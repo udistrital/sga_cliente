@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  client:
+    build:
+      context: ./client_build
+    image: ${SERVICE_NAME}
+    container_name: ${SERVICE_NAME} 
+    env_file:
+      - .env
+    command: sh -c 'npm install; ng serve  --host ${HOST} --port ${PORT}'  
+    ports:
+      - '${PORT}:${PORT}'
+      - '35730:35730'
+    volumes:
+      - './:/app'

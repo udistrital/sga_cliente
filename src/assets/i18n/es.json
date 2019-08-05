@@ -1,0 +1,188 @@
+{
+  "HOME": {
+    "TITLE": "SGA",
+    "SELECT": "Cambiar idioma",
+    "LOGIN": "Iniciar sesion",
+    "LOGOUT": "Cerra sesion",
+    "THEME": "Tema"
+  },
+  "MENU": {
+    "menu": {
+      "menu": "Menú",
+      "rol": "Rol",
+      "opciones": "Opciones",
+      "configurar_rol":"Rol"
+    },
+    "aplicaciones": "Aplicaciones",
+    "roles": "Roles",
+    "opciones": "Opciones",
+    "notificaciones": "Notificaciones",
+    "dashboard": "Inicio",
+    "notificacion_estado": {
+      "notificacion_estado": "notificacion_estado",
+      "lista_notificacion_estado": "lista notificacion_estado",
+      "crud_notificacion_estado": "Crud notificacion_estado"
+    },
+
+    "general": {
+      "general": "General",
+      "aplicaciones": "Aplicaciones",
+      "roles": "roles"
+    },
+    "metodo_http": {
+      "metodo_http": "metodo_http",
+      "lista_metodo_http": "lista metodo_http",
+      "crud_metodo_http": "Crud metodo_http"
+    },
+    "notificacion_tipo": {
+      "notificacion_tipo": "notificacion_tipo",
+      "lista_notificacion_tipo": "lista notificacion_tipo",
+      "crud_notificacion_tipo": "Crud notificacion_tipo"
+    },
+    "aplicacion": {
+      "aplicacion": "aplicacion",
+      "lista_aplicacion": "lista aplicacion",
+      "crud_aplicacion": "Crud aplicacion"
+    },
+    "perfil": {
+      "perfil": "perfil",
+      "lista_perfil": "lista perfil",
+      "crud_perfil": "Crud perfil"
+    },
+    "notificacion_configuracion": {
+      "notificacion_configuracion": "notificacion_configuracion",
+      "lista_notificacion_configuracion": "lista notificacion_configuracion",
+      "crud_notificacion_configuracion": "Crud notificacion_configuracion"
+    },
+    "notificacion": {
+      "notificacion": "Notificaciones",
+      "lista_notificacion": "Lista Notificaciones",
+      "crud_notificacion": "Crud notificacion",
+      "lista_notificacion_configuracion": "Configurar Notificaciones",
+      "lista_notificacion_configuracion_perfil": "Configurar Rol",
+      "lista_notificacion_estado_usuario": "Estado Notificaciones"
+    },
+    "notificacion_estado_usuario": {
+      "notificacion_estado_usuario": "notificacion_estado_usuario",
+      "lista_notificacion_estado_usuario": "lista notificacion_estado_usuario",
+      "crud_notificacion_estado_usuario": "Crud notificacion_estado_usuario"
+    },
+    "parametro": {
+      "parametro": "parametro",
+      "lista_parametro": "lista parametro",
+      "crud_parametro": "Crud parametro"
+    },
+    "notificacion_configuracion_perfil": {
+      "notificacion_configuracion_perfil": "notificacion_configuracion_perfil",
+      "lista_notificacion_configuracion_perfil": "lista notificacion_configuracion_perfil",
+      "crud_notificacion_configuracion_perfil": "Crud notificacion_configuracion_perfil"
+    },
+    "menu_opcion": {
+      "menu_opcion": "menu_opcion",
+      "lista_menu_opcion": "lista menu_opcion",
+      "crud_menu_opcion": "Crud menu_opcion"
+    },
+    "perfil_x_menu_opcion": {
+      "perfil_x_menu_opcion": "perfil_x_menu_opcion",
+      "lista_perfil_x_menu_opcion": "lista perfil_x_menu_opcion",
+      "crud_perfil_x_menu_opcion": "Crud perfil_x_menu_opcion"
+    },
+    "menu_opcion_padre": {
+      "menu_opcion_padre": "menu_opcion_padre",
+      "lista_menu_opcion_padre": "lista menu_opcion_padre",
+      "crud_menu_opcion_padre": "Crud menu_opcion_padre"
+    },
+    "auth": {
+      "auth": "Autenticacion",
+      "login": "Login",
+      "register": "Registro",
+      "request-password": "Recuperar Password",
+      "reset-password": "Reiniciar Password"
+    }
+  },
+  "GLOBAL": {
+    "notificacion_estado": "notificacion_estado",
+    "placeholder_notificacion_estado": "ej: notificacion_estado",
+    "id": "id",
+    "placeholder_id": "ej: id",
+    "nombre": "nombre",
+    "placeholder_nombre": "ej: nombre",
+    "codigo_abreviacion": "codigo_abreviacion",
+    "placeholder_codigo_abreviacion": "ej: codigo_abreviacion",
+    "descripcion": "descripcion",
+    "placeholder_descripcion": "ej: descripcion",
+    "activo": "activo",
+    "placeholder_activo": "ej: activo",
+    "numero_orden": "numero_orden",
+    "placeholder_numero_orden": "ej: numero_orden",
+    "metodo_http": "metodo_http",
+    "placeholder_metodo_http": "ej: metodo_http",
+    "notificacion_tipo": "notificacion_tipo",
+    "placeholder_notificacion_tipo": "ej: notificacion_tipo",
+    "aplicacion": "aplicacion",
+    "placeholder_aplicacion": "ej: aplicacion",
+    "dominio": "dominio",
+    "placeholder_dominio": "ej: dominio",
+    "estado": "estado",
+    "placeholder_estado": "ej: estado",
+    "alias": "alias",
+    "placeholder_alias": "ej: alias",
+    "estilo_icono": "estilo_icono",
+    "placeholder_estilo_icono": "ej: estilo_icono",
+    "perfil": "perfil",
+    "placeholder_perfil": "ej: perfil",
+    "notificacion_configuracion": "notificacion_configuracion",
+    "placeholder_notificacion_configuracion": "ej: notificacion_configuracion",
+    "end_point": "end_point",
+    "placeholder_end_point": "ej: end_point",
+    "tipo": "tipo",
+    "placeholder_tipo": "ej: tipo",
+    "cuerpo_notificacion": "cuerpo_notificacion",
+    "placeholder_cuerpo_notificacion": "ej: cuerpo_notificacion",
+    "notificacion": "notificacion",
+    "placeholder_notificacion": "ej: notificacion",
+    "fecha_creacion": "fecha_creacion",
+    "placeholder_fecha_creacion": "ej: fecha_creacion",
+    "notificacion_estado_usuario": "notificacion_estado_usuario",
+    "placeholder_notificacion_estado_usuario": "ej: notificacion_estado_usuario",
+    "fecha": "fecha",
+    "placeholder_fecha": "ej: fecha",
+    "usuario": "usuario",
+    "placeholder_usuario": "ej: usuario",
+    "parametro": "parametro",
+    "placeholder_parametro": "ej: parametro",
+    "valor": "valor",
+    "placeholder_valor": "ej: valor",
+    "notificacion_configuracion_perfil": "notificacion_configuracion_perfil",
+    "placeholder_notificacion_configuracion_perfil": "ej: notificacion_configuracion_perfil",
+    "menu_opcion": "menu_opcion",
+    "placeholder_menu_opcion": "ej: menu_opcion",
+    "url": "url",
+    "placeholder_url": "ej: url",
+    "layout": "layout",
+    "placeholder_layout": "ej: layout",
+    "tipo_opcion": "tipo_opcion",
+    "placeholder_tipo_opcion": "ej: tipo_opcion",
+    "perfil_x_menu_opcion": "perfil_x_menu_opcion",
+    "placeholder_perfil_x_menu_opcion": "ej: perfil_x_menu_opcion",
+    "opcion": "opcion",
+    "placeholder_opcion": "ej: opcion",
+    "menu_opcion_padre": "menu_opcion_padre",
+    "placeholder_menu_opcion_padre": "ej: menu_opcion_padre",
+    "padre": "padre",
+    "placeholder_padre": "ej: padre",
+    "hijo": "hijo",
+    "placeholder_hijo": "ej: hijo",
+    "aceptar": "aceptar",
+    "cancelar": "cancelar",
+    "salir": "salir",
+    "eliminar": "eliminar",
+    "actualizar": "actualizar",
+    "crear": "crear",
+    "registrar": "registrar",
+    "guardar": "guardar",
+    "formulario": "formulario",
+    "lista": "lista",
+    "regresar": "regresar"
+  }
+}

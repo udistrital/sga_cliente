@@ -1,0 +1,55 @@
+  .menu-app{
+    background: url('https://s3.amazonaws.com/assets-oas/logos-75.png');
+    display: inline-block;
+    height: 75px;
+    width: 75px;
+    margin-top: 3px;
+    border-color: #34495e
+  
+  }
+
+  #noleida, #enviada, #ENVIADA{
+    background-color: grey
+  }
+
+  .mat-list-base .mat-list-item .mat-list-avatar{
+    height: 75px;
+    width: 75px;
+  }
+
+  .mat-list-base .mat-list-item .mat-line{
+      white-space: normal;
+  }
+
+  .form-control{
+     margin: 0px 34px;
+  }
+
+  #polux{
+    background-position: 0px 0px;
+  }
+  #jano {
+    background-position: -75px 0px;
+  }
+  #kyron {
+    background-position: -150px 0px;
+  }
+  #sga {
+    background-position: -225px 0px;
+  }
+  #kronos {
+    background-position: -301px 0px;
+  }
+  
+  #agora{
+    background-position: 0px -75px;
+  }
+  #argo{
+    background-position: -75px -75px;
+  }
+  #arka{
+    background-position: -150px -75px;
+  }
+  #temis{
+    background-position: -225px -75px;
+  }

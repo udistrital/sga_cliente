@@ -1,0 +1,87 @@
+@import '../../styles/themes';
+@import '~@nebular/theme/styles/global/breakpoints';
+@import '~bootstrap/scss/mixins/breakpoints';
+
+@include nb-install-component() {
+  width: 100%;
+  display: block;
+  justify-content: space-between;
+  align-items: center;
+
+  .copyright {
+    text-align: center;
+
+    .final {
+      display: inline-block;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    .social {
+      font-size: 2.25rem;
+      display: inline-block;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+
+  a {
+    clear: none;
+    color: #ffffff !important;
+    @include nb-for-theme(ud) {
+      color: #000000 !important;
+    }
+  }
+
+  a:hover,
+  .list-footer:hover {
+    clear: none;
+    color: #00f9a6 !important;
+    padding-left: 0.5rem;
+    @include nb-for-theme(ud) {
+      color: #ff0000 !important;
+    }
+  }
+
+  .footer-title {
+    border-bottom: 0.1rem solid;
+    border-bottom-color: #00f9a6;
+    text-align: center;
+    margin-bottom: 1rem;
+    @include nb-for-theme(ud) {
+      border-bottom-color: #ffef09;
+    }
+  }
+
+  .nit {
+    font-size: 0.8rem;
+  }
+
+  hr {
+    color: red;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    color: #ffffff;
+    @include nb-for-theme(ud) {
+      color: #000000;
+    }
+  }
+
+  .list-footer {
+    display: block;
+    margin: 0.3rem;
+    text-indent: 0;
+    text-align: justify;
+    list-style: none;
+    transition: padding-left 1.5s;
+  }
+}

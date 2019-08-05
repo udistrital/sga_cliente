@@ -1,0 +1,20 @@
+<toaster-container [toasterconfig]="config"></toaster-container>
+<div class="row">
+  <div class="col-6">
+    <ngx-dinamicform [normalform]="formMenuOpcion" [modeloData]="info_menu_opcion" (result)="validarForm($event)"
+      (interlaced)="selectAplicacion($event)" [clean]="clean">
+    </ngx-dinamicform>
+  </div>
+  <div class="col-6" *ngIf="app">
+    <nb-card [size]="'medium'">
+      <nb-card-header>
+        {{ 'MENU.menu.menu' | translate }}
+      </nb-card-header>
+      <nb-card-body>
+        <div>
+          <tree-root #tree [nodes]="nodes" [options]="options" [focused]="true"></tree-root>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

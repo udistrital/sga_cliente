@@ -1,0 +1,89 @@
+// themes - our custom or/and out of the box themes
+@import 'themes';
+
+// framework component themes (styles tied to theme variables)
+@import '~@nebular/theme/styles/globals';
+@import '~@nebular/auth/styles/all';
+
+// global app font size
+@import './font-size';
+
+// loading progress bar theme
+@import './pace.theme';
+
+@import './bootstrap-rtl';
+@import '~angular-tree-component/dist/angular-tree-component.css';
+
+
+// install the framework and custom global styles
+@include nb-install() {
+
+    /deep/ .mat-input-element::placeholder {
+    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+  }
+
+  /deep/ .mat-input-placeholder {
+    color: nb-theme(color-fg-text);
+  }
+
+  /deep/ .mat-select-value {
+    color: nb-theme(color-fg-text);
+  }
+
+  /deep/ .mat-select-placeholder {
+    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+  }
+
+  /deep/ .mat-form-field-underline {
+    background-color: nb-theme(form-control-border-color);
+  }
+
+  /deep/ .mat-form-field-label {
+    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+  }
+
+  /deep/ .progress {
+    background-color: nb-theme(layout-bg) !important;
+  }
+
+  /deep/ .progress-bar {
+    color: nb-theme(color-fg-text) !important;
+  }
+
+  .link {
+    cursor: pointer;
+    color: nb-theme(link-color);
+    &:hover {
+      color: nb-theme(link-color-hover);
+      @include nb-for-theme(default) {
+        color: #4ba0e2 !important;
+      }
+      text-decoration: underline;
+    }
+
+  }
+
+  // framework global styles
+  @include nb-theme-global();
+  @include nb-auth-global();
+
+  // loading progress bar
+  @include ngx-pace-theme();
+
+  nb-sidebar {
+    @include nb-for-theme(default) {
+      margin-top: nb-theme(sidebar-margin-top) !important;
+      background: nb-theme(sidebar-bg) !important;
+    }
+  }
+
+  ngx-header i {
+    color: nb-theme(header-fg) !important;
+  }
+
+  // fixed in rc.9 and can be removed after upgrade
+  .custom-control .custom-control-indicator {
+    border-radius: 50%; // TODO: quickfix for https://github.com/akveo/nebular/issues/275
+  }
+  @include bootstrap-rtl();
+};
