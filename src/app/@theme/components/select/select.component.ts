@@ -35,7 +35,8 @@ export class SelectComponent implements OnChanges, OnInit {
 
     @Input('campo') campo: any;
     @Input('tipo') tipo: any;
-    @Output('valor') valor: EventEmitter<any> = new EventEmitter();
+    // @Output('valor') valor: EventEmitter<any> = new EventEmitter();
+    @Output() valor: EventEmitter<any> = new EventEmitter();
 
     validCampo() {
         this.campo.valor = this.valor;

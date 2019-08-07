@@ -107,21 +107,21 @@ export class NotificacionesService {
     }
 
     changeStateToView(id) {
-        var notificacion = this.getNotificacionEstadoUsuario(id);
+        const notificacion = this.getNotificacionEstadoUsuario(id);
         notificacion[0].Activo = false
-        this.confService.put('notificacion_estado_usuario',notificacion[0])
+        this.confService.put('notificacion_estado_usuario', notificacion[0])
                 .subscribe(res => {
-        });  
+        });
         notificacion[0].Id = null
         notificacion[0].Activo = true
         notificacion[0].NotificacionEstado = {
             Id: 3,
         }
-        this.confService.post('notificacion_estado_usuario',notificacion[0])
+        this.confService.post('notificacion_estado_usuario', notificacion[0])
                 .subscribe(res => {
                     this.listMessage = [];
                     this.queryNotification();
-        }); 
+        });
     }
 
     queryNotification() {

@@ -75,6 +75,7 @@
     "jquery": "^3.4.1",
     "jspdf": "^1.4.1",
     "leaflet": "1.2.0",
+    "lint": "^0.7.0",
     "moment": "^2.24.0",
     "nebular-icons": "^1.1.0",
     "ng2-ckeditor": "^1.2.2",

@@ -7,8 +7,6 @@ import { SharedModule } from '../shared/shared.module';
 import { ConfiguracionService } from '../@core/data/configuracion.service';
 import { MenuService } from '../@core/data/menu.service';
 
-
-
 const PAGES_COMPONENTS = [
   PagesComponent,
 ];
@@ -30,4 +28,3 @@ const PAGES_COMPONENTS = [
 })
 export class PagesModule {
 }
- 

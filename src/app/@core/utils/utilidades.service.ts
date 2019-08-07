@@ -18,7 +18,7 @@ export class UtilidadesService {
         });
         return sum;
     }
-    
+
     translateTree(tree: any) {
         const trans = tree.map((n: any) => {
             let node = {};

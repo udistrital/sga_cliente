@@ -42,7 +42,7 @@ export class ListadoComponent {
     return array
   }
 
-  redirect(content: any,id: any) {
+  redirect(content: any, id: any) {
     this.router.navigate([content]);
     this.notificacionService.changeStateToView(id);
   }

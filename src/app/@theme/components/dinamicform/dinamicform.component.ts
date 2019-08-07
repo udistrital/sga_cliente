@@ -14,11 +14,12 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Input('normalform') normalform: any;
   @Input('modeloData') modeloData: any;
   @Input('clean') clean: boolean;
-  @Output('result') result: EventEmitter<any> = new EventEmitter();
-  @Output('resultAux') resultAux: EventEmitter<any> = new EventEmitter();
-  @Output('resultSmart') resultSmart: EventEmitter<any> = new EventEmitter();
-  @Output('interlaced') interlaced: EventEmitter<any> = new EventEmitter();
-  @Output('percentage') percentage: EventEmitter<any> = new EventEmitter();
+  // @Output('result') result: EventEmitter<any> = new EventEmitter();
+  @Output() result: EventEmitter<any> = new EventEmitter();
+  @Output() resultAux: EventEmitter<any> = new EventEmitter();
+  @Output() resultSmart: EventEmitter<any> = new EventEmitter();
+  @Output() interlaced: EventEmitter<any> = new EventEmitter();
+  @Output() percentage: EventEmitter<any> = new EventEmitter();
   data: any;
   @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
 
@@ -151,9 +152,9 @@ export class DinamicformComponent implements OnInit, OnChanges {
     if (c.requerido && ((c.valor === '' && c.etiqueta !== 'file') || c.valor === null || c.valor === undefined ||
       (JSON.stringify(c.valor) === '{}' && c.etiqueta !== 'file') || JSON.stringify(c.valor) === '[]')
       || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && c.urlTemp === undefined))) {
-      if(c.prefix){
+      if (c.prefix) {
         c.alerta = '** Este patrón no es aceptado'
-      }else{
+      } else {
         c.alerta = '** Debe llenar este campo';
 
       }

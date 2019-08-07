@@ -14,28 +14,27 @@ import { ImplicitAutenticationService } from './app/@core/utils/implicit_autenti
 if (environment.production) {
   enableProdMode();
 }
-const autenticacion= new ImplicitAutenticationService;
+const autenticacion = new ImplicitAutenticationService;
 
 
 
- const isButtonLogin=false;
+const isButtonLogin = false;
 
- if(!autenticacion.getAuthorizationUrl(isButtonLogin)){
-    // if(isButtonLogin){
-    //   var button = document.createElement("button");
-    //   button.innerHTML = "LOGIN";
-    //   var body = document.getElementsByTagName("body")[0];
-    //   body.appendChild(button);
-    //   button.addEventListener ("click",()=>{
-    //     auth.getAuthorizationUrl()
-    //   });
-    // }
-  }else{
-    autenticacion.live();
+if (!autenticacion.getAuthorizationUrl(isButtonLogin)) {
+  // if(isButtonLogin){
+  //   var button = document.createElement("button");
+  //   button.innerHTML = "LOGIN";
+  //   var body = document.getElementsByTagName("body")[0];
+  //   body.appendChild(button);
+  //   button.addEventListener ("click",()=>{
+  //     auth.getAuthorizationUrl()
+  //   });
+  // }
+} else {
+  autenticacion.live();
+}
 
-         }
-
-        // autenticacion.clearUrl();
+// autenticacion.clearUrl();
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));

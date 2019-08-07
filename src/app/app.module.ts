@@ -123,7 +123,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-  ]
+  ],
 })
 export class MaterialModule { }
 

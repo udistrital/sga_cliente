@@ -1,6 +1,6 @@
-@import "../../styles/themes";
-@import "~bootstrap/scss/mixins/breakpoints";
-@import "~@nebular/theme/styles/global/breakpoints";
+@import '../../styles/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
 
 @include nb-install-component() {
   display: flex;
@@ -61,7 +61,7 @@
       img {
         display: none;
       }
-      content: url("../../../../assets/images/sga_logo.png");
+      content: url('../../../../assets/images/sga_logo.png');
       height: 50px;
 
       span {
@@ -149,9 +149,9 @@
       animation-name: pulse-light;
 
       &::after {
-        content: " ";
+        content: ' ';
         // hack to be able to set border-radius
-        background-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+        background-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
         border-radius: 50%;
         pointer-events: none;
 
