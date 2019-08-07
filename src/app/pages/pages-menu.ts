@@ -9,6 +9,20 @@ export const MENU_ITEMS: MenuItem[] = [
     home: true,
     key: 'dashboard',
   },
+  {
+    title: 'Producción Academica',
+    icon: 'nb-compose',
+    link: '',
+    key: 'produccion_academica',
+    children: [
+      {
+        title: 'Listar Producciones',
+        icon: 'nb-list',
+        link: '/pages/produccion_academica/list-produccion_academica',
+        key: 'list_produccion_academica',
+      },
+    ],
+  },
   /*
   {
     title: 'Menú',

@@ -1,0 +1,113 @@
+<br>
+<div class="dinamic-form" *ngIf="!editando">
+    <form class="form-horizontal">
+        <fieldset [ngClass]="{'fieldseter':true}">
+            <legend align="left">
+                <small>{{'produccion_academica.tipo_produccion_academica' | translate}}</small>
+            </legend>
+            <div class="row">
+                <div class="col-12">
+                    <mat-form-field style="width: 100%;" floatLabel="always">
+                            <mat-label>*{{'produccion_academica.tipo_produccion_academica' | translate}}:</mat-label>
+                            <mat-select [placeholder]="tipoProduccionAcademica?tipoProduccionAcademica.Nombre:translate.instant('produccion_academica.placeholder_tipo_produccion_academica')" [(ngModel)]="tipoProduccionAcademica" (ngModelChange)="filterSubTypes(tipoProduccionAcademica)" [ngModelOptions]="{standalone: true}">
+                                <mat-option>--Seleccionar--</mat-option>
+                                <mat-option *ngFor="let item of tiposProduccionAcademica" [value]="item">
+                                    {{item.Nombre?item.Nombre:item | json}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint class="text-danger" *ngIf="!tipoProduccionAcademica">{{'produccion_academica.alerta_tipo_produccion_academica' | translate}}</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-12" *ngIf="tipoProduccionAcademica">
+                    <mat-form-field style="width: 100%;" floatLabel="always">
+                            <mat-label>*{{'produccion_academica.subtipo_produccion_academica' | translate}}:</mat-label>
+                            <mat-select [placeholder]="info_produccion_academica.SubtipoProduccionId?info_produccion_academica.SubtipoProduccionId.Nombre:translate.instant('produccion_academica.placeholder_subtipo_produccion_academica')" [(ngModel)]="info_produccion_academica.SubtipoProduccionId" (ngModelChange)="loadSubTipoFormFields(info_produccion_academica.SubtipoProduccionId,undefined)" [ngModelOptions]="{standalone: true}">
+                                <mat-option>--Seleccionar--</mat-option>
+                                <mat-option *ngFor="let item of subtiposProduccionAcademicaFiltrados" [value]="item">
+                                    {{item.Nombre?item.Nombre:item | json}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint class="text-danger" *ngIf="!info_produccion_academica.SubtipoProduccionId">{{'produccion_academica.alerta_subtipo_produccion_academica' | translate}}</mat-hint>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!--div align="right" class="form-group">
+                <button class="btn btn-success btn-sm" (click)="validForm()">{{'GLOBAL.guardar' | translate}}</button>
+            </div-->
+        </fieldset>
+    </form>
+</div>
+<div class="dinamic-form" *ngIf="formConstruido">
+    <form class="form-horizontal">
+        <fieldset [ngClass]="{'fieldseter':true}">
+            <legend align="left">
+                <small>{{'produccion_academica.datos_basicos' | translate}}</small>
+            </legend>
+            <div class="row">
+                <div class="col-9">
+                    <mat-form-field style="width: 100%;" class="form-group" floatLabel="always">
+                        <mat-label>* {{'produccion_academica.titulo_produccion_academica' | translate}}:</mat-label>
+                        <input matInput [(ngModel)]="info_produccion_academica.Titulo" [ngModelOptions]="{standalone: true}" type="text" id="Titulo" [placeholder]="translate.instant('produccion_academica.placeholder_titulo_produccion_academica')" />
+                        <mat-hint class="text-danger" *ngIf="!info_produccion_academica.Titulo">{{'produccion_academica.alerta_llenar_campo' | translate}}</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-3">
+                    <mat-form-field  style="width: 100%;" floatLabel="always">
+                        <mat-label>* {{'produccion_academica.fecha_publicacion' | translate}}:</mat-label>
+                        <input matInput [(ngModel)]="info_produccion_academica.Fecha" [matDatepicker]="picker" [ngModelOptions]="{standalone: true}" [placeholder]="translate.instant('produccion_academica.placeholder_fecha_publicacion')" >
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-hint class="text-danger" *ngIf="!info_produccion_academica.Fecha">{{'produccion_academica.alerta_llenar_campo' | translate}}</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-12">
+                    <mat-form-field style="width: 100%;" class="form-group" floatLabel="always">
+                        <mat-label>* {{'produccion_academica.resumen' | translate}}:</mat-label>
+                        <textarea matInput placeholder="Autosize textarea" matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="6" [(ngModel)]="info_produccion_academica.Resumen" [ngModelOptions]="{standalone: true}" type="text" id="resumen_produccion" 
+                            [placeholder]="translate.instant('produccion_academica.placeholder_resumen')"></textarea>
+                        <mat-hint class="text-danger" *ngIf="!info_produccion_academica.Resumen">{{'produccion_academica.alerta_llenar_campo' | translate}}</mat-hint>
+                    </mat-form-field>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="dinamic-form" *ngIf="formConstruido">
+    <form class="form-horizontal">
+        <fieldset [ngClass]="{'fieldseter':true}">
+            <legend align="left">
+                <small>{{'produccion_academica.autores' | translate}}</small>
+            </legend>
+            <div class="row" *ngIf="creandoAutor">
+                <div class="col-10">
+                    <mat-form-field style="width: 100%;" floatLabel="always">
+                        <mat-label>*{{'produccion_academica.agregar_autor' | translate}}:</mat-label>
+                        <mat-select [placeholder]="translate.instant('produccion_academica.placeholder_agregar_autor')" [(ngModel)]="autorSeleccionado" [ngModelOptions]="{standalone: true}">
+                            <mat-option>--Seleccionar--</mat-option>
+                            <mat-option *ngFor="let persona of personas" [value]="persona">
+                                {{persona.PrimerNombre}} {{persona.SegundoNombre}} {{persona.PrimerApellido}} {{persona.SegundoApellido}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-hint class="text-danger" *ngIf="!autorSeleccionado">{{'produccion_academica.alerta_agregar_autor' | translate}}</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-2" align="center">
+                    <button class="btn btn-success btn-sm" (click)="agregarAutor(true,3)">{{'produccion_academica.agregar_autor' | translate}}</button>
+                </div>
+                <br>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                        <ng2-smart-table [settings]="settings_authors" [(source)]="source" (delete)="onDeleteAuthor($event)" (create)="onCreateAuthor($event)">
+                            </ng2-smart-table>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div [hidden]="!formConstruido">
+    <toaster-container [toasterconfig]="config"></toaster-container>
+    <ngx-dinamicform [normalform]="formProduccionAcademica" [modeloData]="DatosAdicionales" (result)="validarForm($event)" [clean]="clean">
+    </ngx-dinamicform>
+</div>
+<br>
