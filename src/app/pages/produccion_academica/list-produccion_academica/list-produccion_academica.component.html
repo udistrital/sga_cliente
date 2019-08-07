@@ -1,5 +1,9 @@
-<div class="col-md-12 col-lg-12 ">
+<!--div class="col-md-12 col-lg-12 "-->
+<div class="col-12">
   <nb-card>
+    <nb-card-header>
+      {{ 'produccion_academica.producciones_academicas' | translate }}
+    </nb-card-header>
     <nb-card-body>
         <toaster-container [toasterconfig]="config"></toaster-container>
         <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -19,8 +23,6 @@
     </nb-card-body>
   </nb-card>
 </div>
-
-
 
 
 
