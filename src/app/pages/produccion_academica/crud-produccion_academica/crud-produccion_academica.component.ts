@@ -404,6 +404,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       this.formConstruido = false;
       this.loadUserData();
       this.Metadatos = [];
+      this.construirForm();
+      this.tipoProduccionAcademica = undefined;
     }
   }
 

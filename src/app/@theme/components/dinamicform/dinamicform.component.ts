@@ -14,7 +14,6 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Input('normalform') normalform: any;
   @Input('modeloData') modeloData: any;
   @Input('clean') clean: boolean;
-  // @Output('result') result: EventEmitter<any> = new EventEmitter();
   @Output() result: EventEmitter<any> = new EventEmitter();
   @Output() resultAux: EventEmitter<any> = new EventEmitter();
   @Output() resultSmart: EventEmitter<any> = new EventEmitter();
@@ -112,6 +111,15 @@ export class DinamicformComponent implements OnInit, OnChanges {
       this.validCampo(c);
       c.File = event.srcElement.files[0];
     }
+    // Tipo file
+    if (c.valor === undefined && c.etiqueta === 'file') {
+      c.urlTemp = URL.createObjectURL(event.srcElement.files[0])
+      c.url = this.cleanURL(c.urlTemp);
+      c.valor = event.srcElement.files[0];
+      // console.info(c);
+      this.validCampo(c);
+      c.File = event.srcElement.files[0];
+    }
   }
 
   cleanURL(oldURL: string): SafeResourceUrl {
@@ -144,20 +152,12 @@ export class DinamicformComponent implements OnInit, OnChanges {
 
   validCampo(c): boolean {
     if (c.etiqueta === 'file') {
-      if (c.valor === null) {
-        c.valor = '';
-      }
-      console.info((c.etiqueta === 'file' && c.valor.name === undefined));
+      // console.info((c.etiqueta === 'file' && (c.valor)?true:c.valor.name === undefined));
     }
     if (c.requerido && ((c.valor === '' && c.etiqueta !== 'file') || c.valor === null || c.valor === undefined ||
       (JSON.stringify(c.valor) === '{}' && c.etiqueta !== 'file') || JSON.stringify(c.valor) === '[]')
       || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && c.urlTemp === undefined))) {
-      if (c.prefix) {
-        c.alerta = '** Este patrón no es aceptado'
-      } else {
-        c.alerta = '** Debe llenar este campo';
-
-      }
+      c.alerta = '** Debe llenar este campo';
       c.clase = 'form-control form-control-danger';
       return false;
     }
@@ -192,11 +192,14 @@ export class DinamicformComponent implements OnInit, OnChanges {
         c.alerta = 'El tamaño del archivo es superior a : ' + c.tamanoMaximo + 'MB. ';
         return false;
       }
-      if (c.formatos.indexOf(c.valor.type.split('/')[1]) === -1) {
-        c.clase = 'form-control form-control-danger';
-        c.alerta = 'Solo se admiten los siguientes formatos: ' + c.formatos;
-        return false;
+      if (c.valor.type) {
+        if (c.formatos.indexOf(c.valor.type.split('/')[1]) === -1) {
+          c.clase = 'form-control form-control-danger';
+          c.alerta = 'Solo se admiten los siguientes formatos: ' + c.formatos;
+          return false;
+        }
       }
+
     }
     if (!this.normalform.btn) {
       if (this.validForm().valid) {
@@ -227,7 +230,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
       requeridos = d.requerido ? requeridos + 1 : requeridos;
       if (this.validCampo(d)) {
         if (d.etiqueta === 'file') {
-          result[d.nombre] = { nombre: d.nombre, file: d.File };
+          result[d.nombre] = { nombre: d.nombre, file: d.File, url: d.url, IdDocumento: d.tipoDocumento };
           // result[d.nombre].push({ nombre: d.name, file: d.valor });
         } else if (d.etiqueta === 'select') {
           result[d.nombre] = d.relacion ? d.valor : d.valor.Id;
