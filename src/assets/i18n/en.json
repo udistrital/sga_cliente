@@ -17,10 +17,10 @@
     "opciones": "Options",
     "notificaciones": "Notifications",
     "dashboard": "Home",
-    "notificacion_estado": {
-      "notificacion_estado": "notificacion_estado",
-      "lista_notificacion_estado": "lista notificacion_estado",
-      "crud_notificacion_estado": "Crud notificacion_estado"
+    "produccion_academica": {
+      "produccion_academica": "Academic Production",
+      "list_produccion_academica": "Academic Production List",
+      "crud_produccion_academica": "Academic Production Crud"
     },
     "auth": {
       "auth": "Auth",
@@ -43,6 +43,7 @@
     "guardar": "Save",
     "formulario": "Form",
     "lista": "List",
-    "regresar": "Return"
+    "regresar": "Return",
+    "error": "Error"
   }
 }

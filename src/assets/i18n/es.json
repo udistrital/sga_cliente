@@ -17,10 +17,10 @@
     "opciones": "Opciones",
     "notificaciones": "Notificaciones",
     "dashboard": "Inicio",
-    "notificacion_estado": {
-      "notificacion_estado": "notificacion_estado",
-      "lista_notificacion_estado": "lista notificacion_estado",
-      "crud_notificacion_estado": "Crud notificacion_estado"
+    "produccion_academica": {
+      "produccion_academica": "Producción Academica",
+      "list_produccion_academica": "Lista Producción Academica",
+      "crud_produccion_academica": "Crud Producción Academica"
     },
     "auth": {
       "auth": "Autenticacion",
@@ -31,18 +31,19 @@
     }
   },
   "GLOBAL": {
-    "id": "id",
-    "activo": "activo",
-    "aceptar": "aceptar",
-    "cancelar": "cancelar",
-    "salir": "salir",
-    "eliminar": "eliminar",
-    "actualizar": "actualizar",
-    "crear": "crear",
-    "registrar": "registrar",
-    "guardar": "guardar",
-    "formulario": "formulario",
-    "lista": "lista",
-    "regresar": "regresar"
+    "id": "Id",
+    "activo": "Activo",
+    "aceptar": "Aceptar",
+    "cancelar": "Cancelar",
+    "salir": "Salir",
+    "eliminar": "Eliminar",
+    "actualizar": "Actualizar",
+    "crear": "Crear",
+    "registrar": "Registrar",
+    "guardar": "Guardar",
+    "formulario": "Formulario",
+    "lista": "Lista",
+    "regresar": "Regresar",
+    "error": "Error"
   }
 }
