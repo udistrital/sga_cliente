@@ -60,7 +60,8 @@
     "405": "La petición fue hecha utilizando un método de solicitud no soportado",
     "408": "Ha excedido el límite de tiempo en retornar resuesta",
     "409": "La solicitud no pudo ser procesada debido a un conflicto con el estado actual del recurso",
-    "500": "Error interno en el servidor"
+    "500": "Error interno en el servidor",
+    "error_subir_documento": "Ocurrió un error subiendo los documentos, por favor intente de nuevo."
   },
   "produccion_academica": {
       "produccion_academica": "Produccion academica",
@@ -102,5 +103,9 @@
       "autor_no_puede_borrar":"Solo el autor principal puede borrar la producción academica",
       "autor_no_ha_confirmado":"Usted no ha confirmado ser uno de los autores de esta producción académica. ¿Desea confirmar su participación?",
       "confirma_participar_produccion":"¿Confirma usted ser uno de los autores de esta producción académica?",
+      "autores": "Autores",
+      "autor": "Autor",
+      "resumen": "Resumen",
+      "placeholder_resumen": "ej: resumen"
   }
 }

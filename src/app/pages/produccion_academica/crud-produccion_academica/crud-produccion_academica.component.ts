@@ -90,7 +90,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       mode: 'external',
       columns: {
         Nombre: {
-          title: this.translate.instant('GLOBAL.nombre_autor'),
+          title: this.translate.instant('produccion_academica.nombre_autor'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
@@ -98,7 +98,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           width: '60%',
         },
         EstadoAutorProduccionId: {
-          title: this.translate.instant('GLOBAL.estado_autor'),
+          title: this.translate.instant('produccion_academica.estado_autor'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value.Nombre;
@@ -110,10 +110,10 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   }
 
   construirForm() {
-    this.formProduccionAcademica.titulo = this.translate.instant('GLOBAL.produccion_academica');
+    this.formProduccionAcademica.titulo = this.translate.instant('produccion_academica.produccion_academica');
     this.formProduccionAcademica.btn = this.translate.instant('GLOBAL.guardar');
     for (let i = 0; i < this.formProduccionAcademica.campos.length; i++) {
-      this.formProduccionAcademica.campos[i].label = this.translate.instant('GLOBAL.' + this.formProduccionAcademica.campos[i].label_i18n);
+      this.formProduccionAcademica.campos[i].label = this.translate.instant('produccion_academica.' + this.formProduccionAcademica.campos[i].label_i18n);
       this.formProduccionAcademica.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' + this.formProduccionAcademica.campos[i].label_i18n);
     }
   }
@@ -410,7 +410,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   updateProduccionAcademica(ProduccionAcademica: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
-      text: this.translate.instant('GLOBAL.seguro_continuar_actualizar_produccion'),
+      text: this.translate.instant('produccion_academica.seguro_continuar_actualizar_produccion'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -429,7 +429,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
-            this.showToast('error', 'Error', this.translate.instant('GLOBAL.produccion_no_actualizada'));
+            this.showToast('error', 'Error', this.translate.instant('produccion_academica.produccion_no_actualizada'));
           } else {
             this.info_produccion_academica = <ProduccionAcademicaPost>res.Body[1];
             this.eventChange.emit(true);
@@ -443,7 +443,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   createProduccionAcademica(ProduccionAcademica: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.registrar'),
-      text: this.translate.instant('GLOBAL.seguro_continuar_registrar_produccion'),
+      text: this.translate.instant('produccion_academica.seguro_continuar_registrar_produccion'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -470,11 +470,11 @@ export class CrudProduccionAcademicaComponent implements OnInit {
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
-            this.showToast('error', 'error', this.translate.instant('GLOBAL.produccion_no_creada'));
+            this.showToast('error', 'error', this.translate.instant('produccion_academica.produccion_no_creada'));
           } else {
             this.info_produccion_academica = <ProduccionAcademicaPost>res.Body[1];
             this.eventChange.emit(true);
-            this.showToast('success', this.translate.instant('GLOBAL.crear'), this.translate.instant('GLOBAL.produccion_creada'));
+            this.showToast('success', this.translate.instant('GLOBAL.crear'), this.translate.instant('produccion_academica.produccion_creada'));
           }
         });
       }
@@ -487,7 +487,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
         Swal({
           type: 'error',
           title: 'ERROR',
-          text: this.translate.instant('GLOBAL.error_autor_ya_existe'),
+          text: this.translate.instant('produccion_academica.error_autor_ya_existe'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       }
@@ -518,7 +518,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       Swal({
         type: 'error',
         title: 'ERROR',
-        text: this.translate.instant('GLOBAL.error_autor_borrar'),
+        text: this.translate.instant('produccion_academica.error_autor_borrar'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
     }
@@ -556,7 +556,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
         Swal({
           type: 'warning',
           title: 'ERROR',
-          text: this.translate.instant('GLOBAL.alerta_llenar_campos_datos_basicos'),
+          text: this.translate.instant('produccion_academica.alerta_llenar_campos_datos_basicos'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       } else {
@@ -605,7 +605,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
             Swal({
               type: 'error',
               title: 'ERROR',
-              text: this.translate.instant('GLOBAL.error_subir_documento'),
+              text: this.translate.instant('ERROR.error_subir_documento'),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
           });
@@ -620,7 +620,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       Swal({
         type: 'error',
         title: 'ERROR',
-        text: this.translate.instant('GLOBAL.error_no_puede_editar_autores'),
+        text: this.translate.instant('produccion_academica.error_no_puede_editar_autores'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
     }

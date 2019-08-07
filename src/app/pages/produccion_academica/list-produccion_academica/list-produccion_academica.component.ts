@@ -60,7 +60,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
         //   },
         // },
         Titulo: {
-          title: this.translate.instant('GLOBAL.titulo_produccion_academica'),
+          title: this.translate.instant('produccion_academica.titulo_produccion_academica'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
@@ -68,7 +68,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
           width: '20%',
         },
         SubtipoProduccionId: {
-          title: this.translate.instant('GLOBAL.tipo_produccion_academica'),
+          title: this.translate.instant('produccion_academica.tipo_produccion_academica'),
           // type: 'tipo_produccion_academica;',
           valuePrepareFunction: (value) => {
             return value.Nombre;
@@ -76,7 +76,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
           width: '15%',
         },
         Resumen: {
-          title: this.translate.instant('GLOBAL.resumen'),
+          title: this.translate.instant('produccion_academica.resumen'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
@@ -84,7 +84,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
           width: '30%',
         },
         EstadoEnteAutorId: {
-          title: this.translate.instant('GLOBAL.estado_autor'),
+          title: this.translate.instant('produccion_academica.estado_autor'),
           // type: 'string',
           valuePrepareFunction: (value) => {
             return value.EstadoAutorProduccionId.Nombre;
@@ -92,7 +92,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
           width: '15%',
         },
         Fecha: {
-          title: this.translate.instant('GLOBAL.fecha_publicacion'),
+          title: this.translate.instant('produccion_academica.fecha_publicacion'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return ((value) + '').substring(0, 10);
@@ -156,7 +156,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
     if (event.data.EstadoEnteAutorId.EstadoAutorProduccionId.Id === 1) {
       const opt: any = {
         title: this.translate.instant('GLOBAL.eliminar'),
-        text: this.translate.instant('GLOBAL.seguro_continuar_eliminar_produccion'),
+        text: this.translate.instant('produccion_academica.seguro_continuar_eliminar_produccion'),
         icon: 'warning',
         buttons: true,
         dangerMode: true,
@@ -170,9 +170,9 @@ export class ListProduccionAcademicaComponent implements OnInit {
               if (res.Body.Id !== undefined) {
                 this.source.load([]);
                 this.loadData();
-                this.showToast('info', 'Ok', this.translate.instant('GLOBAL.produccion_eliminada'));
+                this.showToast('info', 'Ok', this.translate.instant('produccion_academica.produccion_eliminada'));
               } else {
-                this.showToast('info', 'Error', this.translate.instant('GLOBAL.produccion_no_eliminada'));
+                this.showToast('info', 'Error', this.translate.instant('produccion_academica.produccion_no_eliminada'));
               }
             }
            }, (error: HttpErrorResponse) => {
@@ -188,7 +188,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
     } else if (event.data.EstadoEnteAutorId.EstadoAutorProduccionId.Id === 2) {
       const opt: any = {
         title: 'Error',
-        text: this.translate.instant('GLOBAL.autor_no_puede_borrar'),
+        text: this.translate.instant('produccion_academica.autor_no_puede_borrar'),
         icon: 'warning',
         buttons: false,
       };
@@ -203,7 +203,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
   updateEstadoAutor(data: any): void {
     const opt: any = {
       title: 'Error',
-      text: this.translate.instant('GLOBAL.autor_no_ha_confirmado'),
+      text: this.translate.instant('produccion_academica.autor_no_ha_confirmado'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -214,7 +214,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
       if (willConfirm.value) {
         const optConfirmar: any = {
           title: this.translate.instant('GLOBAL.confirmar'),
-          text: this.translate.instant('GLOBAL.confirma_participar_produccion'),
+          text: this.translate.instant('produccion_academica.confirma_participar_produccion'),
           icon: 'warning',
           buttons: true,
           dangerMode: true,
@@ -237,10 +237,10 @@ export class ListProduccionAcademicaComponent implements OnInit {
                 text: this.translate.instant('ERROR.' + res.Code),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
               });
-              this.showToast('error', 'Error', this.translate.instant('GLOBAL.estado_autor_no_actualizado'));
+              this.showToast('error', 'Error', this.translate.instant('produccion_academica.estado_autor_no_actualizado'));
             } else {
               this.loadData();
-              this.showToast('success', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('GLOBAL.estado_autor_actualizado'));
+              this.showToast('success', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('produccion_academica.estado_autor_actualizado'));
             }
           }, (error: HttpErrorResponse) => {
             Swal({

@@ -59,7 +59,8 @@
     "405": "The request was made using an unsupported application method",
     "408": "You have exceeded the time limit in returning answer",
     "409": "The request could not be processed due to a conflict with the current state of the resource",
-    "500": "Internal error on the server"
+    "500": "Internal error on the server",
+    "error_subir_documento": "An error ocurred uploading the documents, please try again."
   },
   "produccion_academica": {
       "produccion_academica": "Academic production",
@@ -101,6 +102,10 @@
       "autor_no_puede_borrar":"Only the main author can delete the academic production",
       "autor_no_ha_confirmado":"You have not confirmed being one of the authors of this academic production. Do you want to confirm your participation?",
       "confirma_participar_produccion":"Do you confirm being one of the authors of this academic production?",
-      "accion_no_permitida":"Action not allowed"
+      "accion_no_permitida":"Action not allowed",
+      "autor": "Author",
+      "autores": "Authors",
+      "resumen": "Summary",
+      "placeholder_resumen": "e.g. summary"
   }
 }
