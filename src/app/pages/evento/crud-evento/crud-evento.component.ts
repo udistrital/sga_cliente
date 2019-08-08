@@ -522,6 +522,7 @@ export class CrudEventoComponent implements OnInit {
           } else {
             // this.info_calendario_evento = <CalendarioEventoPost>res.Body[1];
             this.initInfo();
+            this.loadEventos();
             this.eventChange.emit(true);
             this.showToast('success', this.translate.instant('GLOBAL.crear'), this.translate.instant('evento.evento_creado'));
           }

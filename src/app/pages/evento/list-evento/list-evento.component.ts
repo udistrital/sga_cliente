@@ -77,7 +77,7 @@ export class ListEventoComponent implements OnInit {
           width: '15%',
         },
         Dependencia: {
-          title: this.translate.instant('GLOBAL.dependencia'),
+          title: this.translate.instant('evento.dependencia'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
