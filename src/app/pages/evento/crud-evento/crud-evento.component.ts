@@ -97,7 +97,7 @@ export class CrudEventoComponent implements OnInit {
       },
       columns: {
         Nombre: {
-          title: this.translate.instant('GLOBAL.nombre_publico'),
+          title: this.translate.instant('evento.nombre_publico'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
@@ -123,7 +123,7 @@ export class CrudEventoComponent implements OnInit {
       mode: 'external',
       columns: {
         Nombre: {
-          title: this.translate.instant('GLOBAL.nombre_encargado'),
+          title: this.translate.instant('evento.nombre_encargado'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
@@ -131,7 +131,7 @@ export class CrudEventoComponent implements OnInit {
           width: '60%',
         },
         RolEncargadoEventoId: {
-          title: this.translate.instant('GLOBAL.rol_encargado'),
+          title: this.translate.instant('evento.rol_encargado'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value.Nombre;
@@ -282,7 +282,7 @@ export class CrudEventoComponent implements OnInit {
         Swal({
           type: 'error',
           title: 'ERROR',
-          text: this.translate.instant('GLOBAL.error_encargado_ya_existe'),
+          text: this.translate.instant('evento.error_encargado_ya_existe'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       }
@@ -487,7 +487,7 @@ export class CrudEventoComponent implements OnInit {
   createEvento(calendarioEventoPost: CalendarioEventoPost): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.registrar'),
-      text: this.translate.instant('GLOBAL.seguro_continuar_registrar_evento'),
+      text: this.translate.instant('evento.seguro_continuar_registrar_evento'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -518,12 +518,12 @@ export class CrudEventoComponent implements OnInit {
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
-            this.showToast('error', 'error', this.translate.instant('GLOBAL.evento_no_creado'));
+            this.showToast('error', 'error', this.translate.instant('evento.evento_no_creado'));
           } else {
             // this.info_calendario_evento = <CalendarioEventoPost>res.Body[1];
             this.initInfo();
             this.eventChange.emit(true);
-            this.showToast('success', this.translate.instant('GLOBAL.crear'), this.translate.instant('GLOBAL.evento_creado'));
+            this.showToast('success', this.translate.instant('GLOBAL.crear'), this.translate.instant('evento.evento_creado'));
           }
         });
       }
@@ -533,7 +533,7 @@ export class CrudEventoComponent implements OnInit {
   updateEvento(calendarioEventoPost: CalendarioEventoPost): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
-      text: this.translate.instant('GLOBAL.seguro_continuar_actualizar_evento'),
+      text: this.translate.instant('evento.seguro_continuar_actualizar_evento'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -564,12 +564,12 @@ export class CrudEventoComponent implements OnInit {
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
-            this.showToast('error', 'Error', this.translate.instant('GLOBAL.evento_no_actualizado'));
+            this.showToast('error', 'Error', this.translate.instant('evento.evento_no_actualizado'));
           } else {
             // this.info_calendario_evento = <CalendarioEventoPost>res.Body[1];
             this.initInfo();
             this.eventChange.emit(true);
-            this.showToast('success', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('GLOBAL.evento_actualizado'));
+            this.showToast('success', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('evento.evento_actualizado'));
           }
         });
       }

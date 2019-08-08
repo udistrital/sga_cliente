@@ -61,7 +61,7 @@ export class ListEventoComponent implements OnInit {
         //   },
         // },
         Descripcion: {
-          title: this.translate.instant('GLOBAL.evento'),
+          title: this.translate.instant('evento.evento'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
@@ -69,7 +69,7 @@ export class ListEventoComponent implements OnInit {
           width: '15%',
         },
         TipoEvento: {
-          title: this.translate.instant('GLOBAL.tipo_evento'),
+          title: this.translate.instant('evento.tipo_evento'),
           // type: 'tipo_evento;',
           valuePrepareFunction: (value) => {
             return value;
@@ -150,7 +150,7 @@ export class ListEventoComponent implements OnInit {
       this.calendario_evento_selected = event.data;
       this.activetab();
     } else {
-      this.showToast('error', 'Error', this.translate.instant('GLOBAL.no_puede_borrar_evento'));
+      this.showToast('error', 'Error', this.translate.instant('evento.no_puede_borrar_evento'));
     }
   }
 
@@ -163,7 +163,7 @@ export class ListEventoComponent implements OnInit {
     if (event.data.RolPersona.RolEncargadoEventoId.Id === 1) {
       const opt: any = {
         title: this.translate.instant('GLOBAL.eliminar'),
-        text: this.translate.instant('GLOBAL.seguro_continuar_eliminar_evento'),
+        text: this.translate.instant('evento.seguro_continuar_eliminar_evento'),
         icon: 'warning',
         buttons: true,
         dangerMode: true,
@@ -177,9 +177,9 @@ export class ListEventoComponent implements OnInit {
               if (res.Body.Id !== undefined) {
                 this.source.load([]);
                 this.loadData();
-                this.showToast('info', 'Ok', this.translate.instant('GLOBAL.evento_eliminado'));
+                this.showToast('info', 'Ok', this.translate.instant('evento.evento_eliminado'));
               } else {
-                this.showToast('info', 'Error', this.translate.instant('GLOBAL.evento_no_eliminado'));
+                this.showToast('info', 'Error', this.translate.instant('evento.evento_no_eliminado'));
               }
             }
            }, (error: HttpErrorResponse) => {
@@ -196,7 +196,7 @@ export class ListEventoComponent implements OnInit {
     } else {
        const opt: any = {
         title: 'Error',
-        text: this.translate.instant('GLOBAL.no_puede_borrar_evento'),
+        text: this.translate.instant('evento.no_puede_borrar_evento'),
         icon: 'warning',
         buttons: false,
       };

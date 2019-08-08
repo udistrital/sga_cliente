@@ -22,6 +22,11 @@
       "list_produccion_academica": "Lista Producción Academica",
       "crud_produccion_academica": "Crud Producción Academica"
     },
+    "evento": {
+      "evento": "Eventos",
+      "list_evento": "Lista Eventos",
+      "crud_evento": "Crud Eventos"
+    },
     "auth": {
       "auth": "Autenticacion",
       "login": "Login",
@@ -50,7 +55,14 @@
     "accion_no_permitida":"Acción no permitida",
     "confirmar":"Confirmar",
     "filtrar": "Filtrar",
-    "Limpiar": "Limpiar"
+    "Limpiar": "Limpiar",
+    "fecha_inicio": "Fecha de inicio",
+    "placeholder_fecha_inicio": "Ej: 24/12/2016",
+    "fecha_fin": "Fecha de finalización",
+    "placeholder_fecha_fin": "Ej: 24/08/2018",
+    "periodo": "Período",
+    "placeholder_periodo": "Ej: 1",
+    "alerta_llenar_campo":"Debe llenar este campo"
   },
   "ERROR": {
     "400": "La solicitud contiene sintaxis errónea",
@@ -107,5 +119,38 @@
       "autor": "Autor",
       "resumen": "Resumen",
       "placeholder_resumen": "ej: resumen"
+  },
+  "evento": {
+    "evento": "Evento",
+    "eventos": "Eventos",
+    "error_encargado_ya_existe": "El encargado ya esta agregado.",
+    "tipo_dependencia": "Tipo de dependencia",
+    "placeholder_tipo_dependencia": "Oficina",
+    "dependencia": "Dependencia",
+    "placeholder_dependencia": "Rectoria",
+    "tipo_evento": "Tipo de evento",
+    "placeholder_tipo_evento": "Inscripción",
+    "evento_padre": "Evento padre",
+    "tipos_publico": "Tipos publico",
+    "nombre_publico": "Nombre",
+    "descripcion_publico": "Descripcion",
+    "agregar_encargado": "Agregar",
+    "rol_encargado": "Rol",
+    "placeholder_rol_encargado": "Creador",
+    "nombre_encargado": "Nombre",
+    "placeholder_nombre_encargado": "Andres Perez",
+    "encargados": "Encargados",
+    "seguro_continuar_registrar_evento":"¿Esta seguro de registrar este evento?",
+    "evento_creado":"Evento creado",
+    "evento_no_creado":"Evento no creado",
+    "no_puede_borrar_evento":"No cuenta con los permisos necesarios para borrar el evento",
+    "seguro_continuar_eliminar_evento":"¿Esta seguro de eliminar este evento?",
+    "evento_eliminado":"Evento eliminado",
+    "evento_no_eliminado":"Evento no eliminado",
+    "seguro_continuar_actualizar_evento":"¿Esta seguro de actualizar este evento?",
+    "evento_actualizado":"Evento actualizado",
+    "evento_no_actualizado":"Evento no actualizado",
+    "descripcion": "Descripción",
+    "placeholder_descripcion": "Ej. Inscripción"
   }
 }

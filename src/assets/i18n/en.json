@@ -22,6 +22,11 @@
       "list_produccion_academica": "Academic Production List",
       "crud_produccion_academica": "Academic Production Crud"
     },
+    "evento": {
+      "evento": "Events",
+      "list_evento": "Events List",
+      "crud_evento": "Events Crud"
+    },
     "auth": {
       "auth": "Auth",
       "login": "Login",
@@ -49,7 +54,14 @@
     "no":"No",
     "filtrar": "Filter",
     "Limpiar": "Clean",
-    "confirmar":"Confirm"
+    "confirmar":"Confirm",
+    "fecha_inicio": "Start date",
+    "placeholder_fecha_inicio": "E.g.: 24/12/2016",
+    "fecha_fin": "End date",
+    "placeholder_fecha_fin": "E.g.: 24/08/2018",
+    "periodo": "Period",
+    "placeholder_periodo": "E.g.: 1",
+    "alerta_llenar_campo":"You must fill this field"
   },
   "ERROR": {
     "400": "The request contains incorrect syntax",
@@ -107,5 +119,38 @@
       "autores": "Authors",
       "resumen": "Summary",
       "placeholder_resumen": "e.g. summary"
+  },
+  "evento": {
+    "evento": "Event",
+    "eventos": "Events",
+    "error_encargado_ya_existe":"The person is already added.",
+    "tipo_dependencia": "Dependency type",
+    "placeholder_tipo_dependencia": "Office",
+    "dependencia": "Dependency",
+    "placeholder_dependencia": "Rectory",
+    "tipo_evento": "Event type",
+    "placeholder_tipo_evento": "Inscription",
+    "evento_padre":"Event father",
+    "tipos_publico":"Public types",
+    "nombre_publico":"Name",
+    "descripcion_publico":"Description",
+    "agregar_encargado": "Add",
+    "rol_encargado": "Rol",
+    "placeholder_rol_encargado": "Creator",
+    "nombre_encargado": "Name",
+    "placeholder_nombre_encargado": "Andres Perez",
+    "encargados": "Attendant",
+    "seguro_continuar_registrar_evento":"Are you sure you want to register this event?",
+    "evento_creado":"Event created",
+    "evento_no_creado":"Event not created",
+    "no_puede_borrar_evento":"You are not allowed to delete an event.",
+    "seguro_continuar_eliminar_evento":"Are you sure you want to delete this event?",
+    "evento_eliminado":"Event deleted",
+    "evento_no_eliminado":"Event not deleted",
+    "seguro_continuar_actualizar_evento":"Are you sure you want to update this event?",
+    "evento_actualizado":"Event updated",
+    "evento_no_actualizado":"Event not updated",
+    "descripcion": "Description",
+    "placeholder_descripcion": "e.g. Inscriptions"
   }
 }
