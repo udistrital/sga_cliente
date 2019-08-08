@@ -13,6 +13,10 @@ const routes: Routes = [{
         component: DashboardComponent,
     },
     {
+      path: 'evento',
+      loadChildren: './evento/evento.module#EventoModule',
+    },
+    {
         path: 'perfil',
         loadChildren: './perfil/perfil.module#PerfilModule',
     },

@@ -23,6 +23,20 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Eventos',
+    icon: 'nb-compose',
+    link: '',
+    key: 'evento',
+    children: [
+      {
+        title: 'Listar Eventos',
+        icon: 'nb-list',
+        link: '/pages/evento/list-evento',
+        key: 'list_evento',
+      },
+    ],
+  },
   /*
   {
     title: 'Menú',
