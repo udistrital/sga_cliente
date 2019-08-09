@@ -33,6 +33,11 @@
             "register": "Registro",
             "request-password": "Recuperar Password",
             "reset-password": "Reiniciar Password"
+        },
+        "tipo_periodo": {
+            "tipo_periodo": "Creacion de tipo de Período",
+            "lista_tipo_periodo": "listar los tipos período",
+            "crud_tipo_periodo": "Crear un tipo período"
         }
     },
     "GLOBAL": {
@@ -65,7 +70,8 @@
         "alerta_llenar_campo": "Debe llenar este campo",
         "tipo_periodo": "Tipo Período",
         "placeholder_tipo_periodo": "ej: Administratico, Académico",
-        "placeholder_id": "ej: Id",
+        "id": "id",
+        "placeholder_id": "ej: id",
         "nombre": "Nombre",
         "placeholder_nombre": "ej: Académico",
         "descripcion": "Descripcion",
@@ -75,28 +81,7 @@
         "activo": "Activo",
         "placeholder_activo": "ej: Activo",
         "numero_orden": "Numero orden",
-        "placeholder_numero_orden": "ej: 1,2,3",
-        "periodo": "Período",
-        "placeholder_periodo": "ej: periodo",
-        "ano": "Año",
-        "placeholder_ano": "ej: 2019",
-        "periodo": "Período",
-        "placeholder_periodo": "ej: I,II,III",
-        "codigoabreviacion": "codigoabreviacion",
-        "placeholder_codigoabreviacion": "ej: codigoabreviacion",
-        "tipoevento": "tipoevento",
-        "placeholder_tipoevento": "ej: tipoevento",
-        "dependenciaid": "dependenciaid",
-        "placeholder_dependenciaid": "ej: dependenciaid",
-        "calendarioevento": "calendarioevento",
-        "placeholder_calendarioevento": "ej: calendarioevento",
-        "fechainicio": "fechainicio",
-        "placeholder_fechainicio": "ej: fechainicio",
-        "fechafin": "fechafin",
-        "placeholder_fechafin": "ej: fechafin",
-        "periodoid": "periodoId",
-        "placeholder_periodoid": "ej: periodoid"
-
+        "placeholder_numero_orden": "ej: 1,2,3"
     },
     "ERROR": {
         "400": "La solicitud contiene sintaxis errónea",
@@ -186,5 +171,17 @@
         "evento_no_actualizado": "Evento no actualizado",
         "descripcion": "Descripción",
         "placeholder_descripcion": "Ej. Inscripción"
+    },
+    "tipo_periodo": {
+        "titulo": "Lista de los tipos de Período ",
+        "subtitulo": "Tipos de Período",
+        "explicacion": "Para en listar los tipos de períodos que se encuentren en la organización.",
+        "seguro_continuar_registrar_tipo_periodo": "¿Esta seguro de registrar este tipo de periodo?",
+        "tipo_periodo_creado": "Tipo periodo creado",
+        "seguro_actualizar_tipo_periodo": "¿Esta seguro de actualizar este tipo de periodo?",
+        "tipo_periodo_actualizado": "Tipo periodo actualizado",
+        "seguro_eliminar_tipo_periodo": "¿Esta seguro de eliminar este tipo de periodo?",
+        "tipo_periodo_eliminado": "Tipo periodo eliminado"
+
     }
 }

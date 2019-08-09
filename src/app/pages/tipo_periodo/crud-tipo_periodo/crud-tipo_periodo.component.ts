@@ -81,8 +81,8 @@ export class CrudTipoPeriodoComponent implements OnInit {
   updateTipoPeriodo(tipoPeriodo: any): void {
 
     const opt: any = {
-      title: 'Update?',
-      text: 'Update TipoPeriodo!',
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('tipo_periodo.seguro_actualizar_tipo_periodo'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -96,7 +96,7 @@ export class CrudTipoPeriodoComponent implements OnInit {
           .subscribe(res => {
             this.loadTipoPeriodo();
             this.eventChange.emit(true);
-            this.showToast('info', 'updated', 'TipoPeriodo updated');
+            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('tipo_periodo.tipo_periodo_actualizado'));
           });
       }
     });
@@ -104,8 +104,8 @@ export class CrudTipoPeriodoComponent implements OnInit {
 
   createTipoPeriodo(tipoPeriodo: any): void {
     const opt: any = {
-      title: 'Create?',
-      text: 'Create TipoPeriodo!',
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('tipo_periodo.seguro_continuar_registrar_tipo_periodo'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -119,7 +119,7 @@ export class CrudTipoPeriodoComponent implements OnInit {
           .subscribe(res => {
             this.info_tipo_periodo = <TipoPeriodo><unknown>res;
             this.eventChange.emit(true);
-            this.showToast('info', 'created', 'TipoPeriodo created');
+            this.showToast('success', this.translate.instant('GLOBAL.crear'), this.translate.instant('tipo_periodo.tipo_periodo_creado'));
           });
       }
     });

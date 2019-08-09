@@ -19,7 +19,8 @@ export class ListTipoPeriodoComponent implements OnInit {
 
   source: LocalDataSource = new LocalDataSource();
 
-  constructor(private translate: TranslateService, private clienteHabilitarPeriodoService: ClienteHabilitarPeriodoService, private toasterService: ToasterService) {
+  constructor(private translate: TranslateService, private clienteHabilitarPeriodoService: ClienteHabilitarPeriodoService,
+    private toasterService: ToasterService) {
     this.loadData();
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -119,8 +120,8 @@ export class ListTipoPeriodoComponent implements OnInit {
 
   onDelete(event): void {
     const opt: any = {
-      title: 'Deleting?',
-      text: 'Delete TipoPeriodo!',
+      title: this.translate.instant('GLOBAL.eliminar'),
+      text: this.translate.instant('tipo_periodo.seguro_eliminar_tipo_periodo'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -133,7 +134,7 @@ export class ListTipoPeriodoComponent implements OnInit {
         this.clienteHabilitarPeriodoService.delete('tipo_periodo/', event.data).subscribe(res => {
           if (res !== null) {
             this.loadData();
-            this.showToast('info', 'deleted', 'TipoPeriodo deleted');
+            this.showToast('info', this.translate.instant('GLOBAL.eliminar'), this.translate.instant('tipo_periodo.tipo_periodo_eliminado'));
             }
          });
       }
