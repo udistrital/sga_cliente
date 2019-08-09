@@ -55,6 +55,24 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Periodo',
+    icon: 'nb-compose',
+    link: '/pages/periodo',
+    key: 'periodo',
+    children: [
+      {
+        title: 'Lista Periodo',
+        link: '/pages/periodo/list-periodo',
+        key: 'lista_periodo',
+      },
+      {
+        title: 'CRUD Periodo',
+        link: '/pages/periodo/crud-periodo',
+        key: 'crud_periodo',
+      },
+    ],
+  },
   /*
   {
     title: 'Menú',

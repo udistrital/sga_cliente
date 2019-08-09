@@ -28,6 +28,10 @@ const routes: Routes = [{
       path: 'tipo_periodo',
       loadChildren: './tipo_periodo/tipo_periodo.module#TipoPeriodoModule',
       },
+      {
+        path: 'periodo',
+        loadChildren: './periodo/periodo.module#PeriodoModule',
+        },
     {
         path: '',
         redirectTo: 'dashboard',
