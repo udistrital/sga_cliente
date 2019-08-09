@@ -37,6 +37,24 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Tipo Periodo',
+    icon: 'nb-compose',
+    link: '/pages/tipo_periodo',
+    key: 'tipo_periodo',
+    children: [
+      {
+        title: 'Lista Tipo Periodo',
+        link: '/pages/tipo_periodo/list-tipo_periodo',
+        key: 'lista_tipo_periodo',
+      },
+      {
+        title: 'CRUD Tipo Periodo',
+        link: '/pages/tipo_periodo/crud-tipo_periodo',
+        key: 'crud_tipo_periodo',
+      },
+    ],
+  },
   /*
   {
     title: 'Menú',
