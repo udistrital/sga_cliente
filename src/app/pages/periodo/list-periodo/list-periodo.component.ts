@@ -156,8 +156,8 @@ export class ListPeriodoComponent implements OnInit {
     // Pasamos el valor seleccionado a la variable verSeleccion
   if (this.opcionSeleccionadoAno == null) {
     const opt1: any = {
-      title: 'Atención',
-      text: 'Por Favor Seleccione el año a realizar la operacion',
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('periodo.seleccione_ano'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,

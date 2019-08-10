@@ -1,6 +1,5 @@
-import { Tipoevento } from './../../../@core/data/models/tipoevento';
-
-import { Calendarioevento } from './../../../@core/data/models/calendarioevento';
+import { Tipoevento } from './../../../@core/data/models/oferta_academica/tipoevento';
+import { Calendarioevento } from './../../../@core/data/models/oferta_academica/calendarioevento';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ClienteHabilitarPeriodoService } from '../../../@core/data/cliente_habilitar_periodo.service';
 import { FORM_CALENDARIOEVENTO } from './form-calendarioevento';
@@ -94,8 +93,8 @@ export class CrudCalendarioeventoComponent implements OnInit {
   updateCalendarioevento(calendarioevento: any): void {
 
     const opt: any = {
-      title: 'Update?',
-      text: 'Update Calendarioevento!',
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('oferta.seguro_actualizar_oferta'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -109,7 +108,7 @@ export class CrudCalendarioeventoComponent implements OnInit {
           .subscribe(res => {
             this.loadCalendarioevento();
             this.eventChange.emit(true);
-            this.showToast('info', 'updated', 'Calendarioevento updated');
+            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('oferta.oferta_actualizado'));
           });
       }
     });
@@ -117,8 +116,8 @@ export class CrudCalendarioeventoComponent implements OnInit {
 
   createCalendarioevento(calendarioevento: any): void {
     const opt: any = {
-      title: 'Create?',
-      text: 'Create Calendarioevento!',
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('oferta.seguro_continuar_registrar_oferta'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -132,7 +131,7 @@ export class CrudCalendarioeventoComponent implements OnInit {
           .subscribe(res => {
             this.info_calendarioevento = <Calendarioevento><unknown>res;
             this.eventChange.emit(true);
-            this.showToast('info', 'created', 'Calendarioevento created');
+            this.showToast('info', this.translate.instant('GLOBAL.crear'), this.translate.instant('oferta.oferta_creado'));
           });
       }
     });

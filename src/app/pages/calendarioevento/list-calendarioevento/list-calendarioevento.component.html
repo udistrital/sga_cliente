@@ -1,12 +1,12 @@
 <div class="col-md-12 col-lg-12 ">
     <nb-card>
         <H1 align="center">
-            <font size=4>Lista de Oferta Academica </font>
+            <font size=4>{{ 'oferta.titulo' | translate }} </font>
         </H1>
         <nb-card status="success" class="m-5" size="medium">
-            <nb-card-header>Período Académico a listar</nb-card-header>
+            <nb-card-header>{{ 'oferta.subtitulo' | translate }}</nb-card-header>
             <nb-card-body>
-                Para habilitar el listado de la oferta academica, selecione por favor el año y el periodo a en listar.
+                {{ 'oferta.explicacion' | translate }}
                 <div class="row">
                     <div class="col-sm-6">
                         <nb-card class="m-4">
@@ -14,7 +14,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <mat-label>{{ 'GLOBAL.ano' | translate }} :</mat-label>
                                     <mat-select [(ngModel)]="opcionSeleccionadoAno" (ngModelChange)="capturarAno()">
-                                        <mat-option>--Seleccionar--</mat-option>
+                                        <mat-option>{{ 'oferta.seleccion_ano' | translate }}</mat-option>
                                         <mat-option *ngFor="let item of ano" [value]="item">
                                             {{ item.Ano }}
                                         </mat-option>
@@ -30,7 +30,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <mat-label>{{ 'GLOBAL.periodo' | translate }} :</mat-label>
                                     <mat-select [(ngModel)]="opcionSeleccionadoPeriodo" (ngModelChange)="capturarPeriodo()">
-                                        <mat-option>--Seleccionar--</mat-option>
+                                        <mat-option>{{ 'oferta.seleccion_periodo' | translate }}</mat-option>
                                         <mat-option *ngFor="let item of periodo" [value]="item">
                                             {{ item.Periodo }}
                                         </mat-option>
@@ -43,7 +43,7 @@
                 </div>
             </nb-card-body>
             <nb-card-body class="example-items-rows trans text-center">
-                <button (click)="ListarOferta()" type="button" class="btn btn-outline-success btn-sm m-2">Consultar Oferta</button>
+                <button (click)="ListarOferta()" type="button" class="btn btn-outline-success btn-sm m-2">{{ 'oferta.buton_consultar' | translate }}</button>
 
             </nb-card-body>
         </nb-card>

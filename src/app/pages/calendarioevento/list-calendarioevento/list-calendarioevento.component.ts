@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { Periodo } from './../../../@core/data/models/periodo';
-import { Calendarioevento } from './../../../@core/data/models/calendarioevento';
+import { Periodo } from './../../../@core/data/models/periodo/periodo';
+import { Calendarioevento } from './../../../@core/data/models/oferta_academica/calendarioevento';
 import { OfertaAcademicaService } from '../../../@core/data/oferta_academica.service';
 import { ClienteHabilitarPeriodoService } from '../../../@core/data/cliente_habilitar_periodo.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
@@ -94,8 +94,8 @@ export class ListCalendarioeventoComponent implements OnInit {
   capturarAno() {
   if (this.opcionSeleccionadoAno == null) {
     const opt1: any = {
-      title: 'Atención',
-      text: 'Por Favor Seleccione el año a realizar la operacion',
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('periodo.seleccione_ano'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -116,8 +116,8 @@ export class ListCalendarioeventoComponent implements OnInit {
 
 loadevento() {
   const opt1: any = {
-    title: 'Atención',
-    text: 'El periodo seleccionado no cuenta con una oferta académica',
+    title: this.translate.instant('GLOBAL.atencion'),
+    text: this.translate.instant('oferta.evento'),
     icon: 'warning',
     buttons: true,
     dangerMode: true,
@@ -167,8 +167,8 @@ loadevento() {
 capturarPeriodo() {
   if (this.opcionSeleccionadoPeriodo == null) {
     const opt1: any = {
-      title: 'Atención',
-      text: 'Por Favor Seleccione primero el año a realizar la operacion',
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('periodo.seleccione_ano'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -207,8 +207,8 @@ traerPeriodoSelect() {
   ListarOferta() {
      if (this.info_periodo == null) {
         const opt1: any = {
-          title: 'Atención',
-          text: 'Por Favor Primero Seleccione el Periodo a realizar la operacion',
+          title: this.translate.instant('GLOBAL.atencion'),
+          text: this.translate.instant('periodo.seleccione_periodo'),
           icon: 'warning',
           buttons: true,
           dangerMode: true,
@@ -240,8 +240,8 @@ traerPeriodoSelect() {
 
   onDelete(event): void {
     const opt: any = {
-      title: 'Deleting?',
-      text: 'Delete Calendarioevento!',
+      title: this.translate.instant('GLOBAL.eliminar'),
+      text: this.translate.instant('oferta.seguro_eliminar_oferta'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -253,7 +253,7 @@ traerPeriodoSelect() {
       if (willDelete.value) {
         this.clienteHabilitarPeriodoService.delete('calendarioevento/', event.data).subscribe(res => {
           if (res !== null) {
-            this.showToast('info', 'deleted', 'Calendarioevento deleted');
+            this.showToast('info', this.translate.instant('GLOBAL.eliminar'), this.translate.instant('oferta.oferta_eliminado'));
             }
          });
       }

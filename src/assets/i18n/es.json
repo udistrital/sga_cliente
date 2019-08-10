@@ -43,6 +43,11 @@
             "periodo": "Habilitar Período",
             "lista_periodo": "Habilitar/Deshabilitar un período",
             "crud_periodo": "Crear un período"
+        },
+        "calendarioevento": {
+            "calendarioevento": "Oferta Academica",
+            "lista_calendarioevento": "listar la oferta Academica",
+            "crud_calendarioevento": "Crud calendarioevento"
         }
     },
     "GLOBAL": {
@@ -230,6 +235,20 @@
         "seleccion_periodo": "--Seleccionar Período--",
         "buton_habilitar": "Habiliar",
         "buton_deshabilitar": "Deshabilitar"
-
+    },
+    "oferta": {
+        "seguro_actualizar_periodo": "¿Esta seguro de actualizar este Oferta academica?",
+        "oferta_actualizado": "Oferta academica actualizada",
+        "seguro_continuar_registrar_oferta": "¿Esta seguro de registrar este  oferta academica?",
+        "oferta_creado": "Oferta Academica creada",
+        "evento": "El periodo seleccionado no cuenta con una oferta académica",
+        "seguro_eliminar_oferta": "¿Esta seguro de eliminar esta oferta academica?",
+        "oferta_eliminado": "Oferta Academica eliminada",
+        "titulo": "Lista de Oferta Academica",
+        "subtitulo": "Período Académico a listar",
+        "explicacacion": "Para habilitar el listado de la oferta academica, selecione por favor el año y el periodo a en listar.",
+        "seleccion_ano": "--Seleccionar Año--",
+        "seleccion_periodo": "--Seleccionar Período--",
+        "buton_consultar": "Consultar Oferta"
     }
 }

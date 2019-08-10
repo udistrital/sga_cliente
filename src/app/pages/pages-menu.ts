@@ -73,6 +73,24 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Calendarioevento',
+    icon: 'nb-compose',
+    link: '/pages/calendarioevento',
+    key: 'calendarioevento',
+    children: [
+      {
+        title: 'Lista Calendarioevento',
+        link: '/pages/calendarioevento/list-calendarioevento',
+        key: 'lista_calendarioevento',
+      },
+      // {
+      //   title: 'CRUD Calendarioevento',
+      //   link: '/pages/calendarioevento/crud-calendarioevento',
+      //   key: 'crud_calendarioevento',
+      // },
+    ],
+  },
   /*
   {
     title: 'Menú',

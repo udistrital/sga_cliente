@@ -32,6 +32,10 @@ const routes: Routes = [{
         path: 'periodo',
         loadChildren: './periodo/periodo.module#PeriodoModule',
         },
+        {
+          path: 'calendarioevento',
+          loadChildren: './calendarioevento/calendarioevento.module#CalendarioeventoModule',
+          },
     {
         path: '',
         redirectTo: 'dashboard',
