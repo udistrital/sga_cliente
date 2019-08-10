@@ -194,8 +194,8 @@ export class ListPeriodoComponent implements OnInit {
 capturarPeriodo() {
   if (this.opcionSeleccionadoPeriodo == null) {
     const opt1: any = {
-      title: 'Atención',
-      text: 'Por Favor Seleccione primero el año a realizar la operacion',
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('periodo.seleccione_ano'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -233,8 +233,8 @@ traerPeriodoSelect() {
    ActivarPeriodo() {
      if (this.info_periodo == null) {
         const opt1: any = {
-          title: 'Atención',
-          text: 'Por Favor Primero Seleccione el Periodo a realizar la operacion',
+          title: this.translate.instant('GLOBAL.atencion'),
+          text: this.translate.instant('periodo.seleccione_periodo'),
           icon: 'warning',
           buttons: true,
           dangerMode: true,
@@ -248,8 +248,8 @@ traerPeriodoSelect() {
      }else {
      if (this.info_periodo.Activo === true) {
     const opt1: any = {
-      title: 'Atención',
-      text: 'Este periodo ya esta Habilitado',
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('periodo.habilitado'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -264,8 +264,8 @@ traerPeriodoSelect() {
   }else {
 
     const opt: any = {
-      title: 'Atención!',
-      text: 'Periodo Habilitado!',
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('periodo.periodo_habilitado'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -278,7 +278,7 @@ traerPeriodoSelect() {
         this.clienteHabilitarPeriodoService.put('periodo', this.info_periodo)
           .subscribe(res => {
             this.eventChange.emit(true);
-            this.showToast('info', 'Habilitado', 'Periodo Habilitado');
+            this.showToast('info', this.translate.instant('periodo.se_habilita'), this.translate.instant('periodo.periodo_habilitado'));
             this.loadData();
           });
       }
@@ -288,8 +288,8 @@ traerPeriodoSelect() {
 DeshabilitarPeriodo() {
   if (this.info_periodo == null) {
     const opt1: any = {
-      title: 'Atención',
-      text: 'Por Favor Primero Seleccione el Periodo a realizar la operacion',
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('periodo.seleccione_periodo'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -304,8 +304,8 @@ DeshabilitarPeriodo() {
  }else {
   if (this.info_periodo.Activo === false) {
     const opt1: any = {
-      title: 'Atención',
-      text: 'Este periodo ya esta Deshabilitado',
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('periodo.deshabilitado'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -320,8 +320,8 @@ DeshabilitarPeriodo() {
   }else {
 
     const opt: any = {
-      title: 'Atención!',
-      text: 'Periodo Deshabilitado!',
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('periodo.periodo_deshabilitado'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -334,7 +334,7 @@ DeshabilitarPeriodo() {
         this.clienteHabilitarPeriodoService.put('periodo', this.info_periodo)
           .subscribe(res => {
             this.eventChange.emit(true);
-            this.showToast('info', 'Deshabilitado', 'Periodo Deshabilitado');
+            this.showToast('info', this.translate.instant('periodo.se_deshabilita'), this.translate.instant('periodo.periodo_deshabilitado'));
             this.loadData();
           });
       }
@@ -359,8 +359,8 @@ DeshabilitarPeriodo() {
 
   onDelete(event): void {
     const opt: any = {
-      title: 'Deleting?',
-      text: 'Delete Periodo!',
+      title: this.translate.instant('GLOBAL.eliminar'),
+      text: this.translate.instant('periodo.seguro_eliminar_periodo'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -373,7 +373,7 @@ DeshabilitarPeriodo() {
         this.clienteHabilitarPeriodoService.delete('periodo/', event.data).subscribe(res => {
           if (res !== null) {
             this.loadData();
-            this.showToast('info', 'deleted', 'Periodo deleted');
+            this.showToast('info', this.translate.instant('GLOBAL.eliminar'), this.translate.instant('periodo.periodo_eliminado'));
             }
          });
       }

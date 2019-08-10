@@ -92,8 +92,8 @@ export class CrudPeriodoComponent implements OnInit {
   updatePeriodo(periodo: any): void {
 
     const opt: any = {
-      title: 'Update?',
-      text: 'Update Periodo!',
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('periodo.seguro_actualizar_periodo'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -107,7 +107,7 @@ export class CrudPeriodoComponent implements OnInit {
           .subscribe(res => {
             this.loadPeriodo();
             this.eventChange.emit(true);
-            this.showToast('info', 'updated', 'Periodo updated');
+            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('periodo.periodo_actualizado'));
           });
       }
     });
@@ -115,8 +115,8 @@ export class CrudPeriodoComponent implements OnInit {
 
   createPeriodo(periodo: any): void {
     const opt: any = {
-      title: 'Create?',
-      text: 'Create Periodo!',
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('periodo.seguro_continuar_registrar_periodo'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -130,7 +130,7 @@ export class CrudPeriodoComponent implements OnInit {
           .subscribe(res => {
             this.info_periodo = <Periodo><unknown>res;
             this.eventChange.emit(true);
-            this.showToast('info', 'created', 'Periodo created');
+            this.showToast('success', this.translate.instant('GLOBAL.crear'), this.translate.instant('periodo.periodo_creado'));
           });
       }
     });
