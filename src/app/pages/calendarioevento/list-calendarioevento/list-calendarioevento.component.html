@@ -6,7 +6,7 @@
         <nb-card status="success" class="m-5" size="medium">
             <nb-card-header>{{ 'oferta.subtitulo' | translate }}</nb-card-header>
             <nb-card-body>
-                {{ 'oferta.explicacion' | translate }}
+                {{ 'oferta.explicacacion' | translate }}
                 <div class="row">
                     <div class="col-sm-6">
                         <nb-card class="m-4">
@@ -53,25 +53,25 @@
     <nb-card>
         <nb-card-body>
             <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba para filtrar los proyectos curriculares">
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{ 'oferta.filtro' | translate }}">
             </mat-form-field>
 
             <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
                 <!--  Columna ID-->
                 <ng-container matColumnDef="Proyecto_curricular">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Proyecto Curricular</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'oferta.proyecto' | translate }}</mat-header-cell>
                     <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.TipoEventoId.DependenciaId | lowercase }} </mat-cell>
                 </ng-container>
 
                 <!-- Columna Apellido -->
                 <ng-container matColumnDef="Fecha_inicio">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de inicio</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'oferta.fecha_inicio' | translate }}</mat-header-cell>
                     <mat-cell *matCellDef="let row"> {{row.FechaInicio | date:'dd/MM/yyyy' }} </mat-cell>
                 </ng-container>
 
                 <!-- Columna Nombre-->
                 <ng-container matColumnDef="Fecha_fin">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de finalización </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'oferta.fecha_finaliza' | translate }} </mat-header-cell>
                     <mat-cell *matCellDef="let row"> {{row.FechaFin | date:'dd/MM/yyyy' }} </mat-cell>
                 </ng-container>
 
