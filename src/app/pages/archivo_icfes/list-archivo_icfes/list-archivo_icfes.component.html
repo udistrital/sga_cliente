@@ -10,7 +10,7 @@
         (rowSelect)="itemselec($event)" (edit)="onEdit($event)" (create)="onCreate($event)">
       </ng2-smart-table>
       <!--button (click)="activetab()" >cambiar</button-->
-      <ngx-crud-archivo_icfes *ngIf="cambiotab" [perfil_id]="uid" (eventChange)="onChange($event)"></ngx-crud-archivo_icfes>
+      <ngx-crud-archivo-icfes *ngIf="cambiotab" [perfil_id]="uid" (eventChange)="onChange($event)"></ngx-crud-archivo-icfes>
       <button *ngIf="cambiotab" (click)="activetab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i>
         {{ 'GLOBAL.regresar' | translate }}</button>
 

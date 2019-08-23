@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 
 @Component({
-  selector: 'ngx-list-archivo_icfes',
+  selector: 'ngx-list-archivo-icfes',
   templateUrl: './list-archivo_icfes.component.html',
   styleUrls: ['./list-archivo_icfes.component.scss'],
   })
