@@ -9,6 +9,10 @@ const routes: Routes = [{
   component: PagesComponent,
   children: [
     {
+      path: 'archivo_icfes',
+      loadChildren: './archivo_icfes/archivo_icfes.module#ArchivoIcfesModule',
+    },
+    {
         path: 'dashboard',
         component: DashboardComponent,
     },

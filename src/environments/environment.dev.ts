@@ -25,6 +25,7 @@ export const environment = {
   PRODUCCION_ACADEMICA_SERVICE: 'http://localhost:8080/v1/',
   DOCUMENTO_SERVICE: 'http://api.planestic.udistrital.edu.co:8094/v1/',
   CAMPUS_MID: 'http://localhost:8095/v1/',
+  SGA_MID: 'http://localhost:8095/v1/',
   CORE_SERVICE: 'http://localhost:8096/v1/',
   EVENTO_SERVICE: 'http://localhost:8080/v1/',
   OIKOS_SERVICE: 'http://10.20.0.254/oikos_api/v1/',
