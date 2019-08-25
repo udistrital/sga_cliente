@@ -11,6 +11,12 @@ const httpOptions = {
     }),
 }
 
+const httpOptionsFile = {
+    headers: new HttpHeaders({
+        'Content-Type': 'multipart/form-data',
+    }),
+}
+
 const path = environment.SGA_MID;
 
 @Injectable()
@@ -32,7 +38,7 @@ export class SgaMidService {
     }
 
     post_file(endpoint, element) {
-      return this.http.post<any>(path + endpoint, element, {}).pipe(
+      return this.http.post<any>(path + endpoint, element, httpOptionsFile).pipe(
         catchError(this.handleError),
       );
     }

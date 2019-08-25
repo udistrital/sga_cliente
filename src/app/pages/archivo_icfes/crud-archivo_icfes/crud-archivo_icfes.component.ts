@@ -69,9 +69,6 @@ export class CrudArchivoIcfesComponent implements OnInit {
 
   onSubmit() {
     const formModel = this.prepareSave();
-    // this.loading = true;
-    // In a real-world app you'd have a http request / service call here like
-    // this.http.post('apiUrl', formModel)
     this.sgaMidService.post_file('archivo_icfes', formModel)
       .subscribe(res => {
         this.info_perfil = <Perfil><unknown>res;
