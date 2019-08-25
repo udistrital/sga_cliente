@@ -37,6 +37,20 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Archivo Icfes',
+    icon: 'nb-compose',
+    link: '',
+    key: 'archivo_icfes',
+    children: [
+      {
+        title: 'Registrar archivo',
+        icon: 'nb-list',
+        link: '/pages/archivo_icfes/crud-archivo_icfes',
+        key: 'crud_archivo',
+      },
+    ],
+  },
   /*
   {
     title: 'Menú',

@@ -27,6 +27,11 @@
       "list_evento": "Events List",
       "crud_evento": "Events Crud"
     },
+    "archivo_icfes": {
+      "archivo_icfes": "Icfes file",
+      "list_archivo": "File List",
+      "crud_archivo": "File Register"
+    },
     "auth": {
       "auth": "Auth",
       "login": "Login",
