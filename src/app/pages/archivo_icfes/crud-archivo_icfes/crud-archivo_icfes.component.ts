@@ -18,12 +18,10 @@ export class CrudArchivoIcfesComponent implements OnInit {
   config: ToasterConfig;
   perfil_id: number;
 
-  
   @Input('perfil_id')
   set name(perfil_id: number) {
     this.perfil_id = perfil_id;
   }
-  
 
   @Output() eventChange = new EventEmitter();
 
@@ -49,15 +47,14 @@ export class CrudArchivoIcfesComponent implements OnInit {
   }
 
   onFileChange(event) {
-    console.log(event);
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       if (file.type === 'text/plain') {
         this.archivo_icfes_data.archivo_icfes = file;
       } else {
         this.archivo_icfes_data.archivo_icfes = undefined;
-        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('archivo_icfes.error_formato')); 
-      } 
+        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('archivo_icfes.error_formato'));
+      }
     }
   }
 
