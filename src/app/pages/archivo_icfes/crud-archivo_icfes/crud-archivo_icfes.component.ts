@@ -1,8 +1,7 @@
 import { Aplicacion } from './../../../@core/data/models/aplicacion';
 
 import { Perfil } from './../../../@core/data/models/perfil';
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FORM_ARCHIVO_ICFES } from './form-archivo_icfes';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
@@ -19,149 +18,75 @@ export class CrudArchivoIcfesComponent implements OnInit {
   config: ToasterConfig;
   perfil_id: number;
 
+  
   @Input('perfil_id')
   set name(perfil_id: number) {
     this.perfil_id = perfil_id;
-    this.loadPerfil();
   }
+  
 
   @Output() eventChange = new EventEmitter();
 
-  info_perfil: Perfil;
-  formPerfil: any;
-  regPerfil: any;
-  clean: boolean;
-  archivo_icfes_data: any = {};
+  // info_perfil: Perfil;
+  // formPerfil: any;
+  // regPerfil: any;
+  // clean: boolean;
+  archivo_icfes_data: any;
 
-  form: FormGroup;
-  loading: boolean = false;
-  @ViewChild('fileInput') fileInput: ElementRef;
 
-  constructor(private fb: FormBuilder, private translate: TranslateService, private sgaMidService: SgaMidService, private toasterService: ToasterService) {
-    this.formPerfil = FORM_ARCHIVO_ICFES;
+  constructor(private translate: TranslateService, private sgaMidService: SgaMidService, private toasterService: ToasterService) {
+    // this.formPerfil = FORM_ARCHIVO_ICFES;
+    /*
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.createForm();
-  }
-
-  createForm() {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      archivo_icfes: null,
-    });
+    */
+    this.archivo_icfes_data = {
+      name: undefined,
+      archivo_icfes: undefined,
+    }
   }
 
   onFileChange(event) {
+    console.log(event);
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.form.get('archivo_icfes').setValue(file);
+      if (file.type === 'text/plain') {
+        this.archivo_icfes_data.archivo_icfes = file;
+      } else {
+        this.archivo_icfes_data.archivo_icfes = undefined;
+        this.showToast('error', this.translate.instant('GLOBAL.error'), 'Archivo Icfes no formato'); 
+      } 
     }
   }
 
-  private prepareSave(): any {
-    const input = new FormData();
-    input.append('name', this.form.get('name').value);
-    input.append('archivo_icfes', this.form.get('archivo_icfes').value);
-    return input;
-  }
-
-  onSubmit() {
-    const formModel = this.prepareSave();
-    this.sgaMidService.post_file('archivo_icfes', formModel)
-      .subscribe(res => {
-        this.info_perfil = <Perfil><unknown>res;
-        this.eventChange.emit(true);
-        this.showToast('info', 'created', 'Archivo Icfes created');
-      });
-  }
-
-  clearFile() {
-    this.form.get('avatar').setValue(null);
-    this.fileInput.nativeElement.value = '';
-  }
-
-  construirForm() {
-    this.formPerfil.titulo = this.translate.instant('GLOBAL.perfil');
-    this.formPerfil.btn = this.translate.instant('GLOBAL.guardar');
-    for (let i = 0; i < this.formPerfil.campos.length; i++) {
-      this.formPerfil.campos[i].label = this.translate.instant('GLOBAL.' + this.formPerfil.campos[i].label_i18n);
-      this.formPerfil.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' + this.formPerfil.campos[i].label_i18n);
-    }
+  private preparePost(): any {
+    const postData = new FormData();
+    postData.append('name', this.archivo_icfes_data.name);
+    postData.append('archivo_icfes', this.archivo_icfes_data.archivo_icfes);
+    return postData;
   }
 
   useLanguage(language: string) {
     this.translate.use(language);
   }
 
-  getIndexForm(nombre: String): number {
-    for (let index = 0; index < this.formPerfil.campos.length; index++) {
-      const element = this.formPerfil.campos[index];
-      if (element.nombre === nombre) {
-        return index
-      }
-    }
-    return 0;
-  }
-
-
-  public loadPerfil(): void {
-    if (this.perfil_id !== undefined && this.perfil_id !== 0) {
-      this.sgaMidService.get('perfil/?query=id:' + this.perfil_id)
-        .subscribe(res => {
-          if (res !== null) {
-            this.info_perfil = <Perfil>res[0];
-          }
-        });
-    } else  {
-      this.info_perfil = undefined;
-      this.clean = !this.clean;
-    }
-  }
-
-  updatePerfil(perfil: any): void {
-
-    const opt: any = {
-      title: 'Update?',
-      text: 'Update Perfil!',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt)
-    .then((willDelete) => {
-      if (willDelete.value) {
-        this.info_perfil = <Perfil>perfil;
-        this.sgaMidService.put('perfil', this.info_perfil)
-          .subscribe(res => {
-            this.loadPerfil();
-            this.eventChange.emit(true);
-            this.showToast('info', 'updated', 'Perfil updated');
-          });
-      }
-    });
-  }
-
-  createArchivoIcfes(archivo_icfes: any): void {
+  postArchivoIcfes(): void {
     const opt: any = {
       title: 'Create?',
-      text: 'Create Perfil!',
+      text: 'Create Archivo Icfes!',
       icon: 'warning',
       buttons: true,
       dangerMode: true,
       showCancelButton: true,
     };
     Swal(opt)
-    .then((willDelete) => {
-      if (willDelete.value) {
-        // this.info_perfil = <Perfil>perfil;
-        // archivo_icfes.archivo_icfes = archivo_icfes.SoporteDocumento.file;
-        // console.log("archivo icfes", archivo_icfes);
-        this.sgaMidService.post('archivo_icfes', archivo_icfes)
+    .then((willCreate) => {
+      if (willCreate.value) {
+        const formModel = this.preparePost();
+        this.sgaMidService.post_file('archivo_icfes', formModel)
           .subscribe(res => {
-            this.info_perfil = <Perfil><unknown>res;
             this.eventChange.emit(true);
             this.showToast('info', 'created', 'Archivo Icfes created');
           });
@@ -170,17 +95,7 @@ export class CrudArchivoIcfesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadPerfil();
-  }
 
-  validarForm(event) {
-    if (event.valid) {
-      if (this.info_perfil === undefined) {
-        this.createArchivoIcfes(event.data.Perfil);
-      } else {
-        this.updatePerfil(event.data.Perfil);
-      }
-    }
   }
 
   private showToast(type: string, title: string, body: string) {
