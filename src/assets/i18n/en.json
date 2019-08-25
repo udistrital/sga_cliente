@@ -152,5 +152,15 @@
     "evento_no_actualizado":"Event not updated",
     "descripcion": "Description",
     "placeholder_descripcion": "e.g. Inscriptions"
+  },
+  "archivo_icfes": {
+    "archivo_icfes": "Icfes file",
+    "nombre": "Name",
+    "placeholder_nombre": "Ej. 2019-1 Icfes file",
+    "archivo": "File",
+    "registrar_archivo": "Are you sure you want to proccess this file?",
+    "archivo_registrado": "The file was processed successfully",
+    "error_formato": "Format file is not txt",
+    "archivo_no_registrado": "The file was not processed successfully, please try again"
   }
 }

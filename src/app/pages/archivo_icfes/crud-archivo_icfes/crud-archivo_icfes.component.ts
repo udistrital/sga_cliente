@@ -56,7 +56,7 @@ export class CrudArchivoIcfesComponent implements OnInit {
         this.archivo_icfes_data.archivo_icfes = file;
       } else {
         this.archivo_icfes_data.archivo_icfes = undefined;
-        this.showToast('error', this.translate.instant('GLOBAL.error'), 'Archivo Icfes no formato'); 
+        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('archivo_icfes.error_formato')); 
       } 
     }
   }
@@ -74,8 +74,8 @@ export class CrudArchivoIcfesComponent implements OnInit {
 
   postArchivoIcfes(): void {
     const opt: any = {
-      title: 'Create?',
-      text: 'Create Archivo Icfes!',
+      title: this.translate.instant('GLOBAL.confirmar'),
+      text: this.translate.instant('archivo_icfes.registrar_archivo'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -88,7 +88,9 @@ export class CrudArchivoIcfesComponent implements OnInit {
         this.sgaMidService.post_file('archivo_icfes', formModel)
           .subscribe(res => {
             this.eventChange.emit(true);
-            this.showToast('info', 'created', 'Archivo Icfes created');
+            this.showToast('info', this.translate.instant('GLOBAL.confirmar'), this.translate.instant('archivo_icfes.archivo_registrado'));
+          }, error => {
+            this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('archivo_icfes.archivo_no_registrado'))
           });
       }
     });
