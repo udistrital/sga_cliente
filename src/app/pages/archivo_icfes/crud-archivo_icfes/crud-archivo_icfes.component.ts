@@ -92,7 +92,7 @@ export class CrudArchivoIcfesComponent implements OnInit {
               name: undefined,
               archivo_icfes: undefined,
             }
-            this.ArchivoIcfesInputVariable.nativeElement.value = "";
+            this.ArchivoIcfesInputVariable.nativeElement.value = '';
           }, error => {
             this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('archivo_icfes.archivo_no_registrado'))
           });
