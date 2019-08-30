@@ -20,7 +20,7 @@
                           <label for="archivo_icfes" class="upload-file">
                               * {{'archivo_icfes.archivo' | translate}}
                           </label>
-                          <input type="file" id="archivo_icfes" accept="text/plain" (change)="onFileChange($event)" />
+                          <input #ArchivoIcfesInput type="file" id="archivo_icfes" accept="text/plain" (change)="onFileChange($event)" />
                           <br>
                           <mat-hint class="text-danger" *ngIf="!archivo_icfes_data.archivo_icfes">{{'GLOBAL.alerta_llenar_campo' | translate}}</mat-hint>
                       </div>

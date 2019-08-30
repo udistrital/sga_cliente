@@ -1,7 +1,7 @@
 import { Aplicacion } from './../../../@core/data/models/aplicacion';
 
 import { Perfil } from './../../../@core/data/models/perfil';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FORM_ARCHIVO_ICFES } from './form-archivo_icfes';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
@@ -22,6 +22,8 @@ export class CrudArchivoIcfesComponent implements OnInit {
   set name(perfil_id: number) {
     this.perfil_id = perfil_id;
   }
+
+  @ViewChild('ArchivoIcfesInput') ArchivoIcfesInputVariable: ElementRef;
 
   @Output() eventChange = new EventEmitter();
 
@@ -86,6 +88,11 @@ export class CrudArchivoIcfesComponent implements OnInit {
           .subscribe(res => {
             this.eventChange.emit(true);
             this.showToast('info', this.translate.instant('GLOBAL.confirmar'), this.translate.instant('archivo_icfes.archivo_registrado'));
+            this.archivo_icfes_data = {
+              name: undefined,
+              archivo_icfes: undefined,
+            }
+            this.ArchivoIcfesInputVariable.nativeElement.value = "";
           }, error => {
             this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('archivo_icfes.archivo_no_registrado'))
           });
