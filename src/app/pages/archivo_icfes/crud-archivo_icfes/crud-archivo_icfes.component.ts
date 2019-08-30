@@ -86,7 +86,7 @@ export class CrudArchivoIcfesComponent implements OnInit {
         const formModel = this.preparePost();
         this.sgaMidService.post_file('archivo_icfes', formModel)
           .subscribe(res => {
-            if (res.Type !== 'error'){
+            if (res.Type !== 'error') {
               this.eventChange.emit(true);
               this.showToast('info', this.translate.instant('GLOBAL.confirmar'), this.translate.instant('archivo_icfes.archivo_registrado'));
               this.archivo_icfes_data = {
