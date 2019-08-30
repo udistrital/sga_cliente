@@ -86,13 +86,17 @@ export class CrudArchivoIcfesComponent implements OnInit {
         const formModel = this.preparePost();
         this.sgaMidService.post_file('archivo_icfes', formModel)
           .subscribe(res => {
-            this.eventChange.emit(true);
-            this.showToast('info', this.translate.instant('GLOBAL.confirmar'), this.translate.instant('archivo_icfes.archivo_registrado'));
-            this.archivo_icfes_data = {
-              name: undefined,
-              archivo_icfes: undefined,
+            if (res.Type !== 'error'){
+              this.eventChange.emit(true);
+              this.showToast('info', this.translate.instant('GLOBAL.confirmar'), this.translate.instant('archivo_icfes.archivo_registrado'));
+              this.archivo_icfes_data = {
+                name: undefined,
+                archivo_icfes: undefined,
+              }
+              this.ArchivoIcfesInputVariable.nativeElement.value = '';
+            } else {
+              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('archivo_icfes.archivo_no_registrado'))
             }
-            this.ArchivoIcfesInputVariable.nativeElement.value = '';
           }, error => {
             this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('archivo_icfes.archivo_no_registrado'))
           });
