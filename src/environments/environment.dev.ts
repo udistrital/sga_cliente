@@ -14,7 +14,7 @@ export const environment = {
   NOTIFICACION_SERVICE: 'ws://10.20.0.254:8199/ws/join',
   TOKEN: {
     AUTORIZATION_URL: 'https://autenticacion.udistrital.edu.co/oauth2/authorize',
-    CLIENTE_ID: 'qGicYmef58iY7VxyFm8B39995FUa',
+    CLIENTE_ID: 'RsFySb57eJXw8ft2VtMYfL4r_9oa',
     RESPONSE_TYPE: 'id_token token',
     SCOPE: 'openid email role documento',
     REDIRECT_URL: 'http://10.20.0.254/configuracionv2/',
