@@ -29,6 +29,10 @@ const routes: Routes = [{
       loadChildren: './produccion_academica/produccion_academica.module#ProduccionAcademicaModule',
     },
     {
+      path: 'reportes',
+      loadChildren: './reportes/reportes.module#ReportesModule',
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
