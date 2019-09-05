@@ -25,7 +25,7 @@ export class InscritosProyectoComponent implements OnInit {
       documentLabel: 'sga_v2_reporte_inscr',
       eecutionRole: '/spagobi/user/admin',
       displayToolbar: true,
-      displaySliders: false,
+      displaySliders: true,
       iframe: {
           style: 'border: solid rgb(0,0,0,0.2) 1px;',
           height: '500px;',
