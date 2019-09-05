@@ -5,7 +5,7 @@ import { spagoBIService } from '../../../@core/utils/spagoBIAPI/spagoBIService';
 @Component({
   selector: 'ngx-inscritos-proyecto',
   templateUrl: './inscritos-proyecto.component.html',
-  styleUrls: ['./inscritos-proyecto.component.css'],
+  styleUrls: ['./inscritos-proyecto.component.scss'],
 })
 export class InscritosProyectoComponent implements OnInit {
 
@@ -23,7 +23,7 @@ export class InscritosProyectoComponent implements OnInit {
       displayToolbar: true,
       displaySliders: false,
       iframe: {
-          style: 'border: 2px;',
+          style: 'border: 0px;',
           height: '500px;',
           width: '100%',
       },
@@ -47,4 +47,5 @@ export class InscritosProyectoComponent implements OnInit {
   getReport() {
     spagoBIService.getReport(this, this.callbackFunction);
   }
+  
 }
