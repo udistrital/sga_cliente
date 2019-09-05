@@ -51,6 +51,28 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Reportes',
+    icon: 'nb-compose',
+    link: '',
+    key: 'reportes',
+    children: [
+      {
+        title: 'Inscripciones',
+        icon: '	nb-maximize',
+        link: '',
+        key: 'inscripciones',
+        children: [
+          {
+            title: 'Inscritos por proyecto',
+            icon: 'nb-list',
+            link: '/pages/reportes/inscripciones/inscritos-proyecto',
+            key: 'inscritos_por_proyecto',
+          },
+        ],
+      },
+    ],
+  },
   /*
   {
     title: 'Menú',
