@@ -1,3 +1,7 @@
+import { environment } from '../../../../environments/environment';
+
+const { SPAGOBI } = environment;
+
 function setBaseUrl(config){
 	Sbi.sdk.services.setBaseUrl(config);
 }
@@ -13,16 +17,16 @@ function getDocumentHtml(config){
 
 function getReport(scope, callbackFunction){
       const baseUrl = {
-            protocol: 'https', 
-            host: 'intelligentia.udistrital.edu.co', 
-            port: '8443', 
-            contextPath: 'SpagoBI', 
+            protocol: SPAGOBI.PROTOCOL, 
+            host: SPAGOBI.HOST, 
+            port: SPAGOBI.PORT, 
+            contextPath: SPAGOBI.CONTEXTPATH, 
             controllerPath: 'servlet/AdapterHTTP'
       };
       const authConf = {
             params: {
-                  user: 'sergio_orjuela',
-                  password: 'sergio_orjuela'
+                  user: SPAGOBI.USER,
+                  password: SPAGOBI.PASSWORD
             },
             callback: {
                   fn: callbackFunction,

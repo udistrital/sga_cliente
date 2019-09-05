@@ -29,4 +29,12 @@ export const environment = {
   CORE_SERVICE: 'http://localhost:8096/v1/',
   EVENTO_SERVICE: 'http://localhost:8080/v1/',
   OIKOS_SERVICE: 'http://10.20.0.254/oikos_api/v1/',
+  SPAGOBI: {
+    PROTOCOL: 'https', 
+    HOST: 'intelligentia.udistrital.edu.co', 
+    PORT: '8443', 
+    CONTEXTPATH: 'SpagoBI',
+    USER: 'sergio_orjuela',
+    PASSWORD: 'sergio_orjuela'
+  },
 };
