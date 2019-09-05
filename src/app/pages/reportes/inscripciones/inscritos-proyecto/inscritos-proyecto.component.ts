@@ -24,6 +24,7 @@ export class InscritosProyectoComponent implements OnInit {
     this.reportConfig = {
       documentLabel: 'sga_v2_reporte_inscr',
       eecutionRole: '/spagobi/user/admin',
+      // parameters: {'PARAMETERS': 'param_1=1&param_2=2'}, 
       displayToolbar: true,
       displaySliders: true,
       iframe: {
