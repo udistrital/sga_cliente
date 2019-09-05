@@ -3,9 +3,9 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { spagoBIService } from '../../../@core/utils/spagoBIAPI/spagoBIService';
 
 @Component({
-  selector: 'app-inscritos-proyecto',
+  selector: 'ngx-inscritos-proyecto',
   templateUrl: './inscritos-proyecto.component.html',
-  styleUrls: ['./inscritos-proyecto.component.css']
+  styleUrls: ['./inscritos-proyecto.component.css'],
 })
 export class InscritosProyectoComponent implements OnInit {
 
@@ -18,15 +18,15 @@ export class InscritosProyectoComponent implements OnInit {
 
   initReportConfig() {
     this.reportConfig = {
-      documentLabel: 'sga_v2_reporte_inscr', 
-      eecutionRole: '/spagobi/user/admin', 
-      displayToolbar: true, 
-      displaySliders: false, 
+      documentLabel: 'sga_v2_reporte_inscr',
+      eecutionRole: '/spagobi/user/admin',
+      displayToolbar: true,
+      displaySliders: false,
       iframe: {
           style: 'border: 2px;',
           height: '500px;',
-          width: '100%'
-      }
+          width: '100%',
+      },
     };
   }
 
@@ -35,7 +35,7 @@ export class InscritosProyectoComponent implements OnInit {
       const html = spagoBIService.getDocumentHtml(this.reportConfig);
       this.spagoBIDocumentArea.nativeElement.innerHTML = html;
     } else {
-      console.log('ERROR: authentication failed! Invalid username and/or password ');
+      // console.info('ERROR: authentication failed! Invalid username and/or password ');
       this.spagoBIDocumentArea.nativeElement.innerHTML = '<h1>Error obteniendo la información del reporte</h1>';
     }
   }
@@ -45,6 +45,6 @@ export class InscritosProyectoComponent implements OnInit {
   }
 
   getReport() {
-    spagoBIService.getReport(this,this.callbackFunction);
+    spagoBIService.getReport(this, this.callbackFunction);
   }
 }
