@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
-import { spagoBIService } from '../../../@core/utils/spagoBIAPI/spagoBIService';
+import { spagoBIService } from '../../../../@core/utils/spagoBIAPI/spagoBIService';
 
 @Component({
   selector: 'ngx-inscritos-proyecto',
