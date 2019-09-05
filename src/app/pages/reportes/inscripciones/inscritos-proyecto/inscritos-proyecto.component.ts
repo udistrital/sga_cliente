@@ -40,7 +40,7 @@ export class InscritosProyectoComponent implements OnInit {
       this.spagoBIDocumentArea.nativeElement.innerHTML = html;
     } else {
       // console.info('ERROR: authentication failed! Invalid username and/or password ');
-      const message = this.translate.instant('reportes.error_obteniendo_reporte'); 
+      const message = this.translate.instant('reportes.error_obteniendo_reporte');
       this.spagoBIDocumentArea.nativeElement.innerHTML = `<h5>${message}</h5>`;
       this.showToast('error', 'Error', this.translate.instant('reportes.error_obteniendo_reporte'));
     }
