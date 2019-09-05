@@ -32,6 +32,13 @@
       "list_archivo": "File List",
       "crud_archivo": "File Register"
     },
+    "reportes": {
+      "reportes": "Reports",
+      "inscripciones": {
+        "inscripciones": "Inscriptions",
+        "inscritos_por_proyecto": "Enrolled by project"
+      }
+    },
     "auth": {
       "auth": "Auth",
       "login": "Login",
