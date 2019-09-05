@@ -174,5 +174,9 @@
     "archivo_registrado": "El archivo fue procesado correctamente",
     "error_formato": "El formato del archivo no es txt",
     "archivo_no_registrado": "El archivo no pudo ser procesado, por favor intente nuevamente."
+  },
+  "reportes": {
+    "inscritos_por_proyecto":"Inscritos por proyecto",
+    "error_obteniendo_reporte":"Se produjo un error al obtener la información del informe, por favor vuelva a intentarlo."
   }
 }

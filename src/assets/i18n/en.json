@@ -174,5 +174,9 @@
     "archivo_registrado": "The file was processed successfully",
     "error_formato": "Format file is not txt",
     "archivo_no_registrado": "The file was not processed successfully, please try again"
+  },
+  "reportes": {
+    "inscritos_por_proyecto":"Enrolled by project",
+    "error_obteniendo_reporte":"There was an error getting the report information, please try again."
   }
 }
