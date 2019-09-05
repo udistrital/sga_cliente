@@ -27,7 +27,7 @@ export class InscritosProyectoComponent implements OnInit {
       displayToolbar: true,
       displaySliders: false,
       iframe: {
-          style: 'border: 0px;',
+          style: 'border: solid rgb(0,0,0,0.2) 1px;',
           height: '500px;',
           width: '100%',
       },
