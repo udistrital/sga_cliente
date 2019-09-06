@@ -28,4 +28,6 @@ export const environment = {
   CORE_SERVICE: 'http://localhost:8096/v1/',
   EVENTO_SERVICE: 'http://localhost:8080/v1/',
   OIKOS_SERVICE: 'http://10.20.0.254/oikos_api/v1/',
+  CLIENTE_HABILITAR_PERIODO_SERVICE: 'http://localhost:8088/v1/',
+  OFERTA_ACADEMICA_SERVICE: 'http://localhost:8095/v1/',
 };

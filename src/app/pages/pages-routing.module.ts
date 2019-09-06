@@ -25,6 +25,18 @@ const routes: Routes = [{
       loadChildren: './produccion_academica/produccion_academica.module#ProduccionAcademicaModule',
     },
     {
+      path: 'tipo_periodo',
+      loadChildren: './tipo_periodo/tipo_periodo.module#TipoPeriodoModule',
+      },
+      {
+        path: 'periodo',
+        loadChildren: './periodo/periodo.module#PeriodoModule',
+        },
+        {
+          path: 'calendarioevento',
+          loadChildren: './calendarioevento/calendarioevento.module#CalendarioeventoModule',
+          },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
