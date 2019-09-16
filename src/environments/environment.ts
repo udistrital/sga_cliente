@@ -20,7 +20,7 @@ export const environment = {
     REDIRECT_URL: 'http://localhost:4200/',
     SIGN_OUT_URL: 'https://autenticacion.portaloas.udistrital.edu.co/oidc/logout', 
     SIGN_OUT_REDIRECT_URL: 'http://localhost:4200/', 
-},
+  },
   PERSONA_SERVICE: 'http://api.planestic.udistrital.edu.co:8083/v1/',
   PRODUCCION_ACADEMICA_SERVICE: 'http://localhost:8080/v1/',
   DOCUMENTO_SERVICE: 'http://api.planestic.udistrital.edu.co:8094/v1/',
