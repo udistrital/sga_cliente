@@ -15,10 +15,10 @@ export const environment = {
   TOKEN: {
     AUTORIZATION_URL: 'https://autenticacion.portaloas.udistrital.edu.co/oauth2/authorize',
     CLIENTE_ID: 'e36v1MPQk2jbz9KM4SmKhk8Cyw0a',
-    RESPONSE_TYPE: 'id_token token',  
+    RESPONSE_TYPE: 'id_token token',
     SCOPE: 'openid email role documento',
     REDIRECT_URL: 'http://localhost:4200/',
-    SIGN_OUT_URL: 'https://autenticacion.portaloas.udistrital.edu.co/oidc/logout',  
+    SIGN_OUT_URL: 'https://autenticacion.portaloas.udistrital.edu.co/oidc/logout',
     SIGN_OUT_REDIRECT_URL: 'http://localhost:4200/',
   },
   PERSONA_SERVICE: 'http://api.planestic.udistrital.edu.co:8083/v1/',
