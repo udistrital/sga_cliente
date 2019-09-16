@@ -48,7 +48,14 @@
             "calendarioevento": "Oferta Académica",
             "lista_calendarioevento": "listar la oferta Académica",
             "crud_calendarioevento": "Crud calendarioevento"
+        },
+        "proyecto_academico": {
+            "proyecto_academico": "Proyecto Academico",
+            "list_proyecto_academico": "Lista Producción Academico",
+            "crud_proyecto_academico": "Crud Producción Academico"
         }
+       
+        
     },
     "GLOBAL": {
         "id": "Id",

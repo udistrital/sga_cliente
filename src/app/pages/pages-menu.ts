@@ -1,5 +1,6 @@
 // import { NbMenuItem } from '@nebular/theme';
 import { MenuItem } from './menu-item';
+import { icon } from 'leaflet';
 
 export const MENU_ITEMS: MenuItem[] = [
   {
@@ -91,6 +92,22 @@ export const MENU_ITEMS: MenuItem[] = [
       // },
     ],
   },
+  {
+    title: 'Proyecto Academico',
+    icon: 'nb-compose',
+    link: '',
+    key: 'proyecto_academico',
+    children: [
+      {
+        title: 'Listar Proyectos',
+        icon: 'nb-list',
+        link: '/pages/proyecto_academico/list-proyecto_academico',
+        key: 'list_proyecto_academico',
+      },
+    ],
+  },
+
+
   /*
   {
     title: 'Menú',
