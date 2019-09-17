@@ -78,7 +78,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   }
   submit() {
     if (this.basicform.valid) {
-      console.log(this.basicform.value)
+      // console.log(this.basicform.value)
     } else {
       alert('FILL ALL FIELDS')
     }
