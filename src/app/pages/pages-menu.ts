@@ -99,6 +99,12 @@ export const MENU_ITEMS: MenuItem[] = [
     key: 'proyecto_academico',
     children: [
       {
+        title: 'Registro de un Proyecto',
+        icon: 'nb-compose',
+        link: '/pages/proyecto_academico/crud-proyecto_academico',
+        key: 'crud_proyecto_academico',
+      },
+      {
         title: 'Listar Proyectos',
         icon: 'nb-list',
         link: '/pages/proyecto_academico/list-proyecto_academico',

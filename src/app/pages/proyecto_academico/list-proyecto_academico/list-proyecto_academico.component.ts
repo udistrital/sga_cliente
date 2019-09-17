@@ -27,11 +27,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
     private campusMidService: CampusMidService,
     private user: UserService,
     private toasterService: ToasterService) {
-    this.loadData();
-    this.cargarCampos();
-    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.cargarCampos();
-    });
   }
 
   cargarCampos() {
@@ -136,124 +131,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   ngOnInit() {
   }
 
-  onEdit(event): void {
-    if (event.data.EstadoEnteAutorId.EstadoAutorProduccionId.Id === 1 || event.data.EstadoEnteAutorId.EstadoAutorProduccionId.Id === 2) {
-      this.prod_selected = event.data;
-      this.activetab();
-    } else if (event.data.EstadoEnteAutorId.EstadoAutorProduccionId.Id === 3) {
-      this.updateEstadoAutor(event.data);
-    } else {
-      this.showToast('error', 'Error', this.translate.instant('GLOBAL.accion_no_permitida'));
-    }
-  }
 
-  onCreate(event): void {
-    this.prod_selected = undefined;
-    this.activetab();
-  }
-
-  onDelete(event): void {
-    if (event.data.EstadoEnteAutorId.EstadoAutorProduccionId.Id === 1) {
-      const opt: any = {
-        title: this.translate.instant('GLOBAL.eliminar'),
-        text: this.translate.instant('produccion_academica.seguro_continuar_eliminar_produccion'),
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        showCancelButton: true,
-      };
-      Swal(opt)
-      .then((willDelete) => {
-        if (willDelete.value) {
-          this.campusMidService.delete('produccion_academica', event.data).subscribe((res: any) => {
-            if (res !== null) {
-              if (res.Body.Id !== undefined) {
-                this.source.load([]);
-                this.loadData();
-                this.showToast('info', 'Ok', this.translate.instant('produccion_academica.produccion_eliminada'));
-              } else {
-                this.showToast('info', 'Error', this.translate.instant('produccion_academica.produccion_no_eliminada'));
-              }
-            }
-           }, (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-          });
-        }
-      });
-    } else if (event.data.EstadoEnteAutorId.EstadoAutorProduccionId.Id === 2) {
-      const opt: any = {
-        title: 'Error',
-        text: this.translate.instant('produccion_academica.autor_no_puede_borrar'),
-        icon: 'warning',
-        buttons: false,
-      };
-      Swal(opt);
-    } else if (event.data.EstadoEnteAutorId.EstadoAutorProduccionId.Id === 3) {
-      this.updateEstadoAutor(event.data);
-    } else {
-      this.showToast('error', 'Error', this.translate.instant('GLOBAL.accion_no_permitida'));
-    }
-  }
-
-  updateEstadoAutor(data: any): void {
-    const opt: any = {
-      title: 'Error',
-      text: this.translate.instant('produccion_academica.autor_no_ha_confirmado'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt)
-    .then((willConfirm) => {
-      if (willConfirm.value) {
-        const optConfirmar: any = {
-          title: this.translate.instant('GLOBAL.confirmar'),
-          text: this.translate.instant('produccion_academica.confirma_participar_produccion'),
-          icon: 'warning',
-          buttons: true,
-          dangerMode: true,
-          showCancelButton: true,
-          confirmButtonText: this.translate.instant('GLOBAL.si'),
-          cancelButtonText: this.translate.instant('GLOBAL.no'),
-        };
-         Swal(optConfirmar)
-        .then((isAuthor) => {
-          const dataPut = {
-            acepta: isAuthor.value ? true : false,
-            AutorProduccionAcademica: data.EstadoEnteAutorId,
-          }
-          this.campusMidService.put('produccion_academica/estado_autor_produccion/' + dataPut.AutorProduccionAcademica.Id, dataPut)
-          .subscribe((res: any) => {
-            if (res.Type === 'error') {
-              Swal({
-                type: 'error',
-                title: res.Code,
-                text: this.translate.instant('ERROR.' + res.Code),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              });
-              this.showToast('error', 'Error', this.translate.instant('produccion_academica.estado_autor_no_actualizado'));
-            } else {
-              this.loadData();
-              this.showToast('success', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('produccion_academica.estado_autor_actualizado'));
-            }
-          }, (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-          });
-        });
-      }
-    });
-  }
 
   activetab(): void {
     this.cambiotab = !this.cambiotab;
@@ -279,25 +157,5 @@ export class ListProyectoAcademicoComponent implements OnInit {
     // console.log("afssaf");
   }
 
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
-  }
 
 }

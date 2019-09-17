@@ -52,10 +52,10 @@
         "proyecto_academico": {
             "proyecto_academico": "Proyecto Academico",
             "list_proyecto_academico": "Lista Producción Academico",
-            "crud_proyecto_academico": "Crud Producción Academico"
+            "crud_proyecto_academico": "Registro de un Proyecto académico"
         }
-       
-        
+
+
     },
     "GLOBAL": {
         "id": "Id",
@@ -261,5 +261,9 @@
         "fecha_inicio": "Fecha de inicio",
         "fecha_finaliza": "Fecha de finalización",
         "filtro": "Escriba para filtrar los proyectos curriculares"
+    },
+    "proyecto": {
+        "titulo": "Registro de un Proyecto Académico",
+        "basica": "Datos Basicos"
     }
 }
