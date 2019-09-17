@@ -264,6 +264,22 @@
     },
     "proyecto": {
         "titulo": "Registro de un Proyecto Académico",
-        "basica": "Datos Basicos"
+        "basica": "Datos Basicos",
+        "codigo_snies": "Código SNIES ",
+        "facultad": "Facultad",
+        "erro_selec": "Por favor seleccione la facultad!",
+        "nombre_proyecto": "Nombre",
+        "nivel_proyecto": "Nivel",
+        "metodologia_proyecto": "Metodología",
+        "abreciacion_proyecto": "Abreviación",
+        "correo_proyecto": "Correo Electrónico",
+        "creditos_proyecto": "Numero de creditos",
+        "duracion_proyecto": "Duración",
+        "tipo_duracion": "Tipo duración",
+        "ciclo_proyecto": "Ciclos Propedeuticos",
+        "ofrece_proyecto": "Se ofrece",
+        "enfasis_proyecto": "El proyecto cuenta con énfasis",
+        "registro": "Registro Calificado",
+        "area": "Área de Conocimiento:"
     }
 }

@@ -1,51 +1,134 @@
 <div class="col-md-12 col-lg-12 ">
-    <nb-card>
-        <nb-card accent="info" align="center" size=4>
-            <nb-card-header>{{ 'proyecto.titulo' | translate }}</nb-card-header>
-            <nb-card>
-                <nb-card-body>
-                    Este Modulo le permite el registro de un nuevo proyecto académico o crear uno a partir de un proyecto académico que tengan características similares, para poder realizar el registro deberá tener a la mano la evidencia del acto administrativo, por favor
-                    ingrese la información solicitada.
-                </nb-card-body>
-            </nb-card>
-            <div class="row">
-                <div class="col-sm-6">
+
+    <nb-card accent="info" align="center" size=4>
+        <nb-card-header>{{ 'proyecto.titulo' | translate }}</nb-card-header>
+        <nb-card>
+            <nb-card-body>
+                Este Modulo le permite el registro de un nuevo proyecto académico o crear uno a partir de un proyecto académico que tengan características similares, para poder realizar el registro deberá tener a la mano la evidencia del acto administrativo, por favor
+                ingrese la información solicitada.
+            </nb-card-body>
+        </nb-card>
+        <div class="row">
+            <div class="col-sm-6">
+                <nb-card class="m-4" accent="info">
+                    <nb-card-header>{{ 'proyecto.basica' | translate }}</nb-card-header>
+                    <nb-card-body>
+                        <form id="basicForm" [formGroup]="basicform" (ngSubmit)="submit()">
+                            <mat-form-field>
+                                <input matInput placeholder="{{ 'proyecto.codigo_snies' | translate }}" formControlName="codigo_snies" class="form-control" name="codigo_snies">
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field>
+                                <mat-label>{{ 'proyecto.facultad' | translate }}</mat-label>
+                                <mat-select [formControl]="facultadControl" required>
+                                    <mat-option>--</mat-option>
+                                    <mat-option *ngFor="let facultad of facultades" [value]="facultad">
+                                        {{facultad.name}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="facultadControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field>
+                                <input matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}" formControlName="nombre_proyecto" class="form-control" name="nombre_proyecto">
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field>
+                                <input matInput placeholder="{{ 'proyecto.nivel_proyecto' | translate }}" formControlName="nivel_proyecto" class="form-control" name="nivel_proyecto">
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field>
+                                <input matInput placeholder="{{ 'proyecto.metodologia_proyecto' | translate }}" formControlName="metodologia_proyecto" class="form-control" name="metodologia_proyecto">
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field>
+                                <input matInput placeholder="{{ 'proyecto.abreciacion_proyecto' | translate }}" formControlName="abreviacion_proyecto" class="form-control" name="abreviacion_proyecto">
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field>
+                                <input matInput placeholder="{{ 'proyecto.correo_proyecto' | translate }}" formControlName="correo_proyecto" class="form-control" name="correo_proyecto">
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field>
+                                <input matInput placeholder="{{ 'proyecto.creditos_proyecto' | translate }}" formControlName="creditos_proyecto" class="form-control" name="creditos_proyecto">
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field>
+                                <input matInput placeholder="{{ 'proyecto.duracion_proyecto' | translate }}" formControlName="duracion_proyecto" class="form-control" name="duracion_proyecto">
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field>
+                                <mat-label>{{ 'proyecto.tipo_duracion' | translate }}</mat-label>
+                                <mat-select [formControl]="facultadControl" required>
+                                    <mat-option>--</mat-option>
+                                    <mat-option *ngFor="let facultad of facultades" [value]="facultad">
+                                        {{facultad.name}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="facultadControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
+                            </mat-form-field>
+                            <br>
+                            <mat-checkbox>{{ 'proyecto.ciclo_proyecto' | translate }} </mat-checkbox>&nbsp;&nbsp;
+                            <mat-checkbox>{{ 'proyecto.ofrece_proyecto' | translate }}</mat-checkbox>
+                            <br>
+                            <mat-checkbox>{{ 'proyecto.enfasis_proyecto' | translate }}</mat-checkbox>
+                            <br>
+                            <button id="btnSubmit" mat-raised-button type="submit" color="primary">Submit</button>
+                        </form>
+                        <strong>{{basicform.value.codigo_snies}} </strong>
+                        <br>
+                        <strong>{{basicform.value.nombre_proyecto}} </strong>
+                        <br>
+                        <strong>{{basicform.value.nivel_proyecto}} </strong>
+                        <br>
+                        <strong>{{basicform.value.metodologia_proyecto}} </strong>
+                        <br>
+                        <strong>{{basicform.value.abreviacion_proyecto}} </strong>
+                        <br>
+                        <strong>{{basicform.value.correo_proyecto}} </strong>
+                        <br>
+                        <strong>{{basicform.value.creditos_proyecto}} </strong>
+                        <br>
+                        <strong>{{basicform.value.duracion_proyecto}} </strong>
+                    </nb-card-body>
+
+                </nb-card>
+
+            </div>
+            <div class="col-sm-6">
+                <div class="row-sm-6">
                     <nb-card class="m-4" accent="info">
-                        <nb-card-header>{{ 'proyecto.basica' | translate }}</nb-card-header>
-
-
+                        <nb-card-header>{{ 'proyecto.registro' | translate }}</nb-card-header>
+                        <nb-card-body>
+                            <mat-form-field>
+                                <mat-label>{{ 'proyecto.area' | translate }}</mat-label>
+                                <mat-select [formControl]="facultadControl" required>
+                                    <mat-option>--</mat-option>
+                                    <mat-option *ngFor="let facultad of facultades" [value]="facultad">
+                                        {{facultad.name}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="facultadControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
+                            </mat-form-field>
+                            <br>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+                <div class="row-sm-6">
+                    <nb-card class="m-4" accent="info">
+                        <nb-card-header>{{ 'proyecto.registro' | translate }}</nb-card-header>
+                        <nb-card-body>
+                        </nb-card-body>
                     </nb-card>
                 </div>
             </div>
-        </nb-card>
-        <nb-card status="success" class="m-5" size="medium">
 
-            <nb-card-body>
+        </div>
 
-                <div class="row">
-                    <div class="col-sm-6">
-                        <nb-card class="m-4">
-                            <nb-card-body>
-                                <mat-form-field style="width: 70%;">
-                                    <mat-label>{{ 'GLOBAL.ano' | translate }} :</mat-label>
-                                    <mat-select [(ngModel)]="opcionSeleccionadoAno" (ngModelChange)="capturarAno()">
-                                        <mat-option> {{ 'periodo.seleccion_ano' | translate }}</mat-option>
-                                        <mat-option *ngFor="let item of ano" [value]="item">
-                                            {{ item.Ano }}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
 
-                            </nb-card-body>
-                        </nb-card>
-                    </div>
-                    <div class="col-sm-6">
-                        <nb-card class="m-4">
-                        </nb-card>
-                    </div>
-                </div>
-            </nb-card-body>
-        </nb-card>
+
+
     </nb-card>
+
 
 </div>
