@@ -56,19 +56,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
 
   facultadControl = new FormControl('', [Validators.required]);
   selectFormControl = new FormControl('', Validators.required);
-  facultades: Facultad[] = [
-    {name: 'Ingenieria'},
-    {name: 'Artes'},
-    {name: 'Técnologica'},
-    {name: 'Bosa'},
-  ];
-
-
-
   @Output() eventChange = new EventEmitter();
-
-
-
 
   constructor(private translate: TranslateService,
     private toasterService: ToasterService,
@@ -82,6 +70,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
         metodologia_proyecto: ['', Validators.required],
         abreviacion_proyecto: ['', Validators.required],
         correo_proyecto: ['', [Validators.required, Validators.email]],
+        numero_proyecto: ['', Validators.required],
         creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
         duracion_proyecto: ['', Validators.required],
      })
