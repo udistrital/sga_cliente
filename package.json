@@ -45,6 +45,7 @@
     "@angular/forms": "^7.2.15",
     "@angular/http": "7.2.15",
     "@angular/material": "^7.3.7",
+    "@angular/material-moment-adapter": "^8.2.0",
     "@angular/platform-browser": "^7.2.15",
     "@angular/platform-browser-dynamic": "^7.2.15",
     "@angular/router": "7.2.15",

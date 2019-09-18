@@ -73,7 +73,7 @@
                             <br>
                             <mat-checkbox>{{ 'proyecto.enfasis_proyecto' | translate }}</mat-checkbox>
                             <br>
-                            <button id="btnSubmit" mat-raised-button type="submit" color="primary">Submit</button>
+
                         </form>
                         <strong>{{basicform.value.codigo_snies}} </strong>
                         <br>
@@ -93,31 +93,139 @@
                     </nb-card-body>
 
                 </nb-card>
+                <nb-card class="m-4" accent="info">
+                    <nb-card-header>{{ 'proyecto.enfasis' | translate }}</nb-card-header>
+                    <nb-card-body>
+                        <mat-form-field>
+                            <mat-label>{{ 'proyecto.enfasis_proyecto' | translate }}</mat-label>
+                            <mat-select [formControl]="facultadControl" required>
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let facultad of facultades" [value]="facultad">
+                                    {{facultad.name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="facultadControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
+                        </mat-form-field>
 
+                    </nb-card-body>
+                </nb-card>
             </div>
+
             <div class="col-sm-6">
                 <div class="row-sm-6">
                     <nb-card class="m-4" accent="info">
                         <nb-card-header>{{ 'proyecto.registro' | translate }}</nb-card-header>
                         <nb-card-body>
-                            <mat-form-field>
-                                <mat-label>{{ 'proyecto.area' | translate }}</mat-label>
-                                <mat-select [formControl]="facultadControl" required>
-                                    <mat-option>--</mat-option>
-                                    <mat-option *ngFor="let facultad of facultades" [value]="facultad">
-                                        {{facultad.name}}
-                                    </mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="facultadControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
-                            </mat-form-field>
-                            <br>
+                            <form id="resoluForm" [formGroup]="resoluform" (ngSubmit)="submit()">
+                                <mat-form-field>
+                                    <mat-label>{{ 'proyecto.area' | translate }}</mat-label>
+                                    <mat-select [formControl]="facultadControl" required>
+                                        <mat-option>--</mat-option>
+                                        <mat-option *ngFor="let facultad of facultades" [value]="facultad">
+                                            {{facultad.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="facultadControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
+                                </mat-form-field>
+                                <br>
+                                <mat-form-field>
+                                    <mat-label>{{ 'proyecto.nucleo' | translate }}</mat-label>
+                                    <mat-select [formControl]="facultadControl" required>
+                                        <mat-option>--</mat-option>
+                                        <mat-option *ngFor="let facultad of facultades" [value]="facultad">
+                                            {{facultad.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="facultadControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
+                                </mat-form-field>
+                                <br>
+                                <div class="form-group row">
+                                    <mat-form-field>
+                                        <input matInput placeholder="{{ 'proyecto.resolucion_proyecto' | translate }}" formControlName="resolucion" class="form-control" name="resolucion_proyecto">
+                                    </mat-form-field>
+                                    <div class="col">
+                                        <mat-form-field>
+                                            <input matInput placeholder="{{ 'proyecto.ano_resolucion_proyecto' | translate }}" formControlName="ano_resolucion" class="form-control" name="ano_resolucion_proyecto">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="label col-sm-6 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
+                                    <div class="col">
+                                        <button nbButton size="tiny">{{ 'proyecto.btn_document' | translate }}</button>
+                                    </div>
+                                </div>
+                                <br>
+                                <mat-form-field>
+                                    <input matInput [matDatepicker]="picker" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                                <br>
+                                <mat-form-field>
+                                    <input matInput [matDatepicker]="picker1" placeholder="{{ 'proyecto.fecha_vigencia' | translate }}" formControlName="fecha_vigencia">
+                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                                <br>
+                                <div class="form-group row">
+                                    <label class="label col-sm-7 col-form-label">{{ 'proyecto.text_vigencia' | translate }}</label>
+                                    <div class="col">
+                                        <label class="label col-sm-7 col-form-label">09/2020</label>
+                                    </div>
+                                </div>
+                            </form>
                         </nb-card-body>
                     </nb-card>
                 </div>
                 <div class="row-sm-6">
                     <nb-card class="m-4" accent="info">
-                        <nb-card-header>{{ 'proyecto.registro' | translate }}</nb-card-header>
+                        <nb-card-header>{{ 'proyecto.acto' | translate }}</nb-card-header>
                         <nb-card-body>
+                            <form id="actoForm" [formGroup]="actoform" (ngSubmit)="submit()">
+                                <div class="form-group row">
+                                    <mat-form-field>
+                                        <input matInput placeholder="{{ 'proyecto.acto_proyecto' | translate }}" formControlName="acto" class="form-control" name="acto_proyecto">
+                                    </mat-form-field>
+                                    <div class="col">
+                                        <mat-form-field>
+                                            <input matInput placeholder="{{ 'proyecto.ano_acto_proyecto' | translate }}" formControlName="ano_acto" class="form-control" name="ano_acto_proyecto">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="form-group row">
+                                    <label class="label col-sm-7 col-form-label">{{ 'proyecto.text_document_acto' | translate }}</label>
+                                    <div class="col">
+                                        <button nbButton size="tiny">{{ 'proyecto.btn_document' | translate }}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+                <div class="row-sm-6">
+                    <nb-card class="m-4" accent="info">
+                        <nb-card-header>{{ 'proyecto.complementarios' | translate }}</nb-card-header>
+                        <nb-card-body>
+                            <form id="compleForm" [formGroup]="compleform" (ngSubmit)="submit()">
+                                <mat-form-field>
+                                    <input matInput placeholder="{{ 'proyecto.titulacion_snies' | translate }}" formControlName="titulacion_snies" class="form-control" name="titulacion_snies">
+                                </mat-form-field>
+                                <br>
+                                <mat-form-field>
+                                    <input matInput placeholder="{{ 'proyecto.titulacion_mujer' | translate }}" formControlName="titulacion_mujer" class="form-control" name="titulacion_mujer">
+                                </mat-form-field>
+                                <br>
+                                <mat-form-field>
+                                    <input matInput placeholder="{{ 'proyecto.titulacion_hombre' | translate }}" formControlName="titulacion_hombre" class="form-control" name="titulacion_hombre">
+                                </mat-form-field>
+                                <br>
+                                <mat-form-field>
+                                    <textarea rows="4" cols="50" matInput placeholder="{{ 'proyecto.competencias' | translate }}" formControlName="competencias" class="form-control" name="competencias"></textarea>
+                                </mat-form-field>
+                            </form>
                         </nb-card-body>
                     </nb-card>
                 </div>
@@ -126,6 +234,10 @@
         </div>
 
 
+
+
+
+        <button id="btnSubmit" mat-raised-button type="submit" color="primary">Submit</button>
 
 
     </nb-card>

@@ -10,9 +10,11 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ProduccionAcademicaService } from '../../../@core/data/produccion_academica.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { FORM_proyecto_academico } from './form-proyecto_academico';
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import {FormBuilder, Validators, FormControl} from '@angular/forms'
+import {FormBuilder, Validators, FormControl} from '@angular/forms';
+
 
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
@@ -21,6 +23,9 @@ import { MetadatoSubtipoProduccion } from '../../../@core/data/models/produccion
 import { Persona } from '../../../@core/data/models/persona';
 // import { p } from '@angular/core/src/render3';
 import { LocalDataSource } from 'ng2-smart-table';
+
+
+
 
 export interface Facultad {
   name: string;
@@ -34,6 +39,9 @@ export interface Facultad {
 })
 export class CrudProyectoAcademicoComponent implements OnInit {
   basicform: any;
+  resoluform: any;
+  actoform: any;
+  compleform: any;
 
 
   facultadControl = new FormControl('', [Validators.required]);
@@ -44,6 +52,9 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     {name: 'Técnologica'},
     {name: 'Bosa'},
   ];
+
+
+
   @Output() eventChange = new EventEmitter();
 
 
@@ -66,6 +77,22 @@ export class CrudProyectoAcademicoComponent implements OnInit {
         correo_proyecto: ['', [Validators.required, Validators.email]],
         creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
         duracion_proyecto: ['', Validators.required],
+     })
+     this.resoluform = formBuilder.group({
+      resolucion: ['', Validators.required],
+      ano_resolucion: ['', [Validators.required, Validators.maxLength(4)]],
+      fecha_creacion: ['', Validators.required],
+      fecha_vigencia: ['', Validators.required],
+     })
+     this.actoform = formBuilder.group({
+      acto: ['', Validators.required],
+      ano_acto: ['', Validators.required],
+     })
+     this.compleform = formBuilder.group({
+       titulacion_snies: ['', Validators.required],
+       titulacion_mujer: ['', Validators.required],
+       titulacion_hombre: ['', Validators.required],
+       competencias: ['', Validators.required],
      });
     }
 
@@ -78,7 +105,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   }
   submit() {
     if (this.basicform.valid) {
-      // console.log(this.basicform.value)
+      console.info(this.basicform.value)
     } else {
       alert('FILL ALL FIELDS')
     }
