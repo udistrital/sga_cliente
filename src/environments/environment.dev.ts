@@ -25,9 +25,10 @@ export const environment = {
   PRODUCCION_ACADEMICA_SERVICE: 'http://localhost:8080/v1/',
   DOCUMENTO_SERVICE: 'http://api.planestic.udistrital.edu.co:8094/v1/',
   CAMPUS_MID: 'http://localhost:8095/v1/',
-  CORE_SERVICE: 'http://api.planestic.udistrital.edu.co:8102/v1/',
+  CORE_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/',
   EVENTO_SERVICE: 'http://localhost:8080/v1/',
   OIKOS_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8087/v1/',
+  UNIDAD_TIEMPO_SERVICE: 'http://api.planestic.udistrital.edu.co:8102/v1/',
   CLIENTE_HABILITAR_PERIODO_SERVICE: 'http://localhost:8088/v1/',
   OFERTA_ACADEMICA_SERVICE: 'http://localhost:8095/v1/',
 };

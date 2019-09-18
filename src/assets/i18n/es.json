@@ -300,6 +300,7 @@
         "titulacion_hombre": "Titulación Hombre",
         "competencias": "Competencias:",
         "enfasis": "Énfasis del proyecto académico",
-        "enfasis_proyecto": "Nombre del énfasis:"
+        "enfasis_proyecto": "Nombre del énfasis:",
+        "registro_proyecto": "Registro del Proyecto Académico"
     }
 }

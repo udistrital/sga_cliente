@@ -16,6 +16,7 @@ import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import {FormBuilder, Validators, FormControl} from '@angular/forms';
+import {ProyectoAcademicoPost} from '../../../@core/data/models/proyecto_academico/proyecto_academico_post'
 
 
 import Swal from 'sweetalert2';
@@ -25,6 +26,7 @@ import { MetadatoSubtipoProduccion } from '../../../@core/data/models/produccion
 import { Persona } from '../../../@core/data/models/persona';
 // import { p } from '@angular/core/src/render3';
 import { LocalDataSource } from 'ng2-smart-table';
+import { UnidadTiempoService } from '../../../@core/data/unidad_tiempo.service';
 
 
 
@@ -52,6 +54,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   opcionSeleccionadoFacultad: any;
   checkenfasis: boolean;
   nucleo = [];
+  unidad= [];
 
 
   facultadControl = new FormControl('', [Validators.required]);
@@ -62,6 +65,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     private toasterService: ToasterService,
     private oikosService: OikosService,
     private coreService: CoreService,
+    private unidadtiempoService: UnidadTiempoService,
     private formBuilder: FormBuilder) {
       this.basicform = formBuilder.group({
         codigo_snies: ['', Validators.required],
@@ -101,6 +105,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     this.loadfacultad();
     this.loadarea();
     this.loadnucleo();
+    this.loadunidadtiempo();
   }
   loadfacultad() {
     console.info('Entro')
@@ -159,6 +164,25 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       });
     });
   }
+  loadunidadtiempo() {
+    console.info('Entro')
+    this.unidadtiempoService.get('unidad_tiempo')
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.unidad = <any>res;
+        console.info(this.unidad)
+      }
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
+  }
   submit() {
     if (this.basicform.valid) {
       console.info(this.basicform.value)
@@ -167,10 +191,8 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       console.info(this.opcionSeleccionadoFacultad['Id'])
     }
   }
-  prueba() {
-      console.info(this.opcionSeleccionadoFacultad['Id'])
-      console.info('imprime');
-      console.info(this.checkenfasis)
+  registroproyecto() {
+      console.info(this.basicform.value.codigo_snies)
   }
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({
