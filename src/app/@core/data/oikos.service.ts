@@ -12,7 +12,10 @@ const httpOptions = {
 
 const path = environment.OIKOS_SERVICE;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
+
 export class OikosService {
 
   constructor(private http: HttpClient) {

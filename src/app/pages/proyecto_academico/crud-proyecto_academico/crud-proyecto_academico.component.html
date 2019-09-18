@@ -20,10 +20,10 @@
                             <br>
                             <mat-form-field>
                                 <mat-label>{{ 'proyecto.facultad' | translate }}</mat-label>
-                                <mat-select [formControl]="facultadControl" required>
+                                <mat-select [formControl]="facultadControl" required [(ngModel)]="opcionSeleccionadoFacultad">
                                     <mat-option>--</mat-option>
-                                    <mat-option *ngFor="let facultad of facultades" [value]="facultad">
-                                        {{facultad.name}}
+                                    <mat-option *ngFor="let nombrefacultad of facultad" [value]="nombrefacultad">
+                                        {{nombrefacultad['Nombre']}}
                                     </mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="facultadControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
@@ -70,11 +70,10 @@
                             <br>
                             <mat-checkbox>{{ 'proyecto.ciclo_proyecto' | translate }} </mat-checkbox>&nbsp;&nbsp;
                             <mat-checkbox>{{ 'proyecto.ofrece_proyecto' | translate }}</mat-checkbox>
-                            <br>
-                            <mat-checkbox>{{ 'proyecto.enfasis_proyecto' | translate }}</mat-checkbox>
-                            <br>
+
 
                         </form>
+                        <mat-checkbox [(ngModel)]="checkenfasis">{{ 'proyecto.enfasis_proyecto' | translate }} </mat-checkbox>
                         <strong>{{basicform.value.codigo_snies}} </strong>
                         <br>
                         <strong>{{basicform.value.nombre_proyecto}} </strong>
@@ -90,10 +89,11 @@
                         <strong>{{basicform.value.creditos_proyecto}} </strong>
                         <br>
                         <strong>{{basicform.value.duracion_proyecto}} </strong>
+                        <button (click)="prueba()">botoncitos</button>
                     </nb-card-body>
 
                 </nb-card>
-                <nb-card class="m-4" accent="info">
+                <nb-card *ngIf="checkenfasis" class="m-4" accent="info">
                     <nb-card-header>{{ 'proyecto.enfasis' | translate }}</nb-card-header>
                     <nb-card-body>
                         <mat-form-field>
@@ -121,8 +121,8 @@
                                     <mat-label>{{ 'proyecto.area' | translate }}</mat-label>
                                     <mat-select [formControl]="facultadControl" required>
                                         <mat-option>--</mat-option>
-                                        <mat-option *ngFor="let facultad of facultades" [value]="facultad">
-                                            {{facultad.name}}
+                                        <mat-option *ngFor="let areacono of area" [value]="areacono">
+                                            {{areacono['Nombre']}}
                                         </mat-option>
                                     </mat-select>
                                     <mat-error *ngIf="facultadControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
@@ -132,8 +132,8 @@
                                     <mat-label>{{ 'proyecto.nucleo' | translate }}</mat-label>
                                     <mat-select [formControl]="facultadControl" required>
                                         <mat-option>--</mat-option>
-                                        <mat-option *ngFor="let facultad of facultades" [value]="facultad">
-                                            {{facultad.name}}
+                                        <mat-option *ngFor="let nucleocomun of nucleo" [value]="nucleocomun">
+                                            {{nucleocomun['Nombre']}}
                                         </mat-option>
                                     </mat-select>
                                     <mat-error *ngIf="facultadControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
@@ -237,7 +237,7 @@
 
 
 
-        <button id="btnSubmit" mat-raised-button type="submit" color="primary">Submit</button>
+        <button id="btnSubmit" mat-raised-button (onClick)="submit()" color="primary">Submit</button>
 
 
     </nb-card>

@@ -10,6 +10,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ProduccionAcademicaService } from '../../../@core/data/produccion_academica.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { FORM_proyecto_academico } from './form-proyecto_academico';
+import { OikosService } from '../../../@core/data/oikos.service';
+import { CoreService } from '../../../@core/data/core.service';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -27,6 +29,8 @@ import { LocalDataSource } from 'ng2-smart-table';
 
 
 
+
+
 export interface Facultad {
   name: string;
 }
@@ -38,10 +42,16 @@ export interface Facultad {
   styleUrls: ['./crud-proyecto_academico.component.scss'],
 })
 export class CrudProyectoAcademicoComponent implements OnInit {
+  config: ToasterConfig;
   basicform: any;
   resoluform: any;
   actoform: any;
   compleform: any;
+  facultad = [];
+  area = [];
+  opcionSeleccionadoFacultad: any;
+  checkenfasis: boolean;
+  nucleo = [];
 
 
   facultadControl = new FormControl('', [Validators.required]);
@@ -61,12 +71,9 @@ export class CrudProyectoAcademicoComponent implements OnInit {
 
 
   constructor(private translate: TranslateService,
-    private produccionAcademicaService: ProduccionAcademicaService,
-    private user: UserService,
-    private nuxeoService: NuxeoService,
-    private documentoService: DocumentoService,
-    private personaService: PersonaService,
     private toasterService: ToasterService,
+    private oikosService: OikosService,
+    private coreService: CoreService,
     private formBuilder: FormBuilder) {
       this.basicform = formBuilder.group({
         codigo_snies: ['', Validators.required],
@@ -102,12 +109,98 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     this.translate.use(language);
   }
   ngOnInit() {
+    this.loadfacultad();
+    this.loadarea();
+    this.loadnucleo();
+  }
+  loadfacultad() {
+    console.info('Entro')
+    this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2')
+    .subscribe((res: any) => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.facultad = res.map((data: any) => (data.DependenciaId));
+        console.info(this.facultad)
+      }
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
+  }
+  loadarea() {
+    console.info('Entro')
+    this.coreService.get('area_conocimiento')
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.area = <any>res;
+        console.info(this.area)
+      }
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
+  }
+  loadnucleo() {
+    console.info('Entro')
+    this.coreService.get('nucleo_basico_conocimiento')
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.nucleo = <any>res;
+        console.info(this.nucleo)
+      }
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
   }
   submit() {
     if (this.basicform.valid) {
       console.info(this.basicform.value)
     } else {
       alert('FILL ALL FIELDS')
+      console.info(this.opcionSeleccionadoFacultad['Id'])
     }
+  }
+  prueba() {
+      console.info(this.opcionSeleccionadoFacultad['Id'])
+      console.info('imprime');
+      console.info(this.checkenfasis)
+  }
+  private showToast(type: string, title: string, body: string) {
+    this.config = new ToasterConfig({
+      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
+      positionClass: 'toast-top-center',
+      timeout: 5000,  // ms
+      newestOnTop: true,
+      tapToDismiss: false, // hide on click
+      preventDuplicates: true,
+      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
+      limit: 5,
+    });
+    const toast: Toast = {
+      type: type, // 'default', 'info', 'success', 'warning', 'error'
+      title: title,
+      body: body,
+      showCloseButton: true,
+      bodyOutputType: BodyOutputType.TrustedHtml,
+    };
+    this.toasterService.popAsync(toast);
   }
 }

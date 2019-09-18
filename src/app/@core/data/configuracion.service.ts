@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { RequestManager } from '../../managers/requestManager';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ConfiguracionService {
 
   constructor(private requestManager: RequestManager) {
