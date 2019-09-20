@@ -13,5 +13,4 @@ export class RegistroCalificadoAcreditacion {
     ProyectoAcademicoInstitucionId: ProyectoAcademicoInstitucion;
     TipoRegistroId: TipoRegistro;
 
-
 }

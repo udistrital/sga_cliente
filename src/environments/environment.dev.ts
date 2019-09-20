@@ -29,6 +29,7 @@ export const environment = {
   EVENTO_SERVICE: 'http://localhost:8080/v1/',
   OIKOS_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8087/v1/',
   UNIDAD_TIEMPO_SERVICE: 'http://api.planestic.udistrital.edu.co:8102/v1/',
+  PROYECTO_ACADEMICO_SERVICE: 'http://localhost:8080/v1/',
   CLIENTE_HABILITAR_PERIODO_SERVICE: 'http://localhost:8088/v1/',
   OFERTA_ACADEMICA_SERVICE: 'http://localhost:8095/v1/',
 };

@@ -10,6 +10,7 @@ import { ListProyectoAcademicoComponent } from './list-proyecto_academico/list-p
 import { UserService } from '../../@core/data/users.service';
 import { PersonaService } from '../../@core/data/persona.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
+import {NgDatepickerModule} from 'ng2-datepicker';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { NuxeoService } from '../../@core/utils/nuxeo.service';
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
+    NgDatepickerModule,
   ],
   declarations: [
     ...routedComponents,

@@ -301,6 +301,22 @@
         "competencias": "Competencias:",
         "enfasis": "Énfasis del proyecto académico",
         "enfasis_proyecto": "Nombre del énfasis:",
-        "registro_proyecto": "Registro del Proyecto Académico"
+        "registro_proyecto": "Registro del Proyecto Académico",
+        "erro_codigoSnies": "Por favor ingrese el Codigo SNIES.",
+        "erro_nombre": "Por favor ingrese el Nombre del proyecto.",
+        "erro_meto": "Por favor seleccione la Metodologia del proyecto!",
+        "erro_abre": "Por favor ingrese la Abreviación del proyecto.",
+        "erro_correo": "Por favor ingrese el Correo del proyecto y el formato indicado.",
+        "erro_telefono": "Por favor ingrese el Telefono del proyecto.",
+        "erro_creditos": "Por favor ingrese los Creditos del proyecto, máximo 4 digitos.",
+        "erro_duracion": "Por favor ingrese la Duracion del proyecto.",
+        "erro_unidad": "Por favor seleccione la Unidad de tiempo.",
+        "error_datos": "Por favor Complete todos los datos Obligatorios",
+        "erro_fecha_creacion": "Por favor complete la fecha y hora de la creación del registro",
+        "erro_fecha_vigencia": "Por favor complete la fecha y hora de la vigencia del registro",
+        "erro_selec_enfasis": "Por favor seleccione el énfasis!",
+        "erro_selec_area": "Por favor seleccione el área de conocimiento!",
+        "erro_selec_nucleo": "Por favor seleccione el núcleo Base Conocimiento!",
+        "erro_nivel": "Por favor seleccione el nivel de formación!"
     }
 }
