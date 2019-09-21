@@ -1,8 +1,8 @@
-import { DependenciaTipoDependecia } from './dependencia_tipo_dependencia';
+import { DependenciaTipoDependencia } from './dependencia_tipo_dependencia';
 export class Dependencia {
     Id: number;
     Nombre: string;
     TelefonoDependencia: string;
     CorreoElectronico: string;
-    DependenciaTipoDependencia: DependenciaTipoDependecia;
+    DependenciaTipoDependencia: DependenciaTipoDependencia[];
 }

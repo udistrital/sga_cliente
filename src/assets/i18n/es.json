@@ -50,8 +50,8 @@
             "crud_calendarioevento": "Crud calendarioevento"
         },
         "proyecto_academico": {
-            "proyecto_academico": "Proyecto Academico",
-            "list_proyecto_academico": "Lista Producción Academico",
+            "proyecto_academico": "Proyecto Académico",
+            "list_proyecto_academico": "Lista Proyecto Académico",
             "crud_proyecto_academico": "Registro de un Proyecto académico"
         }
 
@@ -317,6 +317,19 @@
         "erro_selec_enfasis": "Por favor seleccione el énfasis!",
         "erro_selec_area": "Por favor seleccione el área de conocimiento!",
         "erro_selec_nucleo": "Por favor seleccione el núcleo Base Conocimiento!",
-        "erro_nivel": "Por favor seleccione el nivel de formación!"
+        "erro_nivel": "Por favor seleccione el nivel de formación!",
+        "erro_reso": "Por favor ingrese la resolución!",
+        "erro_ano": "Por favor ingrese el año de la resolución!",
+        "erro_acto": "Por favor ingrese el numero del acto administrativo!",
+        "erro_ano_acto": "Por favor ingrese el año del acto administrativo!",
+        "erro_titu_snies": "Por favor ingrese la titulación del SNIES!",
+        "erro_titu_mujer": "Por favor ingrese la titulación otorgada a una Mujer!",
+        "erro_titu_hombre": "Por favor ingrese la titulación otorgad a un Hombre!",
+        "erro_compe": "Por favor ingrese las competencias del proyecto!",
+        "seguro_continuar_registrar_proyecto": "¿Esta seguro de registrar este proyecto académico?",
+        "proyecto_no_creado": "Proyecto Académico no creado",
+        "proyecto_creado": "Proyecto Académico creado correctamente",
+        "creado": "Proyecto Creado!",
+        "mensaje": " Este Modulo le permite el registro de un nuevo proyecto académico o crear uno a partir de un proyecto académico que tengan características similares, para poder realizar el registro deberá tener a la mano la evidencia del acto administrativo, por favor ingrese la información solicitada."
     }
 }

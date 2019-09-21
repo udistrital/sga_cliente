@@ -1,26 +1,15 @@
-import { NuxeoService } from '../../../@core/utils/nuxeo.service';
-import { DocumentoService } from '../../../@core/data/documento.service';
-import { UserService } from '../../../@core/data/users.service';
-import { PersonaService } from '../../../@core/data/persona.service';
-import { ProduccionAcademicaPost } from '../../../@core/data/models/produccion_academica/produccion_academica';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
-import { FORM_proyecto_academico } from './form-proyecto_academico';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { CoreService } from '../../../@core/data/core.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import {FormBuilder, Validators, FormControl} from '@angular/forms';
 import {ProyectoAcademicoPost} from '../../../@core/data/models/proyecto_academico/proyecto_academico_post'
-
-
-
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
 import { UnidadTiempoService } from '../../../@core/data/unidad_tiempo.service';
-import { MatDatepickerInputEvent } from '@angular/material';
 import { ProyectoAcademicoInstitucion } from '../../../@core/data/models/proyecto_academico/proyecto_academico_institucion';
 import { TipoTitulacion } from '../../../@core/data/models/proyecto_academico/tipo_titulacion';
 import { Metodologia } from '../../../@core/data/models/proyecto_academico/metodologia';
@@ -31,6 +20,10 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academico/institucion_enfasis';
 import { Enfasis } from '../../../@core/data/models/proyecto_academico/enfasis';
 import { Titulacion } from '../../../@core/data/models/proyecto_academico/titulacion';
+import { TipoDependencia } from '../../../@core/data/models/oikos/tipo_dependencia';
+import { DependenciaTipoDependencia } from '../../../@core/data/models/oikos/dependencia_tipo_dependencia';
+import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 
 @Component({
@@ -40,6 +33,7 @@ import { Titulacion } from '../../../@core/data/models/proyecto_academico/titula
 })
 export class CrudProyectoAcademicoComponent implements OnInit {
   config: ToasterConfig;
+  settings: any;
   basicform: any;
   resoluform: any;
   actoform: any;
@@ -61,8 +55,8 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   enfasis = [];
   nivel = [];
   metodo = [];
-  fecha_creacion: Date;
-  fecha_vigencia: Date;
+  fecha_creacion: string;
+  fecha_vigencia: string;
   proyecto_academicoPost: ProyectoAcademicoPost;
   proyecto_academico: ProyectoAcademicoInstitucion;
   tipo_titulacion: TipoTitulacion;
@@ -75,6 +69,10 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   titulacion_proyecto_snies: Titulacion;
   titulacion_proyecto_mujer: Titulacion;
   titulacion_proyecto_hombre: Titulacion;
+  tipo_dependencia: TipoDependencia;
+  dependencia_tipo_dependencia: DependenciaTipoDependencia;
+  dependencia: Dependencia;
+
 
 
   CampoControl = new FormControl('', [Validators.required]);
@@ -84,6 +82,21 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   Campo4Control = new FormControl('', [Validators.required]);
   Campo5Control = new FormControl('', [Validators.required]);
   Campo6Control = new FormControl('', [Validators.required]);
+  Campo7Control = new FormControl('', [Validators.required]);
+  Campo8Control = new FormControl('', [Validators.required]);
+  Campo9Control = new FormControl('', [Validators.required]);
+  Campo10Control = new FormControl('', [Validators.required]);
+  Campo11Control = new FormControl('', [Validators.required, Validators.maxLength(4)]);
+  Campo12Control = new FormControl('', [Validators.required]);
+  Campo13Control = new FormControl('', [Validators.required, Validators.maxLength(4)]);
+  Campo14Control = new FormControl('', [Validators.required]);
+  Campo15Control = new FormControl('', [Validators.required]);
+  Campo16Control = new FormControl('', [Validators.required]);
+  Campo17Control = new FormControl('', [Validators.required, Validators.maxLength(4)]);
+  Campo18Control = new FormControl('', [Validators.required]);
+  Campo19Control = new FormControl('', [Validators.required]);
+  Campo20Control = new FormControl('', [Validators.required]);
+  Campo21Control = new FormControl('', [Validators.required]);
   CampoCorreoControl = new FormControl('', [Validators.required, Validators.email]);
   CampoCreditosControl = new FormControl('', [Validators.required, Validators.maxLength(4)]);
   selectFormControl = new FormControl('', Validators.required);
@@ -94,6 +107,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     private oikosService: OikosService,
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
+    private sgamidService: SgaMidService,
     private unidadtiempoService: UnidadTiempoService,
     private formBuilder: FormBuilder) {
       this.basicform = formBuilder.group({
@@ -113,7 +127,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
      })
      this.actoform = formBuilder.group({
       acto: ['', Validators.required],
-      ano_acto: ['', Validators.required],
+      ano_acto: ['', [Validators.required, Validators.maxLength(4)]],
      })
      this.compleform = formBuilder.group({
        titulacion_snies: ['', Validators.required],
@@ -139,7 +153,6 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   }
 
   loadfacultad() {
-    console.info('Entro')
     this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2')
     .subscribe((res: any) => {
       const r = <any>res;
@@ -157,7 +170,6 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     });
   }
   loadarea() {
-    console.info('Entro')
     this.coreService.get('area_conocimiento')
     .subscribe(res => {
       const r = <any>res;
@@ -175,7 +187,6 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     });
   }
   loadnucleo() {
-    console.info('Entro')
     this.coreService.get('nucleo_basico_conocimiento')
     .subscribe(res => {
       const r = <any>res;
@@ -215,7 +226,6 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       const r = <any>res;
       if (res !== null && r.Type !== 'error') {
         this.enfasis = <any>res;
-        console.info(this.enfasis)
       }
     },
     (error: HttpErrorResponse) => {
@@ -233,7 +243,6 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       const r = <any>res;
       if (res !== null && r.Type !== 'error') {
         this.nivel = <any>res;
-        console.info(this.nivel)
       }
     },
     (error: HttpErrorResponse) => {
@@ -251,7 +260,6 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       const r = <any>res;
       if (res !== null && r.Type !== 'error') {
         this.metodo = <any>res;
-        console.info(this.metodo)
       }
     },
     (error: HttpErrorResponse) => {
@@ -263,12 +271,8 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       });
     });
   }
-  submit() {
-    console.info(this.fecha_creacion)
-    console.info(this.fecha_vigencia)
-  }
   registroproyecto() {
-    if (this.basicform.valid) {
+    if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid) {
     this.metodologia = {
       Id: this.opcionSeleccionadoMeto['Id'],
     }
@@ -280,11 +284,11 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       Codigo : '0',
       Nombre : this.basicform.value.nombre_proyecto,
       CodigoSnies: this.basicform.value.codigo_snies,
-      Duracion: this.basicform.value.duracion_proyecto,
-      NumeroCreditos: this.basicform.value.numero_proyecto,
+      Duracion: Number(this.basicform.value.duracion_proyecto),
+      NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
       CorreoElectronico: this.basicform.value.correo_proyecto,
       CiclosPropedeuticos: this.checkciclos,
-      NumeroActoAdministrativo: this.actoform.value.acto,
+      NumeroActoAdministrativo: Number(this.actoform.value.acto),
       EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
       Competencias: this.compleform.value.competencias,
       CodigoAbreviacion: this.basicform.value.abreviacion_proyecto,
@@ -301,10 +305,10 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     this.registro_califacado_acreditacion = {
       Id: 0,
       AnoActoAdministrativoId: this.resoluform.value.ano_resolucion,
-      NumeroActoAdministrativo: this.resoluform.value.resolucion,
-      FechaCreacionActoAdministrativo: this.fecha_creacion,
-      VigenciaActoAdministrativo: this.fecha_vigencia.toString(),
-      VencimientoActoAdministrativo: this.fecha_vigencia,
+      NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
+      FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
+      VigenciaActoAdministrativo: this.fecha_vigencia + ':00Z',
+      VencimientoActoAdministrativo: this.fecha_vigencia + ':00Z',
       EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
       Activo: true,
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
@@ -333,7 +337,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       Nombre: this.compleform.value.titulacion_mujer,
       Activo: true,
       TipoTitulacionId: this.tipo_titulacion = {
-        Id: 1,
+        Id: 2,
       },
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
     }
@@ -342,17 +346,69 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       Nombre: this.compleform.value.titulacion_hombre,
       Activo: true,
       TipoTitulacionId: this.tipo_titulacion = {
-        Id: 1,
+        Id: 3,
       },
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
+    }
+    this.tipo_dependencia = {
+      Id: 1,
+    }
+    this.dependencia_tipo_dependencia = {
+      Id: 0,
+      TipoDependenciaId: this.tipo_dependencia,
+    }
+    this.dependencia = {
+      Id: 0,
+      Nombre: this.basicform.value.nombre_proyecto,
+      TelefonoDependencia: this.basicform.value.numero_proyecto,
+      CorreoElectronico: this.basicform.value.correo_proyecto,
+      DependenciaTipoDependencia: [this.dependencia_tipo_dependencia],
     }
     this.proyecto_academicoPost = {
       ProyectoAcademicoInstitucion: this.proyecto_academico,
       Registro: [this.registro_califacado_acreditacion],
       Enfasis: [this.enfasis_proyecto],
       Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
+      Oikos: this.dependencia,
     }
-    console.info(this.proyecto_academicoPost)
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('proyecto.seguro_continuar_registrar_proyecto'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(opt)
+    .then((willCreate) => {
+      if (willCreate.value) {
+        this.sgamidService.post('proyecto_academico', this.proyecto_academicoPost)
+        .subscribe((res: any) => {
+          if (res.Type === 'error') {
+            Swal({
+              type: 'error',
+               title: res.Code,
+              text: this.translate.instant('ERROR.' + res.Code),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+            this.showToast('error', 'error', this.translate.instant('proyecto.proyecto_no_creado'));
+          } else {
+            const opt1: any = {
+              title: this.translate.instant('proyecto.creado'),
+              text: this.translate.instant('proyecto.proyecto_creado'),
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true,
+              showCancelButton: true,
+            }; Swal(opt1)
+            .then((willDelete) => {
+              if (willDelete.value) {
+              }
+            });
+          }
+        });
+      }
+    });
   } else {
     const opt1: any = {
       title: this.translate.instant('GLOBAL.atencion'),
