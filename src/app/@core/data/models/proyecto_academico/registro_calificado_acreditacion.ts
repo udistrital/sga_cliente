@@ -7,7 +7,7 @@ export class RegistroCalificadoAcreditacion {
     AnoActoAdministrativoId: string;
     FechaCreacionActoAdministrativo: string;
     VigenciaActoAdministrativo: string;
-    VencimientoActoAdministrativo:string;
+    VencimientoActoAdministrativo: string;
     EnlaceActo: string;
     Activo: boolean;
     ProyectoAcademicoInstitucionId: ProyectoAcademicoInstitucion;
