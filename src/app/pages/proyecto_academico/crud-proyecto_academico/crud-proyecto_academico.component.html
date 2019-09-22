@@ -1,5 +1,5 @@
 <div class="col-md-12 col-lg-12 ">
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <nb-card accent="info" align="center" size=4>
         <nb-card-header>{{ 'proyecto.titulo' | translate }}</nb-card-header>
         <nb-card>
@@ -161,12 +161,10 @@
                                     <mat-error *ngIf="Campo13Control.hasError('required')">{{ 'proyecto.erro_ano' | translate }}</mat-error>
                                 </mat-form-field>
                                 <br>
-                                <div class="form-group row">
-                                    <label class="label col-sm-6 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
-                                    <div class="col">
-                                        <button nbButton size="tiny">{{ 'proyecto.btn_document' | translate }}</button>
-                                    </div>
-                                </div>
+                                <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
+                                <button mat-button>
+                                            <mat-icon> attach_file</mat-icon>
+                                </button>
                                 <br>
                                 <mat-form-field>
                                     <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
@@ -201,12 +199,10 @@
                                     <mat-error *ngIf="Campo17Control.hasError('required')">{{ 'proyecto.erro_ano_acto' | translate }}</mat-error>
                                 </mat-form-field>
                                 <br>
-                                <div class="form-group row">
-                                    <label class="label col-sm-7 col-form-label">{{ 'proyecto.text_document_acto' | translate }}</label>
-                                    <div class="col">
-                                        <button nbButton size="tiny">{{ 'proyecto.btn_document' | translate }}</button>
-                                    </div>
-                                </div>
+                                <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document_acto' | translate }}</label>
+                                <button mat-button>
+                                       <mat-icon> attach_file</mat-icon>
+                                    </button>
                             </form>
                         </nb-card-body>
                     </nb-card>

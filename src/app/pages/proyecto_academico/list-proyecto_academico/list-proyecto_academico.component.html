@@ -1,1 +1,96 @@
-<p>works</p>
+<div class="col-md-12 col-lg-12 ">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <nb-card accent="info" align="center" size=4>
+        <nb-card-header>{{ 'consultaproyecto.titulo' | translate }}</nb-card-header>
+        <nb-card>
+            <nb-card-body>
+                {{ 'consultaproyecto.explicacacion' | translate }}
+            </nb-card-body>
+        </nb-card>
+        <nb-card>
+            <nb-card-body>
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{ 'oferta.filtro' | translate }}">
+                </mat-form-field>
+
+                <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                    <!--  Columna ID-->
+                    <ng-container matColumnDef="Id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.id' | translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.Id}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna Apellido -->
+                    <ng-container matColumnDef="Facultad">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'consultaproyecto.facultad' | translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademicoInstitucionId.DependenciaId }} </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna Nombre-->
+                    <ng-container matColumnDef="Nombre Proyecto">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.nombre' | translate }} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademicoInstitucionId.Nombre}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Nivel Proyecto">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.nivel' | translate }} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademicoInstitucionId.NivelFormacionId.Nombre }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="codigo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.codigo' | translate }} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademicoInstitucionId.CodigoSnies}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Activo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.activo' | translate }} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.Activo }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="registro">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.registro' | translate }} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.VigenciaActoAdministrativo | date:'dd/MM/yyyy' }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="calidad">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.calidad' | translate }} </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.Calidad }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Consulta">
+                        <mat-header-cell *matHeaderCellDef> {{ 'consultaproyecto.consulta' | translate }} </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button mat-button>
+                                <mat-icon>visibility</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="editar">
+                        <mat-header-cell *matHeaderCellDef> {{ 'consultaproyecto.editar' | translate }} </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button mat-button>
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="inhabilitar">
+                        <mat-header-cell *matHeaderCellDef> {{ 'consultaproyecto.inhabilitar' | translate }} </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button mat-button>
+                                        <mat-icon>block</mat-icon>
+                                    </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+
+
+            </nb-card-body>
+        </nb-card>
+    </nb-card>
+
+</div>

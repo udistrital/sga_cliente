@@ -329,5 +329,20 @@
         "proyecto_creado": "Academic Project created successfully",
         "creado": "Project Created!",
         "mensaje": "This Module allows you to register a new academic project or create one from an academic project that has similar characteristics, in order to perform the registration you must have the evidence of the administrative act at hand, please enter the requested information."
+    },
+    "consultaproyecto": {
+        "titulo": "Consultation of an Academic Project",
+        "explicacacion": "This Module allows you to consult an existing academic project at the District University, in the same way, it allows you to make a simple or complete modification of a curricular project, you can also register an academic project from a similar project will allow you to disable an academic project , please enter the requested information.",
+        "id": "Id",
+        "facultad": "Faculty",
+        "nombre": "Project name",
+        "nivel": "Project Level",
+        "codigo": "SNIES code",
+        "activo": "Active",
+        "registro": "Registration Expiration",
+        "calidad": "High quality expiration",
+        "consulta": "Query",
+        "editar": "Edit",
+        "inhabilitar": "Disable"
     }
 }
