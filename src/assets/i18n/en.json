@@ -17,6 +17,14 @@
         "opciones": "Options",
         "notificaciones": "Notifications",
         "dashboard": "Home",
+        "administracion": {
+            "administracion": "Administration",
+            "enfasis": {
+                "enfasis": "Emphasis",
+                "list_enfasis": "Emphasis List",
+                "crud_enfasis": "Create Emphasis"
+            }
+        },
         "produccion_academica": {
             "produccion_academica": "Academic Production",
             "list_produccion_academica": "Academic Production List",

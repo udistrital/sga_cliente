@@ -17,6 +17,14 @@
         "opciones": "Opciones",
         "notificaciones": "Notificaciones",
         "dashboard": "Inicio",
+        "administracion": {
+            "administracion": "Administración",
+            "enfasis": {
+                "enfasis": "Enfásis",
+                "list_enfasis": "Listar Enfásis",
+                "crud_enfasis": "Crear Enfásis"
+            }
+        },
         "produccion_academica": {
             "produccion_academica": "Producción Academica",
             "list_produccion_academica": "Lista Producción Academica",
