@@ -26,7 +26,7 @@ export class ListEnfasisComponent implements OnInit {
 
   source: LocalDataSource = new LocalDataSource();
 
-  constructor(private translate: TranslateService, private proyectoAcademicoService: ProyectoAcademicoService, 
+  constructor(private translate: TranslateService, private proyectoAcademicoService: ProyectoAcademicoService,
     private dialogRef: NbDialogRef<ListEnfasisComponent>,
     private toasterService: ToasterService) {
     this.loadData();

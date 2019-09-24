@@ -140,16 +140,16 @@ export class CrudProyectoAcademicoComponent implements OnInit {
      });
     }
 
-  closeListEnfasisComponent(){
+  closeListEnfasisComponent() {
     // console.log("cierra");
   }
-  
+
   openListEnfasisComponent() {
     this.dialogService.open(ListEnfasisComponent, {
       context: {
         asDialog: true,
         onCloseDialog: this.closeListEnfasisComponent,
-      }
+      },
     });
   }
 
