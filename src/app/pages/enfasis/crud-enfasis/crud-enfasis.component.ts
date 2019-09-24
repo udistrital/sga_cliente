@@ -37,7 +37,6 @@ export class CrudEnfasisComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.loadOptionsAplicacion();
    }
 
   construirForm() {
@@ -51,17 +50,6 @@ export class CrudEnfasisComponent implements OnInit {
 
   useLanguage(language: string) {
     this.translate.use(language);
-  }
-
-  loadOptionsAplicacion(): void {
-    let aplicacion: Array<any> = [];
-      this.proyectoAcademicoService.get('aplicacion/?limit=0')
-        .subscribe(res => {
-          if (res !== null) {
-            aplicacion = <Array<Aplicacion>>res;
-          }
-          this.formEnfasis.campos[ this.getIndexForm('Aplicacion') ].opciones = aplicacion;
-        });
   }
 
   getIndexForm(nombre: String): number {

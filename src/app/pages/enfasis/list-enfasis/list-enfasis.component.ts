@@ -59,14 +59,32 @@ export class ListEnfasisComponent implements OnInit {
             return value;
           },
         },
-        Aplicacion: {
-          title: this.translate.instant('GLOBAL.aplicacion'),
-          // type: 'aplicacion;',
+        Descripcion: {
+          title: this.translate.instant('GLOBAL.descripcion'),
+          // type: 'string;',
           valuePrepareFunction: (value) => {
-            return value.Nombre;
+            return value;
           },
-          filterFunction: (cell?: any, search?: string): boolean => {
-            return  (((cell.Nombre).toLowerCase()).indexOf(search.toLowerCase()) !== -1 || search === '')
+        },
+        CodigoAbreviacion: {
+          title: this.translate.instant('GLOBAL.codigo_abreviacion'),
+          // type: 'string;',
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+        },
+        Activo: {
+          title: this.translate.instant('GLOBAL.activo'),
+          // type: 'string;',
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+        },
+        NumeroOrden: {
+          title: this.translate.instant('GLOBAL.numero_orden'),
+          // type: 'string;',
+          valuePrepareFunction: (value) => {
+            return value;
           },
         },
       },

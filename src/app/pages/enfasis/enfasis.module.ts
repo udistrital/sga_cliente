@@ -6,6 +6,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ToasterModule } from 'angular2-toaster';
 import { SharedModule } from '../../shared/shared.module';
 import { CrudEnfasisComponent } from './crud-enfasis/crud-enfasis.component';
+import { ListEnfasisComponent } from './list-enfasis/list-enfasis.component';
 import { ToasterService} from 'angular2-toaster';
 
 @NgModule({
@@ -25,6 +26,7 @@ import { ToasterService} from 'angular2-toaster';
   ],
   exports: [
     CrudEnfasisComponent,
+    ListEnfasisComponent,
   ],
 })
 export class EnfasisModule { }
