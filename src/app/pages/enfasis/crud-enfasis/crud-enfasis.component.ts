@@ -40,7 +40,7 @@ export class CrudEnfasisComponent implements OnInit {
    }
 
   construirForm() {
-    this.formEnfasis.titulo = this.translate.instant('GLOBAL.perfil');
+    this.formEnfasis.titulo = this.translate.instant('enfasis.enfasis');
     this.formEnfasis.btn = this.translate.instant('GLOBAL.guardar');
     for (let i = 0; i < this.formEnfasis.campos.length; i++) {
       this.formEnfasis.campos[i].label = this.translate.instant('GLOBAL.' + this.formEnfasis.campos[i].label_i18n);
@@ -80,8 +80,8 @@ export class CrudEnfasisComponent implements OnInit {
   updateEnfasis(enfasis: any): void {
 
     const opt: any = {
-      title: 'Update?',
-      text: 'Update Perfil!',
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('enfasis.seguro_continuar_actualizar_enfasis'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -95,7 +95,7 @@ export class CrudEnfasisComponent implements OnInit {
           .subscribe(res => {
             this.loadEnfasis();
             this.eventChange.emit(true);
-            this.showToast('info', 'updated', 'enfasis updated');
+            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('enfasis.enfasis_actualizado'));
           });
       }
     });
@@ -103,8 +103,8 @@ export class CrudEnfasisComponent implements OnInit {
 
   createEnfasis(enfasis: any): void {
     const opt: any = {
-      title: 'Create?',
-      text: 'Create Enfasis!',
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('enfasis.seguro_continuar_registrar_enfasis'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -118,7 +118,7 @@ export class CrudEnfasisComponent implements OnInit {
           .subscribe(res => {
             this.info_enfasis = <Enfasis><unknown>res;
             this.eventChange.emit(true);
-            this.showToast('info', 'created', 'Enfasis created');
+            this.showToast('info', this.translate.instant('GLOBAL.registrar'), this.translate.instant('enfasis.enfasis_creado'));
           });
       }
     });

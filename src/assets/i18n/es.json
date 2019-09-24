@@ -226,7 +226,6 @@
         "tipo_periodo_actualizado": "Tipo período actualizado",
         "seguro_eliminar_tipo_periodo": "¿Esta seguro de eliminar este tipo de período?",
         "tipo_periodo_eliminado": "Tipo período eliminado"
-
     },
     "periodo": {
         "seguro_actualizar_periodo": "¿Esta seguro de actualizar este período?",
@@ -354,5 +353,17 @@
         "consulta": "Consulta",
         "editar": "Editar",
         "inhabilitar": "Inhabilitar"
+    },
+    "enfasis":{
+        "enfasis": "Enfásis",
+        "seguro_continuar_registrar_enfasis": "¿Esta seguro de registrar este enfásis?",
+        "enfasis_creado": "Enfásis creado",
+        "enfasis_no_creado": "Enfásis no creado",
+        "seguro_continuar_eliminar_enfasis": "¿Esta seguro de eliminar este enfásis?",
+        "enfasis_eliminado": "Enfásis eliminado",
+        "enfasis_no_eliminado": "Enfásis no eliminado",
+        "seguro_continuar_actualizar_enfasis": "¿Esta seguro de actualizar este enfásis?",
+        "enfasis_actualizado": "Enfásis actualizado",
+        "enfasis_no_actualizado": "Enfásis no actualizado"
     }
 }

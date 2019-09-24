@@ -224,7 +224,6 @@
         "tipo_periodo_actualizado": "Updated period type",
         "seguro_eliminar_tipo_periodo": "Are you sure you want to eliminate this type of period?",
         "tipo_periodo_eliminado": "Type period removed"
-
     },
     "periodo": {
         "seguro_actualizar_periodo": "Are you sure you update this period?",
@@ -352,5 +351,18 @@
         "consulta": "Query",
         "editar": "Edit",
         "inhabilitar": "Disable"
+    },
+    "enfasis":{
+        "enfasis": "Emphasys",
+        "seguro_continuar_registrar_enfasis": "Are you sure you want to register this emphasys?",
+        "enfasis_creado": "Emphasys created",
+        "enfasis_no_creado": "Emphasys not created",
+        "seguro_continuar_eliminar_enfasis": "Are you sure you want to delete this emphasys?",
+        "enfasis_eliminado": "Emphasys deleted",
+        "enfasis_no_eliminado": "Emphasys not deleted",
+        "seguro_continuar_actualizar_enfasis": "Are you sure you want to update this emphasys?",
+        "enfasis_actualizado": "Emphasys updated",
+        "enfasis_no_actualizado": "Emphasys not updated"
     }
+}
 }

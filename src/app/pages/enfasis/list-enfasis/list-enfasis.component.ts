@@ -119,8 +119,8 @@ export class ListEnfasisComponent implements OnInit {
 
   onDelete(event): void {
     const opt: any = {
-      title: 'Deleting?',
-      text: 'Delete Enfasis!',
+      title: this.translate.instant('GLOBAL.eliminar'),
+      text: this.translate.instant('enfasis.seguro_continuar_eliminar_enfasis'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -133,7 +133,7 @@ export class ListEnfasisComponent implements OnInit {
         this.proyectoAcademicoService.delete('enfasis/', event.data).subscribe(res => {
           if (res !== null) {
             this.loadData();
-            this.showToast('info', 'deleted', 'Enfasis deleted');
+            this.showToast('info', this.translate.instant('GLOBAL.eliminar'), this.translate.instant('enfasis.enfasis_eliminado'));
             }
          });
       }
