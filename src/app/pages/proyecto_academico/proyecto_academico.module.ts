@@ -10,7 +10,12 @@ import { ListProyectoAcademicoComponent } from './list-proyecto_academico/list-p
 import { UserService } from '../../@core/data/users.service';
 import { PersonaService } from '../../@core/data/persona.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
+import { NbDialogService } from '@nebular/theme';
 import {NgDatepickerModule} from 'ng2-datepicker';
+import { ListEnfasisComponent } from '../enfasis/list-enfasis/list-enfasis.component';
+import { CrudEnfasisComponent } from '../enfasis/crud-enfasis/crud-enfasis.component';
+import { EnfasisModule } from '../enfasis/enfasis.module';
+
 
 
 @NgModule({
@@ -21,15 +26,21 @@ import {NgDatepickerModule} from 'ng2-datepicker';
     ToasterModule,
     SharedModule,
     NgDatepickerModule,
+    EnfasisModule,
   ],
   declarations: [
     ...routedComponents,
+  ],
+  entryComponents: [
+    ListEnfasisComponent,
+    CrudEnfasisComponent,
   ],
   providers: [
     ProduccionAcademicaService,
     UserService,
     PersonaService,
     NuxeoService,
+    NbDialogService,
   ],
   exports: [
     CrudProyectoAcademicoComponent,

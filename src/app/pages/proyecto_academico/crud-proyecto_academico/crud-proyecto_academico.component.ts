@@ -24,7 +24,9 @@ import { TipoDependencia } from '../../../@core/data/models/oikos/tipo_dependenc
 import { DependenciaTipoDependencia } from '../../../@core/data/models/oikos/dependencia_tipo_dependencia';
 import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
-
+import { NbDialogService } from '@nebular/theme';
+import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
+import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -109,6 +111,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
     private unidadtiempoService: UnidadTiempoService,
+    private dialogService: NbDialogService,
     private formBuilder: FormBuilder) {
       this.basicform = formBuilder.group({
         codigo_snies: ['', Validators.required],
@@ -136,8 +139,10 @@ export class CrudProyectoAcademicoComponent implements OnInit {
        competencias: ['', Validators.required],
      });
     }
-
-
+    @Input() uid: number = undefined;
+    open() {
+      this.dialogService.open(ListEnfasisComponent);
+    }
 
   useLanguage(language: string) {
     this.translate.use(language);
