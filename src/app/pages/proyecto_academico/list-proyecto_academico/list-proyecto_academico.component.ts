@@ -29,6 +29,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   config: ToasterConfig;
   settings: any;
   dataSource: any;
+  index: any;
   displayedColumns = ['Id', 'Facultad', 'Nombre Proyecto', 'Nivel Proyecto', 'codigo', 'Activo', 'registro', 'calidad', 'Consulta', 'editar', 'inhabilitar'];
 
   source: LocalDataSource = new LocalDataSource();
@@ -101,6 +102,13 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
   });
   }
+  consultaproyecto() {
+    console.info('ojoddfdff')
+  console.info(this.index)
+  }
+  highlight(row, evt): void {
+    console.info(row.Id );
+ }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({

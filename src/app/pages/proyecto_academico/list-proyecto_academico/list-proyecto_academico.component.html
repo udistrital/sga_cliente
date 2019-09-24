@@ -17,7 +17,7 @@
                     <!--  Columna ID-->
                     <ng-container matColumnDef="Id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.id' | translate }}</mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.Id}} </mat-cell>
+                        <mat-cell *matCellDef="let row; let i = index" class="text-capitalize"> {{row.Id}} </mat-cell>
                     </ng-container>
 
                     <!-- Columna Apellido -->
@@ -59,8 +59,8 @@
 
                     <ng-container matColumnDef="Consulta">
                         <mat-header-cell *matHeaderCellDef> {{ 'consultaproyecto.consulta' | translate }} </mat-header-cell>
-                        <mat-cell *matCellDef="let row">
-                            <button mat-button>
+                        <mat-cell *matCellDef="let row;  let i = index">
+                            <button (click)="consultaproyecto()" mat-button>
                                 <mat-icon>visibility</mat-icon>
                             </button>
                         </mat-cell>
@@ -85,7 +85,7 @@
                     </ng-container>
 
                     <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="highlight(row,$event)"></mat-row>
                 </mat-table>
 
 
