@@ -66,10 +66,14 @@ export class CrudEnfasisComponent implements OnInit {
   public loadEnfasis(): void {
     if (this.enfasis_id !== undefined && this.enfasis_id !== 0) {
       this.proyectoAcademicoService.get('enfasis/?query=id:' + this.enfasis_id)
-        .subscribe(res => {
-          if (res !== null) {
+        .subscribe((res: any) => {
+          if (res.Type !== 'error') {
             this.info_enfasis = <Enfasis>res[0];
+          } else {
+            this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.general'));
           }
+        }, () => {
+          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.general'));
         });
     } else  {
       this.info_enfasis = undefined;
@@ -92,10 +96,16 @@ export class CrudEnfasisComponent implements OnInit {
       if (willDelete.value) {
         this.info_enfasis = <Enfasis>enfasis;
         this.proyectoAcademicoService.put('enfasis', this.info_enfasis)
-          .subscribe(res => {
-            this.loadEnfasis();
-            this.eventChange.emit(true);
-            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('enfasis.enfasis_actualizado'));
+          .subscribe((res: any) => {
+            if (res.Type !== 'error') {
+              this.loadEnfasis();
+              this.eventChange.emit(true);
+              this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('enfasis.enfasis_actualizado'));
+            } else {
+              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('enfasis.enfasis_no_actualizado'));
+            }
+          }, () => {
+            this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('enfasis.enfasis_no_actualizado'));
           });
       }
     });
@@ -115,10 +125,16 @@ export class CrudEnfasisComponent implements OnInit {
       if (willDelete.value) {
         this.info_enfasis = <Enfasis>enfasis;
         this.proyectoAcademicoService.post('enfasis', this.info_enfasis)
-          .subscribe(res => {
-            this.info_enfasis = <Enfasis><unknown>res;
-            this.eventChange.emit(true);
-            this.showToast('info', this.translate.instant('GLOBAL.registrar'), this.translate.instant('enfasis.enfasis_creado'));
+          .subscribe((res: any) => {
+            if (res.Type !== 'error') {
+              this.info_enfasis = <Enfasis><unknown>res;
+              this.eventChange.emit(true);
+              this.showToast('info', this.translate.instant('GLOBAL.registrar'), this.translate.instant('enfasis.enfasis_creado'));
+            } else {
+              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('enfasis.enfasis_no_creado'));
+            }
+          }, () => {
+            this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('enfasis.enfasis_no_creado'));
           });
       }
     });

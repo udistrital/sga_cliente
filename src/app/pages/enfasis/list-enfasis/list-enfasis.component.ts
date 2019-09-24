@@ -96,11 +96,16 @@ export class ListEnfasisComponent implements OnInit {
   }
 
   loadData(): void {
-    this.proyectoAcademicoService.get('enfasis/?limit=0').subscribe(res => {
-      if (res !== null) {
+    this.proyectoAcademicoService.get('enfasis/?limit=0')
+    .subscribe((res: any) => {
+      if (res.Type !== 'error') {
         const data = <Array<any>>res;
         this.source.load(data);
-          }
+      } else {
+        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.general'));
+      }
+    }, () => {
+      this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.general'));
     });
   }
 
@@ -130,12 +135,17 @@ export class ListEnfasisComponent implements OnInit {
     .then((willDelete) => {
 
       if (willDelete.value) {
-        this.proyectoAcademicoService.delete('enfasis/', event.data).subscribe(res => {
-          if (res !== null) {
-            this.loadData();
-            this.showToast('info', this.translate.instant('GLOBAL.eliminar'), this.translate.instant('enfasis.enfasis_eliminado'));
+        this.proyectoAcademicoService.delete('enfasis/', event.data)
+         .subscribe((res: any) => {
+            if (res.Type !== 'error') {
+              this.loadData();
+              this.showToast('info', this.translate.instant('GLOBAL.eliminar'), this.translate.instant('enfasis.enfasis_eliminado'));
+            } else {
+              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('enfasis.enfasis_no_eliminado'));
             }
-         });
+          }, () => {
+            this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('enfasis.enfasis_no_eliminado'));
+          });
       }
     });
   }

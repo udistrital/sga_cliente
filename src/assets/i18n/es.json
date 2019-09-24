@@ -128,6 +128,7 @@
         "atencion": "Atención"
     },
     "ERROR": {
+        "general": "La solicitud no pudo ser cumplida",
         "400": "La solicitud contiene sintaxis errónea",
         "401": "Autorización no es posible, ha fallado o aún no ha sido provista",
         "403": "El servidor se reusa a responder dado que el cliente no tiene los privilegios adecuados",
