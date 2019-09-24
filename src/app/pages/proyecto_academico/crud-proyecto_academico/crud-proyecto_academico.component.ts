@@ -24,8 +24,8 @@ import { TipoDependencia } from '../../../@core/data/models/oikos/tipo_dependenc
 import { DependenciaTipoDependencia } from '../../../@core/data/models/oikos/dependencia_tipo_dependencia';
 import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
-import { NbDialogService } from '@nebular/theme';
-import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
+import { NbDialogService, NbDialogRef } from '@nebular/theme';
+// import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
 import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
 
 @Component({
@@ -139,10 +139,19 @@ export class CrudProyectoAcademicoComponent implements OnInit {
        competencias: ['', Validators.required],
      });
     }
-    @Input() uid: number = undefined;
-    open() {
-      this.dialogService.open(ListEnfasisComponent);
-    }
+
+  closeListEnfasisComponent(){
+    // console.log("cierra");
+  }
+  
+  openListEnfasisComponent() {
+    this.dialogService.open(ListEnfasisComponent, {
+      context: {
+        asDialog: true,
+        onCloseDialog: this.closeListEnfasisComponent,
+      }
+    });
+  }
 
   useLanguage(language: string) {
     this.translate.use(language);

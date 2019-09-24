@@ -13,7 +13,9 @@
       <ngx-crud-enfasis *ngIf="cambiotab" [enfasis_id]="uid" (eventChange)="onChange($event)"></ngx-crud-enfasis>
       <button *ngIf="cambiotab" (click)="activetab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i>
         {{ 'GLOBAL.regresar' | translate }}</button>
-
+      <br *ngIf="asDialog">
+      <button style="margin-top: 10px;" *ngIf="asDialog" (click)="onCloseDialog(); dismissDialog()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i>
+        {{ 'GLOBAL.cerrar' | translate }}</button>
     </nb-card-body>
   </nb-card>
 </div>

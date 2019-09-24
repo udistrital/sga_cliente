@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { NbDialogRef } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-list-enfasis',
@@ -17,9 +18,17 @@ export class ListEnfasisComponent implements OnInit {
   config: ToasterConfig;
   settings: any;
 
+  @Input() asDialog: boolean;
+  @Input() onCloseDialog: any;
+  dismissDialog() {
+    this.dialogRef.close();
+  }
+
   source: LocalDataSource = new LocalDataSource();
 
-  constructor(private translate: TranslateService, private proyectoAcademicoService: ProyectoAcademicoService, private toasterService: ToasterService) {
+  constructor(private translate: TranslateService, private proyectoAcademicoService: ProyectoAcademicoService, 
+    private dialogRef: NbDialogRef<ListEnfasisComponent>,
+    private toasterService: ToasterService) {
     this.loadData();
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
