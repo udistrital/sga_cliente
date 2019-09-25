@@ -29,6 +29,7 @@ import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
 import { ListEnfasisService } from '../../../@core/data/list_enfasis.service';
 import { Subscription } from 'rxjs';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -107,6 +108,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   @Output() eventChange = new EventEmitter();
 
   subscription: Subscription;
+  source_emphasys: LocalDataSource = new LocalDataSource();
+  arr_enfasis_proyecto: InstitucionEnfasis[] = [];
+  settings_emphasys: any;
 
   constructor(private translate: TranslateService,
     private toasterService: ToasterService,
@@ -152,6 +156,51 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         // do not do anything on error
       }
     });
+    this.settings_emphasys = {
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: true,
+      },
+      actions: {
+        edit: false,
+        add: false,
+        position: 'right',
+      },
+      mode: 'external',
+      columns: {
+        Nombre: {
+          title: this.translate.instant('GLOBAL.nombre'),
+          // type: 'string;',
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+          width: '80%',
+        },
+      },
+    };
+  }
+
+  onCreateEmphasys(event: any) {
+    const emphasys = event.value;
+    if (!this.arr_enfasis_proyecto.find( enfasis => emphasys === enfasis ) && emphasys.Id) {
+      this.arr_enfasis_proyecto.push(emphasys);
+      this.source_emphasys.load(this.arr_enfasis_proyecto);
+      const matSelect: MatSelect = event.source;
+      matSelect.writeValue(null);
+    } else {
+      Swal({
+        type: 'error',
+        title: 'ERROR',
+        text: this.translate.instant('enfasis.error_enfasis_ya_existe'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    }
+  }
+  
+  onDeleteEmphasys(event: any){
+    console.log("delete", this.arr_enfasis_proyecto.indexOf(event.data), event.data);
+    this.arr_enfasis_proyecto.splice(this.arr_enfasis_proyecto.indexOf(event.data), 1);
+    this.source_emphasys.load(this.arr_enfasis_proyecto);
   }
 
   ngOnDestroy() {

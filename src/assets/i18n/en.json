@@ -365,7 +365,8 @@
         "seguro_continuar_actualizar_enfasis": "Are you sure you want to update this emphasys?",
         "enfasis_actualizado": "Emphasys updated",
         "enfasis_no_actualizado": "Emphasys not updated",
-        "administrar_enfasis": "Administrate emphasys"
+        "administrar_enfasis": "Administrate emphasys",
+        "error_enfasis_ya_existe": "The emphasys is already added"
     }
 }
 }

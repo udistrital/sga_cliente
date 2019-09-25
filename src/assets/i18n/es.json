@@ -367,6 +367,7 @@
         "seguro_continuar_actualizar_enfasis": "¿Esta seguro de actualizar este enfásis?",
         "enfasis_actualizado": "Enfásis actualizado",
         "enfasis_no_actualizado": "Enfásis no actualizado",
-        "administrar_enfasis": "Administrar enfásis"
+        "administrar_enfasis": "Administrar enfásis",
+        "error_enfasis_ya_existe": "El enfásis ya fue agregado"
     }
 }
