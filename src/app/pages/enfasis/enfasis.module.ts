@@ -8,6 +8,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { CrudEnfasisComponent } from './crud-enfasis/crud-enfasis.component';
 import { ListEnfasisComponent } from './list-enfasis/list-enfasis.component';
 import { ToasterService} from 'angular2-toaster';
+import { NbDialogRef } from '@nebular/theme';
 
 @NgModule({
   imports: [
@@ -23,6 +24,12 @@ import { ToasterService} from 'angular2-toaster';
   providers: [
     ProyectoAcademicoService,
     ToasterService,
+    {
+      provide: NbDialogRef,
+      useValue: {
+        close: (dialogResult: any) => { },
+      },
+    },
   ],
   exports: [
     CrudEnfasisComponent,
