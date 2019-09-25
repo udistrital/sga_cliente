@@ -8,7 +8,7 @@ export class ListEnfasisService {
     sendListEnfasis(listEnfasis: any) {
         this.subject.next(listEnfasis);
     }
-    
+
     /*
     clearListEnfasis() {
         this.subject.next();

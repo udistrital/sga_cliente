@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { CoreService } from '../../../@core/data/core.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
@@ -35,7 +35,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './crud-proyecto_academico.component.html',
   styleUrls: ['./crud-proyecto_academico.component.scss'],
 })
-export class CrudProyectoAcademicoComponent implements OnInit {
+export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   config: ToasterConfig;
   settings: any;
   basicform: any;
@@ -153,7 +153,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       }
     });
   }
-  
+
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
     this.subscription.unsubscribe();
