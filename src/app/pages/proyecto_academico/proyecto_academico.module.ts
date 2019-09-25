@@ -15,8 +15,7 @@ import {NgDatepickerModule} from 'ng2-datepicker';
 import { ListEnfasisComponent } from '../enfasis/list-enfasis/list-enfasis.component';
 import { CrudEnfasisComponent } from '../enfasis/crud-enfasis/crud-enfasis.component';
 import { EnfasisModule } from '../enfasis/enfasis.module';
-
-
+import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
 
 @NgModule({
   imports: [
@@ -41,6 +40,7 @@ import { EnfasisModule } from '../enfasis/enfasis.module';
     PersonaService,
     NuxeoService,
     NbDialogService,
+    ListEnfasisService,
   ],
   exports: [
     CrudProyectoAcademicoComponent,

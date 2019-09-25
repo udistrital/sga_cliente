@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Injectable } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
+import { ListEnfasisService } from '../../../@core/data/list_enfasis.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
@@ -18,22 +19,22 @@ export class ListEnfasisComponent implements OnInit {
   config: ToasterConfig;
   settings: any;
 
-  @Input() asDialog: boolean;
-  @Input() onCloseDialog: any;
-  dismissDialog() {
-    this.dialogRef.close();
-  }
-
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private translate: TranslateService, private proyectoAcademicoService: ProyectoAcademicoService,
     private dialogRef: NbDialogRef<ListEnfasisComponent>,
+    private listEnfasisService: ListEnfasisService,
     private toasterService: ToasterService) {
     this.loadData();
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
     });
+  }
+
+  @Input() asDialog: boolean;
+  dismissDialog() {
+    this.dialogRef.close();
   }
 
   cargarCampos() {
@@ -109,6 +110,10 @@ export class ListEnfasisComponent implements OnInit {
     .subscribe((res: any) => {
       if (res.Type !== 'error') {
         const data = <Array<any>>res;
+        if (this.asDialog) {
+          // service
+          this.listEnfasisService.sendListEnfasis(res);
+        }
         this.source.load(data);
       } else {
         this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.general'));

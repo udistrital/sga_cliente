@@ -27,6 +27,8 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 // import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
 import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
+import { ListEnfasisService } from '../../../@core/data/list_enfasis.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -104,6 +106,8 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   selectFormControl = new FormControl('', Validators.required);
   @Output() eventChange = new EventEmitter();
 
+  subscription: Subscription;
+
   constructor(private translate: TranslateService,
     private toasterService: ToasterService,
     private oikosService: OikosService,
@@ -112,6 +116,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     private sgamidService: SgaMidService,
     private unidadtiempoService: UnidadTiempoService,
     private dialogService: NbDialogService,
+    private listEnfasisService: ListEnfasisService,
     private formBuilder: FormBuilder) {
       this.basicform = formBuilder.group({
         codigo_snies: ['', Validators.required],
@@ -138,17 +143,26 @@ export class CrudProyectoAcademicoComponent implements OnInit {
        titulacion_hombre: ['', Validators.required],
        competencias: ['', Validators.required],
      });
-    }
 
-  closeListEnfasisComponent() {
-    // console.log("cierra");
+     this.subscription = this.listEnfasisService.getListEnfasis().subscribe(listEnfasis => {
+      if (listEnfasis) {
+        this.enfasis = listEnfasis;
+      } else {
+        // clear messages when empty message received
+        // do not do anything on error
+      }
+    });
+  }
+  
+  ngOnDestroy() {
+    // unsubscribe to ensure no memory leaks
+    this.subscription.unsubscribe();
   }
 
   openListEnfasisComponent() {
     this.dialogService.open(ListEnfasisComponent, {
       context: {
         asDialog: true,
-        onCloseDialog: this.closeListEnfasisComponent,
       },
     });
   }
