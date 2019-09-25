@@ -364,7 +364,8 @@
         "enfasis_no_eliminado": "Emphasys not deleted",
         "seguro_continuar_actualizar_enfasis": "Are you sure you want to update this emphasys?",
         "enfasis_actualizado": "Emphasys updated",
-        "enfasis_no_actualizado": "Emphasys not updated"
+        "enfasis_no_actualizado": "Emphasys not updated",
+        "administrar_enfasis": "Administrate emphasys"
     }
 }
 }
