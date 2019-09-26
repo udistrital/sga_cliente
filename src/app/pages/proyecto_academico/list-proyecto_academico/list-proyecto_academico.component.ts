@@ -13,6 +13,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { MatTableDataSource } from '@angular/material';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ConsultaProyectoAcademicoComponent } from '../consulta-proyecto_academico/consulta-proyecto_academico.component';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 
 
@@ -37,6 +38,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     private campusMidService: CampusMidService,
     private user: UserService,
     private proyectoacademicoService: ProyectoAcademicoService,
+    private sgamidService: SgaMidService,
     public dialog: MatDialog,
     private toasterService: ToasterService) {
       this.loadproyectos();
@@ -92,7 +94,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     }
-    this.proyectoacademicoService.get('registro_calificado_acreditacion/' )
+    this.sgamidService.get('consulta_proyecto_academico/' )
     .subscribe(res => {
     if (res !== null && res[0] !== 'error') {
       this.dataSource = new MatTableDataSource();
@@ -117,8 +119,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
   }
 
   highlight(row, evt): void {
-    this.idproyecto = row.Id;
-    console.info(row.Id );
+    this.idproyecto = row.ProyectoAcademico.Id;
+    console.info(row.ProyectoAcademico.Id );
  }
 
   private showToast(type: string, title: string, body: string) {

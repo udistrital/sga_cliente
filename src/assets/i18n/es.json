@@ -330,7 +330,12 @@
         "proyecto_no_creado": "Proyecto Académico no creado",
         "proyecto_creado": "Proyecto Académico creado correctamente",
         "creado": "Proyecto Creado!",
-        "mensaje": " Este Modulo le permite el registro de un nuevo proyecto académico o crear uno a partir de un proyecto académico que tengan características similares, para poder realizar el registro deberá tener a la mano la evidencia del acto administrativo, por favor ingrese la información solicitada."
+        "mensaje": " Este Modulo le permite el registro de un nuevo proyecto académico o crear uno a partir de un proyecto académico que tengan características similares, para poder realizar el registro deberá tener a la mano la evidencia del acto administrativo, por favor ingrese la información solicitada.",
+        "vigencia": "Vigencia del registro:",
+        "vigencia_mes": "# Meses de vigencia",
+        "erro_mes_vigencia": "Por favor ingrese el numero de meses, máximo 2 digitos.",
+        "erro_ano_vigencia": "Por favor ingrese el numero de años, máximo 1 digitos.",
+        "vigencia_año": "# Años de vigencia"
     },
     "consultaproyecto": {
         "titulo": "Consulta de un Proyecto Académico ",

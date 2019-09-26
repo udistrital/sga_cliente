@@ -328,7 +328,12 @@
         "proyecto_no_creado": "Academic Project not created",
         "proyecto_creado": "Academic Project created successfully",
         "creado": "Project Created!",
-        "mensaje": "This Module allows you to register a new academic project or create one from an academic project that has similar characteristics, in order to perform the registration you must have the evidence of the administrative act at hand, please enter the requested information."
+        "mensaje": "This Module allows you to register a new academic project or create one from an academic project that has similar characteristics, in order to perform the registration you must have the evidence of the administrative act at hand, please enter the requested information.",
+        "vigencia": "Validity of registration:",
+        "vigencia_mes": "# Effective months",
+        "erro_mes_vigencia": "Please enter the number of months, maximum 2 digits.",
+        "erro_ano_vigencia": "Please enter the number of years, maximum 1 digits.",
+        "vigencia_año": "# Years of validity"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",

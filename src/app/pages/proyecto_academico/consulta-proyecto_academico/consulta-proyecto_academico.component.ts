@@ -168,8 +168,6 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
   }
 
   orginizardatos() {
-    
-
   }
 
   private showToast(type: string, title: string, body: string) {

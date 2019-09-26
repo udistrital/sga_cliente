@@ -173,11 +173,20 @@
                                 </mat-form-field>
                                 <br>
                                 <br>
-                                <mat-form-field>
-                                    <mat-label>* {{'proyecto.fecha_vigencia' | translate}}:</mat-label>
-                                    <input matInput [(ngModel)]="fecha_vigencia" type="datetime-local" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_vigencia">
-                                    <mat-error *ngIf="Campo15Control.hasError('required')">{{ 'proyecto.erro_fecha_vigencia' | translate }}</mat-error>
-                                </mat-form-field>
+                                <div class="form-group row">
+
+                                    <label class="label col-sm-8 col-form-label ">{{ 'proyecto.vigencia' | translate }}</label>
+                                    <mat-form-field>
+                                        <input matInput placeholder="{{ 'proyecto.vigencia_mes' | translate }}" formControlName="mes_vigencia" class="form-control" name="resolucion_proyecto">
+                                        <mat-error *ngIf="Campo22Control.hasError('required')">{{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
+                                    </mat-form-field>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput placeholder="{{ 'proyecto.vigencia_año' | translate }}" formControlName="ano_vigencia" class="form-control" name="ano_resolucion_proyecto">
+                                            <mat-error *ngIf="Campo23Control.hasError('required')">{{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                                 <br>
                             </form>
                         </nb-card-body>
