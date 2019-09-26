@@ -11,6 +11,7 @@ import { UserService } from '../../@core/data/users.service';
 import { PersonaService } from '../../@core/data/persona.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
 import {NgDatepickerModule} from 'ng2-datepicker';
+import { ConsultaProyectoAcademicoComponent } from './consulta-proyecto_academico/consulta-proyecto_academico.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import {NgDatepickerModule} from 'ng2-datepicker';
   exports: [
     CrudProyectoAcademicoComponent,
     ListProyectoAcademicoComponent,
+    ConsultaProyectoAcademicoComponent,
   ],
 })
 export class ProyectoAcademicoModule { }

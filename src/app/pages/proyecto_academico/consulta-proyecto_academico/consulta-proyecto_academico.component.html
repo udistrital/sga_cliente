@@ -1,0 +1,104 @@
+<div class="col-md-12 col-lg-12 ">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <nb-card accent="info" align="center" size=4>
+        <nb-card-header>{{ 'consultaproyecto.titulo_consulta' | translate }}</nb-card-header>
+        <nb-card>
+            <nb-card-header>{{ 'proyecto.basica' | translate }}</nb-card-header>
+            <nb-card-body>
+                <form id="basicForm" [formGroup]="basicform" (ngSubmit)="registroproyecto()">
+                    <mat-form-field>
+                        <input matInput placeholder="{{ 'proyecto.codigo_snies' | translate }}" formControlName="codigo_snies" class="form-control" name="codigo_snies">
+                        <mat-error *ngIf="Campo7Control.hasError('required')">{{ 'proyecto.erro_codigoSnies' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <mat-label>{{ 'proyecto.facultad' | translate }}</mat-label>
+                        <mat-select [formControl]="CampoControl" required [(ngModel)]="opcionSeleccionadoFacultad">
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let nombrefacultad of facultad" [value]="nombrefacultad">
+                                {{nombrefacultad['Nombre']}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="CampoControl.hasError('required')">{{ 'proyecto.erro_selec' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}" id="nombre_proyecto" formControlName="nombre_proyecto" class="form-control" name="nombre_proyecto">
+                        <mat-error *ngIf="Campo8Control.hasError('required')">{{ 'proyecto.erro_nombre' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <br>
+                    <mat-form-field>
+                        <mat-label>{{ 'proyecto.nivel_proyecto' | translate }}</mat-label>
+                        <mat-select [formControl]="Campo5Control" required [(ngModel)]="opcionSeleccionadoNivel">
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let nivelproyecto of nivel" [value]="nivelproyecto">
+                                {{nivelproyecto['Nombre']}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Campo5Control.hasError('required')">{{ 'proyecto.erro_nivel' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <br>
+                    <mat-form-field>
+                        <mat-label>{{ 'proyecto.metodologia_proyecto' | translate }}</mat-label>
+                        <mat-select [formControl]="Campo6Control" required [(ngModel)]="opcionSeleccionadoMeto">
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let metodoproyecto of metodo" [value]="metodoproyecto">
+                                {{metodoproyecto['Nombre']}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Campo6Control.hasError('required')">{{ 'proyecto.erro_nivel' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <br>
+                    <mat-form-field>
+                        <input matInput placeholder="{{ 'proyecto.abreciacion_proyecto' | translate }}" formControlName="abreviacion_proyecto" class="form-control" name="abreviacion_proyecto">
+                        <mat-error *ngIf="Campo9Control.hasError('required')">{{ 'proyecto.erro_abre' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input matInput placeholder="{{ 'proyecto.correo_proyecto' | translate }}" formControlName="correo_proyecto" class="form-control" name="correo_proyecto">
+                        <mat-error *ngIf="CampoCorreoControl.hasError('required')">{{ 'proyecto.erro_correo' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <br>
+                    <mat-form-field>
+                        <input matInput placeholder="{{ 'proyecto.numero_proyecto' | translate }}" formControlName="numero_proyecto" class="form-control" name="numero_proyecto">
+                        <mat-error *ngIf="Campo10Control.hasError('required')">{{ 'proyecto.erro_telefono' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input matInput placeholder="{{ 'proyecto.creditos_proyecto' | translate }}" formControlName="creditos_proyecto" class="form-control" name="creditos_proyecto">
+                        <mat-error *ngIf="CampoCreditosControl.hasError('required')">{{ 'proyecto.erro_creditos' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input matInput placeholder="{{ 'proyecto.duracion_proyecto' | translate }}" formControlName="duracion_proyecto" class="form-control" name="duracion_proyecto">
+                        <mat-error *ngIf="Campo12Control.hasError('required')">{{ 'proyecto.erro_duracion' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <br>
+                    <mat-form-field>
+                        <mat-label>{{ 'proyecto.tipo_duracion' | translate }}</mat-label>
+                        <mat-select [formControl]="Campo1Control" required [(ngModel)]="opcionSeleccionadoUnidad">
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let unidadtiempo of unidad" [value]="unidadtiempo">
+                                {{unidadtiempo['Nombre']}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'proyecto.erro_unidad' | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <br>
+                </form>
+                <mat-checkbox [(ngModel)]="checkciclos">{{ 'proyecto.ciclo_proyecto' | translate }} </mat-checkbox>&nbsp;&nbsp;
+                <mat-checkbox [(ngModel)]="checkofrece">{{ 'proyecto.ofrece_proyecto' | translate }}</mat-checkbox>
+            </nb-card-body>
+        </nb-card>
+        <nb-card>
+            diojfiojsf
+        </nb-card>
+    </nb-card>
+
+</div>

@@ -345,6 +345,7 @@
         "calidad": "Vencimiento Alta calidad",
         "consulta": "Consulta",
         "editar": "Editar",
-        "inhabilitar": "Inhabilitar"
+        "inhabilitar": "Inhabilitar",
+        "titulo_consulta": "Información Basica del Proyecto Académico"
     }
 }

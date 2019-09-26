@@ -7,16 +7,14 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 // import { UserService } from '../../../@core/data/users.service';
 import { ProduccionAcademicaPost } from '../../../@core/data/models/produccion_academica/produccion_academica';
 import { HttpErrorResponse } from '@angular/common/http';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { MatTableDataSource } from '@angular/material';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+import { ConsultaProyectoAcademicoComponent } from '../consulta-proyecto_academico/consulta-proyecto_academico.component';
+
+
 
 
 @Component({
@@ -30,6 +28,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   settings: any;
   dataSource: any;
   index: any;
+  idproyecto: any;
   displayedColumns = ['Id', 'Facultad', 'Nombre Proyecto', 'Nivel Proyecto', 'codigo', 'Activo', 'registro', 'calidad', 'Consulta', 'editar', 'inhabilitar'];
 
   source: LocalDataSource = new LocalDataSource();
@@ -38,8 +37,22 @@ export class ListProyectoAcademicoComponent implements OnInit {
     private campusMidService: CampusMidService,
     private user: UserService,
     private proyectoacademicoService: ProyectoAcademicoService,
+    public dialog: MatDialog,
     private toasterService: ToasterService) {
       this.loadproyectos();
+  }
+
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(ConsultaProyectoAcademicoComponent, {
+      width: '550px',
+      height: '750px',
+      data: this.idproyecto,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.info('The dialog was closed');
+    });
   }
 
   applyFilter(filterValue: string) {
@@ -102,11 +115,9 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
   });
   }
-  consultaproyecto() {
-    console.info('ojoddfdff')
-  console.info(this.index)
-  }
+
   highlight(row, evt): void {
+    this.idproyecto = row.Id;
     console.info(row.Id );
  }
 
