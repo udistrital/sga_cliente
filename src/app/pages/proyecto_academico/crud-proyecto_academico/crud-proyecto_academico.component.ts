@@ -30,6 +30,7 @@ import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.co
 import { ListEnfasisService } from '../../../@core/data/list_enfasis.service';
 import { Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
+import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -69,7 +70,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   nivel_formacion: NivelFormacion;
   registro_califacado_acreditacion: RegistroCalificadoAcreditacion;
   tipo_registro: TipoRegistro;
-  enfasis_proyecto: InstitucionEnfasis;
+  enfasis_proyecto: InstitucionEnfasis[];
   enfasis_basico: Enfasis;
   titulacion_proyecto_snies: Titulacion;
   titulacion_proyecto_mujer: Titulacion;
@@ -182,7 +183,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
 
   onCreateEmphasys(event: any) {
     const emphasys = event.value;
-    if (!this.arr_enfasis_proyecto.find( enfasis => emphasys === enfasis ) && emphasys.Id) {
+    if (!this.arr_enfasis_proyecto.find((enfasis: any) => emphasys.Id === enfasis.Id ) && emphasys.Id) {
       this.arr_enfasis_proyecto.push(emphasys);
       this.source_emphasys.load(this.arr_enfasis_proyecto);
       const matSelect: MatSelect = event.source;
@@ -198,8 +199,15 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
   
   onDeleteEmphasys(event: any){
-    console.log("delete", this.arr_enfasis_proyecto.indexOf(event.data), event.data);
-    this.arr_enfasis_proyecto.splice(this.arr_enfasis_proyecto.indexOf(event.data), 1);
+    const findInArray = (value, array, attr) => {
+      for(var i = 0; i < array.length; i += 1) {
+        if(array[i][attr] === value) {
+            return i;
+        }
+      }
+      return -1;
+    }
+    this.arr_enfasis_proyecto.splice(findInArray(event.data.Id, this.arr_enfasis_proyecto, 'Id'), 1);
     this.source_emphasys.load(this.arr_enfasis_proyecto);
   }
 
@@ -349,7 +357,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     });
   }
   registroproyecto() {
-    if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid) {
+    if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0) {
     this.metodologia = {
       Id: this.opcionSeleccionadoMeto['Id'],
     }
@@ -393,6 +401,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         Id: 1,
       },
     }
+    // Cambio d edata para enviar array
+    /*
     this.enfasis_proyecto = {
       Activo: true,
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
@@ -400,6 +410,18 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         Id: +this.opcionSeleccionadoEnfasis['Id'],
       },
     }
+    */
+   this.enfasis_proyecto = [];
+   this.arr_enfasis_proyecto.forEach( enfasis => {
+      this.enfasis_proyecto.push({
+        Activo: true,
+        ProyectoAcademicoInstitucionId: this.proyecto_academico,
+        EnfasisId: {
+          Id: enfasis['Id'],
+        },
+      });
+   });
+
     this.titulacion_proyecto_snies = {
       Id: 0,
       Nombre: this.compleform.value.titulacion_snies,
@@ -444,7 +466,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.proyecto_academicoPost = {
       ProyectoAcademicoInstitucion: this.proyecto_academico,
       Registro: [this.registro_califacado_acreditacion],
-      Enfasis: [this.enfasis_proyecto],
+      Enfasis: this.enfasis_proyecto,
       Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
       Oikos: this.dependencia,
     }
