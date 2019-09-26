@@ -197,11 +197,11 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       });
     }
   }
-  
-  onDeleteEmphasys(event: any){
+
+  onDeleteEmphasys(event: any) {
     const findInArray = (value, array, attr) => {
-      for(var i = 0; i < array.length; i += 1) {
-        if(array[i][attr] === value) {
+      for (let i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
             return i;
         }
       }
