@@ -317,7 +317,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       AnoActoAdministrativoId: this.resoluform.value.ano_resolucion,
       NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
       FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
-      VigenciaActoAdministrativo: this.resoluform.value.mes_vigencia + '/' + this.resoluform.value.ano_vigencia,
+      VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
       EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
       Activo: true,
