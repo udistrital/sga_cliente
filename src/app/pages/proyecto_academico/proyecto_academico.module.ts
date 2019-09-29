@@ -12,6 +12,7 @@ import { PersonaService } from '../../@core/data/persona.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
 import {NgDatepickerModule} from 'ng2-datepicker';
 import { ConsultaProyectoAcademicoComponent } from './consulta-proyecto_academico/consulta-proyecto_academico.component';
+import { ModificarProyectoAcademicoComponent } from './modificar-proyecto_academico/modificar-proyecto_academico.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { ConsultaProyectoAcademicoComponent } from './consulta-proyecto_academic
     CrudProyectoAcademicoComponent,
     ListProyectoAcademicoComponent,
     ConsultaProyectoAcademicoComponent,
+    ModificarProyectoAcademicoComponent,
   ],
 })
 export class ProyectoAcademicoModule { }

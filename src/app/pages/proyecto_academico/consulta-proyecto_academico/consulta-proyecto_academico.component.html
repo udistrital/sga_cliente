@@ -66,7 +66,12 @@
                 </form>
             </nb-card-body>
         </nb-card>
-        <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.aceptar' | translate }}</button>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success'">{{ 'consultaproyecto.masinfomacion' | translate }}</button> </div>
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success-1'">{{ 'consultaproyecto.historico' | translate }}</button></div>
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.aceptar' | translate }}</button></div>
+        </div>
+
     </nb-card>
 
 </div>

@@ -16,6 +16,7 @@ import { ConsultaProyectoAcademicoComponent } from '../consulta-proyecto_academi
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { delay } from 'rxjs/operators';
 import { InformacionBasica } from '../../../@core/data/models/proyecto_academico/informacion_basica';
+import { ModificarProyectoAcademicoComponent } from '../modificar-proyecto_academico/modificar-proyecto_academico.component';
 
 
 export interface DialogData {
@@ -61,6 +62,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   ciclos: string;
   activo: string;
   enfasis: string;
+  consulta: boolean= false;
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private translate: TranslateService,
@@ -72,9 +74,22 @@ export class ListProyectoAcademicoComponent implements OnInit {
   }
 
 
-  openDialog(): void {
+  openDialogConsulta(): void {
     const dialogRef = this.dialog.open(ConsultaProyectoAcademicoComponent, {
       width: '550px',
+      height: '750px',
+      data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
+             abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.activo, enfasis: this.enfasis},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
+  openDialogModificar(): void {
+    const dialogRef = this.dialog.open(ModificarProyectoAcademicoComponent, {
+      width: '850px',
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
@@ -171,7 +186,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
         this.activo = res.map((data: any) => (data.ActivoLetra));
         this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
-        this.openDialog();
+        console.info(this.consulta)
+        this.openDialogConsulta();
       }else {
       Swal(opt1)
       .then((willDelete) => {

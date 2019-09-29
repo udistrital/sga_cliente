@@ -30,28 +30,6 @@
     background-color: rgb(255, 255, 255);
 }
 
-.columna {
-    width: 33%;
-    float: left;
-}
-
-@media (max-width: 500px) {
-    .columna {
-        width: auto;
-        float: none;
-    }
-}
-
-.mat-success {
-    background-color: green;
-    color: #fff;
-}
-
-.mat-success-1 {
-    background-color: rgb(196, 199, 16);
-    color: #fff;
-}
-
 .capitalize {
     text-transform: capitalize;
 }

@@ -351,6 +351,8 @@
         "consulta": "Consulta",
         "editar": "Editar",
         "inhabilitar": "Inhabilitar",
-        "titulo_consulta": "Información Basica del Proyecto Académico"
+        "titulo_consulta": "Información Basica del Proyecto Académico",
+        "historico": "Historico Registros",
+        "masinfomacion": "Mas Información"
     }
 }

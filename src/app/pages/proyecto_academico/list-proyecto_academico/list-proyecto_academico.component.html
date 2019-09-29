@@ -69,7 +69,7 @@
                     <ng-container matColumnDef="editar">
                         <mat-header-cell *matHeaderCellDef> {{ 'consultaproyecto.editar' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button mat-button>
+                            <button (click)="openDialogModificar()" mat-button>
                                     <mat-icon>edit</mat-icon>
                                 </button>
                         </mat-cell>
