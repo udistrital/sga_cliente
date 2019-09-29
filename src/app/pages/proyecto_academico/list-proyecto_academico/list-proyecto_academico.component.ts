@@ -89,7 +89,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
 
   openDialogModificar(): void {
     const dialogRef = this.dialog.open(ModificarProyectoAcademicoComponent, {
-      width: '850px',
+      width: '1000px',
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,

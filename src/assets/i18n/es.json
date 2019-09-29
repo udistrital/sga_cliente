@@ -353,6 +353,19 @@
         "inhabilitar": "Inhabilitar",
         "titulo_consulta": "Información Basica del Proyecto Académico",
         "historico": "Historico Registros",
-        "masinfomacion": "Mas Información"
+        "masinfomacion": "Mas Información",
+        "coordinacion": "Coordinación",
+        "tag_informacionbasica": "Información basica "
+
+    },
+    "editarproyecto": {
+        "coordinacion": "Coordinación",
+        "tag_informacionbasica": "Información basica ",
+        "tag_registro": "Registro calificado y de alta calidad ",
+        "tag_acta": "Acto Administrativo ",
+        "registro_alta": "Registro de Alta Calidad"
+
+
+
     }
 }
