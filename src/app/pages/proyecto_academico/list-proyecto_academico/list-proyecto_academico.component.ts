@@ -19,22 +19,6 @@ import { InformacionBasica } from '../../../@core/data/models/proyecto_academico
 import { ModificarProyectoAcademicoComponent } from '../modificar-proyecto_academico/modificar-proyecto_academico.component';
 
 
-export interface DialogData {
-    codigosnies: Number;
-    facultad: string;
-    nombre: string;
-    nivel: string;
-    metodologia: string;
-    abreviacion: string;
-    correo: string;
-    numerocreditos: Number;
-    duracion: Number;
-    tipoduracion: string;
-    ciclos: Boolean;
-    activo: Boolean;
-    enfasis: string;
-}
-
 
 @Component({
   selector: 'ngx-list-proyecto-academico',
@@ -48,7 +32,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   index: any;
   idproyecto: any;
   datosbasico: InformacionBasica;
-  displayedColumns = ['Id', 'Facultad', 'Nombre Proyecto', 'Nivel Proyecto', 'codigo', 'Activo', 'registro', 'calidad', 'Consulta', 'editar', 'inhabilitar'];
+  displayedColumns = ['Id', 'Facultad', 'Nombre Proyecto', 'Nivel Proyecto', 'codigo', 'Oferta', 'registro', 'calidad', 'Consulta', 'editar', 'inhabilitar'];
   codigosnies: Number;
   facultad: string;
   nombre: String;
@@ -60,7 +44,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   duracion: Number;
   tipo_duracion: string;
   ciclos: string;
-  activo: string;
+  oferta: string;
   enfasis: string;
   consulta: boolean= false;
   source: LocalDataSource = new LocalDataSource();
@@ -80,7 +64,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
-             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.activo, enfasis: this.enfasis},
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -93,7 +77,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
-             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.activo, enfasis: this.enfasis},
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -184,7 +168,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.duracion = res.map((data: any) => (data.ProyectoAcademico.Duracion));
         this.tipo_duracion = res.map((data: any) => (data.NombreUnidad));
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
-        this.activo = res.map((data: any) => (data.ActivoLetra));
+        this.oferta = res.map((data: any) => (data.OfertaLetra));
         this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
         console.info(this.consulta)
         this.openDialogConsulta();

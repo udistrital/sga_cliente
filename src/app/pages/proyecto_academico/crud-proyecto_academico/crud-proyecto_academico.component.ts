@@ -57,6 +57,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   metodo = [];
   fecha_creacion: Date;
   fecha_vencimiento: string;
+  fecha_vencimiento_mostrar: string;
   fecha_vigencia: string;
   proyecto_academicoPost: ProyectoAcademicoPost;
   proyecto_academico: ProyectoAcademicoInstitucion;
@@ -73,6 +74,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   tipo_dependencia: TipoDependencia;
   dependencia_tipo_dependencia: DependenciaTipoDependencia;
   dependencia: Dependencia;
+  fecha_calculada_vencimiento: string
 
 
 
@@ -140,7 +142,16 @@ export class CrudProyectoAcademicoComponent implements OnInit {
      });
     }
 
+    mostrarfecha() {
+      this.calculateEndDateMostrar(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
+      this.fecha_calculada_vencimiento = this.fecha_vencimiento_mostrar
+     }
 
+     calculateEndDateMostrar (date: Date, years: number, months: number, days: number): Date {
+      const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DD');
+      this.fecha_vencimiento_mostrar = convertDate
+      return new Date(convertDate);
+    }
 
   useLanguage(language: string) {
     this.translate.use(language);

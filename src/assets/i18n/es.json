@@ -335,7 +335,8 @@
         "vigencia_mes": "# Meses de vigencia",
         "erro_mes_vigencia": "Por favor ingrese el numero de meses, máximo 2 digitos.",
         "erro_ano_vigencia": "Por favor ingrese el numero de años, máximo 1 digitos.",
-        "vigencia_año": "# Años de vigencia"
+        "vigencia_año": "# Años de vigencia",
+        "fecha_calculada_vencimiento": "El registro se vence el:"
     },
     "consultaproyecto": {
         "titulo": "Consulta de un Proyecto Académico ",
