@@ -301,7 +301,8 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
       Competencias: this.compleform.value.competencias,
       CodigoAbreviacion: this.basicform.value.abreviacion_proyecto,
-      Activo: this.checkofrece,
+      Activo: true,
+      Oferta: this.checkofrece,
       UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
       AnoActoAdministrativoId: this.actoform.value.ano_acto,
       DependenciaId: this.opcionSeleccionadoFacultad['Id'],
@@ -309,6 +310,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
       NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
       MetodologiaId: this.metodologia,
       NivelFormacionId: this.nivel_formacion,
+      AnoActoAdministrativo: this.actoform.value.ano_acto,
 
     }
     this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
