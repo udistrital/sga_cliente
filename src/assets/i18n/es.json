@@ -17,6 +17,14 @@
         "opciones": "Opciones",
         "notificaciones": "Notificaciones",
         "dashboard": "Inicio",
+        "administracion": {
+            "administracion": "Administración",
+            "enfasis": {
+                "enfasis": "Enfásis",
+                "list_enfasis": "Listar Enfásis",
+                "crud_enfasis": "Crear Enfásis"
+            }
+        },
         "produccion_academica": {
             "produccion_academica": "Producción Academica",
             "list_produccion_academica": "Lista Producción Academica",
@@ -74,6 +82,7 @@
         "error": "Error",
         "si": "Si",
         "no": "No",
+        "cerrar": "Cerrar",
         "accion_no_permitida": "Acción no permitida",
         "confirmar": "Confirmar",
         "filtrar": "Filtrar",
@@ -120,6 +129,7 @@
         "atencion": "Atención"
     },
     "ERROR": {
+        "general": "La solicitud no pudo ser cumplida",
         "400": "La solicitud contiene sintaxis errónea",
         "401": "Autorización no es posible, ha fallado o aún no ha sido provista",
         "403": "El servidor se reusa a responder dado que el cliente no tiene los privilegios adecuados",
@@ -218,7 +228,6 @@
         "tipo_periodo_actualizado": "Tipo período actualizado",
         "seguro_eliminar_tipo_periodo": "¿Esta seguro de eliminar este tipo de período?",
         "tipo_periodo_eliminado": "Tipo período eliminado"
-
     },
     "periodo": {
         "seguro_actualizar_periodo": "¿Esta seguro de actualizar este período?",
@@ -356,7 +365,6 @@
         "masinfomacion": "Mas Información",
         "coordinacion": "Coordinación",
         "tag_informacionbasica": "Información basica "
-
     },
     "editarproyecto": {
         "coordinacion": "Coordinación",
@@ -364,8 +372,19 @@
         "tag_registro": "Registro calificado y de alta calidad ",
         "tag_acta": "Acto Administrativo ",
         "registro_alta": "Registro de Alta Calidad"
-
-
-
+    },
+    "enfasis":{
+        "enfasis": "Enfásis",
+        "seguro_continuar_registrar_enfasis": "¿Esta seguro de registrar este enfásis?",
+        "enfasis_creado": "Enfásis creado",
+        "enfasis_no_creado": "Enfásis no creado",
+        "seguro_continuar_eliminar_enfasis": "¿Esta seguro de eliminar este enfásis?",
+        "enfasis_eliminado": "Enfásis eliminado",
+        "enfasis_no_eliminado": "Enfásis no eliminado",
+        "seguro_continuar_actualizar_enfasis": "¿Esta seguro de actualizar este enfásis?",
+        "enfasis_actualizado": "Enfásis actualizado",
+        "enfasis_no_actualizado": "Enfásis no actualizado",
+        "administrar_enfasis": "Administrar enfásis",
+        "error_enfasis_ya_existe": "El enfásis ya fue agregado"
     }
 }

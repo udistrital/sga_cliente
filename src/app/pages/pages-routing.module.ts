@@ -31,15 +31,19 @@ const routes: Routes = [{
     {
       path: 'periodo',
       loadChildren: './periodo/periodo.module#PeriodoModule',
-      },
-        {
-          path: 'calendarioevento',
-          loadChildren: './calendarioevento/calendarioevento.module#CalendarioeventoModule',
-          },
-          {
-            path: 'proyecto_academico',
-            loadChildren: './proyecto_academico/proyecto_academico.module#ProyectoAcademicoModule',
-          },
+    },
+    {
+      path: 'calendarioevento',
+      loadChildren: './calendarioevento/calendarioevento.module#CalendarioeventoModule',
+    },
+    {
+      path: 'proyecto_academico',
+      loadChildren: './proyecto_academico/proyecto_academico.module#ProyectoAcademicoModule',
+    },
+    {
+      path: 'enfasis',
+      loadChildren: './enfasis/enfasis.module#EnfasisModule',
+    },
     {
         path: '',
         redirectTo: 'dashboard',

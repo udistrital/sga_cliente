@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { CoreService } from '../../../@core/data/core.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
@@ -25,13 +25,20 @@ import { DependenciaTipoDependencia } from '../../../@core/data/models/oikos/dep
 import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as moment from 'moment';
+import { NbDialogService, NbDialogRef } from '@nebular/theme';
+// import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
+import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
+import { ListEnfasisService } from '../../../@core/data/list_enfasis.service';
+import { Subscription } from 'rxjs';
+import { MatSelect } from '@angular/material/select';
+import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
   templateUrl: './crud-proyecto_academico.component.html',
   styleUrls: ['./crud-proyecto_academico.component.scss'],
 })
-export class CrudProyectoAcademicoComponent implements OnInit {
+export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   config: ToasterConfig;
   settings: any;
   basicform: any;
@@ -65,7 +72,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   nivel_formacion: NivelFormacion;
   registro_califacado_acreditacion: RegistroCalificadoAcreditacion;
   tipo_registro: TipoRegistro;
-  enfasis_proyecto: InstitucionEnfasis;
+  enfasis_proyecto: InstitucionEnfasis[];
   enfasis_basico: Enfasis;
   titulacion_proyecto_snies: Titulacion;
   titulacion_proyecto_mujer: Titulacion;
@@ -104,6 +111,11 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   selectFormControl = new FormControl('', Validators.required);
   @Output() eventChange = new EventEmitter();
 
+  subscription: Subscription;
+  source_emphasys: LocalDataSource = new LocalDataSource();
+  arr_enfasis_proyecto: InstitucionEnfasis[] = [];
+  settings_emphasys: any;
+
   constructor(private translate: TranslateService,
     private toasterService: ToasterService,
     private oikosService: OikosService,
@@ -111,6 +123,8 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
     private unidadtiempoService: UnidadTiempoService,
+    private dialogService: NbDialogService,
+    private listEnfasisService: ListEnfasisService,
     private formBuilder: FormBuilder) {
       this.basicform = formBuilder.group({
         codigo_snies: ['', Validators.required],
@@ -138,9 +152,81 @@ export class CrudProyectoAcademicoComponent implements OnInit {
        titulacion_hombre: ['', Validators.required],
        competencias: ['', Validators.required],
      });
+
+     this.subscription = this.listEnfasisService.getListEnfasis().subscribe(listEnfasis => {
+      if (listEnfasis) {
+        this.enfasis = listEnfasis;
+      } else {
+        // clear messages when empty message received
+        // do not do anything on error
+      }
+    });
+    this.settings_emphasys = {
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: true,
+      },
+      actions: {
+        edit: false,
+        add: false,
+        position: 'right',
+      },
+      mode: 'external',
+      columns: {
+        Nombre: {
+          title: this.translate.instant('GLOBAL.nombre'),
+          // type: 'string;',
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+          width: '80%',
+        },
+      },
+    };
+  }
+
+  onCreateEmphasys(event: any) {
+    const emphasys = event.value;
+    if (!this.arr_enfasis_proyecto.find((enfasis: any) => emphasys.Id === enfasis.Id ) && emphasys.Id) {
+      this.arr_enfasis_proyecto.push(emphasys);
+      this.source_emphasys.load(this.arr_enfasis_proyecto);
+      const matSelect: MatSelect = event.source;
+      matSelect.writeValue(null);
+    } else {
+      Swal({
+        type: 'error',
+        title: 'ERROR',
+        text: this.translate.instant('enfasis.error_enfasis_ya_existe'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
     }
+  }
 
+  onDeleteEmphasys(event: any) {
+    const findInArray = (value, array, attr) => {
+      for (let i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
+            return i;
+        }
+      }
+      return -1;
+    }
+    this.arr_enfasis_proyecto.splice(findInArray(event.data.Id, this.arr_enfasis_proyecto, 'Id'), 1);
+    this.source_emphasys.load(this.arr_enfasis_proyecto);
+  }
 
+  ngOnDestroy() {
+    // unsubscribe to ensure no memory leaks
+    this.subscription.unsubscribe();
+  }
+
+  openListEnfasisComponent() {
+    this.dialogService.open(ListEnfasisComponent, {
+      context: {
+        asDialog: true,
+      },
+    });
+  }
 
   useLanguage(language: string) {
     this.translate.use(language);
@@ -281,7 +367,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
   }
 
   registroproyecto() {
-    if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid) {
+    if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0) {
     this.metodologia = {
       Id: this.opcionSeleccionadoMeto['Id'],
     }
@@ -328,6 +414,8 @@ export class CrudProyectoAcademicoComponent implements OnInit {
         Id: 1,
       },
     }
+    // Cambio d edata para enviar array
+    /*
     this.enfasis_proyecto = {
       Activo: true,
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
@@ -335,6 +423,18 @@ export class CrudProyectoAcademicoComponent implements OnInit {
         Id: +this.opcionSeleccionadoEnfasis['Id'],
       },
     }
+    */
+   this.enfasis_proyecto = [];
+   this.arr_enfasis_proyecto.forEach( enfasis => {
+      this.enfasis_proyecto.push({
+        Activo: true,
+        ProyectoAcademicoInstitucionId: this.proyecto_academico,
+        EnfasisId: {
+          Id: enfasis['Id'],
+        },
+      });
+   });
+
     this.titulacion_proyecto_snies = {
       Id: 0,
       Nombre: this.compleform.value.titulacion_snies,
@@ -379,7 +479,7 @@ export class CrudProyectoAcademicoComponent implements OnInit {
     this.proyecto_academicoPost = {
       ProyectoAcademicoInstitucion: this.proyecto_academico,
       Registro: [this.registro_califacado_acreditacion],
-      Enfasis: [this.enfasis_proyecto],
+      Enfasis: this.enfasis_proyecto,
       Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
       Oikos: this.dependencia,
     }
