@@ -60,7 +60,7 @@
                     <ng-container matColumnDef="Consulta">
                         <mat-header-cell *matHeaderCellDef> {{ 'consultaproyecto.consulta' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row;  let i = index">
-                            <button (click)="promesaid()" mat-button>
+                            <button (click)="promesaid_consulta()" mat-button>
                                 <mat-icon>visibility</mat-icon>
                             </button>
                         </mat-cell>
@@ -69,7 +69,7 @@
                     <ng-container matColumnDef="editar">
                         <mat-header-cell *matHeaderCellDef> {{ 'consultaproyecto.editar' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button (click)="openDialogModificar()" mat-button>
+                            <button (click)="promesaid_modificar()" mat-button>
                                     <mat-icon>edit</mat-icon>
                                 </button>
                         </mat-cell>

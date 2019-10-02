@@ -20,11 +20,13 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academico/institucion_enfasis';
 import { Enfasis } from '../../../@core/data/models/proyecto_academico/enfasis';
 import { Titulacion } from '../../../@core/data/models/proyecto_academico/titulacion';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { TipoDependencia } from '../../../@core/data/models/oikos/tipo_dependencia';
 import { DependenciaTipoDependencia } from '../../../@core/data/models/oikos/dependencia_tipo_dependencia';
 import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as moment from 'moment';
+import { Inject } from '@angular/core';
 
 
 @Component({
@@ -106,6 +108,9 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   @Output() eventChange = new EventEmitter();
 
   constructor(private translate: TranslateService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialog: MatDialog,
+    public dialogRef: MatDialogRef<ModificarProyectoAcademicoComponent>,
     private toasterService: ToasterService,
     private oikosService: OikosService,
     private coreService: CoreService,
@@ -164,7 +169,31 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       ofrece_proyecto: ['', Validators.required],
       enfasis_proyecto: ['', Validators.required],
    })
+   this.loadfacultad();
 
+  }
+  loadfacultad() {
+    this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2')
+    .subscribe((res: any) => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.facultad = res.map((data: any) => (data.DependenciaId));
+        this.facultad.forEach((fac: any ) => {
+          console.info('ojo' + this.data.idfacultad)
+          if (fac.Id === Number(this.data.idfacultad)) {
+            this.opcionSeleccionadoFacultad = fac;
+          }
+        });
+      }
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
   }
 
 

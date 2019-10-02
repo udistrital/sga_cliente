@@ -47,6 +47,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   oferta: string;
   enfasis: string;
   consulta: boolean= false;
+  idfacultad: Number;
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private translate: TranslateService,
@@ -77,7 +78,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
-             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis},
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, idfacultad: this.idfacultad},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -144,7 +145,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   });
   }
 
-  obteneridporid() {
+  obteneridporid_consulta() {
     const opt1: any = {
       title: this.translate.instant('GLOBAL.atencion'),
       text: this.translate.instant('oferta.evento'),
@@ -170,7 +171,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
         this.oferta = res.map((data: any) => (data.OfertaLetra));
         this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
-        console.info(this.consulta)
         this.openDialogConsulta();
       }else {
       Swal(opt1)
@@ -189,13 +189,69 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
   });
   }
-  promesaid(id: number): Promise<{id: number}> {
+
+  obteneridporid_modificar() {
+    const opt1: any = {
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('oferta.evento'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    }
+    this.sgamidService.get('consulta_proyecto_academico/' + this.idproyecto )
+    .subscribe((res: any) => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.codigosnies = res.map((data: any) => (data.ProyectoAcademico.CodigoSnies));
+        this.nombre = res.map((data: any) => (data.ProyectoAcademico.Nombre));
+        this.facultad = res.map((data: any) => (data.NombreDependencia));
+        this.nivel = res.map((data: any) => (data.ProyectoAcademico.NivelFormacionId.Nombre));
+        this.metodologia = res.map((data: any) => (data.ProyectoAcademico.MetodologiaId.Nombre));
+        this.abreviacion = res.map((data: any) => (data.ProyectoAcademico.CodigoAbreviacion));
+        this.correo = res.map((data: any) => (data.ProyectoAcademico.CorreoElectronico));
+        this.numerocreditos = res.map((data: any) => (data.ProyectoAcademico.NumeroCreditos));
+        this.duracion = res.map((data: any) => (data.ProyectoAcademico.Duracion));
+        this.tipo_duracion = res.map((data: any) => (data.NombreUnidad));
+        this.ciclos = res.map((data: any) => (data.CiclosLetra));
+        this.oferta = res.map((data: any) => (data.OfertaLetra));
+        this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
+        this.idfacultad = res.map((data: any) => (data.ProyectoAcademico.DependenciaId));
+        this.openDialogModificar();
+      }else {
+      Swal(opt1)
+      .then((willDelete) => {
+        if (willDelete.value) {
+        }
+      });
+    }
+  },
+  (error: HttpErrorResponse) => {
+    Swal({
+      type: 'error',
+      title: error.status + '',
+      text: this.translate.instant('ERROR.' + error.status),
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    });
+  });
+  }
+
+  promesaid_consulta(id: number): Promise<{id: number}> {
     return new Promise((resolve) => {
         setTimeout(() => {
           resolve({ id: id });
-          this.obteneridporid()
+          this.obteneridporid_consulta()
       }, 600);
     });
+}
+
+promesaid_modificar(id: number): Promise<{id: number}> {
+  return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ id: id });
+        this.obteneridporid_modificar()
+    }, 600);
+  });
 }
 
   highlight(row ): void {

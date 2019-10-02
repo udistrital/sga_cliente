@@ -112,7 +112,34 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
-
+  {
+    title: 'Administración',
+    icon: 'nb-gear',
+    link: '',
+    key: 'administracion',
+    children: [
+      {
+        title: 'enfasis',
+        icon: 'nb-compose',
+        link: '',
+        key: 'enfasis',
+        children: [
+          {
+            title: 'Registrar Enfásis',
+            icon: 'nb-list',
+            link: '/pages/enfasis/crud-enfasis',
+            key: 'crud_enfasis',
+          },
+          {
+            title: 'Listar Enfásis',
+            icon: 'nb-list',
+            link: '/pages/enfasis/list-enfasis',
+            key: 'list_enfasis',
+          },
+        ],
+      },
+    ],
+  },
 
   /*
   {
