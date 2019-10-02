@@ -1,0 +1,77 @@
+<div class="col-md-12 col-lg-12 ">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <nb-card accent="info" align="center" size=4>
+        <nb-card-header>{{ 'consultaproyecto.titulo_consulta' | translate }}</nb-card-header>
+        <nb-card>
+            <nb-card-header>{{ 'proyecto.basica' | translate }}</nb-card-header>
+            <nb-card-body>
+                <form id="basicForm" [formGroup]="basicform">
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.codigo_snies' | translate }}" formControlName="codigo_snies" class="form-control" name="codigo_snies" [(ngModel)]="data.codigosnies">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.facultad' | translate }}" formControlName="facultad" class="form-control" name="facultad" [(ngModel)]="data.facultad">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}" id="nombre_proyecto" formControlName="nombre_proyecto" class="form-control" name="nombre_proyecto" [(ngModel)]="data.nombre">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.nivel_proyecto' | translate }}" formControlName="nivel_proyecto" class="form-control" name="nivel_proyecto" [(ngModel)]="data.nivel">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.metodologia_proyecto' | translate }}" formControlName="metodologia_proyecto" class="form-control" name="metodologia_proyecto" [(ngModel)]="data.metodologia">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.abreciacion_proyecto' | translate }}" formControlName="abreviacion_proyecto" class="form-control" name="abreviacion_proyecto" [(ngModel)]="data.abreviacion">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.correo_proyecto' | translate }}" formControlName="correo_proyecto" class="form-control" name="correo_proyecto" [(ngModel)]="data.correo">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.creditos_proyecto' | translate }}" formControlName="creditos_proyecto" class="form-control" name="creditos_proyecto" [(ngModel)]="data.numerocreditos">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.duracion_proyecto' | translate }}" formControlName="duracion_proyecto" class="form-control" name="duracion_proyecto" [(ngModel)]="data.duracion">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.tipo_duracion' | translate }}" formControlName="tipo_duracion_proyecto" class="form-control" name="tipo_duracion_proyecto" [(ngModel)]="data.tipoduracion">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.ciclo_proyecto' | translate }}" formControlName="ciclos_proyecto" class="form-control" name="ciclos_proyecto" [(ngModel)]="data.ciclos">
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.ofrece_proyecto' | translate }}" formControlName="ofrece_proyecto" class="form-control" name="ofrece_proyecto" [(ngModel)]="data.ofrece">
+                    </mat-form-field>
+                </form>
+            </nb-card-body>
+        </nb-card>
+        <nb-card class="m-4" accent="info">
+            <nb-card-header>{{ 'proyecto.enfasis' | translate }}</nb-card-header>
+            <nb-card-body>
+                <form id="basicForm" [formGroup]="basicform">
+                    <mat-form-field>
+                        <input readonly matInput placeholder="{{ 'proyecto.enfasis_proyecto' | translate }}" formControlName="enfasis_proyecto" class="form-control" name="enfasis_proyecto" [(ngModel)]="data.enfasis">
+                    </mat-form-field>
+                </form>
+            </nb-card-body>
+        </nb-card>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success'">{{ 'consultaproyecto.masinfomacion' | translate }}</button> </div>
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success-1'">{{ 'consultaproyecto.historico' | translate }}</button></div>
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.aceptar' | translate }}</button></div>
+        </div>
+
+    </nb-card>
+
+</div>

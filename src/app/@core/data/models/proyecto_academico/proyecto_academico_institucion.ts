@@ -15,6 +15,7 @@ export class ProyectoAcademicoInstitucion {
     Competencias: string;
     CodigoAbreviacion: string;
     Activo: boolean;
+    Oferta: boolean;
     UnidadTiempoId: number;
     AnoActoAdministrativoId: string;
     DependenciaId: number;
@@ -22,4 +23,5 @@ export class ProyectoAcademicoInstitucion {
     NucleoBaseId: number;
     MetodologiaId: Metodologia;
     NivelFormacionId: NivelFormacion;
+    AnoActoAdministrativo: string;
 }

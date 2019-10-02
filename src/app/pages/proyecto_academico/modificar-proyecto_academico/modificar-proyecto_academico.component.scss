@@ -1,0 +1,47 @@
+:host /deep/ .nb-theme-default ng2-smart-table table tr td {
+    font-size: 0.85rem;
+}
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.example-header {
+    min-height: 64px;
+    padding: 8px 24px 0;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+div.centre {
+    width: 500px;
+    display: block;
+    background-color: #eee;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mat-table {
+    overflow: auto;
+}
+
+.mat-row:nth-child(even) {
+    background-color: rgb(255, 255, 255);
+}
+
+.mat-row:nth-child(odd) {
+    background-color: rgb(255, 255, 255);
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.encabezado {
+    background-color: rgb(220, 221, 238);
+}

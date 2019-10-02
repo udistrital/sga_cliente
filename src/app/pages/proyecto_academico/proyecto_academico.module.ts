@@ -12,6 +12,8 @@ import { PersonaService } from '../../@core/data/persona.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
 import { NbDialogService } from '@nebular/theme';
 import {NgDatepickerModule} from 'ng2-datepicker';
+import { ConsultaProyectoAcademicoComponent } from './consulta-proyecto_academico/consulta-proyecto_academico.component';
+import { ModificarProyectoAcademicoComponent } from './modificar-proyecto_academico/modificar-proyecto_academico.component';
 import { ListEnfasisComponent } from '../enfasis/list-enfasis/list-enfasis.component';
 import { CrudEnfasisComponent } from '../enfasis/crud-enfasis/crud-enfasis.component';
 import { EnfasisModule } from '../enfasis/enfasis.module';
@@ -45,6 +47,8 @@ import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
   exports: [
     CrudProyectoAcademicoComponent,
     ListProyectoAcademicoComponent,
+    ConsultaProyectoAcademicoComponent,
+    ModificarProyectoAcademicoComponent,
   ],
 })
 export class ProyectoAcademicoModule { }

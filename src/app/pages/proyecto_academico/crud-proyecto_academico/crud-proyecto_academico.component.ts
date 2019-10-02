@@ -24,6 +24,7 @@ import { TipoDependencia } from '../../../@core/data/models/oikos/tipo_dependenc
 import { DependenciaTipoDependencia } from '../../../@core/data/models/oikos/dependencia_tipo_dependencia';
 import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import * as moment from 'moment';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 // import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
 import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
@@ -61,7 +62,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   enfasis = [];
   nivel = [];
   metodo = [];
-  fecha_creacion: string;
+  fecha_creacion: Date;
+  fecha_vencimiento: string;
   fecha_vigencia: string;
   proyecto_academicoPost: ProyectoAcademicoPost;
   proyecto_academico: ProyectoAcademicoInstitucion;
@@ -96,13 +98,14 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   Campo12Control = new FormControl('', [Validators.required]);
   Campo13Control = new FormControl('', [Validators.required, Validators.maxLength(4)]);
   Campo14Control = new FormControl('', [Validators.required]);
-  Campo15Control = new FormControl('', [Validators.required]);
   Campo16Control = new FormControl('', [Validators.required]);
   Campo17Control = new FormControl('', [Validators.required, Validators.maxLength(4)]);
   Campo18Control = new FormControl('', [Validators.required]);
   Campo19Control = new FormControl('', [Validators.required]);
   Campo20Control = new FormControl('', [Validators.required]);
   Campo21Control = new FormControl('', [Validators.required]);
+  Campo22Control = new FormControl('', [Validators.required, Validators.maxLength(2)]);
+  Campo23Control = new FormControl('', [Validators.required, Validators.maxLength(1)]);
   CampoCorreoControl = new FormControl('', [Validators.required, Validators.email]);
   CampoCreditosControl = new FormControl('', [Validators.required, Validators.maxLength(4)]);
   selectFormControl = new FormControl('', Validators.required);
@@ -136,7 +139,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       resolucion: ['', Validators.required],
       ano_resolucion: ['', [Validators.required, Validators.maxLength(4)]],
       fecha_creacion: ['', Validators.required],
-      fecha_vigencia: ['', Validators.required],
+      mes_vigencia: ['', [Validators.required, Validators.maxLength(2)]],
+      ano_vigencia: ['', [Validators.required, Validators.maxLength(1)]],
      })
      this.actoform = formBuilder.group({
       acto: ['', Validators.required],
@@ -356,6 +360,12 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       });
     });
   }
+  calculateEndDate (date: Date, years: number, months: number, days: number): Date {
+    const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DDTHH:mm:ss');
+    this.fecha_vencimiento = convertDate
+    return new Date(convertDate);
+  }
+
   registroproyecto() {
     if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0) {
     this.metodologia = {
@@ -377,7 +387,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
       Competencias: this.compleform.value.competencias,
       CodigoAbreviacion: this.basicform.value.abreviacion_proyecto,
-      Activo: this.checkofrece,
+      Activo: true,
+      Oferta: this.checkofrece,
       UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
       AnoActoAdministrativoId: this.actoform.value.ano_acto,
       DependenciaId: this.opcionSeleccionadoFacultad['Id'],
@@ -385,15 +396,17 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
       MetodologiaId: this.metodologia,
       NivelFormacionId: this.nivel_formacion,
+      AnoActoAdministrativo: this.actoform.value.ano_acto,
 
     }
+    this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
     this.registro_califacado_acreditacion = {
       Id: 0,
       AnoActoAdministrativoId: this.resoluform.value.ano_resolucion,
       NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
       FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
-      VigenciaActoAdministrativo: this.fecha_vigencia + ':00Z',
-      VencimientoActoAdministrativo: this.fecha_vigencia + ':00Z',
+      VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
+      VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
       EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
       Activo: true,
       ProyectoAcademicoInstitucionId: this.proyecto_academico,

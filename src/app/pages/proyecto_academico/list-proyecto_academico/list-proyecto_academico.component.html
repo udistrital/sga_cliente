@@ -17,50 +17,50 @@
                     <!--  Columna ID-->
                     <ng-container matColumnDef="Id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.id' | translate }}</mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.Id}} </mat-cell>
+                        <mat-cell *matCellDef="let row; let i = index" class="text-capitalize"> {{row.ProyectoAcademico.Id}} </mat-cell>
                     </ng-container>
 
                     <!-- Columna Apellido -->
                     <ng-container matColumnDef="Facultad">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'consultaproyecto.facultad' | translate }}</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademicoInstitucionId.DependenciaId }} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.NombreDependencia }} </mat-cell>
                     </ng-container>
 
                     <!-- Columna Nombre-->
                     <ng-container matColumnDef="Nombre Proyecto">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.nombre' | translate }} </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademicoInstitucionId.Nombre}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademico.Nombre}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="Nivel Proyecto">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.nivel' | translate }} </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademicoInstitucionId.NivelFormacionId.Nombre }} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademico.NivelFormacionId.Nombre }} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="codigo">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.codigo' | translate }} </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademicoInstitucionId.CodigoSnies}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademico.CodigoSnies}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="Activo">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.activo' | translate }} </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.Activo }} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ActivoLetra }} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="registro">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.registro' | translate }} </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.VigenciaActoAdministrativo | date:'dd/MM/yyyy' }} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.FechaVenimientoAcreditacion | date:'dd/MM/yyyy' }} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="calidad">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.calidad' | translate }} </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.Calidad }} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.FechaVenimientoCalidad | date:'dd/MM/yyyy'}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="Consulta">
                         <mat-header-cell *matHeaderCellDef> {{ 'consultaproyecto.consulta' | translate }} </mat-header-cell>
-                        <mat-cell *matCellDef="let row">
-                            <button mat-button>
+                        <mat-cell *matCellDef="let row;  let i = index">
+                            <button (click)="promesaid()" mat-button>
                                 <mat-icon>visibility</mat-icon>
                             </button>
                         </mat-cell>
@@ -69,7 +69,7 @@
                     <ng-container matColumnDef="editar">
                         <mat-header-cell *matHeaderCellDef> {{ 'consultaproyecto.editar' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button mat-button>
+                            <button (click)="openDialogModificar()" mat-button>
                                     <mat-icon>edit</mat-icon>
                                 </button>
                         </mat-cell>
@@ -85,7 +85,7 @@
                     </ng-container>
 
                     <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="highlight(row,$event)"></mat-row>
                 </mat-table>
 
 

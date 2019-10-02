@@ -81,6 +81,7 @@
         "si": "Yes",
         "no": "No",
         "cerrar": "Close",
+        "accion_no_permitida": "Action not allowed",
         "filtrar": "Filter",
         "Limpiar": "Clean",
         "confirmar": "Confirm",
@@ -177,7 +178,6 @@
         "autor_no_puede_borrar": "Only the main author can delete the academic production",
         "autor_no_ha_confirmado": "You have not confirmed being one of the authors of this academic production. Do you want to confirm your participation?",
         "confirma_participar_produccion": "Do you confirm being one of the authors of this academic production?",
-        "accion_no_permitida": "Action not allowed",
         "autor": "Author",
         "autores": "Authors",
         "resumen": "Summary",
@@ -337,7 +337,12 @@
         "proyecto_no_creado": "Academic Project not created",
         "proyecto_creado": "Academic Project created successfully",
         "creado": "Project Created!",
-        "mensaje": "This Module allows you to register a new academic project or create one from an academic project that has similar characteristics, in order to perform the registration you must have the evidence of the administrative act at hand, please enter the requested information."
+        "mensaje": "This Module allows you to register a new academic project or create one from an academic project that has similar characteristics, in order to perform the registration you must have the evidence of the administrative act at hand, please enter the requested information.",
+        "vigencia": "Validity of registration:",
+        "vigencia_mes": "# Effective months",
+        "erro_mes_vigencia": "Please enter the number of months, maximum 2 digits.",
+        "erro_ano_vigencia": "Please enter the number of years, maximum 1 digits.",
+        "vigencia_año": "# Years of validity"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
@@ -352,7 +357,19 @@
         "calidad": "High quality expiration",
         "consulta": "Query",
         "editar": "Edit",
-        "inhabilitar": "Disable"
+        "inhabilitar": "Disable",
+        "titulo_consulta": "Basic Information of the Academic Project",
+        "historico": "Historical Records",
+        "masinfomacion": "More information",
+        "coordinacion": "Coordination",
+        "tag_informacionbasica": "Basic information"
+    },
+    "editarproyecto": {
+        "coordinacion": "Coordination",
+        "tag_informacionbasica": "Basic Information",
+        "tag_registro": "Qualified and high quality registration",
+        "tag_acta": "Administrative Act ",
+        "registro_alta": "High quality registration"
     },
     "enfasis":{
         "enfasis": "Emphasys",
@@ -368,5 +385,4 @@
         "administrar_enfasis": "Administrate emphasys",
         "error_enfasis_ya_existe": "The emphasys is already added"
     }
-}
 }

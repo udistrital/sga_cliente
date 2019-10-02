@@ -8,6 +8,8 @@ import { ConfiguracionService } from '../@core/data/configuracion.service';
 import { MenuService } from '../@core/data/menu.service';
 import { CampusMidService } from '../@core/data/campus_mid.service';
 import { DocumentoService } from '../@core/data/documento.service';
+import { MatDialogModule } from '@angular/material';
+
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -19,9 +21,12 @@ const PAGES_COMPONENTS = [
     ThemeModule,
     DashboardModule,
     SharedModule,
+    MatDialogModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,
+  ],
+  entryComponents: [
   ],
   providers: [
     ConfiguracionService,
