@@ -219,6 +219,37 @@ export class ListProyectoAcademicoComponent implements OnInit {
     this.idproyecto = row.ProyectoAcademico.Id;
 
  }
+ 
+inhabilitarProyecto(row: any): void {
+  const opt: any = {
+    title: this.translate.instant('GLOBAL.actualizar'),
+    text: this.translate.instant('proyecto_academico.seguro_continuar_actualizar_proyecto'),
+    icon: 'warning',
+    buttons: true,
+    dangerMode: true,
+    showCancelButton: true,
+  };
+  Swal(opt)
+  .then((willDelete) => {
+    if (willDelete.value) {
+      let proyectoAModificar = row.ProyectoAcademico;
+      proyectoAModificar.Activo = !proyectoAModificar.Activo;
+      proyectoAModificar.Oferta = !proyectoAModificar.Oferta;
+      this.sgamidService.put('consulta_proyecto_academico/inhabilitar_proyecto', proyectoAModificar)
+        .subscribe((res: any) => {
+          if (res.Type !== 'error') {
+            this.loadproyectos();
+            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('proyecto_academico.proyecto_actualizado'));
+          } else {
+            this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto_academico.proyecto_no_actualizado'));
+          }
+        }, () => {
+          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto_academico.proyecto_no_actualizado'));
+        });
+    }
+  });
+
+ }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({
