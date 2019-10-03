@@ -32,7 +32,7 @@ export interface DialogData {
     tipoduracion: string;
     ciclos: Boolean;
     activo: Boolean;
-    enfasis: string;
+    enfasis: any[];
 }
 
 
@@ -61,7 +61,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   tipo_duracion: string;
   ciclos: string;
   activo: string;
-  enfasis: string;
+  enfasis: any[];
   consulta: boolean= false;
   source: LocalDataSource = new LocalDataSource();
 
@@ -185,7 +185,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.tipo_duracion = res.map((data: any) => (data.NombreUnidad));
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
         this.activo = res.map((data: any) => (data.ActivoLetra));
-        this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
+        // this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
+        this.enfasis = res.map((data: any) => (data.Enfasis))[0];
         console.info(this.consulta)
         this.openDialogConsulta();
       }else {

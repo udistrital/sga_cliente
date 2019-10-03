@@ -16,7 +16,8 @@ import { Inject } from '@angular/core';
 export class ConsultaProyectoAcademicoComponent implements OnInit {
   basicform: FormGroup;
 
-  source: LocalDataSource = new LocalDataSource();
+  source_emphasys: LocalDataSource = new LocalDataSource();
+  settings_emphasys: any;
 
 
   constructor(private translate: TranslateService,
@@ -24,6 +25,31 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
     private formBuilder: FormBuilder) {
+      console.log(data);
+      this.source_emphasys.load(data.enfasis);
+      this.settings_emphasys = {
+        actions: false,
+        mode: 'external',
+        hideSubHeader: true,
+        columns: {
+          EnfasisId: {
+            title: this.translate.instant('GLOBAL.nombre'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value.Nombre;
+            },
+            width: '80%',
+          },
+          Activo: {
+            title: this.translate.instant('GLOBAL.activo'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value ? translate.instant('GLOBAL.si'): translate.instant('GLOBAL.no');
+            },
+            width: '20%',
+          },
+        },
+      };
     }
 
     onclick(): void {
