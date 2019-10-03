@@ -342,7 +342,8 @@
         "vigencia_mes": "# Effective months",
         "erro_mes_vigencia": "Please enter the number of months, maximum 2 digits.",
         "erro_ano_vigencia": "Please enter the number of years, maximum 1 digits.",
-        "vigencia_año": "# Years of validity"
+        "vigencia_año": "# Years of validity",
+        "proyecto_no_cargado": "Project not loaded"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",

@@ -32,6 +32,7 @@ import { ListEnfasisService } from '../../../@core/data/list_enfasis.service';
 import { Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -124,6 +125,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private sgamidService: SgaMidService,
     private unidadtiempoService: UnidadTiempoService,
     private dialogService: NbDialogService,
+    private activatedRoute: ActivatedRoute,
     private listEnfasisService: ListEnfasisService,
     private formBuilder: FormBuilder) {
       this.basicform = formBuilder.group({
@@ -239,6 +241,27 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.loadenfasis();
     this.loadnivel();
     this.loadmetodologia();
+
+    // cargar data del proyecto que se clonara
+    this.activatedRoute.paramMap.subscribe(params => {
+      const clone_project_id = params.get('proyecto_id');
+      if (clone_project_id) {
+        this.loadCloneData(clone_project_id);
+      }      
+    });
+  }
+
+  loadCloneData(id: any): void {
+    this.sgamidService.get('consulta_proyecto_academico/' + id )
+    .subscribe((res: any) => {
+      if (res.Type !== 'error' && res[0].Id) {
+        // console.log(res[0]);
+      } else {
+        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
+      }
+    }, () => {
+      this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
+    });
   }
 
   loadfacultad() {
