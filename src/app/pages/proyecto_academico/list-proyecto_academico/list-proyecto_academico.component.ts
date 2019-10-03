@@ -80,7 +80,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
-             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.activo, enfasis: this.enfasis},
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.activo, enfasis: this.enfasis, Id: this.idproyecto},
     });
 
     dialogRef.afterClosed().subscribe(result => {

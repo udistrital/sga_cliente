@@ -365,7 +365,8 @@
         "tag_informacionbasica": "Basic information",
         "seguro_continuar_actualizar_proyecto": "Are you sure you want to update this academic project?",
         "proyecto_actualizado": "Academic project updated",
-        "proyecto_no_actualizado": "Academic project not updated"
+        "proyecto_no_actualizado": "Academic project not updated",
+        "clonar_proyecto": "Clone project"
     },
     "editarproyecto": {
         "coordinacion": "Coordination",
