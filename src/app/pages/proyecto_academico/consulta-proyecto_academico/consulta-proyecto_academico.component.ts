@@ -25,7 +25,6 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
     private formBuilder: FormBuilder) {
-      console.log(data);
       this.source_emphasys.load(data.enfasis);
       this.settings_emphasys = {
         actions: false,
@@ -44,7 +43,7 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
             title: this.translate.instant('GLOBAL.activo'),
             // type: 'string;',
             valuePrepareFunction: (value) => {
-              return value ? translate.instant('GLOBAL.si'): translate.instant('GLOBAL.no');
+              return value ? translate.instant('GLOBAL.si') : translate.instant('GLOBAL.no');
             },
             width: '20%',
           },
