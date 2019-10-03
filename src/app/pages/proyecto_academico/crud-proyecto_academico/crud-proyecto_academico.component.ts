@@ -254,8 +254,10 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   loadCloneData(id: any): void {
     this.sgamidService.get('consulta_proyecto_academico/' + id )
     .subscribe((res: any) => {
-      if (res.Type !== 'error' && res[0].Id) {
-        // console.log(res[0]);
+      if (res.Type !== 'error' && res[0].ProyectoAcademico.Id) {
+        console.log(res[0]);
+        const proyecto_a_clonar = res[0];
+        
       } else {
         this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
       }
