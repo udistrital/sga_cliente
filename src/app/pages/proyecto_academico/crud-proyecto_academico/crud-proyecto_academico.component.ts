@@ -257,7 +257,37 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       if (res.Type !== 'error' && res[0].ProyectoAcademico.Id) {
         console.log(res[0]);
         const proyecto_a_clonar = res[0];
-        
+        // enfasis
+        this.arr_enfasis_proyecto = proyecto_a_clonar.Enfasis.map((enfasis: any) => enfasis.EnfasisId);
+        this.source_emphasys.load(this.arr_enfasis_proyecto);
+        this.checkciclos =  proyecto_a_clonar.ProyectoAcademico.CiclosPropedeuticos;
+        this.checkofrece =  proyecto_a_clonar.ProyectoAcademico.Oferta;
+        this.basicform = this.formBuilder.group({
+          codigo_snies: [proyecto_a_clonar.ProyectoAcademico.CodigoSnies, Validators.required],
+          nombre_proyecto: [proyecto_a_clonar.ProyectoAcademico.Nombre, Validators.required],
+          abreviacion_proyecto: [proyecto_a_clonar.ProyectoAcademico.CodigoAbreviacion, Validators.required],
+          correo_proyecto: [proyecto_a_clonar.ProyectoAcademico.CorreoElectronico, [Validators.required, Validators.email]],
+          numero_proyecto: ['', Validators.required],
+          creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4)]],
+          duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, Validators.required],
+        })
+        this.resoluform = this.formBuilder.group({
+          resolucion: ['', Validators.required],
+          ano_resolucion: ['', [Validators.required, Validators.maxLength(4)]],
+          fecha_creacion: ['', Validators.required],
+          mes_vigencia: ['', [Validators.required, Validators.maxLength(2)]],
+          ano_vigencia: ['', [Validators.required, Validators.maxLength(1)]],
+        })
+        this.actoform = this.formBuilder.group({
+          acto: [proyecto_a_clonar.ProyectoAcademico.NumeroActoAdministrativo, Validators.required],
+          ano_acto: [proyecto_a_clonar.ProyectoAcademico.AnoActoAdministrativo, [Validators.required, Validators.maxLength(4)]],
+        })
+        this.compleform = this.formBuilder.group({
+          titulacion_snies: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 1).Nombre, Validators.required],
+          titulacion_mujer: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 3).Nombre, Validators.required],
+          titulacion_hombre: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 2).Nombre, Validators.required],
+          competencias: [proyecto_a_clonar.ProyectoAcademico.Competencias, Validators.required],
+        });
       } else {
         this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
       }
