@@ -219,7 +219,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     this.idproyecto = row.ProyectoAcademico.Id;
 
  }
- 
+
 inhabilitarProyecto(row: any): void {
   const opt: any = {
     title: this.translate.instant('GLOBAL.actualizar'),
@@ -232,7 +232,7 @@ inhabilitarProyecto(row: any): void {
   Swal(opt)
   .then((willDelete) => {
     if (willDelete.value) {
-      let proyectoAModificar = row.ProyectoAcademico;
+      const proyectoAModificar = row.ProyectoAcademico;
       proyectoAModificar.Activo = !proyectoAModificar.Activo;
       proyectoAModificar.Oferta = !proyectoAModificar.Oferta;
       this.sgamidService.put('consulta_proyecto_academico/inhabilitar_proyecto', proyectoAModificar)
