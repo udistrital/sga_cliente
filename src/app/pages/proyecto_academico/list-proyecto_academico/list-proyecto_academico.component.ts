@@ -223,7 +223,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
 inhabilitarProyecto(row: any): void {
   const opt: any = {
     title: this.translate.instant('GLOBAL.actualizar'),
-    text: this.translate.instant('proyecto_academico.seguro_continuar_actualizar_proyecto'),
+    text: this.translate.instant('consultaproyecto.seguro_continuar_actualizar_proyecto'),
     icon: 'warning',
     buttons: true,
     dangerMode: true,
@@ -239,9 +239,9 @@ inhabilitarProyecto(row: any): void {
         .subscribe((res: any) => {
           if (res.Type !== 'error') {
             this.loadproyectos();
-            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('proyecto_academico.proyecto_actualizado'));
+            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('consultaproyecto.proyecto_actualizado'));
           } else {
-            this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto_academico.proyecto_no_actualizado'));
+            this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('consultaproyecto.proyecto_no_actualizado'));
           }
         }, () => {
           this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto_academico.proyecto_no_actualizado'));
