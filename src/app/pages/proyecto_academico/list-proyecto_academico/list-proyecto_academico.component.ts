@@ -48,7 +48,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   index: any;
   idproyecto: any;
   datosbasico: InformacionBasica;
-  displayedColumns = ['Id', 'Facultad', 'Nombre Proyecto', 'Nivel Proyecto', 'codigo', 'Activo', 'registro', 'calidad', 'Consulta', 'editar', 'inhabilitar'];
+  displayedColumns = ['Id', 'Facultad', 'Nombre Proyecto', 'Nivel Proyecto', 'codigo', 'Oferta', 'registro', 'calidad', 'Consulta', 'editar', 'inhabilitar'];
   codigosnies: Number;
   facultad: string;
   nombre: String;
