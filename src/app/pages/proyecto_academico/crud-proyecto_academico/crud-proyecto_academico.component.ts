@@ -260,8 +260,18 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         // enfasis
         this.arr_enfasis_proyecto = proyecto_a_clonar.Enfasis.map((enfasis: any) => enfasis.EnfasisId);
         this.source_emphasys.load(this.arr_enfasis_proyecto);
+        // checks
         this.checkciclos =  proyecto_a_clonar.ProyectoAcademico.CiclosPropedeuticos;
         this.checkofrece =  proyecto_a_clonar.ProyectoAcademico.Oferta;
+        // selects
+        // unidad de tiempo
+        this.opcionSeleccionadoUnidad = this.unidad.find((unidad_temp: any) => unidad_temp.Id === proyecto_a_clonar.ProyectoAcademico.UnidadTiempoId);
+        this.opcionSeleccionadoNivel = this.nivel.find((nivel_temp: any) => nivel_temp.Id === proyecto_a_clonar.ProyectoAcademico.NivelFormacionId.Id);
+        this.opcionSeleccionadoMeto = this.metodo.find((metodologia_temp: any) => metodologia_temp.Id === proyecto_a_clonar.ProyectoAcademico.MetodologiaId.Id);
+        this.opcionSeleccionadoFacultad = this.facultad.find((facultad_temp: any) => facultad_temp.Id === proyecto_a_clonar.IdDependenciaFacultad);
+        this.opcionSeleccionadoArea = this.area.find((area_temp: any) => area_temp.Id === proyecto_a_clonar.ProyectoAcademico.AreaConocimientoId);
+        this.opcionSeleccionadoNucleo = this.nucleo.find((nucleo_temp: any) => nucleo_temp.Id === proyecto_a_clonar.ProyectoAcademico.NucleoBaseId);
+        // info basica
         this.basicform = this.formBuilder.group({
           codigo_snies: [proyecto_a_clonar.ProyectoAcademico.CodigoSnies, Validators.required],
           nombre_proyecto: [proyecto_a_clonar.ProyectoAcademico.Nombre, Validators.required],
