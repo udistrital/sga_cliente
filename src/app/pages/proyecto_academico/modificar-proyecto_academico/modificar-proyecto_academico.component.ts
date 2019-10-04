@@ -30,6 +30,7 @@ import { Inject } from '@angular/core';
 import * as momentTimezone from 'moment-timezone';
 import { InformacionBasicaPut } from '../../../@core/data/models/proyecto_academico/informacion_basica_put';
 import { Router } from '@angular/router';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'ngx-modificar-proyecto-academico',
@@ -118,6 +119,10 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   selectFormControl = new FormControl('', Validators.required);
   @Output() eventChange = new EventEmitter();
 
+  source_emphasys: LocalDataSource = new LocalDataSource();
+  arr_enfasis_proyecto: any[] = [];
+  settings_emphasys: any;
+
   constructor(private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialog,
@@ -176,14 +181,109 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
    this.loadunidadtiempo();
    this.loadarea();
    this.loadnucleo();
+   this.loadenfasis();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
+   console.info(this.data)
    console.info(this.data.fecha_creacion_registro)
    this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
    console.info('despues' + this.fecha_creacion_calificado)
+
+   // enfasis
+   this.arr_enfasis_proyecto = this.data.enfasis;
+   this.source_emphasys.load(this.arr_enfasis_proyecto);
+
+  this.settings_emphasys = {
+    delete: {
+      deleteButtonContent: '<i class="nb-trash"></i>',
+      confirmDelete: true,
+    },
+    actions: {
+      edit: false,
+      add: false,
+      position: 'right',
+    },
+    hideSubHeader: true,
+    mode: 'external',
+    columns: {
+      EnfasisId: {
+        title: this.translate.instant('GLOBAL.nombre'),
+        // type: 'string;',
+        valuePrepareFunction: (value) => {
+          return value.Nombre;
+        },
+        width: '60%',
+      },
+      Activo: {
+        title: this.translate.instant('GLOBAL.activo'),
+        // type: 'string;',
+        valuePrepareFunction: (value) => {
+          return value ? translate.instant('GLOBAL.si') : translate.instant('GLOBAL.no');
+        },
+        width: '20%',
+      },
+    },
+  };
+
     }
 
+    loadenfasis() {
+      this.proyectoacademicoService.get('enfasis')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.enfasis = <any>res;
+        }
+      },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
+    }
 
+    onCreateEmphasys(event: any) {
+      const emphasys = event.value;
+      if (!this.arr_enfasis_proyecto.find((enfasis: any) => emphasys.Id === enfasis.EnfasisId.Id ) && emphasys.Id) {
+        let enfasis_temporal: any = {};
+        enfasis_temporal.Activo = true;
+        enfasis_temporal.EnfasisId = emphasys;
+        enfasis_temporal.ProyectoAcademicoInstitucionId = this.data.proyectoJson;
+        enfasis_temporal.esNuevo = true;
+        this.arr_enfasis_proyecto.push(enfasis_temporal);
+        this.source_emphasys.load(this.arr_enfasis_proyecto);
+      } else {
+        Swal({
+          type: 'error',
+          title: 'ERROR',
+          text: this.translate.instant('enfasis.error_enfasis_ya_existe'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      }
+      const matSelect: MatSelect = event.source;
+      matSelect.writeValue(null);
+    }
+
+    onDeleteEmphasys(event: any) {
+      const findInArray = (value, array, attr) => {
+        for (let i = 0; i < array.length; i += 1) {
+          if (array[i]['EnfasisId'][attr] === value) {
+              return i;
+          }
+        }
+        return -1;
+      }
+      const to_delete = this.arr_enfasis_proyecto[findInArray(event.data.EnfasisId.Id, this.arr_enfasis_proyecto, 'Id')];
+      if (to_delete.esNuevo) {
+        this.arr_enfasis_proyecto.splice(findInArray(event.data.EnfasisId.Id, this.arr_enfasis_proyecto, 'Id'), 1);
+      } else {
+        to_delete.Activo = !to_delete.Activo;
+      }
+      this.source_emphasys.load(this.arr_enfasis_proyecto);
+    }
 
   useLanguage(language: string) {
     this.translate.use(language);

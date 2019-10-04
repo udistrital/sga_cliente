@@ -63,6 +63,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   vigencia_resolucion_meses: string;
   vigencia_resolucion_anos: string;
   source: LocalDataSource = new LocalDataSource();
+  proyectoJson: any;
 
   constructor(private translate: TranslateService,
     private proyectoacademicoService: ProyectoAcademicoService,
@@ -97,7 +98,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
              titulacion_snies: this.titulacion_snies, titulacion_mujer: this.titulacion_mujer, titulacion_hombre: this.titulacion_hombre,
              competencias: this.competencias, idarea: this.idarea, idnucleo: this.idnucleo, resolucion_acreditacion: this.resolucion_acreditacion,
              resolucion_acreditacion_ano: this.resolucion_acreditacion_ano, fecha_creacion_registro: this.fecha_creacion_resolucion,
-             vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto, Id: this.idproyecto},
+             vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto, Id: this.idproyecto, proyectoJson: this.proyectoJson},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -234,7 +235,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.tipo_duracion = res.map((data: any) => (data.NombreUnidad));
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
         this.oferta = res.map((data: any) => (data.OfertaLetra));
-        this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
+        this.enfasis = res.map((data: any) => (data.Enfasis))[0];
         this.idfacultad = res.map((data: any) => (data.ProyectoAcademico.DependenciaId));
         this.idnivel = res.map((data: any) => (data.ProyectoAcademico.NivelFormacionId.Id));
         this.idmetodo = res.map((data: any) => (data.ProyectoAcademico.MetodologiaId.Id));
@@ -252,6 +253,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.fecha_creacion_resolucion = res.map((data: any) => (data.Registro[0].FechaCreacionActoAdministrativo));
         this.vigencia_resolucion_meses = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(6, 1)));
         this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(12, 1)));
+        this.proyectoJson = res.map((data: any) => (data.ProyectoAcademico));
         console.info(res)
         console.info(this.fecha_creacion_resolucion[0])
 
