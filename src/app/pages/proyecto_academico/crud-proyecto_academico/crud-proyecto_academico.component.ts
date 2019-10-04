@@ -248,7 +248,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       const clone_project_id = params.get('proyecto_id');
       if (clone_project_id) {
         this.loadCloneData(clone_project_id);
-      }      
+      }
     });
   }
 
@@ -256,7 +256,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.sgamidService.get('consulta_proyecto_academico/' + id )
     .subscribe((res: any) => {
       if (res.Type !== 'error' && res[0].ProyectoAcademico.Id) {
-        console.log(res[0]);
         const proyecto_a_clonar = res[0];
         // enfasis
         this.arr_enfasis_proyecto = proyecto_a_clonar.Enfasis.map((enfasis: any) => enfasis.EnfasisId);
@@ -283,13 +282,13 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, Validators.required],
         })
         // resolucion
-        const resolucion = proyecto_a_clonar.Registro.sort((a,b) => a.Id - b.Id).find((registro_temp: any) => registro_temp.TipoRegistroId.Id === 1);
+        const resolucion = proyecto_a_clonar.Registro.sort((a, b) => a.Id - b.Id).find((registro_temp: any) => registro_temp.TipoRegistroId.Id === 1);
         this.resoluform = this.formBuilder.group({
           resolucion: [resolucion.NumeroActoAdministrativo  , Validators.required],
           ano_resolucion: [resolucion.AnoActoAdministrativoId, [Validators.required, Validators.maxLength(4)]],
           fecha_creacion: [momentTimezone.tz(resolucion.FechaCreacionActoAdministrativo, 'America/Bogota').format('YYYY-MM-DDTHH:mm'), Validators.required],
-          mes_vigencia: [resolucion.VigenciaActoAdministrativo.split("Años:")[0].split(":")[1], [Validators.required, Validators.maxLength(2)]],
-          ano_vigencia: [resolucion.VigenciaActoAdministrativo.split("Años:")[1], [Validators.required, Validators.maxLength(1)]],
+          mes_vigencia: [resolucion.VigenciaActoAdministrativo.split('Años:')[0].split(':')[1], [Validators.required, Validators.maxLength(2)]],
+          ano_vigencia: [resolucion.VigenciaActoAdministrativo.split('Años:')[1], [Validators.required, Validators.maxLength(1)]],
         })
         this.actoform = this.formBuilder.group({
           acto: [proyecto_a_clonar.ProyectoAcademico.NumeroActoAdministrativo, Validators.required],

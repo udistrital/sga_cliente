@@ -55,7 +55,7 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
     onclick(): void {
       this.dialogRef.close();
     }
-  
+
   cloneProject(project: any): void {
     this.routerService.navigateByUrl(`pages/proyecto_academico/crud-proyecto_academico/${project.Id}`);
     this.dialogRef.close();
