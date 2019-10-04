@@ -248,7 +248,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     onCreateEmphasys(event: any) {
       const emphasys = event.value;
       if (!this.arr_enfasis_proyecto.find((enfasis: any) => emphasys.Id === enfasis.EnfasisId.Id ) && emphasys.Id) {
-        let enfasis_temporal: any = {};
+        const enfasis_temporal: any = {};
         enfasis_temporal.Activo = true;
         enfasis_temporal.EnfasisId = emphasys;
         enfasis_temporal.ProyectoAcademicoInstitucionId = this.data.proyectoJson;

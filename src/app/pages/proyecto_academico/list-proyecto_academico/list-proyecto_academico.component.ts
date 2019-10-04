@@ -98,7 +98,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
              titulacion_snies: this.titulacion_snies, titulacion_mujer: this.titulacion_mujer, titulacion_hombre: this.titulacion_hombre,
              competencias: this.competencias, idarea: this.idarea, idnucleo: this.idnucleo, resolucion_acreditacion: this.resolucion_acreditacion,
              resolucion_acreditacion_ano: this.resolucion_acreditacion_ano, fecha_creacion_registro: this.fecha_creacion_resolucion,
-             vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto, Id: this.idproyecto, proyectoJson: this.proyectoJson},
+             vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto,
+             Id: this.idproyecto, proyectoJson: this.proyectoJson},
     });
 
     dialogRef.afterClosed().subscribe(result => {
