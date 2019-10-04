@@ -497,6 +497,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     const informacion_basicaPut = {
       ProyectoAcademicoInstitucion: this.proyecto_academico,
       Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
+      Enfasis: this.arr_enfasis_proyecto,
     }
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
@@ -520,6 +521,9 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             });
             this.showToast('error', 'error', this.translate.instant('editarproyecto.proyecto_no_actualizado'));
           } else {
+            this.arr_enfasis_proyecto.forEach((enfasis_temp: any) => {
+              enfasis_temp.esNuevo = false;
+            });
             const opt1: any = {
               title: this.translate.instant('editarproyecto.actualizado'),
               text: this.translate.instant('editarproyecto.proyecto_actualizado'),
