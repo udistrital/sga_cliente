@@ -273,8 +273,10 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         this.opcionSeleccionadoNucleo = this.nucleo.find((nucleo_temp: any) => nucleo_temp.Id === proyecto_a_clonar.ProyectoAcademico.NucleoBaseId);
         // info basica
         this.basicform = this.formBuilder.group({
-          codigo_snies: [proyecto_a_clonar.ProyectoAcademico.CodigoSnies, Validators.required],
-          nombre_proyecto: [proyecto_a_clonar.ProyectoAcademico.Nombre, Validators.required],
+          // codigo_snies: [proyecto_a_clonar.ProyectoAcademico.CodigoSnies, Validators.required],
+          codigo_snies: ['', Validators.required],
+          // nombre_proyecto: [proyecto_a_clonar.ProyectoAcademico.Nombre, Validators.required],
+          nombre_proyecto: ['', Validators.required],
           abreviacion_proyecto: [proyecto_a_clonar.ProyectoAcademico.CodigoAbreviacion, Validators.required],
           correo_proyecto: [proyecto_a_clonar.ProyectoAcademico.CorreoElectronico, [Validators.required, Validators.email]],
           numero_proyecto: ['', Validators.required],
