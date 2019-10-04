@@ -217,7 +217,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.source_emphasys.load(this.arr_enfasis_proyecto);
   }
 
-<<<<<<< HEAD
+
     mostrarfecha() {
       this.calculateEndDateMostrar(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
       this.fecha_calculada_vencimiento = this.fecha_vencimiento_mostrar
@@ -228,7 +228,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       this.fecha_vencimiento_mostrar = convertDate
       return new Date(convertDate);
     }
-=======
+
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
     this.subscription.unsubscribe();
@@ -241,7 +241,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       },
     });
   }
->>>>>>> 36f389eb0e1319e985d271d3d13f89a9aa068620
+
 
   useLanguage(language: string) {
     this.translate.use(language);
@@ -464,7 +464,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       Nombre: this.compleform.value.titulacion_mujer,
       Activo: true,
       TipoTitulacionId: this.tipo_titulacion = {
-        Id: 2,
+        Id: 3,
       },
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
     }
@@ -473,7 +473,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       Nombre: this.compleform.value.titulacion_hombre,
       Activo: true,
       TipoTitulacionId: this.tipo_titulacion = {
-        Id: 3,
+        Id: 2,
       },
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
     }

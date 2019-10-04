@@ -57,12 +57,12 @@
                                     <br>
                                     <br>
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.abreciacion_proyecto' | translate }}" formControlName="abreviacion_proyecto" class="form-control" name="abreviacion_proyecto">
+                                        <input matInput placeholder="{{ 'proyecto.abreciacion_proyecto' | translate }}" formControlName="abreviacion_proyecto" class="form-control" name="abreviacion_proyecto" [(ngModel)]="data.abreviacion">
                                         <mat-error *ngIf="Campo9Control.hasError('required')">{{ 'proyecto.erro_abre' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.correo_proyecto' | translate }}" formControlName="correo_proyecto" class="form-control" name="correo_proyecto">
+                                        <input matInput placeholder="{{ 'proyecto.correo_proyecto' | translate }}" formControlName="correo_proyecto" class="form-control" name="correo_proyecto" [(ngModel)]="data.correo">
                                         <mat-error *ngIf="CampoCorreoControl.hasError('required')">{{ 'proyecto.erro_correo' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
@@ -73,12 +73,12 @@
                                     </mat-form-field>
                                     <br>
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.creditos_proyecto' | translate }}" formControlName="creditos_proyecto" class="form-control" name="creditos_proyecto">
+                                        <input matInput placeholder="{{ 'proyecto.creditos_proyecto' | translate }}" formControlName="creditos_proyecto" class="form-control" name="creditos_proyecto" [(ngModel)]="data.numerocreditos">
                                         <mat-error *ngIf="CampoCreditosControl.hasError('required')">{{ 'proyecto.erro_creditos' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.duracion_proyecto' | translate }}" formControlName="duracion_proyecto" class="form-control" name="duracion_proyecto">
+                                        <input matInput placeholder="{{ 'proyecto.duracion_proyecto' | translate }}" formControlName="duracion_proyecto" class="form-control" name="duracion_proyecto" [(ngModel)]="data.duracion">
                                         <mat-error *ngIf="Campo12Control.hasError('required')">{{ 'proyecto.erro_duracion' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
@@ -129,25 +129,25 @@
                             <nb-card-body>
                                 <form id="compleForm" [formGroup]="compleform">
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.titulacion_snies' | translate }}" formControlName="titulacion_snies" class="form-control" name="titulacion_snies">
+                                        <input matInput placeholder="{{ 'proyecto.titulacion_snies' | translate }}" formControlName="titulacion_snies" class="form-control" name="titulacion_snies" [(ngModel)]="data.titulacion_snies">
                                         <mat-error *ngIf="Campo18Control.hasError('required')">{{ 'proyecto.erro_titu_snies' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
                                     <br>
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.titulacion_mujer' | translate }}" formControlName="titulacion_mujer" class="form-control" name="titulacion_mujer">
+                                        <input matInput placeholder="{{ 'proyecto.titulacion_mujer' | translate }}" formControlName="titulacion_mujer" class="form-control" name="titulacion_mujer" [(ngModel)]="data.titulacion_mujer">
                                         <mat-error *ngIf="Campo19Control.hasError('required')">{{ 'proyecto.erro_titu_mujer' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
                                     <br>
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.titulacion_hombre' | translate }}" formControlName="titulacion_hombre" class="form-control" name="titulacion_hombre">
+                                        <input matInput placeholder="{{ 'proyecto.titulacion_hombre' | translate }}" formControlName="titulacion_hombre" class="form-control" name="titulacion_hombre" [(ngModel)]="data.titulacion_hombre">
                                         <mat-error *ngIf="Campo20Control.hasError('required')">{{ 'proyecto.erro_titu_hombre' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
                                     <br>
                                     <mat-form-field>
-                                        <textarea rows="4" cols="50" matInput placeholder="{{ 'proyecto.competencias' | translate }}" formControlName="competencias" class="form-control" name="competencias"></textarea>
+                                        <textarea rows="4" cols="50" matInput placeholder="{{ 'proyecto.competencias' | translate }}" formControlName="competencias" class="form-control" name="competencias" [(ngModel)]="data.competencias"></textarea>
                                         <mat-error *ngIf="Campo21Control.hasError('required')">{{ 'proyecto.erro_compe' | translate }}</mat-error>
                                     </mat-form-field>
                                 </form>
@@ -163,6 +163,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
+            <div class="col-xs-12 col-sm-3"> <button mat-raised-button [color]="'success'">{{ 'consultaproyecto.masinfomacion' | translate }}</button> </div>
+            <div class="col-xs-12 col-sm-3"> <button mat-raised-button [color]="'success-1'" (click)="putinformacionbasica()">{{ 'consultaproyecto.historico' | translate }}</button></div>
         </div>
 
     </mat-tab>
@@ -199,12 +204,12 @@
                                 <br>
                                 <br>
                                 <mat-form-field>
-                                    <input matInput placeholder="{{ 'proyecto.resolucion_proyecto' | translate }}" formControlName="resolucion" class="form-control" name="resolucion_proyecto">
+                                    <input matInput placeholder="{{ 'proyecto.resolucion_proyecto' | translate }}" formControlName="resolucion" class="form-control" name="resolucion_proyecto" [(ngModel)]="data.resolucion_acreditacion">
                                     <mat-error *ngIf="Campo11Control.hasError('required')">{{ 'proyecto.erro_reso' | translate }}</mat-error>
                                 </mat-form-field>
                                 <br>
                                 <mat-form-field>
-                                    <input matInput placeholder="{{ 'proyecto.ano_resolucion_proyecto' | translate }}" formControlName="ano_resolucion" class="form-control" name="ano_resolucion_proyecto">
+                                    <input matInput placeholder="{{ 'proyecto.ano_resolucion_proyecto' | translate }}" formControlName="ano_resolucion" class="form-control" name="ano_resolucion_proyecto" [(ngModel)]="data.resolucion_acreditacion_ano">
                                     <mat-error *ngIf="Campo13Control.hasError('required')">{{ 'proyecto.erro_ano' | translate }}</mat-error>
                                 </mat-form-field>
                                 <br>
@@ -215,7 +220,7 @@
                                 <br>
                                 <mat-form-field>
                                     <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
-                                    <input matInput [(ngModel)]="fecha_creacion" type="datetime-local" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion">
+                                    <input matInput [ngModel]="fecha_creacion_calificado" type="datetime-local" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion">
                                     <mat-error *ngIf="Campo14Control.hasError('required')">{{ 'proyecto.erro_fecha_creacion' | translate }}</mat-error>
                                 </mat-form-field>
                                 <br>
@@ -223,13 +228,15 @@
                                 <div class="form-group row">
 
                                     <label class="label col-sm-8 col-form-label ">{{ 'proyecto.vigencia' | translate }}</label>
-                                    <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.vigencia_mes' | translate }}" formControlName="mes_vigencia" class="form-control" name="resolucion_proyecto">
-                                        <mat-error *ngIf="Campo22Control.hasError('required')">{{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
-                                    </mat-form-field>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-8">
                                         <mat-form-field>
-                                            <input matInput placeholder="{{ 'proyecto.vigencia_año' | translate }}" formControlName="ano_vigencia" class="form-control" name="ano_resolucion_proyecto">
+                                            <input matInput placeholder="{{ 'proyecto.vigencia_mes' | translate }}" formControlName="mes_vigencia" class="form-control" name="resolucion_proyecto" [(ngModel)]="data.vigencia_meses">
+                                            <mat-error *ngIf="Campo22Control.hasError('required')">{{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <mat-form-field>
+                                            <input matInput placeholder="{{ 'proyecto.vigencia_año' | translate }}" formControlName="ano_vigencia" class="form-control" name="ano_resolucion_proyecto" [(ngModel)]="data.vigencia_anos">
                                             <mat-error *ngIf="Campo23Control.hasError('required')">{{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
                                         </mat-form-field>
                                     </div>
@@ -246,15 +253,15 @@
                         <nb-card class="m-4" accent="info">
                             <nb-card-header>{{ 'editarproyecto.registro_alta' | translate }}</nb-card-header>
                             <nb-card-body>
-                                <form id="resoluForm" [formGroup]="resoluform">
+                                <form id="resolualtaform" [formGroup]="resolualtaform">
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.resolucion_proyecto' | translate }}" formControlName="resolucion" class="form-control" name="resolucion_proyecto">
-                                        <mat-error *ngIf="Campo11Control.hasError('required')">{{ 'proyecto.erro_reso' | translate }}</mat-error>
+                                        <input matInput placeholder="{{ 'proyecto.resolucion_proyecto' | translate }}" formControlName="resolucion" class="form-control" name="resolucion_alta_proyecto">
+                                        <mat-error *ngIf="Campo24Control.hasError('required')">{{ 'proyecto.erro_reso' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
                                     <mat-form-field>
                                         <input matInput placeholder="{{ 'proyecto.ano_resolucion_proyecto' | translate }}" formControlName="ano_resolucion" class="form-control" name="ano_resolucion_proyecto">
-                                        <mat-error *ngIf="Campo13Control.hasError('required')">{{ 'proyecto.erro_ano' | translate }}</mat-error>
+                                        <mat-error *ngIf="Campo25Control.hasError('required')">{{ 'proyecto.erro_ano' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
                                     <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
@@ -264,8 +271,8 @@
                                     <br>
                                     <mat-form-field>
                                         <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
-                                        <input matInput [(ngModel)]="fecha_creacion" type="datetime-local" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion">
-                                        <mat-error *ngIf="Campo14Control.hasError('required')">{{ 'proyecto.erro_fecha_creacion' | translate }}</mat-error>
+                                        <input matInput [(ngModel)]="fecha_creacion_alta" type="datetime-local" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion">
+                                        <mat-error *ngIf="Campo26Control.hasError('required')">{{ 'proyecto.erro_fecha_creacion' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
                                     <br>
@@ -274,12 +281,12 @@
                                         <label class="label col-sm-8 col-form-label ">{{ 'proyecto.vigencia' | translate }}</label>
                                         <mat-form-field>
                                             <input matInput placeholder="{{ 'proyecto.vigencia_mes' | translate }}" formControlName="mes_vigencia" class="form-control" name="resolucion_proyecto">
-                                            <mat-error *ngIf="Campo22Control.hasError('required')">{{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
+                                            <mat-error *ngIf="Campo27Control.hasError('required')">{{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
                                         </mat-form-field>
                                         <div class="col-sm-3">
                                             <mat-form-field>
                                                 <input matInput placeholder="{{ 'proyecto.vigencia_año' | translate }}" formControlName="ano_vigencia" class="form-control" name="ano_resolucion_proyecto">
-                                                <mat-error *ngIf="Campo23Control.hasError('required')">{{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
+                                                <mat-error *ngIf="Campo28Control.hasError('required')">{{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
                                             </mat-form-field>
                                         </div>
                                     </div>

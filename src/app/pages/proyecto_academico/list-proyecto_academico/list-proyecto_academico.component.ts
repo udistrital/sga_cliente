@@ -48,6 +48,22 @@ export class ListProyectoAcademicoComponent implements OnInit {
   enfasis: string;
   consulta: boolean= false;
   idfacultad: Number;
+  idnivel: Number;
+  idmetodo: Number;
+  idunidad: Number;
+  idarea: Number;
+  idnucleo: Number;
+  oferta_check: boolean = false;
+  ciclos_check: boolean = false;
+  titulacion_snies: string;
+  titulacion_mujer: string;
+  titulacion_hombre: string;
+  competencias: string;
+  resolucion_acreditacion: string;
+  resolucion_acreditacion_ano: string;
+  fecha_creacion_resolucion: Date;
+  vigencia_resolucion_meses: string;
+  vigencia_resolucion_anos: string;
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private translate: TranslateService,
@@ -78,7 +94,12 @@ export class ListProyectoAcademicoComponent implements OnInit {
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
-             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, idfacultad: this.idfacultad},
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, idfacultad: this.idfacultad,
+             idnivel: this.idnivel, idmetodo: this.idmetodo, idunidad: this.idunidad, oferta_check: this.oferta_check, ciclos_check: this.ciclos_check,
+             titulacion_snies: this.titulacion_snies, titulacion_mujer: this.titulacion_mujer, titulacion_hombre: this.titulacion_hombre,
+             competencias: this.competencias, idarea: this.idarea, idnucleo: this.idnucleo, resolucion_acreditacion: this.resolucion_acreditacion,
+             resolucion_acreditacion_ano: this.resolucion_acreditacion_ano, fecha_creacion_registro: this.fecha_creacion_resolucion,
+             vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -111,7 +132,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
   }
 
   ngOnInit() {
-
   }
   loadproyectos() {
     const opt1: any = {
@@ -158,6 +178,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     .subscribe((res: any) => {
       const r = <any>res;
       if (res !== null && r.Type !== 'error') {
+        console.info(res)
         this.codigosnies = res.map((data: any) => (data.ProyectoAcademico.CodigoSnies));
         this.nombre = res.map((data: any) => (data.ProyectoAcademico.Nombre));
         this.facultad = res.map((data: any) => (data.NombreDependencia));
@@ -217,6 +238,24 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.oferta = res.map((data: any) => (data.OfertaLetra));
         this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
         this.idfacultad = res.map((data: any) => (data.ProyectoAcademico.DependenciaId));
+        this.idnivel = res.map((data: any) => (data.ProyectoAcademico.NivelFormacionId.Id));
+        this.idmetodo = res.map((data: any) => (data.ProyectoAcademico.MetodologiaId.Id));
+        this.idunidad = res.map((data: any) => (data.ProyectoAcademico.UnidadTiempoId));
+        this.oferta_check = res.map((data: any) => (data.ProyectoAcademico.Oferta));
+        this.ciclos_check = res.map((data: any) => (data.ProyectoAcademico.CiclosPropedeuticos));
+        this.titulacion_snies = res.map((data: any) => (data.Titulaciones[0].Nombre));
+        this.titulacion_mujer = res.map((data: any) => (data.Titulaciones[1].Nombre));
+        this.titulacion_hombre = res.map((data: any) => (data.Titulaciones[2].Nombre));
+        this.competencias = res.map((data: any) => (data.ProyectoAcademico.Competencias));
+        this.idarea = res.map((data: any) => (data.ProyectoAcademico.AreaConocimientoId));
+        this.idnucleo = res.map((data: any) => (data.ProyectoAcademico.NucleoBaseId));
+        this.resolucion_acreditacion = res.map((data: any) => (data.Registro[0].NumeroActoAdministrativo));
+        this.resolucion_acreditacion_ano = res.map((data: any) => (data.Registro[0].AnoActoAdministrativoId));
+        this.fecha_creacion_resolucion = res.map((data: any) => (data.Registro[0].FechaCreacionActoAdministrativo));
+        this.vigencia_resolucion_meses = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(6, 1)));
+        this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(12, 1)));
+        console.info(this.fecha_creacion_resolucion[0])
+
         this.openDialogModificar();
       }else {
       Swal(opt1)

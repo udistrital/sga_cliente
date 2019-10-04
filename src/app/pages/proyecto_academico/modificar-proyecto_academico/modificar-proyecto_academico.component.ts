@@ -27,7 +27,8 @@ import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as moment from 'moment';
 import { Inject } from '@angular/core';
-
+import * as momentTimezone from 'moment-timezone';
+import { InformacionBasicaPut } from '../../../@core/data/models/proyecto_academico/informacion_basica_put';
 
 @Component({
   selector: 'ngx-modificar-proyecto-academico',
@@ -39,6 +40,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   settings: any;
   basicform: any;
   resoluform: any;
+  resolualtaform: any;
   actoform: any;
   compleform: any;
   facultad = [];
@@ -58,10 +60,13 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   enfasis = [];
   nivel = [];
   metodo = [];
-  fecha_creacion: Date;
+  fecha_creacion_calificado: Date;
+  fecha_creacion_alta: Date;
   fecha_vencimiento: string;
   fecha_vigencia: string;
+  check_alta_calidad: boolean ;
   proyecto_academicoPost: ProyectoAcademicoPost;
+  informacion_basicaPut: InformacionBasicaPut;
   proyecto_academico: ProyectoAcademicoInstitucion;
   tipo_titulacion: TipoTitulacion;
   metodologia: Metodologia;
@@ -104,6 +109,11 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   Campo23Control = new FormControl('', [Validators.required, Validators.maxLength(1)]);
   CampoCorreoControl = new FormControl('', [Validators.required, Validators.email]);
   CampoCreditosControl = new FormControl('', [Validators.required, Validators.maxLength(4)]);
+  Campo24Control = new FormControl('', [Validators.required, Validators.maxLength(4)]);
+  Campo25Control = new FormControl('', [Validators.required, Validators.maxLength(4)]);
+  Campo26Control = new FormControl('', [Validators.required]);
+  Campo28Control = new FormControl('', [Validators.required, Validators.maxLength(1)]);
+  Campo27Control = new FormControl('', [Validators.required, Validators.maxLength(2)]);
   selectFormControl = new FormControl('', Validators.required);
   @Output() eventChange = new EventEmitter();
 
@@ -118,16 +128,30 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     private sgamidService: SgaMidService,
     private unidadtiempoService: UnidadTiempoService,
     private formBuilder: FormBuilder) {
-      this.basicform = formBuilder.group({
+      this.basicform = this.formBuilder.group({
         codigo_snies: ['', Validators.required],
+        facultad: ['', Validators.required],
+        nivel_proyecto: ['', Validators.required],
+        metodologia_proyecto: ['', Validators.required],
         nombre_proyecto: ['', Validators.required],
         abreviacion_proyecto: ['', Validators.required],
         correo_proyecto: ['', [Validators.required, Validators.email]],
         numero_proyecto: ['', Validators.required],
         creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
         duracion_proyecto: ['', Validators.required],
+        tipo_duracion_proyecto: ['', Validators.required],
+        ciclos_proyecto: ['', Validators.required],
+        ofrece_proyecto: ['', Validators.required],
+        // enfasis_proyecto: ['', Validators.required],
      })
      this.resoluform = formBuilder.group({
+      resolucion: ['', Validators.required],
+      ano_resolucion: ['', [Validators.required, Validators.maxLength(4)]],
+      fecha_creacion: ['', Validators.required],
+      mes_vigencia: ['', [Validators.required, Validators.maxLength(2)]],
+      ano_vigencia: ['', [Validators.required, Validators.maxLength(1)]],
+     })
+     this.resolualtaform = formBuilder.group({
       resolucion: ['', Validators.required],
       ano_resolucion: ['', [Validators.required, Validators.maxLength(4)]],
       fecha_creacion: ['', Validators.required],
@@ -144,6 +168,17 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
        titulacion_hombre: ['', Validators.required],
        competencias: ['', Validators.required],
      });
+    this.loadfacultad();
+   this.loadnivel();
+   this.loadmetodologia();
+   this.loadunidadtiempo();
+   this.loadarea();
+   this.loadnucleo();
+   this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
+   this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
+   console.info(this.data.fecha_creacion_registro)
+   this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
+   console.info('despues' + this.fecha_creacion_calificado)
     }
 
 
@@ -151,26 +186,11 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   useLanguage(language: string) {
     this.translate.use(language);
   }
+  onclick(): void {
+    this.dialogRef.close();
+  }
 
   ngOnInit() {
-    this.basicform = this.formBuilder.group({
-      codigo_snies: ['', Validators.required],
-      facultad: ['', Validators.required],
-      nivel_proyecto: ['', Validators.required],
-      metodologia_proyecto: ['', Validators.required],
-      nombre_proyecto: ['', Validators.required],
-      abreviacion_proyecto: ['', Validators.required],
-      correo_proyecto: ['', [Validators.required, Validators.email]],
-      numero_proyecto: ['', Validators.required],
-      creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
-      duracion_proyecto: ['', Validators.required],
-      tipo_duracion_proyecto: ['', Validators.required],
-      ciclos_proyecto: ['', Validators.required],
-      ofrece_proyecto: ['', Validators.required],
-      enfasis_proyecto: ['', Validators.required],
-   })
-   this.loadfacultad();
-
   }
   loadfacultad() {
     this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2')
@@ -179,7 +199,6 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       if (res !== null && r.Type !== 'error') {
         this.facultad = res.map((data: any) => (data.DependenciaId));
         this.facultad.forEach((fac: any ) => {
-          console.info('ojo' + this.data.idfacultad)
           if (fac.Id === Number(this.data.idfacultad)) {
             this.opcionSeleccionadoFacultad = fac;
           }
@@ -196,6 +215,256 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     });
   }
 
+  loadnivel() {
+    this.proyectoacademicoService.get('nivel_formacion')
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.nivel = <any>res;
+        this.nivel.forEach((niv: any ) => {
+          if (niv.Id === Number(this.data.idnivel)) {
+            this.opcionSeleccionadoNivel = niv;
+          }
+        });
+      }
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
+  }
+  loadmetodologia() {
+    this.proyectoacademicoService.get('metodologia')
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.metodo = <any>res;
+        this.metodo.forEach((met: any ) => {
+          if (met.Id === Number(this.data.idmetodo)) {
+            this.opcionSeleccionadoMeto = met;
+          }
+        });
+      }
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
+  }
+  loadunidadtiempo() {
+    this.unidadtiempoService.get('unidad_tiempo')
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.unidad = <any>res;
+        this.unidad.forEach((uni: any ) => {
+          if (uni.Id === Number(this.data.idunidad)) {
+            this.opcionSeleccionadoUnidad = uni;
+          }
+        });
+      }
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
+  }
+  loadarea() {
+    this.coreService.get('area_conocimiento')
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.area = <any>res;
+        this.area.forEach((are: any ) => {
+          if (are.Id === Number(this.data.idarea)) {
+            this.opcionSeleccionadoArea = are;
+          }
+        });
+      }
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
+  }
+  loadnucleo() {
+    this.coreService.get('nucleo_basico_conocimiento')
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.nucleo = <any>res;
+        this.nucleo.forEach((nuc: any ) => {
+          if (nuc.Id === Number(this.data.idnucleo)) {
+            this.opcionSeleccionadoNucleo = nuc;
+          }
+        });
+      }
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
+  }
 
+  putinformacionbasica() {
+    if ( this.compleform.valid ) {
+    this.metodologia = {
+      Id: this.opcionSeleccionadoMeto['Id'],
+    }
+    this.nivel_formacion = {
+      Id: this.opcionSeleccionadoNivel['Id'],
+    }
+    this.proyecto_academico = {
+      Id : 0,
+      Codigo : '0',
+      Nombre : this.basicform.value.nombre_proyecto,
+      CodigoSnies: this.basicform.value.codigo_snies,
+      Duracion: Number(this.basicform.value.duracion_proyecto),
+      NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
+      CorreoElectronico: this.basicform.value.correo_proyecto,
+      CiclosPropedeuticos: this.checkciclos,
+      NumeroActoAdministrativo: Number(this.actoform.value.acto),
+      EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+      Competencias: this.compleform.value.competencias,
+      CodigoAbreviacion: this.basicform.value.abreviacion_proyecto,
+      Activo: true,
+      Oferta: this.checkofrece,
+      UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
+      AnoActoAdministrativoId: this.actoform.value.ano_acto,
+      DependenciaId: this.opcionSeleccionadoFacultad['Id'],
+      AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
+      NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
+      MetodologiaId: this.metodologia,
+      NivelFormacionId: this.nivel_formacion,
+      AnoActoAdministrativo: this.actoform.value.ano_acto,
+
+    }
+
+    this.titulacion_proyecto_snies = {
+      Id: 0,
+      Nombre: this.compleform.value.titulacion_snies,
+      Activo: true,
+      TipoTitulacionId: this.tipo_titulacion = {
+        Id: 1,
+      },
+      ProyectoAcademicoInstitucionId: this.proyecto_academico,
+    }
+    this.titulacion_proyecto_mujer = {
+      Id: 0,
+      Nombre: this.compleform.value.titulacion_mujer,
+      Activo: true,
+      TipoTitulacionId: this.tipo_titulacion = {
+        Id: 3,
+      },
+      ProyectoAcademicoInstitucionId: this.proyecto_academico,
+    }
+    this.titulacion_proyecto_hombre = {
+      Id: 0,
+      Nombre: this.compleform.value.titulacion_hombre,
+      Activo: true,
+      TipoTitulacionId: this.tipo_titulacion = {
+        Id: 2,
+      },
+      ProyectoAcademicoInstitucionId: this.proyecto_academico,
+    }
+    const informacion_basicaPut = {
+      ProyectoAcademicoInstitucion: this.proyecto_academico,
+      Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
+    }
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('proyecto.seguro_continuar_registrar_proyecto'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(opt)
+    .then((willCreate) => {
+      if (willCreate.value) {
+        this.proyectoacademicoService.put('tr_proyecto_academico/informacion_basica/' + this.data.idproyecto, informacion_basicaPut)
+        .subscribe((res: any) => {
+          if (res.Type === 'error') {
+            Swal({
+              type: 'error',
+               title: res.Code,
+              text: this.translate.instant('ERROR.' + res.Code),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+            this.showToast('error', 'error', this.translate.instant('proyecto.proyecto_no_creado'));
+          } else {
+            const opt1: any = {
+              title: this.translate.instant('proyecto.creado'),
+              text: this.translate.instant('proyecto.proyecto_creado'),
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true,
+              showCancelButton: true,
+            }; Swal(opt1)
+            .then((willDelete) => {
+              if (willDelete.value) {
+              }
+            });
+          }
+        });
+      }
+    });
+  } else {
+    const opt1: any = {
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('proyecto.error_datos'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    }; Swal(opt1)
+    .then((willDelete) => {
+      if (willDelete.value) {
+
+      }
+    });
+  }
+}
+
+private showToast(type: string, title: string, body: string) {
+  this.config = new ToasterConfig({
+    // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
+    positionClass: 'toast-top-center',
+    timeout: 5000,  // ms
+    newestOnTop: true,
+    tapToDismiss: false, // hide on click
+    preventDuplicates: true,
+    animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
+    limit: 5,
+  });
+  const toast: Toast = {
+    type: type, // 'default', 'info', 'success', 'warning', 'error'
+    title: title,
+    body: body,
+    showCloseButton: true,
+    bodyOutputType: BodyOutputType.TrustedHtml,
+  };
+  this.toasterService.popAsync(toast);
+}
 
 }
