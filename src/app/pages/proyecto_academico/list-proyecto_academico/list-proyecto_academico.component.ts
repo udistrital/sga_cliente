@@ -253,7 +253,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.fecha_creacion_resolucion = res.map((data: any) => (data.Registro[0].FechaCreacionActoAdministrativo));
         this.vigencia_resolucion_meses = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(6, 1)));
         this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(12, 1)));
-        this.proyectoJson = res.map((data: any) => (data.ProyectoAcademico));
+        this.proyectoJson = res.map((data: any) => (data.ProyectoAcademico))[0];
         console.info(res)
         console.info(this.fecha_creacion_resolucion[0])
 
