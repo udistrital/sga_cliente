@@ -68,11 +68,6 @@
                                     <br>
                                     <br>
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.numero_proyecto' | translate }}" formControlName="numero_proyecto" class="form-control" name="numero_proyecto">
-                                        <mat-error *ngIf="Campo10Control.hasError('required')">{{ 'proyecto.erro_telefono' | translate }}</mat-error>
-                                    </mat-form-field>
-                                    <br>
-                                    <mat-form-field>
                                         <input matInput placeholder="{{ 'proyecto.creditos_proyecto' | translate }}" formControlName="creditos_proyecto" class="form-control" name="creditos_proyecto" [(ngModel)]="data.numerocreditos">
                                         <mat-error *ngIf="CampoCreditosControl.hasError('required')">{{ 'proyecto.erro_creditos' | translate }}</mat-error>
                                     </mat-form-field>
@@ -166,8 +161,8 @@
         </div>
         <div class="row">
             <div class="col-xs-12 col-sm-3"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
-            <div class="col-xs-12 col-sm-3"> <button mat-raised-button [color]="'success'">{{ 'consultaproyecto.masinfomacion' | translate }}</button> </div>
-            <div class="col-xs-12 col-sm-3"> <button mat-raised-button [color]="'success-1'" (click)="putinformacionbasica()">{{ 'consultaproyecto.historico' | translate }}</button></div>
+            <div class="col-xs-12 col-sm-5"> <button mat-raised-button [color]="'success'">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success-1'" (click)="putinformacionbasica()">{{ 'editarproyecto.cambios' | translate }}</button></div>
         </div>
 
     </mat-tab>

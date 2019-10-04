@@ -372,9 +372,16 @@
         "tag_informacionbasica": "Información basica ",
         "tag_registro": "Registro calificado y de alta calidad ",
         "tag_acta": "Acto Administrativo ",
-        "registro_alta": "Registro de Alta Calidad"
+        "registro_alta": "Registro de Alta Calidad",
+        "botum_apartir": "Crear Proyecto a partir de este proyecto",
+        "cambios": "Guardar con cambios",
+        "seguro_continuar_actualizar_proyecto": "¿Esta seguro de actualizar este proyecto académico?",
+        "proyecto_no_actualizado": "Proyecto Académico no actualizado",
+        "actualizado": "Proyecto Actualizado!",
+        "proyecto_actualizado": "Proyecto Académico actualizado correctamente"
+
     },
-    "enfasis":{
+    "enfasis": {
         "enfasis": "Enfásis",
         "seguro_continuar_registrar_enfasis": "¿Esta seguro de registrar este enfásis?",
         "enfasis_creado": "Enfásis creado",

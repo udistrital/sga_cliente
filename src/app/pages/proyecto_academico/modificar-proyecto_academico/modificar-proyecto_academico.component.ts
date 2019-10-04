@@ -335,18 +335,18 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       Id: this.opcionSeleccionadoNivel['Id'],
     }
     this.proyecto_academico = {
-      Id : 0,
+      Id : Number(this.data.idproyecto) ,
       Codigo : '0',
-      Nombre : this.basicform.value.nombre_proyecto,
-      CodigoSnies: this.basicform.value.codigo_snies,
+      Nombre : this.basicform.value.nombre_proyecto[0],
+      CodigoSnies: this.basicform.value.codigo_snies[0],
       Duracion: Number(this.basicform.value.duracion_proyecto),
       NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
-      CorreoElectronico: this.basicform.value.correo_proyecto,
+      CorreoElectronico: this.basicform.value.correo_proyecto[0],
       CiclosPropedeuticos: this.checkciclos,
       NumeroActoAdministrativo: Number(this.actoform.value.acto),
       EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
-      Competencias: this.compleform.value.competencias,
-      CodigoAbreviacion: this.basicform.value.abreviacion_proyecto,
+      Competencias: this.compleform.value.competencias[0],
+      CodigoAbreviacion: this.basicform.value.abreviacion_proyecto[0],
       Activo: true,
       Oferta: this.checkofrece,
       UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
@@ -362,7 +362,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
 
     this.titulacion_proyecto_snies = {
       Id: 0,
-      Nombre: this.compleform.value.titulacion_snies,
+      Nombre: String(this.compleform.value.titulacion_snies),
       Activo: true,
       TipoTitulacionId: this.tipo_titulacion = {
         Id: 1,
@@ -371,7 +371,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     }
     this.titulacion_proyecto_mujer = {
       Id: 0,
-      Nombre: this.compleform.value.titulacion_mujer,
+      Nombre: String(this.compleform.value.titulacion_mujer),
       Activo: true,
       TipoTitulacionId: this.tipo_titulacion = {
         Id: 3,
@@ -380,7 +380,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     }
     this.titulacion_proyecto_hombre = {
       Id: 0,
-      Nombre: this.compleform.value.titulacion_hombre,
+      Nombre: String(this.compleform.value.titulacion_hombre),
       Activo: true,
       TipoTitulacionId: this.tipo_titulacion = {
         Id: 2,
@@ -392,8 +392,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
     }
     const opt: any = {
-      title: this.translate.instant('GLOBAL.registrar'),
-      text: this.translate.instant('proyecto.seguro_continuar_registrar_proyecto'),
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('editarproyecto.seguro_continuar_actualizar_proyecto'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -402,7 +402,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     Swal(opt)
     .then((willCreate) => {
       if (willCreate.value) {
-        this.proyectoacademicoService.put('tr_proyecto_academico/informacion_basica/' + this.data.idproyecto, informacion_basicaPut)
+        this.proyectoacademicoService.put('tr_proyecto_academico/informacion_basica/' + Number(this.data.idproyecto), informacion_basicaPut)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
             Swal({
@@ -411,11 +411,11 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
-            this.showToast('error', 'error', this.translate.instant('proyecto.proyecto_no_creado'));
+            this.showToast('error', 'error', this.translate.instant('editarproyecto.proyecto_no_actualizado'));
           } else {
             const opt1: any = {
-              title: this.translate.instant('proyecto.creado'),
-              text: this.translate.instant('proyecto.proyecto_creado'),
+              title: this.translate.instant('editarproyecto.actualizado'),
+              text: this.translate.instant('editarproyecto.proyecto_actualizado'),
               icon: 'warning',
               buttons: true,
               dangerMode: true,

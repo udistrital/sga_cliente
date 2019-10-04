@@ -34,10 +34,10 @@ export class ProyectoAcademicoService {
   }
 
   put(endpoint, element) {
-      return this.http.put(path + endpoint + '/' + element.Id, element, httpOptions).pipe(
-        catchError(this.handleError),
-      );
-  }
+    return this.http.put(path + endpoint + '/', element, httpOptions).pipe(
+      catchError(this.handleError),
+    ); // + element.Id
+}
 
   delete(endpoint, element) {
       return this.http.delete(path + endpoint + '/' + element.Id, httpOptions).pipe(
