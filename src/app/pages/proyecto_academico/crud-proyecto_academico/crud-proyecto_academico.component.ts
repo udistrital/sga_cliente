@@ -32,6 +32,8 @@ import { ListEnfasisService } from '../../../@core/data/list_enfasis.service';
 import { Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
+import { ActivatedRoute } from '@angular/router';
+import * as momentTimezone from 'moment-timezone';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -126,6 +128,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private sgamidService: SgaMidService,
     private unidadtiempoService: UnidadTiempoService,
     private dialogService: NbDialogService,
+    private activatedRoute: ActivatedRoute,
     private listEnfasisService: ListEnfasisService,
     private formBuilder: FormBuilder) {
       this.basicform = formBuilder.group({
@@ -254,6 +257,72 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.loadenfasis();
     this.loadnivel();
     this.loadmetodologia();
+
+    // cargar data del proyecto que se clonara
+    this.activatedRoute.paramMap.subscribe(params => {
+      const clone_project_id = params.get('proyecto_id');
+      if (clone_project_id) {
+        this.loadCloneData(clone_project_id);
+      }
+    });
+  }
+
+  loadCloneData(id: any): void {
+    this.sgamidService.get('consulta_proyecto_academico/' + id )
+    .subscribe((res: any) => {
+      if (res.Type !== 'error' && res[0].ProyectoAcademico.Id) {
+        const proyecto_a_clonar = res[0];
+        // enfasis
+        this.arr_enfasis_proyecto = proyecto_a_clonar.Enfasis.map((enfasis: any) => enfasis.EnfasisId);
+        this.source_emphasys.load(this.arr_enfasis_proyecto);
+        // checks
+        this.checkciclos =  proyecto_a_clonar.ProyectoAcademico.CiclosPropedeuticos;
+        this.checkofrece =  proyecto_a_clonar.ProyectoAcademico.Oferta;
+        // selects
+        // unidad de tiempo
+        this.opcionSeleccionadoUnidad = this.unidad.find((unidad_temp: any) => unidad_temp.Id === proyecto_a_clonar.ProyectoAcademico.UnidadTiempoId);
+        this.opcionSeleccionadoNivel = this.nivel.find((nivel_temp: any) => nivel_temp.Id === proyecto_a_clonar.ProyectoAcademico.NivelFormacionId.Id);
+        this.opcionSeleccionadoMeto = this.metodo.find((metodologia_temp: any) => metodologia_temp.Id === proyecto_a_clonar.ProyectoAcademico.MetodologiaId.Id);
+        this.opcionSeleccionadoFacultad = this.facultad.find((facultad_temp: any) => facultad_temp.Id === proyecto_a_clonar.IdDependenciaFacultad);
+        this.opcionSeleccionadoArea = this.area.find((area_temp: any) => area_temp.Id === proyecto_a_clonar.ProyectoAcademico.AreaConocimientoId);
+        this.opcionSeleccionadoNucleo = this.nucleo.find((nucleo_temp: any) => nucleo_temp.Id === proyecto_a_clonar.ProyectoAcademico.NucleoBaseId);
+        // info basica
+        this.basicform = this.formBuilder.group({
+          // codigo_snies: [proyecto_a_clonar.ProyectoAcademico.CodigoSnies, Validators.required],
+          codigo_snies: ['', Validators.required],
+          // nombre_proyecto: [proyecto_a_clonar.ProyectoAcademico.Nombre, Validators.required],
+          nombre_proyecto: ['', Validators.required],
+          abreviacion_proyecto: [proyecto_a_clonar.ProyectoAcademico.CodigoAbreviacion, Validators.required],
+          correo_proyecto: [proyecto_a_clonar.ProyectoAcademico.CorreoElectronico, [Validators.required, Validators.email]],
+          numero_proyecto: ['', Validators.required],
+          creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4)]],
+          duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, Validators.required],
+        })
+        // resolucion
+        const resolucion = proyecto_a_clonar.Registro.sort((a, b) => a.Id - b.Id).find((registro_temp: any) => registro_temp.TipoRegistroId.Id === 1);
+        this.resoluform = this.formBuilder.group({
+          resolucion: [resolucion.NumeroActoAdministrativo  , Validators.required],
+          ano_resolucion: [resolucion.AnoActoAdministrativoId, [Validators.required, Validators.maxLength(4)]],
+          fecha_creacion: [momentTimezone.tz(resolucion.FechaCreacionActoAdministrativo, 'America/Bogota').format('YYYY-MM-DDTHH:mm'), Validators.required],
+          mes_vigencia: [resolucion.VigenciaActoAdministrativo.split('Años:')[0].split(':')[1], [Validators.required, Validators.maxLength(2)]],
+          ano_vigencia: [resolucion.VigenciaActoAdministrativo.split('Años:')[1], [Validators.required, Validators.maxLength(1)]],
+        })
+        this.actoform = this.formBuilder.group({
+          acto: [proyecto_a_clonar.ProyectoAcademico.NumeroActoAdministrativo, Validators.required],
+          ano_acto: [proyecto_a_clonar.ProyectoAcademico.AnoActoAdministrativo, [Validators.required, Validators.maxLength(4)]],
+        })
+        this.compleform = this.formBuilder.group({
+          titulacion_snies: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 1).Nombre, Validators.required],
+          titulacion_mujer: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 3).Nombre, Validators.required],
+          titulacion_hombre: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 2).Nombre, Validators.required],
+          competencias: [proyecto_a_clonar.ProyectoAcademico.Competencias, Validators.required],
+        });
+      } else {
+        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
+      }
+    }, () => {
+      this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
+    });
   }
 
   loadfacultad() {

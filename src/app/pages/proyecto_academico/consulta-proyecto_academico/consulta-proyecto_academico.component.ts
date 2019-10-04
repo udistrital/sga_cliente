@@ -5,7 +5,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import 'style-loader!angular2-toaster/toaster.css';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Inject } from '@angular/core';
-
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -16,19 +16,50 @@ import { Inject } from '@angular/core';
 export class ConsultaProyectoAcademicoComponent implements OnInit {
   basicform: FormGroup;
 
-  source: LocalDataSource = new LocalDataSource();
+  source_emphasys: LocalDataSource = new LocalDataSource();
+  settings_emphasys: any;
 
 
   constructor(private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
+    private routerService: Router,
     private formBuilder: FormBuilder) {
+      this.source_emphasys.load(data.enfasis);
+      this.settings_emphasys = {
+        actions: false,
+        mode: 'external',
+        hideSubHeader: true,
+        columns: {
+          EnfasisId: {
+            title: this.translate.instant('GLOBAL.nombre'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value.Nombre;
+            },
+            width: '80%',
+          },
+          Activo: {
+            title: this.translate.instant('GLOBAL.activo'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value ? translate.instant('GLOBAL.si') : translate.instant('GLOBAL.no');
+            },
+            width: '20%',
+          },
+        },
+      };
     }
 
     onclick(): void {
       this.dialogRef.close();
     }
+
+  cloneProject(project: any): void {
+    this.routerService.navigateByUrl(`pages/proyecto_academico/crud-proyecto_academico/${project.Id}`);
+    this.dialogRef.close();
+  }
 
   useLanguage(language: string) {
     this.translate.use(language);
