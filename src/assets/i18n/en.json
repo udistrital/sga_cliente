@@ -343,6 +343,7 @@
         "erro_mes_vigencia": "Please enter the number of months, maximum 2 digits.",
         "erro_ano_vigencia": "Please enter the number of years, maximum 1 digits.",
         "vigencia_año": "# Years of validity",
+        "fecha_calculada_vencimiento": "Registration expires on:",
         "proyecto_no_cargado": "Project not loaded"
     },
     "consultaproyecto": {

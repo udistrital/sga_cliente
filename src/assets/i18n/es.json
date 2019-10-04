@@ -345,6 +345,7 @@
         "erro_mes_vigencia": "Por favor ingrese el numero de meses, máximo 2 digitos.",
         "erro_ano_vigencia": "Por favor ingrese el numero de años, máximo 1 digitos.",
         "vigencia_año": "# Años de vigencia",
+        "fecha_calculada_vencimiento": "El registro se vence el:",
         "proyecto_no_cargado": "Proyecto no cargado"
     },
     "consultaproyecto": {
@@ -376,9 +377,16 @@
         "tag_informacionbasica": "Información basica ",
         "tag_registro": "Registro calificado y de alta calidad ",
         "tag_acta": "Acto Administrativo ",
-        "registro_alta": "Registro de Alta Calidad"
+        "registro_alta": "Registro de Alta Calidad",
+        "botum_apartir": "Crear Proyecto a partir de este proyecto",
+        "cambios": "Guardar con cambios",
+        "seguro_continuar_actualizar_proyecto": "¿Esta seguro de actualizar este proyecto académico?",
+        "proyecto_no_actualizado": "Proyecto Académico no actualizado",
+        "actualizado": "Proyecto Actualizado!",
+        "proyecto_actualizado": "Proyecto Académico actualizado correctamente"
+
     },
-    "enfasis":{
+    "enfasis": {
         "enfasis": "Enfásis",
         "seguro_continuar_registrar_enfasis": "¿Esta seguro de registrar este enfásis?",
         "enfasis_creado": "Enfásis creado",

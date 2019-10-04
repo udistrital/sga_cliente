@@ -18,24 +18,6 @@ import { delay } from 'rxjs/operators';
 import { InformacionBasica } from '../../../@core/data/models/proyecto_academico/informacion_basica';
 import { ModificarProyectoAcademicoComponent } from '../modificar-proyecto_academico/modificar-proyecto_academico.component';
 
-
-export interface DialogData {
-    codigosnies: Number;
-    facultad: string;
-    nombre: string;
-    nivel: string;
-    metodologia: string;
-    abreviacion: string;
-    correo: string;
-    numerocreditos: Number;
-    duracion: Number;
-    tipoduracion: string;
-    ciclos: Boolean;
-    activo: Boolean;
-    enfasis: any[];
-}
-
-
 @Component({
   selector: 'ngx-list-proyecto-academico',
   templateUrl: './list-proyecto_academico.component.html',
@@ -60,9 +42,26 @@ export class ListProyectoAcademicoComponent implements OnInit {
   duracion: Number;
   tipo_duracion: string;
   ciclos: string;
-  activo: string;
+  oferta: string;
   enfasis: any[];
   consulta: boolean= false;
+  idfacultad: Number;
+  idnivel: Number;
+  idmetodo: Number;
+  idunidad: Number;
+  idarea: Number;
+  idnucleo: Number;
+  oferta_check: boolean = false;
+  ciclos_check: boolean = false;
+  titulacion_snies: string;
+  titulacion_mujer: string;
+  titulacion_hombre: string;
+  competencias: string;
+  resolucion_acreditacion: string;
+  resolucion_acreditacion_ano: string;
+  fecha_creacion_resolucion: Date;
+  vigencia_resolucion_meses: string;
+  vigencia_resolucion_anos: string;
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private translate: TranslateService,
@@ -80,7 +79,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
-             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.activo, enfasis: this.enfasis, Id: this.idproyecto},
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, Id: this.idproyecto},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -93,7 +92,12 @@ export class ListProyectoAcademicoComponent implements OnInit {
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
-             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.activo, enfasis: this.enfasis},
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, idfacultad: this.idfacultad,
+             idnivel: this.idnivel, idmetodo: this.idmetodo, idunidad: this.idunidad, oferta_check: this.oferta_check, ciclos_check: this.ciclos_check,
+             titulacion_snies: this.titulacion_snies, titulacion_mujer: this.titulacion_mujer, titulacion_hombre: this.titulacion_hombre,
+             competencias: this.competencias, idarea: this.idarea, idnucleo: this.idnucleo, resolucion_acreditacion: this.resolucion_acreditacion,
+             resolucion_acreditacion_ano: this.resolucion_acreditacion_ano, fecha_creacion_registro: this.fecha_creacion_resolucion,
+             vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -126,7 +130,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
   }
 
   ngOnInit() {
-
   }
   loadproyectos() {
     const opt1: any = {
@@ -160,7 +163,53 @@ export class ListProyectoAcademicoComponent implements OnInit {
   });
   }
 
-  obteneridporid() {
+  obteneridporid_consulta() {
+    const opt1: any = {
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('oferta.evento'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    }
+    this.sgamidService.get('consulta_proyecto_academico/' + this.idproyecto )
+    .subscribe((res: any) => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        console.info(res)
+        this.codigosnies = res.map((data: any) => (data.ProyectoAcademico.CodigoSnies));
+        this.nombre = res.map((data: any) => (data.ProyectoAcademico.Nombre));
+        this.facultad = res.map((data: any) => (data.NombreDependencia));
+        this.nivel = res.map((data: any) => (data.ProyectoAcademico.NivelFormacionId.Nombre));
+        this.metodologia = res.map((data: any) => (data.ProyectoAcademico.MetodologiaId.Nombre));
+        this.abreviacion = res.map((data: any) => (data.ProyectoAcademico.CodigoAbreviacion));
+        this.correo = res.map((data: any) => (data.ProyectoAcademico.CorreoElectronico));
+        this.numerocreditos = res.map((data: any) => (data.ProyectoAcademico.NumeroCreditos));
+        this.duracion = res.map((data: any) => (data.ProyectoAcademico.Duracion));
+        this.tipo_duracion = res.map((data: any) => (data.NombreUnidad));
+        this.ciclos = res.map((data: any) => (data.CiclosLetra));
+        this.oferta = res.map((data: any) => (data.OfertaLetra));
+        this.enfasis = res.map((data: any) => (data.Enfasis))[0];
+        this.openDialogConsulta();
+      }else {
+      Swal(opt1)
+      .then((willDelete) => {
+        if (willDelete.value) {
+        }
+      });
+    }
+  },
+  (error: HttpErrorResponse) => {
+    Swal({
+      type: 'error',
+      title: error.status + '',
+      text: this.translate.instant('ERROR.' + error.status),
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    });
+  });
+  }
+
+  obteneridporid_modificar() {
     const opt1: any = {
       title: this.translate.instant('GLOBAL.atencion'),
       text: this.translate.instant('oferta.evento'),
@@ -184,11 +233,29 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.duracion = res.map((data: any) => (data.ProyectoAcademico.Duracion));
         this.tipo_duracion = res.map((data: any) => (data.NombreUnidad));
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
-        this.activo = res.map((data: any) => (data.ActivoLetra));
-        // this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
-        this.enfasis = res.map((data: any) => (data.Enfasis))[0];
-        console.info(this.consulta)
-        this.openDialogConsulta();
+        this.oferta = res.map((data: any) => (data.OfertaLetra));
+        this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
+        this.idfacultad = res.map((data: any) => (data.ProyectoAcademico.DependenciaId));
+        this.idnivel = res.map((data: any) => (data.ProyectoAcademico.NivelFormacionId.Id));
+        this.idmetodo = res.map((data: any) => (data.ProyectoAcademico.MetodologiaId.Id));
+        this.idunidad = res.map((data: any) => (data.ProyectoAcademico.UnidadTiempoId));
+        this.oferta_check = res.map((data: any) => (data.ProyectoAcademico.Oferta));
+        this.ciclos_check = res.map((data: any) => (data.ProyectoAcademico.CiclosPropedeuticos));
+        this.titulacion_snies = res.map((data: any) => (data.Titulaciones[0].Nombre));
+        this.titulacion_mujer = res.map((data: any) => (data.Titulaciones[1].Nombre));
+        this.titulacion_hombre = res.map((data: any) => (data.Titulaciones[2].Nombre));
+        this.competencias = res.map((data: any) => (data.ProyectoAcademico.Competencias));
+        this.idarea = res.map((data: any) => (data.ProyectoAcademico.AreaConocimientoId));
+        this.idnucleo = res.map((data: any) => (data.ProyectoAcademico.NucleoBaseId));
+        this.resolucion_acreditacion = res.map((data: any) => (data.Registro[0].NumeroActoAdministrativo));
+        this.resolucion_acreditacion_ano = res.map((data: any) => (data.Registro[0].AnoActoAdministrativoId));
+        this.fecha_creacion_resolucion = res.map((data: any) => (data.Registro[0].FechaCreacionActoAdministrativo));
+        this.vigencia_resolucion_meses = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(6, 1)));
+        this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(12, 1)));
+        console.info(res)
+        console.info(this.fecha_creacion_resolucion[0])
+
+        this.openDialogModificar();
       }else {
       Swal(opt1)
       .then((willDelete) => {
@@ -206,13 +273,23 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
   });
   }
-  promesaid(id: number): Promise<{id: number}> {
+
+  promesaid_consulta(id: number): Promise<{id: number}> {
     return new Promise((resolve) => {
         setTimeout(() => {
           resolve({ id: id });
-          this.obteneridporid()
+          this.obteneridporid_consulta()
       }, 600);
     });
+}
+
+promesaid_modificar(id: number): Promise<{id: number}> {
+  return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ id: id });
+        this.obteneridporid_modificar()
+    }, 600);
+  });
 }
 
   highlight(row ): void {

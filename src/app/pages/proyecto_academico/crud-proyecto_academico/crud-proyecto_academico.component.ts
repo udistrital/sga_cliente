@@ -66,6 +66,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   metodo = [];
   fecha_creacion: Date;
   fecha_vencimiento: string;
+  fecha_vencimiento_mostrar: string;
   fecha_vigencia: string;
   proyecto_academicoPost: ProyectoAcademicoPost;
   proyecto_academico: ProyectoAcademicoInstitucion;
@@ -82,6 +83,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   tipo_dependencia: TipoDependencia;
   dependencia_tipo_dependencia: DependenciaTipoDependencia;
   dependencia: Dependencia;
+  fecha_calculada_vencimiento: string
 
 
 
@@ -218,6 +220,18 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.source_emphasys.load(this.arr_enfasis_proyecto);
   }
 
+
+    mostrarfecha() {
+      this.calculateEndDateMostrar(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
+      this.fecha_calculada_vencimiento = this.fecha_vencimiento_mostrar
+     }
+
+     calculateEndDateMostrar (date: Date, years: number, months: number, days: number): Date {
+      const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DD');
+      this.fecha_vencimiento_mostrar = convertDate
+      return new Date(convertDate);
+    }
+
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
     this.subscription.unsubscribe();
@@ -230,6 +244,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       },
     });
   }
+
 
   useLanguage(language: string) {
     this.translate.use(language);
@@ -518,7 +533,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       Nombre: this.compleform.value.titulacion_mujer,
       Activo: true,
       TipoTitulacionId: this.tipo_titulacion = {
-        Id: 2,
+        Id: 3,
       },
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
     }
@@ -527,7 +542,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       Nombre: this.compleform.value.titulacion_hombre,
       Activo: true,
       TipoTitulacionId: this.tipo_titulacion = {
-        Id: 3,
+        Id: 2,
       },
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
     }

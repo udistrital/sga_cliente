@@ -190,12 +190,15 @@
                                     </mat-form-field>
                                     <div class="col-sm-3">
                                         <mat-form-field>
-                                            <input matInput placeholder="{{ 'proyecto.vigencia_año' | translate }}" formControlName="ano_vigencia" class="form-control" name="ano_resolucion_proyecto">
+                                            <input matInput #box placeholder="{{ 'proyecto.vigencia_año' | translate }}" formControlName="ano_vigencia" class="form-control" name="ano_resolucion_proyecto" (blur)="mostrarfecha()">
                                             <mat-error *ngIf="Campo23Control.hasError('required')">{{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
                                         </mat-form-field>
+                                        <br>
                                     </div>
                                 </div>
                                 <br>
+                                <label class="label col-sm-8 col-form-label">{{ 'proyecto.fecha_calculada_vencimiento' | translate }}</label>
+                                <label class="label col-sm-8 col-form-label">{{fecha_calculada_vencimiento}}</label>
                             </form>
                         </nb-card-body>
                     </nb-card>
