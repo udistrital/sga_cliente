@@ -29,6 +29,7 @@ import * as moment from 'moment';
 import { Inject } from '@angular/core';
 import * as momentTimezone from 'moment-timezone';
 import { InformacionBasicaPut } from '../../../@core/data/models/proyecto_academico/informacion_basica_put';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-modificar-proyecto-academico',
@@ -126,6 +127,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
+    private routerService: Router,
     private unidadtiempoService: UnidadTiempoService,
     private formBuilder: FormBuilder) {
       this.basicform = this.formBuilder.group({
@@ -187,6 +189,11 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     this.translate.use(language);
   }
   onclick(): void {
+    this.dialogRef.close();
+  }
+
+  cloneProject(project: any): void {
+    this.routerService.navigateByUrl(`pages/proyecto_academico/crud-proyecto_academico/${project.Id}`);
     this.dialogRef.close();
   }
 

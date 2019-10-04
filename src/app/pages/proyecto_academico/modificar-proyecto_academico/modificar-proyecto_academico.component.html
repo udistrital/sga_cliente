@@ -161,7 +161,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12 col-sm-3"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
-            <div class="col-xs-12 col-sm-5"> <button mat-raised-button [color]="'success'">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
+            <div class="col-xs-12 col-sm-5"> <button mat-raised-button [color]="'success'" (click)="cloneProject(data)">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
             <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success-1'" (click)="putinformacionbasica()">{{ 'editarproyecto.cambios' | translate }}</button></div>
         </div>
 
