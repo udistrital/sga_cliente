@@ -33,6 +33,7 @@ import { Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
 import { ActivatedRoute } from '@angular/router';
+import * as momentTimezone from 'moment-timezone';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -281,12 +282,14 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4)]],
           duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, Validators.required],
         })
+        // resolucion
+        const resolucion = proyecto_a_clonar.Registro.sort((a,b) => a.Id - b.Id).find((registro_temp: any) => registro_temp.TipoRegistroId.Id === 1);
         this.resoluform = this.formBuilder.group({
-          resolucion: ['', Validators.required],
-          ano_resolucion: ['', [Validators.required, Validators.maxLength(4)]],
-          fecha_creacion: ['', Validators.required],
-          mes_vigencia: ['', [Validators.required, Validators.maxLength(2)]],
-          ano_vigencia: ['', [Validators.required, Validators.maxLength(1)]],
+          resolucion: [resolucion.NumeroActoAdministrativo  , Validators.required],
+          ano_resolucion: [resolucion.AnoActoAdministrativoId, [Validators.required, Validators.maxLength(4)]],
+          fecha_creacion: [momentTimezone.tz(resolucion.FechaCreacionActoAdministrativo, 'America/Bogota').format('YYYY-MM-DDTHH:mm'), Validators.required],
+          mes_vigencia: [resolucion.VigenciaActoAdministrativo.split("Años:")[0].split(":")[1], [Validators.required, Validators.maxLength(2)]],
+          ano_vigencia: [resolucion.VigenciaActoAdministrativo.split("Años:")[1], [Validators.required, Validators.maxLength(1)]],
         })
         this.actoform = this.formBuilder.group({
           acto: [proyecto_a_clonar.ProyectoAcademico.NumeroActoAdministrativo, Validators.required],
