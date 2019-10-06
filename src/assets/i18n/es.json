@@ -74,6 +74,7 @@
         "eliminar": "Eliminar",
         "actualizar": "Actualizar",
         "crear": "Crear",
+        "asignar": "Asignar",
         "registrar": "Registrar",
         "guardar": "Guardar",
         "formulario": "Formulario",
@@ -388,7 +389,11 @@
         "agregar_coordinado": "Agregar coordinador",
         "alerta_agregar_coordinador": "Debe seleccionar un coordinador",
         "erro_fecha_creacion": "Por favor complete la fecha y hora de la asignacioón del coordinador",
-        "asignar_coordinado": "Asignar coordinador"
+        "asignar_coordinado": "Asignar coordinador",
+        "coordinador_no_asignado": "Coordinador no asignado!",
+        "creado": "Coordinador Asignado!",
+        "coordinador_asignado": "Coordinador asignado Correctamente!",
+        "seguro_continuar_asignar": "¿Esta seguro de asignar este coordinador a este proyecto académico?"
 
     },
     "enfasis": {

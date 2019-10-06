@@ -72,6 +72,7 @@
         "eliminar": "Delete",
         "actualizar": "Update",
         "crear": "Create",
+        "asignar": "To assign",
         "registrar": "Register",
         "guardar": "Save",
         "formulario": "Form",
@@ -386,7 +387,11 @@
         "agregar_coordinado": "Add coordinator",
         "alerta_agregar_coordinador": "You must select a coordinator",
         "erro_fecha_creacion": "Please complete the date and time of the coordinator's assignment",
-        "asignar_coordinado": "Assign Coordinator"
+        "asignar_coordinado": "Assign Coordinator",
+        "coordinador_no_asignado": "Coordinador no asignado!",
+        "creado": "Assigned Coordinator!",
+        "coordinador_asignado": "Coordinator assigned Correctly!",
+        "seguro_continuar_asignar": "Are you sure you assign this coordinator to this academic project?"
     },
     "enfasis": {
         "enfasis": "Emphasys",

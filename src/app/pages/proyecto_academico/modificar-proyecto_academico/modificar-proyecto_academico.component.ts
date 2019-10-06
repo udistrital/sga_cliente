@@ -32,6 +32,7 @@ import { InformacionBasicaPut } from '../../../@core/data/models/proyecto_academ
 import { RegistroPut } from '../../../@core/data/models/proyecto_academico/registro_put';
 import { PersonaService } from '../../../@core/data/persona.service';
 import { Persona } from '../../../@core/data/models/persona';
+import { Coordinador } from '../../../@core/data/models/proyecto_academico/coordinador';
 
 @Component({
   selector: 'ngx-modificar-proyecto-academico',
@@ -86,6 +87,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   registro_califacado_alta_calidad: RegistroCalificadoAcreditacion;
   tipo_registro: TipoRegistro;
   enfasis_proyecto: InstitucionEnfasis;
+  coordinador_data: Coordinador;
   coordinadorSeleccionado: Persona;
   enfasis_basico: Enfasis;
   titulacion_proyecto_snies: Titulacion;
@@ -569,7 +571,7 @@ putinformacionregistro() {
       Activo: true,
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
       TipoRegistroId: this.tipo_registro = {
-        Id: 2,
+        Id: this.data.idproyecto,
       },
 
     }
@@ -747,7 +749,54 @@ putinformacionregistro() {
 }
 registrocoordinador() {
   if ( this.coordinador.valid ) {
-  console.info(this.coordinadorSeleccionado['Id'])
+    this.coordinador_data = {
+      PersonaId: this.coordinadorSeleccionado['Id'],
+      DependenciaId: 0,
+      RolId: 0,
+      Activo: true,
+      ProyectoAcademicoInstitucionId: {
+        Id: 2,
+      },
+    }
+
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.asignar'),
+      text: this.translate.instant('editarproyecto.seguro_continuar_asignar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(opt)
+    .then((willCreate) => {
+      if (willCreate.value) {
+        this.proyectoacademicoService.post('proyecto_academico_rol_persona_dependecia/', this.coordinador_data)
+        .subscribe((res: any) => {
+          if (res.Type === 'error') {
+            Swal({
+              type: 'error',
+               title: res.Code,
+              text: this.translate.instant('ERROR.' + res.Code),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+            this.showToast('error', 'error', this.translate.instant('editarproyecto.coordinador_no_asignado'));
+          } else {
+            const opt1: any = {
+              title: this.translate.instant('editarproyecto.creado'),
+              text: this.translate.instant('editarproyecto.coordinador_asignado'),
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true,
+              showCancelButton: true,
+            }; Swal(opt1)
+            .then((willDelete) => {
+              if (willDelete.value) {
+              }
+            });
+          }
+        });
+      }
+    });
 
 
 } else {
