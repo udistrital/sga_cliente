@@ -17,6 +17,8 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { delay } from 'rxjs/operators';
 import { InformacionBasica } from '../../../@core/data/models/proyecto_academico/informacion_basica';
 import { ModificarProyectoAcademicoComponent } from '../modificar-proyecto_academico/modificar-proyecto_academico.component';
+import { PersonaService } from '../../../@core/data/persona.service';
+import { Persona } from '../../../@core/data/models/persona';
 
 @Component({
   selector: 'ngx-list-proyecto-academico',
@@ -64,6 +66,11 @@ export class ListProyectoAcademicoComponent implements OnInit {
   fecha_creacion_resolucion: Date;
   vigencia_resolucion_meses: string;
   vigencia_resolucion_anos: string;
+  primer_nombre: string;
+  segundo_nombre: string;
+  primer_apellido: string;
+  segundo_apellido: string;
+  nombre_completo: string;
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private translate: TranslateService,
@@ -166,6 +173,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
   });
   }
+
 
   obteneridporid_consulta() {
     const opt1: any = {

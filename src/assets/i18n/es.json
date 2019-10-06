@@ -384,7 +384,11 @@
         "proyecto_no_actualizado": "Proyecto Académico no actualizado",
         "actualizado": "Proyecto Actualizado!",
         "proyecto_actualizado": "Proyecto Académico actualizado correctamente",
-        "alta_calidad": "Registro de Alta calidad?"
+        "alta_calidad": "Registro de Alta calidad?",
+        "agregar_coordinado": "Agregar coordinador",
+        "alerta_agregar_coordinador": "Debe seleccionar un coordinador",
+        "erro_fecha_creacion": "Por favor complete la fecha y hora de la asignacioón del coordinador",
+        "asignar_coordinado": "Asignar coordinador"
 
     },
     "enfasis": {

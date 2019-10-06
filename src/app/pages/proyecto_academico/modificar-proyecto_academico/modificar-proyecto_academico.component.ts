@@ -30,6 +30,8 @@ import { Inject } from '@angular/core';
 import * as momentTimezone from 'moment-timezone';
 import { InformacionBasicaPut } from '../../../@core/data/models/proyecto_academico/informacion_basica_put';
 import { RegistroPut } from '../../../@core/data/models/proyecto_academico/registro_put';
+import { PersonaService } from '../../../@core/data/persona.service';
+import { Persona } from '../../../@core/data/models/persona';
 
 @Component({
   selector: 'ngx-modificar-proyecto-academico',
@@ -44,6 +46,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   resolualtaform: any;
   actoform: any;
   compleform: any;
+  coordinador: any;
   facultad = [];
   area = [];
   opcionSeleccionadoFacultad: any;
@@ -64,6 +67,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   metodo = [];
   fecha_creacion_calificado: Date;
   fecha_creacion_alta: Date;
+  fecha_creacion_cordin: Date;
   fecha_vencimiento: string;
   fecha_vencimiento_alta: string;
   fecha_vigencia: string;
@@ -82,6 +86,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   registro_califacado_alta_calidad: RegistroCalificadoAcreditacion;
   tipo_registro: TipoRegistro;
   enfasis_proyecto: InstitucionEnfasis;
+  coordinadorSeleccionado: Persona;
   enfasis_basico: Enfasis;
   titulacion_proyecto_snies: Titulacion;
   titulacion_proyecto_mujer: Titulacion;
@@ -89,6 +94,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   tipo_dependencia: TipoDependencia;
   dependencia_tipo_dependencia: DependenciaTipoDependencia;
   dependencia: Dependencia;
+  personas: Array<Persona>;
+  creandoAutor: boolean= true;
 
 
 
@@ -122,6 +129,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   Campo26Control = new FormControl('', [Validators.required]);
   Campo28Control = new FormControl('', [Validators.required, Validators.maxLength(1)]);
   Campo27Control = new FormControl('', [Validators.required, Validators.maxLength(2)]);
+  Campo29Control = new FormControl('', [Validators.required]);
   selectFormControl = new FormControl('', Validators.required);
   @Output() eventChange = new EventEmitter();
 
@@ -131,6 +139,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     public dialogRef: MatDialogRef<ModificarProyectoAcademicoComponent>,
     private toasterService: ToasterService,
     private oikosService: OikosService,
+    private personaService: PersonaService,
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
@@ -176,12 +185,16 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
        titulacion_hombre: ['', Validators.required],
        competencias: ['', Validators.required],
      });
+     this.coordinador = formBuilder.group({
+      fecha_creacion_coordinador: ['', Validators.required],
+     })
     this.loadfacultad();
    this.loadnivel();
    this.loadmetodologia();
    this.loadunidadtiempo();
    this.loadarea();
    this.loadnucleo();
+   this. loadpersonas();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
    this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
@@ -199,6 +212,33 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   ngOnInit() {
 
   }
+
+  getFullAuthorName(p: Persona): string {
+    return p.PrimerNombre + ' ' + p.SegundoNombre + ' ' + p.PrimerApellido + ' ' + p.SegundoApellido;
+    console.info(Persona)
+  }
+
+  loadpersonas(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.personaService.get('persona/?limit=0')
+        .subscribe(res => {
+          // if (res !== null) {
+          if (Object.keys(res[0]).length > 0) {
+            this.personas = <Array<Persona>>res;
+            this.personas.forEach( (persona: Persona) => {
+              persona['Nombre'] = this.getFullAuthorName(persona);
+            });
+            resolve(true);
+          } else {
+            this.personas = [];
+            reject({status: 404});
+          }
+        }, (error: HttpErrorResponse) => {
+          reject(error);
+        });
+    });
+  }
+
 
    calculateEndDate (date: Date, years: number, months: number, days: number): Date {
     const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DDTHH:mm:ss');
@@ -705,6 +745,29 @@ putinformacionregistro() {
   }
 }
 }
+registrocoordinador() {
+  if ( this.coordinador.valid ) {
+  console.info(this.coordinadorSeleccionado['Id'])
+
+
+} else {
+  const opt1: any = {
+    title: this.translate.instant('GLOBAL.atencion'),
+    text: this.translate.instant('proyecto.error_datos'),
+    icon: 'warning',
+    buttons: true,
+    dangerMode: true,
+    showCancelButton: true,
+  }; Swal(opt1)
+  .then((willDelete) => {
+    if (willDelete.value) {
+
+    }
+  });
+}
+}
+
+
 private showToast(type: string, title: string, body: string) {
   this.config = new ToasterConfig({
     // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'

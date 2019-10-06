@@ -153,6 +153,30 @@
                         <nb-card class="m-4" accent="info">
                             <nb-card-header>{{ 'editarproyecto.coordinacion' | translate }}</nb-card-header>
                             <nb-card-body>
+                                <form id="coordinadoform" [formGroup]="coordinador">
+
+                                    <div class="col-10">
+                                        <mat-form-field style="width: 100%;" floatLabel="always">
+                                            <mat-label>*{{'editarproyecto.agregar_coordinado' | translate}}:</mat-label>
+                                            <mat-select [placeholder]="translate.instant('produccion_academica.placeholder_agregar_autor')" [formControl]="Campo29Control" required [(ngModel)]="coordinadorSeleccionado">
+                                                <mat-option>--Seleccionar--</mat-option>
+                                                <mat-option *ngFor="let persona of personas" [value]="persona">
+                                                    {{persona.PrimerNombre}} {{persona.SegundoNombre}} {{persona.PrimerApellido}} {{persona.SegundoApellido}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="Campo29Control.hasError('required')">{{'editarproyecto.alerta_agregar_coordinador' | translate}}</mat-error>
+                                        </mat-form-field>
+                                        <mat-form-field>
+                                            <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
+                                            <input matInput [ngModel]="fecha_creacion_cordin" type="datetime-local" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion_coordinador">
+                                            <mat-error *ngIf="Campo14Control.hasError('required')">{{ 'editarproyecto.erro_fecha_creacion' | translate }}</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <button class="btn btn-success btn-sm" (click)="registrocoordinador()">{{'editarproyecto.asignar_coordinado' | translate}}</button>
+                                    <br>
+                                </form>
                             </nb-card-body>
                         </nb-card>
                     </div>
