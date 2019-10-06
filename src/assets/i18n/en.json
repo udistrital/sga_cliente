@@ -343,7 +343,8 @@
         "erro_mes_vigencia": "Please enter the number of months, maximum 2 digits.",
         "erro_ano_vigencia": "Please enter the number of years, maximum 1 digits.",
         "vigencia_año": "# Years of validity",
-        "fecha_calculada_vencimiento": "Registration expires on:"
+        "fecha_calculada_vencimiento": "Registration expires on:",
+        "proyecto_no_cargado": "Project not loaded"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
@@ -358,12 +359,16 @@
         "calidad": "High quality expiration",
         "consulta": "Query",
         "editar": "Edit",
-        "inhabilitar": "Disable",
+        "inhabilitar": "Disable/Enable",
         "titulo_consulta": "Basic Information of the Academic Project",
         "historico": "Historical Records",
         "masinfomacion": "More information",
         "coordinacion": "Coordination",
-        "tag_informacionbasica": "Basic information"
+        "tag_informacionbasica": "Basic information",
+        "seguro_continuar_actualizar_proyecto": "Are you sure you want to update this academic project?",
+        "proyecto_actualizado": "Academic project updated",
+        "proyecto_no_actualizado": "Academic project not updated",
+        "clonar_proyecto": "Clone project"
     },
     "editarproyecto": {
         "coordinacion": "Coordination",

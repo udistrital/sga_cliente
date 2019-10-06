@@ -60,14 +60,31 @@
             <nb-card-header>{{ 'proyecto.enfasis' | translate }}</nb-card-header>
             <nb-card-body>
                 <form id="basicForm" [formGroup]="basicform">
-                    <mat-form-field>
+                    <!--mat-form-field>
                         <input readonly matInput placeholder="{{ 'proyecto.enfasis_proyecto' | translate }}" formControlName="enfasis_proyecto" class="form-control" name="enfasis_proyecto" [(ngModel)]="data.enfasis">
-                    </mat-form-field>
+                    </mat-form-field-->
+                    <!--mat-form-field>
+                        <mat-label>{{ 'proyecto.enfasis_proyecto' | translate }}</mat-label>
+                        <mat-select [formControl]="Campo2Control" required [(ngModel)]="opcionSeleccionadoEnfasis">
+                        <mat-select [formControl]="Campo2Control" (selectionChange)="onCreateEmphasys($event)">
+                                <mat-option>--</mat-option>
+                            <mat-option *ngFor="let enfasisproyecto of enfasis" [value]="enfasisproyecto">
+                                {{enfasisproyecto['Nombre']}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Campo2Control.hasError('required')">{{ 'proyecto.erro_selec_enfasis' | translate }}</mat-error>
+                    </mat-form-field-->
+                    <div class="row">
+                        <div class="col-12">
+                            <ng2-smart-table [settings]="settings_emphasys" [(source)]="source_emphasys">
+                            </ng2-smart-table>
+                        </div>
+                    </div>
                 </form>
             </nb-card-body>
         </nb-card>
         <div class="row">
-            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success'">{{ 'consultaproyecto.masinfomacion' | translate }}</button> </div>
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success'" (click)="cloneProject(data)">{{ 'consultaproyecto.clonar_proyecto' | translate }}</button> </div>
             <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success-1'">{{ 'consultaproyecto.historico' | translate }}</button></div>
             <div class="col-xs-12 col-sm-4"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.aceptar' | translate }}</button></div>
         </div>

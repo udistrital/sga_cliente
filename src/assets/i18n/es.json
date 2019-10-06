@@ -345,7 +345,8 @@
         "erro_mes_vigencia": "Por favor ingrese el numero de meses, máximo 2 digitos.",
         "erro_ano_vigencia": "Por favor ingrese el numero de años, máximo 1 digitos.",
         "vigencia_año": "# Años de vigencia",
-        "fecha_calculada_vencimiento": "El registro se vence el:"
+        "fecha_calculada_vencimiento": "El registro se vence el:",
+        "proyecto_no_cargado": "Proyecto no cargado"
     },
     "consultaproyecto": {
         "titulo": "Consulta de un Proyecto Académico ",
@@ -360,12 +361,16 @@
         "calidad": "Vencimiento Alta calidad",
         "consulta": "Consulta",
         "editar": "Editar",
-        "inhabilitar": "Inhabilitar",
+        "inhabilitar": "Inhabilitar/Habilitar",
         "titulo_consulta": "Información Basica del Proyecto Académico",
         "historico": "Historico Registros",
         "masinfomacion": "Mas Información",
         "coordinacion": "Coordinación",
-        "tag_informacionbasica": "Información basica "
+        "tag_informacionbasica": "Información basica ",
+        "seguro_continuar_actualizar_proyecto": "¿Esta seguro de actualizar este proyecto académico?",
+        "proyecto_actualizado": "Proyecto académico actualizado",
+        "proyecto_no_actualizado": "Proyecto académico no actualizado",
+        "clonar_proyecto": "Clonar proyecto"
     },
     "editarproyecto": {
         "coordinacion": "Coordinación",

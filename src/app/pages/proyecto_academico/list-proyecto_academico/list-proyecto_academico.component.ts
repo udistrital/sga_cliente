@@ -18,8 +18,6 @@ import { delay } from 'rxjs/operators';
 import { InformacionBasica } from '../../../@core/data/models/proyecto_academico/informacion_basica';
 import { ModificarProyectoAcademicoComponent } from '../modificar-proyecto_academico/modificar-proyecto_academico.component';
 
-
-
 @Component({
   selector: 'ngx-list-proyecto-academico',
   templateUrl: './list-proyecto_academico.component.html',
@@ -45,7 +43,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   tipo_duracion: string;
   ciclos: string;
   oferta: string;
-  enfasis: string;
+  enfasis: any[];
   consulta: boolean= false;
   idfacultad: Number;
   idnivel: Number;
@@ -83,7 +81,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
-             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis},
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, Id: this.idproyecto},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -195,7 +193,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.tipo_duracion = res.map((data: any) => (data.NombreUnidad));
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
         this.oferta = res.map((data: any) => (data.OfertaLetra));
-        this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
+        this.enfasis = res.map((data: any) => (data.Enfasis))[0];
         this.openDialogConsulta();
       }else {
       Swal(opt1)
@@ -302,6 +300,37 @@ promesaid_modificar(id: number): Promise<{id: number}> {
 
   highlight(row ): void {
     this.idproyecto = row.ProyectoAcademico.Id;
+
+ }
+
+inhabilitarProyecto(row: any): void {
+  const opt: any = {
+    title: this.translate.instant('GLOBAL.actualizar'),
+    text: this.translate.instant('consultaproyecto.seguro_continuar_actualizar_proyecto'),
+    icon: 'warning',
+    buttons: true,
+    dangerMode: true,
+    showCancelButton: true,
+  };
+  Swal(opt)
+  .then((willDelete) => {
+    if (willDelete.value) {
+      const proyectoAModificar = row.ProyectoAcademico;
+      proyectoAModificar.Activo = !proyectoAModificar.Activo;
+      proyectoAModificar.Oferta = !proyectoAModificar.Oferta;
+      this.sgamidService.put('consulta_proyecto_academico/inhabilitar_proyecto', proyectoAModificar)
+        .subscribe((res: any) => {
+          if (res.Type !== 'error') {
+            this.loadproyectos();
+            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('consultaproyecto.proyecto_actualizado'));
+          } else {
+            this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('consultaproyecto.proyecto_no_actualizado'));
+          }
+        }, () => {
+          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto_academico.proyecto_no_actualizado'));
+        });
+    }
+  });
 
  }
 

@@ -17,6 +17,9 @@ const routes: Routes = [{
   }, {
     path: 'crud-proyecto_academico',
     component: CrudProyectoAcademicoComponent,
+  }, {
+    path: 'crud-proyecto_academico/:proyecto_id',
+    component: CrudProyectoAcademicoComponent,
   },
   {
     path: 'consulta-proyecto_academico',
