@@ -378,7 +378,8 @@
         "seguro_continuar_actualizar_proyecto": "¿Esta seguro de actualizar este proyecto académico?",
         "proyecto_no_actualizado": "Proyecto Académico no actualizado",
         "actualizado": "Proyecto Actualizado!",
-        "proyecto_actualizado": "Proyecto Académico actualizado correctamente"
+        "proyecto_actualizado": "Proyecto Académico actualizado correctamente",
+        "alta_calidad": "Registro de Alta calidad?"
 
     },
     "enfasis": {

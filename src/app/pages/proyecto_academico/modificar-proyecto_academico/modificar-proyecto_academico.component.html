@@ -236,8 +236,8 @@
                                         </mat-form-field>
                                     </div>
                                 </div>
-                                <br>
                             </form>
+                            <mat-checkbox [(ngModel)]="checkalta">{{ 'editarproyecto.alta_calidad' | translate }} </mat-checkbox>
                         </nb-card-body>
                     </nb-card>
                 </div>
@@ -245,7 +245,7 @@
                 <div class="col-sm-6">
                     <div class="row-sm-6">
 
-                        <nb-card class="m-4" accent="info">
+                        <nb-card *ngIf="checkalta" class="m-4" accent="info">
                             <nb-card-header>{{ 'editarproyecto.registro_alta' | translate }}</nb-card-header>
                             <nb-card-body>
                                 <form id="resolualtaform" [formGroup]="resolualtaform">
@@ -278,7 +278,7 @@
                                             <input matInput placeholder="{{ 'proyecto.vigencia_mes' | translate }}" formControlName="mes_vigencia" class="form-control" name="resolucion_proyecto">
                                             <mat-error *ngIf="Campo27Control.hasError('required')">{{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
                                         </mat-form-field>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-8">
                                             <mat-form-field>
                                                 <input matInput placeholder="{{ 'proyecto.vigencia_año' | translate }}" formControlName="ano_vigencia" class="form-control" name="ano_resolucion_proyecto">
                                                 <mat-error *ngIf="Campo28Control.hasError('required')">{{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
@@ -293,26 +293,31 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
+            <div class="col-xs-12 col-sm-5"> <button mat-raised-button [color]="'success'">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success-1'" (click)="putinformacionregistro()">{{ 'editarproyecto.cambios' | translate }}</button></div>
+        </div>
     </mat-tab>
 
 
 
 
     <mat-tab label="{{ 'editarproyecto.tag_acta' | translate }}">
-        <div class="centre col-md-8 col-lg-8">
-            <div class="row-sm-6">
-                <nb-card class="m-8" accent="info">
+        <div class="inner col-md-8 col-lg-8">
+            <div class="centre row-sm-6">
+                <nb-card class="m-8" accent="info" align="center">
                     <nb-card-header>{{ 'proyecto.acto' | translate }}</nb-card-header>
                     <nb-card-body>
                         <form id="actoForm" [formGroup]="actoform">
 
                             <mat-form-field>
-                                <input matInput placeholder="{{ 'proyecto.acto_proyecto' | translate }}" formControlName="acto" class="form-control" name="acto_proyecto">
+                                <input matInput placeholder="{{ 'proyecto.acto_proyecto' | translate }}" formControlName="acto" class="form-control" name="acto_proyecto" [(ngModel)]="data.numero_acto">
                                 <mat-error *ngIf="Campo16Control.hasError('required')">{{ 'proyecto.erro_acto' | translate }}</mat-error>
                             </mat-form-field>
                             <br>
                             <mat-form-field>
-                                <input matInput placeholder="{{ 'proyecto.ano_acto_proyecto' | translate }}" formControlName="ano_acto" class="form-control" name="ano_acto_proyecto">
+                                <input matInput placeholder="{{ 'proyecto.ano_acto_proyecto' | translate }}" formControlName="ano_acto" class="form-control" name="ano_acto_proyecto" [(ngModel)]="data.ano_acto">
                                 <mat-error *ngIf="Campo17Control.hasError('required')">{{ 'proyecto.erro_ano_acto' | translate }}</mat-error>
                             </mat-form-field>
                             <br>
@@ -325,6 +330,10 @@
                 </nb-card>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-sm-3"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
+            <div class="col-sm-5"> <button mat-raised-button [color]="'success'">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
+            <div class="col-sm-4"> <button mat-raised-button [color]="'success-1'" (click)="putinformacionbasica()">{{ 'editarproyecto.cambios' | translate }}</button></div>
+        </div>
     </mat-tab>
 </mat-tab-group>

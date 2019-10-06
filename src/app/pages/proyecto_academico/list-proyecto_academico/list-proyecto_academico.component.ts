@@ -56,6 +56,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
   oferta_check: boolean = false;
   ciclos_check: boolean = false;
   titulacion_snies: string;
+  numero_acto: string;
+  ano_acto: string;
   titulacion_mujer: string;
   titulacion_hombre: string;
   competencias: string;
@@ -99,7 +101,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
              titulacion_snies: this.titulacion_snies, titulacion_mujer: this.titulacion_mujer, titulacion_hombre: this.titulacion_hombre,
              competencias: this.competencias, idarea: this.idarea, idnucleo: this.idnucleo, resolucion_acreditacion: this.resolucion_acreditacion,
              resolucion_acreditacion_ano: this.resolucion_acreditacion_ano, fecha_creacion_registro: this.fecha_creacion_resolucion,
-             vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto},
+             vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto,
+             numero_acto: this.numero_acto, ano_acto: this.ano_acto},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -146,6 +149,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     .subscribe(res => {
     if (res !== null && res[0] !== 'error') {
       this.dataSource = new MatTableDataSource();
+      console.info(res)
       this.dataSource = res
     }else {
       Swal(opt1)
@@ -252,8 +256,10 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.resolucion_acreditacion = res.map((data: any) => (data.Registro[0].NumeroActoAdministrativo));
         this.resolucion_acreditacion_ano = res.map((data: any) => (data.Registro[0].AnoActoAdministrativoId));
         this.fecha_creacion_resolucion = res.map((data: any) => (data.Registro[0].FechaCreacionActoAdministrativo));
-        this.vigencia_resolucion_meses = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(6, 1)));
-        this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(12, 1)));
+        this.vigencia_resolucion_meses = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.slice(6, -6)));
+        this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.slice(-1)));
+        this.numero_acto = res.map((data: any) => (data.ProyectoAcademico.NumeroActoAdministrativo));
+        this.ano_acto = res.map((data: any) => (data.ProyectoAcademico.AnoActoAdministrativo));
         console.info(res)
         console.info(this.fecha_creacion_resolucion[0])
 
