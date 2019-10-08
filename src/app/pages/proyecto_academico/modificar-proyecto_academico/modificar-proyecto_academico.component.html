@@ -11,7 +11,7 @@
                             <nb-card-body>
                                 <form id="basicForm" [formGroup]="basicform">
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.codigo_snies' | translate }}" formControlName="codigo_snies" class="form-control" name="codigo_snies" [(ngModel)]="data.codigosnies">
+                                        <input readonly matInput placeholder="{{ 'proyecto.codigo_snies' | translate }}" formControlName="codigo_snies" class="form-control" name="codigo_snies" [(ngModel)]="data.codigosnies">
                                         <mat-error *ngIf="Campo7Control.hasError('required')">{{ 'proyecto.erro_codigoSnies' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
@@ -27,7 +27,7 @@
                                     </mat-form-field>
                                     <br>
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}" formControlName="nombre_proyecto" class="form-control" name="nombre_proyecto" [(ngModel)]="data.nombre">
+                                        <input readonly matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}" formControlName="nombre_proyecto" class="form-control" name="nombre_proyecto" [(ngModel)]="data.nombre">
                                         <mat-error *ngIf="Campo8Control.hasError('required')">{{ 'proyecto.erro_nombre' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
