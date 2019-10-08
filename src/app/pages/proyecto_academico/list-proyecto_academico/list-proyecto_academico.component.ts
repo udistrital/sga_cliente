@@ -301,9 +301,19 @@ promesaid_modificar(id: number): Promise<{id: number}> {
  }
 
 inhabilitarProyecto(row: any): void {
+  let inhabilitar_title = this.translate.instant('consultaproyecto.inhabilitar_proyecto');
+  let inhabilitar_text = this.translate.instant('consultaproyecto.seguro_continuar_inhabilitar_proyecto');
+  let inhabilitar_ok = this.translate.instant('consultaproyecto.proyecto_inhabilitado');
+  let inhabilitar_error = this.translate.instant('consultaproyecto.proyecto_no_inhabilitado');
+  if (!row.ProyectoAcademico.Oferta) {
+    inhabilitar_title = this.translate.instant('consultaproyecto.habilitar_proyecto');
+    inhabilitar_text = this.translate.instant('consultaproyecto.seguro_continuar_habilitar_proyecto');
+    inhabilitar_ok = this.translate.instant('consultaproyecto.proyecto_habilitado');
+    inhabilitar_error = this.translate.instant('consultaproyecto.proyecto_no_habilitado');
+  }
   const opt: any = {
-    title: this.translate.instant('GLOBAL.actualizar'),
-    text: this.translate.instant('consultaproyecto.seguro_continuar_actualizar_proyecto'),
+    title: inhabilitar_title,
+    text: inhabilitar_text,
     icon: 'warning',
     buttons: true,
     dangerMode: true,
@@ -319,12 +329,12 @@ inhabilitarProyecto(row: any): void {
         .subscribe((res: any) => {
           if (res.Type !== 'error') {
             this.loadproyectos();
-            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('consultaproyecto.proyecto_actualizado'));
+            this.showToast('info', inhabilitar_title, inhabilitar_ok);
           } else {
-            this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('consultaproyecto.proyecto_no_actualizado'));
+            this.showToast('error', this.translate.instant('GLOBAL.error'), inhabilitar_error);
           }
         }, () => {
-          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto_academico.proyecto_no_actualizado'));
+          this.showToast('error', this.translate.instant('GLOBAL.error'), inhabilitar_error);
         });
     }
   });

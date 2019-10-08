@@ -370,6 +370,14 @@
         "seguro_continuar_actualizar_proyecto": "¿Esta seguro de actualizar este proyecto académico?",
         "proyecto_actualizado": "Proyecto académico actualizado",
         "proyecto_no_actualizado": "Proyecto académico no actualizado",
+        "inhabilitar_proyecto": "Inhabilitar proyecto",
+        "seguro_continuar_inhabilitar_proyecto": "¿Esta seguro de inhabilitar este proyecto académico?",
+        "proyecto_inhabilitado": "Proyecto académico inhabilitado",
+        "proyecto_no_inhabilitado": "Proyecto académico no inhabilitado",
+        "habilitar_proyecto": "Habilitar proyecto",
+        "seguro_continuar_habilitar_proyecto": "¿Esta seguro de habilitar este proyecto académico?",
+        "proyecto_habilitado": "Proyecto académico habilitado",
+        "proyecto_no_habilitado": "Proyecto académico no habilitado",
         "clonar_proyecto": "Clonar proyecto"
     },
     "editarproyecto": {
