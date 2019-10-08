@@ -111,6 +111,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.loadproyectos();
     });
   }
 
