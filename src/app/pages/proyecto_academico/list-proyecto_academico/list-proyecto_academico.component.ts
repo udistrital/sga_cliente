@@ -72,6 +72,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   segundo_apellido: string;
   nombre_completo: string;
   source: LocalDataSource = new LocalDataSource();
+  proyectoJson: any;
 
   constructor(private translate: TranslateService,
     private proyectoacademicoService: ProyectoAcademicoService,
@@ -107,7 +108,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
              competencias: this.competencias, idarea: this.idarea, idnucleo: this.idnucleo, resolucion_acreditacion: this.resolucion_acreditacion,
              resolucion_acreditacion_ano: this.resolucion_acreditacion_ano, fecha_creacion_registro: this.fecha_creacion_resolucion,
              vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto,
-             numero_acto: this.numero_acto, ano_acto: this.ano_acto},
+             numero_acto: this.numero_acto, ano_acto: this.ano_acto,
+             Id: this.idproyecto, proyectoJson: this.proyectoJson},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -246,7 +248,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.tipo_duracion = res.map((data: any) => (data.NombreUnidad));
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
         this.oferta = res.map((data: any) => (data.OfertaLetra));
-        this.enfasis = res.map((data: any) => (data.Enfasis[0].EnfasisId.Nombre));
+        this.enfasis = res.map((data: any) => (data.Enfasis))[0];
         this.idfacultad = res.map((data: any) => (data.ProyectoAcademico.DependenciaId));
         this.idnivel = res.map((data: any) => (data.ProyectoAcademico.NivelFormacionId.Id));
         this.idmetodo = res.map((data: any) => (data.ProyectoAcademico.MetodologiaId.Id));
@@ -262,12 +264,11 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.resolucion_acreditacion = res.map((data: any) => (data.Registro[0].NumeroActoAdministrativo));
         this.resolucion_acreditacion_ano = res.map((data: any) => (data.Registro[0].AnoActoAdministrativoId));
         this.fecha_creacion_resolucion = res.map((data: any) => (data.Registro[0].FechaCreacionActoAdministrativo));
-        this.vigencia_resolucion_meses = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.slice(6, -6)));
-        this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.slice(-1)));
+        this.vigencia_resolucion_meses = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(6, 1)));
+        this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(12, 1)));
         this.numero_acto = res.map((data: any) => (data.ProyectoAcademico.NumeroActoAdministrativo));
         this.ano_acto = res.map((data: any) => (data.ProyectoAcademico.AnoActoAdministrativo));
-        console.info(res)
-        console.info(this.fecha_creacion_resolucion[0])
+        this.proyectoJson = res.map((data: any) => (data.ProyectoAcademico))[0];
 
         this.openDialogModificar();
       }else {
