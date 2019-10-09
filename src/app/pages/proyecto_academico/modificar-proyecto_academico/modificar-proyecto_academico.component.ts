@@ -100,7 +100,6 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   creandoAutor: boolean= true;
 
 
-
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
@@ -153,11 +152,11 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         nivel_proyecto: ['', Validators.required],
         metodologia_proyecto: ['', Validators.required],
         nombre_proyecto: ['', Validators.required],
-        abreviacion_proyecto: ['', Validators.required],
+        abreviacion_proyecto: ['', [Validators.required, Validators.maxLength(20)]],
         correo_proyecto: ['', [Validators.required, Validators.email]],
         numero_proyecto: ['', Validators.required],
-        creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
-        duracion_proyecto: ['', Validators.required],
+        creditos_proyecto: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]],
+        duracion_proyecto: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]],
         tipo_duracion_proyecto: ['', Validators.required],
         ciclos_proyecto: ['', Validators.required],
         ofrece_proyecto: ['', Validators.required],
@@ -388,7 +387,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   }
 
   putinformacionbasica() {
-    if ( this.compleform.valid ) {
+    if ( this.compleform.valid && this.basicform.valid) {
     this.metodologia = {
       Id: this.opcionSeleccionadoMeto['Id'],
     }
@@ -532,13 +531,13 @@ putinformacionregistro() {
         Activo: true,
         Oferta: this.checkofrece,
         UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
-        AnoActoAdministrativoId: this.actoform.value.ano_acto,
+        AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
         DependenciaId: this.opcionSeleccionadoFacultad['Id'],
         AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
         NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
         MetodologiaId: this.metodologia,
         NivelFormacionId: this.nivel_formacion,
-        AnoActoAdministrativo: this.actoform.value.ano_acto,
+        AnoActoAdministrativo: String(this.actoform.value.ano_acto),
       }
       this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
        console.info(this.fecha_creacion_calificado + ':00Z')
@@ -571,7 +570,7 @@ putinformacionregistro() {
       Activo: true,
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
       TipoRegistroId: this.tipo_registro = {
-        Id: this.data.idproyecto,
+        Id: 2,
       },
 
     }
@@ -754,10 +753,12 @@ registrocoordinador() {
       DependenciaId: 0,
       RolId: 0,
       Activo: true,
+      FechaInicio: this.coordinador.value.fecha_creacion_coordinador + ':00Z',
       ProyectoAcademicoInstitucionId: {
-        Id: 2,
+        Id:  Number(this.data.idproyecto),
       },
     }
+    console.info(this.coordinador_data )
 
     const opt: any = {
       title: this.translate.instant('GLOBAL.asignar'),

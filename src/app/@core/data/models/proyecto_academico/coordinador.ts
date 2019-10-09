@@ -7,6 +7,7 @@ export class Coordinador {
     DependenciaId: number;
     RolId: number;
     Activo: boolean;
+    FechaInicio: string;
     ProyectoAcademicoInstitucionId: ProyectoId;
 
 }
