@@ -317,6 +317,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           titulacion_hombre: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 2).Nombre, Validators.required],
           competencias: [proyecto_a_clonar.ProyectoAcademico.Competencias, Validators.required],
         });
+        // fecha de vencimiento
+        this.calculateEndDateMostrar(resolucion.FechaCreacionActoAdministrativo, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0);
+        this.fecha_calculada_vencimiento = this.fecha_vencimiento_mostrar;
       } else {
         this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
       }
