@@ -18,6 +18,7 @@ import { ListEnfasisComponent } from '../enfasis/list-enfasis/list-enfasis.compo
 import { CrudEnfasisComponent } from '../enfasis/crud-enfasis/crud-enfasis.component';
 import { EnfasisModule } from '../enfasis/enfasis.module';
 import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
+import { ListRegistroProyectoAcademicoComponent } from './list-registro_proyecto_academico/list-registro_proyecto_academico.component';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
     ListProyectoAcademicoComponent,
     ConsultaProyectoAcademicoComponent,
     ModificarProyectoAcademicoComponent,
+    ListRegistroProyectoAcademicoComponent,
   ],
 })
 export class ProyectoAcademicoModule { }

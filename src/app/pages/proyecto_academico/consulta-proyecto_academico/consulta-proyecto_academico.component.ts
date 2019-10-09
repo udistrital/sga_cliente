@@ -6,6 +6,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { ListRegistroProyectoAcademicoComponent } from '../list-registro_proyecto_academico/list-registro_proyecto_academico.component';
 
 
 @Component({
@@ -52,6 +53,7 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
       };
     }
 
+
     onclick(): void {
       this.dialogRef.close();
     }
@@ -83,6 +85,19 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
       enfasis_proyecto: ['', Validators.required],
    })
 
+  }
+  prueba() {
+    console.info('Id de consulta' + this.data.Id)
+    this.openDialogRegistro()
+  }
+  openDialogRegistro(): void {
+    const dialogRef = this.dialog.open(ListRegistroProyectoAcademicoComponent, {
+      width: '1900px',
+      height: '750px',
+      data: {Id: this.data.Id},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 
 

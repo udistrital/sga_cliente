@@ -409,5 +409,17 @@
         "enfasis_no_actualizado": "Enfásis no actualizado",
         "administrar_enfasis": "Administrar enfásis",
         "error_enfasis_ya_existe": "El enfásis ya fue agregado"
+    },
+    "historial_registro": {
+        "titulo": "Historico de registros de acreditación y alta calidad del Proyecto Académico",
+        "registro": "Registro",
+        "vigencia": "Vigencia",
+        "tipo_registro": "Tipo de registro",
+        "documento": "Documento",
+        "tiempo": "Tiempo de vigencia",
+        "activo": "Activo",
+        "fecha_inicio": "Fecha Inicio Registro",
+        "fecha_vencimiento": "Fecha Vencimiento Registro",
+        "explicacacion": "Este Modulo le permite la consulta del historico del los registros calificados y de alta calidad de un proyecto académico existente en la Universidad Distrital."
     }
 }
