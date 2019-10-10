@@ -420,6 +420,13 @@
         "activo": "Activo",
         "fecha_inicio": "Fecha Inicio Registro",
         "fecha_vencimiento": "Fecha Vencimiento Registro",
-        "explicacacion": "Este Modulo le permite la consulta del historico del los registros calificados y de alta calidad de un proyecto académico existente en la Universidad Distrital."
+        "explicacacion": "Este Modulo le permite la consulta del historico del los registros calificados y de alta calidad de un proyecto académico existente en la Universidad Distrital.",
+        "calificado": "Agregar Nuevo Registro Calificado",
+        "alta": "Agregar Nuevo Registro de Alta Calidad",
+        "registro_titulo": "Crear un Registro a un proyecto Existente",
+        "seguro_continuar_registrar": "¿Esta seguro de registrar un nuevo registro a este proyecto académico?",
+        "registro_no_creado": "Registro no creado",
+        "registro_creado": "Registro creado correctamente",
+        "creado": "Registro Creado!"
     }
 }

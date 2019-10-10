@@ -93,6 +93,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.loadproyectos();
     });
   }
 
@@ -157,7 +158,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
     .subscribe(res => {
     if (res !== null && res[0] !== 'error') {
       this.dataSource = new MatTableDataSource();
-      console.info(res)
       this.dataSource = res
     }else {
       Swal(opt1)
@@ -191,7 +191,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
     .subscribe((res: any) => {
       const r = <any>res;
       if (res !== null && r.Type !== 'error') {
-        console.info(res)
         this.codigosnies = res.map((data: any) => (data.ProyectoAcademico.CodigoSnies));
         this.nombre = res.map((data: any) => (data.ProyectoAcademico.Nombre));
         this.facultad = res.map((data: any) => (data.NombreDependencia));

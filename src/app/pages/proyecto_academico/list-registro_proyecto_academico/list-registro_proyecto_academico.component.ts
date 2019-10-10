@@ -19,6 +19,8 @@ import { InformacionBasica } from '../../../@core/data/models/proyecto_academico
 import { ModificarProyectoAcademicoComponent } from '../modificar-proyecto_academico/modificar-proyecto_academico.component';
 import { PersonaService } from '../../../@core/data/persona.service';
 import { Persona } from '../../../@core/data/models/persona';
+import { ConsultaProyectoAcademicoComponent } from '../consulta-proyecto_academico/consulta-proyecto_academico.component';
+import { RegistroProyectoAcademicoComponent } from '../registro-proyecto_academico/registro-proyecto_academico.component';
 
 @Component({
   selector: 'ngx-list-registro-proyecto-academico',
@@ -40,6 +42,7 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
   constructor(private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private proyectoacademicoService: ProyectoAcademicoService,
+    public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
     private sgamidService: SgaMidService,
     public dialog: MatDialog,
     private toasterService: ToasterService) {
@@ -55,9 +58,12 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
   ngOnInit() {
   }
 
+  onclick(): void {
+    this.dialogRef.close();
+  }
 
   highlight(row ): void {
-    this.idproyecto = row.ProyectoAcademico.Id;
+    this.idproyecto = row.ProyectoAcademicoInstitucionId.Id;
 
  }
  loadregistro() {
@@ -73,7 +79,6 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
   .subscribe(res => {
   if (res !== null && res[0] !== 'error') {
     this.dataSource = new MatTableDataSource();
-    console.info(res)
     this.dataSource = res
   }else {
     Swal(opt1)
@@ -93,6 +98,30 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
 });
 }
 
+OpenRegistroCalificado(): void {
+  const dialogRef = this.dialog.open(RegistroProyectoAcademicoComponent, {
+    width: '550px',
+    height: '750px',
+    data: { IdProyecto: this.data.Id, endpoint: 'registro_calificado', tipo_registro: 1},
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    this.loadregistro();
+  });
+}
+
+
+OpenRegistroAlta(): void {
+  const dialogRef = this.dialog.open(RegistroProyectoAcademicoComponent, {
+    width: '550px',
+    height: '750px',
+    data: { IdProyecto: this.data.Id, endpoint: 'registro_alta_calidad', tipo_registro: 2},
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    this.loadregistro();
+  });
+}
 
 
   private showToast(type: string, title: string, body: string) {

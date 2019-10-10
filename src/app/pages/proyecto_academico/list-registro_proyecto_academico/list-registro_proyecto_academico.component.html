@@ -36,7 +36,7 @@
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'historial_registro.documento' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row">
                             <button mat-button>
-                                        <mat-icon>visibility</mat-icon>
+                                        <mat-icon>picture_as_pdf</mat-icon>
                                     </button>
                         </mat-cell>
                     </ng-container>
@@ -69,6 +69,11 @@
 
             </nb-card-body>
         </nb-card>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success'" (click)="OpenRegistroCalificado()">{{ 'historial_registro.calificado' | translate }}</button> </div>
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success-1'" (click)="OpenRegistroAlta()">{{ 'historial_registro.alta' | translate }}</button></div>
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.aceptar' | translate }}</button></div>
+        </div>
     </nb-card>
 
 </div>

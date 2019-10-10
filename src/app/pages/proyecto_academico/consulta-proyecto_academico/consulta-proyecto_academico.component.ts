@@ -87,13 +87,12 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
 
   }
   prueba() {
-    console.info('Id de consulta' + this.data.Id)
     this.openDialogRegistro()
   }
   openDialogRegistro(): void {
     const dialogRef = this.dialog.open(ListRegistroProyectoAcademicoComponent, {
       width: '1900px',
-      height: '750px',
+      height: '700px',
       data: {Id: this.data.Id},
     });
     dialogRef.afterClosed().subscribe(result => {

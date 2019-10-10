@@ -209,10 +209,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
    this.loadenfasis();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
-   console.info(this.data)
-   console.info(this.data.fecha_creacion_registro)
    this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
-   console.info('despues' + this.fecha_creacion_calificado)
 
    // enfasis
    this.arr_enfasis_proyecto = this.data.enfasis;
@@ -328,7 +325,6 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
 
   getFullAuthorName(p: Persona): string {
     return p.PrimerNombre + ' ' + p.SegundoNombre + ' ' + p.PrimerApellido + ' ' + p.SegundoApellido;
-    console.info(Persona)
   }
 
   loadpersonas(): Promise<any> {
@@ -623,7 +619,6 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
 }
 putinformacionregistro() {
   if ( this.checkalta === true ) {
-    console.info('registro alto')
     if ( this.resolualtaform.valid ) {
       this.metodologia = {
         Id: this.opcionSeleccionadoMeto['Id'],
@@ -656,8 +651,6 @@ putinformacionregistro() {
         AnoActoAdministrativo: String(this.actoform.value.ano_acto),
       }
       this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
-       console.info(this.fecha_creacion_calificado + ':00Z')
-       console.info( this.fecha_vencimiento + 'Z')
       this.registro_califacado_acreditacion = {
       Id: 0,
       AnoActoAdministrativoId: String(this.resoluform.value.ano_resolucion),
@@ -673,8 +666,6 @@ putinformacionregistro() {
       },
     }
     this.calculateEndDateAlta(this.fecha_creacion_alta, this.resolualtaform.value.ano_vigencia, this.resolualtaform.value.mes_vigencia, 0)
-    console.info(this.fecha_creacion_calificado + ':00Z')
-    console.info( this.fecha_vencimiento + 'Z')
     this.registro_califacado_alta_calidad = {
       Id: 0,
       AnoActoAdministrativoId: String(this.resolualtaform.value.ano_resolucion),
@@ -751,7 +742,6 @@ putinformacionregistro() {
     }
 
 }else {
-  console.info('Registro normal')
   if ( this.resoluform.valid ) {
     this.metodologia = {
       Id: this.opcionSeleccionadoMeto['Id'],
@@ -785,8 +775,6 @@ putinformacionregistro() {
     }
 
     this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
-    console.info(this.fecha_creacion_calificado + ':00Z')
-    console.info( this.fecha_vencimiento + 'Z')
     this.registro_califacado_acreditacion = {
       Id: 0,
       AnoActoAdministrativoId: String(this.resoluform.value.ano_resolucion),
@@ -874,7 +862,6 @@ registrocoordinador() {
         Id:  Number(this.data.idproyecto),
       },
     }
-    console.info(this.coordinador_data )
 
     const opt: any = {
       title: this.translate.instant('GLOBAL.asignar'),

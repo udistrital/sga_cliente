@@ -6,6 +6,7 @@ import { CrudProyectoAcademicoComponent } from './crud-proyecto_academico/crud-p
 import { ConsultaProyectoAcademicoComponent } from './consulta-proyecto_academico/consulta-proyecto_academico.component';
 import { ModificarProyectoAcademicoComponent } from './modificar-proyecto_academico/modificar-proyecto_academico.component';
 import { ListRegistroProyectoAcademicoComponent } from './list-registro_proyecto_academico/list-registro_proyecto_academico.component';
+import { RegistroProyectoAcademicoComponent } from './registro-proyecto_academico/registro-proyecto_academico.component';
 
 
 
@@ -34,6 +35,10 @@ const routes: Routes = [{
     path: 'list-registro_proyecto_academico',
     component: ListRegistroProyectoAcademicoComponent,
   },
+  {
+    path: 'registro-proyecto_academico',
+    component: RegistroProyectoAcademicoComponent,
+  },
 ],
 }];
 
@@ -55,4 +60,5 @@ export const routedComponents = [
   ConsultaProyectoAcademicoComponent,
   ModificarProyectoAcademicoComponent,
   ListRegistroProyectoAcademicoComponent,
+  RegistroProyectoAcademicoComponent,
 ];
