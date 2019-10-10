@@ -18,6 +18,7 @@ import { ListEnfasisComponent } from '../enfasis/list-enfasis/list-enfasis.compo
 import { CrudEnfasisComponent } from '../enfasis/crud-enfasis/crud-enfasis.component';
 import { EnfasisModule } from '../enfasis/enfasis.module';
 import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
+import {DpDatePickerModule} from 'ng2-date-picker';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
     SharedModule,
     NgDatepickerModule,
     EnfasisModule,
+    DpDatePickerModule,
   ],
   declarations: [
     ...routedComponents,

@@ -120,6 +120,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   arr_enfasis_proyecto: InstitucionEnfasis[] = [];
   settings_emphasys: any;
 
+  dpDayPickerConfig: any;
+
   constructor(private translate: TranslateService,
     private toasterService: ToasterService,
     private oikosService: OikosService,
@@ -131,6 +133,14 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private listEnfasisService: ListEnfasisService,
     private formBuilder: FormBuilder) {
+
+      this.dpDayPickerConfig = {
+        locale: 'es',
+        format: 'YYYY-MM-DD HH:mm',
+        showTwentyFourHours: false,
+        showSeconds: false,
+        returnedValueType: 'String',
+      }
       this.basicform = formBuilder.group({
         codigo_snies: ['', Validators.required],
         nombre_proyecto: ['', Validators.required],
