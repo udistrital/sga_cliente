@@ -211,11 +211,6 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
    this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
-   console.info('Llega fecha')
-   console.info( this.data.fecha_creacion_registro)
-   // this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
-   console.info('Sale fecha')
-   console.info( this.fecha_creacion_calificado)
    // enfasis
    this.arr_enfasis_proyecto = this.data.enfasis;
    this.source_emphasys.load(this.arr_enfasis_proyecto);
