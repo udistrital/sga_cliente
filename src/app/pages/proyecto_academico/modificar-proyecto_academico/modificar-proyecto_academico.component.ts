@@ -70,6 +70,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   metodo = [];
   fecha_creacion_calificado: Date;
   fecha_creacion_alta: Date;
+  fecha_inicio_coordinador: Date;
   fecha_creacion_cordin: Date;
   fecha_vencimiento: string;
   fecha_vencimiento_alta: string;
@@ -203,14 +204,18 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
    this.loadarea();
    this.loadnucleo();
    this. loadpersonas();
+   this.loadenfasis();
+   this.loadfechacoordinador();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
    this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
-   this.loadenfasis();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
-   this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
-
+   console.info('Llega fecha')
+   console.info( this.data.fecha_creacion_registro)
+   // this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
+   console.info('Sale fecha')
+   console.info( this.fecha_creacion_calificado)
    // enfasis
    this.arr_enfasis_proyecto = this.data.enfasis;
    this.source_emphasys.load(this.arr_enfasis_proyecto);
@@ -247,6 +252,14 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     },
   };
 
+    }
+
+    loadfechacoordinador() {
+      if (this.data.fechainiciocoordinador == null) {
+        this.fecha_creacion_calificado = null
+      }else {
+        this.fecha_creacion_cordin = momentTimezone.tz(this.data.fechainiciocoordinador, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
+      }
     }
 
     loadenfasis() {
@@ -336,6 +349,9 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             this.personas = <Array<Persona>>res;
             this.personas.forEach( (persona: Persona) => {
               persona['Nombre'] = this.getFullAuthorName(persona);
+              if (persona.Id === Number(this.data.idcoordinador)) {
+                this.coordinadorSeleccionado = persona;
+              }
             });
             resolve(true);
           } else {
@@ -471,6 +487,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       });
     });
   }
+
   loadnucleo() {
     this.coreService.get('nucleo_basico_conocimiento')
     .subscribe(res => {
