@@ -49,6 +49,22 @@ export class CrudEventoComponent implements OnInit {
   encargados_borrados: any[];
   publicos_borrados: any[];
 
+  dpDayPickerConfigInicio : any  = {
+    locale: 'es',
+    format: 'YYYY-MM-DD HH:mm',
+    showTwentyFourHours: false,
+    showSeconds: false,
+    returnedValueType: 'String',
+  }
+
+  dpDayPickerConfigFin : any  = {
+    locale: 'es',
+    format: 'YYYY-MM-DD HH:mm',
+    showTwentyFourHours: false,
+    showSeconds: false,
+    returnedValueType: 'String',
+  }
+
   @Input('calendario_evento_selected')
   set name(calendario_evento_selected: CalendarioEventoPost) {
     this.calendario_evento_selected = calendario_evento_selected;
@@ -475,8 +491,6 @@ export class CrudEventoComponent implements OnInit {
   }
 
   guardarEvento() {
-    this.info_calendario_evento.Evento.FechaInicio = moment(this.info_calendario_evento.Evento.FechaInicio).toDate();
-    this.info_calendario_evento.Evento.FechaFin = moment(this.info_calendario_evento.Evento.FechaFin).toDate();
     if ( this.calendario_evento_selected === undefined ) {
       this.createEvento(this.info_calendario_evento);
     } else {
@@ -499,6 +513,8 @@ export class CrudEventoComponent implements OnInit {
         this.info_calendario_evento = <CalendarioEventoPost>calendarioEventoPost;
         this.info_calendario_evento.Evento.TipoEventoId = new TipoEvento();
         this.info_calendario_evento.Evento.TipoEventoId.Id =  this.info_calendario_evento.TipoEvento;
+        this.info_calendario_evento.Evento.FechaInicio = moment(this.info_calendario_evento.Evento.FechaInicio).toDate();
+        this.info_calendario_evento.Evento.FechaFin = moment(this.info_calendario_evento.Evento.FechaFin).toDate();
         // Evento padre
         if (this.info_calendario_evento.EventoPadre) {
           this.info_calendario_evento.Evento.EventoPadreId = new CalendarioEvento();
