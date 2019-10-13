@@ -176,7 +176,7 @@
                                 <br>
                                 <mat-form-field>
                                     <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
-                                    <input matInput [(ngModel)]="fecha_creacion" type="datetime-local" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion">
+                                    <input matInput [(ngModel)]="fecha_creacion" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion" [dpDayPicker]="dpDayPickerConfig" theme="dp-material" mode="daytime">
                                     <mat-error *ngIf="Campo14Control.hasError('required')">{{ 'proyecto.erro_fecha_creacion' | translate }}</mat-error>
                                 </mat-form-field>
                                 <br>

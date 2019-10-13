@@ -369,6 +369,14 @@
         "seguro_continuar_actualizar_proyecto": "Are you sure you want to update this academic project?",
         "proyecto_actualizado": "Academic project updated",
         "proyecto_no_actualizado": "Academic project not updated",
+        "inhabilitar_proyecto": "Disable academic project",
+        "seguro_continuar_inhabilitar_proyecto": "Are you sure you want to disable this academic project?",
+        "proyecto_inhabilitado": "Academic project disabled",
+        "proyecto_no_inhabilitado": "Academic project not disabled",
+        "habilitar_proyecto": "Enable academic project",
+        "seguro_continuar_habilitar_proyecto": "Are you sure you want to enable this academic project?",
+        "proyecto_habilitado": "Academic project enabled",
+        "proyecto_no_habilitado": "Academic project not enabled",
         "clonar_proyecto": "Clone project"
     },
     "editarproyecto": {

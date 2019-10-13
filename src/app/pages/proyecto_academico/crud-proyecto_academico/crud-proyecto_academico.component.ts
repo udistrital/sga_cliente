@@ -120,6 +120,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   arr_enfasis_proyecto: InstitucionEnfasis[] = [];
   settings_emphasys: any;
 
+  dpDayPickerConfig: any;
+
   constructor(private translate: TranslateService,
     private toasterService: ToasterService,
     private oikosService: OikosService,
@@ -131,6 +133,14 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private listEnfasisService: ListEnfasisService,
     private formBuilder: FormBuilder) {
+
+      this.dpDayPickerConfig = {
+        locale: 'es',
+        format: 'YYYY-MM-DD HH:mm',
+        showTwentyFourHours: false,
+        showSeconds: false,
+        returnedValueType: 'String',
+      }
       this.basicform = formBuilder.group({
         codigo_snies: ['', Validators.required],
         nombre_proyecto: ['', Validators.required],
@@ -294,11 +304,12 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           nombre_proyecto: ['', Validators.required],
           abreviacion_proyecto: [proyecto_a_clonar.ProyectoAcademico.CodigoAbreviacion, Validators.required],
           correo_proyecto: [proyecto_a_clonar.ProyectoAcademico.CorreoElectronico, [Validators.required, Validators.email]],
-          numero_proyecto: ['', Validators.required],
+          numero_proyecto: [proyecto_a_clonar.TelefonoDependencia, Validators.required],
           creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4)]],
           duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, Validators.required],
         })
         // resolucion
+        /*
         const resolucion = proyecto_a_clonar.Registro.sort((a, b) => a.Id - b.Id).find((registro_temp: any) => registro_temp.TipoRegistroId.Id === 1);
         this.resoluform = this.formBuilder.group({
           resolucion: [resolucion.NumeroActoAdministrativo  , Validators.required],
@@ -307,9 +318,12 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           mes_vigencia: [resolucion.VigenciaActoAdministrativo.split('Años:')[0].split(':')[1], [Validators.required, Validators.maxLength(2)]],
           ano_vigencia: [resolucion.VigenciaActoAdministrativo.split('Años:')[1], [Validators.required, Validators.maxLength(1)]],
         })
+        */
         this.actoform = this.formBuilder.group({
-          acto: [proyecto_a_clonar.ProyectoAcademico.NumeroActoAdministrativo, Validators.required],
-          ano_acto: [proyecto_a_clonar.ProyectoAcademico.AnoActoAdministrativo, [Validators.required, Validators.maxLength(4)]],
+          // acto: [proyecto_a_clonar.ProyectoAcademico.NumeroActoAdministrativo, Validators.required],
+          // ano_acto: [proyecto_a_clonar.ProyectoAcademico.AnoActoAdministrativo, [Validators.required, Validators.maxLength(4)]],
+          acto: ['', Validators.required],
+          ano_acto: ['', [Validators.required, Validators.maxLength(4)]],
         })
         this.compleform = this.formBuilder.group({
           titulacion_snies: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 1).Nombre, Validators.required],
@@ -318,8 +332,10 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           competencias: [proyecto_a_clonar.ProyectoAcademico.Competencias, Validators.required],
         });
         // fecha de vencimiento
+        /*
         this.calculateEndDateMostrar(resolucion.FechaCreacionActoAdministrativo, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0);
         this.fecha_calculada_vencimiento = this.fecha_vencimiento_mostrar;
+        */
       } else {
         this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
       }
@@ -491,7 +507,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       Id: 0,
       AnoActoAdministrativoId: this.resoluform.value.ano_resolucion,
       NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
-      FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
+      // FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
+      FechaCreacionActoAdministrativo: moment(this.fecha_creacion).format('YYYY-MM-DDTHH:mm') + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
       EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
