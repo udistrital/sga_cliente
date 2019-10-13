@@ -141,6 +141,15 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   arr_enfasis_proyecto: any[] = [];
   settings_emphasys: any;
 
+  dpDayPickerConfig: any = {
+    locale: 'es',
+    format: 'YYYY-MM-DD HH:mm',
+    showTwentyFourHours: false,
+    showSeconds: false,
+    returnedValueType: 'String',
+    // appendTo: document.body,
+  }
+
   constructor(private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialog,
@@ -253,7 +262,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       if (this.data.fechainiciocoordinador == null) {
         this.fecha_creacion_calificado = null
       }else {
-        this.fecha_creacion_cordin = momentTimezone.tz(this.data.fechainiciocoordinador, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
+        this.fecha_creacion_cordin = momentTimezone.tz(this.data.fechainiciocoordinador, 'America/Bogota').format('YYYY-MM-DD HH:mm');
       }
     }
 
@@ -869,7 +878,8 @@ registrocoordinador() {
       DependenciaId: 0,
       RolId: 0,
       Activo: true,
-      FechaInicio: this.coordinador.value.fecha_creacion_coordinador + ':00Z',
+      // FechaInicio: this.coordinador.value.fecha_creacion_coordinador + ':00Z',
+      FechaInicio: moment(this.coordinador.value.fecha_creacion_coordinador).format('YYYY-MM-DDTHH:mm') + ':00Z',
       ProyectoAcademicoInstitucionId: {
         Id:  Number(this.data.idproyecto),
       },

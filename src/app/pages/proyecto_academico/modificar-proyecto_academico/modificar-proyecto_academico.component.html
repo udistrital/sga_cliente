@@ -159,7 +159,7 @@
                     <div class="row-sm-6">
                         <nb-card class="m-4" accent="info">
                             <nb-card-header>{{ 'editarproyecto.coordinacion' | translate }}</nb-card-header>
-                            <nb-card-body>
+                            <nb-card-body style="overflow: visible">
                                 <form id="coordinadoform" [formGroup]="coordinador">
 
                                     <div class="col-10">
@@ -175,7 +175,7 @@
                                         </mat-form-field>
                                         <mat-form-field>
                                             <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
-                                            <input matInput [ngModel]="fecha_creacion_cordin" type="datetime-local" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion_coordinador">
+                                            <input id="datepicker_coordinador" matInput [ngModel]="fecha_creacion_cordin" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion_coordinador"  [dpDayPicker]="dpDayPickerConfig" theme="dp-material" mode="daytime">
                                             <mat-error *ngIf="Campo14Control.hasError('required')">{{ 'editarproyecto.erro_fecha_creacion' | translate }}</mat-error>
                                         </mat-form-field>
                                     </div>
