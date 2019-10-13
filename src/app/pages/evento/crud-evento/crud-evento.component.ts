@@ -560,8 +560,8 @@ export class CrudEventoComponent implements OnInit {
     .then((willDelete) => {
       if (willDelete.value) {
         this.info_calendario_evento = <CalendarioEventoPost>calendarioEventoPost;
-        // this.info_calendario_evento.Evento.FechaInicio = moment(this.info_calendario_evento.Evento.FechaInicio).toDate();
-        // this.info_calendario_evento.Evento.FechaFin = moment(this.info_calendario_evento.Evento.FechaFin).toDate();
+        this.info_calendario_evento.Evento.FechaInicio = moment(this.info_calendario_evento.Evento.FechaInicio).toDate();
+        this.info_calendario_evento.Evento.FechaFin = moment(this.info_calendario_evento.Evento.FechaFin).toDate();
         /*
         if (this.info_calendario_evento.Evento.EventoPadreId.Id === undefined || this.info_calendario_evento.Evento.EventoPadreId.Id === 0) {
           this.info_calendario_evento.Evento.EventoPadreId = undefined;
