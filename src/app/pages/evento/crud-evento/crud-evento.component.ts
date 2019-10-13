@@ -49,7 +49,7 @@ export class CrudEventoComponent implements OnInit {
   encargados_borrados: any[];
   publicos_borrados: any[];
 
-  dpDayPickerConfigInicio : any  = {
+  dpDayPickerConfigInicio: any = {
     locale: 'es',
     format: 'YYYY-MM-DD HH:mm',
     showTwentyFourHours: false,
@@ -57,7 +57,7 @@ export class CrudEventoComponent implements OnInit {
     returnedValueType: 'String',
   }
 
-  dpDayPickerConfigFin : any  = {
+  dpDayPickerConfigFin: any = {
     locale: 'es',
     format: 'YYYY-MM-DD HH:mm',
     showTwentyFourHours: false,
