@@ -167,7 +167,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     .subscribe((res: any[]) => {
     if (res !== null && res[0] !== 'error') {
       this.dataSource = new MatTableDataSource(res);
-      this.dataSource.filterPredicate = (data: any, filter: string) => data.ProyectoAcademico.Nombre.indexOf(filter) != -1;
+      this.dataSource.filterPredicate = (data: any, filter: string) => data.ProyectoAcademico.Nombre.indexOf(filter) !== -1;
     }else {
       Swal(opt1)
       .then((willDelete) => {
