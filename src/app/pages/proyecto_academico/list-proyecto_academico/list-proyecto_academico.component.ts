@@ -121,26 +121,32 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
   }
 
+
   applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+    /*
     this.proyectoacademicoService.get('registro_calificado_acreditacion/' )
-    .subscribe(res => {
-    const r = <any>res;
-    if (res !== null && r.Type !== 'error') {
-      this.dataSource = new MatTableDataSource();
-      this.dataSource = res;
-      this.dataSource = this.dataSource.filter((row: any) => (((row.ProyectoAcademicoInstitucionId.Nombre )
-      .toLowerCase()).indexOf(filterValue.toLowerCase())) !== -1)
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.dataSource = new MatTableDataSource();
+          this.dataSource = res;
+          this.dataSource = this.dataSource.filter((row: any) => (((row.ProyectoAcademicoInstitucionId.Nombre )
+          .toLowerCase()).indexOf(filterValue.toLowerCase())) !== -1)
+        }
+      },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
+    */
   }
-},
-(error: HttpErrorResponse) => {
-  Swal({
-    type: 'error',
-    title: error.status + '',
-    text: this.translate.instant('ERROR.' + error.status),
-    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  });
-});
-}
 
   useLanguage(language: string) {
     this.translate.use(language);
@@ -158,10 +164,10 @@ export class ListProyectoAcademicoComponent implements OnInit {
       showCancelButton: true,
     }
     this.sgamidService.get('consulta_proyecto_academico/' )
-    .subscribe(res => {
+    .subscribe((res: any[]) => {
     if (res !== null && res[0] !== 'error') {
-      this.dataSource = new MatTableDataSource();
-      this.dataSource = res
+      this.dataSource = new MatTableDataSource(res);
+      this.dataSource.filterPredicate = (data: any, filter: string) => data.ProyectoAcademico.Nombre.indexOf(filter) != -1;
     }else {
       Swal(opt1)
       .then((willDelete) => {
