@@ -11,7 +11,7 @@
                             <nb-card-body>
                                 <form id="basicForm" [formGroup]="basicform">
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.codigo_snies' | translate }}" formControlName="codigo_snies" class="form-control" name="codigo_snies" [(ngModel)]="data.codigosnies">
+                                        <input readonly matInput placeholder="{{ 'proyecto.codigo_snies' | translate }}" formControlName="codigo_snies" class="form-control" name="codigo_snies" [(ngModel)]="data.codigosnies">
                                         <mat-error *ngIf="Campo7Control.hasError('required')">{{ 'proyecto.erro_codigoSnies' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
@@ -27,7 +27,7 @@
                                     </mat-form-field>
                                     <br>
                                     <mat-form-field>
-                                        <input matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}" formControlName="nombre_proyecto" class="form-control" name="nombre_proyecto" [(ngModel)]="data.nombre">
+                                        <input readonly matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}" formControlName="nombre_proyecto" class="form-control" name="nombre_proyecto" [(ngModel)]="data.nombre">
                                         <mat-error *ngIf="Campo8Control.hasError('required')">{{ 'proyecto.erro_nombre' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
@@ -160,6 +160,30 @@
                         <nb-card class="m-4" accent="info">
                             <nb-card-header>{{ 'editarproyecto.coordinacion' | translate }}</nb-card-header>
                             <nb-card-body>
+                                <form id="coordinadoform" [formGroup]="coordinador">
+
+                                    <div class="col-10">
+                                        <mat-form-field style="width: 100%;" floatLabel="always">
+                                            <mat-label>*{{'editarproyecto.agregar_coordinado' | translate}}:</mat-label>
+                                            <mat-select [placeholder]="translate.instant('produccion_academica.placeholder_agregar_autor')" [formControl]="Campo29Control" required [(ngModel)]="coordinadorSeleccionado">
+                                                <mat-option>--Seleccionar--</mat-option>
+                                                <mat-option *ngFor="let persona of personas" [value]="persona">
+                                                    {{persona.PrimerNombre}} {{persona.SegundoNombre}} {{persona.PrimerApellido}} {{persona.SegundoApellido}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="Campo29Control.hasError('required')">{{'editarproyecto.alerta_agregar_coordinador' | translate}}</mat-error>
+                                        </mat-form-field>
+                                        <mat-form-field>
+                                            <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
+                                            <input matInput [ngModel]="fecha_creacion_cordin" type="datetime-local" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion_coordinador">
+                                            <mat-error *ngIf="Campo14Control.hasError('required')">{{ 'editarproyecto.erro_fecha_creacion' | translate }}</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <button class="btn btn-success btn-sm" (click)="registrocoordinador()">{{'editarproyecto.asignar_coordinado' | translate}}</button>
+                                    <br>
+                                </form>
                             </nb-card-body>
                         </nb-card>
                     </div>
@@ -243,8 +267,8 @@
                                         </mat-form-field>
                                     </div>
                                 </div>
-                                <br>
                             </form>
+                            <mat-checkbox [(ngModel)]="checkalta">{{ 'editarproyecto.alta_calidad' | translate }} </mat-checkbox>
                         </nb-card-body>
                     </nb-card>
                 </div>
@@ -252,7 +276,7 @@
                 <div class="col-sm-6">
                     <div class="row-sm-6">
 
-                        <nb-card class="m-4" accent="info">
+                        <nb-card *ngIf="checkalta" class="m-4" accent="info">
                             <nb-card-header>{{ 'editarproyecto.registro_alta' | translate }}</nb-card-header>
                             <nb-card-body>
                                 <form id="resolualtaform" [formGroup]="resolualtaform">
@@ -285,7 +309,7 @@
                                             <input matInput placeholder="{{ 'proyecto.vigencia_mes' | translate }}" formControlName="mes_vigencia" class="form-control" name="resolucion_proyecto">
                                             <mat-error *ngIf="Campo27Control.hasError('required')">{{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
                                         </mat-form-field>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-8">
                                             <mat-form-field>
                                                 <input matInput placeholder="{{ 'proyecto.vigencia_año' | translate }}" formControlName="ano_vigencia" class="form-control" name="ano_resolucion_proyecto">
                                                 <mat-error *ngIf="Campo28Control.hasError('required')">{{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
@@ -300,26 +324,31 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-3"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
+            <div class="col-xs-12 col-sm-5"> <button mat-raised-button [color]="'success'">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
+            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success-1'" (click)="putinformacionregistro()">{{ 'editarproyecto.cambios' | translate }}</button></div>
+        </div>
     </mat-tab>
 
 
 
 
     <mat-tab label="{{ 'editarproyecto.tag_acta' | translate }}">
-        <div class="centre col-md-8 col-lg-8">
-            <div class="row-sm-6">
-                <nb-card class="m-8" accent="info">
+        <div class="inner col-md-8 col-lg-8">
+            <div class="centre row-sm-6">
+                <nb-card class="m-8" accent="info" align="center">
                     <nb-card-header>{{ 'proyecto.acto' | translate }}</nb-card-header>
                     <nb-card-body>
                         <form id="actoForm" [formGroup]="actoform">
 
                             <mat-form-field>
-                                <input matInput placeholder="{{ 'proyecto.acto_proyecto' | translate }}" formControlName="acto" class="form-control" name="acto_proyecto">
+                                <input matInput placeholder="{{ 'proyecto.acto_proyecto' | translate }}" formControlName="acto" class="form-control" name="acto_proyecto" [(ngModel)]="data.numero_acto">
                                 <mat-error *ngIf="Campo16Control.hasError('required')">{{ 'proyecto.erro_acto' | translate }}</mat-error>
                             </mat-form-field>
                             <br>
                             <mat-form-field>
-                                <input matInput placeholder="{{ 'proyecto.ano_acto_proyecto' | translate }}" formControlName="ano_acto" class="form-control" name="ano_acto_proyecto">
+                                <input matInput placeholder="{{ 'proyecto.ano_acto_proyecto' | translate }}" formControlName="ano_acto" class="form-control" name="ano_acto_proyecto" [(ngModel)]="data.ano_acto">
                                 <mat-error *ngIf="Campo17Control.hasError('required')">{{ 'proyecto.erro_ano_acto' | translate }}</mat-error>
                             </mat-form-field>
                             <br>
@@ -332,6 +361,10 @@
                 </nb-card>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-sm-3"> <button mat-raised-button color="primary" (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
+            <div class="col-sm-5"> <button mat-raised-button [color]="'success'">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
+            <div class="col-sm-4"> <button mat-raised-button [color]="'success-1'" (click)="putinformacionbasica()">{{ 'editarproyecto.cambios' | translate }}</button></div>
+        </div>
     </mat-tab>
 </mat-tab-group>

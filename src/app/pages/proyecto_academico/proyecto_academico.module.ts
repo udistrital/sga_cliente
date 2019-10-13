@@ -18,6 +18,8 @@ import { ListEnfasisComponent } from '../enfasis/list-enfasis/list-enfasis.compo
 import { CrudEnfasisComponent } from '../enfasis/crud-enfasis/crud-enfasis.component';
 import { EnfasisModule } from '../enfasis/enfasis.module';
 import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
+import { ListRegistroProyectoAcademicoComponent } from './list-registro_proyecto_academico/list-registro_proyecto_academico.component';
+import { RegistroProyectoAcademicoComponent } from './registro-proyecto_academico/registro-proyecto_academico.component';
 import {DpDatePickerModule} from 'ng2-date-picker';
 
 @NgModule({
@@ -51,6 +53,8 @@ import {DpDatePickerModule} from 'ng2-date-picker';
     ListProyectoAcademicoComponent,
     ConsultaProyectoAcademicoComponent,
     ModificarProyectoAcademicoComponent,
+    ListRegistroProyectoAcademicoComponent,
+    RegistroProyectoAcademicoComponent,
   ],
 })
 export class ProyectoAcademicoModule { }

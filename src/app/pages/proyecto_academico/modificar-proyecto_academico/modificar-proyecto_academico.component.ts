@@ -29,6 +29,10 @@ import * as moment from 'moment';
 import { Inject } from '@angular/core';
 import * as momentTimezone from 'moment-timezone';
 import { InformacionBasicaPut } from '../../../@core/data/models/proyecto_academico/informacion_basica_put';
+import { RegistroPut } from '../../../@core/data/models/proyecto_academico/registro_put';
+import { PersonaService } from '../../../@core/data/persona.service';
+import { Persona } from '../../../@core/data/models/persona';
+import { Coordinador } from '../../../@core/data/models/proyecto_academico/coordinador';
 import { Router } from '@angular/router';
 import { MatSelect } from '@angular/material/select';
 
@@ -45,6 +49,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   resolualtaform: any;
   actoform: any;
   compleform: any;
+  coordinador: any;
   facultad = [];
   area = [];
   opcionSeleccionadoFacultad: any;
@@ -56,6 +61,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   opcionSeleccionadoMeto: any;
   checkenfasis: boolean = false;
   checkciclos: boolean = false;
+  checkalta: boolean = false;
   checkofrece: boolean = false;
   nucleo = [];
   unidad= [];
@@ -64,18 +70,28 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   metodo = [];
   fecha_creacion_calificado: Date;
   fecha_creacion_alta: Date;
+  fecha_inicio_coordinador: Date;
+  fecha_creacion_cordin: Date;
   fecha_vencimiento: string;
+  fecha_vencimiento_alta: string;
   fecha_vigencia: string;
   check_alta_calidad: boolean ;
+  fecha_calculada_vencimiento: string;
+  fecha_vencimiento_mostrar: string;
+  fecha_creacion: Date;
   proyecto_academicoPost: ProyectoAcademicoPost;
   informacion_basicaPut: InformacionBasicaPut;
+  registro_put: RegistroPut;
   proyecto_academico: ProyectoAcademicoInstitucion;
   tipo_titulacion: TipoTitulacion;
   metodologia: Metodologia;
   nivel_formacion: NivelFormacion;
   registro_califacado_acreditacion: RegistroCalificadoAcreditacion;
+  registro_califacado_alta_calidad: RegistroCalificadoAcreditacion;
   tipo_registro: TipoRegistro;
   enfasis_proyecto: InstitucionEnfasis;
+  coordinador_data: Coordinador;
+  coordinadorSeleccionado: Persona;
   enfasis_basico: Enfasis;
   titulacion_proyecto_snies: Titulacion;
   titulacion_proyecto_mujer: Titulacion;
@@ -83,7 +99,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   tipo_dependencia: TipoDependencia;
   dependencia_tipo_dependencia: DependenciaTipoDependencia;
   dependencia: Dependencia;
-
+  personas: Array<Persona>;
+  creandoAutor: boolean= true;
 
 
   CampoControl = new FormControl('', [Validators.required]);
@@ -116,6 +133,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   Campo26Control = new FormControl('', [Validators.required]);
   Campo28Control = new FormControl('', [Validators.required, Validators.maxLength(1)]);
   Campo27Control = new FormControl('', [Validators.required, Validators.maxLength(2)]);
+  Campo29Control = new FormControl('', [Validators.required]);
   selectFormControl = new FormControl('', Validators.required);
   @Output() eventChange = new EventEmitter();
 
@@ -129,6 +147,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     public dialogRef: MatDialogRef<ModificarProyectoAcademicoComponent>,
     private toasterService: ToasterService,
     private oikosService: OikosService,
+    private personaService: PersonaService,
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
@@ -141,11 +160,11 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         nivel_proyecto: ['', Validators.required],
         metodologia_proyecto: ['', Validators.required],
         nombre_proyecto: ['', Validators.required],
-        abreviacion_proyecto: ['', Validators.required],
+        abreviacion_proyecto: ['', [Validators.required, Validators.maxLength(20)]],
         correo_proyecto: ['', [Validators.required, Validators.email]],
         numero_proyecto: ['', Validators.required],
-        creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
-        duracion_proyecto: ['', Validators.required],
+        creditos_proyecto: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]],
+        duracion_proyecto: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]],
         tipo_duracion_proyecto: ['', Validators.required],
         ciclos_proyecto: ['', Validators.required],
         ofrece_proyecto: ['', Validators.required],
@@ -175,20 +194,23 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
        titulacion_hombre: ['', Validators.required],
        competencias: ['', Validators.required],
      });
+     this.coordinador = formBuilder.group({
+      fecha_creacion_coordinador: ['', Validators.required],
+     })
     this.loadfacultad();
    this.loadnivel();
    this.loadmetodologia();
    this.loadunidadtiempo();
    this.loadarea();
    this.loadnucleo();
+   this. loadpersonas();
    this.loadenfasis();
+   this.loadfechacoordinador();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
-   console.info(this.data)
-   console.info(this.data.fecha_creacion_registro)
-   this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
-   console.info('despues' + this.fecha_creacion_calificado)
-
+   this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
+   this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
+   this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
    // enfasis
    this.arr_enfasis_proyecto = this.data.enfasis;
    this.source_emphasys.load(this.arr_enfasis_proyecto);
@@ -225,6 +247,14 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     },
   };
 
+    }
+
+    loadfechacoordinador() {
+      if (this.data.fechainiciocoordinador == null) {
+        this.fecha_creacion_calificado = null
+      }else {
+        this.fecha_creacion_cordin = momentTimezone.tz(this.data.fechainiciocoordinador, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
+      }
     }
 
     loadenfasis() {
@@ -298,6 +328,48 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   }
 
   ngOnInit() {
+
+  }
+
+  getFullAuthorName(p: Persona): string {
+    return p.PrimerNombre + ' ' + p.SegundoNombre + ' ' + p.PrimerApellido + ' ' + p.SegundoApellido;
+  }
+
+  loadpersonas(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.personaService.get('persona/?limit=0')
+        .subscribe(res => {
+          // if (res !== null) {
+          if (Object.keys(res[0]).length > 0) {
+            this.personas = <Array<Persona>>res;
+            this.personas.forEach( (persona: Persona) => {
+              persona['Nombre'] = this.getFullAuthorName(persona);
+              if (persona.Id === Number(this.data.idcoordinador)) {
+                this.coordinadorSeleccionado = persona;
+              }
+            });
+            resolve(true);
+          } else {
+            this.personas = [];
+            reject({status: 404});
+          }
+        }, (error: HttpErrorResponse) => {
+          reject(error);
+        });
+    });
+  }
+
+
+   calculateEndDate (date: Date, years: number, months: number, days: number): Date {
+    const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DDTHH:mm:ss');
+    this.fecha_vencimiento = convertDate
+    return new Date(convertDate);
+  }
+
+  calculateEndDateAlta (date: Date, years: number, months: number, days: number): Date {
+    const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DDTHH:mm:ss');
+    this.fecha_vencimiento_alta = convertDate
+    return new Date(convertDate);
   }
   loadfacultad() {
     this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2')
@@ -410,6 +482,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       });
     });
   }
+
   loadnucleo() {
     this.coreService.get('nucleo_basico_conocimiento')
     .subscribe(res => {
@@ -434,7 +507,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   }
 
   putinformacionbasica() {
-    if ( this.compleform.valid ) {
+    if ( this.compleform.valid && this.basicform.valid) {
     this.metodologia = {
       Id: this.opcionSeleccionadoMeto['Id'],
     }
@@ -444,26 +517,26 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     this.proyecto_academico = {
       Id : Number(this.data.idproyecto) ,
       Codigo : '0',
-      Nombre : this.basicform.value.nombre_proyecto[0],
-      CodigoSnies: this.basicform.value.codigo_snies[0],
+      Nombre : String(this.basicform.value.nombre_proyecto),
+      CodigoSnies: String(this.basicform.value.codigo_snies),
       Duracion: Number(this.basicform.value.duracion_proyecto),
       NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
-      CorreoElectronico: this.basicform.value.correo_proyecto[0],
+      CorreoElectronico: String(this.basicform.value.correo_proyecto),
       CiclosPropedeuticos: this.checkciclos,
       NumeroActoAdministrativo: Number(this.actoform.value.acto),
       EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
-      Competencias: this.compleform.value.competencias[0],
-      CodigoAbreviacion: this.basicform.value.abreviacion_proyecto[0],
+      Competencias: String(this.compleform.value.competencias),
+      CodigoAbreviacion: String(this.basicform.value.abreviacion_proyecto),
       Activo: true,
       Oferta: this.checkofrece,
       UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
-      AnoActoAdministrativoId: this.actoform.value.ano_acto,
+      AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
       DependenciaId: this.opcionSeleccionadoFacultad['Id'],
       AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
       NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
       MetodologiaId: this.metodologia,
       NivelFormacionId: this.nivel_formacion,
-      AnoActoAdministrativo: this.actoform.value.ano_acto,
+      AnoActoAdministrativo: String(this.actoform.value.ano_acto),
 
     }
 
@@ -556,6 +629,309 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     });
   }
 }
+putinformacionregistro() {
+  if ( this.checkalta === true ) {
+    if ( this.resolualtaform.valid ) {
+      this.metodologia = {
+        Id: this.opcionSeleccionadoMeto['Id'],
+      }
+      this.nivel_formacion = {
+        Id: this.opcionSeleccionadoNivel['Id'],
+      }
+      this.proyecto_academico = {
+        Id : Number(this.data.idproyecto) ,
+        Codigo : '0',
+        Nombre : String(this.basicform.value.nombre_proyecto),
+        CodigoSnies: String(this.basicform.value.codigo_snies),
+        Duracion: Number(this.basicform.value.duracion_proyecto),
+        NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
+        CorreoElectronico: String(this.basicform.value.correo_proyecto),
+        CiclosPropedeuticos: this.checkciclos,
+        NumeroActoAdministrativo: Number(this.actoform.value.acto),
+        EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+        Competencias: String(this.compleform.value.competencias),
+        CodigoAbreviacion: String(this.basicform.value.abreviacion_proyecto),
+        Activo: true,
+        Oferta: this.checkofrece,
+        UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
+        AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
+        DependenciaId: this.opcionSeleccionadoFacultad['Id'],
+        AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
+        NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
+        MetodologiaId: this.metodologia,
+        NivelFormacionId: this.nivel_formacion,
+        AnoActoAdministrativo: String(this.actoform.value.ano_acto),
+      }
+      this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
+      this.registro_califacado_acreditacion = {
+      Id: 0,
+      AnoActoAdministrativoId: String(this.resoluform.value.ano_resolucion),
+      NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
+      FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
+      VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
+      VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
+      EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      Activo: true,
+      ProyectoAcademicoInstitucionId: this.proyecto_academico,
+      TipoRegistroId: this.tipo_registro = {
+        Id: 1,
+      },
+    }
+    this.calculateEndDateAlta(this.fecha_creacion_alta, this.resolualtaform.value.ano_vigencia, this.resolualtaform.value.mes_vigencia, 0)
+    this.registro_califacado_alta_calidad = {
+      Id: 0,
+      AnoActoAdministrativoId: String(this.resolualtaform.value.ano_resolucion),
+      NumeroActoAdministrativo: Number(this.resolualtaform.value.resolucion),
+      FechaCreacionActoAdministrativo: this.fecha_creacion_alta + ':00Z',
+      VigenciaActoAdministrativo: 'Meses:' + this.resolualtaform.value.mes_vigencia + 'Años:' + this.resolualtaform.value.ano_vigencia,
+      VencimientoActoAdministrativo: this.fecha_vencimiento_alta + 'Z',
+      EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      Activo: true,
+      ProyectoAcademicoInstitucionId: this.proyecto_academico,
+      TipoRegistroId: this.tipo_registro = {
+        Id: 2,
+      },
+
+    }
+    const registro_put = {
+      ProyectoAcademicoInstitucion: this.proyecto_academico,
+      Registro: [this.registro_califacado_acreditacion, this.registro_califacado_alta_calidad],
+    }
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('editarproyecto.seguro_continuar_actualizar_proyecto'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(opt)
+    .then((willCreate) => {
+      if (willCreate.value) {
+        this.proyectoacademicoService.put('tr_proyecto_academico/registro/' + Number(this.data.idproyecto), registro_put)
+        .subscribe((res: any) => {
+          if (res.Type === 'error') {
+            Swal({
+              type: 'error',
+               title: res.Code,
+              text: this.translate.instant('ERROR.' + res.Code),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+            this.showToast('error', 'error', this.translate.instant('editarproyecto.proyecto_no_actualizado'));
+          } else {
+            const opt1: any = {
+              title: this.translate.instant('editarproyecto.actualizado'),
+              text: this.translate.instant('editarproyecto.proyecto_actualizado'),
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true,
+              showCancelButton: true,
+            }; Swal(opt1)
+            .then((willDelete) => {
+              if (willDelete.value) {
+              }
+            });
+          }
+        });
+      }
+    });
+
+
+    } else {
+      const opt1: any = {
+        title: this.translate.instant('GLOBAL.atencion'),
+        text: this.translate.instant('proyecto.error_datos'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+      }; Swal(opt1)
+      .then((willDelete) => {
+        if (willDelete.value) {
+
+        }
+      });
+    }
+
+}else {
+  if ( this.resoluform.valid ) {
+    this.metodologia = {
+      Id: this.opcionSeleccionadoMeto['Id'],
+    }
+    this.nivel_formacion = {
+      Id: this.opcionSeleccionadoNivel['Id'],
+    }
+    this.proyecto_academico = {
+      Id : Number(this.data.idproyecto) ,
+      Codigo : '0',
+      Nombre : String(this.basicform.value.nombre_proyecto),
+      CodigoSnies: String(this.basicform.value.codigo_snies),
+      Duracion: Number(this.basicform.value.duracion_proyecto),
+      NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
+      CorreoElectronico: String(this.basicform.value.correo_proyecto),
+      CiclosPropedeuticos: this.checkciclos,
+      NumeroActoAdministrativo: Number(this.actoform.value.acto),
+      EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+      Competencias: String(this.compleform.value.competencias),
+      CodigoAbreviacion: String(this.basicform.value.abreviacion_proyecto),
+      Activo: true,
+      Oferta: this.checkofrece,
+      UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
+      AnoActoAdministrativoId: this.actoform.value.ano_acto,
+      DependenciaId: this.opcionSeleccionadoFacultad['Id'],
+      AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
+      NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
+      MetodologiaId: this.metodologia,
+      NivelFormacionId: this.nivel_formacion,
+      AnoActoAdministrativo: this.actoform.value.ano_acto,
+    }
+
+    this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
+    this.registro_califacado_acreditacion = {
+      Id: 0,
+      AnoActoAdministrativoId: String(this.resoluform.value.ano_resolucion),
+      NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
+      FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
+      VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
+      VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
+      EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      Activo: true,
+      ProyectoAcademicoInstitucionId: this.proyecto_academico,
+      TipoRegistroId: this.tipo_registro = {
+        Id: 1,
+      },
+    }
+    const registro_put = {
+      ProyectoAcademicoInstitucion: this.proyecto_academico,
+      Registro: [this.registro_califacado_acreditacion],
+    }
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('editarproyecto.seguro_continuar_actualizar_proyecto'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(opt)
+    .then((willCreate) => {
+      if (willCreate.value) {
+        this.proyectoacademicoService.put('tr_proyecto_academico/registro/' + Number(this.data.idproyecto), registro_put)
+        .subscribe((res: any) => {
+          if (res.Type === 'error') {
+            Swal({
+              type: 'error',
+               title: res.Code,
+              text: this.translate.instant('ERROR.' + res.Code),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+            this.showToast('error', 'error', this.translate.instant('editarproyecto.proyecto_no_actualizado'));
+          } else {
+            const opt1: any = {
+              title: this.translate.instant('editarproyecto.actualizado'),
+              text: this.translate.instant('editarproyecto.proyecto_actualizado'),
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true,
+              showCancelButton: true,
+            }; Swal(opt1)
+            .then((willDelete) => {
+              if (willDelete.value) {
+              }
+            });
+          }
+        });
+      }
+    });
+
+
+  } else {
+    const opt1: any = {
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('proyecto.error_datos'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    }; Swal(opt1)
+    .then((willDelete) => {
+      if (willDelete.value) {
+
+      }
+    });
+  }
+}
+}
+registrocoordinador() {
+  if ( this.coordinador.valid ) {
+    this.coordinador_data = {
+      PersonaId: this.coordinadorSeleccionado['Id'],
+      DependenciaId: 0,
+      RolId: 0,
+      Activo: true,
+      FechaInicio: this.coordinador.value.fecha_creacion_coordinador + ':00Z',
+      ProyectoAcademicoInstitucionId: {
+        Id:  Number(this.data.idproyecto),
+      },
+    }
+
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.asignar'),
+      text: this.translate.instant('editarproyecto.seguro_continuar_asignar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(opt)
+    .then((willCreate) => {
+      if (willCreate.value) {
+        this.proyectoacademicoService.post('proyecto_academico_rol_persona_dependecia/', this.coordinador_data)
+        .subscribe((res: any) => {
+          if (res.Type === 'error') {
+            Swal({
+              type: 'error',
+               title: res.Code,
+              text: this.translate.instant('ERROR.' + res.Code),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+            this.showToast('error', 'error', this.translate.instant('editarproyecto.coordinador_no_asignado'));
+          } else {
+            const opt1: any = {
+              title: this.translate.instant('editarproyecto.creado'),
+              text: this.translate.instant('editarproyecto.coordinador_asignado'),
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true,
+              showCancelButton: true,
+            }; Swal(opt1)
+            .then((willDelete) => {
+              if (willDelete.value) {
+              }
+            });
+          }
+        });
+      }
+    });
+
+
+} else {
+  const opt1: any = {
+    title: this.translate.instant('GLOBAL.atencion'),
+    text: this.translate.instant('proyecto.error_datos'),
+    icon: 'warning',
+    buttons: true,
+    dangerMode: true,
+    showCancelButton: true,
+  }; Swal(opt1)
+  .then((willDelete) => {
+    if (willDelete.value) {
+
+    }
+  });
+}
+}
+
 
 private showToast(type: string, title: string, body: string) {
   this.config = new ToasterConfig({

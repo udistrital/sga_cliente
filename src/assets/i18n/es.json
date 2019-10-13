@@ -74,6 +74,7 @@
         "eliminar": "Eliminar",
         "actualizar": "Actualizar",
         "crear": "Crear",
+        "asignar": "Asignar",
         "registrar": "Registrar",
         "guardar": "Guardar",
         "formulario": "Formulario",
@@ -317,8 +318,8 @@
         "erro_abre": "Por favor ingrese la Abreviación del proyecto.",
         "erro_correo": "Por favor ingrese el Correo del proyecto y el formato indicado.",
         "erro_telefono": "Por favor ingrese el Telefono del proyecto.",
-        "erro_creditos": "Por favor ingrese los Creditos del proyecto, máximo 4 digitos.",
-        "erro_duracion": "Por favor ingrese la Duracion del proyecto.",
+        "erro_creditos": "Por favor ingrese los Creditos del proyecto, máximo 4 digitos y solo numeros.",
+        "erro_duracion": "Por favor ingrese la Duracion del proyecto, máximo 3 digitos y solo numeros.",
         "erro_unidad": "Por favor seleccione la Unidad de tiempo.",
         "error_datos": "Por favor Complete todos los datos Obligatorios",
         "erro_fecha_creacion": "Por favor complete la fecha y hora de la creación del registro",
@@ -391,7 +392,16 @@
         "seguro_continuar_actualizar_proyecto": "¿Esta seguro de actualizar este proyecto académico?",
         "proyecto_no_actualizado": "Proyecto Académico no actualizado",
         "actualizado": "Proyecto Actualizado!",
-        "proyecto_actualizado": "Proyecto Académico actualizado correctamente"
+        "proyecto_actualizado": "Proyecto Académico actualizado correctamente",
+        "alta_calidad": "Registro de Alta calidad?",
+        "agregar_coordinado": "Agregar coordinador",
+        "alerta_agregar_coordinador": "Debe seleccionar un coordinador",
+        "erro_fecha_creacion": "Por favor complete la fecha y hora de la asignacioón del coordinador",
+        "asignar_coordinado": "Asignar coordinador",
+        "coordinador_no_asignado": "Coordinador no asignado!",
+        "creado": "Coordinador Asignado!",
+        "coordinador_asignado": "Coordinador asignado Correctamente!",
+        "seguro_continuar_asignar": "¿Esta seguro de asignar este coordinador a este proyecto académico?"
 
     },
     "enfasis": {
@@ -407,5 +417,24 @@
         "enfasis_no_actualizado": "Enfásis no actualizado",
         "administrar_enfasis": "Administrar enfásis",
         "error_enfasis_ya_existe": "El enfásis ya fue agregado"
+    },
+    "historial_registro": {
+        "titulo": "Historico de registros de acreditación y alta calidad del Proyecto Académico",
+        "registro": "Registro",
+        "vigencia": "Vigencia",
+        "tipo_registro": "Tipo de registro",
+        "documento": "Documento",
+        "tiempo": "Tiempo de vigencia",
+        "activo": "Activo",
+        "fecha_inicio": "Fecha Inicio Registro",
+        "fecha_vencimiento": "Fecha Vencimiento Registro",
+        "explicacacion": "Este Modulo le permite la consulta del historico del los registros calificados y de alta calidad de un proyecto académico existente en la Universidad Distrital.",
+        "calificado": "Agregar Nuevo Registro Calificado",
+        "alta": "Agregar Nuevo Registro de Alta Calidad",
+        "registro_titulo": "Crear un Registro a un proyecto Existente",
+        "seguro_continuar_registrar": "¿Esta seguro de registrar un nuevo registro a este proyecto académico?",
+        "registro_no_creado": "Registro no creado",
+        "registro_creado": "Registro creado correctamente",
+        "creado": "Registro Creado!"
     }
 }

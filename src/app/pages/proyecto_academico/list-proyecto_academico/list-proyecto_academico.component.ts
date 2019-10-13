@@ -17,6 +17,8 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { delay } from 'rxjs/operators';
 import { InformacionBasica } from '../../../@core/data/models/proyecto_academico/informacion_basica';
 import { ModificarProyectoAcademicoComponent } from '../modificar-proyecto_academico/modificar-proyecto_academico.component';
+import { PersonaService } from '../../../@core/data/persona.service';
+import { Persona } from '../../../@core/data/models/persona';
 
 @Component({
   selector: 'ngx-list-proyecto-academico',
@@ -51,17 +53,27 @@ export class ListProyectoAcademicoComponent implements OnInit {
   idunidad: Number;
   idarea: Number;
   idnucleo: Number;
+  coordinador: [];
   oferta_check: boolean = false;
   ciclos_check: boolean = false;
   titulacion_snies: string;
+  numero_acto: string;
+  ano_acto: string;
   titulacion_mujer: string;
   titulacion_hombre: string;
   competencias: string;
   resolucion_acreditacion: string;
   resolucion_acreditacion_ano: string;
   fecha_creacion_resolucion: Date;
+  fecha_inicio_coordinador: Date;
   vigencia_resolucion_meses: string;
   vigencia_resolucion_anos: string;
+  primer_nombre: string;
+  segundo_nombre: string;
+  primer_apellido: string;
+  id_coordinador: Number;
+  segundo_apellido: string;
+  nombre_completo: string;
   source: LocalDataSource = new LocalDataSource();
   proyectoJson: any;
 
@@ -84,6 +96,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.loadproyectos();
     });
   }
 
@@ -99,10 +112,12 @@ export class ListProyectoAcademicoComponent implements OnInit {
              competencias: this.competencias, idarea: this.idarea, idnucleo: this.idnucleo, resolucion_acreditacion: this.resolucion_acreditacion,
              resolucion_acreditacion_ano: this.resolucion_acreditacion_ano, fecha_creacion_registro: this.fecha_creacion_resolucion,
              vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto,
-             Id: this.idproyecto, proyectoJson: this.proyectoJson},
+             numero_acto: this.numero_acto, ano_acto: this.ano_acto, Id: this.idproyecto, proyectoJson: this.proyectoJson,
+              fechainiciocoordinador: this.fecha_inicio_coordinador, idcoordinador: this.id_coordinador},
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.loadproyectos();
     });
   }
 
@@ -165,6 +180,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   });
   }
 
+
   obteneridporid_consulta() {
     const opt1: any = {
       title: this.translate.instant('GLOBAL.atencion'),
@@ -178,7 +194,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
     .subscribe((res: any) => {
       const r = <any>res;
       if (res !== null && r.Type !== 'error') {
-        console.info(res)
         this.codigosnies = res.map((data: any) => (data.ProyectoAcademico.CodigoSnies));
         this.nombre = res.map((data: any) => (data.ProyectoAcademico.Nombre));
         this.facultad = res.map((data: any) => (data.NombreDependencia));
@@ -254,9 +269,9 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.fecha_creacion_resolucion = res.map((data: any) => (data.Registro[0].FechaCreacionActoAdministrativo));
         this.vigencia_resolucion_meses = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(6, 1)));
         this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(12, 1)));
+        this.numero_acto = res.map((data: any) => (data.ProyectoAcademico.NumeroActoAdministrativo));
+        this.ano_acto = res.map((data: any) => (data.ProyectoAcademico.AnoActoAdministrativo));
         this.proyectoJson = res.map((data: any) => (data.ProyectoAcademico))[0];
-        console.info(res)
-        console.info(this.fecha_creacion_resolucion[0])
 
         this.openDialogModificar();
       }else {
@@ -291,6 +306,7 @@ promesaid_modificar(id: number): Promise<{id: number}> {
       setTimeout(() => {
         resolve({ id: id });
         this.obteneridporid_modificar()
+        this.consultacoordinador()
     }, 600);
   });
 }
@@ -298,6 +314,41 @@ promesaid_modificar(id: number): Promise<{id: number}> {
   highlight(row ): void {
     this.idproyecto = row.ProyectoAcademico.Id;
 
+ }
+
+ consultacoordinador() {
+  const opt1: any = {
+    title: this.translate.instant('GLOBAL.atencion'),
+    text: this.translate.instant('oferta.evento'),
+    icon: 'warning',
+    buttons: true,
+    dangerMode: true,
+    showCancelButton: true,
+  }
+  this.proyectoacademicoService.get('proyecto_academico_rol_persona_dependecia/?query=ProyectoAcademicoInstitucionId.Id:' + this.idproyecto )
+  .subscribe((res: any) => {
+    const r = <any>res;
+    if (res !== null && r.Type !== 'error') {
+    this.fecha_inicio_coordinador = res.map((data: any) => (data.FechaInicio))[0];
+    this.id_coordinador = res.map((data: any) => (data.PersonaId));
+    this.coordinador = <any>res;
+    console.info(this.coordinador)
+  }else {
+    Swal(opt1)
+    .then((willDelete) => {
+      if (willDelete.value) {
+      }
+    });
+  }
+},
+(error: HttpErrorResponse) => {
+  Swal({
+    type: 'error',
+    title: error.status + '',
+    text: this.translate.instant('ERROR.' + error.status),
+    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  });
+});
  }
 
 inhabilitarProyecto(row: any): void {
