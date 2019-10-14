@@ -11,6 +11,7 @@ import { CrudEventoComponent } from './crud-evento/crud-evento.component';
 import { ListEventoComponent } from './list-evento/list-evento.component';
 import { UserService } from '../../@core/data/users.service';
 import { PersonaService } from '../../@core/data/persona.service';
+import { DpDatePickerModule } from 'ng2-date-picker';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { PersonaService } from '../../@core/data/persona.service';
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
+    DpDatePickerModule,
   ],
   declarations: [
     ...routedComponents,

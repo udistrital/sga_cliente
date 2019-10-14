@@ -20,6 +20,7 @@ import { EnfasisModule } from '../enfasis/enfasis.module';
 import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
 import { ListRegistroProyectoAcademicoComponent } from './list-registro_proyecto_academico/list-registro_proyecto_academico.component';
 import { RegistroProyectoAcademicoComponent } from './registro-proyecto_academico/registro-proyecto_academico.component';
+import {DpDatePickerModule} from 'ng2-date-picker';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { RegistroProyectoAcademicoComponent } from './registro-proyecto_academic
     SharedModule,
     NgDatepickerModule,
     EnfasisModule,
+    DpDatePickerModule,
   ],
   declarations: [
     ...routedComponents,
