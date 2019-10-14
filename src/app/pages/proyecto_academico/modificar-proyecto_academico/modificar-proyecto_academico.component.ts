@@ -209,8 +209,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
    this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
-   this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
-   this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
+   this.checkalta =  Boolean(JSON.parse(this.data.tieneregistroaltacalidad));
+   this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
    // enfasis
    this.arr_enfasis_proyecto = this.data.enfasis;
    this.source_emphasys.load(this.arr_enfasis_proyecto);
