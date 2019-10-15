@@ -65,6 +65,12 @@ export class ListProyectoAcademicoComponent implements OnInit {
   resolucion_acreditacion: string;
   resolucion_acreditacion_ano: string;
   fecha_creacion_resolucion: Date;
+  resolucion_alta_calidad: string;
+  resolucion_alta_calidad_ano: string;
+  fecha_creacion_resolucion_alta_calidad: Date;
+  vigencia_resolucion_meses_alta_calidad: string;
+  vigencia_resolucion_anos_alta_calidad: string;
+  existe_registro_alta_calidad: boolean = false;
   fecha_inicio_coordinador: Date;
   vigencia_resolucion_meses: string;
   vigencia_resolucion_anos: string;
@@ -113,7 +119,10 @@ export class ListProyectoAcademicoComponent implements OnInit {
              resolucion_acreditacion_ano: this.resolucion_acreditacion_ano, fecha_creacion_registro: this.fecha_creacion_resolucion,
              vigencia_meses: this.vigencia_resolucion_meses, vigencia_anos: this.vigencia_resolucion_anos, idproyecto: this.idproyecto,
              numero_acto: this.numero_acto, ano_acto: this.ano_acto, Id: this.idproyecto, proyectoJson: this.proyectoJson,
-              fechainiciocoordinador: this.fecha_inicio_coordinador, idcoordinador: this.id_coordinador},
+             fechainiciocoordinador: this.fecha_inicio_coordinador, idcoordinador: this.id_coordinador,
+             tieneregistroaltacalidad: this.existe_registro_alta_calidad, resolucion_alta: this.resolucion_alta_calidad,
+             resolucion_alta_ano: this.resolucion_alta_calidad_ano, vigencia_meses_alta: this.vigencia_resolucion_meses_alta_calidad,
+             vigencia_ano_alta: this.vigencia_resolucion_anos_alta_calidad, fecha_creacion_registro_alta: this.fecha_creacion_resolucion_alta_calidad},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -277,6 +286,17 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(12, 1)));
         this.numero_acto = res.map((data: any) => (data.ProyectoAcademico.NumeroActoAdministrativo));
         this.ano_acto = res.map((data: any) => (data.ProyectoAcademico.AnoActoAdministrativo));
+        this.existe_registro_alta_calidad = res.map((data: any) => Boolean((data.TieneRegistroAltaCalidad)));
+        this.resolucion_alta_calidad = res.map((data: any) => (data.NumeroActoAdministrativoAltaCalidad));
+        this.resolucion_alta_calidad_ano = res.map((data: any) => (data.AnoActoAdministrativoIdAltaCalidad));
+        this.fecha_creacion_resolucion_alta_calidad = res.map((data: any) => (data.FechaCreacionActoAdministrativoAltaCalidad));
+        if (this.existe_registro_alta_calidad[0] === true) {
+          this.vigencia_resolucion_meses_alta_calidad = res.map((data: any) => (data.VigenciaActoAdministrativoAltaCalidad.substr(6, 1)));
+          this.vigencia_resolucion_anos_alta_calidad = res.map((data: any) => (data.VigenciaActoAdministrativoAltaCalidad.substr(12, 1)));
+        }else {
+          this.vigencia_resolucion_meses_alta_calidad = null
+          this.vigencia_resolucion_anos_alta_calidad = null
+        }
         this.proyectoJson = res.map((data: any) => (data.ProyectoAcademico))[0];
 
         this.openDialogModificar();
