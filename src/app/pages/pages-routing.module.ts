@@ -28,14 +28,22 @@ const routes: Routes = [{
       path: 'tipo_periodo',
       loadChildren: './tipo_periodo/tipo_periodo.module#TipoPeriodoModule',
       },
-      {
-        path: 'periodo',
-        loadChildren: './periodo/periodo.module#PeriodoModule',
-        },
-        {
-          path: 'calendarioevento',
-          loadChildren: './calendarioevento/calendarioevento.module#CalendarioeventoModule',
-          },
+    {
+      path: 'periodo',
+      loadChildren: './periodo/periodo.module#PeriodoModule',
+    },
+    {
+      path: 'calendarioevento',
+      loadChildren: './calendarioevento/calendarioevento.module#CalendarioeventoModule',
+    },
+    {
+      path: 'proyecto_academico',
+      loadChildren: './proyecto_academico/proyecto_academico.module#ProyectoAcademicoModule',
+    },
+    {
+      path: 'enfasis',
+      loadChildren: './enfasis/enfasis.module#EnfasisModule',
+    },
     {
         path: '',
         redirectTo: 'dashboard',

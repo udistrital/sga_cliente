@@ -1,5 +1,6 @@
 // import { NbMenuItem } from '@nebular/theme';
 import { MenuItem } from './menu-item';
+import { icon } from 'leaflet';
 
 export const MENU_ITEMS: MenuItem[] = [
   {
@@ -91,6 +92,55 @@ export const MENU_ITEMS: MenuItem[] = [
       // },
     ],
   },
+  {
+    title: 'Proyecto Academico',
+    icon: 'nb-compose',
+    link: '',
+    key: 'proyecto_academico',
+    children: [
+      {
+        title: 'Registro de un Proyecto',
+        icon: 'nb-compose',
+        link: '/pages/proyecto_academico/crud-proyecto_academico',
+        key: 'crud_proyecto_academico',
+      },
+      {
+        title: 'Listar Proyectos',
+        icon: 'nb-list',
+        link: '/pages/proyecto_academico/list-proyecto_academico',
+        key: 'list_proyecto_academico',
+      },
+    ],
+  },
+  {
+    title: 'Administración',
+    icon: 'nb-gear',
+    link: '',
+    key: 'administracion',
+    children: [
+      {
+        title: 'enfasis',
+        icon: 'nb-compose',
+        link: '',
+        key: 'enfasis',
+        children: [
+          {
+            title: 'Registrar Enfásis',
+            icon: 'nb-list',
+            link: '/pages/enfasis/crud-enfasis',
+            key: 'crud_enfasis',
+          },
+          {
+            title: 'Listar Enfásis',
+            icon: 'nb-list',
+            link: '/pages/enfasis/list-enfasis',
+            key: 'list_enfasis',
+          },
+        ],
+      },
+    ],
+  },
+
   /*
   {
     title: 'Menú',

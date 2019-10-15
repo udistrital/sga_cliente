@@ -12,7 +12,10 @@ const httpOptions = {
 
 const path = environment.CORE_SERVICE;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
+
 export class CoreService {
 
   constructor(private http: HttpClient) {
