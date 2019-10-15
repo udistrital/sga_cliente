@@ -2,50 +2,57 @@ workspace:
   base: /go
   path: src/github.com/udistrital/${DRONE_REPO##udistrital/}
   when:
-      branch: [master, develop]
-      event: push
+      branch: [master, test]
+      event: [push, pull_request]
 
 pipeline:
 
   # build and test the go program
   nodejs:
-    image: node:10.7.0
+    image: node:12.6.0
     commands:
-     - apt-get update -y
-     - apt-get install -y zip
-     - rm -rf node_modules
+     - node --version
      - npm i
-     - npm run lint:ci
-     - npm run build:prod
-
+     - npm run build:test
     when:
-      branch: [master, develop]
-      event: push
+      branch: [test]
+      event: [push, pull_request]
+      
+  nodejs:  
+    image: node:12.6.0
+    commands:
+     - node --version
+     - npm i
+     - npm run build:prod
+    when:
+      branch: [master]
+      event: [push, pull_request]
 
   # upload app.zip to s3 bucket for CodePipline
   publish_s3:
     image: plugins/s3
     secrets: [ aws_access_key_id, aws_secret_access_key ]
-    region: "us-east-1"
-    bucket: "campusvirtualudpreprod.udistrital.edu.co"
+    region: "us-east-1"    
+    bucket: "cliente-pruebas"
     source: dist/**/*
-    target: /
+    target: /pruebas${DRONE_REPO_NAME%%_cliente}.portaloas.udistrital.edu.co
     strip_prefix: dist/
     when:
-      branch: [develop]
-      event: push
-
+      branch: [test]
+      event: [push, pull_request] 
+    
+  # upload app.zip to s3 bucket for CodePipline
   publish_s3:
     image: plugins/s3
     secrets: [ aws_access_key_id, aws_secret_access_key ]
-    region: "us-east-1"
-    bucket: "campusvirtualud.udistrital.edu.co"
+    region: "us-east-1"    
+    bucket: "cliente-prod"
     source: dist/**/*
-    target: /
+    target: /${DRONE_REPO_NAME%%_cliente}.portaloas.udistrital.edu.co
     strip_prefix: dist/
     when:
       branch: [master]
-      event: push
+      event: [push, pull_request] 
 
   #Notify results to telegram
   notify_telegram:
@@ -62,5 +69,6 @@ pipeline:
       {{/success}}
     when:
       status: [success, failure]
-      branch: [master, develop]
-      event: push
+      branch: [master, test]
+      event: [push, pull_request]      
+  
