@@ -51,6 +51,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   autorSeleccionado: Persona;
   formProduccionAcademica: any;
   regProduccionAcademica: any;
+  DatosAdicionales: any;
   clean: boolean;
   formConstruido: boolean;
   creandoAutor: boolean;

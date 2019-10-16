@@ -165,7 +165,7 @@
                                     <div class="col-10">
                                         <mat-form-field style="width: 100%;" floatLabel="always">
                                             <mat-label>*{{'editarproyecto.agregar_coordinado' | translate}}:</mat-label>
-                                            <mat-select [placeholder]="translate.instant('produccion_academica.placeholder_agregar_autor')" [formControl]="Campo29Control" required [(ngModel)]="coordinadorSeleccionado">
+                                            <mat-select [formControl]="Campo29Control" required [(ngModel)]="coordinadorSeleccionado">
                                                 <mat-option>--Seleccionar--</mat-option>
                                                 <mat-option *ngFor="let persona of personas" [value]="persona">
                                                     {{persona.PrimerNombre}} {{persona.SegundoNombre}} {{persona.PrimerApellido}} {{persona.SegundoApellido}}

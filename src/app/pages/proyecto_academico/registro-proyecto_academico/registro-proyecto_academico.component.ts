@@ -111,6 +111,9 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
 
   }
 
+  registroproyecto() {
+    
+  }
 
   calculateEndDate (date: Date, years: number, months: number, days: number): Date {
     const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DDTHH:mm:ss');

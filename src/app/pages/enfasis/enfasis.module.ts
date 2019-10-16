@@ -25,12 +25,6 @@ import { NbDialogRef } from '@nebular/theme';
   providers: [
     ProyectoAcademicoService,
     ToasterService,
-    {
-      provide: NbDialogRef,
-      useValue: {
-        close: (dialogResult: any) => { },
-      },
-    },
     ListEnfasisService,
   ],
   exports: [
