@@ -112,7 +112,7 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
   }
 
   registroproyecto() {
-    
+
   }
 
   calculateEndDate (date: Date, years: number, months: number, days: number): Date {

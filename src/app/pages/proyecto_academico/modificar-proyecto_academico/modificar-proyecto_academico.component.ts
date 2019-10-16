@@ -179,7 +179,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         ofrece_proyecto: ['', Validators.required],
         // enfasis_proyecto: ['', Validators.required],
      })
-     
+
      this.resoluform = formBuilder.group({
       resolucion: ['', Validators.required],
       ano_resolucion: ['', [Validators.required, Validators.maxLength(4)]],
