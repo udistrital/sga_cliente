@@ -392,14 +392,15 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     return new Promise((resolve, reject) => {
       files.forEach((file) => {
         file.Id = file.nombre,
-        file.nombre = 'soporte_' + file.IdDocumento + '_creacion_proyecto_curricular_' + this.basicform.value.codigo_snies + '_' + this.basicform.value.nombre_proyecto;
+        file.nombre = 'soporte_' + file.IdDocumento + '_creacion_proyecto_curricular_'
+          + this.basicform.value.codigo_snies + '_' + this.basicform.value.nombre_proyecto;
         // file.key = file.Id;
         file.key = 'soporte_' + file.IdDocumento;
        });
       this.nuxeoService.getDocumentos$(files, this.documentoService)
         .subscribe(response => {
           if (Object.keys(response).length === files.length) {
-            console.log("response", response);
+            // console.log("response", response);
             files.forEach((file) => {
               if (file.IdDocumento === 9) {
                 this.uidResolucion = file.uid;
@@ -543,9 +544,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
 
   registroproyecto() {
-    try {    
-      if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0 && this.fileActoAdministrativo && this.fileActoAdministrativo) {
-      
+    try {
+      if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0
+          && this.fileActoAdministrativo && this.fileActoAdministrativo) {
       this.metodologia = {
         Id: this.opcionSeleccionadoMeto['Id'],
       }
@@ -677,9 +678,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         if (willCreate.value) {
           // Subir archivos
           await this.uploadFilesCreacionProyecto([this.fileResolucion, this.fileActoAdministrativo]);
-          console.log("subio archivo");
-          console.log("idDocumentoResolucion", this.idDocumentoResolucion);
-          console.log("idDocumentoAdministrativo", this.idDocumentoAdministrativo);
+          // console.log("subio archivo");
+          // console.log("idDocumentoResolucion", this.idDocumentoResolucion);
+          // console.log("idDocumentoAdministrativo", this.idDocumentoAdministrativo);
           this.registro_califacado_acreditacion.EnlaceActo = this.idDocumentoResolucion + '';
           this.proyecto_academico.EnlaceActoAdministrativo = this.idDocumentoAdministrativo + '';
           this.sgamidService.post('proyecto_academico', this.proyecto_academicoPost)
@@ -724,9 +725,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         }
       });
     }
-  }
-  catch(err) {
-      console.log('Error: ', err.message);
+  } catch (err) {
+      // console.log('Error: ', err.message);
       const opt2: any = {
         title: this.translate.instant('GLOBAL.error'),
         text: this.translate.instant('ERROR.error_subir_documento'),
