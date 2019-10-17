@@ -30,8 +30,8 @@ export class NuxeoService {
             baseURL: environment.NUXEO.PATH,
             auth: {
                 method: 'basic',
-                username: 'campus_virtual',
-                password: 'c4mpus',
+                username: environment.NUXEO.CREDENTIALS.USERNAME,
+                password: environment.NUXEO.CREDENTIALS.PASS,
             },
         });
     }

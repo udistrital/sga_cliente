@@ -8,6 +8,10 @@ export const environment = {
   production: true,
   NUXEO: {
     PATH: 'https://documental.udistrital.edu.co/nuxeo/',
+    CREDENTIALS: {
+      USERNAME: 'campus_virtual',
+      PASS: 'c4mpus',
+    },
   },
   CONFIGURACION_SERVICE: 'http://testapi.intranetoas.udistrital.edu.co:8086/v1/',
   NOTIFICACION_SERVICE: 'ws://testapi.intranetoas.udistrital.edu.co:8116/ws/join',
