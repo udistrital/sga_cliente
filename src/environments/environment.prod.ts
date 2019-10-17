@@ -7,7 +7,7 @@
 export const environment = {
   production: true,
   NUXEO: {
-    PATH: 'https://documental.udistrital.edu.co/nuxeo/',
+    PATH: 'https://documental.portaloas.udistrital.edu.co/nuxeo/',
     CREDENTIALS: {
       USERNAME: 'campus_virtual',
       PASS: 'c4mpus',
