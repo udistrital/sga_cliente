@@ -224,9 +224,13 @@
                                 </mat-form-field>
                                 <br>
                                 <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document_acto' | translate }}</label>
-                                <button mat-button>
-                                       <mat-icon> attach_file</mat-icon>
-                                    </button>
+                                <button mat-button type="button" (click)="fileInputDocumentoActo.click()">
+                                    <mat-icon>attach_file</mat-icon>
+                                    <!--span>Select</span-->
+                                    <input #fileInputDocumentoActo type="file" (change)="onInputFileActo($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
+                                </button>
+                                <mat-error *ngIf="!fileActoAdministrativo">{{ 'ERROR.no_documento' | translate }}</mat-error>
+                                <label *ngIf="fileActoAdministrativo">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileActoAdministrativo.name}}</label>
                             </form>
                         </nb-card-body>
                     </nb-card>

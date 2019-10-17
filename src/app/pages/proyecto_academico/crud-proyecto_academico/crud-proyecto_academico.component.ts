@@ -358,7 +358,20 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         file.url = this.cleanURL(file.urlTemp);
         file.idDocumento = 9
         this.fileResolucion = file;
-        console.log("file resolucion", file);
+      } else {
+        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+      }
+    }
+  }
+
+  onInputFileActo(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      if (file.type === 'application/pdf') {
+        file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+        file.url = this.cleanURL(file.urlTemp);
+        file.idDocumento = 10
+        this.fileActoAdministrativo = file;
       } else {
         this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
       }
