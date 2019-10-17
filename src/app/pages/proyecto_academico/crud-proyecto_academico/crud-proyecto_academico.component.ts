@@ -542,13 +542,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     return new Date(convertDate);
   }
 
-  async registroproyecto() {
+  registroproyecto() {
     try {    
-      if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0) {
-      
-      // Subir archivos
-      await this.uploadFilesCreacionProyecto([this.fileResolucion, this.fileActoAdministrativo]);
-      console.log("subio archivo");
+      if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0 && this.fileActoAdministrativo && this.fileActoAdministrativo) {
       
       this.metodologia = {
         Id: this.opcionSeleccionadoMeto['Id'],
@@ -566,8 +562,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         CorreoElectronico: this.basicform.value.correo_proyecto,
         CiclosPropedeuticos: this.checkciclos,
         NumeroActoAdministrativo: Number(this.actoform.value.acto),
-        // EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
         EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+        // EnlaceActoAdministrativo: this.idDocumentoAdministrativo + '',
         Competencias: this.compleform.value.competencias,
         CodigoAbreviacion: this.basicform.value.abreviacion_proyecto,
         Activo: true,
@@ -592,6 +588,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
         VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
         EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+        // EnlaceActo: this.idDocumentoResolucion + '',
         Activo: true,
         ProyectoAcademicoInstitucionId: this.proyecto_academico,
         TipoRegistroId: this.tipo_registro = {
@@ -676,8 +673,15 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         showCancelButton: true,
       };
       Swal(opt)
-      .then((willCreate) => {
+      .then(async (willCreate) => {
         if (willCreate.value) {
+          // Subir archivos
+          await this.uploadFilesCreacionProyecto([this.fileResolucion, this.fileActoAdministrativo]);
+          console.log("subio archivo");
+          console.log("idDocumentoResolucion", this.idDocumentoResolucion);
+          console.log("idDocumentoAdministrativo", this.idDocumentoAdministrativo);
+          this.registro_califacado_acreditacion.EnlaceActo = this.idDocumentoResolucion + '';
+          this.proyecto_academico.EnlaceActoAdministrativo = this.idDocumentoAdministrativo + '';
           this.sgamidService.post('proyecto_academico', this.proyecto_academicoPost)
           .subscribe((res: any) => {
             if (res.Type === 'error') {
@@ -723,6 +727,14 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
   catch(err) {
       console.log('Error: ', err.message);
+      const opt2: any = {
+        title: this.translate.instant('GLOBAL.error'),
+        text: this.translate.instant('ERROR.error_subir_documento'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+      }; Swal(opt2)
   }
 }
   private showToast(type: string, title: string, body: string) {
