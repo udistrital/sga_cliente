@@ -85,6 +85,7 @@ export class NuxeoService {
                                                         documentoPost.Enlace = file.uid;
                                                         documentoPost.Nombre = file.nombre;
                                                         documentoPost.TipoDocumento = tipoDocumento;
+                                                        documentoPost.Activo = true;
                                                         documentoService.post('documento', documentoPost)
                                                             .subscribe(resuestaPost => {
                                                                 nuxeoservice.documentos[file.key] = resuestaPost.Body;

@@ -35,6 +35,8 @@ import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_
 import { ActivatedRoute } from '@angular/router';
 import * as momentTimezone from 'moment-timezone';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -132,6 +134,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private unidadtiempoService: UnidadTiempoService,
     private dialogService: NbDialogService,
     private activatedRoute: ActivatedRoute,
+    private nuxeoService: NuxeoService,
+    private documentoService: DocumentoService,
     private sanitization: DomSanitizer,
     private listEnfasisService: ListEnfasisService,
     private formBuilder: FormBuilder) {
@@ -356,7 +360,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       if (file.type === 'application/pdf') {
         file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
         file.url = this.cleanURL(file.urlTemp);
-        file.idDocumento = 9
+        file.IdDocumento = 9;
+        file.file = event.target.files[0];
         this.fileResolucion = file;
       } else {
         this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
@@ -370,12 +375,34 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       if (file.type === 'application/pdf') {
         file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
         file.url = this.cleanURL(file.urlTemp);
-        file.idDocumento = 10
+        file.IdDocumento = 10;
+        file.file = event.target.files[0];
         this.fileActoAdministrativo = file;
       } else {
         this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
       }
     }
+  }
+
+  uploadFilesCreacionProyecto(files) {
+    return new Promise((resolve, reject) => {
+      files.forEach((file) => {
+        file.Id = file.nombre,
+        file.nombre = 'soporte_' + file.IdDocumento + '_creacion_proyecto_curricular_' + this.basicform.value.codigo_snies + '_' + this.basicform.value.nombre_proyecto;
+        file.key = file.Id;
+       });
+      this.nuxeoService.getDocumentos$(files, this.documentoService)
+        .subscribe(response => {
+          if (Object.keys(response).length === files.length) {
+            files.forEach((file) => {
+              console.log(file);
+            });
+            resolve(true);
+          }
+        }, error => {
+          reject(error);
+        });
+    });
   }
 
   loadfacultad() {
