@@ -34,6 +34,7 @@ import { MatSelect } from '@angular/material/select';
 import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
 import { ActivatedRoute } from '@angular/router';
 import * as momentTimezone from 'moment-timezone';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -84,8 +85,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   dependencia_tipo_dependencia: DependenciaTipoDependencia;
   dependencia: Dependencia;
   fecha_calculada_vencimiento: string
-
-
+  fileResolucion: any;
+  fileActoAdministrativo: any;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -131,6 +132,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private unidadtiempoService: UnidadTiempoService,
     private dialogService: NbDialogService,
     private activatedRoute: ActivatedRoute,
+    private sanitization: DomSanitizer,
     private listEnfasisService: ListEnfasisService,
     private formBuilder: FormBuilder) {
 
@@ -342,6 +344,25 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     }, () => {
       this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
     });
+  }
+
+  cleanURL(oldURL: string): SafeResourceUrl {
+    return this.sanitization.bypassSecurityTrustUrl(oldURL);
+  }
+
+  onInputFileResolucion(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      if (file.type === 'application/pdf') {
+        file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+        file.url = this.cleanURL(file.urlTemp);
+        file.idDocumento = 9
+        this.fileResolucion = file;
+        console.log("file resolucion", file);
+      } else {
+        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+      }
+    }
   }
 
   loadfacultad() {

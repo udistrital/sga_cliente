@@ -170,9 +170,13 @@
                                 </mat-form-field>
                                 <br>
                                 <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
-                                <button mat-button>
-                                            <mat-icon> attach_file</mat-icon>
+                                <button mat-button type="button" (click)="fileInput.click()">
+                                    <mat-icon>attach_file</mat-icon>
+                                    <!--span>Select</span-->
+                                    <input #fileInput type="file" (change)="onInputFileResolucion($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
                                 </button>
+                                <mat-error *ngIf="!fileResolucion">{{ 'ERROR.no_documento' | translate }}</mat-error>
+                                <label *ngIf="fileResolucion">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucion.name}}</label>
                                 <br>
                                 <mat-form-field>
                                     <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>

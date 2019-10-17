@@ -125,7 +125,8 @@
         "placeholder_fechafin": "E.g.: end date",
         "periodoid": "Id period",
         "placeholder_periodoid": "E.g.: Id period",
-        "atencion": "Attention"
+        "atencion": "Attention",
+        "archivo_seleccionado": "Selected file"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -137,6 +138,8 @@
         "408": "You have exceeded the time limit in returning answer",
         "409": "The request could not be processed due to a conflict with the current state of the resource",
         "500": "Internal error on the server",
+        "formato_documento_pdf": "The format of the chosen file is not pdf",
+        "no_documento": "You must select a file",
         "error_subir_documento": "An error ocurred uploading the documents, please try again."
     },
     "produccion_academica": {
