@@ -89,6 +89,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   fecha_calculada_vencimiento: string
   fileResolucion: any;
   fileActoAdministrativo: any;
+  uidResolucion: string;
+  uidActoAdministrativo: string;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -395,7 +397,11 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         .subscribe(response => {
           if (Object.keys(response).length === files.length) {
             files.forEach((file) => {
-              console.log(file);
+              if (file.IdDocumento === 9) {
+                this.uidResolucion = file.uid;
+              } else if (file.IdDocumento === 10) {
+                this.uidActoAdministrativo = file.uid;
+              }
             });
             resolve(true);
           }
