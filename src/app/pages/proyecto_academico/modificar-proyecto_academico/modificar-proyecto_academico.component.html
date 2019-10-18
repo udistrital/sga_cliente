@@ -297,7 +297,7 @@
                                     <button mat-button>
                                         <mat-icon> attach_file</mat-icon>
                                     </button>
-                                    <button mat-button type="button" (click)="downloadFile(data.id_documento_alta_calidad)">
+                                    <button *ngIf="data.id_documento_alta_calidad" mat-button type="button" (click)="downloadFile(data.id_documento_alta_calidad)">
                                         <mat-icon>cloud_download</mat-icon>
                                     </button>
                                     <br>
