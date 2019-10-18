@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { ListRegistroProyectoAcademicoComponent } from '../list-registro_proyecto_academico/list-registro_proyecto_academico.component';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'ngx-consulta-proyecto-academico',
@@ -62,7 +64,33 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
     }
   
   downloadActoFile(project: any) {
-    console.log("proyecto", project.id_documento_acto);
+    var filesToGet = [
+      {
+        Id: project.id_documento_acto,
+        key: project.id_documento_acto,
+      },
+    ];
+    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
+      .subscribe(response => {
+        const filesResponse = <any>response;
+        if (Object.keys(filesResponse).length === filesToGet.length) {
+          console.log("files", filesResponse);
+          filesToGet.forEach((file: any) => {
+            const url = filesResponse[file.Id];
+            window.open(url, 'test', 'toolbar=no,' +
+            'location=no, directories=no, status=no, menubar=no,' +
+            'scrollbars=no, resizable=no, copyhistory=no');
+          });
+        }
+      },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
   }
 
   cloneProject(project: any): void {
