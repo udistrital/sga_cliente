@@ -62,9 +62,9 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
     onclick(): void {
       this.dialogRef.close();
     }
-  
+
   downloadActoFile(project: any) {
-    var filesToGet = [
+    const filesToGet = [
       {
         Id: project.id_documento_acto,
         key: project.id_documento_acto,
@@ -74,7 +74,7 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
       .subscribe(response => {
         const filesResponse = <any>response;
         if (Object.keys(filesResponse).length === filesToGet.length) {
-          console.log("files", filesResponse);
+          // console.log("files", filesResponse);
           filesToGet.forEach((file: any) => {
             const url = filesResponse[file.Id];
             // let newWindow = window.open('','_blank')
