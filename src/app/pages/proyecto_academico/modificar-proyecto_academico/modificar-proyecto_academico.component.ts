@@ -271,11 +271,11 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }
     }
 
-    downloadActoFile(project: any) {
+    downloadFile(id_documento: any) {
       const filesToGet = [
         {
-          Id: project.id_documento_acto,
-          key: project.id_documento_acto,
+          Id: id_documento,
+          key: id_documento,
         },
       ];
       this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
