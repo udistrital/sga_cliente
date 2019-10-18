@@ -356,8 +356,12 @@
                             <br>
                             <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document_acto' | translate }}</label>
                             <button mat-button>
-                                       <mat-icon> attach_file</mat-icon>
-                                    </button>
+                                <mat-icon> attach_file</mat-icon>
+                            </button>
+                            <button mat-button type="button" (click)="downloadActoFile(data)">
+                                <mat-icon>cloud_download</mat-icon>
+                                <!--span>Select</span-->
+                            </button>
                         </form>
                     </nb-card-body>
                 </nb-card>

@@ -124,7 +124,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
              fechainiciocoordinador: this.fecha_inicio_coordinador, idcoordinador: this.id_coordinador,
              tieneregistroaltacalidad: this.existe_registro_alta_calidad, resolucion_alta: this.resolucion_alta_calidad,
              resolucion_alta_ano: this.resolucion_alta_calidad_ano, vigencia_meses_alta: this.vigencia_resolucion_meses_alta_calidad,
-             vigencia_ano_alta: this.vigencia_resolucion_anos_alta_calidad, fecha_creacion_registro_alta: this.fecha_creacion_resolucion_alta_calidad},
+             vigencia_ano_alta: this.vigencia_resolucion_anos_alta_calidad, fecha_creacion_registro_alta: this.fecha_creacion_resolucion_alta_calidad,
+             id_documento_acto: this.id_documento_acto},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -293,6 +294,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.resolucion_alta_calidad = res.map((data: any) => (data.NumeroActoAdministrativoAltaCalidad));
         this.resolucion_alta_calidad_ano = res.map((data: any) => (data.AnoActoAdministrativoIdAltaCalidad));
         this.fecha_creacion_resolucion_alta_calidad = res.map((data: any) => (data.FechaCreacionActoAdministrativoAltaCalidad));
+        this.id_documento_acto = res.map((data: any) => (data.ProyectoAcademico.EnlaceActoAdministrativo))[0];
         if (this.existe_registro_alta_calidad[0] === true) {
           this.vigencia_resolucion_meses_alta_calidad = res.map((data: any) => (data.VigenciaActoAdministrativoAltaCalidad.substr(6, 1)));
           this.vigencia_resolucion_anos_alta_calidad = res.map((data: any) => (data.VigenciaActoAdministrativoAltaCalidad.substr(12, 1)));

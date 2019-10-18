@@ -35,6 +35,8 @@ import { Persona } from '../../../@core/data/models/persona';
 import { Coordinador } from '../../../@core/data/models/proyecto_academico/coordinador';
 import { Router } from '@angular/router';
 import { MatSelect } from '@angular/material/select';
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
 
 @Component({
   selector: 'ngx-modificar-proyecto-academico',
@@ -155,6 +157,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ModificarProyectoAcademicoComponent>,
     private toasterService: ToasterService,
+    private nuxeoService: NuxeoService,
+    private documentoService: DocumentoService,
     private oikosService: OikosService,
     private personaService: PersonaService,
     private coreService: CoreService,
@@ -265,6 +269,41 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }else {
         this.fecha_creacion_cordin = momentTimezone.tz(this.data.fechainiciocoordinador, 'America/Bogota').format('YYYY-MM-DD HH:mm');
       }
+    }
+
+    downloadActoFile(project: any) {
+      const filesToGet = [
+        {
+          Id: project.id_documento_acto,
+          key: project.id_documento_acto,
+        },
+      ];
+      this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
+        .subscribe(response => {
+          const filesResponse = <any>response;
+          if (Object.keys(filesResponse).length === filesToGet.length) {
+            // console.log("files", filesResponse);
+            filesToGet.forEach((file: any) => {
+              const url = filesResponse[file.Id];
+              // let newWindow = window.open('','_blank')
+              const new_tab = window.open('', '_blank', 'toolbar=no,' +
+              'location=no, directories=no, status=no, menubar=no,' +
+              'scrollbars=no, resizable=no, copyhistory=no, height=400, width=400, top = 20, left=20');
+              new_tab.onload = () => {
+                new_tab.location = url;
+              };
+              new_tab.focus();
+            });
+          }
+        },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
     }
 
     loadenfasis() {
