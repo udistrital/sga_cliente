@@ -82,6 +82,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   nombre_completo: string;
   source: LocalDataSource = new LocalDataSource();
   proyectoJson: any;
+  id_documento_acto: string;
 
   constructor(private translate: TranslateService,
     private proyectoacademicoService: ProyectoAcademicoService,
@@ -98,7 +99,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
-             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, Id: this.idproyecto},
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, Id: this.idproyecto,
+             id_documento_acto: this.id_documento_acto},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -222,6 +224,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
         this.oferta = res.map((data: any) => (data.OfertaLetra));
         this.enfasis = res.map((data: any) => (data.Enfasis))[0];
+        this.id_documento_acto = res.map((data: any) => (data.ProyectoAcademico.EnlaceActoAdministrativo))[0];
         this.openDialogConsulta();
       }else {
       Swal(opt1)

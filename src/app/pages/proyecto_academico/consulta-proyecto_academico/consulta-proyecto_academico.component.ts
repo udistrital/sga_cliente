@@ -7,7 +7,8 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListRegistroProyectoAcademicoComponent } from '../list-registro_proyecto_academico/list-registro_proyecto_academico.component';
-
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
 
 @Component({
   selector: 'ngx-consulta-proyecto-academico',
@@ -24,6 +25,8 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
   constructor(private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialog,
+    private nuxeoService: NuxeoService,
+    private documentoService: DocumentoService,
     public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
     private routerService: Router,
     private formBuilder: FormBuilder) {
@@ -57,6 +60,10 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
     onclick(): void {
       this.dialogRef.close();
     }
+  
+  downloadActoFile(project: any) {
+    console.log("proyecto", project.id_documento_acto);
+  }
 
   cloneProject(project: any): void {
     this.routerService.navigateByUrl(`pages/proyecto_academico/crud-proyecto_academico/${project.Id}`);
