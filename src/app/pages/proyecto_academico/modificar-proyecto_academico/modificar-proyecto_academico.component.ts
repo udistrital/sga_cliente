@@ -195,7 +195,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
    this.loadunidadtiempo();
    this.loadarea();
    this.loadnucleo();
-   this. loadpersonas();
+   this.loadpersonas();
    this.loadenfasis();
    this.loadfechacoordinador();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
@@ -866,7 +866,7 @@ registrocoordinador() {
         Id:  Number(this.data.idproyecto),
       },
     }
-
+  console.info(this.coordinador_data)
     const opt: any = {
       title: this.translate.instant('GLOBAL.asignar'),
       text: this.translate.instant('editarproyecto.seguro_continuar_asignar'),
@@ -878,7 +878,7 @@ registrocoordinador() {
     Swal(opt)
     .then((willCreate) => {
       if (willCreate.value) {
-        this.proyectoacademicoService.post('proyecto_academico_rol_persona_dependecia/', this.coordinador_data)
+        this.sgamidService.post('proyecto_academico/coordinador/' + String(this.data.Id), this.coordinador_data)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
             Swal({

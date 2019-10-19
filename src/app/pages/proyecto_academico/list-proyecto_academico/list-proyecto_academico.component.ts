@@ -77,7 +77,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   primer_nombre: string;
   segundo_nombre: string;
   primer_apellido: string;
-  id_coordinador: Number;
+  id_coordinador: any;
   segundo_apellido: string;
   nombre_completo: string;
   source: LocalDataSource = new LocalDataSource();
@@ -349,10 +349,15 @@ promesaid_modificar(id: number): Promise<{id: number}> {
   .subscribe((res: any) => {
     const r = <any>res;
     if (res !== null && r.Type !== 'error') {
-    this.fecha_inicio_coordinador = res.map((data: any) => (data.FechaInicio))[0];
-    this.id_coordinador = res.map((data: any) => (data.PersonaId));
     this.coordinador = <any>res;
+    this.coordinador.forEach((uni: any ) => {
+      if (uni.Activo === true) {
+        this.coordinador = uni;
+      }
+    });
     console.info(this.coordinador)
+    this.id_coordinador = this.coordinador['PersonaId'];
+    this.fecha_inicio_coordinador = this.coordinador['FechaInicio'];
   }else {
     Swal(opt1)
     .then((willDelete) => {
@@ -370,6 +375,7 @@ promesaid_modificar(id: number): Promise<{id: number}> {
   });
 });
  }
+
 
 inhabilitarProyecto(row: any): void {
   let inhabilitar_title = this.translate.instant('consultaproyecto.inhabilitar_proyecto');
