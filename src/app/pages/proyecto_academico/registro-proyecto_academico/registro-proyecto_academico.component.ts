@@ -149,7 +149,7 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
     return new Promise((resolve, reject) => {
       files.forEach((file) => {
         file.Id = file.nombre,
-        file.nombre = 'soporte_' + file.IdDocumento + '_creacion_proyecto_curricular_'
+        file.nombre = 'soporte_' + file.IdDocumento + '_actualizacion_registro_proyecto_'
           + this.data.IdProyecto + '_tipo_registro_' + Number(this.data.tipo_registro);
         // file.key = file.Id;
         file.key = 'soporte_' + file.IdDocumento;
@@ -239,6 +239,15 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
           }
         });
       }
+    })
+    .catch((res) => {
+      Swal({
+        type: 'error',
+         title: res.Code,
+        text: this.translate.instant('ERROR.' + res.Code),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+      this.showToast('error', 'error', this.translate.instant('historial_registro.registro_no_creado'));
     });
   } else {
     const opt1: any = {
