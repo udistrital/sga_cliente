@@ -52,7 +52,7 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
     private toasterService: ToasterService) {
       this.loadregistro();
   }
-  
+
   downloadFile(id_documento: any) {
     const filesToGet = [
       {
