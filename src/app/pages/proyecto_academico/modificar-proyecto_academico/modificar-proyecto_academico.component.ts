@@ -156,19 +156,11 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     private formBuilder: FormBuilder) {
       this.basicform = this.formBuilder.group({
         codigo_snies: ['', Validators.required],
-        facultad: ['', Validators.required],
-        nivel_proyecto: ['', Validators.required],
-        metodologia_proyecto: ['', Validators.required],
         nombre_proyecto: ['', Validators.required],
         abreviacion_proyecto: ['', [Validators.required, Validators.maxLength(20)]],
         correo_proyecto: ['', [Validators.required, Validators.email]],
-        numero_proyecto: ['', Validators.required],
         creditos_proyecto: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]],
         duracion_proyecto: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]],
-        tipo_duracion_proyecto: ['', Validators.required],
-        ciclos_proyecto: ['', Validators.required],
-        ofrece_proyecto: ['', Validators.required],
-        // enfasis_proyecto: ['', Validators.required],
      })
      this.resoluform = formBuilder.group({
       resolucion: ['', Validators.required],
