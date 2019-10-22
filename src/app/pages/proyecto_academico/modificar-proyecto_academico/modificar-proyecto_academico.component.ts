@@ -101,6 +101,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   dependencia: Dependencia;
   personas: Array<Persona>;
   creandoAutor: boolean= true;
+  dpDayPickerConfig: any;
 
 
   CampoControl = new FormControl('', [Validators.required]);
@@ -154,6 +155,13 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     private routerService: Router,
     private unidadtiempoService: UnidadTiempoService,
     private formBuilder: FormBuilder) {
+      this.dpDayPickerConfig = {
+        locale: 'es',
+        format: 'YYYY-MM-DD HH:mm',
+        showTwentyFourHours: false,
+        showSeconds: false,
+        returnedValueType: 'String',
+      }
       this.basicform = this.formBuilder.group({
         codigo_snies: ['', Validators.required],
         nombre_proyecto: ['', Validators.required],
@@ -189,6 +197,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
      this.coordinador = formBuilder.group({
       fecha_creacion_coordinador: ['', Validators.required],
      })
+     console.info(this.data)
+     console.info(this.data.fecha_creacion_registro_alta + 'ojo')
     this.loadfacultad();
    this.loadnivel();
    this.loadmetodologia();
@@ -198,11 +208,12 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
    this.loadpersonas();
    this.loadenfasis();
    this.loadfechacoordinador();
+   this.loadfechaaltacalidad();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
    this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
    this.checkalta =  Boolean(JSON.parse(this.data.tieneregistroaltacalidad));
-   this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
+   // this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DD HH:mm');
    // enfasis
    this.arr_enfasis_proyecto = this.data.enfasis;
    this.source_emphasys.load(this.arr_enfasis_proyecto);
@@ -241,9 +252,17 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
 
     }
 
+    loadfechaaltacalidad() {
+      if (this.data.fecha_creacion_registro_alta[0] == null) {
+        this.fecha_creacion_alta = null
+      }else {
+        this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DD HH:mm');
+      }
+    }
+
     loadfechacoordinador() {
       if (this.data.fechainiciocoordinador == null) {
-        this.fecha_creacion_calificado = null
+        this.fecha_creacion_cordin = null
       }else {
         this.fecha_creacion_cordin = momentTimezone.tz(this.data.fechainiciocoordinador, 'America/Bogota').format('YYYY-MM-DDTHH:mm');
       }
@@ -659,7 +678,8 @@ putinformacionregistro() {
       Id: 0,
       AnoActoAdministrativoId: String(this.resoluform.value.ano_resolucion),
       NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
-      FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
+      // FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
+      FechaCreacionActoAdministrativo: moment(this.fecha_creacion_calificado).format('YYYY-MM-DDTHH:mm') + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
       EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
@@ -674,7 +694,8 @@ putinformacionregistro() {
       Id: 0,
       AnoActoAdministrativoId: String(this.resolualtaform.value.ano_resolucion),
       NumeroActoAdministrativo: Number(this.resolualtaform.value.resolucion),
-      FechaCreacionActoAdministrativo: this.fecha_creacion_alta + ':00Z',
+      // FechaCreacionActoAdministrativo: this.fecha_creacion_alta + ':00Z',
+      FechaCreacionActoAdministrativo: moment(this.fecha_creacion_alta).format('YYYY-MM-DDTHH:mm') + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resolualtaform.value.mes_vigencia + 'Años:' + this.resolualtaform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento_alta + 'Z',
       EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
@@ -769,13 +790,13 @@ putinformacionregistro() {
       Activo: true,
       Oferta: this.checkofrece,
       UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
-      AnoActoAdministrativoId: this.actoform.value.ano_acto,
+      AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
       DependenciaId: this.opcionSeleccionadoFacultad['Id'],
       AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
       NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
       MetodologiaId: this.metodologia,
       NivelFormacionId: this.nivel_formacion,
-      AnoActoAdministrativo: this.actoform.value.ano_acto,
+      AnoActoAdministrativo: String(this.actoform.value.ano_acto),
     }
 
     this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
@@ -783,7 +804,8 @@ putinformacionregistro() {
       Id: 0,
       AnoActoAdministrativoId: String(this.resoluform.value.ano_resolucion),
       NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
-      FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
+      // FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
+      FechaCreacionActoAdministrativo: moment(this.fecha_creacion_calificado).format('YYYY-MM-DDTHH:mm') + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
       EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
@@ -861,7 +883,9 @@ registrocoordinador() {
       DependenciaId: 0,
       RolId: 0,
       Activo: true,
-      FechaInicio: this.coordinador.value.fecha_creacion_coordinador + ':00Z',
+      // FechaInicio: this.coordinador.value.fecha_creacion_coordinador + ':00Z',
+      FechaInicio: moment(this.coordinador.value.fecha_creacion_coordinador).format('YYYY-MM-DDTHH:mm') + ':00Z',
+      FechaFinalizacion: '2019-10-22T11:27:00Z',
       ProyectoAcademicoInstitucionId: {
         Id:  Number(this.data.idproyecto),
       },

@@ -8,6 +8,7 @@ export class Coordinador {
     RolId: number;
     Activo: boolean;
     FechaInicio: string;
+    FechaFinalizacion: string;
     ProyectoAcademicoInstitucionId: ProyectoId;
 
 }
