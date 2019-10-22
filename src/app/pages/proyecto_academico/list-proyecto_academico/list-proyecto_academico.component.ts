@@ -94,7 +94,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
 
   openDialogConsulta(): void {
     const dialogRef = this.dialog.open(ConsultaProyectoAcademicoComponent, {
-      width: '550px',
+      width: '650px',
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
