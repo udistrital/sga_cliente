@@ -824,6 +824,7 @@ putinformacionregistro() {
             });
             this.showToast('error', 'error', this.translate.instant('editarproyecto.proyecto_no_actualizado'));
           } else {
+            this.dialogRef.close();
             const opt1: any = {
               title: this.translate.instant('editarproyecto.actualizado'),
               text: this.translate.instant('editarproyecto.proyecto_actualizado'),
