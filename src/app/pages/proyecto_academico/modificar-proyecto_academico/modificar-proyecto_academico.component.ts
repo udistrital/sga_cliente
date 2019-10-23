@@ -145,6 +145,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   settings_emphasys: any;
 
   fileActoAdministrativo: any;
+  fileRegistroCalificado: any;
 
   dpDayPickerConfig: any = {
     locale: 'es',
@@ -288,6 +289,21 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           file.IdDocumento = 10;
           file.file = event.target.files[0];
           this.fileActoAdministrativo = file;
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+        }
+      }
+    }
+
+    onInputRegistroCalificado(event) {
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        if (file.type === 'application/pdf') {
+          file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+          file.url = this.cleanURL(file.urlTemp);
+          file.IdDocumento = 9;
+          file.file = event.target.files[0];
+          this.fileRegistroCalificado = file;
         } else {
           this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
         }
@@ -753,7 +769,8 @@ putinformacionregistro() {
         CorreoElectronico: String(this.basicform.value.correo_proyecto),
         CiclosPropedeuticos: this.checkciclos,
         NumeroActoAdministrativo: Number(this.actoform.value.acto),
-        EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+        // EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+        EnlaceActoAdministrativo: this.data.id_documento_acto,
         Competencias: String(this.compleform.value.competencias),
         CodigoAbreviacion: String(this.basicform.value.abreviacion_proyecto),
         Activo: true,
@@ -775,7 +792,8 @@ putinformacionregistro() {
       FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
-      EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      // EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      EnlaceActo: this.data.id_documento_registor_calificado,
       Activo: true,
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
       TipoRegistroId: this.tipo_registro = {
@@ -811,8 +829,12 @@ putinformacionregistro() {
       showCancelButton: true,
     };
     Swal(opt)
-    .then((willCreate) => {
+    .then(async (willCreate) => {
       if (willCreate.value) {
+        if (this.fileRegistroCalificado) {
+          const idFileRegistroCalificado = await this.uploadFilesModificacionProyecto([this.fileRegistroCalificado]);
+          registro_put.Registro[0].EnlaceActo = idFileRegistroCalificado + '';
+        }
         this.proyectoacademicoService.put('tr_proyecto_academico/registro/' + Number(this.data.idproyecto), registro_put)
         .subscribe((res: any) => {
           if (res.Type === 'error') {

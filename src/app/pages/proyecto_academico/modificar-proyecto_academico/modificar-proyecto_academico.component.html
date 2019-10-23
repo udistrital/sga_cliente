@@ -240,12 +240,14 @@
                                 </mat-form-field>
                                 <br>
                                 <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
-                                <button mat-button>
-                                     <mat-icon> attach_file</mat-icon>
+                                <button mat-button type="button" (click)="fileInputRegistroCalificado.click()">
+                                    <mat-icon>attach_file</mat-icon>
+                                    <input #fileInputRegistroCalificado type="file" (change)="onInputRegistroCalificado($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
                                 </button>
                                 <button mat-button type="button" (click)="downloadFile(data.id_documento_registor_calificado)">
                                     <mat-icon>cloud_download</mat-icon>
                                 </button>
+                                <label *ngIf="fileRegistroCalificado">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileRegistroCalificado.name}}</label>
                                 <br>
                                 <mat-form-field>
                                     <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
@@ -363,7 +365,6 @@
                             <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document_acto' | translate }}</label>
                             <button mat-button type="button" (click)="fileInputActoAdministrativo.click()">
                                 <mat-icon>attach_file</mat-icon>
-                                <!--span>Select</span-->
                                 <input #fileInputActoAdministrativo type="file" (change)="onInputActoAdministrativo($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
                             </button>
                             <button mat-button type="button" (click)="downloadFile(data.id_documento_acto)">
