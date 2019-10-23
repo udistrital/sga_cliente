@@ -37,6 +37,7 @@ import { Router } from '@angular/router';
 import { MatSelect } from '@angular/material/select';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'ngx-modificar-proyecto-academico',
@@ -143,6 +144,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   arr_enfasis_proyecto: any[] = [];
   settings_emphasys: any;
 
+  fileActoAdministrativo: any;
+
   dpDayPickerConfig: any = {
     locale: 'es',
     format: 'YYYY-MM-DD HH:mm',
@@ -159,6 +162,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     private toasterService: ToasterService,
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
+    private sanitization: DomSanitizer,
     private oikosService: OikosService,
     private personaService: PersonaService,
     private coreService: CoreService,
@@ -268,6 +272,25 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         this.fecha_creacion_calificado = null
       }else {
         this.fecha_creacion_cordin = momentTimezone.tz(this.data.fechainiciocoordinador, 'America/Bogota').format('YYYY-MM-DD HH:mm');
+      }
+    }
+
+    cleanURL(oldURL: string): SafeResourceUrl {
+      return this.sanitization.bypassSecurityTrustUrl(oldURL);
+    }
+
+    onInputActoAdministrativo(event) {
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        if (file.type === 'application/pdf') {
+          file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+          file.url = this.cleanURL(file.urlTemp);
+          file.IdDocumento = 10;
+          file.file = event.target.files[0];
+          this.fileActoAdministrativo = file;
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+        }
       }
     }
 
@@ -555,6 +578,30 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     });
   }
 
+  uploadFilesModificacionProyecto(files) {
+    return new Promise((resolve, reject) => {
+      files.forEach((file) => {
+        file.Id = file.nombre,
+        file.nombre = 'soporte_' + file.IdDocumento + '_modificacion_proyecto_curricular_'
+          + this.basicform.value.codigo_snies + '_' + this.basicform.value.nombre_proyecto;
+        // file.key = file.Id;
+        file.key = 'soporte_' + file.IdDocumento;
+       });
+      this.nuxeoService.getDocumentos$(files, this.documentoService)
+        .subscribe(response => {
+          if (Object.keys(response).length === files.length) {
+            // console.log("response", response);
+            files.forEach((file) => {
+              // Se restringe carga a un archivo
+              resolve(response[file.key].Id);
+            });
+          }
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
   putinformacionbasica() {
     if ( this.compleform.valid && this.basicform.valid) {
     this.metodologia = {
@@ -630,8 +677,15 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       showCancelButton: true,
     };
     Swal(opt)
-    .then((willCreate) => {
+    .then(async (willCreate) => {
       if (willCreate.value) {
+
+        // Si se actualiza el acto administrativo
+        if (this.fileActoAdministrativo) {
+          const idFileActoAdministratico = await this.uploadFilesModificacionProyecto([this.fileActoAdministrativo]);
+          informacion_basicaPut.ProyectoAcademicoInstitucion.EnlaceActoAdministrativo = idFileActoAdministratico + '';
+        }
+
         this.proyectoacademicoService.put('tr_proyecto_academico/informacion_basica/' + Number(this.data.idproyecto), informacion_basicaPut)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
@@ -646,6 +700,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             this.arr_enfasis_proyecto.forEach((enfasis_temp: any) => {
               enfasis_temp.esNuevo = false;
             });
+            this.dialogRef.close();
             const opt1: any = {
               title: this.translate.instant('editarproyecto.actualizado'),
               text: this.translate.instant('editarproyecto.proyecto_actualizado'),
