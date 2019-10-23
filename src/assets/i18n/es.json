@@ -438,6 +438,7 @@
         "seguro_continuar_registrar": "¿Esta seguro de registrar un nuevo registro a este proyecto académico?",
         "registro_no_creado": "Registro no creado",
         "registro_creado": "Registro creado correctamente",
-        "creado": "Registro Creado!"
+        "creado": "Registro Creado!",
+        "crear_registro": "Crear nuevo registro al Proyecto Académico"
     }
 }

@@ -60,6 +60,7 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
   tipo_registro: TipoRegistro;
   fecha_calculada_vencimiento: string
   registro_nuevo: NuevoRegistro
+  dpDayPickerConfig: any;
 
 
   Campo11Control = new FormControl('', [Validators.required, Validators.maxLength(4)]);
@@ -91,6 +92,13 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
     private documentoService: DocumentoService,
     private sanitization: DomSanitizer,
     private formBuilder: FormBuilder) {
+      this.dpDayPickerConfig = {
+        locale: 'es',
+        format: 'YYYY-MM-DD HH:mm',
+        showTwentyFourHours: false,
+        showSeconds: false,
+        returnedValueType: 'String',
+      }
      this.resoluform = formBuilder.group({
       resolucion: ['', Validators.required],
       ano_resolucion: ['', [Validators.required, Validators.maxLength(4)]],
@@ -184,7 +192,8 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
     this.registro_nuevo = {
       AnoActoAdministrativoId: this.resoluform.value.ano_resolucion,
       NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
-      FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
+      // FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
+      FechaCreacionActoAdministrativo: moment(this.fecha_creacion).format('YYYY-MM-DDTHH:mm') + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
       EnlaceActo: 'Ejemploenalce.udistrital.edu.co',

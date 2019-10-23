@@ -435,6 +435,7 @@
         "seguro_continuar_registrar": "Are you sure you register a new record for this academic project?",
         "registro_no_creado": "Record not created",
         "registro_creado": "Record created successfully",
-        "creado": "Registration Created!"
+        "creado": "Registration Created!",
+        "crear_registro": "Create new registration to the Academic Project"
     }
 }
