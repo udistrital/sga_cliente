@@ -296,12 +296,14 @@
                                     </mat-form-field>
                                     <br>
                                     <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
-                                    <button mat-button>
-                                        <mat-icon> attach_file</mat-icon>
+                                    <button mat-button type="button" (click)="fileInputRegistroAltaCalidad.click()">
+                                        <mat-icon>attach_file</mat-icon>
+                                        <input #fileInputRegistroAltaCalidad type="file" (change)="onInputRegistroAltaCalidad($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
                                     </button>
                                     <button *ngIf="data.id_documento_alta_calidad" mat-button type="button" (click)="downloadFile(data.id_documento_alta_calidad)">
                                         <mat-icon>cloud_download</mat-icon>
                                     </button>
+                                    <label *ngIf="fileRegistroAltaCalidad">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileRegistroAltaCalidad.name}}</label>
                                     <br>
                                     <mat-form-field>
                                         <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>

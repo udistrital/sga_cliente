@@ -146,6 +146,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
 
   fileActoAdministrativo: any;
   fileRegistroCalificado: any;
+  fileRegistroAltaCalidad: any;
 
   dpDayPickerConfig: any = {
     locale: 'es',
@@ -304,6 +305,21 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           file.IdDocumento = 9;
           file.file = event.target.files[0];
           this.fileRegistroCalificado = file;
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+        }
+      }
+    }
+
+    onInputRegistroAltaCalidad(event) {
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        if (file.type === 'application/pdf') {
+          file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+          file.url = this.cleanURL(file.urlTemp);
+          file.IdDocumento = 9;
+          file.file = event.target.files[0];
+          this.fileRegistroAltaCalidad = file;
         } else {
           this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
         }
@@ -808,7 +824,8 @@ putinformacionregistro() {
       FechaCreacionActoAdministrativo: this.fecha_creacion_alta + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resolualtaform.value.mes_vigencia + 'Años:' + this.resolualtaform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento_alta + 'Z',
-      EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      // EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      EnlaceActo: this.data.id_documento_alta_calidad,
       Activo: true,
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
       TipoRegistroId: this.tipo_registro = {
@@ -834,6 +851,10 @@ putinformacionregistro() {
         if (this.fileRegistroCalificado) {
           const idFileRegistroCalificado = await this.uploadFilesModificacionProyecto([this.fileRegistroCalificado]);
           registro_put.Registro[0].EnlaceActo = idFileRegistroCalificado + '';
+        }
+        if (this.fileRegistroAltaCalidad) {
+          const idFileRegistroAlta = await this.uploadFilesModificacionProyecto([this.fileRegistroAltaCalidad]);
+          registro_put.Registro[1].EnlaceActo = idFileRegistroAlta + '';
         }
         this.proyectoacademicoService.put('tr_proyecto_academico/registro/' + Number(this.data.idproyecto), registro_put)
         .subscribe((res: any) => {
