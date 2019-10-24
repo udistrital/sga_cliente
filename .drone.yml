@@ -70,5 +70,4 @@ pipeline:
     when:
       status: [success, failure]
       branch: [master, test]
-      event: [push, pull_request]      
-  
+      event: [push, pull_request]
