@@ -147,6 +147,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   fileActoAdministrativo: any;
   fileRegistroCalificado: any;
   fileRegistroAltaCalidad: any;
+  fileResolucionCoordinador: any;
 
   dpDayPickerConfig: any = {
     locale: 'es',
@@ -1024,18 +1025,37 @@ putinformacionregistro() {
   }
 }
 }
+
+onInputResolucionCoordinador(event) {
+  if (event.target.files.length > 0) {
+    const file = event.target.files[0];
+    if (file.type === 'application/pdf') {
+      file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+      file.url = this.cleanURL(file.urlTemp);
+      file.IdDocumento = 11;
+      file.file = event.target.files[0];
+      this.fileResolucionCoordinador = file;
+    } else {
+      this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+    }
+  }
+}
+
+
 registrocoordinador() {
-  if ( this.coordinador.valid ) {
+  if ( this.coordinador.valid && this.fileResolucionCoordinador) {
     this.coordinador_data = {
       PersonaId: this.coordinadorSeleccionado['Id'],
       DependenciaId: 0,
       RolId: 0,
       Activo: true,
+      ResolucionAsignacionId: this.data.id_documento_registro_coordinador,
       // FechaInicio: this.coordinador.value.fecha_creacion_coordinador + ':00Z',
       FechaInicio: moment(this.coordinador.value.fecha_creacion_coordinador).format('YYYY-MM-DDTHH:mm') + ':00Z',
       ProyectoAcademicoInstitucionId: {
         Id:  Number(this.data.idproyecto),
       },
+
     }
   console.info(this.coordinador_data)
     const opt: any = {
@@ -1047,8 +1067,14 @@ registrocoordinador() {
       showCancelButton: true,
     };
     Swal(opt)
-    .then((willCreate) => {
+    .then(async (willCreate) => {
       if (willCreate.value) {
+
+        if (this.fileResolucionCoordinador) {
+          const idFileResolucionCoordinador = await this.uploadFilesModificacionProyecto([this.fileResolucionCoordinador]);
+          this.coordinador_data.ResolucionAsignacionId = Number(idFileResolucionCoordinador);
+        }
+
         this.sgamidService.post('proyecto_academico/coordinador/' + String(this.data.Id), this.coordinador_data)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
@@ -1060,6 +1086,7 @@ registrocoordinador() {
             });
             this.showToast('error', 'error', this.translate.instant('editarproyecto.coordinador_no_asignado'));
           } else {
+            this.dialogRef.close();
             const opt1: any = {
               title: this.translate.instant('editarproyecto.creado'),
               text: this.translate.instant('editarproyecto.coordinador_asignado'),
