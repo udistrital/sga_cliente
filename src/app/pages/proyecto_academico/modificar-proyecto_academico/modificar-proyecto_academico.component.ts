@@ -933,7 +933,8 @@ putinformacionregistro() {
       CorreoElectronico: String(this.basicform.value.correo_proyecto),
       CiclosPropedeuticos: this.checkciclos,
       NumeroActoAdministrativo: Number(this.actoform.value.acto),
-      EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+      // EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+      EnlaceActoAdministrativo: this.data.id_documento_acto,
       Competencias: String(this.compleform.value.competencias),
       CodigoAbreviacion: String(this.basicform.value.abreviacion_proyecto),
       Activo: true,
@@ -977,8 +978,12 @@ putinformacionregistro() {
       showCancelButton: true,
     };
     Swal(opt)
-    .then((willCreate) => {
+    .then(async (willCreate) => {
       if (willCreate.value) {
+        if (this.fileRegistroCalificado) {
+          const idFileRegistroCalificado = await this.uploadFilesModificacionProyecto([this.fileRegistroCalificado]);
+          registro_put.Registro[0].EnlaceActo = idFileRegistroCalificado + '';
+        }
         this.proyectoacademicoService.put('tr_proyecto_academico/registro/' + Number(this.data.idproyecto), registro_put)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
@@ -990,6 +995,7 @@ putinformacionregistro() {
             });
             this.showToast('error', 'error', this.translate.instant('editarproyecto.proyecto_no_actualizado'));
           } else {
+            this.dialogRef.close();
             const opt1: any = {
               title: this.translate.instant('editarproyecto.actualizado'),
               text: this.translate.instant('editarproyecto.proyecto_actualizado'),
