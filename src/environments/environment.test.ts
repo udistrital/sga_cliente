@@ -14,7 +14,7 @@ export const environment = {
   CONF_MENU_SERVICE: 'http://10.20.0.254/configuracion_api/v1/menu_opcion_padre/ArbolMenus/',
   TOKEN: {
     AUTORIZATION_URL: 'https://autenticacion.portaloas.udistrital.edu.co/oauth2/authorize',
-    CLIENTE_ID: '3r8DbyjNrVvcf5Z1CSsBGpGWzrwa',
+    CLIENTE_ID: 'm6xGggH1_HF4PIpoczcDA6EFEYUa',
     RESPONSE_TYPE: 'id_token token',
     SCOPE: 'openid email role documento',
     REDIRECT_URL: 'https://pruebassga.portaloas.udistrital.edu.co',
