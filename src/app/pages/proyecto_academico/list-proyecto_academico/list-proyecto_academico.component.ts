@@ -85,6 +85,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   id_documento_acto: string;
   id_documento_registor_calificado: string;
   id_documento_alta_calidad: string;
+  id_documento_registro_coordinador: number;
 
   constructor(private translate: TranslateService,
     private proyectoacademicoService: ProyectoAcademicoService,
@@ -128,7 +129,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
              resolucion_alta_ano: this.resolucion_alta_calidad_ano, vigencia_meses_alta: this.vigencia_resolucion_meses_alta_calidad,
              vigencia_ano_alta: this.vigencia_resolucion_anos_alta_calidad, fecha_creacion_registro_alta: this.fecha_creacion_resolucion_alta_calidad,
              id_documento_acto: this.id_documento_acto, id_documento_registor_calificado: this.id_documento_registor_calificado,
-             id_documento_alta_calidad: this.id_documento_alta_calidad},
+             id_documento_alta_calidad: this.id_documento_alta_calidad, id_documento_registro_coordinador: this.id_documento_registro_coordinador},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -374,6 +375,7 @@ promesaid_modificar(id: number): Promise<{id: number}> {
     console.info(this.coordinador)
     this.id_coordinador = this.coordinador['PersonaId'];
     this.fecha_inicio_coordinador = this.coordinador['FechaInicio'];
+    this.id_documento_registro_coordinador = this.coordinador['ResolucionAsignacionId'];
   }else {
     Swal(opt1)
     .then((willDelete) => {
