@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReportesComponent } from './reportes.component';
 import { InscritosProyectoComponent } from './inscripciones/inscritos-proyecto/inscritos-proyecto.component';
 import { ReporteProyectosListComponent } from './proyectos/list-proyectos/list-proyectos.component';
+import { ReporteHistoricoAcreditacionesComponent } from './proyectos/historico-acreditaciones/historico-acreditaciones.component';
 
 
 const routes: Routes = [{
@@ -16,6 +17,10 @@ const routes: Routes = [{
     {
       path: 'proyectos/list-proyectos',
       component: ReporteProyectosListComponent,
+    },
+    {
+      path: 'proyectos/historico-acreditaciones',
+      component: ReporteHistoricoAcreditacionesComponent,
     },
   ],
 }];
@@ -35,4 +40,5 @@ export const routedComponents = [
   ReportesComponent,
   InscritosProyectoComponent,
   ReporteProyectosListComponent,
+  ReporteHistoricoAcreditacionesComponent,
 ];

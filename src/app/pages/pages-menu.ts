@@ -158,6 +158,12 @@ export const MENU_ITEMS: MenuItem[] = [
             link: '/pages/reportes/proyectos/list-proyectos',
             key: 'lista_proyectos_curriculares',
           },
+          {
+            title: 'HistoricoAcreditaciones',
+            icon: 'nb-list',
+            link: '/pages/reportes/proyectos/historico-acreditaciones',
+            key: 'historico_acreditaciones',
+          },
         ],
       },
     ],
