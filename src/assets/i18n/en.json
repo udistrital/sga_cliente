@@ -35,6 +35,18 @@
             "list_evento": "Events List",
             "crud_evento": "Events Crud"
         },
+        "archivo_icfes": {
+          "archivo_icfes": "Icfes file",
+          "list_archivo": "File List",
+          "crud_archivo": "File Register"
+        },
+        "reportes": {
+          "reportes": "Reports",
+          "inscripciones": {
+            "inscripciones": "Inscriptions",
+            "inscritos_por_proyecto": "Enrolled by project"
+          }
+        },
         "auth": {
             "auth": "Auth",
             "login": "Login",
@@ -183,6 +195,20 @@
         "autores": "Authors",
         "resumen": "Summary",
         "placeholder_resumen": "e.g. summary"
+    },
+    "archivo_icfes": {
+      "archivo_icfes": "Icfes file",
+      "nombre": "Name",
+      "placeholder_nombre": "Ej. 2019-1 Icfes file",
+      "archivo": "File",
+      "registrar_archivo": "Are you sure you want to proccess this file?",
+      "archivo_registrado": "The file was processed successfully",
+      "error_formato": "Format file is not txt",
+      "archivo_no_registrado": "The file was not processed successfully, please try again"
+    },
+    "reportes": {
+      "inscritos_por_proyecto":"Enrolled by project",
+      "error_obteniendo_reporte":"There was an error getting the report information, please try again."
     },
     "evento": {
         "evento": "Event",
