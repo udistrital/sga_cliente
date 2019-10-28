@@ -1,5 +1,6 @@
 // import { NbMenuItem } from '@nebular/theme';
 import { MenuItem } from './menu-item';
+import { icon } from 'leaflet';
 
 export const MENU_ITEMS: MenuItem[] = [
   {
@@ -52,6 +53,80 @@ export const MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
+    title: 'Tipo Periodo',
+    icon: 'nb-compose',
+    link: '/pages/tipo_periodo',
+    key: 'tipo_periodo',
+    children: [
+      {
+        title: 'Lista Tipo Periodo',
+        link: '/pages/tipo_periodo/list-tipo_periodo',
+        key: 'lista_tipo_periodo',
+      },
+      {
+        title: 'CRUD Tipo Periodo',
+        link: '/pages/tipo_periodo/crud-tipo_periodo',
+        key: 'crud_tipo_periodo',
+      },
+    ],
+  },
+  {
+    title: 'Periodo',
+    icon: 'nb-compose',
+    link: '/pages/periodo',
+    key: 'periodo',
+    children: [
+      {
+        title: 'Lista Periodo',
+        link: '/pages/periodo/list-periodo',
+        key: 'lista_periodo',
+      },
+      {
+        title: 'CRUD Periodo',
+        link: '/pages/periodo/crud-periodo',
+        key: 'crud_periodo',
+      },
+    ],
+  },
+  {
+    title: 'Calendarioevento',
+    icon: 'nb-compose',
+    link: '/pages/calendarioevento',
+    key: 'calendarioevento',
+    children: [
+      {
+        title: 'Lista Calendarioevento',
+        link: '/pages/calendarioevento/list-calendarioevento',
+        key: 'lista_calendarioevento',
+      },
+      // {
+      //   title: 'CRUD Calendarioevento',
+      //   link: '/pages/calendarioevento/crud-calendarioevento',
+      //   key: 'crud_calendarioevento',
+      // },
+    ],
+  },
+  {
+    title: 'Proyecto Academico',
+    icon: 'nb-compose',
+    link: '',
+    key: 'proyecto_academico',
+    children: [
+      {
+        title: 'Registro de un Proyecto',
+        icon: 'nb-compose',
+        link: '/pages/proyecto_academico/crud-proyecto_academico',
+        key: 'crud_proyecto_academico',
+      },
+      {
+        title: 'Listar Proyectos',
+        icon: 'nb-list',
+        link: '/pages/proyecto_academico/list-proyecto_academico',
+        key: 'list_proyecto_academico',
+      },
+    ],
+  },
+  {
     title: 'Reportes',
     icon: 'nb-compose',
     link: '',
@@ -73,6 +148,35 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Administración',
+    icon: 'nb-gear',
+    link: '',
+    key: 'administracion',
+    children: [
+      {
+        title: 'enfasis',
+        icon: 'nb-compose',
+        link: '',
+        key: 'enfasis',
+        children: [
+          {
+            title: 'Registrar Enfásis',
+            icon: 'nb-list',
+            link: '/pages/enfasis/crud-enfasis',
+            key: 'crud_enfasis',
+          },
+          {
+            title: 'Listar Enfásis',
+            icon: 'nb-list',
+            link: '/pages/enfasis/list-enfasis',
+            key: 'list_enfasis',
+          },
+        ],
+      },
+    ],
+  },
+
   /*
   {
     title: 'Menú',
