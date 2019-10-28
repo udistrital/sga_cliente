@@ -146,6 +146,20 @@ export const MENU_ITEMS: MenuItem[] = [
           },
         ],
       },
+      {
+        title: 'Proyectos',
+        icon: '	nb-maximize',
+        link: '',
+        key: 'proyectos_curriculares',
+        children: [
+          {
+            title: 'Proyectos',
+            icon: 'nb-list',
+            link: '/pages/reportes/proyectos/list-proyectos',
+            key: 'lista_proyectos_curriculares',
+          },
+        ],
+      },
     ],
   },
   {

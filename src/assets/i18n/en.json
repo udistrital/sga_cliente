@@ -45,6 +45,10 @@
           "inscripciones": {
             "inscripciones": "Inscriptions",
             "inscritos_por_proyecto": "Enrolled by project"
+          },
+          "proyectos_curriculares": {
+            "proyectos_curriculares": "Academic projects",
+            "lista_proyectos_curriculares": "Project list"
           }
         },
         "auth": {
@@ -208,6 +212,7 @@
     },
     "reportes": {
       "inscritos_por_proyecto":"Enrolled by project",
+      "proyectos_curriculares":"Academic projects",
       "error_obteniendo_reporte":"There was an error getting the report information, please try again."
     },
     "evento": {

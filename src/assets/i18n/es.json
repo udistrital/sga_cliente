@@ -45,6 +45,10 @@
           "inscripciones": {
             "inscripciones": "Inscripciones",
             "inscritos_por_proyecto": "Inscritos por proyecto"
+          },
+          "proyectos_curriculares": {
+            "proyectos_curriculares": "Proyectos curriculares",
+            "lista_proyectos_curriculares": "Listado de proyectos"
           }
         },
         "auth": {
@@ -210,6 +214,7 @@
     },
     "reportes": {
       "inscritos_por_proyecto":"Inscritos por proyecto",
+      "proyectos_curriculares":"Proyectos curriculares",
       "error_obteniendo_reporte":"Se produjo un error al obtener la información del informe, por favor vuelva a intentarlo."
     },
     "evento": {
