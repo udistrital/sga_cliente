@@ -22,7 +22,7 @@ export class ReporteProyectosListComponent implements OnInit {
 
   initReportConfig() {
     this.reportConfig = {
-      documentLabel: 'sga_v2_reporte_inscr',
+      documentLabel: 'proyectos_academicos',
       eecutionRole: '/spagobi/user/admin',
       // parameters: {'PARAMETERS': 'param_1=1&param_2=2'},
       displayToolbar: true,
