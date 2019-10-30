@@ -32,6 +32,25 @@
     }
   }
 
+  // holiii
+   .btn-success{
+  color: #fff;
+ background-color: #4FB9FF!important;
+border-color: #4FB9FF;
+box-shadow: 0 2px 12px 0 #4FB9FF
+}
+.nb-theme-default [nbButton].btn-success {
+ color: #fff;
+ background-color: #4FB9FF;
+ border-color: #4FB9FF;
+}
+
+a {
+ color: #4FB9FF;
+}
+
+
+
   .btn-group.dropdown {
     & > .btn:first-of-type.dropdown-toggle {
       @include nb-ltr() {
