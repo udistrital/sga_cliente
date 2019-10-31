@@ -199,8 +199,6 @@ $nb-themes: nb-register-theme((
 
   font-main: sans-serif,
   color-bg: #ffffff,
-  color-bg-active: rgb(42, 33, 168),
-  color-fg: rgb(153, 26, 142),
   color-fg-heading: #4fb9ff,
   color-fg-text: #000000,
   color-fg-highlight: #7ac273,
@@ -215,14 +213,16 @@ $nb-themes: nb-register-theme((
 
   btn-success-bg: #64d9ff,
   // Card
+ card-text-color: #23d123,
  card-fg: #ffffff,
- card-fg-text: #6f613f,
- card-fg-heading: #6f613f,
+ card-fg-text: #000000, // texto interno 
+ card-header-font-family: 'sans-serif',
+ card-header-font-size: 1.3rem,
+ card-fg-heading: #000000,
  card-bg: #ffffff,
- card-border-color: #ba4a3a,
+ card-header-fg: #64d9ff,
  card-separator: #ffffff73,
- card-header-fg: #6f613f,
- card-header-fg-heading: #6f613f,
+ card-header-fg-heading: #4fb9ff,
  card-header-active-bg:  rgb(7, 3, 58),
  card-header-success-bg: rgba(82, 162, 241, 0.2),
  card-header-info-bg:  #c0e7ff,

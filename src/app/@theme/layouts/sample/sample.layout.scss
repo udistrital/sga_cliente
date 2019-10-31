@@ -8,31 +8,33 @@
   }
 
   nb-sidebar.settings-sidebar {
-    $sidebar-width: 50rem;
-    background-color: #91e7ff;
-    transition: width 0.3s ease;
+    $sidebar-width: 19rem;
+
+    transition: transform 0.3s ease;
     width: $sidebar-width;
     overflow: hidden;
+    @include nb-ltr(transform, translate3d(100%, 0, 0));
+    @include nb-rtl(transform, translate3d(-100%, 0, 0));
+    &.start {
+      @include nb-ltr(transform, translate3d(-100%, 0, 0));
+      @include nb-rtl(transform, translate3d(100%, 0, 0));
+    }
 
-    &.collapsed {
-      width: 0;
+    &.expanded, &.expanded.start {
+      transform: translate3d(0, 0, 0);
+    }
 
-      /deep/ .main-container {
-        width: 0;
-        background-color: ##91e7ff;
-
-        .scrollable {
-          width: $sidebar-width;
-          padding: 1.25rem;
-        }
-      }
+    /deep/ .scrollable {
+      width: $sidebar-width;
+      padding: 3.4rem 0.25rem;
     }
 
     /deep/ .main-container {
       width: $sidebar-width;
       background: nb-theme(color-bg);
-      transition: width 0.3s ease;
+      transition: transform 0.3s ease;
       overflow: hidden;
+      position: relative;
 
       .scrollable {
         width: $sidebar-width;
@@ -88,10 +90,6 @@
       margin-top: 0;
     }
 
-    @include nb-for-theme(ud) {
-      margin-top: -4px;
-    }
-
     /deep/ .main-container {
       height:
         calc(#{nb-theme(sidebar-height)} - #{nb-theme(header-height)} - #{nb-theme(sidebar-header-gap)}) !important;
@@ -120,15 +118,6 @@
       text-align: center;
     }
 
-    .logoud {
-      opacity: 0.8;
-      filter: alpha(opacity=80); /* For IE8 and earlier */
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 1rem;
-    }
-
     background: transparent;
 
     .main-btn {
@@ -155,6 +144,15 @@
       }
     }
 
+    /deep/ nb-menu {
+      & > .menu-items {
+      }
+
+      .nb-e-commerce {
+        font-size: 2rem;
+      }
+    }
+
     &.compacted {
 
       /deep/ nb-sidebar-header {
@@ -175,7 +173,6 @@
       }
     }
   }
-
   @include media-breakpoint-down(xs) {
     .main-content {
       padding: 0.75rem !important;

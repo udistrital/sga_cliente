@@ -12,7 +12,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     title: 'Producción Academica',
-    icon: 'nb-compose',
+    icon: 'nb-edit',
     link: '',
     key: 'produccion_academica',
     children: [
@@ -58,7 +58,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     title: 'Periodo',
-    icon: 'nb-compose',
+    icon: 'nb-gear',
     link: '/pages/periodo',
     key: 'periodo',
     children: [
@@ -94,13 +94,13 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     title: 'Proyecto Academico',
-    icon: 'nb-compose',
+    icon: 'nb-edit',
     link: '',
     key: 'proyecto_academico',
     children: [
       {
         title: 'Registro de un Proyecto',
-        icon: 'nb-compose',
+        icon: 'nb-edit',
         link: '/pages/proyecto_academico/crud-proyecto_academico',
         key: 'crud_proyecto_academico',
       },
