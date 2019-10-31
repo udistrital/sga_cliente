@@ -102,7 +102,7 @@
   }
 
   @include nb-for-theme(corporate) {
-    $menu-action-separator-color: #C0E7FF;
+    $menu-action-separator-color: #c0e7ff;
 
     nb-action {
       @include nb-ltr(border-left-color, $menu-action-separator-color);
