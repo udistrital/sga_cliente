@@ -201,37 +201,37 @@ $nb-themes: nb-register-theme((
   color-bg: #ffffff,
   color-bg-active: rgb(42, 33, 168),
   color-fg: rgb(153, 26, 142),
-  color-fg-heading: #4FB9FF,
+  color-fg-heading: #4fb9ff,
   color-fg-text: #000000,
   color-fg-highlight: #7ac273,
   color-white: #ffffff,
   color-primary: rgb(73, 153, 26),
-  color-success: #64D9FF,
-  color-info: #A83121,
-  color-warning: #BA4A3A,
+  color-success: #64d9ff,
+  color-info: #a83121,
+  color-warning: #ba4a3a,
   color-danger: rgb(180, 56, 39),
 
   // btn
 
-  btn-success-bg: #64D9FF,
+  btn-success-bg: #64d9ff,
   // Card
  card-fg: #ffffff,
- card-fg-text: #6F613F,
- card-fg-heading: #6F613F,
+ card-fg-text: #6f613f,
+ card-fg-heading: #6f613f,
  card-bg: #ffffff,
- card-border-color: #BA4A3A,
+ card-border-color: #ba4a3a,
  card-separator: #ffffff73,
- card-header-fg: #6F613F,
- card-header-fg-heading: #6F613F,
+ card-header-fg: #6f613f,
+ card-header-fg-heading: #6f613f,
  card-header-active-bg:  rgb(7, 3, 58),
  card-header-success-bg: rgba(82, 162, 241, 0.2),
- card-header-info-bg:  #C0E7FF,
+ card-header-info-bg:  #c0e7ff,
  
 
 
   
   // footer
-  footer-fg: #64C9FF,
+  footer-fg: #64c9ff,
   footer-bg: #ffffff,
   footer-height: auto,
  // app wise variables for each theme
@@ -265,7 +265,7 @@ $nb-themes: nb-register-theme((
   margin: 1rem,
   layout-padding: 2rem 0.2rem 3rem,
 
-  sidebar-bg:  #4FB9FF,//#ffffff,
+  sidebar-bg:  #4fb9ff,//#ffffff,
   sidebar-fg: #000000,
   sidebar-shadow: none,
   sidebar-padding: 0.3rem,
@@ -274,16 +274,16 @@ $nb-themes: nb-register-theme((
 
   
   menu-icon-color: #ffffff,
-  card-shadow: 0 2px 5px 0    #C0E7FF,
+  card-shadow: 0 2px 5px 0    #c0e7ff,
 
-  menu-bg:  #4FB9FF,
+  menu-bg:  #4fb9ff,
   menu-fg: #ffffff,
-  menu-active-bg: #4FB9FF,
+  menu-active-bg: #4fb9ff,
   menu-active-fg: #ffffff,
   menu-font-size:0.875rem,
-  menu-item-separator: #4FB9FF,
+  menu-item-separator: #4fb9ff,
 
-  menu-submenu-bg: #4FB9FF,
+  menu-submenu-bg: #4fb9ff,
   menu-submenu-fg: #ffffff,
   menu-submenu-active-bg:  #ffffff,
   menu-submenu-active-fg: #000000,
@@ -302,7 +302,7 @@ $nb-themes: nb-register-theme((
   header-font-size: 0.7rem,
   header-height: 5.5rem,
   header-padding: none,
-  header-fg: #91E7FF,
+  header-fg: #91e7ff,
   header-bg: #ffffff,
   header-shadow: none,
 

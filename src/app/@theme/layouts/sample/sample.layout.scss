@@ -9,7 +9,7 @@
 
   nb-sidebar.settings-sidebar {
     $sidebar-width: 50rem;
-    background-color: #91E7FF;
+    background-color: #91e7ff;
     transition: width 0.3s ease;
     width: $sidebar-width;
     overflow: hidden;
@@ -19,7 +19,7 @@
 
       /deep/ .main-container {
         width: 0;
-        background-color: #91E7FF;
+        background-color: ##91e7ff;
 
         .scrollable {
           width: $sidebar-width;
