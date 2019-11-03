@@ -45,6 +45,11 @@
           "inscripciones": {
             "inscripciones": "Inscripciones",
             "inscritos_por_proyecto": "Inscritos por proyecto"
+          },
+          "proyectos_curriculares": {
+            "proyectos_curriculares": "Proyectos curriculares",
+            "lista_proyectos_curriculares": "Listado de proyectos",
+            "historico_acreditaciones": "Histórico de acreditaciones"
           }
         },
         "auth": {
@@ -210,6 +215,8 @@
     },
     "reportes": {
       "inscritos_por_proyecto":"Inscritos por proyecto",
+      "proyectos_curriculares":"Proyectos curriculares",
+      "historico_acreditaciones": "Histórico de acreditaciones",
       "error_obteniendo_reporte":"Se produjo un error al obtener la información del informe, por favor vuelva a intentarlo."
     },
     "evento": {
