@@ -9,6 +9,10 @@ const routes: Routes = [{
   component: PagesComponent,
   children: [
     {
+      path: 'archivo_icfes',
+      loadChildren: './archivo_icfes/archivo_icfes.module#ArchivoIcfesModule',
+    },
+    {
         path: 'dashboard',
         component: DashboardComponent,
     },
@@ -25,9 +29,13 @@ const routes: Routes = [{
       loadChildren: './produccion_academica/produccion_academica.module#ProduccionAcademicaModule',
     },
     {
+      path: 'reportes',
+      loadChildren: './reportes/reportes.module#ReportesModule',
+    },
+    {
       path: 'tipo_periodo',
       loadChildren: './tipo_periodo/tipo_periodo.module#TipoPeriodoModule',
-      },
+    },
     {
       path: 'periodo',
       loadChildren: './periodo/periodo.module#PeriodoModule',

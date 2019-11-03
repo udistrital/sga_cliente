@@ -35,6 +35,23 @@
             "list_evento": "Lista Eventos",
             "crud_evento": "Crud Eventos"
         },
+        "archivo_icfes": {
+          "archivo_icfes": "Archivo Icfes",
+          "list_archivo": "Lista archivos",
+          "crud_archivo": "Registrar archivo"
+        },
+        "reportes": {
+          "reportes": "Reportes",
+          "inscripciones": {
+            "inscripciones": "Inscripciones",
+            "inscritos_por_proyecto": "Inscritos por proyecto"
+          },
+          "proyectos_curriculares": {
+            "proyectos_curriculares": "Proyectos curriculares",
+            "lista_proyectos_curriculares": "Listado de proyectos",
+            "historico_acreditaciones": "Histórico de acreditaciones"
+          }
+        },
         "auth": {
             "auth": "Autenticacion",
             "login": "Login",
@@ -185,6 +202,22 @@
         "autor": "Autor",
         "resumen": "Resumen",
         "placeholder_resumen": "ej: resumen"
+    },
+    "archivo_icfes": {
+      "archivo_icfes": "Archivo de registros del icfes",
+      "nombre": "Nombre",
+      "placeholder_nombre": "Ej. Archivo del icfes 2019-1",
+      "archivo": "Archivo",
+      "registrar_archivo": "¿Está seguro de procesar este archivo?",
+      "archivo_registrado": "El archivo fue procesado correctamente",
+      "error_formato": "El formato del archivo no es txt",
+      "archivo_no_registrado": "El archivo no pudo ser procesado, por favor intente nuevamente."
+    },
+    "reportes": {
+      "inscritos_por_proyecto":"Inscritos por proyecto",
+      "proyectos_curriculares":"Proyectos curriculares",
+      "historico_acreditaciones": "Histórico de acreditaciones",
+      "error_obteniendo_reporte":"Se produjo un error al obtener la información del informe, por favor vuelva a intentarlo."
     },
     "evento": {
         "evento": "Evento",

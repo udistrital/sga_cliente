@@ -39,6 +39,20 @@ export const MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
+    title: 'Archivo Icfes',
+    icon: 'nb-compose',
+    link: '',
+    key: 'archivo_icfes',
+    children: [
+      {
+        title: 'Registrar archivo',
+        icon: 'nb-list',
+        link: '/pages/archivo_icfes/crud-archivo_icfes',
+        key: 'crud_archivo',
+      },
+    ],
+  },
+  {
     title: 'Tipo Periodo',
     icon: 'nb-compose',
     link: '/pages/tipo_periodo',
@@ -109,6 +123,48 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: 'nb-list',
         link: '/pages/proyecto_academico/list-proyecto_academico',
         key: 'list_proyecto_academico',
+      },
+    ],
+  },
+  {
+    title: 'Reportes',
+    icon: 'nb-compose',
+    link: '',
+    key: 'reportes',
+    children: [
+      {
+        title: 'Inscripciones',
+        icon: '	nb-maximize',
+        link: '',
+        key: 'inscripciones',
+        children: [
+          {
+            title: 'Inscritos por proyecto',
+            icon: 'nb-list',
+            link: '/pages/reportes/inscripciones/inscritos-proyecto',
+            key: 'inscritos_por_proyecto',
+          },
+        ],
+      },
+      {
+        title: 'Proyectos',
+        icon: '	nb-maximize',
+        link: '',
+        key: 'proyectos_curriculares',
+        children: [
+          {
+            title: 'Proyectos',
+            icon: 'nb-list',
+            link: '/pages/reportes/proyectos/list-proyectos',
+            key: 'lista_proyectos_curriculares',
+          },
+          {
+            title: 'HistoricoAcreditaciones',
+            icon: 'nb-list',
+            link: '/pages/reportes/proyectos/historico-acreditaciones',
+            key: 'historico_acreditaciones',
+          },
+        ],
       },
     ],
   },
