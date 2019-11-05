@@ -34,6 +34,9 @@ import { MatSelect } from '@angular/material/select';
 import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
 import { ActivatedRoute } from '@angular/router';
 import * as momentTimezone from 'moment-timezone';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -84,8 +87,12 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   dependencia_tipo_dependencia: DependenciaTipoDependencia;
   dependencia: Dependencia;
   fecha_calculada_vencimiento: string
-
-
+  fileResolucion: any;
+  fileActoAdministrativo: any;
+  uidResolucion: string;
+  uidActoAdministrativo: string;
+  idDocumentoAdministrativo: number;
+  idDocumentoResolucion: number;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -131,6 +138,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private unidadtiempoService: UnidadTiempoService,
     private dialogService: NbDialogService,
     private activatedRoute: ActivatedRoute,
+    private nuxeoService: NuxeoService,
+    private documentoService: DocumentoService,
+    private sanitization: DomSanitizer,
     private listEnfasisService: ListEnfasisService,
     private formBuilder: FormBuilder) {
 
@@ -344,6 +354,70 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     });
   }
 
+  cleanURL(oldURL: string): SafeResourceUrl {
+    return this.sanitization.bypassSecurityTrustUrl(oldURL);
+  }
+
+  onInputFileResolucion(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      if (file.type === 'application/pdf') {
+        file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+        file.url = this.cleanURL(file.urlTemp);
+        file.IdDocumento = 9;
+        file.file = event.target.files[0];
+        this.fileResolucion = file;
+      } else {
+        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+      }
+    }
+  }
+
+  onInputFileActo(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      if (file.type === 'application/pdf') {
+        file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+        file.url = this.cleanURL(file.urlTemp);
+        file.IdDocumento = 10;
+        file.file = event.target.files[0];
+        this.fileActoAdministrativo = file;
+      } else {
+        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+      }
+    }
+  }
+
+  uploadFilesCreacionProyecto(files) {
+    return new Promise((resolve, reject) => {
+      files.forEach((file) => {
+        file.Id = file.nombre,
+        file.nombre = 'soporte_' + file.IdDocumento + '_creacion_proyecto_curricular_'
+          + this.basicform.value.codigo_snies + '_' + this.basicform.value.nombre_proyecto;
+        // file.key = file.Id;
+        file.key = 'soporte_' + file.IdDocumento;
+       });
+      this.nuxeoService.getDocumentos$(files, this.documentoService)
+        .subscribe(response => {
+          if (Object.keys(response).length === files.length) {
+            // console.log("response", response);
+            files.forEach((file) => {
+              if (file.IdDocumento === 9) {
+                this.uidResolucion = file.uid;
+                this.idDocumentoResolucion = response[file.key].Id;
+              } else if (file.IdDocumento === 10) {
+                this.uidActoAdministrativo = file.uid;
+                this.idDocumentoAdministrativo = response[file.key].Id;
+              }
+            });
+            resolve(true);
+          }
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
   loadfacultad() {
     this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2')
     .subscribe((res: any) => {
@@ -470,175 +544,197 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
 
   registroproyecto() {
-    if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0) {
-    this.metodologia = {
-      Id: this.opcionSeleccionadoMeto['Id'],
-    }
-    this.nivel_formacion = {
-      Id: this.opcionSeleccionadoNivel['Id'],
-    }
-    this.proyecto_academico = {
-      Id : 0,
-      Codigo : '0',
-      Nombre : this.basicform.value.nombre_proyecto,
-      CodigoSnies: this.basicform.value.codigo_snies,
-      Duracion: Number(this.basicform.value.duracion_proyecto),
-      NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
-      CorreoElectronico: this.basicform.value.correo_proyecto,
-      CiclosPropedeuticos: this.checkciclos,
-      NumeroActoAdministrativo: Number(this.actoform.value.acto),
-      EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
-      Competencias: this.compleform.value.competencias,
-      CodigoAbreviacion: this.basicform.value.abreviacion_proyecto,
-      Activo: true,
-      Oferta: this.checkofrece,
-      UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
-      AnoActoAdministrativoId: this.actoform.value.ano_acto,
-      DependenciaId: this.opcionSeleccionadoFacultad['Id'],
-      AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
-      NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
-      MetodologiaId: this.metodologia,
-      NivelFormacionId: this.nivel_formacion,
-      AnoActoAdministrativo: this.actoform.value.ano_acto,
+    try {
+      if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0
+          && this.fileActoAdministrativo && this.fileActoAdministrativo) {
+      this.metodologia = {
+        Id: this.opcionSeleccionadoMeto['Id'],
+      }
+      this.nivel_formacion = {
+        Id: this.opcionSeleccionadoNivel['Id'],
+      }
+      this.proyecto_academico = {
+        Id : 0,
+        Codigo : '0',
+        Nombre : this.basicform.value.nombre_proyecto,
+        CodigoSnies: this.basicform.value.codigo_snies,
+        Duracion: Number(this.basicform.value.duracion_proyecto),
+        NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
+        CorreoElectronico: this.basicform.value.correo_proyecto,
+        CiclosPropedeuticos: this.checkciclos,
+        NumeroActoAdministrativo: Number(this.actoform.value.acto),
+        EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+        // EnlaceActoAdministrativo: this.idDocumentoAdministrativo + '',
+        Competencias: this.compleform.value.competencias,
+        CodigoAbreviacion: this.basicform.value.abreviacion_proyecto,
+        Activo: true,
+        Oferta: this.checkofrece,
+        UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
+        AnoActoAdministrativoId: this.actoform.value.ano_acto,
+        DependenciaId: this.opcionSeleccionadoFacultad['Id'],
+        AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
+        NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
+        MetodologiaId: this.metodologia,
+        NivelFormacionId: this.nivel_formacion,
+        AnoActoAdministrativo: this.actoform.value.ano_acto,
 
-    }
-    this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
-    this.registro_califacado_acreditacion = {
-      Id: 0,
-      AnoActoAdministrativoId: this.resoluform.value.ano_resolucion,
-      NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
-      // FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
-      FechaCreacionActoAdministrativo: moment(this.fecha_creacion).format('YYYY-MM-DDTHH:mm') + ':00Z',
-      VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
-      VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
-      EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
-      Activo: true,
-      ProyectoAcademicoInstitucionId: this.proyecto_academico,
-      TipoRegistroId: this.tipo_registro = {
-        Id: 1,
-      },
-    }
-    // Cambio d edata para enviar array
-    /*
-    this.enfasis_proyecto = {
-      Activo: true,
-      ProyectoAcademicoInstitucionId: this.proyecto_academico,
-      EnfasisId: this.enfasis_basico = {
-        Id: +this.opcionSeleccionadoEnfasis['Id'],
-      },
-    }
-    */
-   this.enfasis_proyecto = [];
-   this.arr_enfasis_proyecto.forEach( enfasis => {
-      this.enfasis_proyecto.push({
+      }
+      this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
+      this.registro_califacado_acreditacion = {
+        Id: 0,
+        AnoActoAdministrativoId: this.resoluform.value.ano_resolucion,
+        NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
+        // FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
+        FechaCreacionActoAdministrativo: moment(this.fecha_creacion).format('YYYY-MM-DDTHH:mm') + ':00Z',
+        VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
+        VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
+        EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+        // EnlaceActo: this.idDocumentoResolucion + '',
         Activo: true,
         ProyectoAcademicoInstitucionId: this.proyecto_academico,
-        EnfasisId: {
-          Id: enfasis['Id'],
+        TipoRegistroId: this.tipo_registro = {
+          Id: 1,
         },
-      });
-   });
-
-    this.titulacion_proyecto_snies = {
-      Id: 0,
-      Nombre: this.compleform.value.titulacion_snies,
-      Activo: true,
-      TipoTitulacionId: this.tipo_titulacion = {
-        Id: 1,
-      },
-      ProyectoAcademicoInstitucionId: this.proyecto_academico,
-    }
-    this.titulacion_proyecto_mujer = {
-      Id: 0,
-      Nombre: this.compleform.value.titulacion_mujer,
-      Activo: true,
-      TipoTitulacionId: this.tipo_titulacion = {
-        Id: 3,
-      },
-      ProyectoAcademicoInstitucionId: this.proyecto_academico,
-    }
-    this.titulacion_proyecto_hombre = {
-      Id: 0,
-      Nombre: this.compleform.value.titulacion_hombre,
-      Activo: true,
-      TipoTitulacionId: this.tipo_titulacion = {
-        Id: 2,
-      },
-      ProyectoAcademicoInstitucionId: this.proyecto_academico,
-    }
-    this.tipo_dependencia = {
-      Id: 1,
-    }
-    this.dependencia_tipo_dependencia = {
-      Id: 0,
-      TipoDependenciaId: this.tipo_dependencia,
-    }
-    this.dependencia = {
-      Id: 0,
-      Nombre: this.basicform.value.nombre_proyecto,
-      TelefonoDependencia: this.basicform.value.numero_proyecto,
-      CorreoElectronico: this.basicform.value.correo_proyecto,
-      DependenciaTipoDependencia: [this.dependencia_tipo_dependencia],
-    }
-    this.proyecto_academicoPost = {
-      ProyectoAcademicoInstitucion: this.proyecto_academico,
-      Registro: [this.registro_califacado_acreditacion],
-      Enfasis: this.enfasis_proyecto,
-      Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
-      Oikos: this.dependencia,
-    }
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.registrar'),
-      text: this.translate.instant('proyecto.seguro_continuar_registrar_proyecto'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt)
-    .then((willCreate) => {
-      if (willCreate.value) {
-        this.sgamidService.post('proyecto_academico', this.proyecto_academicoPost)
-        .subscribe((res: any) => {
-          if (res.Type === 'error') {
-            Swal({
-              type: 'error',
-               title: res.Code,
-              text: this.translate.instant('ERROR.' + res.Code),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-            this.showToast('error', 'error', this.translate.instant('proyecto.proyecto_no_creado'));
-          } else {
-            const opt1: any = {
-              title: this.translate.instant('proyecto.creado'),
-              text: this.translate.instant('proyecto.proyecto_creado'),
-              icon: 'warning',
-              buttons: true,
-              dangerMode: true,
-              showCancelButton: true,
-            }; Swal(opt1)
-            .then((willDelete) => {
-              if (willDelete.value) {
-              }
-            });
-          }
+      }
+      // Cambio d edata para enviar array
+      /*
+      this.enfasis_proyecto = {
+        Activo: true,
+        ProyectoAcademicoInstitucionId: this.proyecto_academico,
+        EnfasisId: this.enfasis_basico = {
+          Id: +this.opcionSeleccionadoEnfasis['Id'],
+        },
+      }
+      */
+    this.enfasis_proyecto = [];
+    this.arr_enfasis_proyecto.forEach( enfasis => {
+        this.enfasis_proyecto.push({
+          Activo: true,
+          ProyectoAcademicoInstitucionId: this.proyecto_academico,
+          EnfasisId: {
+            Id: enfasis['Id'],
+          },
         });
-      }
     });
-  } else {
-    const opt1: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('proyecto.error_datos'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    }; Swal(opt1)
-    .then((willDelete) => {
-      if (willDelete.value) {
 
+      this.titulacion_proyecto_snies = {
+        Id: 0,
+        Nombre: this.compleform.value.titulacion_snies,
+        Activo: true,
+        TipoTitulacionId: this.tipo_titulacion = {
+          Id: 1,
+        },
+        ProyectoAcademicoInstitucionId: this.proyecto_academico,
       }
-    });
+      this.titulacion_proyecto_mujer = {
+        Id: 0,
+        Nombre: this.compleform.value.titulacion_mujer,
+        Activo: true,
+        TipoTitulacionId: this.tipo_titulacion = {
+          Id: 3,
+        },
+        ProyectoAcademicoInstitucionId: this.proyecto_academico,
+      }
+      this.titulacion_proyecto_hombre = {
+        Id: 0,
+        Nombre: this.compleform.value.titulacion_hombre,
+        Activo: true,
+        TipoTitulacionId: this.tipo_titulacion = {
+          Id: 2,
+        },
+        ProyectoAcademicoInstitucionId: this.proyecto_academico,
+      }
+      this.tipo_dependencia = {
+        Id: 1,
+      }
+      this.dependencia_tipo_dependencia = {
+        Id: 0,
+        TipoDependenciaId: this.tipo_dependencia,
+      }
+      this.dependencia = {
+        Id: 0,
+        Nombre: this.basicform.value.nombre_proyecto,
+        TelefonoDependencia: this.basicform.value.numero_proyecto,
+        CorreoElectronico: this.basicform.value.correo_proyecto,
+        DependenciaTipoDependencia: [this.dependencia_tipo_dependencia],
+      }
+      this.proyecto_academicoPost = {
+        ProyectoAcademicoInstitucion: this.proyecto_academico,
+        Registro: [this.registro_califacado_acreditacion],
+        Enfasis: this.enfasis_proyecto,
+        Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
+        Oikos: this.dependencia,
+      }
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.registrar'),
+        text: this.translate.instant('proyecto.seguro_continuar_registrar_proyecto'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+      };
+      Swal(opt)
+      .then(async (willCreate) => {
+        if (willCreate.value) {
+          // Subir archivos
+          await this.uploadFilesCreacionProyecto([this.fileResolucion, this.fileActoAdministrativo]);
+          // console.log("subio archivo");
+          // console.log("idDocumentoResolucion", this.idDocumentoResolucion);
+          // console.log("idDocumentoAdministrativo", this.idDocumentoAdministrativo);
+          this.registro_califacado_acreditacion.EnlaceActo = this.idDocumentoResolucion + '';
+          this.proyecto_academico.EnlaceActoAdministrativo = this.idDocumentoAdministrativo + '';
+          this.sgamidService.post('proyecto_academico', this.proyecto_academicoPost)
+          .subscribe((res: any) => {
+            if (res.Type === 'error') {
+              Swal({
+                type: 'error',
+                title: res.Code,
+                text: this.translate.instant('ERROR.' + res.Code),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+              this.showToast('error', 'error', this.translate.instant('proyecto.proyecto_no_creado'));
+            } else {
+              const opt1: any = {
+                title: this.translate.instant('proyecto.creado'),
+                text: this.translate.instant('proyecto.proyecto_creado'),
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+              }; Swal(opt1)
+              .then((willDelete) => {
+                if (willDelete.value) {
+                }
+              });
+            }
+          });
+        }
+      });
+    } else {
+      const opt1: any = {
+        title: this.translate.instant('GLOBAL.atencion'),
+        text: this.translate.instant('proyecto.error_datos'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+      }; Swal(opt1)
+      .then((willDelete) => {
+        if (willDelete.value) {
+
+        }
+      });
+    }
+  } catch (err) {
+      // console.log('Error: ', err.message);
+      const opt2: any = {
+        title: this.translate.instant('GLOBAL.error'),
+        text: this.translate.instant('ERROR.error_subir_documento'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+      }; Swal(opt2)
   }
 }
   private showToast(type: string, title: string, body: string) {

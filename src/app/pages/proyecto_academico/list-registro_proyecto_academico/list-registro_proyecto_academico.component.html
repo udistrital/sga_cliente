@@ -35,9 +35,10 @@
                     <ng-container matColumnDef="Documento">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'historial_registro.documento' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button mat-button>
-                                        <mat-icon>picture_as_pdf</mat-icon>
-                                    </button>
+                            <button mat-button type="button" (click)="downloadFile(row.EnlaceActo)">
+                                <mat-icon>cloud_download</mat-icon>
+                                <!--span>Select</span-->
+                            </button>
                         </mat-cell>
                     </ng-container>
 

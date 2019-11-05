@@ -144,7 +144,8 @@
         "placeholder_fechafin": "ej: fecha fin",
         "periodoid": "periodo Id",
         "placeholder_periodoid": "ej: periodo id",
-        "atencion": "Atención"
+        "atencion": "Atención",
+        "archivo_seleccionado": "Archivo seleccionado"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -156,6 +157,8 @@
         "408": "Ha excedido el límite de tiempo en retornar resuesta",
         "409": "La solicitud no pudo ser procesada debido a un conflicto con el estado actual del recurso",
         "500": "Error interno en el servidor",
+        "formato_documento_pdf": "El formato del documento escogido no es pdf",
+        "no_documento": "Debe seleccionar un archivo",
         "error_subir_documento": "Ocurrió un error subiendo los documentos, por favor intente de nuevo."
     },
     "produccion_academica": {
@@ -468,6 +471,7 @@
         "seguro_continuar_registrar": "¿Esta seguro de registrar un nuevo registro a este proyecto académico?",
         "registro_no_creado": "Registro no creado",
         "registro_creado": "Registro creado correctamente",
-        "creado": "Registro Creado!"
+        "creado": "Registro Creado!",
+        "crear_registro": "Crear nuevo registro al Proyecto Académico"
     }
 }

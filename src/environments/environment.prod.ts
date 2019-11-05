@@ -7,7 +7,11 @@
 export const environment = {
   production: true,
   NUXEO: {
-    PATH: 'https://documental.udistrital.edu.co/nuxeo/',
+    PATH: 'https://documental.portaloas.udistrital.edu.co/nuxeo/',
+    CREDENTIALS: {
+      USERNAME: 'desarrollooas',
+      PASS: 'desarrollooas2019',
+    },
   },
   CONFIGURACION_SERVICE: 'http://testapi.intranetoas.udistrital.edu.co:8086/v1/',
   NOTIFICACION_SERVICE: 'ws://testapi.intranetoas.udistrital.edu.co:8116/ws/join',
@@ -23,7 +27,8 @@ export const environment = {
   },
   PERSONA_SERVICE: 'http://api.planestic.udistrital.edu.co:8083/v1/',
   PRODUCCION_ACADEMICA_SERVICE: 'http://localhost:8080/v1/',
-  DOCUMENTO_SERVICE: 'http://api.planestic.udistrital.edu.co:8094/v1/',
+  // DOCUMENTO_SERVICE: 'http://api.planestic.udistrital.edu.co:8094/v1/',
+  DOCUMENTO_SERVICE: 'http://localhost:8094/v1/',
   CAMPUS_MID: 'http://localhost:8095/v1/',
   SPAGOBI: {
     PROTOCOL: 'https',

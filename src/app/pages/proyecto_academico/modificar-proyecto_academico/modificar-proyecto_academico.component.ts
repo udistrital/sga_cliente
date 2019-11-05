@@ -35,6 +35,9 @@ import { Persona } from '../../../@core/data/models/persona';
 import { Coordinador } from '../../../@core/data/models/proyecto_academico/coordinador';
 import { Router } from '@angular/router';
 import { MatSelect } from '@angular/material/select';
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'ngx-modificar-proyecto-academico',
@@ -141,6 +144,11 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   arr_enfasis_proyecto: any[] = [];
   settings_emphasys: any;
 
+  fileActoAdministrativo: any;
+  fileRegistroCalificado: any;
+  fileRegistroAltaCalidad: any;
+  fileResolucionCoordinador: any;
+
   dpDayPickerConfig: any = {
     locale: 'es',
     format: 'YYYY-MM-DD HH:mm',
@@ -155,6 +163,9 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ModificarProyectoAcademicoComponent>,
     private toasterService: ToasterService,
+    private nuxeoService: NuxeoService,
+    private documentoService: DocumentoService,
+    private sanitization: DomSanitizer,
     private oikosService: OikosService,
     private personaService: PersonaService,
     private coreService: CoreService,
@@ -163,21 +174,20 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     private routerService: Router,
     private unidadtiempoService: UnidadTiempoService,
     private formBuilder: FormBuilder) {
+      this.dpDayPickerConfig = {
+        locale: 'es',
+        format: 'YYYY-MM-DD HH:mm',
+        showTwentyFourHours: false,
+        showSeconds: false,
+        returnedValueType: 'String',
+      }
       this.basicform = this.formBuilder.group({
         codigo_snies: ['', Validators.required],
-        facultad: ['', Validators.required],
-        nivel_proyecto: ['', Validators.required],
-        metodologia_proyecto: ['', Validators.required],
         nombre_proyecto: ['', Validators.required],
         abreviacion_proyecto: ['', [Validators.required, Validators.maxLength(20)]],
         correo_proyecto: ['', [Validators.required, Validators.email]],
-        numero_proyecto: ['', Validators.required],
         creditos_proyecto: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]],
         duracion_proyecto: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$')]],
-        tipo_duracion_proyecto: ['', Validators.required],
-        ciclos_proyecto: ['', Validators.required],
-        ofrece_proyecto: ['', Validators.required],
-        // enfasis_proyecto: ['', Validators.required],
      })
 
      this.resoluform = formBuilder.group({
@@ -207,20 +217,23 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
      this.coordinador = formBuilder.group({
       fecha_creacion_coordinador: ['', Validators.required],
      })
+     console.info(this.data)
+     console.info(this.data.fecha_creacion_registro_alta + 'ojo')
     this.loadfacultad();
    this.loadnivel();
    this.loadmetodologia();
    this.loadunidadtiempo();
    this.loadarea();
    this.loadnucleo();
-   this. loadpersonas();
+   this.loadpersonas();
    this.loadenfasis();
    this.loadfechacoordinador();
+   this.loadfechaaltacalidad();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
    this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
    this.checkalta =  Boolean(JSON.parse(this.data.tieneregistroaltacalidad));
-   this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
+   // this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DD HH:mm');
    // enfasis
    this.arr_enfasis_proyecto = this.data.enfasis;
    this.source_emphasys.load(this.arr_enfasis_proyecto);
@@ -259,12 +272,104 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
 
     }
 
+    loadfechaaltacalidad() {
+      if (this.data.fecha_creacion_registro_alta[0] == null) {
+        this.fecha_creacion_alta = null
+      }else {
+        this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DD HH:mm');
+      }
+    }
+
     loadfechacoordinador() {
       if (this.data.fechainiciocoordinador == null) {
-        this.fecha_creacion_calificado = null
+        this.fecha_creacion_cordin = null
       }else {
         this.fecha_creacion_cordin = momentTimezone.tz(this.data.fechainiciocoordinador, 'America/Bogota').format('YYYY-MM-DD HH:mm');
       }
+    }
+
+    cleanURL(oldURL: string): SafeResourceUrl {
+      return this.sanitization.bypassSecurityTrustUrl(oldURL);
+    }
+
+    onInputActoAdministrativo(event) {
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        if (file.type === 'application/pdf') {
+          file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+          file.url = this.cleanURL(file.urlTemp);
+          file.IdDocumento = 10;
+          file.file = event.target.files[0];
+          this.fileActoAdministrativo = file;
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+        }
+      }
+    }
+
+    onInputRegistroCalificado(event) {
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        if (file.type === 'application/pdf') {
+          file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+          file.url = this.cleanURL(file.urlTemp);
+          file.IdDocumento = 9;
+          file.file = event.target.files[0];
+          this.fileRegistroCalificado = file;
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+        }
+      }
+    }
+
+    onInputRegistroAltaCalidad(event) {
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        if (file.type === 'application/pdf') {
+          file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+          file.url = this.cleanURL(file.urlTemp);
+          file.IdDocumento = 9;
+          file.file = event.target.files[0];
+          this.fileRegistroAltaCalidad = file;
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+        }
+      }
+    }
+
+    downloadFile(id_documento: any) {
+      const filesToGet = [
+        {
+          Id: id_documento,
+          key: id_documento,
+        },
+      ];
+      this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
+        .subscribe(response => {
+          const filesResponse = <any>response;
+          if (Object.keys(filesResponse).length === filesToGet.length) {
+            // console.log("files", filesResponse);
+            filesToGet.forEach((file: any) => {
+              const url = filesResponse[file.Id];
+              // let newWindow = window.open('','_blank')
+              const new_tab = window.open('', '_blank', 'toolbar=no,' +
+              'location=no, directories=no, status=no, menubar=no,' +
+              'scrollbars=no, resizable=no, copyhistory=no, height=400, width=400, top = 20, left=20');
+              new_tab.onload = () => {
+                new_tab.location = url;
+              };
+              new_tab.focus();
+            });
+          }
+        },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
     }
 
     loadenfasis() {
@@ -516,6 +621,30 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     });
   }
 
+  uploadFilesModificacionProyecto(files) {
+    return new Promise((resolve, reject) => {
+      files.forEach((file) => {
+        file.Id = file.nombre,
+        file.nombre = 'soporte_' + file.IdDocumento + '_modificacion_proyecto_curricular_'
+          + this.basicform.value.codigo_snies + '_' + this.basicform.value.nombre_proyecto;
+        // file.key = file.Id;
+        file.key = 'soporte_' + file.IdDocumento;
+       });
+      this.nuxeoService.getDocumentos$(files, this.documentoService)
+        .subscribe(response => {
+          if (Object.keys(response).length === files.length) {
+            // console.log("response", response);
+            files.forEach((file) => {
+              // Se restringe carga a un archivo
+              resolve(response[file.key].Id);
+            });
+          }
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
   putinformacionbasica() {
     if ( this.compleform.valid && this.basicform.valid) {
     this.metodologia = {
@@ -534,7 +663,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       CorreoElectronico: String(this.basicform.value.correo_proyecto),
       CiclosPropedeuticos: this.checkciclos,
       NumeroActoAdministrativo: Number(this.actoform.value.acto),
-      EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+      // EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+      EnlaceActoAdministrativo: this.data.id_documento_acto,
       Competencias: String(this.compleform.value.competencias),
       CodigoAbreviacion: String(this.basicform.value.abreviacion_proyecto),
       Activo: true,
@@ -591,8 +721,15 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       showCancelButton: true,
     };
     Swal(opt)
-    .then((willCreate) => {
+    .then(async (willCreate) => {
       if (willCreate.value) {
+
+        // Si se actualiza el acto administrativo
+        if (this.fileActoAdministrativo) {
+          const idFileActoAdministratico = await this.uploadFilesModificacionProyecto([this.fileActoAdministrativo]);
+          informacion_basicaPut.ProyectoAcademicoInstitucion.EnlaceActoAdministrativo = idFileActoAdministratico + '';
+        }
+
         this.proyectoacademicoService.put('tr_proyecto_academico/informacion_basica/' + Number(this.data.idproyecto), informacion_basicaPut)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
@@ -607,6 +744,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             this.arr_enfasis_proyecto.forEach((enfasis_temp: any) => {
               enfasis_temp.esNuevo = false;
             });
+            this.dialogRef.close();
             const opt1: any = {
               title: this.translate.instant('editarproyecto.actualizado'),
               text: this.translate.instant('editarproyecto.proyecto_actualizado'),
@@ -658,7 +796,8 @@ putinformacionregistro() {
         CorreoElectronico: String(this.basicform.value.correo_proyecto),
         CiclosPropedeuticos: this.checkciclos,
         NumeroActoAdministrativo: Number(this.actoform.value.acto),
-        EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+        // EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+        EnlaceActoAdministrativo: this.data.id_documento_acto,
         Competencias: String(this.compleform.value.competencias),
         CodigoAbreviacion: String(this.basicform.value.abreviacion_proyecto),
         Activo: true,
@@ -677,10 +816,12 @@ putinformacionregistro() {
       Id: 0,
       AnoActoAdministrativoId: String(this.resoluform.value.ano_resolucion),
       NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
-      FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
+      // FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
+      FechaCreacionActoAdministrativo: moment(this.fecha_creacion_calificado).format('YYYY-MM-DDTHH:mm') + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
-      EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      // EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      EnlaceActo: this.data.id_documento_registor_calificado,
       Activo: true,
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
       TipoRegistroId: this.tipo_registro = {
@@ -692,10 +833,12 @@ putinformacionregistro() {
       Id: 0,
       AnoActoAdministrativoId: String(this.resolualtaform.value.ano_resolucion),
       NumeroActoAdministrativo: Number(this.resolualtaform.value.resolucion),
-      FechaCreacionActoAdministrativo: this.fecha_creacion_alta + ':00Z',
+      // FechaCreacionActoAdministrativo: this.fecha_creacion_alta + ':00Z',
+      FechaCreacionActoAdministrativo: moment(this.fecha_creacion_alta).format('YYYY-MM-DDTHH:mm') + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resolualtaform.value.mes_vigencia + 'Años:' + this.resolualtaform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento_alta + 'Z',
-      EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      // EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      EnlaceActo: this.data.id_documento_alta_calidad,
       Activo: true,
       ProyectoAcademicoInstitucionId: this.proyecto_academico,
       TipoRegistroId: this.tipo_registro = {
@@ -716,8 +859,16 @@ putinformacionregistro() {
       showCancelButton: true,
     };
     Swal(opt)
-    .then((willCreate) => {
+    .then(async (willCreate) => {
       if (willCreate.value) {
+        if (this.fileRegistroCalificado) {
+          const idFileRegistroCalificado = await this.uploadFilesModificacionProyecto([this.fileRegistroCalificado]);
+          registro_put.Registro[0].EnlaceActo = idFileRegistroCalificado + '';
+        }
+        if (this.fileRegistroAltaCalidad) {
+          const idFileRegistroAlta = await this.uploadFilesModificacionProyecto([this.fileRegistroAltaCalidad]);
+          registro_put.Registro[1].EnlaceActo = idFileRegistroAlta + '';
+        }
         this.proyectoacademicoService.put('tr_proyecto_academico/registro/' + Number(this.data.idproyecto), registro_put)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
@@ -729,6 +880,7 @@ putinformacionregistro() {
             });
             this.showToast('error', 'error', this.translate.instant('editarproyecto.proyecto_no_actualizado'));
           } else {
+            this.dialogRef.close();
             const opt1: any = {
               title: this.translate.instant('editarproyecto.actualizado'),
               text: this.translate.instant('editarproyecto.proyecto_actualizado'),
@@ -781,19 +933,20 @@ putinformacionregistro() {
       CorreoElectronico: String(this.basicform.value.correo_proyecto),
       CiclosPropedeuticos: this.checkciclos,
       NumeroActoAdministrativo: Number(this.actoform.value.acto),
-      EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+      // EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+      EnlaceActoAdministrativo: this.data.id_documento_acto,
       Competencias: String(this.compleform.value.competencias),
       CodigoAbreviacion: String(this.basicform.value.abreviacion_proyecto),
       Activo: true,
       Oferta: this.checkofrece,
       UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
-      AnoActoAdministrativoId: this.actoform.value.ano_acto,
+      AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
       DependenciaId: this.opcionSeleccionadoFacultad['Id'],
       AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
       NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
       MetodologiaId: this.metodologia,
       NivelFormacionId: this.nivel_formacion,
-      AnoActoAdministrativo: this.actoform.value.ano_acto,
+      AnoActoAdministrativo: String(this.actoform.value.ano_acto),
     }
 
     this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
@@ -801,7 +954,8 @@ putinformacionregistro() {
       Id: 0,
       AnoActoAdministrativoId: String(this.resoluform.value.ano_resolucion),
       NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
-      FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
+      // FechaCreacionActoAdministrativo: this.fecha_creacion_calificado + ':00Z',
+      FechaCreacionActoAdministrativo: moment(this.fecha_creacion_calificado).format('YYYY-MM-DDTHH:mm') + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
       EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
@@ -824,8 +978,12 @@ putinformacionregistro() {
       showCancelButton: true,
     };
     Swal(opt)
-    .then((willCreate) => {
+    .then(async (willCreate) => {
       if (willCreate.value) {
+        if (this.fileRegistroCalificado) {
+          const idFileRegistroCalificado = await this.uploadFilesModificacionProyecto([this.fileRegistroCalificado]);
+          registro_put.Registro[0].EnlaceActo = idFileRegistroCalificado + '';
+        }
         this.proyectoacademicoService.put('tr_proyecto_academico/registro/' + Number(this.data.idproyecto), registro_put)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
@@ -837,6 +995,7 @@ putinformacionregistro() {
             });
             this.showToast('error', 'error', this.translate.instant('editarproyecto.proyecto_no_actualizado'));
           } else {
+            this.dialogRef.close();
             const opt1: any = {
               title: this.translate.instant('editarproyecto.actualizado'),
               text: this.translate.instant('editarproyecto.proyecto_actualizado'),
@@ -872,20 +1031,39 @@ putinformacionregistro() {
   }
 }
 }
+
+onInputResolucionCoordinador(event) {
+  if (event.target.files.length > 0) {
+    const file = event.target.files[0];
+    if (file.type === 'application/pdf') {
+      file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+      file.url = this.cleanURL(file.urlTemp);
+      file.IdDocumento = 11;
+      file.file = event.target.files[0];
+      this.fileResolucionCoordinador = file;
+    } else {
+      this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+    }
+  }
+}
+
+
 registrocoordinador() {
-  if ( this.coordinador.valid ) {
+  if ( this.coordinador.valid && this.fileResolucionCoordinador) {
     this.coordinador_data = {
       PersonaId: this.coordinadorSeleccionado['Id'],
       DependenciaId: 0,
       RolId: 0,
       Activo: true,
+      ResolucionAsignacionId: this.data.id_documento_registro_coordinador,
       // FechaInicio: this.coordinador.value.fecha_creacion_coordinador + ':00Z',
       FechaInicio: moment(this.coordinador.value.fecha_creacion_coordinador).format('YYYY-MM-DDTHH:mm') + ':00Z',
       ProyectoAcademicoInstitucionId: {
         Id:  Number(this.data.idproyecto),
       },
-    }
 
+    }
+  console.info(this.coordinador_data)
     const opt: any = {
       title: this.translate.instant('GLOBAL.asignar'),
       text: this.translate.instant('editarproyecto.seguro_continuar_asignar'),
@@ -895,9 +1073,15 @@ registrocoordinador() {
       showCancelButton: true,
     };
     Swal(opt)
-    .then((willCreate) => {
+    .then(async (willCreate) => {
       if (willCreate.value) {
-        this.proyectoacademicoService.post('proyecto_academico_rol_persona_dependecia/', this.coordinador_data)
+
+        if (this.fileResolucionCoordinador) {
+          const idFileResolucionCoordinador = await this.uploadFilesModificacionProyecto([this.fileResolucionCoordinador]);
+          this.coordinador_data.ResolucionAsignacionId = Number(idFileResolucionCoordinador);
+        }
+
+        this.sgamidService.post('proyecto_academico/coordinador/' + String(this.data.Id), this.coordinador_data)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
             Swal({
@@ -908,6 +1092,7 @@ registrocoordinador() {
             });
             this.showToast('error', 'error', this.translate.instant('editarproyecto.coordinador_no_asignado'));
           } else {
+            this.dialogRef.close();
             const opt1: any = {
               title: this.translate.instant('editarproyecto.creado'),
               text: this.translate.instant('editarproyecto.coordinador_asignado'),

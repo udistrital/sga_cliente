@@ -102,7 +102,7 @@
   }
 
   @include nb-for-theme(corporate) {
-    $menu-action-separator-color: #3f4550;
+    $menu-action-separator-color: #c0e7ff;
 
     nb-action {
       @include nb-ltr(border-left-color, $menu-action-separator-color);
@@ -185,13 +185,13 @@
 
   @include keyframes(pulse-light) {
     0% {
-      box-shadow: 0 0 1px 0 rgba(115, 255, 208, 0);
+      box-shadow: 0 0 1px 0 rgb(254, 255, 255);
     }
     20% {
-      box-shadow: 0 0 3px 10px rgba(115, 255, 208, 0.4);
+      box-shadow: 0 0 3px 10px rgb(254, 255, 255);
     }
     100% {
-      box-shadow: 0 0 5px 20px rgba(115, 255, 208, 0);
+      box-shadow: 0 0 5px 20px rgb(253, 253, 253);
     }
   }
 

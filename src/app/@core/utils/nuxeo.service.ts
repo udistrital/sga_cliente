@@ -30,8 +30,8 @@ export class NuxeoService {
             baseURL: environment.NUXEO.PATH,
             auth: {
                 method: 'basic',
-                username: 'campus_virtual',
-                password: 'c4mpus',
+                username: environment.NUXEO.CREDENTIALS.USERNAME,
+                password: environment.NUXEO.CREDENTIALS.PASS,
             },
         });
     }
@@ -85,9 +85,11 @@ export class NuxeoService {
                                                         documentoPost.Enlace = file.uid;
                                                         documentoPost.Nombre = file.nombre;
                                                         documentoPost.TipoDocumento = tipoDocumento;
+                                                        documentoPost.Activo = true;
                                                         documentoService.post('documento', documentoPost)
                                                             .subscribe(resuestaPost => {
-                                                                nuxeoservice.documentos[file.key] = resuestaPost.Body;
+                                                                nuxeoservice.documentos[file.key] = resuestaPost;
+                                                                // nuxeoservice.documentos[file.key] = resuestaPost.Body;
                                                                 nuxeoservice.documentos$.next(nuxeoservice.documentos);
                                                             })
 
