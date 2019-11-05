@@ -10,44 +10,64 @@
                 <nb-card-body>
                     <form id="resoluForm" [formGroup]="resoluform" (ngSubmit)="registroproyecto()">
                         <mat-form-field>
-                            <input matInput placeholder="{{ 'proyecto.resolucion_proyecto' | translate }}" formControlName="resolucion" class="form-control" name="resolucion_proyecto">
-                            <mat-error *ngIf="Campo11Control.hasError('required')">{{ 'proyecto.erro_reso' | translate }}</mat-error>
+                            <input matInput placeholder="{{ 'proyecto.resolucion_proyecto' | translate }}"
+                                formControlName="resolucion" class="form-control" name="resolucion_proyecto">
+                            <mat-error *ngIf="Campo11Control.hasError('required')">
+                                {{ 'proyecto.erro_reso' | translate }}</mat-error>
                         </mat-form-field>
                         <br>
                         <mat-form-field>
-                            <input matInput placeholder="{{ 'proyecto.ano_resolucion_proyecto' | translate }}" formControlName="ano_resolucion" class="form-control" name="ano_resolucion_proyecto">
-                            <mat-error *ngIf="Campo13Control.hasError('required')">{{ 'proyecto.erro_ano' | translate }}</mat-error>
+                            <input matInput placeholder="{{ 'proyecto.ano_resolucion_proyecto' | translate }}"
+                                formControlName="ano_resolucion" class="form-control" name="ano_resolucion_proyecto">
+                            <mat-error *ngIf="Campo13Control.hasError('required')">{{ 'proyecto.erro_ano' | translate }}
+                            </mat-error>
                         </mat-form-field>
                         <br>
                         <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
-                        <button mat-button>
-                                            <mat-icon> attach_file</mat-icon>
-                                </button>
+                        <button mat-button type="button" (click)="fileInputDocumento.click()">
+                            <mat-icon>attach_file</mat-icon>
+                            <!--span>Select</span-->
+                            <input #fileInputDocumento type="file" (change)="onInputFileDocumento($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
+                        </button>
+                        <mat-error *ngIf="!fileDocumento">{{ 'ERROR.no_documento' | translate }}</mat-error>
+                        <label *ngIf="fileDocumento">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileDocumento.name}}</label>
                         <br>
+
                         <mat-form-field>
-                            <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
-                            <input matInput [(ngModel)]="fecha_creacion" type="datetime-local" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion">
-                            <mat-error *ngIf="Campo14Control.hasError('required')">{{ 'proyecto.erro_fecha_creacion' | translate }}</mat-error>
-                        </mat-form-field>
+                                <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
+                                <input matInput [(ngModel)]="fecha_creacion"
+                                    placeholder="{{ 'proyecto.fecha_creacion' | translate }}"
+                                    formControlName="fecha_creacion" [dpDayPicker]="dpDayPickerConfig"
+                                    theme="dp-material" mode="daytime">
+                                    <mat-error *ngIf="Campo14Control.hasError('required')">
+                                            {{ 'proyecto.erro_fecha_creacion' | translate }}</mat-error>
+                            </mat-form-field>
+
                         <br>
                         <br>
                         <div class="form-group row">
 
                             <label class="label col-sm-8 col-form-label ">{{ 'proyecto.vigencia' | translate }}</label>
                             <mat-form-field>
-                                <input matInput placeholder="{{ 'proyecto.vigencia_mes' | translate }}" formControlName="mes_vigencia" class="form-control" name="resolucion_proyecto">
-                                <mat-error *ngIf="Campo22Control.hasError('required')">{{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
+                                <input matInput placeholder="{{ 'proyecto.vigencia_mes' | translate }}"
+                                    formControlName="mes_vigencia" class="form-control" name="resolucion_proyecto">
+                                <mat-error *ngIf="Campo22Control.hasError('required')">
+                                    {{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
                             </mat-form-field>
                             <div class="col-sm-8">
                                 <mat-form-field>
-                                    <input matInput #box placeholder="{{ 'proyecto.vigencia_año' | translate }}" formControlName="ano_vigencia" class="form-control" name="ano_resolucion_proyecto" (blur)="mostrarfecha()">
-                                    <mat-error *ngIf="Campo23Control.hasError('required')">{{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
+                                    <input matInput #box placeholder="{{ 'proyecto.vigencia_año' | translate }}"
+                                        formControlName="ano_vigencia" class="form-control"
+                                        name="ano_resolucion_proyecto" (blur)="mostrarfecha()">
+                                    <mat-error *ngIf="Campo23Control.hasError('required')">
+                                        {{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
                                 </mat-form-field>
                                 <br>
                             </div>
                         </div>
                         <br>
-                        <label class="label col-sm-8 col-form-label">{{ 'proyecto.fecha_calculada_vencimiento' | translate }}</label>
+                        <label
+                            class="label col-sm-8 col-form-label">{{ 'proyecto.fecha_calculada_vencimiento' | translate }}</label>
                         <label class="label col-sm-8 col-form-label">{{fecha_calculada_vencimiento}}</label>
                     </form>
                 </nb-card-body>
@@ -60,7 +80,8 @@
 
 
 
-        <button (click)="crearregistro()" type="submit" nbButton status="success">{{ 'proyecto.registro_proyecto' | translate }}</button>
+        <button (click)="crearregistro()" type="submit" nbButton
+            status="success">{{ 'historial_registro.crear_registro' | translate }}</button>
 
 
 

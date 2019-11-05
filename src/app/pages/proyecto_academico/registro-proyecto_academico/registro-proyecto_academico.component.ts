@@ -37,6 +37,10 @@ import * as momentTimezone from 'moment-timezone';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { NuevoRegistro } from '../../../@core/data/models/proyecto_academico/nuevo_registro';
 import { ListRegistroProyectoAcademicoComponent } from '../list-registro_proyecto_academico/list-registro_proyecto_academico.component';
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 @Component({
   selector: 'ngx-registro-proyecto-academico',
   templateUrl: './registro-proyecto_academico.component.html',
@@ -56,6 +60,7 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
   tipo_registro: TipoRegistro;
   fecha_calculada_vencimiento: string
   registro_nuevo: NuevoRegistro
+  dpDayPickerConfig: any;
 
 
   Campo11Control = new FormControl('', [Validators.required, Validators.maxLength(4)]);
@@ -70,6 +75,10 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
   arr_enfasis_proyecto: InstitucionEnfasis[] = [];
   settings_emphasys: any;
 
+  fileDocumento: any;
+  uidDocumento: string;
+  idDocumento: number;
+
   constructor(private translate: TranslateService,
   @Inject(MAT_DIALOG_DATA) public data: any,
     private toasterService: ToasterService,
@@ -79,7 +88,17 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
     private sgamidService: SgaMidService,
     private dialogService: NbDialogService,
     private activatedRoute: ActivatedRoute,
+    private nuxeoService: NuxeoService,
+    private documentoService: DocumentoService,
+    private sanitization: DomSanitizer,
     private formBuilder: FormBuilder) {
+      this.dpDayPickerConfig = {
+        locale: 'es',
+        format: 'YYYY-MM-DD HH:mm',
+        showTwentyFourHours: false,
+        showSeconds: false,
+        returnedValueType: 'String',
+      }
      this.resoluform = formBuilder.group({
       resolucion: ['', Validators.required],
       ano_resolucion: ['', [Validators.required, Validators.maxLength(4)]],
@@ -115,6 +134,50 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
 
   }
 
+  cleanURL(oldURL: string): SafeResourceUrl {
+    return this.sanitization.bypassSecurityTrustUrl(oldURL);
+  }
+
+  onInputFileDocumento(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      if (file.type === 'application/pdf') {
+        file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+        file.url = this.cleanURL(file.urlTemp);
+        file.IdDocumento = 9;
+        file.file = event.target.files[0];
+        this.fileDocumento = file;
+      } else {
+        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));
+      }
+    }
+  }
+
+  uploadFilesCreacionRegistro(files) {
+    return new Promise((resolve, reject) => {
+      files.forEach((file) => {
+        file.Id = file.nombre,
+        file.nombre = 'soporte_' + file.IdDocumento + '_actualizacion_registro_proyecto_'
+          + this.data.IdProyecto + '_tipo_registro_' + Number(this.data.tipo_registro);
+        // file.key = file.Id;
+        file.key = 'soporte_' + file.IdDocumento;
+       });
+      this.nuxeoService.getDocumentos$(files, this.documentoService)
+        .subscribe(response => {
+          if (Object.keys(response).length === files.length) {
+            // console.log("response", response);
+            files.forEach((file) => {
+              this.uidDocumento = file.uid;
+              this.idDocumento = response[file.key].Id;
+            });
+            resolve(true);
+          }
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
   calculateEndDate (date: Date, years: number, months: number, days: number): Date {
     const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DDTHH:mm:ss');
     this.fecha_vencimiento = convertDate
@@ -122,16 +185,19 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
   }
 
   crearregistro() {
-    if (this.resoluform.valid ) {
+    if (this.resoluform.valid && this.fileDocumento) {
 
     this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
+
     this.registro_nuevo = {
       AnoActoAdministrativoId: this.resoluform.value.ano_resolucion,
       NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
-      FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
+      // FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
+      FechaCreacionActoAdministrativo: moment(this.fecha_creacion).format('YYYY-MM-DDTHH:mm') + ':00Z',
       VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
       VencimientoActoAdministrativo: this.fecha_vencimiento + 'Z',
       EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
+      // EnlaceActo: this.idDocumento + '',
       Activo: true,
       ProyectoAcademicoInstitucionId : {
         Id: this.data.IdProyecto,
@@ -151,8 +217,10 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
       showCancelButton: true,
     };
     Swal(opt)
-    .then((willCreate) => {
+    .then(async (willCreate) => {
       if (willCreate.value) {
+        await this.uploadFilesCreacionRegistro([this.fileDocumento]);
+        this.registro_nuevo.EnlaceActo = this.idDocumento + '';
         this.sgamidService.post('proyecto_academico/' + String(this.data.endpoint + '/' + String(this.data.IdProyecto)), this.registro_nuevo)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
@@ -180,6 +248,15 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
           }
         });
       }
+    })
+    .catch((res) => {
+      Swal({
+        type: 'error',
+         title: res.Code,
+        text: this.translate.instant('ERROR.' + res.Code),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+      this.showToast('error', 'error', this.translate.instant('historial_registro.registro_no_creado'));
     });
   } else {
     const opt1: any = {

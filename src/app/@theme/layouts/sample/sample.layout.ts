@@ -43,6 +43,14 @@ import { StateService } from '../../../@core/data/state.service';
         <ngx-footer></ngx-footer>
       </nb-layout-footer>
 
+      <nb-sidebar class="settings-sidebar"
+      tag="settings-sidebar"
+      state="collapsed"
+      fixed
+      [end]="sidebar.id !== 'end'">
+<ngx-theme-settings></ngx-theme-settings>
+</nb-sidebar>
+
       <nb-sidebar class="notifications-sidebar"
                    tag="notifications-sidebar"
                    state="collapsed"

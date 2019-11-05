@@ -6,5 +6,6 @@ export class Documento {
     Id: number;
     Metadatos: string;
     Nombre: string;
+    Activo: boolean;
     TipoDocumento: TipoDocumento;
 }

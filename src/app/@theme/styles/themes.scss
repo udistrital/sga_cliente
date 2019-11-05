@@ -163,7 +163,8 @@ $nb-themes: nb-register-theme((
   sidebar-padding: 0.3rem,
   sidebar-margin-top: 0,
   tabs-fg: gray,
-
+ 
+  card-header-info-bg: rgba(0, 36, 153, 0.333),
   color-fg: #777777,
   menu-icon-color: $secundary-color-theme,
   card-shadow: 0 2px 8px 0 rgba(43, 43, 43, 0.494),
@@ -191,87 +192,123 @@ $nb-themes: nb-register-theme((
   scrollbar-bg: #fff,
 ), corporate, corporate);
 
+
+
+
 $nb-themes: nb-register-theme((
-//   // footer
-//   footer-fg: #000000,
-//   footer-bg: #ffffff,
-//   footer-height: auto,
-//  // app wise variables for each theme
-//   sidebar-header-gap: 2rem,
-//   sidebar-header-height: initial,
-//   layout-content-width: 1400px,
-//   font-main: Roboto,
-//   font-secondary: Exo,
-//   //smart-table
-//   smart-table-border-radius: 0.1rem	,
-//   smart-table-header-font-size: 0.8rem,
-//   smart-table-font-size: 0.65rem,
-//   smart-table-font-weight: 400,
-//   smart-table-padding: 0.275rem 0.725rem,
-//   smart-table-paging-border-width: 0.5,
-//   smart-table-filter-padding: 0.1rem 0.1rem,
-//   //form-control
-//   form-control-placeholder-font-size: 0.8rem,
-//   form-control-font-size: 0.8rem,
-//   form-control-border-width: 1px,
-//   form-control-border-radius: 0.1rem,
-//   //fonts
-//   font-weight-thin: 100,
-//   font-weight-light: 200,
-//   font-weight-normal: 300,
-//   font-weight-bolder: 400,
-//   font-weight-bold: 500,
-//   font-weight-ultra-bold: 600,
-//   //general
-//   padding: 1rem,
-//   font-size: 0.9rem,
-//   margin: 1rem,
-//   layout-padding: 2rem 0.2rem 3rem,
 
-//   sidebar-bg: transparent,//#ffffff,
-//   sidebar-fg: #000000,
-//   sidebar-shadow: none,
-//   sidebar-padding: 0.3rem,
-//   sidebar-margin-top: 0,
-//   tabs-fg: #000000,
+  font-main: sans-serif,
+  color-bg: #ffffff,
+  color-fg-heading: #4fb9ff,
+  color-fg-text: #000000,
+  color-fg-highlight: #7ac273,
+  color-white: #ffffff,
+  color-primary: rgb(73, 153, 26),
+  color-success: #64d9ff,
+  color-info: #a83121,
+  color-warning: #ba4a3a,
+  color-danger: rgb(180, 56, 39),
 
-//   color-fg: #000000,
-//   menu-icon-color: #000000,
-//   card-shadow: 0 2px 5px 0 rgba(238, 255, 0, 0.494),
+  // btn
 
-//   menu-bg: #ffffff,
-//   menu-fg: #000000,
-//   menu-active-bg: #ffffff,
-//   menu-active-fg: #000000,
-//   menu-font-size: 0.8rem,
-//   menu-item-separator: rgba(255, 0, 0, 0.301),
-
-//   menu-submenu-bg: #ffffff,
-//   menu-submenu-fg: #000000,
-//   menu-submenu-active-bg:  #ffffff,
-//   menu-submenu-active-fg: #000000,
-//   menu-submenu-item-border-width: 0,
-//   menu-submenu-item-padding: none,
-//   menu-submenu-item-container-padding: none,
-//   menu-submenu-padding: none,
-//   menu-submenu-item-border-radius: 0,
-//   menu-icon-font-size: 1.5rem,
-//   scrollbar-fg: #ce0000,
-//   scrollbar-bg: transparent,
+  btn-success-bg: #64d9ff,
+  // Card
+ card-text-color: #23d123,
+ card-fg: #ffffff,
+ card-fg-text: #000000, // texto interno 
+ card-header-font-family: 'sans-serif',
+ card-header-font-size: 1.3rem,
+ card-fg-heading: #000000,
+ card-bg: #ffffff,
+ card-header-fg: #64d9ff,
+ card-separator: #ffffff73,
+ card-header-fg-heading: #4fb9ff,
+ card-header-active-bg:  rgb(7, 3, 58),
+ card-header-success-bg: rgba(82, 162, 241, 0.2),
+ card-header-info-bg:  #c0e7ff,
+ 
 
 
-//   //header
-//   header-font-family: 'sans-serif',
-//   header-font-size: 0.7rem,
-//   header-height: 5.5rem,
-//   header-padding: none,
-//   header-fg: #000000,
-//   header-bg: #ffffff,
-//   header-shadow: none,
+  
+  // footer
+  footer-fg: #64c9ff,
+  footer-bg: #ffffff,
+  footer-height: auto,
+ // app wise variables for each theme
+  sidebar-header-gap: 2rem,
+  sidebar-header-height: initial,
+  layout-content-width: 1400px,
+  font-secondary: Exo,
+  //smart-table
+  smart-table-border-radius: 0.1rem	,
+  smart-table-header-font-size: 0.8rem,
+  smart-table-font-size: 0.65rem,
+  smart-table-font-weight: 400,
+  smart-table-padding: 0.275rem 0.725rem,
+  smart-table-paging-border-width: 0.5,
+  smart-table-filter-padding: 0.1rem 0.1rem,
+  //form-control
+  form-control-placeholder-font-size: 0.8rem,
+  form-control-font-size: 0.8rem,
+  form-control-border-width: 1px,
+  form-control-border-radius: 0.1rem,
+  //fonts
+  font-weight-thin: 100,
+  font-weight-light: 200,
+  font-weight-normal: 300,
+  font-weight-bolder: 400,
+  font-weight-bold: 500,
+  font-weight-ultra-bold: 600,
+  //general
+  padding: 1rem,
+  font-size: 0.9rem,
+  margin: 1rem,
+  layout-padding: 2rem 0.2rem 3rem,
 
-//   footer-shadow: none,
+  sidebar-bg:  #4fb9ff,//#ffffff,
+  sidebar-fg: #000000,
+  sidebar-shadow: none,
+  sidebar-padding: 0.3rem,
+  sidebar-margin-top: 0,
+  tabs-fg: #000000,
 
-//   switcher-background: #ffffff,
-//   switcher-background-percentage: 14%,
-//   drops-icon-line-gadient: -webkit-linear-gradient(#db3401, #bb0b0b),
+  
+  menu-icon-color: #ffffff,
+  card-shadow: 0 2px 5px 0    #c0e7ff,
+
+  menu-bg:  #4fb9ff,
+  menu-fg: #ffffff,
+  menu-active-bg: #4fb9ff,
+  menu-active-fg: #ffffff,
+  menu-font-size:0.875rem,
+  menu-item-separator: #4fb9ff,
+
+  menu-submenu-bg: #4fb9ff,
+  menu-submenu-fg: #ffffff,
+  menu-submenu-active-bg:  #ffffff,
+  menu-submenu-active-fg: #000000,
+  menu-submenu-item-border-width: 0,
+  menu-submenu-item-padding: none,
+  menu-submenu-item-container-padding: none,
+  menu-submenu-padding: none,
+  menu-submenu-item-border-radius: 0,
+  menu-icon-font-size: 1.5rem,
+  scrollbar-fg: #00ce2d,
+  scrollbar-bg: transparent,
+
+
+  //header
+  header-font-family: 'sans-serif',
+  header-font-size: 0.7rem,
+  header-height: 5.5rem,
+  header-padding: none,
+  header-fg: #91e7ff,
+  header-bg: #ffffff,
+  header-shadow: none,
+
+  footer-shadow: none,
+
+  switcher-background: #ffffff,
+  switcher-background-percentage: 14%,
+  drops-icon-line-gadient: -webkit-linear-gradient(#db3401, #bb0b0b),
 ), ud, default);

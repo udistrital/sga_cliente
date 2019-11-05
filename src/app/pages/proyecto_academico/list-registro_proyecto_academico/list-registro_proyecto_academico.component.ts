@@ -21,6 +21,8 @@ import { PersonaService } from '../../../@core/data/persona.service';
 import { Persona } from '../../../@core/data/models/persona';
 import { ConsultaProyectoAcademicoComponent } from '../consulta-proyecto_academico/consulta-proyecto_academico.component';
 import { RegistroProyectoAcademicoComponent } from '../registro-proyecto_academico/registro-proyecto_academico.component';
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
 
 @Component({
   selector: 'ngx-list-registro-proyecto-academico',
@@ -44,12 +46,47 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
     private proyectoacademicoService: ProyectoAcademicoService,
     public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
     private sgamidService: SgaMidService,
+    private nuxeoService: NuxeoService,
+    private documentoService: DocumentoService,
     public dialog: MatDialog,
     private toasterService: ToasterService) {
       this.loadregistro();
   }
 
-
+  downloadFile(id_documento: any) {
+    const filesToGet = [
+      {
+        Id: id_documento,
+        key: id_documento,
+      },
+    ];
+    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
+      .subscribe(response => {
+        const filesResponse = <any>response;
+        if (Object.keys(filesResponse).length === filesToGet.length) {
+          // console.log("files", filesResponse);
+          filesToGet.forEach((file: any) => {
+            const url = filesResponse[file.Id];
+            // let newWindow = window.open('','_blank')
+            const new_tab = window.open('', '_blank', 'toolbar=no,' +
+            'location=no, directories=no, status=no, menubar=no,' +
+            'scrollbars=no, resizable=no, copyhistory=no, height=400, width=400, top = 20, left=20');
+            new_tab.onload = () => {
+              new_tab.location = url;
+            };
+            new_tab.focus();
+          });
+        }
+      },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
+  }
 
   useLanguage(language: string) {
     this.translate.use(language);

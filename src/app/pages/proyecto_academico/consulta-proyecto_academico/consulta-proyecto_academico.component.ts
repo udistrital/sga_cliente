@@ -7,7 +7,10 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListRegistroProyectoAcademicoComponent } from '../list-registro_proyecto_academico/list-registro_proyecto_academico.component';
-
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'ngx-consulta-proyecto-academico',
@@ -24,6 +27,8 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
   constructor(private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialog,
+    private nuxeoService: NuxeoService,
+    private documentoService: DocumentoService,
     public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
     private routerService: Router,
     private formBuilder: FormBuilder) {
@@ -57,6 +62,41 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
     onclick(): void {
       this.dialogRef.close();
     }
+
+  downloadActoFile(project: any) {
+    const filesToGet = [
+      {
+        Id: project.id_documento_acto,
+        key: project.id_documento_acto,
+      },
+    ];
+    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
+      .subscribe(response => {
+        const filesResponse = <any>response;
+        if (Object.keys(filesResponse).length === filesToGet.length) {
+          // console.log("files", filesResponse);
+          filesToGet.forEach((file: any) => {
+            const url = filesResponse[file.Id];
+            // let newWindow = window.open('','_blank')
+            const new_tab = window.open('', '_blank', 'toolbar=no,' +
+            'location=no, directories=no, status=no, menubar=no,' +
+            'scrollbars=no, resizable=no, copyhistory=no, height=400, width=400, top = 20, left=20');
+            new_tab.onload = () => {
+              new_tab.location = url;
+            };
+            new_tab.focus();
+          });
+        }
+      },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
+  }
 
   cloneProject(project: any): void {
     this.routerService.navigateByUrl(`pages/proyecto_academico/crud-proyecto_academico/${project.Id}`);

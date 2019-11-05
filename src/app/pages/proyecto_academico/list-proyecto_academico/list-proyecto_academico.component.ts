@@ -77,11 +77,15 @@ export class ListProyectoAcademicoComponent implements OnInit {
   primer_nombre: string;
   segundo_nombre: string;
   primer_apellido: string;
-  id_coordinador: Number;
+  id_coordinador: any;
   segundo_apellido: string;
   nombre_completo: string;
   source: LocalDataSource = new LocalDataSource();
   proyectoJson: any;
+  id_documento_acto: string;
+  id_documento_registor_calificado: string;
+  id_documento_alta_calidad: string;
+  id_documento_registro_coordinador: number;
 
   constructor(private translate: TranslateService,
     private proyectoacademicoService: ProyectoAcademicoService,
@@ -94,11 +98,12 @@ export class ListProyectoAcademicoComponent implements OnInit {
 
   openDialogConsulta(): void {
     const dialogRef = this.dialog.open(ConsultaProyectoAcademicoComponent, {
-      width: '550px',
+      width: '650px',
       height: '750px',
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
-             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, Id: this.idproyecto},
+             tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, Id: this.idproyecto,
+             id_documento_acto: this.id_documento_acto},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -122,7 +127,9 @@ export class ListProyectoAcademicoComponent implements OnInit {
              fechainiciocoordinador: this.fecha_inicio_coordinador, idcoordinador: this.id_coordinador,
              tieneregistroaltacalidad: this.existe_registro_alta_calidad, resolucion_alta: this.resolucion_alta_calidad,
              resolucion_alta_ano: this.resolucion_alta_calidad_ano, vigencia_meses_alta: this.vigencia_resolucion_meses_alta_calidad,
-             vigencia_ano_alta: this.vigencia_resolucion_anos_alta_calidad, fecha_creacion_registro_alta: this.fecha_creacion_resolucion_alta_calidad},
+             vigencia_ano_alta: this.vigencia_resolucion_anos_alta_calidad, fecha_creacion_registro_alta: this.fecha_creacion_resolucion_alta_calidad,
+             id_documento_acto: this.id_documento_acto, id_documento_registor_calificado: this.id_documento_registor_calificado,
+             id_documento_alta_calidad: this.id_documento_alta_calidad, id_documento_registro_coordinador: this.id_documento_registro_coordinador},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -222,6 +229,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
         this.oferta = res.map((data: any) => (data.OfertaLetra));
         this.enfasis = res.map((data: any) => (data.Enfasis))[0];
+        this.id_documento_acto = res.map((data: any) => (data.ProyectoAcademico.EnlaceActoAdministrativo))[0];
         this.openDialogConsulta();
       }else {
       Swal(opt1)
@@ -284,12 +292,15 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.fecha_creacion_resolucion = res.map((data: any) => (data.Registro[0].FechaCreacionActoAdministrativo));
         this.vigencia_resolucion_meses = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(6, 1)));
         this.vigencia_resolucion_anos = res.map((data: any) => (data.Registro[0].VigenciaActoAdministrativo.substr(12, 1)));
+        this.id_documento_registor_calificado = res.map((data: any) => (data.Registro[0].EnlaceActo))[0];
         this.numero_acto = res.map((data: any) => (data.ProyectoAcademico.NumeroActoAdministrativo));
         this.ano_acto = res.map((data: any) => (data.ProyectoAcademico.AnoActoAdministrativo));
         this.existe_registro_alta_calidad = res.map((data: any) => Boolean((data.TieneRegistroAltaCalidad)));
         this.resolucion_alta_calidad = res.map((data: any) => (data.NumeroActoAdministrativoAltaCalidad));
         this.resolucion_alta_calidad_ano = res.map((data: any) => (data.AnoActoAdministrativoIdAltaCalidad));
         this.fecha_creacion_resolucion_alta_calidad = res.map((data: any) => (data.FechaCreacionActoAdministrativoAltaCalidad));
+        this.id_documento_alta_calidad = res.map((data: any) => (data.EnlaceActoAdministrativoAltaCalidad))[0];
+        this.id_documento_acto = res.map((data: any) => (data.ProyectoAcademico.EnlaceActoAdministrativo))[0];
         if (this.existe_registro_alta_calidad[0] === true) {
           this.vigencia_resolucion_meses_alta_calidad = res.map((data: any) => (data.VigenciaActoAdministrativoAltaCalidad.substr(6, 1)));
           this.vigencia_resolucion_anos_alta_calidad = res.map((data: any) => (data.VigenciaActoAdministrativoAltaCalidad.substr(12, 1)));
@@ -355,10 +366,16 @@ promesaid_modificar(id: number): Promise<{id: number}> {
   .subscribe((res: any) => {
     const r = <any>res;
     if (res !== null && r.Type !== 'error') {
-    this.fecha_inicio_coordinador = res.map((data: any) => (data.FechaInicio))[0];
-    this.id_coordinador = res.map((data: any) => (data.PersonaId));
     this.coordinador = <any>res;
+    this.coordinador.forEach((uni: any ) => {
+      if (uni.Activo === true) {
+        this.coordinador = uni;
+      }
+    });
     console.info(this.coordinador)
+    this.id_coordinador = this.coordinador['PersonaId'];
+    this.fecha_inicio_coordinador = this.coordinador['FechaInicio'];
+    this.id_documento_registro_coordinador = this.coordinador['ResolucionAsignacionId'];
   }else {
     Swal(opt1)
     .then((willDelete) => {
@@ -376,6 +393,7 @@ promesaid_modificar(id: number): Promise<{id: number}> {
   });
 });
  }
+
 
 inhabilitarProyecto(row: any): void {
   let inhabilitar_title = this.translate.instant('consultaproyecto.inhabilitar_proyecto');

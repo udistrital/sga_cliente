@@ -77,7 +77,7 @@ export class HeaderComponent {
   }
 
   toggleSidebar(): boolean {
-    this.sidebarService.toggle(false, 'menu-sidebar');
+    this.sidebarService.toggle(true, 'menu-sidebar');
     return false;
   }
 
