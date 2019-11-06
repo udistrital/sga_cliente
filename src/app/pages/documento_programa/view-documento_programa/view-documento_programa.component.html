@@ -1,0 +1,22 @@
+<nb-card>
+  <nb-card-header>{{"GLOBAL.documento_programa" | translate}}
+  </nb-card-header>
+  <nb-card-body class="row container">
+    <div class="col-md-12">
+      <table class="table-responsive">
+        <tbody *ngIf="info_documento_programa">
+          <tr *ngFor="let documento of info_documento_programa">
+            <td>
+              <p>{{documento.TipoDocumentoPrograma.Nombre}}</p>
+            </td>
+            <td *ngIf="documento.DocumentoId !== undefined">
+              <p>(<a [href]=documento.DocumentoId download="{{documento.TipoDocumentoPrograma.Nombre}}.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <span *ngIf="url_editar && (estado_inscripcion < 2)" (click)="editar()" class="link">
+        <i class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
+    </div>
+  </nb-card-body>
+</nb-card>

@@ -1,0 +1,33 @@
+<nb-card>
+    <nb-card-header>{{"GLOBAL.formacion_academica" | translate}}
+    </nb-card-header>
+    <nb-card-body class="row container">
+        <div class="col-md-12">
+            <table class="table-responsive">
+                <tbody *ngIf="info_formacion_academica">
+                    <tr *ngFor="let formacion of info_formacion_academica">
+                        <td>
+                            <p><b>{{formacion.FechaInicio | date:'dd/MM/yyyy'}}
+                                    - {{formacion.FechaFinalizacion |
+                                    date:'dd/MM/yyyy'}} </b></p>
+                            <p><b>{{formacion.PaisUniversidad}}</b></p>
+                            <p><b>{{formacion.Titulacion.NivelFormacion.Nombre}}</b></p>
+                            <p><b>{{formacion.Titulacion.Metodologia.Nombre}}</b></p>
+                        </td>
+                        <td>
+                            <p>{{formacion.NombreUniversidad}}</p>
+                            <p>{{formacion.Titulacion.Nombre}}</p>
+                            <p><b>{{"GLOBAL.titulo_trabajo_grado" | translate}}:
+                                </b>{{formacion.TituloTrabajoGrado}} -
+                                {{formacion.DescripcionTrabajoGrado}}</p>
+                            <p>(<a [href]=formacion.Documento download="Formacion{{formacion.FechaFinalizacion |
+                                date:'yyyy'}}.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <span *ngIf="url_editar" (click)="editar()" class="link"><i
+                    class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
+        </div>
+    </nb-card-body>
+</nb-card>

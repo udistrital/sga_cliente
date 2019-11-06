@@ -1,0 +1,34 @@
+<nb-card>
+    <nb-card-header>{{"GLOBAL.experiencia_laboral" | translate}}
+    </nb-card-header>
+    <nb-card-body class="row container">
+        <div class="col-md-12">
+            <table class="table-responsive">
+                <tbody *ngIf="info_experiencia_laboral">
+                    <tr *ngFor="let experiencia of info_experiencia_laboral">
+                        <td>
+                            <p><b>{{experiencia.FechaInicio |
+                                    date:'dd/MM/yyyy'}} -
+                                    {{experiencia.FechaFinalizacion |
+                                    date:'dd/MM/yyyy'}} </b></p>
+                            <p><b>{{experiencia.PaisEmpresa}}</b></p>
+                            <p><b>{{experiencia.TipoVinculacion.Nombre}}</b></p>
+                            <p><b>{{experiencia.TipoDedicacion.Nombre}}</b></p>
+                        </td>
+                        <td>
+                            <p>{{experiencia.Organizacion.Nombre}}</p>
+                            <p>{{experiencia.Organizacion.TipoOrganizacion.Nombre}}</p>
+                            <p><b>{{"GLOBAL.cargo" | translate}}: </b>{{experiencia.Cargo.Nombre}}
+                                - {{experiencia.Actividades}}</p>
+                            <p></p>
+                            <p>(<a [href]=experiencia.Documento download="Experiencia{{experiencia.FechaFinalizacion |
+                                date:'yyyy'}}.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <span *ngIf="url_editar" (click)="editar()" class="link"><i
+                    class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
+        </div>
+    </nb-card-body>
+</nb-card>

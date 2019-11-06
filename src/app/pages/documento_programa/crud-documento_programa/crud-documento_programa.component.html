@@ -1,0 +1,5 @@
+<toaster-container [toasterconfig]="config"></toaster-container>
+<ngx-dinamicform [normalform]="formDocumentoPrograma"
+  [modeloData]="info_documento_programa" (result)="validarForm($event)"
+  [clean]="clean" (percentage)="setPercentage($event)">
+</ngx-dinamicform>

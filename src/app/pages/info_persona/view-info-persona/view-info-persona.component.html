@@ -1,0 +1,28 @@
+<nb-card *ngIf="info_info_persona">
+  <nb-card-header>{{"GLOBAL.info_basica" | translate}}
+    "{{info_info_persona.Usuario}}"</nb-card-header>
+  <nb-card-body class="row container">
+    <div class="col-md-6 col-sm-6col-sm-6 col-xs-12">
+      <ul>
+        <li><label><strong>{{"GLOBAL.nombre" | translate}}: </strong></label>
+          {{info_info_persona.PrimerNombre}}
+          {{info_info_persona.SegundoNombre}}
+          {{info_info_persona.PrimerApellido}}
+          {{info_info_persona.SegundoApellido}}</li>
+        <li><label><strong>{{"GLOBAL.fecha_nacimiento" | translate}}: </strong></label>
+          {{info_info_persona.FechaNacimiento | date : "yyyy/MM/dd"}}</li>
+        <li><label><strong>{{"GLOBAL.genero" | translate}}: </strong></label>
+          {{info_info_persona.Genero.Nombre}}</li>
+        <li><label><strong>{{"GLOBAL.estado_civil" | translate}}: </strong></label>
+          {{info_info_persona.EstadoCivil.Nombre}} (<a [href]=soporteDocumento download="cedula.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</li>
+        <li><label><strong>{{info_info_persona.TipoIdentificacion.CodigoAbreviacion}}:
+            </strong></label> {{info_info_persona.NumeroIdentificacion}}</li>
+      </ul>
+      <span *ngIf="url_editar" (click)="editar()" class="link"><i
+          class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-12 pull-right">
+        <a [href]=foto download="{{info_info_persona.NumeroIdentificacion}}.jpg"><img class="user-picture img-tumbnail" [src]="foto"></a>
+    </div>
+  </nb-card-body>
+</nb-card>

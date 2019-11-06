@@ -1,0 +1,7 @@
+<toaster-container [toasterconfig]="config"></toaster-container>
+<ngx-dinamicform [normalform]="formPropuestaGrado"
+  [modeloData]="info_propuesta_grado" (result)="validarForm($event)"
+  [clean]="clean" (interlaced)="getSeleccion($event)" 
+  (percentage)="setPercentage($event)">
+</ngx-dinamicform>
+<ngx-loading [hidden]="!loading"></ngx-loading>

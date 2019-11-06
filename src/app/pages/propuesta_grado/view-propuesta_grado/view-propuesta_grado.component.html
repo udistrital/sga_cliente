@@ -1,0 +1,29 @@
+<nb-card>
+  <nb-card-header>{{"GLOBAL.propuesta_grado" | translate}}
+  </nb-card-header>
+  <nb-card-body class="row container">
+    <div class="col-md-12">
+      <table class="table-responsive">
+        <tbody *ngIf="info_propuesta_grado">
+          <tr>
+            <td>
+              <p *ngIf="info_propuesta_grado.GrupoInvestigacion"><b>{{"GLOBAL.grupo_investigacion" | translate}}:</b> 
+                {{info_propuesta_grado.GrupoInvestigacion.Nombre}}</p>
+              <p *ngIf="info_propuesta_grado.LineaInvestigacion"><b>{{"GLOBAL.linea_investigacion" | translate}}:</b> 
+                {{info_propuesta_grado.LineaInvestigacion.Nombre}}</p>
+              <p><b>{{"GLOBAL.tipo_proyecto" | translate}}:</b> {{info_propuesta_grado.TipoProyectoId.Nombre}}</p>
+            </td>
+            <td>
+              <p><b>{{"GLOBAL.titulo_proyecto" | translate}}:</b> {{info_propuesta_grado.Nombre}}</p>
+              <p><b>{{"GLOBAL.formato_proyecto" | translate}}:</b> (<a [href]=info_propuesta_grado.DocumentoId download="Propuesta.pdf">
+                {{"GLOBAL.soporte_documento" | translate}}</a>)</p>
+              <p><b>{{"GLOBAL.resumen" | translate}}:</b> {{info_propuesta_grado.Resumen}}</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <span *ngIf="url_editar && (estado_inscripcion < 2)" (click)="editar()" class="link">
+        <i class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
+    </div>
+  </nb-card-body>
+</nb-card>
