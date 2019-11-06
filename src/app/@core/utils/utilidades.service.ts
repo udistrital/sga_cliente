@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
+import 'rxjs/add/observable/of';
+
 
 @Injectable({
     providedIn: 'root',
 })
 export class UtilidadesService {
 
-    userArray: any[];
-    jsonArray: any[];
+    static userArray: any[];
+    static jsonArray: any[];
 
     constructor() {
     }
 
-    getSumArray(array): any {
+    static getSumArray(array): any {
         let sum = 0;
         array.forEach(element => {
             sum += element;

@@ -38,4 +38,5 @@ export const environment = {
   SGA_MID_SERVICE: 'http://localhost:8095/v1/',
   CLIENTE_HABILITAR_PERIODO_SERVICE: 'http://localhost:8088/v1/',
   OFERTA_ACADEMICA_SERVICE: 'http://localhost:8095/v1/',
+  INSCRIPCION_SERVICE: '',
 };
