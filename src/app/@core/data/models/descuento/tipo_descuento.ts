@@ -8,4 +8,3 @@ export class TipoDescuento {
     General: boolean;
     ConceptoAcademico: number;
   }
-  
