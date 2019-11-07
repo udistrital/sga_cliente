@@ -8,4 +8,3 @@ export class TipoDocumentoPrograma {
     Tamano: number;
     Extension: string;
   }
-  

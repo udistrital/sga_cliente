@@ -6,4 +6,3 @@ export class EstadoCivil {
     Activo: boolean;
     NumeroOrden: number;
   }
-  

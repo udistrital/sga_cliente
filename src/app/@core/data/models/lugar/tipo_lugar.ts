@@ -6,4 +6,3 @@ export class TipoLugar {
     Activo: boolean;
     NumeroOrden: number;
   }
-  

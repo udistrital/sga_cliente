@@ -6,4 +6,3 @@ export class GrupoInvestigacion {
     NumeroOrden: number;
     Activo: boolean;
   }
-  

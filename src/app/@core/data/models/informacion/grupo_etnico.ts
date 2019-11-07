@@ -6,4 +6,3 @@ export class GrupoEtnico {
     Activo: boolean;
     NumeroOrden: number;
   }
-  
