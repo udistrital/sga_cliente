@@ -28,6 +28,7 @@ export class ViewInfoPersonaComponent implements OnInit {
     this.loadInfoPersona();
   }
 
+  // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private campusMidService: CampusMidService,

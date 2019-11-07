@@ -6,4 +6,3 @@ export class EstadoInscripcion {
     Activo: boolean;
     NumeroOrden: number;
   }
-  

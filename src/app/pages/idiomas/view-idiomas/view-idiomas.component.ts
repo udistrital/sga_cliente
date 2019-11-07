@@ -29,6 +29,7 @@ export class ViewIdiomasComponent implements OnInit {
     }
   }
 
+  // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
   info_idioma: any;

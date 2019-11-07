@@ -6,4 +6,3 @@ export class TipoProyecto {
     NumeroOrden: number;
     Activo: boolean;
   }
-  

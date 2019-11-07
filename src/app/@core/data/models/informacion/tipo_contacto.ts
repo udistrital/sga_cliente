@@ -6,4 +6,3 @@ export class TipoContacto {
     Activo: boolean;
     NumeroOrden: number;
   }
-  

@@ -6,4 +6,3 @@ export class TipoIdentificacion {
     Activo: boolean;
     NumeroOrden: number;
   }
-  

@@ -7,4 +7,3 @@ export class LineaInvestigacion {
     NumeroOrden: number;
     GrupoInvestigacion: number;
   }
-  
