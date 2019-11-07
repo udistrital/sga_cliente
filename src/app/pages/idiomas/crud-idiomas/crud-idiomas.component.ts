@@ -40,6 +40,7 @@ export class CrudIdiomasComponent implements OnInit {
   }
 
   @Output() eventChange = new EventEmitter();
+  // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
   info_idioma: InfoIdioma;

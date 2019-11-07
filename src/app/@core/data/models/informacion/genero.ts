@@ -6,4 +6,3 @@ export class Genero {
     Activo: boolean;
     NumeroOrden: number;
   }
-  

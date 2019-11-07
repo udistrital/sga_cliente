@@ -6,4 +6,3 @@ export class Titulacion {
     Activo: boolean;
     NumeroOrden: number;
   }
-  

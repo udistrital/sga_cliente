@@ -6,4 +6,3 @@ export class TipoDiscapacidad {
     Activo: boolean;
     NumeroOrden: number;
   }
-  

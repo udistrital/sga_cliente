@@ -21,6 +21,7 @@ export class PerfilComponent implements OnInit {
     this.info_inscripcion_id = info_inscripcion_id;
   }
 
+  // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private translate: TranslateService) {
