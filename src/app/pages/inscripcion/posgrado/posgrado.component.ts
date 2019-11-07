@@ -38,6 +38,7 @@ export class PosgradoComponent implements OnInit, OnChanges {
   }
 
   @Output() eventChange = new EventEmitter();
+  // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
   inscripcion_id: number;
@@ -96,7 +97,7 @@ export class PosgradoComponent implements OnInit, OnChanges {
     private campusMidService: CampusMidService,
     private inscripcionService: InscripcionService,
     private userService: UserService,
-    private programaService: OikosService
+    private programaService: OikosService,
     ) {
     this.imagenes = IMAGENES;
     this.translate = translate;
