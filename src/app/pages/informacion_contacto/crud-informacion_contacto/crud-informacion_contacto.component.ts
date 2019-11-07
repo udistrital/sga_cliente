@@ -1,7 +1,7 @@
-import { Lugar } from './../../../@core/data/models/lugar';
-import { InformacionContacto } from './../../../@core/data/models/informacion_contacto';
-import { InfoContactoGet } from './../../../@core/data/models/info_contacto_get';
-import { InfoContactoPut } from './../../../@core/data/models/info_contacto_put';
+import { Lugar } from './../../../@core/data/models/lugar/lugar';
+import { InformacionContacto } from './../../../@core/data/models/informacion/informacion_contacto';
+import { InfoContactoGet } from './../../../@core/data/models/ente/info_contacto_get';
+import { InfoContactoPut } from './../../../@core/data/models/ente/info_contacto_put';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';

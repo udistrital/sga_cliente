@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
-import { InfoPersona } from '../../../@core/data/models/info_persona';
+import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';

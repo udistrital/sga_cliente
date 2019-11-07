@@ -1,6 +1,6 @@
-import { Lugar } from './../../../@core/data/models/lugar';
-import { InfoCaracteristica } from './../../../@core/data/models/info_caracteristica';
-import { InfoCaracteristicaGet } from './../../../@core/data/models/info_caracteristica_get';
+import { Lugar } from './../../../@core/data/models/lugar/lugar';
+import { InfoCaracteristica } from './../../../@core/data/models/informacion/info_caracteristica';
+import { InfoCaracteristicaGet } from './../../../@core/data/models/informacion/info_caracteristica_get';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';

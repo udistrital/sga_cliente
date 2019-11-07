@@ -11,13 +11,12 @@ const routes: Routes = [{
   children: [{
     path: 'posgrado',
     component: PosgradoComponent,
-    canActivate: [AuthGuard],
     data: {
       roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
+        // 'ADMIN_CAMPUS',
+        // 'ASPIRANTE',
+        // 'Internal/selfsignup',
+        // 'Internal/everyone',
       ],
     },
   }],

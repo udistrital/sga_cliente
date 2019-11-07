@@ -1,7 +1,7 @@
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
-import { Inscripcion } from './../../../@core/data/models/inscripcion';
-import { InfoPersona } from './../../../@core/data/models/info_persona';
+import { Inscripcion } from './../../../@core/data/models/inscripcion/inscripcion';
+import { InfoPersona } from './../../../@core/data/models/informacion/info_persona';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';

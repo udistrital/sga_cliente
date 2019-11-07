@@ -3,7 +3,7 @@ import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { CoreService } from '../../../@core/data/core.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { UserService } from '../../../@core/data/users.service';
-import { PropuestaGrado } from './../../../@core/data/models/propuesta_grado';
+import { PropuestaGrado } from './../../../@core/data/models/inscripcion/propuesta_grado';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';

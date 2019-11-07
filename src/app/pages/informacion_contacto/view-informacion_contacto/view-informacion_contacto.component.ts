@@ -1,4 +1,4 @@
-import { InfoContactoGet } from '../../../@core/data/models/info_contacto_get';
+import { InfoContactoGet } from '../../../@core/data/models/ente/info_contacto_get';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';

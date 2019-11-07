@@ -1,4 +1,4 @@
-import { InfoCaracteristica } from './../../../@core/data/models/info_caracteristica';
+import { InfoCaracteristica } from './../../../@core/data/models/informacion/info_caracteristica';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
