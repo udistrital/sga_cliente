@@ -6,4 +6,3 @@ export class PeriodoAcademico {
     NumeroOrden: number;
     Activo: boolean;
   }
-  
