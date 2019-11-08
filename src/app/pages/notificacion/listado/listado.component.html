@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-6 offset-3">
+    <nb-card>
+      <div class="input-group">
+        <input type="text" class="form-control"
+          (keyup)="searchTerm$.next($event.target.value)" placeholder="Search ...">
+        <span class="input-group-append">
+        </span>
+      </div>
+    </nb-card>
+  </div>
+  <br>
+  <div class="col-6 offset-3">
+    <nb-card size="medium">
+      <nb-card-header>
+        Notificaciones
+      </nb-card-header>
+      <nb-card-body>
+        <mat-list>
+          <mat-list-item *ngFor="let notificacion of notificaciones">
+            <img matListAvatar src="assets/images/polux.png"
+              [alt]="notificacion.User">
+            <h3 matLine> {{notificacion.User}} </h3>
+            <h4 matLine>
+              {{notificacion.Content.Message}}
+            </h4>
+            <h4 matLine>
+              {{notificacion.FechaCreacion}}
+            </h4>
+          </mat-list-item>
+        </mat-list>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

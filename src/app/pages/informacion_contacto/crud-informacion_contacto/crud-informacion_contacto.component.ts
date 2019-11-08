@@ -11,9 +11,9 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
-import { IAppState } from '../../../@core/store/app.state';
-import { ListService } from '../../../@core/store/services/list.service';
-import { Store } from '@ngrx/store';
+// import { IAppState } from '../../../@core/store/app.state';
+// import { ListService } from '../../../@core/store/services/list.service';
+// import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ngx-crud-informacion-contacto',
@@ -54,16 +54,16 @@ export class CrudInformacionContactoComponent implements OnInit {
     private translate: TranslateService,
     private campusMidService: CampusMidService,
     private ubicacionesService: UbicacionService,
-    private store: Store<IAppState>,
-    private listService: ListService,
+    // private store: Store<IAppState>,
+    // private listService: ListService,
     private toasterService: ToasterService) {
     this.formInformacionContacto = FORM_INFORMACION_CONTACTO;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.listService.findPais();
-    this.loadLists();
+    // this.listService.findPais();
+    // this.loadLists();
     this.loading = false;
   }
 
@@ -527,11 +527,11 @@ export class CrudInformacionContactoComponent implements OnInit {
   }
 
   public loadLists() {
-    this.store.select((state) => state).subscribe(
-      (list) => {
-        this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
-      },
-    );
+    // this.store.select((state) => state).subscribe(
+    //   (list) => {
+    //     this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
+    //   },
+    // );
   }
 
 }

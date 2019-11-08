@@ -12,36 +12,36 @@ const routes: Routes = [{
   children: [{
     path: 'list-informacion_contacto',
     component: ListInformacionContactoComponent,
-    canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-      ],
-    },
+  //   canActivate: [AuthGuard],
+  //   data: {
+  //     roles: [
+  //       'ADMIN_CAMPUS',
+  //     ],
+  //  },
   }, {
     path: 'crud-informacion_contacto',
     component: CrudInformacionContactoComponent,
-    canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
+    // canActivate: [AuthGuard],
+    // data: {
+    //   roles: [
+    //     'ADMIN_CAMPUS',
+    //     'ASPIRANTE',
+    //     'Internal/selfsignup',
+    //     'Internal/everyone',
+    //   ],
+    // },
   }, {
     path: 'view-informacion_contacto',
     component: ViewInformacionContactoComponent,
-    canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
+    // canActivate: [AuthGuard],
+    // data: {
+    //   roles: [
+    //     'ADMIN_CAMPUS',
+    //     'ASPIRANTE',
+    //     'Internal/selfsignup',
+    //     'Internal/everyone',
+    //   ],
+    // },
   }],
 }];
 

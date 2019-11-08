@@ -61,6 +61,10 @@
             "proyecto_academico": "Proyecto Académico",
             "list_proyecto_academico": "Lista Proyecto Académico",
             "crud_proyecto_academico": "Registro de un Proyecto académico"
+        },
+        "inscripcion": {
+            "inscripcion": "Inscripcion",
+            "inscripcion_posgrado": "Posgrado"
         }
 
 
@@ -440,5 +444,9 @@
         "registro_creado": "Registro creado correctamente",
         "creado": "Registro Creado!",
         "crear_registro": "Crear nuevo registro al Proyecto Académico"
+    },
+    "inscripcion": {
+        "aviso_programa": "Seleccione el programa al que desea inscribirse",
+        "info_basica": "Información básica"
     }
 }

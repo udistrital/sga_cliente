@@ -50,18 +50,18 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     private translate: TranslateService,
     private campusMidService: CampusMidService,
     private ubicacionesService: UbicacionService,
-    private store: Store<IAppState>,
-    private listService: ListService,
+    // private store: Store<IAppState>,
+    // private listService: ListService,
     private toasterService: ToasterService) {
     this.formInfoCaracteristica = FORM_INFO_CARACTERISTICA;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.listService.findPais();
-    this.listService.findGrupoEtnico();
-    this.listService.findTipoDiscapacidad();
-    this.loadLists();
+    // this.listService.findPais();
+    // this.listService.findGrupoEtnico();
+    // this.listService.findTipoDiscapacidad();
+    // this.loadLists();
     this.loading = false;
   }
 
@@ -324,13 +324,13 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   public loadLists() {
-    this.store.select((state) => state).subscribe(
-      (list) => {
-        this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
-        this.formInfoCaracteristica.campos[this.getIndexForm('GrupoEtnico')].opciones = list.listGrupoEtnico[0];
-        this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].opciones = list.listTipoDiscapacidad[0];
-      },
-    );
+    // this.store.select((state) => state).subscribe(
+    //   (list) => {
+    //     this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
+    //     this.formInfoCaracteristica.campos[this.getIndexForm('GrupoEtnico')].opciones = list.listGrupoEtnico[0];
+    //     this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].opciones = list.listTipoDiscapacidad[0];
+    //   },
+    // );
   }
 
 }

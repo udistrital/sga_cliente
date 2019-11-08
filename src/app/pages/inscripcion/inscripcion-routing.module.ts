@@ -11,14 +11,14 @@ const routes: Routes = [{
   children: [{
     path: 'posgrado',
     component: PosgradoComponent,
-    data: {
-      roles: [
-        // 'ADMIN_CAMPUS',
-        // 'ASPIRANTE',
-        // 'Internal/selfsignup',
-        // 'Internal/everyone',
-      ],
-    },
+    // data: {
+    //   roles: [
+    //     'ADMIN_CAMPUS',
+    //     'ASPIRANTE',
+    //     'Internal/selfsignup',
+    //     'Internal/everyone',
+    //   ],
+    // },
   }],
 }];
 
