@@ -28,7 +28,7 @@ import { ViewInformacionContactoComponent } from './view-informacion_contacto/vi
   ],
 })
 export class InformacionContactoModule {
-  static forRoot(): any[] | import("@angular/core").Type<any> | import("@angular/core").ModuleWithProviders<{}> {
-    throw new Error("Method not implemented.");
+  static forRoot(): any[] | import('@angular/core').Type<any> | import('@angular/core').ModuleWithProviders<{}> {
+    throw new Error('Method not implemented.');
   }
 }
