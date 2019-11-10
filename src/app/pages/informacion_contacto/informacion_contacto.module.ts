@@ -7,6 +7,7 @@ import { ToasterModule } from 'angular2-toaster';
 import { SharedModule } from '../../shared/shared.module';
 import { CrudInformacionContactoComponent } from './crud-informacion_contacto/crud-informacion_contacto.component';
 import { ViewInformacionContactoComponent } from './view-informacion_contacto/view-informacion_contacto.component';
+import { CrudInformacionFamiliarComponent } from './crud-informacion_familiar/crud-informacion_familiar.component';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { ViewInformacionContactoComponent } from './view-informacion_contacto/vi
   ],
   exports: [
     CrudInformacionContactoComponent,
+    CrudInformacionFamiliarComponent,
     ViewInformacionContactoComponent,
   ],
 })

@@ -28,7 +28,7 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="formacion_academica">
                     <nb-card class="exp-card" (click)="perfil_editar('formacion_academica')">
-                        <nb-card-header>{{ 'GLOBAL.formacion_academica' | translate }}</nb-card-header>
+                        <nb-card-header>{{ 'inscripcion.formacion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-graduation-cap fa-5x"></i>
                             <p class="percentage">{{percentage_acad}} %</p>
@@ -38,7 +38,7 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="experiencia_laboral">
                     <nb-card class="exp-card" (click)="perfil_editar('experiencia_laboral')">
-                        <nb-card-header>{{ 'GLOBAL.experiencia_laboral' | translate }}</nb-card-header>
+                        <nb-card-header>{{ 'inscripcion.experiencia_laboral' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-briefcase fa-5x"></i>
                             <p class="percentage">{{percentage_expe}} %</p>
@@ -48,7 +48,7 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="produccion_academica">
                     <nb-card class="exp-card" (click)="perfil_editar('produccion_academica')">
-                        <nb-card-header>{{ 'GLOBAL.produccion_academica' | translate }}</nb-card-header>
+                        <nb-card-header>{{ 'inscripcion.produccion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-book fa-5x"></i>
                             <p class="percentage">{{percentage_prod}} %</p>
@@ -58,7 +58,7 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="documento_programa">
                     <nb-card class="exp-card" (click)="perfil_editar('documento_programa')">
-                        <nb-card-header>{{ 'GLOBAL.documento_programa' | translate }}</nb-card-header>
+                        <nb-card-header>{{ 'inscripcion.documento_programa' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-list-alt fa-5x"></i>
                             <p class="percentage">{{percentage_docu}} %</p>
@@ -68,7 +68,7 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="descuento_matricula">
                     <nb-card class="exp-card" (click)="perfil_editar('descuento_matricula')">
-                        <nb-card-header>{{ 'GLOBAL.descuento_matricula' | translate }}</nb-card-header>
+                        <nb-card-header>{{ 'inscripcion.descuento_matricula' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-dollar fa-5x"></i>
                             <p class="percentage">{{percentage_desc}} %</p>
@@ -78,7 +78,7 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="propuesta_grado">
                     <nb-card class="exp-card" (click)="perfil_editar('propuesta_grado')">
-                        <nb-card-header>{{ 'GLOBAL.propuesta_grado' | translate }}</nb-card-header>
+                        <nb-card-header>{{ 'inscripcion.propuesta_grado' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-file-pdf-o fa-5x"></i>
                             <p class="percentage">{{percentage_proy}} %</p>
@@ -88,7 +88,7 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0">
                     <nb-card class="exp-card" (click)="perfil_editar('perfil')">
-                        <nb-card-header>{{ 'GLOBAL.perfil' | translate }}</nb-card-header>
+                        <nb-card-header>{{ 'inscripcion.perfil' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-user fa-5x"></i>
                         </nb-card-body>
@@ -101,9 +101,9 @@
                 <ngb-progressbar showValue="true" type="success" [value]="percentage_total" [animated]="true" [height]="'15px'">
                 </ngb-progressbar>
                 <blockquote class="blockquote">
-                    <li>{{ 'GLOBAL.aviso_progreso' | translate}}</li>
+                    <li>{{ 'inscripcion.aviso_progreso' | translate}}</li>
                 </blockquote>
-                <button class="btn btn-success pull-right" [disabled]="total" (click)="inscribirse()">{{ 'GLOBAL.inscribirse' | translate }}</button>
+                <button class="btn btn-success pull-right" [disabled]="total" (click)="inscribirse()">{{ 'inscripcion.inscribirse' | translate }}</button>
             </div>
         </nb-card-body>
     </nb-card>
@@ -123,17 +123,21 @@
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
-                <nb-tab tabTitle="{{ 'GLOBAL.info_persona' | translate }}" [active]="info_persona">
+                <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
                     <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="traerInfoPersona($event,0)">
                     </ngx-crud-info-persona>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'GLOBAL.info_caracteristica' | translate }}" [active]="info_caracteristica" *ngIf="info_ente_id">
+                <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}" [active]="info_caracteristica">
                     <ngx-crud-info-caracteristica info_caracteristica_id={{this.info_ente_id}} (eventChange)="perfil_editar('info_contacto')" (result)="setPercentage_info($event,1)">
                     </ngx-crud-info-caracteristica>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'GLOBAL.informacion_contacto' | translate }}" [active]="info_contacto" *ngIf="info_ente_id">
+                <nb-tab tabTitle="{{ 'inscripcion.informacion_contacto' | translate }}" [active]="info_contacto">
                     <ngx-crud-informacion-contacto informacion_contacto_id={{this.info_ente_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-contacto>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}" [active]="info_contacto">
+                    <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    </ngx-crud-informacion-familiar>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
