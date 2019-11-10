@@ -73,7 +73,6 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     this.translate.use(language);
   }
 
- 
 
   getIndexForm(nombre: String): number {
     for (let index = 0; index < this.formInformacionFamiliar.campos.length; index++) {

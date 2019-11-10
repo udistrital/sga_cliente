@@ -91,5 +91,4 @@ export let FORM_INFORMACION_FAMILIAR = {
             tipo: 'text',
         },
     ],
-    
 }
