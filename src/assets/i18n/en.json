@@ -64,7 +64,7 @@
         },
         "inscripcion": {
             "inscripcion": "Inscription",
-            "inscripcion_posgrado": "Enrollment in an academic project"
+            "inscripcion_general": "Enrollment in an academic project"
         }
     },
     "GLOBAL": {

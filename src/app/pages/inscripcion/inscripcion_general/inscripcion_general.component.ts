@@ -17,11 +17,12 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 @Component({
-  selector: 'ngx-posgrado',
-  templateUrl: './posgrado.component.html',
-  styleUrls: ['./posgrado.component.scss'],
+  // tslint:disable-next-line: component-selector
+  selector: 'ngx-inscripcion_general',
+  templateUrl: './inscripcion_general.component.html',
+  styleUrls: ['./inscripcion_general.component.scss'],
 })
-export class PosgradoComponent implements OnInit, OnChanges {
+export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   @Input('inscripcion_id')
   set name(inscripcion_id: number) {

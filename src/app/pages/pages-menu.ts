@@ -115,13 +115,14 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     title:  'Inscripcion',
     icon:  'nb-compose',
-    link:  '/pages/inscripcion',
+    link:  '',
     key:  'inscripcion',
     children:  [
       {
-        title:  'Posgrado',
-        link:  '/pages/inscripcion/posgrado',
-        key:  'inscripcion_posgrado',
+        title:  'Inscripcion',
+        icon: 'nb-edit',
+        link:  '/pages/inscripcion/inscripcion_general',
+        key:  'inscripcion_general',
       },
     ],
   },
