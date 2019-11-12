@@ -90,7 +90,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   button_politica: boolean = true;
   programa_seleccionado: any;
   selectedValue: any;
+  selectedTipo: any;
+  selectTipo: boolean;
+  selectTabView: boolean;
   imagenes: any;
+
+  lista: string[]= ['Pregrado', 'Posgrado', 'Profesionalización', 'Tecnologos', 'Ciclos propedeuticos', 'Transferencia interna',
+                     'Transferencia externa', 'Reingreso'];
 
   constructor(
     private translate: TranslateService,
@@ -106,17 +112,17 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     });
     this.loadInfoPostgrados();
     this.total = true;
-    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-      && this.inscripcion_id.toString() !== '0') {
-      this.getInfoInscripcion();
-    } else {
-      const ENTE = this.userService.getEnte();
-      if (ENTE !== 0 && ENTE !== undefined && ENTE.toString() !== '' && ENTE.toString() !== 'NaN') {
-        this.info_ente_id = <number>ENTE;
-      } else {
-        this.info_ente_id = undefined;
-      }
-    }
+    // if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
+    //   && this.inscripcion_id.toString() !== '0') {
+    //   this.getInfoInscripcion();
+    // } else {
+    //   const ENTE = this.userService.getEnte();
+    //   if (ENTE !== 0 && ENTE !== undefined && ENTE.toString() !== '' && ENTE.toString() !== 'NaN') {
+    //     this.info_ente_id = <number>ENTE;
+    //   } else {
+    //     this.info_ente_id = undefined;
+    //   }
+    // }
   }
 
   setPercentage_info(number, tab) {
@@ -264,7 +270,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       case 'info_contacto':
         this.show_info = true;
         this.show_profile = false;
-        this.show_acad = false;
+        this.show_acad = true;
         this.show_expe = false;
         this.info_contacto = true;
         this.info_caracteristica = false;
@@ -442,35 +448,52 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    if (this.info_ente_id !== 0 && this.info_ente_id !== undefined && this.info_ente_id.toString() !== '' &&
-      this.info_ente_id.toString() !== 'NaN' && this.inscripcion_id === undefined) {
-      this.info_ente_id = <number>this.userService.getEnte();
-      this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_ente_id)
-      .subscribe(inscripcion => {
-        this.info_inscripcion = <any>inscripcion[0];
-        if (inscripcion !== null  && this.info_inscripcion.Type !== 'error') {
-          this.inscripcion_id = this.info_inscripcion.Id;
-          this.getInfoInscripcion();
-        }
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.admision'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
-    }
+    // if (this.info_ente_id !== 0 && this.info_ente_id !== undefined && this.info_ente_id.toString() !== '' &&
+    //   this.info_ente_id.toString() !== 'NaN' && this.inscripcion_id === undefined) {
+    //   this.info_ente_id = <number>this.userService.getEnte();
+    //   this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_ente_id)
+    //   .subscribe(inscripcion => {
+    //     this.info_inscripcion = <any>inscripcion[0];
+    //     if (inscripcion !== null  && this.info_inscripcion.Type !== 'error') {
+    //       this.inscripcion_id = this.info_inscripcion.Id;
+    //       this.getInfoInscripcion();
+    //     }
+    //   },
+    //     (error: HttpErrorResponse) => {
+    //       Swal({
+    //         type: 'error',
+    //         title: error.status + '',
+    //         text: this.translate.instant('ERROR.' + error.status),
+    //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //           this.translate.instant('GLOBAL.admision'),
+    //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //       });
+    //     });
+    // }
   }
 
   ngOnChanges() {
   }
 
   pruebita() {
-    window.localStorage.setItem('programa', this.selectedValue.Id);
+    // window.localStorage.setItem('programa', this.selectedValue.Id);
+    this.selectedValue = true;
+  }
+  tipo_inscripcion() {
+    switch (this.selectedTipo) {
+      case ('Pregrado'):
+      console.info(this.selectedTipo)
+      this.selectTipo = true;
+      this.selectedValue = true;
+      this.selectTabView = false;
+      break;
+      case ('Posgrado'):
+        console.info(this.selectedTipo)
+        this.selectTipo = true;
+        this.selectedValue = true;
+        this.selectTabView = true;
+        break;
+    }
   }
 
   inscribirse() {
