@@ -25,9 +25,9 @@ export const environment = {
     SIGN_OUT_URL: 'https://autenticacion.portaloas.udistrital.edu.co/oidc/logout',
     SIGN_OUT_REDIRECT_URL: 'http://localhost:4200/',
   },
-  PERSONA_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/personas_crud/v1/',
+  PERSONA_SERVICE: 'http://api.planestic.udistrital.edu.co:8083/v1/',
   PRODUCCION_ACADEMICA_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/produccion_academica_crud/v1/',
-  DOCUMENTO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/documento_crud/v1/',
+  DOCUMENTO_SERVICE: 'http://localhost:8094/v1/',
   CAMPUS_MID: 'http://localhost:8095/v1/',
   SPAGOBI: {
     PROTOCOL: 'https',
