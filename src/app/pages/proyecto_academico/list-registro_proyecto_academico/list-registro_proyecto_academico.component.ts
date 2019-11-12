@@ -67,14 +67,7 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
           // console.log("files", filesResponse);
           filesToGet.forEach((file: any) => {
             const url = filesResponse[file.Id];
-            // let newWindow = window.open('','_blank')
-            const new_tab = window.open('', '_blank', 'toolbar=no,' +
-            'location=no, directories=no, status=no, menubar=no,' +
-            'scrollbars=no, resizable=no, copyhistory=no, height=400, width=400, top = 20, left=20');
-            new_tab.onload = () => {
-              new_tab.location = url;
-            };
-            new_tab.focus();
+            window.open(url);
           });
         }
       },
