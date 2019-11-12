@@ -5,6 +5,7 @@ import { ListFormacionAcademicaComponent } from './list-formacion_academica/list
 import { CrudFormacionAcademicaComponent } from './crud-formacion_academica/crud-formacion_academica.component';
 import { ViewFormacionAcademicaComponent } from './view-formacion_academica/view-formacion_academica.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
+import { CrudIcfesComponent } from './crud-icfes/crud-icfes.component';
 
 const routes: Routes = [{
   path: '',
@@ -33,7 +34,21 @@ const routes: Routes = [{
         'Internal/everyone',
       ],
     },
-  }, {
+  },
+  {
+    path: 'crud-icfes',
+    component: CrudIcfesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: [
+        'ADMIN_CAMPUS',
+        'ASPIRANTE',
+        'Internal/selfsignup',
+        'Internal/everyone',
+      ],
+    },
+  }, 
+  {
     path: 'view-formacion_academica',
     component: ViewFormacionAcademicaComponent,
     canActivate: [AuthGuard],
@@ -63,5 +78,6 @@ export const routedComponents = [
   FormacionAcademicaComponent,
   ListFormacionAcademicaComponent,
   CrudFormacionAcademicaComponent,
+  CrudIcfesComponent,
   ViewFormacionAcademicaComponent,
 ];

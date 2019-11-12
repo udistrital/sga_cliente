@@ -91,8 +91,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   programa_seleccionado: any;
   selectedValue: any;
   selectedTipo: any;
-  selectTipo: boolean;
-  selectTabView: boolean;
+  selectTipo: any;
+  selectTabView: any;
   imagenes: any;
 
   lista: string[]= ['Pregrado', 'Posgrado', 'Profesionalización', 'Tecnologos', 'Ciclos propedeuticos', 'Transferencia interna',
@@ -485,13 +485,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       console.info(this.selectedTipo)
       this.selectTipo = true;
       this.selectedValue = true;
-      this.selectTabView = false;
+      this.selectTabView = 'Pregrado';
       break;
       case ('Posgrado'):
         console.info(this.selectedTipo)
-        this.selectTipo = true;
+        this.selectTipo = 'Posgrado';
         this.selectedValue = true;
-        this.selectTabView = true;
+        this.selectTabView = 'Posgrado';
         break;
     }
   }

@@ -47,7 +47,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="experiencia_laboral">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="experiencia_laboral">
                     <nb-card class="exp-card" (click)="perfil_editar('experiencia_laboral')" *ngIf="selectTipo && selectedValue">
                         <nb-card-header>{{ 'inscripcion.experiencia_laboral' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -57,7 +57,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="produccion_academica">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo&& selectedValue" id="produccion_academica">
                     <nb-card class="exp-card" (click)="perfil_editar('produccion_academica')" *ngIf="selectTipo && selectedValue">
                         <nb-card-header>{{ 'inscripcion.produccion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -67,7 +67,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="documento_programa">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo&& selectedValue" id="documento_programa">
                     <nb-card class="exp-card" (click)="perfil_editar('documento_programa')" *ngIf="selectTipo && selectedValue">
                         <nb-card-header>{{ 'inscripcion.documento_programa' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -77,7 +77,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="descuento_matricula">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo&& selectedValue" id="descuento_matricula">
                     <nb-card class="exp-card" (click)="perfil_editar('descuento_matricula')" *ngIf="selectTipo && selectedValue">
                         <nb-card-header>{{ 'inscripcion.descuento_matricula' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -87,7 +87,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0" id="propuesta_grado">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo&& selectedValue" id="propuesta_grado">
                     <nb-card class="exp-card" (click)="perfil_editar('propuesta_grado')" *ngIf="selectTipo && selectedValue">
                         <nb-card-header>{{ 'inscripcion.propuesta_grado' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -97,7 +97,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="info_ente_id && inscripcion_id !== 0">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo&& selectedValue">
                     <nb-card class="exp-card" (click)="perfil_editar('perfil')" *ngIf="selectTipo && selectedValue">
                         <nb-card-header>{{ 'inscripcion.perfil' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -128,12 +128,12 @@
                     <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=true;
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
             show_desc=false;">X</button>
                 </div>
             </div>
-            <nb-tabset fullWidth (changeTab)="selectTab($event)">
+            <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona" *ngIf="selectTipo">
 
                     <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="traerInfoPersona($event,0)">
@@ -154,6 +154,7 @@
             </nb-tabset>
         </nb-card-body>
     </nb-card>
+    <!-- TAG y formularios de formacion academica -->
 
     <nb-card [hidden]="!show_acad">
         <nb-card-body>
@@ -168,139 +169,124 @@
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
-                <nb-tab tabTitle="{{ 'inscripcion.formacion_academica' | translate }}">
+                <nb-tab tabTitle="{{ 'inscripcion.formacion_academica' | translate }}" [active]=true>
                     <ngx-crud-formacion-academica (result)="setPercentage_acad($event,0)"></ngx-crud-formacion-academica>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}" *ngIf="selectTabView">
+                <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}" [active]=true>
+                    <ngx-crud-icfes (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}" [active]=true>
                     <ngx-list-idiomas inscripcion_id={{this.inscripcion_id}} (result)="setPercentage_acad($event,1)"></ngx-list-idiomas>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
     </nb-card>
+    <!-- TAG y formularios de experencia-->
+
+    <nb-card [hidden]="!show_expe">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_expe" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
+            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+            show_desc=false;">X</button>
+                </div>
+            </div>
+            <nb-tabset fullWidth>
+                <nb-tab tabTitle="{{ 'GLOBAL.experiencia_laboral' | translate }}" [active]=true>
+                    <ngx-list-experiencia-laboral ente_id="{{info_ente_id}}" (result)="setPercentage_expe($event,0)">
+                    </ngx-list-experiencia-laboral>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
     <!--
-  <nb-card [hidden]="!show_expe" *ngIf="info_ente_id">
-    <nb-card-body>
-      <div class="row">
-        <div class="col-md-11">
-          <ngb-progressbar showValue="true" type="success"
-            [value]="percentage_expe" [animated]="true"
-            [height]="'15px'"></ngb-progressbar>
-        </div>
-        <div class="col-md-1" align="right">
-          <button class="btn btn-danger btn-icon input-group-text btn-tn"
-            (click)="show_profile=false; show_info=false; show_acad=false;
+    <nb-card [hidden]="!show_prod" *ngIf="info_ente_id">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_prod" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
             show_desc=false;">X</button>
-        </div>
-      </div>
-      <nb-tabset fullWidth (changeTab)="selectTab($event)">
-        <nb-tab tabTitle="{{ 'GLOBAL.experiencia_laboral' | translate }}">
-          <ngx-list-experiencia-laboral ente_id="{{info_ente_id}}"
-            (result)="setPercentage_expe($event,0)">
-          </ngx-list-experiencia-laboral>
-        </nb-tab>
-      </nb-tabset>
-    </nb-card-body>
-  </nb-card>
+                </div>
+            </div>
+            <nb-tabset fullWidth (changeTab)="selectTab($event)">
+                <nb-tab tabTitle="{{ 'GLOBAL.produccion_academica' | translate }}">
+                    <ngx-list-produccion-academica (result)="setPercentage_prod($event,0)">
+                    </ngx-list-produccion-academica>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>-->
 
-  <nb-card [hidden]="!show_prod" *ngIf="info_ente_id">
-    <nb-card-body>
-      <div class="row">
-        <div class="col-md-11">
-          <ngb-progressbar showValue="true" type="success"
-            [value]="percentage_prod" [animated]="true" [height]="'15px'"></ngb-progressbar>
-        </div>
-        <div class="col-md-1" align="right">
-          <button class="btn btn-danger btn-icon input-group-text btn-tn"
-            (click)="show_profile=false; show_info=false; show_acad=false;
+    <nb-card [hidden]="!show_docu">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_docu" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
             show_desc=false;">X</button>
-        </div>
-      </div>
-      <nb-tabset fullWidth (changeTab)="selectTab($event)">
-        <nb-tab tabTitle="{{ 'GLOBAL.produccion_academica' | translate }}">
-          <ngx-list-produccion-academica ente_id="{{info_ente_id}}"
-            (result)="setPercentage_prod($event,0)">
-          </ngx-list-produccion-academica>
-        </nb-tab>
-      </nb-tabset>
-    </nb-card-body>
-  </nb-card>-->
+                </div>
+            </div>
+            <nb-tabset fullWidth (changeTab)="selectTab($event)">
+                <nb-tab tabTitle="{{ 'GLOBAL.documento_programa' | translate }}">
+                    <ngx-list-documento-programa (result)="setPercentage_docu($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
+                    </ngx-list-documento-programa>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
 
-    <!--<nb-card [hidden]="!show_docu" *ngIf="info_ente_id && (estado_inscripcion < 2)">
-    <nb-card-body>
-      <div class="row">
-        <div class="col-md-11">
-          <ngb-progressbar showValue="true" type="success"
-            [value]="percentage_docu" [animated]="true"
-            [height]="'15px'"></ngb-progressbar>
-        </div>
-        <div class="col-md-1" align="right">
-          <button class="btn btn-danger btn-icon input-group-text btn-tn"
-            (click)="show_profile=false; show_info=false; show_acad=false;
+    <nb-card [hidden]="!show_desc">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_desc" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
             show_desc=false;">X</button>
-        </div>
-      </div>
-      <nb-tabset fullWidth (changeTab)="selectTab($event)">
-        <nb-tab tabTitle="{{ 'GLOBAL.documento_programa' | translate }}">
-          <ngx-list-documento-programa (result)="setPercentage_docu($event,0)"
-            persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
-          </ngx-list-documento-programa>
-        </nb-tab>
-      </nb-tabset>
-    </nb-card-body>
-  </nb-card>
+                </div>
+            </div>
+            <nb-tabset fullWidth (changeTab)="selectTab($event)">
+                <nb-tab tabTitle="{{ 'GLOBAL.descuento_matricula' | translate }}">
+                    <ngx-list-descuento-academico (result)="setPercentage_desc($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
+                    </ngx-list-descuento-academico>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
 
-  <nb-card [hidden]="!show_desc" *ngIf="info_ente_id && (estado_inscripcion < 2)">
-    <nb-card-body>
-      <div class="row">
-        <div class="col-md-11">
-          <ngb-progressbar showValue="true" type="success"
-            [value]="percentage_desc" [animated]="true"
-            [height]="'15px'"></ngb-progressbar>
-        </div>
-        <div class="col-md-1" align="right">
-          <button class="btn btn-danger btn-icon input-group-text btn-tn"
-            (click)="show_profile=false; show_info=false; show_acad=false;
+    <nb-card [hidden]="!show_proy">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_proy" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
             show_desc=false;">X</button>
-        </div>
-      </div>
-      <nb-tabset fullWidth (changeTab)="selectTab($event)">
-        <nb-tab tabTitle="{{ 'GLOBAL.descuento_matricula' | translate }}">
-          <ngx-list-descuento-academico (result)="setPercentage_desc($event,0)"
-           persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
-          </ngx-list-descuento-academico>
-        </nb-tab>
-      </nb-tabset>
-    </nb-card-body>
-  </nb-card>
-
-  <nb-card [hidden]="!show_proy" *ngIf="info_ente_id && (estado_inscripcion < 2)">
-    <nb-card-body>
-      <div class="row">
-        <div class="col-md-11">
-          <ngb-progressbar showValue="true" type="success"
-            [value]="percentage_proy" [animated]="true"
-            [height]="'15px'"></ngb-progressbar>
-        </div>
-        <div class="col-md-1" align="right">
-          <button class="btn btn-danger btn-icon input-group-text btn-tn"
-            (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
-        </div>
-      </div>
-      <nb-tabset fullWidth (changeTab)="selectTab($event)">
-        <nb-tab tabTitle="{{ 'GLOBAL.propuesta_grado' | translate }}">
-          <ngx-crud-propuesta-grado (result)="setPercentage_proy($event,0)" persona_id="{{info_ente_id}}"
-            inscripcion_id="{{inscripcion_id}}">
-          </ngx-crud-propuesta-grado>
-        </nb-tab>
-      </nb-tabset>
-    </nb-card-body>
-  </nb-card>-->
+                </div>
+            </div>
+            <nb-tabset fullWidth (changeTab)="selectTab($event)">
+                <nb-tab tabTitle="{{ 'GLOBAL.propuesta_grado' | translate }}">
+                    <ngx-crud-propuesta-grado (result)="setPercentage_proy($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
+                    </ngx-crud-propuesta-grado>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
 
     <!--Vista de perfil------------------------------------------------------------->
 
