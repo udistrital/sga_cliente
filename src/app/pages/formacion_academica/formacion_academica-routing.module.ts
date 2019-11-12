@@ -47,7 +47,7 @@ const routes: Routes = [{
         'Internal/everyone',
       ],
     },
-  }, 
+  },
   {
     path: 'view-formacion_academica',
     component: ViewFormacionAcademicaComponent,
