@@ -72,6 +72,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   percentage_tab_desc = [];
   percentage_tab_docu = [];
   posgrados = [];
+  tipo_inscripciones = [];
 
   show_info = false;
   show_profile = false;
@@ -95,9 +96,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   selectTabView: any;
   imagenes: any;
 
-  lista: string[]= ['Pregrado', 'Posgrado', 'Profesionalización', 'Tecnologos', 'Ciclos propedeuticos', 'Transferencia interna',
-                     'Transferencia externa', 'Reingreso'];
-
   constructor(
     private translate: TranslateService,
     private router: Router,
@@ -111,6 +109,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.loadInfoPostgrados();
+    this.loadTipoInscripcion();
     this.total = true;
     // if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
     //   && this.inscripcion_id.toString() !== '0') {
@@ -188,6 +187,29 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   traerInfoPersona(event, tab) {
     this.setPercentage_info(event, tab);
     if (event !== 0) this.getInfoInscripcion();
+  }
+
+  loadTipoInscripcion() {
+    this.inscripcionService.get('tipo_inscripcion')
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        const tiposInscripciones = <Array<any>>res;
+        tiposInscripciones.forEach(element => {
+          this.tipo_inscripciones.push(element);
+        });
+      }
+    },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('GLOBAL.cargar') + '-' +
+            this.translate.instant('GLOBAL.programa_academico'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
   }
 
   loadInfoPostgrados() {
@@ -480,15 +502,15 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.selectedValue = true;
   }
   tipo_inscripcion() {
-    switch (this.selectedTipo) {
+    console.info(this.selectedTipo.Nombre)
+    switch (this.selectedTipo.Nombre) {
       case ('Pregrado'):
-      console.info(this.selectedTipo)
-      this.selectTipo = true;
+      this.selectTipo = 'Pregrado';
       this.selectedValue = true;
       this.selectTabView = 'Pregrado';
+      // http://pruebasapi.intranetoas.udistrital.edu.co:8116/v1/proyecto_academico_institucion/?query=NivelFormacionId.Nombre:Posgrado
       break;
       case ('Posgrado'):
-        console.info(this.selectedTipo)
         this.selectTipo = 'Posgrado';
         this.selectedValue = true;
         this.selectTabView = 'Posgrado';

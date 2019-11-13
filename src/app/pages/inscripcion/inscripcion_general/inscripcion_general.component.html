@@ -7,8 +7,8 @@
                 <mat-label>{{ 'inscripcion.aviso_tipo' | translate }}:</mat-label>
                 <mat-select [(ngModel)]="selectedTipo" (ngModelChange)="tipo_inscripcion()">
                     <mat-option>--Seleccionar--</mat-option>
-                    <mat-option *ngFor="let item of lista" [value]="item">
-                        {{item}}
+                    <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
+                        {{item.Nombre}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -27,8 +27,8 @@
             <ngx-loading [hidden]="!loading"></ngx-loading>
 
             <div class="row">
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica">
-                    <nb-card class="exp-card" (click)="perfil_editar('info_persona')" *ngIf="selectTipo && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado'">
+                    <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
                         <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-address-card-o fa-5x"></i>
@@ -37,8 +37,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica">
-                    <nb-card class="exp-card" (click)="perfil_editar('formacion_academica')" *ngIf="selectTipo && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado'">
+                    <nb-card class="exp-card" (click)="perfil_editar('formacion_academica')">
                         <nb-card-header>{{ 'inscripcion.formacion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-graduation-cap fa-5x"></i>
@@ -47,8 +47,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="experiencia_laboral">
-                    <nb-card class="exp-card" (click)="perfil_editar('experiencia_laboral')" *ngIf="selectTipo && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="experiencia_laboral" *ngIf="selectTipo=='Posgrado' && selectedValue">
+                    <nb-card class="exp-card" (click)="perfil_editar('experiencia_laboral')">
                         <nb-card-header>{{ 'inscripcion.experiencia_laboral' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-briefcase fa-5x"></i>
@@ -57,8 +57,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo&& selectedValue" id="produccion_academica">
-                    <nb-card class="exp-card" (click)="perfil_editar('produccion_academica')" *ngIf="selectTipo && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue" id="produccion_academica">
+                    <nb-card class="exp-card" (click)="perfil_editar('produccion_academica')">
                         <nb-card-header>{{ 'inscripcion.produccion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-book fa-5x"></i>
@@ -67,8 +67,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo&& selectedValue" id="documento_programa">
-                    <nb-card class="exp-card" (click)="perfil_editar('documento_programa')" *ngIf="selectTipo && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue" id="documento_programa">
+                    <nb-card class="exp-card" (click)="perfil_editar('documento_programa')">
                         <nb-card-header>{{ 'inscripcion.documento_programa' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-list-alt fa-5x"></i>
@@ -77,8 +77,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo&& selectedValue" id="descuento_matricula">
-                    <nb-card class="exp-card" (click)="perfil_editar('descuento_matricula')" *ngIf="selectTipo && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue" id="descuento_matricula">
+                    <nb-card class="exp-card" (click)="perfil_editar('descuento_matricula')">
                         <nb-card-header>{{ 'inscripcion.descuento_matricula' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-dollar fa-5x"></i>
@@ -87,8 +87,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo&& selectedValue" id="propuesta_grado">
-                    <nb-card class="exp-card" (click)="perfil_editar('propuesta_grado')" *ngIf="selectTipo && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue" id="propuesta_grado">
+                    <nb-card class="exp-card" (click)="perfil_editar('propuesta_grado')">
                         <nb-card-header>{{ 'inscripcion.propuesta_grado' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-file-pdf-o fa-5x"></i>
@@ -97,8 +97,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo&& selectedValue">
-                    <nb-card class="exp-card" (click)="perfil_editar('perfil')" *ngIf="selectTipo && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue">
+                    <nb-card class="exp-card" (click)="perfil_editar('perfil')">
                         <nb-card-header>{{ 'inscripcion.perfil' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
                             <i class="fa fa-user fa-5x"></i>
@@ -169,13 +169,13 @@
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
-                <nb-tab tabTitle="{{ 'inscripcion.formacion_academica' | translate }}" [active]=true>
+                <nb-tab tabTitle="{{ 'inscripcion.formacion_academica' | translate }}" [active]=true *ngIf="selectTipo=='Posgrado'">
                     <ngx-crud-formacion-academica (result)="setPercentage_acad($event,0)"></ngx-crud-formacion-academica>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}" [active]=true>
                     <ngx-crud-icfes (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}" [active]=true>
+                <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}" [active]=true *ngIf="selectTipo=='Posgrado'">
                     <ngx-list-idiomas inscripcion_id={{this.inscripcion_id}} (result)="setPercentage_acad($event,1)"></ngx-list-idiomas>
                 </nb-tab>
             </nb-tabset>
@@ -196,7 +196,7 @@
                 </div>
             </div>
             <nb-tabset fullWidth>
-                <nb-tab tabTitle="{{ 'GLOBAL.experiencia_laboral' | translate }}" [active]=true>
+                <nb-tab tabTitle="{{ 'inscripcion.experiencia_laboral' | translate }}" [active]=true>
                     <ngx-list-experiencia-laboral ente_id="{{info_ente_id}}" (result)="setPercentage_expe($event,0)">
                     </ngx-list-experiencia-laboral>
                 </nb-tab>
@@ -238,7 +238,7 @@
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
-                <nb-tab tabTitle="{{ 'GLOBAL.documento_programa' | translate }}">
+                <nb-tab tabTitle="{{ 'inscripcion.documento_programa' | translate }}">
                     <ngx-list-documento-programa (result)="setPercentage_docu($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
                     </ngx-list-documento-programa>
                 </nb-tab>
@@ -259,7 +259,7 @@
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
-                <nb-tab tabTitle="{{ 'GLOBAL.descuento_matricula' | translate }}">
+                <nb-tab tabTitle="{{ 'inscripcion.descuento_matricula' | translate }}">
                     <ngx-list-descuento-academico (result)="setPercentage_desc($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
                     </ngx-list-descuento-academico>
                 </nb-tab>
@@ -280,7 +280,7 @@
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
-                <nb-tab tabTitle="{{ 'GLOBAL.propuesta_grado' | translate }}">
+                <nb-tab tabTitle="{{ 'inscripcion.propuesta_grado' | translate }}">
                     <ngx-crud-propuesta-grado (result)="setPercentage_proy($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
                     </ngx-crud-propuesta-grado>
                 </nb-tab>
@@ -290,7 +290,7 @@
 
     <!--Vista de perfil------------------------------------------------------------->
 
-    <div [hidden]="!show_profile" *ngIf="info_ente_id && show_profile">
+    <div [hidden]="!show_profile">
         <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}"></ngx-perfil>
     </div>
 </div>
