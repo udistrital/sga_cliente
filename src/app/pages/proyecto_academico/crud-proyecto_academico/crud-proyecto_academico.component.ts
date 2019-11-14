@@ -9,7 +9,6 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
-import { UnidadTiempoService } from '../../../@core/data/unidad_tiempo.service';
 import { ProyectoAcademicoInstitucion } from '../../../@core/data/models/proyecto_academico/proyecto_academico_institucion';
 import { TipoTitulacion } from '../../../@core/data/models/proyecto_academico/tipo_titulacion';
 import { Metodologia } from '../../../@core/data/models/proyecto_academico/metodologia';
@@ -135,7 +134,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
-    private unidadtiempoService: UnidadTiempoService,
     private dialogService: NbDialogService,
     private activatedRoute: ActivatedRoute,
     private nuxeoService: NuxeoService,
@@ -470,7 +468,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     });
   }
   loadunidadtiempo() {
-    this.unidadtiempoService.get('unidad_tiempo')
+    this.coreService.get('unidad_tiempo')
     .subscribe(res => {
       const r = <any>res;
       if (res !== null && r.Type !== 'error') {
