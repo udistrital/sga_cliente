@@ -394,7 +394,33 @@
         "secuencia": "Número de referencia",
         "placeholder_secuencia": "Ej: 7888788",
         "info_pago": "Información de recibo de pago",
-        "placeholder_info_pago": "Ej: Información de recibo de pago"
+        "placeholder_info_pago": "Ej: Información de recibo de pago",
+        "medio_entero": "Medio por el cual se enteró de la Universidad Distrital",
+        "placeholder_medio_entero": "Ej: Televisión",
+        "presento": "Se presenta a la Universidad por",
+        "placeholder_presento": "Ej: Primera vez",
+        "tipo_inscrip": "Tipo de inscripción",
+        "placeholder_tipo_inscrip": "Normal",
+        "observacion": "Observaciones",
+        "placeholder_observacion": "",
+        "documento_trans": "Documento de identidad",
+        "placeholder_documento_trans": "Ej: 12345678",
+        "fecha_expe": "Fecha Expedición Documento",
+        "placeholder_fecha_expe": "Ej: 01/01/2019",
+        "codigo_trans": "Código de estudiante en la Universidad Distrital",
+        "placeholder_codigo_trans": "Ej: 2018210987",
+        "codigo_trans_conf": "Confirme el código de estudiante en la Universidad Distrital",
+        "placeholder_codigo_trans_conf": "Ej: 2018210987",
+        "correo_confirma": "Confirme correo electrónico",
+        "placeholder_correo_confirma": "Ej: prueba@prueba.com",
+        "carrera_viene": "Carrera que venía cursando",
+        "placeholder_carrera_viene": "Ej: Licenciatura en Español",
+        "carrera_trans": "Carrera a la que se transfiere",
+        "placeholder_carrera_trans": "Ej: Ingeniería Industrial",
+        "cancelo": "¿Canceló semestre?",
+        "placeholder_cancelo": "Ej: No",
+        "motivos": "Motivos del retiro",
+        "placeholder_motivos": ""
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -725,6 +751,8 @@
         "informacion_familiar": "Información familiar",
         "aviso_tipo": "seleccione el tipo de inscripción de desee realizar",
         "idiomas": "Idiomas",
-        "icfes": "Registro ICFES y colegio"
+        "icfes": "Registro ICFES y colegio",
+        "universidad": "Universidad",
+        "transfe": "Transferencia interna"
     }
 }

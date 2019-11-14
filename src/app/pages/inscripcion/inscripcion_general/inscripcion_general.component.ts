@@ -94,6 +94,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   selectedTipo: any;
   selectTipo: any;
   selectTabView: any;
+  tag_view_posg: boolean;
+  tag_view_pre: boolean;
+  trans: boolean = true;
   imagenes: any;
 
   constructor(
@@ -507,13 +510,23 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       case ('Pregrado'):
       this.selectTipo = 'Pregrado';
       this.selectedValue = true;
+      this.tag_view_pre = true;
+      this.tag_view_posg = false;
+      this.trans = true;
       this.selectTabView = 'Pregrado';
       // http://pruebasapi.intranetoas.udistrital.edu.co:8116/v1/proyecto_academico_institucion/?query=NivelFormacionId.Nombre:Posgrado
       break;
       case ('Posgrado'):
         this.selectTipo = 'Posgrado';
         this.selectedValue = true;
+        this.tag_view_pre = false;
+        this.tag_view_posg = true;
         this.selectTabView = 'Posgrado';
+        this.trans = true;
+        break;
+        case ('Transferencia interna'):
+        this.trans = false;
+        this.selectTipo = 'Transferencia interna';
         break;
     }
   }

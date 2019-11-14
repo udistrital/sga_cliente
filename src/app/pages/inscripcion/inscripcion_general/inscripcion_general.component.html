@@ -14,20 +14,21 @@
             </mat-form-field>
 
             <!-- select programa -->
-            <mat-form-field style="width: 100%;">
-                <mat-label>{{ 'inscripcion.aviso_programa' | translate }}:</mat-label>
-                <mat-select [(ngModel)]="selectedValue" (ngModelChange)="pruebita()">
-                    <mat-option>--Seleccionar--</mat-option>
-                    <mat-option *ngFor="let item of posgrados" [value]="item">
-                        {{item.Nombre}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-
+            <div *ngIf="trans">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>{{ 'inscripcion.aviso_programa' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="selectedValue" (ngModelChange)="pruebita()">
+                        <mat-option>--Seleccionar--</mat-option>
+                        <mat-option *ngFor="let item of posgrados" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
             <ngx-loading [hidden]="!loading"></ngx-loading>
 
             <div class="row">
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado'">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado'|| selectTipo=='Transferencia interna'">
                     <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
                         <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -107,6 +108,7 @@
                 </div>
             </div>
         </nb-card-header>
+
         <nb-card-body>
             <div class="col-md-12">
                 <ngb-progressbar showValue="true" type="success" [value]="percentage_total" [animated]="true" [height]="'15px'">
@@ -151,6 +153,9 @@
                     <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-familiar>
                 </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.transfe' | translate }}" active=true *ngIf='tag_view_pre'>
+                    <ngx-crud-transferencia_interna (result)="setPercentage_acad($event,0)"></ngx-crud-transferencia_interna>
+                </nb-tab>
             </nb-tabset>
         </nb-card-body>
     </nb-card>
@@ -168,20 +173,26 @@
             show_desc=false;">X</button>
                 </div>
             </div>
+
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
-                <nb-tab tabTitle="{{ 'inscripcion.formacion_academica' | translate }}" [active]=true *ngIf="selectTipo=='Posgrado'">
+
+                <nb-tab tabTitle="{{ 'inscripcion.formacion_academica' | translate }}" active=true *ngIf='tag_view_posg'>
                     <ngx-crud-formacion-academica (result)="setPercentage_acad($event,0)"></ngx-crud-formacion-academica>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}" [active]=true>
+
+                <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}" active=true *ngIf='tag_view_pre'>
                     <ngx-crud-icfes (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}" [active]=true *ngIf="selectTipo=='Posgrado'">
+                <nb-tab tabTitle="{{ 'inscripcion.universidad' | translate }}" *ngIf='tag_view_pre'>
+                    <ngx-crud-preguntas (result)="setPercentage_acad($event,0)"></ngx-crud-preguntas>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}" *ngIf='tag_view_posg'>
                     <ngx-list-idiomas inscripcion_id={{this.inscripcion_id}} (result)="setPercentage_acad($event,1)"></ngx-list-idiomas>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
     </nb-card>
-    <!-- TAG y formularios de experencia-->
+
 
     <nb-card [hidden]="!show_expe">
         <nb-card-body>
