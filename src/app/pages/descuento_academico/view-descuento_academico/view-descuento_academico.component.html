@@ -1,0 +1,23 @@
+<nb-card>
+  <nb-card-header>{{"GLOBAL.descuento_matricula" | translate}}
+  </nb-card-header>
+  <nb-card-body class="row container">
+    <div class="col-md-12">
+      <table class="table-responsive">
+        <tbody *ngIf="info_descuento">
+          <tr *ngFor="let descuento of info_descuento">
+            <td>
+              <p>{{descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre}}</p>
+            </td>
+            <td *ngIf="descuento.DocumentoId !== undefined">
+              <p>(<a [href]=descuento.DocumentoId download="{{descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre}}.pdf">
+                {{"GLOBAL.soporte_documento" | translate}}</a>)</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <span *ngIf="url_editar && (estado_inscripcion < 2)" (click)="editar()" class="link">
+        <i class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
+    </div>
+  </nb-card-body>
+</nb-card>

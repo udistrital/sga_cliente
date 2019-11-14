@@ -1,0 +1,4 @@
+<toaster-container [toasterconfig]="config"></toaster-container>
+<ngx-dinamicform [normalform]="formComprobante" [modeloData]="info_comprobante"
+  (result)="validarForm($event)"></ngx-dinamicform>
+<ngx-loading [hidden]="!loading"></ngx-loading>

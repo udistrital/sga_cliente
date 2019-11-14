@@ -1,0 +1,59 @@
+<div class="col-md-12 col-lg-12">
+  <nb-card>
+    <nb-card-body>
+      <div class="info" [hidden]="!mostrarInfo">
+          <div class="row">
+            <div class="col-md-11">
+            </div>
+            <div class="col-md-1" align="right">
+              <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                (click)="mostrarInfo=false;">X</button>
+            </div>
+          </div>
+          <fieldset class="fieldseter">
+          <legend align="justify">
+            <small>Pago por oficina</small>
+          </legend>
+          <p>Para realizar el pago de su inscripción, lo puede hacer a través de todas las sucursales del <b>Banco de Occidente</b> diligenciando el formato de <b>Reacudo en línea</b> como se explica a continuación:</p>
+          <img alt="Consignación" src="../../../../assets/images/consignacion.png"/>
+          <ul>
+            <li><b>Ciudad:</b> escriba el nombre de la ciudad en donde realiza el pago.</li>
+            <li><b>Día|Mes|Año:</b> escriba el día, el mes y el año en el cuál se realiza el pago.</li>
+            <li><b>Cta. o Producto:</b> 230814618</li>
+            <li><b>Código de recaudo:</b> 12 (para programas de posgrado)</li>
+            <li><b>Nombre de cuenta o beneficiario:</b> Universidad Distrital Francisco José de Caldas.</li>
+            <li><b>Valor efectivo:</b> ingrese el valor de la inscripción, acorde a los derechos pecuniarios del año vigente (<a href="https://sgral.udistrital.edu.co/xdata/sgral/cir_2019-001.pdf">Ver valor</a>).</li>
+            <li><b>Nombre del pagador:</b> ingrese el nombre completo del aspirante (si es posible).</li>
+            <li><b>Referencia 1 o Nit/CC:</b> ingrese su número de identificación.</li>
+            <li><b>Teléfono:</b> ingrese el número telefónico.</li>
+          </ul>
+        </fieldset>
+      </div>
+
+      <div class="info" [hidden]="!mostrarForm">
+          <div class="row">
+            <div class="col-md-11">
+            </div>
+            <div class="col-md-1" align="right">
+              <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                (click)="mostrarForm=false;">X</button>
+            </div>
+          </div>
+          <ngx-pago-comprobante [recibo_id]="recibo_id" [inscripcion_id]="inscripcion_id"
+            (eventChange)="onChange($event)"></ngx-pago-comprobante>
+      </div>
+
+      <div [hidden]="mostrarInfo || mostrarForm">
+        <toaster-container [toasterconfig]="config"></toaster-container>
+        <ngx-dinamicform [normalform]="formPago" [modeloData]="info_pago"></ngx-dinamicform>
+        <ngx-loading [hidden]="!loading"></ngx-loading>
+        <div align="right">
+          <button class="btn btn-primary btn-sm" (click)="mostrarConsignacion()" [hidden]="!btnOficina">{{"GLOBAL.oficina" | translate}}</button>
+          <button class="btn btn-success btn-sm" (click)="cargarConsignacion()" [hidden]="!btnCargar">{{"GLOBAL.consignacion" | translate}}</button>
+          <button class="btn btn-primary btn-sm" (click)="generarRecibo()" [hidden]="!btnRecibo">{{"GLOBAL.gen_recibo" | translate}}</button>
+          <button class="btn btn-success btn-sm" (click)="pagarRecibo()" [hidden]="!btnPagar">{{"GLOBAL.pagar" | translate}}</button>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</div>

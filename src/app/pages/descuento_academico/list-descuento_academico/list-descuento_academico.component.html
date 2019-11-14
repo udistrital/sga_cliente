@@ -1,0 +1,11 @@
+<nb-card>
+  <nb-card-body>
+    <toaster-container [toasterconfig]="config"></toaster-container>
+    <ngx-crud-descuento-academico [descuento_academico_id]="uid" [inscripcion_id]="inscripcion" [persona_id]="persona"
+      (eventChange)="onChange($event)" (result)="getPercentage($event)"></ngx-crud-descuento-academico>
+    <ng2-smart-table [settings]="settings" [source]="source"
+      (delete)="onDelete($event)" (rowSelect)="itemselec($event)"
+      (edit)="onEdit($event)" (create)="onCreate($event)">
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>

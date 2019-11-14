@@ -12,6 +12,7 @@ import { DocumentoService } from '../@core/data/documento.service';
 import { MatDialogModule } from '@angular/material';
 
 
+
 const PAGES_COMPONENTS = [
   PagesComponent,
 ];

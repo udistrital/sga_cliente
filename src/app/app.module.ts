@@ -29,6 +29,9 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { NbToastrModule } from '@nebular/theme';
 import { TreeModule } from 'angular-tree-component';
+import { Store, StoreModule } from '@ngrx/store';
+import { rootReducer } from './@core/store/rootReducer';
+import { ListService } from './@core/store/services/list.service';
 import {
   MatSnackBarModule,
   MatAutocompleteModule,
@@ -69,6 +72,7 @@ import {
 } from '@angular/material';
 
 import { ImplicitAutenticationService } from './@core/utils/implicit_autentication.service';
+import { PersonaService } from './@core/data/persona.service';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -133,6 +137,7 @@ export class MaterialModule { }
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    StoreModule.forRoot(rootReducer),
     CdkTableModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -157,6 +162,8 @@ export class MaterialModule { }
   ],
   bootstrap: [AppComponent],
   providers: [ImplicitAutenticationService,
+    ListService,
+    PersonaService,
     { provide: APP_BASE_HREF, useValue: '/' },
   ],
 })
