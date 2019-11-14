@@ -223,8 +223,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
    this.loadunidadtiempo();
    this.loadarea();
    this.loadnucleo();
-   this.loadpersonas();
    this.loadenfasis();
+   this.loadpersonas();
    this.loadfechacoordinador();
    this.loadfechaaltacalidad();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
