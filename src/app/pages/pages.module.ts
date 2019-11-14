@@ -7,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ConfiguracionService } from '../@core/data/configuracion.service';
 import { MenuService } from '../@core/data/menu.service';
 import { CampusMidService } from '../@core/data/campus_mid.service';
+import { SgaMidService } from '../@core/data/sga_mid.service';
 import { DocumentoService } from '../@core/data/documento.service';
 import { MatDialogModule } from '@angular/material';
 
@@ -33,6 +34,7 @@ const PAGES_COMPONENTS = [
     ConfiguracionService,
     MenuService,
     CampusMidService,
+    SgaMidService,
     DocumentoService,
   ],
 })

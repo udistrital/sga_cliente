@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { HttpErrorManager } from './errorManager'
 
@@ -20,10 +18,14 @@ export class RequestManager {
   private path: string;
   public httpOptions: any;
   constructor(private http: HttpClient, private errManager: HttpErrorManager) {
-    this.httpOptions = {
-      headers: new HttpHeaders({
-        'Accept': 'application/json',
-      }),
+    const acces_token = window.localStorage.getItem('access_token');
+    if (acces_token !== null) {
+      this.httpOptions = {
+        // headers: new HttpHeaders({
+        //   'Content-Type': 'application/json',
+        //   'Authorization': `Bearer ${acces_token}`,
+        // }),
+      }
     }
   }
 
@@ -33,7 +35,7 @@ export class RequestManager {
    * @param service: string
    */
   public setPath(service: string) {
-    this.path = environment[service]
+    this.path = environment[service];
   }
 
 
