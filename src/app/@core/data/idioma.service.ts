@@ -10,13 +10,13 @@ const httpOptions = {
     }),
 }
 
-const path = environment.UNIDAD_TIEMPO_SERVICE;
+const path = environment.IDIOMA_SERVICE;
 
 @Injectable({
   providedIn: 'root',
 })
 
-export class UnidadTiempoService {
+export class IdiomaService {
 
   constructor(private http: HttpClient) {
   }

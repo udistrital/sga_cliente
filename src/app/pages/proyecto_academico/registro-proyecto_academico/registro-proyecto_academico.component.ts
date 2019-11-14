@@ -9,7 +9,6 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
-import { UnidadTiempoService } from '../../../@core/data/unidad_tiempo.service';
 import { ProyectoAcademicoInstitucion } from '../../../@core/data/models/proyecto_academico/proyecto_academico_institucion';
 import { TipoTitulacion } from '../../../@core/data/models/proyecto_academico/tipo_titulacion';
 import { Metodologia } from '../../../@core/data/models/proyecto_academico/metodologia';

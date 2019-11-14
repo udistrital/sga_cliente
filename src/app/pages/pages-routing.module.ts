@@ -17,6 +17,10 @@ const routes: Routes = [{
         component: DashboardComponent,
     },
     {
+      path: 'inscripcion',
+      loadChildren: './inscripcion/inscripcion.module#InscripcionModule',
+    },
+    {
       path: 'evento',
       loadChildren: './evento/evento.module#EventoModule',
     },

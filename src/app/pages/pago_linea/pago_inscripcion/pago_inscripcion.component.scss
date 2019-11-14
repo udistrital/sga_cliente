@@ -1,0 +1,51 @@
+@import '../../../@theme/styles/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+@include nb-install-component() {
+  .info {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  legend {
+    padding: 10px;
+
+  }
+
+  .info img {
+    width: 90%;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .info p, ul, legend {
+    text-align: justify;
+  }
+
+  ul {
+    padding-left: 5.25rem !important;
+  }
+
+  .fieldseter {
+    display: flow-root;
+    -moz-padding-start: 1rem;
+    -moz-padding-end: 1rem;
+    -moz-padding-after: 1rem;
+
+    -webkit-margin-start: 1rem;
+    -webkit-margin-end: 1rem;
+    -webkit-padding-before: 1rem;
+    -webkit-padding-start: 1rem;
+    -webkit-padding-end: 1rem;
+    -webkit-padding-after: 1rem;
+
+    min-width: -moz-min-content;
+    border-width: 2px;
+    border-radius: 0.4rem;
+    border-style: groove;
+    border-color: nb-theme(color-success);
+    @include nb-for-theme(cosmic) {
+      border-color: nb-theme(color-primary);
+    }
+  }
+}

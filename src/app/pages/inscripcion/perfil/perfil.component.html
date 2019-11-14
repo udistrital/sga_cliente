@@ -1,0 +1,51 @@
+<nb-card>
+  <nb-card-body>
+    <div>
+      <div class="row">
+        <div class="col-md-11">
+          <h1>{{ 'GLOBAL.perfil' | translate }}</h1>
+        </div>
+        <div class="col-md-1" align="right">
+          <button class="btn btn-danger btn-icon input-group-text btn-tn"
+            (click)="editar($event,'salir_perfil')">X</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <ngx-view-info-persona (url_editar)="editar($event,'info_persona')"
+        info_persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-info-persona>
+      <ngx-view-info-caracteristica
+        (url_editar)="editar($event,'info_caracteristica')"
+        info_caracteristica_id="{{info_persona_id}}" class="col-md-6"></ngx-view-info-caracteristica>
+      <ngx-view-informacion-contacto
+        (url_editar)="editar($event,'info_contacto')"
+        informacion_contacto_id="{{info_persona_id}}" class="col-md-6"></ngx-view-informacion-contacto>
+      <ngx-view-formacion-academica (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-formacion-academica>
+      <ngx-view-idiomas (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" inscripcion_id="{{info_inscripcion_id}}" class="col-md-12"></ngx-view-idiomas>
+      <ngx-view-experiencia-laboral (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-experiencia-laboral>
+      <!--<ngx-view-libro (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-libro>
+      <ngx-view-articulo (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-articulo>
+      <ngx-view-traduccion (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-traduccion>
+      <ngx-view-otra-publicacion (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-otra-publicacion>
+      <ngx-view-otro-documento (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-otro-documento>
+      <ngx-view-produccion-tecnica (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion-tecnica>
+      <ngx-view-produccion-artes-arqu-diseno (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion-artes-arqu-diseno>-->
+      <ngx-view-documento-programa *ngIf="info_inscripcion_id" (url_editar)="editar($event,'default')" inscripcion_id="{{info_inscripcion_id}}"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-documento-programa>
+     <ngx-view-descuento-academico (url_editar)="editar($event,'default')" inscripcion_id="{{info_inscripcion_id}}"
+        persona_id="{{info_persona_id}}" inscripcion_id="{{info_inscripcion_id}}" class="col-md-12"></ngx-view-descuento-academico>
+      <ngx-view-propuesta-grado (url_editar)="editar($event,'default')" inscripcion_id="{{info_inscripcion_id}}"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-propuesta-grado>
+    </div>
+  </nb-card-body>
+</nb-card>
