@@ -31,7 +31,7 @@ const routes: Routes = [{
         'Internal/everyone',
       ],
     },
-  }, 
+  },
   {
     path: 'crud-info_caracteristica_pregrado',
     component: CrudInfoCaracteristicaPregradoComponent,
@@ -44,7 +44,7 @@ const routes: Routes = [{
         'Internal/everyone',
       ],
     },
-  },{
+  }, {
     path: 'view-info_caracteristica',
     component: ViewInfoCaracteristicaComponent,
     canActivate: [AuthGuard],

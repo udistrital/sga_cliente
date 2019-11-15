@@ -59,7 +59,7 @@ const routes: Routes = [{
          'Internal/everyone',
        ],
      },
-  }, 
+  },
   {
     path: 'crud-informacion_familiar',
     component: CrudInformacionFamiliarComponent,

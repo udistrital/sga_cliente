@@ -1,4 +1,4 @@
-export let FORM_INFORMACION_CONTACTO_EXTERNA= {
+export let FORM_INFORMACION_CONTACTO_EXTERNA = {
     // titulo: 'InformacionContacto',
     tipo_formulario: 'mini',
     btn: 'Guardar',
