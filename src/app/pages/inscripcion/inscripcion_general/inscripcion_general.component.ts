@@ -655,7 +655,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.selectprograma = true;
         this.selectTipo = 'Transferencia externa';
         break;
-      case ('Profesionalización'):
+      case ('Profesionalización tecnólogos'):
             this.selectTipo = 'Pregrado';
             this.selectedValue = true;
             this.selectprograma = true;
