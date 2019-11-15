@@ -13,6 +13,9 @@ import { FormacionAcademicaService } from '../../@core/data/formacion_academica.
 import { CrudIcfesComponent } from './crud-icfes/crud-icfes.component';
 import { CrudPreguntasComponent } from './crud-preguntas/crud-preguntas.component';
 import { CrudTransferenciaInternaComponent } from './crud-transferencia_interna/crud-transferencia_interna.component';
+import { CrudReingresoComponent } from './crud-reingreso/crud-reingreso.component';
+import { CrudIcfesExternoComponent } from './crud-icfes_externo/crud-icfes_externo.component';
+import { CrudExternoComponent } from './crud-externo/crud-externo.component';
 
 @NgModule({
   imports: [
@@ -36,6 +39,9 @@ import { CrudTransferenciaInternaComponent } from './crud-transferencia_interna/
     ListFormacionAcademicaComponent,
     CrudPreguntasComponent,
     CrudTransferenciaInternaComponent,
+    CrudReingresoComponent,
+    CrudIcfesExternoComponent,
+    CrudExternoComponent,
     ViewFormacionAcademicaComponent,
   ],
 })

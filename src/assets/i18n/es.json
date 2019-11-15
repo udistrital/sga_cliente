@@ -420,7 +420,30 @@
         "cancelo": "¿Canceló semestre?",
         "placeholder_cancelo": "Ej: No",
         "motivos": "Motivos del retiro",
-        "placeholder_motivos": ""
+        "placeholder_motivos": "",
+        "solicitud": "Solicita reingreso por el Acuerdo 010 de 2018 (CSU) y la Resolución 069 de 2018 (Consejo Académico) del programa transitorio de retorno de estudiantes inactivos y no graduados",
+        "placeholder_solicitud": "Ej: Si",
+        "estrato": "Estrato de residencia",
+        "placeholder_estrato": "Ej: Estrato 0",
+        "correo_principal_confirmar": "Confirme Correo electrónico",
+        "placeholder_correo_principal_confirmar": "Ej: prueba@prueba.com",
+        "eps": "EPS",
+        "placeholder_eps": "Ej: Compensar",
+        "hermanos": "Número de Hermanos en la Universidad Distrital",
+        "placeholder_hermanos": "Ej: 1",
+        "puntaje": "Puntaje SISBEN",
+        "placeholder_puntaje": "Ej: 50",
+        "estrato_costea": "Estrato socioeconómico de quien costeará los estudios",
+        "placeholder_estrato_costea": "Ej: Estrato 0",
+        "numero_semestres": "Número de semestres transcurridos desde la terminación del grado once",
+        "placeholder_numero_semestres": "Ej: Recien graduado",
+        "viene": "Universidad de donde viene",
+        "placeholder_viene": "Ej: Universidad Nacional",
+        "ultimo_semestre": "Último semestre cursado",
+        "placeholder_ultimo_semestre": "Ej: Tercer semestre",
+        "observacion_trans": "Motivos de la Transfeencia",
+        "placeholder_observacion_trans": ""
+
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -753,6 +776,8 @@
         "idiomas": "Idiomas",
         "icfes": "Registro ICFES y colegio",
         "universidad": "Universidad",
-        "transfe": "Transferencia interna"
+        "transfe": "Transferencia interna",
+        "reingreso": "Reingreso",
+        "transferencia": "Datos de transferencia"
     }
 }

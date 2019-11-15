@@ -1,6 +1,6 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <nb-card [hidden]="show_profile || show_info || show_acad || show_expe ||
-    show_proy || show_prod || show_desc || show_docu">
+    <nb-card [hidden]="show_profile || show_info_pregrado || show_acad_pregrado || show_expe ||
+    show_proy || show_prod || show_desc || show_docu ||show_info || show_acad || show_info_interna ||show_info_reingreso || show_info_externa || show_acad_externa">
         <nb-card-header>
             <!-- select tipo de inscripcion -->
             <mat-form-field style="width: 100%;">
@@ -14,7 +14,7 @@
             </mat-form-field>
 
             <!-- select programa -->
-            <div *ngIf="trans">
+            <div *ngIf="selectprograma">
                 <mat-form-field style="width: 100%;">
                     <mat-label>{{ 'inscripcion.aviso_programa' | translate }}:</mat-label>
                     <mat-select [(ngModel)]="selectedValue" (ngModelChange)="pruebita()">
@@ -28,7 +28,7 @@
             <ngx-loading [hidden]="!loading"></ngx-loading>
 
             <div class="row">
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado'|| selectTipo=='Transferencia interna'">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado'|| selectTipo=='Transferencia interna'|| selectTipo=='Reingreso' || selectTipo=='Transferencia externa'|| selectTipo=='Transferencia externa'">
                     <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
                         <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -38,7 +38,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado'">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado' || selectTipo=='Transferencia externa'">
                     <nb-card class="exp-card" (click)="perfil_editar('formacion_academica')">
                         <nb-card-header>{{ 'inscripcion.formacion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -123,6 +123,73 @@
 
     <!--Formularios------------------------------------------------------------->
 
+
+    <nb-card [hidden]="!show_info_pregrado">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad=false;
+            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+            show_desc=false;">X</button>
+                </div>
+            </div>
+            <nb-tabset fullWidth>
+                <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
+                    <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="traerInfoPersona($event,0)">
+                    </ngx-crud-info-persona>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}">
+                    <ngx-crud-info-caracteristica_pregrado info_caracteristica_id={{this.info_ente_id}} (eventChange)="perfil_editar('info_contacto')" (result)="setPercentage_info($event,1)">
+                    </ngx-crud-info-caracteristica_pregrado>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.informacion_contacto' | translate }}">
+                    <ngx-crud-informacion-contacto_pregrado informacion_contacto_id={{this.info_ente_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    </ngx-crud-informacion-contacto_pregrado>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}">
+                    <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    </ngx-crud-informacion-familiar>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
+
+    <nb-card [hidden]="!show_info_externa">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad=false;
+            show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_externa=false;
+            show_desc=false;">X</button>
+                </div>
+            </div>
+            <nb-tabset fullWidth>
+                <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
+                    <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="traerInfoPersona($event,0)">
+                    </ngx-crud-info-persona>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}">
+                    <ngx-crud-info-caracteristica_pregrado info_caracteristica_id={{this.info_ente_id}} (eventChange)="perfil_editar('info_contacto')" (result)="setPercentage_info($event,1)">
+                    </ngx-crud-info-caracteristica_pregrado>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.informacion_contacto' | translate }}">
+                    <ngx-crud-informacion-contacto_externa informacion_contacto_id={{this.info_ente_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    </ngx-crud-informacion-contacto_externa>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}">
+                    <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    </ngx-crud-informacion-familiar>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
+
     <nb-card [hidden]="!show_info">
         <nb-card-body>
             <div class="row">
@@ -136,30 +203,120 @@
                 </div>
             </div>
             <nb-tabset fullWidth>
-                <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona" *ngIf="selectTipo">
+                <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
 
                     <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="traerInfoPersona($event,0)">
                     </ngx-crud-info-persona>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}" [active]="info_caracteristica">
+                <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}">
                     <ngx-crud-info-caracteristica info_caracteristica_id={{this.info_ente_id}} (eventChange)="perfil_editar('info_contacto')" (result)="setPercentage_info($event,1)">
                     </ngx-crud-info-caracteristica>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.informacion_contacto' | translate }}" [active]="info_contacto">
+                <nb-tab tabTitle="{{ 'inscripcion.informacion_contacto' | translate }}">
                     <ngx-crud-informacion-contacto informacion_contacto_id={{this.info_ente_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-contacto>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}" [active]="info_contacto">
+                <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}">
                     <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-familiar>
-                </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.transfe' | translate }}" active=true *ngIf='tag_view_pre'>
-                    <ngx-crud-transferencia_interna (result)="setPercentage_acad($event,0)"></ngx-crud-transferencia_interna>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
     </nb-card>
+
+
+    <nb-card [hidden]="!show_info_reingreso">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
+            show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_reingreso=false;
+            show_desc=false;">X</button>
+                </div>
+            </div>
+            <nb-tabset fullWidth>
+                <nb-tab tabTitle="{{ 'inscripcion.reingreso' | translate }}" [active]="info_persona">
+                    <ngx-crud-reingreso (result)="setPercentage_acad($event,0)"></ngx-crud-reingreso>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
+
+
+    <nb-card [hidden]="!show_info_interna">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
+            show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_interna=false;
+            show_desc=false;">X</button>
+                </div>
+            </div>
+            <nb-tabset fullWidth>
+                <nb-tab tabTitle="{{ 'inscripcion.transfe' | translate }}" [active]="info_persona">
+                    <ngx-crud-transferencia_interna (result)="setPercentage_acad($event,0)"></ngx-crud-transferencia_interna>
+                </nb-tab>
+
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
     <!-- TAG y formularios de formacion academica -->
+
+
+    <nb-card [hidden]="!show_acad_pregrado">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_acad" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
+            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+            show_desc=false;">X</button>
+                </div>
+            </div>
+
+            <nb-tabset fullWidth (changeTab)="selectTab($event)">
+                <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}" active=true>
+                    <ngx-crud-icfes (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.universidad' | translate }}">
+                    <ngx-crud-preguntas (result)="setPercentage_acad($event,0)"></ngx-crud-preguntas>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
+
+
+    <nb-card [hidden]="!show_acad_externa">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_acad" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
+            show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_acad_externa=false;
+            show_desc=false;">X</button>
+                </div>
+            </div>
+            <nb-tabset fullWidth (changeTab)="selectTab($event)">
+                <nb-tab tabTitle="{{ 'inscripcion.transferencia' | translate }}" active=true>
+                    <ngx-crud-externo (result)="setPercentage_acad($event,0)"></ngx-crud-externo>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}">
+                    <ngx-crud-icfes_externo (result)="setPercentage_acad($event,0)"></ngx-crud-icfes_externo>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
+
 
     <nb-card [hidden]="!show_acad">
         <nb-card-body>
@@ -176,17 +333,10 @@
 
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
 
-                <nb-tab tabTitle="{{ 'inscripcion.formacion_academica' | translate }}" active=true *ngIf='tag_view_posg'>
+                <nb-tab tabTitle="{{ 'inscripcion.formacion_academica' | translate }}" active=true>
                     <ngx-crud-formacion-academica (result)="setPercentage_acad($event,0)"></ngx-crud-formacion-academica>
                 </nb-tab>
-
-                <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}" active=true *ngIf='tag_view_pre'>
-                    <ngx-crud-icfes (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
-                </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.universidad' | translate }}" *ngIf='tag_view_pre'>
-                    <ngx-crud-preguntas (result)="setPercentage_acad($event,0)"></ngx-crud-preguntas>
-                </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}" *ngIf='tag_view_posg'>
+                <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}">
                     <ngx-list-idiomas inscripcion_id={{this.inscripcion_id}} (result)="setPercentage_acad($event,1)"></ngx-list-idiomas>
                 </nb-tab>
             </nb-tabset>

@@ -8,6 +8,7 @@ import { ToasterModule } from 'angular2-toaster';
 import { SharedModule } from '../../shared/shared.module';
 import { CrudInfoCaracteristicaComponent } from './crud-info_caracteristica/crud-info_caracteristica.component';
 import { ViewInfoCaracteristicaComponent } from './view-info_caracteristica/view-info_caracteristica.component';
+import { CrudInfoCaracteristicaPregradoComponent } from './crud-info_caracteristica_pregrado/crud-info_caracteristica_pregrado.component';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { ViewInfoCaracteristicaComponent } from './view-info_caracteristica/view
   ],
   exports: [
     CrudInfoCaracteristicaComponent,
+    CrudInfoCaracteristicaPregradoComponent,
     ViewInfoCaracteristicaComponent,
   ],
 })

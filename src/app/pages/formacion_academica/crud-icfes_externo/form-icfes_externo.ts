@@ -1,4 +1,4 @@
-export let FORM_ICFES = {
+export let FORM_ICFES_EXTERNO = {
   // titulo: 'FormacionAcademica',
   tipo_formulario: 'mini',
   alertas: true,
@@ -50,20 +50,13 @@ export let FORM_ICFES = {
       requerido: true,
     },
     {
-      etiqueta: 'select',
-      claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
-      nombre: 'Valido',
-      label_i18n: 'valido_colegio',
-      placeholder_i18n: 'valido_colegio',
+      etiqueta: 'textarea',
+      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
+      nombre: 'Observaciones_icfes',
+      label_i18n: 'observacion',
+      placeholder_i18n: 'observacion',
       requerido: true,
-    },
-    {
-      etiqueta: 'select',
-      claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
-      nombre: 'numeroSemestres',
-      label_i18n: 'numero_semestres',
-      placeholder_i18n: 'numero_semestres',
-      requerido: true,
+      tipo: 'text',
     },
   ],
 }

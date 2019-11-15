@@ -5,6 +5,7 @@ import { ListInfoCaracteristicaComponent } from './list-info_caracteristica/list
 import { CrudInfoCaracteristicaComponent } from './crud-info_caracteristica/crud-info_caracteristica.component';
 import { ViewInfoCaracteristicaComponent } from './view-info_caracteristica/view-info_caracteristica.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
+import { CrudInfoCaracteristicaPregradoComponent } from './crud-info_caracteristica_pregrado/crud-info_caracteristica_pregrado.component';
 
 const routes: Routes = [{
   path: '',
@@ -30,7 +31,20 @@ const routes: Routes = [{
         'Internal/everyone',
       ],
     },
-  }, {
+  }, 
+  {
+    path: 'crud-info_caracteristica_pregrado',
+    component: CrudInfoCaracteristicaPregradoComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: [
+        'ADMIN_CAMPUS',
+        'ASPIRANTE',
+        'Internal/selfsignup',
+        'Internal/everyone',
+      ],
+    },
+  },{
     path: 'view-info_caracteristica',
     component: ViewInfoCaracteristicaComponent,
     canActivate: [AuthGuard],
@@ -60,5 +74,6 @@ export const routedComponents = [
   InfoCaracteristicaComponent,
   ListInfoCaracteristicaComponent,
   CrudInfoCaracteristicaComponent,
+  CrudInfoCaracteristicaPregradoComponent,
   ViewInfoCaracteristicaComponent,
 ];
