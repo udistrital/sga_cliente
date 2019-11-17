@@ -91,6 +91,7 @@
                                 </mat-select>
                                 <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'proyecto.erro_unidad' | translate }}</mat-error>
                             </mat-form-field>
+                            <br>
                             <mat-form-field>
                                 <input matInput placeholder="{{ 'proyecto.duracion_proyecto' | translate }}" formControlName="duracion_proyecto" class="form-control" name="duracion_proyecto">
                                 <mat-error *ngIf="Campo12Control.hasError('required')">{{ 'proyecto.erro_duracion' | translate }}</mat-error>

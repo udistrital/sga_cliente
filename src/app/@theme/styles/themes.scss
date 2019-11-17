@@ -215,14 +215,14 @@ $nb-themes: nb-register-theme((
   // Card
  card-text-color: #23d123,
  card-fg: #ffffff,
- card-fg-text: #000000, // texto interno 
+ card-fg-text: #000000, // texto interno largo
  card-header-font-family: 'sans-serif',
- card-header-font-size: 1.3rem,
+ card-header-font-size: 1.5rem, // tamaño subtitulos card
  card-fg-heading: #000000,
  card-bg: #ffffff,
- card-header-fg: #64d9ff,
+ card-header-fg: #000000, //
  card-separator: #ffffff73,
- card-header-fg-heading: #4fb9ff,
+ card-header-fg-heading: #000000, //  Color subtitulos card
  card-header-active-bg:  rgb(7, 3, 58),
  card-header-success-bg: rgba(82, 162, 241, 0.2),
  card-header-info-bg:  #c0e7ff,
@@ -251,6 +251,10 @@ $nb-themes: nb-register-theme((
   form-control-placeholder-font-size: 0.8rem,
   form-control-font-size: 0.8rem,
   form-control-border-width: 1px,
+  form-control-text-primary-color: rgba(2, 2, 2, 0.333),
+  form-control-placeholder-color: #0000,
+  form-control-bg: #0000,
+  
   form-control-border-radius: 0.1rem,
   //fonts
   font-weight-thin: 100,
@@ -260,7 +264,7 @@ $nb-themes: nb-register-theme((
   font-weight-bold: 500,
   font-weight-ultra-bold: 600,
   //general
-  padding: 1rem,
+  padding: 1rem, 
   font-size: 0.9rem,
   margin: 1rem,
   layout-padding: 2rem 0.2rem 3rem,
@@ -280,7 +284,7 @@ $nb-themes: nb-register-theme((
   menu-fg: #ffffff,
   menu-active-bg: #4fb9ff,
   menu-active-fg: #ffffff,
-  menu-font-size:0.875rem,
+  menu-font-size:0.975rem,
   menu-item-separator: #4fb9ff,
 
   menu-submenu-bg: #4fb9ff,
@@ -302,7 +306,7 @@ $nb-themes: nb-register-theme((
   header-font-size: 0.7rem,
   header-height: 5.5rem,
   header-padding: none,
-  header-fg: #91e7ff,
+  header-fg: #000000,
   header-bg: #ffffff,
   header-shadow: none,
 
