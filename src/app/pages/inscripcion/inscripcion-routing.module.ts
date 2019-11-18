@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { InscripcionComponent } from './inscripcion.component';
-import { PosgradoComponent } from './posgrado/posgrado.component';
+import { InscripcionGeneralComponent } from './inscripcion_general/inscripcion_general.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
 
@@ -9,8 +9,8 @@ const routes: Routes = [{
   path: '',
   component: InscripcionComponent,
   children: [{
-    path: 'posgrado',
-    component: PosgradoComponent,
+    path: 'inscripcion_general',
+    component: InscripcionGeneralComponent,
     // data: {
     //   roles: [
     //     'ADMIN_CAMPUS',
@@ -35,6 +35,6 @@ export class InscripcionRoutingModule { }
 
 export const routedComponents = [
   InscripcionComponent,
-  PosgradoComponent,
+  InscripcionGeneralComponent,
   PerfilComponent,
 ];

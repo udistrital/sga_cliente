@@ -6,7 +6,7 @@ import { ToasterModule } from 'angular2-toaster';
 import { SharedModule } from '../../shared/shared.module';
 import { ImplicitAutenticationService } from './../../@core/utils/implicit_autentication.service';
 import { InscripcionModule } from '../inscripcion/inscripcion.module';
-import { PosgradoComponent } from '../inscripcion/posgrado/posgrado.component';
+import { InscripcionGeneralComponent } from '../inscripcion/inscripcion_general/inscripcion_general.component';
 import { InscripcionService } from '../../@core/data/inscripcion.service';
 import { PagoLineaModule } from '../pago_linea/pago_linea.module';
 
@@ -28,7 +28,7 @@ import { PagoLineaModule } from '../pago_linea/pago_linea.module';
     ImplicitAutenticationService,
   ],
   entryComponents: [
-    PosgradoComponent,
+    InscripcionGeneralComponent,
   ],
 })
 export class AdmisionModule { }

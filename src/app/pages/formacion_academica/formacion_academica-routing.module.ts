@@ -5,6 +5,12 @@ import { ListFormacionAcademicaComponent } from './list-formacion_academica/list
 import { CrudFormacionAcademicaComponent } from './crud-formacion_academica/crud-formacion_academica.component';
 import { ViewFormacionAcademicaComponent } from './view-formacion_academica/view-formacion_academica.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
+import { CrudIcfesComponent } from './crud-icfes/crud-icfes.component';
+import { CrudPreguntasComponent } from './crud-preguntas/crud-preguntas.component';
+import { CrudTransferenciaInternaComponent } from './crud-transferencia_interna/crud-transferencia_interna.component';
+import { CrudReingresoComponent } from './crud-reingreso/crud-reingreso.component';
+import { CrudIcfesExternoComponent } from './crud-icfes_externo/crud-icfes_externo.component';
+import { CrudExternoComponent } from './crud-externo/crud-externo.component';
 
 const routes: Routes = [{
   path: '',
@@ -33,7 +39,86 @@ const routes: Routes = [{
         'Internal/everyone',
       ],
     },
-  }, {
+  },
+  {
+    path: 'crud-icfes',
+    component: CrudIcfesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: [
+        'ADMIN_CAMPUS',
+        'ASPIRANTE',
+        'Internal/selfsignup',
+        'Internal/everyone',
+      ],
+    },
+  },
+  {
+    path: 'crud-icfes_externa',
+    component: CrudIcfesExternoComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: [
+        'ADMIN_CAMPUS',
+        'ASPIRANTE',
+        'Internal/selfsignup',
+        'Internal/everyone',
+      ],
+    },
+  },
+  {
+    path: 'crud-preguntas',
+    component: CrudPreguntasComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: [
+        'ADMIN_CAMPUS',
+        'ASPIRANTE',
+        'Internal/selfsignup',
+        'Internal/everyone',
+      ],
+    },
+  },
+  {
+    path: 'crud-externo',
+    component: CrudExternoComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: [
+        'ADMIN_CAMPUS',
+        'ASPIRANTE',
+        'Internal/selfsignup',
+        'Internal/everyone',
+      ],
+    },
+  },
+  {
+    path: 'crud-transferencia_interna',
+    component: CrudTransferenciaInternaComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: [
+        'ADMIN_CAMPUS',
+        'ASPIRANTE',
+        'Internal/selfsignup',
+        'Internal/everyone',
+      ],
+    },
+  },
+  {
+    path: 'crud-reingreso',
+    component: CrudReingresoComponent,
+    canActivate: [AuthGuard],
+    data: {
+      roles: [
+        'ADMIN_CAMPUS',
+        'ASPIRANTE',
+        'Internal/selfsignup',
+        'Internal/everyone',
+      ],
+    },
+  },
+  {
     path: 'view-formacion_academica',
     component: ViewFormacionAcademicaComponent,
     canActivate: [AuthGuard],
@@ -63,5 +148,11 @@ export const routedComponents = [
   FormacionAcademicaComponent,
   ListFormacionAcademicaComponent,
   CrudFormacionAcademicaComponent,
+  CrudIcfesComponent,
+  CrudPreguntasComponent,
+  CrudTransferenciaInternaComponent,
+  CrudIcfesExternoComponent,
+  CrudExternoComponent,
+  CrudReingresoComponent,
   ViewFormacionAcademicaComponent,
 ];
