@@ -9,7 +9,6 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
-import { UnidadTiempoService } from '../../../@core/data/unidad_tiempo.service';
 import { ProyectoAcademicoInstitucion } from '../../../@core/data/models/proyecto_academico/proyecto_academico_institucion';
 import { TipoTitulacion } from '../../../@core/data/models/proyecto_academico/tipo_titulacion';
 import { Metodologia } from '../../../@core/data/models/proyecto_academico/metodologia';
@@ -23,6 +22,7 @@ import { Titulacion } from '../../../@core/data/models/proyecto_academico/titula
 import { TipoDependencia } from '../../../@core/data/models/oikos/tipo_dependencia';
 import { DependenciaTipoDependencia } from '../../../@core/data/models/oikos/dependencia_tipo_dependencia';
 import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
+import { TrDependenciaPadre } from '../../../@core/data/models/oikos/tr_dependencia_padre';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as moment from 'moment';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
@@ -135,7 +135,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
-    private unidadtiempoService: UnidadTiempoService,
     private dialogService: NbDialogService,
     private activatedRoute: ActivatedRoute,
     private nuxeoService: NuxeoService,
@@ -470,7 +469,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     });
   }
   loadunidadtiempo() {
-    this.unidadtiempoService.get('unidad_tiempo')
+    this.coreService.get('unidad_tiempo')
     .subscribe(res => {
       const r = <any>res;
       if (res !== null && r.Type !== 'error') {
@@ -658,12 +657,23 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         CorreoElectronico: this.basicform.value.correo_proyecto,
         DependenciaTipoDependencia: [this.dependencia_tipo_dependencia],
       }
+      const tr_dependencia_padre_post: TrDependenciaPadre = {
+        PadreId: {
+          Id: this.opcionSeleccionadoFacultad['Id'],
+          Nombre: undefined,
+          TelefonoDependencia: undefined,
+          CorreoElectronico: undefined,
+          DependenciaTipoDependencia: undefined,
+        },
+        HijaId: this.dependencia,
+      }
       this.proyecto_academicoPost = {
         ProyectoAcademicoInstitucion: this.proyecto_academico,
         Registro: [this.registro_califacado_acreditacion],
         Enfasis: this.enfasis_proyecto,
         Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
-        Oikos: this.dependencia,
+        Oikos: tr_dependencia_padre_post,
+        // Oikos: this.dependencia,
       }
       const opt: any = {
         title: this.translate.instant('GLOBAL.registrar'),
