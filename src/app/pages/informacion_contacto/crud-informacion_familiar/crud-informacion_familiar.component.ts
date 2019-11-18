@@ -2,8 +2,10 @@ import { Lugar } from './../../../@core/data/models/lugar/lugar';
 import { InformacionContacto } from './../../../@core/data/models/informacion/informacion_contacto';
 import { InfoContactoGet } from './../../../@core/data/models/ente/info_contacto_get';
 import { InfoContactoPut } from './../../../@core/data/models/ente/info_contacto_put';
+import { TipoParentesco } from './../../../@core/data/models/terceros/tipo_parentesco';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
+import { TercerosService } from '../../../@core/data/terceros.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { FORM_INFORMACION_FAMILIAR } from './form-informacion_familiar';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
@@ -47,6 +49,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     private translate: TranslateService,
     private campusMidService: CampusMidService,
     private ubicacionesService: UbicacionService,
+    private tercerosService: TercerosService,
     // private store: Store<IAppState>,
     // private listService: ListService,
     private toasterService: ToasterService) {
@@ -57,6 +60,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     });
     // this.listService.findPais();
     // this.loadLists();
+    this.loadOptionsParentesco();
     this.loading = false;
   }
 
@@ -120,6 +124,22 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     //     this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
     //   },
     // );
+  }
+
+  loadOptionsParentesco(): void {
+    let parentescos: Array<any> = [];
+    this.tercerosService.get('tipo_parentesco/?limit=0&query=Activo:true')
+      .subscribe(res => {
+        if (res !== null) {
+          parentescos = <Array<TipoParentesco>>res;
+        }
+        this.formInformacionFamiliar.campos[ this.getIndexForm('Parentesco') ].opciones = parentescos;
+        this.formInformacionFamiliar.campos[ this.getIndexForm('ParentescoAlterno') ].opciones = parentescos;
+      });
+  }
+
+  public validarForm(event: any) {
+    // console.log(event);
   }
 
 }
