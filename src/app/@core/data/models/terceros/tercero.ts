@@ -1,7 +1,7 @@
 import { TipoContribuyente } from './tipo_contribuyente';
 
 export class Tercero {
-	Id: number;
-	NombreCompleto: string;
-	TipoContribuyenteId: TipoContribuyente;
+  Id: number;
+  NombreCompleto: string;
+  TipoContribuyenteId: TipoContribuyente;
 }

@@ -155,46 +155,46 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     Swal(opt)
     .then((willDelete) => {
       if (willDelete.value) {
-        let formData = event.data.InformacionFamiliar;
-        let tercero: Tercero = {
+        const formData = event.data.InformacionFamiliar;
+        const tercero: Tercero = {
           Id: 0,
           NombreCompleto: 'Mario Pepito Perez',
           TipoContribuyenteId: {
             Id: 1,
             Nombre: undefined,
-          }
+          },
         }
-        let informacionFamiliarPost: TrPostInformacionFamiliar = {
+        const informacionFamiliarPost: TrPostInformacionFamiliar = {
           Tercero_Familiar: tercero,
           Familiares: [
             {
-              Id: 0,          
-              TerceroId: tercero,        
+              Id: 0,
+              TerceroId: tercero,
               TerceroFamiliarId: {
                 Id: 0,
                 NombreCompleto: formData.NombreFamiliarPrincipal,
                 TipoContribuyenteId: {
                   Id: 1,
                   Nombre: undefined,
-                }
-              },       
-              TipoParentescoId: formData.Parentesco, 
+                },
+              },
+              TipoParentescoId: formData.Parentesco,
               CodigoAbreviacion: 'CONTPRIN',
             },
             {
-              Id: 0,             
-              TerceroId: tercero,        
+              Id: 0,
+              TerceroId: tercero,
               TerceroFamiliarId: {
                 Id: 0,
                 NombreCompleto: formData.NombreFamiliarAlterno,
                 TipoContribuyenteId: {
                   Id: 1,
                   Nombre: undefined,
-                }
+                },
               },
               TipoParentescoId: formData.ParentescoAlterno,
-              CodigoAbreviacion: 'CONTALT',    
-            }
+              CodigoAbreviacion: 'CONTALT',
+            },
           ],
         }
         this.sgaMidService.post('inscripciones/post_informacion_familiar', informacionFamiliarPost)
@@ -208,7 +208,8 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                 });
                 this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
               } else {
-                this.showToast('success', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('informacion_familiar.informacion_familiar_actualizada'));
+                this.showToast('success', this.translate.instant('GLOBAL.actualizar'),
+                    this.translate.instant('informacion_familiar.informacion_familiar_actualizada'));
               }
             }, () => {
                 this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
