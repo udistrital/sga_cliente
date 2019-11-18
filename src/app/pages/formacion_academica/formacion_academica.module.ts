@@ -10,6 +10,12 @@ import { ListFormacionAcademicaComponent } from './list-formacion_academica/list
 import { ViewFormacionAcademicaComponent } from './view-formacion_academica/view-formacion_academica.component';
 import { UserService } from '../../@core/data/users.service';
 import { FormacionAcademicaService } from '../../@core/data/formacion_academica.service';
+import { CrudIcfesComponent } from './crud-icfes/crud-icfes.component';
+import { CrudPreguntasComponent } from './crud-preguntas/crud-preguntas.component';
+import { CrudTransferenciaInternaComponent } from './crud-transferencia_interna/crud-transferencia_interna.component';
+import { CrudReingresoComponent } from './crud-reingreso/crud-reingreso.component';
+import { CrudIcfesExternoComponent } from './crud-icfes_externo/crud-icfes_externo.component';
+import { CrudExternoComponent } from './crud-externo/crud-externo.component';
 
 @NgModule({
   imports: [
@@ -29,7 +35,13 @@ import { FormacionAcademicaService } from '../../@core/data/formacion_academica.
   ],
   exports: [
     CrudFormacionAcademicaComponent,
+    CrudIcfesComponent,
     ListFormacionAcademicaComponent,
+    CrudPreguntasComponent,
+    CrudTransferenciaInternaComponent,
+    CrudReingresoComponent,
+    CrudIcfesExternoComponent,
+    CrudExternoComponent,
     ViewFormacionAcademicaComponent,
   ],
 })
