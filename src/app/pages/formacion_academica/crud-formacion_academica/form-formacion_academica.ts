@@ -13,7 +13,7 @@ export let FORM_FORMACION_ACADEMICA = {
       label_i18n: 'nombre_universidad',
       placeholder_i18n: 'nombre_universidad',
       requerido: true,
-      deshabilitar: true,
+      deshabilitar: false,
       tipo: 'text',
     },
     {

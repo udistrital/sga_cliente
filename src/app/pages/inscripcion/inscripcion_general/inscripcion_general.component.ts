@@ -17,11 +17,12 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 @Component({
-  selector: 'ngx-posgrado',
-  templateUrl: './posgrado.component.html',
-  styleUrls: ['./posgrado.component.scss'],
+  // tslint:disable-next-line: component-selector
+  selector: 'ngx-inscripcion_general',
+  templateUrl: './inscripcion_general.component.html',
+  styleUrls: ['./inscripcion_general.component.scss'],
 })
-export class PosgradoComponent implements OnInit, OnChanges {
+export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   @Input('inscripcion_id')
   set name(inscripcion_id: number) {
@@ -71,9 +72,16 @@ export class PosgradoComponent implements OnInit, OnChanges {
   percentage_tab_desc = [];
   percentage_tab_docu = [];
   posgrados = [];
+  tipo_inscripciones = [];
 
+  show_info_pregrado = false;
+  show_info_interna = false;
+  show_info_externa = false;
+  show_info_reingreso = false;
   show_info = false;
   show_profile = false;
+  show_acad_pregrado = false;
+  show_acad_externa = false;
   show_acad = false;
   show_expe = false;
   show_proy = false;
@@ -88,7 +96,14 @@ export class PosgradoComponent implements OnInit, OnChanges {
   loading: boolean;
   button_politica: boolean = true;
   programa_seleccionado: any;
+  viewtag: any;
   selectedValue: any;
+  selectedTipo: any;
+  selectTipo: any;
+  selectTabView: any;
+  tag_view_posg: boolean;
+  tag_view_pre: boolean;
+  selectprograma: boolean = true;
   imagenes: any;
 
   constructor(
@@ -98,24 +113,25 @@ export class PosgradoComponent implements OnInit, OnChanges {
     private inscripcionService: InscripcionService,
     private userService: UserService,
     private programaService: OikosService,
-    ) {
+  ) {
     this.imagenes = IMAGENES;
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.loadInfoPostgrados();
+    this.loadTipoInscripcion();
     this.total = true;
-    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-      && this.inscripcion_id.toString() !== '0') {
-      this.getInfoInscripcion();
-    } else {
-      const ENTE = this.userService.getEnte();
-      if (ENTE !== 0 && ENTE !== undefined && ENTE.toString() !== '' && ENTE.toString() !== 'NaN') {
-        this.info_ente_id = <number>ENTE;
-      } else {
-        this.info_ente_id = undefined;
-      }
-    }
+    // if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
+    //   && this.inscripcion_id.toString() !== '0') {
+    //   this.getInfoInscripcion();
+    // } else {
+    //   const ENTE = this.userService.getEnte();
+    //   if (ENTE !== 0 && ENTE !== undefined && ENTE.toString() !== '' && ENTE.toString() !== 'NaN') {
+    //     this.info_ente_id = <number>ENTE;
+    //   } else {
+    //     this.info_ente_id = undefined;
+    //   }
+    // }
   }
 
   setPercentage_info(number, tab) {
@@ -183,6 +199,29 @@ export class PosgradoComponent implements OnInit, OnChanges {
     if (event !== 0) this.getInfoInscripcion();
   }
 
+  loadTipoInscripcion() {
+    this.inscripcionService.get('tipo_inscripcion')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          const tiposInscripciones = <Array<any>>res;
+          tiposInscripciones.forEach(element => {
+            this.tipo_inscripciones.push(element);
+          });
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.programa_academico'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
+
   loadInfoPostgrados() {
     this.programaService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:15&limit=0')
       .subscribe(res => {
@@ -213,7 +252,7 @@ export class PosgradoComponent implements OnInit, OnChanges {
       this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
         .subscribe(inscripcion => {
           this.info_inscripcion = <any>inscripcion;
-          if (inscripcion !== null  && this.info_inscripcion.Type !== 'error') {
+          if (inscripcion !== null && this.info_inscripcion.Type !== 'error') {
             this.estado_inscripcion = this.info_inscripcion.EstadoInscripcionId.Id;
             if (this.info_inscripcion.EstadoInscripcionId.Id > 1) {
               this.total = true;
@@ -259,11 +298,12 @@ export class PosgradoComponent implements OnInit, OnChanges {
   }
 
   perfil_editar(event): void {
+    console.info(event)
     switch (event) {
       case 'info_contacto':
         this.show_info = true;
         this.show_profile = false;
-        this.show_acad = false;
+        this.show_acad = true;
         this.show_expe = false;
         this.info_contacto = true;
         this.info_caracteristica = false;
@@ -280,7 +320,7 @@ export class PosgradoComponent implements OnInit, OnChanges {
           this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_ente_id)
             .subscribe(inscripcion => {
               this.info_inscripcion = <any>inscripcion[0];
-              if (inscripcion !== null  && this.info_inscripcion.Type !== 'error') {
+              if (inscripcion !== null && this.info_inscripcion.Type !== 'error') {
                 this.inscripcion_id = this.info_inscripcion.Id;
                 this.getInfoInscripcion();
               }
@@ -310,17 +350,26 @@ export class PosgradoComponent implements OnInit, OnChanges {
         this.show_prod = false;
         break;
       case 'info_persona':
-        this.show_info = true;
-        this.show_profile = false;
-        this.show_acad = false;
-        this.show_expe = false;
-        this.info_contacto = false;
-        this.info_caracteristica = false;
-        this.info_persona = true;
-        this.show_desc = false;
-        this.show_docu = false;
-        this.show_proy = false;
-        this.show_prod = false;
+        if (this.selectTipo === 'Pregrado') {
+          this.viewtag = 'Informacion_pregrado'
+          this.selecttabview(this.viewtag);
+        }
+        if (this.selectTipo === 'Posgrado') {
+          this.viewtag = 'Informacion_posgrado'
+          this.selecttabview(this.viewtag);
+        }
+        if (this.selectTipo === 'Transferencia interna') {
+          this.viewtag = 'Informacion_trasnferencia_interna'
+          this.selecttabview(this.viewtag);
+        }
+        if (this.selectTipo === 'Reingreso') {
+          this.viewtag = 'Informacion_reingreso'
+          this.selecttabview(this.viewtag);
+        }
+        if (this.selectTipo === 'Transferencia externa') {
+          this.viewtag = 'Informacion_externa'
+          this.selecttabview(this.viewtag);
+        }
         break;
       case 'experiencia_laboral':
         this.show_info = false;
@@ -336,17 +385,18 @@ export class PosgradoComponent implements OnInit, OnChanges {
         this.show_prod = false;
         break;
       case 'formacion_academica':
-        this.show_info = false;
-        this.show_docu = false;
-        this.info_contacto = false;
-        this.info_caracteristica = false;
-        this.show_profile = false;
-        this.show_acad = true;
-        this.info_persona = false;
-        this.show_expe = false;
-        this.show_proy = false;
-        this.show_desc = false;
-        this.show_prod = false;
+        if (this.selectTipo === 'Pregrado') {
+          this.viewtag = 'Formacion_pregrago'
+          this.selecttabview(this.viewtag);
+        }
+        if (this.selectTipo === 'Posgrado') {
+          this.viewtag = 'Formacion_posgrago'
+          this.selecttabview(this.viewtag);
+        }
+        if (this.selectTipo === 'Transferencia externa') {
+          this.viewtag = 'Formacion_externa'
+          this.selecttabview(this.viewtag);
+        }
         break;
       case 'produccion_academica':
         this.show_info = false;
@@ -428,6 +478,115 @@ export class PosgradoComponent implements OnInit, OnChanges {
         break;
     }
   }
+  selecttabview(viewtag) {
+    switch (viewtag) {
+      case ('Informacion_pregrado'):
+        this.show_info_pregrado = true;
+        this.show_profile = false;
+        this.show_acad_pregrado = false;
+        this.show_expe = false;
+        this.info_contacto = false;
+        this.info_caracteristica = false;
+        this.info_persona = true;
+        this.show_desc = false;
+        this.show_docu = false;
+        this.show_proy = false;
+        this.show_prod = false;
+        break;
+      case ('Formacion_pregrago'):
+        this.show_info_pregrado = false;
+        this.show_profile = false;
+        this.show_acad_pregrado = true;
+        this.show_expe = false;
+        this.info_contacto = false;
+        this.info_caracteristica = false;
+        this.info_persona = true;
+        this.show_desc = false;
+        this.show_docu = false;
+        this.show_proy = false;
+        this.show_prod = false;
+        break;
+      case ('Informacion_posgrado'):
+        this.show_info = true;
+        this.show_profile = false;
+        this.show_acad = false;
+        this.show_expe = false;
+        this.info_contacto = false;
+        this.info_caracteristica = false;
+        this.info_persona = true;
+        this.show_desc = false;
+        this.show_docu = false;
+        this.show_proy = false;
+        this.show_prod = false;
+        break;
+      case ('Formacion_posgrago'):
+        this.show_info = false;
+        this.show_profile = false;
+        this.show_acad = true;
+        this.show_expe = false;
+        this.info_contacto = false;
+        this.info_caracteristica = false;
+        this.info_persona = false;
+        this.show_desc = false;
+        this.show_docu = false;
+        this.show_proy = false;
+        this.show_prod = false;
+        break;
+      case ('Informacion_trasnferencia_interna'):
+        this.show_info_interna = true;
+        this.show_profile = false;
+        this.show_acad_pregrado = false;
+        this.show_expe = false;
+        this.info_contacto = false;
+        this.info_caracteristica = false;
+        this.info_persona = true;
+        this.show_desc = false;
+        this.show_docu = false;
+        this.show_proy = false;
+        this.show_prod = false;
+        break;
+      case ('Informacion_reingreso'):
+        this.show_info_reingreso = true;
+        this.show_profile = false;
+        this.show_acad_pregrado = false;
+        this.show_expe = false;
+        this.info_contacto = false;
+        this.info_caracteristica = false;
+        this.info_persona = true;
+        this.show_desc = false;
+        this.show_docu = false;
+        this.show_proy = false;
+        this.show_prod = false;
+        break;
+      case ('Informacion_externa'):
+        this.show_info_externa = true;
+        this.show_profile = false;
+        this.show_acad_pregrado = false;
+        this.show_expe = false;
+        this.info_contacto = false;
+        this.info_caracteristica = false;
+        this.info_persona = true;
+        this.show_desc = false;
+        this.show_docu = false;
+        this.show_proy = false;
+        this.show_prod = false;
+        break;
+      case ('Formacion_externa'):
+        this.show_info = false;
+        this.show_profile = false;
+        this.show_acad_externa = true;
+        this.show_expe = false;
+        this.info_contacto = false;
+        this.info_caracteristica = false;
+        this.info_persona = false;
+        this.show_desc = false;
+        this.show_docu = false;
+        this.show_proy = false;
+        this.show_prod = false;
+        break;
+    }
+
+  }
 
   selectTab(event): void {
     if (event.tabTitle === this.translate.instant('GLOBAL.info_persona')) {
@@ -441,100 +600,142 @@ export class PosgradoComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    if (this.info_ente_id !== 0 && this.info_ente_id !== undefined && this.info_ente_id.toString() !== '' &&
-      this.info_ente_id.toString() !== 'NaN' && this.inscripcion_id === undefined) {
-      this.info_ente_id = <number>this.userService.getEnte();
-      this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_ente_id)
-      .subscribe(inscripcion => {
-        this.info_inscripcion = <any>inscripcion[0];
-        if (inscripcion !== null  && this.info_inscripcion.Type !== 'error') {
-          this.inscripcion_id = this.info_inscripcion.Id;
-          this.getInfoInscripcion();
-        }
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.admision'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
-    }
+    // if (this.info_ente_id !== 0 && this.info_ente_id !== undefined && this.info_ente_id.toString() !== '' &&
+    //   this.info_ente_id.toString() !== 'NaN' && this.inscripcion_id === undefined) {
+    //   this.info_ente_id = <number>this.userService.getEnte();
+    //   this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_ente_id)
+    //   .subscribe(inscripcion => {
+    //     this.info_inscripcion = <any>inscripcion[0];
+    //     if (inscripcion !== null  && this.info_inscripcion.Type !== 'error') {
+    //       this.inscripcion_id = this.info_inscripcion.Id;
+    //       this.getInfoInscripcion();
+    //     }
+    //   },
+    //     (error: HttpErrorResponse) => {
+    //       Swal({
+    //         type: 'error',
+    //         title: error.status + '',
+    //         text: this.translate.instant('ERROR.' + error.status),
+    //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //           this.translate.instant('GLOBAL.admision'),
+    //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //       });
+    //     });
+    // }
   }
 
   ngOnChanges() {
   }
 
   pruebita() {
-    window.localStorage.setItem('programa', this.selectedValue.Id);
+    // window.localStorage.setItem('programa', this.selectedValue.Id);
+    this.selectedValue = true;
   }
-
-  inscribirse() {
-    this.datosMidPersona();
-  }
-
-  datosMidPersona() {
-    this.campusMidService.get('persona/consultar_persona/' + this.info_ente_id)
-      .subscribe(res => {
-        const r = <any>res;
-        if (res !== null && r.Type !== 'error') {
-          this.datos_persona = r;
-          this.info_inscripcion.EstadoInscripcionId.Id = 2;
-          this.updateEstadoAdmision();
+  tipo_inscripcion() {
+    switch (this.selectedTipo.Nombre) {
+      case ('Pregrado'):
+        this.selectTipo = 'Pregrado';
+        this.selectedValue = true;
+        this.selectprograma = true;
+        break;
+      case ('Posgrado'):
+        this.selectTipo = 'Posgrado';
+        this.selectedValue = true;
+        this.selectprograma = true;
+        break;
+      case ('Transferencia interna'):
+        this.selectprograma = false;
+        this.selectTipo = 'Transferencia interna';
+        break;
+      case ('Reingreso'):
+        this.selectprograma = false;
+        this.selectTipo = 'Reingreso';
+        break;
+      case ('Transferencia externa'):
+        this.selectprograma = true;
+        this.selectTipo = 'Transferencia externa';
+        break;
+      case ('Profesionalización tecnólogos'):
+            this.selectTipo = 'Pregrado';
+            this.selectedValue = true;
+            this.selectprograma = true;
+        break;
+        case ('Ciclos propedéuticos'):
+            this.selectTipo = 'Pregrado';
+            this.selectedValue = true;
+            this.selectprograma = true;
+            break;
+        case ('Movilidad Académica'):
+            this.selectTipo = 'Pregrado';
+            this.selectedValue = true;
+            this.selectprograma = true;
+            break;
         }
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.admision'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    }
+
+    inscribirse() {
+      this.datosMidPersona();
+    }
+
+    datosMidPersona() {
+      this.campusMidService.get('persona/consultar_persona/' + this.info_ente_id)
+        .subscribe(res => {
+          const r = <any>res;
+          if (res !== null && r.Type !== 'error') {
+            this.datos_persona = r;
+            this.info_inscripcion.EstadoInscripcionId.Id = 2;
+            this.updateEstadoAdmision();
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.admision'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
-        });
-  }
+    }
 
-  updateEstadoAdmision() {
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.inscribirse'),
-      text: this.translate.instant('GLOBAL.inscribirse') + '?',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-    };
-    Swal(opt)
-      .then((willDelete) => {
-        if (willDelete.value) {
-          this.loading = true;
-          this.inscripcionService.put('inscripcion', this.info_inscripcion)
-            .subscribe(res_ins => {
-              const r_ins = <any>res_ins;
-              if (res_ins !== null && r_ins.Type !== 'error') {
-                this.loading = false;
-                this.total = true;
-                this.captureScreen();
-              }
-            },
-              (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
-                  title: error.status + '',
-                  text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-                    this.translate.instant('GLOBAL.admision'),
-                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    updateEstadoAdmision() {
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.inscribirse'),
+        text: this.translate.instant('GLOBAL.inscribirse') + '?',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+      };
+      Swal(opt)
+        .then((willDelete) => {
+          if (willDelete.value) {
+            this.loading = true;
+            this.inscripcionService.put('inscripcion', this.info_inscripcion)
+              .subscribe(res_ins => {
+                const r_ins = <any>res_ins;
+                if (res_ins !== null && r_ins.Type !== 'error') {
+                  this.loading = false;
+                  this.total = true;
+                  this.captureScreen();
+                }
+              },
+                (error: HttpErrorResponse) => {
+                  Swal({
+                    type: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                      this.translate.instant('GLOBAL.admision'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
                 });
-              });
-        }
-      });
-  }
+          }
+        });
+    }
 
   public captureScreen() {
     this.loading = true;

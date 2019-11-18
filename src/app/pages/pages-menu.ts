@@ -115,13 +115,56 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     title:  'Inscripcion',
     icon:  'nb-compose',
-    link:  '/pages/inscripcion',
+    link:  '',
     key:  'inscripcion',
     children:  [
       {
-        title:  'Posgrado',
-        link:  '/pages/inscripcion/posgrado',
-        key:  'inscripcion_posgrado',
+        title:  'Inscripcion',
+        icon: 'nb-edit',
+        link:  '/pages/inscripcion/inscripcion_general',
+        key:  'inscripcion_general',
+      },
+    ],
+  },
+  {
+    title: 'Reportes',
+    icon: 'nb-compose',
+    link: '',
+    key: 'reportes',
+    children: [
+      {
+        title: 'Inscripciones',
+        icon: '	nb-maximize',
+        link: '',
+        key: 'inscripciones',
+        children: [
+          {
+            title: 'Inscritos por proyecto',
+            icon: 'nb-list',
+            link: '/pages/reportes/inscripciones/inscritos-proyecto',
+            key: 'inscritos_por_proyecto',
+          },
+        ],
+      },
+      {
+        title: 'Proyectos',
+        icon: '	nb-maximize',
+        link: '',
+        key: 'proyectos_curriculares',
+        children: [
+          {
+            title: 'Proyectos',
+            icon: 'nb-list',
+            link: '/pages/reportes/proyectos/list-proyectos',
+            key: 'lista_proyectos_curriculares',
+          },
+          {
+            title: 'HistoricoAcreditaciones',
+            icon: 'nb-list',
+            link: '/pages/reportes/proyectos/historico-acreditaciones',
+            key: 'historico_acreditaciones',
+          },
+        ],
       },
     ],
   },
