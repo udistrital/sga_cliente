@@ -144,64 +144,77 @@ export class CrudInformacionFamiliarComponent implements OnInit {
 
   public validarForm(event: any) {
     // console.log(event.data);
-    let formData = event.data.InformacionFamiliar;
-    let tercero: Tercero = {
-      Id: 0,
-      NombreCompleto: 'Mario Pepito Perez',
-      TipoContribuyenteId: {
-        Id: 1,
-        Nombre: undefined,
-      }
-    }
-    let informacionFamiliarPost: TrPostInformacionFamiliar = {
-      Tercero_Familiar: tercero,
-      Familiares: [
-        {
-          Id: 0,          
-          TerceroId: tercero,        
-          TerceroFamiliarId: {
-            Id: 0,
-            NombreCompleto: formData.NombreFamiliarPrincipal,
-            TipoContribuyenteId: {
-              Id: 1,
-              Nombre: undefined,
-            }
-          },       
-          TipoParentescoId: formData.Parentesco, 
-          CodigoAbreviacion: 'CONTPRIN',
-        },
-        {
-          Id: 0,             
-          TerceroId: tercero,        
-          TerceroFamiliarId: {
-            Id: 0,
-            NombreCompleto: formData.NombreFamiliarAlterno,
-            TipoContribuyenteId: {
-              Id: 1,
-              Nombre: undefined,
-            }
-          },
-          TipoParentescoId: formData.ParentescoAlterno,
-          CodigoAbreviacion: 'CONTALT',    
-        }
-      ],
-    }
-    this.sgaMidService.post('inscripciones/post_informacion_familiar', informacionFamiliarPost)
-        .subscribe((res: any) => {
-          if (res.Type === 'error') {
-            Swal({
-              type: 'error',
-              title: res.Code,
-              text: this.translate.instant('ERROR.' + res.Code),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-            this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
-          } else {
-            this.showToast('success', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('informacion_familiar.seguro_continuar_registrar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(opt)
+    .then((willDelete) => {
+      if (willDelete.value) {
+        let formData = event.data.InformacionFamiliar;
+        let tercero: Tercero = {
+          Id: 0,
+          NombreCompleto: 'Mario Pepito Perez',
+          TipoContribuyenteId: {
+            Id: 1,
+            Nombre: undefined,
           }
-        }, () => {
-            this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
-        });
+        }
+        let informacionFamiliarPost: TrPostInformacionFamiliar = {
+          Tercero_Familiar: tercero,
+          Familiares: [
+            {
+              Id: 0,          
+              TerceroId: tercero,        
+              TerceroFamiliarId: {
+                Id: 0,
+                NombreCompleto: formData.NombreFamiliarPrincipal,
+                TipoContribuyenteId: {
+                  Id: 1,
+                  Nombre: undefined,
+                }
+              },       
+              TipoParentescoId: formData.Parentesco, 
+              CodigoAbreviacion: 'CONTPRIN',
+            },
+            {
+              Id: 0,             
+              TerceroId: tercero,        
+              TerceroFamiliarId: {
+                Id: 0,
+                NombreCompleto: formData.NombreFamiliarAlterno,
+                TipoContribuyenteId: {
+                  Id: 1,
+                  Nombre: undefined,
+                }
+              },
+              TipoParentescoId: formData.ParentescoAlterno,
+              CodigoAbreviacion: 'CONTALT',    
+            }
+          ],
+        }
+        this.sgaMidService.post('inscripciones/post_informacion_familiar', informacionFamiliarPost)
+            .subscribe((res: any) => {
+              if (res.Type === 'error') {
+                Swal({
+                  type: 'error',
+                  title: res.Code,
+                  text: this.translate.instant('ERROR.' + res.Code),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+                this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
+              } else {
+                this.showToast('success', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('informacion_familiar.informacion_familiar_actualizada'));
+              }
+            }, () => {
+                this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
+            });
+      }
+    });
   }
 
 }

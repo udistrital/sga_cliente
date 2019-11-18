@@ -559,5 +559,10 @@
         "info_caracteristica": "Characteristic information",
         "informacion_contacto": "Contact information",
         "informacion_familiar": "Family information"
+    },
+    "informacion_familiar": {
+        "informacion_familiar_no_actualizada": "Family information not updated",
+        "informacion_familiar_actualizada": "Familiy information updated",
+        "seguro_continuar_registrar": "Are you sureyo want to register this family information?"
     }
 }
