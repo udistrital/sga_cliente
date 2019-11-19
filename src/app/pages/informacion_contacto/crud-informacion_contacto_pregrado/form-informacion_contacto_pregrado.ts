@@ -101,15 +101,6 @@ export let FORM_INFORMACION_CONTACTO_PREGRADO = {
         {
             etiqueta: 'select',
             claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
-            nombre: 'EstratoSocioenconomico',
-            label_i18n: 'estrato',
-            placeholder_i18n: 'estrato',
-            requerido: true,
-            opciones: [],
-        },
-        {
-            etiqueta: 'select',
-            claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
             nombre: 'EstratoSocioenconomicoCostea',
             label_i18n: 'estrato_costea',
             placeholder_i18n: 'estrato',

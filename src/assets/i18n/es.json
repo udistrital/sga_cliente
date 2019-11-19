@@ -665,7 +665,10 @@
         "erro_ano_vigencia": "Por favor ingrese el numero de años, máximo 1 digitos.",
         "vigencia_año": "# Años de vigencia",
         "fecha_calculada_vencimiento": "El registro se vence el:",
-        "proyecto_no_cargado": "Proyecto no cargado"
+        "proyecto_no_cargado": "Proyecto no cargado",
+        "regresar": "Regresar",
+        "siguiente": "Siguiente",
+        "reset": "Reiniciar registro"
     },
     "consultaproyecto": {
         "titulo": "Consulta de un proyecto académico ",

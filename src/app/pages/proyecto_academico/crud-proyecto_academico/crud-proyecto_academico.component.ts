@@ -9,7 +9,6 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
-import { UnidadTiempoService } from '../../../@core/data/unidad_tiempo.service';
 import { ProyectoAcademicoInstitucion } from '../../../@core/data/models/proyecto_academico/proyecto_academico_institucion';
 import { TipoTitulacion } from '../../../@core/data/models/proyecto_academico/tipo_titulacion';
 import { Metodologia } from '../../../@core/data/models/proyecto_academico/metodologia';
@@ -25,6 +24,7 @@ import { DependenciaTipoDependencia } from '../../../@core/data/models/oikos/dep
 import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as moment from 'moment';
+import {MatDialogRef} from '@angular/material/dialog';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 // import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
 import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
@@ -33,6 +33,7 @@ import { Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import * as momentTimezone from 'moment-timezone';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
@@ -60,6 +61,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   opcionSeleccionadoNivel: any;
   opcionSeleccionadoMeto: any;
   checkenfasis: boolean = false;
+  checkregistro: boolean = false;
   checkciclos: boolean = false;
   checkofrece: boolean = false;
   nucleo = [];
@@ -93,6 +95,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   uidActoAdministrativo: string;
   idDocumentoAdministrativo: number;
   idDocumentoResolucion: number;
+
+  isLinear = true;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -135,7 +139,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
-    private unidadtiempoService: UnidadTiempoService,
+    private routerService: Router,
     private dialogService: NbDialogService,
     private activatedRoute: ActivatedRoute,
     private nuxeoService: NuxeoService,
@@ -159,6 +163,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         numero_proyecto: ['', Validators.required],
         creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
         duracion_proyecto: ['', Validators.required],
+        selector: [''],
      })
      this.resoluform = formBuilder.group({
       resolucion: ['', Validators.required],
@@ -470,7 +475,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     });
   }
   loadunidadtiempo() {
-    this.unidadtiempoService.get('unidad_tiempo')
+    this.coreService.get('unidad_tiempo')
     .subscribe(res => {
       const r = <any>res;
       if (res !== null && r.Type !== 'error') {
@@ -541,6 +546,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DDTHH:mm:ss');
     this.fecha_vencimiento = convertDate
     return new Date(convertDate);
+  }
+  openlist( ): void {
+    this.routerService.navigateByUrl(`pages/proyecto_academico/list-proyecto_academico`);
   }
 
   registroproyecto() {
@@ -704,6 +712,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
               }; Swal(opt1)
               .then((willDelete) => {
                 if (willDelete.value) {
+                  this.checkregistro = true;
+                  this.openlist();
                 }
               });
             }

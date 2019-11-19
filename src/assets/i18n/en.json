@@ -653,7 +653,10 @@
         "erro_ano_vigencia": "Please enter the number of years, maximum 1 digits.",
         "vigencia_año": "# Years of validity",
         "fecha_calculada_vencimiento": "Registration expires on:",
-        "proyecto_no_cargado": "Project not loaded"
+        "proyecto_no_cargado": "Project not loaded",
+        "regresar": "To return",
+        "siguiente": "Next",
+        "reset": "Restart Registration"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
