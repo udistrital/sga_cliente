@@ -722,7 +722,8 @@
         "coordinador_no_asignado": "Coordinador no asignado!",
         "creado": "Coordinador Asignado!",
         "coordinador_asignado": "Coordinador asignado Correctamente!",
-        "seguro_continuar_asignar": "¿Esta seguro de asignar este coordinador a este proyecto académico?"
+        "seguro_continuar_asignar": "¿Esta seguro de asignar este coordinador a este proyecto académico?",
+        "tag_asigcoordinador": "Asignación de coordinador"
 
     },
     "enfasis": {

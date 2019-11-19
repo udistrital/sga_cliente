@@ -710,7 +710,9 @@
         "coordinador_no_asignado": "Coordinador no asignado!",
         "creado": "Assigned Coordinator!",
         "coordinador_asignado": "Coordinator assigned Correctly!",
-        "seguro_continuar_asignar": "Are you sure you assign this coordinator to this academic project?"
+        "seguro_continuar_asignar": "Are you sure you assign this coordinator to this academic project?",
+        "tag_asigcoordinador": "Coordinator Assignment"
+
     },
     "enfasis": {
         "enfasis": "Emphasys",
