@@ -16,7 +16,8 @@
 
                 <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
                     <!--  Columna ID-->
-                    <ng-container matColumnDef="Id">
+
+                    <ng-container matColumnDef="Id" >
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.id' | translate }}</mat-header-cell>
                         <mat-cell *matCellDef="let row; let i = index" class="text-capitalize"> {{row.ProyectoAcademico.Id}} </mat-cell>
                     </ng-container>
@@ -30,7 +31,7 @@
                     <!-- Columna Nombre-->
                     <ng-container matColumnDef="Nombre Proyecto">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.nombre' | translate }} </mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.ProyectoAcademico.Nombre}} </mat-cell>
+                        <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.ProyectoAcademico.Nombre}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="Nivel Proyecto">
