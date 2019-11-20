@@ -44,6 +44,8 @@ import { DocumentoService } from '../../../@core/data/documento.service';
   styleUrls: ['./crud-proyecto_academico.component.scss'],
 })
 export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
+  isLinear = true;
+  checkregistro = false;
   config: ToasterConfig;
   settings: any;
   basicform: any;
