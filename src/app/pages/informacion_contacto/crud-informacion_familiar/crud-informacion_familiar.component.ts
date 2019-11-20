@@ -2,9 +2,14 @@ import { Lugar } from './../../../@core/data/models/lugar/lugar';
 import { InformacionContacto } from './../../../@core/data/models/informacion/informacion_contacto';
 import { InfoContactoGet } from './../../../@core/data/models/ente/info_contacto_get';
 import { InfoContactoPut } from './../../../@core/data/models/ente/info_contacto_put';
+import { TipoParentesco } from './../../../@core/data/models/terceros/tipo_parentesco';
+import { Tercero } from './../../../@core/data/models/terceros/tercero';
+import { TrPostInformacionFamiliar } from './../../../@core/data/models/terceros/tercero_familiar';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
+import { TercerosService } from '../../../@core/data/terceros.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FORM_INFORMACION_FAMILIAR } from './form-informacion_familiar';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -46,7 +51,9 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private campusMidService: CampusMidService,
+    private sgaMidService: SgaMidService,
     private ubicacionesService: UbicacionService,
+    private tercerosService: TercerosService,
     // private store: Store<IAppState>,
     // private listService: ListService,
     private toasterService: ToasterService) {
@@ -57,6 +64,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     });
     // this.listService.findPais();
     // this.loadLists();
+    this.loadOptionsParentesco();
     this.loading = false;
   }
 
@@ -120,6 +128,94 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     //     this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
     //   },
     // );
+  }
+
+  loadOptionsParentesco(): void {
+    let parentescos: Array<any> = [];
+    this.tercerosService.get('tipo_parentesco/?limit=0&query=Activo:true')
+      .subscribe(res => {
+        if (res !== null) {
+          parentescos = <Array<TipoParentesco>>res;
+        }
+        this.formInformacionFamiliar.campos[ this.getIndexForm('Parentesco') ].opciones = parentescos;
+        this.formInformacionFamiliar.campos[ this.getIndexForm('ParentescoAlterno') ].opciones = parentescos;
+      });
+  }
+
+  public validarForm(event: any) {
+    // console.log(event.data);
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('informacion_familiar.seguro_continuar_registrar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(opt)
+    .then((willDelete) => {
+      if (willDelete.value) {
+        const formData = event.data.InformacionFamiliar;
+        const tercero: Tercero = {
+          Id: 0,
+          NombreCompleto: 'Mario Pepito Perez',
+          TipoContribuyenteId: {
+            Id: 1,
+            Nombre: undefined,
+          },
+        }
+        const informacionFamiliarPost: TrPostInformacionFamiliar = {
+          Tercero_Familiar: tercero,
+          Familiares: [
+            {
+              Id: 0,
+              TerceroId: tercero,
+              TerceroFamiliarId: {
+                Id: 0,
+                NombreCompleto: formData.NombreFamiliarPrincipal,
+                TipoContribuyenteId: {
+                  Id: 1,
+                  Nombre: undefined,
+                },
+              },
+              TipoParentescoId: formData.Parentesco,
+              CodigoAbreviacion: 'CONTPRIN',
+            },
+            {
+              Id: 0,
+              TerceroId: tercero,
+              TerceroFamiliarId: {
+                Id: 0,
+                NombreCompleto: formData.NombreFamiliarAlterno,
+                TipoContribuyenteId: {
+                  Id: 1,
+                  Nombre: undefined,
+                },
+              },
+              TipoParentescoId: formData.ParentescoAlterno,
+              CodigoAbreviacion: 'CONTALT',
+            },
+          ],
+        }
+        this.sgaMidService.post('inscripciones/post_informacion_familiar', informacionFamiliarPost)
+            .subscribe((res: any) => {
+              if (res.Type === 'error') {
+                Swal({
+                  type: 'error',
+                  title: res.Code,
+                  text: this.translate.instant('ERROR.' + res.Code),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+                this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
+              } else {
+                this.showToast('success', this.translate.instant('GLOBAL.actualizar'),
+                    this.translate.instant('informacion_familiar.informacion_familiar_actualizada'));
+              }
+            }, () => {
+                this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
+            });
+      }
+    });
   }
 
 }

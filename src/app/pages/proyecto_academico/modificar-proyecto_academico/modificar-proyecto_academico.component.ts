@@ -9,7 +9,6 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
-import { UnidadTiempoService } from '../../../@core/data/unidad_tiempo.service';
 import { ProyectoAcademicoInstitucion } from '../../../@core/data/models/proyecto_academico/proyecto_academico_institucion';
 import { TipoTitulacion } from '../../../@core/data/models/proyecto_academico/tipo_titulacion';
 import { Metodologia } from '../../../@core/data/models/proyecto_academico/metodologia';
@@ -172,7 +171,6 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
     private routerService: Router,
-    private unidadtiempoService: UnidadTiempoService,
     private formBuilder: FormBuilder) {
       this.dpDayPickerConfig = {
         locale: 'es',
@@ -225,8 +223,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
    this.loadunidadtiempo();
    this.loadarea();
    this.loadnucleo();
-   this.loadpersonas();
    this.loadenfasis();
+   this.loadpersonas();
    this.loadfechacoordinador();
    this.loadfechaaltacalidad();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
@@ -351,14 +349,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             // console.log("files", filesResponse);
             filesToGet.forEach((file: any) => {
               const url = filesResponse[file.Id];
-              // let newWindow = window.open('','_blank')
-              const new_tab = window.open('', '_blank', 'toolbar=no,' +
-              'location=no, directories=no, status=no, menubar=no,' +
-              'scrollbars=no, resizable=no, copyhistory=no, height=400, width=400, top = 20, left=20');
-              new_tab.onload = () => {
-                new_tab.location = url;
-              };
-              new_tab.focus();
+              window.open(url);
             });
           }
         },
@@ -554,7 +545,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     });
   }
   loadunidadtiempo() {
-    this.unidadtiempoService.get('unidad_tiempo')
+    this.coreService.get('unidad_tiempo')
     .subscribe(res => {
       const r = <any>res;
       if (res !== null && r.Type !== 'error') {
