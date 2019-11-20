@@ -812,5 +812,10 @@
         "transfe": "Transferencia interna",
         "reingreso": "Reingreso",
         "transferencia": "Datos de transferencia"
+    },
+    "informacion_familiar": {
+        "informacion_familiar_no_actualizada": "Información familiar no actualizada",
+        "informacion_familiar_actualizada": "Información familiar actualizada",
+        "seguro_continuar_registrar": "¿Está seguto de registrar está información familiar?"
     }
 }
