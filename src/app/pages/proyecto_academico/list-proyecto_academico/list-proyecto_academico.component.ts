@@ -182,6 +182,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     this.sgamidService.get('consulta_proyecto_academico/' )
     .subscribe((res: any[]) => {
     if (res !== null && res[0] !== 'error') {
+      console.info(res)
       this.dataSource = new MatTableDataSource(res);
       this.dataSource.filterPredicate = (data: any, filter: string) => data.ProyectoAcademico.Nombre.indexOf(filter) !== -1;
     }else {

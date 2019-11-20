@@ -7,7 +7,7 @@ export let FORM_INFORMACION_FAMILIAR = {
     campos: [
         {
             etiqueta: 'input',
-            claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+            claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
             nombre: 'NombreFamiliarPrincipal',
             label_i18n: 'nombre_familiar',
             placeholder_i18n: 'nombre_familiar',
@@ -43,15 +43,6 @@ export let FORM_INFORMACION_FAMILIAR = {
             tipo: 'text',
         },
         {
-            etiqueta: 'input',
-            claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
-            nombre: 'NombreFamiliarAlterno',
-            label_i18n: 'nombre_familiar_alterno',
-            placeholder_i18n: 'nombre_familiar_alterno',
-            requerido: true,
-            tipo: 'text',
-        },
-        {
             etiqueta: 'select',
             claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
             nombre: 'Parentesco',
@@ -64,8 +55,17 @@ export let FORM_INFORMACION_FAMILIAR = {
         },
         {
             etiqueta: 'input',
+            claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
+            nombre: 'NombreFamiliarAlterno',
+            label_i18n: 'nombre_familiar_alterno',
+            placeholder_i18n: 'nombre_familiar_alterno',
+            requerido: true,
+            tipo: 'text',
+        },
+        {
+            etiqueta: 'input',
             claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
-            nombre: 'CorreoElectronico',
+            nombre: 'CorreoElectronicoAlterno',
             label_i18n: 'correo_alterno',
             placeholder_i18n: 'correo_principal_alterno',
             requerido: true,
@@ -74,7 +74,7 @@ export let FORM_INFORMACION_FAMILIAR = {
         {
             etiqueta: 'input',
             claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
-            nombre: 'Telefono',
+            nombre: 'TelefonoAlterno',
             label_i18n: 'telefono',
             placeholder_i18n: 'telefono',
             requerido: true,
@@ -84,11 +84,22 @@ export let FORM_INFORMACION_FAMILIAR = {
         {
             etiqueta: 'input',
             claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
-            nombre: 'DireccionResidencia',
+            nombre: 'DireccionResidenciaAlterno',
             label_i18n: 'direccion_residencia',
             placeholder_i18n: 'direccion_residencia',
             requerido: true,
             tipo: 'text',
+        },
+        {
+            etiqueta: 'select',
+            claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+            nombre: 'ParentescoAlterno',
+            label_i18n: 'parentesco',
+            placeholder_i18n: 'parentesco',
+            requerido: true,
+            tipo: 'Parentesco',
+            key: 'Nombre',
+            opciones: [],
         },
     ],
 }

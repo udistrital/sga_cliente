@@ -202,73 +202,82 @@
                             </nb-card-body>
                         </nb-card>
                     </div>
-                    <div class="row-sm-6">
-                        <nb-card class="m-4" accent="info">
-                            <nb-card-header>{{ 'editarproyecto.coordinacion' | translate }}</nb-card-header>
-                            <nb-card-body style="overflow: visible">
-                                <form id="coordinadoform" [formGroup]="coordinador">
-
-                                    <div class="col-10">
-                                        <mat-form-field style="width: 100%;" floatLabel="always">
-                                            <mat-label>*{{'editarproyecto.agregar_coordinado' | translate}}:</mat-label>
-                                            <mat-select
-                                                [formControl]="Campo29Control" required
-                                                [(ngModel)]="coordinadorSeleccionado">
-                                                <mat-option>--Seleccionar--</mat-option>
-                                                <mat-option *ngFor="let persona of personas" [value]="persona">
-                                                    {{persona.PrimerNombre}} {{persona.SegundoNombre}}
-                                                    {{persona.PrimerApellido}} {{persona.SegundoApellido}}
-                                                </mat-option>
-                                            </mat-select>
-                                            <mat-error *ngIf="Campo29Control.hasError('required')">
-                                                {{'editarproyecto.alerta_agregar_coordinador' | translate}}</mat-error>
-                                        </mat-form-field>
-                                        <br>
-                                        <br>
-                                        <mat-form-field>
-                                            <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
-                                            <input matInput [(ngModel)]="fecha_creacion_cordin"
-                                                placeholder="{{ 'proyecto.fecha_creacion' | translate }}"
-                                                formControlName="fecha_creacion_coordinador"
-                                                [dpDayPicker]="dpDayPickerConfig" theme="dp-material" mode="daytime">
-                                            <mat-error *ngIf="Campo14Control.hasError('required')">
-                                                {{ 'editarproyecto.erro_fecha_creacion' | translate }}</mat-error>
-                                        </mat-form-field>
-                                        <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
-                                        <button mat-button type="button" (click)="fileInputResolucionCoordinador.click()">
-                                            <mat-icon>attach_file</mat-icon>
-                                            <input #fileInputResolucionCoordinador type="file" (change)="onInputResolucionCoordinador($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
-                                        </button>
-                                        <button *ngIf="data.id_documento_registro_coordinador" mat-button type="button" (click)="downloadFile(data.id_documento_registro_coordinador)">
-                                            <mat-icon>cloud_download</mat-icon>
-                                        </button>
-                                        <mat-error *ngIf="!fileResolucionCoordinador">{{ 'ERROR.no_documento' | translate }}</mat-error>
-                                        <label *ngIf="fileResolucionCoordinador">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucionCoordinador.name}}</label>
-                                        <br>
-
-                                    </div>
-                                    <br>
-                                    <br>
-                                    <button class="btn btn-success btn-sm"
-                                        (click)="registrocoordinador()">{{'editarproyecto.asignar_coordinado' | translate}}</button>
-                                    <br>
-                                </form>
-                            </nb-card-body>
-                        </nb-card>
-                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12 col-sm-3"> <button mat-raised-button color="primary"
+        <div class="box">
+            <div class="item1"> <button mat-button 
                     (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
-            <div class="col-xs-12 col-sm-5"> <button mat-raised-button [color]="'success'"
+            <div class="item2"> <button mat-button 
                     (click)="cloneProject(data)">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
-            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success-1'"
+            <div class="item3"> <button mat-button 
                     (click)="putinformacionbasica()">{{ 'editarproyecto.cambios' | translate }}</button></div>
         </div>
 
     </mat-tab>
+
+
+    <mat-tab label="{{ 'editarproyecto.tag_asigcoordinador' | translate }}">
+            <div class="inner col-md-8 col-lg-8">
+                <div class="centre row-sm-6">
+                        <nb-card class="m-4" accent="info">
+                                <nb-card-header>{{ 'editarproyecto.coordinacion' | translate }}</nb-card-header>
+                                <nb-card-body style="overflow: visible">
+                                    <form id="coordinadoform" [formGroup]="coordinador">
+    
+                                        <div class="col-10">
+                                            <mat-form-field style="width: 100%;" floatLabel="always">
+                                                <mat-label>*{{'editarproyecto.agregar_coordinado' | translate}}:</mat-label>
+                                                <mat-select
+                                                    [placeholder]="translate.instant('produccion_academica.placeholder_agregar_autor')"
+                                                    [formControl]="Campo29Control" required
+                                                    [(ngModel)]="coordinadorSeleccionado">
+                                                    <mat-option>--Seleccionar--</mat-option>
+                                                    <mat-option *ngFor="let persona of personas" [value]="persona">
+                                                        {{persona.PrimerNombre}} {{persona.SegundoNombre}}
+                                                        {{persona.PrimerApellido}} {{persona.SegundoApellido}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="Campo29Control.hasError('required')">
+                                                    {{'editarproyecto.alerta_agregar_coordinador' | translate}}</mat-error>
+                                            </mat-form-field>
+                                            <br>
+                                            <br>
+                                            <mat-form-field>
+                                                <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
+                                                <input matInput [(ngModel)]="fecha_creacion_cordin"
+                                                    placeholder="{{ 'proyecto.fecha_creacion' | translate }}"
+                                                    formControlName="fecha_creacion_coordinador"
+                                                    [dpDayPicker]="dpDayPickerConfig" theme="dp-material" mode="daytime">
+                                                <mat-error *ngIf="Campo14Control.hasError('required')">
+                                                    {{ 'editarproyecto.erro_fecha_creacion' | translate }}</mat-error>
+                                            </mat-form-field>
+                                            <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
+                                            <button mat-button type="button" (click)="fileInputResolucionCoordinador.click()">
+                                                <mat-icon>attach_file</mat-icon>
+                                                <input #fileInputResolucionCoordinador type="file" (change)="onInputResolucionCoordinador($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
+                                            </button>
+                                            <button *ngIf="data.id_documento_registro_coordinador" mat-button type="button" (click)="downloadFile(data.id_documento_registro_coordinador)">
+                                                <mat-icon>cloud_download</mat-icon>
+                                            </button>
+                                            <mat-error *ngIf="!fileResolucionCoordinador">{{ 'ERROR.no_documento' | translate }}</mat-error>
+                                            <label *ngIf="fileResolucionCoordinador">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucionCoordinador.name}}</label>
+                                            <br>
+    
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <button class="btn btn-success btn-sm"
+                                            (click)="registrocoordinador()">{{'editarproyecto.asignar_coordinado' | translate}}</button>
+                                        <br>
+                                    </form>
+                                </nb-card-body>
+                            </nb-card>
+                </div>
+            </div>
+        </mat-tab>
+
+
     <mat-tab label="{{ 'editarproyecto.tag_registro' | translate }}">
         <div class="col-md-12 col-lg-12 ">
             <div class="row">
@@ -451,14 +460,14 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12 col-sm-3"> <button mat-raised-button color="primary"
-                    (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
-            <div class="col-xs-12 col-sm-5"> <button mat-raised-button
-                    [color]="'success'">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
-            <div class="col-xs-12 col-sm-4"> <button mat-raised-button [color]="'success-1'"
-                    (click)="putinformacionregistro()">{{ 'editarproyecto.cambios' | translate }}</button></div>
-        </div>
+        <div class="box">
+                <div class="item1"> <button mat-button 
+                        (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
+                <div class="item2"> <button mat-button 
+                        (click)="cloneProject(data)">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
+                <div class="item3"> <button mat-button 
+                        (click)="putinformacionregistro()">{{ 'editarproyecto.cambios' | translate }}</button></div>
+            </div>
     </mat-tab>
 
 
@@ -502,13 +511,13 @@
                 </nb-card>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-3"> <button mat-raised-button color="primary"
-                    (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
-            <div class="col-sm-5"> <button mat-raised-button
-                    [color]="'success'">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
-            <div class="col-sm-4"> <button mat-raised-button [color]="'success-1'"
-                    (click)="putinformacionbasica()">{{ 'editarproyecto.cambios' | translate }}</button></div>
-        </div>
+        <div class="box">
+                <div class="item1" > <button mat-button 
+                        (click)="onclick()">{{ 'GLOBAL.cancelar' | translate }}</button></div>
+                <div class="item2"> <button mat-button 
+                        (click)="cloneProject(data)">{{ 'editarproyecto.botum_apartir' | translate }}</button> </div>
+                <div class="item3"> <button mat-button 
+                        (click)="putinformacionbasica()">{{ 'editarproyecto.cambios' | translate }}</button></div>
+            </div>
     </mat-tab>
 </mat-tab-group>

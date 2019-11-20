@@ -35,7 +35,7 @@
 
                         <mat-form-field>
                                 <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
-                                <input matInput [(ngModel)]="fecha_creacion"
+                                <input matInput #box (blur)="mostrarfecha()" [(ngModel)]="fecha_creacion"
                                     placeholder="{{ 'proyecto.fecha_creacion' | translate }}"
                                     formControlName="fecha_creacion" [dpDayPicker]="dpDayPickerConfig"
                                     theme="dp-material" mode="daytime">
@@ -45,16 +45,14 @@
 
                         <br>
                         <br>
-                        <div class="form-group row">
 
                             <label class="label col-sm-8 col-form-label ">{{ 'proyecto.vigencia' | translate }}</label>
                             <mat-form-field>
-                                <input matInput placeholder="{{ 'proyecto.vigencia_mes' | translate }}"
+                                <input matInput #box (blur)="mostrarfecha()" placeholder="{{ 'proyecto.vigencia_mes' | translate }}"
                                     formControlName="mes_vigencia" class="form-control" name="resolucion_proyecto">
                                 <mat-error *ngIf="Campo22Control.hasError('required')">
                                     {{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
                             </mat-form-field>
-                            <div class="col-sm-8">
                                 <mat-form-field>
                                     <input matInput #box placeholder="{{ 'proyecto.vigencia_año' | translate }}"
                                         formControlName="ano_vigencia" class="form-control"
@@ -63,8 +61,6 @@
                                         {{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
                                 </mat-form-field>
                                 <br>
-                            </div>
-                        </div>
                         <br>
                         <label
                             class="label col-sm-8 col-form-label">{{ 'proyecto.fecha_calculada_vencimiento' | translate }}</label>
@@ -80,7 +76,7 @@
 
 
 
-        <button (click)="crearregistro()" type="submit" nbButton
+        <button mat-button (click)="crearregistro()" type="submit" nbButton
             status="success">{{ 'historial_registro.crear_registro' | translate }}</button>
 
 
