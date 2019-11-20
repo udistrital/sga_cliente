@@ -13,19 +13,31 @@
   /deep/ .mat-select-value {
     color: nb-theme(color-fg-text);
   }
+  
+  .mat-button, .mat-raised-button {
+    background-color:rgb(0, 162, 255);
+    color: #fff;
+  }
+
 
   /deep/ .mat-select-placeholder {
-    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+    color: transparentize($color: nb-theme(color-fg-text), $amount: 0.6);
   }
 
   /deep/ .mat-form-field-underline {
     background-color: nb-theme(form-control-border-color);
   }
+  
 
-  nb-card-body {
-    overflow: visible;
-    text-align: center;
+  ::ng-deep .mat-checkbox .mat-checkbox-frame {
+    border-color: rgb(0, 153, 255);
   }
+  ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+  .mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate,
+  .mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate {
+    background-color: rgb(0, 119, 255) !important; /* Red background for example */
+}
 
   .input-group {
     margin-bottom: 1rem;
@@ -117,7 +129,7 @@
     position: relative;
 
     .form-control {
-
+      text-decoration-color: black;
       padding-left: 3rem;
     }
 
@@ -132,6 +144,25 @@
     }
   }
 
+  .columna {
+    width:33%;
+    float:left;
+  }
+  .columna1 {
+    width:50%;
+    float:left;
+  }
+  
+  @media (max-width: 500px) {
+    
+    .columna {
+      width:auto;
+      float:none;
+    }
+    
+  }
+  
+  
   .dropdown {
     min-width: 7rem;
   }

@@ -18,6 +18,11 @@
     width: 100%;
 }
 
+.mat-button, .mat-raised-button {
+    background-color:rgb(0, 162, 255);
+    color: #fff;
+  }
+
 .mat-table {
     overflow: auto;
 }
