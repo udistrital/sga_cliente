@@ -22,9 +22,9 @@ import { Titulacion } from '../../../@core/data/models/proyecto_academico/titula
 import { TipoDependencia } from '../../../@core/data/models/oikos/tipo_dependencia';
 import { DependenciaTipoDependencia } from '../../../@core/data/models/oikos/dependencia_tipo_dependencia';
 import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
+import { TrDependenciaPadre } from '../../../@core/data/models/oikos/tr_dependencia_padre';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as moment from 'moment';
-import {MatDialogRef} from '@angular/material/dialog';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 // import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
 import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
@@ -33,7 +33,6 @@ import { Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
 import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
 import * as momentTimezone from 'moment-timezone';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
@@ -61,7 +60,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   opcionSeleccionadoNivel: any;
   opcionSeleccionadoMeto: any;
   checkenfasis: boolean = false;
-  checkregistro: boolean = false;
   checkciclos: boolean = false;
   checkofrece: boolean = false;
   nucleo = [];
@@ -95,8 +93,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   uidActoAdministrativo: string;
   idDocumentoAdministrativo: number;
   idDocumentoResolucion: number;
-
-  isLinear = true;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -139,7 +135,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
-    private routerService: Router,
     private dialogService: NbDialogService,
     private activatedRoute: ActivatedRoute,
     private nuxeoService: NuxeoService,
@@ -163,7 +158,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         numero_proyecto: ['', Validators.required],
         creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
         duracion_proyecto: ['', Validators.required],
-        selector: [''],
      })
      this.resoluform = formBuilder.group({
       resolucion: ['', Validators.required],
@@ -547,9 +541,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.fecha_vencimiento = convertDate
     return new Date(convertDate);
   }
-  openlist( ): void {
-    this.routerService.navigateByUrl(`pages/proyecto_academico/list-proyecto_academico`);
-  }
 
   registroproyecto() {
     try {
@@ -666,12 +657,23 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         CorreoElectronico: this.basicform.value.correo_proyecto,
         DependenciaTipoDependencia: [this.dependencia_tipo_dependencia],
       }
+      const tr_dependencia_padre_post: TrDependenciaPadre = {
+        PadreId: {
+          Id: this.opcionSeleccionadoFacultad['Id'],
+          Nombre: undefined,
+          TelefonoDependencia: undefined,
+          CorreoElectronico: undefined,
+          DependenciaTipoDependencia: undefined,
+        },
+        HijaId: this.dependencia,
+      }
       this.proyecto_academicoPost = {
         ProyectoAcademicoInstitucion: this.proyecto_academico,
         Registro: [this.registro_califacado_acreditacion],
         Enfasis: this.enfasis_proyecto,
         Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
-        Oikos: this.dependencia,
+        Oikos: tr_dependencia_padre_post,
+        // Oikos: this.dependencia,
       }
       const opt: any = {
         title: this.translate.instant('GLOBAL.registrar'),
@@ -712,8 +714,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
               }; Swal(opt1)
               .then((willDelete) => {
                 if (willDelete.value) {
-                  this.checkregistro = true;
-                  this.openlist();
                 }
               });
             }
