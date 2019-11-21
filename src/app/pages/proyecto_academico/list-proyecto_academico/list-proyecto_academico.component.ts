@@ -278,7 +278,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.ciclos = res.map((data: any) => (data.CiclosLetra));
         this.oferta = res.map((data: any) => (data.OfertaLetra));
         this.enfasis = res.map((data: any) => (data.Enfasis))[0];
-        this.idfacultad = res.map((data: any) => (data.ProyectoAcademico.DependenciaId));
+        // this.idfacultad = res.map((data: any) => (data.ProyectoAcademico.DependenciaId));
+        this.idfacultad = res.map((data: any) => (data.ProyectoAcademico.FacultadId));
         this.idnivel = res.map((data: any) => (data.ProyectoAcademico.NivelFormacionId.Id));
         this.idmetodo = res.map((data: any) => (data.ProyectoAcademico.MetodologiaId.Id));
         this.idunidad = res.map((data: any) => (data.ProyectoAcademico.UnidadTiempoId));
