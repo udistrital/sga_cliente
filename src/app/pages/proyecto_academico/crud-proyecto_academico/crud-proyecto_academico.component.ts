@@ -648,7 +648,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         ProyectoAcademicoInstitucionId: this.proyecto_academico,
       }
       this.tipo_dependencia = {
-        Id: 1,
+        Id: 2,
       }
       this.dependencia_tipo_dependencia = {
         Id: 0,
