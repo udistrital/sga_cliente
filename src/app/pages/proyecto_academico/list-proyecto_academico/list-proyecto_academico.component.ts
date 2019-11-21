@@ -219,7 +219,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
       if (res !== null && r.Type !== 'error') {
         this.codigosnies = res.map((data: any) => (data.ProyectoAcademico.CodigoSnies));
         this.nombre = res.map((data: any) => (data.ProyectoAcademico.Nombre));
-        this.facultad = res.map((data: any) => (data.NombreDependencia));
+        // this.facultad = res.map((data: any) => (data.NombreDependencia));
+        this.facultad = res.map((data: any) => (data.NombreFacultad));
         this.nivel = res.map((data: any) => (data.ProyectoAcademico.NivelFormacionId.Nombre));
         this.metodologia = res.map((data: any) => (data.ProyectoAcademico.MetodologiaId.Nombre));
         this.abreviacion = res.map((data: any) => (data.ProyectoAcademico.CodigoAbreviacion));
@@ -265,7 +266,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
       if (res !== null && r.Type !== 'error') {
         this.codigosnies = res.map((data: any) => (data.ProyectoAcademico.CodigoSnies));
         this.nombre = res.map((data: any) => (data.ProyectoAcademico.Nombre));
-        this.facultad = res.map((data: any) => (data.NombreDependencia));
+        // this.facultad = res.map((data: any) => (data.NombreDependencia));
+        this.facultad = res.map((data: any) => (data.NombreFacultad));
         this.nivel = res.map((data: any) => (data.ProyectoAcademico.NivelFormacionId.Nombre));
         this.metodologia = res.map((data: any) => (data.ProyectoAcademico.MetodologiaId.Nombre));
         this.abreviacion = res.map((data: any) => (data.ProyectoAcademico.CodigoAbreviacion));
