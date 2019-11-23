@@ -19,6 +19,7 @@ import { InformacionBasica } from '../../../@core/data/models/proyecto_academico
 import { ModificarProyectoAcademicoComponent } from '../modificar-proyecto_academico/modificar-proyecto_academico.component';
 import { PersonaService } from '../../../@core/data/persona.service';
 import { Persona } from '../../../@core/data/models/persona';
+import { ProyectoAcademicoInstitucion } from '../../../@core/data/models/proyecto_academico/proyecto_academico_institucion';
 
 @Component({
   selector: 'ngx-list-proyecto-academico',
@@ -86,6 +87,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   id_documento_registor_calificado: string;
   id_documento_alta_calidad: string;
   id_documento_registro_coordinador: number;
+  proyecto_padre_id: ProyectoAcademicoInstitucion;
 
   constructor(private translate: TranslateService,
     private proyectoacademicoService: ProyectoAcademicoService,
@@ -129,7 +131,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
              resolucion_alta_ano: this.resolucion_alta_calidad_ano, vigencia_meses_alta: this.vigencia_resolucion_meses_alta_calidad,
              vigencia_ano_alta: this.vigencia_resolucion_anos_alta_calidad, fecha_creacion_registro_alta: this.fecha_creacion_resolucion_alta_calidad,
              id_documento_acto: this.id_documento_acto, id_documento_registor_calificado: this.id_documento_registor_calificado,
-             id_documento_alta_calidad: this.id_documento_alta_calidad, id_documento_registro_coordinador: this.id_documento_registro_coordinador},
+             id_documento_alta_calidad: this.id_documento_alta_calidad, id_documento_registro_coordinador: this.id_documento_registro_coordinador,
+             proyecto_padre_id: this.proyecto_padre_id},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -313,7 +316,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
           this.vigencia_resolucion_anos_alta_calidad = null
         }
         this.proyectoJson = res.map((data: any) => (data.ProyectoAcademico))[0];
-
+        this.proyecto_padre_id = res.map((data: any) => (data.ProyectoAcademico.ProyectoPadreId));
         this.openDialogModificar();
       }else {
       Swal(opt1)

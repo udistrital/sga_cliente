@@ -95,6 +95,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   uidActoAdministrativo: string;
   idDocumentoAdministrativo: number;
   idDocumentoResolucion: number;
+  proyecto_padre_id: ProyectoAcademicoInstitucion;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -293,6 +294,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     .subscribe((res: any) => {
       if (res.Type !== 'error' && res[0].ProyectoAcademico.Id) {
         const proyecto_a_clonar = res[0];
+        this.proyecto_padre_id = proyecto_a_clonar.ProyectoAcademico;
         // enfasis
         this.arr_enfasis_proyecto = proyecto_a_clonar.Enfasis.map((enfasis: any) => enfasis.EnfasisId);
         this.source_emphasys.load(this.arr_enfasis_proyecto);
@@ -580,7 +582,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         MetodologiaId: this.metodologia,
         NivelFormacionId: this.nivel_formacion,
         AnoActoAdministrativo: this.actoform.value.ano_acto,
-
+        ProyectoPadreId: this.proyecto_padre_id,
       }
       this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
       this.registro_califacado_acreditacion = {

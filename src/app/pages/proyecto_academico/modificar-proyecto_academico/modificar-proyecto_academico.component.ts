@@ -669,6 +669,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       MetodologiaId: this.metodologia,
       NivelFormacionId: this.nivel_formacion,
       AnoActoAdministrativo: String(this.actoform.value.ano_acto),
+      ProyectoPadreId: this.data.proyecto_padre_id,
 
     }
 
@@ -803,6 +804,7 @@ putinformacionregistro() {
         MetodologiaId: this.metodologia,
         NivelFormacionId: this.nivel_formacion,
         AnoActoAdministrativo: String(this.actoform.value.ano_acto),
+        ProyectoPadreId: this.data.proyecto_padre_id,
       }
       this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
       this.registro_califacado_acreditacion = {
@@ -941,6 +943,7 @@ putinformacionregistro() {
       MetodologiaId: this.metodologia,
       NivelFormacionId: this.nivel_formacion,
       AnoActoAdministrativo: String(this.actoform.value.ano_acto),
+      ProyectoPadreId: this.data.proyecto_padre_id,
     }
 
     this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
