@@ -105,7 +105,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       data: {codigosnies: this.codigosnies, nombre: this.nombre, facultad: this.facultad, nivel: this.nivel, metodologia: this.metodologia,
              abreviacion: this.abreviacion, correo: this.correo, numerocreditos: this.numerocreditos, duracion: this.duracion,
              tipoduracion: this.tipo_duracion, ciclos: this.ciclos, ofrece: this.oferta, enfasis: this.enfasis, Id: this.idproyecto,
-             id_documento_acto: this.id_documento_acto,proyecto_padre_id: this.proyecto_padre_id},
+             id_documento_acto: this.id_documento_acto, proyecto_padre_id: this.proyecto_padre_id},
     });
 
     dialogRef.afterClosed().subscribe(result => {
