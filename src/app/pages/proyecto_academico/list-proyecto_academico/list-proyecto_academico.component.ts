@@ -317,7 +317,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
           this.vigencia_resolucion_anos_alta_calidad = null
         }
         this.proyectoJson = res.map((data: any) => (data.ProyectoAcademico))[0];
-        this.proyecto_padre_id = res.map((data: any) => (data.ProyectoAcademico.ProyectoPadreId));
+        this.proyecto_padre_id = res.map((data: any) => (data.ProyectoAcademico.ProyectoPadreId))[0];
         this.openDialogModificar();
       }else {
       Swal(opt1)
