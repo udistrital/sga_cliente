@@ -621,6 +621,7 @@
         "proyecto": "Proyecto curricular",
         "fecha_inicio": "Fecha de inicio",
         "fecha_finaliza": "Fecha de finalización",
+        "ano": "Año",
         "filtro": "Escriba para filtrar los proyectos curriculares"
     },
     "proyecto": {
@@ -634,11 +635,12 @@
         "metodologia_proyecto": "Metodología",
         "abreciacion_proyecto": "Abreviación",
         "correo_proyecto": "Correo Electrónico",
-        "numero_proyecto": "Telefono",
-        "creditos_proyecto": "Numero de creditos",
+        "numero_proyecto": "Teléfono",
+        "creditos_proyecto": "Número de creditos",
         "duracion_proyecto": "Duración",
         "tipo_duracion": "Tipo duración:",
-        "ciclo_proyecto": "Ciclos propedeuticos",
+        "ciclo_proyecto": "Ciclos propedéuticos",
+        "fecha_asignacion": "Fecha de asignación", 
         "ofrece_proyecto": "Se ofrece",
         "enfasis_proyecto_selec": "El proyecto cuenta con énfasis",
         "registro": "Registro calificado",

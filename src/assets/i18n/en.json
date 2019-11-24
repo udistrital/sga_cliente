@@ -621,6 +621,7 @@
         "nivel_proyecto": "Level",
         "metodologia_proyecto": "Methodology",
         "abreciacion_proyecto": "Abbreviation",
+        "fecha_asignacion": "Date of assignment", 
         "correo_proyecto": "Email",
         "numero_proyecto": "Phone",
         "creditos_proyecto": "Number of credits",

@@ -182,7 +182,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
     this.sgamidService.get('consulta_proyecto_academico/' )
     .subscribe((res: any[]) => {
     if (res !== null && res[0] !== 'error') {
-      console.info(res)
       this.dataSource = new MatTableDataSource(res);
       this.dataSource.filterPredicate = (data: any, filter: string) => data.ProyectoAcademico.Nombre.indexOf(filter) !== -1;
     }else {
@@ -373,7 +372,6 @@ promesaid_modificar(id: number): Promise<{id: number}> {
         this.coordinador = uni;
       }
     });
-    console.info(this.coordinador)
     this.id_coordinador = this.coordinador['PersonaId'];
     this.fecha_inicio_coordinador = this.coordinador['FechaInicio'];
     this.id_documento_registro_coordinador = this.coordinador['ResolucionAsignacionId'];
