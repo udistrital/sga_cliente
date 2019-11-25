@@ -116,6 +116,7 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
       ciclos_proyecto: ['', Validators.required],
       ofrece_proyecto: ['', Validators.required],
       enfasis_proyecto: ['', Validators.required],
+      proyecto_padre_id: ['', Validators.required],
    })
 
   }
