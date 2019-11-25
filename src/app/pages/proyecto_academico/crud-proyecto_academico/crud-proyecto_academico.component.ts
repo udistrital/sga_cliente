@@ -100,8 +100,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
-  Campo3Control = new FormControl('', [Validators.required]);
-  Campo4Control = new FormControl('', [Validators.required]);
+  Campo3Control = new FormControl('' , [Validators.required]);
+  Campo4Control = new FormControl({ value: '', disabled: true }, [Validators.required]);
   Campo5Control = new FormControl('', [Validators.required]);
   Campo6Control = new FormControl('', [Validators.required]);
   Campo7Control = new FormControl('', [Validators.required]);
@@ -161,6 +161,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         numero_proyecto: ['', Validators.required],
         creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
         duracion_proyecto: ['', Validators.required],
+        selector: [''],
      })
      this.resoluform = formBuilder.group({
       resolucion: ['', Validators.required],
@@ -287,6 +288,10 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         this.loadCloneData(clone_project_id);
       }
     });
+  }
+
+  onSelectionChanged({ value }) {
+    this.Campo4Control.enable();
   }
 
   loadCloneData(id: any): void {

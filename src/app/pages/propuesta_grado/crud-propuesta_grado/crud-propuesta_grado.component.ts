@@ -515,7 +515,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
                   .subscribe(res => {
                     const r = <any>res;
                     if (r !== null && r.Type !== 'error') {
-                      this.info_propuesta_grado = <PropuestaGrado>res;
+                      this.info_propuesta_grado = <PropuestaGrado><unknown>res;
                       this.loading = false;
                       this.eventChange.emit(true);
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),

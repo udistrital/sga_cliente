@@ -117,8 +117,8 @@ export class ListEventoComponent implements OnInit {
   }
 
   loadData(): void {
-    this.campusMidService.get('evento/' + this.user.getPersonaId()).subscribe((res: any) => {
-    // this.campusMidService.get('evento/' + 6).subscribe((res: any) => {
+    // this.campusMidService.get('evento/' + this.user.getPersonaId()).subscribe((res: any) => {
+    this.campusMidService.get('evento/' + 6).subscribe((res: any) => {
       if (res !== null) {
         if (Object.keys(res.Body[0]).length > 0 && res.Type !== 'error') {
           const data = <Array<CalendarioEventoPost>>res.Body;
