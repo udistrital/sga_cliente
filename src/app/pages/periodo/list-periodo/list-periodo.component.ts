@@ -108,7 +108,7 @@ export class ListPeriodoComponent implements OnInit {
             return value;
           },
         },
-        TipoPeriodo: {
+        TipoPeriodoId: {
           title: this.translate.instant('GLOBAL.tipo_periodo'),
           // type: 'tipo_periodo;',
           valuePrepareFunction: (value) => {

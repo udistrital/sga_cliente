@@ -215,8 +215,6 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
      this.coordinador = formBuilder.group({
       fecha_creacion_coordinador: ['', Validators.required],
      })
-     console.info(this.data)
-     console.info(this.data.fecha_creacion_registro_alta + 'ojo')
     this.loadfacultad();
    this.loadnivel();
    this.loadmetodologia();
@@ -1060,7 +1058,6 @@ registrocoordinador() {
       },
 
     }
-  console.info(this.coordinador_data)
     const opt: any = {
       title: this.translate.instant('GLOBAL.asignar'),
       text: this.translate.instant('editarproyecto.seguro_continuar_asignar'),

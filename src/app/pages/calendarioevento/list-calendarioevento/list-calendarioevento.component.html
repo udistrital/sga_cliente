@@ -6,36 +6,34 @@
         <nb-card status="success" class="m-5" size="medium">
             <nb-card-header>{{ 'oferta.subtitulo' | translate }}</nb-card-header>
             <nb-card-body>
-                {{ 'oferta.explicacacion' | translate }}z
+                {{ 'oferta.explicacacion' | translate }}
                 <div class="row">
-                    <div class="col-sm-6">
-                        <nb-card class="m-4">
+                    <div class="col-sm-12">
+                        <nb-card class="m-6">
                             <nb-card-body>
-                                <mat-form-field style="width: 70%;">
-                                    <mat-label>{{ 'GLOBAL.ano' | translate }} :</mat-label>
-                                    <mat-select [(ngModel)]="opcionSeleccionadoAno" (ngModelChange)="capturarAno()">
-                                        <mat-option>{{ 'oferta.seleccion_ano' | translate }}</mat-option>
-                                        <mat-option *ngFor="let item of ano" [value]="item">
-                                            {{ item.Ano }}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
 
-                            </nb-card-body>
-                        </nb-card>
-                    </div>
-                    <div class="col-sm-6">
-                        <nb-card class="m-4">
-                            <nb-card-body>
-                                <mat-form-field style="width: 70%;">
-                                    <mat-label>{{ 'GLOBAL.periodo' | translate }} :</mat-label>
-                                    <mat-select [(ngModel)]="opcionSeleccionadoPeriodo" (ngModelChange)="capturarPeriodo()">
-                                        <mat-option>{{ 'oferta.seleccion_periodo' | translate }}</mat-option>
-                                        <mat-option *ngFor="let item of periodo" [value]="item">
-                                            {{ item.Periodo }}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
+                                    <div id="block_container">
+                                            <div id="bloc1">    <mat-form-field style="width: 70%;">
+                                                    <mat-label>{{ 'oferta.ano' | translate }} :</mat-label>
+                                                    <mat-select [(ngModel)]="opcionSeleccionadoAno" (ngModelChange)="capturarAno()">
+                                                        <mat-option>{{ 'oferta.seleccion_ano' | translate }}</mat-option>
+                                                        <mat-option *ngFor="let item of ano" [value]="item">
+                                                            {{ item.Ano }}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field></div>
+                                            <div id="bloc2"><mat-form-field style="width: 70%;">
+                                                    <mat-label>{{ 'GLOBAL.periodo' | translate }} :</mat-label>
+                                                    <mat-select [(ngModel)]="opcionSeleccionadoPeriodo" (ngModelChange)="capturarPeriodo()">
+                                                        <mat-option>{{ 'oferta.seleccion_periodo' | translate }}</mat-option>
+                                                        <mat-option *ngFor="let item of periodo" [value]="item">
+                                                            {{ item.Periodo }}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field></div>
+                                          </div>
+                            
+                                
 
                             </nb-card-body>
                         </nb-card>

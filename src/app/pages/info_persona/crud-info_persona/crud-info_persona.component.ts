@@ -423,7 +423,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     this.info_inscripcion.Id = Number(this.inscripcion_id);
     this.inscripcionService.post('inscripcion', this.info_inscripcion)
       .subscribe(res => {
-        this.info_inscripcion = <Inscripcion>res;
+        this.info_inscripcion = <Inscripcion><unknown>res;
         this.inscripcion_id = this.info_inscripcion.Id;
         this.eventChange.emit(true);
         Swal({

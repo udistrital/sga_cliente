@@ -243,7 +243,7 @@
                                             <br>
                                             <br>
                                             <mat-form-field>
-                                                <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
+                                                <mat-label>* {{'proyecto.fecha_asignacion' | translate}}:</mat-label>
                                                 <input matInput [(ngModel)]="fecha_creacion_cordin"
                                                     placeholder="{{ 'proyecto.fecha_creacion' | translate }}"
                                                     formControlName="fecha_creacion_coordinador"
@@ -251,7 +251,7 @@
                                                 <mat-error *ngIf="Campo14Control.hasError('required')">
                                                     {{ 'editarproyecto.erro_fecha_creacion' | translate }}</mat-error>
                                             </mat-form-field>
-                                            <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
+                                            <label class="label col-sm-6 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
                                             <button mat-button type="button" (click)="fileInputResolucionCoordinador.click()">
                                                 <mat-icon>attach_file</mat-icon>
                                                 <input #fileInputResolucionCoordinador type="file" (change)="onInputResolucionCoordinador($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
@@ -259,7 +259,6 @@
                                             <button *ngIf="data.id_documento_registro_coordinador" mat-button type="button" (click)="downloadFile(data.id_documento_registro_coordinador)">
                                                 <mat-icon>cloud_download</mat-icon>
                                             </button>
-                                            <mat-error *ngIf="!fileResolucionCoordinador">{{ 'ERROR.no_documento' | translate }}</mat-error>
                                             <label *ngIf="fileResolucionCoordinador">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucionCoordinador.name}}</label>
                                             <br>
     
@@ -329,7 +328,7 @@
                                         {{ 'proyecto.erro_ano' | translate }}</mat-error>
                                 </mat-form-field>
                                 <br>
-                                <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
+                                <label class="label col-sm-6 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
                                 <button mat-button type="button" (click)="fileInputRegistroCalificado.click()">
                                     <mat-icon>attach_file</mat-icon>
                                     <input #fileInputRegistroCalificado type="file" (change)="onInputRegistroCalificado($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
@@ -406,7 +405,7 @@
                                             {{ 'proyecto.erro_ano' | translate }}</mat-error>
                                     </mat-form-field>
                                     <br>
-                                    <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
+                                    <label class="label col-sm-6 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
                                     <button mat-button type="button" (click)="fileInputRegistroAltaCalidad.click()">
                                         <mat-icon>attach_file</mat-icon>
                                         <input #fileInputRegistroAltaCalidad type="file" (change)="onInputRegistroAltaCalidad($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
