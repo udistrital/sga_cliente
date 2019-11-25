@@ -99,7 +99,15 @@
 
 
                         </div>
-
+                        <div class="col-sm-12" *ngIf="data.proyecto_padre_id">
+                            <form id="basicForm" [formGroup]="basicform">
+                                <mat-form-field>
+                                    <input readonly matInput placeholder="{{ 'proyecto.proyecto_padre' | translate }}"
+                                        formControlName="proyecto_padre_id" class="form-control" name="proyecto_padre_id"
+                                        [(ngModel)]="data.proyecto_padre_id.Nombre">
+                                </mat-form-field>
+                            </form>
+                        </div>
                     </div>
                 </nb-card-body>
             </nb-card>

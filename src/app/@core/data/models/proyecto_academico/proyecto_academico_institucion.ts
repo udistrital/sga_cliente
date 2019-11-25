@@ -19,9 +19,11 @@ export class ProyectoAcademicoInstitucion {
     UnidadTiempoId: number;
     AnoActoAdministrativoId: string;
     DependenciaId: number;
+    FacultadId: number;
     AreaConocimientoId: number;
     NucleoBaseId: number;
     MetodologiaId: Metodologia;
     NivelFormacionId: NivelFormacion;
     AnoActoAdministrativo: string;
+    ProyectoPadreId: ProyectoAcademicoInstitucion;
 }

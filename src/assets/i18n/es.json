@@ -701,7 +701,8 @@
         "proyecto_no_cargado": "Proyecto no cargado",
         "regresar": "Regresar",
         "siguiente": "Siguiente",
-        "reset": "Reiniciar registro"
+        "reset": "Reiniciar registro",
+        "proyecto_padre": "Proyecto padre"
     },
     "consultaproyecto": {
         "titulo": "Consulta de un proyecto académico ",

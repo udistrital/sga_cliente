@@ -662,12 +662,14 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       Oferta: this.checkofrece,
       UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
       AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
-      DependenciaId: this.opcionSeleccionadoFacultad['Id'],
+      FacultadId: this.opcionSeleccionadoFacultad['Id'],
+      DependenciaId: 0,
       AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
       NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
       MetodologiaId: this.metodologia,
       NivelFormacionId: this.nivel_formacion,
       AnoActoAdministrativo: String(this.actoform.value.ano_acto),
+      ProyectoPadreId: this.data.proyecto_padre_id,
 
     }
 
@@ -795,12 +797,14 @@ putinformacionregistro() {
         Oferta: this.checkofrece,
         UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
         AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
-        DependenciaId: this.opcionSeleccionadoFacultad['Id'],
+        FacultadId: this.opcionSeleccionadoFacultad['Id'],
+        DependenciaId: 0,
         AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
         NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
         MetodologiaId: this.metodologia,
         NivelFormacionId: this.nivel_formacion,
         AnoActoAdministrativo: String(this.actoform.value.ano_acto),
+        ProyectoPadreId: this.data.proyecto_padre_id,
       }
       this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
       this.registro_califacado_acreditacion = {
@@ -932,12 +936,14 @@ putinformacionregistro() {
       Oferta: this.checkofrece,
       UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
       AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
-      DependenciaId: this.opcionSeleccionadoFacultad['Id'],
+      FacultadId: this.opcionSeleccionadoFacultad['Id'],
+      DependenciaId: 0,
       AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
       NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
       MetodologiaId: this.metodologia,
       NivelFormacionId: this.nivel_formacion,
       AnoActoAdministrativo: String(this.actoform.value.ano_acto),
+      ProyectoPadreId: this.data.proyecto_padre_id,
     }
 
     this.calculateEndDate(this.data.fecha_creacion_registro[0], this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
