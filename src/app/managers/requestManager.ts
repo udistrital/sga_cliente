@@ -35,7 +35,7 @@ export class RequestManager {
    * @param service: string
    */
   public setPath(service: string) {
-    this.path = environment[service];
+    this.path = environment[service]; 
   }
 
 

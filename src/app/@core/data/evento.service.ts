@@ -24,12 +24,15 @@ export class EventoService {
     return this.requestManager.get(endpoint);
   }
   post(endpoint, element) {
+    this.requestManager.setPath('EventoService');
     return this.requestManager.post(endpoint, element);
   }
   put(endpoint, element) {
+    this.requestManager.setPath('EventoService');
     return this.requestManager.put(endpoint, element);
   }
   delete(endpoint, element) {
+    this.requestManager.setPath('EventoService');
     return this.requestManager.delete(endpoint, element.Id);
   }
 }

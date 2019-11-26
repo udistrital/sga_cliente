@@ -31,18 +31,22 @@ export class SgaMidService {
     return this.requestManager.get(endpoint);
   }
   post(endpoint, element) {
+    this.requestManager.setPath('SGA_MID_SERVICE');
     return this.requestManager.post(endpoint, element);
   }
   post_file(endpoint, element) {
+    this.requestManager.setPath('SGA_MID_SERVICE');
     return this.http.post<any>(path + endpoint, element, httpOptionsFile).pipe(
       catchError(this.handleError),
     );
   }
 
   put(endpoint, element) {
+    this.requestManager.setPath('SGA_MID_SERVICE');
     return this.requestManager.put(endpoint, element);
   }
   delete(endpoint, element) {
+    this.requestManager.setPath('SGA_MID_SERVICE');
     return this.requestManager.delete(endpoint, element.Id);
   }
   private handleError(error: HttpErrorResponse) {

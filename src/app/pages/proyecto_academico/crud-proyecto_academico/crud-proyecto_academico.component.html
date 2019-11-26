@@ -117,7 +117,7 @@
 
                 </nb-card>
                 <div>
-                  <button mat-button   matStepperNext>{{ 'proyecto.siguiente' | translate }}</button>
+                  <button mat-button type="button"  matStepperNext>{{ 'proyecto.siguiente' | translate }}</button>
                 </div>
               </form>
             </mat-step>
@@ -159,7 +159,7 @@
             <mat-step [stepControl]="resoluform">
                     <form [formGroup]="resoluform" >
                       <ng-template matStepLabel>{{ 'proyecto.registro' | translate }}</ng-template>
-                      <div class="row-sm-6">
+                      <div class="row-sm-6" style="overflow: false !important;">
                             <nb-card class="m-4" accent="info">
                                 <nb-card-body>
                                         <div class="columna">
@@ -208,7 +208,7 @@
                                         <label *ngIf="fileResolucion">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucion.name}}</label>
                                         <br>
                                         </div>
-                                        <div class="columna">
+                                        <div class="columna" overflow=false>
                                         <mat-form-field>
                                             <mat-label>* {{'proyecto.fecha_creacion' | translate}}:</mat-label>
                                             <input matInput #box  (blur)="mostrarfecha()" [(ngModel)]="fecha_creacion" placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion" [dpDayPicker]="dpDayPickerConfig" theme="dp-material" mode="daytime">
@@ -247,7 +247,7 @@
                           <div class="row-sm-6">
                                 <nb-card class="m-4" accent="info">
                                     <nb-card-body>
-                                            <div class="columna">
+                                            <div class="columna" >
                                             <mat-form-field>
                                                 <input matInput placeholder="{{ 'proyecto.acto_proyecto' | translate }}" formControlName="acto" class="form-control" name="acto_proyecto">
                                                 <mat-error *ngIf="Campo16Control.hasError('required')">{{ 'proyecto.erro_acto' | translate }}</mat-error>

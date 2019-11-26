@@ -17,14 +17,17 @@ export class ProyectoAcademicoService {
   }
 
   post(endpoint, element) {
+    this.requestManager.setPath('PROYECTO_ACADEMICO_SERVICE');
     return this.requestManager.post(endpoint, element);
   }
 
   put(endpoint, element) {
+    this.requestManager.setPath('PROYECTO_ACADEMICO_SERVICE');
     return this.requestManager.put(endpoint, element);
   }
 
   delete(endpoint, element) {
+    this.requestManager.setPath('PROYECTO_ACADEMICO_SERVICE');
     return this.requestManager.delete(endpoint, element.Id);
   }
 }
