@@ -711,7 +711,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           this.sgamidService.post('proyecto_academico', this.proyecto_academicoPost)
           .subscribe((res: any) => {
             if (res.Type === 'error') {
-              Swal({ 
+              Swal({
                 type: 'error',
                 title: res.Code,
                 text: this.translate.instant('ERROR.' + res.Code),
