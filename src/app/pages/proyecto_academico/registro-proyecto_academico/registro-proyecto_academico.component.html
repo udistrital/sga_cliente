@@ -7,7 +7,7 @@
         <div class="row-sm-6">
             <nb-card class="m-4" accent="info">
                 <nb-card-header>{{ 'historial_registro.registro_titulo' | translate }}</nb-card-header>
-                <nb-card-body>
+                <nb-card-body style="overflow: visible">
                     <form id="resoluForm" [formGroup]="resoluform" (ngSubmit)="registroproyecto()">
                         <mat-form-field>
                             <input matInput placeholder="{{ 'proyecto.resolucion_proyecto' | translate }}"

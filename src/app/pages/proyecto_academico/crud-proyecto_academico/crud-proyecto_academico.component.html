@@ -159,9 +159,9 @@
             <mat-step [stepControl]="resoluform">
                     <form [formGroup]="resoluform" >
                       <ng-template matStepLabel>{{ 'proyecto.registro' | translate }}</ng-template>
-                      <div class="row-sm-6" style="overflow: false !important;">
+                      <div class="row-sm-6" >
                             <nb-card class="m-4" accent="info">
-                                <nb-card-body>
+                                <nb-card-body style="overflow: visible">
                                         <div class="columna">
                                         <mat-form-field>
                                             <mat-label>{{ 'proyecto.area' | translate }}</mat-label>
