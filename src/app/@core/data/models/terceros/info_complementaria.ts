@@ -5,5 +5,5 @@ export class InfoComplementaria {
   Nombre: string;
   CodigoAbreviacion: string;
   Activo: boolean;
-	GrupoInfoComplementariaId: GrupoInfoComplementaria;  
+  GrupoInfoComplementariaId: GrupoInfoComplementaria;
 }

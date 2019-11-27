@@ -11,8 +11,8 @@ export class TerceroFamiliar {
 }
 
 export class TerceroFamiliarConInfoComplementaria {
-	Familiar: TerceroFamiliar;
-	InformacionContacto: InfoComplementariaTercero[];
+  Familiar: TerceroFamiliar;
+  InformacionContacto: InfoComplementariaTercero[];
 }
 
 export class TrPostInformacionFamiliar {
