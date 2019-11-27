@@ -97,6 +97,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   uidActoAdministrativo: string;
   idDocumentoAdministrativo: number;
   idDocumentoResolucion: number;
+  proyecto_padre_id: ProyectoAcademicoInstitucion;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -302,6 +303,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     .subscribe((res: any) => {
       if (res.Type !== 'error' && res[0].ProyectoAcademico.Id) {
         const proyecto_a_clonar = res[0];
+        this.proyecto_padre_id = proyecto_a_clonar.ProyectoAcademico;
         // enfasis
         this.arr_enfasis_proyecto = proyecto_a_clonar.Enfasis.map((enfasis: any) => enfasis.EnfasisId);
         this.source_emphasys.load(this.arr_enfasis_proyecto);
@@ -585,13 +587,15 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         Oferta: this.checkofrece,
         UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
         AnoActoAdministrativoId: this.actoform.value.ano_acto,
-        DependenciaId: this.opcionSeleccionadoFacultad['Id'],
+        // DependenciaId: this.opcionSeleccionadoFacultad['Id'],
+        DependenciaId: 0,
+        FacultadId: this.opcionSeleccionadoFacultad['Id'],
         AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
         NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
         MetodologiaId: this.metodologia,
         NivelFormacionId: this.nivel_formacion,
         AnoActoAdministrativo: this.actoform.value.ano_acto,
-
+        ProyectoPadreId: this.proyecto_padre_id,
       }
       this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
       this.registro_califacado_acreditacion = {
@@ -659,7 +663,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         ProyectoAcademicoInstitucionId: this.proyecto_academico,
       }
       this.tipo_dependencia = {
-        Id: 1,
+        Id: 2,
       }
       this.dependencia_tipo_dependencia = {
         Id: 0,

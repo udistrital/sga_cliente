@@ -690,7 +690,8 @@
         "proyecto_no_cargado": "Project not loaded",
         "regresar": "To return",
         "siguiente": "Next",
-        "reset": "Restart Registration"
+        "reset": "Restart Registration",
+        "proyecto_padre": "Parent project"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
