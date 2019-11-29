@@ -369,7 +369,7 @@ export class ListService {
       },
     );
   }
-  
+
   public findTipoICFES() {
     this.store.select(REDUCER_LIST.ICFES).subscribe(
       (list: any) => {

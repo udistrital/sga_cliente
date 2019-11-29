@@ -366,7 +366,8 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   //                 this.eventChange.emit(true);
   //               } else {
   //                   descuentosdependencia.forEach( element2 => {
-  //                     this.descuentoService.get('solicitud_descuento/?query=DescuentosDependenciaId:' + element2.Id + ',PersonaId:' + this.persona + '&limit=0')
+  //                     this.descuentoService.get('solicitud_descuento/?query=DescuentosDependenciaId:' +
+  //    element2.Id + ',PersonaId:' + this.persona + '&limit=0')
   //                       .subscribe(solicitud2 => {
   //                         if (solicitud2 !== null) {
   //                           const dato = <any>solicitud2[0];

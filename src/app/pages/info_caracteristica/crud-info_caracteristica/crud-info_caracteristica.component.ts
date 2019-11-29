@@ -172,7 +172,8 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   //           this.info_info_caracteristica.PaisNacimiento = this.datosGet.Lugar.Lugar.PAIS;
   //           this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.DEPARTAMENTO;
   //           this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.CIUDAD;
-  //           this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] = this.info_info_caracteristica.DepartamentoNacimiento;
+  //           this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] =
+  // this.info_info_caracteristica.DepartamentoNacimiento;
   //           this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones[0] = this.info_info_caracteristica.Lugar;
   //           this.loading = false;
   //         }

@@ -275,7 +275,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   // filterSubTypes(tipoProduccionAcademica: TipoProduccionAcademica) {
   //   this.SubtipoProduccionId = undefined;
   //   this.formConstruido = false;
-  //   this.subtiposProduccionAcademicaFiltrados = this.subtiposProduccionAcademica.filter(subTipo => subTipo.TipoProduccionId.Id === tipoProduccionAcademica.Id);
+  //   this.subtiposProduccionAcademicaFiltrados = this.subtiposProduccionAcademica.filter(subTipo =>
+  // subTipo.TipoProduccionId.Id === tipoProduccionAcademica.Id);
   // }
 
   // loadSubTipoFormFields(subtipoProduccionAcademica: SubTipoProduccionAcademica, callback: Function) {
