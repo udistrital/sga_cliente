@@ -116,7 +116,7 @@
                 <blockquote class="blockquote">
                     <li>{{ 'inscripcion.aviso_progreso' | translate}}</li>
                 </blockquote>
-                <button class="btn btn-success pull-right" [disabled]="total" (click)="inscribirse()">{{ 'inscripcion.inscribirse' | translate }}</button>
+                <button class="btn btn-success pull-right" [disabled]="total" >{{ 'inscripcion.inscribirse' | translate }}</button>
             </div>
         </nb-card-body>
     </nb-card>
@@ -138,7 +138,7 @@
             </div>
             <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
-                    <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="traerInfoPersona($event,0)">
+                    <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" >
                     </ngx-crud-info-persona>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}">
@@ -171,7 +171,7 @@
             </div>
             <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
-                    <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="traerInfoPersona($event,0)">
+                    <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" >
                     </ngx-crud-info-persona>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}">
@@ -205,7 +205,7 @@
             <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
 
-                    <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="traerInfoPersona($event,0)">
+                    <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" >
                     </ngx-crud-info-persona>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}">

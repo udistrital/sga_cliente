@@ -24,19 +24,19 @@ import html2canvas from 'html2canvas';
 })
 export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
-  @Input('inscripcion_id')
-  set name(inscripcion_id: number) {
-    this.inscripcion_id = inscripcion_id;
-    console.info('Posgrado ins: ' + this.inscripcion_id)
-    if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
-      this.selectedValue = undefined;
-      window.localStorage.setItem('programa', this.selectedValue);
-    }
-    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-      && this.inscripcion_id.toString() !== '0') {
-      this.getInfoInscripcion();
-    }
-  }
+  // @Input('inscripcion_id')
+  // set name(inscripcion_id: number) {
+  //   this.inscripcion_id = inscripcion_id;
+  //   console.info('Posgrado ins: ' + this.inscripcion_id)
+  //   if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
+  //     this.selectedValue = undefined;
+  //     window.localStorage.setItem('programa', this.selectedValue);
+  //   }
+  //   if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
+  //     && this.inscripcion_id.toString() !== '0') {
+  //     this.getInfoInscripcion();
+  //   }
+  // }
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
@@ -118,7 +118,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.loadInfoPostgrados();
+    // this.loadInfoPostgrados();
     this.loadTipoInscripcion();
     this.total = true;
     // if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
@@ -194,10 +194,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     }
   }
 
-  traerInfoPersona(event, tab) {
-    this.setPercentage_info(event, tab);
-    if (event !== 0) this.getInfoInscripcion();
-  }
+  // traerInfoPersona(event, tab) {
+  //   this.setPercentage_info(event, tab);
+  //   if (event !== 0) this.getInfoInscripcion();
+  // }
 
   loadTipoInscripcion() {
     this.inscripcionService.get('tipo_inscripcion')
@@ -222,76 +222,76 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         });
   }
 
-  loadInfoPostgrados() {
-    this.programaService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:15&limit=0')
-      .subscribe(res => {
-        const r = <any>res;
-        if (res !== null && r.Type !== 'error') {
-          const programaPosgrados = <Array<any>>res;
-          programaPosgrados.forEach(element => {
-            this.posgrados.push(element.DependenciaId);
-          });
-        }
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.programa_academico'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
-  }
+  // loadInfoPostgrados() {
+  //   this.programaService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:15&limit=0')
+  //     .subscribe(res => {
+  //       const r = <any>res;
+  //       if (res !== null && r.Type !== 'error') {
+  //         const programaPosgrados = <Array<any>>res;
+  //         programaPosgrados.forEach(element => {
+  //           this.posgrados.push(element.DependenciaId);
+  //         });
+  //       }
+  //     },
+  //       (error: HttpErrorResponse) => {
+  //         Swal({
+  //           type: 'error',
+  //           title: error.status + '',
+  //           text: this.translate.instant('ERROR.' + error.status),
+  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
+  //             this.translate.instant('GLOBAL.programa_academico'),
+  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  //         });
+  //       });
+  // }
 
-  getInfoInscripcion() {
-    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-      && this.inscripcion_id.toString() !== '0') {
-      this.loading = true;
-      this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
-        .subscribe(inscripcion => {
-          this.info_inscripcion = <any>inscripcion;
-          if (inscripcion !== null && this.info_inscripcion.Type !== 'error') {
-            this.estado_inscripcion = this.info_inscripcion.EstadoInscripcionId.Id;
-            if (this.info_inscripcion.EstadoInscripcionId.Id > 1) {
-              this.total = true;
-            }
-            this.programaService.get('dependencia/' + this.info_inscripcion.ProgramaAcademicoId)
-              .subscribe(res_programa => {
-                const programa_admision = <any>res_programa;
-                if (res_programa !== null && programa_admision.Type !== 'error') {
-                  this.selectedValue = programa_admision;
-                  this.posgrados.push(programa_admision);
-                  this.info_ente_id = this.info_inscripcion.PersonaId;
-                  this.loading = false;
-                }
-              },
-                (error: HttpErrorResponse) => {
-                  Swal({
-                    type: 'error',
-                    title: error.status + '',
-                    text: this.translate.instant('ERROR.' + error.status),
-                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                      this.translate.instant('GLOBAL.admision') + '|' +
-                      this.translate.instant('GLOBAL.programa_academico'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  });
-                });
-          }
-        },
-          (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.admision'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-          });
-    }
-  }
+  // getInfoInscripcion() {
+  //   if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
+  //     && this.inscripcion_id.toString() !== '0') {
+  //     this.loading = true;
+  //     this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
+  //       .subscribe(inscripcion => {
+  //         this.info_inscripcion = <any>inscripcion;
+  //         if (inscripcion !== null && this.info_inscripcion.Type !== 'error') {
+  //           this.estado_inscripcion = this.info_inscripcion.EstadoInscripcionId.Id;
+  //           if (this.info_inscripcion.EstadoInscripcionId.Id > 1) {
+  //             this.total = true;
+  //           }
+  //           this.programaService.get('dependencia/' + this.info_inscripcion.ProgramaAcademicoId)
+  //             .subscribe(res_programa => {
+  //               const programa_admision = <any>res_programa;
+  //               if (res_programa !== null && programa_admision.Type !== 'error') {
+  //                 this.selectedValue = programa_admision;
+  //                 this.posgrados.push(programa_admision);
+  //                 this.info_ente_id = this.info_inscripcion.PersonaId;
+  //                 this.loading = false;
+  //               }
+  //             },
+  //               (error: HttpErrorResponse) => {
+  //                 Swal({
+  //                   type: 'error',
+  //                   title: error.status + '',
+  //                   text: this.translate.instant('ERROR.' + error.status),
+  //                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
+  //                     this.translate.instant('GLOBAL.admision') + '|' +
+  //                     this.translate.instant('GLOBAL.programa_academico'),
+  //                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  //                 });
+  //               });
+  //         }
+  //       },
+  //         (error: HttpErrorResponse) => {
+  //           Swal({
+  //             type: 'error',
+  //             title: error.status + '',
+  //             text: this.translate.instant('ERROR.' + error.status),
+  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
+  //               this.translate.instant('GLOBAL.admision'),
+  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  //           });
+  //         });
+  //   }
+  // }
 
   useLanguage(language: string) {
     this.translate.use(language);
@@ -322,7 +322,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
               this.info_inscripcion = <any>inscripcion[0];
               if (inscripcion !== null && this.info_inscripcion.Type !== 'error') {
                 this.inscripcion_id = this.info_inscripcion.Id;
-                this.getInfoInscripcion();
+                // this.getInfoInscripcion();
               }
             },
               (error: HttpErrorResponse) => {
@@ -673,155 +673,155 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         }
     }
 
-    inscribirse() {
-      this.datosMidPersona();
-    }
+    // inscribirse() {
+    //   this.datosMidPersona();
+    // }
 
-    datosMidPersona() {
-      this.campusMidService.get('persona/consultar_persona/' + this.info_ente_id)
-        .subscribe(res => {
-          const r = <any>res;
-          if (res !== null && r.Type !== 'error') {
-            this.datos_persona = r;
-            this.info_inscripcion.EstadoInscripcionId.Id = 2;
-            this.updateEstadoAdmision();
-          }
-        },
-          (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.admision'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-          });
-    }
+    // datosMidPersona() {
+    //   this.campusMidService.get('persona/consultar_persona/' + this.info_ente_id)
+    //     .subscribe(res => {
+    //       const r = <any>res;
+    //       if (res !== null && r.Type !== 'error') {
+    //         this.datos_persona = r;
+    //         this.info_inscripcion.EstadoInscripcionId.Id = 2;
+    //         this.updateEstadoAdmision();
+    //       }
+    //     },
+    //       (error: HttpErrorResponse) => {
+    //         Swal({
+    //           type: 'error',
+    //           title: error.status + '',
+    //           text: this.translate.instant('ERROR.' + error.status),
+    //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //             this.translate.instant('GLOBAL.admision'),
+    //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //         });
+    //       });
+    // }
 
-    updateEstadoAdmision() {
-      const opt: any = {
-        title: this.translate.instant('GLOBAL.inscribirse'),
-        text: this.translate.instant('GLOBAL.inscribirse') + '?',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        showCancelButton: true,
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-      };
-      Swal(opt)
-        .then((willDelete) => {
-          if (willDelete.value) {
-            this.loading = true;
-            this.inscripcionService.put('inscripcion', this.info_inscripcion)
-              .subscribe(res_ins => {
-                const r_ins = <any>res_ins;
-                if (res_ins !== null && r_ins.Type !== 'error') {
-                  this.loading = false;
-                  this.total = true;
-                  this.captureScreen();
-                }
-              },
-                (error: HttpErrorResponse) => {
-                  Swal({
-                    type: 'error',
-                    title: error.status + '',
-                    text: this.translate.instant('ERROR.' + error.status),
-                    footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-                      this.translate.instant('GLOBAL.admision'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  });
-                });
-          }
-        });
-    }
+    // updateEstadoAdmision() {
+    //   const opt: any = {
+    //     title: this.translate.instant('GLOBAL.inscribirse'),
+    //     text: this.translate.instant('GLOBAL.inscribirse') + '?',
+    //     icon: 'warning',
+    //     buttons: true,
+    //     dangerMode: true,
+    //     showCancelButton: true,
+    //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    //   };
+    //   Swal(opt)
+    //     .then((willDelete) => {
+    //       if (willDelete.value) {
+    //         this.loading = true;
+    //         this.inscripcionService.put('inscripcion', this.info_inscripcion)
+    //           .subscribe(res_ins => {
+    //             const r_ins = <any>res_ins;
+    //             if (res_ins !== null && r_ins.Type !== 'error') {
+    //               this.loading = false;
+    //               this.total = true;
+    //               this.captureScreen();
+    //             }
+    //           },
+    //             (error: HttpErrorResponse) => {
+    //               Swal({
+    //                 type: 'error',
+    //                 title: error.status + '',
+    //                 text: this.translate.instant('ERROR.' + error.status),
+    //                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+    //                   this.translate.instant('GLOBAL.admision'),
+    //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //               });
+    //             });
+    //       }
+    //     });
+    // }
 
-  public captureScreen() {
-    this.loading = true;
-    const data1 = document.getElementById('info_basica');
-    const data2 = document.getElementById('formacion_academica');
-    const data3 = document.getElementById('experiencia_laboral');
-    const data4 = document.getElementById('produccion_academica');
-    const data5 = document.getElementById('documento_programa');
-    const data6 = document.getElementById('descuento_matricula');
-    const data7 = document.getElementById('propuesta_grado');
-    html2canvas(data1).then(canvas => {
-      const imgWidth = 50;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const imgData = this.imagenes.escudo;
-      const contentDataURL = canvas.toDataURL('image/png');
+  // public captureScreen() {
+  //   this.loading = true;
+  //   const data1 = document.getElementById('info_basica');
+  //   const data2 = document.getElementById('formacion_academica');
+  //   const data3 = document.getElementById('experiencia_laboral');
+  //   const data4 = document.getElementById('produccion_academica');
+  //   const data5 = document.getElementById('documento_programa');
+  //   const data6 = document.getElementById('descuento_matricula');
+  //   const data7 = document.getElementById('propuesta_grado');
+  //   html2canvas(data1).then(canvas => {
+  //     const imgWidth = 50;
+  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //     const imgData = this.imagenes.escudo;
+  //     const contentDataURL = canvas.toDataURL('image/png');
 
-      html2canvas(data2).then(canvas2 => {
-        const imgWidth2 = 50;
-        const imgHeight2 = (canvas2.height * imgWidth2) / canvas2.width;
-        const contentDataURL2 = canvas2.toDataURL('image/png');
+  //     html2canvas(data2).then(canvas2 => {
+  //       const imgWidth2 = 50;
+  //       const imgHeight2 = (canvas2.height * imgWidth2) / canvas2.width;
+  //       const contentDataURL2 = canvas2.toDataURL('image/png');
 
-        html2canvas(data3).then(canvas3 => {
-          const imgWidth3 = 50;
-          const imgHeight3 = (canvas3.height * imgWidth3) / canvas3.width;
-          const contentDataURL3 = canvas3.toDataURL('image/png');
+  //       html2canvas(data3).then(canvas3 => {
+  //         const imgWidth3 = 50;
+  //         const imgHeight3 = (canvas3.height * imgWidth3) / canvas3.width;
+  //         const contentDataURL3 = canvas3.toDataURL('image/png');
 
-          html2canvas(data4).then(canvas4 => {
-            const imgWidth4 = 50;
-            const imgHeight4 = (canvas4.height * imgWidth4) / canvas4.width;
-            const contentDataURL4 = canvas4.toDataURL('image/png');
+  //         html2canvas(data4).then(canvas4 => {
+  //           const imgWidth4 = 50;
+  //           const imgHeight4 = (canvas4.height * imgWidth4) / canvas4.width;
+  //           const contentDataURL4 = canvas4.toDataURL('image/png');
 
-            html2canvas(data5).then(canvas5 => {
-              const imgWidth5 = 50;
-              const imgHeight5 = (canvas5.height * imgWidth5) / canvas5.width;
-              const contentDataURL5 = canvas5.toDataURL('image/png');
+  //           html2canvas(data5).then(canvas5 => {
+  //             const imgWidth5 = 50;
+  //             const imgHeight5 = (canvas5.height * imgWidth5) / canvas5.width;
+  //             const contentDataURL5 = canvas5.toDataURL('image/png');
 
-              html2canvas(data6).then(canvas6 => {
-                const imgWidth6 = 50;
-                const imgHeight6 = (canvas6.height * imgWidth6) / canvas6.width;
-                const contentDataURL6 = canvas6.toDataURL('image/png');
+  //             html2canvas(data6).then(canvas6 => {
+  //               const imgWidth6 = 50;
+  //               const imgHeight6 = (canvas6.height * imgWidth6) / canvas6.width;
+  //               const contentDataURL6 = canvas6.toDataURL('image/png');
 
-                html2canvas(data7).then(canvas7 => {
-                  const imgWidth7 = 50;
-                  const imgHeight7 = (canvas7.height * imgWidth7) / canvas7.width;
-                  const contentDataURL7 = canvas7.toDataURL('image/png');
-                  const pdf = new jsPDF('p', 'mm', 'letter');
+  //               html2canvas(data7).then(canvas7 => {
+  //                 const imgWidth7 = 50;
+  //                 const imgHeight7 = (canvas7.height * imgWidth7) / canvas7.width;
+  //                 const contentDataURL7 = canvas7.toDataURL('image/png');
+  //                 const pdf = new jsPDF('p', 'mm', 'letter');
 
-                  pdf.setFontSize(20);
-                  pdf.addImage(imgData, 'PNG', 10, 10, 92, 35);
-                  pdf.text(`Comprobante de inscripción`, 65, 55);
-                  pdf.setFontSize(12);
+  //                 pdf.setFontSize(20);
+  //                 pdf.addImage(imgData, 'PNG', 10, 10, 92, 35);
+  //                 pdf.text(`Comprobante de inscripción`, 65, 55);
+  //                 pdf.setFontSize(12);
 
-                  pdf.text(`Nombres: ${this.datos_persona['PrimerNombre']} ${this.datos_persona['SegundoNombre']}`, 15, 68);
-                  pdf.text(`Apellidos: ${this.datos_persona['PrimerApellido']} ${this.datos_persona['SegundoApellido']}`, 15, 75);
-                  pdf.text('Documento de identificación: ' + this.datos_persona['TipoIdentificacion']['CodigoAbreviacion'] + ' ' +
-                    this.datos_persona['NumeroIdentificacion'],
-                    15, 82);
-                  pdf.text(`Fecha de inscripción: ${formatDate(new Date(), 'yyyy-MM-dd', 'en')}`, 15, 89);
-                  pdf.text(`Programa académico: ${this.selectedValue.Nombre}`, 15, 96);
+  //                 pdf.text(`Nombres: ${this.datos_persona['PrimerNombre']} ${this.datos_persona['SegundoNombre']}`, 15, 68);
+  //                 pdf.text(`Apellidos: ${this.datos_persona['PrimerApellido']} ${this.datos_persona['SegundoApellido']}`, 15, 75);
+  //                 pdf.text('Documento de identificación: ' + this.datos_persona['TipoIdentificacion']['CodigoAbreviacion'] + ' ' +
+  //                   this.datos_persona['NumeroIdentificacion'],
+  //                   15, 82);
+  //                 pdf.text(`Fecha de inscripción: ${formatDate(new Date(), 'yyyy-MM-dd', 'en')}`, 15, 89);
+  //                 pdf.text(`Programa académico: ${this.selectedValue.Nombre}`, 15, 96);
 
-                  pdf.text(`Formulario: `, 15, 103);
-                  pdf.addImage(contentDataURL, 'PNG', 18, 108, imgWidth, imgHeight);
-                  pdf.addImage(contentDataURL2, 'PNG', 82, 108, imgWidth2, imgHeight2);
-                  pdf.addImage(contentDataURL3, 'PNG', 147, 108, imgWidth3, imgHeight3);
-                  pdf.addImage(contentDataURL4, 'PNG', 18, 148, imgWidth4, imgHeight4);
-                  pdf.addImage(contentDataURL5, 'PNG', 82, 148, imgWidth5, imgHeight5);
-                  pdf.addImage(contentDataURL6, 'PNG', 147, 148, imgWidth6, imgHeight6);
-                  pdf.addImage(contentDataURL7, 'PNG', 82, 188, imgWidth7, imgHeight7);
-                  pdf.setFontSize(9);
-                  pdf.text(`Universidad Distrital Francisco José de Caldas`, 78, 256);
-                  pdf.text(`Carrera 7 # 40B - 53 - Bogotá D.C. - Colombia`, 78, 262);
-                  pdf.text(`Teléfono (Colombia) : +57 3 323-9300`, 83, 267);
+  //                 pdf.text(`Formulario: `, 15, 103);
+  //                 pdf.addImage(contentDataURL, 'PNG', 18, 108, imgWidth, imgHeight);
+  //                 pdf.addImage(contentDataURL2, 'PNG', 82, 108, imgWidth2, imgHeight2);
+  //                 pdf.addImage(contentDataURL3, 'PNG', 147, 108, imgWidth3, imgHeight3);
+  //                 pdf.addImage(contentDataURL4, 'PNG', 18, 148, imgWidth4, imgHeight4);
+  //                 pdf.addImage(contentDataURL5, 'PNG', 82, 148, imgWidth5, imgHeight5);
+  //                 pdf.addImage(contentDataURL6, 'PNG', 147, 148, imgWidth6, imgHeight6);
+  //                 pdf.addImage(contentDataURL7, 'PNG', 82, 188, imgWidth7, imgHeight7);
+  //                 pdf.setFontSize(9);
+  //                 pdf.text(`Universidad Distrital Francisco José de Caldas`, 78, 256);
+  //                 pdf.text(`Carrera 7 # 40B - 53 - Bogotá D.C. - Colombia`, 78, 262);
+  //                 pdf.text(`Teléfono (Colombia) : +57 3 323-9300`, 83, 267);
 
-                  const nombre_archivo = `${this.datos_persona['PrimerNombre']}_${this.datos_persona['PrimerApellido']}_` +
-                    `${this.datos_persona['NumeroIdentificacion']}`;
+  //                 const nombre_archivo = `${this.datos_persona['PrimerNombre']}_${this.datos_persona['PrimerApellido']}_` +
+  //                   `${this.datos_persona['NumeroIdentificacion']}`;
 
-                  this.loading = false;
-                  pdf.save(`${nombre_archivo}.pdf`);
-                  this.eventChange.emit(true);
-                  this.router.navigate(['/pages/procesos_admisiones/estado_admision']);
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  }
+  //                 this.loading = false;
+  //                 pdf.save(`${nombre_archivo}.pdf`);
+  //                 this.eventChange.emit(true);
+  //                 this.router.navigate(['/pages/procesos_admisiones/estado_admision']);
+  //               });
+  //             });
+  //           });
+  //         });
+  //       });
+  //     });
+  //   });
+  // }
 }
