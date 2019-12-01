@@ -70,8 +70,8 @@ export class CrudReingresoComponent implements OnInit {
 
   createReintegro(infoReintegro: any): void {
     const opt: any = {
-      title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('GLOBAL.crear') + '?',
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('reingreso.seguro_continuar_registrar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -90,13 +90,12 @@ export class CrudReingresoComponent implements OnInit {
               if (r !== null && r.Type !== 'error') {
                 this.loading = false;
                 this.eventChange.emit(true);
-                this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                  this.translate.instant('GLOBAL.crear') + ' ' +
-                  this.translate.instant('GLOBAL.confirmarCrear'));
+                this.showToast('info', this.translate.instant('GLOBAL.registrar'),
+                  this.translate.instant('reingreso.reingreso_registrado'));
                 this.clean = !this.clean;
               } else {
                 this.showToast('error', this.translate.instant('GLOBAL.error'),
-                  this.translate.instant('GLOBAL.error'));
+                  this.translate.instant('reingreso.reingreso_no_registrado'));
               }
             },
             (error: HttpErrorResponse) => {
@@ -104,12 +103,11 @@ export class CrudReingresoComponent implements OnInit {
                 type: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.crear') + '-' +
-                  this.translate.instant('GLOBAL.formacion_academica'),
+                footer: this.translate.instant('reingreso.reingreso_no_registrado'),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
               });
               this.showToast('error', this.translate.instant('GLOBAL.error'),
-                  this.translate.instant('GLOBAL.error'));
+                  this.translate.instant('reingreso.reingreso_no_registrado'));
             });
           }
       });
