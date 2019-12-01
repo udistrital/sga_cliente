@@ -812,6 +812,11 @@
         "reingreso_registrado": "Re-entry request created",
         "seguro_continuar_registrar": "Are you sure you want to register this re-entry request?"
     },
+    "transferencia_interna": {
+        "transferencia_no_registrada": "Internal transfer request not created",
+        "transferencia_registrada": "Internal transfer request created",
+        "seguro_continuar_registrar": "Are you sure you want to register this internal transfer request?"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",
