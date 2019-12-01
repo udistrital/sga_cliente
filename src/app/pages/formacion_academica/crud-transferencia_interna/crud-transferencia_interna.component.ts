@@ -12,6 +12,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { ListService } from '../../../@core/store/services/list.service';
+import { Store } from '@ngrx/store';
+import { IAppState } from '../../../@core/store/app.state';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -42,6 +45,8 @@ export class CrudTransferenciaInternaComponent implements OnInit {
     private users: UserService,
     private coreService: CoreService,
     private sgaMidService: SgaMidService,
+    private store: Store<IAppState>,
+    private listService: ListService,
     private toasterService: ToasterService) {
     this.formTransferencia = FORM_TRANSFERENCIAINTERNA;
     this.construirForm();
@@ -51,6 +56,9 @@ export class CrudTransferenciaInternaComponent implements OnInit {
     this.ente = this.users.getEnte();
     this.cargarPeriodo();
     this.loading = true;
+    this.listService.findProgramaAcademico();
+    this.loadLists();
+    console.log("programa academico", this.listService.findProgramaAcademico());
   }
 
   construirForm() {
@@ -62,6 +70,25 @@ export class CrudTransferenciaInternaComponent implements OnInit {
       this.formTransferencia.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +
         this.formTransferencia.campos[i].label_i18n);
     }
+  }
+
+  getIndexForm(nombre: String): number {
+    for (let index = 0; index < this.formTransferencia.campos.length; index++) {
+      const element = this.formTransferencia.campos[index];
+      if (element.nombre === nombre) {
+        return index
+      }
+    }
+    return 0;
+  }
+
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+        this.formTransferencia.campos[this.getIndexForm('carreraqueviene')].opciones = list.listProgramaAcademico[0];
+        this.formTransferencia.campos[this.getIndexForm('carreratransfiere')].opciones = list.listProgramaAcademico[0];
+      },
+   );
   }
 
   useLanguage(language: string) {
@@ -144,11 +171,12 @@ export class CrudTransferenciaInternaComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       const formData = event.data.InfoTransferenciaInterna;
+      console.log("form data", formData);
       const dataPostTransferencia = {
         InscripcionEstudiante: {
           Id: 0,
           PersonaId: this.ente,
-          ProgramaAcademicoId: 0,
+          ProgramaAcademicoId: formData.carreratransfiere.Id,
           PeriodoId: this.periodo.Id,
           AceptaTerminos: true,
           FechaAceptaTerminos: new Date(),
@@ -166,14 +194,15 @@ export class CrudTransferenciaInternaComponent implements OnInit {
             Id: 0,
           },
           TransferenciaInterna: true,
-          CodigoEstudianteProviene: 0,
+          CodigoEstudianteProviene: formData.codigo,
           UniversidadProviene: 'Universidad Distrital Francisco José de Caldas',
-          ProyectoCurricularProviene: '',
+          ProyectoCurricularProviene: formData.carreraqueviene.Nombre,
           UltimoSemestreCursado: formData.UltimoSemestre,
           MotivoRetiro: formData.Motivos,
           Activo: true,
         },
       }
+      console.log("data post", dataPostTransferencia);
       this.createTransferencia(dataPostTransferencia);
       this.result.emit(event);
     }
