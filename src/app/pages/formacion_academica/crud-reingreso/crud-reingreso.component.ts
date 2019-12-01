@@ -111,7 +111,7 @@ export class CrudReingresoComponent implements OnInit {
               this.showToast('error', this.translate.instant('GLOBAL.error'),
                   this.translate.instant('GLOBAL.error'));
             });
-          }  
+          }
       });
   }
 
@@ -150,7 +150,7 @@ export class CrudReingresoComponent implements OnInit {
         InscripcionEstudiante: {
           Id: 0,
           PersonaId: this.ente,
-          ProgramaAcademicoId: Number(formData.codigo.substr(5,3)),
+          ProgramaAcademicoId: Number(formData.codigo.substr(5, 3)),
           PeriodoId: this.periodo.Id,
           AceptaTerminos: true,
           FechaAceptaTerminos: new Date(),
@@ -174,8 +174,6 @@ export class CrudReingresoComponent implements OnInit {
           SolicitudAcuerdo: (formData.SolicitudAcuerdo.Id === 'Si') ? true : false,
         },
       }
-      console.log("proyecto", formData.codigo.substr(5,3));
-      console.log("data post", dataPostReintegro);
       this.createReintegro(dataPostReintegro);
       this.result.emit(event);
     }
