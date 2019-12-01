@@ -58,7 +58,6 @@ export class CrudTransferenciaInternaComponent implements OnInit {
     this.loading = true;
     this.listService.findProgramaAcademico();
     this.loadLists();
-    console.log("programa academico", this.listService.findProgramaAcademico());
   }
 
   construirForm() {
@@ -171,7 +170,6 @@ export class CrudTransferenciaInternaComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       const formData = event.data.InfoTransferenciaInterna;
-      console.log("form data", formData);
       const dataPostTransferencia = {
         InscripcionEstudiante: {
           Id: 0,
@@ -202,7 +200,6 @@ export class CrudTransferenciaInternaComponent implements OnInit {
           Activo: true,
         },
       }
-      console.log("data post", dataPostTransferencia);
       this.createTransferencia(dataPostTransferencia);
       this.result.emit(event);
     }
