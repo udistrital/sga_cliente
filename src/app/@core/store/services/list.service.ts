@@ -428,7 +428,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.TipoIdentificacion).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.enteService.get('tipo_identificacion/?query=Activo:true&limit=0')
+          this.tercerosService.get('tipo_documento/?query=Activo:true&limit=0')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.TipoIdentificacion, result);

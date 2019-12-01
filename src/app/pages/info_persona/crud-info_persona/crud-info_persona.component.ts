@@ -17,6 +17,7 @@ import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { ListService } from '../../../@core/store/services/list.service';
 import { UserService } from '../../../@core/data/users.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   selector: 'ngx-crud-info-persona',
@@ -66,7 +67,7 @@ export class CrudInfoPersonaComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
-    private campusMidService: CampusMidService,
+    private sgamidService: SgaMidService,
     private autenticationService: ImplicitAutenticationService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
@@ -85,7 +86,7 @@ export class CrudInfoPersonaComponent implements OnInit {
       this.listService.findEstadoCivil();
       this.listService.findTipoIdentificacion();
       this.loading = false;
-      // this.cargarPeriodo();
+      this.cargarPeriodo();
       this.loadLists();
   }
 
@@ -169,98 +170,98 @@ export class CrudInfoPersonaComponent implements OnInit {
   //   }
   // }
 
-  // createInfoPersona(infoPersona: any): void {
-  //   const opt: any = {
-  //     title: this.translate.instant('GLOBAL.crear'),
-  //     text: this.translate.instant('GLOBAL.crear') + '?',
-  //     icon: 'warning',
-  //     buttons: true,
-  //     dangerMode: true,
-  //     showCancelButton: true,
-  //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-  //   };
-  //   Swal(opt)
-  //     .then((willDelete) => {
-  //       this.loading = true;
-  //       if (willDelete.value) {
-  //         const files = []
-  //         this.info_info_persona = <any>infoPersona;
-  //         if (this.info_info_persona.Foto.file !== undefined) {
-  //           files.push({
-  //             nombre: this.autenticationService.getPayload().sub,
-  //             name: this.autenticationService.getPayload().sub,
-  //             key: 'Foto',
-  //             file: this.info_info_persona.Foto.file, IdDocumento: 1,
-  //           });
-  //         }
-  //         if (this.info_info_persona.SoporteDocumento.file !== undefined) {
-  //           files.push({
-  //             nombre: this.autenticationService.getPayload().sub,
-  //             name: this.autenticationService.getPayload().sub,
-  //             key: 'SoporteDocumento',
-  //             file: this.info_info_persona.SoporteDocumento.file, IdDocumento: 2,
-  //           });
-  //         }
-  //         this.nuxeoService.getDocumentos$(files, this.documentoService)
-  //           .subscribe(response => {
-  //             if (Object.keys(response).length === files.length) {
-  //               this.filesUp = <any>response;
+  createInfoPersona(infoPersona: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.crear'),
+      text: this.translate.instant('GLOBAL.crear') + '?',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        this.loading = true;
+        if (willDelete.value) {
+          const files = []
+          this.info_info_persona = <any>infoPersona;
+          if (this.info_info_persona.Foto.file !== undefined) {
+            files.push({
+              nombre: this.autenticationService.getPayload().sub,
+              name: this.autenticationService.getPayload().sub,
+              key: 'Foto',
+              file: this.info_info_persona.Foto.file, IdDocumento: 1,
+            });
+          }
+          if (this.info_info_persona.SoporteDocumento.file !== undefined) {
+            files.push({
+              nombre: this.autenticationService.getPayload().sub,
+              name: this.autenticationService.getPayload().sub,
+              key: 'SoporteDocumento',
+              file: this.info_info_persona.SoporteDocumento.file, IdDocumento: 2,
+            });
+          }
+          // this.nuxeoService.getDocumentos$(files, this.documentoService)
+          //   .subscribe(response => {
+              // if (Object.keys(response).length === files.length) {
+              //   this.filesUp = <any>response;
 
-  //               if (this.filesUp['Foto'] !== undefined) {
-  //                 this.info_info_persona.Foto = this.filesUp['Foto'].Id;
-  //               }
-  //               if (this.filesUp['SoporteDocumento'] !== undefined) {
-  //                 this.info_info_persona.SoporteDocumento = this.filesUp['SoporteDocumento'].Id;
-  //               }
-  //               this.info_info_persona.Usuario = this.autenticationService.getPayload().sub;
-  //               console.info(JSON.stringify(this.info_info_persona));
-  //               this.campusMidService.post('persona/guardar_persona', this.info_info_persona)
-  //                 .subscribe(res => {
-  //                   const r = <any>res
-  //                   console.info(JSON.stringify(res));
-  //                   if (r !== null && r.Type !== 'error') {
-  //                     window.localStorage.setItem('ente', r.Id);
-  //                     this.info_persona_id = r.Id;
-  //                     this.loadInfoPersona();
-  //                     this.createInscripcion(this.info_persona_id);
-  //                     this.loadInscripcion();
-  //                     this.loading = false;
-  //                     this.eventChange.emit(true);
-  //                     this.showToast('info', this.translate.instant('GLOBAL.crear'),
-  //                       this.translate.instant('GLOBAL.info_persona') + ' ' +
-  //                       this.translate.instant('GLOBAL.confirmarCrear'));
-  //                   } else {
-  //                     this.showToast('error', this.translate.instant('GLOBAL.error'),
-  //                       this.translate.instant('GLOBAL.error'));
-  //                   }
-  //                 },
-  //                   (error: HttpErrorResponse) => {
-  //                     Swal({
-  //                       type: 'error',
-  //                       title: error.status + '',
-  //                       text: this.translate.instant('ERROR.' + error.status),
-  //                       footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                         this.translate.instant('GLOBAL.info_persona'),
-  //                       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                     });
-  //                   });
-  //             }
-  //           },
-  //             (error: HttpErrorResponse) => {
-  //               Swal({
-  //                 type: 'error',
-  //                 title: error.status + '',
-  //                 text: this.translate.instant('ERROR.' + error.status),
-  //                 footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                   this.translate.instant('GLOBAL.info_persona') + '|' +
-  //                   this.translate.instant('GLOBAL.soporte_documento'),
-  //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //               });
-  //             });
-  //       }
-  //     });
-  // }
+                // if (this.filesUp['Foto'] !== undefined) {
+                //   this.info_info_persona.Foto = this.filesUp['Foto'].Id;
+                // }
+                // if (this.filesUp['SoporteDocumento'] !== undefined) {
+                //   this.info_info_persona.SoporteDocumento = this.filesUp['SoporteDocumento'].Id;
+                // }
+                this.info_info_persona.Usuario = this.autenticationService.getPayload().sub;
+                console.info(JSON.stringify(this.info_info_persona));
+                this.sgamidService.post('persona/guardar_persona', this.info_info_persona)
+                  .subscribe(res => {
+                    const r = <any>res
+                    console.info(JSON.stringify(res));
+                    if (r !== null && r.Type !== 'error') {
+                      window.localStorage.setItem('ente', r.Id);
+                      this.info_persona_id = r.Id;
+                      // this.loadInfoPersona();
+                      // this.createInscripcion(this.info_persona_id);
+                      // this.loadInscripcion();
+                      this.loading = false;
+                      this.eventChange.emit(true);
+                      this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                        this.translate.instant('GLOBAL.info_persona') + ' ' +
+                        this.translate.instant('GLOBAL.confirmarCrear'));
+                    } else {
+                      this.showToast('error', this.translate.instant('GLOBAL.error'),
+                        this.translate.instant('GLOBAL.error'));
+                    }
+                  },
+                    (error: HttpErrorResponse) => {
+                      Swal({
+                        type: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('GLOBAL.crear') + '-' +
+                          this.translate.instant('GLOBAL.info_persona'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      });
+                    });
+              // }
+        //     },
+        //       (error: HttpErrorResponse) => {
+        //         Swal({
+        //           type: 'error',
+        //           title: error.status + '',
+        //           text: this.translate.instant('ERROR.' + error.status),
+        //           footer: this.translate.instant('GLOBAL.crear') + '-' +
+        //             this.translate.instant('GLOBAL.info_persona') + '|' +
+        //             this.translate.instant('GLOBAL.soporte_documento'),
+        //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        //         });
+        //       // });
+        }
+      });
+  }
 
   // updateInfoPersona(infoPersona: any): void {
   //   const opt: any = {
@@ -405,46 +406,46 @@ export class CrudInfoPersonaComponent implements OnInit {
   //   }
   // }
 
-  // createInscripcion(ente_id): void {
-  //   this.aspirante = ente_id;
-  //   this.programa = this.userService.getPrograma();
-  //   const inscripcionPost = {
-  //     PeriodoId: this.periodo.Id,
-  //     PersonaId: this.aspirante,
-  //     ProgramaAcademicoId: this.programa,
-  //     EstadoInscripcionId: {Id: 1},
-  //     TipoInscripcionId: {Id: 1},
-  //     AceptaTerminos: true,
-  //     FechaAceptaTerminos: new Date(),
-  //     Id: this.inscripcion_id,
-  //   };
-  //   this.info_inscripcion = <Inscripcion>inscripcionPost;
-  //   this.info_inscripcion.PersonaId = Number(this.info_persona_id);
-  //   this.info_inscripcion.Id = Number(this.inscripcion_id);
-  //   this.inscripcionService.post('inscripcion', this.info_inscripcion)
-  //     .subscribe(res => {
-  //       this.info_inscripcion = <Inscripcion><unknown>res;
-  //       this.inscripcion_id = this.info_inscripcion.Id;
-  //       this.eventChange.emit(true);
-  //       Swal({
-  //         type: 'info',
-  //         title: this.translate.instant('GLOBAL.crear'),
-  //         text: this.translate.instant('GLOBAL.inscrito') + ' ' + this.periodo.Nombre,
-  //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //       });
-  //     },
-  //     (error: HttpErrorResponse) => {
-  //       Swal({
-  //         type: 'error',
-  //         title: error.status + '',
-  //         text: this.translate.instant('ERROR.' + error.status),
-  //         footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //           this.translate.instant('GLOBAL.info_persona') + '|' +
-  //           this.translate.instant('GLOBAL.admision'),
-  //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //       });
-  //     });
-  // }
+  createInscripcion(ente_id): void {
+    this.aspirante = ente_id;
+    this.programa = this.userService.getPrograma();
+    const inscripcionPost = {
+      PeriodoId: this.periodo.Id,
+      PersonaId: this.aspirante,
+      ProgramaAcademicoId: this.programa,
+      EstadoInscripcionId: {Id: 1},
+      TipoInscripcionId: {Id: 1},
+      AceptaTerminos: true,
+      FechaAceptaTerminos: new Date(),
+      Id: this.inscripcion_id,
+    };
+    this.info_inscripcion = <Inscripcion>inscripcionPost;
+    this.info_inscripcion.PersonaId = Number(this.info_persona_id);
+    this.info_inscripcion.Id = Number(this.inscripcion_id);
+    this.inscripcionService.post('inscripcion', this.info_inscripcion)
+      .subscribe(res => {
+        this.info_inscripcion = <Inscripcion><unknown>res;
+        this.inscripcion_id = this.info_inscripcion.Id;
+        this.eventChange.emit(true);
+        Swal({
+          type: 'info',
+          title: this.translate.instant('GLOBAL.crear'),
+          text: this.translate.instant('GLOBAL.inscrito') + ' ' + this.periodo.Nombre,
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('GLOBAL.crear') + '-' +
+            this.translate.instant('GLOBAL.info_persona') + '|' +
+            this.translate.instant('GLOBAL.admision'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
+  }
 
   // updateInscripcion(): void {
   //   this.loadInscripcion();
@@ -475,54 +476,56 @@ export class CrudInfoPersonaComponent implements OnInit {
     // this.info_admision()
   }
 
-  // validarForm(event) {
-  //   if (event.valid) {
-  //     if (this.info_inscripcion === undefined) {
-  //       this.validarTerminos(event);
-  //     } else {
-  //       if (this.info_inscripcion.AceptaTerminos !== true) {
-  //         this.validarTerminos(event);
-  //       } else {
-  //         // this.updateInfoPersona(event.data.InfoPersona)
-  //       }
-  //     }
-  //   }
-  // }
+  validarForm(event) {
+    if (event.valid) {
+      if (this.info_inscripcion === undefined) {
+        console.info('Listo para registro')
+         this.validarTerminos(event);
+      } else {
+        if (this.info_inscripcion.AceptaTerminos !== true) {
+         // this.validarTerminos(event);
+        } else {
+          // this.updateInfoPersona(event.data.InfoPersona)
+        }
+      }
+    }
+  }
 
-  // validarTerminos(event) {
-  //   Swal({
-  //     title: this.translate.instant('GLOBAL.terminos_datos'),
-  //     width: 800,
-  //     allowOutsideClick: true,
-  //     allowEscapeKey: true,
-  //     html: '<embed src="/assets/pdf/politicasUD.pdf" type="application/pdf" style="width:100%; height:375px;" frameborder="0"></embed>',
-  //     input: 'checkbox',
-  //     inputPlaceholder: this.translate.instant('GLOBAL.acepto_terminos'),
-  //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //   })
-  //     .then((result) => {
-  //       if (result.value) {
-  //         if (this.info_info_persona === undefined) {
-  //           this.createInfoPersona(event.data.InfoPersona);
-  //         } else {
-  //           this.updateInfoPersona(event.data.InfoPersona);
-  //           if (this.info_inscripcion === undefined) {
-  //             this.createInscripcion(this.info_persona_id)
-  //           } else {
-  //             this.updateInscripcion();
-  //           }
-  //         }
-  //         this.loadInscripcion();
-  //       } else if (result.value === 0) {
-  //         Swal({
-  //           type: 'error',
-  //           text: this.translate.instant('GLOBAL.rechazo_terminos'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //         this.aceptaTerminos = false;
-  //       }
-  //     });
-  // }
+  validarTerminos(event) {
+    Swal({
+      title: this.translate.instant('GLOBAL.terminos_datos'),
+      width: 800,
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+      html: '<embed src="/assets/pdf/politicasUD.pdf" type="application/pdf" style="width:100%; height:375px;" frameborder="0"></embed>',
+      input: 'checkbox',
+      inputPlaceholder: this.translate.instant('GLOBAL.acepto_terminos'),
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    })
+      .then((result) => {
+        if (result.value) {
+          console.info('info_info_persona' + this.info_info_persona)
+          if (this.info_info_persona === undefined) {
+            this.createInfoPersona(event.data.InfoPersona);
+          } else {
+            // this.updateInfoPersona(event.data.InfoPersona);
+            if (this.info_inscripcion === undefined) {
+              // this.createInscripcion(this.info_persona_id)
+            } else {
+              // this.updateInscripcion();
+            }
+          }
+          // this.loadInscripcion();
+        } else if (result.value === 0) {
+          Swal({
+            type: 'error',
+            text: this.translate.instant('GLOBAL.rechazo_terminos'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+          this.aceptaTerminos = false;
+        }
+      });
+  }
 
   setPercentage(event) {
     this.percentage = event;

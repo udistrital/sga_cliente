@@ -243,68 +243,68 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   //     });
   // }
 
-  // createInfoCaracteristica(infoCaracteristica: any): void {
-  //   const opt: any = {
-  //     title: this.translate.instant('GLOBAL.crear'),
-  //     text: this.translate.instant('GLOBAL.crear') + '?',
-  //     icon: 'warning',
-  //     buttons: true,
-  //     dangerMode: true,
-  //     showCancelButton: true,
-  //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-  //   };
-  //   Swal(opt)
-  //     .then((willDelete) => {
-  //       this.loading = true;
-  //       if (willDelete.value) {
-  //         const info_info_caracteristica_post = <any>infoCaracteristica;
-  //         info_info_caracteristica_post.TipoRelacionUbicacionEnte = 1;
-  //         info_info_caracteristica_post.Ente = (1 * this.info_caracteristica_id);
-  //         info_info_caracteristica_post.Persona = (1 * this.info_caracteristica_id);
-  //         info_info_caracteristica_post.LugarAnt = info_info_caracteristica_post.Lugar;
-  //         info_info_caracteristica_post.Lugar = {
-  //           Lugar: info_info_caracteristica_post.LugarAnt,
-  //         };
-  //         console.info(JSON.stringify(info_info_caracteristica_post));
-  //         this.campusMidService.post('persona/guardar_complementarios', info_info_caracteristica_post)
-  //           .subscribe(res => {
-  //             if (res !== null) {
-  //               this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
-  //               this.loading = false;
-  //               this.eventChange.emit(true);
-  //               this.showToast('info', this.translate.instant('GLOBAL.crear'),
-  //                 this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
-  //                 this.translate.instant('GLOBAL.confirmarCrear'));
-  //             }
-  //           },
-  //             (error: HttpErrorResponse) => {
-  //               Swal({
-  //                 type: 'error',
-  //                 title: error.status + '',
-  //                 text: this.translate.instant('ERROR.' + error.status),
-  //                 footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                   this.translate.instant('GLOBAL.info_caracteristica'),
-  //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //               });
-  //             });
-  //       }
-  //     });
-  // }
+  createInfoCaracteristica(infoCaracteristica: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.crear'),
+      text: this.translate.instant('GLOBAL.crear') + '?',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        this.loading = true;
+        if (willDelete.value) {
+          const info_info_caracteristica_post = <any>infoCaracteristica;
+          info_info_caracteristica_post.TipoRelacionUbicacionEnte = 1;
+          info_info_caracteristica_post.Ente = (1 * this.info_caracteristica_id);
+          info_info_caracteristica_post.Persona = (1 * this.info_caracteristica_id);
+          info_info_caracteristica_post.LugarAnt = info_info_caracteristica_post.Lugar;
+          info_info_caracteristica_post.Lugar = {
+            Lugar: info_info_caracteristica_post.LugarAnt,
+          };
+          console.info(JSON.stringify(info_info_caracteristica_post));
+          this.campusMidService.post('persona/guardar_complementarios', info_info_caracteristica_post)
+            .subscribe(res => {
+              if (res !== null) {
+                this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
+                this.loading = false;
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                  this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
+                  this.translate.instant('GLOBAL.confirmarCrear'));
+              }
+            },
+              (error: HttpErrorResponse) => {
+                Swal({
+                  type: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.crear') + '-' +
+                    this.translate.instant('GLOBAL.info_caracteristica'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
+        }
+      });
+  }
 
   ngOnInit() {
     // this.loadInfoCaracteristica();
   }
 
-  // validarForm(event) {
-  //   if (event.valid) {
-  //     if (this.info_info_caracteristica === undefined && !this.denied_acces) {
-  //       this.createInfoCaracteristica(event.data.InfoCaracteristica);
-  //     } else {
-  //       this.updateInfoCaracteristica(event.data.InfoCaracteristica);
-  //     }
-  //   }
-  // }
+  validarForm(event) {
+    if (event.valid) {
+      if (this.info_info_caracteristica === undefined && !this.denied_acces) {
+        // this.createInfoCaracteristica(event.data.InfoCaracteristica);
+      } else {
+        // this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+      }
+    }
+  }
 
   setPercentage(event) {
     this.result.emit(event);

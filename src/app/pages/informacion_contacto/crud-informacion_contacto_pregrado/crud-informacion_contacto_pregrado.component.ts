@@ -496,15 +496,15 @@ export class CrudInformacionContactoPregradoComponent implements OnInit {
     // this.loadInformacionContacto();
   }
 
-  // validarForm(event) {
-  //   if (event.valid) {
-  //     if (this.info_informacion_contacto === undefined) {
-  //       this.createInformacionContacto(event.data.InformacionContacto);
-  //     } else {
-  //       this.updateInformacionContacto(event.data.InformacionContacto);
-  //     }
-  //   }
-  // }
+  validarForm(event) {
+    if (event.valid) {
+      if (this.info_informacion_contacto === undefined) {
+        // this.createInformacionContacto(event.data.InformacionContacto);
+      } else {
+        // this.updateInformacionContacto(event.data.InformacionContacto);
+      }
+    }
+  }
 
   setPercentage(event) {
     this.result.emit(event);
