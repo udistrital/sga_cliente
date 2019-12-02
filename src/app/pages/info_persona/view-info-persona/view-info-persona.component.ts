@@ -38,7 +38,7 @@ export class ViewInfoPersonaComponent implements OnInit {
     private translate: TranslateService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.loadInfoPersona();
+    // this.loadInfoPersona();
   }
 
   useLanguage(language: string) {

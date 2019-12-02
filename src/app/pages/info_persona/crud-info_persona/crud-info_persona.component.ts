@@ -227,7 +227,7 @@ export class CrudInfoPersonaComponent implements OnInit {
                       // this.createInscripcion(this.info_persona_id);
                       // this.loadInscripcion();
                       this.loading = false;
-                      this.eventChange.emit(true);
+                      // this.eventChange.emit(true); ojoooooooooooooooooooooooooooooooooooooo
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
                         this.translate.instant('GLOBAL.info_persona') + ' ' +
                         this.translate.instant('GLOBAL.confirmarCrear'));
@@ -508,7 +508,7 @@ export class CrudInfoPersonaComponent implements OnInit {
           if (this.info_info_persona === undefined) {
             this.createInfoPersona(event.data.InfoPersona);
           } else {
-            // this.updateInfoPersona(event.data.InfoPersona);
+             // this.updateInfoPersona(event.data.InfoPersona);
             if (this.info_inscripcion === undefined) {
               // this.createInscripcion(this.info_persona_id)
             } else {
