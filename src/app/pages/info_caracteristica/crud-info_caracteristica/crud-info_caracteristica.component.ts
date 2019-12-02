@@ -24,13 +24,13 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   info_caracteristica_id: number;
 
   @Input('info_caracteristica_id')
-  set name(info_caracteristica_id: number) {
-    this.info_caracteristica_id = info_caracteristica_id;
-    if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
-      this.info_caracteristica_id.toString() !== '') {
-      // this.loadInfoCaracteristica();
-    }
-  }
+  // set name(info_caracteristica_id: number) {
+  //   this.info_caracteristica_id = info_caracteristica_id;
+  //   if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
+  //     this.info_caracteristica_id.toString() !== '') {
+  //     // this.loadInfoCaracteristica();
+  //   }
+  // }
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename

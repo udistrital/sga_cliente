@@ -171,6 +171,7 @@ export class CrudInfoPersonaComponent implements OnInit {
   // }
 
   createInfoPersona(infoPersona: any): void {
+
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
       text: this.translate.instant('GLOBAL.crear') + '?',
@@ -227,10 +228,10 @@ export class CrudInfoPersonaComponent implements OnInit {
                       // this.createInscripcion(this.info_persona_id);
                       // this.loadInscripcion();
                       this.loading = false;
-                      // this.eventChange.emit(true); ojoooooooooooooooooooooooooooooooooooooo
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
                         this.translate.instant('GLOBAL.info_persona') + ' ' +
                         this.translate.instant('GLOBAL.confirmarCrear'));
+                        this.eventChange.emit(true);
                     } else {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
                         this.translate.instant('GLOBAL.error'));

@@ -314,30 +314,30 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_prod = false;
         break;
       case 'info_caracteristica':
-        const ENTE = this.userService.getEnte();
-        if (ENTE !== 0 && ENTE !== undefined && ENTE.toString() !== '' && ENTE.toString() !== 'NaN' && this.info_ente_id === undefined) {
-          this.info_ente_id = <number>ENTE;
-          this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_ente_id)
-            .subscribe(inscripcion => {
-              this.info_inscripcion = <any>inscripcion[0];
-              if (inscripcion !== null && this.info_inscripcion.Type !== 'error') {
-                this.inscripcion_id = this.info_inscripcion.Id;
-                // this.getInfoInscripcion();
-              }
-            },
-              (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
-                  title: error.status + '',
-                  text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                    this.translate.instant('GLOBAL.admision'),
-                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                });
-              });
-        }
-
-        this.show_info = true;
+        // const ENTE = this.userService.getEnte();
+        // if (ENTE !== 0 && ENTE !== undefined && ENTE.toString() !== '' && ENTE.toString() !== 'NaN' && this.info_ente_id === undefined) {
+        //   this.info_ente_id = <number>ENTE;
+        //   this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_ente_id)
+        //     .subscribe(inscripcion => {
+        //       this.info_inscripcion = <any>inscripcion[0];
+        //       if (inscripcion !== null && this.info_inscripcion.Type !== 'error') {
+        //         this.inscripcion_id = this.info_inscripcion.Id;
+        //         // this.getInfoInscripcion();
+        //       }
+        //     },
+        //       (error: HttpErrorResponse) => {
+        //         Swal({
+        //           type: 'error',
+        //           title: error.status + '',
+        //           text: this.translate.instant('ERROR.' + error.status),
+        //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
+        //             this.translate.instant('GLOBAL.admision'),
+        //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        //         });
+        //       });
+        // }
+        console.info('Aqui evento cambio')
+        this.show_info = false;
         this.show_profile = false;
         this.show_acad = false;
         this.show_expe = false;
