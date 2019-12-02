@@ -20,14 +20,17 @@ export class OfertaAcademicaService {
   }
 
   post(endpoint, element) {
+    this.requestManager.setPath('OFERTA_ACADEMICA_SERVICE');
     return this.requestManager.post(endpoint, element);
   }
 
   put(endpoint, element) {
+    this.requestManager.setPath('OFERTA_ACADEMICA_SERVICE');
     return this.requestManager.put(endpoint, element);
   }
 
   delete(endpoint, element) {
+    this.requestManager.setPath('OFERTA_ACADEMICA_SERVICE');
     return this.requestManager.delete(endpoint, element.Id);
   }
 }

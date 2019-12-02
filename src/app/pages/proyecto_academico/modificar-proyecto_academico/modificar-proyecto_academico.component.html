@@ -283,7 +283,7 @@
                     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
                     <nb-card class="m-4" accent="info">
                         <nb-card-header>{{ 'proyecto.registro' | translate }}</nb-card-header>
-                        <nb-card-body>
+                        <nb-card-body style="overflow: visible">
                             <form id="resoluForm" [formGroup]="resoluform">
                                 <mat-form-field>
                                     <mat-label>{{ 'proyecto.area' | translate }}</mat-label>
@@ -386,7 +386,7 @@
 
                         <nb-card *ngIf="checkalta" class="m-4" accent="info">
                             <nb-card-header>{{ 'editarproyecto.registro_alta' | translate }}</nb-card-header>
-                            <nb-card-body>
+                            <nb-card-body style="overflow: visible">
                                 <form id="resolualtaform" [formGroup]="resolualtaform">
                                     <mat-form-field>
                                         <input matInput placeholder="{{ 'proyecto.resolucion_proyecto' | translate }}"

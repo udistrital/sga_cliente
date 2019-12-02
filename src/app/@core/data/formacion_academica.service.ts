@@ -27,12 +27,15 @@ export class FormacionAcademicaService {
     return this.requestManager.get(endpoint);
   }
   post(endpoint, element) {
+    this.requestManager.setPath('FormacionAcademicaService');
     return this.requestManager.post(endpoint, element);
   }
   put(endpoint, element) {
+    this.requestManager.setPath('FormacionAcademicaService');
     return this.requestManager.put(endpoint, element);
   }
   delete(endpoint, element) {
+    this.requestManager.setPath('FormacionAcademicaService');
     return this.requestManager.delete(endpoint, element.Id);
   }
 }
