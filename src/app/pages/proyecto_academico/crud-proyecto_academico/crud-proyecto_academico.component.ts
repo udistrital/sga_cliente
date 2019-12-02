@@ -25,6 +25,7 @@ import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
 import { TrDependenciaPadre } from '../../../@core/data/models/oikos/tr_dependencia_padre';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as moment from 'moment';
+import {MatDialogRef} from '@angular/material/dialog';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 // import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
 import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
@@ -33,6 +34,7 @@ import { Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import * as momentTimezone from 'moment-timezone';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
@@ -135,6 +137,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   constructor(private translate: TranslateService,
     private toasterService: ToasterService,
     private oikosService: OikosService,
+    private routerService: Router,
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
@@ -295,6 +298,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
 
   loadCloneData(id: any): void {
+    this.Campo2Control.setValidators([Validators.nullValidator]);
     this.sgamidService.get('consulta_proyecto_academico/' + id )
     .subscribe((res: any) => {
       if (res.Type !== 'error' && res[0].ProyectoAcademico.Id) {
@@ -551,6 +555,10 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     return new Date(convertDate);
   }
 
+  openlist( ): void {
+    this.routerService.navigateByUrl(`pages/proyecto_academico/list-proyecto_academico`);
+  }
+
   registroproyecto() {
     try {
       if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0
@@ -725,6 +733,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
               }; Swal(opt1)
               .then((willDelete) => {
                 if (willDelete.value) {
+                  this.checkregistro = true;
+                  this.openlist();
                 }
               });
             }

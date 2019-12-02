@@ -168,32 +168,124 @@ export class CrudInformacionFamiliarComponent implements OnInit {
           Tercero_Familiar: tercero,
           Familiares: [
             {
-              Id: 0,
-              TerceroId: tercero,
-              TerceroFamiliarId: {
+              Familiar: {
                 Id: 0,
-                NombreCompleto: formData.NombreFamiliarPrincipal,
-                TipoContribuyenteId: {
-                  Id: 1,
-                  Nombre: undefined,
+                TerceroId: tercero,
+                TerceroFamiliarId: {
+                  Id: 0,
+                  NombreCompleto: formData.NombreFamiliarPrincipal,
+                  TipoContribuyenteId: {
+                    Id: 1,
+                    Nombre: undefined,
+                  },
                 },
+                TipoParentescoId: formData.Parentesco,
+                CodigoAbreviacion: 'CONTPRIN',
               },
-              TipoParentescoId: formData.Parentesco,
-              CodigoAbreviacion: 'CONTPRIN',
+              InformacionContacto: [
+                {
+                  // telefono
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 48,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.Telefono}),
+                  Activo: true,
+                },
+                {
+                  // correo
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 50,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.CorreoElectronico}),
+                  Activo: true,
+                },
+                {
+                  // dirección
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 51,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.DireccionResidencia}),
+                  Activo: true,
+                },
+              ],
             },
             {
-              Id: 0,
-              TerceroId: tercero,
-              TerceroFamiliarId: {
+              Familiar: {
                 Id: 0,
-                NombreCompleto: formData.NombreFamiliarAlterno,
-                TipoContribuyenteId: {
-                  Id: 1,
-                  Nombre: undefined,
+                TerceroId: tercero,
+                TerceroFamiliarId: {
+                  Id: 0,
+                  NombreCompleto: formData.NombreFamiliarAlterno,
+                  TipoContribuyenteId: {
+                    Id: 1,
+                    Nombre: undefined,
+                  },
                 },
+                TipoParentescoId: formData.ParentescoAlterno,
+                CodigoAbreviacion: 'CONTALT',
               },
-              TipoParentescoId: formData.ParentescoAlterno,
-              CodigoAbreviacion: 'CONTALT',
+              InformacionContacto: [
+                {
+                  // telefono
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 48,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.TelefonoAlterno}),
+                  Activo: true,
+                },
+                {
+                  // correo
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 50,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.CorreoElectronicoAlterno}),
+                  Activo: true,
+                },
+                {
+                  // dirección
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 51,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.DireccionResidenciaAlterno}),
+                  Activo: true,
+                },
+              ],
             },
           ],
         }

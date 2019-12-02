@@ -1,4 +1,5 @@
 import { TipoParentesco } from './tipo_parentesco';
+import { InfoComplementariaTercero } from './info_complementaria_tercero';
 import { Tercero } from './tercero';
 
 export class TerceroFamiliar {
@@ -9,7 +10,12 @@ export class TerceroFamiliar {
   CodigoAbreviacion: string;
 }
 
+export class TerceroFamiliarConInfoComplementaria {
+  Familiar: TerceroFamiliar;
+  InformacionContacto: InfoComplementariaTercero[];
+}
+
 export class TrPostInformacionFamiliar {
   Tercero_Familiar: Tercero;
-  Familiares: TerceroFamiliar[];
+  Familiares: TerceroFamiliarConInfoComplementaria[];
 }

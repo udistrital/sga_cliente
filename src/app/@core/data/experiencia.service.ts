@@ -27,12 +27,15 @@ export class ExperienciaService {
     return this.requestManager.get(endpoint);
   }
   post(endpoint, element) {
+    this.requestManager.setPath('ExperienciaService');
     return this.requestManager.post(endpoint, element);
   }
   put(endpoint, element) {
+    this.requestManager.setPath('ExperienciaService');
     return this.requestManager.put(endpoint, element);
   }
   delete(endpoint, element) {
+    this.requestManager.setPath('ExperienciaService');
     return this.requestManager.delete(endpoint, element.Id);
   }
 }
