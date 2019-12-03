@@ -820,6 +820,11 @@
         "reingreso": "Reingreso",
         "transferencia": "Datos de transferencia"
     },
+    "reingreso": {
+        "reingreso_no_registrado": "Solicitud de reingreso no registrada",
+        "reingreso_registrado": "Solicitud de reingreso registrada",
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta solicitud de reingreso?"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Información familiar no actualizada",
         "informacion_familiar_actualizada": "Información familiar actualizada",

@@ -807,9 +807,14 @@
         "reingreso": "Re-entry",
         "transferencia": "Transfer data"
     },
+    "reingreso": {
+        "reingreso_no_registrado": "Re-entry request not created",
+        "reingreso_registrado": "Re-entry request created",
+        "seguro_continuar_registrar": "Are you sure you want to register this re-entry request?"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",
-        "seguro_continuar_registrar": "Are you sureyo want to register this family information?"
+        "seguro_continuar_registrar": "Are you sure you want to register this family information?"
     }
 }
