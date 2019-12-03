@@ -244,6 +244,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   // }
 
   createInfoCaracteristica(infoCaracteristica: any): void {
+    this.info_caracteristica_id = Number(sessionStorage.getItem('IdTercero'));
+    console.info('Id localstor' + this.info_caracteristica_id)
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
       text: this.translate.instant('GLOBAL.crear') + '?',
@@ -260,12 +262,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
         if (willDelete.value) {
           const info_info_caracteristica_post = <any>infoCaracteristica;
           info_info_caracteristica_post.TipoRelacionUbicacionEnte = 1;
-          info_info_caracteristica_post.Ente = (1 * this.info_caracteristica_id);
-          info_info_caracteristica_post.Persona = (1 * this.info_caracteristica_id);
-          info_info_caracteristica_post.LugarAnt = info_info_caracteristica_post.Lugar;
-          info_info_caracteristica_post.Lugar = {
-            Lugar: info_info_caracteristica_post.LugarAnt,
-          };
+          info_info_caracteristica_post.Tercero = (1 * this.info_caracteristica_id);
+          info_info_caracteristica_post.Lugar = info_info_caracteristica_post.Lugar;
           console.info(JSON.stringify(info_info_caracteristica_post));
           this.campusMidService.post('persona/guardar_complementarios', info_info_caracteristica_post)
             .subscribe(res => {
@@ -293,14 +291,20 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.info('Este es el id' +  this.info_caracteristica_id)
     // this.loadInfoCaracteristica();
   }
 
   validarForm(event) {
+    console.info('Entro a valid')
+    console.info(this.info_info_caracteristica)
+    console.info('Este es el id' +  this.info_caracteristica_id)
     if (event.valid) {
       if (this.info_info_caracteristica === undefined && !this.denied_acces) {
-        // this.createInfoCaracteristica(event.data.InfoCaracteristica);
+        console.info('Entro a create')
+        this.createInfoCaracteristica(event.data.InfoCaracteristica);
       } else {
+        console.info('Entro a update')
         // this.updateInfoCaracteristica(event.data.InfoCaracteristica);
       }
     }

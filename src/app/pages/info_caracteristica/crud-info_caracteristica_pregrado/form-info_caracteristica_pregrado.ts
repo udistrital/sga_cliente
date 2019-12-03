@@ -94,7 +94,7 @@ export let FORM_INFO_CARACTERISTICA_PREGRADO = {
             placeholder_i18n: 'eps',
             requerido: true,
             tipo: 'EPS',
-            key: 'Nombre',
+            key: 'NombreCompleto',
             opciones: [],
         },
         {
