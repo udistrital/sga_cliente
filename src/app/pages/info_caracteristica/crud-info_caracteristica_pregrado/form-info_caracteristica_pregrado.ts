@@ -13,14 +13,9 @@ export let FORM_INFO_CARACTERISTICA_PREGRADO = {
             label_i18n: 'grupo_sanguineo',
             placeholder_i18n: 'grupo_sanguineo',
             requerido: true,
-            tipo: 'text',
-            key: 'Id',
-            opciones: [
-                { Id: 'A' },
-                { Id: 'AB' },
-                { Id: 'B' },
-                { Id: 'O' },
-            ],
+            tipo: 'Sanguineo',
+            key: 'Nombre',
+            opciones: [ ],
         },
         {
             etiqueta: 'select',
@@ -30,12 +25,9 @@ export let FORM_INFO_CARACTERISTICA_PREGRADO = {
             label_i18n: 'rh',
             placeholder_i18n: 'rh',
             requerido: true,
-            tipo: 'text',
-            key: 'Id',
-            opciones: [
-                { Id: '-' },
-                { Id: '+' },
-            ],
+            tipo: 'RH',
+            key: 'Nombre',
+            opciones: [ ],
         },
         {
             etiqueta: 'select',
@@ -95,12 +87,14 @@ export let FORM_INFO_CARACTERISTICA_PREGRADO = {
             opciones: [],
         },
         {
-            etiqueta: 'selectmultiple',
+            etiqueta: 'select',
             claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
             nombre: 'EPS',
             label_i18n: 'eps',
             placeholder_i18n: 'eps',
             requerido: true,
+            tipo: 'EPS',
+            key: 'Nombre',
             opciones: [],
         },
         {
@@ -120,6 +114,7 @@ export let FORM_INFO_CARACTERISTICA_PREGRADO = {
                 { Id: '3' },
                 { Id: '4' },
                 { Id: '5' },
+                { Id: 'Más de cinco'},
             ],
         },
         {

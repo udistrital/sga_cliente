@@ -13,7 +13,9 @@ export let FORM_ICFES = {
       label_i18n: 'tipo_icfes',
       placeholder_i18n: 'tipo_icfes',
       requerido: true,
-      tipo: 'text',
+      tipo: 'ICFES',
+      key: 'Nombre',
+      opciones: [],
     },
     {
       etiqueta: 'input',

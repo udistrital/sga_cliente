@@ -12,6 +12,42 @@ export class ListReducer {
     }
   }
 
+  static ListReducerGrupoSanguineo(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.Sanguineo:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerTipoICFES(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.ICFES:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerFactorRH(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.RH:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerEPS(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.EPS:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
   static ListReducerClasificacionNivelIdioma(state: Array<any> = new Array, action) {
     switch (action.type) {
       case REDUCER_LIST.ClasificacionNivelIdioma:

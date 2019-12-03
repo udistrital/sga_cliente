@@ -31,7 +31,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   @Input('documento_programa_id')
   set name(documento_programa_id: number) {
     this.documento_programa_id = documento_programa_id;
-    this.loadDocumentoPrograma();
+    // this.loadDocumentoPrograma();
   }
 
   @Input('persona_id')
@@ -44,7 +44,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
     this.inscripcion = inscripcion_id;
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
-        this.loadOptionsTipodocumentoprograma();
+        // this.loadOptionsTipodocumentoprograma();
     }
   }
 
@@ -103,7 +103,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
     }
     return 0;
   }
-
+/*
   loadOptionsTipodocumentoprograma(): void {
     this.inscripcionService.get('inscripcion/' + this.inscripcion)
       .subscribe(dato_inscripcion => {
@@ -496,9 +496,9 @@ export class CrudDocumentoProgramaComponent implements OnInit {
       this.result.emit(event);
     }
   }
-
+*/
   ngOnInit() {
-    this.loadDocumentoPrograma();
+    // this.loadDocumentoPrograma();
   }
 
   setPercentage(event) {

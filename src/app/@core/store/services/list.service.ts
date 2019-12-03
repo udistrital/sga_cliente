@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { REDUCER_LIST } from '../reducer.constants';
 import { InscripcionService } from '../../data/inscripcion.service';
 import { CoreService } from '../../data/core.service';
+import { TercerosService } from '../../../@core/data/terceros.service';
 import { IdiomaService } from '../../data/idioma.service';
 import { UbicacionService } from '../../data/ubicacion.service';
 import { ProyectoAcademicoService } from '../../data/proyecto_academico.service';
@@ -17,6 +18,7 @@ export class ListService {
     private inscripcionService: InscripcionService,
     private idiomaService: IdiomaService,
     private coreService: CoreService,
+    private tercerosService: TercerosService,
     private ubicacionService: UbicacionService,
     private programaAcademicoService: ProyectoAcademicoService,
     // private producccionAcademicaService: ProduccionAcademicaService,
@@ -30,13 +32,49 @@ export class ListService {
     this.store.select(REDUCER_LIST.Genero).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.personaService.get('genero/?query=Activo:true&limit=0')
+          this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:6')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.Genero, result);
               },
               error => {
                 this.addList(REDUCER_LIST.Genero, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findGrupoSanguineo() {
+    this.store.select(REDUCER_LIST.Sanguineo).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:7')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.Sanguineo, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.Sanguineo, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findFactorRh() {
+    this.store.select(REDUCER_LIST.RH).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:8')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.RH, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.RH, []);
               },
             );
         }
@@ -84,7 +122,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.EstadoCivil).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.personaService.get('estado_civil/?query=Activo:true&limit=0')
+          this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:2')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.EstadoCivil, result);
@@ -102,7 +140,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.GrupoEtnico).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.personaService.get('grupo_etnico/?query=Activo:true&limit=0')
+          this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:3')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.GrupoEtnico, result);
@@ -300,13 +338,49 @@ export class ListService {
     this.store.select(REDUCER_LIST.TipoDiscapacidad).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.personaService.get('tipo_discapacidad/?query=Activo:true&limit=0')
+          this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:1')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.TipoDiscapacidad, result);
               },
               error => {
                 this.addList(REDUCER_LIST.TipoDiscapacidad, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findEPS() {
+    this.store.select(REDUCER_LIST.EPS).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('tipo_tercero')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.EPS, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.EPS, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findTipoICFES() {
+    this.store.select(REDUCER_LIST.ICFES).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.inscripcionService.get('tipo_icfes')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.ICFES, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.ICFES, []);
               },
             );
         }
@@ -354,7 +428,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.TipoIdentificacion).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.enteService.get('tipo_identificacion/?query=Activo:true&limit=0')
+          this.tercerosService.get('tipo_documento/?query=Activo:true&limit=0')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.TipoIdentificacion, result);
@@ -411,6 +485,8 @@ export class ListService {
           this.coreService.get('periodo/?query=Activo:true&limit=0')
             .subscribe(
               (result: any[]) => {
+                console.info('Entro')
+                console.info(result)
                 this.addList(REDUCER_LIST.PeriodoAcademico, result);
               },
               error => {

@@ -38,9 +38,13 @@
     display: flex;
     justify-content: space-between;
 
-    .custom-control {
-      margin-left: 1rem;
+  .custom-control {
+    margin-left: 1rem;
     }
+  }
+
+  .form-control {
+    border: 0;
   }
 
   .dinamic-form {
