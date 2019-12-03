@@ -24,19 +24,19 @@ import html2canvas from 'html2canvas';
 })
 export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
-  // @Input('inscripcion_id')
-  // set name(inscripcion_id: number) {
-  //   this.inscripcion_id = inscripcion_id;
-  //   console.info('Posgrado ins: ' + this.inscripcion_id)
-  //   if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
-  //     this.selectedValue = undefined;
-  //     window.localStorage.setItem('programa', this.selectedValue);
-  //   }
-  //   if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-  //     && this.inscripcion_id.toString() !== '0') {
-  //     this.getInfoInscripcion();
-  //   }
-  // }
+   @Input('inscripcion_id')
+  set name(inscripcion_id: number) {
+    this.inscripcion_id = inscripcion_id;
+    console.info('Posgrado ins: ' + this.inscripcion_id)
+    if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
+      this.selectedValue = undefined;
+      window.localStorage.setItem('programa', this.selectedValue);
+    }
+    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
+      && this.inscripcion_id.toString() !== '0') {
+      // this.getInfoInscripcion();
+    }
+  }
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename

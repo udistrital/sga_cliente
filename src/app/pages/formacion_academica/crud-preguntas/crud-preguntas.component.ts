@@ -83,10 +83,10 @@ export class CrudPreguntasComponent implements OnInit {
     this.translate.use(language);
   }
 
-  // getPais(event) {
-  //   this.paisSelecccionado = event.valor;
-  //   this.loadOptionsPaisUniversidad();
-  // }
+  getPais(event) {
+    this.paisSelecccionado = event.valor;
+    // this.loadOptionsPaisUniversidad();
+  }
 
   // loadOptionsPais(): void {
   //   let paisNacimiento: Array<any> = [];
@@ -159,15 +159,15 @@ export class CrudPreguntasComponent implements OnInit {
   //   }
   // }
 
-  // getIndexForm(nombre: String): number {
-  //   for (let index = 0; index < this.formInfoFormacionAcademica.campos.length; index++) {
-  //     const element = this.formInfoFormacionAcademica.campos[index];
-  //     if (element.nombre === nombre) {
-  //       return index
-  //     }
-  //   }
-  //   return 0;
-  // }
+  getIndexForm(nombre: String): number {
+    for (let index = 0; index < this.formInfoFormacionAcademica.campos.length; index++) {
+      const element = this.formInfoFormacionAcademica.campos[index];
+      if (element.nombre === nombre) {
+        return index
+      }
+    }
+    return 0;
+  }
 
   // addUbicacionOrganizacion(ubicacion: any): void {
   //   this.campusMidService.post('persona/RegistrarUbicaciones', ubicacion).subscribe(res => {
@@ -225,104 +225,104 @@ export class CrudPreguntasComponent implements OnInit {
   //     });
   // }
 
-  // searchDoc(data) {
-  //   const nit = typeof data === 'string' ? data : data.data.Nit;
-  //   this.campusMidService.get('organizacion/identificacion/?Id=' + nit + '&TipoId=5')
-  //     .subscribe(res => {
-  //       const init = this.getIndexForm('Nit');
-  //       const inombre = this.getIndexForm('NombreEmpresa');
-  //       const idir = this.getIndexForm('Direccion');
-  //       const itel = this.getIndexForm('Telefono');
-  //       const icorreo = this.getIndexForm('Correo');
-  //       const ipais = this.getIndexForm('Pais');
-  //       this.organizacion = new Organizacion();
-  //       if (res !== null) {
-  //         this.organizacion = <Organizacion>res;
-  //       } else {
-  //         this.organizacion.NumeroIdentificacion = nit;
-  //         [this.formInfoFormacionAcademica.campos[inombre],
-  //         this.formInfoFormacionAcademica.campos[idir],
-  //         this.formInfoFormacionAcademica.campos[icorreo],
-  //         this.formInfoFormacionAcademica.campos[ipais],
-  //         this.formInfoFormacionAcademica.campos[itel]]
-  //           .forEach(element => {
-  //             element.valor = null;
-  //           });
-  //       }
-  //       this.loadInfoPostgrados(this.organizacion.Ente);
-  //       this.formInfoFormacionAcademica.campos[init].valor = this.organizacion.NumeroIdentificacion;
-  //       this.formInfoFormacionAcademica.campos[inombre].valor = this.organizacion.Nombre;
-  //       if (this.organizacion.Ubicacion) {
-  //         // identificadores del tipo de relacion y atributo para formulario
-  //         if (this.organizacion.Ubicacion.AtributoUbicacion.Id === 1 && this.organizacion.Ubicacion.UbicacionEnte.TipoRelacionUbicacionEnte.Id === 3) {
-  //           this.formInfoFormacionAcademica.campos[idir].valor = this.organizacion.Ubicacion.Valor;
-  //           let existe = false;
-  //           this.formInfoFormacionAcademica.campos[ipais].opciones.forEach(e => {
-  //             if (e.Id === this.organizacion.Ubicacion.UbicacionEnte.Lugar) {
-  //               this.formInfoFormacionAcademica.campos[ipais].valor = e;
-  //               existe = true;
-  //             }
-  //           });
-  //           if (!existe) {
-  //             this.ubicacionesService.get('lugar/' + this.organizacion.Ubicacion.UbicacionEnte.Lugar)
-  //               .subscribe(reslugar => {
-  //                 if (reslugar !== null) {
-  //                   const lugar = <Lugar>reslugar;
-  //                   this.formInfoFormacionAcademica.campos[this.getIndexForm('Pais')].opciones.push(lugar);
-  //                   this.formInfoFormacionAcademica.campos[ipais].valor = lugar;
-  //                 }
-  //               },
-  //                 (error: HttpErrorResponse) => {
-  //                   Swal({
-  //                     type: 'error',
-  //                     title: error.status + '',
-  //                     text: this.translate.instant('ERROR.' + error.status),
-  //                     footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                       this.translate.instant('GLOBAL.formacion_academica') + '|' +
-  //                       this.translate.instant('GLOBAL.pais_universidad'),
-  //                     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                   });
-  //                 });
-  //           }
-  //         }
-  //       } else {
-  //         this.formInfoFormacionAcademica.campos[idir].valor = null;
-  //         this.formInfoFormacionAcademica.campos[ipais].valor = null;
-  //       }
-  //       if (this.organizacion.Contacto) {
-  //         this.organizacion.Contacto.forEach(element => {
-  //           if (element.TipoContacto.Id === 1) {
-  //             this.formInfoFormacionAcademica.campos[itel].valor = element.Valor;
-  //           }
-  //           if (element.TipoContacto.Id === 3) {
-  //             this.formInfoFormacionAcademica.campos[icorreo].valor = element.Valor;
-  //           }
-  //         });
-  //       } else {
-  //         this.formInfoFormacionAcademica.campos[itel].valor = null;
-  //         this.formInfoFormacionAcademica.campos[icorreo].valor = null;
-  //       }
-  //       [this.formInfoFormacionAcademica.campos[inombre],
-  //       this.formInfoFormacionAcademica.campos[idir],
-  //       this.formInfoFormacionAcademica.campos[icorreo],
-  //       this.formInfoFormacionAcademica.campos[ipais],
-  //       this.formInfoFormacionAcademica.campos[itel]]
-  //         .forEach(element => {
-  //           element.deshabilitar = element.valor ? true : false
-  //         });
-  //     },
-  //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
-  //           title: error.status + '',
-  //           text: this.translate.instant('ERROR.' + error.status),
-  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //             this.translate.instant('GLOBAL.formacion_academica') + '|' +
-  //             this.translate.instant('GLOBAL.nombre_universidad'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       });
-  // }
+  searchDoc(data) {
+    const nit = typeof data === 'string' ? data : data.data.Nit;
+    this.campusMidService.get('organizacion/identificacion/?Id=' + nit + '&TipoId=5')
+      .subscribe(res => {
+        const init = this.getIndexForm('Nit');
+        const inombre = this.getIndexForm('NombreEmpresa');
+        const idir = this.getIndexForm('Direccion');
+        const itel = this.getIndexForm('Telefono');
+        const icorreo = this.getIndexForm('Correo');
+        const ipais = this.getIndexForm('Pais');
+        this.organizacion = new Organizacion();
+        if (res !== null) {
+          this.organizacion = <Organizacion>res;
+        } else {
+          this.organizacion.NumeroIdentificacion = nit;
+          [this.formInfoFormacionAcademica.campos[inombre],
+          this.formInfoFormacionAcademica.campos[idir],
+          this.formInfoFormacionAcademica.campos[icorreo],
+          this.formInfoFormacionAcademica.campos[ipais],
+          this.formInfoFormacionAcademica.campos[itel]]
+            .forEach(element => {
+              element.valor = null;
+            });
+        }
+        // this.loadInfoPostgrados(this.organizacion.Ente);
+        this.formInfoFormacionAcademica.campos[init].valor = this.organizacion.NumeroIdentificacion;
+        this.formInfoFormacionAcademica.campos[inombre].valor = this.organizacion.Nombre;
+        if (this.organizacion.Ubicacion) {
+          // identificadores del tipo de relacion y atributo para formulario
+          if (this.organizacion.Ubicacion.AtributoUbicacion.Id === 1 && this.organizacion.Ubicacion.UbicacionEnte.TipoRelacionUbicacionEnte.Id === 3) {
+            this.formInfoFormacionAcademica.campos[idir].valor = this.organizacion.Ubicacion.Valor;
+            let existe = false;
+            this.formInfoFormacionAcademica.campos[ipais].opciones.forEach(e => {
+              if (e.Id === this.organizacion.Ubicacion.UbicacionEnte.Lugar) {
+                this.formInfoFormacionAcademica.campos[ipais].valor = e;
+                existe = true;
+              }
+            });
+            if (!existe) {
+              this.ubicacionesService.get('lugar/' + this.organizacion.Ubicacion.UbicacionEnte.Lugar)
+                .subscribe(reslugar => {
+                  if (reslugar !== null) {
+                    const lugar = <Lugar>reslugar;
+                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Pais')].opciones.push(lugar);
+                    this.formInfoFormacionAcademica.campos[ipais].valor = lugar;
+                  }
+                },
+                  (error: HttpErrorResponse) => {
+                    Swal({
+                      type: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                        this.translate.instant('GLOBAL.formacion_academica') + '|' +
+                        this.translate.instant('GLOBAL.pais_universidad'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                  });
+            }
+          }
+        } else {
+          this.formInfoFormacionAcademica.campos[idir].valor = null;
+          this.formInfoFormacionAcademica.campos[ipais].valor = null;
+        }
+        if (this.organizacion.Contacto) {
+          this.organizacion.Contacto.forEach(element => {
+            if (element.TipoContacto.Id === 1) {
+              this.formInfoFormacionAcademica.campos[itel].valor = element.Valor;
+            }
+            if (element.TipoContacto.Id === 3) {
+              this.formInfoFormacionAcademica.campos[icorreo].valor = element.Valor;
+            }
+          });
+        } else {
+          this.formInfoFormacionAcademica.campos[itel].valor = null;
+          this.formInfoFormacionAcademica.campos[icorreo].valor = null;
+        }
+        [this.formInfoFormacionAcademica.campos[inombre],
+        this.formInfoFormacionAcademica.campos[idir],
+        this.formInfoFormacionAcademica.campos[icorreo],
+        this.formInfoFormacionAcademica.campos[ipais],
+        this.formInfoFormacionAcademica.campos[itel]]
+          .forEach(element => {
+            element.deshabilitar = element.valor ? true : false
+          });
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.formacion_academica') + '|' +
+              this.translate.instant('GLOBAL.nombre_universidad'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
 
   // public loadInfoFormacionAcademica(): void {
   //   this.loading = true;
@@ -603,61 +603,61 @@ export class CrudPreguntasComponent implements OnInit {
     this.result.emit(this.percentage);
   }
 
-  // validarForm(event) {
-  //   if (event.valid) {
-  //     const formacion = {
-  //       Ente: this.ente,
-  //       Persona: this.ente,
-  //       Titulacion: event.data.InfoFormacionAcademica.ProgramaAcademico,
-  //       FechaInicio: event.data.InfoFormacionAcademica.FechaInicio,
-  //       FechaFinalizacion: event.data.InfoFormacionAcademica.FechaFinalizacion,
-  //       TituloTrabajoGrado: event.data.InfoFormacionAcademica.TituloTrabajoGrado,
-  //       DescripcionTrabajoGrado: event.data.InfoFormacionAcademica.DescripcionTrabajoGrado,
-  //       Documento: event.data.InfoFormacionAcademica.Documento,
-  //     }
-  //     const organizacion = this.organizacion.Ente ? this.organizacion.Ente.Id : null;
-  //     const org = {
-  //       NumeroIdentificacion: event.data.InfoFormacionAcademica.Nit,
-  //       Direccion: event.data.InfoFormacionAcademica.Direccion,
-  //       Pais: event.data.InfoFormacionAcademica.Pais,
-  //       Nombre: event.data.InfoFormacionAcademica.NombreEmpresa,
-  //       TipoOrganizacion: event.data.InfoFormacionAcademica.TipoOrganizacion,
-  //       TipoIdentificacion: {
-  //         Id: 5, // tipo nit
-  //       },
-  //       Contacto: [],
-  //       // "FechaExpedicion": "string"
-  //     }
+  validarForm(event) {
+    if (event.valid) {
+      const formacion = {
+        Ente: this.ente,
+        Persona: this.ente,
+        Titulacion: event.data.InfoFormacionAcademica.ProgramaAcademico,
+        FechaInicio: event.data.InfoFormacionAcademica.FechaInicio,
+        FechaFinalizacion: event.data.InfoFormacionAcademica.FechaFinalizacion,
+        TituloTrabajoGrado: event.data.InfoFormacionAcademica.TituloTrabajoGrado,
+        DescripcionTrabajoGrado: event.data.InfoFormacionAcademica.DescripcionTrabajoGrado,
+        Documento: event.data.InfoFormacionAcademica.Documento,
+      }
+      const organizacion = this.organizacion.Ente ? this.organizacion.Ente.Id : null;
+      const org = {
+        NumeroIdentificacion: event.data.InfoFormacionAcademica.Nit,
+        Direccion: event.data.InfoFormacionAcademica.Direccion,
+        Pais: event.data.InfoFormacionAcademica.Pais,
+        Nombre: event.data.InfoFormacionAcademica.NombreEmpresa,
+        TipoOrganizacion: event.data.InfoFormacionAcademica.TipoOrganizacion,
+        TipoIdentificacion: {
+          Id: 5, // tipo nit
+        },
+        Contacto: [],
+        // "FechaExpedicion": "string"
+      }
 
-  //     if (event.data.InfoFormacionAcademica.Telefono) {
-  //       org.Contacto.push({
-  //         TipoContacto: { Id: 1 }, // corresponde al tipo telefono
-  //         Valor: event.data.InfoFormacionAcademica.Telefono,
-  //       });
-  //     }
-  //     if (event.data.InfoFormacionAcademica.Correo) {
-  //       org.Contacto.push({
-  //         TipoContacto: { Id: 3 }, // corresponde al tipo correo
-  //         Valor: event.data.InfoFormacionAcademica.Correo,
-  //       });
-  //     }
+      if (event.data.InfoFormacionAcademica.Telefono) {
+        org.Contacto.push({
+          TipoContacto: { Id: 1 }, // corresponde al tipo telefono
+          Valor: event.data.InfoFormacionAcademica.Telefono,
+        });
+      }
+      if (event.data.InfoFormacionAcademica.Correo) {
+        org.Contacto.push({
+          TipoContacto: { Id: 3 }, // corresponde al tipo correo
+          Valor: event.data.InfoFormacionAcademica.Correo,
+        });
+      }
 
-  //     if (this.info_formacion_academica === undefined) {
-  //       if (organizacion !== null) {
-  //         this.createInfoFormacionAcademica(formacion);
-  //       } else {
-  //         this.createOrganizacion(org, formacion);
-  //       }
-  //     } else {
-  //       if (this.organizacion.Ente) {
-  //         this.updateInfoFormacionAcademica(formacion);
-  //       } else {
-  //         this.createOrganizacion(org, formacion);
-  //       }
-  //     }
-  //     this.result.emit(event);
-  //   }
-  // }
+      if (this.info_formacion_academica === undefined) {
+        if (organizacion !== null) {
+          // this.createInfoFormacionAcademica(formacion);
+        } else {
+          // this.createOrganizacion(org, formacion);
+        }
+      } else {
+        if (this.organizacion.Ente) {
+          // this.updateInfoFormacionAcademica(formacion);
+        } else {
+          // this.createOrganizacion(org, formacion);
+        }
+      }
+      this.result.emit(event);
+    }
+  }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({
