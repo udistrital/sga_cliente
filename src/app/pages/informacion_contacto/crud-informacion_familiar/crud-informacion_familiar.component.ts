@@ -16,9 +16,6 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
-import { ListService } from '../../../@core/store/services/list.service';
-import { Store } from '@ngrx/store';
-import { IAppState } from '../../../@core/store/app.state';
 // import { IAppState } from '../../../@core/store/app.state';
 // import { ListService } from '../../../@core/store/services/list.service';
 // import { Store } from '@ngrx/store';
@@ -57,14 +54,16 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     private sgaMidService: SgaMidService,
     private ubicacionesService: UbicacionService,
     private tercerosService: TercerosService,
-    private store: Store<IAppState>,
-    private listService: ListService,
+    // private store: Store<IAppState>,
+    // private listService: ListService,
     private toasterService: ToasterService) {
     this.formInformacionFamiliar = FORM_INFORMACION_FAMILIAR;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+    // this.listService.findPais();
+    // this.loadLists();
     this.loadOptionsParentesco();
     this.loading = false;
   }
@@ -123,7 +122,13 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     this.toasterService.popAsync(toast);
   }
 
-
+  public loadLists() {
+    // this.store.select((state) => state).subscribe(
+    //   (list) => {
+    //     this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
+    //   },
+    // );
+  }
 
   loadOptionsParentesco(): void {
     let parentescos: Array<any> = [];
@@ -137,80 +142,172 @@ export class CrudInformacionFamiliarComponent implements OnInit {
       });
   }
 
-  // public validarForm(event: any) {
-  //   // console.log(event.data);
-  //   const opt: any = {
-  //     title: this.translate.instant('GLOBAL.registrar'),
-  //     text: this.translate.instant('informacion_familiar.seguro_continuar_registrar'),
-  //     icon: 'warning',
-  //     buttons: true,
-  //     dangerMode: true,
-  //     showCancelButton: true,
-  //   };
-  //   Swal(opt)
-  //   .then((willDelete) => {
-  //     if (willDelete.value) {
-  //       const formData = event.data.InformacionFamiliar;
-  //       const tercero: Tercero = {
-  //         Id: 0,
-  //         NombreCompleto: 'Mario Pepito Perez',
-  //         TipoContribuyenteId: {
-  //           Id: 1,
-  //           Nombre: undefined,
-  //         },
-  //       }
-  //       const informacionFamiliarPost: TrPostInformacionFamiliar = {
-  //         Tercero_Familiar: tercero,
-  //         Familiares: [
-  //           {
-  //             Id: 0,
-  //             TerceroId: tercero,
-  //             TerceroFamiliarId: {
-  //               Id: 0,
-  //               NombreCompleto: formData.NombreFamiliarPrincipal,
-  //               TipoContribuyenteId: {
-  //                 Id: 1,
-  //                 Nombre: undefined,
-  //               },
-  //             },
-  //             TipoParentescoId: formData.Parentesco,
-  //             CodigoAbreviacion: 'CONTPRIN',
-  //           },
-  //           {
-  //             Id: 0,
-  //             TerceroId: tercero,
-  //             TerceroFamiliarId: {
-  //               Id: 0,
-  //               NombreCompleto: formData.NombreFamiliarAlterno,
-  //               TipoContribuyenteId: {
-  //                 Id: 1,
-  //                 Nombre: undefined,
-  //               },
-  //             },
-  //             TipoParentescoId: formData.ParentescoAlterno,
-  //             CodigoAbreviacion: 'CONTALT',
-  //           },
-  //         ],
-  //       }
-  //       this.sgaMidService.post('inscripciones/post_informacion_familiar', informacionFamiliarPost)
-  //           .subscribe((res: any) => {
-  //             if (res.Type === 'error') {
-  //               Swal({
-  //                 type: 'error',
-  //                 title: res.Code,
-  //                 text: this.translate.instant('ERROR.' + res.Code),
-  //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //               });
-  //               this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
-  //             } else {
-  //               this.showToast('success', this.translate.instant('GLOBAL.actualizar'),
-  //                   this.translate.instant('informacion_familiar.informacion_familiar_actualizada'));
-  //             }
-  //           }, () => {
-  //               this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
-  //           });
-  //     }
-  //   });
-  // }
+  public validarForm(event: any) {
+    // console.log(event.data);
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('informacion_familiar.seguro_continuar_registrar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(opt)
+    .then((willDelete) => {
+      if (willDelete.value) {
+        const formData = event.data.InformacionFamiliar;
+        const tercero: Tercero = {
+          Id: 0,
+          NombreCompleto: 'Mario Pepito Perez',
+          TipoContribuyenteId: {
+            Id: 1,
+            Nombre: undefined,
+          },
+        }
+        const informacionFamiliarPost: TrPostInformacionFamiliar = {
+          Tercero_Familiar: tercero,
+          Familiares: [
+            {
+              Familiar: {
+                Id: 0,
+                TerceroId: tercero,
+                TerceroFamiliarId: {
+                  Id: 0,
+                  NombreCompleto: formData.NombreFamiliarPrincipal,
+                  TipoContribuyenteId: {
+                    Id: 1,
+                    Nombre: undefined,
+                  },
+                },
+                TipoParentescoId: formData.Parentesco,
+                CodigoAbreviacion: 'CONTPRIN',
+              },
+              InformacionContacto: [
+                {
+                  // telefono
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 48,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.Telefono}),
+                  Activo: true,
+                },
+                {
+                  // correo
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 50,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.CorreoElectronico}),
+                  Activo: true,
+                },
+                {
+                  // dirección
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 51,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.DireccionResidencia}),
+                  Activo: true,
+                },
+              ],
+            },
+            {
+              Familiar: {
+                Id: 0,
+                TerceroId: tercero,
+                TerceroFamiliarId: {
+                  Id: 0,
+                  NombreCompleto: formData.NombreFamiliarAlterno,
+                  TipoContribuyenteId: {
+                    Id: 1,
+                    Nombre: undefined,
+                  },
+                },
+                TipoParentescoId: formData.ParentescoAlterno,
+                CodigoAbreviacion: 'CONTALT',
+              },
+              InformacionContacto: [
+                {
+                  // telefono
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 48,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.TelefonoAlterno}),
+                  Activo: true,
+                },
+                {
+                  // correo
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 50,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.CorreoElectronicoAlterno}),
+                  Activo: true,
+                },
+                {
+                  // dirección
+                  Id: 0,
+                  TerceroId: tercero,
+                  InfoComplementariaId: {
+                    Id: 51,
+                    Nombre: undefined,
+                    CodigoAbreviacion: undefined,
+                    Activo: undefined,
+                    GrupoInfoComplementariaId: undefined,
+                  },
+                  Dato: JSON.stringify({value: formData.DireccionResidenciaAlterno}),
+                  Activo: true,
+                },
+              ],
+            },
+          ],
+        }
+        this.sgaMidService.post('inscripciones/post_informacion_familiar', informacionFamiliarPost)
+            .subscribe((res: any) => {
+              if (res.Type === 'error') {
+                Swal({
+                  type: 'error',
+                  title: res.Code,
+                  text: this.translate.instant('ERROR.' + res.Code),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+                this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
+              } else {
+                this.showToast('success', this.translate.instant('GLOBAL.actualizar'),
+                    this.translate.instant('informacion_familiar.informacion_familiar_actualizada'));
+              }
+            }, () => {
+                this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
+            });
+      }
+    });
+  }
 
 }

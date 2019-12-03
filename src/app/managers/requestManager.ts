@@ -80,7 +80,8 @@ export class RequestManager {
    * @returns Observable<any>
    */
   put(endpoint, element) {
-    return this.http.put<any>(`${this.path}${endpoint}/${element.Id}`, element, this.httpOptions).pipe(
+    const path = (element.Id) ? `${this.path}${endpoint}/${element.Id}` : `${this.path}${endpoint}`;
+    return this.http.put<any>(path, element, this.httpOptions).pipe(
       catchError(this.errManager.handleError),
     );
   }
