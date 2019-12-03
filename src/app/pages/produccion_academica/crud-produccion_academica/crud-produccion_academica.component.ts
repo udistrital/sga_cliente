@@ -515,19 +515,19 @@ export class CrudProduccionAcademicaComponent implements OnInit {
     // this.loadProduccionAcademica();
   }
 
-  // onDeleteAuthor(event): void {
-  //   if (event.data.PuedeBorrar) {
-  //     this.source_authors.splice(this.source_authors.indexOf(event.data), this.source_authors.indexOf(event.data));
-  //     this.source.load(this.source_authors);
-  //   } else {
-  //     Swal({
-  //       type: 'error',
-  //       title: 'ERROR',
-  //       text: this.translate.instant('produccion_academica.error_autor_borrar'),
-  //       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //     });
-  //   }
-  // }
+  onDeleteAuthor(event): void {
+    if (event.data.PuedeBorrar) {
+      this.source_authors.splice(this.source_authors.indexOf(event.data), this.source_authors.indexOf(event.data));
+      this.source.load(this.source_authors);
+    } else {
+      Swal({
+        type: 'error',
+        title: 'ERROR',
+        text: this.translate.instant('produccion_academica.error_autor_borrar'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    }
+  }
 
   // uploadFilesToMetadaData(files, metadatos) {
   //   return new Promise((resolve, reject) => {
@@ -553,70 +553,70 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   //   });
   // }
 
-  // validarForm(event) {
-  //   if (event.valid) {
-  //     if (this.info_produccion_academica.Titulo === undefined ||
-  //     this.info_produccion_academica.Fecha === undefined ||
-  //     this.info_produccion_academica.Resumen === undefined) {
-  //       Swal({
-  //         type: 'warning',
-  //         title: 'ERROR',
-  //         text: this.translate.instant('produccion_academica.alerta_llenar_campos_datos_basicos'),
-  //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //       });
-  //     } else {
-  //       const promises = [];
-  //       if (event.data.ProduccionAcademica) {
-  //         // Subir archivos y verificar los
-  //         // console.log(event.data.ProduccionAcademica);
-  //         // const tempMetadatos = JSON.parse(JSON.stringify(event.data.ProduccionAcademica));
-  //         const tempMetadatos = event.data.ProduccionAcademica;
-  //         const keys = Object.keys(tempMetadatos);
-  //         const metadatos = [];
-  //         const filesToUpload = [];
-  //         for (let i = 0; i < keys.length; i++) {
-  //           if (tempMetadatos[keys[i]].nombre) {
-  //             // Archivo se debe subir a nuxeo
-  //             if (tempMetadatos[keys[i]].file !== undefined) {
-  //               filesToUpload.push(tempMetadatos[keys[i]]);
-  //             }
-  //           } else {
-  //             metadatos.push({
-  //               MetadatoSubtipoProduccionId: parseInt(keys[i], 10),
-  //               Valor: tempMetadatos[keys[i]],
-  //             });
-  //           }
-  //         }
-  //         if (filesToUpload.length > 0) {
-  //           promises.push(this.uploadFilesToMetadaData(filesToUpload, metadatos));
-  //         }
-  //         this.info_produccion_academica.Metadatos = metadatos;
-  //       } else {
-  //         this.info_produccion_academica.Metadatos = [];
-  //       }
-  //       this.info_produccion_academica.Autores = JSON.parse(JSON.stringify(this.source_authors));
-  //       Promise.all(promises)
-  //         .then(() => {
-  //           // console.log("promesas cumplidas subir produccion");
-  //           // console.log("metadatos", this.info_produccion_academica.Metadatos);
-  //           if ( this.produccion_academica_selected === undefined ) {
-  //             this.createProduccionAcademica(this.info_produccion_academica);
-  //           } else {
-  //             this.updateProduccionAcademica(this.info_produccion_academica);
-  //           }
-  //         })
-  //         .catch(error => {
-  //           // console.log("error subiendo archivos", error);
-  //           Swal({
-  //             type: 'error',
-  //             title: 'ERROR',
-  //             text: this.translate.instant('ERROR.error_subir_documento'),
-  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //           });
-  //         });
-  //     }
-  //   }
-  // }
+  validarForm(event) {
+    if (event.valid) {
+      if (this.info_produccion_academica.Titulo === undefined ||
+      this.info_produccion_academica.Fecha === undefined ||
+      this.info_produccion_academica.Resumen === undefined) {
+        Swal({
+          type: 'warning',
+          title: 'ERROR',
+          text: this.translate.instant('produccion_academica.alerta_llenar_campos_datos_basicos'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      } else {
+        const promises = [];
+        if (event.data.ProduccionAcademica) {
+          // Subir archivos y verificar los
+          // console.log(event.data.ProduccionAcademica);
+          // const tempMetadatos = JSON.parse(JSON.stringify(event.data.ProduccionAcademica));
+          const tempMetadatos = event.data.ProduccionAcademica;
+          const keys = Object.keys(tempMetadatos);
+          const metadatos = [];
+          const filesToUpload = [];
+          for (let i = 0; i < keys.length; i++) {
+            if (tempMetadatos[keys[i]].nombre) {
+              // Archivo se debe subir a nuxeo
+              if (tempMetadatos[keys[i]].file !== undefined) {
+                filesToUpload.push(tempMetadatos[keys[i]]);
+              }
+            } else {
+              metadatos.push({
+                MetadatoSubtipoProduccionId: parseInt(keys[i], 10),
+                Valor: tempMetadatos[keys[i]],
+              });
+            }
+          }
+          if (filesToUpload.length > 0) {
+            // promises.push(this.uploadFilesToMetadaData(filesToUpload, metadatos));
+          }
+          this.info_produccion_academica.Metadatos = metadatos;
+        } else {
+          this.info_produccion_academica.Metadatos = [];
+        }
+        this.info_produccion_academica.Autores = JSON.parse(JSON.stringify(this.source_authors));
+        Promise.all(promises)
+          .then(() => {
+            // console.log("promesas cumplidas subir produccion");
+            // console.log("metadatos", this.info_produccion_academica.Metadatos);
+            if ( this.produccion_academica_selected === undefined ) {
+              // this.createProduccionAcademica(this.info_produccion_academica);
+            } else {
+              // this.updateProduccionAcademica(this.info_produccion_academica);
+            }
+          })
+          .catch(error => {
+            // console.log("error subiendo archivos", error);
+            Swal({
+              type: 'error',
+              title: 'ERROR',
+              text: this.translate.instant('ERROR.error_subir_documento'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+      }
+    }
+  }
 
   // onCreateAuthor(event): void {
   //   if (!this.editando) {

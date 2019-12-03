@@ -485,18 +485,18 @@ export class CrudDocumentoProgramaComponent implements OnInit {
         }
       });
   }
-
+*/
   validarForm(event) {
     if (event.valid) {
       if (this.info_documento_programa === undefined) {
-        this.crearNuevoDocumentoPrograma(event.data.DocumentoPrograma);
+        // this.crearNuevoDocumentoPrograma(event.data.DocumentoPrograma);
       } else {
-        this.updateDocumentoPrograma(event.data.DocumentoPrograma);
+        // this.updateDocumentoPrograma(event.data.DocumentoPrograma);
       }
       this.result.emit(event);
     }
   }
-*/
+
   ngOnInit() {
     // this.loadDocumentoPrograma();
   }

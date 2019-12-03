@@ -406,39 +406,39 @@ export class CrudIdiomasComponent implements OnInit {
     this.result.emit(this.percentage);
   }
 
-  // validarForm(event) {
-  //   if (event.valid) {
-  //     if (this.info_idioma === undefined) {
-  //       this.createInfoIdioma(event.data.InfoIdioma);
-  //     } else {
-  //       this.updateInfoIdioma(event.data.InfoIdioma);
-  //     }
-  //     this.result.emit(event);
-  //   }
-  // }
+  validarForm(event) {
+    if (event.valid) {
+      if (this.info_idioma === undefined) {
+        // this.createInfoIdioma(event.data.InfoIdioma);
+      } else {
+        // this.updateInfoIdioma(event.data.InfoIdioma);
+      }
+      this.result.emit(event);
+    }
+  }
 
-  // cargarIdiomaExamen(): void {
-  //   if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== '') {
-  //     this.inscripcionService.get('inscripcion_posgrado/?query=InscripcionId:' + this.inscripcion_id)
-  //       .subscribe(res => {
-  //         const r = <any>res[0];
-  //         if (res !== null && r.Type !== 'error' && JSON.stringify(res[0]).toString() !== '{}') {
-  //           this.idioma_examen = r.Idioma;
-  //         }
-  //       },
-  //         (error: HttpErrorResponse) => {
-  //           Swal({
-  //             type: 'error',
-  //             title: error.status + '',
-  //             text: this.translate.instant('ERROR.' + error.status),
-  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //               this.translate.instant('GLOBAL.idiomas') + '|' +
-  //               this.translate.instant('GLOBAL.idioma_examen'),
-  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //           });
-  //         });
-  //   }
-  // }
+  cargarIdiomaExamen(): void {
+    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== '') {
+      this.inscripcionService.get('inscripcion_posgrado/?query=InscripcionId:' + this.inscripcion_id)
+        .subscribe(res => {
+          const r = <any>res[0];
+          if (res !== null && r.Type !== 'error' && JSON.stringify(res[0]).toString() !== '{}') {
+            this.idioma_examen = r.Idioma;
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.idiomas') + '|' +
+                this.translate.instant('GLOBAL.idioma_examen'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    }
+  }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({

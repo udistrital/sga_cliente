@@ -109,12 +109,12 @@ export class CrudPropuestaGradoComponent implements OnInit {
     return 0;
   }
 
-  // getSeleccion(event) {
-  //   if (event.nombre === 'GrupoInvestigacion') {
-  //     this.grupoSeleccionado = event.valor;
-  //     this.loadOptionsLineaInvestigacion();
-  //   }
-  // }
+  getSeleccion(event) {
+    if (event.nombre === 'GrupoInvestigacion') {
+      this.grupoSeleccionado = event.valor;
+      // this.loadOptionsLineaInvestigacion();
+    }
+  }
 
   // loadOptionsLineaInvestigacion(): void {
   //   let consultaLineas: Array<any> = [];
@@ -556,15 +556,15 @@ export class CrudPropuestaGradoComponent implements OnInit {
   ngOnInit() {
   }
 
-  // validarForm(event) {
-  //   if (event.valid) {
-  //     if (this.info_propuesta_grado === undefined) {
-  //       this.createPropuestaGrado(event.data.PropuestaGrado);
-  //     } else {
-  //       this.updatePropuestaGrado(event.data.PropuestaGrado);
-  //     }
-  //   }
-  // }
+  validarForm(event) {
+    if (event.valid) {
+      if (this.info_propuesta_grado === undefined) {
+        // this.createPropuestaGrado(event.data.PropuestaGrado);
+      } else {
+        // this.updatePropuestaGrado(event.data.PropuestaGrado);
+      }
+    }
+  }
 
   setPercentage(event) {
     this.percentage = event;

@@ -140,15 +140,15 @@ export class CrudPerfilComponent implements OnInit {
     // this.loadPerfil();
   }
 
-  // validarForm(event) {
-  //   if (event.valid) {
-  //     if (this.info_perfil === undefined) {
-  //       this.createPerfil(event.data.Perfil);
-  //     } else {
-  //       this.updatePerfil(event.data.Perfil);
-  //     }
-  //   }
-  // }
+  validarForm(event) {
+    if (event.valid) {
+      if (this.info_perfil === undefined) {
+        // this.createPerfil(event.data.Perfil);
+      } else {
+        // this.updatePerfil(event.data.Perfil);
+      }
+    }
+  }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({
