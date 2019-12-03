@@ -302,7 +302,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.ProgramaAcademico).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.programaAcademicoService.get('programa_academico/?query=Activo:true&limit=0')
+          this.programaAcademicoService.get('proyecto_academico_institucion/?query=Activo:true&limit=0')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.ProgramaAcademico, result);
