@@ -95,10 +95,14 @@
         "crear": "Create",
         "asignar": "To assign",
         "registrar": "Register",
+        "confirmarCrear": "has been created",
+        "info_persona": "Personal data",
         "guardar": "Save",
         "formulario": "Form",
         "lista": "List",
         "regresar": "Return",
+        "terminos_datos": "Privacy and data processing policy",
+        "acepto_terminos": "I have read and agree to the privacy and treatment of information policy terms",
         "error": "Error",
         "si": "Yes",
         "no": "No",
@@ -807,9 +811,19 @@
         "reingreso": "Re-entry",
         "transferencia": "Transfer data"
     },
+    "reingreso": {
+        "reingreso_no_registrado": "Re-entry request not created",
+        "reingreso_registrado": "Re-entry request created",
+        "seguro_continuar_registrar": "Are you sure you want to register this re-entry request?"
+    },
+    "transferencia_interna": {
+        "transferencia_no_registrada": "Internal transfer request not created",
+        "transferencia_registrada": "Internal transfer request created",
+        "seguro_continuar_registrar": "Are you sure you want to register this internal transfer request?"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",
-        "seguro_continuar_registrar": "Are you sureyo want to register this family information?"
+        "seguro_continuar_registrar": "Are you sure you want to register this family information?"
     }
 }

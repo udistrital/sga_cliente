@@ -21,7 +21,7 @@ export class CrudPerfilComponent implements OnInit {
   @Input('perfil_id')
   set name(perfil_id: number) {
     this.perfil_id = perfil_id;
-    this.loadPerfil();
+    // this.loadPerfil();
   }
 
   @Output() eventChange = new EventEmitter();
@@ -37,7 +37,7 @@ export class CrudPerfilComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.loadOptionsAplicacion();
+    // this.loadOptionsAplicacion();
    }
 
   construirForm() {
@@ -52,7 +52,7 @@ export class CrudPerfilComponent implements OnInit {
   useLanguage(language: string) {
     this.translate.use(language);
   }
-
+/*
   loadOptionsAplicacion(): void {
     let aplicacion: Array<any> = [];
       this.configuracionService.get('aplicacion/?limit=0')
@@ -63,7 +63,7 @@ export class CrudPerfilComponent implements OnInit {
           this.formPerfil.campos[ this.getIndexForm('Aplicacion') ].opciones = aplicacion;
         });
   }
-
+*/
   getIndexForm(nombre: String): number {
     for (let index = 0; index < this.formPerfil.campos.length; index++) {
       const element = this.formPerfil.campos[index];
@@ -74,7 +74,7 @@ export class CrudPerfilComponent implements OnInit {
     return 0;
   }
 
-
+/*
   public loadPerfil(): void {
     if (this.perfil_id !== undefined && this.perfil_id !== 0) {
       this.configuracionService.get('perfil/?query=id:' + this.perfil_id)
@@ -135,20 +135,20 @@ export class CrudPerfilComponent implements OnInit {
       }
     });
   }
-
+*/
   ngOnInit() {
-    this.loadPerfil();
+    // this.loadPerfil();
   }
 
-  validarForm(event) {
-    if (event.valid) {
-      if (this.info_perfil === undefined) {
-        this.createPerfil(event.data.Perfil);
-      } else {
-        this.updatePerfil(event.data.Perfil);
-      }
-    }
-  }
+  // validarForm(event) {
+  //   if (event.valid) {
+  //     if (this.info_perfil === undefined) {
+  //       this.createPerfil(event.data.Perfil);
+  //     } else {
+  //       this.updatePerfil(event.data.Perfil);
+  //     }
+  //   }
+  // }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({

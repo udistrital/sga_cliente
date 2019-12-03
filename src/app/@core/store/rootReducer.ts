@@ -4,6 +4,10 @@ import { ListReducer } from './reducers/list.reducer';
 
 export const rootReducer: ActionReducerMap<IAppState> = {
   listGenero: ListReducer.ListReducerGenero,
+  listGrupoSanguineo: ListReducer.ListReducerGrupoSanguineo,
+  listFactorRh: ListReducer.ListReducerFactorRH,
+  listEPS: ListReducer.ListReducerEPS,
+  listICFES: ListReducer.ListReducerTipoICFES,
   listClasificacionNivelIdioma: ListReducer.ListReducerClasificacionNivelIdioma,
   listEstadoInscripcion: ListReducer.ListReducerEstadoInscripcion,
   listEstadoCivil: ListReducer.ListReducerEstadoCivil,

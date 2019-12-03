@@ -1,5 +1,9 @@
 export const REDUCER_LIST = {
     Genero: 'listGenero',
+    Sanguineo: 'listGrupoSanguineo',
+    RH: 'listFactorRh',
+    EPS: 'listEPS',
+    ICFES: 'listICFES',
     ClasificacionNivelIdioma: 'listClasificacionNivelIdioma',
     EstadoInscripcion: 'listEstadoInscripcion',
     EstadoCivil: 'listEstadoCivil',

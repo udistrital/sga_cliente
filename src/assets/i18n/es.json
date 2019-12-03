@@ -90,7 +90,11 @@
         "id": "Id",
         "activo": "Activo",
         "aceptar": "Aceptar",
+        "terminos_datos": "Política de privacidad y tratamiento de datos",
+        "acepto_terminos": "He leido y estoy de acuerdo con los términos de la política de tratamiento y privacidad de la información",
         "cancelar": "Cancelar",
+        "info_persona": "Información personal",
+        "confirmarCrear": "ha sido creado(a)",
         "salir": "Salir",
         "eliminar": "Eliminar",
         "actualizar": "Actualizar",
@@ -819,6 +823,16 @@
         "transfe": "Transferencia interna",
         "reingreso": "Reingreso",
         "transferencia": "Datos de transferencia"
+    },
+    "reingreso": {
+        "reingreso_no_registrado": "Solicitud de reingreso no registrada",
+        "reingreso_registrado": "Solicitud de reingreso registrada",
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta solicitud de reingreso?"
+    },
+    "transferencia_interna": {
+        "transferencia_no_registrada": "Solicitud de transferencia interna no registrada",
+        "transferencia_registrada": "Solicitud de transferencia interna registrada",
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta solicitud de transferencia interna?"
     },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Información familiar no actualizada",
