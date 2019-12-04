@@ -21,11 +21,18 @@ import { Store } from '@ngrx/store';
 export class CrudIcfesComponent implements OnInit {
   config: ToasterConfig;
   info_formacion_academica_id: number;
+  inscripcion_id: number;
   persiona_id: number;
 
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
     this.info_formacion_academica_id = info_formacion_academica_id;
+    // this.loadInfoFormacionAcademica();
+  }
+
+  @Input('inscripcion_id')
+  set inscripcion(inscripcion_id: number) {
+    this.inscripcion_id = inscripcion_id;
     // this.loadInfoFormacionAcademica();
   }
 
@@ -103,7 +110,7 @@ export class CrudIcfesComponent implements OnInit {
         this.loading = true;
         if (willDelete.value) {
           this.info_icfes = <any>infoIcfes;
-          this.sgaMidService.post('inscripciones/post_icfes_colegio', this.info_icfes)
+          this.sgaMidService.post('inscripciones/post_info_icfes_colegio', this.info_icfes)
             .subscribe(res => {
               const r = <any>res;
               if (r !== null && r.Type !== 'error') {
@@ -135,8 +142,49 @@ export class CrudIcfesComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       const formData = event.data.InfoIcfes;
+      const tercero = {
+        Id: this.persiona_id  || 1, // se debe cambiar solo por persona id
+      }
+      const inscripcion = { 
+        Id: this.inscripcion_id || 1, // se debe cambiar solo por inscripcion
+      }
       const dataIcfesColegio = {
-
+        InscripcionPregrado: {
+          Id: 0,
+          InscripcionId: inscripcion,
+          TipoIcfesId: formData.TipoIcfes,
+          CodigoIcfes: formData.NúmeroRegistroIcfes,
+          TipoDocumentoIcfes: 1,
+          NumeroIdentificacionIcfes: 1,
+          AnoIcfes: Number(formData.NúmeroRegistroIcfes.substr(0,4)),
+          Activo: true,
+        },
+        InfoComplementariaTercero: [
+          {
+            // Localidad colegio
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: formData.LocalidadColegio,
+            Dato: JSON.stringify(formData.LocalidadColegio),
+            Activo: true,
+          },
+          {
+            // Tipo Colegio
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: formData.TipoColegio,
+            Dato: JSON.stringify(formData.TipoColegio),
+            Activo: true,
+          },
+          {
+            // Semestres sin estudiar
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: formData.numeroSemestres,
+            Dato: JSON.stringify(formData.numeroSemestres),
+            Activo: true,
+          },
+        ],
       }
       this.createIcfesColegio(dataIcfesColegio);
       this.result.emit(event);
