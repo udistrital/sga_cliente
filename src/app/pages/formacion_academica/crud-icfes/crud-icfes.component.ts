@@ -90,7 +90,7 @@ export class CrudIcfesComponent implements OnInit {
   createIcfesColegio(infoIcfes: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.registrar'),
-      text: this.translate.instant('reingreso.seguro_continuar_registrar'),
+      text: this.translate.instant('icfes_colegio.seguro_continuar_registrar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -110,11 +110,11 @@ export class CrudIcfesComponent implements OnInit {
                 this.loading = false;
                 this.eventChange.emit(true);
                 this.showToast('info', this.translate.instant('GLOBAL.registrar'),
-                  this.translate.instant('reingreso.reingreso_registrado'));
+                  this.translate.instant('icfes_colegio.icfes_colegio_registrado'));
                 this.clean = !this.clean;
               } else {
                 this.showToast('error', this.translate.instant('GLOBAL.error'),
-                  this.translate.instant('reingreso.reingreso_no_registrado'));
+                  this.translate.instant('icfes_colegio.icfes_colegio_no_registrado'));
               }
             },
             (error: HttpErrorResponse) => {
@@ -122,11 +122,11 @@ export class CrudIcfesComponent implements OnInit {
                 type: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('reingreso.reingreso_no_registrado'),
+                footer: this.translate.instant('icfes_colegio.icfes_colegio_no_registrado'),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
               });
               this.showToast('error', this.translate.instant('GLOBAL.error'),
-                  this.translate.instant('reingreso.reingreso_no_registrado'));
+                this.translate.instant('icfes_colegio.icfes_colegio_no_registrado'));
             });
           }
       });
