@@ -51,7 +51,6 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
-    private campusMidService: CampusMidService,
     private sgamidService: SgaMidService,
     private ubicacionesService: UbicacionService,
     private store: Store<IAppState>,
