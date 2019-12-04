@@ -9,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { ListService } from '../../../@core/store/services/list.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 
@@ -20,6 +21,7 @@ import { Store } from '@ngrx/store';
 export class CrudIcfesComponent implements OnInit {
   config: ToasterConfig;
   info_formacion_academica_id: number;
+  persiona_id: number;
 
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
@@ -35,12 +37,14 @@ export class CrudIcfesComponent implements OnInit {
   formIcfes: any;
   temp: any;
   clean: boolean;
+  loading: boolean;
   percentage: number;
 
   constructor(
     private translate: TranslateService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
+    private sgaMidService: SgaMidService,
     private users: UserService,
     private store: Store<IAppState>,
     private listService: ListService,
@@ -55,7 +59,7 @@ export class CrudIcfesComponent implements OnInit {
     this.listService.findTipoColegio();
     this.listService.findSemestresSinEstudiar();
     // this.loadOptionsPais();
-    // this.ente = this.users.getEnte();
+    this.persiona_id = this.users.getPersonaId();
     this.loadLists();
   }
 
@@ -83,8 +87,58 @@ export class CrudIcfesComponent implements OnInit {
     this.result.emit(this.percentage);
   }
 
+  createIcfesColegio(infoIcfes: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('reingreso.seguro_continuar_registrar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        this.loading = true;
+        if (willDelete.value) {
+          this.info_icfes = <any>infoIcfes;
+          this.sgaMidService.post('inscripciones/post_icfes_colegio', this.info_icfes)
+            .subscribe(res => {
+              const r = <any>res;
+              if (r !== null && r.Type !== 'error') {
+                this.loading = false;
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.registrar'),
+                  this.translate.instant('reingreso.reingreso_registrado'));
+                this.clean = !this.clean;
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('reingreso.reingreso_no_registrado'));
+              }
+            },
+            (error: HttpErrorResponse) => {
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('reingreso.reingreso_no_registrado'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+              this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('reingreso.reingreso_no_registrado'));
+            });
+          }
+      });
+  }
+
   validarForm(event) {
     if (event.valid) {
+      const formData = event.data.InfoIcfes;
+      const dataIcfesColegio = {
+
+      }
+      this.createIcfesColegio(dataIcfesColegio);
       this.result.emit(event);
     }
   }
