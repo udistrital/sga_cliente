@@ -516,6 +516,24 @@ export class ListService {
     );
   }
 
+  public findTipoColegio() {
+    this.store.select(REDUCER_LIST.TipoColegio).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_13')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoColegio, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoColegio, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   private addList(type: string, object: Array<any>) {
     this.store.dispatch({
       type: type,

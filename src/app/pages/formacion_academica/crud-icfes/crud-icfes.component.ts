@@ -70,6 +70,7 @@ export class CrudIcfesComponent implements OnInit {
     });
     this.listService.findTipoICFES();
     this.listService.findLocalidadesBogota();
+    this.listService.findTipoColegio();
     // this.loadOptionsPais();
     // this.ente = this.users.getEnte();
     this.loadLists();
@@ -681,6 +682,7 @@ export class CrudIcfesComponent implements OnInit {
       (list) => {
        this.formInfoFormacionAcademica.campos[this.getIndexForm('TipoIcfes')].opciones = list.listICFES[0];
        this.formInfoFormacionAcademica.campos[this.getIndexForm('LocalidadColegio')].opciones = list.listLocalidadesBogota[0];
+       this.formInfoFormacionAcademica.campos[this.getIndexForm('TipoColegio')].opciones = list.listTipoColegio[0];
       },
    );
  }

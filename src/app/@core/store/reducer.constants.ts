@@ -26,5 +26,6 @@ export const REDUCER_LIST = {
     GrupoInvestigacion: 'listReducerGrupoInvestigacion',
     PeriodoAcademico: 'ListReducerPeriodoAcademico',
     LocalidadesBogota: 'ListReducerLocalidadesBogota',
+    TipoColegio: 'ListTipoColegio',
     // TipoPublicacionLibro: 'listReducerTipoPublicacionLibro',
 };
