@@ -4,7 +4,7 @@ export let FORM_ICFES = {
   alertas: true,
   btn: 'Guardar',
   btnLimpiar: 'Limpiar',
-  modelo: 'InfoFormacionAcademica',
+  modelo: 'InfoIcfes',
   campos: [
     {
       etiqueta: 'select',
