@@ -11,8 +11,6 @@ const httpOptions = {
     }),
 }
 
-const path = environment.PAGO_SERVICE;
-
 @Injectable()
 export class PagoService {
 

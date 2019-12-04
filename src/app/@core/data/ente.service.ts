@@ -11,8 +11,6 @@ const httpOptions = {
     }),
 }
 
-const path = environment.ENTE_SERVICE;
-
 @Injectable({
   providedIn: 'root',
 })

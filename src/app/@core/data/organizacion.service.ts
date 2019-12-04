@@ -11,8 +11,6 @@ const httpOptions = {
     }),
 }
 
-const path = environment.ORGANIZACION_SERVICE;
-
 @Injectable({
   providedIn: 'root',
 })
