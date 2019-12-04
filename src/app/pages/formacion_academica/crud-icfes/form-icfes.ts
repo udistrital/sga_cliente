@@ -42,6 +42,8 @@ export let FORM_ICFES = {
       label_i18n: 'localidad_colegio',
       placeholder_i18n: 'localidad_colegio',
       requerido: true,
+      key: 'Nombre',
+      opciones: [],
     },
     {
       etiqueta: 'select',
@@ -50,6 +52,8 @@ export let FORM_ICFES = {
       label_i18n: 'tipo_colegio',
       placeholder_i18n: 'tipo_colegio',
       requerido: true,
+      key: 'Nombre',
+      opciones: [],
     },
     {
       etiqueta: 'select',
@@ -58,6 +62,15 @@ export let FORM_ICFES = {
       label_i18n: 'valido_colegio',
       placeholder_i18n: 'valido_colegio',
       requerido: true,
+      opciones: [
+        {
+          "Id": "Si",
+        },
+        {
+          "Id": "No",
+        },
+      ],
+      key: 'Id',
     },
     {
       etiqueta: 'select',
@@ -66,6 +79,8 @@ export let FORM_ICFES = {
       label_i18n: 'numero_semestres',
       placeholder_i18n: 'numero_semestres',
       requerido: true,
+      key: 'Nombre',
+      opciones: [],
     },
   ],
 }

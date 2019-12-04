@@ -498,6 +498,24 @@ export class ListService {
     );
   }
 
+  public findLocalidadesBogota() {
+    this.store.select(REDUCER_LIST.LocalidadesBogota).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_12')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.LocalidadesBogota, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.LocalidadesBogota, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   private addList(type: string, object: Array<any>) {
     this.store.dispatch({
       type: type,

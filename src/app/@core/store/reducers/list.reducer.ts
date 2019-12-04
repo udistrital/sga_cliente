@@ -236,4 +236,13 @@ export class ListReducer {
         return state;
     }
   }
+
+  static ListReducerLocalidadesBogota(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.LocalidadesBogota:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
 }
