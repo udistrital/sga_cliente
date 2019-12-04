@@ -145,7 +145,7 @@ export class CrudIcfesComponent implements OnInit {
       const tercero = {
         Id: this.persiona_id  || 1, // se debe cambiar solo por persona id
       }
-      const inscripcion = { 
+      const inscripcion = {
         Id: this.inscripcion_id || 1, // se debe cambiar solo por inscripcion
       }
       const dataIcfesColegio = {
@@ -156,7 +156,7 @@ export class CrudIcfesComponent implements OnInit {
           CodigoIcfes: formData.NúmeroRegistroIcfes,
           TipoDocumentoIcfes: 1,
           NumeroIdentificacionIcfes: 1,
-          AnoIcfes: Number(formData.NúmeroRegistroIcfes.substr(0,4)),
+          AnoIcfes: Number(formData.NúmeroRegistroIcfes.substr(0, 4)),
           Activo: true,
         },
         InfoComplementariaTercero: [

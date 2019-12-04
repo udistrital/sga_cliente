@@ -64,10 +64,10 @@ export let FORM_ICFES = {
       requerido: true,
       opciones: [
         {
-          "Id": "Si",
+          'Id': 'Si',
         },
         {
-          "Id": "No",
+          'Id': 'No',
         },
       ],
       key: 'Id',
