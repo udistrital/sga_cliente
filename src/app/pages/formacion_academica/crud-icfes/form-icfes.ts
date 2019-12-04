@@ -8,7 +8,7 @@ export let FORM_ICFES = {
   campos: [
     {
       etiqueta: 'select',
-      claseGrid: 'col-lg-6 col-md-5 col-sm-12 col-xs-12',
+      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'TipoIcfes',
       label_i18n: 'tipo_icfes',
       placeholder_i18n: 'tipo_icfes',
@@ -19,7 +19,7 @@ export let FORM_ICFES = {
     },
     {
       etiqueta: 'input',
-      claseGrid: 'col-lg-5 col-md-5 col-sm-10 col-xs-10',
+      claseGrid: 'col-lg-6 col-md-6 col-sm-10 col-xs-10',
       nombre: 'NúmeroRegistroIcfes',
       label_i18n: 'numero_registro',
       placeholder_i18n: 'numero_registro',
