@@ -13,6 +13,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { ListService } from '../../../@core/store/services/list.service';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../../@core/store/app.state';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -23,6 +24,7 @@ import { IAppState } from '../../../@core/store/app.state';
 export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   config: ToasterConfig;
   info_caracteristica_id: number;
+  SgaMidService: any;
 
   @Input('info_caracteristica_id')
   set name(info_caracteristica_id: number) {
@@ -50,6 +52,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private campusMidService: CampusMidService,
+    private sgamidService: SgaMidService,
     private ubicacionesService: UbicacionService,
     private store: Store<IAppState>,
     private listService: ListService,
@@ -265,7 +268,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
           info_info_caracteristica_post.Tercero = (1 * this.info_caracteristica_id);
           info_info_caracteristica_post.Lugar = info_info_caracteristica_post.Lugar;
           console.info(JSON.stringify(info_info_caracteristica_post));
-          this.campusMidService.post('persona/guardar_complementarios', info_info_caracteristica_post)
+          this.sgamidService.post('persona/guardar_complementarios', info_info_caracteristica_post)
             .subscribe(res => {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
