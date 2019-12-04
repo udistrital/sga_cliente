@@ -27,5 +27,6 @@ export const REDUCER_LIST = {
     PeriodoAcademico: 'ListReducerPeriodoAcademico',
     LocalidadesBogota: 'ListReducerLocalidadesBogota',
     TipoColegio: 'ListTipoColegio',
+    SemestresSinEstudiar: 'ListSemestresSinEstudiar',
     // TipoPublicacionLibro: 'listReducerTipoPublicacionLibro',
 };

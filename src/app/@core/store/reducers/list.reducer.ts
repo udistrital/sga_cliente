@@ -254,4 +254,13 @@ export class ListReducer {
         return state;
     }
   }
+
+  static ListReducerSemestresSinEstudiar(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.SemestresSinEstudiar:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
 }
