@@ -11,8 +11,6 @@ const httpOptions = {
     }),
 }
 
-const path = environment.EXPERIENCIA_SERVICE;
-
 @Injectable({
   providedIn: 'root',
 })
@@ -20,22 +18,22 @@ const path = environment.EXPERIENCIA_SERVICE;
 export class ExperienciaService {
 
   constructor(private requestManager: RequestManager) {
-    this.requestManager.setPath('ExperienciaService');
+    this.requestManager.setPath('EXPERIENCIA_SERVICE');
   }
   get(endpoint) {
-    this.requestManager.setPath('ExperienciaService');
+    this.requestManager.setPath('EXPERIENCIA_SERVICE');
     return this.requestManager.get(endpoint);
   }
   post(endpoint, element) {
-    this.requestManager.setPath('ExperienciaService');
+    this.requestManager.setPath('EXPERIENCIA_SERVICE');
     return this.requestManager.post(endpoint, element);
   }
   put(endpoint, element) {
-    this.requestManager.setPath('ExperienciaService');
+    this.requestManager.setPath('EXPERIENCIA_SERVICE');
     return this.requestManager.put(endpoint, element);
   }
   delete(endpoint, element) {
-    this.requestManager.setPath('ExperienciaService');
+    this.requestManager.setPath('EXPERIENCIA_SERVICE');
     return this.requestManager.delete(endpoint, element.Id);
   }
 }

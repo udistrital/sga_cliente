@@ -22,7 +22,6 @@ const path = environment.SGA_MID_SERVICE;
 @Injectable()
 export class SgaMidService {
 
-
   constructor(private requestManager: RequestManager, private http: HttpClient) {
     this.requestManager.setPath('SGA_MID_SERVICE');
   }

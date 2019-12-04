@@ -11,8 +11,6 @@ const httpOptions = {
     }),
 }
 
-const path = environment.IDIOMA_SERVICE;
-
 @Injectable({
   providedIn: 'root',
 })

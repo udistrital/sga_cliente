@@ -11,8 +11,6 @@ const httpOptions = {
     }),
 }
 
-const path = environment.RECIBO_SERVICE;
-
 @Injectable({
   providedIn: 'root',
 })

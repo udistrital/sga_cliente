@@ -11,8 +11,6 @@ const httpOptions = {
     }),
 }
 
-const path = environment.OIKOS_SERVICE;
-
 @Injectable({
   providedIn: 'root',
 })

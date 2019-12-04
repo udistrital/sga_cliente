@@ -11,8 +11,6 @@ const httpOptions = {
     }),
 }
 
-const path = environment.PRODUCCION_ACADEMICA_SERVICE;
-
 @Injectable()
 export class ProduccionAcademicaService {
 
