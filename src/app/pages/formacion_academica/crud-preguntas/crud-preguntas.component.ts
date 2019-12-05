@@ -28,6 +28,7 @@ import { Store } from '@ngrx/store';
 export class CrudPreguntasComponent implements OnInit {
   config: ToasterConfig;
   info_formacion_academica_id: number;
+  persiona_id: number;
 
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
@@ -58,8 +59,9 @@ export class CrudPreguntasComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    // this.loadOptionsPais();
-    // this.ente = this.users.getEnte();
+
+    this.persiona_id = this.users.getPersonaId();
+
     this.listService.findMediosEnteroUniversidad();
     this.listService.findSePresentaAUniversidadPor();
     this.listService.findTipoInscripcionUniversidad();
@@ -112,6 +114,39 @@ export class CrudPreguntasComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
+      const formData = event.data.InfoIcfes;
+      const tercero = {
+        Id: this.persiona_id  || 1, // se debe cambiar solo por persona id
+      }
+      const dataUniversidad = {
+        InfoComplementariaTercero: [
+          {
+            // Medio por el que se entero de la universidad
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: formData.MedioEntero,
+            Dato: JSON.stringify(formData.MedioEntero),
+            Activo: true,
+          },
+          {
+            // Se presento a la universidad por cuantas veces
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: formData.PresentoUniversidad,
+            Dato: JSON.stringify(formData.PresentoUniversidad),
+            Activo: true,
+          },
+          {
+            // Tipo de cupo al que aspira
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: formData.TipoInscripcion,
+            Dato: JSON.stringify(formData.TipoInscripcion),
+            Activo: true,
+          },
+        ],
+      }
+      this.createUniversidad(dataUniversidad);
       this.result.emit(event);
     }
   }
