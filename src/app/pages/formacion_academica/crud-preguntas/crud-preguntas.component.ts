@@ -50,6 +50,7 @@ export class CrudPreguntasComponent implements OnInit {
     private translate: TranslateService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
+    private sgaMidService: SgaMidService,
     private users: UserService,
     private store: Store<IAppState>,
     private listService: ListService,
@@ -110,6 +111,49 @@ export class CrudPreguntasComponent implements OnInit {
   setPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);
+  }
+
+  createUniversidad(infoUniversidad: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('universidad_form.seguro_continuar_registrar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        if (willDelete.value) {
+          this.info_universidad = <any>infoUniversidad;
+          this.sgaMidService.post('inscripciones/info_complementaria_universidad', this.info_universidad)
+            .subscribe(res => {
+              const r = <any>res;
+              if (r !== null && r.Type !== 'error') {
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.registrar'),
+                  this.translate.instant('universidad_form.universidad_form_registrado'));
+                this.clean = !this.clean;
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('universidad_form.universidad_form_no_registrado'));
+              }
+            },
+            (error: HttpErrorResponse) => {
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('universidad_form.universidad_form_no_registrado'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+              this.showToast('error', this.translate.instant('GLOBAL.error'),
+                this.translate.instant('universidad_form.universidad_form_no_registrado'));
+            });
+          }
+      });
   }
 
   validarForm(event) {
