@@ -839,6 +839,11 @@
         "icfes_colegio_registrado": "Información del icfes y del colegio registrada",
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información del icfes y del colegio?"
     },
+    "universidad_form": {
+        "universidad_form_no_registrado": "Información de la universidad no registrada",
+        "universidad_form_registrado": "Información de la universidad registrada",
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta información de la universidad?"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Información familiar no actualizada",
         "informacion_familiar_actualizada": "Información familiar actualizada",

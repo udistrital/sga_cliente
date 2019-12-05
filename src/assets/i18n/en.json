@@ -826,6 +826,11 @@
         "icfes_colegio_registrado": "Icfes and school information not registered",
         "seguro_continuar_registrar": "Are you sure you want to register this Icfes and school information?"
     },
+    "universidad_form": {
+        "universidad_form_no_registrado": "University information not registered",
+        "universidad_form_registrado": "University information registered",
+        "seguro_continuar_registrar": "Are you sure you want to register this university information?"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",
