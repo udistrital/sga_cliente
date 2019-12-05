@@ -158,7 +158,7 @@ export class CrudPreguntasComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
-      const formData = event.data.InfoIcfes;
+      const formData = event.data.InfoUniversidad;
       const tercero = {
         Id: this.persiona_id  || 1, // se debe cambiar solo por persona id
       }
