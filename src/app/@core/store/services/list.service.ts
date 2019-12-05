@@ -570,6 +570,24 @@ export class ListService {
     );
   }
 
+  public findSePresentaAUniversidadPor() {
+    this.store.select(REDUCER_LIST.SePresentaAUniversidadPor).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_15')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.SePresentaAUniversidadPor, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.SePresentaAUniversidadPor, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   private addList(type: string, object: Array<any>) {
     this.store.dispatch({
       type: type,

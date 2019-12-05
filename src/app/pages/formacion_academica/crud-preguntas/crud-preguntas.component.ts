@@ -61,6 +61,7 @@ export class CrudPreguntasComponent implements OnInit {
     // this.loadOptionsPais();
     // this.ente = this.users.getEnte();
     this.listService.findMediosEnteroUniversidad();
+    this.listService.findSePresentaAUniversidadPor();
     this.loadLists();
   }
 
@@ -92,7 +93,8 @@ export class CrudPreguntasComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
-       this.formUniversidad.campos[this.getIndexForm('MedioEntero')].opciones = list.listMediosEnteroUniversidad[0];;
+       this.formUniversidad.campos[this.getIndexForm('MedioEntero')].opciones = list.listMediosEnteroUniversidad[0];
+       this.formUniversidad.campos[this.getIndexForm('PresentoUniversidad')].opciones = list.listSePresentaAUniversidadPor[0];
       },
    );
  }

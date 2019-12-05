@@ -29,5 +29,6 @@ export const REDUCER_LIST = {
     TipoColegio: 'ListTipoColegio',
     SemestresSinEstudiar: 'ListSemestresSinEstudiar',
     MediosEnteroUniversidad: 'ListMediosEnteroUniversidad',
+    SePresentaAUniversidadPor: 'ListSePresentaAUniversidadPor',
     // TipoPublicacionLibro: 'listReducerTipoPublicacionLibro',
 };
