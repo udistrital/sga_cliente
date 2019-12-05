@@ -821,6 +821,11 @@
         "transferencia_registrada": "Internal transfer request created",
         "seguro_continuar_registrar": "Are you sure you want to register this internal transfer request?"
     },
+    "icfes_colegio": {
+        "icfes_colegio_no_registrado": "Icfes and school information not registered",
+        "icfes_colegio_registrado": "Icfes and school information not registered",
+        "seguro_continuar_registrar": "Are you sure you want to register this Icfes and school information?"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",

@@ -18,6 +18,7 @@ import { TipoIdentificacion } from '../data/models/informacion/tipo_identificaci
 import { TipoProyecto } from '../data/models/investigacion/tipo_proyecto';
 import { GrupoInvestigacion } from '../data/models/investigacion/grupo_investigacion';
 import { PeriodoAcademico } from '../data/models/periodo/periodo_academico';
+import { InfoComplementaria } from '../data/models/terceros/info_complementaria';
 // import { TipoPublicacionLibro } from '../data/models/tipo_publicacion_libro';
 
 export interface IAppState {
@@ -47,5 +48,8 @@ export interface IAppState {
   listTipoProyecto: TipoProyecto[],
   listGrupoInvestigacion: GrupoInvestigacion[],
   listPeriodoAcademico: PeriodoAcademico[],
+  listLocalidadesBogota: InfoComplementaria[],
+  listTipoColegio: InfoComplementaria[],
+  listSemestresSinEstudiar: InfoComplementaria[],
   // listTipoPublicacionLibro: TipoPublicacionLibro[],
 }

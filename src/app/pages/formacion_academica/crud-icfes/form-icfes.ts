@@ -4,11 +4,11 @@ export let FORM_ICFES = {
   alertas: true,
   btn: 'Guardar',
   btnLimpiar: 'Limpiar',
-  modelo: 'InfoFormacionAcademica',
+  modelo: 'InfoIcfes',
   campos: [
     {
       etiqueta: 'select',
-      claseGrid: 'col-lg-6 col-md-5 col-sm-12 col-xs-12',
+      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'TipoIcfes',
       label_i18n: 'tipo_icfes',
       placeholder_i18n: 'tipo_icfes',
@@ -19,7 +19,7 @@ export let FORM_ICFES = {
     },
     {
       etiqueta: 'input',
-      claseGrid: 'col-lg-5 col-md-5 col-sm-10 col-xs-10',
+      claseGrid: 'col-lg-6 col-md-6 col-sm-10 col-xs-10',
       nombre: 'NúmeroRegistroIcfes',
       label_i18n: 'numero_registro',
       placeholder_i18n: 'numero_registro',
@@ -42,6 +42,8 @@ export let FORM_ICFES = {
       label_i18n: 'localidad_colegio',
       placeholder_i18n: 'localidad_colegio',
       requerido: true,
+      key: 'Nombre',
+      opciones: [],
     },
     {
       etiqueta: 'select',
@@ -50,6 +52,8 @@ export let FORM_ICFES = {
       label_i18n: 'tipo_colegio',
       placeholder_i18n: 'tipo_colegio',
       requerido: true,
+      key: 'Nombre',
+      opciones: [],
     },
     {
       etiqueta: 'select',
@@ -58,6 +62,15 @@ export let FORM_ICFES = {
       label_i18n: 'valido_colegio',
       placeholder_i18n: 'valido_colegio',
       requerido: true,
+      opciones: [
+        {
+          'Id': 'Si',
+        },
+        {
+          'Id': 'No',
+        },
+      ],
+      key: 'Id',
     },
     {
       etiqueta: 'select',
@@ -66,6 +79,8 @@ export let FORM_ICFES = {
       label_i18n: 'numero_semestres',
       placeholder_i18n: 'numero_semestres',
       requerido: true,
+      key: 'Nombre',
+      opciones: [],
     },
   ],
 }
