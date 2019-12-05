@@ -94,8 +94,17 @@ export let FORM_INFO_CARACTERISTICA_PREGRADO = {
             placeholder_i18n: 'eps',
             requerido: true,
             tipo: 'EPS',
-            key: 'Nombre',
+            key: 'NombreCompleto',
             opciones: [],
+        },
+        {
+            etiqueta: 'mat-date',
+            claseGrid: 'col-lg-4 col-md-6 col-sm-12 col-xs-12',
+            nombre: 'FechaVinculacion',
+            label_i18n: 'fecha_vinculacion',
+            placeholder_i18n: 'fecha_vinculacion',
+            requerido: true,
+            tipo: 'date',
         },
         {
             etiqueta: 'select',

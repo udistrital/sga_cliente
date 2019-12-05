@@ -24,10 +24,10 @@ import html2canvas from 'html2canvas';
 })
 export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
-   @Input('inscripcion_id')
+  @Input('inscripcion_id')
   set name(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
-    console.info('Posgrado ins: ' + this.inscripcion_id)
+    // console.info('Posgrado ins: ' + this.inscripcion_id)
     if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
       this.selectedValue = undefined;
       window.localStorage.setItem('programa', this.selectedValue);
@@ -301,7 +301,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     console.info(event)
     switch (event) {
       case 'info_contacto':
-        this.show_info = true;
+
+        this.show_info = false;
         this.show_profile = false;
         this.show_acad = true;
         this.show_expe = false;

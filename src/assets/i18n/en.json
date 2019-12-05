@@ -116,6 +116,7 @@
         "fecha_fin": "End date",
         "placeholder_fecha_fin": "E.g.: 24/08/2018",
         "periodo": "Period",
+        "info_caracteristica": "Characteristic data",
         "placeholder_periodo": "E.g.: 1",
         "alerta_llenar_campo": "You must fill this field",
         "tipo_periodo": "Type Period ",
@@ -451,7 +452,9 @@
         "ultimo_semestre": "Last semester taken",
         "placeholder_ultimo_semestre": "E.g: Third semester",
         "observacion_trans": "Reasons for the Transfer",
-        "placeholder_observacion_trans": ""
+        "placeholder_observacion_trans": "",
+        "fecha_vinculacion": "EPS Link Start Date",
+        "placeholder_fecha_vinculacion": "E.g: 01/01/2019"
     },
 
     "ERROR": {
@@ -820,6 +823,11 @@
         "transferencia_no_registrada": "Internal transfer request not created",
         "transferencia_registrada": "Internal transfer request created",
         "seguro_continuar_registrar": "Are you sure you want to register this internal transfer request?"
+    },
+    "icfes_colegio": {
+        "icfes_colegio_no_registrado": "Icfes and school information not registered",
+        "icfes_colegio_registrado": "Icfes and school information not registered",
+        "seguro_continuar_registrar": "Are you sure you want to register this Icfes and school information?"
     },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",

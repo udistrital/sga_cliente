@@ -2,7 +2,7 @@ import { Lugar } from './../../../@core/data/models/lugar/lugar';
 import { InformacionContacto } from './../../../@core/data/models/informacion/informacion_contacto';
 import { InfoContactoGet } from './../../../@core/data/models/ente/info_contacto_get';
 import { InfoContactoPut } from './../../../@core/data/models/ente/info_contacto_put';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { FORM_INFORMACION_CONTACTO_PREGRADO } from './form-informacion_contacto_pregrado';
@@ -21,7 +21,7 @@ import { Store } from '@ngrx/store';
   templateUrl: './crud-informacion_contacto_pregrado.component.html',
   styleUrls: ['./crud-informacion_contacto_pregrado.component.scss'],
 })
-export class CrudInformacionContactoPregradoComponent implements OnInit {
+export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
   config: ToasterConfig;
   informacion_contacto_id: number;
 
@@ -492,7 +492,8 @@ export class CrudInformacionContactoPregradoComponent implements OnInit {
   //     });
   // }
 
-  ngOnInit() {
+  ngAfterViewInit(): void {
+    this.info_informacion_contacto.CodigoPostal = '123245';
     // this.loadInformacionContacto();
   }
 
@@ -535,6 +536,8 @@ export class CrudInformacionContactoPregradoComponent implements OnInit {
      this.store.select((state) => state).subscribe(
       (list) => {
        this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
+       this.formInformacionContacto.campos[this.getIndexForm('CorreoElectronico')].valor =
+       JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).email;
       },
    );
   }

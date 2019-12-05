@@ -356,9 +356,12 @@ export class ListService {
     this.store.select(REDUCER_LIST.EPS).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.tercerosService.get('tipo_tercero')
+          this.tercerosService.get('tercero_tipo_tercero/?query=TipoTerceroId.Id:3&limit=0')
             .subscribe(
               (result: any[]) => {
+                for (let i = 0; i < result.length; i++) {
+                  result[i] = result[i]['TerceroId']
+                }
                 this.addList(REDUCER_LIST.EPS, result);
               },
               error => {
@@ -369,6 +372,8 @@ export class ListService {
       },
     );
   }
+
+
 
   public findTipoICFES() {
     this.store.select(REDUCER_LIST.ICFES).subscribe(
@@ -491,6 +496,60 @@ export class ListService {
               },
               error => {
                 this.addList(REDUCER_LIST.PeriodoAcademico, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findLocalidadesBogota() {
+    this.store.select(REDUCER_LIST.LocalidadesBogota).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_12')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.LocalidadesBogota, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.LocalidadesBogota, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findTipoColegio() {
+    this.store.select(REDUCER_LIST.TipoColegio).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_13')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoColegio, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoColegio, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findSemestresSinEstudiar() {
+    this.store.select(REDUCER_LIST.SemestresSinEstudiar).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_14')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.SemestresSinEstudiar, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.SemestresSinEstudiar, []);
               },
             );
         }
