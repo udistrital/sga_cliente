@@ -15,6 +15,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { ListService } from '../../../@core/store/services/list.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { IAppState } from '../../../@core/store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ngx-crud-preguntas',
@@ -39,7 +43,6 @@ export class CrudPreguntasComponent implements OnInit {
   formUniversidad: any;
   temp: any;
   clean: boolean;
-  loading: boolean;
   percentage: number;
 
   constructor(
@@ -47,6 +50,8 @@ export class CrudPreguntasComponent implements OnInit {
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private users: UserService,
+    private store: Store<IAppState>,
+    private listService: ListService,
     private toasterService: ToasterService) {
     this.formUniversidad = FORM_PREGUNTAS;
     this.construirForm();
@@ -55,7 +60,8 @@ export class CrudPreguntasComponent implements OnInit {
     });
     // this.loadOptionsPais();
     // this.ente = this.users.getEnte();
-    this.loading = false;
+    this.listService.findMediosEnteroUniversidad();
+    this.loadLists();
   }
 
   construirForm() {
@@ -82,6 +88,14 @@ export class CrudPreguntasComponent implements OnInit {
     }
     return 0;
   }
+
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+       this.formUniversidad.campos[this.getIndexForm('MedioEntero')].opciones = list.listMediosEnteroUniversidad[0];;
+      },
+   );
+ }
 
   ngOnInit() {
     // this.loadInfoFormacionAcademica();

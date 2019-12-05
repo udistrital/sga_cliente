@@ -552,6 +552,24 @@ export class ListService {
     );
   }
 
+  public findMediosEnteroUniversidad() {
+    this.store.select(REDUCER_LIST.MediosEnteroUniversidad).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_12')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.MediosEnteroUniversidad, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.MediosEnteroUniversidad, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   private addList(type: string, object: Array<any>) {
     this.store.dispatch({
       type: type,

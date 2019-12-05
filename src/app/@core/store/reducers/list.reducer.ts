@@ -263,4 +263,13 @@ export class ListReducer {
         return state;
     }
   }
+
+  static ListReducerMediosEnteroUniversidad(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.MediosEnteroUniversidad:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
 }

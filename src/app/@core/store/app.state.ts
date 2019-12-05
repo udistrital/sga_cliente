@@ -51,5 +51,6 @@ export interface IAppState {
   listLocalidadesBogota: InfoComplementaria[],
   listTipoColegio: InfoComplementaria[],
   listSemestresSinEstudiar: InfoComplementaria[],
+  listMediosEnteroUniversidad: InfoComplementaria[],
   // listTipoPublicacionLibro: TipoPublicacionLibro[],
 }
