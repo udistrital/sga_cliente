@@ -62,6 +62,7 @@ export class CrudPreguntasComponent implements OnInit {
     // this.ente = this.users.getEnte();
     this.listService.findMediosEnteroUniversidad();
     this.listService.findSePresentaAUniversidadPor();
+    this.listService.findTipoInscripcionUniversidad();
     this.loadLists();
   }
 
@@ -95,6 +96,7 @@ export class CrudPreguntasComponent implements OnInit {
       (list) => {
        this.formUniversidad.campos[this.getIndexForm('MedioEntero')].opciones = list.listMediosEnteroUniversidad[0];
        this.formUniversidad.campos[this.getIndexForm('PresentoUniversidad')].opciones = list.listSePresentaAUniversidadPor[0];
+       this.formUniversidad.campos[this.getIndexForm('TipoInscripcion')].opciones = list.listTipoInscripcionUniversidad[0];
       },
    );
  }

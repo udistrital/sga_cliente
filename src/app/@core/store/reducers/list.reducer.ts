@@ -281,4 +281,13 @@ export class ListReducer {
         return state;
     }
   }
+
+  static ListReducerTipoInscripcionUniversidad(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.TipoInscripcionUniversidad:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
 }

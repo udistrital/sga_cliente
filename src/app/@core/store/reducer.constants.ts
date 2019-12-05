@@ -30,5 +30,6 @@ export const REDUCER_LIST = {
     SemestresSinEstudiar: 'ListSemestresSinEstudiar',
     MediosEnteroUniversidad: 'ListMediosEnteroUniversidad',
     SePresentaAUniversidadPor: 'ListSePresentaAUniversidadPor',
+    TipoInscripcionUniversidad: 'ListTipoInscripcionUniversidad',
     // TipoPublicacionLibro: 'listReducerTipoPublicacionLibro',
 };

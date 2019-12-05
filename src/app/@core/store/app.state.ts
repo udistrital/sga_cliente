@@ -53,5 +53,6 @@ export interface IAppState {
   listSemestresSinEstudiar: InfoComplementaria[],
   listMediosEnteroUniversidad: InfoComplementaria[],
   listSePresentaAUniversidadPor: InfoComplementaria[],
+  listTipoInscripcionUniversidad: InfoComplementaria[],
   // listTipoPublicacionLibro: TipoPublicacionLibro[],
 }
