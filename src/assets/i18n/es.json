@@ -137,6 +137,7 @@
         "placeholder_ano": "ej: 2019",
         "placeholder_periodo": "ej: I,II,III",
         "tiporecurrencia": "tipo recurrencia",
+        "info_caracteristica": "Información característica",
         "placeholder_tiporecurrencia": "ej: tipo recurrencia",
         "codigoabreviacion": "código abreviación",
         "placeholder_codigoabreviacion": "ej: codigo abreviacion",
@@ -463,7 +464,9 @@
         "ultimo_semestre": "Último semestre cursado",
         "placeholder_ultimo_semestre": "Ej: Tercer semestre",
         "observacion_trans": "Motivos de la Transfeencia",
-        "placeholder_observacion_trans": ""
+        "placeholder_observacion_trans": "",
+        "fecha_vinculacion": "Fecha de inicio de vinculación EPS",
+        "placeholder_fecha_vinculacion": "Ej: 01/01/2019"
 
     },
     "ERROR": {

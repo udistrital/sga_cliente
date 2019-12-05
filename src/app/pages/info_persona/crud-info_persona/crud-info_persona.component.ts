@@ -224,6 +224,7 @@ export class CrudInfoPersonaComponent implements OnInit {
                     if (r !== null && r.Type !== 'error') {
                       window.localStorage.setItem('ente', r.Id);
                       this.info_persona_id = r.Id;
+                      sessionStorage.setItem('IdTercero', String(this.info_persona_id));
                       // this.loadInfoPersona();
                       // this.createInscripcion(this.info_persona_id);
                       // this.loadInscripcion();
