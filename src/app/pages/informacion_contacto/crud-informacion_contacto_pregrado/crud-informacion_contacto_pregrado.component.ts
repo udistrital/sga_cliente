@@ -44,6 +44,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
   clean: boolean;
   denied_acces: boolean = false;
   paisSeleccionado: any;
+  info_tercero_id: Number;
   departamentoSeleccionado: any;
   ciudadSeleccionada: any;
   datosPost: any;
@@ -330,19 +331,19 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
   //   };
   //   Swal(opt)
   //     .then((willDelete) => {
-  //       if (willDelete.value) {
+  //       if (willDelete.value) {info_tercero_id
   //         this.loading = true;
-  //         this.info_informacion_contacto = <InformacionContacto>informacionContacto;
-  //         if (this.info_informacion_contacto.PaisResidencia.Nombre.toString().toLowerCase() !== 'colombia' ||
-  //         (this.info_informacion_contacto.CiudadResidencia.Nombre.toString().toLowerCase() !== 'bogotá' &&
-  //           this.info_informacion_contacto.CiudadResidencia.Nombre.toString().toLowerCase() !== 'bogota')) {
-  //             this.info_informacion_contacto.LocalidadResidencia = null;
+  //         this.info_informacioninfo_tercero_idntacto = <InformacionContacto>informacionContacto;
+  //         if (this.info_informainfo_tercero_idn_contacto.PaisResidencia.Nombre.toString().toLowerCase() !== 'colombia' ||
+  //         (this.info_informacioinfo_tercero_idontacto.CiudadResidencia.Nombre.toString().toLowerCase() !== 'bogotá' &&
+  //           this.info_informaciinfo_tercero_idcontacto.CiudadResidencia.Nombre.toString().toLowerCase() !== 'bogota')) {
+  //             this.info_informainfo_tercero_idn_contacto.LocalidadResidencia = null;
   //         }
-  //         const loc = this.info_informacion_contacto.LocalidadResidencia;
+  //         const loc = this.infoinfo_tercero_idformacion_contacto.LocalidadResidencia;
 
-  //         this.datosPut = <InfoContactoPut>{
-  //           Ente: (1 * this.info_informacion_contacto.Ente),
-  //           Persona: (1 * this.info_informacion_contacto.Ente),
+  //         this.datosPut = <Infoinfo_tercero_idtactoPut>{
+  //           Ente: (1 * this.infinfo_tercero_idnformacion_contacto.Ente),
+  //           Persona: (1 * this.info_tercero_ido_informacion_contacto.Ente),
   //           ContactoEnte: [
   //             {
   //               Id: this.info_informacion_contacto.IdTelefonoEnte,
@@ -406,91 +407,75 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
   //     });
   // }
 
-  // createInformacionContacto(informacionContacto: any): void {
-  //   const opt: any = {
-  //     title: this.translate.instant('GLOBAL.crear'),
-  //     text: this.translate.instant('GLOBAL.crear') + '?',
-  //     icon: 'warning',
-  //     buttons: true,
-  //     dangerMode: true,
-  //     showCancelButton: true,
-  //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-  //   };
-  //   Swal(opt)
-  //     .then((willDelete) => {
-  //       this.loading = true;
-  //       if (willDelete.value) {
-  //         this.info_informacion_contacto = <InformacionContacto>informacionContacto;
-  //         this.info_informacion_contacto.Ente = this.informacion_contacto_id;
-  //         if (this.info_informacion_contacto.PaisResidencia.Nombre.toString().toLowerCase() !== 'colombia' ||
-  //         (this.info_informacion_contacto.CiudadResidencia.Nombre.toString().toLowerCase() !== 'bogotá' &&
-  //           this.info_informacion_contacto.CiudadResidencia.Nombre.toString().toLowerCase() !== 'bogota')) {
-  //             this.info_informacion_contacto.LocalidadResidencia = null;
-  //         }
-  //         const loc = this.info_informacion_contacto.LocalidadResidencia;
+   createInformacionContacto(informacionContacto: any): void {
+    this.info_tercero_id = Number(sessionStorage.getItem('IdTercero'));
+     const opt: any = {
+       title: this.translate.instant('GLOBAL.crear'),
+       text: this.translate.instant('GLOBAL.crear') + '?',
+       icon: 'warning',
+       buttons: true,
+       dangerMode: true,
+       showCancelButton: true,
+       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+     };
+     Swal(opt)
+       .then((willDelete) => {
+         this.loading = true;
+         if (willDelete.value) {
+           this.info_informacion_contacto = <InformacionContacto>informacionContacto;
+           this.info_informacion_contacto.Ente = this.informacion_contacto_id;
+           if (this.info_informacion_contacto.PaisResidencia.Nombre.toString().toLowerCase() !== 'colombia' ||
+           (this.info_informacion_contacto.CiudadResidencia.Nombre.toString().toLowerCase() !== 'bogotá' &&
+             this.info_informacion_contacto.CiudadResidencia.Nombre.toString().toLowerCase() !== 'bogota')) {
+               this.info_informacion_contacto.LocalidadResidencia = null;
+           }
+           const loc = this.info_informacion_contacto.LocalidadResidencia;
 
-  //         this.datosPost = {
-  //           'Ente': (1 * this.info_informacion_contacto.Ente),
-  //           'Persona': (1 * this.info_informacion_contacto.Ente),
-  //           'ContactoEnte': [
-  //             {
-  //               'TipoContacto': {'Id': 1},
-  //               'Valor': '' + this.info_informacion_contacto.Telefono,
-  //             },
-  //             {
-  //               'TipoContacto': {'Id': 2},
-  //               'Valor': '' + this.info_informacion_contacto.TelefonoAlterno,
-  //             },
-  //           ],
-  //           'UbicacionEnte': {
-  //             'Lugar': this.info_informacion_contacto.CiudadResidencia,
-  //             'TipoRelacionUbicacionEnte': 2,
-  //             'Atributos': [
-  //               {
-  //                 'AtributoUbicacion': {'Id': 1},
-  //                 'Valor': this.info_informacion_contacto.DireccionResidencia,
-  //               },
-  //               {
-  //                 'AtributoUbicacion': {'Id': 2},
-  //                 'Valor': '' + this.info_informacion_contacto.EstratoResidencia,
-  //               },
-  //               {
-  //                 'AtributoUbicacion': {'Id': 3},
-  //                 'Valor': this.info_informacion_contacto.CodigoPostal,
-  //               },
-  //             ],
-  //           },
-  //         };
-
-  //         if (loc !== null) {
-  //           this.datosPost.UbicacionEnte.Lugar = <Lugar>{Id: this.info_informacion_contacto.LocalidadResidencia};
-  //         }
-
-  //         this.campusMidService.post('persona/guardar_contacto/', this.datosPost)
-  //           .subscribe(res => {
-  //             if (res !== null) {
-  //               // this.info_informacion_contacto = <InformacionContacto>res;
-  //               this.loading = false;
-  //               this.eventChange.emit(true);
-  //               this.showToast('info', this.translate.instant('GLOBAL.crear'),
-  //                 this.translate.instant('GLOBAL.informacion_contacto') + ' ' +
-  //                 this.translate.instant('GLOBAL.confirmarCrear'));
-  //             }
-  //           },
-  //             (error: HttpErrorResponse) => {
-  //               Swal({
-  //                 type: 'error',
-  //                 title: error.status + '',
-  //                 text: this.translate.instant('ERROR.' + error.status),
-  //                 footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                   this.translate.instant('GLOBAL.informacion_contacto'),
-  //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //               });
-  //             });
-  //       }
-  //     });
-  // }
+           this.datosPost = {
+             'Tercero': this.info_tercero_id,
+             'Contactotercero': {  
+                'Telefono': this.info_informacion_contacto.Telefono,
+                'TelefonoAlterno': this.info_informacion_contacto.TelefonoAlterno,
+                'Estrato': this.info_informacion_contacto.EstratoResidencia,
+                'CodigoPostal': this.info_informacion_contacto.CodigoPostal,
+                 'Correo': this.formInformacionContacto.campos[this.getIndexForm('CorreoElectronico')].valor,
+            
+             },
+             'UbicacionTercero': {
+               'Lugar': this.info_informacion_contacto.CiudadResidencia,
+               'Direccion': this.info_informacion_contacto.DireccionResidencia,
+             },
+           };
+           
+           if (loc !== null) {
+             this.datosPost.UbicacionTercero.Lugar = <Lugar>{Id: this.info_informacion_contacto.LocalidadResidencia};
+           }
+           console.info(JSON.stringify(this.datosPost));
+           this.campusMidService.post('persona/guardar_contacto/', this.datosPost)
+             .subscribe(res => {
+               if (res !== null) {
+                 // this.info_informacion_contacto = <InformacionContacto>res;
+                 this.loading = false;
+                 this.eventChange.emit(true);
+                 this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                   this.translate.instant('GLOBAL.informacion_contacto') + ' ' +
+                   this.translate.instant('GLOBAL.confirmarCrear'));
+               }
+             },
+               (error: HttpErrorResponse) => {
+                 Swal({
+                   type: 'error',
+                   title: error.status + '',
+                   text: this.translate.instant('ERROR.' + error.status),
+                   footer: this.translate.instant('GLOBAL.crear') + '-' +
+                     this.translate.instant('GLOBAL.informacion_contacto'),
+                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                 });
+               });
+         }
+       });
+   }
 
   ngAfterViewInit(): void {
     this.info_informacion_contacto.CodigoPostal = '123245';
@@ -500,7 +485,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
   validarForm(event) {
     if (event.valid) {
       if (this.info_informacion_contacto === undefined) {
-        // this.createInformacionContacto(event.data.InformacionContacto);
+         this.createInformacionContacto(event.data.InformacionContacto);
       } else {
         // this.updateInformacionContacto(event.data.InformacionContacto);
       }
