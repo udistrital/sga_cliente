@@ -434,10 +434,11 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
 
            this.datosPost = {
              'Tercero': this.info_tercero_id,
+             'EstratoTercero': String(this.formInformacionContacto.campos[this.getIndexForm('EstratoResidencia')].valor),
+             'EstratoQuienCostea': this.formInformacionContacto.campos[this.getIndexForm('EstratoSocioenconomicoCostea')].valor,
              'Contactotercero': {
-             'Telefono': this.info_informacion_contacto.Telefono,
-             'TelefonoAlterno': this.info_informacion_contacto.TelefonoAlterno,
-             'Estrato': this.info_informacion_contacto.EstratoResidencia,
+             'Telefono': String(this.info_informacion_contacto.Telefono),
+             'TelefonoAlterno': String(this.info_informacion_contacto.TelefonoAlterno),
              'CodigoPostal': this.info_informacion_contacto.CodigoPostal,
              'Correo': this.formInformacionContacto.campos[this.getIndexForm('CorreoElectronico')].valor,
               },
