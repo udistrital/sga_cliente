@@ -301,7 +301,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     console.info(event)
     switch (event) {
       case 'info_contacto':
-        this.show_info = true;
+
+        this.show_info = false;
         this.show_profile = false;
         this.show_acad = true;
         this.show_expe = false;
