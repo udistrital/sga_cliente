@@ -4,7 +4,7 @@ export let FORM_PREGUNTAS = {
   alertas: true,
   btn: 'Guardar',
   btnLimpiar: 'Limpiar',
-  modelo: 'InfoFormacionAcademica',
+  modelo: 'InfoUniversidad',
   campos: [
     {
       etiqueta: 'select',

@@ -24,10 +24,6 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 export class CrudPreguntasComponent implements OnInit {
   config: ToasterConfig;
   info_formacion_academica_id: number;
-  organizacion: any;
-  ente: number;
-  SoporteDocumento: any;
-  filesUp: any;
 
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
@@ -39,14 +35,12 @@ export class CrudPreguntasComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
-  info_formacion_academica: any;
-  formInfoFormacionAcademica: any;
-  regInfoFormacionAcademica: any;
+  info_universidad: any;
+  formUniversidad: any;
   temp: any;
   clean: boolean;
   loading: boolean;
   percentage: number;
-  paisSelecccionado: any;
 
   constructor(
     private translate: TranslateService,
@@ -54,7 +48,7 @@ export class CrudPreguntasComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private users: UserService,
     private toasterService: ToasterService) {
-    this.formInfoFormacionAcademica = FORM_PREGUNTAS;
+    this.formUniversidad = FORM_PREGUNTAS;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
@@ -65,13 +59,13 @@ export class CrudPreguntasComponent implements OnInit {
   }
 
   construirForm() {
-    // this.formInfoFormacionAcademica.titulo = this.translate.instant('GLOBAL.formacion_academica');
-    this.formInfoFormacionAcademica.btn = this.translate.instant('GLOBAL.guardar');
-    this.formInfoFormacionAcademica.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
-    for (let i = 0; i < this.formInfoFormacionAcademica.campos.length; i++) {
-      this.formInfoFormacionAcademica.campos[i].label = this.translate.instant('GLOBAL.' + this.formInfoFormacionAcademica.campos[i].label_i18n);
-      this.formInfoFormacionAcademica.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +
-        this.formInfoFormacionAcademica.campos[i].label_i18n);
+    // this.formUniversidad.titulo = this.translate.instant('GLOBAL.formacion_academica');
+    this.formUniversidad.btn = this.translate.instant('GLOBAL.guardar');
+    this.formUniversidad.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
+    for (let i = 0; i < this.formUniversidad.campos.length; i++) {
+      this.formUniversidad.campos[i].label = this.translate.instant('GLOBAL.' + this.formUniversidad.campos[i].label_i18n);
+      this.formUniversidad.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +
+        this.formUniversidad.campos[i].label_i18n);
     }
   }
 
@@ -80,8 +74,8 @@ export class CrudPreguntasComponent implements OnInit {
   }
 
   getIndexForm(nombre: String): number {
-    for (let index = 0; index < this.formInfoFormacionAcademica.campos.length; index++) {
-      const element = this.formInfoFormacionAcademica.campos[index];
+    for (let index = 0; index < this.formUniversidad.campos.length; index++) {
+      const element = this.formUniversidad.campos[index];
       if (element.nombre === nombre) {
         return index
       }
