@@ -20,23 +20,23 @@ const path = environment.DOCUMENTO_PROGRAMA_SERVICE;
 export class DocumentoProgramaService {
 
   constructor(private requestManager: RequestManager) {
-    this.requestManager.setPath('DocumentoProgramaService');
+    this.requestManager.setPath('DOCUMENTO_PROGRAMA_SERVICE');
   }
 
   get(endpoint) {
-    this.requestManager.setPath('DocumentoProgramaService');
+    this.requestManager.setPath('DOCUMENTO_PROGRAMA_SERVICE');
     return this.requestManager.get(endpoint);
   }
   post(endpoint, element) {
-    this.requestManager.setPath('DocumentoProgramaService');
+    this.requestManager.setPath('DOCUMENTO_PROGRAMA_SERVICE');
     return this.requestManager.post(endpoint, element);
   }
   put(endpoint, element) {
-    this.requestManager.setPath('DocumentoProgramaService');
+    this.requestManager.setPath('DOCUMENTO_PROGRAMA_SERVICE');
     return this.requestManager.put(endpoint, element);
   }
   delete(endpoint, element) {
-    this.requestManager.setPath('DocumentoProgramaService');
+    this.requestManager.setPath('DOCUMENTO_PROGRAMA_SERVICE');
     return this.requestManager.delete(endpoint, element.Id);
   }
 }

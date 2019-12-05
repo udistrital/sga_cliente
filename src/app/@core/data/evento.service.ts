@@ -11,28 +11,26 @@ const httpOptions = {
     }),
 }
 
-const path = environment.EVENTO_SERVICE;
-
 @Injectable()
 export class EventoService {
 
   constructor(private requestManager: RequestManager) {
-    this.requestManager.setPath('EventoService');
+    this.requestManager.setPath('EVENTO_SERVICE');
   }
   get(endpoint) {
-    this.requestManager.setPath('EventoService');
+    this.requestManager.setPath('EVENTO_SERVICE');
     return this.requestManager.get(endpoint);
   }
   post(endpoint, element) {
-    this.requestManager.setPath('EventoService');
+    this.requestManager.setPath('EVENTO_SERVICE');
     return this.requestManager.post(endpoint, element);
   }
   put(endpoint, element) {
-    this.requestManager.setPath('EventoService');
+    this.requestManager.setPath('EVENTO_SERVICE');
     return this.requestManager.put(endpoint, element);
   }
   delete(endpoint, element) {
-    this.requestManager.setPath('EventoService');
+    this.requestManager.setPath('EVENTO_SERVICE');
     return this.requestManager.delete(endpoint, element.Id);
   }
 }

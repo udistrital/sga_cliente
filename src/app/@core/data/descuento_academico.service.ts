@@ -11,8 +11,6 @@ const httpOptions = {
     }),
 }
 
-const path = environment.DESCUENTO_ACADEMICO_SERVICE;
-
 @Injectable({
   providedIn: 'root',
 })
@@ -20,23 +18,23 @@ const path = environment.DESCUENTO_ACADEMICO_SERVICE;
 export class DescuentoAcademicoService {
 
   constructor(private requestManager: RequestManager) {
-    this.requestManager.setPath('DescuentoAcademicoService');
+    this.requestManager.setPath('DESCUENTO_ACADEMICO_SERVICE');
   }
 
   get(endpoint) {
-    this.requestManager.setPath('DescuentoAcademicoService');
+    this.requestManager.setPath('DESCUENTO_ACADEMICO_SERVICE');
     return this.requestManager.get(endpoint);
   }
   post(endpoint, element) {
-    this.requestManager.setPath('DescuentoAcademicoService');
+    this.requestManager.setPath('DESCUENTO_ACADEMICO_SERVICE');
     return this.requestManager.post(endpoint, element);
   }
   put(endpoint, element) {
-    this.requestManager.setPath('DescuentoAcademicoService');
+    this.requestManager.setPath('DESCUENTO_ACADEMICO_SERVICE');
     return this.requestManager.put(endpoint, element);
   }
   delete(endpoint, element) {
-    this.requestManager.setPath('DescuentoAcademicoService');
+    this.requestManager.setPath('DESCUENTO_ACADEMICO_SERVICE');
     return this.requestManager.delete(endpoint, element.Id);
   }
 }

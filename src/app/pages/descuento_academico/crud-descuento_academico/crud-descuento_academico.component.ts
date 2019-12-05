@@ -528,16 +528,16 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     this.result.emit(this.percentage);
   }
 
-  // validarForm(event) {
-  //   if (event.valid) {
-  //     if (this.info_descuento_academico === undefined) {
-  //       this.crearNuevoDescuentoAcademico(event.data.SolicitudDescuento);
-  //     } else {
-  //       this.updateDescuentoAcademico(event.data.SolicitudDescuento);
-  //     }
-  //     this.result.emit(event);
-  //   }
-  // }
+  validarForm(event) {
+    if (event.valid) {
+      if (this.info_descuento_academico === undefined) {
+        // this.crearNuevoDescuentoAcademico(event.data.SolicitudDescuento);
+      } else {
+        // this.updateDescuentoAcademico(event.data.SolicitudDescuento);
+      }
+      this.result.emit(event);
+    }
+  }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({
