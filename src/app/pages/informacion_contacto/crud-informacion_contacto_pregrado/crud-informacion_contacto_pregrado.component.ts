@@ -435,18 +435,17 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
            this.datosPost = {
              'Tercero': this.info_tercero_id,
              'Contactotercero': {
-             'Telefono': this.info_informacion_contacto.Telefono, 
+             'Telefono': this.info_informacion_contacto.Telefono,
              'TelefonoAlterno': this.info_informacion_contacto.TelefonoAlterno,
              'Estrato': this.info_informacion_contacto.EstratoResidencia,
              'CodigoPostal': this.info_informacion_contacto.CodigoPostal,
-             'Correo': this.formInformacionContacto.campos[this.getIndexForm('CorreoElectronico')].valor,            
+             'Correo': this.formInformacionContacto.campos[this.getIndexForm('CorreoElectronico')].valor,
               },
              'UbicacionTercero': {
                'Lugar': this.info_informacion_contacto.CiudadResidencia,
                'Direccion': this.info_informacion_contacto.DireccionResidencia,
              },
            };
-           
            if (loc !== null) {
              this.datosPost.UbicacionTercero.Lugar = <Lugar>{Id: this.info_informacion_contacto.LocalidadResidencia};
            }
