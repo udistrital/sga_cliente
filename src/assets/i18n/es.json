@@ -116,6 +116,7 @@
         "fecha_inicio": "Fecha de inicio",
         "placeholder_fecha_inicio": "Ej: 24/12/2016",
         "fecha_fin": "Fecha de finalización",
+        "informacion_contacto": "Información de contacto",
         "placeholder_fecha_fin": "Ej: 24/08/2018",
         "periodo": "Período",
         "placeholder_periodo": "Ej: 1",

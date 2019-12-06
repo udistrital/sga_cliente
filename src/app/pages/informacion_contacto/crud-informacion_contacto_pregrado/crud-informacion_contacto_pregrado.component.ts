@@ -14,6 +14,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { IAppState } from '../../../@core/store/app.state';
 import { ListService } from '../../../@core/store/services/list.service';
 import { Store } from '@ngrx/store';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -55,6 +56,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
   constructor(
     private translate: TranslateService,
     private campusMidService: CampusMidService,
+    private sgamidService: SgaMidService,
     private ubicacionesService: UbicacionService,
     private store: Store<IAppState>,
     private listService: ListService,
@@ -451,7 +453,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
              this.datosPost.UbicacionTercero.Lugar = <Lugar>{Id: this.info_informacion_contacto.LocalidadResidencia};
            }
            console.info(JSON.stringify(this.datosPost));
-           this.campusMidService.post('persona/guardar_contacto/', this.datosPost)
+           this.sgamidService.post('persona/guardar_datos_contacto/', this.datosPost)
              .subscribe(res => {
                if (res !== null) {
                  // this.info_informacion_contacto = <InformacionContacto>res;
