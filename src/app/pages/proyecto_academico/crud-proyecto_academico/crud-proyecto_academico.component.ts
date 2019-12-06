@@ -110,9 +110,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   Campo8Control = new FormControl('', [Validators.required]); 
   Campo9Control = new FormControl('', [Validators.required]);
   Campo10Control = new FormControl('', [Validators.required]);
-  Campo11Control = new FormControl('', [Validators.required, Validators.maxLength(4),Validators.pattern("^[0-9]*$")]);
+  Campo11Control = new FormControl('', [Validators.required, Validators.maxLength(4),Validators.pattern('^[0-9]*$')]);
   Campo12Control = new FormControl('', [Validators.required]);
-  Campo13Control = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.pattern("^[0-9]*$")]);
+  Campo13Control = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]);
   Campo14Control = new FormControl('', [Validators.required]);
   Campo16Control = new FormControl('', [Validators.required]);
   Campo17Control = new FormControl('', [Validators.required, Validators.maxLength(4)]);
@@ -120,8 +120,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   Campo19Control = new FormControl('', [Validators.required]);
   Campo20Control = new FormControl('', [Validators.required]);
   Campo21Control = new FormControl('', [Validators.required]);
-  Campo22Control = new FormControl('', [Validators.required, Validators.maxLength(2), Validators.pattern("^[0-9]*$"), Validators.max(12)]);
-  Campo23Control = new FormControl('', [Validators.required, Validators.maxLength(1),Validators.pattern("^[0-9]*$")]);
+  Campo22Control = new FormControl('', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(12)]);
+  Campo23Control = new FormControl('', [Validators.required, Validators.maxLength(1),Validators.pattern('^[0-9]*$')]);
   CampoCorreoControl = new FormControl('', [Validators.required, Validators.email]);
   CampoCreditosControl = new FormControl('', [Validators.required, Validators.maxLength(4)]);
   selectFormControl = new FormControl('', Validators.required);
@@ -167,11 +167,11 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         selector: [''],
      })
      this.resoluform = formBuilder.group({
-      resolucion: ['', [Validators.required, Validators.maxLength(4),Validators.pattern("^[0-9]*$")]],
-      ano_resolucion: ['', [Validators.required, Validators.maxLength(4),Validators.pattern("^[0-9]*$")]],
+      resolucion: ['', [Validators.required, Validators.maxLength(4),Validators.pattern('^[0-9]*$')]],
+      ano_resolucion: ['', [Validators.required, Validators.maxLength(4),Validators.pattern('^[0-9]*$')]],
       fecha_creacion: ['', Validators.required],
-      mes_vigencia: ['', [Validators.required, Validators.maxLength(2),Validators.pattern("^[0-9]*$"), Validators.max(12)]],
-      ano_vigencia: ['', [Validators.required, Validators.maxLength(1),Validators.pattern("^[0-9]*$")]],
+      mes_vigencia: ['', [Validators.required, Validators.maxLength(2),Validators.pattern('^[0-9]*$'), Validators.max(12)]],
+      ano_vigencia: ['', [Validators.required, Validators.maxLength(1),Validators.pattern('^[0-9]*$')]],
      })
      this.actoform = formBuilder.group({
       acto: ['', Validators.required],
