@@ -8,6 +8,7 @@ export class InformacionContacto {
   EstratoResidencia: number;
   CodigoPostal: string;
   Telefono: string;
+  Correo: string;
   TelefonoAlterno: string;
   Ente: number;
   IdLugarEnte: number;

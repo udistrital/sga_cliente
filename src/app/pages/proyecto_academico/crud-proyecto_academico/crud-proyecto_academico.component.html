@@ -191,6 +191,7 @@
                                             <mat-error *ngIf="Campo11Control.hasError('required')">{{ 'proyecto.erro_reso' | translate }}</mat-error>
                                         </mat-form-field>
                                         <br>
+                                        <br>
                                         <mat-form-field>
                                             <input matInput placeholder="{{ 'proyecto.ano_resolucion_proyecto' | translate }}" formControlName="ano_resolucion" class="form-control" name="ano_resolucion_proyecto">
                                             <mat-error *ngIf="Campo13Control.hasError('required')">{{ 'proyecto.erro_ano' | translate }}</mat-error>
@@ -222,7 +223,8 @@
                                                 <input matInput #box (blur)="mostrarfecha()" placeholder="{{ 'proyecto.vigencia_mes' | translate }}" formControlName="mes_vigencia" class="form-control" name="resolucion_proyecto">
                                                 <mat-error *ngIf="Campo22Control.hasError('required')">{{ 'proyecto.erro_mes_vigencia' | translate }}</mat-error>
                                             </mat-form-field>
-                                            
+                                            <br>
+                                            <br>
                                                 <mat-form-field>
                                                     <input matInput #box placeholder="{{ 'proyecto.vigencia_año' | translate }}" formControlName="ano_vigencia" class="form-control" name="ano_resolucion_proyecto" (blur)="mostrarfecha()">
                                                     <mat-error *ngIf="Campo23Control.hasError('required')">{{ 'proyecto.erro_ano_vigencia' | translate }}</mat-error>
