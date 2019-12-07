@@ -557,6 +557,60 @@ export class ListService {
     );
   }
 
+  public findMediosEnteroUniversidad() {
+    this.store.select(REDUCER_LIST.MediosEnteroUniversidad).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_12')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.MediosEnteroUniversidad, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.MediosEnteroUniversidad, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findSePresentaAUniversidadPor() {
+    this.store.select(REDUCER_LIST.SePresentaAUniversidadPor).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_15')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.SePresentaAUniversidadPor, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.SePresentaAUniversidadPor, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findTipoInscripcionUniversidad() {
+    this.store.select(REDUCER_LIST.TipoInscripcionUniversidad).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_16')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoInscripcionUniversidad, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoInscripcionUniversidad, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   private addList(type: string, object: Array<any>) {
     this.store.dispatch({
       type: type,

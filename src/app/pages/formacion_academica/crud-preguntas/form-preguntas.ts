@@ -4,7 +4,7 @@ export let FORM_PREGUNTAS = {
   alertas: true,
   btn: 'Guardar',
   btnLimpiar: 'Limpiar',
-  modelo: 'InfoFormacionAcademica',
+  modelo: 'InfoUniversidad',
   campos: [
     {
       etiqueta: 'select',
@@ -13,7 +13,9 @@ export let FORM_PREGUNTAS = {
       label_i18n: 'medio_entero',
       placeholder_i18n: 'medio_entero',
       requerido: true,
-      tipo: 'text',
+      tipo: 'MedioEnteroUniversidad',
+      key: 'Nombre',
+      opciones: [],
     },
     {
       etiqueta: 'select',
@@ -22,6 +24,9 @@ export let FORM_PREGUNTAS = {
       label_i18n: 'presento',
       placeholder_i18n: 'presento',
       requerido: true,
+      tipo: 'PresentoUniversidad',
+      key: 'Nombre',
+      opciones: [],
     },
     {
       etiqueta: 'select',
@@ -30,7 +35,11 @@ export let FORM_PREGUNTAS = {
       label_i18n: 'tipo_inscrip',
       placeholder_i18n: 'tipo_inscrip',
       requerido: true,
+      tipo: 'TipoInscripcionUniversidad',
+      key: 'Nombre',
+      opciones: [],
     },
+    /*
     {
       etiqueta: 'textarea',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
@@ -40,5 +49,6 @@ export let FORM_PREGUNTAS = {
       requerido: true,
       tipo: 'text',
     },
+    */
   ],
 }
