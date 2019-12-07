@@ -90,6 +90,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   show_docu = false;
 
   info_contacto: boolean;
+  info_familiar: boolean;
   info_persona: boolean;
   info_caracteristica: boolean;
   info_inscripcion: any;
@@ -304,7 +305,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
         this.show_info = false;
         this.show_profile = false;
-        this.show_acad = true;
+        this.show_acad = false;
         this.show_expe = false;
         this.info_contacto = true;
         this.info_caracteristica = false;
@@ -371,6 +372,21 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.viewtag = 'Informacion_externa'
           this.selecttabview(this.viewtag);
         }
+        break;
+        case 'info_familiar':
+
+        this.show_info = false;
+        this.show_profile = false;
+        this.show_acad = false;
+        this.show_expe = false;
+        this.info_contacto = false;
+        this.info_familiar = true;
+        this.info_caracteristica = false;
+        this.info_persona = false;
+        this.show_proy = false;
+        this.show_desc = false;
+        this.show_docu = false;
+        this.show_prod = false;
         break;
       case 'experiencia_laboral':
         this.show_info = false;

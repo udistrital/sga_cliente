@@ -32,5 +32,8 @@ export const rootReducer: ActionReducerMap<IAppState> = {
   listLocalidadesBogota: ListReducer.ListReducerLocalidadesBogota,
   listTipoColegio: ListReducer.ListReducerTipoColegio,
   listSemestresSinEstudiar: ListReducer.ListReducerSemestresSinEstudiar,
+  listMediosEnteroUniversidad: ListReducer.ListReducerMediosEnteroUniversidad,
+  listSePresentaAUniversidadPor: ListReducer.ListReducerSePresentaAUniversidadPor,
+  listTipoInscripcionUniversidad: ListReducer.ListReducerTipoInscripcionUniversidad,
   // listTipoPublicacionLibro: ListReducer.listReducerTipoPublicacionLibro,
 }

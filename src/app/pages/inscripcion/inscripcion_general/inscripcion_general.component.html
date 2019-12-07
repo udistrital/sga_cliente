@@ -146,10 +146,10 @@
                     </ngx-crud-info-caracteristica_pregrado>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.informacion_contacto' | translate }}" [active]="info_contacto">
-                    <ngx-crud-informacion-contacto_pregrado informacion_contacto_id={{this.info_ente_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    <ngx-crud-informacion-contacto_pregrado informacion_contacto_id={{this.info_ente_id}} (eventChange)="perfil_editar('info_familiar')" (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-contacto_pregrado>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}">
+                <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}"[active]="info_familiar">
                     <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-familiar>
                 </nb-tab>
