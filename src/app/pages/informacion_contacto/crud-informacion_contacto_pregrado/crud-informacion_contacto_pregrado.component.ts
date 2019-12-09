@@ -85,12 +85,6 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
   }
 
   getSeleccion(event) {
-    if(event.nombre === 'CorreoElectronicoConfirmar'){
-      if(1){
-        console.log(event);
-        this.formInformacionContacto[this.getIndexForm('CorreoElectronicoConfirmar')].alerta = "Los campos no son iguales";
-      }
-    }
     if (event.nombre === 'PaisResidencia') {
       this.paisSeleccionado = event.valor;
       this.loadOptionsDepartamentoResidencia();

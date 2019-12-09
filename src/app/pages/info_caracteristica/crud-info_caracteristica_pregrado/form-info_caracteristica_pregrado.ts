@@ -134,7 +134,7 @@ export let FORM_INFO_CARACTERISTICA_PREGRADO = {
             placeholder_i18n: 'puntaje',
             requerido: true,
             tipo: 'number',
-            minimo:0,
+            minimo: 0,
 
         },
     ],

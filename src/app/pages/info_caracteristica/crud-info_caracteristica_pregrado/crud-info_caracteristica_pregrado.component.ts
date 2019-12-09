@@ -301,8 +301,6 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     console.info('Entro a valid')
     console.info(this.info_info_caracteristica)
     console.info('Este es el id' +  this.info_caracteristica_id)
-
-    
     if (event.valid) {
       if (this.info_info_caracteristica === undefined && !this.denied_acces) {
         console.info('Entro a create')
