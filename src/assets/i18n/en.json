@@ -825,6 +825,11 @@
         "transferencia_registrada": "Internal transfer request created",
         "seguro_continuar_registrar": "Are you sure you want to register this internal transfer request?"
     },
+    "transferencia_externa": {
+        "transferencia_no_registrada": "External transfer request not created",
+        "transferencia_registrada": "External transfer request created",
+        "seguro_continuar_registrar": "Are you sure you want to register this internal transfer request?"
+    },
     "icfes_colegio": {
         "icfes_colegio_no_registrado": "Icfes and school information not registered",
         "icfes_colegio_registrado": "Icfes and school information not registered",
