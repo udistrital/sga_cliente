@@ -83,8 +83,7 @@ export class CrudExternoComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
-        this.formTransferenciaExterna.campos[this.getIndexForm('carreraqueviene')].opciones = list.listProgramaAcademico[0];
-        this.formTransferenciaExterna.campos[this.getIndexForm('carreratransfiere')].opciones = list.listProgramaAcademico[0];
+        this.formTransferenciaExterna.campos[this.getIndexForm('CarreraViene')].opciones = list.listProgramaAcademico[0];
       },
    );
   }
