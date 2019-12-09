@@ -28,8 +28,15 @@ export class CrudExternoComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
+  @Input('info_proyecto_seleccionado_id')
+  set name(info_proyecto_seleccionado_id: number) {
+    this.info_proyecto_seleccionado_id = info_proyecto_seleccionado_id;
+    // this.loadInfoFormacionAcademica();
+  }
+
   formTransferenciaExterna: any;
   info_transferencia_externa: any;
+  info_proyecto_seleccionado_id: number;
   periodo: any;
   clean: boolean;
   loading: boolean;
@@ -120,6 +127,90 @@ export class CrudExternoComponent implements OnInit {
   setPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);
+  }
+
+  validarForm(event) {
+    if (event.valid) {
+      const formData = event.data.InfoTransferenciaExterna;
+      const dataPostTransferenciaExterna = {
+        InscripcionEstudiante: {
+          Id: 0,
+          PersonaId: this.persona_id,
+          // ProgramaAcademicoId: formData.carreratransfiere.Id,
+          ProgramaAcademicoId: this.info_proyecto_seleccionado_id || 1,
+          PeriodoId: this.periodo.Id,
+          AceptaTerminos: true,
+          FechaAceptaTerminos: new Date(),
+          Activo: true,
+          EstadoInscripcionId: {
+            Id: 1, // activa
+          },
+          TipoInscripcionId: {
+            Id: 5, // transferencia externa
+          },
+        },
+        TransferenciaEstudiante: {
+          Id: 0,
+          InscripcionId: {
+            Id: 0,
+          },
+          TransferenciaInterna: false,
+          CodigoEstudianteProviene: undefined,
+          UniversidadProviene: formData.UniversidadViene,
+          ProyectoCurricularProviene: formData.CarreraViene,
+          UltimoSemestreCursado: formData.UltimoSemestre,
+          MotivoRetiro: formData.Motivos,
+          Activo: true,
+        },
+      }
+      this.createTransferenciaExterna(dataPostTransferenciaExterna);
+      this.result.emit(event);
+    }
+  }
+
+  createTransferenciaExterna(infoTransferenciaExterna: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('transferencia_interna.seguro_continuar_registrar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        this.loading = true;
+        if (willDelete.value) {
+          this.info_transferencia_externa = <any>infoTransferenciaExterna;
+          this.sgaMidService.post('inscripciones/post_transferencia', this.info_transferencia_externa)
+            .subscribe(res => {
+              const r = <any>res;
+              if (r !== null && r.Type !== 'error') {
+                this.loading = false;
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.registrar'),
+                  this.translate.instant('transferencia_externa.transferencia_registrada'));
+                this.clean = !this.clean;
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('transferencia_externa.transferencia_no_registrada'));
+              }
+            },
+            (error: HttpErrorResponse) => {
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('transferencia_externa.transferencia_no_registrada'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+              this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('transferencia_externa.transferencia_no_registrada'));
+            });
+          }
+      });
   }
 
   private showToast(type: string, title: string, body: string) {
