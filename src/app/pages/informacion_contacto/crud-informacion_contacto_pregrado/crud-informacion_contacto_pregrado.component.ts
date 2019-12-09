@@ -2,7 +2,7 @@ import { Lugar } from './../../../@core/data/models/lugar/lugar';
 import { InformacionContacto } from './../../../@core/data/models/informacion/informacion_contacto';
 import { InfoContactoGet } from './../../../@core/data/models/ente/info_contacto_get';
 import { InfoContactoPut } from './../../../@core/data/models/ente/info_contacto_put';
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnChanges } from '@angular/core';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { FORM_INFORMACION_CONTACTO_PREGRADO } from './form-informacion_contacto_pregrado';
@@ -22,7 +22,7 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
   templateUrl: './crud-informacion_contacto_pregrado.component.html',
   styleUrls: ['./crud-informacion_contacto_pregrado.component.scss'],
 })
-export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
+export class CrudInformacionContactoPregradoComponent implements AfterViewInit, OnChanges  {
   config: ToasterConfig;
   informacion_contacto_id: number;
 
@@ -85,6 +85,12 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
   }
 
   getSeleccion(event) {
+    if(event.nombre === 'CorreoElectronicoConfirmar'){
+      if(1){
+        console.log(event);
+        this.formInformacionContacto[this.getIndexForm('CorreoElectronicoConfirmar')].alerta = "Los campos no son iguales";
+      }
+    }
     if (event.nombre === 'PaisResidencia') {
       this.paisSeleccionado = event.valor;
       this.loadOptionsDepartamentoResidencia();
@@ -481,6 +487,10 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.info_informacion_contacto.CodigoPostal = '123245';
     // this.loadInformacionContacto();
+  }
+
+  ngOnChanges(changes) {
+    console.info('Cambio detectado')
   }
 
   validarForm(event) {

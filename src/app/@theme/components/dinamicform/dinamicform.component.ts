@@ -126,6 +126,20 @@ export class DinamicformComponent implements OnInit, OnChanges {
     return this.sanitization.bypassSecurityTrustUrl(oldURL);
   }
 
+  confirmacion(event){
+    const camposAValidar = this.normalform.campos.filter((campo: any) => (campo.etiqueta === 'inputConfirmacion'));
+    if(!(camposAValidar[0].valor === camposAValidar[1].valor)) {
+      camposAValidar[0].clase = 'form-control form-control-danger';
+      camposAValidar[1].clase = 'form-control form-control-danger';
+      camposAValidar[0].alerta = camposAValidar[0].mensajeIguales;
+      camposAValidar[1].alerta = camposAValidar[1].mensajeIguales;
+    }else {
+      camposAValidar[0].clase = 'form-control form-control-success';
+      camposAValidar[1].clase = 'form-control form-control-success';
+      camposAValidar[0].alerta = '';
+      camposAValidar[1].alerta = '';
+    }
+  }
   ngOnInit() {
     if (!this.normalform.tipo_formulario) {
       this.normalform.tipo_formulario = 'grid';
@@ -168,6 +182,9 @@ export class DinamicformComponent implements OnInit, OnChanges {
         c.alerta = 'El valor no puede ser menor que ' + c.minimo;
         return false;
       }
+    }
+    if (c.etiqueta === 'input' && c.tipo === 'text' && c.validarIguales== true ) {
+      
     }
     if (c.etiqueta === 'radio') {
       if (c.valor.Id === undefined) {
