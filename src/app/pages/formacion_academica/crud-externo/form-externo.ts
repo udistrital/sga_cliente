@@ -7,7 +7,7 @@ export let FORM_EXTERNO = {
   modelo: 'InfoTransferenciaExterna',
   campos: [
     {
-      etiqueta: 'select',
+      etiqueta: 'input',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'UniversidadViene',
       label_i18n: 'universidad_viene',
@@ -16,20 +16,22 @@ export let FORM_EXTERNO = {
       tipo: 'text',
     },
     {
-      etiqueta: 'select',
+      etiqueta: 'input',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'CarreraViene',
       label_i18n: 'carrera_viene',
       placeholder_i18n: 'carrera_viene',
       requerido: true,
+      tipo: 'text',
     },
     {
-      etiqueta: 'select',
+      etiqueta: 'input',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'UltimoSemestre',
       label_i18n: 'ultimo_semestre',
       placeholder_i18n: 'ultimo_semestre',
       requerido: true,
+      tipo: 'number',
     },
     {
       etiqueta: 'textarea',

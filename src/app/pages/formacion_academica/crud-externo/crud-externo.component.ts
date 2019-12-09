@@ -11,9 +11,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
-import { ListService } from '../../../@core/store/services/list.service';
-import { Store } from '@ngrx/store';
-import { IAppState } from '../../../@core/store/app.state';
+// import { ListService } from '../../../@core/store/services/list.service';
+// import { Store } from '@ngrx/store';
+// import { IAppState } from '../../../@core/store/app.state';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class CrudExternoComponent implements OnInit {
   clean: boolean;
   loading: boolean;
   percentage: number;
-  ente: any;
+  persona_id: number;
 
   constructor(
     private translate: TranslateService,
@@ -44,19 +44,19 @@ export class CrudExternoComponent implements OnInit {
     private users: UserService,
     private coreService: CoreService,
     private sgaMidService: SgaMidService,
-    private store: Store<IAppState>,
-    private listService: ListService,
+    // private store: Store<IAppState>,
+    // private listService: ListService,
     private toasterService: ToasterService) {
     this.formTransferenciaExterna = FORM_EXTERNO;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.ente = this.users.getEnte();
+    this.persona_id = this.users.getPersonaId();
     this.cargarPeriodo();
     this.loading = true;
-    this.listService.findProgramaAcademico();
-    this.loadLists();
+    // this.listService.findProgramaAcademico();
+    // this.loadLists();
   }
 
   construirForm() {
@@ -80,6 +80,7 @@ export class CrudExternoComponent implements OnInit {
     return 0;
   }
 
+  /*
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
@@ -87,6 +88,7 @@ export class CrudExternoComponent implements OnInit {
       },
    );
   }
+  */
 
   useLanguage(language: string) {
     this.translate.use(language);
