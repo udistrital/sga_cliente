@@ -311,7 +311,8 @@
                     <ngx-crud-externo (result)="setPercentage_acad($event,0)"></ngx-crud-externo>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}">
-                    <ngx-crud-icfes_externo (result)="setPercentage_acad($event,0)"></ngx-crud-icfes_externo>
+                    <!--ngx-crud-icfes_externo (result)="setPercentage_acad($event,0)"></ngx-crud-icfes_externo-->
+                    <ngx-crud-icfes (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
