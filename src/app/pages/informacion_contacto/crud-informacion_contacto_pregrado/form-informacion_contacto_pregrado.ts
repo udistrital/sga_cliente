@@ -13,6 +13,8 @@ export let FORM_INFORMACION_CONTACTO_PREGRADO = {
             placeholder_i18n: 'estrato_residencia',
             requerido: true,
             tipo: 'number',
+            minimo: 0,
+
         },
         {
             etiqueta: 'input',
@@ -21,7 +23,9 @@ export let FORM_INFORMACION_CONTACTO_PREGRADO = {
             label_i18n: 'codigo_postal',
             placeholder_i18n: 'codigo_postal',
             requerido: false,
-            tipo: 'text',
+            tipo: 'number',
+            minimo: 0,
+
         },
         {
             etiqueta: 'input',
