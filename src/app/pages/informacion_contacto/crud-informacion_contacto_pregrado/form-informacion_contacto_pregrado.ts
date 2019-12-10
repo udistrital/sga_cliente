@@ -91,7 +91,6 @@ export let FORM_INFORMACION_CONTACTO_PREGRADO = {
             correo2: true,
             entrelazado: true,
         },
-   
         {
             etiqueta: 'select',
             claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
