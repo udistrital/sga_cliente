@@ -3,7 +3,6 @@ import { InfoCaracteristica } from './../../../@core/data/models/informacion/inf
 import { InfoCaracteristicaGet } from './../../../@core/data/models/informacion/info_caracteristica_get';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { FORM_INFO_CARACTERISTICA_PREGRADO } from './form-info_caracteristica_pregrado';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
