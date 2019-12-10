@@ -125,7 +125,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
   cleanURL(oldURL: string): SafeResourceUrl {
     return this.sanitization.bypassSecurityTrustUrl(oldURL);
   }
+  validlog1(event) {
+    const camposLog1 = this.normalform.campos.filter((campo: any) => (campo.etiqueta === 'inputConfirmacion'));
+    // if (camposLog1[0].valor> )
 
+  }
   confirmacion(event) {
     const camposAValidar = this.normalform.campos.filter((campo: any) => (campo.etiqueta === 'inputConfirmacion'));
     if (!(camposAValidar[0].valor === camposAValidar[1].valor)) {
@@ -180,6 +184,14 @@ export class DinamicformComponent implements OnInit, OnChanges {
       if (c.valor < c.minimo) {
         c.clase = 'form-control form-control-danger';
         c.alerta = 'El valor no puede ser menor que ' + c.minimo;
+        return false;
+      }
+    }
+    if (c.etiqueta === 'input' && c.tipo === 'number') {
+      c.valor = parseInt(c.valor, 10);
+      if (c.valor > c.maximolog) {
+        c.clase = 'form-control form-control-danger';
+        c.alerta = 'El valor no puede ser mayor que ' + c.maximolog;
         return false;
       }
     }

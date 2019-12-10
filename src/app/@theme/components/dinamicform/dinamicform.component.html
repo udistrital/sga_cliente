@@ -313,11 +313,22 @@
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
                         </mat-form-field>
 
-                        <!-- input -->
+                        <!-- input confirmacion -->
                         <mat-form-field *ngSwitchCase="'inputConfirmacion'" style="width: 100%;" class="form-group"
                             floatLabel="always">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <input matInput [(ngModel)]="c.valor" (ngModelChange)="confirmacion(c)"
+                                [ngModelOptions]="{standalone: true}" type="{{c.tipo}}" id="{{c.nombre}}"
+                                [placeholder]="c.placeholder" [disabled]="c.deshabilitar" pattern="c.pattern || *" />
+                            <span matPrefix *ngIf="c.prefix">{{c.prefix.value}}</span>
+                            <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
+                        </mat-form-field>
+
+                            <!-- input log 1 -->
+                            <mat-form-field *ngSwitchCase="'inputLog1'" style="width: 100%;" class="form-group"
+                            floatLabel="always">
+                            <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
+                            <input matInput [(ngModel)]="c.valor" (ngModelChange)="validlog1(c)"
                                 [ngModelOptions]="{standalone: true}" type="{{c.tipo}}" id="{{c.nombre}}"
                                 [placeholder]="c.placeholder" [disabled]="c.deshabilitar" pattern="c.pattern || *" />
                             <span matPrefix *ngIf="c.prefix">{{c.prefix.value}}</span>
