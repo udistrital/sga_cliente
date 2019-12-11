@@ -650,10 +650,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         });
     }
 
-  
-  
-
   ngOnChanges() {
+
   }
 
   pruebita() {
