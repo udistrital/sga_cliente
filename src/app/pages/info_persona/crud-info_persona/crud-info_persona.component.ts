@@ -114,8 +114,7 @@ export class CrudInfoPersonaComponent implements OnInit {
   }
 
   public loadInfoPersona(): void {
-    this.loading = true; 
-    
+    this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '') {
       this.sgamidService.get('persona/consultar_persona/' + this.info_persona_id)
@@ -564,7 +563,6 @@ export class CrudInfoPersonaComponent implements OnInit {
         this.formInfoPersona.campos[this.getIndexForm('Genero')].opciones = list.listGenero[0];
         this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].opciones = list.listEstadoCivil[0];
         this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].opciones = list.listTipoIdentificacion[0];
-       
       },
     );
   }

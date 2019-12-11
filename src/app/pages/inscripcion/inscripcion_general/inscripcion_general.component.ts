@@ -626,7 +626,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     console.info(JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub)
     this.usuariowso2 = JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub,
 
-      this.terceroService.get('tercero/?query=UsuarioWSO2:' +String(this.usuariowso2))
+      this.terceroService.get('tercero/?query=UsuarioWSO2:' + String(this.usuariowso2))
       .subscribe(res => {
         console.info('Datos terceros')
         console.info(res)
