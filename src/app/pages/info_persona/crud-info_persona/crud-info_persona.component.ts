@@ -4,7 +4,6 @@ import { Inscripcion } from './../../../@core/data/models/inscripcion/inscripcio
 import { InfoPersona } from './../../../@core/data/models/informacion/info_persona';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DocumentoService } from '../../../@core/data/documento.service';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { CoreService } from '../../../@core/data/core.service';
 import { FORM_INFO_PERSONA } from './form-info_persona';
@@ -35,17 +34,18 @@ export class CrudInfoPersonaComponent implements OnInit {
   @Input('info_persona_id')
   set persona(info_persona_id: number) {
     this.info_persona_id = info_persona_id;
-   // this.loadInfoPersona();
-    // console.info('InfoPersonaId: ' + info_persona_id);
+    this.loadInfoPersona();
+    console.info('InfoPersonaIdPersona: ' + info_persona_id);
   }
+
 
   @Input('inscripcion_id')
   set admision(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
     if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
       && this.inscripcion_id.toString() !== '0') {
-     // this.loadInscripcion();
-      // console.info('inscripcionId: ' + inscripcion_id);
+      // this.loadInscripcion();
+      console.info('inscripcionId: ' + inscripcion_id);
     }
   }
 
@@ -113,62 +113,64 @@ export class CrudInfoPersonaComponent implements OnInit {
     return 0;
   }
 
-  // public loadInfoPersona(): void {
-  //   this.loading = true;
-  //   if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
-  //     this.info_persona_id.toString() !== '') {
-  //     this.campusMidService.get('persona/consultar_persona/' + this.info_persona_id)
-  //       .subscribe(res => {
-  //         if (res !== null) {
-  //           const temp = <InfoPersona>res;
-  //           const files = []
-  //           if (temp.Foto + '' !== '0') {
-  //             files.push({ Id: temp.Foto, key: 'Foto' });
-  //           }
-  //           if (temp.SoporteDocumento + '' !== '0') {
-  //             files.push({ Id: temp.SoporteDocumento, key: 'SoporteDocumento' });
-  //           }
-  //           this.nuxeoService.getDocumentoById$(files, this.documentoService)
-  //             .subscribe(response => {
-  //               const filesResponse = <any>response;
-  //               if (Object.keys(filesResponse).length === files.length) {
-  //                 this.Foto = temp.Foto;
-  //                 this.SoporteDocumento = temp.SoporteDocumento;
-  //                 temp.Foto = filesResponse['Foto'] + '';
-  //                 temp.SoporteDocumento = filesResponse['SoporteDocumento'] + '';
-  //                 this.info_info_persona = temp;
-  //                 this.loading = false;
-  //               }
-  //             },
-  //               (error: HttpErrorResponse) => {
-  //                 Swal({
-  //                   type: 'error',
-  //                   title: error.status + '',
-  //                   text: this.translate.instant('ERROR.' + error.status),
-  //                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                     this.translate.instant('GLOBAL.info_persona') + '|' +
-  //                     this.translate.instant('GLOBAL.soporte_documento'),
-  //                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                 });
-  //               });
-  //         }
-  //       },
-  //         (error: HttpErrorResponse) => {
-  //           Swal({
-  //             type: 'error',
-  //             title: error.status + '',
-  //             text: this.translate.instant('ERROR.' + error.status),
-  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //               this.translate.instant('GLOBAL.info_persona'),
-  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //           });
-  //         });
-  //   } else {
-  //     this.info_info_persona = undefined
-  //     this.clean = !this.clean;
-  //     this.loading = false;
-  //   }
-  // }
+  public loadInfoPersona(): void {
+    this.loading = true; 
+    
+    if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
+      this.info_persona_id.toString() !== '') {
+      this.sgamidService.get('persona/consultar_persona/' + this.info_persona_id)
+        .subscribe(res => {
+          if (res !== null) {
+            const temp = <InfoPersona>res;
+            this.info_info_persona = temp;
+            const files = []
+            if (temp.Foto + '' !== '0') {
+              files.push({ Id: temp.Foto, key: 'Foto' });
+            }
+            if (temp.SoporteDocumento + '' !== '0') {
+              files.push({ Id: temp.SoporteDocumento, key: 'SoporteDocumento' });
+            }
+            this.nuxeoService.getDocumentoById$(files, this.documentoService)
+              .subscribe(response => {
+                const filesResponse = <any>response;
+                if (Object.keys(filesResponse).length === files.length) {
+                  this.Foto = temp.Foto;
+                  this.SoporteDocumento = temp.SoporteDocumento;
+                  temp.Foto = filesResponse['Foto'] + '';
+                  temp.SoporteDocumento = filesResponse['SoporteDocumento'] + '';
+                  this.info_info_persona = temp;
+                  this.loading = false;
+                }
+              },
+                (error: HttpErrorResponse) => {
+                  Swal({
+                    type: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                      this.translate.instant('GLOBAL.info_persona') + '|' +
+                      this.translate.instant('GLOBAL.soporte_documento'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
+                });
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_persona'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    } else {
+      this.info_info_persona = undefined
+      this.clean = !this.clean;
+      this.loading = false;
+    }
+  }
 
   createInfoPersona(infoPersona: any): void {
 
@@ -265,148 +267,148 @@ export class CrudInfoPersonaComponent implements OnInit {
       });
   }
 
-  // updateInfoPersona(infoPersona: any): void {
-  //   const opt: any = {
-  //     title: this.translate.instant('GLOBAL.actualizar'),
-  //     text: this.translate.instant('GLOBAL.actualizar') + '?',
-  //     icon: 'warning',
-  //     buttons: true,
-  //     dangerMode: true,
-  //     showCancelButton: true,
-  //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-  //   };
-  //   Swal(opt)
-  //     .then((willDelete) => {
-  //       if (willDelete.value) {
-  //         this.loading = true;
-  //         this.info_info_persona = <any>infoPersona;
-  //         const files = [];
-  //         if (this.info_info_persona.Foto.file !== undefined) {
-  //           files.push({ file: this.info_info_persona.Foto.file, documento: this.Foto, key: 'Foto' });
-  //         }
-  //         if (this.info_info_persona.SoporteDocumento.file !== undefined) {
-  //           files.push({ file: this.info_info_persona.SoporteDocumento.file, documento: this.SoporteDocumento, key: 'SoporteDocumento' });
-  //         }
-  //         if (files.length !== 0) {
-  //           this.nuxeoService.updateDocument$(files, this.documentoService)
-  //             .subscribe(response => {
-  //               if (Object.keys(response).length === files.length) {
-  //                 const documentos_actualizados = <any>response;
-  //                 this.info_info_persona.Foto = this.Foto;
-  //                 this.info_info_persona.SoporteDocumento = this.SoporteDocumento;
-  //                 this.campusMidService.put('persona/actualizar_persona', this.info_info_persona)
-  //                   .subscribe(res => {
-  //                     if (documentos_actualizados['Foto'] !== undefined) {
-  //                       this.info_info_persona.Foto = documentos_actualizados['Foto'].url + '';
-  //                     }
-  //                     if (documentos_actualizados['SoporteDocumento'] !== undefined) {
-  //                       this.info_info_persona.SoporteDocumento = documentos_actualizados['SoporteDocumento'].url + '';
-  //                     }
-  //                     this.loading = false;
-  //                     this.loadInfoPersona();
-  //                     this.programa = this.userService.getPrograma();
-  //                     if (this.inscripcion_id === 0) {
-  //                       this.createInscripcion(this.info_persona_id);
-  //                       this.loadInscripcion();
-  //                     } else if (this.inscripcion_id !== 0 && this.info_inscripcion.ProgramaAcademicoId !== this.programa && this.programa > 0) {
-  //                       this.updateInscripcion();
-  //                       this.loadInscripcion();
-  //                     } else {
-  //                       this.showToast('error', this.translate.instant('GLOBAL.actualizar'),
-  //                         this.translate.instant('GLOBAL.admision') + ' ' +
-  //                         this.translate.instant('GLOBAL.confirmarActualizar'));
-  //                     }
-  //                     this.eventChange.emit(true);
-  //                     this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
-  //                       this.translate.instant('GLOBAL.info_persona') + ' ' +
-  //                       this.translate.instant('GLOBAL.confirmarActualizar'));
-  //                   },
-  //                     (error: HttpErrorResponse) => {
-  //                       Swal({
-  //                         type: 'error',
-  //                         title: error.status + '',
-  //                         text: this.translate.instant('ERROR.' + error.status),
-  //                         footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-  //                           this.translate.instant('GLOBAL.info_persona'),
-  //                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                       });
-  //                     });
-  //               }
-  //             },
-  //               (error: HttpErrorResponse) => {
-  //                 Swal({
-  //                   type: 'error',
-  //                   title: error.status + '',
-  //                   text: this.translate.instant('ERROR.' + error.status),
-  //                   footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-  //                     this.translate.instant('GLOBAL.info_persona') + '|' +
-  //                     this.translate.instant('GLOBAL.soporte_documento'),
-  //                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                 });
-  //               });
-  //         } else {
-  //           this.info_info_persona.Foto = this.Foto;
-  //           this.info_info_persona.SoporteDocumento = this.SoporteDocumento;
-  //           this.campusMidService.put('persona/actualizar_persona', this.info_info_persona)
-  //             .subscribe(res => {
-  //               this.loadInfoPersona();
-  //               this.loading = false;
-  //               this.programa = this.userService.getPrograma();
-  //               if (this.inscripcion_id === 0) {
-  //                 this.createInscripcion(this.info_persona_id);
-  //                 this.loadInscripcion();
-  //               } else if (this.inscripcion_id !== 0 && this.info_inscripcion.ProgramaAcademicoId !== this.programa && this.programa > 0) {
-  //                 this.updateInscripcion();
-  //                 this.loadInscripcion();
-  //               } else {
-  //                 this.showToast('error', this.translate.instant('GLOBAL.actualizar'),
-  //                   this.translate.instant('GLOBAL.admision') + ' ' +
-  //                   this.translate.instant('GLOBAL.confirmarActualizar'));
-  //               }
-  //               this.eventChange.emit(true);
-  //               this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
-  //                 this.translate.instant('GLOBAL.info_persona') + ' ' +
-  //                 this.translate.instant('GLOBAL.confirmarActualizar'));
-  //             },
-  //               (error: HttpErrorResponse) => {
-  //                 Swal({
-  //                   type: 'error',
-  //                   title: error.status + '',
-  //                   text: this.translate.instant('ERROR.' + error.status),
-  //                   footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-  //                     this.translate.instant('GLOBAL.info_persona'),
-  //                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                 });
-  //               });
-  //         }
-  //       }
-  //     });
-  // }
+  updateInfoPersona(infoPersona: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('GLOBAL.actualizar') + '?',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        if (willDelete.value) {
+          this.loading = true;
+          this.info_info_persona = <any>infoPersona;
+          const files = [];
+          if (this.info_info_persona.Foto.file !== undefined) {
+            files.push({ file: this.info_info_persona.Foto.file, documento: this.Foto, key: 'Foto' });
+          }
+          if (this.info_info_persona.SoporteDocumento.file !== undefined) {
+            files.push({ file: this.info_info_persona.SoporteDocumento.file, documento: this.SoporteDocumento, key: 'SoporteDocumento' });
+          }
+          if (files.length !== 0) {
+            this.nuxeoService.updateDocument$(files, this.documentoService)
+              .subscribe(response => {
+                if (Object.keys(response).length === files.length) {
+                  const documentos_actualizados = <any>response;
+                  this.info_info_persona.Foto = this.Foto;
+                  this.info_info_persona.SoporteDocumento = this.SoporteDocumento;
+                  this.sgamidService.put('persona/actualizar_persona', this.info_info_persona)
+                    .subscribe(res => {
+                      if (documentos_actualizados['Foto'] !== undefined) {
+                        this.info_info_persona.Foto = documentos_actualizados['Foto'].url + '';
+                      }
+                      if (documentos_actualizados['SoporteDocumento'] !== undefined) {
+                        this.info_info_persona.SoporteDocumento = documentos_actualizados['SoporteDocumento'].url + '';
+                      }
+                      this.loading = false;
+                      this.loadInfoPersona();
+                      this.programa = this.userService.getPrograma();
+                      if (this.inscripcion_id === 0) {
+                        this.createInscripcion(this.info_persona_id);
+                        this.loadInscripcion();
+                      } else if (this.inscripcion_id !== 0 && this.info_inscripcion.ProgramaAcademicoId !== this.programa && this.programa > 0) {
+                        // this.updateInscripcion();
+                        this.loadInscripcion();
+                      } else {
+                        this.showToast('error', this.translate.instant('GLOBAL.actualizar'),
+                          this.translate.instant('GLOBAL.admision') + ' ' +
+                          this.translate.instant('GLOBAL.confirmarActualizar'));
+                      }
+                      this.eventChange.emit(true);
+                      this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+                        this.translate.instant('GLOBAL.info_persona') + ' ' +
+                        this.translate.instant('GLOBAL.confirmarActualizar'));
+                    },
+                      (error: HttpErrorResponse) => {
+                        Swal({
+                          type: 'error',
+                          title: error.status + '',
+                          text: this.translate.instant('ERROR.' + error.status),
+                          footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                            this.translate.instant('GLOBAL.info_persona'),
+                          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                        });
+                      });
+                }
+              },
+                (error: HttpErrorResponse) => {
+                  Swal({
+                    type: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                      this.translate.instant('GLOBAL.info_persona') + '|' +
+                      this.translate.instant('GLOBAL.soporte_documento'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
+                });
+          } else {
+            this.info_info_persona.Foto = this.Foto;
+            this.info_info_persona.SoporteDocumento = this.SoporteDocumento;
+            this.sgamidService.put('persona/actualizar_persona', this.info_info_persona)
+              .subscribe(res => {
+                this.loadInfoPersona();
+                this.loading = false;
+                this.programa = this.userService.getPrograma();
+                if (this.inscripcion_id === 0) {
+                  this.createInscripcion(this.info_persona_id);
+                  this.loadInscripcion();
+                } else if (this.inscripcion_id !== 0 && this.info_inscripcion.ProgramaAcademicoId !== this.programa && this.programa > 0) {
+                  // this.updateInscripcion();
+                  this.loadInscripcion();
+                } else {
+                  this.showToast('error', this.translate.instant('GLOBAL.actualizar'),
+                    this.translate.instant('GLOBAL.admision') + ' ' +
+                    this.translate.instant('GLOBAL.confirmarActualizar'));
+                }
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+                  this.translate.instant('GLOBAL.info_persona') + ' ' +
+                  this.translate.instant('GLOBAL.confirmarActualizar'));
+              },
+                (error: HttpErrorResponse) => {
+                  Swal({
+                    type: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                      this.translate.instant('GLOBAL.info_persona'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
+                });
+          }
+        }
+      });
+  }
 
-  // public loadInscripcion(): void {
-  //   if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-  //     && this.inscripcion_id.toString() !== '0') {
-  //     this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
-  //       .subscribe(res => {
-  //         if (res !== null) {
-  //           this.info_inscripcion = <Inscripcion>res;
-  //           this.aceptaTerminos = true;
-  //         }
-  //       },
-  //         (error: HttpErrorResponse) => {
-  //           Swal({
-  //             type: 'error',
-  //             title: error.status + '',
-  //             text: this.translate.instant('ERROR.' + error.status),
-  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //               this.translate.instant('GLOBAL.info_persona') + '|' +
-  //               this.translate.instant('GLOBAL.admision'),
-  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //           });
-  //         });
-  //   }
-  // }
+  public loadInscripcion(): void {
+    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
+      && this.inscripcion_id.toString() !== '0') {
+      this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
+        .subscribe(res => {
+          if (res !== null) {
+            this.info_inscripcion = <Inscripcion>res;
+            this.aceptaTerminos = true;
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_persona') + '|' +
+                this.translate.instant('GLOBAL.admision'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    }
+  }
 
   createInscripcion(ente_id): void {
     this.aspirante = ente_id;
@@ -475,6 +477,7 @@ export class CrudInfoPersonaComponent implements OnInit {
   // }
 
   ngOnInit() {
+    // this.loadInfoPersona()
     // this.info_admision()
   }
 
@@ -485,7 +488,7 @@ export class CrudInfoPersonaComponent implements OnInit {
          this.validarTerminos(event);
       } else {
         if (this.info_inscripcion.AceptaTerminos !== true) {
-         // this.validarTerminos(event);
+         this.validarTerminos(event);
         } else {
           // this.updateInfoPersona(event.data.InfoPersona)
         }
@@ -561,6 +564,7 @@ export class CrudInfoPersonaComponent implements OnInit {
         this.formInfoPersona.campos[this.getIndexForm('Genero')].opciones = list.listGenero[0];
         this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].opciones = list.listEstadoCivil[0];
         this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].opciones = list.listTipoIdentificacion[0];
+       
       },
     );
   }

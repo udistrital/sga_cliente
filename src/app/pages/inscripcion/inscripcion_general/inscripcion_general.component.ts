@@ -7,6 +7,7 @@ import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { UserService } from '../../../@core/data/users.service';
+import { TercerosService} from '../../../@core/data/terceros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import { IMAGENES } from './imagenes';
@@ -15,6 +16,8 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { from } from 'rxjs';
+import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -23,11 +26,12 @@ import html2canvas from 'html2canvas';
   styleUrls: ['./inscripcion_general.component.scss'],
 })
 export class InscripcionGeneralComponent implements OnInit, OnChanges {
+  toasterService: any;
 
   @Input('inscripcion_id')
   set name(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
-    // console.info('Posgrado ins: ' + this.inscripcion_id)
+    console.info('Posgrado ins: ' + this.inscripcion_id)
     if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
       this.selectedValue = undefined;
       window.localStorage.setItem('programa', this.selectedValue);
@@ -42,11 +46,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
+  config: ToasterConfig;
   inscripcion_id: number;
   info_persona_id: number;
   info_ente_id: number;
   estado_inscripcion: number;
   info_info_persona: any;
+  usuariowso2: any;
   datos_persona: any;
   inscripcion: Inscripcion;
   step = 0;
@@ -110,7 +116,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   constructor(
     private translate: TranslateService,
     private router: Router,
-    private campusMidService: CampusMidService,
+    private terceroService: TercerosService,
     private inscripcionService: InscripcionService,
     private userService: UserService,
     private programaService: OikosService,
@@ -617,29 +623,35 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    // if (this.info_ente_id !== 0 && this.info_ente_id !== undefined && this.info_ente_id.toString() !== '' &&
-    //   this.info_ente_id.toString() !== 'NaN' && this.inscripcion_id === undefined) {
-    //   this.info_ente_id = <number>this.userService.getEnte();
-    //   this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_ente_id)
-    //   .subscribe(inscripcion => {
-    //     this.info_inscripcion = <any>inscripcion[0];
-    //     if (inscripcion !== null  && this.info_inscripcion.Type !== 'error') {
-    //       this.inscripcion_id = this.info_inscripcion.Id;
-    //       this.getInfoInscripcion();
-    //     }
-    //   },
-    //     (error: HttpErrorResponse) => {
-    //       Swal({
-    //         type: 'error',
-    //         title: error.status + '',
-    //         text: this.translate.instant('ERROR.' + error.status),
-    //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
-    //           this.translate.instant('GLOBAL.admision'),
-    //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-    //       });
-    //     });
-    // }
-  }
+    console.info(JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub)
+    this.usuariowso2 = JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub,
+
+      this.terceroService.get('tercero/?query=UsuarioWSO2:' +String(this.usuariowso2))
+      .subscribe(res => {
+        console.info('Datos terceros')
+        console.info(res)
+        this.info_inscripcion = <any>res[0];
+        if (res !== null  && this.info_inscripcion.Type !== 'error') {
+          this.inscripcion_id = this.info_inscripcion.Id;
+          this.info_persona_id = this.inscripcion_id;
+          console.info('este es el del serivio ' + this.info_persona_id)
+          // this.getInfoInscripcion();
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.admision'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+    }
+
+  
+  
 
   ngOnChanges() {
   }
@@ -841,4 +853,24 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   //     });
   //   });
   // }
+  private showToast(type: string, title: string, body: string) {
+    this.config = new ToasterConfig({
+      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
+      positionClass: 'toast-top-center',
+      timeout: 5000,  // ms
+      newestOnTop: true,
+      tapToDismiss: false, // hide on click
+      preventDuplicates: true,
+      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
+      limit: 5,
+    });
+    const toast: Toast = {
+      type: type, // 'default', 'info', 'success', 'warning', 'error'
+      title: title,
+      body: body,
+      showCloseButton: true,
+      bodyOutputType: BodyOutputType.TrustedHtml,
+    };
+    this.toasterService.popAsync(toast);
+  }
 }

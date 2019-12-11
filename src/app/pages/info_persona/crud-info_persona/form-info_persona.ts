@@ -50,7 +50,7 @@ export let FORM_INFO_PERSONA = {
             requerido: true,
             tipo: 'TipoIdentificacion',
             key: 'Nombre',
-            opciones: [],
+            opciones: [ ],
         },
         {
             etiqueta: 'input',
