@@ -11,6 +11,10 @@ import { UserService } from '../../../@core/data/users.service';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ListService } from '../../../@core/store/services/list.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { IAppState } from '../../../@core/store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ngx-crud-idiomas',
@@ -20,7 +24,6 @@ export class CrudIdiomasComponent implements OnInit {
   config: ToasterConfig;
   info_idioma_id: number;
   inscripcion_id: number;
-  ente: number;
 
   @Input('info_idioma_id')
   set name(info_idioma_id: number) {
@@ -45,18 +48,27 @@ export class CrudIdiomasComponent implements OnInit {
   formInfoIdioma: any;
   clean: boolean;
   percentage: number;
+  persona_id: number;
 
   constructor(
     private translate: TranslateService,
     private users: UserService,
     private idiomaService: IdiomaService,
+    private store: Store<IAppState>,
+    private listService: ListService,
+    private sgaMidService: SgaMidService,
     private toasterService: ToasterService) {
     this.formInfoIdioma = FORM_IDIOMAS;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+    this.listService.findIdioma();
+    this.listService.findNivelIdioma();
+    this.listService.findClasificacionNivelIdioma();
+    this.loadLists();
 
+    this.persona_id = this.users.getPersonaId();
   }
 
   construirForm() {
@@ -71,75 +83,6 @@ export class CrudIdiomasComponent implements OnInit {
   useLanguage(language: string) {
     this.translate.use(language);
   }
-
-  // loadOptionsIdiomas(): void {
-  //   let idioma: Array<any> = [];
-  //   this.idiomaService.get('idioma/?query=Activo:true&limit=0')
-  //     .subscribe(res => {
-  //       if (res !== null) {
-  //         idioma = <Array<Idioma>>res;
-  //       }
-  //       this.formInfoIdioma.campos[this.getIndexForm('Idioma')].opciones = idioma;
-  //     },
-  //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
-  //           title: error.status + '',
-  //           text: this.translate.instant('ERROR.' + error.status),
-  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //             this.translate.instant('GLOBAL.idiomas') + '|' +
-  //             this.translate.instant('GLOBAL.idioma'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       });
-  // }
-
-  // loadOptionsNiveles(): void {
-  //   let nivel: Array<any> = [];
-  //   this.idiomaService.get('valor_nivel_idioma/?query=Activo:true&limit=0')
-  //     .subscribe(res => {
-  //       if (res !== null) {
-  //         nivel = <Array<NivelIdioma>>res;
-  //       }
-  //       this.formInfoIdioma.campos[this.getIndexForm('NivelEscribe')].opciones = nivel;
-  //       this.formInfoIdioma.campos[this.getIndexForm('NivelEscucha')].opciones = nivel;
-  //       this.formInfoIdioma.campos[this.getIndexForm('NivelHabla')].opciones = nivel;
-  //       this.formInfoIdioma.campos[this.getIndexForm('NivelLee')].opciones = nivel;
-  //     },
-  //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
-  //           title: error.status + '',
-  //           text: this.translate.instant('ERROR.' + error.status),
-  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //             this.translate.instant('GLOBAL.idiomas') + '|' +
-  //             this.translate.instant('GLOBAL.nivel'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       });
-  // }
-
-  // loadOptionsClasificacion(): void {
-  //   let clasificacion: Array<any> = [];
-  //   this.idiomaService.get('clasificacion_nivel_idioma/?query=Activo:true&limit=0')
-  //     .subscribe(res => {
-  //       if (res !== null) {
-  //         clasificacion = <Array<ClasificacionNivelIdioma>>res;
-  //       }
-  //       this.formInfoIdioma.campos[this.getIndexForm('ClasificacionNivelIdioma')].opciones = clasificacion;
-  //     },
-  //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
-  //           title: error.status + '',
-  //           text: this.translate.instant('ERROR.' + error.status),
-  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //             this.translate.instant('GLOBAL.idiomas') + '|' +
-  //             this.translate.instant('GLOBAL.clasificacion_nivel_idioma'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       });
-  // }
 
   getIndexForm(nombre: String): number {
     for (let index = 0; index < this.formInfoIdioma.campos.length; index++) {
@@ -186,4 +129,18 @@ export class CrudIdiomasComponent implements OnInit {
     };
     this.toasterService.popAsync(toast);
   }
+
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+       this.formInfoIdioma.campos[this.getIndexForm('Idioma')].opciones = list.listIdioma[0];
+       this.formInfoIdioma.campos[this.getIndexForm('NivelEscribe')].opciones = list.listNivelIdioma[0];
+       this.formInfoIdioma.campos[this.getIndexForm('NivelEscucha')].opciones = list.listNivelIdioma[0];
+       this.formInfoIdioma.campos[this.getIndexForm('NivelHabla')].opciones = list.listNivelIdioma[0];
+       this.formInfoIdioma.campos[this.getIndexForm('NivelLee')].opciones = list.listNivelIdioma[0];
+       this.formInfoIdioma.campos[this.getIndexForm('ClasificacionNivelIdioma')].opciones = list.listClasificacionNivelIdioma[0];
+      },
+   );
+ }
+
 }
