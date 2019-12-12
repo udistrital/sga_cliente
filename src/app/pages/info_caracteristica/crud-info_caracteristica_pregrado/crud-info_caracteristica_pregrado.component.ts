@@ -31,6 +31,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
       this.info_caracteristica_id.toString() !== '') {
       // this.loadInfoCaracteristica();
+      console.info('Id_Caracteristica_pregrado' + this.info_caracteristica_id)
     }
   }
 
@@ -100,7 +101,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     const departamentoNacimiento: Array<any> = [];
     if (this.paisSeleccionado) {
       this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.paisSeleccionado.Id +
-      ',LugarHijo.TipoLugar.Id:2,LugarHijo.Activo:true&limit=0')
+      ',LugarHijo.TipoLugar.CodigoAbreviacion:D,LugarHijo.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
