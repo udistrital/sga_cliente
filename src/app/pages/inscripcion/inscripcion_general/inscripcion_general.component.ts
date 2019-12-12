@@ -135,6 +135,12 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     // }
   }
 
+  create_inscription(child_controller){
+    this.inscripcion_id = 100;
+    console.log("aqui crea la inscripción");
+    child_controller.callbackCreateInscripcion();
+  }
+
   setPercentage_info(number, tab) {
     this.percentage_tab_info[tab] = (number * 100) / 3;
     this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));

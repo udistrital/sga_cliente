@@ -31,6 +31,7 @@ export class ListIdiomasComponent implements OnInit {
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
+  @Output() bridge_create_inscripcion: EventEmitter<any> = new EventEmitter();
 
   loading: boolean;
   percentage: number;
@@ -46,6 +47,10 @@ export class ListIdiomasComponent implements OnInit {
       });
       this.loading = false;
     }
+
+  crear_inscripcion(data) {
+    this.bridge_create_inscripcion.emit(data);
+  }
 
   cargarCampos() {
     this.settings = {

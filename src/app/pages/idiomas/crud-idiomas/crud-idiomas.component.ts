@@ -34,11 +34,13 @@ export class CrudIdiomasComponent implements OnInit {
   @Input('inscripcion_id')
   set admision(inscripcion_id: number) {
     if (inscripcion_id !== undefined && inscripcion_id !== 0 && inscripcion_id.toString() !== '') {
-      // this.inscripcion_id = inscripcion_id;
+      this.inscripcion_id = inscripcion_id;
       // console.info('Idioma inscripcion: ' + this.inscripcion_id);
       // this.cargarIdiomaExamen();
     }
   }
+
+  @Output() crear_inscripcion: EventEmitter<any> = new EventEmitter();
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
@@ -46,6 +48,7 @@ export class CrudIdiomasComponent implements OnInit {
 
   info_idioma: InfoIdioma;
   formInfoIdioma: any;
+  formData: any;
   clean: boolean;
   percentage: number;
   persona_id: number;
@@ -103,7 +106,8 @@ export class CrudIdiomasComponent implements OnInit {
     this.result.emit(this.percentage);
   }
 
-  createInfoIdioma(infoIdioma: any): void {
+  createInfoIdioma(infoIdioma: any){
+      console.log("create info idioma", this.formData, this.inscripcion_id);
   //   const opt: any = {
   //     title: this.translate.instant('GLOBAL.crear'),
   //     text: this.translate.instant('GLOBAL.crear') + '?',
@@ -204,10 +208,17 @@ export class CrudIdiomasComponent implements OnInit {
   //     });
   }
 
+  callbackCreateInscripcion() {
+    console.log("llama calback");
+    this.createInfoIdioma(this.formData);
+  }
+
   validarForm(event) {
     if (event.valid) {
-      const formData = event.data.InfoIdioma;
-      this.createInfoIdioma(formData);
+      this.formData = event.data.InfoIdioma;
+      if (!this.inscripcion_id) {
+        this.crear_inscripcion.emit(this);
+      }
       this.result.emit(event);
     }
   }

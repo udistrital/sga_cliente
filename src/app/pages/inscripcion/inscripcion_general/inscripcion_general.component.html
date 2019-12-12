@@ -338,7 +338,7 @@
                     <ngx-crud-formacion-academica (result)="setPercentage_acad($event,0)"></ngx-crud-formacion-academica>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}">
-                    <ngx-list-idiomas inscripcion_id={{this.inscripcion_id}} (result)="setPercentage_acad($event,1)"></ngx-list-idiomas>
+                    <ngx-list-idiomas (result)="setPercentage_acad($event,1)" (bridge_create_inscripcion)="create_inscription($event)" inscripcion_id="{{inscripcion_id}}"></ngx-list-idiomas>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
