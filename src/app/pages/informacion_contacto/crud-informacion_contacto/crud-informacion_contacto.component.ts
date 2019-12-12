@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { IAppState } from '../../../@core/store/app.state';
 import { ListService } from '../../../@core/store/services/list.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -21,7 +22,8 @@ import { Store } from '@ngrx/store';
 export class CrudInformacionContactoComponent implements OnInit {
   config: ToasterConfig;
   persona_id: number;
-  informacion_contacto_id: number
+  informacion_contacto_id: number;
+  info_informacion_contacto: any;
 
   @Input('informacion_contacto_id')
   set name(informacion_contacto_id: number) {
@@ -45,6 +47,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     private store: Store<IAppState>,
     private listService: ListService,
     private userService: UserService,
+    private sgaMidService: SgaMidService,
     private toasterService: ToasterService) {
     this.formInformacionContacto = FORM_INFORMACION_CONTACTO;
     this.construirForm();
@@ -53,6 +56,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     });
     this.listService.findPais();
     this.loadLists();
+    this.persona_id = this.userService.getPersonaId();
   }
 
   construirForm() {
@@ -148,8 +152,109 @@ export class CrudInformacionContactoComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
-      
+      const formData = event.data.InfoInformacionContacto;
+      const tercero = {
+        Id: this.persona_id  || 1, // se debe cambiar solo por persona id
+      }
+      const dataInfoContacto = {
+        InfoComplementariaTercero: [
+          {
+            // Estrato
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: {
+              Id: 38,
+            },
+            Dato: JSON.stringify({value: formData.EstratoResidencia}),
+            Activo: true,
+          },
+          {
+            // CodigoPostal
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: {
+              Id: 52,
+            },
+            Dato: JSON.stringify({value: formData.CodigoPostal}),
+            Activo: true,
+          },
+          {
+            // Telefono
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: {
+              Id: 48,
+            },
+            Dato: JSON.stringify({
+              principal: formData.Telefono,
+              alterno: formData.TelefonoAlterno,
+            }),
+            Activo: true,
+          },
+          {
+            // Dirección
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: {
+              Id: 48,
+            },
+            Dato: JSON.stringify({
+              country: formData.PaisResidencia,
+              department: formData.DepartamentoResidencia,
+              city: formData.CiudadResidencia,
+              address: formData.DireccionResidencia,
+            }),
+            Activo: true,
+          },
+        ],
+      }
+      this.createInfoContacto(dataInfoContacto);
+      this.result.emit(event);
     }
+  }
+
+  createInfoContacto(info_contacto: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.registrar'),
+      text: this.translate.instant('informacion_contacto_posgrado.seguro_continuar_registrar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        this.info_informacion_contacto = true;
+        if (willDelete.value) {
+          this.info_informacion_contacto = <any>info_contacto;
+          this.sgaMidService.post('inscripciones/info_complementaria_tercero', this.info_informacion_contacto)
+            .subscribe(res => {
+              const r = <any>res;
+              if (r !== null && r.Type !== 'error') {
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.registrar'),
+                  this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
+                this.clean = !this.clean;
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'));
+              }
+            },
+            (error: HttpErrorResponse) => {
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+              this.showToast('error', this.translate.instant('GLOBAL.error'),
+                this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'));
+            });
+          }
+      });
   }
 
   setPercentage(event) {
