@@ -40,6 +40,8 @@ export class CrudInformacionContactoComponent implements OnInit {
 
   formInformacionContacto: any;
   clean: boolean;
+  paisSeleccionado: any;
+  departamentoSeleccionado: any;
 
   constructor(
     private translate: TranslateService,
@@ -74,9 +76,15 @@ export class CrudInformacionContactoComponent implements OnInit {
 
   getSeleccion(event) {
     if (event.nombre === 'PaisResidencia') {
-      this.loadOptionsDepartamentoResidencia(event.valor);
+      if (this.paisSeleccionado != event.valor) {
+        this.paisSeleccionado = event.valor;
+        this.loadOptionsDepartamentoResidencia(event.valor);
+      }
     } else if (event.nombre === 'DepartamentoResidencia') {
-      this.loadOptionsCiudadResidencia(event.valor);
+      if (this.departamentoSeleccionado != event.valor) {
+        this.departamentoSeleccionado = event.valor;
+        this.loadOptionsCiudadResidencia(event.valor);
+      }
     }
   }
 
