@@ -183,10 +183,10 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] =
             this.info_info_caracteristica.DepartamentoNacimiento;
             this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones[0] = this.info_info_caracteristica.Lugar;
-            this.formInfoCaracteristica.campos[this.getIndexForm('NumeroHermanos')].valor = res['NumeroHermanos'] 
-            this.formInfoCaracteristica.campos[this.getIndexForm('PuntajeSisbe')].valor = res['PuntajeSisben'] 
-            this.formInfoCaracteristica.campos[this.getIndexForm('EPS')].valor =res['EPS']['TerceroEntidadId']
-            this.formInfoCaracteristica.campos[this.getIndexForm('FechaVinculacion')].valor =res['EPS']['FechaInicioVinculacion']
+            this.formInfoCaracteristica.campos[this.getIndexForm('NumeroHermanos')].valor = res['NumeroHermanos']
+            this.formInfoCaracteristica.campos[this.getIndexForm('PuntajeSisbe')].valor = res['PuntajeSisben']
+            this.formInfoCaracteristica.campos[this.getIndexForm('EPS')].valor = res['EPS']['TerceroEntidadId']
+            this.formInfoCaracteristica.campos[this.getIndexForm('FechaVinculacion')].valor = res['EPS']['FechaInicioVinculacion']
             this.loading = false;
           }
         },
