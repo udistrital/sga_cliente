@@ -840,6 +840,11 @@
         "universidad_form_registrado": "University information registered",
         "seguro_continuar_registrar": "Are you sure you want to register this university information?"
     },
+    "informacion_contacto_posgrado": {
+        "informacion_contacto_no_registrada": "Contact information not registered",
+        "informacion_contacto_registrada": "Contact information registered",
+        "seguro_continuar_registrar": "Are you sure you want to register this contact information?"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",
