@@ -76,12 +76,12 @@ export class CrudInformacionContactoComponent implements OnInit {
 
   getSeleccion(event) {
     if (event.nombre === 'PaisResidencia') {
-      if (this.paisSeleccionado != event.valor) {
+      if (this.paisSeleccionado !== event.valor) {
         this.paisSeleccionado = event.valor;
         this.loadOptionsDepartamentoResidencia(event.valor);
       }
     } else if (event.nombre === 'DepartamentoResidencia') {
-      if (this.departamentoSeleccionado != event.valor) {
+      if (this.departamentoSeleccionado !== event.valor) {
         this.departamentoSeleccionado = event.valor;
         this.loadOptionsCiudadResidencia(event.valor);
       }
