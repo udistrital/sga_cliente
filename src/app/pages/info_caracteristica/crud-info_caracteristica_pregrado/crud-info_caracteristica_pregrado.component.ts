@@ -30,7 +30,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     this.info_caracteristica_id = info_caracteristica_id;
     if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
       this.info_caracteristica_id.toString() !== '') {
-      // this.loadInfoCaracteristica();
+      this.loadInfoCaracteristica();
       console.info('Id_Caracteristica_pregrado' + this.info_caracteristica_id)
     }
   }
@@ -163,47 +163,50 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     return 0;
   }
 
-  // public loadInfoCaracteristica(): void {
-  //   this.loading = true;
-  //   if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
-  //     this.info_caracteristica_id.toString() !== '') {
-  //     this.denied_acces = false;
-  //     this.campusMidService.get('persona/consultar_complementarios/' + this.info_caracteristica_id)
-  //       .subscribe(res => {
-  //         if (res !== null) {
-  //           this.datosGet = <InfoCaracteristicaGet>res;
-  //           this.info_info_caracteristica = <InfoCaracteristica>res;
-  //           this.info_info_caracteristica.Ente = (1 * this.info_caracteristica_id);
-  //           this.info_info_caracteristica.GrupoSanguineo = <any>{ Id: this.info_info_caracteristica.GrupoSanguineo };
-  //           this.info_info_caracteristica.Rh = <any>{ Id: this.info_info_caracteristica.Rh };
-  //           this.info_info_caracteristica.TipoRelacionUbicacionEnte = 1;
-  //           this.info_info_caracteristica.IdLugarEnte = this.datosGet.Lugar.Id;
-  //           this.info_info_caracteristica.PaisNacimiento = this.datosGet.Lugar.Lugar.PAIS;
-  //           this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.DEPARTAMENTO;
-  //           this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.CIUDAD;
-  //           this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] =
-  //  this.info_info_caracteristica.DepartamentoNacimiento;
-  //           this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones[0] = this.info_info_caracteristica.Lugar;
-  //           this.loading = false;
-  //         }
-  //       },
-  //         (error: HttpErrorResponse) => {
-  //           Swal({
-  //             type: 'error',
-  //             title: error.status + '',
-  //             text: this.translate.instant('ERROR.' + error.status),
-  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //               this.translate.instant('GLOBAL.info_caracteristica'),
-  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //           });
-  //         });
-  //   } else {
-  //     this.info_info_caracteristica = undefined;
-  //     this.clean = !this.clean;
-  //     this.denied_acces = false; // no muestra el formulario a menos que se le pase un id del ente info_caracteristica_id
-  //     this.loading = false;
-  //   }
-  // }
+  public loadInfoCaracteristica(): void {
+    this.loading = true;
+    if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
+      this.info_caracteristica_id.toString() !== '') {
+      this.denied_acces = false;
+      this.sgamidService.get('persona/consultar_complementarios/' + this.info_caracteristica_id)
+        .subscribe(res => {
+          if (res !== null) {
+            this.datosGet = <InfoCaracteristicaGet>res;
+            this.info_info_caracteristica = <InfoCaracteristica>res;
+            this.info_info_caracteristica.GrupoSanguineo =  this.info_info_caracteristica.GrupoSanguineo ;
+            this.info_info_caracteristica.Rh = this.info_info_caracteristica.Rh ;
+            this.info_info_caracteristica.TipoRelacionUbicacionEnte = 1;
+            this.info_info_caracteristica.IdLugarEnte = this.datosGet.Lugar.Id;
+            this.info_info_caracteristica.PaisNacimiento = this.datosGet.Lugar.Lugar.PAIS;
+            this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.DEPARTAMENTO;
+            this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.CIUDAD;
+            this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] =
+            this.info_info_caracteristica.DepartamentoNacimiento;
+            this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones[0] = this.info_info_caracteristica.Lugar;
+            this.formInfoCaracteristica.campos[this.getIndexForm('NumeroHermanos')].valor = res['NumeroHermanos'] 
+            this.formInfoCaracteristica.campos[this.getIndexForm('PuntajeSisbe')].valor = res['PuntajeSisben'] 
+            this.formInfoCaracteristica.campos[this.getIndexForm('EPS')].valor =res['EPS']['TerceroEntidadId']
+            this.formInfoCaracteristica.campos[this.getIndexForm('FechaVinculacion')].valor =res['EPS']['FechaInicioVinculacion']
+            this.loading = false;
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    } else {
+      this.info_info_caracteristica = undefined;
+      this.clean = !this.clean;
+      this.denied_acces = false; // no muestra el formulario a menos que se le pase un id del ente info_caracteristica_id
+      this.loading = false;
+    }
+  }
 
   // updateInfoCaracteristica(infoCaracteristica: any): void {
   //   const opt: any = {
@@ -246,7 +249,6 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   // }
 
   createInfoCaracteristica(infoCaracteristica: any): void {
-    this.info_caracteristica_id = Number(sessionStorage.getItem('IdTercero'));
     console.info('Id localstor' + this.info_caracteristica_id)
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
