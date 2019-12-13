@@ -277,7 +277,6 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
                 this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogota')) {
               this.info_informacion_contacto.LocalidadResidencia = this.datosGet.UbicacionEnte.Lugar.LOCALIDAD;
             }
-            
             this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones[0] = this.datosGet.UbicacionEnte.Lugar.DEPARTAMENTO;
             this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones[0] = this.info_informacion_contacto.CiudadResidencia;
             if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
