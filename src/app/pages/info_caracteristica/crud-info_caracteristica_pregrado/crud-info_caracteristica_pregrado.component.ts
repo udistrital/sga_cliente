@@ -32,6 +32,9 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
       this.info_caracteristica_id.toString() !== '') {
       this.loadInfoCaracteristica();
       console.info('Id_Caracteristica_pregrado' + this.info_caracteristica_id)
+    }else {
+      this.info_caracteristica_id = Number(sessionStorage.getItem('IdTercero'))
+      console.info('Id_Caracteristica_pregrado_else' + this.info_caracteristica_id)
     }
   }
 

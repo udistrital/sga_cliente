@@ -48,6 +48,9 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
   paisSeleccionado: any;
   info_tercero_id: Number;
   departamentoSeleccionado: any;
+  tempcodigo: any;
+  tempcorreo: any;
+  tempdirecion: any;
   ciudadSeleccionada: any;
   datosPost: any;
   datosGet: any;
@@ -247,42 +250,38 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
       this.campusMidService.get('persona/consultar_contacto/' + this.informacion_contacto_id)
         .subscribe(res => {
           if (res !== null) {
-            this.formInformacionContacto.campos[this.getIndexForm('EstratoResidencia')].valor = res['EstratoTercero']
-            this.formInformacionContacto.campos[this.getIndexForm('EstratoSocioenconomicoCostea')].valor = res['EstratoAcudiente']
-            console.info('ojosdofdosajfojsaofj')
-            console.info(res['CodigoPostal'])
-            this.formInformacionContacto.campos[this.getIndexForm('CodigoPostal')].valor = res['CodigoPostal']['Data']
-            this.formInformacionContacto.campos[this.getIndexForm('Telefono')].valor = res['Telefono']
             this.datosGet = <InfoContactoGet>res;
+
             this.info_informacion_contacto = <any>{
-              PaisResidencia: this.datosGet.Lugar.PAIS,
-              DepartamentoResidencia: this.datosGet.Lugar.DEPARTAMENTO,
-              CiudadResidencia: this.datosGet.Lugar.CIUDAD,
+              Ente: (1 * this.informacion_contacto_id),
+              PaisResidencia: this.datosGet.UbicacionEnte.Lugar.PAIS,
+              DepartamentoResidencia: this.datosGet.UbicacionEnte.Lugar.DEPARTAMENTO,
+              CiudadResidencia: this.datosGet.UbicacionEnte.Lugar.CIUDAD,
               IdLugarEnte: this.datosGet.UbicacionEnte.Id,
             };
+            this.formInformacionContacto.campos[this.getIndexForm('EstratoResidencia')].valor = res['EstratoTercero']
+            this.formInformacionContacto.campos[this.getIndexForm('EstratoSocioenconomicoCostea')].valor = res['EstratoAcudiente']
+            this.tempcodigo =  JSON.parse(res['CodigoPostal'])
+            this.tempcorreo = JSON.parse(res['Correo'])
+            this.tempdirecion =  JSON.parse(res['Direccion'])
+            this.formInformacionContacto.campos[this.getIndexForm('CodigoPostal')].valor =this.tempcodigo.Data
+            this.formInformacionContacto.campos[this.getIndexForm('Telefono')].valor = res['Telefono']
+            this.formInformacionContacto.campos[this.getIndexForm('TelefonoAlterno')].valor = res['TelefonoAlterno']
+            this.formInformacionContacto.campos[this.getIndexForm('CorreoElectronico')].valor = this.tempcorreo.Data
+            this.formInformacionContacto.campos[this.getIndexForm('CorreoElectronicoConfirmar')].valor = this.tempcorreo.Data
+            this.formInformacionContacto.campos[this.getIndexForm('DireccionResidencia')].valor = this.tempdirecion.Data
+          
 
             this.paisSeleccionado = this.info_informacion_contacto.PaisResidencia;
             this.ciudadSeleccionada = this.info_informacion_contacto.CiudadResidencia;
+         
 
             if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
               (this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogotá' ||
                 this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogota')) {
               this.info_informacion_contacto.LocalidadResidencia = this.datosGet.UbicacionEnte.Lugar.LOCALIDAD;
             }
-
-            for (let i = 0; i < this.datosGet.UbicacionEnte.Atributos.length; i++) {
-              if (this.datosGet.UbicacionEnte.Atributos[i].AtributoUbicacion.Nombre === 'Dirección') {
-                this.info_informacion_contacto.IdDireccionEnte = this.datosGet.UbicacionEnte.Atributos[i].Id;
-                this.info_informacion_contacto.DireccionResidencia = this.datosGet.UbicacionEnte.Atributos[i].Valor;
-              } else if (this.datosGet.UbicacionEnte.Atributos[i].AtributoUbicacion.Nombre === 'Estrato') {
-                this.info_informacion_contacto.IdEstratoEnte = this.datosGet.UbicacionEnte.Atributos[i].Id;
-                this.info_informacion_contacto.EstratoResidencia = this.datosGet.UbicacionEnte.Atributos[i].Valor;
-              } else if (this.datosGet.UbicacionEnte.Atributos[i].AtributoUbicacion.Nombre === 'Código postal') {
-                this.info_informacion_contacto.IdCodigoEnte = this.datosGet.UbicacionEnte.Atributos[i].Id;
-                this.info_informacion_contacto.CodigoPostal = this.datosGet.UbicacionEnte.Atributos[i].Valor;
-              }
-            }
-
+            
             this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones[0] = this.datosGet.UbicacionEnte.Lugar.DEPARTAMENTO;
             this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones[0] = this.info_informacion_contacto.CiudadResidencia;
             if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
