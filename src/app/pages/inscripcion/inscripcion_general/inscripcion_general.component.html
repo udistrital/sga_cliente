@@ -150,7 +150,7 @@
                     </ngx-crud-informacion-contacto_pregrado>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}"[active]="info_familiar">
-                    <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    <ngx-crud-informacion-familiar  info_persona_id={{this.info_persona_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-familiar>
                 </nb-tab>
             </nb-tabset>

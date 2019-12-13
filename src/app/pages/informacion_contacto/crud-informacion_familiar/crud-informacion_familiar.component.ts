@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 // import { IAppState } from '../../../@core/store/app.state';
 // import { ListService } from '../../../@core/store/services/list.service';
-// import { Store } from '@ngrx/store';
+// import { Store } from '@ngrx/store'; 
 
 @Component({
   selector: 'ngx-crud-informacion-familiar',
@@ -28,7 +28,14 @@ import 'style-loader!angular2-toaster/toaster.css';
 export class CrudInformacionFamiliarComponent implements OnInit {
   config: ToasterConfig;
   informacion_contacto_id: number;
+  info_persona_id: number;
 
+  @Input('info_persona_id')
+  set persona(info_persona_id: number) {
+    this.info_persona_id = info_persona_id;
+    // this.loadInfoPersona();
+    console.info('ID_Persona_Familiar: ' + info_persona_id);
+  }
 
 
   @Output() eventChange = new EventEmitter();
@@ -157,8 +164,8 @@ export class CrudInformacionFamiliarComponent implements OnInit {
       if (willDelete.value) {
         const formData = event.data.InformacionFamiliar;
         const tercero: Tercero = {
-          Id: 0,
-          NombreCompleto: 'Mario Pepito Perez',
+          Id: Number(this.info_persona_id),
+          NombreCompleto:undefined,
           TipoContribuyenteId: {
             Id: 1,
             Nombre: undefined,
@@ -188,7 +195,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 48,
+                    Id: 51,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -202,7 +209,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 50,
+                    Id: 53,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -216,7 +223,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 51,
+                    Id: 54,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -248,7 +255,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 48,
+                    Id: 51,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -262,7 +269,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 50,
+                    Id: 53,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -276,7 +283,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 51,
+                    Id: 54,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -289,6 +296,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
             },
           ],
         }
+        console.info(informacionFamiliarPost)
         this.sgaMidService.post('inscripciones/post_informacion_familiar', informacionFamiliarPost)
             .subscribe((res: any) => {
               if (res.Type === 'error') {
