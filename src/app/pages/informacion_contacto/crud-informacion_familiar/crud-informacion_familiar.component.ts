@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 // import { IAppState } from '../../../@core/store/app.state';
 // import { ListService } from '../../../@core/store/services/list.service';
-// import { Store } from '@ngrx/store'; 
+// import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ngx-crud-informacion-familiar',
@@ -165,7 +165,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
         const formData = event.data.InformacionFamiliar;
         const tercero: Tercero = {
           Id: Number(this.info_persona_id),
-          NombreCompleto:undefined,
+          NombreCompleto: undefined,
           TipoContribuyenteId: {
             Id: 1,
             Nombre: undefined,
