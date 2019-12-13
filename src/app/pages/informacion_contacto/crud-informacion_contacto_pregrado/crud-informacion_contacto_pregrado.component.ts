@@ -31,7 +31,8 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
     this.informacion_contacto_id = informacion_contacto_id;
     if (this.informacion_contacto_id !== undefined && this.informacion_contacto_id !== 0 &&
       this.informacion_contacto_id.toString() !== '') {
-      // this.loadInformacionContacto();
+      this.loadInformacionContacto();
+      console.info('ID_Contacto_Pregrado' + this.informacion_contacto_id)
     }
   }
 
@@ -145,7 +146,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
     const departamentoResidencia: Array<any> = [];
     if (this.paisSeleccionado) {
       this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.paisSeleccionado.Id +
-      ',LugarHijo.TipoLugar.Id:2,LugarHijo.Activo:true&limit=0')
+      ',LugarHijo.TipoLugar.CodigoAbreviacion:D,LugarHijo.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -238,87 +239,82 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
     return 0;
   }
 
-  // public loadInformacionContacto(): void {
-  //   this.loading = true;
-  //   if (this.informacion_contacto_id !== undefined && this.informacion_contacto_id !== 0 &&
-  //     this.informacion_contacto_id.toString() !== '') {
-  //     this.denied_acces = false;
-  //     this.campusMidService.get('persona/consultar_contacto/' + this.informacion_contacto_id)
-  //       .subscribe(res => {
-  //         if (res !== null) {
-  //           this.datosGet = <InfoContactoGet>res;
-  //           this.info_informacion_contacto = <any>{
-  //             Ente: (1 * this.informacion_contacto_id),
-  //             PaisResidencia: this.datosGet.UbicacionEnte.Lugar.PAIS,
-  //             DepartamentoResidencia: this.datosGet.UbicacionEnte.Lugar.DEPARTAMENTO,
-  //             CiudadResidencia: this.datosGet.UbicacionEnte.Lugar.CIUDAD,
-  //             IdLugarEnte: this.datosGet.UbicacionEnte.Id,
-  //             IdDireccionEnte: this.datosGet.UbicacionEnte.Atributos[1].Id,
-  //             DireccionResidencia: this.datosGet.UbicacionEnte.Atributos[1].Valor,
-  //             IdEstratoEnte: this.datosGet.UbicacionEnte.Atributos[0].Id,
-  //             EstratoResidencia: this.datosGet.UbicacionEnte.Atributos[0].Valor,
-  //             IdCodigoEnte: this.datosGet.UbicacionEnte.Atributos[2].Id,
-  //             CodigoPostal: '' + this.datosGet.UbicacionEnte.Atributos[2].Valor,
-  //             IdTelefonoEnte: this.datosGet.ContactoEnte[0].Id,
-  //             Telefono: '' + this.datosGet.ContactoEnte[0].Valor,
-  //             IdTelefonoAlternoEnte: this.datosGet.ContactoEnte[1].Id,
-  //             TelefonoAlterno: '' + this.datosGet.ContactoEnte[1].Valor,
-  //           };
+  public loadInformacionContacto(): void {
+    this.loading = true;
+    if (this.informacion_contacto_id !== undefined && this.informacion_contacto_id !== 0 &&
+      this.informacion_contacto_id.toString() !== '') {
+      this.denied_acces = false;
+      this.campusMidService.get('persona/consultar_contacto/' + this.informacion_contacto_id)
+        .subscribe(res => {
+          if (res !== null) {
+            this.formInformacionContacto.campos[this.getIndexForm('EstratoResidencia')].valor = res['EstratoTercero']
+            this.formInformacionContacto.campos[this.getIndexForm('EstratoSocioenconomicoCostea')].valor = res['EstratoAcudiente']
+            console.info('ojosdofdosajfojsaofj')
+            console.info(res['CodigoPostal'])
+            this.formInformacionContacto.campos[this.getIndexForm('CodigoPostal')].valor = res['CodigoPostal']['Data']
+            this.formInformacionContacto.campos[this.getIndexForm('Telefono')].valor = res['Telefono']
+            this.datosGet = <InfoContactoGet>res;
+            this.info_informacion_contacto = <any>{
+              PaisResidencia: this.datosGet.Lugar.PAIS,
+              DepartamentoResidencia: this.datosGet.Lugar.DEPARTAMENTO,
+              CiudadResidencia: this.datosGet.Lugar.CIUDAD,
+              IdLugarEnte: this.datosGet.UbicacionEnte.Id,
+            };
 
-  //           this.paisSeleccionado = this.info_informacion_contacto.PaisResidencia;
-  //           this.ciudadSeleccionada = this.info_informacion_contacto.CiudadResidencia;
+            this.paisSeleccionado = this.info_informacion_contacto.PaisResidencia;
+            this.ciudadSeleccionada = this.info_informacion_contacto.CiudadResidencia;
 
-  //           if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
-  //             (this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogotá' ||
-  //               this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogota')) {
-  //             this.info_informacion_contacto.LocalidadResidencia = this.datosGet.UbicacionEnte.Lugar.LOCALIDAD;
-  //           }
+            if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
+              (this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogotá' ||
+                this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogota')) {
+              this.info_informacion_contacto.LocalidadResidencia = this.datosGet.UbicacionEnte.Lugar.LOCALIDAD;
+            }
 
-  //           for (let i = 0; i < this.datosGet.UbicacionEnte.Atributos.length; i++) {
-  //             if (this.datosGet.UbicacionEnte.Atributos[i].AtributoUbicacion.Nombre === 'Dirección') {
-  //               this.info_informacion_contacto.IdDireccionEnte = this.datosGet.UbicacionEnte.Atributos[i].Id;
-  //               this.info_informacion_contacto.DireccionResidencia = this.datosGet.UbicacionEnte.Atributos[i].Valor;
-  //             } else if (this.datosGet.UbicacionEnte.Atributos[i].AtributoUbicacion.Nombre === 'Estrato') {
-  //               this.info_informacion_contacto.IdEstratoEnte = this.datosGet.UbicacionEnte.Atributos[i].Id;
-  //               this.info_informacion_contacto.EstratoResidencia = this.datosGet.UbicacionEnte.Atributos[i].Valor;
-  //             } else if (this.datosGet.UbicacionEnte.Atributos[i].AtributoUbicacion.Nombre === 'Código postal') {
-  //               this.info_informacion_contacto.IdCodigoEnte = this.datosGet.UbicacionEnte.Atributos[i].Id;
-  //               this.info_informacion_contacto.CodigoPostal = this.datosGet.UbicacionEnte.Atributos[i].Valor;
-  //             }
-  //           }
+            for (let i = 0; i < this.datosGet.UbicacionEnte.Atributos.length; i++) {
+              if (this.datosGet.UbicacionEnte.Atributos[i].AtributoUbicacion.Nombre === 'Dirección') {
+                this.info_informacion_contacto.IdDireccionEnte = this.datosGet.UbicacionEnte.Atributos[i].Id;
+                this.info_informacion_contacto.DireccionResidencia = this.datosGet.UbicacionEnte.Atributos[i].Valor;
+              } else if (this.datosGet.UbicacionEnte.Atributos[i].AtributoUbicacion.Nombre === 'Estrato') {
+                this.info_informacion_contacto.IdEstratoEnte = this.datosGet.UbicacionEnte.Atributos[i].Id;
+                this.info_informacion_contacto.EstratoResidencia = this.datosGet.UbicacionEnte.Atributos[i].Valor;
+              } else if (this.datosGet.UbicacionEnte.Atributos[i].AtributoUbicacion.Nombre === 'Código postal') {
+                this.info_informacion_contacto.IdCodigoEnte = this.datosGet.UbicacionEnte.Atributos[i].Id;
+                this.info_informacion_contacto.CodigoPostal = this.datosGet.UbicacionEnte.Atributos[i].Valor;
+              }
+            }
 
-  //           this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones[0] = this.datosGet.UbicacionEnte.Lugar.DEPARTAMENTO;
-  //           this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones[0] = this.info_informacion_contacto.CiudadResidencia;
-  //           if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
-  //             (this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogotá' ||
-  //               this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogota')) {
-  //               if (this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')].nombre === 'LocalidadResidencia') {
-  //                 this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')]
-  //                   .opciones[0] = this.info_informacion_contacto.LocalidadResidencia;
-  //               }
-  //           }
-  //           this.loading = false;
-  //         }
-  //       },
-  //         (error: HttpErrorResponse) => {
-  //           if (error.status.toString() !== '200') {
-  //             Swal({
-  //               type: 'error',
-  //               title: error.status + '',
-  //               text: this.translate.instant('ERROR.' + error.status),
-  //               footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                 this.translate.instant('GLOBAL.informacion_contacto'),
-  //               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //             });
-  //           }
-  //         });
-  //   } else {
-  //     this.info_informacion_contacto = undefined;
-  //     this.clean = !this.clean;
-  //     this.denied_acces = false; //  no muestra el formulario a menos que se le pase un id del ente info_caracteristica_id
-  //     this.loading = false;
-  //   }
-  // }
+            this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones[0] = this.datosGet.UbicacionEnte.Lugar.DEPARTAMENTO;
+            this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones[0] = this.info_informacion_contacto.CiudadResidencia;
+            if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
+              (this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogotá' ||
+                this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogota')) {
+                if (this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')].nombre === 'LocalidadResidencia') {
+                  this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')]
+                    .opciones[0] = this.info_informacion_contacto.LocalidadResidencia;
+                }
+            }
+            this.loading = false;
+          }
+        },
+          (error: HttpErrorResponse) => {
+            if (error.status.toString() !== '200') {
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                  this.translate.instant('GLOBAL.informacion_contacto'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+            }
+          });
+    } else {
+      this.info_informacion_contacto = undefined;
+      this.clean = !this.clean;
+      this.denied_acces = false; //  no muestra el formulario a menos que se le pase un id del ente info_caracteristica_id
+      this.loading = false;
+    }
+  }
 
   // updateInformacionContacto(informacionContacto: any): void {
   //   const opt: any = {
@@ -410,7 +406,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
   // }
 
    createInformacionContacto(informacionContacto: any): void {
-    this.info_tercero_id = Number(sessionStorage.getItem('IdTercero'));
+    this.info_tercero_id =  Number(this.informacion_contacto_id);
      const opt: any = {
        title: this.translate.instant('GLOBAL.crear'),
        text: this.translate.instant('GLOBAL.crear') + '?',
