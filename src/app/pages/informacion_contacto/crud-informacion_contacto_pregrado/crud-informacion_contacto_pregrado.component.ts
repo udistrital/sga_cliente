@@ -264,18 +264,14 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
             this.tempcodigo =  JSON.parse(res['CodigoPostal'])
             this.tempcorreo = JSON.parse(res['Correo'])
             this.tempdirecion =  JSON.parse(res['Direccion'])
-            this.formInformacionContacto.campos[this.getIndexForm('CodigoPostal')].valor =this.tempcodigo.Data
+            this.formInformacionContacto.campos[this.getIndexForm('CodigoPostal')].valor = this.tempcodigo.Data
             this.formInformacionContacto.campos[this.getIndexForm('Telefono')].valor = res['Telefono']
             this.formInformacionContacto.campos[this.getIndexForm('TelefonoAlterno')].valor = res['TelefonoAlterno']
             this.formInformacionContacto.campos[this.getIndexForm('CorreoElectronico')].valor = this.tempcorreo.Data
             this.formInformacionContacto.campos[this.getIndexForm('CorreoElectronicoConfirmar')].valor = this.tempcorreo.Data
             this.formInformacionContacto.campos[this.getIndexForm('DireccionResidencia')].valor = this.tempdirecion.Data
-          
-
             this.paisSeleccionado = this.info_informacion_contacto.PaisResidencia;
             this.ciudadSeleccionada = this.info_informacion_contacto.CiudadResidencia;
-         
-
             if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
               (this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogotá' ||
                 this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogota')) {
@@ -285,7 +281,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
             this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones[0] = this.datosGet.UbicacionEnte.Lugar.DEPARTAMENTO;
             this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones[0] = this.info_informacion_contacto.CiudadResidencia;
             if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
-              (this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogotá' ||
+               (this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogotá' ||
                 this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogota')) {
                 if (this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')].nombre === 'LocalidadResidencia') {
                   this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')]
