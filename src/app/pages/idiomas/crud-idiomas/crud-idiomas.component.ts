@@ -37,6 +37,9 @@ export class CrudIdiomasComponent implements OnInit {
       this.inscripcion_id = inscripcion_id;
       // console.info('Idioma inscripcion: ' + this.inscripcion_id);
       // this.cargarIdiomaExamen();
+      if (this.formData) {
+        this.createInfoIdioma(this.formData);
+      }
     }
   }
 
@@ -107,7 +110,7 @@ export class CrudIdiomasComponent implements OnInit {
   }
 
   createInfoIdioma(infoIdioma: any){
-      console.log("create info idioma", this.formData, this.inscripcion_id);
+  //   console.log("create info idioma", infoIdioma, this.inscripcion_id);
   //   const opt: any = {
   //     title: this.translate.instant('GLOBAL.crear'),
   //     text: this.translate.instant('GLOBAL.crear') + '?',
@@ -208,16 +211,13 @@ export class CrudIdiomasComponent implements OnInit {
   //     });
   }
 
-  callbackCreateInscripcion() {
-    console.log("llama calback");
-    this.createInfoIdioma(this.formData);
-  }
-
   validarForm(event) {
     if (event.valid) {
       this.formData = event.data.InfoIdioma;
       if (!this.inscripcion_id) {
-        this.crear_inscripcion.emit(this);
+        this.crear_inscripcion.emit(this.formData);
+      } else {
+        this.createInfoIdioma(this.formData);
       }
       this.result.emit(event);
     }

@@ -135,10 +135,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     // }
   }
 
-  create_inscription(child_controller){
-    this.inscripcion_id = 100;
-    console.log("aqui crea la inscripción");
-    child_controller.callbackCreateInscripcion();
+  create_inscription(data){
+    // this.inscripcion_id = 100;
+    // console.log("inscripción creada");
   }
 
   setPercentage_info(number, tab) {
