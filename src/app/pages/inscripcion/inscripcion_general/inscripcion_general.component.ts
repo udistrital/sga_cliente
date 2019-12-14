@@ -135,7 +135,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     // }
   }
 
-  create_inscription(data){
+  create_inscription(data) {
     // this.inscripcion_id = 100;
     // console.log("inscripción creada");
   }

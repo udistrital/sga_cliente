@@ -109,7 +109,7 @@ export class CrudIdiomasComponent implements OnInit {
     this.result.emit(this.percentage);
   }
 
-  createInfoIdioma(infoIdioma: any){
+  createInfoIdioma(infoIdioma: any ){
   //   console.log("create info idioma", infoIdioma, this.inscripcion_id);
   //   const opt: any = {
   //     title: this.translate.instant('GLOBAL.crear'),
