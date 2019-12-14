@@ -7,6 +7,7 @@ import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { UserService } from '../../../@core/data/users.service';
+import { CoreService } from '../../../@core/data/core.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import { IMAGENES } from './imagenes';
@@ -106,6 +107,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   tag_view_pre: boolean;
   selectprograma: boolean = true;
   imagenes: any;
+  periodo: any;
 
   constructor(
     private translate: TranslateService,
@@ -113,6 +115,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private campusMidService: CampusMidService,
     private inscripcionService: InscripcionService,
     private userService: UserService,
+    private coreService: CoreService,
     private programaService: OikosService,
   ) {
     this.imagenes = IMAGENES;
@@ -133,11 +136,58 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     //     this.info_ente_id = undefined;
     //   }
     // }
+    this.cargarPeriodo();
+  }
+
+  cargarPeriodo(): void {
+    this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.periodo = <any>res[0];
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.periodo_academico'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
   }
 
   create_inscription(data) {
-    // this.inscripcion_id = 100;
-    // console.log("inscripción creada");
+    const info_inscripcion_temp = {
+      Id: 0,
+      PersonaId: this.info_persona_id || 1,
+      ProgramaAcademicoId: 0, // Cambiar por el periodo
+      PeriodoId: this.periodo.Id,
+      AceptaTerminos: true,
+      FechaAceptaTerminos: new Date(),
+      Activo: true,
+      EstadoInscripcionId: {
+        Id: 1,
+      },
+      TipoInscripcionId: this.selectedTipo,
+    }
+    this.inscripcionService.post('inscripcion', info_inscripcion_temp)
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.inscripcion_id = r.Id;
+      }
+    },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('inscripcion.error_registrar_informacion'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
   }
 
   setPercentage_info(number, tab) {

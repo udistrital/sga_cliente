@@ -31,7 +31,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
     this.inscripcion_id = info2;
     if (this.inscripcion_id !== null && this.inscripcion_id !== 0 &&
       this.inscripcion_id.toString() !== '') {
-      this.loadData();
+      // this.loadData();
     }
   }
 

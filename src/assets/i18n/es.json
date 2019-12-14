@@ -826,7 +826,8 @@
         "universidad": "Universidad",
         "transfe": "Transferencia interna",
         "reingreso": "Reingreso",
-        "transferencia": "Datos de transferencia"
+        "transferencia": "Datos de transferencia",
+        "error_registrar_informacion": "Ocurrió un error al registrar la información de la inscripción"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

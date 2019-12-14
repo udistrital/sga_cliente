@@ -33,7 +33,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   set info2(info2: number) {
     this.inscripcion_id = info2;
     if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== '') {
-      this.loadData();
+      // this.loadData();
     }
   }
 

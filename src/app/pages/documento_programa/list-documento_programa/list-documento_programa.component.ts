@@ -39,8 +39,8 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.inscripcion = info2;
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
-        this.getDocumentosPrograma();
-        this.loadData();
+        // this.getDocumentosPrograma();
+        // this.loadData();
     }
   }
 

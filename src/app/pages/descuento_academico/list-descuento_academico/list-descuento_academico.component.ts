@@ -38,7 +38,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     this.inscripcion = info2;
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
-      this.loadData();
+      // this.loadData();
     }
   }
 
