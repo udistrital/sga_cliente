@@ -132,106 +132,90 @@ export class CrudIdiomasComponent implements OnInit {
     }
   }
 
-  createInfoIdioma(infoIdioma: any ) {
-  console.log("create info idioma", this.inscripcion_id, this.formData);
-  this.formData = undefined;
-  // const opt: any = {
-  //   title: this.translate.instant('GLOBAL.crear'),
-  //   text: this.translate.instant('GLOBAL.crear') + '?',
-  //   icon: 'warning',
-  //   buttons: true,
-  //   dangerMode: true,
-  //   showCancelButton: true,
-  //   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //   cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-  // };
-  // Swal(opt)
-  //   .then((willDelete) => {
-  //     if (willDelete.value) {
-  //       this.info_idioma = <InfoIdioma>infoIdioma;
-  //       this.info_idioma.Persona = this.users.getEnte();
-  //       if (this.info_idioma.Nativo === true && this.info_idioma.Nativo === this.info_idioma.SeleccionExamen) {
-  //         Swal({
-  //           type: 'error',
-  //           title: this.translate.instant('GLOBAL.crear'),
-  //           text: this.translate.instant('ERROR.nativo_examen'),
-  //           footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //             this.translate.instant('GLOBAL.idioma'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       } else if (this.info_idioma.SeleccionExamen === true && this.idioma_examen !== undefined &&
-  //         this.info_idioma.Idioma.Id !== this.idioma_examen) {
-  //         Swal({
-  //           type: 'error',
-  //           title: this.translate.instant('GLOBAL.crear'),
-  //           text: this.translate.instant('ERROR.doble_examen'),
-  //           footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //             this.translate.instant('GLOBAL.idioma'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       } else {
-  //         this.idiomaService.post('conocimiento_idioma', this.info_idioma)
-  //           .subscribe(res => {
-  //             const r = <any>res;
-  //             if (r !== null && r.Type !== 'error') {
-  //               if (this.info_idioma.SeleccionExamen === true) {
-  //                 const examen = {
-  //                   Idioma: this.info_idioma.Idioma.Id,
-  //                   Activo: true,
-  //                   InscripcionId: {Id: (1 * this.inscripcion_id)},
-  //                 };
-  //                 console.info(JSON.stringify(examen));
-  //                 this.inscripcionService.post('inscripcion_posgrado/', examen)
-  //                   .subscribe(resexamen => {
-  //                     const rex = <any>resexamen;
-  //                     if (rex !== null && rex.Type !== 'error') {
-  //                       this.idioma_examen = this.info_idioma.Idioma.Id;
-
-  //                       this.loading = false;
-  //                       this.eventChange.emit(true);
-  //                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
-  //                         this.translate.instant('GLOBAL.idioma') + ' ' +
-  //                         this.translate.instant('GLOBAL.confirmarCrear'));
-  //                       this.info_idioma_id = 0;
-  //                       this.info_idioma = undefined;
-  //                       this.clean = !this.clean;
-  //                     }
-  //                   },
-  //                     (error: HttpErrorResponse) => {
-  //                       Swal({
-  //                         type: 'error',
-  //                         title: error.status + '',
-  //                         text: this.translate.instant('ERROR.' + error.status),
-  //                         footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                           this.translate.instant('GLOBAL.idioma_examen'),
-  //                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                       });
-  //                     });
-  //               } else {
-  //                 this.loading = false;
-  //                 this.eventChange.emit(true);
-  //                 this.showToast('info', this.translate.instant('GLOBAL.crear'),
-  //                   this.translate.instant('GLOBAL.idioma') + ' ' +
-  //                   this.translate.instant('GLOBAL.confirmarCrear'));
-  //                 this.info_idioma_id = 0;
-  //                 this.info_idioma = undefined;
-  //                 this.clean = !this.clean;
-  //               }
-  //             }
-  //           },
-  //             (error: HttpErrorResponse) => {
-  //               Swal({
-  //                 type: 'error',
-  //                 title: error.status + '',
-  //                 text: this.translate.instant('ERROR.' + error.status),
-  //                 footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                   this.translate.instant('GLOBAL.idioma'),
-  //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //               });
-  //             });
-  //       }
-  //     }
-  //   });
+  createInfoIdioma(infoIdioma: any) {
+    this.formData = undefined;
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.crear'),
+      text: this.translate.instant('idiomas.seguro_continuar_registrar'),
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        if (willDelete.value) {
+          this.info_idioma = <InfoIdioma>infoIdioma;
+          this.info_idioma.Persona = this.persona_id || 1;
+          if (this.info_idioma.Nativo === true && this.info_idioma.Nativo === this.info_idioma.SeleccionExamen) {
+            Swal({
+              type: 'error',
+              title: this.translate.instant('GLOBAL.crear'),
+              text: this.translate.instant('idiomas.error_nativo_examen'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          } else if (this.info_idioma.SeleccionExamen === true && this.idioma_examen !== undefined &&
+            this.info_idioma.Idioma.Id !== this.idioma_examen) {
+            Swal({
+              type: 'error',
+              title: this.translate.instant('GLOBAL.crear'),
+              text: this.translate.instant('idiomas.doble_examen'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          } else {
+            this.idiomaService.post('conocimiento_idioma', this.info_idioma)
+              .subscribe(res => {
+                const r = <any>res;
+                if (r !== null && r.Type !== 'error') {
+                  if (this.info_idioma.SeleccionExamen === true) {
+                    const examen = {
+                      Idioma: this.info_idioma.Idioma.Id,
+                      Activo: true,
+                      InscripcionId: {Id: Number(this.inscripcion_id)},
+                    };
+                    console.info(JSON.stringify(examen));
+                    this.inscripcionService.post('inscripcion_posgrado/', examen)
+                      .subscribe(resexamen => {
+                        const rex = <any>resexamen;
+                        if (rex !== null && rex.Type !== 'error') {
+                          this.idioma_examen = this.info_idioma.Idioma.Id;
+                          this.eventChange.emit(true);
+                          this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                            this.translate.instant('idiomas.informacion_idioma_registrada'));
+                          this.info_idioma_id = 0;
+                          this.info_idioma = undefined;
+                          this.clean = !this.clean;
+                        }
+                      },
+                      (error: HttpErrorResponse) => {
+                        Swal({
+                          type: 'error',
+                          title: error.status + '',
+                          text: this.translate.instant('ERROR.' + error.status),
+                          footer: this.translate.instant('idiomas.informacion_idioma_no_registrada'),
+                          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                        });
+                      });
+                  } else {
+                    this.eventChange.emit(true);
+                    this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                      this.translate.instant('idiomas.informacion_idioma_registrada'));
+                    this.info_idioma_id = 0;
+                    this.info_idioma = undefined;
+                    this.clean = !this.clean;
+                  }
+                }
+              },
+              (error: HttpErrorResponse) => {
+                Swal({
+                  type: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('idiomas.informacion_idioma_no_registrada'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
+          }
+        }
+      });
   }
 
   validarForm(event) {
