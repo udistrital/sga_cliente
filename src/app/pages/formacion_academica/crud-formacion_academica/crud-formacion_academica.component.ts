@@ -263,7 +263,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         // this.loadInfoPostgrados(this.organizacion.Ente);
         this.formInfoFormacionAcademica.campos[init].valor = this.organizacion.NumeroIdentificacion;
         this.formInfoFormacionAcademica.campos[inombre].valor = this.organizacion.Nombre;
-        
         if (this.organizacion.Ubicacion) {
           // identificadores del tipo de relacion y atributo para formulario
           if (this.organizacion.Ubicacion.AtributoUbicacion.Id === 1 && this.organizacion.Ubicacion.UbicacionEnte.TipoRelacionUbicacionEnte.Id === 3) {
