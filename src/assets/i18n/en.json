@@ -847,6 +847,14 @@
         "informacion_contacto_registrada": "Contact information registered",
         "seguro_continuar_registrar": "Are you sure you want to register this contact information?"
     },
+    "idiomas": {
+        "error_cargar_informacion_idiomas": "An error happened loading the languages information",
+        "error_nativo_examen": "You can't request an exam with your native language",
+        "error_doble_examen": "You already have a language exam request with other language",
+        "informacion_idioma_no_registrada": "Language information not registered",
+        "informacion_idioma_registrada": "Language information registered",
+        "seguro_continuar_registrar": "Are you sure you want to register this language information?"
+     },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",
