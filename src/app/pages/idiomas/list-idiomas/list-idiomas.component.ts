@@ -126,7 +126,6 @@ export class ListIdiomasComponent implements OnInit {
     this.idiomaService.get('conocimiento_idioma/?query=Persona:' + this.persona_id +
       '&limit=0')
       .subscribe(res => {
-        console.log("res idiomas", res);
         if (res !== null && JSON.stringify(res[0]) !== '{}') {
           const data = <Array<any>>res;
             this.loading = false;
