@@ -18,8 +18,10 @@ export class ViewIdiomasComponent implements OnInit {
 
   @Input('persona_id')
   set info(info: number) {
-    this.persona_id = info;
-    this.loadInfoIdioma();
+    if (info) {
+      this.persona_id = info;
+      this.loadInfoIdioma();
+    }
   };
 
   @Input('inscripcion_id')
