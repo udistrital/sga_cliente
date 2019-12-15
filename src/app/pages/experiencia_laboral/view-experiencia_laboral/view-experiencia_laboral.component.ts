@@ -23,7 +23,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   @Input('persona_id')
   set info(info: number) {
     this.ente = info;
-    this.loadData();
+    // this.loadData();
   }
 
   // tslint:disable-next-line: no-output-rename

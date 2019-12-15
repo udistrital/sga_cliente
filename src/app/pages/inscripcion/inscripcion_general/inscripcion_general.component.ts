@@ -145,6 +145,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.periodo = <any>res[0];
+          this.loadInfoInscripcion();
         }
       },
         (error: HttpErrorResponse) => {
@@ -154,6 +155,27 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
               this.translate.instant('GLOBAL.periodo_academico'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
+
+  loadInfoInscripcion() {
+    this.inscripcionService.get(`inscripcion?limint=1&query=PeriodoId:${this.periodo.Id},PersonaId:${this.info_persona_id || 1}`)
+      .subscribe(res => {
+        const r = <any>res;
+        console.log("información de la inscripción", r);
+        if (res !== null && r.Type !== 'error') {
+          if (r.Id) {
+            this.inscripcion_id = r.Id;
+          }
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('inscripcion.error_cargar_informacion'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });

@@ -293,7 +293,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.info('Este es el id' +  this.info_caracteristica_id)
+    // console.info('Este es el id' +  this.info_caracteristica_id)
     // this.loadInfoCaracteristica();
   }
 

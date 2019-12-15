@@ -814,7 +814,8 @@
         "transfe": "Internal transfer",
         "reingreso": "Re-entry",
         "transferencia": "Transfer data",
-        "error_registrar_informacion": "An error happened saving the inscription information"
+        "error_registrar_informacion": "An error happened saving the inscription information",
+        "error_cargar_informacion": "An error happened loading the inscription information"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
