@@ -13,12 +13,12 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./view-idiomas.component.scss'],
 })
 export class ViewIdiomasComponent implements OnInit {
-  ente: number;
+  persona_id: number;
   inscripcion: number;
 
   @Input('persona_id')
   set info(info: number) {
-    this.ente = info;
+    this.persona_id = info;
     this.loadInfoIdioma();
   };
 
@@ -42,7 +42,7 @@ export class ViewIdiomasComponent implements OnInit {
     private idiomaService: IdiomaService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.ente = this.users.getEnte();
+    this.persona_id = this.users.getPersonaId() || 1;
   }
 
   useLanguage(language: string) {
@@ -54,7 +54,7 @@ export class ViewIdiomasComponent implements OnInit {
   }
 
   public loadInfoIdioma(): void {
-    this.idiomaService.get('conocimiento_idioma/?query=Persona:' + this.ente +
+    this.idiomaService.get('conocimiento_idioma/?query=Persona:' + this.persona_id +
       '&limit=0')
       .subscribe(res => {
         if (res !== null) {

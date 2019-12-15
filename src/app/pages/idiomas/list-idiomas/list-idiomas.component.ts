@@ -35,6 +35,7 @@ export class ListIdiomasComponent implements OnInit {
 
   loading: boolean;
   percentage: number;
+  persona_id: number;
 
   constructor(private translate: TranslateService,
     private idiomaService: IdiomaService,
@@ -121,9 +122,11 @@ export class ListIdiomasComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.idiomaService.get('conocimiento_idioma/?query=Persona:' + this.userService.getEnte() +
+    this.persona_id = this.userService.getPersonaId() || 1;
+    this.idiomaService.get('conocimiento_idioma/?query=Persona:' + this.persona_id +
       '&limit=0')
       .subscribe(res => {
+        console.log("res idiomas", res);
         if (res !== null && JSON.stringify(res[0]) !== '{}') {
           const data = <Array<any>>res;
             this.loading = false;
