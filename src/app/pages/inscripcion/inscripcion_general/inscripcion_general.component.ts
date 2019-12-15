@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ResolveEnd } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
@@ -136,49 +136,57 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     //     this.info_ente_id = undefined;
     //   }
     // }
+
+    this.loadData();
     this.cargarPeriodo();
   }
 
-  cargarPeriodo(): void {
-    this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
+  async loadData() {
+    try {
+      await this.cargarPeriodo();
+      await this.loadInfoInscripcion();
+    } catch (error) {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('inscripcion.error_cargar_informacion'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    }
+  }
+
+  cargarPeriodo() {
+    return new Promise((resolve, reject) => {
+      this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.periodo = <any>res[0];
-          this.loadInfoInscripcion();
+          resolve(this.periodo);
         }
       },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.periodo_academico'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
+      (error: HttpErrorResponse) => {
+        reject(error);
+      });
+    });
   }
 
   loadInfoInscripcion() {
-    this.inscripcionService.get(`inscripcion?limint=1&query=PeriodoId:${this.periodo.Id},PersonaId:${this.info_persona_id || 1}`)
+    return new Promise((resolve, reject) => {
+      this.inscripcionService.get(`inscripcion?limint=1&query=PeriodoId:${this.periodo.Id},PersonaId:${this.info_persona_id || 1}`)
       .subscribe(res => {
         const r = <any>res;
-        console.log("información de la inscripción", r);
         if (res !== null && r.Type !== 'error') {
-          if (r.Id) {
-            this.inscripcion_id = r.Id;
+          if (r[0].Id) {
+            this.inscripcion_id = r[0].Id;
           }
         }
+        resolve(this.inscripcion_id);
       },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('inscripcion.error_cargar_informacion'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
+      (error: HttpErrorResponse) => {
+        reject(error);
+      });
+    });
   }
 
   create_inscription(data) {

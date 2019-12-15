@@ -110,8 +110,7 @@ export class CrudIdiomasComponent implements OnInit {
   }
 
   createInfoIdioma(infoIdioma: any ) {
-  //   console.log("create info idioma", infoIdioma, this.inscripcion_id);
-  console.log("create info idioma");
+  console.log("create info idioma", this.inscripcion_id, this.formData);
   this.formData = undefined;
   //   const opt: any = {
   //     title: this.translate.instant('GLOBAL.crear'),
