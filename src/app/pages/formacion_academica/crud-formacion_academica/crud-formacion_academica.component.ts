@@ -1,14 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Lugar } from './../../../@core/data/models/lugar/lugar';
-import { ProgramaAcademico } from './../../../@core/data/models/proyecto_academico/programa_academico';
 import { FORM_FORMACION_ACADEMICA } from './form-formacion_academica';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
-import { Organizacion } from '../../../@core/data/models/ente/organizacion';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { UserService } from '../../../@core/data/users.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -51,7 +48,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private ubicacionesService: UbicacionService,
-    private campusMidService: CampusMidService,
+    private sgaMidService: SgaMidService,
     private programaService: ProyectoAcademicoService,
     private autenticationService: ImplicitAutenticationService,
     private documentoService: DocumentoService,
@@ -83,10 +80,10 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     this.translate.use(language);
   }
 
-  getPais(event) {
-    this.paisSelecccionado = event.valor;
-    // this.loadOptionsPaisUniversidad();
-  }
+  // getPais(event) {
+  //   this.paisSelecccionado = event.valor;
+  //   // this.loadOptionsPaisUniversidad();
+  // }
 
   // loadOptionsPais(): void {
   //   let paisNacimiento: Array<any> = [];
@@ -227,14 +224,28 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
   searchDoc(data) {
     const nit = typeof data === 'string' ? data : data.data.Nit;
-    this.campusMidService.get('organizacion/identificacion/?Id=' + nit + '&TipoId=5')
-      .subscribe(res => {
-        const init = this.getIndexForm('Nit');
-        const inombre = this.getIndexForm('NombreEmpresa');
-        const idir = this.getIndexForm('Direccion');
-        const itel = this.getIndexForm('Telefono');
-        const icorreo = this.getIndexForm('Correo');
-        const ipais = this.getIndexForm('Pais');
+    const init = this.getIndexForm('Nit');
+    const inombre = this.getIndexForm('NombreUniversidad');
+    const idir = this.getIndexForm('Direccion');
+    const itel = this.getIndexForm('Telefono');
+    const icorreo = this.getIndexForm('Correo');
+    // this.sgaMidService.get(`tercero/identificacion/?Id=800088702&TipoId=7`)
+    this.sgaMidService.get(`tercero/identificacion/?Id=${nit}&TipoId=7`)
+      .subscribe((res: any) => {
+        this.formInfoFormacionAcademica.campos[init].valor = res.NumeroIdentificacion;
+        this.formInfoFormacionAcademica.campos[inombre].valor = res.NombreCompleto;
+        this.formInfoFormacionAcademica.campos[idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
+        this.formInfoFormacionAcademica.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
+        this.formInfoFormacionAcademica.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
+        // this.info_formacion_academica = {
+        //   Nit: res.NumeroIdentificacion,
+        //   NombreUniversidad: res.NombreCompleto,
+        //   Direccion: (res.Direccion) ? res.Direccion : 'No registrado',
+        //   Telefono: (res.Telefono) ? res.Telefono : 'No registrado',
+        //   Correo: (res.Correo) ? res.Correo : 'No registrado',
+        // }
+        /*
+        console.log();
         this.organizacion = new Organizacion();
         if (res !== null) {
           this.organizacion = <Organizacion>res;
@@ -252,6 +263,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         // this.loadInfoPostgrados(this.organizacion.Ente);
         this.formInfoFormacionAcademica.campos[init].valor = this.organizacion.NumeroIdentificacion;
         this.formInfoFormacionAcademica.campos[inombre].valor = this.organizacion.Nombre;
+        
         if (this.organizacion.Ubicacion) {
           // identificadores del tipo de relacion y atributo para formulario
           if (this.organizacion.Ubicacion.AtributoUbicacion.Id === 1 && this.organizacion.Ubicacion.UbicacionEnte.TipoRelacionUbicacionEnte.Id === 3) {
@@ -302,26 +314,33 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           this.formInfoFormacionAcademica.campos[itel].valor = null;
           this.formInfoFormacionAcademica.campos[icorreo].valor = null;
         }
+         */
         [this.formInfoFormacionAcademica.campos[inombre],
         this.formInfoFormacionAcademica.campos[idir],
         this.formInfoFormacionAcademica.campos[icorreo],
-        this.formInfoFormacionAcademica.campos[ipais],
         this.formInfoFormacionAcademica.campos[itel]]
           .forEach(element => {
             element.deshabilitar = element.valor ? true : false
           });
       },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.formacion_academica') + '|' +
-              this.translate.instant('GLOBAL.nombre_universidad'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+      (error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          [this.formInfoFormacionAcademica.campos[inombre],
+          this.formInfoFormacionAcademica.campos[idir],
+          this.formInfoFormacionAcademica.campos[icorreo],
+          this.formInfoFormacionAcademica.campos[itel]]
+            .forEach(element => {
+              element.deshabilitar = false;
+            });
+        }
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('formacion_academica.error_cargar_universidad'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+      });
   }
 
   // public loadInfoFormacionAcademica(): void {

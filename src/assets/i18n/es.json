@@ -861,12 +861,15 @@
         "seguro_continuar_registrar": "¿Está seguto de registrar esta información de contacto?"
     },
     "idiomas": {
-        "error_cargar_informacion_idiomas": "Ocurrió un error alcargar la información de los idiomas",
+        "error_cargar_informacion_idiomas": "Ocurrió un error al cargar la información de los idiomas",
         "error_nativo_examen": "No puede solicitar un exámen con su idioma nativo",
         "error_doble_examen": "Ya tiene registrado un idioma con exámen",
         "informacion_idioma_no_registrada": "Información de idioma no registrada",
         "informacion_idiomaregistrada": "Información de idioma registrada",
         "seguro_continuar_registrar": "¿Está seguto de registrar esta información de idioma?"
+    },
+    "formacion_academica": {
+        "error_cargar_universidad": "Ocurruió un error al cargar la información de la universidad"
     },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Información familiar no actualizada",

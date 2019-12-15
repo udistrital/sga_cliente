@@ -855,6 +855,9 @@
         "informacion_idioma_registrada": "Language information registered",
         "seguro_continuar_registrar": "Are you sure you want to register this language information?"
      },
+     "formacion_academica": {
+        "error_cargar_universidad": "An error happened loading the university information"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",
