@@ -29,11 +29,18 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   config: ToasterConfig;
   informacion_contacto_id: number;
   info_persona_id: number;
+  info_info_familiar: any;
+  tempcorreoPrincipal: any;
+  tempcorreoAlterno: any;
+  temptelefonoPrincipal: any;
+  tempdireccionPrincipal: any;
+  tempdireccionAlterno: any;
+  temptelefonoAlterno: any;
 
   @Input('info_persona_id')
   set persona(info_persona_id: number) {
     this.info_persona_id = info_persona_id;
-    // this.loadInfoPersona();
+    this.loadInfoPersona();
     console.info('ID_Persona_Familiar: ' + info_persona_id);
   }
 
@@ -102,6 +109,56 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   ngOnInit() {
 
   }
+  public loadInfoPersona(): void {
+    console.info('Ojoooooo cargar')
+    this.loading = true;
+    if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
+      this.info_persona_id.toString() !== '') {
+        this.sgaMidService.get('persona/consultar_familiar/' + this.info_persona_id)
+        .subscribe(res => {
+          console.info(res)
+          if (res !== null) {
+            this.datosGet = res;
+            this.tempcorreoPrincipal = JSON.parse(this.datosGet['Correos'][0]['Dato'])
+            this.tempcorreoAlterno = JSON.parse(this.datosGet['Correos'][1]['Dato'])
+            this.temptelefonoPrincipal = JSON.parse(this.datosGet['Numeros'][0]['Dato'])
+            this.temptelefonoAlterno = JSON.parse(this.datosGet['Numeros'][1]['Dato'])
+            this.tempdireccionPrincipal = JSON.parse(this.datosGet['Direcciones'][0]['Dato'])
+            this.tempdireccionAlterno = JSON.parse(this.datosGet['Direcciones'][1]['Dato'])
+            this.info_info_familiar = res;
+            this.formInformacionFamiliar.campos[this.getIndexForm('NombreFamiliarPrincipal')].valor = this.datosGet['Principal']['TerceroFamiliarId']
+            ['NombreCompleto']
+            this.formInformacionFamiliar.campos[this.getIndexForm('Parentesco')].valor = this.datosGet['Relaciones'][0]
+            this.formInformacionFamiliar.campos[this.getIndexForm('ParentescoAlterno')].valor = this.datosGet['Relaciones'][1]
+            this.formInformacionFamiliar.campos[this.getIndexForm('CorreoElectronico')].valor =  this.tempcorreoPrincipal.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('CorreoElectronicoAlterno')].valor = this.tempcorreoAlterno.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('Telefono')].valor = this.temptelefonoPrincipal.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('TelefonoAlterno')].valor = this.temptelefonoAlterno.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('DireccionResidencia')].valor = this.tempdireccionPrincipal.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('DireccionResidenciaAlterno')].valor = this.tempdireccionAlterno.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('NombreFamiliarAlterno')].valor = this.datosGet['Alterno']['TerceroFamiliarId']
+            ['NombreCompleto']
+            this.loading = false;
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    } else {
+      this.info_info_familiar = undefined;
+      this.clean = !this.clean;
+      this.denied_acces = false; // no muestra el formulario a menos que se le pase un id del ente info_caracteristica_id
+      this.loading = false;
+    }
+  }
+
 
 
   setPercentage(event) {
