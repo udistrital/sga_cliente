@@ -118,8 +118,8 @@ export class CrudIcfesComponent implements OnInit {
         this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].entrelazado = true;
         this.formIcfes.campos[this.getIndexForm('Tipo')].valor = 0;
       }if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
-      (event.valor.Nombre.toString().toLowerCase() != 'cundinamarca' ||
-        event.valor.Nombre.toString().toLowerCase() != 'cundinamarca')) {
+      (event.valor.Nombre.toString().toLowerCase() !== 'cundinamarca' ||
+        event.valor.Nombre.toString().toLowerCase() !== 'cundinamarca')) {
         this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].entrelazado = true;
         this.formIcfes.campos[this.getIndexForm('Tipo')].valor = 0;
       }
@@ -133,19 +133,18 @@ export class CrudIcfesComponent implements OnInit {
          this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = true;
         this.construirForm();
       } else  if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
-      (this.paisSeleccionado.Nombre.toString().toLowerCase() != 'bogotá' ||
-      this.paisSeleccionado.Nombre.toString().toLowerCase() != 'bogota')) {
+      (this.paisSeleccionado.Nombre.toString().toLowerCase() !== 'bogotá' ||
+      this.paisSeleccionado.Nombre.toString().toLowerCase() !== 'bogota')) {
        this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
        this.formIcfes.campos[this.getIndexForm('Tipo')].valor = 0;
       this.construirForm();
-    }
-      else {
+    } else {
         this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = true;
         this.construirForm();
         console.info('otroooooooooo con cundinamarca')
-      } 
+      }
 
     }else if (event.nombre === 'Tipo') {
       console.info('select tipo')
