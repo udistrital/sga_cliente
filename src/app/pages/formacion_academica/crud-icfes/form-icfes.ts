@@ -128,5 +128,15 @@ export let FORM_ICFES = {
   key: 'NombreCompleto',
   opciones: [ ],
 },
+{
+  etiqueta: 'input',
+  claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
+  nombre: 'NombreColegio',
+  label_i18n: 'Nombrecolegio',
+  placeholder_i18n: 'Nombrecolegio',
+  requerido: true,
+  ocultar: true,
+  tipo: 'text',
+},
   ],
 }

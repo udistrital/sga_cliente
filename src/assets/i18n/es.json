@@ -473,7 +473,9 @@
         "fecha_vinculacion": "Fecha de inicio de vinculación EPS",
         "placeholder_fecha_vinculacion": "Ej: 01/01/2019",
         "colegio": "Colegio donde culmunó el grado 11",
-        "placeholder_colegio": "Ej: Colegio Nacional"
+        "placeholder_colegio": "Ej: Colegio Nacional",
+        "Nombrecolegio": "Nombre del colegio donde culmunó el grado 11",
+        "placeholder_Nombrecolegio": "Ej: Colegio Nacional"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",

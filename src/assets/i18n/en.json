@@ -461,7 +461,11 @@
         "observacion_trans": "Reasons for the Transfer",
         "placeholder_observacion_trans": "",
         "fecha_vinculacion": "EPS Link Start Date",
-        "placeholder_fecha_vinculacion": "E.g: 01/01/2019"
+        "placeholder_fecha_vinculacion": "E.g: 01/01/2019",
+        "colegio": "College where grade 11 culminated",
+        "placeholder_colegio": "E.g: National College",
+        "Nombrecolegio": "Name of the school where grade 11 ended",
+        "placeholder_Nombrecolegio": "E.g: National College"
     },
 
     "ERROR": {
