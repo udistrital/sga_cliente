@@ -553,7 +553,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                 if (this.filesUp['Documento'] !== undefined) {
                   this.info_formacion_academica.FormacionAcademica.Documento = this.filesUp['Documento'].Id;
                 }
-                console.info("data post", JSON.stringify(this.info_formacion_academica));
+                console.info('data post', JSON.stringify(this.info_formacion_academica));
                 this.sgaMidService.post('formacion_academica/', this.info_formacion_academica)
                   .subscribe(res => {
                     const r = <any>res;
@@ -637,7 +637,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           Documento: formData.Documento,
           TituloTrabajoGrado: formData.TituloTrabajoGrado,
           DescripcionTrabajoGrado: formData.DescripcionTrabajoGrado,
-        }
+        },
       }
       this.createInfoFormacionAcademica(postData);
       this.result.emit(event);
