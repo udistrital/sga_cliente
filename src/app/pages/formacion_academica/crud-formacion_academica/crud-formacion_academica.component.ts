@@ -527,7 +527,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   createInfoFormacionAcademica(infoFormacionAcademica: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('GLOBAL.crear') + '?',
+      text: this.translate.instant('informacion_academica.seguro_continuar_registrar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -560,14 +560,13 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                     if (r !== null && r.Type !== 'error') {
                       this.eventChange.emit(true);
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('GLOBAL.formacion_academica') + ' ' +
-                        this.translate.instant('GLOBAL.confirmarCrear'));
+                        this.translate.instant('informacion_academica.informacion_academica_registrada'));
                       this.info_formacion_academica_id = 0;
                       this.info_formacion_academica = undefined;
                       this.clean = !this.clean;
                     } else {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
-                        this.translate.instant('GLOBAL.error'));
+                      this.translate.instant('informacion_academica.informacion_academica_no_registrada'));
                     }
                   },
                     (error: HttpErrorResponse) => {
@@ -575,8 +574,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                         type: 'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('GLOBAL.crear') + '-' +
-                          this.translate.instant('GLOBAL.formacion_academica'),
+                        footer: this.translate.instant('informacion_academica.informacion_academica_no_registrada'),
                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                       });
                     });
@@ -587,9 +585,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                   type: 'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('GLOBAL.crear') + '-' +
-                    this.translate.instant('GLOBAL.formacion_academica') + '|' +
-                    this.translate.instant('GLOBAL.soporte_documento'),
+                  footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });

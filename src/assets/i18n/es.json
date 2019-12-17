@@ -860,6 +860,12 @@
         "informacion_contacto_registrada": "Información de contacto actualizada",
         "seguro_continuar_registrar": "¿Está seguto de registrar esta información de contacto?"
     },
+    "informacion_academica": {
+        "informacion_academica_no_registrada": "Información académica no actualizada",
+        "informacion_academica_registrada": "Información académica actualizada",
+        "documento_informacion_academica_no_registrado": "Error subiendo el documento de soporte",
+        "seguro_continuar_registrar": "¿Está seguto de registrar esta información académica?"
+    },
     "idiomas": {
         "error_cargar_informacion_idiomas": "Ocurrió un error al cargar la información de los idiomas",
         "error_nativo_examen": "No puede solicitar un exámen con su idioma nativo",

@@ -847,6 +847,12 @@
         "informacion_contacto_registrada": "Contact information registered",
         "seguro_continuar_registrar": "Are you sure you want to register this contact information?"
     },
+    "informacion_academica": {
+        "informacion_academica_no_registrada": "Academic information not registered",
+        "informacion_academica_registrada": "Academic information registered",
+        "documento_informacion_academica_no_registrado": "Error uploading support document",
+        "seguro_continuar_registrar": "Are you sure you want to register this academic information?"
+    },
     "idiomas": {
         "error_cargar_informacion_idiomas": "An error happened loading the languages information",
         "error_nativo_examen": "You can't request an exam with your native language",
