@@ -12,6 +12,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { ListService } from '../../../@core/store/services/list.service';
+import { IAppState } from '../../../@core/store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ngx-crud-formacion-academica',
@@ -41,7 +44,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   regInfoFormacionAcademica: any;
   temp: any;
   clean: boolean;
-  loading: boolean;
   percentage: number;
   paisSelecccionado: any;
 
@@ -54,6 +56,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private users: UserService,
+    private store: Store<IAppState>,
+    private listService: ListService,
     private toasterService: ToasterService) {
     this.formInfoFormacionAcademica = FORM_FORMACION_ACADEMICA;
     this.construirForm();
@@ -62,7 +66,9 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     });
     // this.loadOptionsPais();
     // this.ente = this.users.getEnte();
-    this.loading = false;
+    this.listService.findPais();
+    this.listService.findProgramaAcademico();
+    this.loadLists();
   }
 
   construirForm() {
@@ -701,4 +707,13 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     };
     this.toasterService.popAsync(toast);
   }
+
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+       this.formInfoFormacionAcademica.campos[this.getIndexForm('Pais')].opciones = list.listPais[0];
+       this.formInfoFormacionAcademica.campos[this.getIndexForm('ProgramaAcademico')].opciones = list.listProgramaAcademico[0];
+      },
+   );
+ }
 }
