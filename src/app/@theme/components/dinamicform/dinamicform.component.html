@@ -304,7 +304,7 @@
                     <div class=" form-group">
                         <!-- input -->
                         <mat-form-field *ngSwitchCase="'input'" style="width: 100%;" class="form-group"
-                            floatLabel="always">
+                            floatLabel="always" [hidden]= "c.ocultar">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <input matInput [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" type="{{c.tipo}}" id="{{c.nombre}}"
@@ -384,7 +384,7 @@
                         </mat-form-field>
 
                         <!-- select -->
-                        <mat-form-field *ngSwitchCase="'select'" style="width: 100%;" floatLabel="always">
+                        <mat-form-field *ngSwitchCase="'select'" style="width: 100%;" floatLabel="always" [hidden]= "c.ocultar">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <mat-select [placeholder]="c.valor?(c.key?c.valor[c.key]:c.valor|json):c.placeholder"
                                 [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
@@ -398,7 +398,7 @@
                         </mat-form-field>
 
                         <!-- select multiple-->
-                        <mat-form-field *ngSwitchCase="'selectmultiple'" style="width: 100%;" floatLabel="always">
+                        <mat-form-field *ngSwitchCase="'selectmultiple'" style="width: 100%;" floatLabel="always" >
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <mat-select [placeholder]="c.valor?(c.key?c.valor[c.key]:c.valor|json):c.placeholder"
                                 [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"

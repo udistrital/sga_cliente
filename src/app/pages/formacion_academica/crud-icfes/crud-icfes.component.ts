@@ -4,10 +4,13 @@ import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-t
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { Lugar } from './../../../@core/data/models/lugar/lugar';
 import { UserService } from '../../../@core/data/users.service';
+import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { TercerosService} from '../../../@core/data/terceros.service';
 import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { IAppState } from '../../../@core/store/app.state';
@@ -45,12 +48,18 @@ export class CrudIcfesComponent implements OnInit {
   temp: any;
   clean: boolean;
   loading: boolean;
+  paisSeleccionado: any;
   percentage: number;
+  ciudadSeleccionada: any;
+  tipoSeleccionado: any;
+  departamentoSeleccionado: any;
 
   constructor(
     private translate: TranslateService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
+    private ubicacionesService: UbicacionService,
+    private terceroService: TercerosService,
     private sgaMidService: SgaMidService,
     private users: UserService,
     private store: Store<IAppState>,
@@ -86,12 +95,205 @@ export class CrudIcfesComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.loadInfoFormacionAcademica();
+
   }
 
   setPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);
+  }
+  getSeleccion(event) {
+    if (event.nombre === 'PaisResidencia') {
+      this.paisSeleccionado = event.valor;
+      this.loadOptionsDepartamentoResidencia();
+    } else if (event.nombre === 'DepartamentoResidencia') {
+      this.departamentoSeleccionado = event.valor;
+      this.loadOptionsCiudadResidencia();
+      if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
+        (event.valor.Nombre.toString().toLowerCase() === 'cundinamarca' ||
+          event.valor.Nombre.toString().toLowerCase() === 'cundinamarca')) {
+        this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].entrelazado = true;
+      } else {
+       console.info('otro departamento ')
+          this.construirForm();
+        
+      }
+    } else if (event.nombre === 'CiudadResidencia') {
+      this.ciudadSeleccionada = event.valor;
+      if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
+        (event.valor.Nombre.toString().toLowerCase() === 'bogotá' ||
+          event.valor.Nombre.toString().toLowerCase() === 'bogota')) {
+        console.info('Bogotaaaaaaaa')
+         this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
+        this.construirForm();
+       
+        // this.construirForm();
+        // this.loadOptionsLocalidadResidencia();
+      } else {
+
+        console.info('otroooooooooo con cundinamarca')
+      }
+    }else if(event.nombre === 'Tipo') {
+      console.info('select tipo')
+      this.tipoSeleccionado = event.valor;
+      console.info(this.tipoSeleccionado.Id)
+      if(this.tipoSeleccionado.Id.toString().toLowerCase() === 'oficial'){
+        console.info('ojo consulta oficial')
+        this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = false;
+        this.construirForm();
+        this.loadOptionscolegiooficial();
+      }else {
+        console.info('ojo consulta privado')
+        this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = false;
+        this.construirForm();
+        this.loadOptionscolegioprivado();
+      }
+
+    }
+  }
+
+  loadOptionscolegiooficial():  void {
+    let consultaColegio: Array<any> = [];
+    const colegiosoficiales: Array<any> = [];
+      this.terceroService.get('tercero_tipo_tercero/?query=TipoTerceroId.Id:7' + ',TerceroId.Activo:true&limit=-1')
+        .subscribe(res => {
+          if (res !== null) {
+            consultaColegio = <Array<any>>res;
+            for (let i = 0; i < consultaColegio.length; i++) {
+              colegiosoficiales.push(consultaColegio[i].TerceroId);
+            }
+          }
+          this.formIcfes.campos[this.getIndexForm('Colegio')].opciones = colegiosoficiales;
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.departamento_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    
+  }
+
+
+  loadOptionscolegioprivado():  void {
+    let consultaColegio: Array<any> = [];
+    const colegiosprivado: Array<any> = [];
+      this.terceroService.get('tercero_tipo_tercero/?query=TipoTerceroId.Id:12' + ',TerceroId.Activo:true&limit=-1')
+        .subscribe(res => {
+          if (res !== null) {
+            consultaColegio = <Array<any>>res;
+            for (let i = 0; i < consultaColegio.length; i++) {
+              colegiosprivado.push(consultaColegio[i].TerceroId);
+            }
+          }
+          this.formIcfes.campos[this.getIndexForm('Colegio')].opciones = colegiosprivado;
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.departamento_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    
+  }
+
+
+  loadOptionsDepartamentoResidencia(): void {
+    let consultaHijos: Array<any> = [];
+    const departamentoResidencia: Array<any> = [];
+    if (this.paisSeleccionado) {
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.paisSeleccionado.Id +
+      ',LugarHijo.TipoLugar.CodigoAbreviacion:D,LugarHijo.Activo:true&limit=0')
+        .subscribe(res => {
+          if (res !== null) {
+            consultaHijos = <Array<Lugar>>res;
+            for (let i = 0; i < consultaHijos.length; i++) {
+              departamentoResidencia.push(consultaHijos[i].LugarHijo);
+            }
+          }
+          this.formIcfes.campos[this.getIndexForm('DepartamentoResidencia')].opciones = departamentoResidencia;
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.departamento_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    }
+  }
+
+  loadOptionsCiudadResidencia(): void {
+    let consultaHijos: Array<any> = [];
+    const ciudadResidencia: Array<any> = [];
+    if (this.departamentoSeleccionado) {
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.departamentoSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+        .subscribe(res => {
+          if (res !== null) {
+            consultaHijos = <Array<Lugar>>res;
+            for (let i = 0; i < consultaHijos.length; i++) {
+              ciudadResidencia.push(consultaHijos[i].LugarHijo);
+            }
+          }
+          this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].opciones = ciudadResidencia;
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.ciudad_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    }
+  }
+
+  loadOptionsLocalidadResidencia(): void {
+    let consultaHijos: Array<any> = [];
+    const localidadResidencia: Array<any> = [];
+    if (this.departamentoSeleccionado) {
+      console.info('ID ciudad')
+      console.info(this.ciudadSeleccionada.Id)
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.ciudadSeleccionada.Id + ',LugarHijo.Activo:true&limit=0')
+        .subscribe(res => {
+          if (res !== null) {
+            consultaHijos = <Array<Lugar>>res;
+            for (let i = 0; i < consultaHijos.length; i++) {
+              localidadResidencia.push(consultaHijos[i].LugarHijo);
+            }
+          }
+          console.info(localidadResidencia)
+          this.formIcfes.campos[this.getIndexForm('LocalidadResidencia')].opciones = localidadResidencia;
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.localidad_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    }
   }
 
   createIcfesColegio(infoIcfes: any): void {
@@ -204,6 +406,7 @@ export class CrudIcfesComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
+        this.formIcfes.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
        this.formIcfes.campos[this.getIndexForm('TipoIcfes')].opciones = list.listICFES[0];
        this.formIcfes.campos[this.getIndexForm('LocalidadColegio')].opciones = list.listLocalidadesBogota[0];
        this.formIcfes.campos[this.getIndexForm('TipoColegio')].opciones = list.listTipoColegio[0];

@@ -16,6 +16,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { FormacionAcademicaRoutingModule } from '../../formacion_academica/formacion_academica-routing.module';
 // import { IAppState } from '../../../@core/store/app.state';
 // import { ListService } from '../../../@core/store/services/list.service';
 // import { Store } from '@ngrx/store';
@@ -107,8 +108,9 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    
   }
+
   public loadInfoPersona(): void {
     console.info('Ojoooooo cargar')
     this.loading = true;
@@ -258,7 +260,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                     Activo: undefined,
                     GrupoInfoComplementariaId: undefined,
                   },
-                  Dato: JSON.stringify({value: formData.Telefono}),
+                  Dato: JSON.stringify({value: formData.Telefono, Nombre: formData.CorreoElectronico }),
                   Activo: true,
                 },
                 {
