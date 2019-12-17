@@ -229,6 +229,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     const idir = this.getIndexForm('Direccion');
     const itel = this.getIndexForm('Telefono');
     const icorreo = this.getIndexForm('Correo');
+    const iPais = this.getIndexForm('Pais');
     // this.sgaMidService.get(`tercero/identificacion/?Id=800088702&TipoId=7`)
     this.sgaMidService.get(`tercero/identificacion/?Id=${nit}&TipoId=7`)
       .subscribe((res: any) => {
@@ -237,6 +238,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         this.formInfoFormacionAcademica.campos[idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
         this.formInfoFormacionAcademica.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
         this.formInfoFormacionAcademica.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
+        this.formInfoFormacionAcademica.campos[iPais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : {Id: 0, Nombre: 'No registrado'};
         // this.info_formacion_academica = {
         //   Nit: res.NumeroIdentificacion,
         //   NombreUniversidad: res.NombreCompleto,
@@ -317,6 +319,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         [this.formInfoFormacionAcademica.campos[inombre],
         this.formInfoFormacionAcademica.campos[idir],
         this.formInfoFormacionAcademica.campos[icorreo],
+        this.formInfoFormacionAcademica.campos[iPais],
         this.formInfoFormacionAcademica.campos[itel]]
           .forEach(element => {
             element.deshabilitar = element.valor ? true : false
@@ -327,6 +330,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           [this.formInfoFormacionAcademica.campos[inombre],
           this.formInfoFormacionAcademica.campos[idir],
           this.formInfoFormacionAcademica.campos[icorreo],
+          this.formInfoFormacionAcademica.campos[iPais],
           this.formInfoFormacionAcademica.campos[itel]]
             .forEach(element => {
               element.deshabilitar = false;

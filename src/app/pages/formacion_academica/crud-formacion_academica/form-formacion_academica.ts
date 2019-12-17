@@ -32,7 +32,6 @@ export let FORM_FORMACION_ACADEMICA = {
       deshabilitar: true,
       tipo: 'text',
     },
-    /*
     {
       etiqueta: 'select',
       claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
@@ -45,10 +44,9 @@ export let FORM_FORMACION_ACADEMICA = {
       key: 'Nombre',
       opciones: [],
     },
-    */
     {
       etiqueta: 'input',
-      claseGrid: 'col-lg-4 col-md-4 col-sm-12 col-xs-12',
+      claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
       nombre: 'Direccion',
       label_i18n: 'direccion_universidad',
       placeholder_i18n: 'direccion_universidad',
@@ -58,7 +56,7 @@ export let FORM_FORMACION_ACADEMICA = {
     },
     {
       etiqueta: 'input',
-      claseGrid: 'col-lg-4 col-md-4 col-sm-12 col-xs-12',
+      claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
       nombre: 'Correo',
       label_i18n: 'correo_universidad',
       placeholder_i18n: 'correo_universidad',
@@ -68,7 +66,7 @@ export let FORM_FORMACION_ACADEMICA = {
     },
     {
       etiqueta: 'input',
-      claseGrid: 'col-lg-4 col-md-4 col-sm-12 col-xs-12',
+      claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
       nombre: 'Telefono',
       label_i18n: 'telefono_universidad',
       placeholder_i18n: 'telefono_universidad',
