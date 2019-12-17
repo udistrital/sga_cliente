@@ -115,8 +115,7 @@ export class CrudIcfesComponent implements OnInit {
         this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].entrelazado = true;
       } else {
        console.info('otro departamento ')
-          this.construirForm();
-        
+          this.construirForm();        
       }
     } else if (event.nombre === 'CiudadResidencia') {
       this.ciudadSeleccionada = event.valor;
@@ -126,18 +125,15 @@ export class CrudIcfesComponent implements OnInit {
         console.info('Bogotaaaaaaaa')
          this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
         this.construirForm();
-       
-        // this.construirForm();
-        // this.loadOptionsLocalidadResidencia();
       } else {
 
         console.info('otroooooooooo con cundinamarca')
       }
-    }else if(event.nombre === 'Tipo') {
+    }else if (event.nombre === 'Tipo') {
       console.info('select tipo')
       this.tipoSeleccionado = event.valor;
       console.info(this.tipoSeleccionado.Id)
-      if(this.tipoSeleccionado.Id.toString().toLowerCase() === 'oficial'){
+      if (this.tipoSeleccionado.Id.toString().toLowerCase() === 'oficial') {
         console.info('ojo consulta oficial')
         this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = false;
         this.construirForm();
@@ -176,8 +172,7 @@ export class CrudIcfesComponent implements OnInit {
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
           });
-    
-  }
+    }
 
 
   loadOptionscolegioprivado():  void {
@@ -204,8 +199,7 @@ export class CrudIcfesComponent implements OnInit {
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
           });
-    
-  }
+        }
 
 
   loadOptionsDepartamentoResidencia(): void {

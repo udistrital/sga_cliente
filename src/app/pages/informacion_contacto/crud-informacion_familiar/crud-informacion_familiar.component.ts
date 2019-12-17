@@ -108,7 +108,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
 
   public loadInfoPersona(): void {

@@ -34,9 +34,7 @@ export let FORM_ICFES = {
       placeholder_i18n: 'confirme_numero_registro',
       requerido: true,
       tipo: 'text',
-    },
-   
-
+    },   
     {
       etiqueta: 'select',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
@@ -115,9 +113,9 @@ export let FORM_ICFES = {
   },
   {
     'Id': 'Privado',
-  },],
+  },
+],
 },
-
 {
   etiqueta: 'select',
   claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
@@ -125,7 +123,7 @@ export let FORM_ICFES = {
   label_i18n: 'colegio',
   placeholder_i18n: 'colegio',
   requerido: true,
-  ocultar:true, 
+  ocultar: true,
   tipo: 'Lugar',
   key: 'NombreCompleto',
   opciones: [ ],
