@@ -115,7 +115,7 @@ export class CrudIcfesComponent implements OnInit {
         this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].entrelazado = true;
       } else {
        console.info('otro departamento ')
-          this.construirForm();        
+          this.construirForm();
       }
     } else if (event.nombre === 'CiudadResidencia') {
       this.ciudadSeleccionada = event.valor;
