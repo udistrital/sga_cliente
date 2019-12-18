@@ -323,7 +323,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           type: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
-          footer: this.translate.instant('formacion_academica.error_cargar_universidad'),
+          footer: this.translate.instant('informacion_academica.error_cargar_universidad'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       });

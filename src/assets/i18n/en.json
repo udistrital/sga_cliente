@@ -851,7 +851,15 @@
         "informacion_academica_no_registrada": "Academic information not registered",
         "informacion_academica_registrada": "Academic information registered",
         "documento_informacion_academica_no_registrado": "Error uploading support document",
-        "seguro_continuar_registrar": "Are you sure you want to register this academic information?"
+        "seguro_continuar_registrar": "Are you sure you want to register this academic information?",
+        "error_cargar_universidad": "An error happened loading the university information"
+    },
+    "experiencia_laboral": {
+        "experiencia_laboral_no_registrada": "Work experience not registered",
+        "experiencia_laboral_registrada": "Work experience registered",
+        "documento_experiencia_laboral_no_registrado": "Error uploading support document",
+        "seguro_continuar_registrar": "Are you sure you want to register this work experience?",
+        "error_cargar_empresa": "An error happened loading the company information"
     },
     "idiomas": {
         "error_cargar_informacion_idiomas": "An error happened loading the languages information",
@@ -861,9 +869,6 @@
         "informacion_idioma_registrada": "Language information registered",
         "seguro_continuar_registrar": "Are you sure you want to register this language information?"
      },
-     "formacion_academica": {
-        "error_cargar_universidad": "An error happened loading the university information"
-    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",
