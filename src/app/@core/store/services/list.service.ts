@@ -631,6 +631,24 @@ export class ListService {
     );
   }
 
+  public findTipoVinculacion() {
+    this.store.select(REDUCER_LIST.TipoVinculacion).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.experienciaService.get('tipo_vinculacion/?limit=0')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoVinculacion, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoVinculacion, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   private addList(type: string, object: Array<any>) {
     this.store.dispatch({
       type: type,
