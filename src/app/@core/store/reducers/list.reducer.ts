@@ -308,4 +308,13 @@ export class ListReducer {
         return state;
     }
   }
+
+  static ListReducerCargo(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.Cargo:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
 }

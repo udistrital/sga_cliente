@@ -649,6 +649,24 @@ export class ListService {
     );
   }
 
+  public findCargo() {
+    this.store.select(REDUCER_LIST.Cargo).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.experienciaService.get('cargo/?limit=0')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.Cargo, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.Cargo, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   private addList(type: string, object: Array<any>) {
     this.store.dispatch({
       type: type,

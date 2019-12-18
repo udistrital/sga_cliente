@@ -33,5 +33,6 @@ export const REDUCER_LIST = {
     TipoInscripcionUniversidad: 'ListTipoInscripcionUniversidad',
     TipoDedicacion: 'ListTipoDedicacion',
     TipoVinculacion: 'ListTipoVinculacion',
+    Cargo: 'ListCargo',
     // TipoPublicacionLibro: 'listReducerTipoPublicacionLibro',
 };
