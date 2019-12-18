@@ -398,120 +398,120 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   //       });
   // }
 
-  searchOrganizacion(data: any): void {
-    const nit = typeof data === 'string' ? data : data.data.Nit;
-    this.organizacion = new Organizacion();
-    this.campusMidService.get('organizacion/identificacion/?Id=' + nit + '&TipoId=5')
-      .subscribe(res => {
-        const init = this.getIndexForm('Nit');
-        const inombre = this.getIndexForm('NombreEmpresa');
-        const itipo = this.getIndexForm('TipoOrganizacion');
-        const idir = this.getIndexForm('Direccion');
-        const itel = this.getIndexForm('Telefono');
-        const icorreo = this.getIndexForm('Correo');
-        const ipais = this.getIndexForm('Pais');
-        this.organizacion = new Organizacion();
-        if (res !== null) {
-          this.organizacion = <Organizacion>res;
-        } else {
-          this.organizacion.NumeroIdentificacion = nit;
-          [this.formInfoExperienciaLaboral.campos[inombre],
-          this.formInfoExperienciaLaboral.campos[itipo],
-          this.formInfoExperienciaLaboral.campos[idir],
-          this.formInfoExperienciaLaboral.campos[icorreo],
-          this.formInfoExperienciaLaboral.campos[ipais],
-          this.formInfoExperienciaLaboral.campos[itel]]
-            .forEach(element => {
-              element.valor = null;
-            });
-        }
-        this.formInfoExperienciaLaboral.campos[init].valor = this.organizacion.NumeroIdentificacion;
-        this.formInfoExperienciaLaboral.campos[inombre].valor = this.organizacion.Nombre;
-        this.formInfoExperienciaLaboral.campos[itipo].opciones.forEach(element => {
-          if (this.organizacion.TipoOrganizacion && element.Id === this.organizacion.TipoOrganizacion.Id) {
-            this.formInfoExperienciaLaboral.campos[itipo].valor = element;
-          }
-        });
-        if (this.organizacion.Ubicacion) {
-          // identificadores del tipo de relacion y atributo para formulario
-          if (this.organizacion.Ubicacion.AtributoUbicacion.Id === 1 &&
-            this.organizacion.Ubicacion.UbicacionEnte.TipoRelacionUbicacionEnte.Id === 3) {
-            this.formInfoExperienciaLaboral.campos[idir].valor = this.organizacion.Ubicacion.Valor;
-            this.formInfoExperienciaLaboral.campos[ipais].opciones.forEach(e => {
-              if (e.Id === this.organizacion.Ubicacion.UbicacionEnte.Lugar) {
-                this.formInfoExperienciaLaboral.campos[ipais].valor = e;
-              }
-            });
-          }
-        } else {
-          this.formInfoExperienciaLaboral.campos[idir].valor = null;
-          this.formInfoExperienciaLaboral.campos[ipais].valor = null;
-        }
-        if (this.organizacion.Contacto) {
-          this.organizacion.Contacto.forEach(element => {
-            if (element.TipoContacto.Id === 1) {
-              this.formInfoExperienciaLaboral.campos[itel].valor = element.Valor;
-            }
-            if (element.TipoContacto.Id === 3) {
-              this.formInfoExperienciaLaboral.campos[icorreo].valor = element.Valor;
-            }
-          });
-        } else {
-          this.formInfoExperienciaLaboral.campos[itel].valor = null;
-          this.formInfoExperienciaLaboral.campos[icorreo].valor = null;
-        }
-        [this.formInfoExperienciaLaboral.campos[inombre],
-        this.formInfoExperienciaLaboral.campos[itipo],
-        this.formInfoExperienciaLaboral.campos[idir],
-        this.formInfoExperienciaLaboral.campos[icorreo],
-        this.formInfoExperienciaLaboral.campos[ipais],
-        this.formInfoExperienciaLaboral.campos[itel]]
-          .forEach(element => {
-            element.deshabilitar = element.valor ? true : false
-          });
-      },
-        (error: HttpErrorResponse) => {
-          if (error.status === 200 || error.status.toString() === '200') {
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.no_encontrado'),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-                this.translate.instant('GLOBAL.nombre_empresa'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-            [this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')],
-            this.formInfoExperienciaLaboral.campos[this.getIndexForm('TipoOrganizacion')],
-            this.formInfoExperienciaLaboral.campos[this.getIndexForm('Direccion')],
-            this.formInfoExperienciaLaboral.campos[this.getIndexForm('Correo')],
-            this.formInfoExperienciaLaboral.campos[this.getIndexForm('Pais')],
-            this.formInfoExperienciaLaboral.campos[this.getIndexForm('Telefono')]]
-              .forEach(element => {
-                element.deshabilitar = element.valor ? true : false
-              });
-          } else {
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-                this.translate.instant('GLOBAL.nombre_empresa'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-            [this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')],
-            this.formInfoExperienciaLaboral.campos[this.getIndexForm('TipoOrganizacion')],
-            this.formInfoExperienciaLaboral.campos[this.getIndexForm('Direccion')],
-            this.formInfoExperienciaLaboral.campos[this.getIndexForm('Correo')],
-            this.formInfoExperienciaLaboral.campos[this.getIndexForm('Pais')],
-            this.formInfoExperienciaLaboral.campos[this.getIndexForm('Telefono')]]
-              .forEach(element => {
-                element.deshabilitar = element.valor ? true : false
-              });
-          }
-        });
-    }
+  // searchOrganizacion(data: any): void {
+  //   const nit = typeof data === 'string' ? data : data.data.Nit;
+  //   this.organizacion = new Organizacion();
+  //   this.campusMidService.get('organizacion/identificacion/?Id=' + nit + '&TipoId=5')
+  //     .subscribe(res => {
+  //       const init = this.getIndexForm('Nit');
+  //       const inombre = this.getIndexForm('NombreEmpresa');
+  //       const itipo = this.getIndexForm('TipoOrganizacion');
+  //       const idir = this.getIndexForm('Direccion');
+  //       const itel = this.getIndexForm('Telefono');
+  //       const icorreo = this.getIndexForm('Correo');
+  //       const ipais = this.getIndexForm('Pais');
+  //       this.organizacion = new Organizacion();
+  //       if (res !== null) {
+  //         this.organizacion = <Organizacion>res;
+  //       } else {
+  //         this.organizacion.NumeroIdentificacion = nit;
+  //         [this.formInfoExperienciaLaboral.campos[inombre],
+  //         this.formInfoExperienciaLaboral.campos[itipo],
+  //         this.formInfoExperienciaLaboral.campos[idir],
+  //         this.formInfoExperienciaLaboral.campos[icorreo],
+  //         this.formInfoExperienciaLaboral.campos[ipais],
+  //         this.formInfoExperienciaLaboral.campos[itel]]
+  //           .forEach(element => {
+  //             element.valor = null;
+  //           });
+  //       }
+  //       this.formInfoExperienciaLaboral.campos[init].valor = this.organizacion.NumeroIdentificacion;
+  //       this.formInfoExperienciaLaboral.campos[inombre].valor = this.organizacion.Nombre;
+  //       this.formInfoExperienciaLaboral.campos[itipo].opciones.forEach(element => {
+  //         if (this.organizacion.TipoOrganizacion && element.Id === this.organizacion.TipoOrganizacion.Id) {
+  //           this.formInfoExperienciaLaboral.campos[itipo].valor = element;
+  //         }
+  //       });
+  //       if (this.organizacion.Ubicacion) {
+  //         // identificadores del tipo de relacion y atributo para formulario
+  //         if (this.organizacion.Ubicacion.AtributoUbicacion.Id === 1 &&
+  //           this.organizacion.Ubicacion.UbicacionEnte.TipoRelacionUbicacionEnte.Id === 3) {
+  //           this.formInfoExperienciaLaboral.campos[idir].valor = this.organizacion.Ubicacion.Valor;
+  //           this.formInfoExperienciaLaboral.campos[ipais].opciones.forEach(e => {
+  //             if (e.Id === this.organizacion.Ubicacion.UbicacionEnte.Lugar) {
+  //               this.formInfoExperienciaLaboral.campos[ipais].valor = e;
+  //             }
+  //           });
+  //         }
+  //       } else {
+  //         this.formInfoExperienciaLaboral.campos[idir].valor = null;
+  //         this.formInfoExperienciaLaboral.campos[ipais].valor = null;
+  //       }
+  //       if (this.organizacion.Contacto) {
+  //         this.organizacion.Contacto.forEach(element => {
+  //           if (element.TipoContacto.Id === 1) {
+  //             this.formInfoExperienciaLaboral.campos[itel].valor = element.Valor;
+  //           }
+  //           if (element.TipoContacto.Id === 3) {
+  //             this.formInfoExperienciaLaboral.campos[icorreo].valor = element.Valor;
+  //           }
+  //         });
+  //       } else {
+  //         this.formInfoExperienciaLaboral.campos[itel].valor = null;
+  //         this.formInfoExperienciaLaboral.campos[icorreo].valor = null;
+  //       }
+  //       [this.formInfoExperienciaLaboral.campos[inombre],
+  //       this.formInfoExperienciaLaboral.campos[itipo],
+  //       this.formInfoExperienciaLaboral.campos[idir],
+  //       this.formInfoExperienciaLaboral.campos[icorreo],
+  //       this.formInfoExperienciaLaboral.campos[ipais],
+  //       this.formInfoExperienciaLaboral.campos[itel]]
+  //         .forEach(element => {
+  //           element.deshabilitar = element.valor ? true : false
+  //         });
+  //     },
+  //       (error: HttpErrorResponse) => {
+  //         if (error.status === 200 || error.status.toString() === '200') {
+  //           Swal({
+  //             type: 'error',
+  //             title: error.status + '',
+  //             text: this.translate.instant('ERROR.no_encontrado'),
+  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
+  //               this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+  //               this.translate.instant('GLOBAL.nombre_empresa'),
+  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  //           });
+  //           [this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')],
+  //           this.formInfoExperienciaLaboral.campos[this.getIndexForm('TipoOrganizacion')],
+  //           this.formInfoExperienciaLaboral.campos[this.getIndexForm('Direccion')],
+  //           this.formInfoExperienciaLaboral.campos[this.getIndexForm('Correo')],
+  //           this.formInfoExperienciaLaboral.campos[this.getIndexForm('Pais')],
+  //           this.formInfoExperienciaLaboral.campos[this.getIndexForm('Telefono')]]
+  //             .forEach(element => {
+  //               element.deshabilitar = element.valor ? true : false
+  //             });
+  //         } else {
+  //           Swal({
+  //             type: 'error',
+  //             title: error.status + '',
+  //             text: this.translate.instant('ERROR.' + error.status),
+  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
+  //               this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+  //               this.translate.instant('GLOBAL.nombre_empresa'),
+  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  //           });
+  //           [this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')],
+  //           this.formInfoExperienciaLaboral.campos[this.getIndexForm('TipoOrganizacion')],
+  //           this.formInfoExperienciaLaboral.campos[this.getIndexForm('Direccion')],
+  //           this.formInfoExperienciaLaboral.campos[this.getIndexForm('Correo')],
+  //           this.formInfoExperienciaLaboral.campos[this.getIndexForm('Pais')],
+  //           this.formInfoExperienciaLaboral.campos[this.getIndexForm('Telefono')]]
+  //             .forEach(element => {
+  //               element.deshabilitar = element.valor ? true : false
+  //             });
+  //         }
+  //       });
+  //   }
 
   // createInfoExperienciaLaboral(infoExperienciaLaboral: any): void {
   //   const opt: any = {
@@ -652,62 +652,62 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     this.result.emit(this.percentage);
   }
 
-  validarForm(event) {
-    if (event.valid) {
-      const experiencia = {
-        Persona: this.ente_id,
-        Actividades: event.data.InfoExperienciaLaboral.Actividades,
-        FechaInicio: event.data.InfoExperienciaLaboral.FechaInicio,
-        FechaFinalizacion: event.data.InfoExperienciaLaboral.FechaFinalizacion,
-        Organizacion: this.organizacion.Ente ? this.organizacion.Id : null,
-        TipoDedicacion: event.data.InfoExperienciaLaboral.TipoDedicacion,
-        Cargo: event.data.InfoExperienciaLaboral.Cargo,
-        TipoVinculacion: event.data.InfoExperienciaLaboral.TipoVinculacion,
-        Soporte: event.data.InfoExperienciaLaboral.Soporte,
-      }
-      const org = {
-        NumeroIdentificacion: event.data.InfoExperienciaLaboral.Nit,
-        Direccion: event.data.InfoExperienciaLaboral.Direccion,
-        Pais: event.data.InfoExperienciaLaboral.Pais,
-        // LugarExpedicion: ,
-        Nombre: event.data.InfoExperienciaLaboral.NombreEmpresa,
-        TipoOrganizacion: event.data.InfoExperienciaLaboral.TipoOrganizacion,
-        TipoIdentificacion: {
-          Id: 5, // tipo nit
-        },
-        Contacto: [],
-        // "FechaExpedicion": "string"
-      }
+  // validarForm(event) {
+  //   if (event.valid) {
+  //     const experiencia = {
+  //       Persona: this.ente_id,
+  //       Actividades: event.data.InfoExperienciaLaboral.Actividades,
+  //       FechaInicio: event.data.InfoExperienciaLaboral.FechaInicio,
+  //       FechaFinalizacion: event.data.InfoExperienciaLaboral.FechaFinalizacion,
+  //       Organizacion: this.organizacion.Ente ? this.organizacion.Id : null,
+  //       TipoDedicacion: event.data.InfoExperienciaLaboral.TipoDedicacion,
+  //       Cargo: event.data.InfoExperienciaLaboral.Cargo,
+  //       TipoVinculacion: event.data.InfoExperienciaLaboral.TipoVinculacion,
+  //       Soporte: event.data.InfoExperienciaLaboral.Soporte,
+  //     }
+  //     const org = {
+  //       NumeroIdentificacion: event.data.InfoExperienciaLaboral.Nit,
+  //       Direccion: event.data.InfoExperienciaLaboral.Direccion,
+  //       Pais: event.data.InfoExperienciaLaboral.Pais,
+  //       // LugarExpedicion: ,
+  //       Nombre: event.data.InfoExperienciaLaboral.NombreEmpresa,
+  //       TipoOrganizacion: event.data.InfoExperienciaLaboral.TipoOrganizacion,
+  //       TipoIdentificacion: {
+  //         Id: 5, // tipo nit
+  //       },
+  //       Contacto: [],
+  //       // "FechaExpedicion": "string"
+  //     }
 
-      if (event.data.InfoExperienciaLaboral.Telefono) {
-        org.Contacto.push({
-          TipoContacto: { Id: 1 }, // corresponde al tipo telefono
-          Valor: event.data.InfoExperienciaLaboral.Telefono,
-        });
-      }
-      if (event.data.InfoExperienciaLaboral.Correo) {
-        org.Contacto.push({
-          TipoContacto: { Id: 3 }, // corresponde al tipo correo
-          Valor: event.data.InfoExperienciaLaboral.Correo,
-        });
-      }
+  //     if (event.data.InfoExperienciaLaboral.Telefono) {
+  //       org.Contacto.push({
+  //         TipoContacto: { Id: 1 }, // corresponde al tipo telefono
+  //         Valor: event.data.InfoExperienciaLaboral.Telefono,
+  //       });
+  //     }
+  //     if (event.data.InfoExperienciaLaboral.Correo) {
+  //       org.Contacto.push({
+  //         TipoContacto: { Id: 3 }, // corresponde al tipo correo
+  //         Valor: event.data.InfoExperienciaLaboral.Correo,
+  //       });
+  //     }
 
-      if (this.info_experiencia_laboral === undefined) {
-        if (experiencia.Organizacion !== null) {
-          // this.createInfoExperienciaLaboral(experiencia);
-        } else {
-          // this.createOrganizacion(org, experiencia);
-        }
-      } else {
-        if (this.organizacion.Ente) {
-          // this.updateInfoExperienciaLaboral(experiencia);
-        } else {
-          // this.createOrganizacion(org, experiencia);
-        }
-      }
-      this.result.emit(event);
-    }
-  }
+  //     if (this.info_experiencia_laboral === undefined) {
+  //       if (experiencia.Organizacion !== null) {
+  //         // this.createInfoExperienciaLaboral(experiencia);
+  //       } else {
+  //         // this.createOrganizacion(org, experiencia);
+  //       }
+  //     } else {
+  //       if (this.organizacion.Ente) {
+  //         // this.updateInfoExperienciaLaboral(experiencia);
+  //       } else {
+  //         // this.createOrganizacion(org, experiencia);
+  //       }
+  //     }
+  //     this.result.emit(event);
+  //   }
+  // }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({
