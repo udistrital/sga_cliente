@@ -77,7 +77,10 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     // this.loadOptionsTipoVinculacion();
     this.persona_id = this.users.getPersonaId();
     this.listService.findPais();
-    this.listService.findProgramaAcademico();
+    this.listService.findTipoOrganizacion();
+    this.listService.findTipoDedicacion();
+    this.listService.findTipoVinculacion();
+    this.listService.findCargo();
     this.loadLists();
   }
 

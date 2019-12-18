@@ -33,7 +33,7 @@ export const REDUCER_LIST = {
     TipoInscripcionUniversidad: 'ListTipoInscripcionUniversidad',
     TipoDedicacion: 'ListTipoDedicacion',
     TipoVinculacion: 'ListTipoVinculacion',
-    TIpoOrganizacion: 'ListTipoOrganizacion',
+    TipoOrganizacion: 'ListTipoOrganizacion',
     Cargo: 'ListCargo',
     // TipoPublicacionLibro: 'listReducerTipoPublicacionLibro',
 };
