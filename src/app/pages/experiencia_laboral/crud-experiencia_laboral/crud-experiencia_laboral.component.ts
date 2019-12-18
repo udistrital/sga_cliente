@@ -441,7 +441,8 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         this.formInfoExperienciaLaboral.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
         this.formInfoExperienciaLaboral.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
         this.formInfoExperienciaLaboral.campos[ipais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : {Id: 0, Nombre: 'No registrado'};
-        this.formInfoExperienciaLaboral.campos[itipo].valor = (res.TipoTerceroId && res.TipoTerceroId.Id) ? res.TipoTerceroId.TipoTerceroId : {Id: 0, Nombre: 'No registrado'};
+        this.formInfoExperienciaLaboral.campos[itipo].valor = (res.TipoTerceroId && res.TipoTerceroId.Id) ?
+          res.TipoTerceroId.TipoTerceroId : {Id: 0, Nombre: 'No registrado'};
         // this.info_formacion_academica = {
         //   Nit: res.NumeroIdentificacion,
         //   NombreUniversidad: res.NombreCompleto,
