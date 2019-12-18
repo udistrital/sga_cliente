@@ -617,7 +617,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.TipoDedicacion).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.experienciaService.get('tipo_dedicacion/?limit=0')
+          this.experienciaService.get('tipo_dedicacion/?limit=0&query=Activo:true')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.TipoDedicacion, result);
@@ -635,7 +635,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.TipoVinculacion).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.experienciaService.get('tipo_vinculacion/?limit=0')
+          this.experienciaService.get('tipo_vinculacion/?limit=0&query=Activo:true')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.TipoVinculacion, result);
@@ -649,11 +649,29 @@ export class ListService {
     );
   }
 
+  public findTipoOrganizacion() {
+    this.store.select(REDUCER_LIST.TipoOrganizacion).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('tipo_tercero/?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoOrganizacion, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoOrganizacion, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   public findCargo() {
     this.store.select(REDUCER_LIST.Cargo).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.experienciaService.get('cargo/?limit=0')
+          this.experienciaService.get('cargo/?limit=0&query=Activo:true')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.Cargo, result);

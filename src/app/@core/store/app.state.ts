@@ -57,5 +57,6 @@ export interface IAppState {
   listTipoDedicacion: InfoComplementaria[],
   listTipoVinculacion: InfoComplementaria[],
   listCargo: InfoComplementaria[],
+  listTipoOrganizacion: InfoComplementaria[],
   // listTipoPublicacionLibro: TipoPublicacionLibro[],
 }

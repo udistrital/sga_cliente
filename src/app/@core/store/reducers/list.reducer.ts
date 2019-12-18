@@ -309,6 +309,15 @@ export class ListReducer {
     }
   }
 
+  static ListReducerTipoOrganizacion(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.TipoOrganizacion:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
   static ListReducerCargo(state: Array<any> = new Array, action) {
     switch (action.type) {
       case REDUCER_LIST.Cargo:
