@@ -1,5 +1,5 @@
 import { EnteService } from './../../../@core/data/ente.service';
-import { CampusMidService } from './../../../@core/data/campus_mid.service';
+import { SgaMidService } from './../../../@core/data/sga_mid.service';
 import { Organizacion } from './../../../@core/data/models/ente/organizacion';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FORM_EXPERIENCIA_LABORAL } from './form-experiencia_laboral';
@@ -54,7 +54,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     private translate: TranslateService,
     private toasterService: ToasterService,
     private organizacionService: OrganizacionService,
-    private campusMidService: CampusMidService,
+    private sgaMidService: SgaMidService,
     private ubicacionesService: UbicacionService,
     private experienciaService: ExperienciaService,
     private documentoService: DocumentoService,
@@ -398,7 +398,134 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   //       });
   // }
 
-  // searchOrganizacion(data: any): void {
+
+
+  searchOrganizacion(data: any): void {
+    const nit = typeof data === 'string' ? data : data.data.Nit;
+    const init = this.getIndexForm('Nit');
+    const inombre = this.getIndexForm('NombreEmpresa');
+    const itipo = this.getIndexForm('TipoOrganizacion');
+    const idir = this.getIndexForm('Direccion');
+    const itel = this.getIndexForm('Telefono');
+    const icorreo = this.getIndexForm('Correo');
+    const ipais = this.getIndexForm('Pais');
+    // this.sgaMidService.get(`tercero/identificacion/?Id=800088702&TipoId=7`)
+    this.sgaMidService.get(`tercero/identificacion/?Id=${nit}&TipoId=7`)
+      .subscribe((res: any) => {
+        this.formInfoExperienciaLaboral.campos[init].valor = res.NumeroIdentificacion;
+        this.formInfoExperienciaLaboral.campos[inombre].valor = res.NombreCompleto;
+        this.formInfoExperienciaLaboral.campos[idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
+        this.formInfoExperienciaLaboral.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
+        this.formInfoExperienciaLaboral.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
+        this.formInfoExperienciaLaboral.campos[ipais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : {Id: 0, Nombre: 'No registrado'};
+        this.formInfoExperienciaLaboral.campos[itipo].valor = (res.TipoTerceroId && res.TipoTerceroId.Id) ? res.TipoTerceroId.TipoTerceroId : {Id: 0, Nombre: 'No registrado'};
+        // this.info_formacion_academica = {
+        //   Nit: res.NumeroIdentificacion,
+        //   NombreUniversidad: res.NombreCompleto,
+        //   Direccion: (res.Direccion) ? res.Direccion : 'No registrado',
+        //   Telefono: (res.Telefono) ? res.Telefono : 'No registrado',
+        //   Correo: (res.Correo) ? res.Correo : 'No registrado',
+        // }
+        /*
+        console.log();
+        this.organizacion = new Organizacion();
+        if (res !== null) {
+          this.organizacion = <Organizacion>res;
+        } else {
+          this.organizacion.NumeroIdentificacion = nit;
+          [this.formInfoFormacionAcademica.campos[inombre],
+          this.formInfoFormacionAcademica.campos[idir],
+          this.formInfoFormacionAcademica.campos[icorreo],
+          this.formInfoFormacionAcademica.campos[ipais],
+          this.formInfoFormacionAcademica.campos[itel]]
+            .forEach(element => {
+              element.valor = null;
+            });
+        }
+        // this.loadInfoPostgrados(this.organizacion.Ente);
+        this.formInfoFormacionAcademica.campos[init].valor = this.organizacion.NumeroIdentificacion;
+        this.formInfoFormacionAcademica.campos[inombre].valor = this.organizacion.Nombre;
+        if (this.organizacion.Ubicacion) {
+          // identificadores del tipo de relacion y atributo para formulario
+          if (this.organizacion.Ubicacion.AtributoUbicacion.Id === 1 && this.organizacion.Ubicacion.UbicacionEnte.TipoRelacionUbicacionEnte.Id === 3) {
+            this.formInfoFormacionAcademica.campos[idir].valor = this.organizacion.Ubicacion.Valor;
+            let existe = false;
+            this.formInfoFormacionAcademica.campos[ipais].opciones.forEach(e => {
+              if (e.Id === this.organizacion.Ubicacion.UbicacionEnte.Lugar) {
+                this.formInfoFormacionAcademica.campos[ipais].valor = e;
+                existe = true;
+              }
+            });
+            if (!existe) {
+              this.ubicacionesService.get('lugar/' + this.organizacion.Ubicacion.UbicacionEnte.Lugar)
+                .subscribe(reslugar => {
+                  if (reslugar !== null) {
+                    const lugar = <Lugar>reslugar;
+                    // this.formInfoFormacionAcademica.campos[this.getIndexForm('Pais')].opciones.push(lugar);
+                    this.formInfoFormacionAcademica.campos[ipais].valor = lugar;
+                  }
+                },
+                  (error: HttpErrorResponse) => {
+                    Swal({
+                      type: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                        this.translate.instant('GLOBAL.formacion_academica') + '|' +
+                        this.translate.instant('GLOBAL.pais_universidad'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                  });
+            }
+          }
+        } else {
+          this.formInfoFormacionAcademica.campos[idir].valor = null;
+          this.formInfoFormacionAcademica.campos[ipais].valor = null;
+        }
+        if (this.organizacion.Contacto) {
+          this.organizacion.Contacto.forEach(element => {
+            if (element.TipoContacto.Id === 1) {
+              this.formInfoFormacionAcademica.campos[itel].valor = element.Valor;
+            }
+            if (element.TipoContacto.Id === 3) {
+              this.formInfoFormacionAcademica.campos[icorreo].valor = element.Valor;
+            }
+          });
+        } else {
+          this.formInfoFormacionAcademica.campos[itel].valor = null;
+          this.formInfoFormacionAcademica.campos[icorreo].valor = null;
+        }
+         */
+        [this.formInfoExperienciaLaboral.campos[inombre],
+        this.formInfoExperienciaLaboral.campos[idir],
+        this.formInfoExperienciaLaboral.campos[icorreo],
+        this.formInfoExperienciaLaboral.campos[ipais],
+        this.formInfoExperienciaLaboral.campos[itipo],
+        this.formInfoExperienciaLaboral.campos[itel]]
+          .forEach(element => {
+            element.deshabilitar = element.valor ? true : false
+          });
+      },
+      (error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          [this.formInfoExperienciaLaboral.campos[inombre],
+          this.formInfoExperienciaLaboral.campos[idir],
+          this.formInfoExperienciaLaboral.campos[icorreo],
+          this.formInfoExperienciaLaboral.campos[ipais],
+          this.formInfoExperienciaLaboral.campos[itipo],
+          this.formInfoExperienciaLaboral.campos[itel]]
+            .forEach(element => {
+              element.deshabilitar = false;
+            });
+        }
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('experiencia_laboral.error_cargar_empresa'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
   //   const nit = typeof data === 'string' ? data : data.data.Nit;
   //   this.organizacion = new Organizacion();
   //   this.campusMidService.get('organizacion/identificacion/?Id=' + nit + '&TipoId=5')
@@ -511,7 +638,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   //             });
   //         }
   //       });
-  //   }
+    }
 
   // createInfoExperienciaLaboral(infoExperienciaLaboral: any): void {
   //   const opt: any = {
