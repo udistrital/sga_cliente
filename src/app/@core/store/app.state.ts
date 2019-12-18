@@ -54,5 +54,6 @@ export interface IAppState {
   listMediosEnteroUniversidad: InfoComplementaria[],
   listSePresentaAUniversidadPor: InfoComplementaria[],
   listTipoInscripcionUniversidad: InfoComplementaria[],
+  listTipoDedicacion: InfoComplementaria[],
   // listTipoPublicacionLibro: TipoPublicacionLibro[],
 }

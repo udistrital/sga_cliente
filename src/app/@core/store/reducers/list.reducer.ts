@@ -290,4 +290,13 @@ export class ListReducer {
         return state;
     }
   }
+
+  static ListReducerTipoDedicacion(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.TipoDedicacion:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
 }

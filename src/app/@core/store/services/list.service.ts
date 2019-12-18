@@ -10,6 +10,7 @@ import { IdiomaService } from '../../data/idioma.service';
 import { UbicacionService } from '../../data/ubicacion.service';
 import { ProyectoAcademicoService } from '../../data/proyecto_academico.service';
 import { EnteService } from '../../data/ente.service';
+import { ExperienciaService } from '../../data/experiencia.service';
 @Injectable()
 export class ListService {
 
@@ -21,6 +22,7 @@ export class ListService {
     private tercerosService: TercerosService,
     private ubicacionService: UbicacionService,
     private programaAcademicoService: ProyectoAcademicoService,
+    private experienciaService: ExperienciaService,
     // private producccionAcademicaService: ProduccionAcademicaService,
     private enteService: EnteService,
     private store: Store<IAppState>) {
@@ -604,6 +606,24 @@ export class ListService {
               },
               error => {
                 this.addList(REDUCER_LIST.TipoInscripcionUniversidad, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findTipoDedicacion() {
+    this.store.select(REDUCER_LIST.TipoDedicacion).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.experienciaService.get('tipo_dedicacion/?limit=0')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoDedicacion, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoDedicacion, []);
               },
             );
         }
