@@ -1,4 +1,4 @@
-import { EnteService } from './../../../@core/data/ente.service';
+import { UserService } from '../../../@core/data/users.service';
 import { SgaMidService } from './../../../@core/data/sga_mid.service';
 import { Organizacion } from './../../../@core/data/models/ente/organizacion';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
@@ -14,6 +14,9 @@ import { ExperienciaService } from '../../../@core/data/experiencia.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ListService } from '../../../@core/store/services/list.service';
+import { IAppState } from '../../../@core/store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ngx-crud-experiencia-laboral',
@@ -48,7 +51,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   temp: any;
   clean: boolean;
   percentage: number;
-  loading: boolean;
+  persona_id: number;
 
   constructor(
     private translate: TranslateService,
@@ -59,7 +62,9 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     private experienciaService: ExperienciaService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
-    private enteService: EnteService) {
+    private store: Store<IAppState>,
+    private listService: ListService,
+    private users: UserService) {
     this.formInfoExperienciaLaboral = FORM_EXPERIENCIA_LABORAL;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -70,7 +75,22 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     // this.loadOptionsCargo();
     // this.loadOptionsTipoDedicacion();
     // this.loadOptionsTipoVinculacion();
-    this.loading = false;
+    this.persona_id = this.users.getPersonaId();
+    this.listService.findPais();
+    this.listService.findProgramaAcademico();
+    this.loadLists();
+  }
+
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+       this.formInfoExperienciaLaboral.campos[this.getIndexForm('Pais')].opciones = list.listPais[0];
+       this.formInfoExperienciaLaboral.campos[this.getIndexForm('TipoOrganizacion')].opciones = list.listTipoOrganizacion[0];
+       this.formInfoExperienciaLaboral.campos[this.getIndexForm('TipoDedicacion')].opciones = list.listTipoDedicacion[0];
+       this.formInfoExperienciaLaboral.campos[this.getIndexForm('TipoVinculacion')].opciones = list.listTipoVinculacion[0];
+       this.formInfoExperienciaLaboral.campos[this.getIndexForm('Cargo')].opciones = list.listCargo[0];
+      },
+   );
   }
 
   construirForm() {
