@@ -566,7 +566,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                       this.clean = !this.clean;
                     } else {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
-                      this.translate.instant('informacion_academica.informacion_academica_no_registrada'));
+                        this.translate.instant('informacion_academica.informacion_academica_no_registrada'));
                     }
                   },
                     (error: HttpErrorResponse) => {
@@ -602,7 +602,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     this.result.emit(this.percentage);
   }
 
-  async validarForm(event) {
+  validarForm(event) {
     if (event.valid) {
       const formData = event.data.InfoFormacionAcademica;
       const universidadData = {
