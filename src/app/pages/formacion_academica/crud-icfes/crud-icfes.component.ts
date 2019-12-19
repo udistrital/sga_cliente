@@ -407,7 +407,7 @@ export class CrudIcfesComponent implements OnInit {
              'DireccionColegio': {
                   'InfoComplementariaId': {
                     'Id': 54,
-                  }, 
+                  },
                   'Dato': JSON.stringify(this.formIcfes.campos[this.getIndexForm('DireccionColegio')].valor),
                   'Activo': true,
              },
@@ -442,7 +442,7 @@ export class CrudIcfesComponent implements OnInit {
                  });
                });
          }
-       }); 
+       });
   }
 
   validarForm(event) {
@@ -500,7 +500,7 @@ export class CrudIcfesComponent implements OnInit {
     }else {
       console.info('crear colegio')
       console.info(this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].valor.Id)
-        this.createColegioeIcfesColegio();    
+        this.createColegioeIcfesColegio();
     }
   }
 
