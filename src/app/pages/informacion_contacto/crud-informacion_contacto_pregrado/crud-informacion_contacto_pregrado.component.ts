@@ -482,6 +482,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
       if (this.info_informacion_contacto === undefined) {
          this.createInformacionContacto(event.data.InformacionContacto);
       } else {
+        this.createInformacionContacto(event.data.InformacionContacto); // ojo temporal 
         // this.updateInformacionContacto(event.data.InformacionContacto);
       }
     }

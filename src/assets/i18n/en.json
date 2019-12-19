@@ -465,7 +465,9 @@
         "colegio": "College where grade 11 culminated",
         "placeholder_colegio": "E.g: National College",
         "Nombrecolegio": "Name of the school where grade 11 ended",
-        "placeholder_Nombrecolegio": "E.g: National College"
+        "placeholder_Nombrecolegio": "E.g: National College",
+        "DireccionColegio": "Address of the school where grade 11 ended",
+        "placeholder_DireccionColegio": "E.g: Street 1 # 2 -03"
     },
 
     "ERROR": {

@@ -150,7 +150,7 @@
                     </ngx-crud-informacion-contacto_pregrado>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}"[active]="info_familiar">
-                    <ngx-crud-informacion-familiar  info_persona_id={{this.info_persona_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    <ngx-crud-informacion-familiar  info_persona_id={{this.info_persona_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,3)">
                     </ngx-crud-informacion-familiar>
                 </nb-tab>
             </nb-tabset>
@@ -284,10 +284,10 @@
 
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}" active=true>
-                    <ngx-crud-icfes (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
+                    <ngx-crud-icfes inscripcion_id={{this.info_persona_id}} (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.universidad' | translate }}">
-                    <ngx-crud-preguntas (result)="setPercentage_acad($event,0)"></ngx-crud-preguntas>
+                    <ngx-crud-preguntas info_formacion_academica_id={{this.info_persona_id}} (result)="setPercentage_acad($event,0)"></ngx-crud-preguntas>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>

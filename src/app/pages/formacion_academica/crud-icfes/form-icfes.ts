@@ -104,7 +104,7 @@ export let FORM_ICFES = {
   label_i18n: 'tipo_colegio',
   placeholder_i18n: 'tipo_colegio',
   requerido: true,
-  entrelazado: true,
+ 
   ocultar: true,
   tipo: 'Lugar',
   key: 'Id',
@@ -115,6 +115,7 @@ export let FORM_ICFES = {
     'Id': 'Privado',
   },
 ],
+entrelazado: true,
 },
 {
   etiqueta: 'select',
@@ -134,6 +135,16 @@ export let FORM_ICFES = {
   nombre: 'NombreColegio',
   label_i18n: 'Nombrecolegio',
   placeholder_i18n: 'Nombrecolegio',
+  requerido: true,
+  ocultar: true,
+  tipo: 'text',
+},
+{
+  etiqueta: 'input',
+  claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
+  nombre: 'DireccionColegio',
+  label_i18n: 'DireccionColegio',
+  placeholder_i18n: 'DireccionColegio',
   requerido: true,
   ocultar: true,
   tipo: 'text',
