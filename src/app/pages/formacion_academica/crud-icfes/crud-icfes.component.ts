@@ -32,7 +32,7 @@ export class CrudIcfesComponent implements OnInit {
   @Input('inscripcion_id')
   set inscripcion(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
-    console.info('ID_FormacionAcademica_Pregrado' + this.inscripcion_id)  
+    console.info('ID_FormacionAcademica_Pregrado' + this.inscripcion_id)
     // this.loadInfoFormacionAcademica();
   }
 
@@ -395,26 +395,26 @@ export class CrudIcfesComponent implements OnInit {
      Swal(opt)
        .then((willDelete) => {
          this.loading = true;
-         if (willDelete.value) {       
+         if (willDelete.value) {
            this.datosPost = {
-             'TerceroColegio':{
-              'NombreCompleto':String(this.formIcfes.campos[this.getIndexForm('NombreColegio')].valor),
-              'TipoContribuyenteId':{
+             'TerceroColegio': {
+              'NombreCompleto': String(this.formIcfes.campos[this.getIndexForm('NombreColegio')].valor),
+              'TipoContribuyenteId': {
                 'Id': 2,
               },
               'Activo': false,
              },
-             'DireccionColegio':{
+             'DireccionColegio': {
                   'InfoComplementariaId': {
-                    'Id':54,
+                    'Id': 54,
                   }, 
                   'Dato': JSON.stringify(this.formIcfes.campos[this.getIndexForm('DireccionColegio')].valor),
                   'Activo': true,
              },
              'UbicacionColegio': {
               'InfoComplementariaId': {
-                'Id':92,
-              }, 
+                'Id': 92,
+              },
               'Dato': JSON.stringify(this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].valor.Id),
               'Activo': true,
              },
@@ -447,7 +447,7 @@ export class CrudIcfesComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid && String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
-    String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota') { 
+    String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota') {
       console.info('No crear colegio')
       // const formData = event.data.InfoIcfes;
       // const tercero = {
@@ -500,8 +500,7 @@ export class CrudIcfesComponent implements OnInit {
     }else {
       console.info('crear colegio')
       console.info(this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].valor.Id)
-        this.createColegioeIcfesColegio();
-    
+        this.createColegioeIcfesColegio();    
     }
   }
 
