@@ -103,8 +103,7 @@ export let FORM_ICFES = {
   nombre: 'Tipo',
   label_i18n: 'tipo_colegio',
   placeholder_i18n: 'tipo_colegio',
-  requerido: true,
- 
+  requerido: true, 
   ocultar: true,
   tipo: 'Lugar',
   key: 'Id',
