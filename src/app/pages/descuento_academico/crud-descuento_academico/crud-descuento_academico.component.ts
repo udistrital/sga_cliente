@@ -463,82 +463,82 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   //       });
   // }
 
-  // createDescuentoAcademico(DescuentoAcademico: any): void {
-  //   const opt: any = {
-  //     title: this.translate.instant('GLOBAL.crear'),
-  //     text: this.translate.instant('GLOBAL.crear') + '?',
-  //     icon: 'warning',
-  //     buttons: true,
-  //     dangerMode: true,
-  //     showCancelButton: true,
-  //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-  //   };
-  //   Swal(opt)
-  //     .then((willDelete) => {
-  //       this.loading = true;
-  //       if (willDelete.value) {
-  //         const files = [];
-  //         this.info_descuento_academico = <SolicitudDescuento>DescuentoAcademico;
-  //         this.info_descuento_academico.PersonaId = 1 * this.persona;
-  //         this.info_descuento_academico.PeriodoId = this.periodo;
-  //         this.info_descuento_academico.DescuentosDependenciaId = this.info_descuento_academico.DescuentoDependencia;
-  //         if (this.info_descuento_academico.Documento.file !== undefined) {
-  //           files.push({
-  //             nombre: this.autenticationService.getPayload().sub, key: 'SoporteDescuento',
-  //             file: this.info_descuento_academico.Documento.file, IdDocumento: 7,
-  //           });
-  //         }
-  //         this.nuxeoService.getDocumentos$(files, this.documentoService)
-  //           .subscribe(response => {
-  //             if (Object.keys(response).length === files.length) {
-  //               const filesUp = <any>response;
-  //               if (filesUp['SoporteDescuento'] !== undefined) {
-  //                 this.info_descuento_academico.DocumentoId = filesUp['SoporteDescuento'].Id;
-  //               }
-  //               this.mid.post('descuento_academico/', this.info_descuento_academico)
-  //                 .subscribe(res => {
-  //                   const r = <any>res
-  //                   if (r !== null && r.Type !== 'error') {
-  //                     this.loading = false;
-  //                     this.eventChange.emit(true);
-  //                     this.showToast('info', this.translate.instant('GLOBAL.crear'),
-  //                       this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
-  //                       this.translate.instant('GLOBAL.confirmarCrear'));
-  //                     this.descuento_academico_id = 0;
-  //                     this.info_descuento_academico = undefined;
-  //                     this.clean = !this.clean;
-  //                   } else {
-  //                     this.showToast('error', this.translate.instant('GLOBAL.error'),
-  //                       this.translate.instant('GLOBAL.error'));
-  //                   }
-  //                 },
-  //                   (error: HttpErrorResponse) => {
-  //                     Swal({
-  //                       type: 'error',
-  //                       title: error.status + '',
-  //                       text: this.translate.instant('ERROR.' + error.status),
-  //                       footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                         this.translate.instant('GLOBAL.descuento_matricula'),
-  //                       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                     });
-  //                   });
-  //             }
-  //           },
-  //             (error: HttpErrorResponse) => {
-  //               Swal({
-  //                 type: 'error',
-  //                 title: error.status + '',
-  //                 text: this.translate.instant('ERROR.' + error.status),
-  //                 footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                   this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-  //                   this.translate.instant('GLOBAL.soporte_documento'),
-  //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //               });
-  //             });
-  //       }
-  //     });
-  // }
+  createDescuentoAcademico(DescuentoAcademico: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.crear'),
+      text: this.translate.instant('GLOBAL.crear') + '?',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        this.loading = true;
+        if (willDelete.value) {
+          const files = [];
+          this.info_descuento_academico = <SolicitudDescuento>DescuentoAcademico;
+          this.info_descuento_academico.PersonaId = 1 * this.persona;
+          this.info_descuento_academico.PeriodoId = this.periodo;
+          this.info_descuento_academico.DescuentosDependenciaId = this.info_descuento_academico.DescuentoDependencia;
+          if (this.info_descuento_academico.Documento.file !== undefined) {
+            files.push({
+              nombre: this.autenticationService.getPayload().sub, key: 'SoporteDescuento',
+              file: this.info_descuento_academico.Documento.file, IdDocumento: 7,
+            });
+          }
+          this.nuxeoService.getDocumentos$(files, this.documentoService)
+            .subscribe(response => {
+              if (Object.keys(response).length === files.length) {
+                const filesUp = <any>response;
+                if (filesUp['SoporteDescuento'] !== undefined) {
+                  this.info_descuento_academico.DocumentoId = filesUp['SoporteDescuento'].Id;
+                }
+                this.mid.post('descuento_academico/', this.info_descuento_academico)
+                  .subscribe(res => {
+                    const r = <any>res
+                    if (r !== null && r.Type !== 'error') {
+                      this.loading = false;
+                      this.eventChange.emit(true);
+                      this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                        this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
+                        this.translate.instant('GLOBAL.confirmarCrear'));
+                      this.descuento_academico_id = 0;
+                      this.info_descuento_academico = undefined;
+                      this.clean = !this.clean;
+                    } else {
+                      this.showToast('error', this.translate.instant('GLOBAL.error'),
+                        this.translate.instant('GLOBAL.error'));
+                    }
+                  },
+                    (error: HttpErrorResponse) => {
+                      Swal({
+                        type: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('GLOBAL.crear') + '-' +
+                          this.translate.instant('GLOBAL.descuento_matricula'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      });
+                    });
+              }
+            },
+              (error: HttpErrorResponse) => {
+                Swal({
+                  type: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.crear') + '-' +
+                    this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+                    this.translate.instant('GLOBAL.soporte_documento'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
+        }
+      });
+  }
 
   ngOnInit() {
     // this.loadDescuentoAcademico();
@@ -551,11 +551,12 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
-      if (this.info_descuento_academico === undefined) {
-        // this.crearNuevoDescuentoAcademico(event.data.SolicitudDescuento);
-      } else {
-        // this.updateDescuentoAcademico(event.data.SolicitudDescuento);
-      }
+      // if (this.info_descuento_academico === undefined) {
+      //   // this.crearNuevoDescuentoAcademico(event.data.SolicitudDescuento);
+      // } else {
+      //   // this.updateDescuentoAcademico(event.data.SolicitudDescuento);
+      // }
+      this.createDescuentoAcademico(event.data.SolicitudDescuento);
       this.result.emit(event);
     }
   }
