@@ -476,13 +476,16 @@ export class CrudIcfesComponent implements OnInit {
     if ( String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
     String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota') {
       console.info('No crear colegio')
-      const tercero = {
-        Id: this.persiona_id  || 1, // se debe cambiar solo por persona id
-      }
+      this.persiona_id =  Number(this.inscripcion_id);
       const inscripcion = {
         Id:  1, // se debe cambiar solo por inscripcion
       }
       const dataIcfesColegio = {
+        'Tercero': {
+          'TerceroId': {
+           'Id': this.persiona_id ,
+         },
+        },
         InscripcionPregrado: {
           Id: 0,
           InscripcionId: inscripcion,
