@@ -196,7 +196,7 @@ export class CrudIcfesComponent implements OnInit {
   loadOptionscolegiooficial():  void {
     let consultaColegio: Array<any> = [];
     const colegiosoficiales: Array<any> = [];
-      this.terceroService.get('tercero_tipo_tercero/?query=TipoTerceroId.Id:7' + ',TerceroId.Activo:true&limit=-1')
+      this.terceroService.get('tercero_tipo_tercero/?query=TipoTerceroId.Id:7' + ',TerceroId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaColegio = <Array<any>>res;
@@ -223,7 +223,7 @@ export class CrudIcfesComponent implements OnInit {
   loadOptionscolegioprivado():  void {
     let consultaColegio: Array<any> = [];
     const colegiosprivado: Array<any> = [];
-      this.terceroService.get('tercero_tipo_tercero/?query=TipoTerceroId.Id:12' + ',TerceroId.Activo:true&limit=-1')
+      this.terceroService.get('tercero_tipo_tercero/?query=TipoTerceroId.Id:12' + ',TerceroId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaColegio = <Array<any>>res;
@@ -502,7 +502,9 @@ export class CrudIcfesComponent implements OnInit {
           {
             // Semestres sin estudiar
             'Id': 0,
-            TerceroId: this.persiona_id,
+            'TerceroId': { 
+              'Id': this.persiona_id,
+            },
             InfoComplementariaId: this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor,
             Dato: JSON.stringify(this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor.Nombre),
             Activo: true,
