@@ -91,10 +91,10 @@ export class CrudDocumentoProgramaComponent implements OnInit {
       (list) => {
         if (list.listDocumentoPrograma[0]) {
           this.formDocumentoPrograma.campos[this.getIndexForm('DocumentoProgramaId')].opciones = list.listDocumentoPrograma[0].map((documentoPrograma) => {
-            return { 
+            return {
               Id: documentoPrograma.Id,
               Nombre: documentoPrograma.TipoDocumentoProgramaId.Id + '. ' + documentoPrograma.TipoDocumentoProgramaId.Nombre,
-            } 
+            }
           });
         }
       },
