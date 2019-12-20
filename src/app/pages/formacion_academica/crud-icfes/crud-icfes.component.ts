@@ -473,55 +473,42 @@ export class CrudIcfesComponent implements OnInit {
   }
 
   validarForm(event) {
-    if (event.valid && String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
+    if ( String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
     String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota') {
       console.info('No crear colegio')
-      // const formData = event.data.InfoIcfes;
-      // const tercero = {
-      //   Id: this.persiona_id  || 1, // se debe cambiar solo por persona id
-      // }
-      // const inscripcion = {
-      //   Id: this.inscripcion_id || 1, // se debe cambiar solo por inscripcion
-      // }
-      // const dataIcfesColegio = {
-      //   InscripcionPregrado: {
-      //     Id: 0,
-      //     InscripcionId: inscripcion,
-      //     TipoIcfesId: formData.TipoIcfes,
-      //     CodigoIcfes: formData.NúmeroRegistroIcfes,
-      //     TipoDocumentoIcfes: 1,
-      //     NumeroIdentificacionIcfes: 1,
-      //     AnoIcfes: Number(formData.NúmeroRegistroIcfes.substr(0, 4)),
-      //     Activo: true,
-      //     Valido: (formData.Valido.Id === 'Si') ? true : false,
-      //   },
-      //   InfoComplementariaTercero: [
-      //     {
-      //       // Localidad colegio
-      //       Id: 0,
-      //       TerceroId: tercero,
-      //       InfoComplementariaId: formData.LocalidadColegio,
-      //       Dato: JSON.stringify(formData.LocalidadColegio),
-      //       Activo: true,
-      //     },
-      //     {
-      //       // Tipo Colegio
-      //       Id: 0,
-      //       TerceroId: tercero,
-      //       InfoComplementariaId: formData.TipoColegio,
-      //       Dato: JSON.stringify(formData.TipoColegio),
-      //       Activo: true,
-      //     },
-      //     {
-      //       // Semestres sin estudiar
-      //       Id: 0,
-      //       TerceroId: tercero,
-      //       InfoComplementariaId: formData.numeroSemestres,
-      //       Dato: JSON.stringify(formData.numeroSemestres),
-      //       Activo: true,
-      //     },
-      //   ],
-      // }
+      const tercero = {
+        Id: this.persiona_id  || 1, // se debe cambiar solo por persona id
+      }
+      const inscripcion = {
+        Id:  1, // se debe cambiar solo por inscripcion
+      }
+      const dataIcfesColegio = {
+        InscripcionPregrado: {
+          Id: 0,
+          InscripcionId: inscripcion,
+          TipoIcfesId: this.formIcfes.campos[this.getIndexForm('TipoIcfes')].valor,
+          CodigoIcfes: this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor,
+          TipoDocumentoIcfes: 1,
+          NumeroIdentificacionIcfes: 1,
+          AnoIcfes: Number(this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor.substr(0, 4)),
+          Activo: true,
+          Valido: (this.formIcfes.campos[this.getIndexForm('Valido')].valor.Id === 'Si') ? true : false,
+        },
+        InfoComplementariaTercero: [
+
+          {
+            // Semestres sin estudiar
+            'Id': 0,
+            TerceroId: this.persiona_id,
+            InfoComplementariaId: this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor,
+            Dato: JSON.stringify(this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor.Nombre),
+            Activo: true,
+          },
+        ],
+        dataColegio: this.formIcfes.campos[this.getIndexForm('Colegio')].valor,
+      }
+      console.info(JSON.stringify(dataIcfesColegio));
+    
       // this.createIcfesColegio(dataIcfesColegio);
       this.result.emit(event);
     }else {
