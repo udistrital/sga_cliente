@@ -326,4 +326,13 @@ export class ListReducer {
         return state;
     }
   }
+
+  static ListReducerDocumentoPrograma(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.DocumentoPrograma:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
 }

@@ -35,5 +35,6 @@ export const REDUCER_LIST = {
     TipoVinculacion: 'ListTipoVinculacion',
     TipoOrganizacion: 'ListTipoOrganizacion',
     Cargo: 'ListCargo',
+    DocumentoPrograma: 'ListDocumentoPrograma',
     // TipoPublicacionLibro: 'listReducerTipoPublicacionLibro',
 };

@@ -11,6 +11,7 @@ import { UbicacionService } from '../../data/ubicacion.service';
 import { ProyectoAcademicoService } from '../../data/proyecto_academico.service';
 import { EnteService } from '../../data/ente.service';
 import { ExperienciaService } from '../../data/experiencia.service';
+import { DocumentoProgramaService } from '../../data/documento_programa.service';
 @Injectable()
 export class ListService {
 
@@ -25,6 +26,7 @@ export class ListService {
     private experienciaService: ExperienciaService,
     // private producccionAcademicaService: ProduccionAcademicaService,
     private enteService: EnteService,
+    private documentoProgramaService: DocumentoProgramaService,
     private store: Store<IAppState>) {
 
   }
@@ -678,6 +680,24 @@ export class ListService {
               },
               error => {
                 this.addList(REDUCER_LIST.Cargo, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findDocumentoPrograma() {
+    this.store.select(REDUCER_LIST.DocumentoPrograma).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.documentoProgramaService.get('documento_programa/?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.DocumentoPrograma, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.DocumentoPrograma, []);
               },
             );
         }
