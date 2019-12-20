@@ -416,11 +416,11 @@ export class CrudIcfesComponent implements OnInit {
                   Activo: true,
                   Valido: (this.formIcfes.campos[this.getIndexForm('Valido')].valor.Id === 'Si') ? true : false,
               },
-                'InfoComplementariaTercero': {    
+                'InfoComplementariaTercero': {
             // Semestres sin estudiar
             'Id': 0,
             TerceroId: this.persiona_id,
-            InfoComplementariaId:this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor,
+            InfoComplementariaId: this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor,
             Dato: JSON.stringify(this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor.Nombre),
             Activo: true,
           },
