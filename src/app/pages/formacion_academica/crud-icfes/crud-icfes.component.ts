@@ -507,7 +507,7 @@ export class CrudIcfesComponent implements OnInit {
         ],
         dataColegio: this.formIcfes.campos[this.getIndexForm('Colegio')].valor,
       }
-      console.info(JSON.stringify(dataIcfesColegio));    
+      console.info(JSON.stringify(dataIcfesColegio));
       // this.createIcfesColegio(dataIcfesColegio);
       this.result.emit(event);
     }else {
