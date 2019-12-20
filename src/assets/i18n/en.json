@@ -862,6 +862,12 @@
         "error_cargar_empresa": "An error happened loading the company information"
     },
     "documento_programa": {
+        "descuento_academico_no_registrado": "Academic discount not registered",
+        "descuento_academico_registrado": "Academic discount registered",
+        "documento_descuento_academico_no_registrado": "Error uploading support document",
+        "seguro_continuar_registrar": "Are you sure you want to register this academic discount?"
+    },
+    "descuento_academico": {
         "documento_programa_no_registrado": "Document not registered",
         "documento_programa_registrado": "Document registered",
         "documento_documento_programa_no_registrado": "Error uploading support document",

@@ -1,7 +1,7 @@
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { DescuentoAcademicoService } from '../../../@core/data/descuento_academico.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
@@ -75,7 +75,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     private documentoService: DocumentoService,
     private descuentoService: DescuentoAcademicoService,
     private inscripcionService: InscripcionService,
-    private mid: CampusMidService,
+    private sgaMidService: SgaMidService,
     private store: Store<IAppState>,
     private listService: ListService,
     private nuxeoService: NuxeoService,
@@ -466,7 +466,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   createDescuentoAcademico(DescuentoAcademico: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('GLOBAL.crear') + '?',
+      text: this.translate.instant('descuento_academico.seguro_continuar_registrar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -496,21 +496,20 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                 if (filesUp['SoporteDescuento'] !== undefined) {
                   this.info_descuento_academico.DocumentoId = filesUp['SoporteDescuento'].Id;
                 }
-                this.mid.post('descuento_academico/', this.info_descuento_academico)
+                this.sgaMidService.post('descuento_academico/', this.info_descuento_academico)
                   .subscribe(res => {
                     const r = <any>res
                     if (r !== null && r.Type !== 'error') {
                       this.loading = false;
                       this.eventChange.emit(true);
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
-                        this.translate.instant('GLOBAL.confirmarCrear'));
+                        this.translate.instant('descuento_academico.descuento_academico_registrado'));
                       this.descuento_academico_id = 0;
                       this.info_descuento_academico = undefined;
                       this.clean = !this.clean;
                     } else {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
-                        this.translate.instant('GLOBAL.error'));
+                        this.translate.instant('descuento_academico.descuento_academico_no_registrado'));
                     }
                   },
                     (error: HttpErrorResponse) => {
@@ -518,8 +517,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                         type: 'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('GLOBAL.crear') + '-' +
-                          this.translate.instant('GLOBAL.descuento_matricula'),
+                        footer: this.translate.instant('descuento_academico.descuento_academico_no_registrado'),
                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                       });
                     });
@@ -530,9 +528,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                   type: 'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('GLOBAL.crear') + '-' +
-                    this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-                    this.translate.instant('GLOBAL.soporte_documento'),
+                  footer: this.translate.instant('descuento_academico.documento_descuento_academico_no_registrado'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
