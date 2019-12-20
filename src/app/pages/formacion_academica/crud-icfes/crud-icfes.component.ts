@@ -400,7 +400,7 @@ export class CrudIcfesComponent implements OnInit {
         Id:  1, // se debe cambiar solo por inscripcion
       }
            this.datosPost = {
-             'Tercero':{
+             'Tercero': {
               'TerceroId': {
                'Id': this.persiona_id ,
              },
@@ -408,7 +408,7 @@ export class CrudIcfesComponent implements OnInit {
             'InscripcionPregrado': {
                   Id: 0,
                   InscripcionId: inscripcion,
-                  TipoIcfesId:this.formIcfes.campos[this.getIndexForm('TipoIcfes')].valor,
+                  TipoIcfesId: this.formIcfes.campos[this.getIndexForm('TipoIcfes')].valor,
                   CodigoIcfes: this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor,
                   TipoDocumentoIcfes: 1,
                   NumeroIdentificacionIcfes: 1,
@@ -416,16 +416,14 @@ export class CrudIcfesComponent implements OnInit {
                   Activo: true,
                   Valido: (this.formIcfes.campos[this.getIndexForm('Valido')].valor.Id === 'Si') ? true : false,
               },
-                'InfoComplementariaTercero': {
-    
+                'InfoComplementariaTercero': {    
             // Semestres sin estudiar
             'Id': 0,
             TerceroId: this.persiona_id,
             InfoComplementariaId:this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor,
-            Dato: JSON.stringify(this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor.Nombre,),
+            Dato: JSON.stringify(this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor.Nombre),
             Activo: true,
           },
-        
              'TerceroColegio': {
               'NombreCompleto': String(this.formIcfes.campos[this.getIndexForm('NombreColegio')].valor),
               'TipoContribuyenteId': {
