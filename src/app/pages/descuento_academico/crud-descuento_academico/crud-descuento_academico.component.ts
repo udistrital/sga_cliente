@@ -15,6 +15,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SolicitudDescuento } from '../../../@core/data/models/descuento/solicitud_descuento';
 import { DescuentoDependencia } from '../../../@core/data/models/descuento/descuento_dependencia';
 import { TipoDescuento } from '../../../@core/data/models/descuento/tipo_descuento';
+import { ListService } from '../../../@core/store/services/list.service';
+import { IAppState } from '../../../@core/store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ngx-crud-descuento-academico',
@@ -73,6 +76,8 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     private descuentoService: DescuentoAcademicoService,
     private inscripcionService: InscripcionService,
     private mid: CampusMidService,
+    private store: Store<IAppState>,
+    private listService: ListService,
     private nuxeoService: NuxeoService,
     // private user: UserService,
     private toasterService: ToasterService) {
@@ -81,7 +86,23 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.loading = false;
+    this.listService.findDescuentoDependencia();
+    this.loadLists();
+  }
+
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+        if (list.listDocumentoPrograma[0]) {
+          this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = list.listDescuentoDependencia[0].map((descuentoDependencia) => {
+            return {
+              Id: descuentoDependencia.Id,
+              Nombre: descuentoDependencia.TipoDescuentoId.Id + '. ' + descuentoDependencia.TipoDescuentoId.Nombre,
+            }
+          });
+        }
+      },
+   );
   }
 
   construirForm() {

@@ -335,4 +335,13 @@ export class ListReducer {
         return state;
     }
   }
+
+  static ListReducerDescuentoDependencia(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.DescuentoDependencia:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
 }

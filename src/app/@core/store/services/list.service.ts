@@ -12,6 +12,7 @@ import { ProyectoAcademicoService } from '../../data/proyecto_academico.service'
 import { EnteService } from '../../data/ente.service';
 import { ExperienciaService } from '../../data/experiencia.service';
 import { DocumentoProgramaService } from '../../data/documento_programa.service';
+import { DescuentoAcademicoService } from '../../data/descuento_academico.service';
 @Injectable()
 export class ListService {
 
@@ -26,6 +27,7 @@ export class ListService {
     private experienciaService: ExperienciaService,
     // private producccionAcademicaService: ProduccionAcademicaService,
     private enteService: EnteService,
+    private descuentoAcademicoService: DescuentoAcademicoService,
     private documentoProgramaService: DocumentoProgramaService,
     private store: Store<IAppState>) {
 
@@ -698,6 +700,24 @@ export class ListService {
               },
               error => {
                 this.addList(REDUCER_LIST.DocumentoPrograma, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findDescuentoDependencia() {
+    this.store.select(REDUCER_LIST.DescuentoDependencia).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.descuentoAcademicoService.get('descuentos_dependencia/?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.DescuentoDependencia, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.DescuentoDependencia, []);
               },
             );
         }
