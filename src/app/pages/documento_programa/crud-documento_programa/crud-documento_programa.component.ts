@@ -430,6 +430,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
           });
         });
   }
+  */
 
   createDocumentoPrograma(documentoPrograma: any): void {
     const opt: any = {
@@ -448,7 +449,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
         if (willDelete.value) {
           const files = [];
           this.info_documento_programa = <SoporteDocumentoPrograma>documentoPrograma;
-          this.info_documento_programa.PersonaId = 1 * this.persona;
+          this.info_documento_programa.PersonaId = this.persona || 1;
           this.info_documento_programa.DocumentoProgramaId = this.info_documento_programa.DocumentoProgramaId;
           if (this.info_documento_programa.Documento.file !== undefined) {
             files.push({
@@ -506,7 +507,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
         }
       });
   }
-*/
+
   validarForm(event) {
     if (event.valid) {
       // if (this.info_documento_programa === undefined) {
@@ -514,7 +515,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
       // } else {
       // this.updateDocumentoPrograma(event.data.DocumentoPrograma);
       // }
-      
+      this.createDocumentoPrograma(event.data.DocumentoPrograma);
       this.result.emit(event);
     }
   }
