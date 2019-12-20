@@ -502,7 +502,7 @@ export class CrudIcfesComponent implements OnInit {
           {
             // Semestres sin estudiar
             'Id': 0,
-            'TerceroId': { 
+            'TerceroId': {
               'Id': this.persiona_id,
             },
             InfoComplementariaId: this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor,
