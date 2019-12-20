@@ -861,6 +861,12 @@
         "seguro_continuar_registrar": "Are you sure you want to register this work experience?",
         "error_cargar_empresa": "An error happened loading the company information"
     },
+    "documento_programa": {
+        "documento_programa_no_registrado": "Document not registered",
+        "documento_programa_registrado": "Document registered",
+        "documento_documento_programa_no_registrado": "Error uploading support document",
+        "seguro_continuar_registrar": "Are you sure you want to register this document?"
+    },
     "idiomas": {
         "error_cargar_informacion_idiomas": "An error happened loading the languages information",
         "error_nativo_examen": "You can't request an exam with your native language",

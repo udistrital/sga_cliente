@@ -874,6 +874,12 @@
         "seguro_continuar_registrar": "¿Está seguto de registrar esta experiencia laboral?",
         "error_cargar_empresa": "Ocurruió un error al cargar la información de la empresa"
     },
+    "documento_programa": {
+        "documento_programa_no_registrado": "Documento no registrado",
+        "documento_programa_registrado": "Documento registrado",
+        "documento_documento_programa_no_registrado": "Error subiendo el documento de soporte",
+        "seguro_continuar_registrar": "¿Está seguto de registrar este documento?"
+    },
     "idiomas": {
         "error_cargar_informacion_idiomas": "Ocurrió un error al cargar la información de los idiomas",
         "error_nativo_examen": "No puede solicitar un exámen con su idioma nativo",

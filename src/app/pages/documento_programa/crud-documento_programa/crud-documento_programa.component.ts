@@ -435,7 +435,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   createDocumentoPrograma(documentoPrograma: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('GLOBAL.crear') + '?',
+      text: this.translate.instant('documento_programa.seguro_continuar_registrar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -471,14 +471,13 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                       this.loading = false;
                       this.eventChange.emit(true);
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('GLOBAL.documento_programa') + ' ' +
-                        this.translate.instant('GLOBAL.confirmarCrear'));
+                        this.translate.instant('documento_programa.documento_programa_registrado'));
                       this.documento_programa_id = 0;
                       this.info_documento_programa = undefined;
                       this.clean = !this.clean;
                     } else {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
-                        this.translate.instant('GLOBAL.error'));
+                        this.translate.instant('documento_programa.documento_programa_no_registrado'));
                     }
                   },
                     (error: HttpErrorResponse) => {
@@ -486,8 +485,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                         type: 'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('GLOBAL.crear') + '-' +
-                          this.translate.instant('GLOBAL.documento_programa'),
+                        footer: this.translate.instant('documento_programa.documento_programa_no_registrado'),
                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                       });
                     });
@@ -498,9 +496,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                   type: 'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('GLOBAL.crear') + '-' +
-                    this.translate.instant('GLOBAL.documento_programa') + '|' +
-                    this.translate.instant('GLOBAL.soporte_documento'),
+                  footer: this.translate.instant('documento_programa.documento_documento_programa_no_registrado'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
