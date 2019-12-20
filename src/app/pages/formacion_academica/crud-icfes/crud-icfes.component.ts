@@ -396,7 +396,36 @@ export class CrudIcfesComponent implements OnInit {
        .then((willDelete) => {
          this.loading = true;
          if (willDelete.value) {
+           const inscripcion = {
+        Id:  1, // se debe cambiar solo por inscripcion
+      }
            this.datosPost = {
+             'Tercero':{
+              'TerceroId': {
+               'Id': this.persiona_id ,
+             },
+            },
+            'InscripcionPregrado': {
+                  Id: 0,
+                  InscripcionId: inscripcion,
+                  TipoIcfesId:this.formIcfes.campos[this.getIndexForm('TipoIcfes')].valor,
+                  CodigoIcfes: this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor,
+                  TipoDocumentoIcfes: 1,
+                  NumeroIdentificacionIcfes: 1,
+                  AnoIcfes: Number(this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor.substr(0, 4)),
+                  Activo: true,
+                  Valido: (this.formIcfes.campos[this.getIndexForm('Valido')].valor.Id === 'Si') ? true : false,
+              },
+                'InfoComplementariaTercero': {
+    
+            // Semestres sin estudiar
+            'Id': 0,
+            TerceroId: this.persiona_id,
+            InfoComplementariaId:this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor,
+            Dato: JSON.stringify(this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor.Nombre,),
+            Activo: true,
+          },
+        
              'TerceroColegio': {
               'NombreCompleto': String(this.formIcfes.campos[this.getIndexForm('NombreColegio')].valor),
               'TipoContribuyenteId': {
@@ -499,7 +528,7 @@ export class CrudIcfesComponent implements OnInit {
       this.result.emit(event);
     }else {
       console.info('crear colegio')
-      console.info(this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].valor.Id)
+      console.info(this.formIcfes.campos[this.getIndexForm('Valido')].valor)
         this.createColegioeIcfesColegio();
     }
   }
