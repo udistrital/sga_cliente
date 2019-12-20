@@ -480,7 +480,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
         if (willDelete.value) {
           const files = [];
           this.info_descuento_academico = <SolicitudDescuento>DescuentoAcademico;
-          this.info_descuento_academico.PersonaId = 1 * this.persona;
+          this.info_descuento_academico.PersonaId = this.persona || 1;
           this.info_descuento_academico.PeriodoId = this.periodo;
           this.info_descuento_academico.DescuentosDependenciaId = this.info_descuento_academico.DescuentoDependencia;
           if (this.info_descuento_academico.Documento.file !== undefined) {
