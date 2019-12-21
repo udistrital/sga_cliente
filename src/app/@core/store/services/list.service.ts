@@ -13,6 +13,7 @@ import { EnteService } from '../../data/ente.service';
 import { ExperienciaService } from '../../data/experiencia.service';
 import { DocumentoProgramaService } from '../../data/documento_programa.service';
 import { DescuentoAcademicoService } from '../../data/descuento_academico.service';
+import { CIDCService } from '../../data/cidc.service';
 @Injectable()
 export class ListService {
 
@@ -25,6 +26,7 @@ export class ListService {
     private ubicacionService: UbicacionService,
     private programaAcademicoService: ProyectoAcademicoService,
     private experienciaService: ExperienciaService,
+    private cidcService: CIDCService,
     // private producccionAcademicaService: ProduccionAcademicaService,
     private enteService: EnteService,
     private descuentoAcademicoService: DescuentoAcademicoService,
@@ -475,7 +477,8 @@ export class ListService {
     this.store.select(REDUCER_LIST.GrupoInvestigacion).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
+          // this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
+          this.cidcService.get('research_group')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.GrupoInvestigacion, result);

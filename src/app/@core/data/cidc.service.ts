@@ -12,7 +12,7 @@ const httpOptions = {
 }
 
 @Injectable()
-export class ProduccionAcademicaService {
+export class CIDCService {
 
   constructor(private requestManager: RequestManager) {
     this.requestManager.setPath('CIDC_SERVICE');
