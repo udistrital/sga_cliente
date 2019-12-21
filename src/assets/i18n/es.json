@@ -894,6 +894,13 @@
         "informacion_idiomaregistrada": "Información de idioma registrada",
         "seguro_continuar_registrar": "¿Está seguto de registrar esta información de idioma?"
     },
+    "propuesta_grado": {
+        "error_cargar_lineas_investigacion": "Ocurrió un error al cargar la información de las líneas de investigación",
+        "error_documento_propuesta_grado": "Ocurrió un error al cargar el documento de la propuesta de grado",
+        "informacion_idioma_no_registrada": "Propuesta de grado no registrada",
+        "informacion_idiomaregistrada": "Propuesta de grado registrada",
+        "seguro_continuar_registrar": "¿Está seguto de registrar esta propuesta de grado?"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Información familiar no actualizada",
         "informacion_familiar_actualizada": "Información familiar actualizada",

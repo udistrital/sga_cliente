@@ -165,10 +165,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
             type: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-              this.translate.instant('GLOBAL.grupo_investigacion') + '-' +
-              this.translate.instant('GLOBAL.linea_investigacion'),
+            footer: this.translate.instant('propuesta_grado.error_cargar_lineas_investigacion'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });
@@ -491,7 +488,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
   createPropuestaGrado(propuestaGrado: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('GLOBAL.crear') + '?',
+      text: this.translate.instant('propuesta_grado.seguro_continuar_registrar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -531,8 +528,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
                       this.loading = false;
                       this.eventChange.emit(true);
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('GLOBAL.propuesta_grado') + ' ' +
-                        this.translate.instant('GLOBAL.confirmarCrear'));
+                            this.translate.instant('propuesta_grado.propuesta_grado_registrada'));
                     } else {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
                         this.translate.instant('GLOBAL.error'));
@@ -543,8 +539,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
                         type: 'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('GLOBAL.crear') + '-' +
-                          this.translate.instant('GLOBAL.propuesta_grado'),
+                        footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),
                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                       });
                     });
@@ -555,9 +550,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
                   type: 'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('GLOBAL.crear') + '-' +
-                    this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-                    this.translate.instant('GLOBAL.soporte_documento'),
+                  footer: this.translate.instant('propuesta_grado.error_documento_propuesta_grado'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });

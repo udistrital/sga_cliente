@@ -881,6 +881,13 @@
         "informacion_idioma_registrada": "Language information registered",
         "seguro_continuar_registrar": "Are you sure you want to register this language information?"
      },
+     "propuesta_grado": {
+        "error_cargar_lineas_investigacion": "An error happened loading the research lines information",
+        "error_documento_propuesta_grado": "An error happened saving the degree work proposal document",
+        "informacion_idioma_no_registrada": "Degree work proposal not created",
+        "informacion_idiomaregistrada": "Degree work proposal created",
+        "seguro_continuar_registrar": "Are you sure you want to register this degree work proposal?"
+    },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",
