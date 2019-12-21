@@ -365,8 +365,8 @@
             </nb-tabset>
         </nb-card-body>
     </nb-card>
-    <!--
-    <nb-card [hidden]="!show_prod" *ngIf="info_ente_id">
+    
+    <nb-card [hidden]="!show_prod">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -379,13 +379,13 @@
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
-                <nb-tab tabTitle="{{ 'GLOBAL.produccion_academica' | translate }}">
+                <nb-tab tabTitle="{{ 'produccion_academica.producciones_academicas' | translate }}">
                     <ngx-list-produccion-academica (result)="setPercentage_prod($event,0)">
                     </ngx-list-produccion-academica>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
-    </nb-card>-->
+    </nb-card>
 
     <nb-card [hidden]="!show_docu">
         <nb-card-body>
