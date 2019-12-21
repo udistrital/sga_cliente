@@ -81,9 +81,9 @@ export class CrudPropuestaGradoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    // this.listService.findGrupoInvestigacion();
-    // this.listService.findTipoProyecto();
-    // this.loadLists();
+    this.listService.findGrupoInvestigacion();
+    this.listService.findTipoProyecto();
+    this.loadLists();
   }
 
   construirForm() {
@@ -592,12 +592,12 @@ export class CrudPropuestaGradoComponent implements OnInit {
     this.toasterService.popAsync(toast);
   }
 
-  // public loadLists() {
-  //   this.store.select((state) => state).subscribe(
-  //     (list) => {
-  //       this.formPropuestaGrado.campos[this.getIndexForm('GrupoInvestigacion')].opciones = list.listGrupoInvestigacion[0];
-  //       this.formPropuestaGrado.campos[this.getIndexForm('TipoProyecto')].opciones = list.listTipoProyecto[0];
-  //     },
-  //   );
-  // }
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+        this.formPropuestaGrado.campos[this.getIndexForm('GrupoInvestigacion')].opciones = list.listGrupoInvestigacion[0];
+        this.formPropuestaGrado.campos[this.getIndexForm('TipoProyecto')].opciones = list.listTipoProyecto[0];
+      },
+    );
+  }
 }
