@@ -173,7 +173,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   loadInfoInscripcion() {
     return new Promise((resolve, reject) => {
-      this.inscripcionService.get(`inscripcion?limint=1&query=PeriodoId:${this.periodo.Id},PersonaId:${this.info_persona_id || 1}`)
+      this.inscripcionService.get(`inscripcion?limint=1&query=PeriodoId:${this.periodo.Id},PersonaId:${this.info_persona_id || 4}`)
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
@@ -192,7 +192,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   create_inscription(data) {
     const info_inscripcion_temp = {
       Id: 0,
-      PersonaId: this.info_persona_id || 1,
+      PersonaId: this.info_persona_id || 4,
       ProgramaAcademicoId: 0, // Cambiar por el periodo
       PeriodoId: this.periodo.Id,
       AceptaTerminos: true,

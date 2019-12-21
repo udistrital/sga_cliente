@@ -443,7 +443,7 @@
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.propuesta_grado' | translate }}">
-                    <ngx-crud-propuesta-grado (result)="setPercentage_proy($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
+                    <ngx-crud-propuesta-grado (result)="setPercentage_proy($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}" (crear_inscripcion)="create_inscription($event)">
                     </ngx-crud-propuesta-grado>
                 </nb-tab>
             </nb-tabset>

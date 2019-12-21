@@ -29,7 +29,7 @@ export let FORM_PROPUESTA_GRADO = {
     {
       etiqueta: 'select',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
-      nombre: 'LineaInvestigacion',
+      nombre: 'LineaInvestigacionId',
       label_i18n: 'linea_investigacion',
       placeholder_i18n: 'placeholder_linea_investigacion',
       requerido: true,
@@ -40,7 +40,7 @@ export let FORM_PROPUESTA_GRADO = {
     {
       etiqueta: 'select',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
-      nombre: 'TipoProyecto',
+      nombre: 'TipoProyectoId',
       label_i18n: 'tipo_proyecto',
       placeholder_i18n: 'tipo_proyecto',
       requerido: true,
