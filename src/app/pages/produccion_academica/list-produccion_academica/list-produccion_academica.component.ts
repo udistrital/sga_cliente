@@ -113,7 +113,6 @@ export class ListProduccionAcademicaComponent implements OnInit {
     this.sgaMidService.get('produccion_academica/' + this.persona_id).subscribe((res: any) => {
     // this.campusMidService.get('produccion_academica/' + 5).subscribe((res: any) => {
       if (res !== null) {
-        console.log("producicones", res);
         if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
           const data = <Array<ProduccionAcademicaPost>>res;
           // this.source.load(data);
