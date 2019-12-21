@@ -16,7 +16,7 @@ import { Genero } from '../data/models/informacion/genero';
 import { Titulacion } from '../data/models/inscripcion/titulacion';
 import { TipoIdentificacion } from '../data/models/informacion/tipo_identificacion';
 import { TipoProyecto } from '../data/models/investigacion/tipo_proyecto';
-import { GrupoInvestigacion } from '../data/models/investigacion/grupo_investigacion';
+import { GrupoInvestigacion } from '../data/models/investigacion_cidc/grupo_investigacion';
 import { PeriodoAcademico } from '../data/models/periodo/periodo_academico';
 import { InfoComplementaria } from '../data/models/terceros/info_complementaria';
 // import { TipoPublicacionLibro } from '../data/models/tipo_publicacion_libro';

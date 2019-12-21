@@ -22,7 +22,7 @@ export let FORM_PROPUESTA_GRADO = {
       placeholder_i18n: 'placeholder_grupo_investigacion',
       requerido: true,
       tipo: 'GrupoInvestigacion',
-      key: 'Nombre',
+      key: 'name',
       opciones: [],
       entrelazado: true,
     },
@@ -34,7 +34,7 @@ export let FORM_PROPUESTA_GRADO = {
       placeholder_i18n: 'placeholder_linea_investigacion',
       requerido: true,
       tipo: 'LineaInvestigacion',
-      key: 'Nombre',
+      key: 'name',
       opciones: [],
     },
     {

@@ -11,7 +11,9 @@ const httpOptions = {
     }),
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CIDCService {
 
   constructor(private requestManager: RequestManager) {
