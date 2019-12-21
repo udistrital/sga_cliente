@@ -3,7 +3,7 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { PropuestaGrado } from './../../../@core/data/models/inscripcion/propuesta_grado';
 import { Inscripcion } from './../../../@core/data/models/inscripcion/inscripcion';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CoreService } from '../../../@core/data/core.service';
+import { CIDCService } from '../../../@core/data/cidc.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { FORM_PROPUESTA_GRADO } from './form-propuesta_grado';
@@ -72,7 +72,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private inscripcionService: InscripcionService,
-    private coreService: CoreService,
+    private cidcService: CIDCService,
     private store: Store<IAppState>,
     private listService: ListService,
     private toasterService: ToasterService) {
@@ -112,55 +112,58 @@ export class CrudPropuestaGradoComponent implements OnInit {
   getSeleccion(event) {
     if (event.nombre === 'GrupoInvestigacion') {
       this.grupoSeleccionado = event.valor;
-      // this.loadOptionsLineaInvestigacion();
+      this.loadOptionsLineaInvestigacion();
     }
   }
 
-  // loadOptionsLineaInvestigacion(): void {
-  //   let consultaLineas: Array<any> = [];
-  //   const lineas: Array<any> = [];
-  //   this.coreService.get('linea_investigacion_grupo_investigacion/?query=GrupoInvestigacionId:' +
-  //     this.grupoSeleccionado.Id + '&limit=0')
-  //     .subscribe(linea_grupo => {
-  //       if (linea_grupo !== null) {
-  //         consultaLineas = <Array<any>>linea_grupo;
-  //         consultaLineas.forEach(element => {
-  //           this.coreService.get('linea_investigacion/' + element.LineaInvestigacionId)
-  //             .subscribe(linea => {
-  //               if (linea !== null) {
-  //                 element.LineaInvestigacion = <any>linea;
-  //                 element.Nombre = element.LineaInvestigacion.Nombre;
-  //                 lineas.push(element);
-  //               }
-  //               this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones = lineas;
-  //             },
-  //               (error: HttpErrorResponse) => {
-  //                 Swal({
-  //                   type: 'error',
-  //                   title: error.status + '',
-  //                   text: this.translate.instant('ERROR.' + error.status),
-  //                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                     this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-  //                     this.translate.instant('GLOBAL.linea_investigacion'),
-  //                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                 });
-  //               });
-  //         });
-  //       }
-  //     },
-  //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
-  //           title: error.status + '',
-  //           text: this.translate.instant('ERROR.' + error.status),
-  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //             this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-  //             this.translate.instant('GLOBAL.grupo_investigacion') + '-' +
-  //             this.translate.instant('GLOBAL.linea_investigacion'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       });
-  // }
+  loadOptionsLineaInvestigacion(): void {
+    let consultaLineas: Array<any> = [];
+    const lineas: Array<any> = [];
+    // this.coreService.get('linea_investigacion_grupo_investigacion/?query=GrupoInvestigacionId:' +
+    this.cidcService.get('research_focus')
+    // this.cidcService.get('linea_investigacion_grupo_investigacion/?query=GrupoInvestigacionId:' +
+      // this.grupoSeleccionado.Id + '&limit=0')
+      .subscribe(lineas_grupo => {
+        if (lineas_grupo !== null) {
+          consultaLineas = <Array<any>>lineas_grupo;
+          this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones = consultaLineas;
+          // consultaLineas.forEach(element => {
+          //   this.coreService.get('linea_investigacion/' + element.LineaInvestigacionId)
+          //     .subscribe(linea => {
+          //       if (linea !== null) {
+          //         element.LineaInvestigacion = <any>linea;
+          //         element.Nombre = element.LineaInvestigacion.Nombre;
+          //         lineas.push(element);
+          //       }
+          //       this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones = lineas;
+          //     },
+          //       (error: HttpErrorResponse) => {
+          //         Swal({
+          //           type: 'error',
+          //           title: error.status + '',
+          //           text: this.translate.instant('ERROR.' + error.status),
+          //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
+          //             this.translate.instant('GLOBAL.propuesta_grado') + '|' +
+          //             this.translate.instant('GLOBAL.linea_investigacion'),
+          //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          //         });
+          //       });
+          // });
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.propuesta_grado') + '|' +
+              this.translate.instant('GLOBAL.grupo_investigacion') + '-' +
+              this.translate.instant('GLOBAL.linea_investigacion'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
 
   // public buscarID_prop(): void {
   //   this.loading = true;
