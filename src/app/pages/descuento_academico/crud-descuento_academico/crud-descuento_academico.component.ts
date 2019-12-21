@@ -93,7 +93,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
-        if (list.listDocumentoPrograma[0]) {
+        if (list.listDescuentoDependencia[0]) {
           this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = list.listDescuentoDependencia[0]
             .map((descuentoDependencia) => {
             return {
