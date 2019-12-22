@@ -49,6 +49,7 @@ export class CrudIcfesComponent implements OnInit {
   percentage: number;
   ciudadSeleccionada: any;
   tipoSeleccionado: any;
+  tipocolegio: Number;
   datosPost: any;
   departamentoSeleccionado: any;
 
@@ -179,10 +180,12 @@ export class CrudIcfesComponent implements OnInit {
       }else if ( String(this.tipoSeleccionado['Id']).toLowerCase() === 'oficial') {
         this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = false;
+        this.tipocolegio = 7;
         console.info('bien ')
       }else if ( String(this.tipoSeleccionado['Id']).toLowerCase() === 'privado') {
         this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = false;
+        this.tipocolegio = 12;
         console.info('bien ')
       }
 
@@ -419,7 +422,9 @@ export class CrudIcfesComponent implements OnInit {
                 'InfoComplementariaTercero': {
             // Semestres sin estudiar
             'Id': 0,
-            TerceroId: this.persiona_id,
+            'TerceroId': {
+              'Id': this.persiona_id,
+            },
             InfoComplementariaId: this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor,
             Dato: JSON.stringify(this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor.Nombre),
             Activo: true,
@@ -431,6 +436,15 @@ export class CrudIcfesComponent implements OnInit {
               },
               'Activo': false,
              },
+             'TipoColegio': {
+              'TerceroId': {
+                'Id': this.persiona_id,
+              },
+              'TipoTerceroId': {
+                'Id': this.tipocolegio,
+              },
+              'Activo': true,
+             },
              'DireccionColegio': {
                   'InfoComplementariaId': {
                     'Id': 54,
@@ -440,36 +454,40 @@ export class CrudIcfesComponent implements OnInit {
              },
              'UbicacionColegio': {
               'InfoComplementariaId': {
-                'Id': 92,
+                'Id': 89,
               },
               'Dato': JSON.stringify(this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].valor.Id),
               'Activo': true,
              },
            };
            console.info(JSON.stringify(this.datosPost));
-           this.sgaMidService.post('persona/guardar_datos_contacto_iojhiohioh/', this.datosPost)
+           this.sgaMidService.post('inscripciones/post_info_icfes_colegio_nuevo', this.datosPost)
              .subscribe(res => {
-               if (res !== null) {
-                 // this.info_informacion_contacto = <InformacionContacto>res;
-                 this.loading = false;
-                 this.eventChange.emit(true);
-                 this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                   this.translate.instant('GLOBAL.informacion_contacto') + ' ' +
-                   this.translate.instant('GLOBAL.confirmarCrear'));
-               }
-             },
-               (error: HttpErrorResponse) => {
-                 Swal({
-                   type: 'error',
-                   title: error.status + '',
-                   text: this.translate.instant('ERROR.' + error.status),
-                   footer: this.translate.instant('GLOBAL.crear') + '-' +
-                     this.translate.instant('GLOBAL.informacion_contacto'),
-                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                 });
-               });
-         }
-       });
+              const r = <any>res;
+              if (r !== null && r.Type !== 'error') {
+                this.loading = false;
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.registrar'),
+                  this.translate.instant('icfes_colegio.icfes_colegio_registrado'));
+                this.clean = !this.clean;
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('icfes_colegio.icfes_colegio_no_registrado'));
+              }
+            },
+            (error: HttpErrorResponse) => {
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('icfes_colegio.icfes_colegio_no_registrado'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+              this.showToast('error', this.translate.instant('GLOBAL.error'),
+                this.translate.instant('icfes_colegio.icfes_colegio_no_registrado'));
+            });
+          }
+      });
   }
 
   validarForm(event) {
@@ -513,12 +531,12 @@ export class CrudIcfesComponent implements OnInit {
         dataColegio: this.formIcfes.campos[this.getIndexForm('Colegio')].valor,
       }
       console.info(JSON.stringify(dataIcfesColegio));
-      // this.createIcfesColegio(dataIcfesColegio);
+      this.createIcfesColegio(dataIcfesColegio);
       this.result.emit(event);
     }else {
       console.info('crear colegio')
       console.info(this.formIcfes.campos[this.getIndexForm('Valido')].valor)
-        this.createColegioeIcfesColegio();
+      this.createColegioeIcfesColegio();
     }
   }
 
