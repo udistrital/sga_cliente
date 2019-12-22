@@ -26,6 +26,7 @@ export class CrudIcfesComponent implements OnInit {
   info_formacion_academica_id: number;
   inscripcion_id: number;
   persiona_id: number;
+  denied_acces: boolean = false;
 
 
 
@@ -33,7 +34,7 @@ export class CrudIcfesComponent implements OnInit {
   set inscripcion(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
     console.info('ID_FormacionAcademica_Pregrado' + this.inscripcion_id)
-    // this.loadInfoFormacionAcademica();
+    this.loadInfoFormacionAcademica();
   }
 
   @Output() eventChange = new EventEmitter();
@@ -52,6 +53,7 @@ export class CrudIcfesComponent implements OnInit {
   tipocolegio: Number;
   datosPost: any;
   departamentoSeleccionado: any;
+  datosGet: any;
 
   constructor(
     private translate: TranslateService,
@@ -335,6 +337,51 @@ export class CrudIcfesComponent implements OnInit {
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
           });
+    }
+  }
+
+  public loadInfoFormacionAcademica(): void {
+    this.loading = true;
+    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 &&
+      this.inscripcion_id.toString() !== '') {
+      this.denied_acces = false;
+      this.sgaMidService.get('persona/consultar_formacion_pregreado/' + this.inscripcion_id)
+        .subscribe(res => {
+          if (res !== null) {
+            this.datosGet = <any>res;
+            this.formIcfes.campos[this.getIndexForm('TipoIcfes')].valor = res['TipoIcfes']
+            this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor = res['NúmeroRegistroIcfes']
+            this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfesConfirmar')].valor = res['NúmeroRegistroIcfes']
+            if (res['Valido'] === true) {
+            this.formIcfes.campos[this.getIndexForm('Valido')].valor = {'Id': 'Si'}
+            } else {
+              this.formIcfes.campos[this.getIndexForm('Valido')].valor = {'Id': 'No'}
+            }
+            this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor = res['numeroSemestres']['InfoComplementariaId']
+            // this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] =
+            // this.info_info_caracteristica.DepartamentoNacimiento;
+            // this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones[0] = this.info_info_caracteristica.Lugar;
+            // this.formInfoCaracteristica.campos[this.getIndexForm('NumeroHermanos')].valor = res['NumeroHermanos']
+            // this.formInfoCaracteristica.campos[this.getIndexForm('PuntajeSisbe')].valor = res['PuntajeSisben']
+            // this.formInfoCaracteristica.campos[this.getIndexForm('EPS')].valor = res['EPS']['TerceroEntidadId']
+            // this.formInfoCaracteristica.campos[this.getIndexForm('FechaVinculacion')].valor = res['EPS']['FechaInicioVinculacion']
+            this.loading = false;
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    } else {
+      this.clean = !this.clean;
+      this.denied_acces = false; // no muestra el formulario a menos que se le pase un id del ente info_caracteristica_id
+      this.loading = false;
     }
   }
 

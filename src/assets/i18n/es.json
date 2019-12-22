@@ -477,7 +477,8 @@
         "Nombrecolegio": "Nombre del colegio donde culmunó el grado 11",
         "placeholder_Nombrecolegio": "Ej: Colegio Nacional",
         "DireccionColegio": "Dirección del colegio donde culmunó el grado 11",
-        "placeholder_DireccionColegio": "Ej: Calle 1 # 2 -03"
+        "placeholder_DireccionColegio": "Ej: Calle 1 # 2 -03",
+        "formacion_academica": "Informacion Academica"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
