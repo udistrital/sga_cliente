@@ -345,7 +345,7 @@ export class CrudIcfesComponent implements OnInit {
     if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 &&
       this.inscripcion_id.toString() !== '') {
       this.denied_acces = false;
-      this.sgaMidService.get('persona/consultar_formacion_pregreado/' + this.inscripcion_id)
+      this.sgaMidService.get('persona/consultar_formacion_pregrado/' + this.inscripcion_id)
         .subscribe(res => {
           if (res !== null) {
             this.datosGet = <any>res;
