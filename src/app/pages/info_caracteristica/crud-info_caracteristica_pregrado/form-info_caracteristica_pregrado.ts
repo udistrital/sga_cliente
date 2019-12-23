@@ -107,24 +107,14 @@ export let FORM_INFO_CARACTERISTICA_PREGRADO = {
             tipo: 'date',
         },
         {
-            etiqueta: 'select',
+            etiqueta: 'input',
             relacion: false,
             claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
             nombre: 'NumeroHermanos',
             label_i18n: 'hermanos',
             placeholder_i18n: 'hermanos',
             requerido: true,
-            tipo: 'text',
-            key: 'Id',
-            opciones: [
-                { Id: '0' },
-                { Id: '1' },
-                { Id: '2' },
-                { Id: '3' },
-                { Id: '4' },
-                { Id: '5' },
-                { Id: 'Más de cinco'},
-            ],
+            tipo: 'number',
         },
         {
             etiqueta: 'input',
@@ -133,7 +123,9 @@ export let FORM_INFO_CARACTERISTICA_PREGRADO = {
             label_i18n: 'puntaje',
             placeholder_i18n: 'puntaje',
             requerido: true,
-            tipo: 'text',
+            tipo: 'number',
+            minimo: 0,
+
         },
     ],
 }
