@@ -4,10 +4,13 @@ import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-t
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { Lugar } from './../../../@core/data/models/lugar/lugar';
 import { UserService } from '../../../@core/data/users.service';
+import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { TercerosService} from '../../../@core/data/terceros.service';
 import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { IAppState } from '../../../@core/store/app.state';
@@ -23,17 +26,15 @@ export class CrudIcfesComponent implements OnInit {
   info_formacion_academica_id: number;
   inscripcion_id: number;
   persiona_id: number;
+  denied_acces: boolean = false;
 
-  @Input('info_formacion_academica_id')
-  set name(info_formacion_academica_id: number) {
-    this.info_formacion_academica_id = info_formacion_academica_id;
-    // this.loadInfoFormacionAcademica();
-  }
+
 
   @Input('inscripcion_id')
   set inscripcion(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
-    // this.loadInfoFormacionAcademica();
+    console.info('ID_FormacionAcademica_Pregrado' + this.inscripcion_id)
+    this.loadInfoFormacionAcademica();
   }
 
   @Output() eventChange = new EventEmitter();
@@ -45,12 +46,21 @@ export class CrudIcfesComponent implements OnInit {
   temp: any;
   clean: boolean;
   loading: boolean;
+  paisSeleccionado: any;
   percentage: number;
+  ciudadSeleccionada: any;
+  tipoSeleccionado: any;
+  tipocolegio: Number;
+  datosPost: any;
+  departamentoSeleccionado: any;
+  datosGet: any;
 
   constructor(
     private translate: TranslateService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
+    private ubicacionesService: UbicacionService,
+    private terceroService: TercerosService,
     private sgaMidService: SgaMidService,
     private users: UserService,
     private store: Store<IAppState>,
@@ -86,12 +96,293 @@ export class CrudIcfesComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.loadInfoFormacionAcademica();
+
   }
 
   setPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);
+  }
+  getSeleccion(event) {
+
+    if (event.nombre === 'PaisResidencia') {
+      this.paisSeleccionado = event.valor;
+      this.loadOptionsDepartamentoResidencia();
+    } else if (event.nombre === 'DepartamentoResidencia') {
+      this.departamentoSeleccionado = event.valor;
+      this.loadOptionsCiudadResidencia();
+      if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
+        (event.valor.Nombre.toString().toLowerCase() === 'cundinamarca' ||
+          event.valor.Nombre.toString().toLowerCase() === 'cundinamarca')) {
+        // this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = true;
+        // this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = true;
+        // this.formIcfes.campos[this.getIndexForm('NombreColegio')].valor = null;
+        // this.formIcfes.campos[this.getIndexForm('DireccionColegio')].valor = null;
+        this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].entrelazado = true;
+        // this.formIcfes.campos[this.getIndexForm('Tipo')].valor = 0;
+      }if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
+      (event.valor.Nombre.toString().toLowerCase() !== 'cundinamarca' ||
+        event.valor.Nombre.toString().toLowerCase() !== 'cundinamarca')) {
+        this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].entrelazado = true;
+        // this.formIcfes.campos[this.getIndexForm('Tipo')].valor = 0;
+        // this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = true;
+        // this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = true;
+        // this.formIcfes.campos[this.getIndexForm('Colegio')].valor = 0;
+        // this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = true;
+        // this.formIcfes.campos[this.getIndexForm('NombreColegio')].valor = null;
+        // this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = true;
+        // this.formIcfes.campos[this.getIndexForm('DireccionColegio')].valor = null;
+      }
+    } else if (event.nombre === 'CiudadResidencia') {
+      this.ciudadSeleccionada = event.valor;
+      if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
+        (event.valor.Nombre.toString().toLowerCase() === 'bogotá' ||
+          event.valor.Nombre.toString().toLowerCase() === 'bogota')) {
+        console.info('Bogotaaaaaaaa')
+         this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
+        //  this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = true;
+        //  this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = true;
+        this.construirForm();
+      } else  if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
+      (this.paisSeleccionado.Nombre.toString().toLowerCase() !== 'bogotá' ||
+      this.paisSeleccionado.Nombre.toString().toLowerCase() !== 'bogota')) {
+       this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
+       this.formIcfes.campos[this.getIndexForm('Tipo')].valor = 0;
+      this.construirForm();
+    } else {
+        this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
+        this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = false;
+        this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = false;
+        // this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = true;
+        this.formIcfes.campos[this.getIndexForm('Colegio')].valor = 0;
+        this.construirForm();
+        console.info('otroooooooooo con cundinamarca')
+      }
+
+    }else if (event.nombre === 'Tipo') {
+      console.info('select tipo')
+      this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
+      this.tipoSeleccionado = event.valor;
+      if ( String(this.tipoSeleccionado['Id']).toLowerCase() === 'oficial' &&
+      (String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
+      String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota'))  {
+        console.info('ojo consulta oficial')
+        this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = false;
+        this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
+        this.construirForm();
+        this.loadOptionscolegiooficial();
+      }else if (String(this.tipoSeleccionado.Id).toLowerCase() === 'privado' &&
+      (String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
+      String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota'))  {
+        console.info('ojo consulta privado')
+        this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = false;
+        this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
+        this.construirForm();
+        this.loadOptionscolegioprivado();
+      }else if ( String(this.tipoSeleccionado['Id']).toLowerCase() === 'oficial') {
+        this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = false;
+        this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = false;
+        this.tipocolegio = 7;
+        console.info('bien ')
+      }else if ( String(this.tipoSeleccionado['Id']).toLowerCase() === 'privado') {
+        this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = false;
+        this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = false;
+        this.tipocolegio = 12;
+        console.info('bien ')
+      }
+
+    }else {
+      // this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = true;
+      // this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = true;
+      // this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = true;
+    }
+  }
+
+  loadOptionscolegiooficial():  void {
+    let consultaColegio: Array<any> = [];
+    const colegiosoficiales: Array<any> = [];
+      this.terceroService.get('tercero_tipo_tercero/?query=TipoTerceroId.Id:7' + ',TerceroId.Activo:true&limit=0')
+        .subscribe(res => {
+          if (res !== null) {
+            consultaColegio = <Array<any>>res;
+            for (let i = 0; i < consultaColegio.length; i++) {
+              colegiosoficiales.push(consultaColegio[i].TerceroId);
+            }
+          }
+          this.formIcfes.campos[this.getIndexForm('Colegio')].opciones = colegiosoficiales;
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.departamento_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    }
+
+
+  loadOptionscolegioprivado():  void {
+    let consultaColegio: Array<any> = [];
+    const colegiosprivado: Array<any> = [];
+      this.terceroService.get('tercero_tipo_tercero/?query=TipoTerceroId.Id:12' + ',TerceroId.Activo:true&limit=0')
+        .subscribe(res => {
+          if (res !== null) {
+            consultaColegio = <Array<any>>res;
+            for (let i = 0; i < consultaColegio.length; i++) {
+              colegiosprivado.push(consultaColegio[i].TerceroId);
+            }
+          }
+          this.formIcfes.campos[this.getIndexForm('Colegio')].opciones = colegiosprivado;
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.departamento_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+        }
+
+
+  loadOptionsDepartamentoResidencia(): void {
+    let consultaHijos: Array<any> = [];
+    const departamentoResidencia: Array<any> = [];
+    if (this.paisSeleccionado) {
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.paisSeleccionado.Id +
+      ',LugarHijo.TipoLugar.CodigoAbreviacion:D,LugarHijo.Activo:true&limit=0')
+        .subscribe(res => {
+          if (res !== null) {
+            consultaHijos = <Array<Lugar>>res;
+            for (let i = 0; i < consultaHijos.length; i++) {
+              departamentoResidencia.push(consultaHijos[i].LugarHijo);
+            }
+          }
+          this.formIcfes.campos[this.getIndexForm('DepartamentoResidencia')].opciones = departamentoResidencia;
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.departamento_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    }
+  }
+
+  loadOptionsCiudadResidencia(): void {
+    let consultaHijos: Array<any> = [];
+    const ciudadResidencia: Array<any> = [];
+    if (this.departamentoSeleccionado) {
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.departamentoSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+        .subscribe(res => {
+          if (res !== null) {
+            consultaHijos = <Array<Lugar>>res;
+            for (let i = 0; i < consultaHijos.length; i++) {
+              ciudadResidencia.push(consultaHijos[i].LugarHijo);
+            }
+          }
+          this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].opciones = ciudadResidencia;
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.ciudad_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    }
+  }
+
+  loadOptionsLocalidadResidencia(): void {
+    let consultaHijos: Array<any> = [];
+    const localidadResidencia: Array<any> = [];
+    if (this.departamentoSeleccionado) {
+      console.info('ID ciudad')
+      console.info(this.ciudadSeleccionada.Id)
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.ciudadSeleccionada.Id + ',LugarHijo.Activo:true&limit=0')
+        .subscribe(res => {
+          if (res !== null) {
+            consultaHijos = <Array<Lugar>>res;
+            for (let i = 0; i < consultaHijos.length; i++) {
+              localidadResidencia.push(consultaHijos[i].LugarHijo);
+            }
+          }
+          console.info(localidadResidencia)
+          this.formIcfes.campos[this.getIndexForm('LocalidadResidencia')].opciones = localidadResidencia;
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.localidad_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    }
+  }
+
+  public loadInfoFormacionAcademica(): void {
+    this.loading = true;
+    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 &&
+      this.inscripcion_id.toString() !== '') {
+      this.denied_acces = false;
+      this.sgaMidService.get('persona/consultar_formacion_pregreado/' + this.inscripcion_id)
+        .subscribe(res => {
+          if (res !== null) {
+            this.datosGet = <any>res;
+            this.formIcfes.campos[this.getIndexForm('TipoIcfes')].valor = res['TipoIcfes']
+            this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor = res['NúmeroRegistroIcfes']
+            this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfesConfirmar')].valor = res['NúmeroRegistroIcfes']
+            if (res['Valido'] === true) {
+            this.formIcfes.campos[this.getIndexForm('Valido')].valor = {'Id': 'Si'}
+            } else {
+              this.formIcfes.campos[this.getIndexForm('Valido')].valor = {'Id': 'No'}
+            }
+            this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor = res['numeroSemestres']['InfoComplementariaId']
+            // this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] =
+            // this.info_info_caracteristica.DepartamentoNacimiento;
+            // this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones[0] = this.info_info_caracteristica.Lugar;
+            // this.formInfoCaracteristica.campos[this.getIndexForm('NumeroHermanos')].valor = res['NumeroHermanos']
+            // this.formInfoCaracteristica.campos[this.getIndexForm('PuntajeSisbe')].valor = res['PuntajeSisben']
+            // this.formInfoCaracteristica.campos[this.getIndexForm('EPS')].valor = res['EPS']['TerceroEntidadId']
+            // this.formInfoCaracteristica.campos[this.getIndexForm('FechaVinculacion')].valor = res['EPS']['FechaInicioVinculacion']
+            this.loading = false;
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    } else {
+      this.clean = !this.clean;
+      this.denied_acces = false; // no muestra el formulario a menos que se le pase un id del ente info_caracteristica_id
+      this.loading = false;
+    }
   }
 
   createIcfesColegio(infoIcfes: any): void {
@@ -139,55 +430,160 @@ export class CrudIcfesComponent implements OnInit {
       });
   }
 
-  validarForm(event) {
-    if (event.valid) {
-      const formData = event.data.InfoIcfes;
-      const tercero = {
-        Id: this.persiona_id  || 1, // se debe cambiar solo por persona id
+  createColegioeIcfesColegio() {
+    this.persiona_id =  Number(this.inscripcion_id);
+     const opt: any = {
+       title: this.translate.instant('GLOBAL.crear'),
+       text: this.translate.instant('GLOBAL.crear') + '?',
+       icon: 'warning',
+       buttons: true,
+       dangerMode: true,
+       showCancelButton: true,
+       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+     };
+     Swal(opt)
+       .then((willDelete) => {
+         this.loading = true;
+         if (willDelete.value) {
+           const inscripcion = {
+        Id:  1, // se debe cambiar solo por inscripcion
       }
+           this.datosPost = {
+             'Tercero': {
+              'TerceroId': {
+               'Id': this.persiona_id ,
+             },
+            },
+            'InscripcionPregrado': {
+                  Id: 0,
+                  InscripcionId: inscripcion,
+                  TipoIcfesId: this.formIcfes.campos[this.getIndexForm('TipoIcfes')].valor,
+                  CodigoIcfes: this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor,
+                  TipoDocumentoIcfes: 1,
+                  NumeroIdentificacionIcfes: 1,
+                  AnoIcfes: Number(this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor.substr(0, 4)),
+                  Activo: true,
+                  Valido: (this.formIcfes.campos[this.getIndexForm('Valido')].valor.Id === 'Si') ? true : false,
+              },
+                'InfoComplementariaTercero': {
+            // Semestres sin estudiar
+            'Id': 0,
+            'TerceroId': {
+              'Id': this.persiona_id,
+            },
+            InfoComplementariaId: this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor,
+            Dato: JSON.stringify(this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor.Nombre),
+            Activo: true,
+          },
+             'TerceroColegio': {
+              'NombreCompleto': String(this.formIcfes.campos[this.getIndexForm('NombreColegio')].valor),
+              'TipoContribuyenteId': {
+                'Id': 2,
+              },
+              'Activo': false,
+             },
+             'TipoColegio': {
+              'TerceroId': {
+                'Id': this.persiona_id,
+              },
+              'TipoTerceroId': {
+                'Id': this.tipocolegio,
+              },
+              'Activo': true,
+             },
+             'DireccionColegio': {
+                  'InfoComplementariaId': {
+                    'Id': 54,
+                  },
+                  'Dato': JSON.stringify(this.formIcfes.campos[this.getIndexForm('DireccionColegio')].valor),
+                  'Activo': true,
+             },
+             'UbicacionColegio': {
+              'InfoComplementariaId': {
+                'Id': 89,
+              },
+              'Dato': JSON.stringify(this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].valor.Id),
+              'Activo': true,
+             },
+           };
+           console.info(JSON.stringify(this.datosPost));
+           this.sgaMidService.post('inscripciones/post_info_icfes_colegio_nuevo', this.datosPost)
+             .subscribe(res => {
+              const r = <any>res;
+              if (r !== null && r.Type !== 'error') {
+                this.loading = false;
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.registrar'),
+                  this.translate.instant('icfes_colegio.icfes_colegio_registrado'));
+                this.clean = !this.clean;
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('icfes_colegio.icfes_colegio_no_registrado'));
+              }
+            },
+            (error: HttpErrorResponse) => {
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('icfes_colegio.icfes_colegio_no_registrado'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+              this.showToast('error', this.translate.instant('GLOBAL.error'),
+                this.translate.instant('icfes_colegio.icfes_colegio_no_registrado'));
+            });
+          }
+      });
+  }
+
+  validarForm(event) {
+    if ( String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
+    String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota') {
+      console.info('No crear colegio')
+      this.persiona_id =  Number(this.inscripcion_id);
       const inscripcion = {
-        Id: this.inscripcion_id || 1, // se debe cambiar solo por inscripcion
+        Id:  1, // se debe cambiar solo por inscripcion
       }
       const dataIcfesColegio = {
+        'Tercero': {
+          'TerceroId': {
+           'Id': this.persiona_id ,
+         },
+        },
         InscripcionPregrado: {
           Id: 0,
           InscripcionId: inscripcion,
-          TipoIcfesId: formData.TipoIcfes,
-          CodigoIcfes: formData.NúmeroRegistroIcfes,
+          TipoIcfesId: this.formIcfes.campos[this.getIndexForm('TipoIcfes')].valor,
+          CodigoIcfes: this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor,
           TipoDocumentoIcfes: 1,
           NumeroIdentificacionIcfes: 1,
-          AnoIcfes: Number(formData.NúmeroRegistroIcfes.substr(0, 4)),
+          AnoIcfes: Number(this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor.substr(0, 4)),
           Activo: true,
+          Valido: (this.formIcfes.campos[this.getIndexForm('Valido')].valor.Id === 'Si') ? true : false,
         },
         InfoComplementariaTercero: [
-          {
-            // Localidad colegio
-            Id: 0,
-            TerceroId: tercero,
-            InfoComplementariaId: formData.LocalidadColegio,
-            Dato: JSON.stringify(formData.LocalidadColegio),
-            Activo: true,
-          },
-          {
-            // Tipo Colegio
-            Id: 0,
-            TerceroId: tercero,
-            InfoComplementariaId: formData.TipoColegio,
-            Dato: JSON.stringify(formData.TipoColegio),
-            Activo: true,
-          },
+
           {
             // Semestres sin estudiar
-            Id: 0,
-            TerceroId: tercero,
-            InfoComplementariaId: formData.numeroSemestres,
-            Dato: JSON.stringify(formData.numeroSemestres),
+            'Id': 0,
+            'TerceroId': {
+              'Id': this.persiona_id,
+            },
+            InfoComplementariaId: this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor,
+            Dato: JSON.stringify(this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor.Nombre),
             Activo: true,
           },
         ],
+        dataColegio: this.formIcfes.campos[this.getIndexForm('Colegio')].valor,
       }
+      console.info(JSON.stringify(dataIcfesColegio));
       this.createIcfesColegio(dataIcfesColegio);
       this.result.emit(event);
+    }else {
+      console.info('crear colegio')
+      console.info(this.formIcfes.campos[this.getIndexForm('Valido')].valor)
+      this.createColegioeIcfesColegio();
     }
   }
 
@@ -204,10 +600,11 @@ export class CrudIcfesComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
-       this.formIcfes.campos[this.getIndexForm('TipoIcfes')].opciones = list.listICFES[0];
+        this.formIcfes.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
        this.formIcfes.campos[this.getIndexForm('LocalidadColegio')].opciones = list.listLocalidadesBogota[0];
-       this.formIcfes.campos[this.getIndexForm('TipoColegio')].opciones = list.listTipoColegio[0];
+      //  this.formIcfes.campos[this.getIndexForm('TipoColegio')].opciones = list.listTipoColegio[0];
        this.formIcfes.campos[this.getIndexForm('numeroSemestres')].opciones = list.listSemestresSinEstudiar[0];
+       this.formIcfes.campos[this.getIndexForm('TipoIcfes')].opciones = list.listICFES[0];
       },
    );
  }

@@ -16,6 +16,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { FormacionAcademicaRoutingModule } from '../../formacion_academica/formacion_academica-routing.module';
 // import { IAppState } from '../../../@core/store/app.state';
 // import { ListService } from '../../../@core/store/services/list.service';
 // import { Store } from '@ngrx/store';
@@ -28,7 +29,21 @@ import 'style-loader!angular2-toaster/toaster.css';
 export class CrudInformacionFamiliarComponent implements OnInit {
   config: ToasterConfig;
   informacion_contacto_id: number;
+  info_persona_id: number;
+  info_info_familiar: any;
+  tempcorreoPrincipal: any;
+  tempcorreoAlterno: any;
+  temptelefonoPrincipal: any;
+  tempdireccionPrincipal: any;
+  tempdireccionAlterno: any;
+  temptelefonoAlterno: any;
 
+  @Input('info_persona_id')
+  set persona(info_persona_id: number) {
+    this.info_persona_id = info_persona_id;
+    this.loadInfoPersona();
+    console.info('ID_Persona_Familiar: ' + info_persona_id);
+  }
 
 
   @Output() eventChange = new EventEmitter();
@@ -96,6 +111,57 @@ export class CrudInformacionFamiliarComponent implements OnInit {
 
   }
 
+  public loadInfoPersona(): void {
+    console.info('Ojoooooo cargar')
+    this.loading = true;
+    if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
+      this.info_persona_id.toString() !== '') {
+        this.sgaMidService.get('persona/consultar_familiar/' + this.info_persona_id)
+        .subscribe(res => {
+          console.info(res)
+          if (res !== null) {
+            this.datosGet = res;
+            this.tempcorreoPrincipal = JSON.parse(this.datosGet['Correos'][0]['Dato'])
+            this.tempcorreoAlterno = JSON.parse(this.datosGet['Correos'][1]['Dato'])
+            this.temptelefonoPrincipal = JSON.parse(this.datosGet['Numeros'][0]['Dato'])
+            this.temptelefonoAlterno = JSON.parse(this.datosGet['Numeros'][1]['Dato'])
+            this.tempdireccionPrincipal = JSON.parse(this.datosGet['Direcciones'][0]['Dato'])
+            this.tempdireccionAlterno = JSON.parse(this.datosGet['Direcciones'][1]['Dato'])
+            this.info_info_familiar = res;
+            this.formInformacionFamiliar.campos[this.getIndexForm('NombreFamiliarPrincipal')].valor = this.datosGet['Principal']['TerceroFamiliarId']
+            ['NombreCompleto']
+            this.formInformacionFamiliar.campos[this.getIndexForm('Parentesco')].valor = this.datosGet['Relaciones'][0]
+            this.formInformacionFamiliar.campos[this.getIndexForm('ParentescoAlterno')].valor = this.datosGet['Relaciones'][1]
+            this.formInformacionFamiliar.campos[this.getIndexForm('CorreoElectronico')].valor =  this.tempcorreoPrincipal.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('CorreoElectronicoAlterno')].valor = this.tempcorreoAlterno.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('Telefono')].valor = this.temptelefonoPrincipal.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('TelefonoAlterno')].valor = this.temptelefonoAlterno.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('DireccionResidencia')].valor = this.tempdireccionPrincipal.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('DireccionResidenciaAlterno')].valor = this.tempdireccionAlterno.value
+            this.formInformacionFamiliar.campos[this.getIndexForm('NombreFamiliarAlterno')].valor = this.datosGet['Alterno']['TerceroFamiliarId']
+            ['NombreCompleto']
+            this.loading = false;
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    } else {
+      this.info_info_familiar = undefined;
+      this.clean = !this.clean;
+      this.denied_acces = false; // no muestra el formulario a menos que se le pase un id del ente info_caracteristica_id
+      this.loading = false;
+    }
+  }
+
+
 
   setPercentage(event) {
     this.result.emit(event);
@@ -157,8 +223,8 @@ export class CrudInformacionFamiliarComponent implements OnInit {
       if (willDelete.value) {
         const formData = event.data.InformacionFamiliar;
         const tercero: Tercero = {
-          Id: 0,
-          NombreCompleto: 'Mario Pepito Perez',
+          Id: Number(this.info_persona_id),
+          NombreCompleto: undefined,
           TipoContribuyenteId: {
             Id: 1,
             Nombre: undefined,
@@ -188,13 +254,13 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 48,
+                    Id: 51,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
                     GrupoInfoComplementariaId: undefined,
                   },
-                  Dato: JSON.stringify({value: formData.Telefono}),
+                  Dato: JSON.stringify({value: formData.Telefono, Nombre: formData.CorreoElectronico }),
                   Activo: true,
                 },
                 {
@@ -202,7 +268,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 50,
+                    Id: 53,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -216,7 +282,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 51,
+                    Id: 54,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -248,7 +314,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 48,
+                    Id: 51,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -262,7 +328,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 50,
+                    Id: 53,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -276,7 +342,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                   Id: 0,
                   TerceroId: tercero,
                   InfoComplementariaId: {
-                    Id: 51,
+                    Id: 54,
                     Nombre: undefined,
                     CodigoAbreviacion: undefined,
                     Activo: undefined,
@@ -289,6 +355,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
             },
           ],
         }
+        console.info(informacionFamiliarPost)
         this.sgaMidService.post('inscripciones/post_informacion_familiar', informacionFamiliarPost)
             .subscribe((res: any) => {
               if (res.Type === 'error') {

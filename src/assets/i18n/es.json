@@ -272,8 +272,12 @@
         "placeholder_numero_registro": "Ej: Número del registro del icfes",
         "confirme_numero_registro": "CONFIRME el Número del registro del icfes (SNP)",
         "placeholder_confirme_numero_registro": "Ej: Número del registro del icfes",
-        "localidad_colegio": "Localidad del colegio donde culminó el grado 11",
-        "placeholder_localidad_colegio": "Ej: Usme",
+        "localidad_colegio": "País del colegio donde culminó el grado 11",
+        "placeholder_localidad_colegio": "Ej: Colombia",
+        "departamento_colegio": "Departamento del colegio donde culminó el grado 11",
+        "placeholder_departamento_colegio": "Ej: Cundinamarca",
+        "ciudad_colegio": "Ciudad, municipio del colegio donde culminó el grado 11",
+        "placeholder_ciudad_colegio": "Ej: Bogotá",
         "tipo_colegio": "Tipo de Colegio donde culminó el Grado 11",
         "placeholder_tipo_colegio": "Ej: Oficial",
         "valido_colegio": "¿Validó el bachillerato?",
@@ -467,8 +471,14 @@
         "observacion_trans": "Motivos de la Transfeencia",
         "placeholder_observacion_trans": "",
         "fecha_vinculacion": "Fecha de inicio de vinculación EPS",
-        "placeholder_fecha_vinculacion": "Ej: 01/01/2019"
-
+        "placeholder_fecha_vinculacion": "Ej: 01/01/2019",
+        "colegio": "Colegio donde culmunó el grado 11",
+        "placeholder_colegio": "Ej: Colegio Nacional",
+        "Nombrecolegio": "Nombre del colegio donde culmunó el grado 11",
+        "placeholder_Nombrecolegio": "Ej: Colegio Nacional",
+        "DireccionColegio": "Dirección del colegio donde culmunó el grado 11",
+        "placeholder_DireccionColegio": "Ej: Calle 1 # 2 -03",
+        "formacion_academica": "Informacion Academica"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -851,6 +861,6 @@
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Información familiar no actualizada",
         "informacion_familiar_actualizada": "Información familiar actualizada",
-        "seguro_continuar_registrar": "¿Está seguto de registrar esta información familiar?"
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta información familiar?"
     }
 }

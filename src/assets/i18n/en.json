@@ -365,6 +365,12 @@
         "titulo_produccion_artes": "Production title",
         "placeholder_titulo_produccion_artes": "E.g.: Musical sequence ...",
         "tipo_disciplina": "Discipline type",
+        "localidad_colegio": "Country of the school where grade 11 ended",
+        "placeholder_localidad_colegio": "E.g: Colombia",
+        "departamento_colegio": "Department of the school where grade 11 ended",
+        "placeholder_departamento_colegio": "E.g: Cundinamarca",
+        "ciudad_colegio": "City, municipality of the school where grade 11 ended",
+        "placeholder_ciudad_colegio": "E.g: Bogotá",
         "placeholder_tipo_disciplina": "E.g.: Audiovisual arts",
         "tipo_documento_programa": "Document type",
         "placeholder_tipo_documento_programa": "E.g.: Professional card",
@@ -455,7 +461,13 @@
         "observacion_trans": "Reasons for the Transfer",
         "placeholder_observacion_trans": "",
         "fecha_vinculacion": "EPS Link Start Date",
-        "placeholder_fecha_vinculacion": "E.g: 01/01/2019"
+        "placeholder_fecha_vinculacion": "E.g: 01/01/2019",
+        "colegio": "College where grade 11 culminated",
+        "placeholder_colegio": "E.g: National College",
+        "Nombrecolegio": "Name of the school where grade 11 ended",
+        "placeholder_Nombrecolegio": "E.g: National College",
+        "DireccionColegio": "Address of the school where grade 11 ended",
+        "placeholder_DireccionColegio": "E.g: Street 1 # 2 -03"
     },
 
     "ERROR": {

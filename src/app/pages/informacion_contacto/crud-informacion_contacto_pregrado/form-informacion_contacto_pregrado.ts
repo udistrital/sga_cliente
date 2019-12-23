@@ -50,22 +50,14 @@ export let FORM_INFORMACION_CONTACTO_PREGRADO = {
             minimo: 1000,
         },
         {
-            etiqueta: 'select',
+            etiqueta: 'input',
             claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
             nombre: 'EstratoSocioenconomicoCostea',
             label_i18n: 'estrato_costea',
             placeholder_i18n: 'estrato',
             requerido: true,
-            tipo: 'text',
-            key: 'Id',
-            opciones: [
-                { Id: '1' },
-                { Id: '2' },
-                { Id: '3' },
-                { Id: '4' },
-                { Id: '5' },
-                { Id: '6'},
-            ],
+            tipo: 'number',
+
         },
         {
             etiqueta: 'inputConfirmacion',

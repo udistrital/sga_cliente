@@ -1,5 +1,5 @@
 <div *ngIf="!denied_acces">
     <toaster-container [toasterconfig]="config"></toaster-container>
-    <ngx-dinamicform [normalform]="formInformacionFamiliar" [modeloData]="InformacionFamiliar" (result)="validarForm($event)" [clean]="clean" (interlaced)="getSeleccion($event)" (percentage)="setPercentage($event)">
+    <ngx-dinamicform [normalform]="formInformacionFamiliar" [modeloData]="info_info_familiar" (result)="validarForm($event)" [clean]="clean" (interlaced)="getSeleccion($event)" (percentage)="setPercentage($event)">
     </ngx-dinamicform>
 </div>
