@@ -35,7 +35,7 @@ export class CrudTransferenciaInternaComponent implements OnInit {
   clean: boolean;
   loading: boolean;
   percentage: number;
-  ente: any;
+  persona_id: any;
 
   constructor(
     private translate: TranslateService,
@@ -53,7 +53,7 @@ export class CrudTransferenciaInternaComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.ente = this.users.getEnte();
+    this.persona_id = this.users.getPersonaId();
     this.cargarPeriodo();
     this.loading = true;
     this.listService.findProgramaAcademico();
@@ -173,7 +173,7 @@ export class CrudTransferenciaInternaComponent implements OnInit {
       const dataPostTransferencia = {
         InscripcionEstudiante: {
           Id: 0,
-          PersonaId: this.ente,
+          PersonaId: this.persona_id,
           ProgramaAcademicoId: formData.carreratransfiere.Id,
           PeriodoId: this.periodo.Id,
           AceptaTerminos: true,

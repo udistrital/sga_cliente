@@ -17,13 +17,13 @@ import Swal from 'sweetalert2';
 })
 export class ViewPropuestaGradoComponent implements OnInit {
   info_propuesta_grado: PropuestaGrado;
-  ente: number;
+  persona_id: number;
   inscripcion_id: number;
   estado_inscripcion: number;
 
   @Input('persona_id')
   set info(info: number) {
-    this.ente = info;
+    this.persona_id = info;
   }
 
   @Input('inscripcion_id')
@@ -47,7 +47,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.ente = this.users.getEnte();
+    this.persona_id = this.users.getPersonaId();
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {

@@ -16,13 +16,13 @@ import { UserService } from '../../../@core/data/users.service';
   styleUrls: ['./view-experiencia_laboral.component.scss'],
 })
 export class ViewExperienciaLaboralComponent implements OnInit {
-  ente: number;
+  persona_id: number;
   info_experiencia_laboral: any;
   data: Array<any>;
 
   @Input('persona_id')
   set info(info: number) {
-    this.ente = info;
+    this.persona_id = info;
     //  this.loadData();
   }
 
@@ -44,7 +44,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.ente = this.users.getEnte();
+    this.persona_id = this.users.getPersonaId();
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -57,7 +57,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
 
   loadData(): void {
     this.info_experiencia_laboral = <any>[];
-    this.experienciaService.get('soporte_experiencia_laboral/?query=ExperienciaLaboral.Persona:' + this.ente +
+    this.experienciaService.get('soporte_experiencia_laboral/?query=ExperienciaLaboral.Persona:' + this.persona_id +
       '&sortby=Id&order=asc&limit=0')
       .subscribe(res => {
         if (res !== null) {
@@ -77,7 +77,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
               this.documentosSoporte = <Array<any>>response;
 
               if (Object.values(this.documentosSoporte).length === data.length) {
-                this.experienciaService.get('experiencia_laboral/?query=Persona:' + this.ente +
+                this.experienciaService.get('experiencia_laboral/?query=Persona:' + this.persona_id +
                   '&sortby=Id&order=asc&limit=0')
                   .subscribe(res2 => {
                     if (res2 !== null) {

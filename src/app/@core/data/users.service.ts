@@ -28,16 +28,16 @@ export class UserService {
           if (res !== null) {
             this.user = res[0];
             this.user$.next(this.user);
-            window.localStorage.setItem('ente', res[0].Ente);
+            // window.localStorage.setItem('ente', res[0].Ente);
             window.localStorage.setItem('persona_id', res[0].Id);
           }
         });
     }
   }
 
-  public getEnte(): number {
-    return parseInt(window.localStorage.getItem('ente'), 10);
-  }
+  // public getEnte(): number {
+  //   return parseInt(window.localStorage.getItem('ente'), 10);
+  // }
 
   public getPrograma(): number {
     return parseInt(window.localStorage.getItem('programa'), 10);
