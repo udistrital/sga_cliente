@@ -347,7 +347,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           if (res !== null) {
             this.temp_info_academica = <any>res[0];
             const files = []
-            console.log("tesmo", this.temp_info_academica);
             if (this.temp_info_academica.Documento + '' !== '0') {
               files.push({ Id: this.temp_info_academica.Documento, key: 'Documento' });
             }
@@ -355,7 +354,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               .subscribe(response => {
                 const filesResponse = <any>response;
                 if (Object.keys(filesResponse).length === files.length) {
-                  console.log(filesResponse);
                   this.info_formacion_academica = {
                     Nit: this.temp_info_academica.Institucion.Nit,
                     NombreUniversidad: this.temp_info_academica.Institucion.NombreUniversidad,
