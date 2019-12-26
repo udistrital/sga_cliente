@@ -116,7 +116,6 @@ export class CrudIdiomasComponent implements OnInit {
       this.inscripcionService.get('inscripcion_posgrado/?query=InscripcionId:' + this.inscripcion_id)
         .subscribe(res => {
           const r = <any>res[0];
-          console.log("r",r);
           if (res !== null && r.Type !== 'error' && JSON.stringify(res[0]).toString() !== '{}') {
             this.idioma_examen = r.Idioma;
           }
@@ -154,8 +153,8 @@ export class CrudIdiomasComponent implements OnInit {
               text: this.translate.instant('idiomas.error_nativo_examen'),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
-          } else if (this.info_idioma.SeleccionExamen === true && this.idioma_examen !== undefined &&
-            this.info_idioma.Idioma.Id !== this.idioma_examen) {
+          } else if (this.info_idioma.SeleccionExamen === true && this.idioma_examen !== undefined) {
+            // this.info_idioma.Idioma.Id !== this.idioma_examen) {
             Swal({
               type: 'error',
               title: this.translate.instant('GLOBAL.crear'),
