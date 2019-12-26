@@ -358,7 +358,7 @@ export class CrudIcfesComponent implements OnInit {
             this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfesConfirmar')].valor = res['NúmeroRegistroIcfes']
             if (res['Valido'] === true) {
             this.formIcfes.campos[this.getIndexForm('Valido')].valor = {'Id': 'Si'}
-            } else if (res['Valido'] === false){
+            } else if (res['Valido'] === false) {
               this.formIcfes.campos[this.getIndexForm('Valido')].valor = {'Id': 'No'}
             } else {
               this.formIcfes.campos[this.getIndexForm('Valido')].valor = 0
