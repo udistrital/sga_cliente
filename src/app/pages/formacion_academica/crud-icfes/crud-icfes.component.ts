@@ -104,7 +104,8 @@ export class CrudIcfesComponent implements OnInit {
     this.result.emit(this.percentage);
   }
   getSeleccion(event) {
-
+    console.info('Evento')
+    console.info(event)
     if (event.nombre === 'PaisResidencia') {
       this.paisSeleccionado = event.valor;
       this.loadOptionsDepartamentoResidencia();
@@ -118,20 +119,20 @@ export class CrudIcfesComponent implements OnInit {
         this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = true;
         this.formIcfes.campos[this.getIndexForm('NombreColegio')].valor = null;
         this.formIcfes.campos[this.getIndexForm('DireccionColegio')].valor = null;
-        this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].entrelazado = true;
         this.formIcfes.campos[this.getIndexForm('Tipo')].valor = 0;
+        this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].entrelazado = true;
       }if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
       (event.valor.Nombre.toString().toLowerCase() !== 'cundinamarca' ||
         event.valor.Nombre.toString().toLowerCase() !== 'cundinamarca')) {
         this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].entrelazado = true;
         this.formIcfes.campos[this.getIndexForm('Tipo')].valor = 0;
-        this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = true;
+        // this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = true;
         this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = true;
-        this.formIcfes.campos[this.getIndexForm('Colegio')].valor = 0;
-        this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = true;
-        this.formIcfes.campos[this.getIndexForm('NombreColegio')].valor = null;
-        this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = true;
-        this.formIcfes.campos[this.getIndexForm('DireccionColegio')].valor = null;
+        // this.formIcfes.campos[this.getIndexForm('Colegio')].valor = 0;
+        // this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = true;
+        // this.formIcfes.campos[this.getIndexForm('NombreColegio')].valor = null;
+        // this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = true;
+        // this.formIcfes.campos[this.getIndexForm('DireccionColegio')].valor = null;
       }
     } else if (event.nombre === 'CiudadResidencia') {
       this.ciudadSeleccionada = event.valor;
@@ -150,14 +151,14 @@ export class CrudIcfesComponent implements OnInit {
        this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
        this.formIcfes.campos[this.getIndexForm('Tipo')].valor = 0;
        this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = true;
-       this.formIcfes.campos[this.getIndexForm('Colegio')].valor = 0;
+      //  this.formIcfes.campos[this.getIndexForm('Colegio')].valor = 0;
       this.construirForm();
     } else {
         this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = true;
-        this.formIcfes.campos[this.getIndexForm('Colegio')].valor = 0;
+        // this.formIcfes.campos[this.getIndexForm('Colegio')].valor = 0;
         this.construirForm();
         console.info('otroooooooooo con cundinamarca')
       }
@@ -357,10 +358,55 @@ export class CrudIcfesComponent implements OnInit {
             this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfesConfirmar')].valor = res['NúmeroRegistroIcfes']
             if (res['Valido'] === true) {
             this.formIcfes.campos[this.getIndexForm('Valido')].valor = {'Id': 'Si'}
-            } else {
+            } else if (res['Valido'] === false){
               this.formIcfes.campos[this.getIndexForm('Valido')].valor = {'Id': 'No'}
+            } else {
+              this.formIcfes.campos[this.getIndexForm('Valido')].valor = 0
             }
             this.formIcfes.campos[this.getIndexForm('numeroSemestres')].valor = res['numeroSemestres']['InfoComplementariaId']
+            this.formIcfes.campos[this.getIndexForm('PaisResidencia')].valor = res ['Lugar']['PAIS']
+            this.ciudadSeleccionada =  res ['Lugar']['CIUDAD'];
+            if ((this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogotá' ||
+              this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogota')) {
+                this.formIcfes.campos[this.getIndexForm('DepartamentoResidencia')].valor =  {
+                  'Activo': true,
+                  'FechaCreacion': '2019-12-11 16:13:10.710536 +0000 UTC',
+                  'FechaModificacion': '2019-12-11 16:13:10.710536 +0000 UTC',
+                  'Id': 824,
+                  'Nombre': 'Cundinamarca',
+                  'TipoLugar': {
+                    'Activo': true,
+                    'CodigoAbreviacion': 'C',
+                    'Descripcion': 'Ciudad',
+                    'FechaCreacion': '2019-12-11 15:33:18.168012 +0000 UTC',
+                    'FechaModificacion': '2019-12-11 15:33:18.168012 +0000 UTC',
+                    'Id': 2,
+                    'Nombre': 'CIUDAD',
+                    'NumeroOrden': 2,
+                  },
+                }
+                this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].valor = res ['Lugar']['CIUDAD']
+          }else {
+            this.formIcfes.campos[this.getIndexForm('DepartamentoResidencia')].valor = res ['Lugar']['DEPARTAMENTO']
+            this.formIcfes.campos[this.getIndexForm('CiudadResidencia')].valor = res ['Lugar']['CIUDAD']
+          }
+          if (res['TipoColegio'] === 7) {
+            this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
+            this.formIcfes.campos[this.getIndexForm('Tipo')].valor = {'Id': 'Oficial'}
+            this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = false;
+            this.formIcfes.campos[this.getIndexForm('Colegio')].valor = res['Colegio']
+          } else if (res['TipoColegio'] === 12) {
+            this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
+            this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = false;
+            this.formIcfes.campos[this.getIndexForm('Tipo')].valor = {'Id': 'Privado'}
+            this.formIcfes.campos[this.getIndexForm('Colegio')].valor = res['Colegio']
+          } else {
+            this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = true;
+            this.formIcfes.campos[this.getIndexForm('Tipo')].valor = 0;
+            this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = true;
+            this.formIcfes.campos[this.getIndexForm('Colegio')].valor = 0;
+          }
+
             // this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] =
             // this.info_info_caracteristica.DepartamentoNacimiento;
             // this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones[0] = this.info_info_caracteristica.Lugar;
