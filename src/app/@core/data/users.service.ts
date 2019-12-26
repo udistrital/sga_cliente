@@ -10,7 +10,8 @@ const httpOptions = {
   }),
 }
 
-const path = environment.PERSONA_SERVICE;
+// const path = environment.PERSONA_SERVICE;
+const path = environment.TERCEROS_SERVICE;
 
 @Injectable()
 export class UserService {
@@ -23,7 +24,8 @@ export class UserService {
       const id_token = window.localStorage.getItem('id_token').split('.');
       const payload = JSON.parse(atob(id_token[1]));
       window.localStorage.setItem('usuario', payload.sub);
-      this.http.get(path + 'persona/?query=Usuario:' + payload.sub, httpOptions)
+      // this.http.get(path + 'persona/?query=Usuario:' + payload.sub, httpOptions)
+      this.http.get(path + 'tercero/?query=UsuarioWSO2:' + payload.sub, httpOptions)
         .subscribe(res => {
           if (res !== null) {
             this.user = res[0];
