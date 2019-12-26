@@ -116,6 +116,7 @@ export class CrudIdiomasComponent implements OnInit {
       this.inscripcionService.get('inscripcion_posgrado/?query=InscripcionId:' + this.inscripcion_id)
         .subscribe(res => {
           const r = <any>res[0];
+          console.log("r",r);
           if (res !== null && r.Type !== 'error' && JSON.stringify(res[0]).toString() !== '{}') {
             this.idioma_examen = r.Idioma;
           }
