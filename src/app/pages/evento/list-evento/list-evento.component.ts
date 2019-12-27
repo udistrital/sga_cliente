@@ -150,7 +150,6 @@ export class ListEventoComponent implements OnInit {
     console.info('Load data list')
     console.info(this.info_persona_id)
     // this.campusMidService.get('evento/' + this.user.getPersonaId()).subscribe((res: any) => {
-   
     this.sgaMidService.get('evento/' +  this.info_persona_id)
     .subscribe((res: any) => {
       if (res !== null) {
