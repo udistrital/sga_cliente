@@ -859,6 +859,7 @@
         "experiencia_laboral_registrada": "Work experience registered",
         "documento_experiencia_laboral_no_registrado": "Error uploading support document",
         "seguro_continuar_registrar": "Are you sure you want to register this work experience?",
+        "cargar_experiencia": "An error happened loading the work experience information",
         "error_cargar_empresa": "An error happened loading the company information"
     },
     "documento_programa": {

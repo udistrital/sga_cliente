@@ -872,6 +872,7 @@
         "experiencia_laboral_registrada": "Experiencia laboral actualizada",
         "documento_experiencia_laboral_no_registrado": "Error subiendo el documento de soporte",
         "seguro_continuar_registrar": "¿Está seguto de registrar esta experiencia laboral?",
+        "cargar_experiencia": "Ocurruió un error al cargar la información de la experiencia laboral",
         "error_cargar_empresa": "Ocurruió un error al cargar la información de la empresa"
     },
     "documento_programa": {
