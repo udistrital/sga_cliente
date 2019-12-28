@@ -33,7 +33,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   @Input('info_experiencia_laboral_id')
   set name(info_experiencia_laboral_id: number) {
     this.info_experiencia_laboral_id = info_experiencia_laboral_id;
-    // this.loadInfoExperienciaLaboral();
+    this.loadInfoExperienciaLaboral();
   }
 
   @Input('ente_id')
@@ -122,99 +122,105 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     return 0;
   }
 
-  // public loadInfoExperienciaLaboral(): void {
-  //   this.loading = true;
-  //   this.temp = {};
-  //   this.info_experiencia_laboral = {};
-  //   this.soporte = [];
-  //   if (this.info_experiencia_laboral_id !== undefined &&
-  //     this.info_experiencia_laboral_id !== 0 &&
-  //     this.info_experiencia_laboral_id.toString() !== '') {
-  //     this.campusMidService.get('experiencia_laboral/' + this.info_experiencia_laboral_id)
-  //       .subscribe(res => {
-  //         if (res !== null) {
-  //           this.temp = <any>res;
-  //           const files = [];
-  //           if (this.temp.Documento + '' !== '0') {
-  //             files.push({ Id: this.temp.Documento, key: 'Soporte' });
-  //             this.nuxeoService.getDocumentoById$(files, this.documentoService)
-  //               .subscribe(response => {
-  //                 const filesResponse = <any>response;
-  //                 if (Object.keys(filesResponse).length === files.length) {
-  //                   this.info_experiencia_laboral = <any>res;
-  //                   this.soporte = this.info_experiencia_laboral.Soporte;
-  //                   this.info_experiencia_laboral.Soporte = filesResponse['Soporte'] + '';
-  //                   this.enteService.get('identificacion/?query=Ente.Id:' +
-  //                     this.info_experiencia_laboral.Organizacion + ',TipoIdentificacion.Id:5').subscribe(r => {
-  //                       if (r !== null) {
-  //                         this.searchOrganizacion(r[0].NumeroIdentificacion);
-  //                         this.loading = false;
-  //                       }
-  //                     },
-  //                       (error: HttpErrorResponse) => {
-  //                         Swal({
-  //                           type: 'error',
-  //                           title: error.status + '',
-  //                           text: this.translate.instant('ERROR.' + error.status),
-  //                           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                             this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-  //                             this.translate.instant('GLOBAL.nombre_empresa'),
-  //                           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                         });
-  //                       });
-  //                 }
-  //               },
-  //                 (error: HttpErrorResponse) => {
-  //                   Swal({
-  //                     type: 'error',
-  //                     title: error.status + '',
-  //                     text: this.translate.instant('ERROR.' + error.status),
-  //                     footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                       this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-  //                       this.translate.instant('GLOBAL.soporte_documento'),
-  //                     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                   });
-  //                 })
-  //           } else {
-  //             this.info_experiencia_laboral = <any>res;
-  //             this.enteService.get('identificacion/?query=Ente.Id:' +
-  //               this.info_experiencia_laboral.Organizacion + ',TipoIdentificacion.Id:5').subscribe(r => {
-  //                 if (r !== null) {
-  //                   this.searchOrganizacion(r[0].NumeroIdentificacion);
-  //                 }
-  //               },
-  //                 (error: HttpErrorResponse) => {
-  //                   Swal({
-  //                     type: 'error',
-  //                     title: error.status + '',
-  //                     text: this.translate.instant('ERROR.' + error.status),
-  //                     footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                       this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-  //                       this.translate.instant('GLOBAL.nombre_empresa'),
-  //                     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                   });
-  //                 });
-  //           }
-  //         }
-  //       },
-  //         (error: HttpErrorResponse) => {
-  //           Swal({
-  //             type: 'error',
-  //             title: error.status + '',
-  //             text: this.translate.instant('ERROR.' + error.status),
-  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //               this.translate.instant('GLOBAL.experiencia_laboral'),
-  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //           });
-  //         });
-  //   } else {
-  //     this.soporte = [];
-  //     this.temp = {};
-  //     this.info_experiencia_laboral = undefined
-  //     this.clean = !this.clean;
-  //     this.loading = false;
-  //   }
-  // }
+  public loadInfoExperienciaLaboral(): void {
+    this.temp = {};
+    this.info_experiencia_laboral = {};
+    this.soporte = [];
+    if (this.info_experiencia_laboral_id !== undefined &&
+      this.info_experiencia_laboral_id !== 0 &&
+      this.info_experiencia_laboral_id.toString() !== '') {
+      this.sgaMidService.get('experiencia_laboral/' + this.info_experiencia_laboral_id)
+        .subscribe(res => {
+          if (res !== null) {
+            this.temp = <any>res;
+            const files = [];
+            if (this.temp.Documento + '' !== '0') {
+              files.push({ Id: this.temp.Documento, key: 'Soporte' });
+              this.nuxeoService.getDocumentoById$(files, this.documentoService)
+                .subscribe(response => {
+                  const filesResponse = <any>response;
+                  if (Object.keys(filesResponse).length === files.length) {
+                    this.info_experiencia_laboral = <any>res;
+                    this.soporte = this.info_experiencia_laboral.Soporte;
+                    this.info_experiencia_laboral.Soporte = filesResponse['Soporte'] + '';
+                    this.info_experiencia_laboral.Nit = this.info_experiencia_laboral.Organizacion.NumeroIdentificacion;
+                    this.info_experiencia_laboral.NombreEmpresa = this.info_experiencia_laboral.Organizacion.Nombre;
+                    this.info_experiencia_laboral.TipoOrganizacion = this.info_experiencia_laboral.Organizacion.TipoOrganizacion;
+                    this.info_experiencia_laboral.Direccion = this.info_experiencia_laboral.Organizacion.Direccion;
+                    this.info_experiencia_laboral.Telefono = this.info_experiencia_laboral.Organizacion.Telefono;
+                    this.info_experiencia_laboral.Correo = this.info_experiencia_laboral.Organizacion.Correo;
+                    this.info_experiencia_laboral.Pais = this.info_experiencia_laboral.Organizacion.Pais;
+                    // this.enteService.get('identificacion/?query=Ente.Id:' +
+                    //   this.info_experiencia_laboral.Organizacion + ',TipoIdentificacion.Id:5').subscribe(r => {
+                    //     if (r !== null) {
+                    //       this.searchOrganizacion(r[0].NumeroIdentificacion);
+                    //       this.loading = false;
+                    //     }
+                    //   },
+                    //     (error: HttpErrorResponse) => {
+                    //       Swal({
+                    //         type: 'error',
+                    //         title: error.status + '',
+                    //         text: this.translate.instant('ERROR.' + error.status),
+                    //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                    //           this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+                    //           this.translate.instant('GLOBAL.nombre_empresa'),
+                    //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    //       });
+                    //     });
+                  }
+                },
+                  (error: HttpErrorResponse) => {
+                    Swal({
+                      type: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                        this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+                        this.translate.instant('GLOBAL.soporte_documento'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                  })
+            }
+          //   } else {
+          //     this.info_experiencia_laboral = <any>res;
+          //     this.enteService.get('identificacion/?query=Ente.Id:' +
+          //       this.info_experiencia_laboral.Organizacion + ',TipoIdentificacion.Id:5').subscribe(r => {
+          //         if (r !== null) {
+          //           this.searchOrganizacion(r[0].NumeroIdentificacion);
+          //         }
+          //       },
+          //         (error: HttpErrorResponse) => {
+          //           Swal({
+          //             type: 'error',
+          //             title: error.status + '',
+          //             text: this.translate.instant('ERROR.' + error.status),
+          //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
+          //               this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+          //               this.translate.instant('GLOBAL.nombre_empresa'),
+          //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          //           });
+          //         });
+          //   }
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.experiencia_laboral'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    } else {
+      this.soporte = [];
+      this.temp = {};
+      this.info_experiencia_laboral = undefined
+      this.clean = !this.clean;
+    }
+  }
 
   // updateInfoExperienciaLaboral(infoExperienciaLaboral: any): void {
   //   const opt: any = {
