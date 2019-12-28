@@ -29,7 +29,7 @@ export class CrudIdiomasComponent implements OnInit {
   @Input('info_idioma_id')
   set name(info_idioma_id: number) {
     this.info_idioma_id = info_idioma_id;
-    // this.loadInfoIdioma();
+    this.loadInfoIdioma();
   }
 
   @Input('inscripcion_id')
@@ -56,6 +56,7 @@ export class CrudIdiomasComponent implements OnInit {
   percentage: number;
   persona_id: number;
   idioma_examen: any;
+  idioma: number;
 
   constructor(
     private translate: TranslateService,
@@ -216,6 +217,32 @@ export class CrudIdiomasComponent implements OnInit {
           }
         }
       });
+  }
+
+  public loadInfoIdioma(): void {
+    if (this.info_idioma_id !== undefined && this.info_idioma_id !== 0 &&
+      this.info_idioma_id.toString() !== '') {
+      this.idiomaService.get('conocimiento_idioma/?query=Id:' + this.info_idioma_id)
+        .subscribe(res => {
+          if (res !== null) {
+            this.info_idioma = <InfoIdioma>res[0];
+            this.idioma = this.info_idioma.Idioma.Id;
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('idiomas.error_cargar_informacion_idiomas'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    } else {
+      this.info_idioma = undefined;
+      this.idioma = undefined;
+      this.clean = !this.clean;
+    }
   }
 
   validarForm(event) {
