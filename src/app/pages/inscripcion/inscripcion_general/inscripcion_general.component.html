@@ -5,7 +5,7 @@
             <!-- select tipo de inscripcion -->
             <mat-form-field style="width: 100%;">
                 <mat-label>{{ 'inscripcion.aviso_tipo' | translate }}:</mat-label>
-                <mat-select [(ngModel)]="selectedTipo" (ngModelChange)="tipo_inscripcion()">
+                <mat-select [(ngModel)]="selectedTipo" (ngModelChange)="cargaproyectoseventosactivos()">
                     <mat-option>--Seleccionar--</mat-option>
                     <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
                         {{item.Nombre}}
@@ -17,7 +17,7 @@
             <div *ngIf="selectprograma">
                 <mat-form-field style="width: 100%;">
                     <mat-label>{{ 'inscripcion.aviso_programa' | translate }}:</mat-label>
-                    <mat-select [(ngModel)]="selectedValue" (ngModelChange)="pruebita()">
+                    <mat-select [(ngModel)]="selectedValue" (ngModelChange)="tipo_inscripcion()" [disabled]="SelectedTipoBool">
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of posgrados" [value]="item">
                             {{item.Nombre}}

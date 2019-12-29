@@ -18,6 +18,7 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { from } from 'rxjs';
 import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -58,6 +59,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   step = 0;
   cambioTab = 0;
   nForms: number;
+  SelectedTipoBool: boolean = true;
 
   percentage_info: number = 0;
   percentage_acad: number = 0;
@@ -120,12 +122,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private inscripcionService: InscripcionService,
     private userService: UserService,
     private programaService: OikosService,
+    private sgaMidService: SgaMidService,
   ) {
     this.imagenes = IMAGENES;
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    // this.loadInfoPostgrados();
+    this.loadInfoPostgrados();
     this.loadTipoInscripcion();
     this.total = true;
     // if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
@@ -229,28 +232,31 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         });
   }
 
-  // loadInfoPostgrados() {
-  //   this.programaService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:15&limit=0')
-  //     .subscribe(res => {
-  //       const r = <any>res;
-  //       if (res !== null && r.Type !== 'error') {
-  //         const programaPosgrados = <Array<any>>res;
-  //         programaPosgrados.forEach(element => {
-  //           this.posgrados.push(element.DependenciaId);
-  //         });
-  //       }
-  //     },
-  //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
-  //           title: error.status + '',
-  //           text: this.translate.instant('ERROR.' + error.status),
-  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //             this.translate.instant('GLOBAL.programa_academico'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       });
-  // }
+  loadInfoPostgrados() {
+    // Tener el cuenta que el 5 corresponde al id del evento padre de inscripcion en una facultad
+    this.sgaMidService.get('inscripciones/consultar_proyectos_eventos/5')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          const programaPosgrados = <Array<any>>res;
+          console.info('Proyectos')
+          console.info(programaPosgrados)
+          programaPosgrados.forEach(element => {
+            this.posgrados.push(element);
+          });
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.programa_academico'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
 
   // getInfoInscripcion() {
   //   if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
@@ -654,12 +660,17 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   }
 
-  pruebita() {
-    // window.localStorage.setItem('programa', this.selectedValue.Id);
-    this.selectedValue = true;
+  cargaproyectoseventosactivos() {
+    this.SelectedTipoBool = false
+    this.selectedTipo = this.selectedTipo.Nombre
+    console.info(this.selectedValue)
+    if (this.selectedValue === true) {
+      this.tipo_inscripcion();
+    }
   }
   tipo_inscripcion() {
-    switch (this.selectedTipo.Nombre) {
+    console.info('Tipo metodo')
+    switch (this.selectedTipo) {
       case ('Pregrado'):
         this.selectTipo = 'Pregrado';
         this.selectedValue = true;
