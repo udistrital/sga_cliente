@@ -34,7 +34,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   @Input('documento_programa_id')
   set name(documento_programa_id: number) {
     this.documento_programa_id = documento_programa_id;
-    // this.loadDocumentoPrograma();
+    this.loadDocumentoPrograma();
   }
 
   @Input('persona_id')
@@ -186,7 +186,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
         });
       });
   }
-
+*/
   public loadDocumentoPrograma(): void {
     this.loading = true;
     this.temp = {};
@@ -283,7 +283,8 @@ export class CrudDocumentoProgramaComponent implements OnInit {
       this.loading = false;
     }
   }
-
+  
+  /*
   updateDocumentoPrograma(soporteDocumentoPrograma: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
