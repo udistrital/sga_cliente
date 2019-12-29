@@ -143,6 +143,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   async loadData() {
     try {
+      this.info_persona_id = this.userService.getPersonaId();
       await this.cargarPeriodo();
       await this.loadInfoInscripcion();
     } catch (error) {

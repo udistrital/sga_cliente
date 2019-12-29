@@ -449,7 +449,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
         if (willDelete.value) {
           const files = [];
           this.info_documento_programa = <SoporteDocumentoPrograma>documentoPrograma;
-          this.info_documento_programa.PersonaId = this.persona || 1;
+          this.info_documento_programa.PersonaId = Number(this.persona) || 1;
           this.info_documento_programa.DocumentoProgramaId = this.info_documento_programa.DocumentoProgramaId;
           if (this.info_documento_programa.Documento.file !== undefined) {
             files.push({

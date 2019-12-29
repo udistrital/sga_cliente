@@ -412,7 +412,7 @@
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.documento_programa' | translate }}">
-                    <ngx-list-documento-programa (result)="setPercentage_docu($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
+                    <ngx-list-documento-programa (result)="setPercentage_docu($event,0)" persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}">
                     </ngx-list-documento-programa>
                 </nb-tab>
             </nb-tabset>

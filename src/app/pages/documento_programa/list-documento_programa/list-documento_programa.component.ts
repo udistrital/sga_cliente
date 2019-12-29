@@ -7,6 +7,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 
 @Component({
   selector: 'ngx-list-documento-programa',
@@ -40,7 +41,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
         // this.getDocumentosPrograma();
-        // this.loadData();
+        this.loadData();
     }
   }
 
@@ -101,46 +102,46 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.translate.use(language);
   }
 
-  getDocumentosPrograma(): void {
-    this.contador = 0;
-    this.inscripcionService.get('inscripcion/' + this.inscripcion)
-      .subscribe(dato_inscripcion => {
-        const inscripciondata = <any>dato_inscripcion;
-        if (dato_inscripcion !== null && JSON.stringify(dato_inscripcion[0]) !== '{}') {
-          const programa = inscripciondata.ProgramaAcademicoId;
-          const periodo = inscripciondata.PeriodoId;
-          this.documentoProgramaService.get('documento_programa/?query=ProgramaId:' + programa +
-            ',PeriodoId:' + periodo + '&limit=0')
-            .subscribe(documentoPrograma => {
-              if (documentoPrograma !== null && JSON.stringify(documentoPrograma[0]) !== '{}') {
-                const docProgramas = <Array<any>>documentoPrograma;
-                this.contador = docProgramas.length;
-              }
-            },
-              (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
-                  title: error.status + '',
-                  text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                    this.translate.instant('GLOBAL.documento_programa'),
-                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                });
-              });
-        }
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.documento_programa') + '|' +
-              this.translate.instant('GLOBAL.admision'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
-  }
+  // getDocumentosPrograma(): void {
+  //   this.contador = 0;
+  //   this.inscripcionService.get('inscripcion/' + this.inscripcion)
+  //     .subscribe(dato_inscripcion => {
+  //       const inscripciondata = <any>dato_inscripcion;
+  //       if (dato_inscripcion !== null && JSON.stringify(dato_inscripcion[0]) !== '{}') {
+  //         const programa = inscripciondata.ProgramaAcademicoId;
+  //         const periodo = inscripciondata.PeriodoId;
+  //         this.documentoProgramaService.get('documento_programa/?query=ProgramaId:' + programa +
+  //           ',PeriodoId:' + periodo + '&limit=0')
+  //           .subscribe(documentoPrograma => {
+  //             if (documentoPrograma !== null && JSON.stringify(documentoPrograma[0]) !== '{}') {
+  //               const docProgramas = <Array<any>>documentoPrograma;
+  //               this.contador = docProgramas.length;
+  //             }
+  //           },
+  //             (error: HttpErrorResponse) => {
+  //               Swal({
+  //                 type: 'error',
+  //                 title: error.status + '',
+  //                 text: this.translate.instant('ERROR.' + error.status),
+  //                 footer: this.translate.instant('GLOBAL.cargar') + '-' +
+  //                   this.translate.instant('GLOBAL.documento_programa'),
+  //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  //               });
+  //             });
+  //       }
+  //     },
+  //       (error: HttpErrorResponse) => {
+  //         Swal({
+  //           type: 'error',
+  //           title: error.status + '',
+  //           text: this.translate.instant('ERROR.' + error.status),
+  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
+  //             this.translate.instant('GLOBAL.documento_programa') + '|' +
+  //             this.translate.instant('GLOBAL.admision'),
+  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  //         });
+  //       });
+  // }
 
   loadData(): void {
     this.info_data = <any>[];
@@ -159,7 +160,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
                   .subscribe(documentoPrograma => {
                     if (documentoPrograma !== null && JSON.stringify(documentoPrograma[0]) !== '{}') {
                       this.programaDocumento =  <Array<any>>documentoPrograma;
-                      if (this.programaDocumento.PeriodoId === this.periodo) {
+                      // if (this.programaDocumento.PeriodoId === this.periodo) {
                         element.DocumentoPrograma = this.programaDocumento;
                         this.documentoProgramaService.get('tipo_documento_programa/' +
                           this.programaDocumento.TipoDocumentoProgramaId.Id)
@@ -183,7 +184,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
                               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                             });
                           });
-                      }
+                      // }
                     }
                   },
                     (error: HttpErrorResponse) => {
