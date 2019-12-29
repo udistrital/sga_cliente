@@ -283,7 +283,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
       this.loading = false;
     }
   }
-  
+
   /*
   updateDocumentoPrograma(soporteDocumentoPrograma: any): void {
     const opt: any = {
