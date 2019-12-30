@@ -42,6 +42,7 @@ export class CrudInformacionContactoComponent implements OnInit {
   clean: boolean;
   paisSeleccionado: any;
   departamentoSeleccionado: any;
+  denied_acces: boolean = false;
 
   constructor(
     private translate: TranslateService,

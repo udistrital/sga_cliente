@@ -87,6 +87,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     this.translate.use(language);
   }
 
+  getPais(event) {}
   // getPais(event) {
   //   this.paisSelecccionado = event.valor;
   //   // this.loadOptionsPaisUniversidad();
