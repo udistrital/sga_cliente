@@ -56,6 +56,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   creandoAutor: boolean;
   editando: boolean;
   settings_authors: any;
+  DatosAdicionales: any;
   source: LocalDataSource = new LocalDataSource();
   Metadatos: any[];
 
