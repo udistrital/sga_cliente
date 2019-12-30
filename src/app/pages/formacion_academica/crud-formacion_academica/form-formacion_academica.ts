@@ -8,17 +8,7 @@ export let FORM_FORMACION_ACADEMICA = {
   campos: [
     {
       etiqueta: 'input',
-      claseGrid: 'col-lg-6 col-md-5 col-sm-12 col-xs-12',
-      nombre: 'NombreUniversidad',
-      label_i18n: 'nombre_universidad',
-      placeholder_i18n: 'nombre_universidad',
-      requerido: true,
-      deshabilitar: false,
-      tipo: 'text',
-    },
-    {
-      etiqueta: 'input',
-      claseGrid: 'col-lg-5 col-md-5 col-sm-10 col-xs-10',
+      claseGrid: 'col-lg-11 col-md-11 col-sm-11 col-xs-11',
       nombre: 'Nit',
       label_i18n: 'nit',
       placeholder_i18n: 'nit',
@@ -31,6 +21,16 @@ export let FORM_FORMACION_ACADEMICA = {
       nombre: 'BusquedaBoton',
       claseBoton: 'btn btn-primary btn-sm',
       icono: 'fa fa-search',
+    },
+    {
+      etiqueta: 'input',
+      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
+      nombre: 'NombreUniversidad',
+      label_i18n: 'nombre_universidad',
+      placeholder_i18n: 'nombre_universidad',
+      requerido: true,
+      deshabilitar: true,
+      tipo: 'text',
     },
     {
       etiqueta: 'select',

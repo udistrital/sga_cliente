@@ -17,12 +17,12 @@ import Swal from 'sweetalert2';
 export class ViewFormacionAcademicaComponent implements OnInit {
   info_formacion_academica_id: number;
   organizacion: any;
-  ente: number;
+  persona_id: number;
 
   @Input('persona_id')
   set info(info: number) {
-    this.ente = info;
-    this.loadData();
+    this.persona_id = info;
+    // this.loadData();
   }
 
   // tslint:disable-next-line: no-output-rename
@@ -42,7 +42,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.ente = this.users.getEnte();
+    this.persona_id = this.users.getPersonaId();
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -54,7 +54,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   }
 
   loadData(): void {
-    this.campusMidService.get('formacion_academica/?Ente=' + this.ente)
+    this.campusMidService.get('formacion_academica/?Ente=' + this.persona_id)
       .subscribe(res => {
         if (res !== null) {
           const data = <Array<any>>res;

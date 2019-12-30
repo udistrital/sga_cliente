@@ -46,7 +46,7 @@
       <div [hidden]="mostrarInfo || mostrarForm">
         <toaster-container [toasterconfig]="config"></toaster-container>
         <ngx-dinamicform [normalform]="formPago" [modeloData]="info_pago"></ngx-dinamicform>
-        <ngx-loading [hidden]="!loading"></ngx-loading>
+        <!--ngx-loading [hidden]="!loading"></ngx-loading-->
         <div align="right">
           <button class="btn btn-primary btn-sm" (click)="mostrarConsignacion()" [hidden]="!btnOficina">{{"GLOBAL.oficina" | translate}}</button>
           <button class="btn btn-success btn-sm" (click)="cargarConsignacion()" [hidden]="!btnCargar">{{"GLOBAL.consignacion" | translate}}</button>

@@ -1,7 +1,7 @@
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { DescuentoAcademicoService } from '../../../@core/data/descuento_academico.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
@@ -15,6 +15,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SolicitudDescuento } from '../../../@core/data/models/descuento/solicitud_descuento';
 import { DescuentoDependencia } from '../../../@core/data/models/descuento/descuento_dependencia';
 import { TipoDescuento } from '../../../@core/data/models/descuento/tipo_descuento';
+import { ListService } from '../../../@core/store/services/list.service';
+import { IAppState } from '../../../@core/store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ngx-crud-descuento-academico',
@@ -48,7 +51,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     this.inscripcion = inscripcion_id;
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
-        console.info('InscripcionDes: ' + this.inscripcion);
+        // console.info('InscripcionDes: ' + this.inscripcion);
         // this.loadOptionsTipoDescuento();
     }
   }
@@ -72,7 +75,9 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     private documentoService: DocumentoService,
     private descuentoService: DescuentoAcademicoService,
     private inscripcionService: InscripcionService,
-    private mid: CampusMidService,
+    private sgaMidService: SgaMidService,
+    private store: Store<IAppState>,
+    private listService: ListService,
     private nuxeoService: NuxeoService,
     // private user: UserService,
     private toasterService: ToasterService) {
@@ -81,7 +86,24 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.loading = false;
+    this.listService.findDescuentoDependencia();
+    this.loadLists();
+  }
+
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+        if (list.listDescuentoDependencia[0]) {
+          this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = list.listDescuentoDependencia[0]
+            .map((descuentoDependencia) => {
+            return {
+              Id: descuentoDependencia.Id,
+              Nombre: descuentoDependencia.TipoDescuentoId.Id + '. ' + descuentoDependencia.TipoDescuentoId.Nombre,
+            }
+          });
+        }
+      },
+   );
   }
 
   construirForm() {
@@ -442,82 +464,78 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   //       });
   // }
 
-  // createDescuentoAcademico(DescuentoAcademico: any): void {
-  //   const opt: any = {
-  //     title: this.translate.instant('GLOBAL.crear'),
-  //     text: this.translate.instant('GLOBAL.crear') + '?',
-  //     icon: 'warning',
-  //     buttons: true,
-  //     dangerMode: true,
-  //     showCancelButton: true,
-  //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-  //   };
-  //   Swal(opt)
-  //     .then((willDelete) => {
-  //       this.loading = true;
-  //       if (willDelete.value) {
-  //         const files = [];
-  //         this.info_descuento_academico = <SolicitudDescuento>DescuentoAcademico;
-  //         this.info_descuento_academico.PersonaId = 1 * this.persona;
-  //         this.info_descuento_academico.PeriodoId = this.periodo;
-  //         this.info_descuento_academico.DescuentosDependenciaId = this.info_descuento_academico.DescuentoDependencia;
-  //         if (this.info_descuento_academico.Documento.file !== undefined) {
-  //           files.push({
-  //             nombre: this.autenticationService.getPayload().sub, key: 'SoporteDescuento',
-  //             file: this.info_descuento_academico.Documento.file, IdDocumento: 7,
-  //           });
-  //         }
-  //         this.nuxeoService.getDocumentos$(files, this.documentoService)
-  //           .subscribe(response => {
-  //             if (Object.keys(response).length === files.length) {
-  //               const filesUp = <any>response;
-  //               if (filesUp['SoporteDescuento'] !== undefined) {
-  //                 this.info_descuento_academico.DocumentoId = filesUp['SoporteDescuento'].Id;
-  //               }
-  //               this.mid.post('descuento_academico/', this.info_descuento_academico)
-  //                 .subscribe(res => {
-  //                   const r = <any>res
-  //                   if (r !== null && r.Type !== 'error') {
-  //                     this.loading = false;
-  //                     this.eventChange.emit(true);
-  //                     this.showToast('info', this.translate.instant('GLOBAL.crear'),
-  //                       this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
-  //                       this.translate.instant('GLOBAL.confirmarCrear'));
-  //                     this.descuento_academico_id = 0;
-  //                     this.info_descuento_academico = undefined;
-  //                     this.clean = !this.clean;
-  //                   } else {
-  //                     this.showToast('error', this.translate.instant('GLOBAL.error'),
-  //                       this.translate.instant('GLOBAL.error'));
-  //                   }
-  //                 },
-  //                   (error: HttpErrorResponse) => {
-  //                     Swal({
-  //                       type: 'error',
-  //                       title: error.status + '',
-  //                       text: this.translate.instant('ERROR.' + error.status),
-  //                       footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                         this.translate.instant('GLOBAL.descuento_matricula'),
-  //                       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                     });
-  //                   });
-  //             }
-  //           },
-  //             (error: HttpErrorResponse) => {
-  //               Swal({
-  //                 type: 'error',
-  //                 title: error.status + '',
-  //                 text: this.translate.instant('ERROR.' + error.status),
-  //                 footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                   this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-  //                   this.translate.instant('GLOBAL.soporte_documento'),
-  //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //               });
-  //             });
-  //       }
-  //     });
-  // }
+  createDescuentoAcademico(DescuentoAcademico: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.crear'),
+      text: this.translate.instant('descuento_academico.seguro_continuar_registrar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        this.loading = true;
+        if (willDelete.value) {
+          const files = [];
+          this.info_descuento_academico = <SolicitudDescuento>DescuentoAcademico;
+          this.info_descuento_academico.PersonaId = this.persona || 1;
+          this.info_descuento_academico.PeriodoId = this.periodo;
+          this.info_descuento_academico.DescuentosDependenciaId = this.info_descuento_academico.DescuentoDependencia;
+          if (this.info_descuento_academico.Documento.file !== undefined) {
+            files.push({
+              nombre: this.autenticationService.getPayload().sub, key: 'SoporteDescuento',
+              file: this.info_descuento_academico.Documento.file, IdDocumento: 7,
+            });
+          }
+          this.nuxeoService.getDocumentos$(files, this.documentoService)
+            .subscribe(response => {
+              if (Object.keys(response).length === files.length) {
+                const filesUp = <any>response;
+                if (filesUp['SoporteDescuento'] !== undefined) {
+                  this.info_descuento_academico.DocumentoId = filesUp['SoporteDescuento'].Id;
+                }
+                this.sgaMidService.post('descuento_academico/', this.info_descuento_academico)
+                  .subscribe(res => {
+                    const r = <any>res
+                    if (r !== null && r.Type !== 'error') {
+                      this.loading = false;
+                      this.eventChange.emit(true);
+                      this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                        this.translate.instant('descuento_academico.descuento_academico_registrado'));
+                      this.descuento_academico_id = 0;
+                      this.info_descuento_academico = undefined;
+                      this.clean = !this.clean;
+                    } else {
+                      this.showToast('error', this.translate.instant('GLOBAL.error'),
+                        this.translate.instant('descuento_academico.descuento_academico_no_registrado'));
+                    }
+                  },
+                    (error: HttpErrorResponse) => {
+                      Swal({
+                        type: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('descuento_academico.descuento_academico_no_registrado'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      });
+                    });
+              }
+            },
+              (error: HttpErrorResponse) => {
+                Swal({
+                  type: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('descuento_academico.documento_descuento_academico_no_registrado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
+        }
+      });
+  }
 
   ngOnInit() {
     // this.loadDescuentoAcademico();
@@ -530,11 +548,12 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
-      if (this.info_descuento_academico === undefined) {
-        // this.crearNuevoDescuentoAcademico(event.data.SolicitudDescuento);
-      } else {
-        // this.updateDescuentoAcademico(event.data.SolicitudDescuento);
-      }
+      // if (this.info_descuento_academico === undefined) {
+      //   // this.crearNuevoDescuentoAcademico(event.data.SolicitudDescuento);
+      // } else {
+      //   // this.updateDescuentoAcademico(event.data.SolicitudDescuento);
+      // }
+      this.createDescuentoAcademico(event.data.SolicitudDescuento);
       this.result.emit(event);
     }
   }

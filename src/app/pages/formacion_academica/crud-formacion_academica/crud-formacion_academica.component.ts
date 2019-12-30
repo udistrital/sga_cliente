@@ -1,20 +1,20 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Lugar } from './../../../@core/data/models/lugar/lugar';
-import { ProgramaAcademico } from './../../../@core/data/models/proyecto_academico/programa_academico';
 import { FORM_FORMACION_ACADEMICA } from './form-formacion_academica';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
-import { Organizacion } from '../../../@core/data/models/ente/organizacion';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { UserService } from '../../../@core/data/users.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { ListService } from '../../../@core/store/services/list.service';
+import { IAppState } from '../../../@core/store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ngx-crud-formacion-academica',
@@ -25,7 +25,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   config: ToasterConfig;
   info_formacion_academica_id: number;
   organizacion: any;
-  ente: number;
+  persona_id: number;
   SoporteDocumento: any;
   filesUp: any;
 
@@ -42,30 +42,34 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   info_formacion_academica: any;
   formInfoFormacionAcademica: any;
   regInfoFormacionAcademica: any;
-  temp: any;
+  temp_info_academica: any;
   clean: boolean;
-  loading: boolean;
   percentage: number;
   paisSelecccionado: any;
+  infoComplementariaUniversidadId: number = 1;
+  universidadConsultada: any;
 
   constructor(
     private translate: TranslateService,
     private ubicacionesService: UbicacionService,
-    private campusMidService: CampusMidService,
+    private sgaMidService: SgaMidService,
     private programaService: ProyectoAcademicoService,
     private autenticationService: ImplicitAutenticationService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private users: UserService,
+    private store: Store<IAppState>,
+    private listService: ListService,
     private toasterService: ToasterService) {
     this.formInfoFormacionAcademica = FORM_FORMACION_ACADEMICA;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    // this.loadOptionsPais();
-    // this.ente = this.users.getEnte();
-    this.loading = false;
+    this.persona_id = this.users.getPersonaId();
+    this.listService.findPais();
+    this.listService.findProgramaAcademico();
+    this.loadLists();
   }
 
   construirForm() {
@@ -83,31 +87,9 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     this.translate.use(language);
   }
 
-  getPais(event) {
-    this.paisSelecccionado = event.valor;
-    // this.loadOptionsPaisUniversidad();
-  }
-
-  // loadOptionsPais(): void {
-  //   let paisNacimiento: Array<any> = [];
-  //   this.ubicacionesService.get('lugar/?query=TipoLugar.Nombre:PAIS,Activo:true&limit=0')
-  //     .subscribe(res => {
-  //       if (res !== null) {
-  //         paisNacimiento = <Array<Lugar>>res;
-  //       }
-  //       this.formInfoFormacionAcademica.campos[this.getIndexForm('Pais')].opciones = paisNacimiento;
-  //     },
-  //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
-  //           title: error.status + '',
-  //           text: this.translate.instant('ERROR.' + error.status),
-  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //             this.translate.instant('GLOBAL.formacion_academica') + '|' +
-  //             this.translate.instant('GLOBAL.pais_universidad'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       });
+  // getPais(event) {
+  //   this.paisSelecccionado = event.valor;
+  //   // this.loadOptionsPaisUniversidad();
   // }
 
   // loadInfoPostgrados(institucion) {
@@ -227,14 +209,31 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
   searchDoc(data) {
     const nit = typeof data === 'string' ? data : data.data.Nit;
-    this.campusMidService.get('organizacion/identificacion/?Id=' + nit + '&TipoId=5')
-      .subscribe(res => {
-        const init = this.getIndexForm('Nit');
-        const inombre = this.getIndexForm('NombreEmpresa');
-        const idir = this.getIndexForm('Direccion');
-        const itel = this.getIndexForm('Telefono');
-        const icorreo = this.getIndexForm('Correo');
-        const ipais = this.getIndexForm('Pais');
+    const init = this.getIndexForm('Nit');
+    const inombre = this.getIndexForm('NombreUniversidad');
+    const idir = this.getIndexForm('Direccion');
+    const itel = this.getIndexForm('Telefono');
+    const icorreo = this.getIndexForm('Correo');
+    const iPais = this.getIndexForm('Pais');
+    // this.sgaMidService.get(`tercero/identificacion/?Id=800088702&TipoId=7`)
+    this.sgaMidService.get(`tercero/identificacion/?Id=${nit}&TipoId=7`)
+      .subscribe((res: any) => {
+        this.universidadConsultada = res;
+        this.formInfoFormacionAcademica.campos[init].valor = res.NumeroIdentificacion;
+        this.formInfoFormacionAcademica.campos[inombre].valor = res.NombreCompleto;
+        this.formInfoFormacionAcademica.campos[idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
+        this.formInfoFormacionAcademica.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
+        this.formInfoFormacionAcademica.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
+        this.formInfoFormacionAcademica.campos[iPais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : {Id: 0, Nombre: 'No registrado'};
+        // this.info_formacion_academica = {
+        //   Nit: res.NumeroIdentificacion,
+        //   NombreUniversidad: res.NombreCompleto,
+        //   Direccion: (res.Direccion) ? res.Direccion : 'No registrado',
+        //   Telefono: (res.Telefono) ? res.Telefono : 'No registrado',
+        //   Correo: (res.Correo) ? res.Correo : 'No registrado',
+        // }
+        /*
+        console.log();
         this.organizacion = new Organizacion();
         if (res !== null) {
           this.organizacion = <Organizacion>res;
@@ -302,125 +301,150 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           this.formInfoFormacionAcademica.campos[itel].valor = null;
           this.formInfoFormacionAcademica.campos[icorreo].valor = null;
         }
+         */
         [this.formInfoFormacionAcademica.campos[inombre],
         this.formInfoFormacionAcademica.campos[idir],
         this.formInfoFormacionAcademica.campos[icorreo],
-        this.formInfoFormacionAcademica.campos[ipais],
+        this.formInfoFormacionAcademica.campos[iPais],
         this.formInfoFormacionAcademica.campos[itel]]
           .forEach(element => {
             element.deshabilitar = element.valor ? true : false
           });
       },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.formacion_academica') + '|' +
-              this.translate.instant('GLOBAL.nombre_universidad'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+      (error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          [this.formInfoFormacionAcademica.campos[inombre],
+          this.formInfoFormacionAcademica.campos[idir],
+          this.formInfoFormacionAcademica.campos[icorreo],
+          this.formInfoFormacionAcademica.campos[iPais],
+          this.formInfoFormacionAcademica.campos[itel]]
+            .forEach(element => {
+              element.deshabilitar = false;
+            });
+        }
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('informacion_academica.error_cargar_universidad'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+      });
   }
 
-  // public loadInfoFormacionAcademica(): void {
-  //   this.loading = true;
-  //   this.temp = {};
-  //   this.SoporteDocumento = [];
-  //   this.info_formacion_academica = {};
-  //   this.filesUp = <any>{};
-  //   if (this.info_formacion_academica_id !== undefined &&
-  //     this.info_formacion_academica_id !== 0 &&
-  //     this.info_formacion_academica_id.toString() !== '') {
-  //     this.campusMidService.get('formacion_academica/' + this.info_formacion_academica_id)
-  //       .subscribe(res => {
-  //         if (res !== null) {
-  //           this.temp = <any>res;
-  //           const files = []
-  //           if (this.temp.Documento + '' !== '0') {
-  //             files.push({ Id: this.temp.Documento, key: 'Documento' });
-  //           }
-  //           this.nuxeoService.getDocumentoById$(files, this.documentoService)
-  //             .subscribe(response => {
-  //               const filesResponse = <any>response;
-  //               if (Object.keys(filesResponse).length === files.length) {
-  //                 this.programaService.get('programa_academico/?query=id:' + this.temp.Titulacion.Id)
-  //                   .subscribe(programa => {
-  //                     if (programa !== null) {
-  //                       const programa_info = <ProgramaAcademico>programa[0];
-  //                       this.campusMidService.get('organizacion/' + programa_info.Institucion)
-  //                         .subscribe(organizacion => {
-  //                           if (organizacion !== null) {
-  //                             const organizacion_info = <any>organizacion;
-  //                             this.searchDoc(organizacion_info.NumeroIdentificacion);
-  //                             this.SoporteDocumento = this.temp.Documento;
-  //                             this.temp.Documento = filesResponse['Documento'] + '';
-  //                             this.temp.Titulacion = programa_info;
-  //                             this.temp.ProgramaAcademico = programa_info;
-  //                             this.info_formacion_academica = this.temp;
-  //                             this.formInfoFormacionAcademica.campos[this.getIndexForm('ProgramaAcademico')].opciones.push(programa_info);
-  //                             this.loading = false;
-  //                           }
-  //                         },
-  //                           (error: HttpErrorResponse) => {
-  //                             Swal({
-  //                               type: 'error',
-  //                               title: error.status + '',
-  //                               text: this.translate.instant('ERROR.' + error.status),
-  //                               footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                                 this.translate.instant('GLOBAL.formacion_academica') + '|' +
-  //                                 this.translate.instant('GLOBAL.nombre_universidad'),
-  //                               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                             });
-  //                           });
-  //                     }
-  //                   },
-  //                     (error: HttpErrorResponse) => {
-  //                       Swal({
-  //                         type: 'error',
-  //                         title: error.status + '',
-  //                         text: this.translate.instant('ERROR.' + error.status),
-  //                         footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                           this.translate.instant('GLOBAL.formacion_academica') + '|' +
-  //                           this.translate.instant('GLOBAL.programa_academico'),
-  //                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                       });
-  //                     });
-  //               }
-  //             },
-  //               (error: HttpErrorResponse) => {
-  //                 Swal({
-  //                   type: 'error',
-  //                   title: error.status + '',
-  //                   text: this.translate.instant('ERROR.' + error.status),
-  //                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                     this.translate.instant('GLOBAL.formacion_academica') + '|' +
-  //                     this.translate.instant('GLOBAL.soporte_documento'),
-  //                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                 });
-  //               });
-  //         }
-  //       },
-  //         (error: HttpErrorResponse) => {
-  //           Swal({
-  //             type: 'error',
-  //             title: error.status + '',
-  //             text: this.translate.instant('ERROR.' + error.status),
-  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //               this.translate.instant('GLOBAL.formacion_academica'),
-  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //           });
-  //         });
-  //   } else {
-  //     this.temp = {};
-  //     this.SoporteDocumento = [];
-  //     this.filesUp = <any>{};
-  //     this.info_formacion_academica = undefined
-  //     this.clean = !this.clean;
-  //     this.loading = false;
-  //   }
-  // }
+  public loadInfoFormacionAcademica(): void {
+    this.temp_info_academica = {};
+    this.SoporteDocumento = [];
+    this.info_formacion_academica = {};
+    this.filesUp = <any>{};
+    // if (this.info_formacion_academica_id !== undefined &&
+    //   this.info_formacion_academica_id !== 0 &&
+    //   this.info_formacion_academica_id.toString() !== '') {
+    if (this.persona_id) {
+      // this.sgaMidService.get('formacion_academica' + this.info_formacion_academica_id)
+      this.sgaMidService.get('formacion_academica/by_tercero/' + this.persona_id)
+        .subscribe(res => {
+          if (res !== null) {
+            this.temp_info_academica = <any>res[0];
+            const files = []
+            if (this.temp_info_academica.Documento + '' !== '0') {
+              files.push({ Id: this.temp_info_academica.Documento, key: 'Documento' });
+            }
+            this.nuxeoService.getDocumentoById$(files, this.documentoService)
+              .subscribe(response => {
+                const filesResponse = <any>response;
+                if (Object.keys(filesResponse).length === files.length) {
+                  this.info_formacion_academica = {
+                    Nit: this.temp_info_academica.Institucion.Nit,
+                    NombreUniversidad: this.temp_info_academica.Institucion.NombreUniversidad,
+                    Pais: this.temp_info_academica.Institucion.Pais,
+                    Direccion: this.temp_info_academica.Institucion.Direccion,
+                    Correo: this.temp_info_academica.Institucion.Correo,
+                    Telefono: this.temp_info_academica.Institucion.Telefono,
+                    ProgramaAcademico: this.temp_info_academica.Titulacion,
+                    FechaInicio: this.temp_info_academica.FechaInicio,
+                    FechaFinalizacion: this.temp_info_academica.FechaFinalizacion,
+                    TituloTrabajoGrado: this.temp_info_academica.TituloTrabajoGrado,
+                    DescripcionTrabajoGrado: this.temp_info_academica.DescripcionTrabajoGrado,
+                    // Documento: filesResponse['Documento'],
+                  }
+                  // this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].url = filesResponse['Documento'] + '';
+                  this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
+                  // this.programaService.get('programa_academico/?query=id:' + this.temp.Titulacion.Id)
+                  //   .subscribe(programa => {
+                  //     if (programa !== null) {
+                  //       const programa_info = <ProgramaAcademico>programa[0];
+                  //       this.campusMidService.get('organizacion/' + programa_info.Institucion)
+                  //         .subscribe(organizacion => {
+                  //           if (organizacion !== null) {
+                  //             const organizacion_info = <any>organizacion;
+                  //             this.searchDoc(organizacion_info.NumeroIdentificacion);
+                  //             this.SoporteDocumento = this.temp.Documento;
+                  //             this.temp.Documento = filesResponse['Documento'] + '';
+                  //             this.temp.Titulacion = programa_info;
+                  //             this.temp.ProgramaAcademico = programa_info;
+                  //             this.info_formacion_academica = this.temp;
+                  //             this.formInfoFormacionAcademica.campos[this.getIndexForm('ProgramaAcademico')].opciones.push(programa_info);
+                  //             this.loading = false;
+                  //           }
+                  //         },
+                  //           (error: HttpErrorResponse) => {
+                  //             Swal({
+                  //               type: 'error',
+                  //               title: error.status + '',
+                  //               text: this.translate.instant('ERROR.' + error.status),
+                  //               footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                  //                 this.translate.instant('GLOBAL.formacion_academica') + '|' +
+                  //                 this.translate.instant('GLOBAL.nombre_universidad'),
+                  //               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  //             });
+                  //           });
+                  //     }
+                  //   },
+                  //     (error: HttpErrorResponse) => {
+                  //       Swal({
+                  //         type: 'error',
+                  //         title: error.status + '',
+                  //         text: this.translate.instant('ERROR.' + error.status),
+                  //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                  //           this.translate.instant('GLOBAL.formacion_academica') + '|' +
+                  //           this.translate.instant('GLOBAL.programa_academico'),
+                  //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  //       });
+                  //     });
+                }
+              },
+                (error: HttpErrorResponse) => {
+                  Swal({
+                    type: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                      this.translate.instant('GLOBAL.formacion_academica') + '|' +
+                      this.translate.instant('GLOBAL.soporte_documento'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
+                });
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.formacion_academica'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    } else {
+      this.temp_info_academica = {};
+      this.SoporteDocumento = [];
+      this.filesUp = <any>{};
+      this.info_formacion_academica = undefined
+      this.clean = !this.clean;
+    }
+  }
 
   // updateInfoFormacionAcademica(infoFormacionAcademica: any): void {
   //   const opt: any = {
@@ -519,83 +543,77 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   //     });
   // }
 
-  // createInfoFormacionAcademica(infoFormacionAcademica: any): void {
-  //   const opt: any = {
-  //     title: this.translate.instant('GLOBAL.crear'),
-  //     text: this.translate.instant('GLOBAL.crear') + '?',
-  //     icon: 'warning',
-  //     buttons: true,
-  //     dangerMode: true,
-  //     showCancelButton: true,
-  //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-  //   };
-  //   Swal(opt)
-  //     .then((willDelete) => {
-  //       this.loading = true;
-  //       if (willDelete.value) {
-  //         const files = [];
-  //         this.info_formacion_academica = <any>infoFormacionAcademica;
-  //         if (this.info_formacion_academica.Documento.file !== undefined) {
-  //           files.push({
-  //             nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-  //             file: this.info_formacion_academica.Documento.file, IdDocumento: 3,
-  //           });
-  //         }
-  //         this.nuxeoService.getDocumentos$(files, this.documentoService)
-  //           .subscribe(response => {
-  //             if (Object.keys(response).length === files.length) {
-  //               this.filesUp = <any>response;
-  //               if (this.filesUp['Documento'] !== undefined) {
-  //                 this.info_formacion_academica.Documento = this.filesUp['Documento'].Id;
-  //               }
-  //               console.info(JSON.stringify(this.info_formacion_academica));
-  //               this.campusMidService.post('formacion_academica/', this.info_formacion_academica)
-  //                 .subscribe(res => {
-  //                   const r = <any>res;
-  //                   if (r !== null && r.Type !== 'error') {
-  //                     this.loading = false;
-  //                     this.eventChange.emit(true);
-  //                     this.showToast('info', this.translate.instant('GLOBAL.crear'),
-  //                       this.translate.instant('GLOBAL.formacion_academica') + ' ' +
-  //                       this.translate.instant('GLOBAL.confirmarCrear'));
-  //                     this.info_formacion_academica_id = 0;
-  //                     this.info_formacion_academica = undefined;
-  //                     this.clean = !this.clean;
-  //                   } else {
-  //                     this.showToast('error', this.translate.instant('GLOBAL.error'),
-  //                       this.translate.instant('GLOBAL.error'));
-  //                   }
-  //                 },
-  //                   (error: HttpErrorResponse) => {
-  //                     Swal({
-  //                       type: 'error',
-  //                       title: error.status + '',
-  //                       text: this.translate.instant('ERROR.' + error.status),
-  //                       footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                         this.translate.instant('GLOBAL.formacion_academica'),
-  //                       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                     });
-  //                   });
-  //             }
-  //           },
-  //             (error: HttpErrorResponse) => {
-  //               Swal({
-  //                 type: 'error',
-  //                 title: error.status + '',
-  //                 text: this.translate.instant('ERROR.' + error.status),
-  //                 footer: this.translate.instant('GLOBAL.crear') + '-' +
-  //                   this.translate.instant('GLOBAL.formacion_academica') + '|' +
-  //                   this.translate.instant('GLOBAL.soporte_documento'),
-  //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //               });
-  //             });
-  //       }
-  //     });
-  // }
+  createInfoFormacionAcademica(infoFormacionAcademica: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.crear'),
+      text: this.translate.instant('informacion_academica.seguro_continuar_registrar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        if (willDelete.value) {
+          const files = [];
+          this.info_formacion_academica = <any>infoFormacionAcademica;
+          if (this.info_formacion_academica.FormacionAcademica.Documento.file !== undefined) {
+            files.push({
+              nombre: this.autenticationService.getPayload().sub, key: 'Documento',
+              file: this.info_formacion_academica.FormacionAcademica.Documento.file, IdDocumento: 3,
+            });
+          }
+          this.nuxeoService.getDocumentos$(files, this.documentoService)
+            .subscribe(response => {
+              if (Object.keys(response).length === files.length) {
+                this.filesUp = <any>response;
+                if (this.filesUp['Documento'] !== undefined) {
+                  this.info_formacion_academica.FormacionAcademica.Documento = this.filesUp['Documento'].Id;
+                }
+                // console.info('data post', JSON.stringify(this.info_formacion_academica));
+                this.sgaMidService.post('formacion_academica/', this.info_formacion_academica)
+                  .subscribe(res => {
+                    const r = <any>res;
+                    if (r !== null && r.Type !== 'error') {
+                      this.eventChange.emit(true);
+                      this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                        this.translate.instant('informacion_academica.informacion_academica_registrada'));
+                      this.info_formacion_academica_id = 0;
+                      this.info_formacion_academica = undefined;
+                      this.clean = !this.clean;
+                    } else {
+                      this.showToast('error', this.translate.instant('GLOBAL.error'),
+                        this.translate.instant('informacion_academica.informacion_academica_no_registrada'));
+                    }
+                  },
+                    (error: HttpErrorResponse) => {
+                      Swal({
+                        type: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('informacion_academica.informacion_academica_no_registrada'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      });
+                    });
+              }
+            },
+              (error: HttpErrorResponse) => {
+                Swal({
+                  type: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
+        }
+      });
+  }
 
   ngOnInit() {
-    // this.loadInfoFormacionAcademica();
+    this.loadInfoFormacionAcademica();
   }
 
   setPercentage(event) {
@@ -605,56 +623,44 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
-      const formacion = {
-        Ente: this.ente,
-        Persona: this.ente,
-        Titulacion: event.data.InfoFormacionAcademica.ProgramaAcademico,
-        FechaInicio: event.data.InfoFormacionAcademica.FechaInicio,
-        FechaFinalizacion: event.data.InfoFormacionAcademica.FechaFinalizacion,
-        TituloTrabajoGrado: event.data.InfoFormacionAcademica.TituloTrabajoGrado,
-        DescripcionTrabajoGrado: event.data.InfoFormacionAcademica.DescripcionTrabajoGrado,
-        Documento: event.data.InfoFormacionAcademica.Documento,
+      const formData = event.data.InfoFormacionAcademica;
+      const universidadData = {
+        UniversidadConsultada: this.universidadConsultada,
+        Validada: (this.universidadConsultada) ? true : false,
+        Nit: formData.Nit,
+        NombreUniversidad: formData.NombreUniversidad,
+        Pais: formData.Pais,
+        Direccion: formData.Direccion,
+        Correo: formData.Correo,
+        Telefono: formData.Telefono,
+      };
+      const tercero = {
+        Id: this.persona_id, // se debe cambiar solo por persona id
       }
-      const organizacion = this.organizacion.Ente ? this.organizacion.Ente.Id : null;
-      const org = {
-        NumeroIdentificacion: event.data.InfoFormacionAcademica.Nit,
-        Direccion: event.data.InfoFormacionAcademica.Direccion,
-        Pais: event.data.InfoFormacionAcademica.Pais,
-        Nombre: event.data.InfoFormacionAcademica.NombreEmpresa,
-        TipoOrganizacion: event.data.InfoFormacionAcademica.TipoOrganizacion,
-        TipoIdentificacion: {
-          Id: 5, // tipo nit
+      const postData = {
+        InfoComplementariaTercero: [
+          {
+            // Información de la universidad
+            Id: 0,
+            TerceroId: tercero,
+            InfoComplementariaId: {
+              Id: this.infoComplementariaUniversidadId, // Completar id faltante
+            },
+            Dato: JSON.stringify(universidadData),
+            Activo: true,
+          },
+        ],
+        FormacionAcademica: {
+          Persona: this.persona_id,
+          Titulacion: formData.ProgramaAcademico,
+          FechaInicio: formData.FechaInicio,
+          FechaFinalizacion: formData.FechaFinalizacion,
+          Documento: formData.Documento,
+          TituloTrabajoGrado: formData.TituloTrabajoGrado,
+          DescripcionTrabajoGrado: formData.DescripcionTrabajoGrado,
         },
-        Contacto: [],
-        // "FechaExpedicion": "string"
       }
-
-      if (event.data.InfoFormacionAcademica.Telefono) {
-        org.Contacto.push({
-          TipoContacto: { Id: 1 }, // corresponde al tipo telefono
-          Valor: event.data.InfoFormacionAcademica.Telefono,
-        });
-      }
-      if (event.data.InfoFormacionAcademica.Correo) {
-        org.Contacto.push({
-          TipoContacto: { Id: 3 }, // corresponde al tipo correo
-          Valor: event.data.InfoFormacionAcademica.Correo,
-        });
-      }
-
-      if (this.info_formacion_academica === undefined) {
-        if (organizacion !== null) {
-          // this.createInfoFormacionAcademica(formacion);
-        } else {
-          // this.createOrganizacion(org, formacion);
-        }
-      } else {
-        if (this.organizacion.Ente) {
-          // this.updateInfoFormacionAcademica(formacion);
-        } else {
-          // this.createOrganizacion(org, formacion);
-        }
-      }
+      this.createInfoFormacionAcademica(postData);
       this.result.emit(event);
     }
   }
@@ -679,4 +685,13 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     };
     this.toasterService.popAsync(toast);
   }
+
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+       this.formInfoFormacionAcademica.campos[this.getIndexForm('Pais')].opciones = list.listPais[0];
+       this.formInfoFormacionAcademica.campos[this.getIndexForm('ProgramaAcademico')].opciones = list.listProgramaAcademico[0];
+      },
+   );
+ }
 }

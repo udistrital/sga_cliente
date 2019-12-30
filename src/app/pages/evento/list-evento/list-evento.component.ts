@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
+import { TercerosService} from '../../../@core/data/terceros.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 // import { UserService } from '../../../@core/data/users.service';
@@ -19,16 +20,21 @@ import * as momentTimezone from 'moment-timezone';
 export class ListEventoComponent implements OnInit {
   calendario_evento_selected: CalendarioEventoPost;
   cambiotab: boolean = false;
+  usuariowso2: any;
+  info_inscripcion: any;
+  info_persona_id: number;
+  info_evento: any
   config: ToasterConfig;
   settings: any;
 
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private translate: TranslateService,
-    private campusMidService: CampusMidService,
+    private sgaMidService: SgaMidService,
     private user: UserService,
+    private terceroService: TercerosService,
     private toasterService: ToasterService) {
-    this.loadData();
+    this.loadPersona();
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
@@ -88,7 +94,7 @@ export class ListEventoComponent implements OnInit {
           title: this.translate.instant('GLOBAL.periodo'),
           // type: 'string',
           valuePrepareFunction: (value) => {
-            return value.Ano + '-' + value.Periodo;
+            return value.Nombre;
           },
           width: '15%',
         },
@@ -115,13 +121,44 @@ export class ListEventoComponent implements OnInit {
   useLanguage(language: string) {
     this.translate.use(language);
   }
+  loadPersona() {
+    this.usuariowso2 = JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub,
+
+  this.terceroService.get('tercero/?query=UsuarioWSO2:' + String(this.usuariowso2))
+  .subscribe(res => {
+    console.info('Datos terceros')
+    console.info(res)
+    this.info_inscripcion = <any>res[0];
+    if (res !== null  && this.info_inscripcion.Type !== 'error') {
+      this.info_persona_id = this.info_inscripcion.Id;
+    }
+    this.loadData();
+  },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        footer: this.translate.instant('GLOBAL.cargar') + '-' +
+          this.translate.instant('GLOBAL.admision'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
+ }
 
   loadData(): void {
+    console.info('Load data list')
+    console.info(this.info_persona_id)
     // this.campusMidService.get('evento/' + this.user.getPersonaId()).subscribe((res: any) => {
-    this.campusMidService.get('evento/' + 6).subscribe((res: any) => {
+    this.sgaMidService.get('evento/' +  this.info_persona_id)
+    .subscribe((res: any) => {
       if (res !== null) {
-        if (Object.keys(res.Body[0]).length > 0 && res.Type !== 'error') {
-          const data = <Array<CalendarioEventoPost>>res.Body;
+        console.info('Data')
+        console.info(res)
+        if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
+          const data = <Array<CalendarioEventoPost>>res;
+          console.info(data)
+          this.info_evento = <any>res;
           this.source.load(data);
         } else {
            Swal({
@@ -140,6 +177,7 @@ export class ListEventoComponent implements OnInit {
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
     });
+    this.cargarCampos();
   }
 
   ngOnInit() {
@@ -172,7 +210,7 @@ export class ListEventoComponent implements OnInit {
       Swal(opt)
       .then((willDelete) => {
         if (willDelete.value) {
-          this.campusMidService.delete('evento', event.data.CalendarioEvento).subscribe((res: any) => {
+          this.sgaMidService.delete('evento', event.data.CalendarioEvento).subscribe((res: any) => {
             if (res !== null) {
               if (res.Body.Id !== undefined) {
                 this.source.load([]);

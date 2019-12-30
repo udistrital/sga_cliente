@@ -6,6 +6,7 @@ import { CalendarioEventoPost, CalendarioEventoPut, CalendarioEvento } from './.
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EventoService } from '../../../@core/data/evento.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
+import { TercerosService} from '../../../@core/data/terceros.service';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { CoreService } from '../../../@core/data/core.service';
 // import { FORM_evento } from './form-evento';
@@ -38,6 +39,8 @@ export class CrudEventoComponent implements OnInit {
   dependencias: any[];
   dependencias_filtered: any[];
   tipo_eventos: any[];
+  info_inscripcion: any;
+  usuariowso2: any;
   tipo_eventos_filtered: any[];
   eventos: CalendarioEvento[];
   periodos: any[];
@@ -76,6 +79,7 @@ export class CrudEventoComponent implements OnInit {
   constructor(private translate: TranslateService,
     private coreService: CoreService,
     private eventoService: EventoService,
+    private terceroService: TercerosService,
     private oikosService: OikosService,
     private user: UserService,
     private personaService: PersonaService,
@@ -220,10 +224,11 @@ export class CrudEventoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadEvento();
+    // this.loadEvento();
   }
 
   loadOptions(): void {
+    console.info('Entro a options'),
     this.loadRoles()
     .then(() => {
       Promise.all([
@@ -234,7 +239,7 @@ export class CrudEventoComponent implements OnInit {
         this.loadPeriodos(),
         this.loadEventos(),
         this.loadPersonas(),
-        // this.loadRoles(),
+        this.loadRoles(),
       ]).
         then(() => {
 
@@ -265,16 +270,24 @@ export class CrudEventoComponent implements OnInit {
   }
 
   loadUserData(): Promise<any> {
+    this.usuariowso2 = JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub,
     this.info_calendario_evento.EncargadosEvento = [];
     this.source.load(this.info_calendario_evento.EncargadosEvento);
+    console.info('Persona')
+    console.info(this.usuariowso2)
+
     return new Promise((resolve, reject) => {
-        this.personaService.get('persona/?query=Id:' + this.user.getPersonaId())
-        .subscribe(res => {
-          // if (res !== null) {
+
+    this.terceroService.get('tercero/?query=UsuarioWSO2:' + String(this.usuariowso2))
+    .subscribe(res => {
+      console.info('Datos terceros')
+      console.info(res)
+      this.info_inscripcion = <any>res[0];
+      // if (res !== null  && this.info_inscripcion.Type !== 'error') {
           if (Object.keys(res[0]).length > 0) {
             const userData = <Persona>res[0];
             userData['PuedeBorrar'] = false;
-            userData['Nombre'] = this.getPersonFullName(userData);
+            userData['Nombre'] = this.info_inscripcion.NombreCompleto;
             this.persona_seleccionada = JSON.parse(JSON.stringify(userData));
             this.agregarEncargado(false, 1);
             this.persona_seleccionada = undefined;
@@ -282,9 +295,10 @@ export class CrudEventoComponent implements OnInit {
           } else {
             reject({status: 404});
           }
-        }, (error: HttpErrorResponse) => {
-          reject(error);
-        });
+    },
+    (error: HttpErrorResponse) => {
+        reject(error);
+      });
     });
   }
 
@@ -304,7 +318,7 @@ export class CrudEventoComponent implements OnInit {
       }
     } else {
       this.info_calendario_evento.EncargadosEvento.push({
-        Nombre: this.getPersonFullName(this.persona_seleccionada),
+        Nombre: this.persona_seleccionada.Nombre,
         EncargadoId: this.persona_seleccionada.Id,
         Id: 0,
         Activo: true,
@@ -339,14 +353,12 @@ export class CrudEventoComponent implements OnInit {
 
   loadPersonas(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.personaService.get('persona/?limit=0')
+      this.personaService.get('tercero?query=TipoContribuyenteId:1&limit=0')
         .subscribe(res => {
           // if (res !== null) {
           if (Object.keys(res[0]).length > 0) {
             this.personas = <Array<Persona>>res;
-            this.personas.forEach( (persona: Persona) => {
-              persona['Nombre'] = this.getPersonFullName(persona);
-            });
+
             resolve(true);
           } else {
             this.personas = [];
@@ -365,6 +377,7 @@ export class CrudEventoComponent implements OnInit {
           // if (res !== null) {
           if (Object.keys(res[0]).length > 0) {
             this.tipo_dependencias = <Array<any>>res;
+            console.info(this.tipo_dependencias)
             resolve(true);
           } else {
             this.tipo_dependencias = [];
@@ -406,6 +419,7 @@ export class CrudEventoComponent implements OnInit {
       this.eventoService.get('tipo_evento/?query=Activo:true&limit=0')
         .subscribe(res => {
           // if (res !== null) {
+            console.info(res)
           if (Object.keys(res[0]).length > 0) {
             this.tipo_eventos = <Array<TipoEvento>>res;
             this.tipo_eventos_filtered = <Array<TipoEvento>>res;
@@ -430,6 +444,8 @@ export class CrudEventoComponent implements OnInit {
     this.info_calendario_evento.Evento.TipoEventoId = undefined;
     this.info_calendario_evento.TipoEvento = undefined;
     this.tipo_eventos_filtered = this.tipo_eventos.filter(tipo_evento => tipo_evento.DependenciaId === dependencia);
+    console.info('Ojoooo')
+    console.info(this.tipo_eventos_filtered)
   }
 
   loadEventos(): Promise<any> {

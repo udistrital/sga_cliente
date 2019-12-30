@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -20,13 +20,15 @@ export class ListProduccionAcademicaComponent implements OnInit {
   cambiotab: boolean = false;
   config: ToasterConfig;
   settings: any;
+  persona_id: number;
 
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private translate: TranslateService,
-    private campusMidService: CampusMidService,
+    private sgaMidService: SgaMidService,
     private user: UserService,
     private toasterService: ToasterService) {
+    this.persona_id = user.getPersonaId() || 1;
     this.loadData();
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -108,11 +110,11 @@ export class ListProduccionAcademicaComponent implements OnInit {
   }
 
   loadData(): void {
-    this.campusMidService.get('produccion_academica/' + this.user.getPersonaId()).subscribe((res: any) => {
+    this.sgaMidService.get('produccion_academica/' + this.persona_id).subscribe((res: any) => {
     // this.campusMidService.get('produccion_academica/' + 5).subscribe((res: any) => {
       if (res !== null) {
-        if (Object.keys(res.Body[0]).length > 0 && res.Type !== 'error') {
-          const data = <Array<ProduccionAcademicaPost>>res.Body;
+        if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
+          const data = <Array<ProduccionAcademicaPost>>res;
           this.source.load(data);
         } else {
            Swal({
@@ -165,7 +167,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
       Swal(opt)
       .then((willDelete) => {
         if (willDelete.value) {
-          this.campusMidService.delete('produccion_academica', event.data).subscribe((res: any) => {
+          this.sgaMidService.delete('produccion_academica', event.data).subscribe((res: any) => {
             if (res !== null) {
               if (res.Body.Id !== undefined) {
                 this.source.load([]);
@@ -228,7 +230,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
             acepta: isAuthor.value ? true : false,
             AutorProduccionAcademica: data.EstadoEnteAutorId,
           }
-          this.campusMidService.put('produccion_academica/estado_autor_produccion/' + dataPut.AutorProduccionAcademica.Id, dataPut)
+          this.sgaMidService.put('produccion_academica/estado_autor_produccion/' + dataPut.AutorProduccionAcademica.Id, dataPut)
           .subscribe((res: any) => {
             if (res.Type === 'error') {
               Swal({

@@ -454,8 +454,8 @@
         "placeholder_estrato_costea": "E.g: Stratum 0",
         "numero_semestres": "Number of semesters elapsed since the end of eleventh grade",
         "placeholder_numero_semestres": "E.g: Just graduated",
-        "viene": "Where does it come from",
-        "placeholder_viene": "E.g: National University",
+        "universidad_viene": "Which university do you come from?",
+        "placeholder_universidad_viene": "E.g: National University",
         "ultimo_semestre": "Last semester taken",
         "placeholder_ultimo_semestre": "E.g: Third semester",
         "observacion_trans": "Reasons for the Transfer",
@@ -825,7 +825,9 @@
         "universidad": "college",
         "transfe": "Internal transfer",
         "reingreso": "Re-entry",
-        "transferencia": "Transfer data"
+        "transferencia": "Transfer data",
+        "error_registrar_informacion": "An error happened saving the inscription information",
+        "error_cargar_informacion": "An error happened loading the inscription information"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
@@ -837,6 +839,11 @@
         "transferencia_registrada": "Internal transfer request created",
         "seguro_continuar_registrar": "Are you sure you want to register this internal transfer request?"
     },
+    "transferencia_externa": {
+        "transferencia_no_registrada": "External transfer request not created",
+        "transferencia_registrada": "External transfer request created",
+        "seguro_continuar_registrar": "Are you sure you want to register this internal transfer request?"
+    },
     "icfes_colegio": {
         "icfes_colegio_no_registrado": "Icfes and school information not registered",
         "icfes_colegio_registrado": "Icfes and school information not registered",
@@ -846,6 +853,53 @@
         "universidad_form_no_registrado": "University information not registered",
         "universidad_form_registrado": "University information registered",
         "seguro_continuar_registrar": "Are you sure you want to register this university information?"
+    },
+    "informacion_contacto_posgrado": {
+        "informacion_contacto_no_registrada": "Contact information not registered",
+        "informacion_contacto_registrada": "Contact information registered",
+        "seguro_continuar_registrar": "Are you sure you want to register this contact information?"
+    },
+    "informacion_academica": {
+        "informacion_academica_no_registrada": "Academic information not registered",
+        "informacion_academica_registrada": "Academic information registered",
+        "documento_informacion_academica_no_registrado": "Error uploading support document",
+        "seguro_continuar_registrar": "Are you sure you want to register this academic information?",
+        "error_cargar_universidad": "An error happened loading the university information"
+    },
+    "experiencia_laboral": {
+        "experiencia_laboral_no_registrada": "Work experience not registered",
+        "experiencia_laboral_registrada": "Work experience registered",
+        "documento_experiencia_laboral_no_registrado": "Error uploading support document",
+        "seguro_continuar_registrar": "Are you sure you want to register this work experience?",
+        "cargar_experiencia": "An error happened loading the work experience information",
+        "error_cargar_empresa": "An error happened loading the company information"
+    },
+    "documento_programa": {
+        "descuento_academico_no_registrado": "Academic discount not registered",
+        "descuento_academico_registrado": "Academic discount registered",
+        "documento_descuento_academico_no_registrado": "Error uploading support document",
+        "seguro_continuar_registrar": "Are you sure you want to register this academic discount?"
+    },
+    "descuento_academico": {
+        "documento_programa_no_registrado": "Document not registered",
+        "documento_programa_registrado": "Document registered",
+        "documento_documento_programa_no_registrado": "Error uploading support document",
+        "seguro_continuar_registrar": "Are you sure you want to register this document?"
+    },
+    "idiomas": {
+        "error_cargar_informacion_idiomas": "An error happened loading the languages information",
+        "error_nativo_examen": "You can't request an exam with your native language",
+        "error_doble_examen": "You already have a language exam request with other language",
+        "informacion_idioma_no_registrada": "Language information not registered",
+        "informacion_idioma_registrada": "Language information registered",
+        "seguro_continuar_registrar": "Are you sure you want to register this language information?"
+     },
+     "propuesta_grado": {
+        "error_cargar_lineas_investigacion": "An error happened loading the research lines information",
+        "error_documento_propuesta_grado": "An error happened saving the degree work proposal document",
+        "propuesta_grado_no_registrada": "Degree work proposal not created",
+        "propuesta_grado_registrada": "Degree work proposal created",
+        "seguro_continuar_registrar": "Are you sure you want to register this degree work proposal?"
     },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Family information not updated",

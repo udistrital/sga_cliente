@@ -1,12 +1,13 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ResolveEnd } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { UserService } from '../../../@core/data/users.service';
+import { CoreService } from '../../../@core/data/core.service';
 import { TercerosService} from '../../../@core/data/terceros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
@@ -18,6 +19,7 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { from } from 'rxjs';
 import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -58,6 +60,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   step = 0;
   cambioTab = 0;
   nForms: number;
+  SelectedTipoBool: boolean = true;
 
   percentage_info: number = 0;
   percentage_acad: number = 0;
@@ -112,6 +115,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   tag_view_pre: boolean;
   selectprograma: boolean = true;
   imagenes: any;
+  periodo: any;
 
   constructor(
     private translate: TranslateService,
@@ -119,13 +123,15 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private terceroService: TercerosService,
     private inscripcionService: InscripcionService,
     private userService: UserService,
+    private coreService: CoreService,
     private programaService: OikosService,
+    private sgaMidService: SgaMidService,
   ) {
     this.imagenes = IMAGENES;
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    // this.loadInfoPostgrados();
+    this.loadInfoPostgrados();
     this.loadTipoInscripcion();
     this.total = true;
     // if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
@@ -139,6 +145,89 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     //     this.info_ente_id = undefined;
     //   }
     // }
+
+    this.loadData();
+    this.cargarPeriodo();
+  }
+
+  async loadData() {
+    try {
+      this.info_persona_id = this.userService.getPersonaId();
+      await this.cargarPeriodo();
+      await this.loadInfoInscripcion();
+    } catch (error) {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('inscripcion.error_cargar_informacion'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    }
+  }
+
+  cargarPeriodo() {
+    return new Promise((resolve, reject) => {
+      this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.periodo = <any>res[0];
+          resolve(this.periodo);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      });
+    });
+  }
+
+  loadInfoInscripcion() {
+    return new Promise((resolve, reject) => {
+      this.inscripcionService.get(`inscripcion?limint=1&query=PeriodoId:${this.periodo.Id},PersonaId:${this.info_persona_id || 4}`)
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          if (r[0].Id) {
+            this.inscripcion_id = r[0].Id;
+          }
+        }
+        resolve(this.inscripcion_id);
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      });
+    });
+  }
+
+  create_inscription(data) {
+    const info_inscripcion_temp = {
+      Id: 0,
+      PersonaId: this.info_persona_id || 4,
+      ProgramaAcademicoId: 0, // Cambiar por el periodo
+      PeriodoId: this.periodo.Id,
+      AceptaTerminos: true,
+      FechaAceptaTerminos: new Date(),
+      Activo: true,
+      EstadoInscripcionId: {
+        Id: 1,
+      },
+      TipoInscripcionId: this.selectedTipo,
+    }
+    this.inscripcionService.post('inscripcion', info_inscripcion_temp)
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.inscripcion_id = r.Id;
+      }
+    },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('inscripcion.error_registrar_informacion'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
   }
 
   setPercentage_info(number, tab) {
@@ -229,28 +318,31 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         });
   }
 
-  // loadInfoPostgrados() {
-  //   this.programaService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:15&limit=0')
-  //     .subscribe(res => {
-  //       const r = <any>res;
-  //       if (res !== null && r.Type !== 'error') {
-  //         const programaPosgrados = <Array<any>>res;
-  //         programaPosgrados.forEach(element => {
-  //           this.posgrados.push(element.DependenciaId);
-  //         });
-  //       }
-  //     },
-  //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
-  //           title: error.status + '',
-  //           text: this.translate.instant('ERROR.' + error.status),
-  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //             this.translate.instant('GLOBAL.programa_academico'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       });
-  // }
+  loadInfoPostgrados() {
+    // Tener el cuenta que el 5 corresponde al id del evento padre de inscripcion en una facultad
+    this.sgaMidService.get('inscripciones/consultar_proyectos_eventos/5')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          const programaPosgrados = <Array<any>>res;
+          console.info('Proyectos')
+          console.info(programaPosgrados)
+          programaPosgrados.forEach(element => {
+            this.posgrados.push(element);
+          });
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.programa_academico'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
 
   // getInfoInscripcion() {
   //   if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
@@ -654,12 +746,17 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   }
 
-  pruebita() {
-    // window.localStorage.setItem('programa', this.selectedValue.Id);
-    this.selectedValue = true;
+  cargaproyectoseventosactivos() {
+    this.SelectedTipoBool = false
+    this.selectedTipo = this.selectedTipo.Nombre
+    console.info(this.selectedValue)
+    if (this.selectedValue === true) {
+      this.tipo_inscripcion();
+    }
   }
   tipo_inscripcion() {
-    switch (this.selectedTipo.Nombre) {
+    console.info('Tipo metodo')
+    switch (this.selectedTipo) {
       case ('Pregrado'):
         this.selectTipo = 'Pregrado';
         this.selectedValue = true;
