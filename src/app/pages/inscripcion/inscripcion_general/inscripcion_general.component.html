@@ -25,7 +25,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <ngx-loading [hidden]="!loading"></ngx-loading>
+            <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
             <div class="row">
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado'|| selectTipo=='Transferencia interna'|| selectTipo=='Reingreso' || selectTipo=='Transferencia externa'|| selectTipo=='Transferencia externa'">
@@ -124,7 +124,8 @@
     <!--Formularios------------------------------------------------------------->
 
 
-    <nb-card [hidden]="!show_info_pregrado">
+    <!-- <nb-card [hidden]="!show_info_pregrado"> -->
+    <nb-card *ngIf="show_info_pregrado">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -157,7 +158,8 @@
         </nb-card-body>
     </nb-card>
 
-    <nb-card [hidden]="!show_info_externa">
+    <!-- <nb-card [hidden]="!show_info_externa"> -->
+    <nb-card *ngIf="show_info_externa">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -190,7 +192,8 @@
         </nb-card-body>
     </nb-card>
 
-    <nb-card [hidden]="!show_info">
+    <!-- <nb-card [hidden]="!show_info"> -->
+    <nb-card *ngIf="show_info">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -225,7 +228,8 @@
     </nb-card>
 
 
-    <nb-card [hidden]="!show_info_reingreso">
+    <!-- <nb-card [hidden]="!show_info_reingreso"> -->
+    <nb-card *ngIf="show_info_reingreso">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -246,7 +250,8 @@
     </nb-card>
 
 
-    <nb-card [hidden]="!show_info_interna">
+    <!-- <nb-card [hidden]="!show_info_interna"> -->
+    <nb-card *ngIf="show_info_interna">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -269,7 +274,8 @@
     <!-- TAG y formularios de formacion academica -->
 
 
-    <nb-card [hidden]="!show_acad_pregrado">
+    <!-- <nb-card [hidden]="!show_acad_pregrado"> -->
+    <nb-card *ngIf="show_acad_pregrado">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -294,7 +300,8 @@
     </nb-card>
 
 
-    <nb-card [hidden]="!show_acad_externa">
+    <!-- <nb-card [hidden]="!show_acad_externa"> -->
+    <nb-card *ngIf="show_acad_externa">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -311,14 +318,16 @@
                     <ngx-crud-externo (result)="setPercentage_acad($event,0)"></ngx-crud-externo>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}">
-                    <ngx-crud-icfes_externo (result)="setPercentage_acad($event,0)"></ngx-crud-icfes_externo>
+                    <!--ngx-crud-icfes_externo (result)="setPercentage_acad($event,0)"></ngx-crud-icfes_externo-->
+                    <ngx-crud-icfes (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
     </nb-card>
 
 
-    <nb-card [hidden]="!show_acad">
+    <!-- <nb-card [hidden]="!show_acad"> -->
+    <nb-card *ngIf="show_acad">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -337,14 +346,15 @@
                     <ngx-crud-formacion-academica (result)="setPercentage_acad($event,0)"></ngx-crud-formacion-academica>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}">
-                    <ngx-list-idiomas inscripcion_id={{this.inscripcion_id}} (result)="setPercentage_acad($event,1)"></ngx-list-idiomas>
+                    <ngx-list-idiomas (result)="setPercentage_acad($event,1)" (bridge_create_inscripcion)="create_inscription($event)" inscripcion_id="{{inscripcion_id}}"></ngx-list-idiomas>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
     </nb-card>
 
 
-    <nb-card [hidden]="!show_expe">
+    <!-- <nb-card [hidden]="!show_expe"> -->
+    <nb-card *ngIf="show_expe">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -364,8 +374,9 @@
             </nb-tabset>
         </nb-card-body>
     </nb-card>
-    <!--
-    <nb-card [hidden]="!show_prod" *ngIf="info_ente_id">
+    
+    <!-- <nb-card [hidden]="!show_prod"> -->
+    <nb-card *ngIf="show_prod">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -378,15 +389,16 @@
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
-                <nb-tab tabTitle="{{ 'GLOBAL.produccion_academica' | translate }}">
+                <nb-tab tabTitle="{{ 'produccion_academica.producciones_academicas' | translate }}">
                     <ngx-list-produccion-academica (result)="setPercentage_prod($event,0)">
                     </ngx-list-produccion-academica>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
-    </nb-card>-->
+    </nb-card>
 
-    <nb-card [hidden]="!show_docu">
+    <!-- <nb-card [hidden]="!show_docu"> -->
+    <nb-card *ngIf="show_docu">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -400,14 +412,15 @@
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.documento_programa' | translate }}">
-                    <ngx-list-documento-programa (result)="setPercentage_docu($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
+                    <ngx-list-documento-programa (result)="setPercentage_docu($event,0)" persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}">
                     </ngx-list-documento-programa>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
     </nb-card>
 
-    <nb-card [hidden]="!show_desc">
+    <!-- <nb-card [hidden]="!show_desc"> -->
+    <nb-card *ngIf="show_desc">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -428,7 +441,8 @@
         </nb-card-body>
     </nb-card>
 
-    <nb-card [hidden]="!show_proy">
+    <!-- <nb-card [hidden]="!show_proy"> -->
+    <nb-card *ngIf="show_proy">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -442,7 +456,7 @@
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.propuesta_grado' | translate }}">
-                    <ngx-crud-propuesta-grado (result)="setPercentage_proy($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
+                    <ngx-crud-propuesta-grado (result)="setPercentage_proy($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}" (crear_inscripcion)="create_inscription($event)">
                     </ngx-crud-propuesta-grado>
                 </nb-tab>
             </nb-tabset>
@@ -451,7 +465,8 @@
 
     <!--Vista de perfil------------------------------------------------------------->
 
-    <div [hidden]="!show_profile">
+    <!-- <div [hidden]="!show_profile"> -->
+    <div *ngIf="show_profile">
         <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}"></ngx-perfil>
     </div>
 </div>

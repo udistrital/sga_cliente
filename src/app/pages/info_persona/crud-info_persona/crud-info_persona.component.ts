@@ -542,7 +542,7 @@ export class CrudInfoPersonaComponent implements OnInit {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.periodo = <any>res[0];
-          console.info(this.periodo);
+          // console.info(this.periodo);
         }
       },
         (error: HttpErrorResponse) => {

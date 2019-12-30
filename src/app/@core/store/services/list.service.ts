@@ -10,6 +10,10 @@ import { IdiomaService } from '../../data/idioma.service';
 import { UbicacionService } from '../../data/ubicacion.service';
 import { ProyectoAcademicoService } from '../../data/proyecto_academico.service';
 import { EnteService } from '../../data/ente.service';
+import { ExperienciaService } from '../../data/experiencia.service';
+import { DocumentoProgramaService } from '../../data/documento_programa.service';
+import { DescuentoAcademicoService } from '../../data/descuento_academico.service';
+import { CIDCService } from '../../data/cidc.service';
 @Injectable()
 export class ListService {
 
@@ -21,8 +25,12 @@ export class ListService {
     private tercerosService: TercerosService,
     private ubicacionService: UbicacionService,
     private programaAcademicoService: ProyectoAcademicoService,
+    private experienciaService: ExperienciaService,
+    private cidcService: CIDCService,
     // private producccionAcademicaService: ProduccionAcademicaService,
     private enteService: EnteService,
+    private descuentoAcademicoService: DescuentoAcademicoService,
+    private documentoProgramaService: DocumentoProgramaService,
     private store: Store<IAppState>) {
 
   }
@@ -469,7 +477,8 @@ export class ListService {
     this.store.select(REDUCER_LIST.GrupoInvestigacion).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
+          // this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
+          this.cidcService.get('research_group')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.GrupoInvestigacion, result);
@@ -604,6 +613,114 @@ export class ListService {
               },
               error => {
                 this.addList(REDUCER_LIST.TipoInscripcionUniversidad, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findTipoDedicacion() {
+    this.store.select(REDUCER_LIST.TipoDedicacion).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.experienciaService.get('tipo_dedicacion/?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoDedicacion, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoDedicacion, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findTipoVinculacion() {
+    this.store.select(REDUCER_LIST.TipoVinculacion).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.experienciaService.get('tipo_vinculacion/?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoVinculacion, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoVinculacion, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findTipoOrganizacion() {
+    this.store.select(REDUCER_LIST.TipoOrganizacion).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('tipo_tercero/?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoOrganizacion, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoOrganizacion, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findCargo() {
+    this.store.select(REDUCER_LIST.Cargo).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.experienciaService.get('cargo/?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.Cargo, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.Cargo, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findDocumentoPrograma() {
+    this.store.select(REDUCER_LIST.DocumentoPrograma).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.documentoProgramaService.get('documento_programa/?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.DocumentoPrograma, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.DocumentoPrograma, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findDescuentoDependencia() {
+    this.store.select(REDUCER_LIST.DescuentoDependencia).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.descuentoAcademicoService.get('descuentos_dependencia/?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.DescuentoDependencia, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.DescuentoDependencia, []);
               },
             );
         }

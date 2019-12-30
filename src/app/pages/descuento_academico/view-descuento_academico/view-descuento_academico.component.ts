@@ -35,7 +35,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   set info2(info2: number) {
     this.inscripcion = info2;
     if (this.inscripcion !== undefined && this.inscripcion !== 0 && this.inscripcion.toString() !== '') {
-      this.loadData();
+      // this.loadData();
     }
   }
 

@@ -32,7 +32,7 @@ export class CrudReingresoComponent implements OnInit {
   clean: boolean;
   loading: boolean;
   percentage: number;
-  ente: any;
+  persona_id: any;
 
   constructor(
     private translate: TranslateService,
@@ -48,7 +48,7 @@ export class CrudReingresoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.ente = this.users.getEnte();
+    this.persona_id = this.users.getPersonaId();
     this.cargarPeriodo();
     this.loading = true;
   }
@@ -147,7 +147,7 @@ export class CrudReingresoComponent implements OnInit {
       const dataPostReintegro = {
         InscripcionEstudiante: {
           Id: 0,
-          PersonaId: this.ente,
+          PersonaId: this.persona_id,
           ProgramaAcademicoId: Number(formData.codigo.substr(5, 3)),
           PeriodoId: this.periodo.Id,
           AceptaTerminos: true,
