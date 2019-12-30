@@ -125,7 +125,7 @@ export class NotificacionesService {
     }
 
     queryNotification() {
-        this.confService.get('notificacion_estado_usuario?query=Usuario:' + this.payload.sub + ',Activo:true&sortby=id&order=asc&limit=-1')
+        this.confService.get('notificacion_estado_usuario?query=Usuario:' + this.payload.sub + ',Activo:true&sortby=id&order=asc&limit=0')
             .subscribe((resp: any) => {
                 if (resp !== null) {
                     this.notificacion_estado_usuario = resp

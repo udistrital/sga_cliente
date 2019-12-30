@@ -34,6 +34,7 @@ export class CrudPreguntasComponent implements OnInit {
   set name(info_formacion_academica_id: number) {
     this.info_formacion_academica_id = info_formacion_academica_id;
     // this.loadInfoFormacionAcademica();
+    console.info('ID_Preguntas:' + this.info_formacion_academica_id)
   }
 
   @Output() eventChange = new EventEmitter();

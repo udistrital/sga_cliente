@@ -26,7 +26,6 @@ export const environment = {
     SIGN_OUT_REDIRECT_URL: 'http://localhost:4200/',
   },
   TERCEROS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_crud/v1/',
-  // TERCEROS_SERVICE: 'http://localhost:8083/v1/',
   PERSONA_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8121/v1/',
   PRODUCCION_ACADEMICA_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/produccion_academica_crud/v1/',
   DOCUMENTO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/documento_crud/v1/',
@@ -46,9 +45,7 @@ export const environment = {
   SGA_MID_SERVICE: 'http://localhost:8095/v1/',
   CLIENTE_HABILITAR_PERIODO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/core_crud/v1/',
   OFERTA_ACADEMICA_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/sesiones_crud/v1/',
-
-  // INSCRIPCION_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/inscripcion_crud/v1/',
-  INSCRIPCION_SERVICE: 'http://localhost:8082/v1/',
+  INSCRIPCION_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/inscripcion_crud/v1/',
   UBICACION_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/ubicaciones_crud/v1/',
   // DOCUMENTO_PROGRAMA_SERVICE: 'https://autenticacion.udistrital.edu.co/apioas/documento_programa_crud/v1/',
   DOCUMENTO_PROGRAMA_SERVICE: 'http://api.planestic.udistrital.edu.co:9014/v1/',

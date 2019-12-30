@@ -5,7 +5,7 @@
             <!-- select tipo de inscripcion -->
             <mat-form-field style="width: 100%;">
                 <mat-label>{{ 'inscripcion.aviso_tipo' | translate }}:</mat-label>
-                <mat-select [(ngModel)]="selectedTipo" (ngModelChange)="tipo_inscripcion()">
+                <mat-select [(ngModel)]="selectedTipo" (ngModelChange)="cargaproyectoseventosactivos()">
                     <mat-option>--Seleccionar--</mat-option>
                     <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
                         {{item.Nombre}}
@@ -17,7 +17,7 @@
             <div *ngIf="selectprograma">
                 <mat-form-field style="width: 100%;">
                     <mat-label>{{ 'inscripcion.aviso_programa' | translate }}:</mat-label>
-                    <mat-select [(ngModel)]="selectedValue" (ngModelChange)="pruebita()">
+                    <mat-select [(ngModel)]="selectedValue" (ngModelChange)="tipo_inscripcion()" [disabled]="SelectedTipoBool">
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of posgrados" [value]="item">
                             {{item.Nombre}}
@@ -139,19 +139,19 @@
             </div>
             <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
-                    <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" >
+                    <ngx-crud-info-persona info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" >
                     </ngx-crud-info-persona>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}" [active]="info_caracteristica">
-                    <ngx-crud-info-caracteristica_pregrado info_caracteristica_id={{this.info_ente_id}} (eventChange)="perfil_editar('info_contacto')" (result)="setPercentage_info($event,1)">
+                    <ngx-crud-info-caracteristica_pregrado info_caracteristica_id={{this.info_persona_id}} (eventChange)="perfil_editar('info_contacto')" (result)="setPercentage_info($event,1)">
                     </ngx-crud-info-caracteristica_pregrado>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.informacion_contacto' | translate }}" [active]="info_contacto">
-                    <ngx-crud-informacion-contacto_pregrado informacion_contacto_id={{this.info_ente_id}} (eventChange)="perfil_editar('info_familiar')" (result)="setPercentage_info($event,2)">
+                    <ngx-crud-informacion-contacto_pregrado informacion_contacto_id={{this.info_persona_id}} (eventChange)="perfil_editar('info_familiar')" (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-contacto_pregrado>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}"[active]="info_familiar">
-                    <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    <ngx-crud-informacion-familiar  info_persona_id={{this.info_persona_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,3)">
                     </ngx-crud-informacion-familiar>
                 </nb-tab>
             </nb-tabset>
@@ -290,10 +290,10 @@
 
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}" active=true>
-                    <ngx-crud-icfes (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
+                    <ngx-crud-icfes inscripcion_id={{this.info_persona_id}} (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.universidad' | translate }}">
-                    <ngx-crud-preguntas (result)="setPercentage_acad($event,0)"></ngx-crud-preguntas>
+                    <ngx-crud-preguntas info_formacion_academica_id={{this.info_persona_id}} (result)="setPercentage_acad($event,0)"></ngx-crud-preguntas>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
