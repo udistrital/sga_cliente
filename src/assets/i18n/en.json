@@ -331,6 +331,7 @@
         "volumen": "Volume",
         "placeholder_volumen": "E.g.: 1",
         "fasciculo": "Fascicle",
+        "inscrito": "Has been enrolled in the academic period:",
         "placeholder_fasciculo": "E.g.: 1",
         "serie": "Issue",
         "placeholder_serie": "E.g.: 2",

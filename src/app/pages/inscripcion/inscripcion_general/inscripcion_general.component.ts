@@ -29,19 +29,19 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 export class InscripcionGeneralComponent implements OnInit, OnChanges {
   toasterService: any;
 
-  @Input('inscripcion_id')
-  set name(inscripcion_id: number) {
-    this.inscripcion_id = inscripcion_id;
-    console.info('Posgrado ins: ' + this.inscripcion_id)
-    if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
-      this.selectedValue = undefined;
-      window.localStorage.setItem('programa', this.selectedValue);
-    }
-    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-      && this.inscripcion_id.toString() !== '0') {
-      // this.getInfoInscripcion();
-    }
-  }
+  // @Input('inscripcion_id')
+  // set name(inscripcion_id: number) {
+  //   this.inscripcion_id = inscripcion_id;
+  //   console.info('Posgrado ins: ' + this.inscripcion_id)
+  //   if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
+  //     this.selectedValue = undefined;
+  //     window.localStorage.setItem('programa', this.selectedValue);
+  //   }
+  //   if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
+  //     && this.inscripcion_id.toString() !== '0') {
+  //     // this.getInfoInscripcion();
+  //   }
+  // }
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
@@ -663,13 +663,15 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   cargaproyectoseventosactivos() {
     this.SelectedTipoBool = false
     this.selectedTipo = this.selectedTipo.Nombre
-    console.info(this.selectedValue)
     if (this.selectedValue === true) {
       this.tipo_inscripcion();
     }
   }
   tipo_inscripcion() {
     console.info('Tipo metodo')
+    console.info('Select programa')
+    console.info(this.selectedValue)
+    window.localStorage.setItem('programa', this.selectedValue.Id);
     switch (this.selectedTipo) {
       case ('Pregrado'):
         this.selectTipo = 'Pregrado';

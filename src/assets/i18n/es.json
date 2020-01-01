@@ -220,6 +220,7 @@
         "correo_principal": "Correo Electrónico",
         "placeholder_correo_principal": "Ej: ana@correo.com",
         "nombre_familiar_alterno": "Nombre del acudiente alterno",
+        "inscrito": "Ha sido inscrito al período académico:",
         "placeholder_nombre_familiar_alterno": "Ej: Pedro",
         "correo_alterno": "Correo Electrónico",
         "placeholder_correo_alterno": "Ej: pedro@correo.com",
