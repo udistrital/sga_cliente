@@ -51,7 +51,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
     // if (this.inscripcion_id !== undefined && this.inscripcion_id !== null && this.inscripcion_id !== 0 &&
     //   this.inscripcion_id.toString() !== '') {
     //  console.info('InscripcionPro: ' + this.inscripcion_id);
-    //   this.loadPropuestaGrado();
+      // this.loadPropuestaGrado();
       if (this.formData) {
         this.createPropuestaGrado(this.formData);
       }
@@ -135,7 +135,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
       .subscribe(lineas_grupo => {
         if (lineas_grupo !== null) {
           consultaLineas = <Array<any>>lineas_grupo;
-          this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacionId')].opciones = consultaLineas;
+          this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones = consultaLineas;
           // consultaLineas.forEach(element => {
           //   this.coreService.get('linea_investigacion/' + element.LineaInvestigacionId)
           //     .subscribe(linea => {
@@ -518,7 +518,10 @@ export class CrudPropuestaGradoComponent implements OnInit {
                   this.info_propuesta_grado.DocumentoId = this.filesUp9['FormatoProyecto'].Id;
                 }
                 // this.info_propuesta_grado.TipoProyectoId = this.info_propuesta_grado.TipoProyecto;
-                this.info_propuesta_grado.GrupoInvestigacionLineaInvetigacionId = this.info_propuesta_grado.LineaInvestigacionId.Id;
+                // this.info_propuesta_grado.GrupoInvestigacionLineaInvetigacionId = this.info_propuesta_grado.LineaInvestigacionId.Id;
+                this.info_propuesta_grado.Activo = true;
+                this.info_propuesta_grado.GrupoInvestigacionId = this.info_propuesta_grado.GrupoInvestigacion.id;
+                this.info_propuesta_grado.LineaInvestigacionId = this.info_propuesta_grado.LineaInvestigacion.id;
                 this.info_propuesta_grado.InscripcionId = {Id: Number(this.inscripcion_id)};
                 this.inscripcionService.post('propuesta/', this.info_propuesta_grado)
                   .subscribe(res => {
