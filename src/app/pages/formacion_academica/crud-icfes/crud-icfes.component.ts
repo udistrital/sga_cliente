@@ -24,16 +24,16 @@ import { Store } from '@ngrx/store';
 export class CrudIcfesComponent implements OnInit {
   config: ToasterConfig;
   info_formacion_academica_id: number;
-  inscripcion_id: number;
+  info_persona_id: number;
   persiona_id: number;
   denied_acces: boolean = false;
 
 
 
-  @Input('inscripcion_id')
-  set inscripcion(inscripcion_id: number) {
-    this.inscripcion_id = inscripcion_id;
-    console.info('ID_FormacionAcademica_Pregrado' + this.inscripcion_id)
+  @Input('info_persona_id')
+  set inscripcion(info_persona_id: number) {
+    this.info_persona_id = info_persona_id;
+    console.info('ID_FormacionAcademica_Pregrado' + this.info_persona_id)
     this.loadInfoFormacionAcademica();
   }
 
@@ -52,6 +52,7 @@ export class CrudIcfesComponent implements OnInit {
   tipoSeleccionado: any;
   tipocolegio: Number;
   datosPost: any;
+  id_inscripcion: Number;
   departamentoSeleccionado: any;
   datosGet: any;
 
@@ -346,13 +347,18 @@ export class CrudIcfesComponent implements OnInit {
 
   public loadInfoFormacionAcademica(): void {
     this.loading = true;
-    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 &&
-      this.inscripcion_id.toString() !== '') {
+    console.info('Metodo')
+    console.info(this.info_persona_id)
+    if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
+      this.info_persona_id.toString() !== '') {
+        console.info('Metodo paso')
       this.denied_acces = false;
-      this.sgaMidService.get('persona/consultar_formacion_pregreado/' + this.inscripcion_id)
+      this.sgaMidService.get('persona/consultar_formacion_pregrado/' + this.info_persona_id)
         .subscribe(res => {
           if (res !== null) {
             this.datosGet = <any>res;
+            console.info('ojooooooo')
+            console.info(this.datosGet)
             this.formIcfes.campos[this.getIndexForm('TipoIcfes')].valor = res['TipoIcfes']
             this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor = res['NúmeroRegistroIcfes']
             this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfesConfirmar')].valor = res['NúmeroRegistroIcfes']
@@ -480,7 +486,7 @@ export class CrudIcfesComponent implements OnInit {
   }
 
   createColegioeIcfesColegio() {
-    this.persiona_id =  Number(this.inscripcion_id);
+    this.persiona_id =  Number(this.info_persona_id);
      const opt: any = {
        title: this.translate.instant('GLOBAL.crear'),
        text: this.translate.instant('GLOBAL.crear') + '?',
@@ -495,8 +501,9 @@ export class CrudIcfesComponent implements OnInit {
        .then((willDelete) => {
          this.loading = true;
          if (willDelete.value) {
+          this.id_inscripcion = Number(localStorage.getItem('IdInscripcion'));
            const inscripcion = {
-        Id:  1, // se debe cambiar solo por inscripcion
+        Id: this.id_inscripcion, // se debe cambiar solo por inscripcion
       }
            this.datosPost = {
              'Tercero': {
@@ -590,9 +597,10 @@ export class CrudIcfesComponent implements OnInit {
     if ( String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
     String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota') {
       console.info('No crear colegio')
-      this.persiona_id =  Number(this.inscripcion_id);
+      this.persiona_id =  Number(this.info_persona_id);
+      this.id_inscripcion = Number(localStorage.getItem('IdInscripcion'));
       const inscripcion = {
-        Id:  1, // se debe cambiar solo por inscripcion
+        Id:  this.id_inscripcion, // se debe cambiar solo por inscripcion
       }
       const dataIcfesColegio = {
         'Tercero': {
