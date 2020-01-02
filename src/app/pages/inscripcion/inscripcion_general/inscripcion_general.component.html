@@ -5,7 +5,7 @@
             <!-- select tipo de inscripcion -->
             <mat-form-field style="width: 100%;">
                 <mat-label>{{ 'inscripcion.aviso_tipo' | translate }}:</mat-label>
-                <mat-select [(ngModel)]="selectedTipo" (ngModelChange)="cargaproyectoseventosactivos()">
+                <mat-select [(ngModel)]="tipo_inscripcion_selected" (ngModelChange)="cargaproyectoseventosactivos()">
                     <mat-option>--Seleccionar--</mat-option>
                     <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
                         {{item.Nombre}}
