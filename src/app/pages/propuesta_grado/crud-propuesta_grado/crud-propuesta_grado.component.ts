@@ -339,7 +339,6 @@ export class CrudPropuestaGradoComponent implements OnInit {
                       });
                     });
                 }
-                
               },
                 (error: HttpErrorResponse) => {
                   Swal({
