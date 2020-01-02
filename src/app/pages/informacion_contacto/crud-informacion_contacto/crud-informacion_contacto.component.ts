@@ -205,7 +205,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             Id: 0,
             TerceroId: tercero,
             InfoComplementariaId: {
-              Id: 48,
+              Id: 51,
             },
             Dato: JSON.stringify({
               country: formData.PaisResidencia,
