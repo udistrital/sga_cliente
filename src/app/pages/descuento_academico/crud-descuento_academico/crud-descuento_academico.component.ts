@@ -18,6 +18,7 @@ import { TipoDescuento } from '../../../@core/data/models/descuento/tipo_descuen
 import { ListService } from '../../../@core/store/services/list.service';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
+import { CoreService } from '../../../@core/data/core.service';
 
 @Component({
   selector: 'ngx-crud-descuento-academico',
@@ -75,6 +76,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     private documentoService: DocumentoService,
     private descuentoService: DescuentoAcademicoService,
     private inscripcionService: InscripcionService,
+    private coreService: CoreService,
     private sgaMidService: SgaMidService,
     private store: Store<IAppState>,
     private listService: ListService,
@@ -86,8 +88,25 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+    this.cargarPeriodo();
     this.listService.findDescuentoDependencia();
     this.loadLists();
+  }
+
+  cargarPeriodo() {
+    return new Promise((resolve, reject) => {
+      this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.periodo = <any>res[0].Id;
+          resolve(this.periodo);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      });
+    });
   }
 
   public loadLists() {
