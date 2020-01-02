@@ -24,7 +24,7 @@ export let FORM_PROPUESTA_GRADO = {
       tipo: 'GrupoInvestigacion',
       key: 'name',
       opciones: [],
-      entrelazado: true,
+      // entrelazado: true,
     },
     {
       etiqueta: 'select',
