@@ -434,7 +434,7 @@
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.descuento_matricula' | translate }}">
-                    <ngx-list-descuento-academico (result)="setPercentage_desc($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
+                    <ngx-list-descuento-academico (result)="setPercentage_desc($event,0)" persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}">
                     </ngx-list-descuento-academico>
                 </nb-tab>
             </nb-tabset>
