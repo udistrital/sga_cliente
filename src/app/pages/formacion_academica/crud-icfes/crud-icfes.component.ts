@@ -72,13 +72,12 @@ export class CrudIcfesComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+    this.loadLists();
     this.listService.findTipoICFES();
     this.listService.findLocalidadesBogota();
     this.listService.findTipoColegio();
     this.listService.findSemestresSinEstudiar();
-    // this.loadOptionsPais();
-    this.persiona_id = this.users.getPersonaId();
-    this.loadLists();
+    this.construirForm();
   }
 
   construirForm() {
@@ -657,7 +656,7 @@ export class CrudIcfesComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
-        this.formIcfes.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
+      this.formIcfes.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
        this.formIcfes.campos[this.getIndexForm('LocalidadColegio')].opciones = list.listLocalidadesBogota[0];
       //  this.formIcfes.campos[this.getIndexForm('TipoColegio')].opciones = list.listTipoColegio[0];
        this.formIcfes.campos[this.getIndexForm('numeroSemestres')].opciones = list.listSemestresSinEstudiar[0];
