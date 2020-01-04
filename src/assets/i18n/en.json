@@ -46,6 +46,10 @@
             "inscripciones": "Inscriptions",
             "inscritos_por_proyecto": "Enrolled by project"
           },
+          "icfes": {
+            "icfes": "ICFES SNP Registration",
+            "icfes_por_proyecto":"Records by project"
+        },
           "proyectos_curriculares": {
             "proyectos_curriculares": "Academic projects",
             "lista_proyectos_curriculares": "Project list",
@@ -544,7 +548,8 @@
       "inscritos_por_proyecto":"Enrolled by project",
       "proyectos_curriculares":"Academic projects",
       "historico_acreditaciones": "Accreditation history",
-      "error_obteniendo_reporte":"There was an error getting the report information, please try again."
+      "error_obteniendo_reporte":"There was an error getting the report information, please try again.",
+      "icfes_snp": "List of applicants projects with SNP registration"
     },
     "evento": {
         "evento": "Event",
