@@ -183,7 +183,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   loadInfoInscripcion() {
     return new Promise((resolve, reject) => {
-      this.inscripcionService.get(`inscripcion?limint=1&query=PeriodoId:${this.periodo.Id},PersonaId:${this.info_persona_id || 4}`)
+      this.inscripcionService.get(`inscripcion?limit=1&query=PeriodoId:${this.periodo.Id},PersonaId:${this.info_persona_id || 4}`)
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
