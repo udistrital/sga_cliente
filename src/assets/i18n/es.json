@@ -469,11 +469,11 @@
         "placeholder_estrato_costea": "Ej: Estrato 0",
         "numero_semestres": "Número de semestres transcurridos desde la terminación del grado once",
         "placeholder_numero_semestres": "Ej: Recien graduado",
-        "viene": "Universidad de donde viene",
-        "placeholder_viene": "Ej: Universidad Nacional",
+        "universidad_viene": "Universidad de donde viene",
+        "placeholder_universidad_viene": "Ej: Universidad Nacional",
         "ultimo_semestre": "Último semestre cursado",
         "placeholder_ultimo_semestre": "Ej: Tercer semestre",
-        "observacion_trans": "Motivos de la Transfeencia",
+        "observacion_trans": "Motivos de la Transferencia",
         "placeholder_observacion_trans": "",
         "fecha_vinculacion": "Fecha de inicio de vinculación EPS",
         "placeholder_fecha_vinculacion": "Ej: 01/01/2019",
@@ -842,7 +842,9 @@
         "universidad": "Universidad",
         "transfe": "Transferencia interna",
         "reingreso": "Reingreso",
-        "transferencia": "Datos de transferencia"
+        "transferencia": "Datos de transferencia",
+        "error_registrar_informacion": "Ocurrió un error al registrar la información de la inscripción",
+        "error_cargar_informacion": "Ocurrió un error al cargar la información de la inscripción"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -854,6 +856,11 @@
         "transferencia_registrada": "Solicitud de transferencia interna registrada",
         "seguro_continuar_registrar": "¿Está seguro de registrar esta solicitud de transferencia interna?"
     },
+    "transferencia_externa": {
+        "transferencia_no_registrada": "Solicitud de transferencia externa no registrada",
+        "transferencia_registrada": "Solicitud de transferencia externa registrada",
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta solicitud de transferencia externa?"
+    },
     "icfes_colegio": {
         "icfes_colegio_no_registrado": "Información del icfes y del colegio no registrada",
         "icfes_colegio_registrado": "Información del icfes y del colegio registrada",
@@ -863,6 +870,53 @@
         "universidad_form_no_registrado": "Información de la universidad no registrada",
         "universidad_form_registrado": "Información de la universidad registrada",
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información de la universidad?"
+    },
+    "informacion_contacto_posgrado": {
+        "informacion_contacto_no_registrada": "Información de contacto no actualizada",
+        "informacion_contacto_registrada": "Información de contacto actualizada",
+        "seguro_continuar_registrar": "¿Está seguto de registrar esta información de contacto?"
+    },
+    "informacion_academica": {
+        "informacion_academica_no_registrada": "Información académica no actualizada",
+        "informacion_academica_registrada": "Información académica actualizada",
+        "documento_informacion_academica_no_registrado": "Error subiendo el documento de soporte",
+        "seguro_continuar_registrar": "¿Está seguto de registrar esta información académica?",
+        "error_cargar_universidad": "Ocurruió un error al cargar la información de la universidad"
+    },
+    "experiencia_laboral": {
+        "experiencia_laboral_no_registrada": "Experiencia laboral no actualizada",
+        "experiencia_laboral_registrada": "Experiencia laboral actualizada",
+        "documento_experiencia_laboral_no_registrado": "Error subiendo el documento de soporte",
+        "seguro_continuar_registrar": "¿Está seguto de registrar esta experiencia laboral?",
+        "cargar_experiencia": "Ocurruió un error al cargar la información de la experiencia laboral",
+        "error_cargar_empresa": "Ocurruió un error al cargar la información de la empresa"
+    },
+    "documento_programa": {
+        "documento_programa_no_registrado": "Documento no registrado",
+        "documento_programa_registrado": "Documento registrado",
+        "documento_documento_programa_no_registrado": "Error subiendo el documento de soporte",
+        "seguro_continuar_registrar": "¿Está seguto de registrar este documento?"
+    },
+    "descuento_academico": {
+        "descuento_academico_no_registrado": "Descuento académico no registrado",
+        "descuento_academico_registrado": "Descuento académico registrado",
+        "documento_descuento_academico_no_registrado": "Error subiendo el documento de soporte",
+        "seguro_continuar_registrar": "¿Está seguto de registrar este descuento académico?"
+    },
+    "idiomas": {
+        "error_cargar_informacion_idiomas": "Ocurrió un error al cargar la información de los idiomas",
+        "error_nativo_examen": "No puede solicitar un exámen con su idioma nativo",
+        "error_doble_examen": "Ya tiene registrado un idioma con exámen",
+        "informacion_idioma_no_registrada": "Información de idioma no registrada",
+        "informacion_idiomaregistrada": "Información de idioma registrada",
+        "seguro_continuar_registrar": "¿Está seguto de registrar esta información de idioma?"
+    },
+    "propuesta_grado": {
+        "error_cargar_lineas_investigacion": "Ocurrió un error al cargar la información de las líneas de investigación",
+        "error_documento_propuesta_grado": "Ocurrió un error al cargar el documento de la propuesta de grado",
+        "propuesta_grado_no_registrada": "Propuesta de grado no registrada",
+        "propuesta_grado_registrada": "Propuesta de grado registrada",
+        "seguro_continuar_registrar": "¿Está seguto de registrar esta propuesta de grado?"
     },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Información familiar no actualizada",

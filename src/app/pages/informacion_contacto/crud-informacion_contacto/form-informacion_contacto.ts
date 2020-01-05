@@ -3,7 +3,7 @@ export let FORM_INFORMACION_CONTACTO = {
     tipo_formulario: 'mini',
     btn: 'Guardar',
     alertas: true,
-    modelo: 'InformacionContacto',
+    modelo: 'InfoInformacionContacto',
     campos: [
         {
             etiqueta: 'input',

@@ -1,4 +1,6 @@
 import { OrganizacionService } from './../../../@core/data/organizacion.service';
+import { SgaMidService } from './../../../@core/data/sga_mid.service';
+import { UserService } from './../../../@core/data/users.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
@@ -38,17 +40,26 @@ export class ListExperienciaLaboralComponent implements OnInit {
 
   loading: boolean;
   percentage: number;
+  persona_id: number;
 
-  constructor(private translate: TranslateService, private toasterService: ToasterService,
-    private experienciaService: ExperienciaService, private organizacionService: OrganizacionService) {
-    if (this.eid !== undefined && this.eid !== null && this.eid.toString() !== '') {
-      this.loadData();
-    }
+  constructor(private translate: TranslateService,
+    private toasterService: ToasterService,
+    private sgaMidService: SgaMidService,
+    private experienciaService: ExperienciaService,
+    private userService: UserService,
+    private organizacionService: OrganizacionService) {
+    // if (this.eid !== undefined && this.eid !== null && this.eid.toString() !== '') {
+    //   this.loadData();
+    // }
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
     });
     this.loading = false;
+    this.persona_id = this.userService.getPersonaId();
+    if (this.persona_id !== undefined && this.persona_id !== null && this.persona_id.toString() !== '') {
+      this.loadData();
+    }
   }
 
   cargarCampos() {
@@ -113,9 +124,14 @@ export class ListExperienciaLaboralComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.experienciaService.get('experiencia_laboral/?query=Persona:' + this.eid).subscribe(res => {
+    // this.experienciaService.get('experiencia_laboral/?query=Persona:' + this.eid).subscribe(res => {
+    this.sgaMidService.get('experiencia_laboral/by_tercero/' + this.persona_id).subscribe(res => {
       if (res !== null && JSON.stringify(res[0]) !== '{}') {
         this.data = <Array<any>>res;
+        this.loading = false;
+        this.getPercentage(1);
+        this.source.load(this.data);
+        /*
         this.data.forEach(element => {
           this.organizacionService.get('organizacion/?query=Ente:' + element.Organizacion).subscribe(r => {
             if (res !== null) {
@@ -137,6 +153,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
               });
             });
         });
+        */
       }
     },
       (error: HttpErrorResponse) => {
@@ -144,8 +161,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
           type: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
-          footer: this.translate.instant('GLOBAL.cargar') + '-' +
-            this.translate.instant('GLOBAL.experiencia_laboral'),
+          footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       });

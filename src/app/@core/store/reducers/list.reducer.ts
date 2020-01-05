@@ -290,4 +290,58 @@ export class ListReducer {
         return state;
     }
   }
+
+  static ListReducerTipoDedicacion(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.TipoDedicacion:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerTipoVinculacion(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.TipoVinculacion:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerTipoOrganizacion(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.TipoOrganizacion:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerCargo(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.Cargo:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerDocumentoPrograma(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.DocumentoPrograma:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerDescuentoDependencia(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.DescuentoDependencia:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
 }

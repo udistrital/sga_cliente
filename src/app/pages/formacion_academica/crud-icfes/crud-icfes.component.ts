@@ -352,6 +352,7 @@ export class CrudIcfesComponent implements OnInit {
       this.info_persona_id.toString() !== '') {
         console.info('Metodo paso')
       this.denied_acces = false;
+
       this.sgaMidService.get('persona/consultar_formacion_pregrado/' + this.info_persona_id)
         .subscribe(res => {
           if (res !== null) {

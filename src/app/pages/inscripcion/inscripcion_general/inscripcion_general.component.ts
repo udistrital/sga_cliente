@@ -1,12 +1,13 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ResolveEnd } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { UserService } from '../../../@core/data/users.service';
+import { CoreService } from '../../../@core/data/core.service';
 import { TercerosService} from '../../../@core/data/terceros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
@@ -114,6 +115,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   tag_view_pre: boolean;
   selectprograma: boolean = true;
   imagenes: any;
+  periodo: any;
 
   constructor(
     private translate: TranslateService,
@@ -121,6 +123,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private terceroService: TercerosService,
     private inscripcionService: InscripcionService,
     private userService: UserService,
+    private coreService: CoreService,
     private programaService: OikosService,
     private sgaMidService: SgaMidService,
   ) {
@@ -142,6 +145,89 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     //     this.info_ente_id = undefined;
     //   }
     // }
+
+    this.loadData();
+    this.cargarPeriodo();
+  }
+
+  async loadData() {
+    try {
+      this.info_persona_id = this.userService.getPersonaId();
+      await this.cargarPeriodo();
+      await this.loadInfoInscripcion();
+    } catch (error) {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('inscripcion.error_cargar_informacion'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    }
+  }
+
+  cargarPeriodo() {
+    return new Promise((resolve, reject) => {
+      this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.periodo = <any>res[0];
+          resolve(this.periodo);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      });
+    });
+  }
+
+  loadInfoInscripcion() {
+    return new Promise((resolve, reject) => {
+      this.inscripcionService.get(`inscripcion?limit=1&query=PeriodoId:${this.periodo.Id},PersonaId:${this.info_persona_id || 4}`)
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          if (r[0].Id) {
+            this.inscripcion_id = r[0].Id;
+          }
+        }
+        resolve(this.inscripcion_id);
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      });
+    });
+  }
+
+  create_inscription(data) {
+    const info_inscripcion_temp = {
+      Id: 0,
+      PersonaId: this.info_persona_id || 4,
+      ProgramaAcademicoId: 0, // Cambiar por el periodo
+      PeriodoId: this.periodo.Id,
+      AceptaTerminos: true,
+      FechaAceptaTerminos: new Date(),
+      Activo: true,
+      EstadoInscripcionId: {
+        Id: 1,
+      },
+      TipoInscripcionId: this.selectedTipo,
+    }
+    this.inscripcionService.post('inscripcion', info_inscripcion_temp)
+    .subscribe(res => {
+      const r = <any>res;
+      if (res !== null && r.Type !== 'error') {
+        this.inscripcion_id = r.Id;
+      }
+    },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('inscripcion.error_registrar_informacion'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
   }
 
   setPercentage_info(number, tab) {
