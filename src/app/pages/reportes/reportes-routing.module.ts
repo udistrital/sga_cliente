@@ -4,7 +4,7 @@ import { ReportesComponent } from './reportes.component';
 import { InscritosProyectoComponent } from './inscripciones/inscritos-proyecto/inscritos-proyecto.component';
 import { ReporteProyectosListComponent } from './proyectos/list-proyectos/list-proyectos.component';
 import { ReporteHistoricoAcreditacionesComponent } from './proyectos/historico-acreditaciones/historico-acreditaciones.component';
-
+import {IcfesProyectoComponent} from './icfes_SNP/icfes-proyecto/icfes-proyecto.component';
 
 const routes: Routes = [{
   path: '',
@@ -13,6 +13,10 @@ const routes: Routes = [{
     {
       path: 'inscripciones/inscritos-proyecto',
       component: InscritosProyectoComponent,
+    },
+    {
+      path: 'icfes_SNP/icfes-proyecto',
+      component: IcfesProyectoComponent,
     },
     {
       path: 'proyectos/list-proyectos',
@@ -39,6 +43,7 @@ export class EventoRoutingModule { }
 export const routedComponents = [
   ReportesComponent,
   InscritosProyectoComponent,
+  IcfesProyectoComponent,
   ReporteProyectosListComponent,
   ReporteHistoricoAcreditacionesComponent,
 ];

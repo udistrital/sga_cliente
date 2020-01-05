@@ -290,7 +290,7 @@
 
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.icfes' | translate }}" active=true>
-                    <ngx-crud-icfes inscripcion_id={{this.info_persona_id}} (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
+                    <ngx-crud-icfes  info_persona_id={{this.info_persona_id}} (result)="setPercentage_acad($event,0)"></ngx-crud-icfes>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.universidad' | translate }}">
                     <ngx-crud-preguntas info_formacion_academica_id={{this.info_persona_id}} (result)="setPercentage_acad($event,0)"></ngx-crud-preguntas>

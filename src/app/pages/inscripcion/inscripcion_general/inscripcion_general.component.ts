@@ -343,54 +343,78 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           });
         });
   }
+  loadidInscripcion() {
+    this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_persona_id )
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.inscripcion_id = res[0].Id
+          console.info('Id  inscripcion: ' + this.inscripcion_id)
+          window.localStorage.setItem('IdInscripcion', String(this.inscripcion_id));
+          this.getInfoInscripcion() ;
+        }else {
+          this.inscripcion_id = undefined;
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.programa_academico'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
 
-  // getInfoInscripcion() {
-  //   if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-  //     && this.inscripcion_id.toString() !== '0') {
-  //     this.loading = true;
-  //     this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
-  //       .subscribe(inscripcion => {
-  //         this.info_inscripcion = <any>inscripcion;
-  //         if (inscripcion !== null && this.info_inscripcion.Type !== 'error') {
-  //           this.estado_inscripcion = this.info_inscripcion.EstadoInscripcionId.Id;
-  //           if (this.info_inscripcion.EstadoInscripcionId.Id > 1) {
-  //             this.total = true;
-  //           }
-  //           this.programaService.get('dependencia/' + this.info_inscripcion.ProgramaAcademicoId)
-  //             .subscribe(res_programa => {
-  //               const programa_admision = <any>res_programa;
-  //               if (res_programa !== null && programa_admision.Type !== 'error') {
-  //                 this.selectedValue = programa_admision;
-  //                 this.posgrados.push(programa_admision);
-  //                 this.info_ente_id = this.info_inscripcion.PersonaId;
-  //                 this.loading = false;
-  //               }
-  //             },
-  //               (error: HttpErrorResponse) => {
-  //                 Swal({
-  //                   type: 'error',
-  //                   title: error.status + '',
-  //                   text: this.translate.instant('ERROR.' + error.status),
-  //                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                     this.translate.instant('GLOBAL.admision') + '|' +
-  //                     this.translate.instant('GLOBAL.programa_academico'),
-  //                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                 });
-  //               });
-  //         }
-  //       },
-  //         (error: HttpErrorResponse) => {
-  //           Swal({
-  //             type: 'error',
-  //             title: error.status + '',
-  //             text: this.translate.instant('ERROR.' + error.status),
-  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //               this.translate.instant('GLOBAL.admision'),
-  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //           });
-  //         });
-  //   }
-  // }
+  getInfoInscripcion() {
+    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
+      && this.inscripcion_id.toString() !== '0') {
+      this.loading = true;
+      this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
+        .subscribe(inscripcion => {
+          this.info_inscripcion = <any>inscripcion;
+          if (inscripcion !== null && this.info_inscripcion.Type !== 'error') {
+            this.estado_inscripcion = this.info_inscripcion.EstadoInscripcionId.Id;
+            if (this.info_inscripcion.EstadoInscripcionId.Id > 1) {
+              this.total = true;
+            }
+            this.programaService.get('dependencia/' + this.info_inscripcion.ProgramaAcademicoId)
+              .subscribe(res_programa => {
+                const programa_admision = <any>res_programa;
+                if (res_programa !== null && programa_admision.Type !== 'error') {
+                  // this.selectedValue = programa_admision;
+                  // this.posgrados.push(programa_admision);
+                  // this.info_ente_id = this.info_inscripcion.PersonaId;
+                  this.loading = false;
+                }
+              },
+                (error: HttpErrorResponse) => {
+                  Swal({
+                    type: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                      this.translate.instant('GLOBAL.admision') + '|' +
+                      this.translate.instant('GLOBAL.programa_academico'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
+                });
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.admision'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    }
+  }
 
   useLanguage(language: string) {
     this.translate.use(language);
@@ -727,6 +751,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.inscripcion_id = this.info_inscripcion.Id;
           this.info_persona_id = this.inscripcion_id;
           console.info('este es el del serivio ' + this.info_persona_id)
+          this.loadidInscripcion();
           // this.getInfoInscripcion();
         }
       },
@@ -749,13 +774,15 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   cargaproyectoseventosactivos() {
     this.SelectedTipoBool = false
     this.selectedTipo = this.selectedTipo.Nombre
-    console.info(this.selectedValue)
     if (this.selectedValue === true) {
       this.tipo_inscripcion();
     }
   }
   tipo_inscripcion() {
     console.info('Tipo metodo')
+    console.info('Select programa')
+    console.info(this.selectedValue)
+    window.localStorage.setItem('programa', this.selectedValue.Id);
     switch (this.selectedTipo) {
       case ('Pregrado'):
         this.selectTipo = 'Pregrado';

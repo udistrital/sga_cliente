@@ -227,7 +227,7 @@ export class CrudInfoPersonaComponent implements OnInit {
                       this.info_persona_id = r.Id;
                       sessionStorage.setItem('IdTercero', String(this.info_persona_id));
                       // this.loadInfoPersona();
-                      // this.createInscripcion(this.info_persona_id);
+                      this.createInscripcion(this.info_persona_id);
                       // this.loadInscripcion();
                       this.loading = false;
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
@@ -409,9 +409,9 @@ export class CrudInfoPersonaComponent implements OnInit {
     }
   }
 
-  createInscripcion(ente_id): void {
-    this.aspirante = ente_id;
-    this.programa = this.userService.getPrograma();
+  createInscripcion(tercero_id): void {
+    this.aspirante = tercero_id;
+    this.programa = Number(localStorage.getItem('programa'));
     const inscripcionPost = {
       PeriodoId: this.periodo.Id,
       PersonaId: this.aspirante,
@@ -425,6 +425,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     this.info_inscripcion = <Inscripcion>inscripcionPost;
     this.info_inscripcion.PersonaId = Number(this.info_persona_id);
     this.info_inscripcion.Id = Number(this.inscripcion_id);
+    console.info(JSON.stringify(this.info_inscripcion));
     this.inscripcionService.post('inscripcion', this.info_inscripcion)
       .subscribe(res => {
         this.info_inscripcion = <Inscripcion><unknown>res;
