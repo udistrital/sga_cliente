@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header>{{"GLOBAL.propuesta_grado" | translate}}
+  <nb-card-header>{{"inscripcion.propuesta_grado" | translate}}
   </nb-card-header>
   <nb-card-body class="row container">
     <div class="col-md-12">
@@ -8,14 +8,14 @@
           <tr>
             <td>
               <p *ngIf="info_propuesta_grado.GrupoInvestigacion"><b>{{"GLOBAL.grupo_investigacion" | translate}}:</b> 
-                {{info_propuesta_grado.GrupoInvestigacion.Nombre}}</p>
+                {{info_propuesta_grado.GrupoInvestigacion.name}}</p>
               <p *ngIf="info_propuesta_grado.LineaInvestigacion"><b>{{"GLOBAL.linea_investigacion" | translate}}:</b> 
-                {{info_propuesta_grado.LineaInvestigacion.Nombre}}</p>
+                {{info_propuesta_grado.LineaInvestigacion.name}}</p>
               <p><b>{{"GLOBAL.tipo_proyecto" | translate}}:</b> {{info_propuesta_grado.TipoProyectoId.Nombre}}</p>
             </td>
             <td>
               <p><b>{{"GLOBAL.titulo_proyecto" | translate}}:</b> {{info_propuesta_grado.Nombre}}</p>
-              <p><b>{{"GLOBAL.formato_proyecto" | translate}}:</b> (<a [href]=info_propuesta_grado.DocumentoId download="Propuesta.pdf">
+              <p><b>{{"GLOBAL.formato_proyecto" | translate}}:</b> (<a [href]=info_propuesta_grado.Documento download="PropuestaGrado.pdf">
                 {{"GLOBAL.soporte_documento" | translate}}</a>)</p>
               <p><b>{{"GLOBAL.resumen" | translate}}:</b> {{info_propuesta_grado.Resumen}}</p>
             </td>
