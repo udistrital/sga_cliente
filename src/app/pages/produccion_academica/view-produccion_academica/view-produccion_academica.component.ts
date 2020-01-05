@@ -12,7 +12,7 @@ import { ProduccionAcademicaPost } from '../../../@core/data/models/produccion_a
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
-  selector: 'ngx-view-produccion_academica',
+  selector: 'ngx-view-produccion-academica',
   templateUrl: './view-produccion_academica.component.html',
   styleUrls: ['./view-produccion_academica.component.scss'],
 })
