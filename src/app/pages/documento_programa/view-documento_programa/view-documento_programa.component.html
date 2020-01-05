@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header>{{"GLOBAL.documento_programa" | translate}}
+  <nb-card-header>{{"inscripcion.documento_programa" | translate}}
   </nb-card-header>
   <nb-card-body class="row container">
     <div class="col-md-12">
@@ -7,10 +7,10 @@
         <tbody *ngIf="info_documento_programa">
           <tr *ngFor="let documento of info_documento_programa">
             <td>
-              <p>{{documento.TipoDocumentoPrograma.Nombre}}</p>
+              <p>{{documento.DocumentoPrograma.TipoDocumentoPrograma.Nombre}}</p>
             </td>
             <td *ngIf="documento.DocumentoId !== undefined">
-              <p>(<a [href]=documento.DocumentoId download="{{documento.TipoDocumentoPrograma.Nombre}}.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</p>
+              <p>(<a [href]=documento.Documento download="{{documento.DocumentoPrograma.TipoDocumentoPrograma.Nombre}}.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</p>
             </td>
           </tr>
         </tbody>
