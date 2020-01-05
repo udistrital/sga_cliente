@@ -147,6 +147,20 @@ export const MENU_ITEMS: MenuItem[] = [
         ],
       },
       {
+        title: 'Icfes',
+        icon: '	nb-maximize',
+        link: '',
+        key: 'icfes',
+        children: [
+          {
+            title: 'Registro Icfes por proyecto',
+            icon: 'nb-list',
+            link: '/pages/reportes/icfes_SNP/icfes-proyecto',
+            key: 'icfes_por_proyecto',
+          },
+        ],
+      },
+      {
         title: 'Proyectos',
         icon: '	nb-maximize',
         link: '',
