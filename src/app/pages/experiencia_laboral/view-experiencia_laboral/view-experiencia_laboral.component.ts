@@ -78,7 +78,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
             if (Object.values(this.documentosSoporte).length === data.length) {
               for (let i = 0; i < data.length; i++) {
                 data[i].Documento = this.cleanURL(this.documentosSoporte['DocumentoExp' + data[i].Id] + '');
-              }      
+              }
             }
             this.info_experiencia_laboral = data;
           },

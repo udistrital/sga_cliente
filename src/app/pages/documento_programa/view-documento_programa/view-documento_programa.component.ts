@@ -72,31 +72,29 @@ export class ViewDocumentoProgramaComponent implements OnInit {
           this.persona_id + '&limit=0')
           .subscribe(res => {
             if (res !== null && JSON.stringify(res[0]) !== '{}') {
-              res.forEach(element => {
-                this.documentoProgramaService.get('documento_programa/' + element.DocumentoProgramaId.Id)
+              res.forEach(doc => {
+                this.documentoProgramaService.get('documento_programa/' + doc.DocumentoProgramaId.Id)
                   .subscribe(documentoPrograma => {
                     if (documentoPrograma !== null && JSON.stringify(documentoPrograma[0]) !== '{}') {
                       this.programaDocumento =  <Array<any>>documentoPrograma;
                       // if (this.programaDocumento.PeriodoId === this.periodo) {
-                        element.DocumentoPrograma = this.programaDocumento;
+                        doc.DocumentoPrograma = this.programaDocumento;
                         this.documentoProgramaService.get('tipo_documento_programa/' +
                           this.programaDocumento.TipoDocumentoProgramaId.Id)
                           .subscribe(tipoDocumentoPrograma => {
                             if (tipoDocumentoPrograma !== null && JSON.stringify(tipoDocumentoPrograma[0]) !== '{}') {
                               const tipoProgramaDocumento =  <Array<any>>tipoDocumentoPrograma;
-                              element.DocumentoPrograma.TipoDocumentoPrograma = tipoProgramaDocumento;
-                              
-                              this.info_documento_programa.push(element);
-
+                              doc.DocumentoPrograma.TipoDocumentoPrograma = tipoProgramaDocumento;
+                              this.info_documento_programa.push(doc);
                               this.nuxeoService.getDocumentoById$([
-                                { Id: element.DocumentoId, key: 'DocumentoPrograma' + element.DocumentoId},
+                                { Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId},
                               ], this.documentoService)
                                 .subscribe(response => {
                                   const documentosSoporte = <Array<any>>response;
                                   // if (Object.values(documentosSoporte).length === data.length) {
                                     // for (let i = 0; i < data.length; i++) {
-                                  element.Documento = this.cleanURL(documentosSoporte['DocumentoPrograma'+ element.DocumentoId + '']);
-                                    // }      
+                                  doc.Documento = this.cleanURL(documentosSoporte['DocumentoPrograma' + doc.DocumentoId + '']);
+                                    // }
                                   // }
                                 },
                                 (error: HttpErrorResponse) => {
