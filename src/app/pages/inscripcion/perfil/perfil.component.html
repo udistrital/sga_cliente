@@ -40,6 +40,8 @@
         persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion-tecnica>
       <ngx-view-produccion-artes-arqu-diseno (url_editar)="editar($event,'default')"
         persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion-artes-arqu-diseno>-->
+      <ngx-view-produccion_academica (url_editar)="editar($event,'default')"
+        persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion_academica>
       <ngx-view-documento-programa *ngIf="info_inscripcion_id" (url_editar)="editar($event,'default')" inscripcion_id="{{info_inscripcion_id}}"
         persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-documento-programa>
       <ngx-view-descuento-academico (url_editar)="editar($event,'default')" inscripcion_id="{{info_inscripcion_id}}"
