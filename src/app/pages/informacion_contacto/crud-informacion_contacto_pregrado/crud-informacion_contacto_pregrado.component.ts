@@ -282,10 +282,28 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
             if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
                (this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogotá' ||
                 this.ciudadSeleccionada.Nombre.toString().toLowerCase() === 'bogota')) {
-                if (this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')].nombre === 'LocalidadResidencia') {
-                  this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')]
+                  if (this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')].nombre !== 'LocalidadResidencia') {
+                    this.formInformacionContacto.campos[this.getIndexForm('DireccionResidencia')].claseGrid = 'col-lg-6 col-md-6 col-sm-12 col-xs-12';
+                    const direccion = this.formInformacionContacto.campos.pop();
+                    this.formInformacionContacto.campos.push({
+                      etiqueta: 'select',
+                      claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+                      nombre: 'LocalidadResidencia',
+                      label_i18n: 'localidad_residencia',
+                      placeholder_i18n: 'localidad_residencia',
+                      requerido: true,
+                      tipo: 'Lugar',
+                      key: 'Nombre',
+                      opciones: [],
+                    });
+                    this.formInformacionContacto.campos.push(direccion);
+                    this.construirForm();
+                    this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')]
                     .opciones[0] = this.info_informacion_contacto.LocalidadResidencia;
-                }
+                  }else {
+                    this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')]
+                    .opciones[0] = this.info_informacion_contacto.LocalidadResidencia;
+                  }
             }
             this.loading = false;
           }
