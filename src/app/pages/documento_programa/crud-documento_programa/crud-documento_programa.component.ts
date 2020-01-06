@@ -12,6 +12,9 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ListService } from '../../../@core/store/services/list.service';
+import { IAppState } from '../../../@core/store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ngx-crud-documento-programa',
@@ -31,7 +34,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   @Input('documento_programa_id')
   set name(documento_programa_id: number) {
     this.documento_programa_id = documento_programa_id;
-    // this.loadDocumentoPrograma();
+    this.loadDocumentoPrograma();
   }
 
   @Input('persona_id')
@@ -71,13 +74,31 @@ export class CrudDocumentoProgramaComponent implements OnInit {
     private inscripcionService: InscripcionService,
     private documentoProgramaService: DocumentoProgramaService,
     private nuxeoService: NuxeoService,
+    private store: Store<IAppState>,
+    private listService: ListService,
     private toasterService: ToasterService) {
     this.formDocumentoPrograma = FORM_DOCUMENTO_PROGRAMA;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.loading = false;
+    this.listService.findDocumentoPrograma();
+    this.loadLists();
+  }
+
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+        if (list.listDocumentoPrograma[0]) {
+          this.formDocumentoPrograma.campos[this.getIndexForm('DocumentoProgramaId')].opciones = list.listDocumentoPrograma[0].map((documentoPrograma) => {
+            return {
+              Id: documentoPrograma.Id,
+              Nombre: documentoPrograma.TipoDocumentoProgramaId.Id + '. ' + documentoPrograma.TipoDocumentoProgramaId.Nombre,
+            }
+          });
+        }
+      },
+   );
   }
 
   construirForm() {
@@ -165,7 +186,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
         });
       });
   }
-
+*/
   public loadDocumentoPrograma(): void {
     this.loading = true;
     this.temp = {};
@@ -263,6 +284,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
     }
   }
 
+  /*
   updateDocumentoPrograma(soporteDocumentoPrograma: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
@@ -409,11 +431,12 @@ export class CrudDocumentoProgramaComponent implements OnInit {
           });
         });
   }
+  */
 
   createDocumentoPrograma(documentoPrograma: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('GLOBAL.crear') + '?',
+      text: this.translate.instant('documento_programa.seguro_continuar_registrar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -427,7 +450,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
         if (willDelete.value) {
           const files = [];
           this.info_documento_programa = <SoporteDocumentoPrograma>documentoPrograma;
-          this.info_documento_programa.PersonaId = 1 * this.persona;
+          this.info_documento_programa.PersonaId = Number(this.persona) || 1;
           this.info_documento_programa.DocumentoProgramaId = this.info_documento_programa.DocumentoProgramaId;
           if (this.info_documento_programa.Documento.file !== undefined) {
             files.push({
@@ -449,14 +472,13 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                       this.loading = false;
                       this.eventChange.emit(true);
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('GLOBAL.documento_programa') + ' ' +
-                        this.translate.instant('GLOBAL.confirmarCrear'));
+                        this.translate.instant('documento_programa.documento_programa_registrado'));
                       this.documento_programa_id = 0;
                       this.info_documento_programa = undefined;
                       this.clean = !this.clean;
                     } else {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
-                        this.translate.instant('GLOBAL.error'));
+                        this.translate.instant('documento_programa.documento_programa_no_registrado'));
                     }
                   },
                     (error: HttpErrorResponse) => {
@@ -464,8 +486,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                         type: 'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('GLOBAL.crear') + '-' +
-                          this.translate.instant('GLOBAL.documento_programa'),
+                        footer: this.translate.instant('documento_programa.documento_programa_no_registrado'),
                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                       });
                     });
@@ -476,23 +497,22 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                   type: 'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('GLOBAL.crear') + '-' +
-                    this.translate.instant('GLOBAL.documento_programa') + '|' +
-                    this.translate.instant('GLOBAL.soporte_documento'),
+                  footer: this.translate.instant('documento_programa.documento_documento_programa_no_registrado'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
         }
       });
   }
-*/
+
   validarForm(event) {
     if (event.valid) {
-      if (this.info_documento_programa === undefined) {
-        // this.crearNuevoDocumentoPrograma(event.data.DocumentoPrograma);
-      } else {
-        // this.updateDocumentoPrograma(event.data.DocumentoPrograma);
-      }
+      // if (this.info_documento_programa === undefined) {
+      // this.crearNuevoDocumentoPrograma(event.data.DocumentoPrograma);
+      // } else {
+      // this.updateDocumentoPrograma(event.data.DocumentoPrograma);
+      // }
+      this.createDocumentoPrograma(event.data.DocumentoPrograma);
       this.result.emit(event);
     }
   }

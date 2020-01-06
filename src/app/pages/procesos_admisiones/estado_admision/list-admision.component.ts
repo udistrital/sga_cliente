@@ -21,7 +21,7 @@ export class ListAdmisionComponent implements OnInit {
   cambiotab2: boolean = false;
   settings: any;
   data: any;
-  ente: number;
+  persona_id: number;
   posgrados = [];
   periodo = [];
   selectedValuePrograma: any;
@@ -35,8 +35,8 @@ export class ListAdmisionComponent implements OnInit {
     private coreService: CoreService,
     private userService: UserService,
     private programaService: OikosService) {
-    this.ente = this.userService.getEnte();
-    if (this.ente !== 0 && this.ente !== undefined && this.ente.toString() !== '' && this.ente.toString() !== 'NaN') {
+    this.persona_id = this.userService.getPersonaId();
+    if (this.persona_id !== 0 && this.persona_id !== undefined && this.persona_id.toString() !== '' && this.persona_id.toString() !== 'NaN') {
       this.loadData();
     }
     this.cargarCampos();
@@ -89,8 +89,8 @@ export class ListAdmisionComponent implements OnInit {
   }
 
   loadData(): void {
-    if (this.ente !== 0 && this.ente !== undefined && this.ente.toString() !== '') {
-      this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.ente +
+    if (this.persona_id !== 0 && this.persona_id !== undefined && this.persona_id.toString() !== '') {
+      this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.persona_id +
         '&limit=0').subscribe(res => {
           if (res !== null) {
             const data = <Array<any>>res;
@@ -152,8 +152,8 @@ export class ListAdmisionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ente = this.userService.getEnte();
-    if (this.ente !== 0 && this.ente !== undefined && this.ente.toString() !== '' && this.ente.toString() !== 'NaN') {
+    this.persona_id = this.userService.getPersonaId();
+    if (this.persona_id !== 0 && this.persona_id !== undefined && this.persona_id.toString() !== '' && this.persona_id.toString() !== 'NaN') {
       this.loadData();
     }
   }

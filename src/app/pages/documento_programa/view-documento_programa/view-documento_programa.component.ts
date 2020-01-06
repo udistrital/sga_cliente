@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./view-documento_programa.component.scss'],
 })
 export class ViewDocumentoProgramaComponent implements OnInit {
-  ente: number;
+  persona_id: number;
   inscripcion_id: number;
   periodo_id: number;
   estado_inscripcion: number;
@@ -26,14 +26,14 @@ export class ViewDocumentoProgramaComponent implements OnInit {
 
   @Input('persona_id')
   set info(info: number) {
-    this.ente = info;
+    this.persona_id = info;
   }
 
   @Input('inscripcion_id')
   set info2(info2: number) {
     this.inscripcion_id = info2;
     if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== '') {
-      this.loadData();
+      // this.loadData();
     }
   }
 
@@ -49,7 +49,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     private users: UserService) {
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       });
-      this.ente = this.users.getEnte();
+      this.persona_id = this.users.getPersonaId();
   }
 
   useLanguage(language: string) {
@@ -68,7 +68,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
         this.periodo_id = inscripciondata.PeriodoId;
         const programa = inscripciondata.ProgramaAcademicoId;
         this.estado_inscripcion = inscripciondata.EstadoInscripcionId.Id;
-        this.documentoProgramaService.get('soporte_documento_programa/?query=PersonaId:' + this.ente +
+        this.documentoProgramaService.get('soporte_documento_programa/?query=PersonaId:' + this.persona_id +
           ',DocumentoProgramaId.PeriodoId:' + this.periodo_id + ',DocumentoProgramaId.ProgramaId:' + programa +
           '&sortby=Id&order=asc&limit=0')
           .subscribe(res => {

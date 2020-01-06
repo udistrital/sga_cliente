@@ -487,7 +487,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
    }
 
   ngAfterViewInit(): void {
-    this.info_informacion_contacto.CodigoPostal = '123245';
+    // this.info_informacion_contacto.CodigoPostal = '123245';
     // this.loadInformacionContacto();
   }
 

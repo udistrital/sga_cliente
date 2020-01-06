@@ -35,5 +35,11 @@ export const rootReducer: ActionReducerMap<IAppState> = {
   listMediosEnteroUniversidad: ListReducer.ListReducerMediosEnteroUniversidad,
   listSePresentaAUniversidadPor: ListReducer.ListReducerSePresentaAUniversidadPor,
   listTipoInscripcionUniversidad: ListReducer.ListReducerTipoInscripcionUniversidad,
+  listTipoDedicacion: ListReducer.ListReducerTipoDedicacion,
+  listTipoVinculacion: ListReducer.ListReducerTipoVinculacion,
+  listCargo: ListReducer.ListReducerCargo,
+  listTipoOrganizacion: ListReducer.ListReducerTipoOrganizacion,
+  listDocumentoPrograma: ListReducer.ListReducerDocumentoPrograma,
+  listDescuentoDependencia: ListReducer.ListReducerDescuentoDependencia,
   // listTipoPublicacionLibro: ListReducer.listReducerTipoPublicacionLibro,
 }

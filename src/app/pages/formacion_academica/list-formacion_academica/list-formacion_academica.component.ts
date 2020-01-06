@@ -23,6 +23,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
   config: ToasterConfig;
   settings: any;
   source: LocalDataSource = new LocalDataSource();
+  persona_id: number;
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
@@ -43,6 +44,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
     });
+    this.persona_id = this.userService.getPersonaId();
     this.loading = false;
   }
 
@@ -127,7 +129,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.formacionService.get('formacion_academica/?query=Persona:' + this.userService.getEnte())
+    this.formacionService.get('formacion_academica/?query=Persona:' + this.persona_id)
       .subscribe(res => {
         if (res !== null) {
           const data = <Array<any>>res;

@@ -31,9 +31,11 @@ export class ListIdiomasComponent implements OnInit {
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
+  @Output() bridge_create_inscripcion: EventEmitter<any> = new EventEmitter();
 
   loading: boolean;
   percentage: number;
+  persona_id: number;
 
   constructor(private translate: TranslateService,
     private idiomaService: IdiomaService,
@@ -46,6 +48,10 @@ export class ListIdiomasComponent implements OnInit {
       });
       this.loading = false;
     }
+
+  crear_inscripcion(data) {
+    this.bridge_create_inscripcion.emit(data);
+  }
 
   cargarCampos() {
     this.settings = {
@@ -116,7 +122,8 @@ export class ListIdiomasComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.idiomaService.get('conocimiento_idioma/?query=Persona:' + this.userService.getEnte() +
+    this.persona_id = this.userService.getPersonaId() || 1;
+    this.idiomaService.get('conocimiento_idioma/?query=Persona:' + this.persona_id +
       '&limit=0')
       .subscribe(res => {
         if (res !== null && JSON.stringify(res[0]) !== '{}') {

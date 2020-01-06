@@ -28,7 +28,7 @@ export class PagoInscripcionComponent implements OnInit {
     this.inscripcion_id = inscripcion_id;
     console.info(this.inscripcion_id)
     if (this.inscripcion_id !== 0 && this.inscripcion_id !== undefined && this.inscripcion_id.toString() !== '') {
-      this.getInfoRecibo();
+      // this.getInfoRecibo();
     }
   }
 
