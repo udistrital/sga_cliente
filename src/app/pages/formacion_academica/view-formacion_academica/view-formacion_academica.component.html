@@ -10,9 +10,10 @@
                             <p><b>{{formacion.FechaInicio | date:'dd/MM/yyyy'}}
                                     - {{formacion.FechaFinalizacion |
                                     date:'dd/MM/yyyy'}} </b></p>
-                            <p><b>{{formacion.PaisUniversidad}}</b></p>
-                            <p><b>{{formacion.Titulacion.NivelFormacion.Nombre}}</b></p>
-                            <p><b>{{formacion.Titulacion.Metodologia.Nombre}}</b></p>
+                            <!-- <p><b>{{formacion.PaisUniversidad}}</b></p> -->
+                            <p><b>{{formacion.Pais.Nombre}}</b></p>
+                            <p><b>{{formacion.Titulacion.NivelFormacionId.Nombre}}</b></p>
+                            <p><b>{{formacion.Titulacion.MetodologiaId.Nombre}}</b></p>
                         </td>
                         <td>
                             <p>{{formacion.NombreUniversidad}}</p>

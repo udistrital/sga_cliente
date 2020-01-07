@@ -34,6 +34,7 @@ import { CrudExperienciaLaboralComponent } from '../experiencia_laboral/crud-exp
 // tslint:disable-next-line:max-line-length
 import { ProduccionAcademicaModule } from '../produccion_academica/produccion_academica.module';
 import { ListProduccionAcademicaComponent } from '../produccion_academica/list-produccion_academica/list-produccion_academica.component';
+import { ViewProduccionAcademicaComponent } from '../produccion_academica/view-produccion_academica/view-produccion_academica.component';
 import { DocumentoProgramaModule } from '../documento_programa/documento_programa.module';
 // tslint:enable:max-line-length
 import { ListDocumentoProgramaComponent } from '../documento_programa/list-documento_programa/list-documento_programa.component';
@@ -90,6 +91,7 @@ import { CrudPropuestaGradoComponent } from '../propuesta_grado/crud-propuesta_g
     ListExperienciaLaboralComponent,
     CrudExperienciaLaboralComponent,
     ListProduccionAcademicaComponent,
+    ViewProduccionAcademicaComponent,
     ListDocumentoProgramaComponent,
     CrudDocumentoProgramaComponent,
     ListDescuentoAcademicoComponent,

@@ -51,7 +51,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
     // if (this.inscripcion_id !== undefined && this.inscripcion_id !== null && this.inscripcion_id !== 0 &&
     //   this.inscripcion_id.toString() !== '') {
     //  console.info('InscripcionPro: ' + this.inscripcion_id);
-    //   this.loadPropuestaGrado();
+      this.loadPropuestaGrado();
       if (this.formData) {
         this.createPropuestaGrado(this.formData);
       }
@@ -89,6 +89,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
       this.construirForm();
     });
     this.listService.findGrupoInvestigacion();
+    this.listService.findLineaInvestigacion();
     this.listService.findTipoProyecto();
     this.loadLists();
   }
@@ -117,59 +118,59 @@ export class CrudPropuestaGradoComponent implements OnInit {
   }
 
   getSeleccion(event) {
-    if (event.nombre === 'GrupoInvestigacion') {
-      if (this.grupoSeleccionado !== event.valor) {
-        this.grupoSeleccionado = event.valor;
-        this.loadOptionsLineaInvestigacion();
-      }
-    }
+    // if (event.nombre === 'GrupoInvestigacion') {
+    //   if (this.grupoSeleccionado !== event.valor) {
+    //     this.grupoSeleccionado = event.valor;
+    //     this.loadOptionsLineaInvestigacion();
+    //   }
+    // }
   }
 
-  loadOptionsLineaInvestigacion(): void {
-    let consultaLineas: Array<any> = [];
-    const lineas: Array<any> = [];
-    // this.coreService.get('linea_investigacion_grupo_investigacion/?query=GrupoInvestigacionId:' +
-    this.cidcService.get('research_focus')
-    // this.cidcService.get('linea_investigacion_grupo_investigacion/?query=GrupoInvestigacionId:' +
-      // this.grupoSeleccionado.Id + '&limit=0')
-      .subscribe(lineas_grupo => {
-        if (lineas_grupo !== null) {
-          consultaLineas = <Array<any>>lineas_grupo;
-          this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacionId')].opciones = consultaLineas;
-          // consultaLineas.forEach(element => {
-          //   this.coreService.get('linea_investigacion/' + element.LineaInvestigacionId)
-          //     .subscribe(linea => {
-          //       if (linea !== null) {
-          //         element.LineaInvestigacion = <any>linea;
-          //         element.Nombre = element.LineaInvestigacion.Nombre;
-          //         lineas.push(element);
-          //       }
-          //       this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones = lineas;
-          //     },
-          //       (error: HttpErrorResponse) => {
-          //         Swal({
-          //           type: 'error',
-          //           title: error.status + '',
-          //           text: this.translate.instant('ERROR.' + error.status),
-          //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-          //             this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-          //             this.translate.instant('GLOBAL.linea_investigacion'),
-          //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          //         });
-          //       });
-          // });
-        }
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('propuesta_grado.error_cargar_lineas_investigacion'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
-  }
+  // loadOptionsLineaInvestigacion(): void {
+  //   let consultaLineas: Array<any> = [];
+  //   const lineas: Array<any> = [];
+  //   // this.coreService.get('linea_investigacion_grupo_investigacion/?query=GrupoInvestigacionId:' +
+  //   this.cidcService.get('research_focus')
+  //   // this.cidcService.get('linea_investigacion_grupo_investigacion/?query=GrupoInvestigacionId:' +
+  //     // this.grupoSeleccionado.Id + '&limit=0')
+  //     .subscribe(lineas_grupo => {
+  //       if (lineas_grupo !== null) {
+  //         consultaLineas = <Array<any>>lineas_grupo;
+  //         this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones = consultaLineas;
+  //         // consultaLineas.forEach(element => {
+  //         //   this.coreService.get('linea_investigacion/' + element.LineaInvestigacionId)
+  //         //     .subscribe(linea => {
+  //         //       if (linea !== null) {
+  //         //         element.LineaInvestigacion = <any>linea;
+  //         //         element.Nombre = element.LineaInvestigacion.Nombre;
+  //         //         lineas.push(element);
+  //         //       }
+  //         //       this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones = lineas;
+  //         //     },
+  //         //       (error: HttpErrorResponse) => {
+  //         //         Swal({
+  //         //           type: 'error',
+  //         //           title: error.status + '',
+  //         //           text: this.translate.instant('ERROR.' + error.status),
+  //         //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
+  //         //             this.translate.instant('GLOBAL.propuesta_grado') + '|' +
+  //         //             this.translate.instant('GLOBAL.linea_investigacion'),
+  //         //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  //         //         });
+  //         //       });
+  //         // });
+  //       }
+  //     },
+  //       (error: HttpErrorResponse) => {
+  //         Swal({
+  //           type: 'error',
+  //           title: error.status + '',
+  //           text: this.translate.instant('ERROR.' + error.status),
+  //           footer: this.translate.instant('propuesta_grado.error_cargar_lineas_investigacion'),
+  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  //         });
+  //       });
+  // }
 
   // public buscarID_prop(): void {
   //   this.loading = true;
@@ -280,114 +281,96 @@ export class CrudPropuestaGradoComponent implements OnInit {
   //   }
   // }
 
-  // public loadPropuestaGrado(): void {
-  //   if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 &&
-  //     this.inscripcion_id.toString() !== '') {
-  //     this.loading = true;
-  //     this.inscripcionService.get('propuesta/?query=InscripcionId:' + this.inscripcion_id)
-  //       .subscribe(res => {
-  //         if (res !== null && JSON.stringify(res[0]) !== '{}') {
-  //           const temp = <PropuestaGrado>res[0];
-  //           const files9 = []
-  //           if (temp.DocumentoId + '' !== '0') {
-  //             files9.push({ Id: temp.DocumentoId, key: 'FormatoProyecto' });
-  //           }
-  //           this.nuxeoService.getDocumentoById$(files9, this.documentoService)
-  //             .subscribe(response_2 => {
-  //               const filesResponse_2 = <any>response_2;
-  //               if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2['FormatoProyecto'] !== undefined)) {
-  //                 temp.FormatoProyecto = filesResponse_2['FormatoProyecto'] + '';
-  //                 this.FormatoProyecto = temp.DocumentoId;
-  //                 this.coreService.get('linea_investigacion_grupo_investigacion/' + temp.GrupoInvestigacionLineaInvestigacionId)
-  //                   .subscribe(linea_grupo => {
-  //                     if (linea_grupo !== null) {
-  //                       temp.LineaInvestigacion = <any>linea_grupo;
-  //                       this.coreService.get('grupo_investigacion/' + temp.LineaInvestigacion.GrupoInvestigacionId)
-  //                       .subscribe(grupo => {
-  //                         if (grupo !== null) {
-  //                           temp.GrupoInvestigacion = <any>grupo;
-  //                           this.coreService.get('linea_investigacion/' + temp.LineaInvestigacion.LineaInvestigacionId)
-  //                             .subscribe(linea => {
-  //                               if (linea !== null) {
-  //                                 temp.LineaInvestigacion.LineaInvestigacion = <any>linea;
-  //                                 temp.LineaInvestigacion.Nombre = temp.LineaInvestigacion.LineaInvestigacion.Nombre;
-  //                                 this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones.push(temp.LineaInvestigacion);
-  //                                 temp.TipoProyecto = temp.TipoProyectoId;
-  //                                 this.info_propuesta_grado = temp;
-  //                                 this.loading = false;
-  //                               }
-  //                             },
-  //                               (error: HttpErrorResponse) => {
-  //                                 Swal({
-  //                                   type: 'error',
-  //                                   title: error.status + '',
-  //                                   text: this.translate.instant('ERROR.' + error.status),
-  //                                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                                     this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-  //                                     this.translate.instant('GLOBAL.linea_investigacion'),
-  //                                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                                 });
-  //                               });
-  //                         }
-  //                       },
-  //                         (error: HttpErrorResponse) => {
-  //                           Swal({
-  //                             type: 'error',
-  //                             title: error.status + '',
-  //                             text: this.translate.instant('ERROR.' + error.status),
-  //                             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                               this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-  //                               this.translate.instant('GLOBAL.grupo_investigacion'),
-  //                             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                           });
-  //                         });
-  //                     }
-  //                   },
-  //                     (error: HttpErrorResponse) => {
-  //                       Swal({
-  //                         type: 'error',
-  //                         title: error.status + '',
-  //                         text: this.translate.instant('ERROR.' + error.status),
-  //                         footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                           this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-  //                           this.translate.instant('GLOBAL.grupo_investigacion') + '-' +
-  //                           this.translate.instant('GLOBAL.linea_investigacion'),
-  //                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                       });
-  //                     });
-  //               }
-  //             },
-  //               (error: HttpErrorResponse) => {
-  //                 Swal({
-  //                   type: 'error',
-  //                   title: error.status + '',
-  //                   text: this.translate.instant('ERROR.' + error.status),
-  //                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                     this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-  //                     this.translate.instant('GLOBAL.soporte_documento'),
-  //                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                 });
-  //               });
-  //         } else {
-  //           this.loading = false;
-  //         }
-  //       },
-  //         (error: HttpErrorResponse) => {
-  //           Swal({
-  //             type: 'error',
-  //             title: error.status + '',
-  //             text: this.translate.instant('ERROR.' + error.status),
-  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //               this.translate.instant('GLOBAL.propuesta_grado'),
-  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //           });
-  //         });
-  //   } else {
-  //     this.info_propuesta_grado = undefined;
-  //     this.clean = !this.clean;
-  //     this.loading = false;
-  //   }
-  // }
+  public loadPropuestaGrado(): void {
+    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 &&
+      this.inscripcion_id.toString() !== '') {
+      this.loading = true;
+      this.inscripcionService.get('propuesta/?query=Activo:true,InscripcionId:' + this.inscripcion_id)
+        .subscribe(res => {
+          if (res !== null && JSON.stringify(res[0]) !== '{}') {
+            const temp = <PropuestaGrado>res[0];
+            const files9 = []
+            if (temp.DocumentoId + '' !== '0') {
+              files9.push({ Id: temp.DocumentoId, key: 'FormatoProyecto' });
+            }
+            this.nuxeoService.getDocumentoById$(files9, this.documentoService)
+              .subscribe(response_2 => {
+                const filesResponse_2 = <any>response_2;
+                if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2['FormatoProyecto'] !== undefined)) {
+                  temp.FormatoProyecto = filesResponse_2['FormatoProyecto'] + '';
+                  this.FormatoProyecto = temp.DocumentoId;
+                  this.cidcService.get('research_group/' + temp.GrupoInvestigacionId)
+                  .subscribe(grupo => {
+                    if (grupo !== null) {
+                      temp.GrupoInvestigacion = <any>grupo;
+                      this.cidcService.get('research_focus/' + temp.LineaInvestigacionId)
+                        .subscribe(linea => {
+                          if (linea !== null) {
+                            temp.LineaInvestigacion = <any>linea;
+                            // temp.LineaInvestigacion.name = temp.LineaInvestigacion.LineaInvestigacion.name;
+                            // this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones.push(temp.LineaInvestigacion);
+                            temp.TipoProyecto = temp.TipoProyectoId;
+                            this.info_propuesta_grado = temp;
+                            this.loading = false;
+                          }
+                        },
+                          (error: HttpErrorResponse) => {
+                            Swal({
+                              type: 'error',
+                              title: error.status + '',
+                              text: this.translate.instant('ERROR.' + error.status),
+                              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                                this.translate.instant('GLOBAL.propuesta_grado') + '|' +
+                                this.translate.instant('GLOBAL.linea_investigacion'),
+                              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                            });
+                          });
+                    }
+                  },
+                    (error: HttpErrorResponse) => {
+                      Swal({
+                        type: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                          this.translate.instant('GLOBAL.propuesta_grado') + '|' +
+                          this.translate.instant('GLOBAL.grupo_investigacion'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      });
+                    });
+                }
+              },
+                (error: HttpErrorResponse) => {
+                  Swal({
+                    type: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                      this.translate.instant('GLOBAL.propuesta_grado') + '|' +
+                      this.translate.instant('GLOBAL.soporte_documento'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
+                });
+          } else {
+            this.loading = false;
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.propuesta_grado'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+    } else {
+      this.info_propuesta_grado = undefined;
+      this.clean = !this.clean;
+      this.loading = false;
+    }
+  }
 
   // updatePropuestaGrado(propuestaGrado: any): void {
   //   const opt: any = {
@@ -518,7 +501,10 @@ export class CrudPropuestaGradoComponent implements OnInit {
                   this.info_propuesta_grado.DocumentoId = this.filesUp9['FormatoProyecto'].Id;
                 }
                 // this.info_propuesta_grado.TipoProyectoId = this.info_propuesta_grado.TipoProyecto;
-                this.info_propuesta_grado.GrupoInvestigacionLineaInvetigacionId = this.info_propuesta_grado.LineaInvestigacionId.Id;
+                // this.info_propuesta_grado.GrupoInvestigacionLineaInvetigacionId = this.info_propuesta_grado.LineaInvestigacionId.Id;
+                this.info_propuesta_grado.Activo = true;
+                this.info_propuesta_grado.GrupoInvestigacionId = this.info_propuesta_grado.GrupoInvestigacion.id;
+                this.info_propuesta_grado.LineaInvestigacionId = this.info_propuesta_grado.LineaInvestigacion.id;
                 this.info_propuesta_grado.InscripcionId = {Id: Number(this.inscripcion_id)};
                 this.inscripcionService.post('propuesta/', this.info_propuesta_grado)
                   .subscribe(res => {
@@ -608,6 +594,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
     this.store.select((state) => state).subscribe(
       (list) => {
         this.formPropuestaGrado.campos[this.getIndexForm('GrupoInvestigacion')].opciones = list.listGrupoInvestigacion[0];
+        this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones = list.listLineaInvestigacion[0];
         this.formPropuestaGrado.campos[this.getIndexForm('TipoProyectoId')].opciones = list.listTipoProyecto[0];
       },
     );

@@ -10,7 +10,8 @@ export class PropuestaGrado {
   LineaInvestigacion: any;
   FormatoProyecto: string;
   DocumentoId: number;
-  GrupoInvestigacionLineaInvestigacionId: number;
+  GrupoInvestigacionId: number;
+  LineaInvestigacionId: number;
   InscripcionId: Inscripcion;
   TipoProyecto: TipoProyecto;
   TipoProyectoId: TipoProyecto;

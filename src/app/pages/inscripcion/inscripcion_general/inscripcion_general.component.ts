@@ -109,6 +109,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   viewtag: any;
   selectedValue: any;
   selectedTipo: any;
+  tipo_inscripcion_selected: any;
   selectTipo: any;
   selectTabView: any;
   tag_view_posg: boolean;
@@ -203,7 +204,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     const info_inscripcion_temp = {
       Id: 0,
       PersonaId: this.info_persona_id || 4,
-      ProgramaAcademicoId: 0, // Cambiar por el periodo
+      ProgramaAcademicoId: this.selectedValue.Id || 0, // Cambiar por el periodo
       PeriodoId: this.periodo.Id,
       AceptaTerminos: true,
       FechaAceptaTerminos: new Date(),
@@ -211,7 +212,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       EstadoInscripcionId: {
         Id: 1,
       },
-      TipoInscripcionId: this.selectedTipo,
+      TipoInscripcionId: this.tipo_inscripcion_selected,
     }
     this.inscripcionService.post('inscripcion', info_inscripcion_temp)
     .subscribe(res => {
@@ -333,6 +334,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         }
       },
         (error: HttpErrorResponse) => {
+          this.posgrados = [];
+          this.posgrados.push({Id: 1, Nombre: 'test'});
           Swal({
             type: 'error',
             title: error.status + '',
@@ -739,32 +742,31 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    console.info(JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub)
-    this.usuariowso2 = JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub,
+    // console.info(JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub)
+    // this.usuariowso2 = JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub,
 
-      this.terceroService.get('tercero/?query=UsuarioWSO2:' + String(this.usuariowso2))
-      .subscribe(res => {
-        console.info('Datos terceros')
-        console.info(res)
-        this.info_inscripcion = <any>res[0];
-        if (res !== null  && this.info_inscripcion.Type !== 'error') {
-          this.inscripcion_id = this.info_inscripcion.Id;
-          this.info_persona_id = this.inscripcion_id;
-          console.info('este es el del serivio ' + this.info_persona_id)
-          this.loadidInscripcion();
-          // this.getInfoInscripcion();
-        }
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.admision'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
+    //   this.terceroService.get('tercero/?query=UsuarioWSO2:' + String(this.usuariowso2))
+    //   .subscribe(res => {
+    //     console.info('Datos terceros')
+    //     console.info(res)
+    //     this.info_inscripcion = <any>res[0];
+    //     if (res !== null  && this.info_inscripcion.Type !== 'error') {
+    //       // this.inscripcion_id = this.info_inscripcion.Id;
+    //       this.info_persona_id = this.inscripcion_id;
+    //       console.info('este es el del serivio ' + this.info_persona_id)
+    //       // this.getInfoInscripcion();
+    //     }
+    //   },
+    //     (error: HttpErrorResponse) => {
+    //       Swal({
+    //         type: 'error',
+    //         title: error.status + '',
+    //         text: this.translate.instant('ERROR.' + error.status),
+    //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //           this.translate.instant('GLOBAL.admision'),
+    //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //       });
+    //     });
     }
 
   ngOnChanges() {
@@ -773,7 +775,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   cargaproyectoseventosactivos() {
     this.SelectedTipoBool = false
-    this.selectedTipo = this.selectedTipo.Nombre
+    this.selectedTipo = this.tipo_inscripcion_selected.Nombre
+    console.info(this.selectedValue)
     if (this.selectedValue === true) {
       this.tipo_inscripcion();
     }

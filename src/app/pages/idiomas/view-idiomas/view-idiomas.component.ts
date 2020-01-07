@@ -64,8 +64,8 @@ export class ViewIdiomasComponent implements OnInit {
           if (this.inscripcion !== undefined && this.inscripcion !== 0 && this.inscripcion.toString() !== '') {
             this.inscripcionService.get('inscripcion_posgrado/?query=InscripcionId:' + this.inscripcion)
               .subscribe(resexamen => {
-                this.info_examen = <any>resexamen[0];
-                if (this.info_examen !== null && this.info_examen.Type !== 'error') {
+                this.info_examen = <any>resexamen[0].Id ? <any>resexamen[0] : undefined;
+                if (this.info_examen && this.info_examen !== null && this.info_examen.Type !== 'error') {
                   this.idiomaService.get('idioma/' + this.info_examen.Idioma)
                     .subscribe(resex => {
                       if (resex !== null) {

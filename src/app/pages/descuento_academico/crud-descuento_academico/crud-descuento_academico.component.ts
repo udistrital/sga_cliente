@@ -18,6 +18,7 @@ import { TipoDescuento } from '../../../@core/data/models/descuento/tipo_descuen
 import { ListService } from '../../../@core/store/services/list.service';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
+import { CoreService } from '../../../@core/data/core.service';
 
 @Component({
   selector: 'ngx-crud-descuento-academico',
@@ -38,7 +39,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   @Input('descuento_academico_id')
   set name(descuento_academico_id: number) {
     this.descuento_academico_id = descuento_academico_id;
-    // this.loadDescuentoAcademico();
+    this.loadDescuentoAcademico();
   }
 
   @Input('persona_id')
@@ -75,6 +76,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     private documentoService: DocumentoService,
     private descuentoService: DescuentoAcademicoService,
     private inscripcionService: InscripcionService,
+    private coreService: CoreService,
     private sgaMidService: SgaMidService,
     private store: Store<IAppState>,
     private listService: ListService,
@@ -86,8 +88,25 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+    this.cargarPeriodo();
     this.listService.findDescuentoDependencia();
     this.loadLists();
+  }
+
+  cargarPeriodo() {
+    return new Promise((resolve, reject) => {
+      this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.periodo = <any>res[0].Id;
+          resolve(this.periodo);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      });
+    });
   }
 
   public loadLists() {
@@ -188,68 +207,68 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   //     });
   // }
 
-  // public loadDescuentoAcademico(): void {
-  //   this.loading = true;
-  //   this.temp = {};
-  //   this.SoporteDescuento = [];
-  //   this.info_descuento_academico = {};
-  //   this.filesUp = <any>{};
-  //   if (this.descuento_academico_id !== undefined &&
-  //     this.descuento_academico_id !== 0 &&
-  //     this.descuento_academico_id.toString() !== '') {
-  //       this.mid.get('descuento_academico/?PersonaId=' + this.persona + '&SolicitudId=' + this.descuento_academico_id)
-  //         .subscribe(solicitud => {
-  //           if (solicitud !== null) {
-  //             this.temp = <SolicitudDescuento>solicitud;
-  //             const files = [];
-  //             if (this.temp.DocumentoId + '' !== '0') {
-  //               files.push({ Id: this.temp.DocumentoId, key: 'SoporteDescuento' });
-  //             }
-  //             this.nuxeoService.getDocumentoById$(files, this.documentoService)
-  //               .subscribe(response => {
-  //                 const filesResponse = <any>response;
-  //                 if (Object.keys(filesResponse).length === files.length) {
-  //                   this.SoporteDescuento = this.temp.DocumentoId;
-  //                   this.temp.Documento = filesResponse['SoporteDescuento'] + '';
-  //                   this.info_descuento_academico = this.temp;
-  //                   this.info_descuento_academico.DescuentoDependencia = this.temp.DescuentosDependenciaId;
-  //                   this.info_descuento_academico.Periodo = this.periodo;
-  //                   this.info_descuento_academico.Documento = filesResponse['SoporteDescuento'] + '';
-  //                   this.loading = false;
-  //                 }
-  //               },
-  //                 (error: HttpErrorResponse) => {
-  //                   Swal({
-  //                     type: 'error',
-  //                     title: error.status + '',
-  //                     text: this.translate.instant('ERROR.' + error.status),
-  //                     footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                       this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-  //                       this.translate.instant('GLOBAL.soporte_documento'),
-  //                     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //                   });
-  //                 });
-  //           }
-  //         },
-  //           (error: HttpErrorResponse) => {
-  //             Swal({
-  //               type: 'error',
-  //               title: error.status + '',
-  //               text: this.translate.instant('ERROR.' + error.status),
-  //               footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //                 this.translate.instant('GLOBAL.descuento_matricula'),
-  //               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //             });
-  //           });
-  //   } else {
-  //     this.temp = {};
-  //     this.SoporteDescuento = [];
-  //     this.filesUp = <any>{};
-  //     this.info_descuento_academico = undefined;
-  //     this.clean = !this.clean;
-  //     this.loading = false;
-  //   }
-  // }
+  public loadDescuentoAcademico(): void {
+    this.loading = true;
+    this.temp = {};
+    this.SoporteDescuento = [];
+    this.info_descuento_academico = {};
+    this.filesUp = <any>{};
+    if (this.descuento_academico_id !== undefined &&
+      this.descuento_academico_id !== 0 &&
+      this.descuento_academico_id.toString() !== '') {
+        this.sgaMidService.get('descuento_academico/?PersonaId=' + this.persona + '&SolicitudId=' + this.descuento_academico_id)
+          .subscribe(solicitud => {
+            if (solicitud !== null) {
+              this.temp = <SolicitudDescuento>solicitud;
+              const files = [];
+              if (this.temp.DocumentoId + '' !== '0') {
+                files.push({ Id: this.temp.DocumentoId, key: 'SoporteDescuento' });
+              }
+              this.nuxeoService.getDocumentoById$(files, this.documentoService)
+                .subscribe(response => {
+                  const filesResponse = <any>response;
+                  if (Object.keys(filesResponse).length === files.length) {
+                    this.SoporteDescuento = this.temp.DocumentoId;
+                    this.temp.Documento = filesResponse['SoporteDescuento'] + '';
+                    this.info_descuento_academico = this.temp;
+                    this.info_descuento_academico.DescuentoDependencia = this.temp.DescuentosDependenciaId;
+                    this.info_descuento_academico.Periodo = this.periodo;
+                    this.info_descuento_academico.Documento = filesResponse['SoporteDescuento'] + '';
+                    this.loading = false;
+                  }
+                },
+                  (error: HttpErrorResponse) => {
+                    Swal({
+                      type: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                        this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+                        this.translate.instant('GLOBAL.soporte_documento'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                  });
+            }
+          },
+            (error: HttpErrorResponse) => {
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                  this.translate.instant('GLOBAL.descuento_matricula'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+            });
+    } else {
+      this.temp = {};
+      this.SoporteDescuento = [];
+      this.filesUp = <any>{};
+      this.info_descuento_academico = undefined;
+      this.clean = !this.clean;
+      this.loading = false;
+    }
+  }
 
   // updateDescuentoAcademico(DescuentoAcademico: any): void {
   //   const opt: any = {
@@ -481,7 +500,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
         if (willDelete.value) {
           const files = [];
           this.info_descuento_academico = <SolicitudDescuento>DescuentoAcademico;
-          this.info_descuento_academico.PersonaId = this.persona || 1;
+          this.info_descuento_academico.PersonaId = Number(this.persona) || 1;
           this.info_descuento_academico.PeriodoId = this.periodo;
           this.info_descuento_academico.DescuentosDependenciaId = this.info_descuento_academico.DescuentoDependencia;
           if (this.info_descuento_academico.Documento.file !== undefined) {

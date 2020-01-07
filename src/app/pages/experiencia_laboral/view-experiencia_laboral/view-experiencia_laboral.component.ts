@@ -1,6 +1,7 @@
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -22,8 +23,10 @@ export class ViewExperienciaLaboralComponent implements OnInit {
 
   @Input('persona_id')
   set info(info: number) {
-    this.persona_id = info;
-    //  this.loadData();
+    if (info) {
+      this.persona_id = info;
+      this.loadData();
+    }
   }
 
   // tslint:disable-next-line: no-output-rename
@@ -36,6 +39,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private campusMidService: CampusMidService,
+    private sgaMidService: SgaMidService,
     private ubicacionesService: UbicacionService,
     private experienciaService: ExperienciaService,
     private documentoService: DocumentoService,
@@ -57,110 +61,153 @@ export class ViewExperienciaLaboralComponent implements OnInit {
 
   loadData(): void {
     this.info_experiencia_laboral = <any>[];
-    this.experienciaService.get('soporte_experiencia_laboral/?query=ExperienciaLaboral.Persona:' + this.persona_id +
-      '&sortby=Id&order=asc&limit=0')
-      .subscribe(res => {
-        if (res !== null) {
-          const data = <Array<any>>res;
-          const soportes = [];
-          const id_exp = [];
+    this.sgaMidService.get('experiencia_laboral/by_tercero/' + this.persona_id).subscribe(res => {
+      if (res !== null && JSON.stringify(res[0]) !== '{}') {
+        const data = <Array<any>>res;
+        const soportes = [];
 
-          for (let i = 0; i < data.length; i++) {
-            if (data[i].Documento + '' !== '0') {
-              soportes.push({ Id: data[i].Documento, key: 'DocumentoExp' + i });
-              id_exp.push(data[i].ExperienciaLaboral.Id);
-            }
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].Documento + '' !== '0') {
+            soportes.push({ Id: data[i].Documento, key: 'DocumentoExp' + data[i].Id });
           }
-
-          this.nuxeoService.getDocumentoById$(soportes, this.documentoService)
-            .subscribe(response => {
-              this.documentosSoporte = <Array<any>>response;
-
-              if (Object.values(this.documentosSoporte).length === data.length) {
-                this.experienciaService.get('experiencia_laboral/?query=Persona:' + this.persona_id +
-                  '&sortby=Id&order=asc&limit=0')
-                  .subscribe(res2 => {
-                    if (res2 !== null) {
-                      const data2 = <Array<any>>res2;
-                      let contador = 0;
-                      data2.forEach(element => {
-                        this.campusMidService.get('organizacion/' + element.Organizacion)
-                          .subscribe(organizacion => {
-                            if (organizacion !== null) {
-                              const organizacion_info = <any>organizacion;
-                              element.Organizacion = organizacion_info;
-                              this.ubicacionesService.get('lugar/' + organizacion_info.Ubicacion.UbicacionEnte.Lugar)
-                                .subscribe(pais => {
-                                  if (pais !== null) {
-                                    const pais_info = <any>pais;
-                                    element.PaisEmpresa = pais_info.Nombre;
-                                    element.Documento = this.cleanURL(this.documentosSoporte['DocumentoExp' + contador] + '');
-                                    contador++;
-                                    this.info_experiencia_laboral.push(element);
-                                  }
-                                },
-                                  (error: HttpErrorResponse) => {
-                                    Swal({
-                                      type: 'error',
-                                      title: error.status + '',
-                                      text: this.translate.instant('ERROR.' + error.status),
-                                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                                        this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-                                        this.translate.instant('GLOBAL.pais_empresa'),
-                                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                                    });
-                                  });
-                            }
-                          },
-                            (error: HttpErrorResponse) => {
-                              Swal({
-                                type: 'error',
-                                title: error.status + '',
-                                text: this.translate.instant('ERROR.' + error.status),
-                                footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                                  this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-                                  this.translate.instant('GLOBAL.nombre_empresa'),
-                                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                              });
-                            });
-                    });
-                  }
-                },
-                  (error: HttpErrorResponse) => {
-                    Swal({
-                      type: 'error',
-                      title: error.status + '',
-                      text: this.translate.instant('ERROR.' + error.status),
-                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                        this.translate.instant('GLOBAL.experiencia_laboral'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                    });
-                  });
-              }
-            },
-            (error: HttpErrorResponse) => {
-              Swal({
-                type: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                  this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-                  this.translate.instant('GLOBAL.soporte_documento'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              });
-            });
         }
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.experiencia_laboral'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+
+        this.nuxeoService.getDocumentoById$(soportes, this.documentoService)
+          .subscribe(response => {
+            this.documentosSoporte = <Array<any>>response;
+            if (Object.values(this.documentosSoporte).length === data.length) {
+              for (let i = 0; i < data.length; i++) {
+                data[i].Documento = this.cleanURL(this.documentosSoporte['DocumentoExp' + data[i].Id] + '');
+              }
+            }
+            this.info_experiencia_laboral = data;
+          },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+                this.translate.instant('GLOBAL.soporte_documento'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
+      }
+    },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+      });
+    // this.experienciaService.get('soporte_experiencia_laboral/?query=ExperienciaLaboral.Persona:' + this.persona_id +
+    //   '&sortby=Id&order=asc&limit=0')
+    //   .subscribe(res => {
+    //     if (res !== null) {
+    //       const data = <Array<any>>res;
+    //       const soportes = [];
+    //       const id_exp = [];
+
+    //       for (let i = 0; i < data.length; i++) {
+    //         if (data[i].Documento + '' !== '0') {
+    //           soportes.push({ Id: data[i].Documento, key: 'DocumentoExp' + i });
+    //           id_exp.push(data[i].ExperienciaLaboral.Id);
+    //         }
+    //       }
+
+    //       this.nuxeoService.getDocumentoById$(soportes, this.documentoService)
+    //         .subscribe(response => {
+    //           this.documentosSoporte = <Array<any>>response;
+
+    //           if (Object.values(this.documentosSoporte).length === data.length) {
+    //             this.experienciaService.get('experiencia_laboral/?query=Persona:' + this.persona_id +
+    //               '&sortby=Id&order=asc&limit=0')
+    //               .subscribe(res2 => {
+    //                 if (res2 !== null) {
+    //                   const data2 = <Array<any>>res2;
+    //                   let contador = 0;
+    //                   data2.forEach(element => {
+    //                     this.campusMidService.get('organizacion/' + element.Organizacion)
+    //                       .subscribe(organizacion => {
+    //                         if (organizacion !== null) {
+    //                           const organizacion_info = <any>organizacion;
+    //                           element.Organizacion = organizacion_info;
+    //                           this.ubicacionesService.get('lugar/' + organizacion_info.Ubicacion.UbicacionEnte.Lugar)
+    //                             .subscribe(pais => {
+    //                               if (pais !== null) {
+    //                                 const pais_info = <any>pais;
+    //                                 element.PaisEmpresa = pais_info.Nombre;
+    //                                 element.Documento = this.cleanURL(this.documentosSoporte['DocumentoExp' + contador] + '');
+    //                                 contador++;
+    //                                 this.info_experiencia_laboral.push(element);
+    //                               }
+    //                             },
+    //                               (error: HttpErrorResponse) => {
+    //                                 Swal({
+    //                                   type: 'error',
+    //                                   title: error.status + '',
+    //                                   text: this.translate.instant('ERROR.' + error.status),
+    //                                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //                                     this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+    //                                     this.translate.instant('GLOBAL.pais_empresa'),
+    //                                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //                                 });
+    //                               });
+    //                         }
+    //                       },
+    //                         (error: HttpErrorResponse) => {
+    //                           Swal({
+    //                             type: 'error',
+    //                             title: error.status + '',
+    //                             text: this.translate.instant('ERROR.' + error.status),
+    //                             footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //                               this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+    //                               this.translate.instant('GLOBAL.nombre_empresa'),
+    //                             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //                           });
+    //                         });
+    //                 });
+    //               }
+    //             },
+    //               (error: HttpErrorResponse) => {
+    //                 Swal({
+    //                   type: 'error',
+    //                   title: error.status + '',
+    //                   text: this.translate.instant('ERROR.' + error.status),
+    //                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //                     this.translate.instant('GLOBAL.experiencia_laboral'),
+    //                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //                 });
+    //               });
+    //           }
+    //         },
+    //         (error: HttpErrorResponse) => {
+    //           Swal({
+    //             type: 'error',
+    //             title: error.status + '',
+    //             text: this.translate.instant('ERROR.' + error.status),
+    //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //               this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+    //               this.translate.instant('GLOBAL.soporte_documento'),
+    //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //           });
+    //         });
+    //     }
+    //   },
+    //     (error: HttpErrorResponse) => {
+    //       Swal({
+    //         type: 'error',
+    //         title: error.status + '',
+    //         text: this.translate.instant('ERROR.' + error.status),
+    //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //           this.translate.instant('GLOBAL.experiencia_laboral'),
+    //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //       });
+    //     });
   }
 
   ngOnInit() {

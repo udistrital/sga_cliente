@@ -5,7 +5,7 @@
             <!-- select tipo de inscripcion -->
             <mat-form-field style="width: 100%;">
                 <mat-label>{{ 'inscripcion.aviso_tipo' | translate }}:</mat-label>
-                <mat-select [(ngModel)]="selectedTipo" (ngModelChange)="cargaproyectoseventosactivos()">
+                <mat-select [(ngModel)]="tipo_inscripcion_selected" (ngModelChange)="cargaproyectoseventosactivos()">
                     <mat-option>--Seleccionar--</mat-option>
                     <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
                         {{item.Nombre}}
@@ -434,7 +434,7 @@
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.descuento_matricula' | translate }}">
-                    <ngx-list-descuento-academico (result)="setPercentage_desc($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}">
+                    <ngx-list-descuento-academico (result)="setPercentage_desc($event,0)" persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}">
                     </ngx-list-descuento-academico>
                 </nb-tab>
             </nb-tabset>
@@ -467,6 +467,6 @@
 
     <!-- <div [hidden]="!show_profile"> -->
     <div *ngIf="show_profile">
-        <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}"></ngx-perfil>
+        <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}"></ngx-perfil>
     </div>
 </div>
