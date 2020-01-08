@@ -85,7 +85,8 @@
         },
         "inscripcion": {
             "inscripcion": "Inscription",
-            "inscripcion_general": "Enrollment in an academic project"
+            "inscripcion_general": "Enrollment in an academic project",
+            "preinscripcion": "Pre-registration for academic projects"
         }
     },
     "GLOBAL": {
@@ -811,6 +812,7 @@
     },
     "inscripcion": {
         "aviso_programa": "Select the program you wish to enroll",
+        "aviso_nivel": "Select the level to which you want to register",
         "info_basica": "Basic information",
         "aviso_progreso": "For the registration to a project it is necessary to complete each of the information blocks that are requested 100%",
         "perfil": "Profile",
@@ -826,6 +828,7 @@
         "informacion_contacto": "Contact information",
         "informacion_familiar": "Family information",
         "aviso_tipo": "select the type of registration you want to make",
+        "aviso_periodo": "Period to which you will pre-register",
         "idiomas": "Languages",
         "icfes": "ICFES and school registration",
         "universidad": "college",
