@@ -247,7 +247,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
     if (this.informacion_contacto_id !== undefined && this.informacion_contacto_id !== 0 &&
       this.informacion_contacto_id.toString() !== '') {
       this.denied_acces = false;
-      this.campusMidService.get('persona/consultar_contacto/' + this.informacion_contacto_id)
+      this.sgamidService.get('persona/consultar_contacto/' + this.informacion_contacto_id)
         .subscribe(res => {
           if (res !== null) {
             this.datosGet = <InfoContactoGet>res;
