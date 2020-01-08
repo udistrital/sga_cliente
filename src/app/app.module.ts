@@ -139,6 +139,7 @@ export class MaterialModule { }
   imports: [
     StoreModule.forRoot(rootReducer),
     CdkTableModule,
+    MatSelectModule,
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,

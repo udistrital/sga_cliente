@@ -426,7 +426,7 @@ inhabilitarProyecto(row: any): void {
       const proyectoAModificar = row.ProyectoAcademico;
       proyectoAModificar.Activo = !proyectoAModificar.Activo;
       proyectoAModificar.Oferta = !proyectoAModificar.Oferta;
-      this.sgamidService.put(`consulta_proyecto_academico/inhabilitar_proyecto/${proyectoAModificar.Id}`, proyectoAModificar)
+      this.sgamidService.put('consulta_proyecto_academico/inhabilitar_proyecto/', proyectoAModificar)
         .subscribe((res: any) => {
           if (res.Type !== 'error') {
             this.loadproyectos();
