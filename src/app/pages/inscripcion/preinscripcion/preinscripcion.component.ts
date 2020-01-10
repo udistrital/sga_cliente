@@ -205,36 +205,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     });
   }
 
-  create_inscription(data) {
-    const info_inscripcion_temp = {
-      Id: 0,
-      PersonaId: this.info_persona_id || 4,
-      ProgramaAcademicoId: this.selectedValue.Id || 0, // Cambiar por el periodo
-      PeriodoId: this.periodo.Id,
-      AceptaTerminos: true,
-      FechaAceptaTerminos: new Date(),
-      Activo: true,
-      EstadoInscripcionId: {
-        Id: 1,
-      },
-      TipoInscripcionId: this.tipo_inscripcion_selected,
-    }
-    this.inscripcionService.post('inscripcion', info_inscripcion_temp)
-    .subscribe(res => {
-      const r = <any>res;
-      if (res !== null && r.Type !== 'error') {
-        this.inscripcion_id = r.Id;
-      }
-    },
-      (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
-          title: error.status + '',
-          text: this.translate.instant('inscripcion.error_registrar_informacion'),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        });
-      });
-  }
 
   setPercentage_info(number, tab) {
     this.percentage_tab_info[tab] = (number * 100) / 3;
@@ -505,61 +475,16 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
 
   }
 
-  cargaproyectoseventosactivos() {
-    this.SelectedTipoBool = false
-    this.selectedTipo = this.tipo_inscripcion_selected.Nombre
-    console.info(this.selectedValue)
-    if (this.selectedValue === true) {
-      this.tipo_inscripcion();
-    }
-  }
+
   nivel() {
     console.info(this.selectednivel)
   }
-  tipo_inscripcion() {
+  viewtab() {
     console.info('Tipo metodo')
     console.info('Select programa')
     console.info(this.selectedValue)
-    window.localStorage.setItem('programa', this.selectedValue.Id);
-    switch (this.selectedTipo) {
-      case ('Pregrado'):
-        this.selectTipo = 'Pregrado';
-        this.selectedValue = true;
-        this.selectprograma = true;
-        break;
-      case ('Posgrado'):
-        this.selectTipo = 'Posgrado';
-        this.selectedValue = true;
-        this.selectprograma = true;
-        break;
-      case ('Transferencia interna'):
-        this.selectprograma = false;
-        this.selectTipo = 'Transferencia interna';
-        break;
-      case ('Reingreso'):
-        this.selectprograma = false;
-        this.selectTipo = 'Reingreso';
-        break;
-      case ('Transferencia externa'):
-        this.selectprograma = true;
-        this.selectTipo = 'Transferencia externa';
-        break;
-      case ('Profesionalización tecnólogos'):
-            this.selectTipo = 'Pregrado';
-            this.selectedValue = true;
-            this.selectprograma = true;
-        break;
-        case ('Ciclos propedéuticos'):
-            this.selectTipo = 'Pregrado';
-            this.selectedValue = true;
-            this.selectprograma = true;
-            break;
-        case ('Movilidad Académica'):
-            this.selectTipo = 'Pregrado';
-            this.selectedValue = true;
-            this.selectprograma = true;
-            break;
-        }
+    // window.localStorage.setItem('programa', this.selectedValue.Id);
+    this.selectTipo = true;
     }
 
     // inscribirse() {

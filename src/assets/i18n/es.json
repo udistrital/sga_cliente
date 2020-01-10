@@ -847,7 +847,8 @@
         "reingreso": "Reingreso",
         "transferencia": "Datos de transferencia",
         "error_registrar_informacion": "Ocurrió un error al registrar la información de la inscripción",
-        "error_cargar_informacion": "Ocurrió un error al cargar la información de la inscripción"
+        "error_cargar_informacion": "Ocurrió un error al cargar la información de la inscripción",
+        "preinscripcion": "Preinscripcion a proyecto académicos"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

@@ -28,7 +28,7 @@
 
             <mat-form-field style="width: 100%;">
                 <mat-label>{{ 'inscripcion.aviso_tipo' | translate }}:</mat-label>
-                <mat-select [(ngModel)]="tipo_inscripcion_selected" (ngModelChange)="perfil_editar(info_persona)" >
+                <mat-select [(ngModel)]="tipo_inscripcion_selected" (ngModelChange)="viewtab()" >
                     <mat-option>--Seleccionar--</mat-option>
                     <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
                         {{item.Nombre}}
@@ -38,7 +38,7 @@
             <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
             <div class="row">
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado'|| selectTipo=='Transferencia interna'|| selectTipo=='Reingreso' || selectTipo=='Transferencia externa'|| selectTipo=='Transferencia externa'">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo==true">
                     <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
                         <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -86,9 +86,9 @@
                     <ngx-crud-info-persona info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" >
                     </ngx-crud-info-persona>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}" [active]="info_caracteristica">
-                    <ngx-crud-info-caracteristica_pregrado info_caracteristica_id={{this.info_persona_id}} (eventChange)="perfil_editar('info_contacto')" (result)="setPercentage_info($event,1)">
-                    </ngx-crud-info-caracteristica_pregrado>
+                <nb-tab tabTitle="{{ 'inscripcion.preinscripcion' | translate }}" [active]="info_caracteristica">
+                    <ngx-crud-inscripcion-multiple info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="setPercentage_info($event,1)">
+                    </ngx-crud-inscripcion-multiple>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
