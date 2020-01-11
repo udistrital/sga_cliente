@@ -1,6 +1,5 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <nb-card [hidden]="show_profile || show_info_pregrado || show_acad_pregrado || show_expe ||
-    show_proy || show_prod || show_desc || show_docu ||show_info || show_acad || show_info_interna ||show_info_reingreso || show_info_externa || show_acad_externa">
+    <nb-card [hidden]="show_profile || show_info ">
         <nb-card-header>
                 <!-- select periodo -->
                 <mat-form-field style="width: 40%;">
@@ -61,7 +60,6 @@
                 <blockquote class="blockquote">
                     <li>{{ 'inscripcion.aviso_progreso' | translate}}</li>
                 </blockquote>
-                <button class="btn btn-success pull-right" [disabled]="total" >{{ 'inscripcion.inscribirse' | translate }}</button>
             </div>
         </nb-card-body>
     </nb-card>
@@ -86,8 +84,8 @@
                     <ngx-crud-info-persona info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" >
                     </ngx-crud-info-persona>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.preinscripcion' | translate }}" [active]="info_caracteristica">
-                    <ngx-crud-inscripcion-multiple info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="setPercentage_info($event,1)">
+                <nb-tab tabTitle="{{ 'inscripcion.preinscripcion' | translate }}" [active]="">
+                    <ngx-crud-inscripcion-multiple  inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="setPercentage_info($event,1)">
                     </ngx-crud-inscripcion-multiple>
                 </nb-tab>
             </nb-tabset>

@@ -60,6 +60,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   cambioTab = 0;
   nForms: number;
   SelectedTipoBool: boolean = true;
+  info_inscripcion: any;
 
   percentage_info: number = 0;
   percentage_acad: number = 0;
@@ -84,26 +85,11 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   periodos = [];
   nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
 
-  show_info_pregrado = false;
-  show_info_interna = false;
-  show_info_externa = false;
-  show_info_reingreso = false;
   show_info = false;
   show_profile = false;
-  show_acad_pregrado = false;
-  show_acad_externa = false;
-  show_acad = false;
-  show_expe = false;
-  show_proy = false;
-  show_prod = false;
-  show_desc = false;
-  show_docu = false;
 
-  info_contacto: boolean;
-  info_familiar: boolean;
+
   info_persona: boolean;
-  info_caracteristica: boolean;
-  info_inscripcion: any;
   loading: boolean;
   button_politica: boolean = true;
   programa_seleccionado: any;
@@ -154,7 +140,10 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
 
   async loadData() {
     try {
+      console.info('LoadData')
       this.info_persona_id = this.userService.getPersonaId();
+      console.info('Carga hecha')
+      console.info(this.info_persona_id)
       await this.cargarPeriodo();
       await this.loadInfoInscripcion();
     } catch (error) {
@@ -174,6 +163,9 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.periodo = <any>res[0];
+          window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
+          console.info('Id periodo')
+          console.info(this.periodo)
           resolve(this.periodo);
           const periodos = <Array<any>>res;
          periodos.forEach(element => {
@@ -217,38 +209,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     this.percentage_acad = Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad));
     this.setPercentage_total();
   }
-
-  setPercentage_expe(number, tab) {
-    this.percentage_tab_expe[tab] = (number * 100) / 1;
-    this.percentage_expe = Math.round(UtilidadesService.getSumArray(this.percentage_tab_expe));
-    this.setPercentage_total();
-  }
-
-  setPercentage_proy(number, tab) {
-    this.percentage_tab_proy[tab] = (number * 100) / 1;
-    this.percentage_proy = Math.round(UtilidadesService.getSumArray(this.percentage_tab_proy));
-    this.setPercentage_total();
-  }
-
-  setPercentage_desc(number, tab) {
-    this.percentage_tab_desc[tab] = (number * 100) / 1;
-    this.percentage_desc = Math.round(UtilidadesService.getSumArray(this.percentage_tab_desc));
-    this.setPercentage_total();
-  }
-
-  setPercentage_docu(number, tab) {
-    this.percentage_tab_docu[tab] = (number * 100) / 1;
-    this.percentage_docu = Math.round(UtilidadesService.getSumArray(this.percentage_tab_docu));
-    this.setPercentage_total();
-  }
-
-  setPercentage_prod(number, tab) {
-    this.percentage_tab_prod[tab] = (number * 100) / 1;
-    this.percentage_prod = Math.round(UtilidadesService.getSumArray(this.percentage_tab_prod));
-    this.percentage_prod = (this.percentage_prod * 100) / this.percentage_prod;
-    this.setPercentage_total();
-  }
-
   setPercentage_total() {
     this.percentage_total = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info)) / 4;
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4;
@@ -266,12 +226,8 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     }
   }
 
-  // traerInfoPersona(event, tab) {
-  //   this.setPercentage_info(event, tab);
-  //   if (event !== 0) this.getInfoInscripcion();
-  // }
-
   loadTipoInscripcion() {
+    window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
     this.inscripcionService.get('tipo_inscripcion/?query=NivelId:'+ Number(this.selectednivel.id))
       .subscribe(res => {
         const r = <any>res;
@@ -321,6 +277,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
           });
         });
   }
+
   loadidInscripcion() {
     this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_persona_id )
       .subscribe(res => {
@@ -407,28 +364,10 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
       case 'perfil':
         this.show_info = false;
         this.show_profile = true;
-        this.show_acad = false;
-        this.info_contacto = false;
-        this.show_docu = false;
-        this.info_caracteristica = false;
-        this.show_desc = false;
-        this.show_expe = false;
-        this.show_proy = false;
-        this.show_prod = false;
-        this.show_desc = false;
         break;
       default:
         this.show_info = false;
-        this.show_docu = false;
         this.show_profile = false;
-        this.show_acad = false;
-        this.info_contacto = false;
-        this.info_caracteristica = false;
-        this.show_desc = false;
-        this.show_expe = false;
-        this.show_proy = false;
-        this.show_prod = false;
-        this.show_desc = false;
         break;
     }
   }
@@ -444,6 +383,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.info_persona_id = this.userService.getPersonaId();
     // console.info(JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub)
     // this.usuariowso2 = JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub,
 
@@ -475,10 +415,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
 
   }
 
-
-  nivel() {
-    console.info(this.selectednivel)
-  }
   viewtab() {
     console.info('Tipo metodo')
     console.info('Select programa')
@@ -487,31 +423,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     this.selectTipo = true;
     }
 
-    // inscribirse() {
-    //   this.datosMidPersona();
-    // }
-
-    // datosMidPersona() {
-    //   this.campusMidService.get('persona/consultar_persona/' + this.info_ente_id)
-    //     .subscribe(res => {
-    //       const r = <any>res;
-    //       if (res !== null && r.Type !== 'error') {
-    //         this.datos_persona = r;
-    //         this.info_inscripcion.EstadoInscripcionId.Id = 2;
-    //         this.updateEstadoAdmision();
-    //       }
-    //     },
-    //       (error: HttpErrorResponse) => {
-    //         Swal({
-    //           type: 'error',
-    //           title: error.status + '',
-    //           text: this.translate.instant('ERROR.' + error.status),
-    //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-    //             this.translate.instant('GLOBAL.admision'),
-    //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-    //         });
-    //       });
-    // }
+   
 
     // updateEstadoAdmision() {
     //   const opt: any = {
