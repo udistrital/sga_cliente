@@ -72,6 +72,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private sgamidService: SgaMidService,
+    // tslint:disable-next-line: no-shadowed-variable
     private OikosService: OikosService,
     private autenticationService: ImplicitAutenticationService,
     private documentoService: DocumentoService,

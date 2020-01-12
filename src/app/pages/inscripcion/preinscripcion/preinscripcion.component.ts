@@ -230,7 +230,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
 
   loadTipoInscripcion() {
     window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
-    this.inscripcionService.get('tipo_inscripcion/?query=NivelId:'+ Number(this.selectednivel.id))
+    this.inscripcionService.get('tipo_inscripcion/?query=NivelId:' + Number(this.selectednivel.id))
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
@@ -427,9 +427,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     window.localStorage.setItem('IdTipoInscripcion', this.tipo_inscripcion_selected.Id);
     this.selectTipo = true;
     }
-
-   
-
     // updateEstadoAdmision() {
     //   const opt: any = {
     //     title: this.translate.instant('GLOBAL.inscribirse'),
