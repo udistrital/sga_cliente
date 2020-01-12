@@ -4,11 +4,11 @@
   (percentage)="setPercentage($event)">
 </ngx-dinamicform> -->
 
-    <nb-card >
+    <nb-card  >
         <nb-card-body>
                 {{ 'inscripcion.mensaje_preinscripcion' | translate }}
           </nb-card-body>
-        <nb-card-body>
+        <nb-card-body >
             <div class="col-sm-12">
           
                     <nb-card class="m-4" accent="info">
@@ -31,7 +31,7 @@
                                 </div>
                             </div>
                         </nb-card-body>
-                        <button  mat-button (click)="preinscripcion()"  type="submit"  nbButton status="success">{{ 'inscripcion.realizar_preinscripcion' | translate }}</button>
+                        <button (click)="setPercentage($event)"  mat-button (click)="preinscripcion()"  type="submit"  nbButton status="success">{{ 'inscripcion.realizar_preinscripcion' | translate }} </button>
                     </nb-card>
                 </div>
 

@@ -90,6 +90,8 @@
         }
     },
     "GLOBAL": {
+        "preinscripcion": "Pre-registration",
+        "preinscripcion_2": "You want to pre-register",
         "id": "Id",
         "activo": "Active",
         "aceptar": "Accept",

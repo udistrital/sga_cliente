@@ -56,6 +56,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   usuariowso2: any;
   datos_persona: any;
   inscripcion: Inscripcion;
+  preinscripcion: boolean;
   step = 0;
   cambioTab = 0;
   nForms: number;
@@ -199,7 +200,8 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
 
 
   setPercentage_info(number, tab) {
-    this.percentage_tab_info[tab] = (number * 100) / 3;
+    console.info(number)
+    this.percentage_tab_info[tab] = (number * 100) / 2;
     this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
     this.setPercentage_total();
   }
@@ -210,7 +212,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     this.setPercentage_total();
   }
   setPercentage_total() {
-    this.percentage_total = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info)) / 4;
+    this.percentage_total = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info)) / 2;
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4;
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_docu)) / 4;
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_proy)) / 4;
@@ -361,6 +363,9 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
       case 'info_persona':
         this.show_info = true;
         break;
+        case 'info_preinscripcion':
+          this.preinscripcion = true;
+          break;
       case 'perfil':
         this.show_info = false;
         this.show_profile = true;
@@ -419,7 +424,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     console.info('Tipo metodo')
     console.info('Select programa')
     console.info(this.selectedValue)
-    // window.localStorage.setItem('programa', this.selectedValue.Id);
+    window.localStorage.setItem('IdTipoInscripcion', this.tipo_inscripcion_selected.Id);
     this.selectTipo = true;
     }
 

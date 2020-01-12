@@ -92,6 +92,8 @@
 
     },
     "GLOBAL": {
+        "preinscripcion": "Preinscripcion",
+        "preinscripcion_2": "Desea realizar preinscripcion",
         "id": "Id",
         "activo": "Activo",
         "aceptar": "Aceptar",

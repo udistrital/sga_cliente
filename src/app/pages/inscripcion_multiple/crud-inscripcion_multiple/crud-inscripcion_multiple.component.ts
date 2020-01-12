@@ -45,7 +45,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       console.info('inscripcionId: ' + inscripcion_id);
     }
   }
-
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
@@ -61,6 +60,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   aspirante: number;
   periodo: any;
   proyectos_preinscripcion: any [];
+  proyectos_preinscripcion_post: any;
 
   arr_proyecto: InstitucionEnfasis[] = [];
   source_emphasys: LocalDataSource = new LocalDataSource();
@@ -104,11 +104,26 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
       };
       this.cargaproyectosacademicos();
+      this.cargarPeriodo();
     }
 
 
   useLanguage(language: string) {
     this.translate.use(language);
+  }
+  cargarPeriodo() {
+    return new Promise((resolve, reject) => {
+      this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.periodo = <any>res[0];
+        }
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      });
+    });
   }
 
   cargaproyectosacademicos() {
@@ -157,23 +172,18 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   createInscripcion(tercero_id): void {
-    this.aspirante = tercero_id;
-    this.programa = Number(localStorage.getItem('programa'));
-    const inscripcionPost = {
-      PeriodoId: this.periodo.Id,
-      PersonaId: this.aspirante,
-      ProgramaAcademicoId: this.programa,
-      EstadoInscripcionId: {Id: 1},
-      TipoInscripcionId: {Id: 1},
-      AceptaTerminos: true,
-      FechaAceptaTerminos: new Date(),
-      Id: this.inscripcion_id,
-    };
-    this.info_inscripcion = <Inscripcion>inscripcionPost;
-    this.info_inscripcion.PersonaId = Number(this.info_persona_id);
-    this.info_inscripcion.Id = Number(this.inscripcion_id);
-    console.info(JSON.stringify(this.info_inscripcion));
-    this.inscripcionService.post('inscripcion', this.info_inscripcion)
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.preinscripcion'),
+      text: this.translate.instant('GLOBAL.preinscripcion_2') + '?',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };  Swal(opt)
+    .then((willDelete) => {
+    this.sgamidService.post('inscripciones/post_preinscripcion', this.proyectos_preinscripcion_post)
       .subscribe(res => {
         this.info_inscripcion = <Inscripcion><unknown>res;
         this.inscripcion_id = this.info_inscripcion.Id;
@@ -184,6 +194,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           text: this.translate.instant('GLOBAL.inscrito') + ' ' + this.periodo.Nombre,
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+        this.eventChange.emit(true);
       },
       (error: HttpErrorResponse) => {
         Swal({
@@ -196,6 +207,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       });
+    });
   }
 
   // updateInscripcion(): void {
@@ -264,24 +276,23 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.arr_proyecto.forEach( proyecto => {
       Number(localStorage.getItem('IdNivel'))
         this.proyectos_preinscripcion.push({
-          PersonaId: {
-            Id: Number(localStorage.getItem('persona_id')),
-          },
-          ProgramaAcademicoId: {
-            Id: proyecto['Id'],
-          },
-          PeriodoId: {
-            Id: Number(localStorage.getItem('IdPeriodo')),
-          },
+          PersonaId:  Number(localStorage.getItem('persona_id')),
+          ProgramaAcademicoId: proyecto['Id'],
+          PeriodoId: Number(localStorage.getItem('IdPeriodo')),
           EstadoInscripcionId: {Id: 1},
-          TipoInscripcionId: {Id: 1},
+          TipoInscripcionId: {Id:  Number(localStorage.getItem('IdTipoInscripcion'))},
           AceptaTerminos: true,
           FechaAceptaTerminos: new Date(),
           Activo: true,
         });
     });
     if (this.proyectos_preinscripcion[0] != null) {
-    console.info(this.proyectos_preinscripcion)
+      this.info_inscripcion =  <Inscripcion><unknown>this.proyectos_preinscripcion;
+      this.proyectos_preinscripcion_post = {
+        DatosPreinscripcion:  this.info_inscripcion,
+      }
+      console.info(JSON.stringify(this.proyectos_preinscripcion_post));
+      this.createInscripcion(5);
   } else {
     Swal({
       type: 'error',
@@ -294,7 +305,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   // termina
 
 
- 
   setPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);

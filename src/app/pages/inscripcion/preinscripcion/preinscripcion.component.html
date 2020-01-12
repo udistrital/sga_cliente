@@ -53,22 +53,13 @@
             </div>
         </nb-card-header>
 
-        <nb-card-body>
-            <div class="col-md-12">
-                <ngb-progressbar showValue="true" type="success" [value]="percentage_total" [animated]="true" [height]="'15px'">
-                </ngb-progressbar>
-                <blockquote class="blockquote">
-                    <li>{{ 'inscripcion.aviso_progreso' | translate}}</li>
-                </blockquote>
-            </div>
-        </nb-card-body>
     </nb-card>
 
     <!--Formularios------------------------------------------------------------->
 
 
     <!-- <nb-card [hidden]="!show_info_pregrado"> -->
-    <nb-card *ngIf="show_info">
+    <nb-card [hidden]="!show_info">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -81,11 +72,11 @@
             </div>
             <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
-                    <ngx-crud-info-persona info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" >
+                    <ngx-crud-info-persona info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_preinscripcion')"  (result)="setPercentage_info($event,0)">
                     </ngx-crud-info-persona>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.preinscripcion' | translate }}" [active]="">
-                    <ngx-crud-inscripcion-multiple  inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" (result)="setPercentage_info($event,1)">
+                <nb-tab tabTitle="{{ 'inscripcion.preinscripcion' | translate }}" [active]="preinscripcion">
+                    <ngx-crud-inscripcion-multiple  inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info(1,1)">
                     </ngx-crud-inscripcion-multiple>
                 </nb-tab>
             </nb-tabset>
