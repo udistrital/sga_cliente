@@ -85,12 +85,15 @@
         },
         "inscripcion": {
             "inscripcion": "Inscripción",
-            "inscripcion_general": "Inscripción a un proyecto académico"
+            "inscripcion_general": "Inscripción a un proyecto académico",
+            "preinscripcion": "Preinscripción a proyectos académicos"
         }
 
 
     },
     "GLOBAL": {
+        "preinscripcion": "Preinscripcion",
+        "preinscripcion_2": "Desea realizar preinscripcion",
         "id": "Id",
         "activo": "Activo",
         "aceptar": "Aceptar",
@@ -822,6 +825,7 @@
     },
     "inscripcion": {
         "aviso_programa": "Seleccione el programa al que desea inscribirse",
+        "aviso_nivel": "Seleccione el nivel al que desea inscribirse",
         "info_basica": "Información básica",
         "aviso_progreso": "Para el registro a un proyecto es necesario completar cada uno de los bloques de informacion que son solicitados al 100%",
         "perfil": "Perfil",
@@ -837,6 +841,7 @@
         "informacion_contacto": "Información de contacto",
         "informacion_familiar": "Información familiar",
         "aviso_tipo": "seleccione el tipo de inscripción de desee realizar",
+        "aviso_periodo": "Período al cual se va a preinscribir",
         "idiomas": "Idiomas",
         "icfes": "Registro ICFES y colegio",
         "universidad": "Universidad",
@@ -844,7 +849,13 @@
         "reingreso": "Reingreso",
         "transferencia": "Datos de transferencia",
         "error_registrar_informacion": "Ocurrió un error al registrar la información de la inscripción",
-        "error_cargar_informacion": "Ocurrió un error al cargar la información de la inscripción"
+        "error_cargar_informacion": "Ocurrió un error al cargar la información de la inscripción",
+        "preinscripcion": "Preinscripcion a proyecto académicos",
+        "mensaje_preinscripcion": "Para realizar la preinscripción a uno o más proyectos académicos por favor seleccione el (los) proyectos a los que se desea presentar y finalice la preinscripción oprimiendo el boton de Preinscripción.",
+        "select": "Nombre del proyecto académico",
+        "erro_selec": "Por favor seleccione al menos un proyecto académico!",
+        "error_proyecto_ya_existe": "El proyecto académico ya fue agregado!",
+        "realizar_preinscripcion": "Preinscripción"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

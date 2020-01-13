@@ -119,6 +119,12 @@ export const MENU_ITEMS: MenuItem[] = [
     key:  'inscripcion',
     children:  [
       {
+        title:  'Pre Inscripcion',
+        icon: 'nb-edit',
+        link:  '/pages/inscripcion/preinscripcion',
+        key:  'preinscripcion',
+      },
+      {
         title:  'Inscripcion',
         icon: 'nb-edit',
         link:  '/pages/inscripcion/inscripcion_general',
