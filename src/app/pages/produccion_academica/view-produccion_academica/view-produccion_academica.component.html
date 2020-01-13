@@ -1,0 +1,31 @@
+<nb-card>
+  <nb-card-header>{{"produccion_academica.producciones_academicas" | translate}} </nb-card-header>
+  <nb-card-body class="row container">
+      <div class="col-md-12">
+          <table class="table-responsive">
+              <thead>
+                  <tr>
+                      <th>{{'produccion_academica.titulo_produccion_academica' | translate}}</th>
+                      <th>{{'produccion_academica.tipo_produccion_academica' | translate}}</th>
+                      <th>{{'produccion_academica.resumen' | translate}}</th>
+                      <th>{{'produccion_academica.estado_autor' | translate}}</th>
+                  </tr>
+              </thead>
+              <tbody *ngIf="info_produccion_academica">
+                  <tr *ngFor="let produccion of info_produccion_academica">
+                      <td>{{produccion.Titulo}}</td>
+                      <!-- <td *ngIf="idioma.Nativo; else elseTemplate2">Si</td>
+                      <ng-template #elseTemplate2>
+                          <td>No</td>
+                      </ng-template> -->
+                      <td>{{produccion.SubtipoProduccionId.Nombre}}</td>
+                      <td>{{produccion.Resumen}}</td>
+                      <td>{{produccion.EstadoEnteAutorId.EstadoAutorProduccionId.Nombre}}</td>
+                  </tr>
+              </tbody>
+          </table>
+          <span *ngIf="url_editar" (click)="editar()" class="link"><i
+                  class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
+      </div>
+  </nb-card-body>
+</nb-card>

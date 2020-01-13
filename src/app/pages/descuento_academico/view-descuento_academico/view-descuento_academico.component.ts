@@ -35,7 +35,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   set info2(info2: number) {
     this.inscripcion = info2;
     if (this.inscripcion !== undefined && this.inscripcion !== 0 && this.inscripcion.toString() !== '') {
-      // this.loadData();
+      this.loadData();
     }
   }
 
@@ -44,10 +44,10 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
 
   constructor(private translate: TranslateService,
     private mid: CampusMidService,
-    private docdesService: DocumentoService,
-    private nuxeoDes: NuxeoService,
+    private documentoService: DocumentoService,
+    private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
-    private inscripciones: InscripcionService) {
+    private inscripcionService: InscripcionService) {
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       });
   }
@@ -61,76 +61,137 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   }
 
   loadData(): void {
-    this.inscripciones.get('inscripcion/' + this.inscripcion)
-      .subscribe(dato_inscripcion => {
-        const inscripciondata = <any>dato_inscripcion;
-        this.programa = inscripciondata.ProgramaAcademicoId;
-        this.periodo = inscripciondata.PeriodoId;
-        this.estado_inscripcion = inscripciondata.EstadoInscripcionId.Id;
-        this.mid.get('descuento_academico/descuentopersonaperiododependencia/?PersonaId=' + this.persona +
-          '&DependenciaId=' + this.programa + '&PeriodoId=' + this.periodo)
-          .subscribe(descuentos => {
-            if (descuentos !== null) {
-              this.dataDes = <Array<any>>descuentos;
-              const soportesDes = [];
-              let archivosDes = 0;
+    this.inscripcionService.get('inscripcion/' + this.inscripcion)
+    .subscribe(dato_inscripcion => {
+      const inscripciondata = <any>dato_inscripcion;
+      this.programa = inscripciondata.ProgramaAcademicoId;
+      this.periodo = inscripciondata.PeriodoId;
+      this.programa = 16;
+      this.mid.get(`descuento_academico/descuentopersonaperiododependencia?` +
+        `PersonaId=${this.persona}&DependenciaId=${this.programa}&PeriodoId=${this.periodo}`)
+        .subscribe(res => {
+          if (res !== null) {
+            this.info_descuento = <Array<SolicitudDescuento>>res;
 
-              for (let i = 0; i < this.dataDes.length; i++) {
-                if (this.dataDes[i].DocumentoId + '' !== '0') {
-                  soportesDes.push({ Id: this.dataDes[i].DocumentoId, key: 'DocumentoDes' + i });
-                  archivosDes = i;
-                }
-              }
-
-              this.nuxeoDes.getDocumentoById$(soportesDes, this.docdesService)
-                .subscribe(responseDes => {
-                  this.docDesSoporte = <Array<any>>responseDes;
-
-                  if (Object.values(this.docDesSoporte).length > this.dataDes.length && this.docDesSoporte['DocumentoDes' + archivosDes] !== undefined &&
-                    this.dataDes[archivosDes].DocumentoId > 0) {
-                    let contadorDes = 0;
-                    this.info_descuento = <any>[];
-
-                    this.dataDes.forEach(elementDes => {
-                      elementDes.DocumentoId = this.cleanURL(this.docDesSoporte['DocumentoDes' + contadorDes] + '');
-                      contadorDes++;
-                      this.info_descuento.push(elementDes);
-                    });
-                  }
+            this.info_descuento.forEach(descuento => {
+              this.nuxeoService.getDocumentoById$([
+                { Id: descuento.DocumentoId, key: 'DocumentoPrograma' + descuento.DocumentoId},
+              ], this.documentoService)
+                .subscribe(response => {
+                  const documentosSoporte = <Array<any>>response;
+                  // if (Object.values(documentosSoporte).length === data.length) {
+                    // for (let i = 0; i < data.length; i++) {
+                    descuento.Documento = this.cleanURL(documentosSoporte['DocumentoPrograma' + descuento.DocumentoId + '']);
+                    // }
+                  // }
                 },
-                  (error: HttpErrorResponse) => {
-                    Swal({
-                      type: 'error',
-                      title: error.status + '',
-                      text: this.translate.instant('ERROR.' + error.status),
-                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                        this.translate.instant('GLOBAL.documento_programa'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                    });
+                (error: HttpErrorResponse) => {
+                  Swal({
+                    type: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                      this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+                      this.translate.instant('GLOBAL.soporte_documento'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                   });
-            }
-          },
-            (error: HttpErrorResponse) => {
-              Swal({
-                type: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                  this.translate.instant('GLOBAL.descuentos_dependencia'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              });
+                });
             });
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.admision'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+                this.translate.instant('GLOBAL.descuento_matricula'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
-      });
+    },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('GLOBAL.cargar') + '-' +
+            this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+            this.translate.instant('GLOBAL.admision'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+    });
+    // this.inscripciones.get('inscripcion/' + this.inscripcion)
+    //   .subscribe(dato_inscripcion => {
+    //     const inscripciondata = <any>dato_inscripcion;
+    //     this.programa = inscripciondata.ProgramaAcademicoId;
+    //     this.periodo = inscripciondata.PeriodoId;
+    //     this.estado_inscripcion = inscripciondata.EstadoInscripcionId.Id;
+    //     this.mid.get('descuento_academico/descuentopersonaperiododependencia/?PersonaId=' + this.persona +
+    //       '&DependenciaId=' + this.programa + '&PeriodoId=' + this.periodo)
+    //       .subscribe(descuentos => {
+    //         if (descuentos !== null) {
+    //           this.dataDes = <Array<any>>descuentos;
+    //           const soportesDes = [];
+    //           let archivosDes = 0;
+
+    //           for (let i = 0; i < this.dataDes.length; i++) {
+    //             if (this.dataDes[i].DocumentoId + '' !== '0') {
+    //               soportesDes.push({ Id: this.dataDes[i].DocumentoId, key: 'DocumentoDes' + i });
+    //               archivosDes = i;
+    //             }
+    //           }
+
+    //           this.nuxeoDes.getDocumentoById$(soportesDes, this.docdesService)
+    //             .subscribe(responseDes => {
+    //               this.docDesSoporte = <Array<any>>responseDes;
+
+    //               if (Object.values(this.docDesSoporte).length > this.dataDes.length && this.docDesSoporte['DocumentoDes' + archivosDes] !== undefined &&
+    //                 this.dataDes[archivosDes].DocumentoId > 0) {
+    //                 let contadorDes = 0;
+    //                 this.info_descuento = <any>[];
+
+    //                 this.dataDes.forEach(elementDes => {
+    //                   elementDes.DocumentoId = this.cleanURL(this.docDesSoporte['DocumentoDes' + contadorDes] + '');
+    //                   contadorDes++;
+    //                   this.info_descuento.push(elementDes);
+    //                 });
+    //               }
+    //             },
+    //               (error: HttpErrorResponse) => {
+    //                 Swal({
+    //                   type: 'error',
+    //                   title: error.status + '',
+    //                   text: this.translate.instant('ERROR.' + error.status),
+    //                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //                     this.translate.instant('GLOBAL.documento_programa'),
+    //                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //                 });
+    //               });
+    //         }
+    //       },
+    //         (error: HttpErrorResponse) => {
+    //           Swal({
+    //             type: 'error',
+    //             title: error.status + '',
+    //             text: this.translate.instant('ERROR.' + error.status),
+    //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //               this.translate.instant('GLOBAL.descuentos_dependencia'),
+    //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //           });
+    //         });
+    //   },
+    //     (error: HttpErrorResponse) => {
+    //       Swal({
+    //         type: 'error',
+    //         title: error.status + '',
+    //         text: this.translate.instant('ERROR.' + error.status),
+    //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //           this.translate.instant('GLOBAL.admision'),
+    //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //       });
+    //   });
   }
 
   ngOnInit() {

@@ -38,7 +38,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     this.inscripcion = info2;
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
-      // this.loadData();
+      this.loadData();
     }
   }
 
@@ -106,54 +106,17 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         const inscripciondata = <any>dato_inscripcion;
         this.programa = inscripciondata.ProgramaAcademicoId;
         this.periodo = inscripciondata.PeriodoId;
-        this.descuentoService.get('descuentos_dependencia/?query=DependenciaId:' + this.programa +
-          ',PeriodoId:' + this.periodo + '&limit=0')
-          .subscribe(descuentos => {
-            const descuentosdependencia = <Array<any>>descuentos;
-            this.data = [];
-            descuentosdependencia.forEach(element => {
-              this.descuentoService.get('solicitud_descuento/?query=DescuentosDependenciaId:' + element.Id + ',PersonaId:' + this.persona + '&limit=0')
-                .subscribe(solicitud => {
-                  if (solicitud !== null && JSON.stringify(solicitud[0]) !== '{}') {
-                    this.solicituddescuento = <any>solicitud[0];
-                    if (this.solicituddescuento.Id !== undefined && this.solicituddescuento.Id !== null) {
-                      const id_aux = this.solicituddescuento.Id;
-                      this.mid.get('descuento_academico/?PersonaId=' + this.persona + '&SolicitudId=' + id_aux)
-                        .subscribe(res => {
-                          console.info(JSON.stringify(res))
-                          if (res !== null) {
-                            this.data.push(<SolicitudDescuento>res);
-                            this.loading = false;
-                            this.getPercentage(1);
-                            this.source.load(this.data);
-                          }
-                        },
-                          (error: HttpErrorResponse) => {
-                            Swal({
-                              type: 'error',
-                              title: error.status + '',
-                              text: this.translate.instant('ERROR.' + error.status),
-                              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                                this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-                                this.translate.instant('GLOBAL.descuento_matricula'),
-                              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                            });
-                          });
-                    }
-                  }
-                },
-                  (error: HttpErrorResponse) => {
-                    Swal({
-                      type: 'error',
-                      title: error.status + '',
-                      text: this.translate.instant('ERROR.' + error.status),
-                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                        this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-                        this.translate.instant('GLOBAL.descuento_matricula'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                    });
-                });
-            });
+        this.programa = 16;
+        this.mid.get(`descuento_academico/descuentopersonaperiododependencia?` +
+          `PersonaId=${this.persona}&DependenciaId=${this.programa}&PeriodoId=${this.periodo}`)
+          .subscribe(res => {
+            console.info(JSON.stringify(res))
+            if (res !== null) {
+              // this.data.push(<SolicitudDescuento>res);
+              this.data = <Array<SolicitudDescuento>>res;
+              this.getPercentage(1);
+              this.source.load(this.data);
+            }
           },
             (error: HttpErrorResponse) => {
               Swal({
@@ -162,10 +125,70 @@ export class ListDescuentoAcademicoComponent implements OnInit {
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.cargar') + '-' +
                   this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-                  this.translate.instant('GLOBAL.descuentos_dependencia'),
+                  this.translate.instant('GLOBAL.descuento_matricula'),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
               });
             });
+        // this.descuentoService.get('descuentos_dependencia/?query=DependenciaId:' + this.programa +
+        //   ',PeriodoId:' + this.periodo + '&limit=0')
+        //   .subscribe(descuentos => {
+        //     const descuentosdependencia = <Array<any>>descuentos;
+        //     this.data = [];
+        //     descuentosdependencia.forEach(element => {
+        //       this.descuentoService.get('solicitud_descuento/?query=DescuentosDependenciaId:' + element.Id + ',PersonaId:' + this.persona + '&limit=0')
+        //         .subscribe(solicitud => {
+        //           if (solicitud !== null && JSON.stringify(solicitud[0]) !== '{}') {
+        //             this.solicituddescuento = <any>solicitud[0];
+        //             if (this.solicituddescuento.Id !== undefined && this.solicituddescuento.Id !== null) {
+        //               const id_aux = this.solicituddescuento.Id;
+        //               this.mid.get('descuento_academico/?PersonaId=' + this.persona + '&SolicitudId=' + id_aux)
+        //                 .subscribe(res => {
+        //                   console.info(JSON.stringify(res))
+        //                   if (res !== null) {
+        //                     this.data.push(<SolicitudDescuento>res);
+        //                     this.loading = false;
+        //                     this.getPercentage(1);
+        //                     this.source.load(this.data);
+        //                   }
+        //                 },
+        //                   (error: HttpErrorResponse) => {
+        //                     Swal({
+        //                       type: 'error',
+        //                       title: error.status + '',
+        //                       text: this.translate.instant('ERROR.' + error.status),
+        //                       footer: this.translate.instant('GLOBAL.cargar') + '-' +
+        //                         this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+        //                         this.translate.instant('GLOBAL.descuento_matricula'),
+        //                       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        //                     });
+        //                   });
+        //             }
+        //           }
+        //         },
+        //           (error: HttpErrorResponse) => {
+        //             Swal({
+        //               type: 'error',
+        //               title: error.status + '',
+        //               text: this.translate.instant('ERROR.' + error.status),
+        //               footer: this.translate.instant('GLOBAL.cargar') + '-' +
+        //                 this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+        //                 this.translate.instant('GLOBAL.descuento_matricula'),
+        //               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        //             });
+        //         });
+        //     });
+        //   },
+        //     (error: HttpErrorResponse) => {
+        //       Swal({
+        //         type: 'error',
+        //         title: error.status + '',
+        //         text: this.translate.instant('ERROR.' + error.status),
+        //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
+        //           this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+        //           this.translate.instant('GLOBAL.descuentos_dependencia'),
+        //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        //       });
+        //     });
       },
         (error: HttpErrorResponse) => {
           Swal({

@@ -60,6 +60,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     this.listService.findPais();
     this.loadLists();
     this.persona_id = this.userService.getPersonaId();
+    this.loadInformacionContacto();
   }
 
   construirForm() {
@@ -159,6 +160,30 @@ export class CrudInformacionContactoComponent implements OnInit {
     // this.loadInformacionContacto();
   }
 
+  loadInformacionContacto() {
+    if (this.persona_id) {
+      this.sgaMidService.get(`inscripciones/info_complementaria_tercero/${this.persona_id}`)
+      .subscribe(res => {
+        if (res !== null) {
+          this.info_informacion_contacto = <any>res;
+          this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = [this.info_informacion_contacto.PaisResidencia];
+          this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = [this.info_informacion_contacto.DepartamentoResidencia];
+          this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = [this.info_informacion_contacto.CiudadResidencia];
+          this.result.emit(1);
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+    }
+  }
+
   validarForm(event) {
     if (event.valid) {
       const formData = event.data.InfoInformacionContacto;
@@ -205,7 +230,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             Id: 0,
             TerceroId: tercero,
             InfoComplementariaId: {
-              Id: 48,
+              Id: 51,
             },
             Dato: JSON.stringify({
               country: formData.PaisResidencia,

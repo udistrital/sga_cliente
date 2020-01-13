@@ -184,7 +184,8 @@ export class ListService {
     this.store.select(REDUCER_LIST.LineaInvestigacion).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.coreService.get('linea_investigacion/?query=Activo:true&limit=0')
+          // this.coreService.get('linea_investigacion/?query=Activo:true&limit=0')
+          this.cidcService.get('research_focus')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.LineaInvestigacion, result);
