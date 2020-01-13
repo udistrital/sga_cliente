@@ -230,7 +230,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
 
   loadTipoInscripcion() {
     window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
-    this.inscripcionService.get('tipo_inscripcion/?query=NivelId:' + Number(this.selectednivel.id))
+    this.inscripcionService.get('tipo_inscripcion/?query=NivelId:' + Number(this.selectednivel.id) + ',Activo:true&sortby=NumeroOrden&order=asc')
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
