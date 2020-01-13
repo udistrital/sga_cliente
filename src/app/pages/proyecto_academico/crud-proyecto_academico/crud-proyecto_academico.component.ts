@@ -96,6 +96,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   uidResolucion: string;
   uidActoAdministrativo: string;
   idDocumentoAdministrativo: number;
+  disable: boolean = true;
   idDocumentoResolucion: number;
   proyecto_padre_id: ProyectoAcademicoInstitucion;
 
@@ -103,7 +104,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
   Campo3Control = new FormControl('' , [Validators.required]);
-  Campo4Control = new FormControl({ value: '', disabled: true }, [Validators.required]);
+  Campo4Control = new FormControl('', [Validators.required]);
   Campo5Control = new FormControl('', [Validators.required]);
   Campo6Control = new FormControl('', [Validators.required]);
   Campo7Control = new FormControl('', [Validators.required]);
@@ -172,10 +173,13 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       fecha_creacion: ['', Validators.required],
       mes_vigencia: ['', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(12)]],
       ano_vigencia: ['', [Validators.required, Validators.maxLength(1), Validators.pattern('^[0-9]*$')]],
+      documento: ['', Validators.required],
+      Campo4Control: [{value: '', disabled: true}, Validators.required],
      })
      this.actoform = formBuilder.group({
       acto: ['', Validators.required],
       ano_acto: ['', [Validators.required, Validators.maxLength(4)]],
+      documento: ['', Validators.required],
      })
      this.compleform = formBuilder.group({
        titulacion_snies: ['', Validators.required],
@@ -294,7 +298,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
 
   onSelectionChanged({ value }) {
-    this.Campo4Control.enable();
+    this.resoluform.enable();
   }
 
   loadCloneData(id: any): void {

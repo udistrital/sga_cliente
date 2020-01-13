@@ -157,7 +157,7 @@
             </mat-step>
 
             <mat-step [stepControl]="resoluform">
-                    <form [formGroup]="resoluform" >
+                    <form [formGroup]="resoluform" > 
                       <ng-template matStepLabel>{{ 'proyecto.registro' | translate }}</ng-template>
                       <div class="row-sm-6" >
                             <nb-card class="m-4" accent="info">
@@ -176,7 +176,7 @@
                                         <br>
                                         <mat-form-field >
                                             <mat-label>{{ 'proyecto.nucleo' | translate }}</mat-label>
-                                            <mat-select [formControl]="Campo4Control" required [(ngModel)]="opcionSeleccionadoNucleo" >
+                                            <mat-select   formControlName="Campo4Control" required  [(ngModel)]="opcionSeleccionadoNucleo" >
                                                 <mat-option>--</mat-option>
                                                 <mat-option *ngFor="let nucleocomun of nucleo" [value]="nucleocomun" >
                                                     {{nucleocomun['Nombre']}}
@@ -200,10 +200,10 @@
                                         </div>
                                         <div class="columna">
                                         <label class="label col-sm-8 col-form-label">{{ 'proyecto.text_document' | translate }}</label>
-                                        <button mat-button type="button" (click)="fileInput.click()">
+                                        <button  mat-button type="button" (click)="fileInput.click()">
                                             <mat-icon>attach_file</mat-icon>
                                             <!--span>Select</span-->
-                                            <input #fileInput type="file" (change)="onInputFileResolucion($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
+                                            <input formControlName="documento"  #fileInput type="file" (change)="onInputFileResolucion($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
                                         </button>
                                         <mat-error *ngIf="!fileResolucion">{{ 'ERROR.no_documento' | translate }}</mat-error>
                                         <label *ngIf="fileResolucion">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucion.name}}</label>
@@ -268,7 +268,7 @@
                                             <button mat-button type="button" (click)="fileInputDocumentoActo.click()">
                                                 <mat-icon>attach_file</mat-icon>
                                                 <!--span>Select</span-->
-                                                <input #fileInputDocumentoActo type="file" (change)="onInputFileActo($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
+                                                <input formControlName="documento" #fileInputDocumentoActo type="file" (change)="onInputFileActo($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
                                             </button>
                                             <mat-error *ngIf="!fileActoAdministrativo">{{ 'ERROR.no_documento' | translate }}</mat-error>
                                             <label *ngIf="fileActoAdministrativo">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileActoAdministrativo.name}}</label>
