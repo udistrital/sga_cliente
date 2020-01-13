@@ -1,0 +1,95 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <nb-card [hidden]="show_profile || show_info ">
+        <nb-card-header>
+                <!-- select periodo -->
+                <mat-form-field style="width: 40%;">
+                        <mat-label>{{ 'inscripcion.aviso_periodo' | translate }}:</mat-label>
+                        <mat-select [(ngModel)]="periodo" [disabled]='true'>
+                            <mat-option>--Seleccionar--</mat-option>
+                            <mat-option *ngFor="let item of periodos" [value]="item">
+                                {{item.Nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+            <!-- select Nivel -->
+           
+                <mat-form-field style="width: 100%;">
+                    <mat-label>{{ 'inscripcion.aviso_nivel' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="selectednivel" (ngModelChange)="loadTipoInscripcion()" >
+                        <mat-option>--Seleccionar--</mat-option>
+                        <mat-option *ngFor="let item of nivel_load" [value]="item">
+                            {{item.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <!-- select tipo de inscripcion -->
+
+            <mat-form-field style="width: 100%;">
+                <mat-label>{{ 'inscripcion.aviso_tipo' | translate }}:</mat-label>
+                <mat-select [(ngModel)]="tipo_inscripcion_selected" (ngModelChange)="viewtab()" >
+                    <mat-option>--Seleccionar--</mat-option>
+                    <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
+                        {{item.Nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <!--ngx-loading [hidden]="!loading"></ngx-loading-->
+
+            <div class="row">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo==true">
+                    <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
+                        <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form">
+                            <i class="fa fa-address-card-o fa-5x"></i>
+                            <p class="percentage">{{percentage_info}} %</p>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+      
+
+       
+            </div>
+        </nb-card-header>
+
+    </nb-card>
+
+    <!--Formularios------------------------------------------------------------->
+
+
+    <!-- <nb-card [hidden]="!show_info_pregrado"> -->
+    <nb-card [hidden]="!show_info">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
+            show_expe=false;">X</button>
+                </div>
+            </div>
+            <nb-tabset fullWidth>
+                <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
+                    <ngx-crud-info-persona info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_preinscripcion')"  (result)="setPercentage_info($event,0)">
+                    </ngx-crud-info-persona>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'inscripcion.preinscripcion' | translate }}" [active]="preinscripcion">
+                    <ngx-crud-inscripcion-multiple  inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info(1,1)">
+                    </ngx-crud-inscripcion-multiple>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
+
+    
+
+
+    <!--Vista de perfil------------------------------------------------------------->
+
+    <!-- <div [hidden]="!show_profile"> -->
+    <div *ngIf="show_profile">
+        <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}"></ngx-perfil>
+    </div>
+</div>

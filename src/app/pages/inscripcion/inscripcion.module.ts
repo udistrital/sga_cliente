@@ -17,7 +17,9 @@ import { DescuentoAcademicoService } from '../../@core/data/descuento_academico.
 import { DocumentoProgramaService } from '../../@core/data/documento_programa.service';
 import { CampusMidService } from '../../@core/data/campus_mid.service';
 import { InfoPersonaModule } from '../info_persona/info_persona.module';
+import { InscripcionMultipleModule} from '../inscripcion_multiple/inscripcion_multiple.module'
 import { CrudInfoPersonaComponent } from '../info_persona/crud-info_persona/crud-info_persona.component';
+import { CrudInscripcionMultipleComponent} from '../inscripcion_multiple/crud-inscripcion_multiple/crud-inscripcion_multiple.component'
 import { InfoCaracteristicaModule } from '../info_caracteristica/info_caracteristica.module';
 import { CrudInfoCaracteristicaComponent } from '../info_caracteristica/crud-info_caracteristica/crud-info_caracteristica.component';
 import { InformacionContactoModule } from '../informacion_contacto/informacion_contacto.module';
@@ -44,6 +46,8 @@ import { ListDescuentoAcademicoComponent } from '../descuento_academico/list-des
 import { CrudDescuentoAcademicoComponent } from '../descuento_academico/crud-descuento_academico/crud-descuento_academico.component';
 import { PropuestaGradoModule } from '../propuesta_grado/propuesta_grado.module';
 import { CrudPropuestaGradoComponent } from '../propuesta_grado/crud-propuesta_grado/crud-propuesta_grado.component';
+import { PreinscripcionComponent } from './preinscripcion/preinscripcion.component';
+
 
 @NgModule({
   imports: [
@@ -53,6 +57,7 @@ import { CrudPropuestaGradoComponent } from '../propuesta_grado/crud-propuesta_g
     SharedModule,
     ToasterModule,
     InfoPersonaModule,
+    InscripcionMultipleModule,
     InfoCaracteristicaModule,
     InformacionContactoModule,
     FormacionAcademicaModule,
@@ -82,6 +87,7 @@ import { CrudPropuestaGradoComponent } from '../propuesta_grado/crud-propuesta_g
   ],
    entryComponents: [
     CrudInfoPersonaComponent,
+    CrudInscripcionMultipleComponent,
     CrudInfoCaracteristicaComponent,
     // CrudInformacionContactoComponent,
     ListFormacionAcademicaComponent,
@@ -100,6 +106,7 @@ import { CrudPropuestaGradoComponent } from '../propuesta_grado/crud-propuesta_g
    ],
   exports: [
     InscripcionGeneralComponent,
+    PreinscripcionComponent,
   ],
 })
 export class InscripcionModule { }

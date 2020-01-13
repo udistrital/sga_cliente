@@ -4,6 +4,7 @@ import { InscripcionComponent } from './inscripcion.component';
 import { InscripcionGeneralComponent } from './inscripcion_general/inscripcion_general.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
+import { PreinscripcionComponent } from './preinscripcion/preinscripcion.component';
 
 const routes: Routes = [{
   path: '',
@@ -19,7 +20,11 @@ const routes: Routes = [{
     //     'Internal/everyone',
     //   ],
     // },
-  }],
+  },
+{
+  path: 'preinscripcion',
+  component: PreinscripcionComponent,
+}],
 }];
 
 @NgModule({
@@ -37,4 +42,5 @@ export const routedComponents = [
   InscripcionComponent,
   InscripcionGeneralComponent,
   PerfilComponent,
+  PreinscripcionComponent,
 ];

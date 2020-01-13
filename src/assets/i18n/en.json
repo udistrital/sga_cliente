@@ -85,10 +85,13 @@
         },
         "inscripcion": {
             "inscripcion": "Inscription",
-            "inscripcion_general": "Enrollment in an academic project"
+            "inscripcion_general": "Enrollment in an academic project",
+            "preinscripcion": "Pre-registration for academic projects"
         }
     },
     "GLOBAL": {
+        "preinscripcion": "Pre-registration",
+        "preinscripcion_2": "You want to pre-register",
         "id": "Id",
         "activo": "Active",
         "aceptar": "Accept",
@@ -811,6 +814,7 @@
     },
     "inscripcion": {
         "aviso_programa": "Select the program you wish to enroll",
+        "aviso_nivel": "Select the level to which you want to register",
         "info_basica": "Basic information",
         "aviso_progreso": "For the registration to a project it is necessary to complete each of the information blocks that are requested 100%",
         "perfil": "Profile",
@@ -826,6 +830,7 @@
         "informacion_contacto": "Contact information",
         "informacion_familiar": "Family information",
         "aviso_tipo": "select the type of registration you want to make",
+        "aviso_periodo": "Period to which you will pre-register",
         "idiomas": "Languages",
         "icfes": "ICFES and school registration",
         "universidad": "college",
@@ -833,7 +838,13 @@
         "reingreso": "Re-entry",
         "transferencia": "Transfer data",
         "error_registrar_informacion": "An error happened saving the inscription information",
-        "error_cargar_informacion": "An error happened loading the inscription information"
+        "error_cargar_informacion": "An error happened loading the inscription information",
+        "preinscripcion": "Pre-registration for academic projects",
+        "mensaje_preinscripcion": "To pre-register for one or more academic projects, please select the project (s) to which you wish to submit and finalize the pre-registration by pressing the Pre-registration button.",
+        "select": "Name of the academic project",
+        "erro_selec": "Please select at least one academic project!",
+        "error_proyecto_ya_existe": "The academic project has already been added!",
+        "realizar_preinscripcion": "Pre-registration"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
