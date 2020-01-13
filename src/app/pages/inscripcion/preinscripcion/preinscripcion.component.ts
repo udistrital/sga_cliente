@@ -88,7 +88,8 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
 
   show_info = false;
   show_profile = false;
-
+  show_expe = false;
+  show_acad = false;
 
   info_persona: boolean;
   loading: boolean;
