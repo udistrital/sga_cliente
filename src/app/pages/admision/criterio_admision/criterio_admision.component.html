@@ -1,5 +1,5 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <nb-card [hidden]="show_profile || show_info ">
+    <nb-card [hidden]="show_profile || show_icfes ">
         <nb-card-header>
                 <!-- select periodo -->
                 <mat-form-field style="width: 40%;">
@@ -84,22 +84,19 @@
 
 
     <!-- <nb-card [hidden]="!show_info_pregrado"> -->
-    <nb-card [hidden]="!show_info">
+    <nb-card [hidden]="!show_icfes">
         <nb-card-body>
             <div class="row">
-                <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
-                </div>
-                <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false;">X</button>
+                <div class="col-md-1" align="left">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_icfes=false; show_acad=false;
+                    ">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth>
-                <!-- <nb-tab tabTitle="{{ 'inscripcion.preinscripcion' | translate }}" [active]="preinscripcion">
-                    <ngx-crud-inscripcion-multiple  inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info(1,1)">
-                    </ngx-crud-inscripcion-multiple>
-                </nb-tab> -->
+                <nb-tab tabTitle="{{ 'inscripcion.preinscripcion' | translate }}" [active]="preinscripcion">
+                    <ngx-crud-criterio-icfes (eventChange)="perfil_editar('default')" >
+                    </ngx-crud-criterio-icfes>
+                </nb-tab>
             </nb-tabset>
         </nb-card-body>
     </nb-card>

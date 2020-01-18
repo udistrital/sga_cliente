@@ -13,6 +13,8 @@ import { PersonaService } from '../../@core/data/persona.service';
 import { UbicacionService } from '../../@core/data/ubicacion.service';
 import { FormacionAcademicaModule } from '../formacion_academica/formacion_academica.module';
 import { CriterioAdmisionComponent } from './criterio_admision/criterio_admision.component';
+import { CriterioIcfesModule } from '../criterio_icfes/criterio_icfes.module';
+import { CrudCriterioIcfesComponent } from '../criterio_icfes/crud-criterio_icfes/crud-criterio_icfes.component';
 
 
 @NgModule({
@@ -23,6 +25,7 @@ import { CriterioAdmisionComponent } from './criterio_admision/criterio_admision
     SharedModule,
     ToasterModule,
     FormacionAcademicaModule,
+    CriterioIcfesModule,
   ],
   declarations: [
     ...routedComponents,
@@ -37,6 +40,7 @@ import { CriterioAdmisionComponent } from './criterio_admision/criterio_admision
     UbicacionService,
   ],
    entryComponents: [
+    CrudCriterioIcfesComponent,
    ],
   exports: [
     CriterioAdmisionComponent,

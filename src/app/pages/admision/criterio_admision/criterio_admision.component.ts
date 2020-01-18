@@ -84,7 +84,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   periodos = [];
   nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
 
-  show_info = false;
+  show_icfes = false;
   show_profile = false;
   show_expe = false;
   show_acad = false;
@@ -252,17 +252,17 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     console.info(event)
     switch (event) {
       case 'info_persona':
-        this.show_info = true;
+        this.show_icfes = true;
         break;
         case 'info_preinscripcion':
           this.preinscripcion = true;
           break;
       case 'perfil':
-        this.show_info = false;
+        this.show_icfes = false;
         this.show_profile = true;
         break;
       default:
-        this.show_info = false;
+        this.show_icfes = false;
         this.show_profile = false;
         break;
     }
