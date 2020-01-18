@@ -133,6 +133,20 @@ export const MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
+    title:  'Admision',
+    icon:  'nb-compose',
+    link:  '',
+    key:  'admision',
+    children:  [
+      {
+        title:  'Criterios admisión',
+        icon: 'nb-edit',
+        link:  '/pages/admision/criterio_admision',
+        key:  'criterios',
+      },
+    ],
+  },
+  {
     title: 'Reportes',
     icon: 'nb-compose',
     link: '',
