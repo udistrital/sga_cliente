@@ -303,18 +303,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       }else {
         this.selectTipoIcfes = false;
       }
-      // switch (this.criterios_selected[i]['Nombre']) {
-      //   case 'ICFES':
-      //     this.selectTipoIcfes = true;
-      //   break;
-      //   case 'Entrevista':
-      //     this.selectTipoEntrevista = true;
-      //   break;
-      //   case 'Prueba':
-      //       this.selectTipoPrueba = true;
-      //     break;
-      // }
-  
     }
 
   private showToast(type: string, title: string, body: string) {
