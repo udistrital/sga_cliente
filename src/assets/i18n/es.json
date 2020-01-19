@@ -490,7 +490,20 @@
         "placeholder_Nombrecolegio": "Ej: Colegio Nacional",
         "DireccionColegio": "Dirección del colegio donde culmunó el grado 11",
         "placeholder_DireccionColegio": "Ej: Calle 1 # 2 -03",
-        "formacion_academica": "Informacion Academica"
+        "formacion_academica": "Informacion Academica",
+        "porcentaje_total": "Ingrese el porcentaje del criterio ICFES sobre el porcentaje general de la evaluación total",
+        "placeholder_porcentaje_total": "Ej: 50 % del 100% de la evaluación",
+        "area_1": "Matematicas",
+        "placeholder_area_1": "Ej: 40 % del 100% del criterio ICFES ",
+        "area_2": "Ciencias",
+        "placeholder_area_2": "Ej: 20 % del 100% del criterio ICFES ",
+        "area_3": "Lectura",
+        "placeholder_area_3": "Ej: 15 % del 100% del criterio ICFES ",
+        "area_4": "Sociales",
+        "placeholder_area_4": "Ej: 15 % del 100% del criterio ICFES ",
+        "area_5": "Inglés",
+        "placeholder_area_5": "Ej: 10 % del 100% del criterio ICFES ",
+        "error_porcentaje_total": "El porcentaje de los subcriterios es mayor al 100% posible, ajuste los porcentajes de los subcriterios por favor!"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -948,6 +961,7 @@
         "erro_selec_criterio": "Por favor seleccione al menos un criterio!",
         "info_icfes": "Criterio ICFES",
         "entrevista": "Criterio Entrevista",
-        "prueba": "Criterio Prueba"
+        "prueba": "Criterio Prueba",
+        "criterio_icfes": "Porcentajes para el criterio ICFES"
     }
 }

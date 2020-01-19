@@ -937,6 +937,7 @@
         "erro_selec_criterio": "Please select at least one criterion!",
         "info_icfes": "Criteria ICFES ",
         "entrevista": "Criteria Interview",
-        "prueba": "Criteria Test"
+        "prueba": "Criteria Test",
+        "criterio_icfes": "Percentages for the ICFES criterion"
     }
 }
