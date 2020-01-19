@@ -99,7 +99,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   selectedTipo: any;
   proyectos_selected: any[];
   criterio_selected: any[];
-  criterios_finales: any[];
   selectTipoIcfes: any;
   selectTipoEntrevista: any;
   selectTipoPrueba: any;
@@ -156,7 +155,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.periodo = <any>res[0];
-          // window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
+          window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
           resolve(this.periodo);
           const periodos = <Array<any>>res;
          periodos.forEach(element => {
@@ -223,7 +222,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   }
 
   loadCriterios() {
-    // window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
+    window.localStorage.setItem('ProyectoSelect', String(this.proyectos_selected));
     this.selectcriterio = false;
     this.evaluacionService.get('requisito/?query=Activo:true&limit=0')
       .subscribe(res => {
@@ -289,6 +288,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
 
 
   viewtab() {
+    window.localStorage.setItem('CriteriosSelect', String(this.criterio_selected));
     console.info('Tipo criterio')
     console.info(this.criterio_selected)
     this.ultimo_select = this.criterio_selected.length - 1

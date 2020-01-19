@@ -40,7 +40,7 @@
              <!-- select criterios -->
              <mat-form-field style="width: 100%;">
                 <mat-label>{{ 'admision.aviso_criterios' | translate }}:</mat-label>
-                <mat-select [formControl]="Campo2Control" [(ngModel)]="criterio_selected"  [(ngModel)]="criterios_finales" (selectionChange)="viewtab()" [disabled]='selectcriterio' multiple>
+                <mat-select [formControl]="Campo2Control" [(ngModel)]="criterio_selected"  (selectionChange)="viewtab()" [disabled]='selectcriterio' multiple>
                     <mat-option *ngFor="let item of criterios" [value]="item">
                         {{item.Nombre}}
                     </mat-option>

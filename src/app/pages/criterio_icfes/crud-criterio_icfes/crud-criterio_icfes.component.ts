@@ -108,8 +108,6 @@ export class CrudCriterioIcfesComponent implements OnInit {
     return 0;
   }
 
-  
-
   createInfoPersona(infoPersona: any): void {
 
     const opt: any = {
@@ -230,6 +228,8 @@ export class CrudCriterioIcfesComponent implements OnInit {
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
     } else  {
+      console.info(window.localStorage.getItem('ProyectoSelect'))
+      console.info(window.localStorage.getItem('CriteriosSelect'))
       console.info('bien porcentaje')
     }
   }
