@@ -30,6 +30,7 @@ export class CrudCriterioIcfesComponent implements OnInit {
   config: ToasterConfig;
   info_persona_id: number;
   inscripcion_id: number;
+  info_info_persona: any;
 
   @Input('info_persona_id')
   set persona(info_persona_id: number) {
