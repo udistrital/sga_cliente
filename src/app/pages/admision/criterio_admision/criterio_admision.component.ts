@@ -225,7 +225,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   this.selectcriterio = false;
 }
   loadCriterios() {
-    window.localStorage.setItem('ProyectoSelect', String(this.proyectos_selected));
     this.evaluacionService.get('requisito/?query=Activo:true&limit=0')
       .subscribe(res => {
         const r = <any>res;
@@ -252,30 +251,15 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   perfil_editar(event): void {
     console.info(event)
     switch (event) {
-      case 'info_persona':
+      case 'info_icfes':
         this.show_icfes = true;
         break;
-        case 'info_preinscripcion':
+        case 'info_entrevista':
           this.preinscripcion = true;
           break;
-      case 'perfil':
+      case 'info_entrevista':
         this.show_icfes = false;
-        this.show_profile = true;
         break;
-      default:
-        this.show_icfes = false;
-        this.show_profile = false;
-        break;
-    }
-  }
-  selectTab(event): void {
-    if (event.tabTitle === this.translate.instant('GLOBAL.info_persona')) {
-      if (this.info_persona)
-        this.perfil_editar('info_persona');
-    } else if (event.tabTitle === this.translate.instant('GLOBAL.info_caracteristica')) {
-      this.perfil_editar('info_caracteristica');
-    } else if (event.tabTitle === this.translate.instant('GLOBAL.informacion_contacto')) {
-      this.perfil_editar('info_contacto');
     }
   }
 
@@ -290,7 +274,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
 
 
   viewtab() {
-    window.localStorage.setItem('CriteriosSelect', String(this.criterio_selected));
     console.info('Tipo criterio')
     console.info(this.criterio_selected)
       this.selectTipoIcfes = false;

@@ -28,31 +28,16 @@ export class CrudCriterioIcfesComponent implements OnInit {
   Foto: any;
   SoporteDocumento: any;
   config: ToasterConfig;
-  info_persona_id: number;
-  inscripcion_id: number;
 
-  @Input('info_persona_id')
-  set persona(info_persona_id: number) {
-    this.info_persona_id = info_persona_id;
-    console.info('InfoPersonaIdPersona: ' + info_persona_id);
-  }
-
-
-  @Input('inscripcion_id')
-  set admision(inscripcion_id: number) {
-    this.inscripcion_id = inscripcion_id;
-    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-      && this.inscripcion_id.toString() !== '0') {
-      // this.loadInscripcion();
-      console.info('inscripcionId: ' + inscripcion_id);
-    }
-  }
+  @Input() info_proyectos: any;
+  @Input() info_periodo: any;
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
   info_criterio_icfes: any;
+  info_criterio_icfes_post: any;
   formCriterioIcfes: any;
   regInfoPersona: any;
   info_inscripcion: any;
@@ -69,13 +54,8 @@ export class CrudCriterioIcfesComponent implements OnInit {
     private translate: TranslateService,
     private sgamidService: SgaMidService,
     private autenticationService: ImplicitAutenticationService,
-    private documentoService: DocumentoService,
-    private nuxeoService: NuxeoService,
     private store: Store<IAppState>,
     private listService: ListService,
-    private inscripcionService: InscripcionService,
-    private coreService: CoreService,
-    private userService: UserService,
     private toasterService: ToasterService) {
       this.formCriterioIcfes = FORM_CRITERIO_ICFES;
       this.construirForm();
@@ -108,7 +88,7 @@ export class CrudCriterioIcfesComponent implements OnInit {
     return 0;
   }
 
-  createInfoPersona(infoPersona: any): void {
+  createInfoCriterio(infoCriterio: any): void {
 
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
@@ -124,79 +104,45 @@ export class CrudCriterioIcfesComponent implements OnInit {
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
-          const files = []
-          this.info_criterio_icfes = <any>infoPersona;
-          if (this.info_criterio_icfes.Foto.file !== undefined) {
-            files.push({
-              nombre: this.autenticationService.getPayload().sub,
-              name: this.autenticationService.getPayload().sub,
-              key: 'Foto',
-              file: this.info_criterio_icfes.Foto.file, IdDocumento: 1,
-            });
-          }
-          if (this.info_criterio_icfes.SoporteDocumento.file !== undefined) {
-            files.push({
-              nombre: this.autenticationService.getPayload().sub,
-              name: this.autenticationService.getPayload().sub,
-              key: 'SoporteDocumento',
-              file: this.info_criterio_icfes.SoporteDocumento.file, IdDocumento: 2,
-            });
-          }
-          // this.nuxeoService.getDocumentos$(files, this.documentoService)
-          //   .subscribe(response => {
-              // if (Object.keys(response).length === files.length) {
-              //   this.filesUp = <any>response;
-
-                // if (this.filesUp['Foto'] !== undefined) {
-                //   this.info_info_persona.Foto = this.filesUp['Foto'].Id;
-                // }
-                // if (this.filesUp['SoporteDocumento'] !== undefined) {
-                //   this.info_info_persona.SoporteDocumento = this.filesUp['SoporteDocumento'].Id;
-                // }
-                this.info_criterio_icfes.Usuario = this.autenticationService.getPayload().sub;
+          this.info_criterio_icfes = <any>infoCriterio;
+                this.info_criterio_icfes.Proyectos = this.info_proyectos;
+                this.info_criterio_icfes.Periodo = this.info_periodo;
+                this.info_criterio_icfes.General = this.info_criterio_icfes.PorcentajeTotal
+                this.info_criterio_icfes.Especifico = {
+                  Area1: this.info_criterio_icfes.Area1,
+                  Area2: this.info_criterio_icfes.Area2,
+                  Area3: this.info_criterio_icfes.Area3,
+                  Area4: this.info_criterio_icfes.Area4,
+                  Area5: this.info_criterio_icfes.Area5,
+                }
                 console.info(JSON.stringify(this.info_criterio_icfes));
-                this.sgamidService.post('persona/guardar_persona', this.info_criterio_icfes)
-                  .subscribe(res => {
-                    const r = <any>res
-                    console.info(JSON.stringify(res));
-                    if (r !== null && r.Type !== 'error') {
-                      window.localStorage.setItem('ente', r.Id);
-                      this.info_persona_id = r.Id;
-                      sessionStorage.setItem('IdTercero', String(this.info_persona_id));
-                      // this.loadInfoPersona();
-                      this.loading = false;
-                      this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('GLOBAL.info_persona') + ' ' +
-                        this.translate.instant('GLOBAL.confirmarCrear'));
-                        this.eventChange.emit(true);
-                    } else {
-                      this.showToast('error', this.translate.instant('GLOBAL.error'),
-                        this.translate.instant('GLOBAL.error'));
-                    }
-                  },
-                    (error: HttpErrorResponse) => {
-                      Swal({
-                        type: 'error',
-                        title: error.status + '',
-                        text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('GLOBAL.crear') + '-' +
-                          this.translate.instant('GLOBAL.info_persona'),
-                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                      });
-                    });
-              // }
-        //     },
-        //       (error: HttpErrorResponse) => {
-        //         Swal({
-        //           type: 'error',
-        //           title: error.status + '',
-        //           text: this.translate.instant('ERROR.' + error.status),
-        //           footer: this.translate.instant('GLOBAL.crear') + '-' +
-        //             this.translate.instant('GLOBAL.info_persona') + '|' +
-        //             this.translate.instant('GLOBAL.soporte_documento'),
-        //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        //         });
-        //       // });
+                // this.sgamidService.post('persona/guardar_persona', this.info_criterio_icfes)
+                //   .subscribe(res => {
+                //     const r = <any>res
+                //     console.info(JSON.stringify(res));
+                //     if (r !== null && r.Type !== 'error') {
+                //       window.localStorage.setItem('ente', r.Id);
+                //       // this.loadInfoPersona();
+                //       this.loading = false;
+                //       this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                //         this.translate.instant('GLOBAL.info_persona') + ' ' +
+                //         this.translate.instant('GLOBAL.confirmarCrear'));
+                //         this.eventChange.emit(true);
+                //     } else {
+                //       this.showToast('error', this.translate.instant('GLOBAL.error'),
+                //         this.translate.instant('GLOBAL.error'));
+                //     }
+                //   },
+                //     (error: HttpErrorResponse) => {
+                //       Swal({
+                //         type: 'error',
+                //         title: error.status + '',
+                //         text: this.translate.instant('ERROR.' + error.status),
+                //         footer: this.translate.instant('GLOBAL.crear') + '-' +
+                //           this.translate.instant('GLOBAL.info_persona'),
+                //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                //       });
+                //     });
         }
       });
   }
@@ -204,8 +150,7 @@ export class CrudCriterioIcfesComponent implements OnInit {
 
 
   ngOnInit() {
-    // this.loadInfoPersona()
-    // this.info_admision()
+
   }
 
   validarForm(event) {
@@ -216,21 +161,23 @@ export class CrudCriterioIcfesComponent implements OnInit {
 
   calculoporcentaje(InfoCriterioIcfes: any): void {
     this.info_criterio_icfes = <any>InfoCriterioIcfes;
-    console.info('datos')
-    console.info(this.info_criterio_icfes)
     this.porcentaje_subcriterio_total = this.info_criterio_icfes.Area1 + this.info_criterio_icfes.Area2 + this.info_criterio_icfes.Area3 +
     this.info_criterio_icfes.Area4 + this.info_criterio_icfes.Area5
     console.info(this.porcentaje_subcriterio_total)
-    if (this.porcentaje_subcriterio_total >= 101) {
+    if (this.porcentaje_subcriterio_total >= 101 || this.porcentaje_subcriterio_total < 100) {
       Swal({
         type: 'error',
         text: this.translate.instant('GLOBAL.error_porcentaje_total'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
     } else  {
-      console.info(window.localStorage.getItem('ProyectoSelect'))
-      console.info(window.localStorage.getItem('CriteriosSelect'))
-      console.info('bien porcentaje')
+      console.info('Bien porcentaje')
+      console.info('Datos Proyecto')
+      console.info(this.info_proyectos)
+      console.info(this.info_periodo)
+      console.info('datos')
+      console.info(this.info_criterio_icfes)
+      this.createInfoCriterio(this.info_criterio_icfes);
     }
   }
   setPercentage(event) {
