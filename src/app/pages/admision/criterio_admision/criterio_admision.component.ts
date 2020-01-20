@@ -31,7 +31,7 @@ import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_ins
 export class CriterioAdmisionComponent implements OnInit, OnChanges {
   toasterService: any;
 
-  @Input('inscripcion_id')
+  @Input('criterios_select')
   set name(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
     console.info('Posgrado ins: ' + this.inscripcion_id)
@@ -130,6 +130,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     });
     this.total = true;
     this.loadData();
+    this.loadCriterios();
   }
 
   async loadData() {
@@ -220,10 +221,11 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
           });
         });
   }
-
+  activeCriterios() {
+  this.selectcriterio = false;
+}
   loadCriterios() {
     window.localStorage.setItem('ProyectoSelect', String(this.proyectos_selected));
-    this.selectcriterio = false;
     this.evaluacionService.get('requisito/?query=Activo:true&limit=0')
       .subscribe(res => {
         const r = <any>res;
@@ -291,19 +293,21 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     window.localStorage.setItem('CriteriosSelect', String(this.criterio_selected));
     console.info('Tipo criterio')
     console.info(this.criterio_selected)
-    this.ultimo_select = this.criterio_selected.length - 1
-    console.info('final')
-    console.info(this.ultimo_select)
-      if (this.criterio_selected[this.ultimo_select]['Nombre'] === 'ICFES') {
-        this.selectTipoIcfes = true;
-      } else if (this.criterio_selected[this.ultimo_select]['Nombre'] === 'Entrevista') {
+      this.selectTipoIcfes = false;
+      this.selectTipoEntrevista = false;
+      this.selectTipoPrueba = false;
+    for (let i = 0; i < this.criterio_selected.length; i++) {
+      if (this.criterio_selected[i]['Nombre'] === 'ICFES') {
+      this.selectTipoIcfes = true;
+      }
+      if (this.criterio_selected[i]['Nombre'] === 'Entrevista') {
         this.selectTipoEntrevista = true;
-      }else if (this.criterio_selected[this.ultimo_select]['Nombre'] === 'Prueba') {
+      }
+      if (this.criterio_selected[i]['Nombre'] === 'Prueba') {
         this.selectTipoPrueba = true;
-      }else {
-        this.selectTipoIcfes = false;
       }
     }
+  }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({
