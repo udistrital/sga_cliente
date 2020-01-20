@@ -87,6 +87,10 @@
             "inscripcion": "Inscription",
             "inscripcion_general": "Enrollment in an academic project",
             "preinscripcion": "Pre-registration for academic projects"
+        },
+        "admision": {
+            "admision": "Admissions",
+            "criterios": "Admissions criteria for projects"
         }
     },
     "GLOBAL": {
@@ -922,5 +926,18 @@
         "informacion_familiar_no_actualizada": "Family information not updated",
         "informacion_familiar_actualizada": "Familiy information updated",
         "seguro_continuar_registrar": "Are you sure you want to register this family information?"
+    },
+    "admision": {
+        "aviso_periodo": "Period in which the admission criteria are defined",
+        "aviso_nivel": "Select the level to which you want to define the admission criteria",
+        "aviso_proyecto": "Selections the academic projects you wish to define the admission criteria",
+        "erro_selec_nivel": "Please select the level!",
+        "erro_selec_proyecto": "Please select at least one project!",
+        "aviso_criterios": "Select the criteria you want to assign to academic projects",
+        "erro_selec_criterio": "Please select at least one criterion!",
+        "info_icfes": "Criteria ICFES ",
+        "entrevista": "Criteria Interview",
+        "prueba": "Criteria Test",
+        "criterio_icfes": "Percentages for the ICFES criterion"
     }
 }

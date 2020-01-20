@@ -62,4 +62,5 @@ export const environment = {
   PAGO_SERVICE: 'http://prueba.campusvirtual.udistrital.edu.co/pagos/',
   RECIBO_SERVICE: 'http://api.planestic.udistrital.edu.co:9017/v1/',
   CIDC_SERVICE: 'http://200.69.103.88:3114/api/v1/',
+  EVALUACION_INSCRIPCION_SERVICE: 'http://localhost:8086/v1/',
 };
