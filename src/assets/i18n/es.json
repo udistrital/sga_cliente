@@ -503,7 +503,7 @@
         "placeholder_area_4": "Ej: 15 % del 100% del criterio ICFES ",
         "area_5": "Inglés",
         "placeholder_area_5": "Ej: 10 % del 100% del criterio ICFES ",
-        "error_porcentaje_total": "El porcentaje de los subcriterios es mayor al 100% posible, ajuste los porcentajes de los subcriterios por favor!"
+        "error_porcentaje_total": "El porcentaje de los subcriterios es mayor o menor al 100% posible, ajuste los porcentajes de los subcriterios por favor!"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
