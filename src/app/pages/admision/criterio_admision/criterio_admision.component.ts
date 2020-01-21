@@ -260,6 +260,9 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       case 'info_entrevista':
         this.show_icfes = false;
         break;
+        default:
+            this.show_icfes = false;
+        break;
     }
   }
 

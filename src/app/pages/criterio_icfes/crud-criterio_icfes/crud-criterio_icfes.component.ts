@@ -116,33 +116,31 @@ export class CrudCriterioIcfesComponent implements OnInit {
                   Area5: this.info_criterio_icfes.Area5,
                 }
                 console.info(JSON.stringify(this.info_criterio_icfes));
-                // this.sgamidService.post('persona/guardar_persona', this.info_criterio_icfes)
-                //   .subscribe(res => {
-                //     const r = <any>res
-                //     console.info(JSON.stringify(res));
-                //     if (r !== null && r.Type !== 'error') {
-                //       window.localStorage.setItem('ente', r.Id);
-                //       // this.loadInfoPersona();
-                //       this.loading = false;
-                //       this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                //         this.translate.instant('GLOBAL.info_persona') + ' ' +
-                //         this.translate.instant('GLOBAL.confirmarCrear'));
-                //         this.eventChange.emit(true);
-                //     } else {
-                //       this.showToast('error', this.translate.instant('GLOBAL.error'),
-                //         this.translate.instant('GLOBAL.error'));
-                //     }
-                //   },
-                //     (error: HttpErrorResponse) => {
-                //       Swal({
-                //         type: 'error',
-                //         title: error.status + '',
-                //         text: this.translate.instant('ERROR.' + error.status),
-                //         footer: this.translate.instant('GLOBAL.crear') + '-' +
-                //           this.translate.instant('GLOBAL.info_persona'),
-                //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                //       });
-                //     });
+                this.sgamidService.post('admision/', this.info_criterio_icfes)
+                  .subscribe(res => {
+                    const r = <any>res
+                    if (r !== null && r.Type !== 'error') {
+                      // this.loadInfoPersona();
+                      this.loading = false;
+                      this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                        this.translate.instant('GLOBAL.info_criterio') + ' ' +
+                        this.translate.instant('GLOBAL.confirmarCrear'));
+                        this.eventChange.emit(true);
+                    } else {
+                      this.showToast('error', this.translate.instant('GLOBAL.error'),
+                        this.translate.instant('GLOBAL.error'));
+                    }
+                  },
+                    (error: HttpErrorResponse) => {
+                      Swal({
+                        type: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('GLOBAL.crear') + '-' +
+                          this.translate.instant('GLOBAL.info_criterio'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      });
+                    });
         }
       });
   }
