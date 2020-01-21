@@ -108,6 +108,7 @@
         "registrar": "Register",
         "confirmarCrear": "has been created",
         "info_persona": "Personal data",
+        "info_criterio": "ICFES criteria",
         "guardar": "Save",
         "formulario": "Form",
         "lista": "List",
@@ -479,7 +480,21 @@
         "Nombrecolegio": "Name of the school where grade 11 ended",
         "placeholder_Nombrecolegio": "E.g: National College",
         "DireccionColegio": "Address of the school where grade 11 ended",
-        "placeholder_DireccionColegio": "E.g: Street 1 # 2 -03"
+        "placeholder_DireccionColegio": "E.g: Street 1 # 2 -03",
+        "formacion_academica": "Academic information",
+        "porcentaje_total": "Enter the percentage of the ICFES criterion over the general percentage of the total evaluation",
+        "placeholder_porcentaje_total": "E.g: 50% of 100% of the evaluation",
+        "area_1": "Math",
+        "placeholder_area_1": "E.g: 40% of 100% of the ICFES criteria ",
+        "area_2": "Sciences",
+        "placeholder_area_2": "E.g: 20% of 100% of the ICFES criteria ",
+        "area_3": "Reading",
+        "placeholder_area_3": "E.g: 15% of 100% of the ICFES criteria",
+        "area_4": "Social",
+        "placeholder_area_4": "E.g: 15% of 100% of the ICFES criteria",
+        "area_5": "English",
+        "placeholder_area_5": "E.g: 10% of 100% of the ICFES criteria",
+        "error_porcentaje_total": "The percentage of sub-criteria is greater or less than 100% possible, adjust the percentages of sub-criteria please!"
     },
 
     "ERROR": {
