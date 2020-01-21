@@ -36,6 +36,7 @@ export class CrudCriterioIcfesComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
+  info_info_persona: any;
   info_criterio_icfes: any;
   info_criterio_icfes_post: any;
   formCriterioIcfes: any;
