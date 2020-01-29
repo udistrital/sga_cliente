@@ -24,14 +24,21 @@ export class AuthInterceptor implements HttpInterceptor {
     const acces_token = window.localStorage.getItem('access_token');
 
     if (acces_token !== null) {
-      const authReq = req.clone({
-        headers: new HttpHeaders({
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+     let content = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${acces_token}`,
+    });
+      if (req.headers.getAll('Content-Type')) {
+        if (req.headers.getAll('Content-Type')[0] === 'multipart/form-data') {
+        content = new HttpHeaders({
           'Authorization': `Bearer ${acces_token}`,
-        }),
+        });
+      }
+      }
+      const authReq = req.clone({
+        headers: content,
       });
-
       // Clone the request and replace the original headers with
       // cloned headers, updated with the authorization.
 

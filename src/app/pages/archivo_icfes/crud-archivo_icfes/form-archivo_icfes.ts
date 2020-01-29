@@ -7,13 +7,15 @@ export let FORM_ARCHIVO_ICFES = {
     modelo: 'Perfil',
     campos: [
     {
-        etiqueta: 'input',
-        claseGrid: 'col-6',
-        nombre: 'Nombre',
-        label_i18n: 'nombre',
-        placeholder_i18n: 'nombre',
+        etiqueta: 'select',
+        claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+        nombre: 'GrupoEtnico',
+        label_i18n: 'grupo_etnico',
+        placeholder_i18n: 'grupo_etnico',
         requerido: true,
-        tipo: 'text',
+        tipo: 'GrupoEtnico',
+        key: 'Nombre',
+        opciones: [],
     },
     {
         etiqueta: 'file',

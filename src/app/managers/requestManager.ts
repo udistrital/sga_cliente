@@ -23,7 +23,7 @@ export class RequestManager {
       this.httpOptions = {
         // headers: new HttpHeaders({
         //   'Content-Type': 'application/json',
-        //   'Authorization': `Bearer ${acces_token}`,
+        //   'Authorization': `Bearer ${acces_token}`, 
         // }),
       }
     }
@@ -69,6 +69,20 @@ export class RequestManager {
    */
   post(endpoint, element) {
     return this.http.post<any>(`${this.path}${endpoint}`, element, this.httpOptions).pipe(
+      catchError(this.errManager.handleError),
+    );
+  }
+
+  /**
+   * Perform a POST http request
+   * @param endpoint service's end-point
+   * @param element data to send as JSON
+   * @returns Observable<any>
+   */
+  post_file(endpoint, element) {
+    return this.http.post<any>(`${this.path}${endpoint}`, element, {    headers: new HttpHeaders({
+      'Content-Type': 'multipart/form-data',
+  })}).pipe(
       catchError(this.errManager.handleError),
     );
   }
