@@ -90,7 +90,8 @@
         },
         "admision": {
             "admision": "Admisiones",
-            "criterios": "Criterios de admisiones por proyectos"
+            "criterios": "Criterios de admisiones por proyectos",
+            "asignacion_cupos": "Asignación de cupos"
         }
 
 

@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdmisionComponent } from './admision.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
 import { CriterioAdmisionComponent } from './criterio_admision/criterio_admision.component';
+import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.component';
 
 const routes: Routes = [{
   path: '',
@@ -10,6 +11,10 @@ const routes: Routes = [{
   children: [{
   path: 'criterio_admision',
   component: CriterioAdmisionComponent,
+},
+{
+  path: 'asignacion_cupos',
+  component: AsignacionCuposComponent,
 }],
 }];
 
@@ -27,4 +32,5 @@ export class AdmisionRoutingModule { }
 export const routedComponents = [
   AdmisionComponent,
   CriterioAdmisionComponent,
+  AsignacionCuposComponent,
 ];

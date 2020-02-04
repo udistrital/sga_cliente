@@ -144,6 +144,12 @@ export const MENU_ITEMS: MenuItem[] = [
         link:  '/pages/admision/criterio_admision',
         key:  'criterios',
       },
+      {
+        title:  'Asignacion Cupos',
+        icon: 'nb-edit',
+        link:  '/pages/admision/asignacion_cupos',
+        key:  'asignacion_cupos',
+      },
     ],
   },
   {

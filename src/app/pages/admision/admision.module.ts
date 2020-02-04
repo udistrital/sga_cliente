@@ -15,6 +15,7 @@ import { FormacionAcademicaModule } from '../formacion_academica/formacion_acade
 import { CriterioAdmisionComponent } from './criterio_admision/criterio_admision.component';
 import { CriterioIcfesModule } from '../criterio_icfes/criterio_icfes.module';
 import { CrudCriterioIcfesComponent } from '../criterio_icfes/crud-criterio_icfes/crud-criterio_icfes.component';
+import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.component';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import { CrudCriterioIcfesComponent } from '../criterio_icfes/crud-criterio_icfe
    ],
   exports: [
     CriterioAdmisionComponent,
+    AsignacionCuposComponent,
   ],
 })
 export class AdmisionModule { }

@@ -90,7 +90,8 @@
         },
         "admision": {
             "admision": "Admissions",
-            "criterios": "Admissions criteria for projects"
+            "criterios": "Admissions criteria for projects",
+            "asignacion_cupos": "Assignment of quotas"
         }
     },
     "GLOBAL": {
