@@ -14,7 +14,9 @@ import { UbicacionService } from '../../@core/data/ubicacion.service';
 import { FormacionAcademicaModule } from '../formacion_academica/formacion_academica.module';
 import { CriterioAdmisionComponent } from './criterio_admision/criterio_admision.component';
 import { CriterioIcfesModule } from '../criterio_icfes/criterio_icfes.module';
+import { AsignacionCupoModule } from '../asignacion_cupo/asignacion_cupo.module';
 import { CrudCriterioIcfesComponent } from '../criterio_icfes/crud-criterio_icfes/crud-criterio_icfes.component';
+import { CrudAsignacionCupoComponent } from '../asignacion_cupo/crud-asignacion_cupo/crud-asignacion_cupo.component';
 import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.component';
 
 
@@ -27,6 +29,7 @@ import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.co
     ToasterModule,
     FormacionAcademicaModule,
     CriterioIcfesModule,
+    AsignacionCupoModule,
   ],
   declarations: [
     ...routedComponents,
@@ -42,6 +45,7 @@ import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.co
   ],
    entryComponents: [
     CrudCriterioIcfesComponent,
+    CrudAsignacionCupoComponent,
    ],
   exports: [
     CriterioAdmisionComponent,

@@ -2,9 +2,8 @@
     <nb-card [hidden]="show_profile || show_icfes ">
         <nb-card-header>
                 <!-- select periodo -->
-                cupos
                 <mat-form-field style="width: 40%;">
-                        <mat-label>{{ 'admision.aviso_periodo' | translate }}:</mat-label>
+                        <mat-label>{{ 'cupos.aviso_periodo' | translate }}:</mat-label>
                         <mat-select [(ngModel)]="periodo" [disabled]='true'>
                             <mat-option>--Seleccionar--</mat-option>
                             <mat-option *ngFor="let item of periodos" [value]="item">
@@ -16,67 +15,28 @@
             <!-- select Nivel -->
            
                 <mat-form-field style="width: 100%;">
-                    <mat-label>{{ 'admision.aviso_nivel' | translate }}:</mat-label>
+                    <mat-label>{{ 'cupos.aviso_nivel' | translate }}:</mat-label>
                     <mat-select [formControl]="CampoControl" [(ngModel)]="selectednivel" (selectionChange)="loadProyectos()" >
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of nivel_load" [value]="item">
                             {{item.nombre}}
                         </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="CampoControl.hasError('required')">{{ 'admision.erro_selec_nivel' | translate }}</mat-error>
+                    <mat-error *ngIf="CampoControl.hasError('required')">{{ 'cupos.erro_selec_nivel' | translate }}</mat-error>
                 </mat-form-field>
 
                 <!-- select proyectos -->
             <mat-form-field style="width: 100%;">
-                <mat-label>{{ 'admision.aviso_proyecto' | translate }}:</mat-label>
+                <mat-label>{{ 'cupos.aviso_proyecto' | translate }}:</mat-label>
                 <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="activeCriterios()" [disabled]='selectprograma' multiple>
                     <mat-option *ngFor="let item of proyectos" [value]="item">
                         {{item.Nombre}}
                     </mat-option>
                 </mat-select>
-                <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'admision.erro_selec_proyecto' | translate }}</mat-error>
+                <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'cupos.erro_selec_proyecto' | translate }}</mat-error>
             </mat-form-field>
             <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
-             <!-- select criterios -->
-             <mat-form-field style="width: 100%;">
-                <mat-label>{{ 'admision.aviso_criterios' | translate }}:</mat-label>
-                <mat-select [formControl]="Campo2Control" [(ngModel)]="criterio_selected"  (selectionChange)="viewtab()" [disabled]='selectcriterio' multiple>
-                    <mat-option *ngFor="let item of criterios" [value]="item">
-                        {{item.Nombre}}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="Campo2Control.hasError('required')">{{ 'admision.erro_selec_criterio' | translate }}</mat-error>
-            </mat-form-field>
-            <!-- Tag de criterios -->
-            <div class="row">
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipoIcfes==true">
-                    <nb-card class="exp-card" (click)="perfil_editar('info_icfes')">
-                        <nb-card-header>{{ 'admision.info_icfes' | translate }}</nb-card-header>
-                        <nb-card-body class="icon-form">
-                            <i class="fa fa-graduation-cap fa-5x"></i>
-                        </nb-card-body>
-                    </nb-card>
-                </div>       
-
-      <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipoEntrevista==true">
-                    <nb-card class="exp-card" (click)="perfil_editar('info_entrevista')">
-                        <nb-card-header>{{ 'admision.entrevista' | translate }}</nb-card-header>
-                        <nb-card-body class="icon-form">
-                            <i class="fa fa-address-card-o fa-5x"></i>
-                        </nb-card-body>
-                    </nb-card>
-                </div>
-
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipoPrueba==true">
-                    <nb-card class="exp-card" (click)="perfil_editar('info_prueba')">
-                        <nb-card-header>{{ 'admision.prueba' | translate }}</nb-card-header>
-                        <nb-card-body class="icon-form">
-                            <i class="fa fa-address-card-o fa-5x"></i>
-                        </nb-card-body>
-                    </nb-card>
-                </div>
-            </div>
         </nb-card-header>
 
     </nb-card>
@@ -84,19 +44,12 @@
     <!--Formularios------------------------------------------------------------->
 
 
-    <!-- <nb-card [hidden]="!show_info_pregrado"> -->
-    <nb-card [hidden]="!show_icfes">
+    <nb-card [hidden]="show_icfes">
         <nb-card-body>
-            <div class="row">
-                <div class="col-md-1" align="left">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_icfes=false; show_acad=false;
-                    ">X</button>
-                </div>
-            </div>
             <nb-tabset fullWidth>
-                <nb-tab tabTitle="{{ 'admision.criterio_icfes' | translate }}" [active]="preinscripcion">
-                    <ngx-crud-criterio-icfes [info_proyectos]="this.proyectos_selected" [info_periodo]="this.periodo"  >
-                    </ngx-crud-criterio-icfes>
+                <nb-tab tabTitle="{{ 'cupos.cupos' | translate }}" [active]="preinscripcion">
+                    <ngx-crud-asignacion-cupo [info_proyectos]="this.proyectos_selected" [info_periodo]="this.periodo"  >
+                    </ngx-crud-asignacion-cupo>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>

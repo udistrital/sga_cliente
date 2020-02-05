@@ -505,7 +505,9 @@
         "placeholder_area_4": "Ej: 15 % del 100% del criterio ICFES ",
         "area_5": "Inglés",
         "placeholder_area_5": "Ej: 10 % del 100% del criterio ICFES ",
-        "error_porcentaje_total": "El porcentaje de los subcriterios es mayor o menor al 100% posible, ajuste los porcentajes de los subcriterios por favor!"
+        "error_porcentaje_total": "El porcentaje de los subcriterios es mayor o menor al 100% posible, ajuste los porcentajes de los subcriterios por favor!",
+        "cupos_asignados": "Ingrese el numero de cupos asignados para el periodo y el/los proyectos académicos selecionados",
+        "placeholder_cupos_asignados": "Ej: 120 cupos"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -965,5 +967,13 @@
         "entrevista": "Criterio Entrevista",
         "prueba": "Criterio Prueba",
         "criterio_icfes": "Porcentajes para el criterio ICFES"
+    },
+    "cupos": {
+        "aviso_periodo": "Período en el cual se define los cupos de admisión",
+        "aviso_nivel": "Seleccione el nivel al que desea definir los cupos de admisión",
+        "aviso_proyecto": "Seleciones el/los proyectos académicos que desea definir los cupos de admisión",
+        "erro_selec_nivel": "Por favor seleccion el nivel!",
+        "erro_selec_proyecto": "Por favor seleccione al menos un proyecto!",
+        "cupos": "Definición de los cupos para el periodo y el/los proyectos académicos selecionados"
     }
 }

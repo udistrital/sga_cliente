@@ -65,20 +65,9 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   SelectedTipoBool: boolean = true;
   info_inscripcion: any;
 
-  percentage_info: number = 0;
-  percentage_acad: number = 0;
-  percentage_expe: number = 0;
-  percentage_proy: number = 0;
-  percentage_prod: number = 0;
-  percentage_desc: number = 0;
-  percentage_docu: number = 0;
-  percentage_total: number = 0;
 
   total: boolean = false;
 
-  percentage_tab_info = [];
-  percentage_tab_expe = [];
-  percentage_tab_acad = [];
   proyectos = [];
   criterios = [];
   periodos = [];
@@ -129,25 +118,9 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.total = true;
-    this.loadData();
-    this.loadCriterios();
+    this.cargarPeriodo();
   }
 
-  async loadData() {
-    try {
-      this.info_persona_id = this.userService.getPersonaId();
-      console.info('Carga hecha')
-      console.info(this.info_persona_id)
-      await this.cargarPeriodo();
-    } catch (error) {
-      Swal({
-        type: 'error',
-        title: error.status + '',
-        text: this.translate.instant('inscripcion.error_cargar_informacion'),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    }
-  }
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
@@ -170,33 +143,6 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
     });
   }
 
-
-  setPercentage_info(number, tab) {
-    console.info(number)
-    this.percentage_tab_info[tab] = (number * 100) / 2;
-    this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
-    this.setPercentage_total();
-  }
-
-  setPercentage_acad(number, tab) {
-    this.percentage_tab_acad[tab] = (number * 100) / 2;
-    this.percentage_acad = Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad));
-    this.setPercentage_total();
-  }
-  setPercentage_total() {
-    this.percentage_total = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info)) / 2;
-    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4;
-    if (this.info_inscripcion !== undefined) {
-      if (this.info_inscripcion.EstadoInscripcionId.Id > 1) {
-        this.percentage_total = 100;
-      }
-      if (this.percentage_total >= 100) {
-        if (this.info_inscripcion.EstadoInscripcionId.Id === 1) {
-          this.total = false;
-        }
-      }
-    }
-  }
 
   loadProyectos() {
     // window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
@@ -224,26 +170,6 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   activeCriterios() {
   this.selectcriterio = false;
 }
-  loadCriterios() {
-    this.evaluacionService.get('requisito/?query=Activo:true&limit=0')
-      .subscribe(res => {
-        const r = <any>res;
-        if (res !== null && r.Type !== 'error') {
-          const CriteriosConsultados = <Array<any>>res;
-            this.criterios = CriteriosConsultados;
-        }
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.programa_academico'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
-  }
   useLanguage(language: string) {
     this.translate.use(language);
   }

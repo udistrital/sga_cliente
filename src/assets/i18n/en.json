@@ -955,5 +955,13 @@
         "entrevista": "Criteria Interview",
         "prueba": "Criteria Test",
         "criterio_icfes": "Percentages for the ICFES criterion"
+    },
+    "cupos": {
+        "aviso_periodo": "Period in which the admission quotas are defined",
+        "aviso_nivel": "Select the level to which you want to define the admission quotas",
+        "aviso_proyecto": "Selections the academic projects you want to define the admission quotas",
+        "erro_selec_nivel": "Please select the level!",
+        "erro_selec_proyecto": "Please select at least one project!",
+        "cupos": "Definition of quotas for the period and the selected academic projects"
     }
 }
