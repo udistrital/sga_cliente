@@ -199,10 +199,10 @@ export class CrudAsignacionCupoComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       const cupos = event.data.InfoCupos.CuposAsignados
-    const datos = [{Nombre: 'Comunidades Negras', Cupos: Math.round((Number(cupos) / 40 ) * 2 )},
-    { Nombre: 'Desplazados víctimas del conflicto  armado', Cupos: Math.round((Number(cupos) / 40 ) * 1 )},
-    { Nombre: 'Comunidades indígenas', Cupos: Math.round((Number(cupos) / 40 ) * 2 )},
-    { Nombre: 'Mejor Bachiller de los Colegios Públicos del Distrito Capital', Cupos: Math.round((Number(cupos) / 40 ) * 1 )},
+    const datos = [{Nombre: 'Comunidades Negras', Cupos: Math.trunc((Number(cupos) / 40 ) * 2 )},
+    { Nombre: 'Desplazados víctimas del conflicto  armado', Cupos: Math.trunc((Number(cupos) / 40 ) * 1 )},
+    { Nombre: 'Comunidades indígenas', Cupos: Math.trunc((Number(cupos) / 40 ) * 2 )},
+    { Nombre: 'Mejor Bachiller de los Colegios Públicos del Distrito Capital', Cupos: Math.trunc((Number(cupos) / 40 ) * 1 )},
     { Nombre: 'Beneficiarios de la ley 1084 de 2006 ', Cupos: 1 },
     { Nombre: 'Beneficiarios del Programa de Reincorporación y/o Reintegración en el marco del programa para la paz', Cupos: 1 } ];
      const data = <Array<any>>datos;
@@ -217,12 +217,12 @@ export class CrudAsignacionCupoComponent implements OnInit {
     this.info_cupos = <any>InfoCupos;
     this.info_cupos.Proyectos = this.info_proyectos;
     this.info_cupos.Periodo = this.info_periodo;
-    this.info_cupos.CuposOpcionados = Number(Math.round((Number(this.info_cupos.CuposAsignados) ) * 0.5 ))
+    this.info_cupos.CuposOpcionados = Number(Math.trunc((Number(this.info_cupos.CuposAsignados) ) * 0.5 ))
     this.info_cupos.CuposEspeciales = {
-      ComunidadesNegras : String(Math.round((Number(this.info_cupos.CuposAsignados) / 40 ) * 2 )),
-      DesplazadosVictimasConflicto : String(Math.round((Number(this.info_cupos.CuposAsignados) / 40 ) * 1 )),
-      ComunidadesIndiginas : String(Math.round((Number(this.info_cupos.CuposAsignados) / 40 ) * 2 )),
-      MejorBachiller : String(Math.round((Number(this.info_cupos.CuposAsignados) / 40 ) * 1 )),
+      ComunidadesNegras : String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40 ) * 2 )),
+      DesplazadosVictimasConflicto : String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40 ) * 1 )),
+      ComunidadesIndiginas : String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40 ) * 2 )),
+      MejorBachiller : String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40 ) * 1 )),
       Ley1084 : '1',
       ProgramaReincorporacion: '1',
     }
