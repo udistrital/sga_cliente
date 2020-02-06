@@ -509,7 +509,8 @@
         "cupos_asignados": "Ingrese el numero de cupos asignados para el periodo y el/los proyectos académicos selecionados",
         "placeholder_cupos_asignados": "Ej: 120 cupos",
         "cupos": "Cupos especiales",
-        "numero_cupos": "Numero de cupos especiales asigndos por el concejo superior"
+        "numero_cupos": "Numero de cupos especiales asigndos por el concejo superior",
+        "info_cupos": "Cupos Asignados"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",

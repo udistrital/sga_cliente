@@ -495,7 +495,12 @@
         "placeholder_area_4": "E.g: 15% of 100% of the ICFES criteria",
         "area_5": "English",
         "placeholder_area_5": "E.g: 10% of 100% of the ICFES criteria",
-        "error_porcentaje_total": "The percentage of sub-criteria is greater or less than 100% possible, adjust the percentages of sub-criteria please!"
+        "error_porcentaje_total": "The percentage of sub-criteria is greater or less than 100% possible, adjust the percentages of sub-criteria please!",
+        "cupos_asignados": "Enter the number of seats allocated for the period and the selected academic projects",
+        "placeholder_cupos_asignados": "E.g: 120 places ",
+        "cupos": "Special quotas",
+        "numero_cupos": "Number of special quotas allocated by the superior council",
+        "info_cupos": "Assigned Quotas"
     },
 
     "ERROR": {
@@ -962,6 +967,7 @@
         "aviso_proyecto": "Selections the academic projects you want to define the admission quotas",
         "erro_selec_nivel": "Please select the level!",
         "erro_selec_proyecto": "Please select at least one project!",
-        "cupos": "Definition of quotas for the period and the selected academic projects"
+        "cupos": "Definition of quotas for the period and the selected academic projects",
+        "asignar": "Assign quotas"
     }
 }

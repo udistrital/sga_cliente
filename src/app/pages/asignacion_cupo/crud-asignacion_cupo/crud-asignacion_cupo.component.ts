@@ -162,13 +162,13 @@ export class CrudAsignacionCupoComponent implements OnInit {
         this.loading = true;
         if (willDelete.value) {
                 console.info(JSON.stringify(this.info_cupos));
-                this.sgamidService.post('admision334545/34094350', this.info_cupos)
+                this.sgamidService.post('admision/postcupos', this.info_cupos)
                   .subscribe(res => {
                     const r = <any>res
                     if (r !== null && r.Type !== 'error') {
                       this.loading = false;
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('GLOBAL.info_criterio') + ' ' +
+                        this.translate.instant('GLOBAL.info_cupos') + ' ' +
                         this.translate.instant('GLOBAL.confirmarCrear'));
                         this.eventChange.emit(true);
                     } else {
@@ -182,7 +182,7 @@ export class CrudAsignacionCupoComponent implements OnInit {
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
                         footer: this.translate.instant('GLOBAL.crear') + '-' +
-                          this.translate.instant('GLOBAL.info_criterio'),
+                          this.translate.instant('GLOBAL.info_cupos'),
                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                       });
                     });
@@ -217,7 +217,7 @@ export class CrudAsignacionCupoComponent implements OnInit {
     this.info_cupos = <any>InfoCupos;
     this.info_cupos.Proyectos = this.info_proyectos;
     this.info_cupos.Periodo = this.info_periodo;
-    this.info_cupos.CuposOpcionados = String(Math.round((Number(this.info_cupos.CuposAsignados) ) * 0.5 ))
+    this.info_cupos.CuposOpcionados = Number(Math.round((Number(this.info_cupos.CuposAsignados) ) * 0.5 ))
     this.info_cupos.CuposEspeciales = {
       ComunidadesNegras : String(Math.round((Number(this.info_cupos.CuposAsignados) / 40 ) * 2 )),
       DesplazadosVictimasConflicto : String(Math.round((Number(this.info_cupos.CuposAsignados) / 40 ) * 1 )),
