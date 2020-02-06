@@ -10,7 +10,10 @@ import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { ListService } from '../../../@core/store/services/list.service';
 import { UserService } from '../../../@core/data/users.service';
+import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academico/institucion_enfasis';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { LocalDataSource } from 'ng2-smart-table';
+import { MatSelect } from '@angular/material';
 
 @Component({
   selector: 'ngx-crud-asignacion-cupo',
@@ -18,9 +21,6 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
   styleUrls: ['./crud-asignacion_cupo.component.scss'],
 })
 export class CrudAsignacionCupoComponent implements OnInit {
-  filesUp: any;
-  Foto: any;
-  SoporteDocumento: any;
   config: ToasterConfig;
 
   @Input() info_proyectos: any;
@@ -31,7 +31,7 @@ export class CrudAsignacionCupoComponent implements OnInit {
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
   info_info_persona: any;
-  info_criterio_icfes: any;
+  info_cupos: any;
   info_criterio_icfes_post: any;
   formAsigancionCupo: any;
   regInfoPersona: any;
@@ -44,8 +44,10 @@ export class CrudAsignacionCupoComponent implements OnInit {
   aspirante: number;
   periodo: any;
   show_calculos_cupos = false;
+  source_emphasys: LocalDataSource = new LocalDataSource();
   porcentaje_subcriterio_total: number;
-
+  settings_emphasys: any;
+  arr_cupos: any[] = [];
   constructor(
     private translate: TranslateService,
     private sgamidService: SgaMidService,
@@ -53,6 +55,37 @@ export class CrudAsignacionCupoComponent implements OnInit {
     private store: Store<IAppState>,
     private listService: ListService,
     private toasterService: ToasterService) {
+      this.settings_emphasys = {
+        delete: {
+          deleteButtonContent: '<i class="nb-trash"></i>',
+          confirmDelete: true,
+        },
+        actions: {
+          delete: false,
+          edit: false,
+          add: false,
+          position: 'right',
+        },
+        mode: 'external',
+        columns: {
+          Nombre: {
+            title: this.translate.instant('GLOBAL.cupos'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value;
+            },
+            width: '50%',
+          },
+          Cupos: {
+            title: this.translate.instant('GLOBAL.numero_cupos'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value;
+            },
+            width: '50%',
+          },
+        },
+      };
       this.formAsigancionCupo = FORM_ASIGNACION_CUPO;
       this.construirForm();
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -74,6 +107,7 @@ export class CrudAsignacionCupoComponent implements OnInit {
     this.translate.use(language);
   }
 
+
   getIndexForm(nombre: String): number {
     for (let index = 0; index < this.formAsigancionCupo.campos.length; index++) {
       const element = this.formAsigancionCupo.campos[index];
@@ -83,8 +117,35 @@ export class CrudAsignacionCupoComponent implements OnInit {
     }
     return 0;
   }
-
-  createInfoCriterio(infoCriterio: any): void {
+  onCreateEmphasys(event: any) {
+    const projetc = event.value;
+    if (!this.arr_cupos.find((proyectos: any) => projetc.Id === proyectos.Id ) && projetc.Id) {
+      this.arr_cupos.push(projetc);
+      this.source_emphasys.load(this.arr_cupos);
+      const matSelect: MatSelect = event.source;
+      matSelect.writeValue(null);
+    } else {
+      Swal({
+        type: 'error',
+        title: 'ERROR',
+        text: this.translate.instant('inscripcion.error_proyecto_ya_existe'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    }
+  }
+  onDeleteEmphasys(event: any) {
+    const findInArray = (value, array, attr) => {
+      for (let i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
+            return i;
+        }
+      }
+      return -1;
+    }
+    this.arr_cupos.splice(findInArray(event.data.Id, this.arr_cupos, 'Id'), 1);
+    this.source_emphasys.load(this.arr_cupos);
+  }
+  createCupos() {
 
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
@@ -100,23 +161,11 @@ export class CrudAsignacionCupoComponent implements OnInit {
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
-          this.info_criterio_icfes = <any>infoCriterio;
-                this.info_criterio_icfes.Proyectos = this.info_proyectos;
-                this.info_criterio_icfes.Periodo = this.info_periodo;
-                this.info_criterio_icfes.General = this.info_criterio_icfes.PorcentajeTotal
-                this.info_criterio_icfes.Especifico = {
-                  Area1: this.info_criterio_icfes.Area1,
-                  Area2: this.info_criterio_icfes.Area2,
-                  Area3: this.info_criterio_icfes.Area3,
-                  Area4: this.info_criterio_icfes.Area4,
-                  Area5: this.info_criterio_icfes.Area5,
-                }
-                console.info(JSON.stringify(this.info_criterio_icfes));
-                this.sgamidService.post('admision/', this.info_criterio_icfes)
+                console.info(JSON.stringify(this.info_cupos));
+                this.sgamidService.post('admision334545/34094350', this.info_cupos)
                   .subscribe(res => {
                     const r = <any>res
                     if (r !== null && r.Type !== 'error') {
-                      // this.loadInfoPersona();
                       this.loading = false;
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
                         this.translate.instant('GLOBAL.info_criterio') + ' ' +
@@ -148,37 +197,38 @@ export class CrudAsignacionCupoComponent implements OnInit {
   }
 
   validarForm(event) {
-    this.show_calculos_cupos = true;
     if (event.valid) {
-      // this.calculoporcentaje(event.data.InfoCriterioIcfes)
+      const cupos = event.data.InfoCupos.CuposAsignados
+    const datos = [{Nombre: 'Comunidades Negras', Cupos: Math.round((Number(cupos) / 40 ) * 2 )},
+    { Nombre: 'Desplazados víctimas del conflicto  armado', Cupos: Math.round((Number(cupos) / 40 ) * 1 )},
+    { Nombre: 'Comunidades indígenas', Cupos: Math.round((Number(cupos) / 40 ) * 2 )},
+    { Nombre: 'Mejor Bachiller de los Colegios Públicos del Distrito Capital', Cupos: Math.round((Number(cupos) / 40 ) * 1 )},
+    { Nombre: 'Beneficiarios de la ley 1084 de 2006 ', Cupos: 1 },
+    { Nombre: 'Beneficiarios del Programa de Reincorporación y/o Reintegración en el marco del programa para la paz', Cupos: 1 } ];
+     const data = <Array<any>>datos;
+     this.source_emphasys.load(data);
+      this.show_calculos_cupos = true;
+      this.calculocupos(event.data.InfoCupos)
     }
   }
 
-  calculoporcentaje(InfoCriterioIcfes: any): void {
-    this.info_criterio_icfes = <any>InfoCriterioIcfes;
-    this.porcentaje_subcriterio_total = this.info_criterio_icfes.Area1 + this.info_criterio_icfes.Area2 + this.info_criterio_icfes.Area3 +
-    this.info_criterio_icfes.Area4 + this.info_criterio_icfes.Area5
-    console.info(this.porcentaje_subcriterio_total)
-    if (this.porcentaje_subcriterio_total >= 101 || this.porcentaje_subcriterio_total < 100) {
-      Swal({
-        type: 'error',
-        text: this.translate.instant('GLOBAL.error_porcentaje_total'),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    } else  {
-      console.info('Bien porcentaje')
-      console.info('Datos Proyecto')
-      console.info(this.info_proyectos)
-      console.info(this.info_periodo)
-      console.info('datos')
-      console.info(this.info_criterio_icfes)
-      this.createInfoCriterio(this.info_criterio_icfes);
+  calculocupos(InfoCupos: any): void {
+    // Se definen el calculos de los cupos segun historia de usuario la funcion redondea segun decimas por encima por encima de .5
+    this.info_cupos = <any>InfoCupos;
+    this.info_cupos.Proyectos = this.info_proyectos;
+    this.info_cupos.Periodo = this.info_periodo;
+    this.info_cupos.CuposOpcionados = String(Math.round((Number(this.info_cupos.CuposAsignados) ) * 0.5 ))
+    this.info_cupos.CuposEspeciales = {
+      ComunidadesNegras : String(Math.round((Number(this.info_cupos.CuposAsignados) / 40 ) * 2 )),
+      DesplazadosVictimasConflicto : String(Math.round((Number(this.info_cupos.CuposAsignados) / 40 ) * 1 )),
+      ComunidadesIndiginas : String(Math.round((Number(this.info_cupos.CuposAsignados) / 40 ) * 2 )),
+      MejorBachiller : String(Math.round((Number(this.info_cupos.CuposAsignados) / 40 ) * 1 )),
+      Ley1084 : '1',
+      ProgramaReincorporacion: '1',
     }
+
   }
-  setPercentage(event) {
-    this.percentage = event;
-    this.result.emit(this.percentage);
-  }
+
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({

@@ -2,7 +2,7 @@ export let FORM_ASIGNACION_CUPO = {
     // titulo: 'InfoPersona',
     tipo_formulario: 'mini',
     alertas: true,
-    btn: 'Guardar',
+    btn: 'Calcular cupos',
     modelo: 'InfoCupos',
     campos: [
         {

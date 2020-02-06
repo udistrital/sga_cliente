@@ -73,7 +73,7 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   periodos = [];
   nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
 
-  show_icfes = false;
+  show_cupos = false;
   show_profile = false;
   show_expe = false;
   show_acad = false;
@@ -167,9 +167,7 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
           });
         });
   }
-  activeCriterios() {
-  this.selectcriterio = false;
-}
+
   useLanguage(language: string) {
     this.translate.use(language);
   }
@@ -177,17 +175,11 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   perfil_editar(event): void {
     console.info(event)
     switch (event) {
-      case 'info_icfes':
-        this.show_icfes = true;
-        break;
-        case 'info_entrevista':
-          this.preinscripcion = true;
-          break;
-      case 'info_entrevista':
-        this.show_icfes = false;
+      case 'info_cupos':
+        this.show_cupos = true;
         break;
         default:
-            this.show_icfes = false;
+            this.show_cupos = false;
         break;
     }
   }
@@ -201,25 +193,6 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   }
 
 
-
-  viewtab() {
-    console.info('Tipo criterio')
-    console.info(this.criterio_selected)
-      this.selectTipoIcfes = false;
-      this.selectTipoEntrevista = false;
-      this.selectTipoPrueba = false;
-    for (let i = 0; i < this.criterio_selected.length; i++) {
-      if (this.criterio_selected[i]['Nombre'] === 'ICFES') {
-      this.selectTipoIcfes = true;
-      }
-      if (this.criterio_selected[i]['Nombre'] === 'Entrevista') {
-        this.selectTipoEntrevista = true;
-      }
-      if (this.criterio_selected[i]['Nombre'] === 'Prueba') {
-        this.selectTipoPrueba = true;
-      }
-    }
-  }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({

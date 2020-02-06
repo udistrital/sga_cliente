@@ -1,14 +1,17 @@
 <toaster-container [toasterconfig]="config"></toaster-container>
 <ngx-dinamicform [normalform]="formAsigancionCupo" [modeloData]="info_info_persona"
   (result)="validarForm($event)" [clean]="clean"
-  (percentage)="setPercentage($event)">
+ >
 </ngx-dinamicform>
 <nb-card [hidden]="!show_calculos_cupos" accent="info">
-        <nb-card-header>Nebula</nb-card-header>
         <nb-card-body>
-          A nebula is an interstellar cloud of dust, hydrogen, helium and other ionized gases.
-          Originally, nebula was a name for any diffuse astronomical object,
-          including galaxies beyond the Milky Way.
+            <div class="row">
+                <div class="col-12">
+                    <ng2-smart-table [settings]="settings_emphasys" [(source)]="source_emphasys" (delete)="onDeleteEmphasys($event)" (create)="onCreateEmphasys($event)">
+                    </ng2-smart-table>
+                </div>
+            </div>
         </nb-card-body>
+        <button   mat-button (click)="createCupos()"  type="submit"  nbButton status="success">{{ 'cupos.asignar' | translate }} </button>
 </nb-card>
 <!--ngx-loading [hidden]="!loading"></ngx-loading-->

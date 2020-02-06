@@ -507,7 +507,9 @@
         "placeholder_area_5": "Ej: 10 % del 100% del criterio ICFES ",
         "error_porcentaje_total": "El porcentaje de los subcriterios es mayor o menor al 100% posible, ajuste los porcentajes de los subcriterios por favor!",
         "cupos_asignados": "Ingrese el numero de cupos asignados para el periodo y el/los proyectos académicos selecionados",
-        "placeholder_cupos_asignados": "Ej: 120 cupos"
+        "placeholder_cupos_asignados": "Ej: 120 cupos",
+        "cupos": "Cupos especiales",
+        "numero_cupos": "Numero de cupos especiales asigndos por el concejo superior"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -974,6 +976,7 @@
         "aviso_proyecto": "Seleciones el/los proyectos académicos que desea definir los cupos de admisión",
         "erro_selec_nivel": "Por favor seleccion el nivel!",
         "erro_selec_proyecto": "Por favor seleccione al menos un proyecto!",
-        "cupos": "Definición de los cupos para el periodo y el/los proyectos académicos selecionados"
+        "cupos": "Definición de los cupos para el periodo y el/los proyectos académicos selecionados",
+        "asignar": "Asignar cupos"
     }
 }
