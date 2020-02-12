@@ -4,7 +4,7 @@
         <nb-card-header>
                 <!-- select periodo -->
                 <mat-form-field style="width: 40%;">
-                        <mat-label>{{ 'cupos.aviso_periodo_actualizar' | translate }}:</mat-label>
+                        <mat-label>{{ 'cupos.aviso_periodo_listar' | translate }}:</mat-label>
                         <mat-select [(ngModel)]="periodo" [disabled]='true'>
                             <mat-option>--Seleccionar--</mat-option>
                             <mat-option *ngFor="let item of periodos" [value]="item">
@@ -16,7 +16,7 @@
             <!-- select Nivel -->
            
                 <mat-form-field style="width: 100%;">
-                    <mat-label>{{ 'cupos.aviso_nivel_actualizar' | translate }}:</mat-label>
+                    <mat-label>{{ 'cupos.aviso_nivel_listar' | translate }}:</mat-label>
                     <mat-select [formControl]="CampoControl" [(ngModel)]="selectednivel" (selectionChange)="loadProyectos()" >
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of nivel_load" [value]="item">
@@ -28,8 +28,8 @@
 
                 <!-- select proyectos -->
             <mat-form-field style="width: 100%;">
-                <mat-label>{{ 'cupos.aviso_proyecto_actualizar' | translate }}:</mat-label>
-                <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="activar_button()" [disabled]='selectprograma' multiple>
+                <mat-label>{{ 'cupos.aviso_proyec' | translate }}:</mat-label>
+                <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="activar_button()" [disabled]='selectprograma'>
                     <mat-option *ngFor="let item of proyectos" [value]="item">
                         {{item.Nombre}}
                     </mat-option>
@@ -40,8 +40,18 @@
            
          
         </nb-card-header>
-        <button mat-button  (click)="cambiarestados()" type="submit"  nbButton status="success"  [disabled]="buttoncambio">{{ 'admision.actualizacion_estado' | translate }}</button>
+        <button mat-button  (click)="cambiarestados()" type="submit"  nbButton status="success"  [disabled]="buttoncambio">{{ 'admision.enlistar' | translate }}</button>
     </nb-card>
 
+    <nb-card [hidden]="!show_listado" accent="info">
+            <nb-card-body>
+                <div class="row">
+                    <div class="col-12">
+                        <ng2-smart-table [settings]="settings_emphasys" [(source)]="source_emphasys"  >
+                        </ng2-smart-table>
+                    </div>
+                </div>
+            </nb-card-body>
+    </nb-card>
   
 </div>

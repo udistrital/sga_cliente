@@ -92,7 +92,8 @@
             "admision": "Admisiones",
             "criterios": "Criterios de admisiones por proyectos",
             "asignacion_cupos": "Asignación de cupos",
-            "actualizacion_estado": "Actulizar estado aspirantes"
+            "actualizacion_estado": "Actulizar estado aspirantes",
+            "listado_aspirante": "Listar aspirantes"
         }
 
 
@@ -513,7 +514,12 @@
         "placeholder_cupos_asignados": "Ej: 120 cupos",
         "cupos": "Cupos especiales",
         "numero_cupos": "Numero de cupos especiales asigndos por el concejo superior",
-        "info_cupos": "Cupos Asignados"
+        "info_cupos": "Cupos Asignados",
+        "Nombre": "NOMBRE COMPLETO",
+        "TipoInscripcion": "TIPO DE INSCRIPCION",
+        "Estado": "ESTADO",
+        "Tipo": "TIPO",
+        "Documento": "Número Documento"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -973,12 +979,19 @@
         "entrevista": "Criterio Entrevista",
         "prueba": "Criterio Prueba",
         "criterio_icfes": "Porcentajes para el criterio ICFES",
-        "actualizacion_estado": "Actulizar estado aspirantes"
+        "actualizacion_estado": "Actulizar estado aspirantes",
+        "enlistar": "Enlistar aspirantes"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",
+        "aviso_periodo_listar": "Período en el cual se va a listar aspirantes",
+        "aviso_periodo_actualizar": "Período en el cual desea actualizar estado",
         "aviso_nivel": "Seleccione el nivel al que desea definir los cupos de admisión",
-        "aviso_proyecto": "Seleciones el/los proyectos académicos que desea definir los cupos de admisión",
+        "aviso_nivel_actualizar": "Seleccione el nivel al que desea actualizar estado",
+        "aviso_nivel_listar": "Seleccione el nivel al que desea listar los aspirantes",
+        "aviso_proyecto": "Selecione el/los proyectos académicos que desea definir los cupos de admisión",
+        "aviso_proyecto_actualizar": "Selecione el/los proyectos académicos que desea actualizar estado",
+        "aviso_proyec": "Seleciones el proyecto académico que desea listar",
         "erro_selec_nivel": "Por favor seleccion el nivel!",
         "erro_selec_proyecto": "Por favor seleccione al menos un proyecto!",
         "cupos": "Definición de los cupos para el periodo y el/los proyectos académicos selecionados",

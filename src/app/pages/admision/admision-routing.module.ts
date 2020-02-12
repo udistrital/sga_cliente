@@ -5,6 +5,7 @@ import { AuthGuard } from '../../@core/_guards/auth.guard';
 import { CriterioAdmisionComponent } from './criterio_admision/criterio_admision.component';
 import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.component';
 import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizacion_estado.component';
+import { ListadoAspiranteComponent } from './listado_aspirantes/listado_aspirante.component';
 
 const routes: Routes = [{
   path: '',
@@ -20,6 +21,10 @@ const routes: Routes = [{
 {
   path: 'actualizacion_estado',
   component: ActualizacionEstadoComponent,
+},
+{
+  path: 'listado_aspirante',
+  component: ListadoAspiranteComponent,
 }],
 }];
 
@@ -39,4 +44,5 @@ export const routedComponents = [
   CriterioAdmisionComponent,
   AsignacionCuposComponent,
   ActualizacionEstadoComponent,
+  ListadoAspiranteComponent,
 ];

@@ -19,6 +19,8 @@ import { CrudCriterioIcfesComponent } from '../criterio_icfes/crud-criterio_icfe
 import { CrudAsignacionCupoComponent } from '../asignacion_cupo/crud-asignacion_cupo/crud-asignacion_cupo.component';
 import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.component';
 import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizacion_estado.component';
+import { ListadoAspiranteComponent } from './listado_aspirantes/listado_aspirante.component';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 
 
@@ -28,6 +30,7 @@ import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizaci
     AdmisionRoutingModule,
     MatExpansionModule,
     SharedModule,
+    Ng2SmartTableModule,
     ToasterModule,
     FormacionAcademicaModule,
     CriterioIcfesModule,
@@ -53,6 +56,7 @@ import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizaci
     CriterioAdmisionComponent,
     AsignacionCuposComponent,
     ActualizacionEstadoComponent,
+    ListadoAspiranteComponent,
   ],
 })
 export class AdmisionModule { }

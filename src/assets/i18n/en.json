@@ -92,7 +92,8 @@
             "admision": "Admissions",
             "criterios": "Admissions criteria for projects",
             "asignacion_cupos": "Assignment of quotas",
-            "actualizacion_estado": "Actulize aspirant status"
+            "actualizacion_estado": "Actulize aspirant status",
+            "listado_aspirante": "List applicants"
         }
     },
     "GLOBAL": {
@@ -503,7 +504,12 @@
         "placeholder_cupos_asignados": "E.g: 120 places ",
         "cupos": "Special quotas",
         "numero_cupos": "Number of special quotas allocated by the superior council",
-        "info_cupos": "Assigned Quotas"
+        "info_cupos": "Assigned Quotas",
+        "Nombre": "NAME",
+        "TipoInscripcion": "Type of registration",
+        "Estado": "STATE",
+        "Tipo": "TYPE",
+        "Documento": "ID CARD"
     },
 
     "ERROR": {
@@ -963,12 +969,19 @@
         "entrevista": "Criteria Interview",
         "prueba": "Criteria Test",
         "criterio_icfes": "Percentages for the ICFES criterion",
-        "actualizacion_estado": "Actulizar estado aspirantes"
+        "actualizacion_estado": "Actulizar estado aspirantes",
+        "enlistar": "Enlist applicants"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",
+        "aviso_periodo_listar": "Period in which applicants will be listed",
+        "aviso_periodo_actualizar": "Period in which you want to update status",
         "aviso_nivel": "Select the level to which you want to define the admission quotas",
+        "aviso_nivel_listar": "Select the level to which you want to list the applicants",
+        "aviso_nivel_actualizar": "Select the level to which you want to update status",
         "aviso_proyecto": "Selections the academic projects you want to define the admission quotas",
+        "aviso_proyecto_actualizar": "Select the academic projects you wish to update status",
+        "aviso_proyec": "Select the academic project you wish to list",
         "erro_selec_nivel": "Please select the level!",
         "erro_selec_proyecto": "Please select at least one project!",
         "cupos": "Definition of quotas for the period and the selected academic projects",
