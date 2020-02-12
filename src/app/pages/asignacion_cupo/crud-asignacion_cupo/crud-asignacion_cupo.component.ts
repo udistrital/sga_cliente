@@ -51,9 +51,6 @@ export class CrudAsignacionCupoComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private sgamidService: SgaMidService,
-    private autenticationService: ImplicitAutenticationService,
-    private store: Store<IAppState>,
-    private listService: ListService,
     private toasterService: ToasterService) {
       this.settings_emphasys = {
         delete: {

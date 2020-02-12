@@ -109,8 +109,10 @@
         "asignar": "To assign",
         "registrar": "Register",
         "confirmarCrear": "has been created",
+        "confirmarActualizar": "has been updated",
         "info_persona": "Personal data",
         "info_criterio": "ICFES criteria",
+        "info_estado": "Registration Status",
         "guardar": "Save",
         "formulario": "Form",
         "lista": "List",
@@ -960,7 +962,8 @@
         "info_icfes": "Criteria ICFES ",
         "entrevista": "Criteria Interview",
         "prueba": "Criteria Test",
-        "criterio_icfes": "Percentages for the ICFES criterion"
+        "criterio_icfes": "Percentages for the ICFES criterion",
+        "actualizacion_estado": "Actulizar estado aspirantes"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",

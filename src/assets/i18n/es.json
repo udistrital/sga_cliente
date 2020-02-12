@@ -108,7 +108,9 @@
         "cancelar": "Cancelar",
         "info_persona": "Información personal",
         "info_criterio": "Criterios ICFES",
+        "info_estado": "Estado de inscripción",
         "confirmarCrear": "ha sido creado(a)",
+        "confirmarActualizar": "ha sido actualizado(a)",
         "salir": "Salir",
         "eliminar": "Eliminar",
         "actualizar": "Actualizar",
@@ -970,7 +972,8 @@
         "info_icfes": "Criterio ICFES",
         "entrevista": "Criterio Entrevista",
         "prueba": "Criterio Prueba",
-        "criterio_icfes": "Porcentajes para el criterio ICFES"
+        "criterio_icfes": "Porcentajes para el criterio ICFES",
+        "actualizacion_estado": "Actulizar estado aspirantes"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

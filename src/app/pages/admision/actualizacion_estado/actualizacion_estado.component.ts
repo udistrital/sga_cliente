@@ -16,7 +16,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { from } from 'rxjs';
-import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
+import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
@@ -28,33 +28,13 @@ import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_ins
   styleUrls: ['./actualizacion_estado.component.scss'],
 })
 export class ActualizacionEstadoComponent implements OnInit, OnChanges {
-  toasterService: any;
 
-  @Input('criterios_select')
-  set name(inscripcion_id: number) {
-    this.inscripcion_id = inscripcion_id;
-    console.info('Posgrado ins: ' + this.inscripcion_id)
-    if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
-      this.selectedValue = undefined;
-      window.localStorage.setItem('programa', this.selectedValue);
-    }
-    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-      && this.inscripcion_id.toString() !== '0') {
-      // this.getInfoInscripcion();
-    }
-  }
+  config: ToasterConfig;
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
-  config: ToasterConfig;
-  inscripcion_id: number;
-  info_persona_id: number;
-  info_ente_id: number;
-  estado_inscripcion: number;
-  info_info_persona: any;
-  usuariowso2: any;
   datos_persona: any;
   inscripcion: Inscripcion;
   preinscripcion: boolean;
@@ -63,59 +43,37 @@ export class ActualizacionEstadoComponent implements OnInit, OnChanges {
   nForms: number;
   SelectedTipoBool: boolean = true;
   info_inscripcion: any;
+  infoActulizacion: any;
 
-
-  total: boolean = false;
 
   proyectos = [];
-  criterios = [];
   periodos = [];
   nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
 
-  show_cupos = false;
-  show_profile = false;
-  show_expe = false;
-  show_acad = false;
-
-  info_persona: boolean;
   loading: boolean;
-  ultimo_select: number;
-  button_politica: boolean = true;
   programa_seleccionado: any;
-  viewtag: any;
   selectedValue: any;
   selectedTipo: any;
   proyectos_selected: any[];
-  criterio_selected: any[];
-  selectTipoIcfes: any;
-  selectTipoEntrevista: any;
-  selectTipoPrueba: any;
-  selectTabView: any;
-  tag_view_posg: boolean;
-  tag_view_pre: boolean;
   selectprograma: boolean = true;
   selectcriterio: boolean = true;
-  imagenes: any;
   periodo: any;
   selectednivel: any ;
+  buttoncambio: boolean = true;
+  info_actualizar_estados: any;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
   constructor(
     private translate: TranslateService,
-    private router: Router,
-    private terceroService: TercerosService,
+    private sgamidService: SgaMidService,
     private oikosService: OikosService,
-    private userService: UserService,
     private coreService: CoreService,
-    private evaluacionService: EvaluacionInscripcionService,
-    private sgaMidService: SgaMidService,
-  ) {
+    private toasterService: ToasterService ) {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.total = true;
     this.cargarPeriodo();
   }
 
@@ -170,17 +128,58 @@ export class ActualizacionEstadoComponent implements OnInit, OnChanges {
     this.translate.use(language);
   }
 
-  perfil_editar(event): void {
-    console.info(event)
-    switch (event) {
-      case 'info_cupos':
-        this.show_cupos = true;
-        break;
-        default:
-            this.show_cupos = false;
-        break;
-    }
+  activar_button() {
+    this.buttoncambio = false
+
   }
+  cambiarestados() {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('GLOBAL.actualizar') + '?',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        this.loading = true;
+        if (willDelete.value) {
+          this.info_actualizar_estados = {}
+                this.info_actualizar_estados.Proyectos = this.proyectos_selected;
+                this.info_actualizar_estados.Periodo = this.periodo;
+                console.info(JSON.stringify(this.info_actualizar_estados));
+                this.sgamidService.post('admision/cambioestado', this.info_actualizar_estados)
+                  .subscribe(res => {
+                    const r = <any>res
+                    if (r !== null && r.Type !== 'error') {
+                      this.loading = false;
+                      this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+                        this.translate.instant('GLOBAL.info_estado') + ' ' +
+                        this.translate.instant('GLOBAL.confirmarActualizar'));
+                        this.eventChange.emit(true);
+                    } else {
+                      this.showToast('error', this.translate.instant('GLOBAL.error'),
+                        this.translate.instant('GLOBAL.error'));
+                    }
+                  },
+                    (error: HttpErrorResponse) => {
+                      Swal({
+                        type: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                          this.translate.instant('GLOBAL.info_estado'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      });
+                    });
+        }
+      });
+  }
+
+
 
   ngOnInit() {
 
@@ -189,6 +188,7 @@ export class ActualizacionEstadoComponent implements OnInit, OnChanges {
   ngOnChanges() {
 
   }
+
 
 
 
