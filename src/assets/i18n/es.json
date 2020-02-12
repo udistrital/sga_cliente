@@ -91,7 +91,8 @@
         "admision": {
             "admision": "Admisiones",
             "criterios": "Criterios de admisiones por proyectos",
-            "asignacion_cupos": "Asignación de cupos"
+            "asignacion_cupos": "Asignación de cupos",
+            "actualizacion_estado": "Actulizar estado aspirantes"
         }
 
 

@@ -150,6 +150,12 @@ export const MENU_ITEMS: MenuItem[] = [
         link:  '/pages/admision/asignacion_cupos',
         key:  'asignacion_cupos',
       },
+      {
+        title:  'Actualizacion Estado',
+        icon: 'nb-compose',
+        link:  '/pages/admision/actualizacion_estado',
+        key:  'actualizacion_estado',
+      },
     ],
   },
   {

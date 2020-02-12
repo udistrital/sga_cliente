@@ -18,6 +18,8 @@ import { AsignacionCupoModule } from '../asignacion_cupo/asignacion_cupo.module'
 import { CrudCriterioIcfesComponent } from '../criterio_icfes/crud-criterio_icfes/crud-criterio_icfes.component';
 import { CrudAsignacionCupoComponent } from '../asignacion_cupo/crud-asignacion_cupo/crud-asignacion_cupo.component';
 import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.component';
+import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizacion_estado.component';
+
 
 
 @NgModule({
@@ -50,6 +52,7 @@ import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.co
   exports: [
     CriterioAdmisionComponent,
     AsignacionCuposComponent,
+    ActualizacionEstadoComponent,
   ],
 })
 export class AdmisionModule { }

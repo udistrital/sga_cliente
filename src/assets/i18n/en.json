@@ -91,7 +91,8 @@
         "admision": {
             "admision": "Admissions",
             "criterios": "Admissions criteria for projects",
-            "asignacion_cupos": "Assignment of quotas"
+            "asignacion_cupos": "Assignment of quotas",
+            "actualizacion_estado": "Actulize aspirant status"
         }
     },
     "GLOBAL": {
