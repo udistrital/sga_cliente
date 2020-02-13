@@ -519,7 +519,8 @@
         "TipoInscripcion": "TIPO DE INSCRIPCION",
         "Estado": "ESTADO",
         "Tipo": "TIPO",
-        "Documento": "Número Documento"
+        "Documento": "Número Documento",
+        "Puntaje": "PUNTAJE"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",

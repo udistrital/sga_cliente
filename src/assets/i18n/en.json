@@ -509,7 +509,8 @@
         "TipoInscripcion": "Type of registration",
         "Estado": "STATE",
         "Tipo": "TYPE",
-        "Documento": "ID CARD"
+        "Documento": "ID CARD",
+        "Puntaje": "SCORE"
     },
 
     "ERROR": {

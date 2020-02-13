@@ -62,7 +62,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   periodo: any;
   selectednivel: any ;
   buttoncambio: boolean = true;
-  info_actualizar_estados: any;
+  info_consultar_aspirantes: any;
   settings_emphasys: any;
   arr_cupos: any[] = [];
   source_emphasys: LocalDataSource = new LocalDataSource();
@@ -90,23 +90,23 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         },
         mode: 'external',
         columns: {
-          Tipo: {
+          TipoDocumento: {
             title: this.translate.instant('GLOBAL.Tipo'),
             // type: 'string;',
             valuePrepareFunction: (value) => {
               return value;
             },
-            width: '5%',
+            width: '2%',
           },
-          Documento: {
+          NumeroDocumento: {
             title: this.translate.instant('GLOBAL.Documento'),
             // type: 'string;',
             valuePrepareFunction: (value) => {
               return value;
             },
-            width: '10%',
+            width: '8%',
           },
-          Nombre: {
+          NombreAspirante: {
             title: this.translate.instant('GLOBAL.Nombre'),
             // type: 'string;',
             valuePrepareFunction: (value) => {
@@ -114,19 +114,27 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             },
             width: '50%',
           },
-          TipoInscripcion: {
-            title: this.translate.instant('GLOBAL.TipoInscripcion'),
+          NotaFinal: {
+            title: this.translate.instant('GLOBAL.Puntaje'),
             // type: 'string;',
             valuePrepareFunction: (value) => {
               return value;
             },
+            width: '5%',
+          },
+          TipoInscripcionId: {
+            title: this.translate.instant('GLOBAL.TipoInscripcion'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value.Nombre;
+            },
             width: '25%',
           },
-          Estado: {
+          EstadoInscripcionId: {
             title: this.translate.instant('GLOBAL.Estado'),
             // type: 'string;',
             valuePrepareFunction: (value) => {
-              return value;
+              return value.Nombre;
             },
             width: '10%',
           },
@@ -193,12 +201,41 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
 
   activar_button() {
     this.buttoncambio = false
-    console.info(this.periodo['Id'])
-    console.info(this.proyectos_selected['Id'])
+
 
   }
-  cambiarestados() {
+
+  mostrartabla() {
     this.show_listado = true
+
+    this.info_consultar_aspirantes = {
+      Id_proyecto: Number(this.proyectos_selected['Id']),
+      Id_periodo: Number(this.periodo['Id']),
+    }
+          this.sgamidService.post('admision/consulta_aspirantes', this.info_consultar_aspirantes)
+            .subscribe(res => {
+              const r = <any>res
+              if (r !== null && r.Type !== 'error') {
+                this.loading = false;
+                r.sort((puntaje_mayor, puntaje_menor ) =>  puntaje_menor.NotaFinal - puntaje_mayor.NotaFinal )
+                 const data = <Array<any>>r;
+                 this.source_emphasys.load(data);
+
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('GLOBAL.error'));
+              }
+            },
+              (error: HttpErrorResponse) => {
+                Swal({
+                  type: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                    this.translate.instant('GLOBAL.info_estado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
   }
 
 
