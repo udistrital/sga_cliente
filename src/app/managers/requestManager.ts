@@ -74,6 +74,20 @@ export class RequestManager {
   }
 
   /**
+   * Perform a POST http request
+   * @param endpoint service's end-point
+   * @param element data to send as JSON
+   * @returns Observable<any>
+   */
+  post_file(endpoint, element) {
+    return this.http.post<any>(`${this.path}${endpoint}`, element, {    headers: new HttpHeaders({
+      'Content-Type': 'multipart/form-data',
+  })}).pipe(
+      catchError(this.errManager.handleError),
+    );
+  }
+
+  /**
    * Perform a PUT http request
    * @param endpoint service's end-point
    * @param element data to send as JSON, With the id to UPDATE

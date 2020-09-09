@@ -14,7 +14,14 @@ import { UbicacionService } from '../../@core/data/ubicacion.service';
 import { FormacionAcademicaModule } from '../formacion_academica/formacion_academica.module';
 import { CriterioAdmisionComponent } from './criterio_admision/criterio_admision.component';
 import { CriterioIcfesModule } from '../criterio_icfes/criterio_icfes.module';
+import { AsignacionCupoModule } from '../asignacion_cupo/asignacion_cupo.module';
 import { CrudCriterioIcfesComponent } from '../criterio_icfes/crud-criterio_icfes/crud-criterio_icfes.component';
+import { CrudAsignacionCupoComponent } from '../asignacion_cupo/crud-asignacion_cupo/crud-asignacion_cupo.component';
+import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.component';
+import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizacion_estado.component';
+import { ListadoAspiranteComponent } from './listado_aspirantes/listado_aspirante.component';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+
 
 
 @NgModule({
@@ -23,9 +30,11 @@ import { CrudCriterioIcfesComponent } from '../criterio_icfes/crud-criterio_icfe
     AdmisionRoutingModule,
     MatExpansionModule,
     SharedModule,
+    Ng2SmartTableModule,
     ToasterModule,
     FormacionAcademicaModule,
     CriterioIcfesModule,
+    AsignacionCupoModule,
   ],
   declarations: [
     ...routedComponents,
@@ -41,9 +50,13 @@ import { CrudCriterioIcfesComponent } from '../criterio_icfes/crud-criterio_icfe
   ],
    entryComponents: [
     CrudCriterioIcfesComponent,
+    CrudAsignacionCupoComponent,
    ],
   exports: [
     CriterioAdmisionComponent,
+    AsignacionCuposComponent,
+    ActualizacionEstadoComponent,
+    ListadoAspiranteComponent,
   ],
 })
 export class AdmisionModule { }
