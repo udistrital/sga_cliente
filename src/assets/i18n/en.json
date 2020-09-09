@@ -90,7 +90,10 @@
         },
         "admision": {
             "admision": "Admissions",
-            "criterios": "Admissions criteria for projects"
+            "criterios": "Admissions criteria for projects",
+            "asignacion_cupos": "Assignment of quotas",
+            "actualizacion_estado": "Actulize aspirant status",
+            "listado_aspirante": "List applicants"
         }
     },
     "GLOBAL": {
@@ -107,8 +110,10 @@
         "asignar": "To assign",
         "registrar": "Register",
         "confirmarCrear": "has been created",
+        "confirmarActualizar": "has been updated",
         "info_persona": "Personal data",
         "info_criterio": "ICFES criteria",
+        "info_estado": "Registration Status",
         "guardar": "Save",
         "formulario": "Form",
         "lista": "List",
@@ -494,7 +499,18 @@
         "placeholder_area_4": "E.g: 15% of 100% of the ICFES criteria",
         "area_5": "English",
         "placeholder_area_5": "E.g: 10% of 100% of the ICFES criteria",
-        "error_porcentaje_total": "The percentage of sub-criteria is greater or less than 100% possible, adjust the percentages of sub-criteria please!"
+        "error_porcentaje_total": "The percentage of sub-criteria is greater or less than 100% possible, adjust the percentages of sub-criteria please!",
+        "cupos_asignados": "Enter the number of seats allocated for the period and the selected academic projects",
+        "placeholder_cupos_asignados": "E.g: 120 places ",
+        "cupos": "Special quotas",
+        "numero_cupos": "Number of special quotas allocated by the superior council",
+        "info_cupos": "Assigned Quotas",
+        "Nombre": "NAME",
+        "TipoInscripcion": "Type of registration",
+        "Estado": "STATE",
+        "Tipo": "TYPE",
+        "Documento": "ID CARD",
+        "Puntaje": "SCORE"
     },
 
     "ERROR": {
@@ -953,6 +969,23 @@
         "info_icfes": "Criteria ICFES ",
         "entrevista": "Criteria Interview",
         "prueba": "Criteria Test",
-        "criterio_icfes": "Percentages for the ICFES criterion"
+        "criterio_icfes": "Percentages for the ICFES criterion",
+        "actualizacion_estado": "Actulizar estado aspirantes",
+        "enlistar": "Enlist applicants"
+    },
+    "cupos": {
+        "aviso_periodo": "Period in which the admission quotas are defined",
+        "aviso_periodo_listar": "Period in which applicants will be listed",
+        "aviso_periodo_actualizar": "Period in which you want to update status",
+        "aviso_nivel": "Select the level to which you want to define the admission quotas",
+        "aviso_nivel_listar": "Select the level to which you want to list the applicants",
+        "aviso_nivel_actualizar": "Select the level to which you want to update status",
+        "aviso_proyecto": "Selections the academic projects you want to define the admission quotas",
+        "aviso_proyecto_actualizar": "Select the academic projects you wish to update status",
+        "aviso_proyec": "Select the academic project you wish to list",
+        "erro_selec_nivel": "Please select the level!",
+        "erro_selec_proyecto": "Please select at least one project!",
+        "cupos": "Definition of quotas for the period and the selected academic projects",
+        "asignar": "Assign quotas"
     }
 }

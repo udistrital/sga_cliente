@@ -5,9 +5,11 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef }
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FORM_ARCHIVO_ICFES } from './form-archivo_icfes';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
+import { CoreService } from '../../../@core/data/core.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-crud-archivo-icfes',
@@ -32,9 +34,12 @@ export class CrudArchivoIcfesComponent implements OnInit {
   // regPerfil: any;
   // clean: boolean;
   archivo_icfes_data: any;
+  periodos = [];
+  periodo: any;
 
 
-  constructor(private translate: TranslateService, private sgaMidService: SgaMidService, private toasterService: ToasterService) {
+  constructor(private translate: TranslateService, private sgaMidService: SgaMidService,
+     private toasterService: ToasterService, private coreService: CoreService) {
     // this.formPerfil = FORM_ARCHIVO_ICFES;
     /*
     this.construirForm();
@@ -42,8 +47,9 @@ export class CrudArchivoIcfesComponent implements OnInit {
       this.construirForm();
     });
     */
+   this.cargarPeriodo();
     this.archivo_icfes_data = {
-      name: undefined,
+      name: 'archivo_icfes',
       archivo_icfes: undefined,
     }
   }
@@ -59,6 +65,28 @@ export class CrudArchivoIcfesComponent implements OnInit {
       }
     }
   }
+  cargarPeriodo() {
+    return new Promise((resolve, reject) => {
+      this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.periodo = <any>res[0];
+          resolve(this.periodo);
+          const periodos = <Array<any>>res;
+         periodos.forEach(element => {
+            this.periodos.push(element);
+          });
+        }
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      });
+    });
+  }
+
+
+
 
   private preparePost(): any {
     const postData = new FormData();
@@ -72,6 +100,8 @@ export class CrudArchivoIcfesComponent implements OnInit {
   }
 
   postArchivoIcfes(): void {
+    console.info('Id periodo')
+    console.info(this.periodo.Id)
     const opt: any = {
       title: this.translate.instant('GLOBAL.confirmar'),
       text: this.translate.instant('archivo_icfes.registrar_archivo'),
@@ -84,7 +114,7 @@ export class CrudArchivoIcfesComponent implements OnInit {
     .then((willCreate) => {
       if (willCreate.value) {
         const formModel = this.preparePost();
-        this.sgaMidService.post_file('archivo_icfes', formModel)
+        this.sgaMidService.post_file('archivo_icfes/' + Number(this.periodo.Id) , formModel)
           .subscribe(res => {
             if (res.Type !== 'error') {
               this.eventChange.emit(true);

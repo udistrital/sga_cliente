@@ -35,9 +35,10 @@ export class SgaMidService {
   }
   post_file(endpoint, element) {
     this.requestManager.setPath('SGA_MID_SERVICE');
-    return this.http.post<any>(path + endpoint, element, httpOptionsFile).pipe(
-      catchError(this.handleError),
-    );
+    return this.requestManager.post_file(endpoint, element);
+    // return this.http.post<any>(path + endpoint, element, httpOptionsFile).pipe(
+    //   catchError(this.handleError),
+    // );
   }
 
   put(endpoint, element) {

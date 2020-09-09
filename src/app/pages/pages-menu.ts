@@ -144,6 +144,24 @@ export const MENU_ITEMS: MenuItem[] = [
         link:  '/pages/admision/criterio_admision',
         key:  'criterios',
       },
+      {
+        title:  'Asignacion Cupos',
+        icon: 'nb-edit',
+        link:  '/pages/admision/asignacion_cupos',
+        key:  'asignacion_cupos',
+      },
+      {
+        title:  'Actualizacion Estado',
+        icon: 'nb-compose',
+        link:  '/pages/admision/actualizacion_estado',
+        key:  'actualizacion_estado',
+      },
+      {
+        title:  'Listado Aspirante',
+        icon: 'nb-compose',
+        link:  '/pages/admision/listado_aspirante',
+        key:  'listado_aspirante',
+      },
     ],
   },
   {
