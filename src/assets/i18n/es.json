@@ -26,9 +26,9 @@
             }
         },
         "produccion_academica": {
-            "produccion_academica": "Producción academica",
-            "list_produccion_academica": "Lista producción academica",
-            "crud_produccion_academica": "Crud producción academica"
+            "produccion_academica": "Producción académica",
+            "list_produccion_academica": "Lista producción académica",
+            "crud_produccion_academica": "Crud producción académica"
         },
         "evento": {
             "evento": "Eventos",
