@@ -334,7 +334,7 @@
         "placeholder_tipo_publicacion": "Ej: Capítulo de libro",
         "fecha_publicacion": "Fecha de publicación",
         "placeholder_fecha_publicacion": "Ej: 12/31/2000",
-        "ano": "Año de publicación",
+        "ano": "Año",
         "placeholder_ano": "Ej: 2001",
         "mes": "Mes de publicación",
         "placeholder_mes": "Ej: Octubre",
