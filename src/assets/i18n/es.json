@@ -64,7 +64,7 @@
             "reset-password": "Reiniciar password"
         },
         "tipo_periodo": {
-            "tipo_periodo": "Creacion de tipo de período",
+            "tipo_periodo": "Creación de tipo de período",
             "lista_tipo_periodo": "listar los tipos período",
             "crud_tipo_periodo": "Crear un tipo período"
         },
