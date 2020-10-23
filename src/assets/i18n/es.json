@@ -81,16 +81,16 @@
         "proyecto_academico": {
             "proyecto_academico": "Proyecto académico",
             "list_proyecto_academico": "Lista proyecto académico",
-            "crud_proyecto_academico": "Registro de un proyecto académico"
+            "crud_proyecto_academico": "Registro de un \nproyecto académico"
         },
         "inscripcion": {
             "inscripcion": "Inscripción",
-            "inscripcion_general": "Inscripción a un proyecto académico",
-            "preinscripcion": "Preinscripción a proyectos académicos"
+            "inscripcion_general": "Inscripción a un \nproyecto académico",
+            "preinscripcion": "Preinscripción a \nproyectos académicos"
         },
         "admision": {
             "admision": "Admisiones",
-            "criterios": "Criterios de admisiones por proyectos",
+            "criterios": "Criterios de admisiones \npor proyectos",
             "asignacion_cupos": "Asignación de cupos",
             "actualizacion_estado": "Actulizar estado aspirantes",
             "listado_aspirante": "Listar aspirantes"
@@ -782,7 +782,7 @@
         "editar": "Editar",
         "inhabilitar": "Inhabilitar/ Habilitar",
         "titulo_consulta": "Información basica del proyecto académico",
-        "historico": "Historico registros",
+        "historico": "Histórico registros",
         "masinfomacion": "Mas información",
         "coordinacion": "Coordinación",
         "tag_informacionbasica": "Información basica ",
