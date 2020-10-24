@@ -2,9 +2,9 @@
 <div class="col-md-12 col-lg-12 ">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <nb-card accent="info" align="center" size=4>
-        <nb-card-header>{{ 'consultaproyecto.titulo' | translate }}</nb-card-header>
+        <nb-card-header class="titulo">{{ 'consultaproyecto.titulo' | translate }}</nb-card-header>
         <nb-card>
-            <nb-card-body>
+            <nb-card-body class="explicacion">
                 {{ 'consultaproyecto.explicacacion' | translate }}
             </nb-card-body>
         </nb-card>
@@ -23,13 +23,13 @@
                     </ng-container>
 
                     <!-- Columna Apellido -->
-                    <ng-container matColumnDef="Facultad">
+                    <ng-container matColumnDef="NombreFacultad">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'consultaproyecto.facultad' | translate }}</mat-header-cell>
                         <mat-cell *matCellDef="let row"> {{row.NombreFacultad }} </mat-cell>
                     </ng-container>
 
                     <!-- Columna Nombre-->
-                    <ng-container matColumnDef="Nombre Proyecto">
+                    <ng-container matColumnDef="Nombre">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.nombre' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.ProyectoAcademico.Nombre}} </mat-cell>
                     </ng-container>
@@ -44,17 +44,17 @@
                         <mat-cell *matCellDef="let row"> {{row.ProyectoAcademico.CodigoSnies}} </mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="Oferta">
+                    <ng-container matColumnDef="OfertaLetra">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.activo' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row"> {{row.OfertaLetra }} </mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="registro">
+                    <ng-container matColumnDef="FechaVenimientoAcreditacion">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.registro' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row"> {{row.FechaVenimientoAcreditacion | date:'dd/MM/yyyy' }} </mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="calidad">
+                    <ng-container matColumnDef="FechaVenimientoCalidad">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.calidad' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row"> {{row.FechaVenimientoCalidad | date:'dd/MM/yyyy' }} </mat-cell>
                     </ng-container>

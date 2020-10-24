@@ -683,7 +683,7 @@
         "fecha_inicio": "Fecha de inicio",
         "fecha_finaliza": "Fecha de finalización",
         "ano": "Año",
-        "filtro": "Escriba para filtrar los proyectos curriculares"
+        "filtro": "Escriba para filtrar por nombre de proyecto curricular"
     },
     "proyecto": {
         "titulo": "Registro de un proyecto académico",

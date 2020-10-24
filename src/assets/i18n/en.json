@@ -673,7 +673,7 @@
         "proyecto": "Curriculum Project",
         "fecha_inicio": "Start date",
         "fecha_finaliza": "Finish date",
-        "filtro": "Write to filter the curricular projects"
+        "filtro": "Write to filter by curricular project name"
     },
     "proyecto": {
         "titulo": "Registration of an Academic Project",

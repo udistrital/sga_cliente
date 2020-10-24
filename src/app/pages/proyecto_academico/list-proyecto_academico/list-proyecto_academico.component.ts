@@ -11,6 +11,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { MatTableDataSource } from '@angular/material';
+import { MatSort } from '@angular/material/sort'
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ConsultaProyectoAcademicoComponent } from '../consulta-proyecto_academico/consulta-proyecto_academico.component';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
@@ -33,7 +34,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   index: any;
   idproyecto: any;
   datosbasico: InformacionBasica;
-  displayedColumns = ['Id', 'Facultad', 'Nombre Proyecto', 'Nivel Proyecto', 'codigo', 'Oferta', 'registro', 'calidad', 'Consulta', 'editar', 'inhabilitar'];
+  displayedColumns = ['Id', 'NombreFacultad', 'Nombre', 'Nivel Proyecto', 'codigo', 'OfertaLetra', 'FechaVenimientoAcreditacion', 'FechaVenimientoCalidad', 'Consulta', 'editar', 'inhabilitar'];
   codigosnies: Number;
   facultad: string;
   nombre: String;
@@ -97,6 +98,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       this.loadproyectos();
   }
 
+  @ViewChild(MatSort) sort: MatSort;
 
   openDialogConsulta(): void {
     const dialogRef = this.dialog.open(ConsultaProyectoAcademicoComponent, {
@@ -140,6 +142,11 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
   }
 
+  filterPredicate(data: string, filter: string): boolean {
+    data = data.trim().toLowerCase();
+    filter = filter.trim().toLowerCase();
+    return data.indexOf(filter) >= 0;
+  }
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -186,7 +193,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
     .subscribe((res: any[]) => {
     if (res !== null && res[0] !== 'error') {
       this.dataSource = new MatTableDataSource(res);
-      this.dataSource.filterPredicate = (data: any, filter: string) => data.ProyectoAcademico.Nombre.indexOf(filter) !== -1;
+      this.dataSource.sort = this.sort;
+      this.dataSource.filterPredicate = (data: any, filter: string) => this.filterPredicate(data.ProyectoAcademico.Nombre, filter);
     }else {
       Swal(opt1)
       .then((willDelete) => {
