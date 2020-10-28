@@ -26,9 +26,9 @@
             }
         },
         "produccion_academica": {
-            "produccion_academica": "Producción academica",
-            "list_produccion_academica": "Lista producción academica",
-            "crud_produccion_academica": "Crud producción academica"
+            "produccion_academica": "Producción académica",
+            "list_produccion_academica": "Lista producción académica",
+            "crud_produccion_academica": "Crud producción académica"
         },
         "evento": {
             "evento": "Eventos",
@@ -64,7 +64,7 @@
             "reset-password": "Reiniciar password"
         },
         "tipo_periodo": {
-            "tipo_periodo": "Creacion de tipo de período",
+            "tipo_periodo": "Creación de tipo de período",
             "lista_tipo_periodo": "listar los tipos período",
             "crud_tipo_periodo": "Crear un tipo período"
         },
@@ -81,16 +81,16 @@
         "proyecto_academico": {
             "proyecto_academico": "Proyecto académico",
             "list_proyecto_academico": "Lista proyecto académico",
-            "crud_proyecto_academico": "Registro de un proyecto académico"
+            "crud_proyecto_academico": "Registro de un \nproyecto académico"
         },
         "inscripcion": {
             "inscripcion": "Inscripción",
-            "inscripcion_general": "Inscripción a un proyecto académico",
-            "preinscripcion": "Preinscripción a proyectos académicos"
+            "inscripcion_general": "Inscripción a un \nproyecto académico",
+            "preinscripcion": "Preinscripción a \nproyectos académicos"
         },
         "admision": {
             "admision": "Admisiones",
-            "criterios": "Criterios de admisiones por proyectos",
+            "criterios": "Criterios de admisiones \npor proyectos",
             "asignacion_cupos": "Asignación de cupos",
             "actualizacion_estado": "Actulizar estado aspirantes",
             "listado_aspirante": "Listar aspirantes"
@@ -334,7 +334,7 @@
         "placeholder_tipo_publicacion": "Ej: Capítulo de libro",
         "fecha_publicacion": "Fecha de publicación",
         "placeholder_fecha_publicacion": "Ej: 12/31/2000",
-        "ano": "Año de publicación",
+        "ano": "Año",
         "placeholder_ano": "Ej: 2001",
         "mes": "Mes de publicación",
         "placeholder_mes": "Ej: Octubre",
@@ -683,7 +683,7 @@
         "fecha_inicio": "Fecha de inicio",
         "fecha_finaliza": "Fecha de finalización",
         "ano": "Año",
-        "filtro": "Escriba para filtrar los proyectos curriculares"
+        "filtro": "Escriba para filtrar por nombre de proyecto curricular"
     },
     "proyecto": {
         "titulo": "Registro de un proyecto académico",
@@ -782,7 +782,7 @@
         "editar": "Editar",
         "inhabilitar": "Inhabilitar/ Habilitar",
         "titulo_consulta": "Información basica del proyecto académico",
-        "historico": "Historico registros",
+        "historico": "Histórico registros",
         "masinfomacion": "Mas información",
         "coordinacion": "Coordinación",
         "tag_informacionbasica": "Información basica ",

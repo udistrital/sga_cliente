@@ -12,11 +12,11 @@
     flex: 0 0 50px;
 }
 
-.mat-column-Facultad {
+.mat-column-NombreFacultad {
     flex: 0 0 150px;
     justify-content:center;
 }
-.mat-column-Nombre-Proyecto {
+.mat-column-proyecto {
     flex: 0 0 150px;
     justify-content:center;
 }
@@ -31,17 +31,17 @@
     justify-content:center;
 }
 
-.mat-column-Oferta {
+.mat-column-OfertaLetra {
     flex: 0 0 100px;
     justify-content:center;
 }
 
-.mat-column-registro {
+.mat-column-FechaVenimientoAcreditacion {
     flex: 0 0 110px;
     justify-content:center;
 }
 
-.mat-column-calidad {
+.mat-column-FechaVenimientoCalidad {
     flex: 0 0 110px;
     justify-content:center;
 }
@@ -75,6 +75,10 @@
     overflow: auto;
 }
 
+.mat-row, .mat-header-row {
+    justify-content: space-around;
+}
+
 .mat-row:nth-child(even) {
     background-color: rgb(255, 255, 255);
 }
@@ -89,4 +93,12 @@
 
 .encabezado {
     background-color: rgb(220, 221, 238);
+}
+
+.explicacion {
+    font-size: 12pt;
+}
+
+.titulo {
+    font-size: 16pt;
 }
