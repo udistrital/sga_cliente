@@ -78,6 +78,10 @@
             "lista_calendarioevento": "List the Academic offer",
             "crud_calendarioevento": "Crud calendar event"
         },
+        "calendarioacademico": {
+            "calendarioacademico": "Academic Calendar",
+            "list_calendarioacademico": "List of academic calendars"
+        },
         "proyecto_academico": {
             "proyecto_academico": "Academic Project",
             "list_proyecto_academico": "Academic Project List",
@@ -987,5 +991,24 @@
         "erro_selec_proyecto": "Please select at least one project!",
         "cupos": "Definition of quotas for the period and the selected academic projects",
         "asignar": "Assign quotas"
+    },
+    "calendario": {
+        "calendario_academico": "Academic Calendar",
+        "calendarios_academicos": "Academic Calendars",
+        "nombre": "Name",
+        "periodo": "Academic Period",
+        "dependencia": "Type of Dependency",
+        "estado": "Status",
+        "definicion": "Defining Academic Calendar",
+        "para": "Academic Calendar for:",
+        "agregar_periodo": "Add Academic Period",
+        "resolucion": "Resolution",
+        "numero_resolucion": "Resolution N°",
+        "anno_resolucion": "Resolution year:",
+        "etiqueta_documento": "Resolution document:",
+        "procesos_actividades": "Processes and Activities",
+        "procesos_descripcion": "Select the way you want to define the academic calendar:",
+        "procesos_copiar": "Copy processes and activities from a previous calendar",
+        "procesos_definir": "Define processes and activities"
     }
 }

@@ -78,6 +78,10 @@
             "lista_calendarioevento": "Listar la oferta académica",
             "crud_calendarioevento": "Crud calendarioevento"
         },
+        "calendarioacademico": {
+            "calendarioacademico": "Calendario académico",
+            "list_calendarioacademico": "Listar calendarios académicos"
+        },
         "proyecto_academico": {
             "proyecto_academico": "Proyecto académico",
             "list_proyecto_academico": "Lista proyecto académico",
@@ -997,5 +1001,24 @@
         "erro_selec_proyecto": "Por favor seleccione al menos un proyecto!",
         "cupos": "Definición de los cupos para el periodo y el/los proyectos académicos selecionados",
         "asignar": "Asignar cupos"
+    },
+    "calendario": {
+        "calendario_academico": "Calendario Académico",
+        "calendarios_academicos": "Calendarios Académicos",
+        "nombre": "Nombre",
+        "periodo": "Periodo Académico",
+        "dependencia": "Tipo de dependencia",
+        "estado": "Estado",
+        "definicion": "Definición del Calendario Académico",
+        "para": "Calendario Académico para:",
+        "agregar_periodo": "Agregar periodo académico",
+        "resolucion": "Resolución de creación",
+        "numero_resolucion": "Resolución N°:",
+        "anno_resolucion": "Año resolución:",
+        "etiqueta_documento": "Documento de la resolución:",
+        "procesos_actividades": "Procesos y Actividades",
+        "procesos_descripcion": "Seleccione la forma en la que desea definir el calendario académico:",
+        "procesos_copiar": "Copiar los procesos y actividades de un cronograma anterior",
+        "procesos_definir": "Definir los procesos y actividades"
     }
 }

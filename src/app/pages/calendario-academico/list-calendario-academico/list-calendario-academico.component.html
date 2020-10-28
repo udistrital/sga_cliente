@@ -1,0 +1,22 @@
+<div class="col-12">
+  <nb-card>
+    <nb-card-header>
+      {{ 'calendario.calendarios_academicos' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+      <nb-tabset fullWidth (changeTab)="changeTab($event)">
+        <nb-tab tabTitle="{{ 'GLOBAL.lista' | translate }}" [active]="!activetab">
+          <br />
+          <ng2-smart-table [settings]="settings" [source]="data" (delete)="onDelete($event)" (create)="onCreate($event)" (edit)="onEdit($event)">
+
+          </ng2-smart-table>
+        </nb-tab>
+        <nb-tab tabTitle="{{ 'GLOBAL.formulario' | translate }}" [active]="activetab">
+          <br />
+          <ngx-def-calendario-academico></ngx-def-calendario-academico>
+          <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+        </nb-tab>
+      </nb-tabset>
+    </nb-card-body>
+  </nb-card>
+</div>

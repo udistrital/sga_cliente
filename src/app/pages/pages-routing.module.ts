@@ -29,6 +29,10 @@ const routes: Routes = [{
       loadChildren: './evento/evento.module#EventoModule',
     },
     {
+      path: 'calendario-academico',
+      loadChildren: './calendario-academico/calendario-academico.module#CalendarioAcademicoModule'
+    },
+    {
         path: 'perfil',
         loadChildren: './perfil/perfil.module#PerfilModule',
     },

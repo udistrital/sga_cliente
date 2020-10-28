@@ -1,0 +1,74 @@
+<div class="dinamic-form">
+  <form class="form-horizontal">
+    <fieldset [ngClass]="{'fieldseter':true} ">
+      <legend>
+        {{ 'calendario.definicion' | translate }}
+      </legend>
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field style="width: 100%;" floatLabel="always">
+            <mat-label>*{{ 'calendario.para' | translate }} </mat-label>
+            <mat-select placeholder="Pregrado/Posgrado" >
+              <mat-option>--Seleccionar--</mat-option>
+              <mat-option>Pregrado</mat-option>
+              <mat-option>Posgrado</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <mat-form-field style="width: 100%;" floatLabel="always">
+            <mat-label>*{{ 'calendario.periodo' | translate }}: </mat-label>
+            <mat-select placeholder="2020-I, 2020-II, 2020-III" >
+              <mat-option>--Seleccionar--</mat-option>
+              <mat-option>2020-I</mat-option>
+              <mat-option>2020-II</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-4">
+          <button mat-button type="button">{{ 'calendario.agregar_periodo' | translate }} </button>
+        </div>
+      </div>
+      <!-- anidado -->
+      <fieldset [ngClass]="{'fieldseter':true} ">
+        <legend>
+          {{ 'calendario.resolucion' | translate }}
+        </legend>
+        <div class="row">
+          <div class="col-3">
+            <mat-form-field floatLabel="always">
+              <input matInput type="text" name="num_resolucion" placeholder="{{ 'calendario.numero_resolucion' | translate }} " />
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <mat-form-field floatLabel="always">
+              <input matInput type="text" name="" placeholder="{{ 'calendario.anno_resolucion' | translate }} " />
+            </mat-form-field>
+          </div>
+          <div class="col-4">
+            <p>{{ 'calendario.etiqueta_documento' | translate }} </p>
+          </div>
+          <div class="col-2">
+            <button mat-button type="button"><span class="nb-cloudy"></span></button>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset [ngClass]="{'fieldseter':true} ">
+        <legend>
+          {{ 'calendario.procesos_actividades' | translate }}
+        </legend>
+        <div class="row">
+          <div class="col-12">
+            <p>{{ 'calendario.procesos_descripcion' | translate }} </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 text-center"><button mat-button>{{ 'calendario.procesos_copiar' | translate }} </button></div>
+          <div class="col-6 text-center"><button mat-button>{{ 'calendario.procesos_definir' | translate }} </button></div>
+        </div>
+      </fieldset>
+    </fieldset>
+  </form>
+</div>
