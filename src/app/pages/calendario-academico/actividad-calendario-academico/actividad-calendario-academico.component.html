@@ -1,0 +1,66 @@
+<div class="dinamic-form">
+  <form class="form-horizontal">
+    <fieldset [ngClass]="{'fieldseter':true} ">
+      <legend>
+        {{ 'calendario.actividad' | translate }}
+      </legend>
+      <div class="row">
+        <div class="col-3">
+          <p>{{ 'calendario.proceso' | translate }}: </p>
+        </div>
+        <div class="col-3">
+          <p>{{ 'calendario.periodo' | translate }}: </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field floatLabel="always">
+            <input matInput type="text"  placeholder="*{{ 'calendario.actividad' | translate }} " />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field floatLabel="always" style="width: 100%;">
+            <input matInput type="text" name="descripcion" placeholder="*{{ 'GLOBAL.descripcion' | translate }} " />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <mat-form-field floatLabel="always">
+            <input matInput type="date" placeholder="*{{ 'calendario.fecha_inicio' | translate }} " />
+          </mat-form-field>
+        </div>
+        <div class="col-3">
+          <mat-form-field floatLabel="always">
+            <input matInput type="date" placeholder="*{{ 'calendario.fecha_fin' | translate }} " />
+          </mat-form-field>
+        </div>
+      </div>
+      <fieldset [ngClass]="{'fieldseter':true} ">
+        <legend>
+          {{ 'calendario.dirigido' | translate }}
+        </legend>
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field style="width: 100%;" floatLabel="always">
+              <mat-label>*{{ 'calendario.dirigido_label' | translate }} </mat-label>
+              <mat-select placeholder="Coordinadores/Estudiantes" >
+                <mat-option>--Seleccionar--</mat-option>
+                <mat-option>Coordinadores</mat-option>
+                <mat-option>Estudiantes</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </fieldset>
+      <br>
+      <div class="row">
+        <div class="col-12">
+          <button class="float-right" mat-button type="button" (click)="addPeriod()">{{ 'GLOBAL.guardar' | translate }} </button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>

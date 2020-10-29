@@ -5,7 +5,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 @Component({
   selector: 'ngx-list-calendario-academico',
   templateUrl: './list-calendario-academico.component.html',
-  styleUrls: ['./list-calendario-academico.component.scss']
+  styleUrls: ['../calendario-academico.component.scss']
 })
 export class ListCalendarioAcademicoComponent implements OnInit {
 
@@ -71,6 +71,9 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         },
       },
       mode: 'external',
+      actions: {
+        position: 'right',
+      },
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
       },
@@ -80,9 +83,6 @@ export class ListCalendarioAcademicoComponent implements OnInit {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
         confirmDelete: true,
-      },
-      create: {
-        createButtonContent: '<i class="nb-compose"></i>'
       }
     }
   }

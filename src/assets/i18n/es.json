@@ -1019,6 +1019,17 @@
         "procesos_actividades": "Procesos y Actividades",
         "procesos_descripcion": "Seleccione la forma en la que desea definir el calendario académico:",
         "procesos_copiar": "Copiar los procesos y actividades de un cronograma anterior",
-        "procesos_definir": "Definir los procesos y actividades"
+        "procesos_definir": "Definir los procesos y actividades",
+        "procesos": "Procesos",
+        "proceso": "Proceso",
+        "actividades": "Actividades",
+        "actividad": "Actividad",
+        "sin_procesos": "No se encontraron procesos registrados al calendario",
+        "sin_actividades": "No se encontraron actividades registradas al proceso",
+        "periodicidad": "Seleccione la periodicidad del proceso:",
+        "fecha_inicio": "Fecha de inicio",
+        "fecha_fin": "Fecha de cierre",
+        "dirigido": "Dirigido a",
+        "dirigido_label": "Seleccione a quien va dirigida la actividad"
     }
 }

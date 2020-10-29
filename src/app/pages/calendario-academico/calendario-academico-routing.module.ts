@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { CalendarioAcademicoComponent } from './calendario-academico.component';
 import { DefCalendarioAcademicoComponent } from './def-calendario-academico/def-calendario-academico.component';
 import { ListCalendarioAcademicoComponent } from './list-calendario-academico/list-calendario-academico.component';
+import { ProcesoCalendarioAcademicoComponent } from './proceso-calendario-academico/proceso-calendario-academico.component';
+import { ActividadCalendarioAcademicoComponent } from './actividad-calendario-academico/actividad-calendario-academico.component';
 
 const routes: Routes = [{
     path: '',
@@ -15,6 +17,14 @@ const routes: Routes = [{
         {
             path: 'def-calendario-academico',
             component: DefCalendarioAcademicoComponent
+        },
+        {
+            path: 'proceso-',
+            component: ProcesoCalendarioAcademicoComponent
+        },
+        {
+            path: 'actividad',
+            component: ActividadCalendarioAcademicoComponent
         }
     ],
 }];
@@ -32,5 +42,7 @@ export class CalendarioAcademicoRoutingModule { }
 export const routedComponents = [
     CalendarioAcademicoComponent,
     ListCalendarioAcademicoComponent,
-    DefCalendarioAcademicoComponent
+    DefCalendarioAcademicoComponent,
+    ProcesoCalendarioAcademicoComponent,
+    ActividadCalendarioAcademicoComponent
 ]

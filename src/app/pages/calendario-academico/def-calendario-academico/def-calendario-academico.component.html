@@ -28,7 +28,7 @@
           </mat-form-field>
         </div>
         <div class="col-4">
-          <button mat-button type="button">{{ 'calendario.agregar_periodo' | translate }} </button>
+          <button mat-button type="button" (click)="addPeriod()">{{ 'calendario.agregar_periodo' | translate }} </button>
         </div>
       </div>
       <!-- anidado -->
@@ -47,11 +47,16 @@
               <input matInput type="text" name="" placeholder="{{ 'calendario.anno_resolucion' | translate }} " />
             </mat-form-field>
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <p>{{ 'calendario.etiqueta_documento' | translate }} </p>
           </div>
-          <div class="col-2">
-            <button mat-button type="button"><span class="nb-cloudy"></span></button>
+          <div class="col-3">
+            <button mat-button type="button" (click)="fileInput.click()">
+              <span class="fa fa-paperclip fa-lg"></span>
+              <input formControlName="documento" #fileInput type="file" (change)="onInputFileResolucion($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
+            </button>
+            <mat-error *ngIf="!fileResolucion">{{ 'ERROR.no_documento' | translate }}</mat-error>
+            <label *ngIf="fileResolucion">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucion.name}}</label>
           </div>
         </div>
       </fieldset>
@@ -59,16 +64,43 @@
         <legend>
           {{ 'calendario.procesos_actividades' | translate }}
         </legend>
-        <div class="row">
-          <div class="col-12">
-            <p>{{ 'calendario.procesos_descripcion' | translate }} </p>
+        <div class="calendar-buttons">
+          <div class="row">
+            <div class="col-12">
+              <p>{{ 'calendario.procesos_descripcion' | translate }} </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 text-center"><button mat-button>{{ 'calendario.procesos_copiar' | translate }} </button></div>
+            <div class="col-6 text-center"><button mat-button (click)="openTabs()">{{ 'calendario.procesos_definir' | translate }} </button></div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-6 text-center"><button mat-button>{{ 'calendario.procesos_copiar' | translate }} </button></div>
-          <div class="col-6 text-center"><button mat-button>{{ 'calendario.procesos_definir' | translate }} </button></div>
+        <div class="calendar-content" *ngIf="activetabs">
+          <mat-tab-group>
+            <mat-tab label="{{ 'calendario.procesos' | translate }}" >
+              <ng2-smart-table  [settings]="processSettings" [source]="processes" (create)="addProcess($event)" (editConfirm)="editProcess($event)" (deleteConfirm)="deleteProcess($event)" ></ng2-smart-table>
+            </mat-tab>
+            <mat-tab label="{{ 'calendario.actividades' | translate }}" >
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Proceso: ADMISIONES
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <ng2-smart-table  [settings]="activitiesSettings" (create)="addActivity($event)" (deleteConfirm)="deleteProcess($event)" ></ng2-smart-table>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-tab>
+          </mat-tab-group>
         </div>
       </fieldset>
+      <br>
+      <div class="row">
+        <div class="col-12">
+          <button class="float-right" mat-button type="button" (click)="saveCalendar()">{{ 'GLOBAL.guardar' | translate }} </button>
+        </div>
+      </div>
     </fieldset>
   </form>
 </div>

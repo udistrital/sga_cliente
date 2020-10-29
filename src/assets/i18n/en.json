@@ -1009,6 +1009,17 @@
         "procesos_actividades": "Processes and Activities",
         "procesos_descripcion": "Select the way you want to define the academic calendar:",
         "procesos_copiar": "Copy processes and activities from a previous calendar",
-        "procesos_definir": "Define processes and activities"
+        "procesos_definir": "Define processes and activities",
+        "procesos": "Processes",
+        "proceso": "Process",
+        "actividades": "Activities",
+        "actividad": "Activity",
+        "sin_procesos": "There are no registered processes to the calendar",
+        "sin_actividades": "There are no registered activities to the process",
+        "periodicidad": "Select how periodic is the process:",
+        "fecha_inicio": "Start date",
+        "fecha_fin": "End date",
+        "dirigido": "Directed to",
+        "dirigido_label": "Select who is the activity directed to"
     }
 }
