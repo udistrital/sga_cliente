@@ -1030,6 +1030,13 @@
         "fecha_inicio": "Fecha de inicio",
         "fecha_fin": "Fecha de cierre",
         "dirigido": "Dirigido a",
-        "dirigido_label": "Seleccione a quien va dirigida la actividad"
+        "dirigido_label": "Seleccione a quien va dirigida la actividad",
+        "error_nombre_proceso": "Por favor digite el nombre del proceso",
+        "error_desc_proceso": "Por favor indique una descripción para el proceso",
+        "error_period_proceso": "Por favor seleccione la periodicidad del proceso",
+        "error_nombre_actividad": "Por favor digite el nombre de la actividad",
+        "error_desc_actividad": "Por favor indique una descripcion para la actividad",
+        "error_fecha_actividad": "Por favor seleccione una fecha",
+        "error_resp_actividad": "Por favor seleccione a quien se dirige la actividad"
     }
 }

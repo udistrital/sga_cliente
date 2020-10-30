@@ -1,40 +1,52 @@
 <div class="dinamic-form">
-  <form class="form-horizontal">
+  <form novalidate [formGroup]="activityForm" #fform="ngForm" (ngSubmit)="saveActivity()"  class="form-horizontal">
     <fieldset [ngClass]="{'fieldseter':true} ">
       <legend>
         {{ 'calendario.actividad' | translate }}
       </legend>
       <div class="row">
         <div class="col-3">
-          <p>{{ 'calendario.proceso' | translate }}: </p>
+          <p>{{ 'calendario.proceso' | translate }}: {{ processName }}</p>
         </div>
         <div class="col-3">
-          <p>{{ 'calendario.periodo' | translate }}: </p>
+          <p>{{ 'calendario.periodo' | translate }}: {{ period }} </p>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
           <mat-form-field floatLabel="always">
-            <input matInput type="text"  placeholder="*{{ 'calendario.actividad' | translate }} " />
+            <input matInput type="text" formControlName="nombre" placeholder="*{{ 'calendario.actividad' | translate }} " required />
+            <mat-error *ngIf="activityForm.get('nombre').hasError('required') && activityForm.get('nombre').touched" >
+              {{ 'calendario.error_nombre_actividad' | translate }}
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
           <mat-form-field floatLabel="always" style="width: 100%;">
-            <input matInput type="text" name="descripcion" placeholder="*{{ 'GLOBAL.descripcion' | translate }} " />
+            <input matInput type="text" formControlName="descripcion" placeholder="*{{ 'GLOBAL.descripcion' | translate }} " required />
           </mat-form-field>
+          <mat-error *ngIf="activityForm.get('descripcion').hasError('required') && activityForm.get('descripcion').touched" >
+            {{ 'calendario.error_desc_actividad' | translate }}
+          </mat-error>
         </div>
       </div>
       <div class="row">
-        <div class="col-3">
+        <div class="col-6">
           <mat-form-field floatLabel="always">
-            <input matInput type="date" placeholder="*{{ 'calendario.fecha_inicio' | translate }} " />
+            <input matInput type="date" formControlName="fecha_inicio" placeholder="*{{ 'calendario.fecha_inicio' | translate }} " required/>
           </mat-form-field>
+          <mat-error *ngIf="activityForm.get('fecha_inicio').hasError('required') && activityForm.get('fecha_inicio').touched" >
+            {{ 'calendario.error_fecha_actividad' | translate }}
+          </mat-error>
         </div>
-        <div class="col-3">
+        <div class="col-6">
           <mat-form-field floatLabel="always">
-            <input matInput type="date" placeholder="*{{ 'calendario.fecha_fin' | translate }} " />
+            <input matInput type="date" formContronName="fecha_fin" placeholder="*{{ 'calendario.fecha_fin' | translate }} " required />
+            <mat-error *ngIf="activityForm.get('fecha_fin').hasError('required') && activityForm.get('fecha_fin').touched" >
+              {{ 'calendario.error_fecha_actividad' | translate }}
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -46,10 +58,13 @@
           <div class="col-12">
             <mat-form-field style="width: 100%;" floatLabel="always">
               <mat-label>*{{ 'calendario.dirigido_label' | translate }} </mat-label>
-              <mat-select placeholder="Coordinadores/Estudiantes" >
-                <mat-option>--Seleccionar--</mat-option>
-                <mat-option>Coordinadores</mat-option>
-                <mat-option>Estudiantes</mat-option>
+              <mat-select formControlName="responsable" placeholder="Coordinadores/Estudiantes" required >
+                <mat-option *ngFor="let resp of responsables" [value]="resp" >
+                  {{ resp }}
+                </mat-option>
+                <mat-error *ngIf="activityForm.get('responsable').hasError('required') && activityForm.get('responsable').touched" >
+                  {{ 'calendario.error_resp_actividad' | translate }}
+                </mat-error>
               </mat-select>
             </mat-form-field>
           </div>
@@ -58,7 +73,7 @@
       <br>
       <div class="row">
         <div class="col-12">
-          <button class="float-right" mat-button type="button" (click)="addPeriod()">{{ 'GLOBAL.guardar' | translate }} </button>
+          <button class="float-right" mat-button type="submit" [disabled]="activityForm.invalid" >{{ 'GLOBAL.guardar' | translate }} </button>
         </div>
       </div>
     </fieldset>

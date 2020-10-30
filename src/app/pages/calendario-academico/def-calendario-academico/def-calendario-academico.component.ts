@@ -5,9 +5,11 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import 'style-loader!angular2-toaster/toaster.css';
 import { LocalDataSource } from 'ng2-smart-table';
 import { MatDialog } from '@angular/material/dialog';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProcesoCalendarioAcademicoComponent } from '../proceso-calendario-academico/proceso-calendario-academico.component';
 import { ActividadCalendarioAcademicoComponent } from '../actividad-calendario-academico/actividad-calendario-academico.component';
 import { CrudPeriodoComponent } from '../../periodo/crud-periodo/crud-periodo.component';
+import { Proceso } from '../../../@core/data/models/calendario-academico/proceso';
 
 @Component({
   selector: 'ngx-def-calendario-academico',
@@ -19,8 +21,9 @@ export class DefCalendarioAcademicoComponent implements OnInit {
   fileResolucion: any;
   processSettings: any;
   activitiesSettings: any;
-  processes: LocalDataSource;
+  processes: Proceso[];
   activetabs: boolean = false;
+
 
   constructor(
     private sanitization: DomSanitizer,
@@ -34,6 +37,8 @@ export class DefCalendarioAcademicoComponent implements OnInit {
       this.createProcessTable();
       this.createActivitiesTable();
     });
+
+    this.processes = [];
   }
 
   ngOnInit() {
@@ -121,7 +126,11 @@ export class DefCalendarioAcademicoComponent implements OnInit {
   }
 
   addProcess(event) {
-    this.dialog.open(ProcesoCalendarioAcademicoComponent, {width: '800px', height: '400px'})
+    const newProcess = this.dialog.open(ProcesoCalendarioAcademicoComponent, {width: '800px', height: '400px'});
+    newProcess.afterClosed().subscribe((process: Proceso) => {
+      this.processes.push(process);
+    });
+    console.log(this.processes);
   }
   
 

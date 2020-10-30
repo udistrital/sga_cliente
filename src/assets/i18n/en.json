@@ -1020,6 +1020,9 @@
         "fecha_inicio": "Start date",
         "fecha_fin": "End date",
         "dirigido": "Directed to",
-        "dirigido_label": "Select who is the activity directed to"
+        "dirigido_label": "Select who is the activity directed to",
+        "error_nombre_proceso": "Please give a name to the process",
+        "error_desc_proceso": "Please add a description to the process",
+        "error_period_proceso": "Please select how periodic is the process"
     }
 }

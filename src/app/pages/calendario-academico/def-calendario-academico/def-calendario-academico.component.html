@@ -1,5 +1,5 @@
 <div class="dinamic-form">
-  <form class="form-horizontal">
+  <form class="form-horizontal" >
     <fieldset [ngClass]="{'fieldseter':true} ">
       <legend>
         {{ 'calendario.definicion' | translate }}
@@ -82,13 +82,13 @@
             </mat-tab>
             <mat-tab label="{{ 'calendario.actividades' | translate }}" >
               <mat-accordion>
-                <mat-expansion-panel>
+                <mat-expansion-panel *ngFor="let process of processes">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      Proceso: ADMISIONES
+                      {{ process.nombre }}
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  <ng2-smart-table  [settings]="activitiesSettings" (create)="addActivity($event)" (deleteConfirm)="deleteProcess($event)" ></ng2-smart-table>
+                  <ng2-smart-table  [settings]="activitiesSettings" [source]="process.actividades" (create)="addActivity($event)" (deleteConfirm)="deleteActivity($event)" ></ng2-smart-table>
                 </mat-expansion-panel>
               </mat-accordion>
             </mat-tab>

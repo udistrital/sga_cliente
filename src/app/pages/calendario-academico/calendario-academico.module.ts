@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { ThemeModule } from '../../@theme/theme.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ToasterModule } from 'angular2-toaster';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { MatDialogModule } from '@angular/material/dialog';
 import { CalendarioAcademicoRoutingModule, routedComponents } from './calendario-academico-routing.module';
 import { SharedModule } from '../../shared/shared.module';
@@ -11,6 +12,8 @@ import { ListCalendarioAcademicoComponent } from './list-calendario-academico/li
 import { DefCalendarioAcademicoComponent } from './def-calendario-academico/def-calendario-academico.component';
 import { ProcesoCalendarioAcademicoComponent } from './proceso-calendario-academico/proceso-calendario-academico.component';
 import { ActividadCalendarioAcademicoComponent } from './actividad-calendario-academico/actividad-calendario-academico.component';
+
+import { EventoService } from '../../@core/data/evento.service';
 
 
 
@@ -22,7 +25,9 @@ import { ActividadCalendarioAcademicoComponent } from './actividad-calendario-ac
     Ng2SmartTableModule,
     ToasterModule,
     MatDialogModule,
-    PeriodoModule
+    PeriodoModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     routedComponents
@@ -37,6 +42,9 @@ import { ActividadCalendarioAcademicoComponent } from './actividad-calendario-ac
     ProcesoCalendarioAcademicoComponent,
     ActividadCalendarioAcademicoComponent,
     CrudPeriodoComponent,
+  ],
+  providers: [
+    EventoService,
   ]
 })
 export class CalendarioAcademicoModule { }
