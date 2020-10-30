@@ -78,6 +78,10 @@
             "lista_calendarioevento": "List the Academic offer",
             "crud_calendarioevento": "Crud calendar event"
         },
+        "calendarioacademico": {
+            "calendarioacademico": "Academic Calendar",
+            "list_calendarioacademico": "List of academic calendars"
+        },
         "proyecto_academico": {
             "proyecto_academico": "Academic Project",
             "list_proyecto_academico": "Academic Project List",
@@ -987,5 +991,46 @@
         "erro_selec_proyecto": "Please select at least one project!",
         "cupos": "Definition of quotas for the period and the selected academic projects",
         "asignar": "Assign quotas"
+    },
+    "calendario": {
+        "calendario_academico": "Academic Calendar",
+        "calendarios_academicos": "Academic Calendars",
+        "nombre": "Name",
+        "periodo": "Academic Period",
+        "dependencia": "Type of Dependency",
+        "estado": "Status",
+        "definicion": "Defining Academic Calendar",
+        "para": "Academic Calendar for:",
+        "agregar_periodo": "Add Academic Period",
+        "resolucion": "Resolution",
+        "numero_resolucion": "Resolution N°",
+        "anno_resolucion": "Resolution year:",
+        "etiqueta_documento": "Resolution document:",
+        "procesos_actividades": "Processes and Activities",
+        "procesos_descripcion": "Select the way you want to define the academic calendar:",
+        "procesos_copiar": "Copy processes and activities from a previous calendar",
+        "procesos_definir": "Define processes and activities",
+        "procesos": "Processes",
+        "proceso": "Process",
+        "actividades": "Activities",
+        "actividad": "Activity",
+        "sin_procesos": "There are no registered processes to the calendar",
+        "sin_actividades": "There are no registered activities to the process",
+        "periodicidad": "Select how periodic is the process:",
+        "fecha_inicio": "Start date",
+        "fecha_fin": "End date",
+        "dirigido": "Directed to",
+        "dirigido_label": "Select who is the activity directed to",
+        "error_nombre_proceso": "Please give a name to the process",
+        "error_desc_proceso": "Please add a description to the process",
+        "error_period_proceso": "Please select how periodic is the process",
+        "error_nombre_actividad": "Please give a name to the activity",
+        "error_desc_actividad": "Please add a description to the activity",
+        "error_fecha_actividad": "Please select a date",
+        "error_resp_actividad": "Please select for who is the activity",
+        "error_resolucion": "Please give the resolution number",
+        "error_anno": "Please add a valid year",
+        "error_select_para": "Please select what is the calendar for",
+        "error_select_periodo": "Please select an academic period"
     }
 }
