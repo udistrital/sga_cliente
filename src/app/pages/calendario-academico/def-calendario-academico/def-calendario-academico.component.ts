@@ -10,27 +10,40 @@ import { ProcesoCalendarioAcademicoComponent } from '../proceso-calendario-acade
 import { ActividadCalendarioAcademicoComponent } from '../actividad-calendario-academico/actividad-calendario-academico.component';
 import { CrudPeriodoComponent } from '../../periodo/crud-periodo/crud-periodo.component';
 import { Proceso } from '../../../@core/data/models/calendario-academico/proceso';
+import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
+import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
+
+import { CoreService } from '../../../@core/data/core.service';
 
 @Component({
   selector: 'ngx-def-calendario-academico',
   templateUrl: './def-calendario-academico.component.html',
   styleUrls: ['../calendario-academico.component.scss']
 })
-export class DefCalendarioAcademicoComponent implements OnInit {
+export class DefCalendarioAcademicoComponent {
 
   fileResolucion: any;
   processSettings: any;
   activitiesSettings: any;
   processes: Proceso[];
+  calendar: Calendario;
   activetabs: boolean = false;
+  calendarForm: any;
+  createdCalendar: boolean = false;
+  periodos: any;
+  nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
 
 
   constructor(
     private sanitization: DomSanitizer,
     private toasterService: ToasterService,
     private translate: TranslateService,
+    private builder: FormBuilder,
     private dialog: MatDialog, 
+    private coreService: CoreService
   ) {
+    this.loadSelects()
+    this.createCalendarForm();
     this.createProcessTable();
     this.createActivitiesTable();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -41,7 +54,21 @@ export class DefCalendarioAcademicoComponent implements OnInit {
     this.processes = [];
   }
 
-  ngOnInit() {
+  createCalendarForm() {
+    this.calendarForm = this.builder.group({
+      resolucion: ['', Validators.required],
+      anno: ['', Validators.minLength(4)],
+      periodo: '',
+      calendario_para: '',
+      fileResolucion: ''
+    })
+  }
+
+  loadSelects() {
+    this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1').subscribe(res => {
+      console.log(res)
+      this.periodos = res;
+    });
   }
 
   createProcessTable() {
@@ -121,6 +148,12 @@ export class DefCalendarioAcademicoComponent implements OnInit {
     }
   }
 
+  createCalendar() {
+    //crea el calendario
+    this.calendar = this.calendarForm.value;
+    this.createdCalendar = true;
+  }
+
   addPeriod() {
     this.dialog.open(CrudPeriodoComponent, {width: '800px', height: '600px'})
   }
@@ -130,7 +163,7 @@ export class DefCalendarioAcademicoComponent implements OnInit {
     newProcess.afterClosed().subscribe((process: Proceso) => {
       this.processes.push(process);
     });
-    console.log(this.processes);
+    
   }
   
 
@@ -143,7 +176,10 @@ export class DefCalendarioAcademicoComponent implements OnInit {
   }
 
   addActivity(event) {
-    this.dialog.open(ActividadCalendarioAcademicoComponent, {width: '800px', height: '600px'})
+    const newActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, {width: '800px', height: '600px'});
+    newActivity.afterClosed().subscribe((activity: Actividad) => {
+      console.log(activity);
+    })
   }
 
   openTabs() {

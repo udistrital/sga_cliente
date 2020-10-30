@@ -1,0 +1,36 @@
+<div class="col-12">
+  <div class="row">
+    <nb-card size="4">
+      <nb-card-header>{{ 'calendario.calendario_academico' | translate}} </nb-card-header>
+      <nb-card-body>
+        <p>Proceso: Admisiones </p>
+        <mat-table [dataSource]="dataSource">
+
+          <ng-container matColumnDef="actividad" >
+            <mat-header-cell *matHeaderCellDef  >{{ 'calendario.actividad' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.actividad}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_inicio" >
+            <mat-header-cell *matHeaderCellDef  >{{ 'calendario.desde' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.fecha_inicio}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_fin" >
+            <mat-header-cell *matHeaderCellDef  >{{ 'calendario.hasta' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.fecha_fin}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="responsable" >
+            <mat-header-cell *matHeaderCellDef  >{{ 'calendario.responsable' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.responsable}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" ></mat-row>
+
+        </mat-table>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

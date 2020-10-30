@@ -1023,6 +1023,14 @@
         "dirigido_label": "Select who is the activity directed to",
         "error_nombre_proceso": "Please give a name to the process",
         "error_desc_proceso": "Please add a description to the process",
-        "error_period_proceso": "Please select how periodic is the process"
+        "error_period_proceso": "Please select how periodic is the process",
+        "error_nombre_actividad": "Please give a name to the activity",
+        "error_desc_actividad": "Please add a description to the activity",
+        "error_fecha_actividad": "Please select a date",
+        "error_resp_actividad": "Please select for who is the activity",
+        "error_resolucion": "Please give the resolution number",
+        "error_anno": "Please add a valid year",
+        "error_select_para": "Please select what is the calendar for",
+        "error_select_periodo": "Please select an academic period"
     }
 }

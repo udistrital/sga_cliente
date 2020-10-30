@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -14,7 +15,9 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   activetab: boolean = false;
 
   constructor(
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.createTable();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -72,18 +75,43 @@ export class ListCalendarioAcademicoComponent implements OnInit {
       },
       mode: 'external',
       actions: {
+        edit: false,
+        delete: false,
         position: 'right',
+        custom: [
+          {
+            name: 'view',
+            title: '<i class="nb-list"></i>'
+          },
+          {
+            name: 'edit',
+            title: '<i class="nb-edit"></i>',
+          },
+          {
+            name: 'delete',
+            title: '<i class="nb-trash"></i>'
+          }
+        ]
       },
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
       },
-      edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
-      },
-      delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
-        confirmDelete: true,
-      }
+    }
+  }
+
+  onAction(event) {
+    switch (event.action) {
+      case 'view':
+        this.router.navigate(['../detalle-calendario'], {relativeTo: this.route});
+        break;
+      case 'edit':
+        this.onEdit(event);
+        break;
+      case 'delete':
+        this.onDelete(event);
+        break;
+      case 'clone':
+        break;
     }
   }
 

@@ -7,7 +7,7 @@
       <nb-tabset fullWidth (changeTab)="changeTab($event)">
         <nb-tab tabTitle="{{ 'GLOBAL.lista' | translate }}" [active]="!activetab">
           <br />
-          <ng2-smart-table [settings]="settings" [source]="data" (delete)="onDelete($event)" (create)="onCreate($event)" (edit)="onEdit($event)">
+          <ng2-smart-table [settings]="settings" [source]="data" (create)="onCreate($event)" (custom)="onAction($event)">
 
           </ng2-smart-table>
         </nb-tab>

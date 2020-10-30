@@ -12,8 +12,10 @@ import { ListCalendarioAcademicoComponent } from './list-calendario-academico/li
 import { DefCalendarioAcademicoComponent } from './def-calendario-academico/def-calendario-academico.component';
 import { ProcesoCalendarioAcademicoComponent } from './proceso-calendario-academico/proceso-calendario-academico.component';
 import { ActividadCalendarioAcademicoComponent } from './actividad-calendario-academico/actividad-calendario-academico.component';
+import { DetalleCalendarioComponent } from './detalle-calendario/detalle-calendario.component';
 
 import { EventoService } from '../../@core/data/evento.service';
+import { CoreService } from '../../@core/data/core.service';
 
 
 
@@ -30,13 +32,14 @@ import { EventoService } from '../../@core/data/evento.service';
     ReactiveFormsModule,
   ],
   declarations: [
-    routedComponents
+    routedComponents,
   ],
   exports: [
     ListCalendarioAcademicoComponent,
     DefCalendarioAcademicoComponent,
     ProcesoCalendarioAcademicoComponent,
-    ActividadCalendarioAcademicoComponent
+    ActividadCalendarioAcademicoComponent,
+    DetalleCalendarioComponent,
   ],
   entryComponents : [
     ProcesoCalendarioAcademicoComponent,
@@ -45,6 +48,7 @@ import { EventoService } from '../../@core/data/evento.service';
   ],
   providers: [
     EventoService,
+    CoreService,
   ]
 })
 export class CalendarioAcademicoModule { }

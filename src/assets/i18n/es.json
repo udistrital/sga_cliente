@@ -1037,6 +1037,13 @@
         "error_nombre_actividad": "Por favor digite el nombre de la actividad",
         "error_desc_actividad": "Por favor indique una descripcion para la actividad",
         "error_fecha_actividad": "Por favor seleccione una fecha",
-        "error_resp_actividad": "Por favor seleccione a quien se dirige la actividad"
+        "error_resp_actividad": "Por favor seleccione a quien se dirige la actividad",
+        "error_resolucion": "Por favor indique el numero de resolución",
+        "error_anno": "Por favor digite un año válido",
+        "error_select_para": "Seleccione para qué es el calendario",
+        "error_select_periodo": "Seleccione un periodo académico",
+        "desde": "Desde",
+        "hasta": "Hasta",
+        "responsable": "Responsable"
     }
 }
