@@ -1,89 +1,21 @@
-<div class="row">
-  <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-    <div class="footer-title">
-      <h5>{{universidad.title}}</h5>
-      <h5 class="nit">{{universidad.nit}}</h5>
+<div class="footer-div">
+    <figure class="card-imageContainer">
+        <img src="../../../../assets/images/logo_universidad_acreditacion.png" class="card-image" alt="logo-udistrital">
+    </figure>
+    <div class="footer-column">
+        <div class="footer-title">
+            <h5>Oficina Asesora de Sistemas</h5>
+        </div>
     </div>
-    <label>{{universidad.norma}}</label>
-    <div class="list-footer" *ngFor="let creacion of universidad.creacion">
-      <a href="{{creacion.url}}" target="_blank" title="{{creacion.title}}">
-        <label><i class="fa fa-university"></i> {{creacion.label}}</label>
-      </a>
+
+    <div class="footer-logos">
+        <div class="social" *ngFor="let lista of social.list">
+            <i class="icon {{lista.class}}"></i>
+            <div class="text-container">
+                <p *ngFor="let value of lista.value">
+                    {{value}}
+                </p>
+            </div>
+        </div>
     </div>
-    <div class="list-footer" *ngFor="let acreditacion of
-      universidad.acreditacion">
-      <a href="{{acreditacion.url}}" target="_blank"
-        title="{{acreditacion.title}}">
-        <label><i class="fa fa-trophy"></i> {{acreditacion.label}}</label>
-      </a>
-    </div>
-    <div *ngFor="let elemento of universidad.representante">
-      <div><h3>{{elemento.subtitle}}</h3></div>
-      <div>{{elemento.nombre}}</div>
-      <div>
-        <a href="mailto:{{elemento.correo}}" target="_blank"
-          title="{{elemento.correo}}">
-          <label>{{elemento.correo}}</label>
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-    <div class="footer-title">
-      <h5>{{normatividad.title}}</h5>
-    </div>
-    <div *ngFor="let elemento of normatividad.seccion">
-      <h3>{{elemento.subtitle}}</h3>
-      <div class="list-footer" *ngFor="let norma of elemento.list">
-        <a href="{{norma.url}}" target="_blank" title="{{norma.title}}">
-          <label>{{norma.label}}</label>
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-    <div class="footer-title">
-      <h5>{{recomendados.title}}</h5>
-    </div>
-    <div class="list-footer" *ngFor="let recomendado of recomendados.list">
-      <a href="{{recomendado.url}}" target="_blank"
-        title="{{recomendado.title}}">
-        <label>{{recomendado.label}}</label>
-      </a>
-    </div>
-  </div>
-  <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-    <div class="footer-title">
-      <h5>{{contactenos.title}}</h5>
-    </div>
-    <div>
-      <div class="list-footer" *ngFor="let elemento of contactenos.datos">
-        <label *ngIf="elemento.label">{{elemento.label}}: </label>
-        <a href="{{elemento.url}}" target="_blank"
-          title="{{elemento.title}}" *ngIf="elemento.url">
-          <label>{{elemento.dato}}</label>
-        </a>
-        <label *ngIf="!elemento.url">{{elemento.dato}}</label>
-      </div>
-    </div>
-  </div>
 </div>
-<div class="row copyright">
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <div class="social" *ngFor="let lista of social.list">
-      <a href="{{lista.url}}" target="_blank" title="{{lista.title}}" class="ion
-        ion-social-{{lista.class}}"></a>
-    </div>
-  </div>
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <div class="final" *ngFor="let lista of final.list">
-      <a href="{{lista.url}}" target="_blank" title="{{lista.title}}">
-        <label>{{lista.label}}</label>
-      </a>
-    </div>
-  </div>
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    {{copyright}}
-  </div>
-</div>
-<ngx-loading></ngx-loading>
