@@ -514,7 +514,8 @@
         "Estado": "STATE",
         "Tipo": "TYPE",
         "Documento": "ID CARD",
-        "Puntaje": "SCORE"
+        "Puntaje": "SCORE",
+        "acciones": "Actions"
     },
 
     "ERROR": {
@@ -1031,6 +1032,13 @@
         "error_resolucion": "Please give the resolution number",
         "error_anno": "Please add a valid year",
         "error_select_para": "Please select what is the calendar for",
-        "error_select_periodo": "Please select an academic period"
+        "error_select_periodo": "Please select an academic period",
+        "desde": "Since",
+        "hasta": "Until",
+        "responsable": "In charge of",
+        "error_registro_calendario": "An error ocurred while registering the calendar. Please try again.",
+        "error_registro_proceso": "An error ocurred while registering the process. Please try again.",
+        "error_registro_actividad": "An error ocurred while registering the activity. Please try again.",
+        "error_pre_file": "Year and resolution number are requred to select a file."
     }
 }

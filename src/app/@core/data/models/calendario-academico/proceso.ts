@@ -1,9 +1,10 @@
 import { Actividad } from './actividad';
 
 export class Proceso {
-    id: number;
-    nombre: string;
-    descripcion: string;
-    periodicidad: string;
+    Nombre: string;
+    Descripcion: string;
+    TipoRecurrenciaId: {Id: number};
+    CalendarioId: {Id: number}; //id del calendario
+    procesoId: number;
     actividades: Actividad[];
 }

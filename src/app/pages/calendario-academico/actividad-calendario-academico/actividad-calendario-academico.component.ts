@@ -2,7 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
-import { EventoService } from '../../../@core/data/evento.service';
+import { CoreService } from '../../../@core/data/core.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-actividad-calendario-academico',
@@ -11,6 +12,7 @@ import { EventoService } from '../../../@core/data/evento.service';
 })
 export class ActividadCalendarioAcademicoComponent {
 
+  activity: Actividad;
   processName: string;
   period: string;
   activityForm: FormGroup;
@@ -19,36 +21,52 @@ export class ActividadCalendarioAcademicoComponent {
   constructor(
     public dialogRef: MatDialogRef<ActividadCalendarioAcademicoComponent>,
     private builder: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public activity: Actividad,
+    private coreService: CoreService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
-    this.fetchSelectData();
+    this.processName = this.data.process.Nombre;
+    this.period = '';
+    this.fetchSelectData(this.data.calendar.PeriodoId);
     this.createActivityForm();
+    this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
   }
 
   saveActivity() {
     this.activity = this.activityForm.value;
+    this.activity.TipoEventoId = {Id: this.data.process.procesoId};
+    this.activity.FechaInicio = moment(this.activity.FechaInicio).format('YYYY-MM-DDTHH:mm') + ':00Z';
+    this.activity.FechaFin = moment(this.activity.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
+    this.activity.Activo = true;
     this.dialogRef.close(this.activity);
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
   }
 
   createActivityForm() {
     this.activityForm = this.builder.group({
-      nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
-      fecha_inicio: ['', Validators.required],
-      fecha_fin: ['', Validators.required],
-      responsable: 'Coordinador'
+      Nombre: ['', Validators.required],
+      Descripcion: ['', Validators.required],
+      FechaInicio: ['', Validators.required],
+      FechaFin: ['', Validators.required],
+      responsable: ''
     })
   }
 
-  fetchSelectData() {
+  fetchSelectData(period) {
+    this.coreService.get('periodo/' + period ).subscribe(
+      response => this.period = response["Nombre"]
+  );
+    
+    
     //this.eventoService.get('rol_encargado_evento/?limit=0').subscribe((data => this.responsables = data));
-
     this.responsables = [
-      "Coordinador",
-      "Estudiantes",
-      "Rectoria",
-      "Decanaturas",
-      "Proyectos curriculares"
+      {Nombre:"Coordinador", Id:1},
+      {Nombre:"Estudiantes", Id:2},
+      {Nombre:"Rectoria", Id:3},
+      {Nombre:"Decanaturas", Id:4},
+      {Nombre:"Proyectos curriculares", Id:5}
     ]
   }
 

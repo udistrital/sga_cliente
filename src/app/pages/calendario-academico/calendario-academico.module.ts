@@ -16,6 +16,8 @@ import { DetalleCalendarioComponent } from './detalle-calendario/detalle-calenda
 
 import { EventoService } from '../../@core/data/evento.service';
 import { CoreService } from '../../@core/data/core.service';
+import { DocumentoService } from '../../@core/data/documento.service';
+import { NuxeoService } from '../../@core/utils/nuxeo.service';
 
 
 
@@ -49,6 +51,8 @@ import { CoreService } from '../../@core/data/core.service';
   providers: [
     EventoService,
     CoreService,
+    DocumentoService,
+    NuxeoService
   ]
 })
 export class CalendarioAcademicoModule { }

@@ -1,3 +1,4 @@
+<toaster-container [toasterconfig]="config"></toaster-container>
 <div class="dinamic-form">
   <form novalidate [formGroup]="calendarForm" #fform="ngForm" (ngSubmit)="createCalendar()" class="form-horizontal" >
     <fieldset [ngClass]="{'fieldseter':true} ">
@@ -8,13 +9,13 @@
         <div class="col-12">
           <mat-form-field style="width: 100%;" floatLabel="always">
             <mat-label>*{{ 'calendario.para' | translate }} </mat-label>
-            <mat-select formControlName="calendario_para" placeholder="Pregrado/Posgrado" required>
+            <mat-select formControlName="Nivel" placeholder="Pregrado/Posgrado" required>
               <mat-option>--Seleccionar--</mat-option>
               <mat-option *ngFor="let nivel of nivel_load" [value]="nivel.id" >
                 {{ nivel.nombre }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="calendarForm.get('calendario_para').hasError('required') && calendarForm.get('calendario_para').touched" >
+            <mat-error *ngIf="calendarForm.get('Nivel').hasError('required') && calendarForm.get('Nivel').touched" >
               {{ 'calendario.error_select_para' | translate }}
             </mat-error>
           </mat-form-field>
@@ -24,13 +25,13 @@
         <div class="col-5">
           <mat-form-field style="width: 100%;" floatLabel="always">
             <mat-label>*{{ 'calendario.periodo' | translate }}: </mat-label>
-            <mat-select formControlName="periodo" placeholder="2020-I, 2020-II, 2020-III" required >
+            <mat-select formControlName="PeriodoId" placeholder="2020-I, 2020-II, 2020-III" required >
               <mat-option>--Seleccionar--</mat-option>
               <mat-option *ngFor="let periodo of periodos" [value]="periodo.Id" >
                 {{ periodo.Nombre }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="calendarForm.get('periodo').hasError('required') && calendarForm.get('periodo').touched" >
+            <mat-error *ngIf="calendarForm.get('PeriodoId').hasError('required') && calendarForm.get('PeriodoId').touched" >
               {{ 'calendario.error_select_periodo' | translate }}
             </mat-error>
           </mat-form-field>
@@ -47,7 +48,7 @@
         <div class="row">
           <div class="col-3">
             <mat-form-field floatLabel="always">
-              <input matInput type="number" formControlName="resolucion" placeholder="{{ 'calendario.numero_resolucion' | translate }} " required />
+              <input matInput type="text" formControlName="resolucion" placeholder="{{ 'calendario.numero_resolucion' | translate }} " required />
               <mat-error *ngIf="calendarForm.get('resolucion').hasError('required') && calendarForm.get('resolucion').touched" >
                 {{ 'calendario.error_resolucion' | translate }}
               </mat-error>
@@ -55,8 +56,8 @@
           </div>
           <div class="col-3">
             <mat-form-field floatLabel="always">
-              <input matInput type="number" formControlName="anno" placeholder="{{ 'calendario.anno_resolucion' | translate }} " required/>
-              <mat-error *ngIf="calendarForm.get('resolucion').hasError('minlength') && calendarForm.get('resolucion').touched" >
+              <input matInput type="text" formControlName="anno" placeholder="{{ 'calendario.anno_resolucion' | translate }} " required/>
+              <mat-error *ngIf="calendarForm.get('anno').hasError('minLength') &&calendarForm.get('anno').hasError('required') && calendarForm.get('anno').touched" >
                 {{ 'calendario.error_anno' | translate }}
               </mat-error>
             </mat-form-field>
@@ -85,7 +86,7 @@
         <legend>
           {{ 'calendario.procesos_actividades' | translate }}
         </legend>
-        <div class="calendar-buttons">
+        <div class="calendar-buttons" [hidden]="activetabs">
           <div class="row">
             <div class="col-12">
               <p>{{ 'calendario.procesos_descripcion' | translate }} </p>
@@ -99,17 +100,17 @@
         <div class="calendar-content" *ngIf="activetabs">
           <mat-tab-group>
             <mat-tab label="{{ 'calendario.procesos' | translate }}" >
-              <ng2-smart-table  [settings]="processSettings" [source]="processes" (create)="addProcess($event)" (editConfirm)="editProcess($event)" (deleteConfirm)="deleteProcess($event)" ></ng2-smart-table>
+              <ng2-smart-table  [settings]="processSettings" [source]="processTable" (create)="addProcess($event)" (editConfirm)="editProcess($event)" (deleteConfirm)="deleteProcess($event)" ></ng2-smart-table>
             </mat-tab>
             <mat-tab label="{{ 'calendario.actividades' | translate }}" >
               <mat-accordion>
                 <mat-expansion-panel *ngFor="let process of processes">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      {{ process.nombre }}
+                      {{ process.Nombre }}
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  <ng2-smart-table  [settings]="activitiesSettings" [source]="process.actividades" (create)="addActivity($event)" (deleteConfirm)="deleteActivity($event)" ></ng2-smart-table>
+                  <ng2-smart-table  [settings]="activitiesSettings" [source]="process.actividades" (create)="addActivity(process)" (deleteConfirm)="deleteActivity($event)" ></ng2-smart-table>
                 </mat-expansion-panel>
               </mat-accordion>
             </mat-tab>
