@@ -1049,6 +1049,12 @@
         "error_registro_calendario": "Ocurrió un error al registrar el calendario. Por favor intente de nuevo.",
         "error_registro_proceso": "Ocurrió un error al registrar el proceso. Por favor intente de nuevo.",
         "error_registro_actividad": "Ocurrió un error al registrar la actividad. Por favor intente de nuevo.",
-        "error_pre_file": "Se requieren el año y numero de resolución para subir el archivo"
+        "error_pre_file": "Se requieren el año y numero de resolución para subir el archivo",
+        "seguro_registrar_calendario": "¿Esta seguro de registrar un nuevo calendario académico?",
+        "seguro_registrar_proceso": "¿Esta seguro de agregar un nuevo proceso al calendario académico?",
+        "seguro_registrar_actividad": "¿Esta seguro de agregar una actividad al proceso actual?",
+        "calendario_exito": "El calendario ha sido creado con éxito.",
+        "proceso_exito": "El proceso ha sido registrado con éxito.",
+        "actividad_exito": "La actividad ha sido guardada con éxito."
     }
 }

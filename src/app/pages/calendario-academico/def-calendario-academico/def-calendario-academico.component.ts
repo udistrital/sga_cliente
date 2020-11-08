@@ -12,6 +12,8 @@ import { CrudPeriodoComponent } from '../../periodo/crud-periodo/crud-periodo.co
 import { Proceso } from '../../../@core/data/models/calendario-academico/proceso';
 import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
 import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
+import Swal from 'sweetalert2';
+import * as moment from 'moment';
 
 import { CoreService } from '../../../@core/data/core.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
@@ -161,39 +163,55 @@ export class DefCalendarioAcademicoComponent {
     }
   }
 
-  createCalendar() {
-    if (this.fileResolucion) {
-      this.calendar = this.calendarForm.value;
-      this.uploadResolutionFile(this.fileResolucion)
-        .then(fileID => {
-          this.calendar.DocumentoId = fileID;
-          this.calendar.DependenciaId = '{}';
-          this.calendar.Activo = true;
-          this.eventoService.post('calendario', this.calendar).subscribe(
-            response => {
-              this.calendar.calendarioId = response["Id"];
-              this.createdCalendar = true;
-            },
-            error => {
-              console.log("Error calendario", error);
-              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('calendario.error_registro_calendario'));
-            }
-          );
-        }).catch(error => {
-          console.log("Error subida archivo", error);
-          this.showToast('error', this.translate.instant('GLOBAL.archivo_seleccionado'), this.translate.instant('ERROR.error_subir_documento'));
-        });
-      
-    } else {
-      this.showToast('error', this.translate.instant('GLOBAL.archivo_seleccionado'), this.translate.instant('ERROR.no_documento'));
-    }
+  createCalendar(event) {
+    event.preventDefault();
+    const options: any = {
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('calendario.seguro_registrar_calendario'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(options).then((ok) => {
+      if (ok) {
+        if (this.fileResolucion) {
+          this.calendar = this.calendarForm.value;
+          this.uploadResolutionFile(this.fileResolucion)
+            .then(fileID => {
+              this.calendar.DocumentoId = fileID;
+              this.calendar.DependenciaId = '{}';
+              this.calendar.Activo = true;
+              this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + " ";
+              this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
+              this.calendar.Nombre += " " + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
+              this.eventoService.post('calendario', this.calendar).subscribe(
+                response => {
+                  this.calendar.calendarioId = response["Id"];
+                  this.createdCalendar = true;
+                  Swal("", this.translate.instant('calendario.calendario_exito'), 'success');
+                },
+                error => {
+                  console.log("Error calendario", error);
+                  this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('calendario.error_registro_calendario'));
+                }
+              );
+            }).catch(error => {
+              console.log("Error subida archivo", error);
+              this.showToast('error', this.translate.instant('GLOBAL.archivo_seleccionado'), this.translate.instant('ERROR.error_subir_documento'));
+            });
+          
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.archivo_seleccionado'), this.translate.instant('ERROR.no_documento'));
+        }
+      }
+    });
   }
 
   uploadResolutionFile(file) {
     return new Promise((resolve, reject) => {
       this.nuxeoService.getDocumentos$([file], this.documentoService)
         .subscribe(response => {
-          console.log("documento", response)
           resolve(response["undefined"].Id);//desempacar el response, puede dejar de llamarse 'undefined'
         }, error => {
           reject(error);
@@ -220,6 +238,7 @@ export class DefCalendarioAcademicoComponent {
             process.actividades = [];
             this.processes.push(process);
             this.processTable.load(this.processes);
+            Swal("", this.translate.instant('calendario.proceso_exito'), 'success');
           },
           error => {
             this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('calendario.error_registro_proceso'));
@@ -237,7 +256,7 @@ export class DefCalendarioAcademicoComponent {
 
   }
 
-  addActivity(process: Proceso) {
+  addActivity(event, process: Proceso) {
     const activityConfig = new MatDialogConfig();
     activityConfig.width = '800px';
     activityConfig.height = '600px';
@@ -247,17 +266,27 @@ export class DefCalendarioAcademicoComponent {
       if (activity !== undefined) {
         this.eventoService.post('calendario_evento', activity).subscribe(
           response => {
-            console.log("Actividad", response);
-            
+            activity.FechaInicio = moment(activity.FechaInicio).format('DD-MM-YYYY');
+            activity.FechaFin = moment(activity.FechaFin).format('DD-MM-YYYY');
             this.processes.filter((proc: Proceso) => proc.procesoId === process.procesoId)[0].actividades.push(activity);
-            this.processTable.load(this.processes);
+            event.source.load(process.actividades);
+            Swal("", this.translate.instant('calendario.actividad_exito'), 'success');
           },
           error => {
             this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('calendario.error_registro_actividad'));
           }
         );
       }
-    })
+    });
+    this.processTable.load(this.processes);
+  }
+
+  editActivity(event, process: Proceso) {
+
+  }
+
+  deleteActivity(event, process: Proceso) {
+
   }
 
   openTabs() {
@@ -277,8 +306,7 @@ export class DefCalendarioAcademicoComponent {
           file.url = this.cleanURL(file.urlTemp);
           file.IdDocumento = 14;
           file.file = event.target.files[0];
-          file.resolucion = this.calendarForm.value.resolucion;
-          file.anno = this.calendarForm.value.anno;
+          file.Metadatos = JSON.stringify({resolucion: this.calendarForm.value.resolucion, anno: this.calendarForm.value.anno});
           this.fileResolucion = file;
         } else {
           this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('ERROR.formato_documento_pdf'));

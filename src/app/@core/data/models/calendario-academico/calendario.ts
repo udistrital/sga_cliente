@@ -1,4 +1,5 @@
 export class Calendario {
+    Nombre: string;
     PeriodoId: number;
     Nivel: number;
     resolucion: number;

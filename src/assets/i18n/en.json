@@ -1039,6 +1039,12 @@
         "error_registro_calendario": "An error ocurred while registering the calendar. Please try again.",
         "error_registro_proceso": "An error ocurred while registering the process. Please try again.",
         "error_registro_actividad": "An error ocurred while registering the activity. Please try again.",
-        "error_pre_file": "Year and resolution number are requred to select a file."
+        "error_pre_file": "Year and resolution number are requred to select a file.",
+        "seguro_registrar_calendario": "Are you sure about creating a new academic calendar?",
+        "seguro_registrar_proceso": "Are you sure about adding a new process to the academic calendar?",
+        "seguro_registrar_actividad": "Are you sure about adding a new activity to the current process?",
+        "calendario_exito": "The calendar has been successfully created.",
+        "proceso_exito": "The process has been successfully registered.",
+        "actividad_exito": "The activity has been successfully saved."
     }
 }

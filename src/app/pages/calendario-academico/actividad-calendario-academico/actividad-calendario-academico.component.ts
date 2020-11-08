@@ -1,8 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
 import { CoreService } from '../../../@core/data/core.service';
+import Swal from 'sweetalert2';
 import * as moment from 'moment';
 
 @Component({
@@ -22,6 +24,7 @@ export class ActividadCalendarioAcademicoComponent {
     public dialogRef: MatDialogRef<ActividadCalendarioAcademicoComponent>,
     private builder: FormBuilder,
     private coreService: CoreService,
+    private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.processName = this.data.process.Nombre;
@@ -32,12 +35,22 @@ export class ActividadCalendarioAcademicoComponent {
   }
 
   saveActivity() {
-    this.activity = this.activityForm.value;
-    this.activity.TipoEventoId = {Id: this.data.process.procesoId};
-    this.activity.FechaInicio = moment(this.activity.FechaInicio).format('YYYY-MM-DDTHH:mm') + ':00Z';
-    this.activity.FechaFin = moment(this.activity.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
-    this.activity.Activo = true;
-    this.dialogRef.close(this.activity);
+    const options: any = {
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('calendario.seguro_registrar_actividad'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(options).then(() => {
+      this.activity = this.activityForm.value;
+      this.activity.TipoEventoId = {Id: this.data.process.procesoId};
+      this.activity.FechaInicio = moment(this.activity.FechaInicio).format('YYYY-MM-DDTHH:mm') + ':00Z';
+      this.activity.FechaFin = moment(this.activity.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
+      this.activity.Activo = true;
+      this.dialogRef.close(this.activity);
+    })
   }
 
   closeDialog() {
