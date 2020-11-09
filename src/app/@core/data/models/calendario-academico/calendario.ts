@@ -1,8 +1,11 @@
 export class Calendario {
-    id: number;
-    periodo: string;
-    calendario_para: string;
+    Nombre: string;
+    PeriodoId: number;
+    Nivel: number;
     resolucion: number;
     anno: number;
-    fileResolucion: any;
+    DocumentoId: any;
+    DependenciaId: any;
+    Activo: boolean;
+    calendarioId: number;
 }

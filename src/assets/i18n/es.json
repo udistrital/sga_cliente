@@ -103,6 +103,7 @@
 
     },
     "GLOBAL": {
+        "cargando": "Cargando...",
         "preinscripcion": "Preinscripcion",
         "preinscripcion_2": "Desea realizar preinscripcion",
         "id": "Id",
@@ -524,7 +525,8 @@
         "Estado": "ESTADO",
         "Tipo": "TIPO",
         "Documento": "Número Documento",
-        "Puntaje": "PUNTAJE"
+        "Puntaje": "PUNTAJE",
+        "acciones": "Acciones"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -930,7 +932,7 @@
         "informacion_academica_registrada": "Información académica actualizada",
         "documento_informacion_academica_no_registrado": "Error subiendo el documento de soporte",
         "seguro_continuar_registrar": "¿Está seguto de registrar esta información académica?",
-        "error_cargar_universidad": "Ocurruió un error al cargar la información de la universidad"
+        "error_cargar_universidad": "Ocurrió un error al cargar la información de la universidad"
     },
     "experiencia_laboral": {
         "experiencia_laboral_no_registrada": "Experiencia laboral no actualizada",
@@ -1044,6 +1046,16 @@
         "error_select_periodo": "Seleccione un periodo académico",
         "desde": "Desde",
         "hasta": "Hasta",
-        "responsable": "Responsable"
+        "responsable": "Responsable",
+        "error_registro_calendario": "Ocurrió un error al registrar el calendario. Por favor intente de nuevo.",
+        "error_registro_proceso": "Ocurrió un error al registrar el proceso. Por favor intente de nuevo.",
+        "error_registro_actividad": "Ocurrió un error al registrar la actividad. Por favor intente de nuevo.",
+        "error_pre_file": "Se requieren el año y numero de resolución para subir el archivo",
+        "seguro_registrar_calendario": "¿Esta seguro de registrar un nuevo calendario académico?",
+        "seguro_registrar_proceso": "¿Esta seguro de agregar un nuevo proceso al calendario académico?",
+        "seguro_registrar_actividad": "¿Esta seguro de agregar una actividad al proceso actual?",
+        "calendario_exito": "El calendario ha sido creado con éxito.",
+        "proceso_exito": "El proceso ha sido registrado con éxito.",
+        "actividad_exito": "La actividad ha sido guardada con éxito."
     }
 }

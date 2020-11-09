@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ThemeModule } from '../../@theme/theme.module';
+import { NbSpinnerModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ToasterModule } from 'angular2-toaster';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
@@ -16,6 +17,8 @@ import { DetalleCalendarioComponent } from './detalle-calendario/detalle-calenda
 
 import { EventoService } from '../../@core/data/evento.service';
 import { CoreService } from '../../@core/data/core.service';
+import { DocumentoService } from '../../@core/data/documento.service';
+import { NuxeoService } from '../../@core/utils/nuxeo.service';
 
 
 
@@ -30,6 +33,7 @@ import { CoreService } from '../../@core/data/core.service';
     PeriodoModule,
     FormsModule,
     ReactiveFormsModule,
+    NbSpinnerModule 
   ],
   declarations: [
     routedComponents,
@@ -49,6 +53,8 @@ import { CoreService } from '../../@core/data/core.service';
   providers: [
     EventoService,
     CoreService,
+    DocumentoService,
+    NuxeoService
   ]
 })
 export class CalendarioAcademicoModule { }
