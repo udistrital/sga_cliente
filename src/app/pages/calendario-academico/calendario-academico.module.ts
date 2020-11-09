@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ThemeModule } from '../../@theme/theme.module';
+import { NbSpinnerModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ToasterModule } from 'angular2-toaster';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
@@ -32,6 +33,7 @@ import { NuxeoService } from '../../@core/utils/nuxeo.service';
     PeriodoModule,
     FormsModule,
     ReactiveFormsModule,
+    NbSpinnerModule 
   ],
   declarations: [
     routedComponents,

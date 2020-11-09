@@ -40,6 +40,7 @@ export class DefCalendarioAcademicoComponent {
   createdCalendar: boolean = false;
   periodos: any;
   nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
+  loading: boolean = false;
 
 
   constructor(
@@ -175,6 +176,7 @@ export class DefCalendarioAcademicoComponent {
     };
     Swal(options).then((ok) => {
       if (ok) {
+        this.loading = true;
         if (this.fileResolucion) {
           this.calendar = this.calendarForm.value;
           this.uploadResolutionFile(this.fileResolucion)
@@ -189,6 +191,7 @@ export class DefCalendarioAcademicoComponent {
                 response => {
                   this.calendar.calendarioId = response["Id"];
                   this.createdCalendar = true;
+                  this.loading = false;
                   Swal("", this.translate.instant('calendario.calendario_exito'), 'success');
                 },
                 error => {

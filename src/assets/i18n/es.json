@@ -103,6 +103,7 @@
 
     },
     "GLOBAL": {
+        "cargando": "Cargando...",
         "preinscripcion": "Preinscripcion",
         "preinscripcion_2": "Desea realizar preinscripcion",
         "id": "Id",
