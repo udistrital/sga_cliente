@@ -1,9 +1,10 @@
 export class Actividad {
-    id: number;
-    nombre: string;
-    descripcion: string;
-    fecha_inicio: string;
-    fecha_fin: string;
-    estado: string;
-    responsable: string;
+    Nombre: string;
+    Descripcion: string;
+    FechaInicio: string;
+    FechaFin: string;
+    Activo: boolean;
+    responsable: number;
+    TipoEventoId: {Id: number}; //id del proceso
+    actividadId: number;
 }

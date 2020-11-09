@@ -86,6 +86,7 @@ export class NuxeoService {
                                                         documentoPost.Nombre = file.nombre;
                                                         documentoPost.TipoDocumento = tipoDocumento;
                                                         documentoPost.Activo = true;
+                                                        documentoPost.Metadatos = file.Metadatos;
                                                         documentoService.post('documento', documentoPost)
                                                             .subscribe(resuestaPost => {
                                                                 nuxeoservice.documentos[file.key] = resuestaPost;

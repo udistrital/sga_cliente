@@ -1,8 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 import { Proceso } from '../../../@core/data/models/calendario-academico/proceso';
-import { EventoService } from '../../../@core/data/evento.service';
+import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
+import { CoreService } from '../../../@core/data/core.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'ngx-proceso-calendario-academico',
@@ -11,40 +14,53 @@ import { EventoService } from '../../../@core/data/evento.service';
 })
 export class ProcesoCalendarioAcademicoComponent {
 
+  process: Proceso;
   processForm: FormGroup;
-  periodicidad: any;
+  periodicidad: any[];
 
   constructor(
     public dialogRef: MatDialogRef<ProcesoCalendarioAcademicoComponent>,
     private builder: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public process: Proceso,
-    private eventoService: EventoService
+    private translate: TranslateService,
+    @Inject(MAT_DIALOG_DATA) private calendar: Calendario,
+    private coreService: CoreService
   ) { 
     this.fetchSelectData();
     this.createProcessForm();
+    this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
   }
 
-  savePeriod() {
-    this.process = this.processForm.value;
-    this.dialogRef.close(this.process);
+  saveProcess() {
+    const options: any = {
+      title: this.translate.instant('GLOBAL.atencion'),
+      text: this.translate.instant('calendario.seguro_registrar_proceso'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal(options).then(() => {
+      this.process = this.processForm.value;
+      this.process.CalendarioId = {Id: this.calendar.calendarioId};
+      this.process.TipoRecurrenciaId = {Id: this.processForm.value.TipoRecurrenciaId}
+      this.dialogRef.close(this.process);
+    });
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
   }
 
   createProcessForm() {
     this.processForm = this.builder.group({
-      nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
-      periodicidad: 'Semestral'
+      Nombre: ['', Validators.required],
+      Descripcion: ['', Validators.required],
+      TipoRecurrenciaId: ''
     }) 
   }
 
   fetchSelectData() {
-    //this.eventoService.get('tipo_recurrencia/?limit=0').subscribe((data => this.periodicidad = data));
-
-    this.periodicidad = [
-      {nombre: "Semestral", value: 1},
-      {nombre: "Anual", value: 2},
-      {nombre: "Bimestral", value: 3}
-    ]
+    this.coreService.get('unidad_tiempo').subscribe((data => this.periodicidad = data));
   }
 
 }
