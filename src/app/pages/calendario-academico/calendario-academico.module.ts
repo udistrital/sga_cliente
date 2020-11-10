@@ -3,7 +3,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { NbSpinnerModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ToasterModule } from 'angular2-toaster';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CalendarioAcademicoRoutingModule, routedComponents } from './calendario-academico-routing.module';
 import { SharedModule } from '../../shared/shared.module';
@@ -33,7 +33,7 @@ import { NuxeoService } from '../../@core/utils/nuxeo.service';
     PeriodoModule,
     FormsModule,
     ReactiveFormsModule,
-    NbSpinnerModule 
+    NbSpinnerModule,
   ],
   declarations: [
     routedComponents,
@@ -54,7 +54,7 @@ import { NuxeoService } from '../../@core/utils/nuxeo.service';
     EventoService,
     CoreService,
     DocumentoService,
-    NuxeoService
-  ]
+    NuxeoService,
+  ],
 })
 export class CalendarioAcademicoModule { }

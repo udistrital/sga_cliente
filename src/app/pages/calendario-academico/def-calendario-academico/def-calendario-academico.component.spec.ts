@@ -8,7 +8,7 @@ describe('DefCalendarioAcademicoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DefCalendarioAcademicoComponent ]
+      declarations: [ DefCalendarioAcademicoComponent ],
     })
     .compileComponents();
   }));

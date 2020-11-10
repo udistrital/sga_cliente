@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 
 @Component({
-  selector: 'detalle-calendario',
+  selector: 'ngx-detalle-calendario',
   templateUrl: './detalle-calendario.component.html',
-  styleUrls: ['./detalle-calendario.component.scss']
+  styleUrls: ['./detalle-calendario.component.scss'],
 })
 export class DetalleCalendarioComponent implements OnInit {
 
@@ -20,19 +20,19 @@ export class DetalleCalendarioComponent implements OnInit {
         actividad: 'Inscripcion de aspirantes',
         fecha_inicio: '23/09/2020',
         fecha_fin: '20/01/2021',
-        responsable: 'COMUNIDAD EN GENERAL'
+        responsable: 'COMUNIDAD EN GENERAL',
       },
       {
         actividad: 'Entrevistas',
         fecha_inicio: '23/09/2020',
         fecha_fin: '20/01/2021',
-        responsable: 'COORDINADORES'
+        responsable: 'COORDINADORES',
       },
       {
         actividad: 'Publicación de admitidos',
         fecha_inicio: '23/09/2020',
         fecha_fin: '20/01/2021',
-        responsable: 'COORDINADORES'
+        responsable: 'COORDINADORES',
       },
     ]
 
