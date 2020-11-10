@@ -198,6 +198,7 @@ export class DefCalendarioAcademicoComponent {
                   this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('calendario.error_registro_calendario'));
                 },
               );
+              this.loading = false;
             }).catch(error => {
               console.error('Error subida archivo', error);
               this.showToast('error', this.translate.instant('GLOBAL.archivo_seleccionado'), this.translate.instant('ERROR.error_subir_documento'));
@@ -205,7 +206,6 @@ export class DefCalendarioAcademicoComponent {
         } else {
           this.showToast('error', this.translate.instant('GLOBAL.archivo_seleccionado'), this.translate.instant('ERROR.no_documento'));
         }
-        this.loading = false;
       }
     });
   }
