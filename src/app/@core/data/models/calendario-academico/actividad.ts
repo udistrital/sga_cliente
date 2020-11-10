@@ -5,6 +5,6 @@ export class Actividad {
     FechaFin: string;
     Activo: boolean;
     responsable: number;
-    TipoEventoId: {Id: number}; //id del proceso
+    TipoEventoId: {Id: number}; // id del proceso
     actividadId: number;
 }

@@ -30,7 +30,7 @@ const routes: Routes = [{
     },
     {
       path: 'calendario-academico',
-      loadChildren: './calendario-academico/calendario-academico.module#CalendarioAcademicoModule'
+      loadChildren: './calendario-academico/calendario-academico.module#CalendarioAcademicoModule',
     },
     {
         path: 'perfil',

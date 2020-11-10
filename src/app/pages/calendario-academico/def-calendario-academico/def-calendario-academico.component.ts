@@ -23,7 +23,7 @@ import { EventoService } from '../../../@core/data/evento.service';
 @Component({
   selector: 'ngx-def-calendario-academico',
   templateUrl: './def-calendario-academico.component.html',
-  styleUrls: ['../calendario-academico.component.scss']
+  styleUrls: ['../calendario-academico.component.scss'],
 })
 export class DefCalendarioAcademicoComponent {
 
@@ -48,11 +48,11 @@ export class DefCalendarioAcademicoComponent {
     private toasterService: ToasterService,
     private translate: TranslateService,
     private builder: FormBuilder,
-    private dialog: MatDialog, 
+    private dialog: MatDialog,
     private coreService: CoreService,
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
-    private eventoService: EventoService
+    private eventoService: EventoService,
   ) {
     this.processTable = new LocalDataSource();
     this.processes = [];
@@ -73,7 +73,7 @@ export class DefCalendarioAcademicoComponent {
       anno: ['', [Validators.required, Validators.minLength(4)]],
       PeriodoId: '',
       Nivel: '',
-      fileResolucion: ['', Validators.required]
+      fileResolucion: ['', Validators.required],
     })
   }
 
@@ -89,18 +89,18 @@ export class DefCalendarioAcademicoComponent {
         Nombre: {
           title: this.translate.instant('calendario.nombre'),
           width: '20%',
-          editable: false
+          editable: false,
         },
         Descripcion: {
           title: this.translate.instant('GLOBAL.descripcion'),
           width: '80%',
-          editable: false
-        }
+          editable: false,
+        },
       },
       mode: 'external',
       actions: {
         position: 'right',
-        columnTitle: this.translate.instant('GLOBAL.acciones')
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
       },
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
@@ -112,7 +112,7 @@ export class DefCalendarioAcademicoComponent {
         deleteButtonContent: '<i class="nb-trash"></i>',
         confirmDelete: true,
       },
-      noDataMessage: this.translate.instant('calendario.sin_procesos')
+      noDataMessage: this.translate.instant('calendario.sin_procesos'),
     }
   }
 
@@ -122,33 +122,33 @@ export class DefCalendarioAcademicoComponent {
         Nombre: {
           title: this.translate.instant('calendario.nombre'),
           witdh: '20%',
-          editable: false
+          editable: false,
         },
         Descripcion: {
           title: this.translate.instant('GLOBAL.descripcion'),
           witdh: '20%',
-          editable: false
+          editable: false,
         },
         FechaInicio: {
           title: this.translate.instant('calendario.fecha_inicio'),
           witdh: '20%',
-          editable: false
+          editable: false,
         },
         FechaFin: {
           title: this.translate.instant('calendario.fecha_fin'),
           witdh: '20%',
-          editable: false
+          editable: false,
         },
         Estado: {
           title: this.translate.instant('calendario.estado'),
           witdh: '20%',
-          editable: false
+          editable: false,
         },
       },
       mode: 'external',
       actions: {
         position: 'right',
-        columnTitle: this.translate.instant('GLOBAL.acciones')
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
       },
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
@@ -160,7 +160,7 @@ export class DefCalendarioAcademicoComponent {
         deleteButtonContent: '<i class="nb-trash"></i>',
         confirmDelete: true,
       },
-      noDataMessage: this.translate.instant('calendario.sin_actividades')
+      noDataMessage: this.translate.instant('calendario.sin_actividades'),
     }
   }
 
@@ -184,26 +184,25 @@ export class DefCalendarioAcademicoComponent {
               this.calendar.DocumentoId = fileID;
               this.calendar.DependenciaId = '{}';
               this.calendar.Activo = true;
-              this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + " ";
+              this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
               this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
-              this.calendar.Nombre += " " + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
+              this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
               this.eventoService.post('calendario', this.calendar).subscribe(
                 response => {
-                  this.calendar.calendarioId = response["Id"];
+                  this.calendar.calendarioId = response['Id'];
                   this.createdCalendar = true;
                   this.loading = false;
-                  Swal("", this.translate.instant('calendario.calendario_exito'), 'success');
+                  Swal('', this.translate.instant('calendario.calendario_exito'), 'success');
                 },
                 error => {
-                  console.log("Error calendario", error);
+                  console.error('Error calendario', error);
                   this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('calendario.error_registro_calendario'));
-                }
+                },
               );
             }).catch(error => {
-              console.log("Error subida archivo", error);
+              console.error('Error subida archivo', error);
               this.showToast('error', this.translate.instant('GLOBAL.archivo_seleccionado'), this.translate.instant('ERROR.error_subir_documento'));
             });
-          
         } else {
           this.showToast('error', this.translate.instant('GLOBAL.archivo_seleccionado'), this.translate.instant('ERROR.no_documento'));
         }
@@ -215,7 +214,7 @@ export class DefCalendarioAcademicoComponent {
     return new Promise((resolve, reject) => {
       this.nuxeoService.getDocumentos$([file], this.documentoService)
         .subscribe(response => {
-          resolve(response["undefined"].Id);//desempacar el response, puede dejar de llamarse 'undefined'
+          resolve(response['undefined'].Id); // desempacar el response, puede dejar de llamarse 'undefined'
         }, error => {
           reject(error);
         });
@@ -236,21 +235,20 @@ export class DefCalendarioAcademicoComponent {
       if (process !== undefined) {
         this.eventoService.post('tipo_evento', process).subscribe(
           response => {
-            console.log("Proceso", response);
-            process.procesoId = response["Id"];
+            process.procesoId = response['Id'];
             process.actividades = [];
             this.processes.push(process);
             this.processTable.load(this.processes);
-            Swal("", this.translate.instant('calendario.proceso_exito'), 'success');
+            Swal('', this.translate.instant('calendario.proceso_exito'), 'success');
           },
           error => {
             this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('calendario.error_registro_proceso'));
-          }
+          },
         );
       }
     });
   }
-  
+
   editProcess(event) {
 
   }
@@ -273,11 +271,11 @@ export class DefCalendarioAcademicoComponent {
             activity.FechaFin = moment(activity.FechaFin).format('DD-MM-YYYY');
             this.processes.filter((proc: Proceso) => proc.procesoId === process.procesoId)[0].actividades.push(activity);
             event.source.load(process.actividades);
-            Swal("", this.translate.instant('calendario.actividad_exito'), 'success');
+            Swal('', this.translate.instant('calendario.actividad_exito'), 'success');
           },
           error => {
             this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('calendario.error_registro_actividad'));
-          }
+          },
         );
       }
     });

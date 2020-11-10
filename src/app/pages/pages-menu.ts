@@ -48,9 +48,9 @@ export const MENU_ITEMS: MenuItem[] = [
         title: 'Listar calendarios académicos',
         icon: 'nb-list',
         link: '/pages/calendario-academico/list-calendario-academico',
-        key: 'list_calendarioacademico'
-      }
-    ]
+        key: 'list_calendarioacademico',
+      },
+    ],
   },
   {
     title: 'Tipo Periodo',
