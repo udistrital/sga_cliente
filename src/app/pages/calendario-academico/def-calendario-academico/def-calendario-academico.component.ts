@@ -191,7 +191,6 @@ export class DefCalendarioAcademicoComponent {
                 response => {
                   this.calendar.calendarioId = response['Id'];
                   this.createdCalendar = true;
-                  this.loading = false;
                   Swal('', this.translate.instant('calendario.calendario_exito'), 'success');
                 },
                 error => {
@@ -206,6 +205,7 @@ export class DefCalendarioAcademicoComponent {
         } else {
           this.showToast('error', this.translate.instant('GLOBAL.archivo_seleccionado'), this.translate.instant('ERROR.no_documento'));
         }
+        this.loading = false;
       }
     });
   }
