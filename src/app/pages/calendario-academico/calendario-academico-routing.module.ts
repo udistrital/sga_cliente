@@ -13,24 +13,24 @@ const routes: Routes = [{
     children: [
         {
             path: 'list-calendario-academico',
-            component: ListCalendarioAcademicoComponent
+            component: ListCalendarioAcademicoComponent,
         },
         {
             path: 'def-calendario-academico',
-            component: DefCalendarioAcademicoComponent
+            component: DefCalendarioAcademicoComponent,
         },
         {
             path: 'proceso',
-            component: ProcesoCalendarioAcademicoComponent
+            component: ProcesoCalendarioAcademicoComponent,
         },
         {
             path: 'actividad',
-            component: ActividadCalendarioAcademicoComponent
+            component: ActividadCalendarioAcademicoComponent,
         },
         {
             path: 'detalle-calendario',
-            component: DetalleCalendarioComponent
-        }
+            component: DetalleCalendarioComponent,
+        },
     ],
 }];
 
@@ -40,7 +40,7 @@ const routes: Routes = [{
     ],
     exports: [
         RouterModule,
-    ]
+    ],
 })
 export class CalendarioAcademicoRoutingModule { }
 
@@ -50,5 +50,5 @@ export const routedComponents = [
     DefCalendarioAcademicoComponent,
     ProcesoCalendarioAcademicoComponent,
     ActividadCalendarioAcademicoComponent,
-    DetalleCalendarioComponent
+    DetalleCalendarioComponent,
 ]

@@ -10,7 +10,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'ngx-actividad-calendario-academico',
   templateUrl: './actividad-calendario-academico.component.html',
-  styleUrls: ['../calendario-academico.component.scss']
+  styleUrls: ['../calendario-academico.component.scss'],
 })
 export class ActividadCalendarioAcademicoComponent {
 
@@ -63,23 +63,23 @@ export class ActividadCalendarioAcademicoComponent {
       Descripcion: ['', Validators.required],
       FechaInicio: ['', Validators.required],
       FechaFin: ['', Validators.required],
-      responsable: ''
+      responsable: '',
     })
   }
 
   fetchSelectData(period) {
     this.coreService.get('periodo/' + period ).subscribe(
-      response => this.period = response["Nombre"]
+      response => this.period = response['Nombre'],
   );
-    
-    
-    //this.eventoService.get('rol_encargado_evento/?limit=0').subscribe((data => this.responsables = data));
+
+
+    // this.eventoService.get('rol_encargado_evento/?limit=0').subscribe((data => this.responsables = data));
     this.responsables = [
-      {Nombre:"Coordinador", Id:1},
-      {Nombre:"Estudiantes", Id:2},
-      {Nombre:"Rectoria", Id:3},
-      {Nombre:"Decanaturas", Id:4},
-      {Nombre:"Proyectos curriculares", Id:5}
+      {Nombre: 'Coordinador', Id: 1},
+      {Nombre: 'Estudiantes', Id: 2},
+      {Nombre: 'Rectoria', Id: 3},
+      {Nombre: 'Decanaturas', Id: 4},
+      {Nombre: 'Proyectos curriculares', Id: 5},
     ]
   }
 

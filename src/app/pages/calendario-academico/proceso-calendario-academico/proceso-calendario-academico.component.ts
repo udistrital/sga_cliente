@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'ngx-proceso-calendario-academico',
   templateUrl: './proceso-calendario-academico.component.html',
-  styleUrls: ['../calendario-academico.component.scss']
+  styleUrls: ['../calendario-academico.component.scss'],
 })
 export class ProcesoCalendarioAcademicoComponent {
 
@@ -23,8 +23,8 @@ export class ProcesoCalendarioAcademicoComponent {
     private builder: FormBuilder,
     private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) private calendar: Calendario,
-    private coreService: CoreService
-  ) { 
+    private coreService: CoreService,
+  ) {
     this.fetchSelectData();
     this.createProcessForm();
     this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
@@ -55,8 +55,8 @@ export class ProcesoCalendarioAcademicoComponent {
     this.processForm = this.builder.group({
       Nombre: ['', Validators.required],
       Descripcion: ['', Validators.required],
-      TipoRecurrenciaId: ''
-    }) 
+      TipoRecurrenciaId: '',
+    });
   }
 
   fetchSelectData() {

@@ -34,7 +34,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
   index: any;
   idproyecto: any;
   datosbasico: InformacionBasica;
-  displayedColumns = ['Id', 'NombreFacultad', 'proyecto', 'Nivel Proyecto', 'codigo', 'OfertaLetra', 'FechaVenimientoAcreditacion', 'FechaVenimientoCalidad', 'Consulta', 'editar', 'inhabilitar'];
   codigosnies: Number;
   facultad: string;
   nombre: String;
@@ -89,6 +88,19 @@ export class ListProyectoAcademicoComponent implements OnInit {
   id_documento_alta_calidad: string;
   id_documento_registro_coordinador: number;
   proyecto_padre_id: ProyectoAcademicoInstitucion;
+  displayedColumns = [
+    'Id',
+    'NombreFacultad',
+    'proyecto',
+    'Nivel Proyecto',
+    'codigo',
+    'OfertaLetra',
+    'FechaVenimientoAcreditacion',
+    'FechaVenimientoCalidad',
+    'Consulta',
+    'editar',
+    'inhabilitar',
+  ];
 
   constructor(private translate: TranslateService,
     private proyectoacademicoService: ProyectoAcademicoService,
@@ -195,7 +207,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       this.dataSource = new MatTableDataSource(res);
       this.dataSource.sort = this.sort;
       this.dataSource.filterPredicate = (data: any, filter: string) => this.filterPredicate(data.ProyectoAcademico.Nombre, filter);
-      this.dataSource.data.forEach((data: any) => data.proyecto = data.ProyectoAcademico.Nombre); //para ordenar por nommbre de proyecto
+      this.dataSource.data.forEach((data: any) => data.proyecto = data.ProyectoAcademico.Nombre); // para ordenar por nommbre de proyecto
     }else {
       Swal(opt1)
       .then((willDelete) => {

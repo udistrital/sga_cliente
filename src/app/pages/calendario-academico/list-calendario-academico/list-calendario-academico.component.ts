@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'ngx-list-calendario-academico',
   templateUrl: './list-calendario-academico.component.html',
-  styleUrls: ['../calendario-academico.component.scss']
+  styleUrls: ['../calendario-academico.component.scss'],
 })
 export class ListCalendarioAcademicoComponent implements OnInit {
 
@@ -17,7 +17,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.createTable();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -26,25 +26,25 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
 
   ngOnInit() {
-    //datos provisionales
+    // datos provisionales
     this.data = [
       {
-        Nombre: "Calendario académico Posgrado 2020-III",
-        Periodo: "2020-III",
-        Dependencia: "Posgrado",
-        Estado: "Activo"
+        Nombre: 'Calendario académico Posgrado 2020-III',
+        Periodo: '2020-III',
+        Dependencia: 'Posgrado',
+        Estado: 'Activo',
       },
       {
-        Nombre: "Calendario académico Pregrado 2020-III",
-        Periodo: "2020-III",
-        Dependencia: "Pregrado",
-        Estado: "Activo"
+        Nombre: 'Calendario académico Pregrado 2020-III',
+        Periodo: '2020-III',
+        Dependencia: 'Pregrado',
+        Estado: 'Activo',
       },
       {
-        Nombre: "Calendario académico Pregrado 2020-I",
-        Periodo: "2020-I",
-        Dependencia: "Pregrado",
-        Estado: "Inactivo"
+        Nombre: 'Calendario académico Pregrado 2020-I',
+        Periodo: '2020-I',
+        Dependencia: 'Pregrado',
+        Estado: 'Inactivo',
       },
     ]
   }
@@ -55,22 +55,22 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         Nombre: {
           title: this.translate.instant('calendario.nombre'),
           width: '20%',
-          editable: false
+          editable: false,
         },
         Periodo: {
           title: this.translate.instant('calendario.periodo'),
           width: '20%',
-          editable: false
+          editable: false,
         },
         Dependencia: {
           title: this.translate.instant('calendario.dependencia'),
           width: '20%',
-          editable: false
+          editable: false,
         },
         Estado: {
           title: this.translate.instant('calendario.estado'),
           width: '20%',
-          editable: false
+          editable: false,
         },
       },
       mode: 'external',
@@ -81,7 +81,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         custom: [
           {
             name: 'view',
-            title: '<i class="nb-list"></i>'
+            title: '<i class="nb-list"></i>',
           },
           {
             name: 'edit',
@@ -89,9 +89,9 @@ export class ListCalendarioAcademicoComponent implements OnInit {
           },
           {
             name: 'delete',
-            title: '<i class="nb-trash"></i>'
-          }
-        ]
+            title: '<i class="nb-trash"></i>',
+          },
+        ],
       },
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
