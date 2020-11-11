@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { Proceso } from '../../../@core/data/models/calendario-academico/proceso';
 import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
-import { CoreService } from '../../../@core/data/core.service';
+import { EventoService } from '../../../@core/data/evento.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -23,7 +23,7 @@ export class ProcesoCalendarioAcademicoComponent {
     private builder: FormBuilder,
     private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) private calendar: Calendario,
-    private coreService: CoreService,
+    private eventoService: EventoService,
   ) {
     this.fetchSelectData();
     this.createProcessForm();
@@ -60,7 +60,7 @@ export class ProcesoCalendarioAcademicoComponent {
   }
 
   fetchSelectData() {
-    this.coreService.get('unidad_tiempo').subscribe((data => this.periodicidad = data));
+    this.eventoService.get('tipo_recurrencia').subscribe((data => this.periodicidad = data));
   }
 
 }
