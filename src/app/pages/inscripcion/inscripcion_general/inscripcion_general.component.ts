@@ -335,7 +335,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       },
         (error: HttpErrorResponse) => {
           this.posgrados = [];
-          this.posgrados.push({Id: 1, Nombre: 'Ingenieria de Sistemas' }, {Id:2, Nombre:'Maestria en Ingeniera'});
+          this.posgrados.push({Id: 1, Nombre: 'Ingenieria de Sistemas' }, {Id: 2, Nombre: 'Maestria en Ingeniera'});
           Swal({
             type: 'error',
             title: error.status + '',
@@ -785,10 +785,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   tipo_inscripcion() {
     console.info('Tipo metodo')
     console.info('Select programa')
-    if (this.selectedValue.Id==1) {
-      this.selectedTipo = "Pregrado"
+    if (this.selectedValue.Id == 1) {
+      this.selectedTipo = 'Pregrado'
     } else {
-      this.selectedTipo = "Posgrado"
+      this.selectedTipo = 'Posgrado'
     }
     window.localStorage.setItem('programa', this.selectedValue.Id);    
     switch (this.selectedTipo) {
