@@ -303,7 +303,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         if (res !== null && r.Type !== 'error') {
           const tiposInscripciones = <Array<any>>res;
           tiposInscripciones.forEach(element => {
-            this.tipo_inscripciones.push(element);            
+            this.tipo_inscripciones.push(element);
           });
         }
       },
@@ -785,13 +785,12 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   tipo_inscripcion() {
     console.info('Tipo metodo')
     console.info('Select programa')
-    if (this.selectedValue.Id==1){
+    if (this.selectedValue.Id==1) {
       this.selectedTipo = "Pregrado"
     } else {
       this.selectedTipo = "Posgrado"
-    } 
-    window.localStorage.setItem('programa', this.selectedValue.Id);
-    
+    }
+    window.localStorage.setItem('programa', this.selectedValue.Id);    
     switch (this.selectedTipo) {
       case ('Pregrado'):
         this.selectTipo = 'Pregrado';
