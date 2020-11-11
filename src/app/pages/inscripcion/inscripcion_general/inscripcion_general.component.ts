@@ -303,8 +303,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         if (res !== null && r.Type !== 'error') {
           const tiposInscripciones = <Array<any>>res;
           tiposInscripciones.forEach(element => {
-            this.tipo_inscripciones.push(element);
-            
+            this.tipo_inscripciones.push(element);            
           });
         }
       },
@@ -777,7 +776,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   cargaproyectoseventosactivos() {
     this.SelectedTipoBool = false
     // this.selectedTipo = this.tipo_inscripcion_selected.Nombre
-    
     console.info(this.selectedTipo)
     window.localStorage.setItem('Select', this.selectedTipo);
     if (this.selectedValue === true) {
@@ -793,6 +791,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.selectedTipo = "Posgrado"
     } 
     window.localStorage.setItem('programa', this.selectedValue.Id);
+    
     switch (this.selectedTipo) {
       case ('Pregrado'):
         this.selectTipo = 'Pregrado';
