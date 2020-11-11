@@ -297,13 +297,14 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   // }
 
   loadTipoInscripcion() {
-    this.inscripcionService.get('tipo_inscripcion')
+    this.inscripcionService.get('tipo_inscripcion/?limit=0')
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           const tiposInscripciones = <Array<any>>res;
           tiposInscripciones.forEach(element => {
             this.tipo_inscripciones.push(element);
+            
           });
         }
       },
@@ -335,7 +336,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       },
         (error: HttpErrorResponse) => {
           this.posgrados = [];
-          this.posgrados.push({Id: 1, Nombre: 'test'});
+          this.posgrados.push({Id: 1, Nombre: 'Ingenieria de Sistemas' }, {Id:2, Nombre:'Maestria en Ingeniera'});
           Swal({
             type: 'error',
             title: error.status + '',
@@ -775,8 +776,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   cargaproyectoseventosactivos() {
     this.SelectedTipoBool = false
-    this.selectedTipo = this.tipo_inscripcion_selected.Nombre
-    console.info(this.selectedValue)
+    // this.selectedTipo = this.tipo_inscripcion_selected.Nombre
+    
+    console.info(this.selectedTipo)
+    window.localStorage.setItem('Select', this.selectedTipo);
     if (this.selectedValue === true) {
       this.tipo_inscripcion();
     }
@@ -784,7 +787,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   tipo_inscripcion() {
     console.info('Tipo metodo')
     console.info('Select programa')
-    console.info(this.selectedValue)
+    if (this.selectedValue.Id==1){
+      this.selectedTipo = "Pregrado"
+    } else {
+      this.selectedTipo = "Posgrado"
+    } 
     window.localStorage.setItem('programa', this.selectedValue.Id);
     switch (this.selectedTipo) {
       case ('Pregrado'):
