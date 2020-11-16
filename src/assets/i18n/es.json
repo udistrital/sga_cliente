@@ -108,6 +108,7 @@
         "preinscripcion_2": "Desea realizar preinscripcion",
         "id": "Id",
         "activo": "Activo",
+        "inactivo": "Inactivo",
         "aceptar": "Aceptar",
         "terminos_datos": "Política de privacidad y tratamiento de datos",
         "acepto_terminos": "He leido y estoy de acuerdo con los términos de la política de tratamiento y privacidad de la información",

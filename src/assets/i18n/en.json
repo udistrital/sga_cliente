@@ -106,6 +106,7 @@
         "preinscripcion_2": "You want to pre-register",
         "id": "Id",
         "activo": "Active",
+        "inactivo": "Inactive",
         "aceptar": "Accept",
         "cancelar": "Cancel",
         "salir": "Get out",

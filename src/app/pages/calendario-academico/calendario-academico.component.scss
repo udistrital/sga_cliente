@@ -211,6 +211,11 @@
   font-size: 1.1em;
 }
 
+:host /deep/ ng2-st-tbody-custom {
+  display: flex;
+  justify-content: space-around;
+} 
+
 :host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
   color: #5dcfe3;
 }
