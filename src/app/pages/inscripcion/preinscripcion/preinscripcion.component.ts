@@ -122,7 +122,8 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.loadInfoPostgrados();
+    // ojo quitar comentario 
+    // this.loadInfoPostgrados();
     this.total = true;
     // if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
     //   && this.inscripcion_id.toString() !== '0') {

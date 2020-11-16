@@ -132,7 +132,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.loadInfoPostgrados();
+    // Ojo borrar despues de auditoria
+    this.posgrados.push({Id: 1, Nombre: 'Ingenieria de Sistemas' }, {Id: 2, Nombre: 'Maestria en Ingeniera'});
+    // this.loadInfoPostgrados();
+
     this.loadTipoInscripcion();
     this.total = true;
     // if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
