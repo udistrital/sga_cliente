@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { SgaMidService } from '../../../@core/data/sga_mid.service'
 import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private sgaMidService: SgaMidService,
+    private popUpmanager: PopUpManager,
   ) {
     this.dataSource = new LocalDataSource();
     this.createTable();
@@ -52,7 +54,8 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         this.loading = false;
       },
       error => {
-        console.error(error);
+        this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.loading = false;
       },
     );
   }
