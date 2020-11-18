@@ -13,7 +13,7 @@
         </nb-tab>
         <nb-tab tabTitle="{{ 'GLOBAL.formulario' | translate }}" [active]="activetab">
           <br />
-          <ngx-def-calendario-academico></ngx-def-calendario-academico>
+          <ngx-def-calendario-academico [calendarForEditId]="calendarForEditId"></ngx-def-calendario-academico>
           <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
         </nb-tab>
       </nb-tabset>

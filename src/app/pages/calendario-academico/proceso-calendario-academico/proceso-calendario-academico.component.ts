@@ -22,12 +22,19 @@ export class ProcesoCalendarioAcademicoComponent {
     public dialogRef: MatDialogRef<ProcesoCalendarioAcademicoComponent>,
     private builder: FormBuilder,
     private translate: TranslateService,
-    @Inject(MAT_DIALOG_DATA) private calendar: Calendario,
+    @Inject(MAT_DIALOG_DATA) private data: any,
     private eventoService: EventoService,
   ) {
     this.fetchSelectData();
     this.createProcessForm();
     this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
+    if (this.data.editProcess !== undefined) {
+      this.processForm.setValue({
+        Nombre: this.data.editProcess.Nombre,
+        Descripcion: this.data.editProcess.Descripcion,
+        TipoRecurrenciaId: this.data.editProcess.TipoRecurrenciaId.Id,
+      });
+    }
   }
 
   saveProcess() {
@@ -41,7 +48,7 @@ export class ProcesoCalendarioAcademicoComponent {
     };
     Swal(options).then(() => {
       this.process = this.processForm.value;
-      this.process.CalendarioId = {Id: this.calendar.calendarioId};
+      this.process.CalendarioId = {Id: this.data.calendar.calendarioId};
       this.process.TipoRecurrenciaId = {Id: this.processForm.value.TipoRecurrenciaId}
       this.dialogRef.close(this.process);
     });
@@ -60,7 +67,7 @@ export class ProcesoCalendarioAcademicoComponent {
   }
 
   fetchSelectData() {
-    this.eventoService.get('tipo_recurrencia').subscribe((data => this.periodicidad = data));
+    this.eventoService.get('tipo_recurrencia?limit=0').subscribe((data => this.periodicidad = data));
   }
 
 }

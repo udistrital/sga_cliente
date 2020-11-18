@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
 import { CoreService } from '../../../@core/data/core.service';
+import { EventoService } from '../../../@core/data/evento.service';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
 
@@ -24,6 +25,7 @@ export class ActividadCalendarioAcademicoComponent {
     public dialogRef: MatDialogRef<ActividadCalendarioAcademicoComponent>,
     private builder: FormBuilder,
     private coreService: CoreService,
+    private eventoService: EventoService,
     private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
@@ -32,6 +34,15 @@ export class ActividadCalendarioAcademicoComponent {
     this.fetchSelectData(this.data.calendar.PeriodoId);
     this.createActivityForm();
     this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
+    if (this.data.editActivity !== undefined) {
+      this.activityForm.setValue({
+        Nombre: this.data.editActivity.Nombre,
+        Descripcion: this.data.editActivity.Descripcion,
+        FechaInicio: this.data.editActivity.FechaInicio,
+        FechaFin: this.data.editActivity.FechaFin,
+        responsable: 0,
+      });
+    }
   }
 
   saveActivity() {
@@ -70,17 +81,8 @@ export class ActividadCalendarioAcademicoComponent {
   fetchSelectData(period) {
     this.coreService.get('periodo/' + period ).subscribe(
       response => this.period = response['Nombre'],
-  );
-
-
-    // this.eventoService.get('rol_encargado_evento/?limit=0').subscribe((data => this.responsables = data));
-    this.responsables = [
-      {Nombre: 'Coordinador', Id: 1},
-      {Nombre: 'Estudiantes', Id: 2},
-      {Nombre: 'Rectoria', Id: 3},
-      {Nombre: 'Decanaturas', Id: 4},
-      {Nombre: 'Proyectos curriculares', Id: 5},
-    ]
+    );
+    this.eventoService.get('tipo_publico?limit=0').subscribe((data => this.responsables = data));
   }
 
 }

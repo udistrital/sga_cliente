@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ToasterService, Toast, BodyOutputType, ToasterConfig } from 'angular2-toaster';
 import { LocalDataSource } from 'ng2-smart-table';
 import { SgaMidService } from '../../../@core/data/sga_mid.service'
 import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
-import 'style-loader!angular2-toaster/toaster.css';
 
 
 @Component({
@@ -20,6 +18,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   dataSource: LocalDataSource;
   activetab: boolean = false;
   calendars: Calendario[] = [];
+  calendarForEditId: number = 0;
   nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
 
   constructor(
@@ -138,7 +137,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
 
   onEdit(event: any) {
-    this.activateTab();
+    this.activateTab(event.data.Id); // ID del calendario seleccionado para edición
   }
 
   onDelete(event: any) {
@@ -153,8 +152,9 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     }
   }
 
-  activateTab() {
+  activateTab(calendarId = 0) {
     this.activetab = !this.activetab;
+    this.calendarForEditId = calendarId;
   }
 
 }
