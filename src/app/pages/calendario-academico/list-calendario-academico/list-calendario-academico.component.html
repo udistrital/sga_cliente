@@ -1,5 +1,5 @@
 <div class="col-12">
-  <nb-card>
+  <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <nb-card-header>
       {{ 'calendario.calendarios_academicos' | translate }}
     </nb-card-header>

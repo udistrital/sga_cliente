@@ -129,6 +129,7 @@
         "lista": "Lista",
         "regresar": "Regresar",
         "error": "Error",
+        "operacion_exitosa": "Operación exitosa",
         "si": "Si",
         "no": "No",
         "cerrar": "Cerrar",
@@ -1057,6 +1058,11 @@
         "seguro_registrar_actividad": "¿Esta seguro de agregar una actividad al proceso actual?",
         "calendario_exito": "El calendario ha sido creado con éxito.",
         "proceso_exito": "El proceso ha sido registrado con éxito.",
-        "actividad_exito": "La actividad ha sido guardada con éxito."
+        "actividad_exito": "La actividad ha sido guardada con éxito.",
+        "actividad_dirigido": "Agregar responsables (A quien va dirigido)",
+        "error_dirigido_nombre": "Por favor indique el nombre",
+        "error_dirigido_codigo": "Por favor indique la abreviación",
+        "error_dirigido_orden": "Por favor indique número de órden",
+        "responsable_exito": "El nuevo responsable se ha registrado con éxito"
     }
 }

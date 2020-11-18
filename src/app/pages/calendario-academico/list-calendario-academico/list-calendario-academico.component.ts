@@ -20,6 +20,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   calendars: Calendario[] = [];
   calendarForEditId: number = 0;
   nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
+  loading: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -35,6 +36,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.sgaMidService.get('consulta_calendario_academico?limit=0').subscribe(
       response => {
         response.map(calendar => {
@@ -47,6 +49,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
           });
         });
         this.createTable();
+        this.loading = false;
       },
       error => {
         console.error(error);

@@ -349,7 +349,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges{
   addActivity(event, process: Proceso) {
     const activityConfig = new MatDialogConfig();
     activityConfig.width = '800px';
-    activityConfig.height = '600px';
+    activityConfig.height = '700px';
     activityConfig.data = {process: process, calendar: this.calendar};
     const newActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
     newActivity.afterClosed().subscribe((activity: Actividad) => {
@@ -375,7 +375,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges{
     console.log(event.data)
     const activityConfig = new MatDialogConfig();
     activityConfig.width = '800px';
-    activityConfig.height = '600px';
+    activityConfig.height = '700px';
     activityConfig.data = {process: process, calendar: this.calendar, editActivity: event.data};
     const editedActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
     //PUT

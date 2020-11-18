@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
 import { CoreService } from '../../../@core/data/core.service';
 import { EventoService } from '../../../@core/data/evento.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
 
@@ -20,6 +21,8 @@ export class ActividadCalendarioAcademicoComponent {
   period: string;
   activityForm: FormGroup;
   responsables: any;
+  publicTypeForm: FormGroup;
+  addPublic: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<ActividadCalendarioAcademicoComponent>,
@@ -27,19 +30,21 @@ export class ActividadCalendarioAcademicoComponent {
     private coreService: CoreService,
     private eventoService: EventoService,
     private translate: TranslateService,
+    private popUpManager: PopUpManager,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.processName = this.data.process.Nombre;
     this.period = '';
     this.fetchSelectData(this.data.calendar.PeriodoId);
     this.createActivityForm();
+    this.createPublicTypeForm();
     this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
     if (this.data.editActivity !== undefined) {
       this.activityForm.setValue({
         Nombre: this.data.editActivity.Nombre,
         Descripcion: this.data.editActivity.Descripcion,
-        FechaInicio: this.data.editActivity.FechaInicio,
-        FechaFin: this.data.editActivity.FechaFin,
+        FechaInicio: moment(this.data.editActivity.FechaInicio).format('YYYY-MM-DD'),
+        FechaFin: moment(this.data.editActivity.FechaFin).format('YYYY-MM-DD'),
         responsable: 0,
       });
     }
@@ -78,11 +83,54 @@ export class ActividadCalendarioAcademicoComponent {
     })
   }
 
+  createPublicTypeForm() {
+    this.publicTypeForm = this.builder.group({
+      Nombre: ['', Validators.required],
+      CodigoAbreviacion: ['', Validators.required],
+      Activo: [true, Validators.required],
+      NumeroOrden: ['', Validators.required],
+    })
+  }
+
   fetchSelectData(period) {
     this.coreService.get('periodo/' + period ).subscribe(
       response => this.period = response['Nombre'],
     );
-    this.eventoService.get('tipo_publico?limit=0').subscribe((data => this.responsables = data));
+    this.updateSelect();
+  }
+
+  updateSelect() {
+    this.eventoService.get('tipo_publico?limit=0').subscribe(
+      data => {
+        this.responsables = data;
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
+  }
+
+  addPublicType() {
+    const newPublicType = this.publicTypeForm.value;
+    this.eventoService.post('tipo_publico', newPublicType).subscribe(
+      response => {
+        this.updateSelect();
+        this.popUpManager.showSuccessAlert(this.translate.instant('calendario.responsable_exito'));
+        this.publicTypeForm.reset({
+          Nombre: '',
+          CodigoAbreviacion: '',
+          Activo: true,
+          NumeroOrden: '',
+        });
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
+  }
+
+  openForm() {
+    this.addPublic = true;
   }
 
 }
