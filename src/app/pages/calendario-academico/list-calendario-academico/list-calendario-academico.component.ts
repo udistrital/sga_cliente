@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LocalDataSource } from 'ng2-smart-table';
+import { SgaMidService } from '../../../@core/data/sga_mid.service'
+import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
 
 
 @Component({
@@ -11,14 +14,21 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class ListCalendarioAcademicoComponent implements OnInit {
 
   settings: any;
-  data: any[];
+  data: any[] = [];
+  dataSource: LocalDataSource;
   activetab: boolean = false;
+  calendars: Calendario[] = [];
+  calendarForEditId: number = 0;
+  nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
+  loading: boolean = false;
 
   constructor(
     private translate: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
+    private sgaMidService: SgaMidService,
   ) {
+    this.dataSource = new LocalDataSource();
     this.createTable();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
@@ -26,50 +36,53 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
 
   ngOnInit() {
-    // datos provisionales
-    this.data = [
-      {
-        Nombre: 'Calendario académico Posgrado 2020-III',
-        Periodo: '2020-III',
-        Dependencia: 'Posgrado',
-        Estado: 'Activo',
+    this.loading = true;
+    this.sgaMidService.get('consulta_calendario_academico?limit=0').subscribe(
+      response => {
+        response.map(calendar => {
+          this.data.push({
+            Id: calendar.Id,
+            Nombre: calendar.Nombre,
+            Periodo: calendar.Periodo,
+            Dependencia: this.nivel_load.filter(nivel => nivel.id === calendar.Nivel)[0].nombre,
+            Estado: calendar.Activo ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo'),
+          });
+        });
+        this.createTable();
+        this.loading = false;
       },
-      {
-        Nombre: 'Calendario académico Pregrado 2020-III',
-        Periodo: '2020-III',
-        Dependencia: 'Pregrado',
-        Estado: 'Activo',
+      error => {
+        console.error(error);
       },
-      {
-        Nombre: 'Calendario académico Pregrado 2020-I',
-        Periodo: '2020-I',
-        Dependencia: 'Pregrado',
-        Estado: 'Inactivo',
-      },
-    ]
+    );
   }
 
   createTable() {
     this.settings = {
       columns: {
+        Id: {
+          title: 'ID',
+          editable: false,
+          width: '5%',
+        },
         Nombre: {
           title: this.translate.instant('calendario.nombre'),
-          width: '20%',
+          width: '25%',
           editable: false,
         },
         Periodo: {
           title: this.translate.instant('calendario.periodo'),
-          width: '20%',
+          width: '15%',
           editable: false,
         },
         Dependencia: {
           title: this.translate.instant('calendario.dependencia'),
-          width: '20%',
+          width: '15%',
           editable: false,
         },
         Estado: {
           title: this.translate.instant('calendario.estado'),
-          width: '20%',
+          width: '15%',
           editable: false,
         },
       },
@@ -78,10 +91,15 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         edit: false,
         delete: false,
         position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
         custom: [
           {
+            name: 'assign',
+            title: '<i class="nb-compose"></i>',
+          },
+          {
             name: 'view',
-            title: '<i class="nb-list"></i>',
+            title: '<i class="nb-home"></i>',
           },
           {
             name: 'edit',
@@ -97,12 +115,14 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         addButtonContent: '<i class="nb-plus"></i>',
       },
     }
+    this.dataSource.load(this.data);
   }
 
   onAction(event) {
+    console.log(event)
     switch (event.action) {
       case 'view':
-        this.router.navigate(['../detalle-calendario'], {relativeTo: this.route});
+        this.router.navigate(['../detalle-calendario/'+event.data.Id], {relativeTo: this.route});
         break;
       case 'edit':
         this.onEdit(event);
@@ -110,7 +130,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
       case 'delete':
         this.onDelete(event);
         break;
-      case 'clone':
+      case 'assign':
         break;
     }
   }
@@ -120,7 +140,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
 
   onEdit(event: any) {
-    this.activateTab();
+    this.activateTab(event.data.Id); // ID del calendario seleccionado para edición
   }
 
   onDelete(event: any) {
@@ -135,8 +155,9 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     }
   }
 
-  activateTab() {
+  activateTab(calendarId = 0) {
     this.activetab = !this.activetab;
+    this.calendarForEditId = calendarId;
   }
 
 }

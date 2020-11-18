@@ -78,4 +78,50 @@
       </div>
     </fieldset>
   </form>
+  <br>
+  <button mat-button type="button" (click)="openForm()" [hidden]="addPublic" >{{ 'calendario.actividad_dirigido' | translate }}</button>
+  <form novalidate [formGroup]="publicTypeForm" #pform="ngForm" (ngSubmit)="addPublicType()" class="form-horizontal" *ngIf="addPublic">
+    <fieldset [ngClass]="{'fieldseter':true} ">
+      <legend>
+        {{ 'calendario.actividad_dirigido' | translate }}
+      </legend>
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" formControlName="Nombre" placeholder="{{ 'calendario.nombre' | translate }}" required>
+            <mat-error *ngIf="publicTypeForm.get('Nombre').hasError('required') && publicTypeForm.get('Nombre').touched">
+              {{ 'calendario.nombre' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field floatLabel="always">
+            <input matInput type="text" formControlName="CodigoAbreviacion" placeholder="{{ 'GLOBAL.codigo_abreviacion' | translate }}" required>
+            <mat-error *ngIf="publicTypeForm.get('CodigoAbreviacion').hasError('required') && publicTypeForm.get('CodigoAbreviacion').touched">
+              {{ 'calendario.error_dirigido_codigo' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field floatLabel="always">
+            <input matInput type="number" formControlName="NumeroOrden" placeholder="{{ 'GLOBAL.numero_orden' | translate }}" required>
+            <mat-error *ngIf="publicTypeForm.get('NumeroOrden').hasError('required') && publicTypeForm.get('NumeroOrden').touched">
+              {{ 'calendario.error_dirigido_orden' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-checkbox formControlName="Activo" >{{ 'GLOBAL.activo' | translate }} </mat-checkbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <button class="float-right" mat-button type="submit" [disabled]="publicTypeForm.invalid" >{{ 'evento.agregar_encargado' | translate }} </button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
 </div>
