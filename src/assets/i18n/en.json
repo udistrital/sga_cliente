@@ -106,6 +106,7 @@
         "preinscripcion_2": "You want to pre-register",
         "id": "Id",
         "activo": "Active",
+        "inactivo": "Inactive",
         "aceptar": "Accept",
         "cancelar": "Cancel",
         "salir": "Get out",
@@ -126,6 +127,7 @@
         "terminos_datos": "Privacy and data processing policy",
         "acepto_terminos": "I have read and agree to the privacy and treatment of information policy terms",
         "error": "Error",
+        "operacion_exitosa": "Successfull operation",
         "si": "Yes",
         "no": "No",
         "cerrar": "Close",
@@ -1046,6 +1048,11 @@
         "seguro_registrar_actividad": "Are you sure about adding a new activity to the current process?",
         "calendario_exito": "The calendar has been successfully created.",
         "proceso_exito": "The process has been successfully registered.",
-        "actividad_exito": "The activity has been successfully saved."
+        "actividad_exito": "The activity has been successfully saved.",
+        "actividad_dirigido": "Add responsible (Who is the activity directed to)",
+        "error_dirigido_nombre": "Please add a name",
+        "error_dirigido_codigo": "Please add an abbreviation",
+        "error_dirigido_orden": "Please add an order number",
+        "responsable_exito": "The new responsible has been successfully added"
     }
 }
