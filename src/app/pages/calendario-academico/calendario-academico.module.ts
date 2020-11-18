@@ -19,6 +19,7 @@ import { EventoService } from '../../@core/data/evento.service';
 import { CoreService } from '../../@core/data/core.service';
 import { DocumentoService } from '../../@core/data/documento.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
+import { PopUpManager } from '../../managers/popUpManager';
 
 
 
@@ -55,6 +56,7 @@ import { NuxeoService } from '../../@core/utils/nuxeo.service';
     CoreService,
     DocumentoService,
     NuxeoService,
+    PopUpManager,
   ],
 })
 export class CalendarioAcademicoModule { }
