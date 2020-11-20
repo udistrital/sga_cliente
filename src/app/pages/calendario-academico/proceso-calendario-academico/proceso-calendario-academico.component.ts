@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Proceso } from '../../../@core/data/models/calendario-academico/proceso';
 import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
 import { EventoService } from '../../../@core/data/evento.service';
-import Swal from 'sweetalert2';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-proceso-calendario-academico',
@@ -24,6 +24,7 @@ export class ProcesoCalendarioAcademicoComponent {
     private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) private data: any,
     private eventoService: EventoService,
+    private popUpManager: PopUpManager,
   ) {
     this.fetchSelectData();
     this.createProcessForm();
@@ -38,19 +39,15 @@ export class ProcesoCalendarioAcademicoComponent {
   }
 
   saveProcess() {
-    const options: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('calendario.seguro_registrar_proceso'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(options).then(() => {
-      this.process = this.processForm.value;
-      this.process.CalendarioId = {Id: this.data.calendar.calendarioId};
-      this.process.TipoRecurrenciaId = {Id: this.processForm.value.TipoRecurrenciaId}
-      this.dialogRef.close(this.process);
+    this.popUpManager.showConfirmAlert(
+      this.translate.instant('calendario.seguro_registrar_proceso')
+    ).then((ok) => {
+      if (ok.value) {
+        this.process = this.processForm.value;
+        this.process.CalendarioId = {Id: this.data.calendar.calendarioId};
+        this.process.TipoRecurrenciaId = {Id: this.processForm.value.TipoRecurrenciaId}
+        this.dialogRef.close(this.process);
+      }
     });
   }
 
