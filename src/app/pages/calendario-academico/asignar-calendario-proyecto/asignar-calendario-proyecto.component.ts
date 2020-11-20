@@ -20,7 +20,7 @@ export class AsignarCalendarioProyectoComponent implements OnInit {
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     public dialogRef: MatDialogRef<AsignarCalendarioProyectoComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any,
+    @Inject(MAT_DIALOG_DATA) public dat: any,
   ) {
     this.selectedProjects = new FormControl([], Validators.required);
     this.dialogRef.backdropClick().subscribe(() => this.dialogRef.close());
@@ -30,10 +30,10 @@ export class AsignarCalendarioProyectoComponent implements OnInit {
     this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
       response => {
         this.projects = (<any[]>response).filter(
-          project => this.data.data.Dependencia === project['NivelFormacionId']['Descripcion']
+          project => this.dat.data.Dependencia === project['NivelFormacionId']['Descripcion']
         );
-        if (this.data.calendar.DependenciaId !== '{}') {
-          const deps = JSON.parse(this.data.calendar.DependenciaId);
+        if (this.dat.calendar.DependenciaId !== '{}') {
+          const deps = JSON.parse(this.dat.calendar.DependenciaId);
           this.selectedProjects.setValue(deps['proyectos']);
         }
       },
