@@ -36,25 +36,25 @@
             "crud_evento": "Crud eventos"
         },
         "archivo_icfes": {
-          "archivo_icfes": "Archivo Icfes",
-          "list_archivo": "Lista archivos",
-          "crud_archivo": "Registrar archivo"
+            "archivo_icfes": "Archivo Icfes",
+            "list_archivo": "Lista archivos",
+            "crud_archivo": "Registrar archivo"
         },
         "reportes": {
-          "reportes": "Reportes",
-          "inscripciones": {
-            "inscripciones": "Inscripciones",
-            "inscritos_por_proyecto": "Inscritos por proyecto"
-          },
-          "icfes": {
-              "icfes": "Registro ICFES SNP",
-              "icfes_por_proyecto":"Registros por proyecto"
-          },
-          "proyectos_curriculares": {
-            "proyectos_curriculares": "Proyectos curriculares",
-            "lista_proyectos_curriculares": "Listado de proyectos",
-            "historico_acreditaciones": "Histórico de acreditaciones"
-          }
+            "reportes": "Reportes",
+            "inscripciones": {
+                "inscripciones": "Inscripciones",
+                "inscritos_por_proyecto": "Inscritos por proyecto"
+            },
+            "icfes": {
+                "icfes": "Registro ICFES SNP",
+                "icfes_por_proyecto": "Registros por proyecto"
+            },
+            "proyectos_curriculares": {
+                "proyectos_curriculares": "Proyectos curriculares",
+                "lista_proyectos_curriculares": "Listado de proyectos",
+                "historico_acreditaciones": "Histórico de acreditaciones"
+            }
         },
         "auth": {
             "auth": "Autenticacion",
@@ -590,21 +590,21 @@
         "placeholder_resumen": "ej: resumen"
     },
     "archivo_icfes": {
-      "archivo_icfes": "Archivo de registros del icfes",
-      "nombre": "Nombre",
-      "placeholder_nombre": "Ej. Archivo del icfes 2019-1",
-      "archivo": "Archivo",
-      "registrar_archivo": "¿Está seguro de procesar este archivo?",
-      "archivo_registrado": "El archivo fue procesado correctamente",
-      "error_formato": "El formato del archivo no es txt",
-      "archivo_no_registrado": "El archivo no pudo ser procesado, por favor intente nuevamente."
+        "archivo_icfes": "Archivo de registros del icfes",
+        "nombre": "Nombre",
+        "placeholder_nombre": "Ej. Archivo del icfes 2019-1",
+        "archivo": "Archivo",
+        "registrar_archivo": "¿Está seguro de procesar este archivo?",
+        "archivo_registrado": "El archivo fue procesado correctamente",
+        "error_formato": "El formato del archivo no es txt",
+        "archivo_no_registrado": "El archivo no pudo ser procesado, por favor intente nuevamente."
     },
     "reportes": {
-      "inscritos_por_proyecto":"Inscritos por proyecto",
-      "proyectos_curriculares":"Proyectos curriculares",
-      "historico_acreditaciones": "Histórico de acreditaciones",
-      "error_obteniendo_reporte":"Se produjo un error al obtener la información del informe, por favor vuelva a intentarlo.",
-      "icfes_snp": "Listado por proyectos de los aspirantes con registro SNP"
+        "inscritos_por_proyecto": "Inscritos por proyecto",
+        "proyectos_curriculares": "Proyectos curriculares",
+        "historico_acreditaciones": "Histórico de acreditaciones",
+        "error_obteniendo_reporte": "Se produjo un error al obtener la información del informe, por favor vuelva a intentarlo.",
+        "icfes_snp": "Listado por proyectos de los aspirantes con registro SNP"
     },
     "evento": {
         "evento": "Evento",
@@ -709,7 +709,7 @@
         "duracion_proyecto": "Duración",
         "tipo_duracion": "Tipo duración:",
         "ciclo_proyecto": "Ciclos propedéuticos",
-        "fecha_asignacion": "Fecha de asignación", 
+        "fecha_asignacion": "Fecha de asignación",
         "ofrece_proyecto": "Se ofrece",
         "enfasis_proyecto_selec": "El proyecto cuenta con énfasis",
         "registro": "Registro calificado",
@@ -1007,6 +1007,7 @@
         "asignar": "Asignar cupos"
     },
     "calendario": {
+        "calendario_resolucion": "Calendario definido mediante la resolución",
         "calendario_academico": "Calendario Académico",
         "calendarios_academicos": "Calendarios Académicos",
         "nombre": "Nombre",

@@ -1,36 +1,59 @@
-<div class="col-12">
-  <div class="row">
-    <nb-card size="4">
-      <nb-card-header>{{ 'calendario.calendario_academico' | translate}} </nb-card-header>
-      <nb-card-body>
-        <p>Proceso: Admisiones </p>
-        <mat-table [dataSource]="dataSource">
+<div class="col-12" *ngIf="periodos[0].Id == nil">
+    <label>{{ 'calendario.sin_procesos' | translate }}</label>
+</div>
+<div class="col-12" *ngIf="periodos[0].Id != nil">
+    <nb-card>
+        <nb-card-header>{{ 'calendario.calendario_academico' | translate}} {{ periodos[0].Nombre }}</nb-card-header>
+        <nb-card-body>
+            <!-- <p>Proceso: Admisiones </p> -->
+            <form novalidate [formGroup]="calendarForm" #fform="ngForm" (ngSubmit)="createCalendar($event)" class="form-horizontal">
+                <div class="row my-2" *ngIf="periodos[0].ListaCalendario != nil">
+                    <div class="col-5">
+                        <mat-form-field style="width: 100%;" floatLabel="always">
+                            <mat-select formControlName="ListCal" placeholder="Seleccione la versión del calendario">
+                                <mat-option>--Seleccionar--</mat-option>
+                                <mat-option *ngFor="let periodo of periodos" [value]="periodo.Id">
+                                    <mat-option *ngFor="let listCal of periodo.ListaCalendario" (click)="cambiarCalendario(listCal.Id)" [value]="listCal.Id">
+                                        {{ listCal.Nombre }}
+                                    </mat-option>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
 
-          <ng-container matColumnDef="actividad" >
-            <mat-header-cell *matHeaderCellDef  >{{ 'calendario.actividad' | translate }}</mat-header-cell>
-            <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.actividad}} </mat-cell>
-          </ng-container>
+                <div class="col-12">
+                    {{ 'calendario.calendario_resolucion' | translate }} : {{ periodos[0].resolucion.Resolucion }} del año {{ periodos[0].resolucion.Anno }}
+                    <button mat-button type="button" (click)="downloadFile(periodos[0].resolucion.Enlace)">
+                        <span style="font-size:26px;
+                        align-self: center;
+                        margin-right: 10px;
+                        color: #4fb9ff !important;">
+                            <i class="fa fa-cloud-download" aria-hidden="true" ></i>
+                        </span>
+                        </button>
+                </div>
 
-          <ng-container matColumnDef="fecha_inicio" >
-            <mat-header-cell *matHeaderCellDef  >{{ 'calendario.desde' | translate }}</mat-header-cell>
-            <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.fecha_inicio}} </mat-cell>
-          </ng-container>
+                <div class="col-12">
+                    <mat-tab-group>
 
-          <ng-container matColumnDef="fecha_fin" >
-            <mat-header-cell *matHeaderCellDef  >{{ 'calendario.hasta' | translate }}</mat-header-cell>
-            <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.fecha_fin}} </mat-cell>
-          </ng-container>
+                        <mat-tab label="{{ 'calendario.actividades' | translate }}">
+                            <ng-container *ngFor="let periodo of periodos">
+                                <mat-expansion-panel *ngFor="let proceso of periodo.proceso">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            {{ proceso.Proceso }}
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <ng2-smart-table [settings]="activitiesSettings" [source]="proceso.Actividades"></ng2-smart-table>
+                                </mat-expansion-panel>
 
-          <ng-container matColumnDef="responsable" >
-            <mat-header-cell *matHeaderCellDef  >{{ 'calendario.responsable' | translate }}</mat-header-cell>
-            <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.responsable}} </mat-cell>
-          </ng-container>
+                            </ng-container>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
 
-          <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" ></mat-row>
-
-        </mat-table>
-      </nb-card-body>
+            </form>
+        </nb-card-body>
     </nb-card>
-  </div>
 </div>
