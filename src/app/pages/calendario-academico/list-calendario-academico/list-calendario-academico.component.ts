@@ -125,7 +125,8 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     console.log(event)
     switch (event.action) {
       case 'view':
-        this.router.navigate(['../detalle-calendario/'+event.data.Id], {relativeTo: this.route});
+        // this.router.navigate(['../detalle-calendario/'+event.data.Id], {relativeTo: this.route});
+        this.router.navigate(['../detalle-calendario', {Id:event.data['Id']} ], {relativeTo: this.route});
         break;
       case 'edit':
         this.onEdit(event);

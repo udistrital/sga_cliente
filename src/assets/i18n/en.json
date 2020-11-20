@@ -36,25 +36,25 @@
             "crud_evento": "Events Crud"
         },
         "archivo_icfes": {
-          "archivo_icfes": "Icfes file",
-          "list_archivo": "File List",
-          "crud_archivo": "File Register"
+            "archivo_icfes": "Icfes file",
+            "list_archivo": "File List",
+            "crud_archivo": "File Register"
         },
         "reportes": {
-          "reportes": "Reports",
-          "inscripciones": {
-            "inscripciones": "Inscriptions",
-            "inscritos_por_proyecto": "Enrolled by project"
-          },
-          "icfes": {
-            "icfes": "ICFES SNP Registration",
-            "icfes_por_proyecto":"Records by project"
-        },
-          "proyectos_curriculares": {
-            "proyectos_curriculares": "Academic projects",
-            "lista_proyectos_curriculares": "Project list",
-            "historico_acreditaciones": "Accreditation history"
-          }
+            "reportes": "Reports",
+            "inscripciones": {
+                "inscripciones": "Inscriptions",
+                "inscritos_por_proyecto": "Enrolled by project"
+            },
+            "icfes": {
+                "icfes": "ICFES SNP Registration",
+                "icfes_por_proyecto": "Records by project"
+            },
+            "proyectos_curriculares": {
+                "proyectos_curriculares": "Academic projects",
+                "lista_proyectos_curriculares": "Project list",
+                "historico_acreditaciones": "Accreditation history"
+            }
         },
         "auth": {
             "auth": "Auth",
@@ -581,21 +581,21 @@
         "placeholder_resumen": "e.g. summary"
     },
     "archivo_icfes": {
-      "archivo_icfes": "Icfes file",
-      "nombre": "Name",
-      "placeholder_nombre": "Ej. 2019-1 Icfes file",
-      "archivo": "File",
-      "registrar_archivo": "Are you sure you want to proccess this file?",
-      "archivo_registrado": "The file was processed successfully",
-      "error_formato": "Format file is not txt",
-      "archivo_no_registrado": "The file was not processed successfully, please try again"
+        "archivo_icfes": "Icfes file",
+        "nombre": "Name",
+        "placeholder_nombre": "Ej. 2019-1 Icfes file",
+        "archivo": "File",
+        "registrar_archivo": "Are you sure you want to proccess this file?",
+        "archivo_registrado": "The file was processed successfully",
+        "error_formato": "Format file is not txt",
+        "archivo_no_registrado": "The file was not processed successfully, please try again"
     },
     "reportes": {
-      "inscritos_por_proyecto":"Enrolled by project",
-      "proyectos_curriculares":"Academic projects",
-      "historico_acreditaciones": "Accreditation history",
-      "error_obteniendo_reporte":"There was an error getting the report information, please try again.",
-      "icfes_snp": "List of applicants projects with SNP registration"
+        "inscritos_por_proyecto": "Enrolled by project",
+        "proyectos_curriculares": "Academic projects",
+        "historico_acreditaciones": "Accreditation history",
+        "error_obteniendo_reporte": "There was an error getting the report information, please try again.",
+        "icfes_snp": "List of applicants projects with SNP registration"
     },
     "evento": {
         "evento": "Event",
@@ -693,7 +693,7 @@
         "nivel_proyecto": "Level",
         "metodologia_proyecto": "Methodology",
         "abreciacion_proyecto": "Abbreviation",
-        "fecha_asignacion": "Date of assignment", 
+        "fecha_asignacion": "Date of assignment",
         "correo_proyecto": "Email",
         "numero_proyecto": "Phone",
         "creditos_proyecto": "Number of credits",
@@ -953,8 +953,8 @@
         "informacion_idioma_no_registrada": "Language information not registered",
         "informacion_idioma_registrada": "Language information registered",
         "seguro_continuar_registrar": "Are you sure you want to register this language information?"
-     },
-     "propuesta_grado": {
+    },
+    "propuesta_grado": {
         "error_cargar_lineas_investigacion": "An error happened loading the research lines information",
         "error_documento_propuesta_grado": "An error happened saving the degree work proposal document",
         "propuesta_grado_no_registrada": "Degree work proposal not created",
@@ -997,6 +997,7 @@
         "asignar": "Assign quotas"
     },
     "calendario": {
+        "calendario_resolucion": "Academic Calendar defined by resolution",
         "calendario_academico": "Academic Calendar",
         "calendarios_academicos": "Academic Calendars",
         "nombre": "Name",
