@@ -1,7 +1,7 @@
-<div class="col-12" *ngIf="periodos[0].Id == nil">
+<div class="col-12" *ngIf="periodos[0].Id == null">
     <label>{{ 'calendario.sin_procesos' | translate }}</label>
 </div>
-<div class="col-12" *ngIf="periodos[0].Id != nil">
+<div class="col-12" *ngIf="periodos[0].Id != null">
     <nb-card>
         <nb-card-header>{{ 'calendario.calendario_academico' | translate}} {{ periodos[0].Nombre }}</nb-card-header>
         <nb-card-body>
