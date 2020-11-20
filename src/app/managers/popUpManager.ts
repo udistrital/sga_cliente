@@ -56,4 +56,16 @@ export class PopUpManager {
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
     }
+
+    public showConfirmAlert(text): Promise<any> {
+        const options: any = {
+            title: this.translate.instant('GLOBAL.atencion'),
+            text: text,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+        };
+        return Swal(options);
+    }
 }

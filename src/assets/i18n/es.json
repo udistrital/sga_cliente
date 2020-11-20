@@ -1063,6 +1063,10 @@
         "error_dirigido_nombre": "Por favor indique el nombre",
         "error_dirigido_codigo": "Por favor indique la abreviación",
         "error_dirigido_orden": "Por favor indique número de órden",
-        "responsable_exito": "El nuevo responsable se ha registrado con éxito"
+        "responsable_exito": "El nuevo responsable se ha registrado con éxito.",
+        "seleccione_proyecto": "Seleccione el/los proyectos académicos.",
+        "error_select_proyecto": "Seleccione por lo menos un proyecto.",
+        "seguro_proyectos": "¿Está seguro de asignar el calendario a los proyectos seleccionados?",
+        "proyectos_exito": "El calendario académico ha sido asignado con éxito."
     }
 }

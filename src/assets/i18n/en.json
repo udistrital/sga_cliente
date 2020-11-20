@@ -1053,6 +1053,10 @@
         "error_dirigido_nombre": "Please add a name",
         "error_dirigido_codigo": "Please add an abbreviation",
         "error_dirigido_orden": "Please add an order number",
-        "responsable_exito": "The new responsible has been successfully added"
+        "responsable_exito": "The new responsible has been successfully added.",
+        "seleccione_proyecto": "Select the academic projects.",
+        "error_select_proyecto": "Select at least one proyect.",
+        "seguro_proyectos": "Are you sure about assingning the calendar to the selected projects?",
+        "proyectos_exito": "The academic calendar has been successfully assigned."
     }
 }

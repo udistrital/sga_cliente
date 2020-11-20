@@ -6,7 +6,6 @@ import { Actividad } from '../../../@core/data/models/calendario-academico/activ
 import { CoreService } from '../../../@core/data/core.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { PopUpManager } from '../../../managers/popUpManager';
-import Swal from 'sweetalert2';
 import * as moment from 'moment';
 
 @Component({
@@ -51,22 +50,16 @@ export class ActividadCalendarioAcademicoComponent {
   }
 
   saveActivity() {
-    const options: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('calendario.seguro_registrar_actividad'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(options).then(() => {
+    this.popUpManager.showConfirmAlert(
+      this.translate.instant('calendario.seguro_registrar_actividad')
+    ).then(() => {
       this.activity = this.activityForm.value;
       this.activity.TipoEventoId = {Id: this.data.process.procesoId};
       this.activity.FechaInicio = moment(this.activity.FechaInicio).format('YYYY-MM-DDTHH:mm') + ':00Z';
       this.activity.FechaFin = moment(this.activity.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
       this.activity.Activo = true;
       this.dialogRef.close(this.activity);
-    })
+    });
   }
 
   closeDialog() {
