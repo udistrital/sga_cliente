@@ -6,6 +6,7 @@ import { ListCalendarioAcademicoComponent } from './list-calendario-academico/li
 import { ProcesoCalendarioAcademicoComponent } from './proceso-calendario-academico/proceso-calendario-academico.component';
 import { ActividadCalendarioAcademicoComponent } from './actividad-calendario-academico/actividad-calendario-academico.component';
 import { DetalleCalendarioComponent } from './detalle-calendario/detalle-calendario.component';
+import { AsignarCalendarioProyectoComponent } from './asignar-calendario-proyecto/asignar-calendario-proyecto.component';
 
 const routes: Routes = [{
     path: '',
@@ -31,6 +32,10 @@ const routes: Routes = [{
             path: 'detalle-calendario',
             component: DetalleCalendarioComponent,
         },
+        {
+            path: 'asignar-calendario-proyecto',
+            component: AsignarCalendarioProyectoComponent,
+        },
     ],
 }];
 
@@ -51,4 +56,5 @@ export const routedComponents = [
     ProcesoCalendarioAcademicoComponent,
     ActividadCalendarioAcademicoComponent,
     DetalleCalendarioComponent,
+    AsignarCalendarioProyectoComponent,
 ]

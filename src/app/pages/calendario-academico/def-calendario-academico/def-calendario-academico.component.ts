@@ -163,9 +163,14 @@ export class DefCalendarioAcademicoComponent implements OnChanges{
   }
 
   loadSelects() {
-    this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1').subscribe(res => {
-      this.periodos = res;
-    });
+    this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1').subscribe(
+      res => {
+        this.periodos = res;
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.periodos = [{Id: 15, Nombre: '2019-3'}]
+      });
   }
 
   createProcessTable() {

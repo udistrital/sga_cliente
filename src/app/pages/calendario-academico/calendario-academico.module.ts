@@ -14,6 +14,7 @@ import { DefCalendarioAcademicoComponent } from './def-calendario-academico/def-
 import { ProcesoCalendarioAcademicoComponent } from './proceso-calendario-academico/proceso-calendario-academico.component';
 import { ActividadCalendarioAcademicoComponent } from './actividad-calendario-academico/actividad-calendario-academico.component';
 import { DetalleCalendarioComponent } from './detalle-calendario/detalle-calendario.component';
+import { AsignarCalendarioProyectoComponent } from './asignar-calendario-proyecto/asignar-calendario-proyecto.component';
 
 import { EventoService } from '../../@core/data/evento.service';
 import { CoreService } from '../../@core/data/core.service';
@@ -50,6 +51,7 @@ import { PopUpManager } from '../../managers/popUpManager';
     ProcesoCalendarioAcademicoComponent,
     ActividadCalendarioAcademicoComponent,
     CrudPeriodoComponent,
+    AsignarCalendarioProyectoComponent,
   ],
   providers: [
     EventoService,

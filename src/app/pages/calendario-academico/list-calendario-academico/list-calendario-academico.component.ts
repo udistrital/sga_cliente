@@ -5,6 +5,9 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { SgaMidService } from '../../../@core/data/sga_mid.service'
 import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AsignarCalendarioProyectoComponent } from '../asignar-calendario-proyecto/asignar-calendario-proyecto.component';
+import { EventoService } from '../../../@core/data/evento.service';
 
 
 @Component({
@@ -28,7 +31,9 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private sgaMidService: SgaMidService,
+    private eventoService: EventoService,
     private popUpmanager: PopUpManager,
+    private dialog: MatDialog,
   ) {
     this.dataSource = new LocalDataSource();
     this.createTable();
@@ -125,7 +130,8 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     console.log(event)
     switch (event.action) {
       case 'view':
-        this.router.navigate(['../detalle-calendario/'+event.data.Id], {relativeTo: this.route});
+        // this.router.navigate(['../detalle-calendario/'+event.data.Id], {relativeTo: this.route});
+        this.router.navigate(['../detalle-calendario', {Id:event.data['Id']} ], {relativeTo: this.route});
         break;
       case 'edit':
         this.onEdit(event);
@@ -134,6 +140,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         this.onDelete(event);
         break;
       case 'assign':
+        this.onAssign(event);
         break;
     }
   }
@@ -148,6 +155,35 @@ export class ListCalendarioAcademicoComponent implements OnInit {
 
   onDelete(event: any) {
 
+  }
+
+  onAssign(event: any) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '800px';
+    assignConfig.height = '400px';
+    
+    this.eventoService.get('calendario/'+event.data.Id).subscribe(
+      (calendar: Calendario) => {
+        assignConfig.data = {calendar: calendar, data: event.data};
+        const newAssign = this.dialog.open(AsignarCalendarioProyectoComponent, assignConfig);
+        newAssign.afterClosed().subscribe((data) => {
+          if (data !== undefined) {
+            calendar.DependenciaId = JSON.stringify({proyectos: data})
+            this.eventoService.put('calendario', calendar).subscribe(
+              response => {
+                this.popUpmanager.showSuccessAlert(this.translate.instant('calendario.proyectos_exito'));
+              },
+              error => {
+                this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
+              },
+            );
+          }
+        });
+      },
+      error => {
+        this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    )
   }
 
   changeTab(event: any) {
