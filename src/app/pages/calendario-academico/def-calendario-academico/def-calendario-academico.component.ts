@@ -74,9 +74,11 @@ export class DefCalendarioAcademicoComponent implements OnChanges{
     if (this.calendarForEditId === 0) {
       this.activetabs = false;
       this.createdCalendar = false;
+      this.editMode = false;
       this.calendarForm.reset()
     } else {
       this.createdCalendar = true;
+      this.editMode = true;
       this.openTabs();
       this.eventoService.get('calendario/'+this.calendarForEditId).subscribe(
         calendar => {
@@ -110,30 +112,35 @@ export class DefCalendarioAcademicoComponent implements OnChanges{
       );
       this.eventoService.get('tipo_evento?query=CalendarioID__Id:'+this.calendarForEditId).subscribe(
         processes => {
+            console.log(processes)
             processes.forEach(element => {
-              let loadedProcess: Proceso = new Proceso();
-              loadedProcess.procesoId = element['Id'];
-              loadedProcess.CalendarioId = {Id: this.calendarForEditId};
-              loadedProcess.Nombre = element['Nombre'];
-              loadedProcess.Descripcion = element['Descripcion'];
-              loadedProcess.TipoRecurrenciaId = {Id: element['TipoRecurrenciaId']['Id']};
-              loadedProcess.actividades = [];
-              this.processes.push(loadedProcess);
+              if (Object.keys(element).length !== 0) {
+                let loadedProcess: Proceso = new Proceso();
+                loadedProcess.procesoId = element['Id'];
+                loadedProcess.CalendarioId = {Id: this.calendarForEditId};
+                loadedProcess.Nombre = element['Nombre'];
+                loadedProcess.Descripcion = element['Descripcion'];
+                loadedProcess.TipoRecurrenciaId = {Id: element['TipoRecurrenciaId']['Id']};
+                loadedProcess.actividades = [];
+                this.processes.push(loadedProcess);
+              }
             });
 
           this.processes.forEach(process => {
             this.eventoService.get('calendario_evento?query=TipoEventoId__Id:'+process.procesoId).subscribe(
               activities => {
                 activities.forEach(element => {
-                  let loadedActivity: Actividad = new Actividad();
-                  loadedActivity.actividadId = element['Id'];
-                  loadedActivity.TipoEventoId = {Id: element['TipoEventoId']['Id']};
-                  loadedActivity.Nombre = element['Nombre'];
-                  loadedActivity.Descripcion = element['Descripcion'];
-                  loadedActivity.Activo = element['Activo'];
-                  loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
-                  loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
-                  process.actividades.push(loadedActivity);
+                  if (Object.keys(element).length !== 0) {
+                    let loadedActivity: Actividad = new Actividad();
+                    loadedActivity.actividadId = element['Id'];
+                    loadedActivity.TipoEventoId = {Id: element['TipoEventoId']['Id']};
+                    loadedActivity.Nombre = element['Nombre'];
+                    loadedActivity.Descripcion = element['Descripcion'];
+                    loadedActivity.Activo = element['Activo'];
+                    loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
+                    loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
+                    process.actividades.push(loadedActivity);
+                  }
                 });
                 this.processTable.load(this.processes);
               },
@@ -317,7 +324,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges{
     const processConfig = new MatDialogConfig();
     processConfig.width = '800px';
     processConfig.height = '400px';
-    processConfig.data = this.calendar;
+    processConfig.data = {calendar: this.calendar};
     const newProcess = this.dialog.open(ProcesoCalendarioAcademicoComponent, processConfig);
     newProcess.afterClosed().subscribe((process: Proceso) => {
       if (process !== undefined) {
@@ -416,6 +423,28 @@ export class DefCalendarioAcademicoComponent implements OnChanges{
     } else {
       this.popUpManager.showErrorToast(this.translate.instant('calendario.error_pre_file'));
     }
+  }
+
+  downloadFile(id_documento: any) {
+    const filesToGet = [
+      {
+        Id: id_documento,
+        key: id_documento,
+      },
+    ];
+    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
+      .subscribe(response => {
+        const filesResponse = <any>response;
+        if (Object.keys(filesResponse).length === filesToGet.length) {
+          filesToGet.forEach((file: any) => {
+            const url = filesResponse[file.Id];
+            window.open(url);
+          });
+        }
+      },
+      (error) => {
+        this.popUpManager.showErrorToast
+      });
   }
 
 }
