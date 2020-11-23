@@ -7,6 +7,7 @@ import { ProcesoCalendarioAcademicoComponent } from './proceso-calendario-academ
 import { ActividadCalendarioAcademicoComponent } from './actividad-calendario-academico/actividad-calendario-academico.component';
 import { DetalleCalendarioComponent } from './detalle-calendario/detalle-calendario.component';
 import { AsignarCalendarioProyectoComponent } from './asignar-calendario-proyecto/asignar-calendario-proyecto.component';
+import { CalendarioProyectoComponent } from './calendario-proyecto/calendario-proyecto.component';
 
 const routes: Routes = [{
     path: '',
@@ -36,6 +37,10 @@ const routes: Routes = [{
             path: 'asignar-calendario-proyecto',
             component: AsignarCalendarioProyectoComponent,
         },
+        {
+            path: 'calendario-proyecto',
+            component: CalendarioProyectoComponent,
+        },
     ],
 }];
 
@@ -57,4 +62,5 @@ export const routedComponents = [
     ActividadCalendarioAcademicoComponent,
     DetalleCalendarioComponent,
     AsignarCalendarioProyectoComponent,
+    CalendarioProyectoComponent,
 ]
