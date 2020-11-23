@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import Swal from 'sweetalert2';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import * as moment from 'moment';
 
 
 @Component({
@@ -16,14 +17,13 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 })
 export class DetalleCalendarioComponent implements OnInit {
 
+  activetab: boolean = false;
+  calendarForEditId: number = 0;
   dataSource: any;
   data: any;
-
   periodos: any;
-
   processSettings: any;
   activitiesSettings: any;
-
   idDetalle: any
 
   constructor(
@@ -33,6 +33,7 @@ export class DetalleCalendarioComponent implements OnInit {
     private documentoService: DocumentoService,
     private route: ActivatedRoute,
     private matIconRegistry: MatIconRegistry,
+    private router: Router,
   ) {
     this.createActivitiesTable();
   }
@@ -40,6 +41,21 @@ export class DetalleCalendarioComponent implements OnInit {
   loadSelects(id: any) {
     this.sgaMidService.get('consulta_calendario_academico/'+id).subscribe(res => {
       this.periodos = res;
+
+      if (JSON.stringify(res[0]) === JSON.stringify({})) {
+        const options: any = {
+          title: this.translate.instant('GLOBAL.atencion'),
+          text: this.translate.instant('calendario.sin_procesos'),
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true,
+          showCancelButton: true,
+        };
+        Swal(options).then((ok) => {
+          this.router.navigate(['../list-calendario-academico'] , {relativeTo: this.route});
+        });
+      }
+
     });
   }
 
@@ -70,12 +86,14 @@ export class DetalleCalendarioComponent implements OnInit {
           witdh: '20%',
           editable: false,
           filter: false,
+          valuePrepareFunction: (value) => { return value = moment(value).format('YYYY-MM-DD') },
         },
         FechaFin: {
           title: this.translate.instant('calendario.fecha_fin'),
           witdh: '20%',
           editable: false,
           filter: false,
+          valuePrepareFunction: (value) => { return value = moment(value).format('YYYY-MM-DD') },
         },
         Responsable: {
           title: this.translate.instant('calendario.responsable'),
@@ -101,7 +119,6 @@ export class DetalleCalendarioComponent implements OnInit {
       .subscribe(response => {
         const filesResponse = <any>response;
         if (Object.keys(filesResponse).length === filesToGet.length) {
-          // console.log("files", filesResponse);
           filesToGet.forEach((file: any) => {
             const url = filesResponse[file.Id];
             window.open(url);
@@ -116,6 +133,10 @@ export class DetalleCalendarioComponent implements OnInit {
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       });
+  }
+
+  activateTab() {
+    this.router.navigate(['../list-calendario-academico'] , {relativeTo: this.route});
   }
 
 }

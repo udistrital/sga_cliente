@@ -1,59 +1,58 @@
-<div class="col-12" *ngIf="periodos[0].Id == null">
-    <label>{{ 'calendario.sin_procesos' | translate }}</label>
-</div>
-<div class="col-12" *ngIf="periodos[0].Id != null">
-    <nb-card>
-        <nb-card-header>{{ 'calendario.calendario_academico' | translate}} {{ periodos[0].Nombre }}</nb-card-header>
-        <nb-card-body>
-            <!-- <p>Proceso: Admisiones </p> -->
-            <form novalidate [formGroup]="calendarForm" #fform="ngForm" (ngSubmit)="createCalendar($event)" class="form-horizontal">
-                <div class="row my-2" *ngIf="periodos[0].ListaCalendario != nil">
-                    <div class="col-5">
-                        <mat-form-field style="width: 100%;" floatLabel="always">
-                            <mat-select formControlName="ListCal" placeholder="Seleccione la versión del calendario">
-                                <mat-option>--Seleccionar--</mat-option>
-                                <mat-option *ngFor="let periodo of periodos" [value]="periodo.Id">
-                                    <mat-option *ngFor="let listCal of periodo.ListaCalendario" (click)="cambiarCalendario(listCal.Id)" [value]="listCal.Id">
-                                        {{ listCal.Nombre }}
-                                    </mat-option>
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                </div>
+<div class="dinamic-form" *ngIf="periodos[0].Id != null">
+    <fieldset [ngClass]="{'fieldseter':true} ">
+        <legend>
+            {{ 'calendario.calendario_academico' | translate}} {{ periodos[0].Nombre }}
+        </legend>
+        <div class="col-12">
+            <nb-card>
+                <nb-card-body>
+                    <form novalidate [formGroup]="calendarForm" #fform="ngForm" (ngSubmit)="createCalendar($event)" class="form-horizontal">
+                        <div class="row my-2" *ngIf="periodos[0].ListaCalendario != nil">
+                            <div class="col-5">
+                                <mat-form-field style="width: 100%;" floatLabel="always">
+                                    <mat-select formControlName="ListCal" placeholder="Seleccione la versión del calendario">
+                                        <mat-option>--Seleccionar--</mat-option>
+                                        <mat-option *ngFor="let periodo of periodos" [value]="periodo.Id">
+                                            <mat-option *ngFor="let listCal of periodo.ListaCalendario" (click)="cambiarCalendario(listCal.Id)" [value]="listCal.Id">
+                                                {{ listCal.Nombre }}
+                                            </mat-option>
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
 
-                <div class="col-12">
-                    {{ 'calendario.calendario_resolucion' | translate }} : {{ periodos[0].resolucion.Resolucion }} del año {{ periodos[0].resolucion.Anno }}
-                    <button mat-button type="button" (click)="downloadFile(periodos[0].resolucion.Enlace)">
-                        <span style="font-size:26px;
-                        align-self: center;
-                        margin-right: 10px;
-                        color: #4fb9ff !important;">
-                            <i class="fa fa-cloud-download" aria-hidden="true" ></i>
-                        </span>
-                        </button>
-                </div>
+                        <div class="col-12">
+                            {{ 'calendario.calendario_resolucion' | translate }} : {{ periodos[0].resolucion.Resolucion }} del año {{ periodos[0].resolucion.Anno }}
+                            <button mat-button type="button" (click)="downloadFile(periodos[0].resolucion.Id)">    
+                                <i class="fa fa-cloud-download" aria-hidden="true" ></i>
+                            </button>
+                        </div>
 
-                <div class="col-12">
-                    <mat-tab-group>
+                        <div class="col-12">
+                            <mat-tab-group>
 
-                        <mat-tab label="{{ 'calendario.actividades' | translate }}">
-                            <ng-container *ngFor="let periodo of periodos">
-                                <mat-expansion-panel *ngFor="let proceso of periodo.proceso">
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            {{ proceso.Proceso }}
-                                        </mat-panel-title>
-                                    </mat-expansion-panel-header>
-                                    <ng2-smart-table [settings]="activitiesSettings" [source]="proceso.Actividades"></ng2-smart-table>
-                                </mat-expansion-panel>
+                                <mat-tab label="{{ 'calendario.actividades' | translate }}">
+                                    <ng-container *ngFor="let periodo of periodos">
+                                        <mat-expansion-panel *ngFor="let proceso of periodo.proceso">
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    {{ proceso.Proceso }}
+                                                </mat-panel-title>
+                                            </mat-expansion-panel-header>
+                                            <ng2-smart-table [settings]="activitiesSettings" [source]="proceso.Actividades"></ng2-smart-table>
+                                        </mat-expansion-panel>
 
-                            </ng-container>
-                        </mat-tab>
-                    </mat-tab-group>
-                </div>
+                                    </ng-container>
+                                </mat-tab>
+                            </mat-tab-group>
+                        </div>
 
-            </form>
-        </nb-card-body>
-    </nb-card>
+                    </form>
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </fieldset>
+    <br>
+    <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
 </div>
