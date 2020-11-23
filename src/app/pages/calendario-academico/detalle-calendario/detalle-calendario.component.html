@@ -1,12 +1,9 @@
-<div class="dinamic-form">
+<div class="dinamic-form" *ngIf="periodos[0].Id != null">
     <fieldset [ngClass]="{'fieldseter':true} ">
         <legend>
             {{ 'calendario.calendario_academico' | translate}} {{ periodos[0].Nombre }}
         </legend>
-        <div class="col-12" *ngIf="periodos[0].Id == null">
-            <label>{{ 'calendario.sin_procesos' | translate }}</label>
-        </div>
-        <div class="col-12" *ngIf="periodos[0].Id != null">
+        <div class="col-12">
             <nb-card>
                 <nb-card-body>
                     <form novalidate [formGroup]="calendarForm" #fform="ngForm" (ngSubmit)="createCalendar($event)" class="form-horizontal">

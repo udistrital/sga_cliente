@@ -41,7 +41,25 @@ export class DetalleCalendarioComponent implements OnInit {
   loadSelects(id: any) {
     this.sgaMidService.get('consulta_calendario_academico/'+id).subscribe(res => {
       this.periodos = res;
+
+      if (JSON.stringify(res[0]) === JSON.stringify({})) {
+        const options: any = {
+          title: this.translate.instant('GLOBAL.atencion'),
+          text: this.translate.instant('calendario.sin_procesos'),
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true,
+          showCancelButton: true,
+        };
+        Swal(options).then((ok) => {
+          this.router.navigate(['../list-calendario-academico'] , {relativeTo: this.route});
+        });
+      }
+
     });
+
+    
+   
   }
 
   ngOnInit() {
