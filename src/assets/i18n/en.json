@@ -80,7 +80,8 @@
         },
         "calendarioacademico": {
             "calendarioacademico": "Academic Calendar",
-            "list_calendarioacademico": "List of academic calendars"
+            "list_calendarioacademico": "List of academic calendars",
+            "buscar_calendario_proyecto": "Search calendar by project"
         },
         "proyecto_academico": {
             "proyecto_academico": "Academic Project",
@@ -1058,6 +1059,8 @@
         "seleccione_proyecto": "Select the academic projects.",
         "error_select_proyecto": "Select at least one proyect.",
         "seguro_proyectos": "Are you sure about assingning the calendar to the selected projects?",
-        "proyectos_exito": "The academic calendar has been successfully assigned."
+        "proyectos_exito": "The academic calendar has been successfully assigned.",
+        "buscar_calendario": "Search the academic calendar assigned to an academic project",
+        "sin_calendario": "There are no calendars associated to this particular project"
     }
 }
