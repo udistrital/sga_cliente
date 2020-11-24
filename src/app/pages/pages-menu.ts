@@ -50,6 +50,12 @@ export const MENU_ITEMS: MenuItem[] = [
         link: '/pages/calendario-academico/list-calendario-academico',
         key: 'list_calendarioacademico',
       },
+      {
+        title: 'Calendario académico por proyecto',
+        icon: 'nb-search',
+        link: '/pages/calendario-academico/calendario-proyecto',
+        key: 'buscar_calendario_proyecto',
+      }
     ],
   },
   {

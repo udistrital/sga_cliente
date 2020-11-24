@@ -21,6 +21,7 @@ import { CoreService } from '../../@core/data/core.service';
 import { DocumentoService } from '../../@core/data/documento.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
 import { PopUpManager } from '../../managers/popUpManager';
+import { CalendarioProyectoComponent } from './calendario-proyecto/calendario-proyecto.component';
 
 
 
@@ -46,6 +47,7 @@ import { PopUpManager } from '../../managers/popUpManager';
     ProcesoCalendarioAcademicoComponent,
     ActividadCalendarioAcademicoComponent,
     DetalleCalendarioComponent,
+    CalendarioProyectoComponent,
   ],
   entryComponents : [
     ProcesoCalendarioAcademicoComponent,

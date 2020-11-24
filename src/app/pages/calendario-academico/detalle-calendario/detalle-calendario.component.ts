@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -15,7 +15,7 @@ import * as moment from 'moment';
   templateUrl: './detalle-calendario.component.html',
   styleUrls: ['./detalle-calendario.component.scss'],
 })
-export class DetalleCalendarioComponent implements OnInit {
+export class DetalleCalendarioComponent implements OnInit, OnChanges {
 
   activetab: boolean = false;
   calendarForEditId: number = 0;
@@ -25,6 +25,9 @@ export class DetalleCalendarioComponent implements OnInit {
   processSettings: any;
   activitiesSettings: any;
   idDetalle: any
+
+  @Input()
+  calendarForProject: string = "0";
 
   constructor(
     private sgaMidService: SgaMidService,
@@ -66,6 +69,12 @@ export class DetalleCalendarioComponent implements OnInit {
     });
     this.loadSelects(this.idDetalle)
 
+  }
+
+  ngOnChanges() {
+    if (this.calendarForProject != "0") {
+      this.loadSelects(this.calendarForProject);
+    }
   }
 
   cambiarCalendario(id: any){
