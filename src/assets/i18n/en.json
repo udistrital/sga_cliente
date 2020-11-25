@@ -1061,6 +1061,8 @@
         "seguro_proyectos": "Are you sure about assingning the calendar to the selected projects?",
         "proyectos_exito": "The academic calendar has been successfully assigned.",
         "buscar_calendario": "Search the academic calendar assigned to an academic project",
-        "sin_calendario": "There are no calendars associated to this particular project"
+        "sin_calendario": "There are no calendars associated to this particular project",
+        "publico_repetido": "The chosen public type is already selected.",
+        "no_publico": "You must select at lead one public type."
     }
 }

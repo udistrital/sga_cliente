@@ -1071,6 +1071,8 @@
         "seguro_proyectos": "¿Está seguro de asignar el calendario a los proyectos seleccionados?",
         "proyectos_exito": "El calendario académico ha sido asignado con éxito.",
         "buscar_calendario": "Buscar calendario académico asignado a un proyecto académico",
-        "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular."
+        "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular.",
+        "publico_repetido": "El tipo de público elegido ya habia sido seleccionado.",
+        "no_publico": "Debe seleccionar al menos un tipo de público."
     }
 }

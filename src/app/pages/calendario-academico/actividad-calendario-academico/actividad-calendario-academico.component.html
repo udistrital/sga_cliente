@@ -58,7 +58,7 @@
           <div class="col-12">
             <mat-form-field style="width: 100%;" floatLabel="always">
               <mat-label>*{{ 'calendario.dirigido_label' | translate }} </mat-label>
-              <mat-select formControlName="responsable" placeholder="Coordinadores/Estudiantes" required >
+              <mat-select formControlName="responsable" placeholder="Coordinadores/Estudiantes" (selectionChange)="onSelectChange($event)" required >
                 <mat-option *ngFor="let resp of responsables" [value]="resp.Id" >
                   {{ resp.Nombre }}
                 </mat-option>
@@ -67,6 +67,12 @@
                 {{ 'calendario.error_resp_actividad' | translate }}
               </mat-error>
             </mat-form-field>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class=col-12>
+            <ng2-smart-table [settings]="publicTable" [source]="tableSource" (delete)="deletePublic($event)" ></ng2-smart-table>
           </div>
         </div>
       </fieldset>
