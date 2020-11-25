@@ -170,6 +170,7 @@ export class ActividadCalendarioAcademicoComponent {
           Activo: true,
           NumeroOrden: '',
         });
+        this.addPublic = false;
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -179,6 +180,10 @@ export class ActividadCalendarioAcademicoComponent {
 
   openForm() {
     this.addPublic = true;
+  }
+
+  closeForm() {
+    this.addPublic = false;
   }
 
 }

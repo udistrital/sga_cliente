@@ -1,5 +1,5 @@
 <div class="dinamic-form">
-  <form novalidate [formGroup]="activityForm" #fform="ngForm" (ngSubmit)="saveActivity()"  class="form-horizontal">
+  <form novalidate [formGroup]="activityForm" #fform="ngForm" (ngSubmit)="saveActivity()"  class="form-horizontal" [hidden]="addPublic">
     <fieldset [ngClass]="{'fieldseter':true} ">
       <legend>
         {{ 'calendario.actividad' | translate }}
@@ -85,7 +85,7 @@
     </fieldset>
   </form>
   <br>
-  <button mat-button type="button" (click)="openForm()" [hidden]="addPublic" >{{ 'calendario.actividad_dirigido' | translate }}</button>
+  <button mat-button style="width: 100%;" type="button" (click)="openForm()" [hidden]="addPublic" >{{ 'calendario.actividad_dirigido' | translate }}</button>
   <form novalidate [formGroup]="publicTypeForm" #pform="ngForm" (ngSubmit)="addPublicType()" class="form-horizontal" *ngIf="addPublic">
     <fieldset [ngClass]="{'fieldseter':true} ">
       <legend>
@@ -128,6 +128,14 @@
           <button class="float-right" mat-button type="submit" [disabled]="publicTypeForm.invalid" >{{ 'evento.agregar_encargado' | translate }} </button>
         </div>
       </div>
+      <br>
+      <div class="row">
+        <div class="col-12">
+          <ng2-smart-table [settings]="publicTable" [source]="responsables" ></ng2-smart-table>
+        </div>
+      </div>
     </fieldset>
+    <br>
+    <button type="button" (click)="closeForm()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
   </form>
 </div>

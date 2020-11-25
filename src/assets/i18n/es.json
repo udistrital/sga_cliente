@@ -1061,7 +1061,7 @@
         "calendario_exito": "El calendario ha sido creado con éxito.",
         "proceso_exito": "El proceso ha sido registrado con éxito.",
         "actividad_exito": "La actividad ha sido guardada con éxito.",
-        "actividad_dirigido": "Agregar responsables (A quien va dirigido)",
+        "actividad_dirigido": "Administrar tipos de público",
         "error_dirigido_nombre": "Por favor indique el nombre",
         "error_dirigido_codigo": "Por favor indique la abreviación",
         "error_dirigido_orden": "Por favor indique número de órden",

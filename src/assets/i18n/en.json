@@ -1051,7 +1051,7 @@
         "calendario_exito": "The calendar has been successfully created.",
         "proceso_exito": "The process has been successfully registered.",
         "actividad_exito": "The activity has been successfully saved.",
-        "actividad_dirigido": "Add responsible (Who is the activity directed to)",
+        "actividad_dirigido": "Manage public types",
         "error_dirigido_nombre": "Please add a name",
         "error_dirigido_codigo": "Please add an abbreviation",
         "error_dirigido_orden": "Please add an order number",
