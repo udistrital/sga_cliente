@@ -1,22 +1,22 @@
 <div class="col-12">
-  <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-    <nb-card-header>
-      {{ 'calendario.calendarios_academicos' | translate }}
-    </nb-card-header>
-    <nb-card-body>
-      <nb-tabset fullWidth (changeTab)="changeTab($event)">
-        <nb-tab tabTitle="{{ 'GLOBAL.lista' | translate }}" [active]="!activetab">
-          <br />
-          <ng2-smart-table [settings]="settings" [source]="dataSource" (create)="onCreate($event)" (custom)="onAction($event)">
+    <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+        <nb-card-header>
+            {{ 'calendario.calendarios_academicos' | translate }}
+        </nb-card-header>
+        <nb-card-body>
+            <nb-tabset fullWidth (changeTab)="changeTab($event)">
+                <nb-tab tabTitle="{{ 'GLOBAL.lista' | translate }}" [active]="!activetab">
+                    <br />
+                    <ng2-smart-table [settings]="settings" [source]="dataSource" (create)="onCreate($event)" (custom)="onAction($event)">
 
-          </ng2-smart-table>
-        </nb-tab>
-        <nb-tab tabTitle="{{ 'GLOBAL.formulario' | translate }}" [active]="activetab">
-          <br />
-          <ngx-def-calendario-academico [calendarForEditId]="calendarForEditId"></ngx-def-calendario-academico>
-          <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
-        </nb-tab>
-      </nb-tabset>
-    </nb-card-body>
-  </nb-card>
+                    </ng2-smart-table>
+                </nb-tab>
+                <nb-tab tabTitle="{{ 'GLOBAL.formulario' | translate }}" [active]="activetab">
+                    <br />
+                    <ngx-def-calendario-academico [calendarForEditId]="calendarForEditId" (calendarCloneOut)="recargarDespuesClon($event)"></ngx-def-calendario-academico>
+                    <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
 </div>
