@@ -35,6 +35,11 @@
             "list_evento": "Events List",
             "crud_evento": "Events Crud"
         },
+        "derechos_pecuniarios": {
+            "derechos_pecuniarios": "Pecuniary Rights",
+            "definir_conceptos": "Define Concepts",
+            "asignar_valores": "Assign Values"
+        },
         "archivo_icfes": {
             "archivo_icfes": "Icfes file",
             "list_archivo": "File List",
