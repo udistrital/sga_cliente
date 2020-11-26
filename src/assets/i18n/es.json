@@ -1008,6 +1008,9 @@
         "asignar": "Asignar cupos"
     },
     "calendario": {
+        "seguro_continuar_inhabilitar_calendario": "¿Esta seguro de inhabilitar este Calendario?",
+        "calendario_inhabilitado": "Calendario inhabilitado",
+        "calendario_no_inhabilitado": "Calendario no inhabilitado",
         "clonar_calendario_nombre": "Seleccione el periodo académico y el nivel del cual quiere copiar el calendario académico:",
         "clonar_calendario": "Clonar calendario",
         "calendario_resolucion": "Calendario definido mediante la resolución",

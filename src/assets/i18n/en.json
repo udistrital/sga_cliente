@@ -998,6 +998,9 @@
         "asignar": "Assign quotas"
     },
     "calendario": {
+        "seguro_continuar_inhabilitar_calendario": "¿Are you sure to disable this Calendar?",
+        "calendario_inhabilitado": "Calendar disabled",
+        "calendario_no_inhabilitado": "Calendar not disabled",
         "clonar_calendario_nombre": "Select the academic period and the level from which you want to copy the academic calendar:",
         "clonar_calendario": "Clone calendar",
         "calendario_resolucion": "Academic Calendar defined by resolution",
