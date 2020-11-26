@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, Input } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -8,7 +8,6 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AsignarCalendarioProyectoComponent } from '../asignar-calendario-proyecto/asignar-calendario-proyecto.component';
 import { EventoService } from '../../../@core/data/evento.service';
-
 
 @Component({
   selector: 'ngx-list-calendario-academico',
@@ -40,6 +39,9 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
+  }
+  recargarDespuesClon(newItem) {
+    this.calendarForEditId = newItem
   }
 
   ngOnInit() {
@@ -116,6 +118,10 @@ export class ListCalendarioAcademicoComponent implements OnInit {
           {
             name: 'delete',
             title: '<i class="nb-trash"></i>',
+          },
+          {
+            name: 'clone',
+            title: '<i class="fa fa-clone" aria-hidden="true"></i>',
           },
         ],
       },
