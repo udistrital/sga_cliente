@@ -29,7 +29,8 @@ export class ListProduccionAcademicaComponent implements OnInit {
     private user: UserService,
     private toasterService: ToasterService) {
     this.persona_id = user.getPersonaId() || 1;
-    this.loadData();
+    // ojo quitar comentario
+    // this.loadData();
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
