@@ -18,6 +18,7 @@ import { CoreService } from '../../../@core/data/core.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { EventoService } from '../../../@core/data/evento.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
@@ -54,6 +55,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges{
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
     private eventoService: EventoService,
+    private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
   ) {
     this.processTable = new LocalDataSource();
@@ -156,7 +158,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges{
       );
 
     }
-    
+
   }
 
   createCalendarForm() {
@@ -366,7 +368,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges{
     const newActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
     newActivity.afterClosed().subscribe((activity: Actividad) => {
       if (activity !== undefined) {
-        this.eventoService.post('calendario_evento', activity).subscribe(
+        this.sgaMidService.post('crear_actividad_calendario', activity).subscribe(
           response => {
             activity.FechaInicio = moment(activity.FechaInicio).format('DD-MM-YYYY');
             activity.FechaFin = moment(activity.FechaFin).format('DD-MM-YYYY');
