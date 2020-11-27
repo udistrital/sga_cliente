@@ -13,15 +13,14 @@ import { Calendario } from '../../../@core/data/models/calendario-academico/cale
 import { CalendarioClone } from '../../../@core/data/models/calendario-academico/calendarioClone';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import * as moment from 'moment';
-import { Router, ActivatedRoute } from '@angular/router';
 
 import { CoreService } from '../../../@core/data/core.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { EventoService } from '../../../@core/data/evento.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 
-import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   selector: 'ngx-def-calendario-academico',
@@ -64,10 +63,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
     private eventoService: EventoService,
-    private popUpManager: PopUpManager,
-    private router: Router,
-    private route: ActivatedRoute,
     private sgaMidService: SgaMidService,
+    private popUpManager: PopUpManager,
   ) {
     // this.calendarCloneOut = new EventEmitter<string>();
     this.processTable = new LocalDataSource();
@@ -426,13 +423,16 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     activityConfig.height = '700px';
     activityConfig.data = { process: process, calendar: this.calendar };
     const newActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
-    newActivity.afterClosed().subscribe((activity: Actividad) => {
+    newActivity.afterClosed().subscribe((activity: any) => {
       if (activity !== undefined) {
-        this.eventoService.post('calendario_evento', activity).subscribe(
+        this.sgaMidService.post('crear_actividad_calendario', activity).subscribe(
           response => {
-            activity.FechaInicio = moment(activity.FechaInicio).format('DD-MM-YYYY');
-            activity.FechaFin = moment(activity.FechaFin).format('DD-MM-YYYY');
-            this.processes.filter((proc: Proceso) => proc.procesoId === process.procesoId)[0].actividades.push(activity);
+            var actividad: Actividad = new Actividad();
+            actividad = activity.Actividad;
+            actividad.responsables = activity.responsable;
+            actividad.FechaInicio = moment(actividad.FechaInicio).format('DD-MM-YYYY');
+            actividad.FechaFin = moment(actividad.FechaFin).format('DD-MM-YYYY');
+            this.processes.filter((proc: Proceso) => proc.procesoId === process.procesoId)[0].actividades.push(actividad);
             event.source.load(process.actividades);
             this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_exito'));
           },
