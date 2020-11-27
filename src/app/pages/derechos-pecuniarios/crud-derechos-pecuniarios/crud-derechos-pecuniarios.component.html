@@ -1,3 +1,18 @@
-<p>
-  crud-derechos-pecuniarios works!
-</p>
+<div class="row">
+  <div class="col">
+    <mat-card>
+      <mat-card-title>{{ 'derechos_pecuniarios.titulo' | translate }}</mat-card-title>
+      <mat-card-content>
+        <p>{{ 'derechos_pecuniarios.forma' | translate }} </p>
+        <div class="row">
+          <div class="col-12 col-md-6 text-center">
+            <button mat-button type="button" (click)="copiarDerechos()" >{{ 'derechos_pecuniarios.copiar' | translate }} </button>
+          </div>
+          <div class="col-12 col-md-6 text-center">
+            <button mat-button type="button" (click)="definirDerechos()" >{{ 'derechos_pecuniarios.definir' | translate }} </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

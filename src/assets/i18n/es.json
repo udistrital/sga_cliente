@@ -135,6 +135,7 @@
         "lista": "Lista",
         "regresar": "Regresar",
         "error": "Error",
+        "informacion": "Información",
         "operacion_exitosa": "Operación exitosa",
         "si": "Si",
         "no": "No",
@@ -1077,5 +1078,22 @@
         "proyectos_exito": "El calendario académico ha sido asignado con éxito.",
         "buscar_calendario": "Buscar calendario académico asignado a un proyecto académico",
         "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular."
+    },
+    "derechos_pecuniarios": {
+        "titulo": "Derechos Pecuniarios",
+        "forma": "Seleccione la forma en la que desea definir los conceptos de los derechos pecuniarios",
+        "copiar": "Copiar los conceptos de una vigencia anterior",
+        "definir": "Definir los conceptos",
+        "forma_vigencia": "Seleccione la vigencia de la cual desea copiar los conceptos de los derechos pecuniarios",
+        "boton_copiar": "Copiar conceptos",
+        "boton_calcular": "Calcular valores",
+        "vigencia": "Vigencia",
+        "codigo": "Código",
+        "factor": "Factor",
+        "no_data": "No se encontraron conceptos registrados",
+        "conceptos": "Conceptos",
+        "salario": "Salario Mínimo Legal Mensual Vigente (SMMLV)",
+        "no_conceptos": "No hay conceptos registrados para hacer la asignación de valores para los derechos pecuniarios.",
+        "costo": "Costo"
     }
 }

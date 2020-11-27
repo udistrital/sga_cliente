@@ -4,11 +4,13 @@ import { DerechosPecuniariosComponent } from './derechos-pecuniarios.component';
 import { DerechosPecuniariosRoutingComponent, routedComponents } from './derechos-pecuniarios-routing.module';
 import { CrudDerechosPecuniariosComponent } from './crud-derechos-pecuniarios/crud-derechos-pecuniarios.component';
 import { ListDerechosPecuniariosComponent } from './list-derechos-pecuniarios/list-derechos-pecuniarios.component'
+import { CopiarConceptosComponent } from './copiar-conceptos/copiar-conceptos.component';
 import { PopUpManager } from '../../managers/popUpManager';
 import { SharedModule } from '../../shared/shared.module';
 import { ThemeModule } from '../../@theme/theme.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DefinirConceptosComponent } from './definir-conceptos/definir-conceptos.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DerechosPecuniariosComponent,
     CrudDerechosPecuniariosComponent,
     ListDerechosPecuniariosComponent,
+    CopiarConceptosComponent,
+    DefinirConceptosComponent,
   ],
   providers: [
     PopUpManager,
