@@ -4,6 +4,7 @@ import { CopiarConceptosComponent } from './copiar-conceptos/copiar-conceptos.co
 import { CrudDerechosPecuniariosComponent } from './crud-derechos-pecuniarios/crud-derechos-pecuniarios.component';
 import { DefinirConceptosComponent } from './definir-conceptos/definir-conceptos.component';
 import { DerechosPecuniariosComponent } from './derechos-pecuniarios.component';
+import { DialogoConceptosComponent } from './dialogo-conceptos/dialogo-conceptos.component';
 import { ListDerechosPecuniariosComponent } from './list-derechos-pecuniarios/list-derechos-pecuniarios.component';
 
 const routes: Routes = [{
@@ -46,4 +47,5 @@ export const routedComponents = [
     ListDerechosPecuniariosComponent,
     CopiarConceptosComponent,
     DefinirConceptosComponent,
+    DialogoConceptosComponent,
 ]

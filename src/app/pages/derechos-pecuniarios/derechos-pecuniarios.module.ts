@@ -11,6 +11,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DefinirConceptosComponent } from './definir-conceptos/definir-conceptos.component';
+import { DialogoConceptosComponent } from './dialogo-conceptos/dialogo-conceptos.component';
 
 @NgModule({
   declarations: [
@@ -34,5 +35,8 @@ import { DefinirConceptosComponent } from './definir-conceptos/definir-conceptos
   providers: [
     PopUpManager,
   ],
+  entryComponents: [
+    DialogoConceptosComponent,
+  ]
 })
 export class DerechosPecuniariosModule { }

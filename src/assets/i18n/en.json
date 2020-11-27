@@ -1084,6 +1084,12 @@
         "conceptos": "Concepts",
         "salario": "Minimum Legal Monthly Valid Salary",
         "no_conceptos": "There are no registered concepts to assign values for financial entitlements.",
-        "costo": "Cost"
+        "costo": "Cost",
+        "agregar_concepto": "Add Concept",
+        "error_codigo": "Please add a code for the concept",
+        "error_factor": "Please give the factor of the concept",
+        "error_nombre": "Please insert the name for the concept",
+        "confirmar_concepto": "Are you sure to add this concept to the financial entitlements?",
+        "inactivar_concepto": "Inactive this concept?"
     }
 }

@@ -25,7 +25,7 @@
     <mat-card>
       <mat-card-title>{{ 'derechos_pecuniarios.conceptos' | translate }}</mat-card-title>
       <mat-card-content>
-        <ng2-smart-table [settings]="tablaConceptos" [source]="datosConceptos" ></ng2-smart-table>
+        <ng2-smart-table [settings]="tablaConceptos" [source]="datosConceptos" (create)="agregarConcepto()" (edit)="editarConcepto($event)" (delete)="inactivarConcepto($event)" ></ng2-smart-table>
       </mat-card-content>
     </mat-card>
   </div>

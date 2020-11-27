@@ -1094,6 +1094,12 @@
         "conceptos": "Conceptos",
         "salario": "Salario Mínimo Legal Mensual Vigente (SMMLV)",
         "no_conceptos": "No hay conceptos registrados para hacer la asignación de valores para los derechos pecuniarios.",
-        "costo": "Costo"
+        "costo": "Costo",
+        "agregar_concepto": "Agregar Concepto",
+        "error_codigo": "Por favor ingrese el codigo del concepto",
+        "error_factor": "Por favor indique el factor del concepto",
+        "error_nombre": "Por favor agregue el nombre del concepto",
+        "confirmar_concepto": "¿Está seguro de agregar este concepto a los derechos pecuniarios?",
+        "inactivar_concepto": "¿Inactivar concepto?"
     }
 }
