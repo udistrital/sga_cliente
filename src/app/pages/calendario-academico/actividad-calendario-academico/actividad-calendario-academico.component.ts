@@ -21,6 +21,7 @@ export class ActividadCalendarioAcademicoComponent {
   period: string;
   activityForm: FormGroup;
   responsables: any;
+  responsablesSelected: any[];
   publicTypeForm: FormGroup;
   addPublic: boolean = false;
   publicTable: any;
@@ -45,12 +46,14 @@ export class ActividadCalendarioAcademicoComponent {
     this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
     if (this.data.editActivity !== undefined) {
       this.activityForm.setValue({
-        Nombre: this.data.editActivity.Nombre,
-        Descripcion: this.data.editActivity.Descripcion,
-        FechaInicio: moment(this.data.editActivity.FechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD'),
-        FechaFin: moment(this.data.editActivity.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD'),
-        responsable: 0,
+        Nombre: this.data.editActivity.Actividad.Nombre,
+        Descripcion: this.data.editActivity.Actividad.Descripcion,
+        FechaInicio: moment(this.data.editActivity.Actividad.FechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+        FechaFin: moment(this.data.editActivity.Actividad.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD'),
       });
+      this.tableSource.load(
+        this.responsables.filter(resp => this.data.editActivity.responsable.some(resp2 => resp2.IdPublico === resp.Id))
+      );
     }
   }
 
@@ -66,13 +69,13 @@ export class ActividadCalendarioAcademicoComponent {
         this.activity.Activo = true;
         this.tableSource.getAll().then(
           data => {
-            this.activity.responsable = data.map(
+            this.responsablesSelected = data.map(
               item => {
-                return {IdPublico: item.Id}
+                return { IdPublico: item.Id }
               }
             );
-            if (this.activity.responsable.length > 0) {
-              this.dialogRef.close(this.activity);
+            if (this.responsablesSelected.length > 0) {
+              this.dialogRef.close({"Actividad": this.activity, "responsable": this.responsablesSelected});
             } else {
               this.popUpManager.showErrorAlert(this.translate.instant('calendario.no_publico'))
             }
@@ -92,7 +95,6 @@ export class ActividadCalendarioAcademicoComponent {
       Descripcion: ['', Validators.required],
       FechaInicio: ['', Validators.required],
       FechaFin: ['', Validators.required],
-      responsable: [[], Validators.required],
     })
   }
 

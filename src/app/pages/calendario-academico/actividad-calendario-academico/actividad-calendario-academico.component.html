@@ -58,14 +58,11 @@
           <div class="col-12">
             <mat-form-field style="width: 100%;" floatLabel="always">
               <mat-label>*{{ 'calendario.dirigido_label' | translate }} </mat-label>
-              <mat-select formControlName="responsable" placeholder="Coordinadores/Estudiantes" (selectionChange)="onSelectChange($event)" required >
+              <mat-select placeholder="Coordinadores/Estudiantes" (selectionChange)="onSelectChange($event)" required >
                 <mat-option *ngFor="let resp of responsables" [value]="resp.Id" >
                   {{ resp.Nombre }}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="activityForm.get('responsable').hasError('required') && activityForm.get('responsable').touched" >
-                {{ 'calendario.error_resp_actividad' | translate }}
-              </mat-error>
             </mat-form-field>
           </div>
         </div>
