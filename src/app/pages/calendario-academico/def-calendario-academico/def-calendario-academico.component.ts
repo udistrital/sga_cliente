@@ -119,8 +119,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     } else {
       this.createdCalendar = true;
       this.editMode = true;
-      // this.openTabs();
-      // this.openTabsClone();
+      this.openTabs();
       this.eventoService.get('calendario/' + this.calendarForEditId).subscribe(
         calendar => {
           this.calendar = new Calendario();
