@@ -7,6 +7,7 @@ import { CoreService } from '../../../@core/data/core.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import * as moment from 'moment';
+import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
   selector: 'ngx-actividad-calendario-academico',
@@ -20,8 +21,11 @@ export class ActividadCalendarioAcademicoComponent {
   period: string;
   activityForm: FormGroup;
   responsables: any;
+  responsablesSelected: any[];
   publicTypeForm: FormGroup;
   addPublic: boolean = false;
+  publicTable: any;
+  tableSource: LocalDataSource;
 
   constructor(
     public dialogRef: MatDialogRef<ActividadCalendarioAcademicoComponent>,
@@ -34,31 +38,50 @@ export class ActividadCalendarioAcademicoComponent {
   ) {
     this.processName = this.data.process.Nombre;
     this.period = '';
+    this.tableSource = new LocalDataSource();
     this.fetchSelectData(this.data.calendar.PeriodoId);
     this.createActivityForm();
+    this.createPublicTable();
     this.createPublicTypeForm();
     this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
     if (this.data.editActivity !== undefined) {
       this.activityForm.setValue({
-        Nombre: this.data.editActivity.Nombre,
-        Descripcion: this.data.editActivity.Descripcion,
-        FechaInicio: moment(this.data.editActivity.FechaInicio).format('YYYY-MM-DD'),
-        FechaFin: moment(this.data.editActivity.FechaFin).format('YYYY-MM-DD'),
-        responsable: 0,
+        Nombre: this.data.editActivity.Actividad.Nombre,
+        Descripcion: this.data.editActivity.Actividad.Descripcion,
+        FechaInicio: moment(this.data.editActivity.Actividad.FechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+        FechaFin: moment(this.data.editActivity.Actividad.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD'),
       });
+      this.tableSource.load(
+        this.responsables.filter(resp => this.data.editActivity.responsable.some(resp2 => resp2.IdPublico === resp.Id))
+      );
     }
   }
 
   saveActivity() {
     this.popUpManager.showConfirmAlert(
       this.translate.instant('calendario.seguro_registrar_actividad')
-    ).then(() => {
-      this.activity = this.activityForm.value;
-      this.activity.TipoEventoId = {Id: this.data.process.procesoId};
-      this.activity.FechaInicio = moment(this.activity.FechaInicio).format('YYYY-MM-DDTHH:mm') + ':00Z';
-      this.activity.FechaFin = moment(this.activity.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
-      this.activity.Activo = true;
-      this.dialogRef.close(this.activity);
+    ).then((ok) => {
+      if (ok.value) {
+        this.activity = this.activityForm.value;
+        this.activity.TipoEventoId = {Id: this.data.process.procesoId};
+        this.activity.FechaInicio = moment(this.activity.FechaInicio).format('YYYY-MM-DDTHH:mm') + ':00Z';
+        this.activity.FechaFin = moment(this.activity.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
+        this.activity.Activo = true;
+        this.tableSource.getAll().then(
+          data => {
+            this.responsablesSelected = data.map(
+              item => {
+                return { IdPublico: item.Id }
+              }
+            );
+            if (this.responsablesSelected.length > 0) {
+              this.dialogRef.close({"Actividad": this.activity, "responsable": this.responsablesSelected});
+            } else {
+              this.popUpManager.showErrorAlert(this.translate.instant('calendario.no_publico'))
+            }
+          },
+        );
+      }
     });
   }
 
@@ -72,7 +95,6 @@ export class ActividadCalendarioAcademicoComponent {
       Descripcion: ['', Validators.required],
       FechaInicio: ['', Validators.required],
       FechaFin: ['', Validators.required],
-      responsable: '',
     })
   }
 
@@ -103,6 +125,41 @@ export class ActividadCalendarioAcademicoComponent {
     );
   }
 
+  createPublicTable() {
+    this.publicTable = {
+      columns: {
+        Nombre: {
+          title: this.translate.instant('calendario.nombre'),
+          width: '80%',
+          editable: false,
+        },
+      },
+      mode: 'external',
+      actions : {
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+        add: false,
+        edit: false,
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+      },
+      hideSubHeader: true,
+    }
+  }
+
+  deletePublic(event: any) {
+    this.tableSource.remove(event.data)
+  }
+
+  onSelectChange(event: any) {
+    const data: any = this.responsables.filter((row) => row.Id === event.value)[0]
+    this.tableSource.find(data).then(
+      val => this.popUpManager.showErrorAlert(this.translate.instant('calendario.publico_repetido')),
+      err => this.tableSource.append(data),
+    );
+  }
+
   addPublicType() {
     const newPublicType = this.publicTypeForm.value;
     this.eventoService.post('tipo_publico', newPublicType).subscribe(
@@ -115,6 +172,7 @@ export class ActividadCalendarioAcademicoComponent {
           Activo: true,
           NumeroOrden: '',
         });
+        this.addPublic = false;
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -124,6 +182,10 @@ export class ActividadCalendarioAcademicoComponent {
 
   openForm() {
     this.addPublic = true;
+  }
+
+  closeForm() {
+    this.addPublic = false;
   }
 
 }

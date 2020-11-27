@@ -1067,7 +1067,7 @@
         "calendario_clon_error": "No existen procesos con los criterios seleccionados",
         "proceso_exito": "El proceso ha sido registrado con éxito.",
         "actividad_exito": "La actividad ha sido guardada con éxito.",
-        "actividad_dirigido": "Agregar responsables (A quien va dirigido)",
+        "actividad_dirigido": "Administrar tipos de público",
         "error_dirigido_nombre": "Por favor indique el nombre",
         "error_dirigido_codigo": "Por favor indique la abreviación",
         "error_dirigido_orden": "Por favor indique número de órden",
@@ -1077,6 +1077,8 @@
         "seguro_proyectos": "¿Está seguro de asignar el calendario a los proyectos seleccionados?",
         "proyectos_exito": "El calendario académico ha sido asignado con éxito.",
         "buscar_calendario": "Buscar calendario académico asignado a un proyecto académico",
-        "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular."
+        "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular.",
+        "publico_repetido": "El tipo de público elegido ya habia sido seleccionado.",
+        "no_publico": "Debe seleccionar al menos un tipo de público."
     }
 }

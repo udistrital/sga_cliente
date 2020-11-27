@@ -1057,7 +1057,7 @@
         "calendario_clon_error": "There are no processes with the selected criteria",
         "proceso_exito": "The process has been successfully registered.",
         "actividad_exito": "The activity has been successfully saved.",
-        "actividad_dirigido": "Add responsible (Who is the activity directed to)",
+        "actividad_dirigido": "Manage public types",
         "error_dirigido_nombre": "Please add a name",
         "error_dirigido_codigo": "Please add an abbreviation",
         "error_dirigido_orden": "Please add an order number",
@@ -1067,6 +1067,8 @@
         "seguro_proyectos": "Are you sure about assingning the calendar to the selected projects?",
         "proyectos_exito": "The academic calendar has been successfully assigned.",
         "buscar_calendario": "Search the academic calendar assigned to an academic project",
-        "sin_calendario": "There are no calendars associated to this particular project"
+        "sin_calendario": "There are no calendars associated to this particular project",
+        "publico_repetido": "The chosen public type is already selected.",
+        "no_publico": "You must select at lead one public type."
     }
 }
