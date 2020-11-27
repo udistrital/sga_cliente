@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,7 +14,7 @@ import { LocalDataSource } from 'ng2-smart-table';
   templateUrl: './actividad-calendario-academico.component.html',
   styleUrls: ['../calendario-academico.component.scss'],
 })
-export class ActividadCalendarioAcademicoComponent {
+export class ActividadCalendarioAcademicoComponent implements OnInit{
 
   activity: Actividad;
   processName: string;
@@ -44,16 +44,16 @@ export class ActividadCalendarioAcademicoComponent {
     this.createPublicTable();
     this.createPublicTypeForm();
     this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
+  }
+
+  ngOnInit() {
     if (this.data.editActivity !== undefined) {
       this.activityForm.setValue({
-        Nombre: this.data.editActivity.Actividad.Nombre,
-        Descripcion: this.data.editActivity.Actividad.Descripcion,
-        FechaInicio: moment(this.data.editActivity.Actividad.FechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD'),
-        FechaFin: moment(this.data.editActivity.Actividad.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+        Nombre: this.data.editActivity.Nombre,
+        Descripcion: this.data.editActivity.Descripcion,
+        FechaInicio: moment(this.data.editActivity.FechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+        FechaFin: moment(this.data.editActivity.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD'),
       });
-      this.tableSource.load(
-        this.responsables.filter(resp => this.data.editActivity.responsable.some(resp2 => resp2.IdPublico === resp.Id))
-      );
     }
   }
 
@@ -118,6 +118,11 @@ export class ActividadCalendarioAcademicoComponent {
     this.eventoService.get('tipo_publico?limit=0').subscribe(
       data => {
         this.responsables = data;
+        if (this.data.editActivity !== undefined) {
+          this.tableSource.load(
+            this.responsables.filter(resp => this.data.editActivity.responsables.some(resp2 => resp2.IdPublico === resp.Id))
+          );
+        }
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));

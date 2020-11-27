@@ -543,7 +543,8 @@
         "500": "Error interno en el servidor",
         "formato_documento_pdf": "El formato del documento escogido no es pdf",
         "no_documento": "Debe seleccionar un archivo",
-        "error_subir_documento": "Ocurrió un error subiendo los documentos, por favor intente de nuevo."
+        "error_subir_documento": "Ocurrió un error subiendo los documentos, por favor intente de nuevo.",
+        "error_cargar_documento": "Ocurrió un error al descargar documentos"
     },
     "produccion_academica": {
         "produccion_academica": "Producción académica",

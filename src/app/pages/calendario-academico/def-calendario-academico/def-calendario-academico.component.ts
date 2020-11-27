@@ -12,7 +12,6 @@ import { Actividad } from '../../../@core/data/models/calendario-academico/activ
 import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
 import { CalendarioClone } from '../../../@core/data/models/calendario-academico/calendarioClone';
 import { Documento } from '../../../@core/data/models/documento/documento';
-import Swal from 'sweetalert2';
 import * as moment from 'moment';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -153,7 +152,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       );
       this.eventoService.get('tipo_evento?query=CalendarioID__Id:' + this.calendarForEditId).subscribe(
         processes => {
-          console.log(processes)
           processes.forEach(element => {
             if (Object.keys(element).length !== 0) {
               let loadedProcess: Proceso = new Proceso();
@@ -180,7 +178,20 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                     loadedActivity.Activo = element['Activo'];
                     loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
                     loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
-                    process.actividades.push(loadedActivity);
+                    this.eventoService.get('calendario_evento_tipo_publico?query=CalendarioEventoId__Id:'+loadedActivity.actividadId).subscribe(
+                      (response: any[]) => {
+                        loadedActivity.responsables = response.map(
+                          result => { 
+                            return { IdPublico: result["TipoPublicoId"]["Id"] } 
+                          }
+                        );
+                        process.actividades.push(loadedActivity);
+                        this.createActivitiesTable();
+                      },
+                      error => {
+                        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                      },
+                    );
                   }
                 });
                 this.processTable.load(this.processes);
@@ -266,7 +277,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
-        confirmDelete: true,
       },
       noDataMessage: this.translate.instant('calendario.sin_procesos'),
     }
@@ -314,7 +324,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
-        confirmDelete: true,
       },
       noDataMessage: this.translate.instant('calendario.sin_actividades'),
     }
@@ -323,16 +332,9 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   createCalendar(event) {
     this.activebutton = true
     event.preventDefault();
-    const options: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('calendario.seguro_registrar_calendario'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(options).then((ok) => {
-      if (ok) {
+    this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_registrar_calendario'))
+    .then(ok => {
+      if (ok.value) {
         this.loading = true;
         if (this.fileResolucion) {
           this.calendar = this.calendarForm.value;
@@ -500,8 +502,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         key: id_documento,
       },
     ];
-    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
-      .subscribe(response => {
+    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService).subscribe(
+      response => {
         const filesResponse = <any>response;
         if (Object.keys(filesResponse).length === filesToGet.length) {
           filesToGet.forEach((file: any) => {
@@ -510,9 +512,10 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           });
         }
       },
-        (error) => {
-          this.popUpManager.showErrorToast
-        });
+      error => {
+        this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
+      },
+    );
   }
 
 }
