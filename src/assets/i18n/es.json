@@ -549,7 +549,8 @@
         "500": "Error interno en el servidor",
         "formato_documento_pdf": "El formato del documento escogido no es pdf",
         "no_documento": "Debe seleccionar un archivo",
-        "error_subir_documento": "Ocurrió un error subiendo los documentos, por favor intente de nuevo."
+        "error_subir_documento": "Ocurrió un error subiendo los documentos, por favor intente de nuevo.",
+        "error_cargar_documento": "Ocurrió un error al descargar documentos"
     },
     "produccion_academica": {
         "produccion_academica": "Producción académica",
@@ -1014,6 +1015,11 @@
         "asignar": "Asignar cupos"
     },
     "calendario": {
+        "seguro_continuar_inhabilitar_calendario": "¿Esta seguro de inhabilitar este Calendario?",
+        "calendario_inhabilitado": "Calendario inhabilitado",
+        "calendario_no_inhabilitado": "Calendario no inhabilitado",
+        "clonar_calendario_nombre": "Seleccione el periodo académico y el nivel del cual quiere copiar el calendario académico:",
+        "clonar_calendario": "Clonar calendario",
         "calendario_resolucion": "Calendario definido mediante la resolución",
         "calendario_academico": "Calendario Académico",
         "calendarios_academicos": "Calendarios Académicos",
@@ -1065,9 +1071,10 @@
         "seguro_registrar_proceso": "¿Esta seguro de agregar un nuevo proceso al calendario académico?",
         "seguro_registrar_actividad": "¿Esta seguro de agregar una actividad al proceso actual?",
         "calendario_exito": "El calendario ha sido creado con éxito.",
+        "calendario_clon_error": "No existen procesos con los criterios seleccionados",
         "proceso_exito": "El proceso ha sido registrado con éxito.",
         "actividad_exito": "La actividad ha sido guardada con éxito.",
-        "actividad_dirigido": "Agregar responsables (A quien va dirigido)",
+        "actividad_dirigido": "Administrar tipos de público",
         "error_dirigido_nombre": "Por favor indique el nombre",
         "error_dirigido_codigo": "Por favor indique la abreviación",
         "error_dirigido_orden": "Por favor indique número de órden",
@@ -1077,6 +1084,9 @@
         "seguro_proyectos": "¿Está seguro de asignar el calendario a los proyectos seleccionados?",
         "proyectos_exito": "El calendario académico ha sido asignado con éxito.",
         "buscar_calendario": "Buscar calendario académico asignado a un proyecto académico",
+        "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular.",
+        "publico_repetido": "El tipo de público elegido ya habia sido seleccionado.",
+        "no_publico": "Debe seleccionar al menos un tipo de público."
         "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular."
     },
     "derechos_pecuniarios": {
@@ -1101,5 +1111,6 @@
         "error_nombre": "Por favor agregue el nombre del concepto",
         "confirmar_concepto": "¿Está seguro de agregar este concepto a los derechos pecuniarios?",
         "inactivar_concepto": "¿Inactivar concepto?"
+
     }
 }

@@ -424,14 +424,14 @@ export class CrudIcfesComponent implements OnInit {
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
+ /*            Swal({
               type: 'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
                 this.translate.instant('GLOBAL.info_caracteristica'),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+            }); */
           });
     } else {
       this.clean = !this.clean;
