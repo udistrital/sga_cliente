@@ -998,6 +998,11 @@
         "asignar": "Assign quotas"
     },
     "calendario": {
+        "seguro_continuar_inhabilitar_calendario": "¿Are you sure to disable this Calendar?",
+        "calendario_inhabilitado": "Calendar disabled",
+        "calendario_no_inhabilitado": "Calendar not disabled",
+        "clonar_calendario_nombre": "Select the academic period and the level from which you want to copy the academic calendar:",
+        "clonar_calendario": "Clone calendar",
         "calendario_resolucion": "Academic Calendar defined by resolution",
         "calendario_academico": "Academic Calendar",
         "calendarios_academicos": "Academic Calendars",
@@ -1049,6 +1054,7 @@
         "seguro_registrar_proceso": "Are you sure about adding a new process to the academic calendar?",
         "seguro_registrar_actividad": "Are you sure about adding a new activity to the current process?",
         "calendario_exito": "The calendar has been successfully created.",
+        "calendario_clon_error": "There are no processes with the selected criteria",
         "proceso_exito": "The process has been successfully registered.",
         "actividad_exito": "The activity has been successfully saved.",
         "actividad_dirigido": "Manage public types",
