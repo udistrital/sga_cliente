@@ -185,6 +185,26 @@ export const MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
+    title: 'Derechos Pecuniarios',
+    icon: 'nb-compose',
+    link: '',
+    key: 'derechos_pecuniarios',
+    children: [
+      {
+        title: 'Definir Conceptos',
+        icon: 'nb-list',
+        link: '/pages/derechos-pecuniarios/crud-derechos-pecuniarios',
+        key: 'definir_conceptos',
+      },
+      {
+        title: 'Asignar valores',
+        icon: 'nb-bar-chart',
+        link: '/pages/derechos-pecuniarios/list-derechos-pecuniarios',
+        key: 'asignar_valores'
+      }
+    ]
+  },
+  {
     title: 'Archivo Icfes',
     icon: 'nb-compose',
     link: '',

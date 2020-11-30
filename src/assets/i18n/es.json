@@ -35,6 +35,11 @@
             "list_evento": "Lista eventos",
             "crud_evento": "Crud eventos"
         },
+        "derechos_pecuniarios": {
+            "derechos_pecuniarios": "Derechos Pecuniarios",
+            "definir_conceptos": "Definir Conceptos",
+            "asignar_valores": "Asignar Valores"
+        },
         "archivo_icfes": {
             "archivo_icfes": "Archivo Icfes",
             "list_archivo": "Lista archivos",
@@ -130,6 +135,7 @@
         "lista": "Lista",
         "regresar": "Regresar",
         "error": "Error",
+        "informacion": "Información",
         "operacion_exitosa": "Operación exitosa",
         "si": "Si",
         "no": "No",
@@ -1081,5 +1087,30 @@
         "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular.",
         "publico_repetido": "El tipo de público elegido ya habia sido seleccionado.",
         "no_publico": "Debe seleccionar al menos un tipo de público."
+        "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular."
+    },
+    "derechos_pecuniarios": {
+        "titulo": "Derechos Pecuniarios",
+        "forma": "Seleccione la forma en la que desea definir los conceptos de los derechos pecuniarios",
+        "copiar": "Copiar los conceptos de una vigencia anterior",
+        "definir": "Definir los conceptos",
+        "forma_vigencia": "Seleccione la vigencia de la cual desea copiar los conceptos de los derechos pecuniarios",
+        "boton_copiar": "Copiar conceptos",
+        "boton_calcular": "Calcular valores",
+        "vigencia": "Vigencia",
+        "codigo": "Código",
+        "factor": "Factor",
+        "no_data": "No se encontraron conceptos registrados",
+        "conceptos": "Conceptos",
+        "salario": "Salario Mínimo Legal Mensual Vigente (SMMLV)",
+        "no_conceptos": "No hay conceptos registrados para hacer la asignación de valores para los derechos pecuniarios.",
+        "costo": "Costo",
+        "agregar_concepto": "Agregar Concepto",
+        "error_codigo": "Por favor ingrese el codigo del concepto",
+        "error_factor": "Por favor indique el factor del concepto",
+        "error_nombre": "Por favor agregue el nombre del concepto",
+        "confirmar_concepto": "¿Está seguro de agregar este concepto a los derechos pecuniarios?",
+        "inactivar_concepto": "¿Inactivar concepto?"
+
     }
 }

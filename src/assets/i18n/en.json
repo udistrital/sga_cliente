@@ -35,6 +35,11 @@
             "list_evento": "Events List",
             "crud_evento": "Events Crud"
         },
+        "derechos_pecuniarios": {
+            "derechos_pecuniarios": "Financial entitlements",
+            "definir_conceptos": "Define Concepts",
+            "asignar_valores": "Assign Values"
+        },
         "archivo_icfes": {
             "archivo_icfes": "Icfes file",
             "list_archivo": "File List",
@@ -128,6 +133,7 @@
         "terminos_datos": "Privacy and data processing policy",
         "acepto_terminos": "I have read and agree to the privacy and treatment of information policy terms",
         "error": "Error",
+        "informacion": "Information",
         "operacion_exitosa": "Successfull operation",
         "si": "Yes",
         "no": "No",
@@ -1071,5 +1077,30 @@
         "sin_calendario": "There are no calendars associated to this particular project",
         "publico_repetido": "The chosen public type is already selected.",
         "no_publico": "You must select at lead one public type."
+        "sin_calendario": "There are no calendars associated to this particular project"
+    },
+    "derechos_pecuniarios": {
+        "titulo": "Financial entitlements",
+        "forma": "Select the way you want to define Financial entitlements concepts.",
+        "copiar": "Copy concepts from a previous validity",
+        "definir": "Define the concepts",
+        "forma_vigencia": "Select the validity from which you want to copy Financial entitlements concepts.",
+        "boton_copiar": "Copy concepts",
+        "boton_calcular": "Calculate values",
+        "vigencia": "Validity",
+        "codigo": "Code",
+        "factor": "Factor",
+        "no_data": "No registered concepts found",
+        "conceptos": "Concepts",
+        "salario": "Minimum Legal Monthly Valid Salary",
+        "no_conceptos": "There are no registered concepts to assign values for financial entitlements.",
+        "costo": "Cost",
+        "agregar_concepto": "Add Concept",
+        "error_codigo": "Please add a code for the concept",
+        "error_factor": "Please give the factor of the concept",
+        "error_nombre": "Please insert the name for the concept",
+        "confirmar_concepto": "Are you sure to add this concept to the financial entitlements?",
+        "inactivar_concepto": "Inactive this concept?"
+
     }
 }

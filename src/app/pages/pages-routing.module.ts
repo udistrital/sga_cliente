@@ -33,6 +33,10 @@ const routes: Routes = [{
       loadChildren: './calendario-academico/calendario-academico.module#CalendarioAcademicoModule',
     },
     {
+      path: 'derechos-pecuniarios',
+      loadChildren: './derechos-pecuniarios/derechos-pecuniarios.module#DerechosPecuniariosModule',
+    },
+    {
         path: 'perfil',
         loadChildren: './perfil/perfil.module#PerfilModule',
     },
