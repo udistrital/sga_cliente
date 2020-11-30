@@ -1077,7 +1077,6 @@
         "sin_calendario": "There are no calendars associated to this particular project",
         "publico_repetido": "The chosen public type is already selected.",
         "no_publico": "You must select at lead one public type."
-        "sin_calendario": "There are no calendars associated to this particular project"
     },
     "derechos_pecuniarios": {
         "titulo": "Financial entitlements",

@@ -65,8 +65,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     private eventoService: EventoService,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
-    private sgaMidService: SgaMidService,
-    private popUpManager: PopUpManager,
   ) {
     // this.calendarCloneOut = new EventEmitter<string>();
     this.processTable = new LocalDataSource();
