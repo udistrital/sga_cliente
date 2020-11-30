@@ -4,6 +4,7 @@ export class Actividad {
     FechaInicio: string;
     FechaFin: string;
     Activo: boolean;
+    responsables: any[];
     TipoEventoId: {Id: number}; // id del proceso
     actividadId: number;
 }
