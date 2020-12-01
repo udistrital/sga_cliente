@@ -110,6 +110,10 @@ export class ListCalendarioAcademicoComponent implements OnInit {
             title: '<i class="nb-compose"></i>',
           },
           {
+            name: 'add',
+            title: '<i class="nb-plus-circled"></i>',
+          },
+          {
             name: 'view',
             title: '<i class="nb-home"></i>',
           },
@@ -138,6 +142,9 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         this.router.navigate(['../detalle-calendario', { Id: event.data['Id'] }], { relativeTo: this.route });
         break;
       case 'edit':
+        this.onEdit(event);
+        break;
+      case 'add':
         this.onEdit(event);
         break;
       case 'delete':

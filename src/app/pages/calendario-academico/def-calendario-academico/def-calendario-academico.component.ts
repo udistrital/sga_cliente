@@ -112,6 +112,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   ngOnChanges() {
+
     this.processes = [];
     this.processTable.load(this.processes);
     if (this.calendarForEditId === 0) {
@@ -132,7 +133,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           this.calendar.Nivel = calendar['Nivel'];
           this.calendar.Activo = calendar['Activo'];
           this.calendar.PeriodoId = calendar['PeriodoId'];
-          
+
           this.documentoService.get('documento/' + this.calendar.DocumentoId).subscribe(
             (documento: Documento) => {
               this.fileResolucion = documento;
