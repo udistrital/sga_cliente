@@ -3,6 +3,8 @@ import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalDataSource } from 'ng2-smart-table';
+import { ParametrosService } from '../../../@core/data/parametros.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'copiar-conceptos',
@@ -20,15 +22,23 @@ export class CopiarConceptosComponent implements OnInit {
     private translate: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
+    private parametrosService: ParametrosService,
+    private popUpManager: PopUpManager,
   ) {
     this.vigenciaElegida = new FormControl('');
+    this.datosConceptos = new LocalDataSource();
   }
 
   ngOnInit() {
-    //traer las vigencias disponibles con un GET
-    this.vigencias = [{Id: 1, Nombre: '2020'}, {Id: 2, Nombre: '2019'}, {Id: 3, Nombre: '2018'}]
+    this.parametrosService.get('salario_minimo?limit=0&sortby=Id&order=desc').subscribe(
+      response => {
+        this.vigencias = response;
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
     this.crearTablaConceptos();
-    this.datosConceptos = new LocalDataSource();
   }
 
   crearTablaConceptos() {

@@ -12,6 +12,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DefinirConceptosComponent } from './definir-conceptos/definir-conceptos.component';
 import { DialogoConceptosComponent } from './dialogo-conceptos/dialogo-conceptos.component';
+import { ParametrosService } from '../../@core/data/parametros.service';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { DialogoConceptosComponent } from './dialogo-conceptos/dialogo-conceptos
   ],
   providers: [
     PopUpManager,
+    ParametrosService,
   ],
   entryComponents: [
     DialogoConceptosComponent,

@@ -5,6 +5,8 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { DialogoConceptosComponent } from '../dialogo-conceptos/dialogo-conceptos.component';
 import { Concepto } from '../../../@core/data/models/derechos-pecuniarios/concepto';
+import { ParametrosService } from '../../../@core/data/parametros.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   selector: 'ngx-definir-conceptos',
@@ -16,6 +18,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   vigencias: any[];
   tablaConceptos: any;
   datosConceptos: LocalDataSource;
+  salario: number;
 
   @Input()
   datosCargados: any[] = [];
@@ -24,12 +27,22 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private dialog: MatDialog,
-  ) { }
+    private parametrosService: ParametrosService,
+    private sgaMidService: SgaMidService,
+  ) {
+    this.datosConceptos = new LocalDataSource();
+  }
 
   ngOnInit() {
-    this.vigencias = [{Id: 1, Nombre: '2020'}, {Id: 2, Nombre: '2019'}, {Id: 3, Nombre: '2018'}]
+    this.parametrosService.get('salario_minimo?limit=0&sortby=Id&order=desc').subscribe(
+      response => {
+        this.vigencias = response;
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
     this.crearTablaConceptos();
-    this.datosConceptos = new LocalDataSource();
   }
 
   ngOnChanges() {
@@ -84,6 +97,10 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     if (this.datosConceptos.count() === 0) {
       this.popUpManager.showAlert('info', this.translate.instant('derechos_pecuniarios.no_conceptos'));
     }
+  }
+
+  cargarSalario(event) {
+    this.salario = this.vigencias.filter(vg => vg.Id === event.value)[0].Valor;
   }
 
   agregarConcepto() {
