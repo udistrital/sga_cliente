@@ -375,7 +375,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             assignConfig.data.calendarioEvento.FechaCreacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
             assignConfig.data.calendarioEvento.FechaModificacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
             assignConfig.data.calendarioEvento.FechaInicio = moment(event.data.FechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD') + 'T00:00:00-05:00';
-            assignConfig.data.calendarioEvento.FechaFin = moment(event.data.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DDTHH:mm') + 'T00:00:00-05:00';
+            assignConfig.data.calendarioEvento.FechaFin = moment(event.data.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD') + 'T00:00:00-05:00';
             assignConfig.data.calendarioEvento.Activo = event.data.Activo;
             assignConfig.data.calendarioEvento.DependenciaId = JSON.stringify({ proyectos: data });
             assignConfig.data.calendarioEvento.EventoPadreId = { Id: event.data.actividadId };
