@@ -329,7 +329,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
       },
-      noDataMessage: this.translate.instant('calendario.sin_procesos'),
+      noDataMessage: this.translate.instant('calendario.sin_actividades'),
     }
   }
 
