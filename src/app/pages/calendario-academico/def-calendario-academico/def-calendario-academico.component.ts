@@ -184,6 +184,12 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                     loadedActivity.Activo = element['Activo'];
                     loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
                     loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
+                    if (element['EventoPadreId'] != null){
+                      loadedActivity.EventoPadreId = { Id: element['EventoPadreId']['Id'], FechaInicio: element['EventoPadreId']['FechaInicio'], FechaFin: element['EventoPadreId']['FechaFin'] };
+                    }else{
+                      loadedActivity.EventoPadreId = null;
+                    }
+                    
                     process.actividades.push(loadedActivity);
                   }
                 });
