@@ -5,6 +5,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { DialogoConceptosComponent } from '../dialogo-conceptos/dialogo-conceptos.component';
 import { Concepto } from '../../../@core/data/models/derechos-pecuniarios/concepto';
+import { ConceptoPost } from '../../../@core/data/models/derechos-pecuniarios/concepto-post';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
@@ -19,6 +20,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   tablaConceptos: any;
   datosConceptos: LocalDataSource;
   salario: number;
+  vigenciaActual: number; 
 
   @Input()
   datosCargados: any[] = [];
@@ -34,9 +36,9 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.parametrosService.get('salario_minimo?limit=0&sortby=Id&order=desc').subscribe(
+    this.parametrosService.get('periodo?limit=0&sortby=Id&order=desc').subscribe(
       response => {
-        this.vigencias = response;
+        this.vigencias = response["Data"];
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -100,7 +102,22 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   }
 
   cargarSalario(event) {
-    this.salario = this.vigencias.filter(vg => vg.Id === event.value)[0].Valor;
+    this.vigenciaActual = event.value;
+    this.parametrosService.get('parametro_periodo?query=PeriodoId__Id:'+this.vigenciaActual).subscribe(
+      response => {
+        const data: any[] = response["Data"];
+        if (Object.keys(data[0]).length > 0) {
+          this.salario = JSON.parse(data[0]["Valor"]).Valor; // puede cambiar 
+        } else {
+          this.salario = 0;
+          this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.no_salario'));
+        }
+      },
+      error => {
+        this.salario = 0;
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
   }
 
   agregarConcepto() {
@@ -109,9 +126,31 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     configDialogo.height = '350px';
     const conceptoDialogo = this.dialog.open(DialogoConceptosComponent, configDialogo);
     conceptoDialogo.afterClosed().subscribe((concepto: Concepto) => {
-      console.log(concepto);
-      this.datosConceptos.append(concepto);
-      //POST
+      if (concepto !== undefined) {
+        const nuevoConcepto = new ConceptoPost(); // { Concepto: {}, Factor: {}, Vigencia: {} };
+        nuevoConcepto.Concepto = {
+          Nombre: concepto.Nombre,
+          CodigoAbreviacion: concepto.Codigo,
+          Activo: true,
+          TipoParametroId: { Id: 2 }, // Identificador que agrupa los parametros de derechos pecuniarios
+        };
+        nuevoConcepto.Factor = {
+          Valor: { NumFactor: concepto.Factor },
+        };
+        nuevoConcepto.Vigencia = {
+          Id: this.vigenciaActual
+        }
+        console.log("concepto", nuevoConcepto)
+        this.sgaMidService.post('crear_concepto', nuevoConcepto).subscribe(
+          response => {
+            this.datosConceptos.append(concepto);
+            console.log(response);
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          },
+        );
+      }
     });
   }
 
@@ -122,6 +161,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     configDialogo.data = event.data;
     const conceptoDialogo = this.dialog.open(DialogoConceptosComponent, configDialogo);
     conceptoDialogo.afterClosed().subscribe((concepto: Concepto) => {
+      this.datosConceptos.update(event.data, concepto);
       console.log(concepto);
       //PUT
     });

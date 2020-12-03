@@ -30,7 +30,7 @@ export class CopiarConceptosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.parametrosService.get('salario_minimo?limit=0&sortby=Id&order=desc').subscribe(
+    this.parametrosService.get('periodo?limit=0&sortby=Id&order=desc').subscribe(
       response => {
         this.vigencias = response;
       },

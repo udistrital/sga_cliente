@@ -1099,7 +1099,7 @@
         "error_factor": "Please give the factor of the concept",
         "error_nombre": "Please insert the name for the concept",
         "confirmar_concepto": "Are you sure to add this concept to the financial entitlements?",
-        "inactivar_concepto": "Inactive this concept?"
-
+        "inactivar_concepto": "Inactive this concept?",
+        "no_salario": "There's no registered salary for this validity"
     }
 }
