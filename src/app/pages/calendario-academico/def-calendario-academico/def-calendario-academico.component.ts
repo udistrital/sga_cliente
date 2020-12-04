@@ -55,6 +55,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
 
   @Input()
   calendarForEditId: number = 0;
+  @Input()
+  calendarForNew: boolean = false;
   @Output()
   calendarCloneOut = new EventEmitter<number>();
 
@@ -113,7 +115,13 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
 
     this.processes = [];
     this.processTable.load(this.processes);
-    if (this.calendarForEditId === 0) {
+    if (this.calendarForNew === true){
+      this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      this.activetabs = false;
+      this.createdCalendar = false;
+      this.editMode = false;
+      this.calendarForm.reset()
+    } else if (this.calendarForEditId === 0) {
       this.activetabs = false;
       this.activetabsClone = false
       this.createdCalendar = false;

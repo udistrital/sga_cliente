@@ -23,6 +23,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   activetab: boolean = false;
   calendars: Calendario[] = [];
   calendarForEditId: number = 0;
+  calendarForNew: boolean = false;
   nivel_load = [{ nombre: 'Pregrado', id: 14 }, { nombre: 'Posgrado', id: 15 }];
   loading: boolean = false;
 
@@ -110,7 +111,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
             title: '<i class="nb-compose"></i>',
           },
           {
-            name: 'add',
+            name: 'new',
             title: '<i class="nb-plus-circled"></i>',
           },
           {
@@ -144,8 +145,8 @@ export class ListCalendarioAcademicoComponent implements OnInit {
       case 'edit':
         this.onEdit(event);
         break;
-      case 'add':
-        this.onEdit(event);
+      case 'new':
+        this.onCreate(event);
         break;
       case 'delete':
         this.onDelete(event);
@@ -157,7 +158,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
 
   onCreate(event: any) {
-    this.activateTab();
+    this.activateTab(event.data.Id, true);
   }
 
   onEdit(event: any) {
@@ -230,9 +231,10 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     }
   }
 
-  activateTab(calendarId = 0) {
+  activateTab(calendarId = 0, calendarState = false) {
     this.activetab = !this.activetab;
     this.calendarForEditId = calendarId;
+    this.calendarForNew = calendarState;
   }
 
 }
