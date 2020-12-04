@@ -75,7 +75,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
 
   saveActivity() {
     this.popUpManager.showConfirmAlert(
-      this.translate.instant('calendario.seguro_registrar_actividad')
+      this.translate.instant('calendario.seguro_registrar_actividad'),
     ).then((ok) => {
       if (ok.value) {
         this.activity = this.activityForm.value;
@@ -88,10 +88,10 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
             this.responsablesSelected = data.map(
               item => {
                 return { IdPublico: item.Id }
-              }
+              },
             );
             if (this.responsablesSelected.length > 0) {
-              this.dialogRef.close({ "Actividad": this.activity, "responsable": this.responsablesSelected });
+              this.dialogRef.close({ 'Actividad': this.activity, 'responsable': this.responsablesSelected });
             } else {
               this.popUpManager.showErrorAlert(this.translate.instant('calendario.no_publico'))
             }
@@ -136,7 +136,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
         this.responsables = data;
         if (this.data.editActivity !== undefined) {
           this.tableSource.load(
-            this.responsables.filter(resp => this.data.editActivity.responsables.some(resp2 => resp2.IdPublico === resp.Id))
+            this.responsables.filter(resp => this.data.editActivity.responsables.some(resp2 => resp2.IdPublico === resp.Id)),
           );
         }
       },

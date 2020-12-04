@@ -8,13 +8,12 @@ import { PopUpManager } from '../../../managers/popUpManager';
 @Component({
   selector: 'asignar-calendario-proyecto',
   templateUrl: './asignar-calendario-proyecto.component.html',
-  styleUrls: ['../calendario-academico.component.scss']
+  styleUrls: ['../calendario-academico.component.scss'],
 })
 export class AsignarCalendarioProyectoComponent implements OnInit {
 
   selectedProjects: FormControl;
-  projects: any[];
-  
+  projects: any[];  
   constructor(
     private projectService: ProyectoAcademicoService,
     private popUpManager: PopUpManager,
@@ -30,7 +29,7 @@ export class AsignarCalendarioProyectoComponent implements OnInit {
     this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
       response => {
         this.projects = (<any[]>response).filter(
-          project => this.dat.data.Dependencia === project['NivelFormacionId']['Descripcion']
+          project => this.dat.data.Dependencia === project['NivelFormacionId']['Descripcion'],
         );
         if (this.dat.calendar.DependenciaId !== '{}') {
           const deps = JSON.parse(this.dat.calendar.DependenciaId);

@@ -21,7 +21,7 @@ const routes: Routes = [{
         },
         {
             path: 'copiar-conceptos',
-            component: CopiarConceptosComponent
+            component: CopiarConceptosComponent,
         },
         {
             path: 'definir-conceptos',
