@@ -13,7 +13,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 export class AsignarCalendarioProyectoComponent implements OnInit {
 
   selectedProjects: FormControl;
-  projects: any[];  
+  projects: any[];
   constructor(
     private projectService: ProyectoAcademicoService,
     private popUpManager: PopUpManager,
