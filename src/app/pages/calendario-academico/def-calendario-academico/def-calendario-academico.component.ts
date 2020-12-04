@@ -23,6 +23,7 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'ngx-def-calendario-academico',
@@ -116,11 +117,42 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     this.processes = [];
     this.processTable.load(this.processes);
     if (this.calendarForNew === true){
-      this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       this.activetabs = false;
       this.createdCalendar = false;
-      this.editMode = false;
-      this.calendarForm.reset()
+      this.editMode = true;
+      //this.calendarForm.reset()
+      this.eventoService.get('calendario/' + this.calendarForEditId).subscribe(
+        calendar => {
+          this.calendar = new Calendario();
+          this.calendar.calendarioId = calendar['Id'];
+          this.calendar.DocumentoId = calendar['DocumentoId'];
+          this.calendar.Nivel = calendar['Nivel'];
+          this.calendar.Activo = calendar['Activo'];
+          this.calendar.PeriodoId = calendar['PeriodoId'];
+
+          this.documentoService.get('documento/' + this.calendar.DocumentoId).subscribe(
+            (documento: Documento) => {
+              this.fileResolucion = documento;
+              this.calendar.resolucion = JSON.parse(documento.Metadatos)['resolucion'];
+              this.calendar.anno = JSON.parse(documento.Metadatos)['anno'];
+              this.calendarForm.setValue({
+                resolucion: null,
+                anno: null,
+                PeriodoId: this.calendar.PeriodoId,
+                Nivel: this.calendar.Nivel,
+                fileResolucion: null,
+              });
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            },
+          );
+        },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        },
+      );
+      console.log(this.calendarForEditId);      
     } else if (this.calendarForEditId === 0) {
       this.activetabs = false;
       this.activetabsClone = false
