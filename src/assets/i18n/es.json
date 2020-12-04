@@ -1083,6 +1083,7 @@
         "error_select_proyecto": "Seleccione por lo menos un proyecto.",
         "seguro_proyectos": "¿Está seguro de asignar el calendario a los proyectos seleccionados?",
         "proyectos_exito": "El calendario académico ha sido asignado con éxito.",
+        "actividad_hija_exito": "Actividad hija creada con éxito.",
         "buscar_calendario": "Buscar calendario académico asignado a un proyecto académico",
         "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular.",
         "publico_repetido": "El tipo de público elegido ya habia sido seleccionado.",
