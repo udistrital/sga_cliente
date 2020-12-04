@@ -23,6 +23,7 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'ngx-def-calendario-academico',
@@ -55,6 +56,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
 
   @Input()
   calendarForEditId: number = 0;
+  @Input()
+  calendarForNew: boolean = false;
   @Output()
   calendarCloneOut = new EventEmitter<number>();
 
@@ -110,9 +113,17 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   ngOnChanges() {
+
     this.processes = [];
     this.processTable.load(this.processes);
-    if (this.calendarForEditId === 0) {
+    if (this.calendarForNew === true){
+      this.activetabs = false;
+      this.createdCalendar = false;
+      this.editMode = true;
+      //this.calendarForm.reset()
+      
+      console.log(this.calendarForEditId);      
+    } else if (this.calendarForEditId === 0) {
       this.activetabs = false;
       this.activetabsClone = false
       this.createdCalendar = false;
@@ -174,39 +185,34 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
               activities => {
                 activities.forEach(element => {
                   if (Object.keys(element).length !== 0) {
-                    if (element['EventoPadreId'] == null) {
-                      let loadedActivity: Actividad = new Actividad();
-                      loadedActivity.actividadId = element['Id'];
-                      loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
-                      loadedActivity.Nombre = element['Nombre'];
-                      loadedActivity.Descripcion = element['Descripcion'];
-                      loadedActivity.Activo = element['Activo'];
-                      loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
-                      loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
-                      if (element['EventoPadreId'] != null) {
-                        loadedActivity.EventoPadreId = { Id: element['EventoPadreId']['Id'], FechaInicio: element['EventoPadreId']['FechaInicio'], FechaFin: element['EventoPadreId']['FechaFin'] };
-                      } else {
-                        loadedActivity.EventoPadreId = null;
-                      }
-
-                      this.eventoService.get('calendario_evento_tipo_publico?query=CalendarioEventoId__Id:' + loadedActivity.actividadId).subscribe(
-                        (response: any[]) => {
-                          loadedActivity.responsables = response.map(
-                            result => {
-                              return { IdPublico: result["TipoPublicoId"]["Id"] }
-                            }
-                          );
-                          process.actividades.push(loadedActivity);
-                          this.createActivitiesTable();
-                        },
-                        error => {
-                          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                        },
-                      );
-
-                      process.actividades.push(loadedActivity);
-                      this.createActivitiesTable();
+                    let loadedActivity: Actividad = new Actividad();
+                    loadedActivity.actividadId = element['Id'];
+                    loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
+                    loadedActivity.Nombre = element['Nombre'];
+                    loadedActivity.Descripcion = element['Descripcion'];
+                    loadedActivity.Activo = element['Activo'];
+                    loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
+                    loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
+                    if (element['EventoPadreId'] != null) {
+                      loadedActivity.EventoPadreId = { Id: element['EventoPadreId']['Id'], FechaInicio: element['EventoPadreId']['FechaInicio'], FechaFin: element['EventoPadreId']['FechaFin'] };
+                    } else {
+                      loadedActivity.EventoPadreId = null;
                     }
+
+                    this.eventoService.get('calendario_evento_tipo_publico?query=CalendarioEventoId__Id:' + loadedActivity.actividadId).subscribe(
+                      (response: any[]) => {
+                        loadedActivity.responsables = response.map(
+                          result => {
+                            return { IdPublico: result["TipoPublicoId"]["Id"] }
+                          }
+                        );
+                        process.actividades.push(loadedActivity);
+                        this.createActivitiesTable();
+                      },
+                      error => {
+                        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                      },
+                    );
                   }
                 });
                 this.processTable.load(this.processes);
@@ -334,10 +340,10 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
         custom: [
-          // {
-          //   name: 'assign',
-          //   title: '<i class="nb-compose"></i>',
-          // },
+          {
+            name: 'assign',
+            title: '<i class="nb-compose"></i>',
+          },
           {
             name: 'edit',
             title: '<i class="nb-edit"></i>',

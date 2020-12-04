@@ -6,9 +6,9 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
-  selector: 'calendario-proyecto',
+  selector: 'ngx-calendario-proyecto',
   templateUrl: './calendario-proyecto.component.html',
-  styleUrls: ['../calendario-academico.component.scss']
+  styleUrls: ['../calendario-academico.component.scss'],
 })
 export class CalendarioProyectoComponent {
 
@@ -16,7 +16,7 @@ export class CalendarioProyectoComponent {
   selectedProject: FormControl;
   nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
   projects: any[];
-  calendarioId: string = "";
+  calendarioId: string = '';
   projectId: number = 0;
   showCalendar: boolean = false;
   loading: boolean = false;
@@ -36,7 +36,7 @@ export class CalendarioProyectoComponent {
     this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
       response => {
         this.projects = (<any[]>response).filter(
-          project => this.nivel_load.filter((val) => this.selectedLevel.value === val.id)[0].nombre === project['NivelFormacionId']['Descripcion']
+          project => this.nivel_load.filter((val) => this.selectedLevel.value === val.id)[0].nombre === project['NivelFormacionId']['Descripcion'],
         );
         this.loading = false;
       },
@@ -53,7 +53,7 @@ export class CalendarioProyectoComponent {
       response => {
         this.calendarioId = response["CalendarioId"];
         this.projectId = this.selectedProject.value
-        if (this.calendarioId == "0") {
+        if (this.calendarioId === "0") {
           this.showCalendar = false;
           this.popUpManager.showAlert('', this.translate.instant('calendario.sin_calendario'))
         } else {
