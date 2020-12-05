@@ -6,7 +6,7 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
-  selector: 'asignar-calendario-proyecto',
+  selector: 'ngx-asignar-calendario-proyecto',
   templateUrl: './asignar-calendario-proyecto.component.html',
   styleUrls: ['../calendario-academico.component.scss'],
 })
