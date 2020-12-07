@@ -16,6 +16,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   vigencias: any[];
   tablaConceptos: any;
   datosConceptos: LocalDataSource;
+  salario: number;
 
   @Input()
   datosCargados: any[] = [];
@@ -30,6 +31,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     this.vigencias = [{Id: 1, Nombre: '2020'}, {Id: 2, Nombre: '2019'}, {Id: 3, Nombre: '2018'}]
     this.crearTablaConceptos();
     this.datosConceptos = new LocalDataSource();
+    this.salario = 880000;
   }
 
   ngOnChanges() {
@@ -83,6 +85,15 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   calcularValores() {
     if (this.datosConceptos.count() === 0) {
       this.popUpManager.showAlert('info', this.translate.instant('derechos_pecuniarios.no_conceptos'));
+    } else{
+      var totalConcepto=this.datosCargados.length;
+      var resultado = [];
+      var smldv = this.salario/30;
+      for (var i = 0; i < totalConcepto; i++){
+        this.datosCargados[i].Costo = smldv*this.datosCargados[i].Factor;
+        console.log(this.datosCargados[i].Nombre)
+        console.log(this.datosCargados[i].Costo)
+      }
     }
   }
 
