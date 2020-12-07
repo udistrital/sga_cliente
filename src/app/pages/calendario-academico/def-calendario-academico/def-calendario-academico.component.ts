@@ -23,6 +23,7 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'ngx-def-calendario-academico',
@@ -55,6 +56,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
 
   @Input()
   calendarForEditId: number = 0;
+  @Input()
+  calendarForNew: boolean = false;
   @Output()
   calendarCloneOut = new EventEmitter<number>();
 
@@ -110,9 +113,36 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   ngOnChanges() {
+
     this.processes = [];
     this.processTable.load(this.processes);
-    if (this.calendarForEditId === 0) {
+    if (this.calendarForNew === true){
+      this.activetabs = false;
+      this.createdCalendar = false;
+      this.editMode = true;
+      
+      this.eventoService.get('calendario/' + this.calendarForEditId).subscribe(
+        calendar => {
+          this.calendar = new Calendario();
+          this.calendar.calendarioId = calendar['Id'];
+          this.calendar.DocumentoId = calendar['DocumentoId'];
+          this.calendar.Nivel = calendar['Nivel'];
+          this.calendar.Activo = calendar['Activo'];
+          this.calendar.PeriodoId = calendar['PeriodoId'];
+
+          this.calendarForm.setValue({
+            resolucion: null,
+            anno: null,
+            PeriodoId: this.calendar.PeriodoId,
+            Nivel: this.calendar.Nivel,
+            fileResolucion: null,
+          });
+        },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        },
+      );     
+    } else if (this.calendarForEditId === 0) {
       this.activetabs = false;
       this.activetabsClone = false
       this.createdCalendar = false;
@@ -184,7 +214,11 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                       loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
                       loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
                       if (element['EventoPadreId'] != null) {
-                        loadedActivity.EventoPadreId = { Id: element['EventoPadreId']['Id'], FechaInicio: element['EventoPadreId']['FechaInicio'], FechaFin: element['EventoPadreId']['FechaFin'] };
+                        loadedActivity.EventoPadreId = { 
+                          Id: element['EventoPadreId']['Id'], 
+                          FechaInicio: element['EventoPadreId']['FechaInicio'], 
+                          FechaFin: element['EventoPadreId']['FechaFin'] 
+                        };
                       } else {
                         loadedActivity.EventoPadreId = null;
                       }
@@ -194,7 +228,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                           loadedActivity.responsables = response.map(
                             result => {
                               return { IdPublico: result["TipoPublicoId"]["Id"] }
-                            }
+                            },
                           );
                           process.actividades.push(loadedActivity);
                           this.createActivitiesTable();
@@ -415,14 +449,15 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       },
       error => {
         this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
-      }
+      },
     )
   }
 
   createCalendar(event) {
     this.activebutton = true
     event.preventDefault();
-    this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_registrar_calendario'))
+    if (this.calendarForNew === false){
+      this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_registrar_calendario'))
       .then(ok => {
         if (ok.value) {
           this.loading = true;
@@ -454,7 +489,43 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.no_documento'));
           }
         }
-      });
+      }); 
+    } else {
+      this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_registrar_calendario'))
+      .then(ok => {
+        if (ok.value) {
+          this.loading = true;
+          if (this.fileResolucion) {
+            this.calendar = this.calendarForm.value;
+            this.uploadResolutionFile(this.fileResolucion)
+              .then(fileID => {
+                this.calendar.DocumentoId = fileID;
+                this.calendar.DependenciaId = '{}';
+                this.calendar.Activo = true;
+                this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
+                this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
+                this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
+                this.calendar.CalendarioPadreId = {Id: this.calendarForEditId};
+                this.sgaMidService.post('modificar_calendario', this.calendar).subscribe(
+                  response => {
+                    this.calendar.calendarioId = response['Id'];
+                    this.createdCalendar = true;
+                    this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
+                  },
+                  error => {
+                    this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
+                  },
+                );
+                this.loading = false;
+              }).catch(error => {
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
+              });
+          } else {
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.no_documento'));
+          }
+        }
+      }); 
+    }  
   }
 
   uploadResolutionFile(file) {
@@ -503,7 +574,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     processConfig.height = '400px';
     processConfig.data = { calendar: this.calendar, editProcess: event.data };
     const editedProcess = this.dialog.open(ProcesoCalendarioAcademicoComponent, processConfig);
-    //PUT
+    // PUT
   }
 
   deleteProcess(event) {
@@ -545,7 +616,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     activityConfig.height = '700px';
     activityConfig.data = { process: process, calendar: this.calendar, editActivity: event.data };
     const editedActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
-    //PUT
+    // PUT
   }
 
   deleteActivity(event, process: Proceso) {

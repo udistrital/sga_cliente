@@ -37,6 +37,6 @@ import { DialogoConceptosComponent } from './dialogo-conceptos/dialogo-conceptos
   ],
   entryComponents: [
     DialogoConceptosComponent,
-  ]
+  ],
 })
 export class DerechosPecuniariosModule { }

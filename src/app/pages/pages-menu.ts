@@ -55,7 +55,7 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: 'nb-search',
         link: '/pages/calendario-academico/calendario-proyecto',
         key: 'buscar_calendario_proyecto',
-      }
+      },
     ],
   },
   {
@@ -200,9 +200,9 @@ export const MENU_ITEMS: MenuItem[] = [
         title: 'Asignar valores',
         icon: 'nb-bar-chart',
         link: '/pages/derechos-pecuniarios/list-derechos-pecuniarios',
-        key: 'asignar_valores'
-      }
-    ]
+        key: 'asignar_valores',
+      },
+    ],
   },
   {
     title: 'Archivo Icfes',
