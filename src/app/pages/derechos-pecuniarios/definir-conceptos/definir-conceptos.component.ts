@@ -8,6 +8,7 @@ import { Concepto } from '../../../@core/data/models/derechos-pecuniarios/concep
 import { ConceptoPost } from '../../../@core/data/models/derechos-pecuniarios/concepto-post';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { ConceptoPut } from '../../../@core/data/models/derechos-pecuniarios/concepto-put';
 
 @Component({
   selector: 'ngx-definir-conceptos',
@@ -54,10 +55,15 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   crearTablaConceptos() {
     this.tablaConceptos = {
       columns: {
+        Id: {
+          title: 'Id',
+          editable: false,
+          width: '5%',
+        },
         Codigo: {
           title: this.translate.instant('derechos_pecuniarios.codigo'),
           editable: false,
-          width: '30%',
+          width: '25%',
         },
         Nombre: {
           title: this.translate.instant('GLOBAL.nombre'),
@@ -98,12 +104,14 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   calcularValores() {
     if (this.datosConceptos.count() === 0) {
       this.popUpManager.showAlert('info', this.translate.instant('derechos_pecuniarios.no_conceptos'));
+    } else {
+      // aqui va la función de calcular los valores y el put para guardarlos
     }
   }
 
   cargarSalario(event) {
     this.vigenciaActual = event.value;
-    this.parametrosService.get('parametro_periodo?query=PeriodoId__Id:'+this.vigenciaActual).subscribe(
+    this.parametrosService.get('parametro_periodo?limit=0&query=PeriodoId__Id:'+this.vigenciaActual).subscribe(
       response => {
         const data: any[] = response["Data"];
         if (Object.keys(data[0]).length > 0) {
@@ -118,6 +126,30 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       },
     );
+
+    this.datosCargados = [];
+    this.sgaMidService.get('derechos_pecuniarios/' + this.vigenciaActual).subscribe(
+      response => {
+        var data: any[] = response['Data'];
+        if (Object.keys(data).length > 0 && Object.keys(data[0]).length > 0) {
+          data.forEach(obj => {
+            var concepto = new Concepto();
+            concepto.Id = obj.ParametroId.Id;
+            concepto.Codigo = obj.ParametroId.CodigoAbreviacion;
+            concepto.Nombre = obj.ParametroId.Nombre;
+            concepto.FactorId = obj.Id
+            concepto.Factor = JSON.parse(obj.Valor).NumFactor;
+            this.datosCargados.push(concepto);
+          });
+        } else {
+          this.popUpManager.showAlert('info', this.translate.instant('derechos_pecuniarios.no_conceptos'));
+        }
+        this.datosConceptos.load(this.datosCargados);
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
   }
 
   agregarConcepto() {
@@ -127,7 +159,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     const conceptoDialogo = this.dialog.open(DialogoConceptosComponent, configDialogo);
     conceptoDialogo.afterClosed().subscribe((concepto: Concepto) => {
       if (concepto !== undefined) {
-        const nuevoConcepto = new ConceptoPost(); // { Concepto: {}, Factor: {}, Vigencia: {} };
+        const nuevoConcepto = new ConceptoPost(); 
         nuevoConcepto.Concepto = {
           Nombre: concepto.Nombre,
           CodigoAbreviacion: concepto.Codigo,
@@ -140,11 +172,11 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
         nuevoConcepto.Vigencia = {
           Id: this.vigenciaActual
         }
-        console.log("concepto", nuevoConcepto)
-        this.sgaMidService.post('crear_concepto', nuevoConcepto).subscribe(
+        this.sgaMidService.post('derechos_pecuniarios', nuevoConcepto).subscribe(
           response => {
+            concepto.Id = response["Concepto"]["Id"];
+            concepto.FactorId = response["Factor"]["Id"];
             this.datosConceptos.append(concepto);
-            console.log(response);
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -158,12 +190,35 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     const configDialogo = new MatDialogConfig();
     configDialogo.width = '900px';
     configDialogo.height = '350px';
-    configDialogo.data = event.data;
+    configDialogo.data = this.datosCargados.find(obj => event.data.Id === obj.Id);
     const conceptoDialogo = this.dialog.open(DialogoConceptosComponent, configDialogo);
     conceptoDialogo.afterClosed().subscribe((concepto: Concepto) => {
-      this.datosConceptos.update(event.data, concepto);
-      console.log(concepto);
-      //PUT
+      if (concepto !== undefined) {
+        const updateConcepto = new ConceptoPut(); 
+        updateConcepto.Concepto = {
+          Id: concepto.Id,
+          Nombre: concepto.Nombre,
+          CodigoAbreviacion: concepto.Codigo,
+          Activo: true,
+          TipoParametroId: { Id: 2 }, // Identificador que agrupa los parametros de derechos pecuniarios
+        };
+        updateConcepto.Factor = {
+          Id: configDialogo.data.FactorId,
+          Valor: { NumFactor: concepto.Factor },
+        };
+        updateConcepto.Vigencia = {
+          Id: this.vigenciaActual
+        }
+        this.sgaMidService.put('derechos_pecuniarios/update/'+event.data.Id, updateConcepto).subscribe(
+          response => {
+            console.log(response)
+            this.datosConceptos.update(event.data, concepto);
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          },
+        );
+      }
     });
   }
 
