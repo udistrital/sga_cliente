@@ -1,12 +1,15 @@
 export class Calendario {
     Nombre: string;
-    PeriodoId: number;
-    Nivel: number;
-    resolucion: number;
-    anno: number;
-    DocumentoId: any;
     DependenciaId: any;
+    DocumentoId: any;
+    PeriodoId: number;
+    AplicacionId: number;
+    Nivel: number;
     Activo: boolean;
-    calendarioId: number;
+    FechaCreacion: string;
+    FechaModificacion: string;
     CalendarioPadreId: {Id: number};
+    resolucion: number;
+    anno: number; 
+    calendarioId: number;
 }
