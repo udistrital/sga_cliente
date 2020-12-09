@@ -8,4 +8,5 @@ export class Calendario {
     DependenciaId: any;
     Activo: boolean;
     calendarioId: number;
+    CalendarioPadreId: {Id: number};
 }
