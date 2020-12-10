@@ -111,6 +111,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             this.calendarCloneOut.emit(this.calendarClone.Id);
             this.calendarForNew = false;
             this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
+            this.popUpManager.showInfoToast(this.translate.instant('calendario.clonar_calendario_fechas'));
           }
         },
         error => {
