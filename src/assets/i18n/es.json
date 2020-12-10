@@ -1097,6 +1097,7 @@
         "forma_vigencia": "Seleccione la vigencia de la cual desea copiar los conceptos de los derechos pecuniarios",
         "boton_copiar": "Copiar conceptos",
         "boton_calcular": "Calcular valores",
+        "boton_guardar": "Guardar",
         "vigencia": "Vigencia",
         "codigo": "Código",
         "factor": "Factor",

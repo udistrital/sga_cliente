@@ -17,6 +17,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   tablaConceptos: any;
   datosConceptos: LocalDataSource;
   salario: number;
+  costo: any[];
 
   @Input()
   datosCargados: any[] = [];
@@ -93,8 +94,14 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
         this.datosCargados[i].Costo = smldv*this.datosCargados[i].Factor;
         console.log(this.datosCargados[i].Nombre)
         console.log(this.datosCargados[i].Costo)
+        this.costo = this.datosCargados[i].Costo
       }
     }
+  }
+
+  guardarValores(){
+    console.log(this.datosCargados);
+    // Controlador del mid    
   }
 
   agregarConcepto() {
