@@ -108,6 +108,7 @@
     },
     "GLOBAL": {
         "cargando": "Loading...",
+        "info": "Warning!",
         "preinscripcion": "Pre-registration",
         "preinscripcion_2": "You want to pre-register",
         "id": "Id",
@@ -1010,6 +1011,7 @@
         "calendario_no_inhabilitado": "Calendar not disabled",
         "clonar_calendario_nombre": "Select the academic period and the level from which you want to copy the academic calendar:",
         "clonar_calendario": "Clone calendar",
+        "clonar_calendario_fechas": "Remember to update the dates of the activities",
         "calendario_resolucion": "Academic Calendar defined by resolution",
         "calendario_academico": "Academic Calendar",
         "calendarios_academicos": "Academic Calendars",
