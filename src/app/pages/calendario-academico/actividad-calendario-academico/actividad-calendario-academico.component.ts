@@ -8,13 +8,14 @@ import { EventoService } from '../../../@core/data/evento.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import * as moment from 'moment';
 import { LocalDataSource } from 'ng2-smart-table';
+import { CalendarioEvento } from './../../../@core/data/models/evento/calendario_evento';
 
 @Component({
   selector: 'ngx-actividad-calendario-academico',
   templateUrl: './actividad-calendario-academico.component.html',
   styleUrls: ['../calendario-academico.component.scss'],
 })
-export class ActividadCalendarioAcademicoComponent implements OnInit{
+export class ActividadCalendarioAcademicoComponent implements OnInit {
 
   activity: Actividad;
   processName: string;
@@ -26,6 +27,10 @@ export class ActividadCalendarioAcademicoComponent implements OnInit{
   addPublic: boolean = false;
   publicTable: any;
   tableSource: LocalDataSource;
+  evento: CalendarioEvento;
+
+  minDate: Date;
+  maxDate: Date;
 
   constructor(
     public dialogRef: MatDialogRef<ActividadCalendarioAcademicoComponent>,
@@ -44,6 +49,9 @@ export class ActividadCalendarioAcademicoComponent implements OnInit{
     this.createPublicTable();
     this.createPublicTypeForm();
     this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
+
+    const currentYear = new Date().getFullYear();
+
   }
 
   ngOnInit() {
@@ -54,16 +62,24 @@ export class ActividadCalendarioAcademicoComponent implements OnInit{
         FechaInicio: moment(this.data.editActivity.FechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD'),
         FechaFin: moment(this.data.editActivity.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD'),
       });
+
+      if (this.data.editActivity.EventoPadreId.Id != null) {
+
+        this.minDate = new Date(this.data.editActivity.EventoPadreId.FechaInicio);
+        this.minDate.setDate(this.minDate.getDate());
+        this.maxDate = new Date(this.data.editActivity.EventoPadreId.FechaFin);
+        this.maxDate.setDate(this.maxDate.getDate());
+      }
     }
   }
 
   saveActivity() {
     this.popUpManager.showConfirmAlert(
-      this.translate.instant('calendario.seguro_registrar_actividad')
+      this.translate.instant('calendario.seguro_registrar_actividad'),
     ).then((ok) => {
       if (ok.value) {
         this.activity = this.activityForm.value;
-        this.activity.TipoEventoId = {Id: this.data.process.procesoId};
+        this.activity.TipoEventoId = { Id: this.data.process.procesoId };
         this.activity.FechaInicio = moment(this.activity.FechaInicio).format('YYYY-MM-DDTHH:mm') + ':00Z';
         this.activity.FechaFin = moment(this.activity.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
         this.activity.Activo = true;
@@ -72,10 +88,10 @@ export class ActividadCalendarioAcademicoComponent implements OnInit{
             this.responsablesSelected = data.map(
               item => {
                 return { IdPublico: item.Id }
-              }
+              },
             );
             if (this.responsablesSelected.length > 0) {
-              this.dialogRef.close({"Actividad": this.activity, "responsable": this.responsablesSelected});
+              this.dialogRef.close({ 'Actividad': this.activity, 'responsable': this.responsablesSelected });
             } else {
               this.popUpManager.showErrorAlert(this.translate.instant('calendario.no_publico'))
             }
@@ -108,7 +124,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit{
   }
 
   fetchSelectData(period) {
-    this.coreService.get('periodo/' + period ).subscribe(
+    this.coreService.get('periodo/' + period).subscribe(
       response => this.period = response['Nombre'],
     );
     this.updateSelect();
@@ -120,7 +136,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit{
         this.responsables = data;
         if (this.data.editActivity !== undefined) {
           this.tableSource.load(
-            this.responsables.filter(resp => this.data.editActivity.responsables.some(resp2 => resp2.IdPublico === resp.Id))
+            this.responsables.filter(resp => this.data.editActivity.responsables.some(resp2 => resp2.IdPublico === resp.Id)),
           );
         }
       },
@@ -140,7 +156,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit{
         },
       },
       mode: 'external',
-      actions : {
+      actions: {
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
         add: false,

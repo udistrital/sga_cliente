@@ -164,7 +164,7 @@
                                         {{ process.Nombre }}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <ng2-smart-table [settings]="activitiesSettings" [source]="process.actividades" (create)="addActivity($event, process)" (edit)="editActivity($event, process)" (delete)="deleteActivity($event, process)"></ng2-smart-table>
+                                <ng2-smart-table [settings]="activitiesSettings" [source]="process.actividades" (create)="addActivity($event, process)" (custom)="onActionActivity($event, process)"></ng2-smart-table>
                             </mat-expansion-panel>
                         </mat-accordion>
                     </mat-tab>

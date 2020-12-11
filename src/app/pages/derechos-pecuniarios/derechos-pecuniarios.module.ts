@@ -41,6 +41,6 @@ import { ConsultarConceptosComponent } from './consultar-conceptos/consultar-con
   ],
   entryComponents: [
     DialogoConceptosComponent,
-  ]
+  ],
 })
 export class DerechosPecuniariosModule { }
