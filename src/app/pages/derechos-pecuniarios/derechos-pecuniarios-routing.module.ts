@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ConsultarConceptosComponent } from './consultar-conceptos/consultar-conceptos.component';
 import { CopiarConceptosComponent } from './copiar-conceptos/copiar-conceptos.component';
 import { CrudDerechosPecuniariosComponent } from './crud-derechos-pecuniarios/crud-derechos-pecuniarios.component';
 import { DefinirConceptosComponent } from './definir-conceptos/definir-conceptos.component';
@@ -27,6 +28,10 @@ const routes: Routes = [{
             path: 'definir-conceptos',
             component: DefinirConceptosComponent,
         },
+        {
+            path: 'consultar-conceptos',
+            component: ConsultarConceptosComponent,
+        },
     ],
 }];
 
@@ -48,4 +53,5 @@ export const routedComponents = [
     CopiarConceptosComponent,
     DefinirConceptosComponent,
     DialogoConceptosComponent,
+    ConsultarConceptosComponent,
 ]

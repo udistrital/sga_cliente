@@ -12,6 +12,8 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DefinirConceptosComponent } from './definir-conceptos/definir-conceptos.component';
 import { DialogoConceptosComponent } from './dialogo-conceptos/dialogo-conceptos.component';
+import { ParametrosService } from '../../@core/data/parametros.service';
+import { ConsultarConceptosComponent } from './consultar-conceptos/consultar-conceptos.component';
 
 @NgModule({
   declarations: [
@@ -31,9 +33,11 @@ import { DialogoConceptosComponent } from './dialogo-conceptos/dialogo-conceptos
     ListDerechosPecuniariosComponent,
     CopiarConceptosComponent,
     DefinirConceptosComponent,
+    ConsultarConceptosComponent,
   ],
   providers: [
     PopUpManager,
+    ParametrosService,
   ],
   entryComponents: [
     DialogoConceptosComponent,

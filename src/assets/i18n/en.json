@@ -38,7 +38,8 @@
         "derechos_pecuniarios": {
             "derechos_pecuniarios": "Financial entitlements",
             "definir_conceptos": "Define Concepts",
-            "asignar_valores": "Assign Values"
+            "asignar_valores": "Assign Values",
+            "consultar_conceptos": "Consult concepts"
         },
         "archivo_icfes": {
             "archivo_icfes": "Icfes file",
@@ -108,6 +109,7 @@
     },
     "GLOBAL": {
         "cargando": "Loading...",
+        "info": "Warning!",
         "preinscripcion": "Pre-registration",
         "preinscripcion_2": "You want to pre-register",
         "id": "Id",
@@ -1010,6 +1012,7 @@
         "calendario_no_inhabilitado": "Calendar not disabled",
         "clonar_calendario_nombre": "Select the academic period and the level from which you want to copy the academic calendar:",
         "clonar_calendario": "Clone calendar",
+        "clonar_calendario_fechas": "Remember to update the dates of the activities",
         "calendario_resolucion": "Academic Calendar defined by resolution",
         "calendario_academico": "Academic Calendar",
         "calendarios_academicos": "Academic Calendars",
@@ -1101,7 +1104,9 @@
         "error_factor": "Please give the factor of the concept",
         "error_nombre": "Please insert the name for the concept",
         "confirmar_concepto": "Are you sure to add this concept to the financial entitlements?",
-        "inactivar_concepto": "Inactive this concept?"
-
+        "inactivar_concepto": "Inactive this concept?",
+        "no_salario": "There's no registered salary for this validity",
+        "inactivo": "The chosen concept is now inactive.",
+        "actualizado": "The concept has been updated"
     }
 }

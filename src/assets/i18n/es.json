@@ -38,7 +38,8 @@
         "derechos_pecuniarios": {
             "derechos_pecuniarios": "Derechos Pecuniarios",
             "definir_conceptos": "Definir Conceptos",
-            "asignar_valores": "Asignar Valores"
+            "asignar_valores": "Asignar Valores",
+            "consultar_conceptos": "Consultar Conceptos"
         },
         "archivo_icfes": {
             "archivo_icfes": "Archivo Icfes",
@@ -110,6 +111,7 @@
     },
     "GLOBAL": {
         "cargando": "Cargando...",
+        "info": "¡Atención!",
         "preinscripcion": "Preinscripcion",
         "preinscripcion_2": "Desea realizar preinscripcion",
         "id": "Id",
@@ -292,10 +294,7 @@
         "placeholder_nivel_escribe": "Ej: Medio",
         "nivel_escucha": "Nivel de escucha",
         "placeholder_nivel_escucha": "Ej: Medio",
-        "nivel_habla": "Nivel de habla",
-        "placeholder_nivel_habla": "Ej: Medio",
-        "nivel_lee": "Nivel de lectura",
-        "placeholder_nivel_lee": "Ej: Medio",
+        "nivel_habla": "Nivel de habla","info": "¡Atención!",
         "clasificacion_nivel_idioma": "Clasificación del idioma",
         "placeholder_clasificacion_nivel_idioma": "Ej: A1",
         "tipo_icfes": "Tipo de ICFES",
@@ -1020,6 +1019,7 @@
         "calendario_no_inhabilitado": "Calendario no inhabilitado",
         "clonar_calendario_nombre": "Seleccione el periodo académico y el nivel del cual quiere copiar el calendario académico:",
         "clonar_calendario": "Clonar calendario",
+        "clonar_calendario_fechas": "Recuerde que debe actualizar las fechas de las actividades",
         "calendario_resolucion": "Calendario definido mediante la resolución",
         "calendario_academico": "Calendario Académico",
         "calendarios_academicos": "Calendarios Académicos",
@@ -1113,6 +1113,10 @@
         "confirmar_concepto": "¿Está seguro de agregar este concepto a los derechos pecuniarios?",
         "inactivar_concepto": "¿Inactivar concepto?",
         "registro_costo": "Los costos de los conceptos han sido guardados exitosamente",
-        "error_registro_costo": "Los costos de los conceptos no han podido ser guardados"
+        "error_registro_costo": "Los costos de los conceptos no han podido ser guardados",
+        "no_salario": "No hay salario registrado para esta vigencia",
+        "inactivo": "El concepto seleccionado se ecuentra ahora inactivo.",
+        "actualizado": "El concepto ha sido correctamente actualizado",
+        "confirmar_guardar": "¿Está seguro que desea guardar estos valores de derechos pecuniarios?"
     }
 }
