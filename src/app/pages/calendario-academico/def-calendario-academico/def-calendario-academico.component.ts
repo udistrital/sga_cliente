@@ -16,6 +16,7 @@ import { CalendarioClone } from '../../../@core/data/models/calendario-academico
 import { CalendarioEvento } from '../../../@core/data/models/calendario-academico/calendarioEvento';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import * as moment from 'moment';
+import * as momentTimezone from 'moment-timezone';
 
 import { CoreService } from '../../../@core/data/core.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
@@ -88,32 +89,60 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       this.createActivitiesTable();
     });
   }
-  clonarCalendario() {
-    this.calendarClone = new CalendarioClone();
-    this.calendarClone = this.calendarFormClone.value;
-    this.calendarClone.Id = this.calendar.calendarioId
 
-    this.sgaMidService.post('clonar_calendario/', this.calendarClone).subscribe(
-      response => {
-        if (JSON.stringify(response) === JSON.stringify({})) {
-          this.activebutton = true;
-          this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_clon_error'));
-        } else {
-          this.activebutton = false;
-          this.activetabsClone = false;
-          this.activetabs = true;
-          this.calendarCloneOut.emit(this.calendarClone.Id);
-          this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
-        }
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
-      },
-    );
+  clonarCalendario() {
+    
+    if (this.calendarForNew === true){
+      // Funcion clonar nueva
+      console.log(this.calendarForEditId);
+      this.calendarClone = new CalendarioClone();
+      this.calendarClone = this.calendarFormClone.value;
+      this.calendarClone.Id = this.calendar.calendarioId;
+      this.calendarClone.IdPadre = {Id: this.calendarForEditId};
+      this.sgaMidService.post('/clonar_calendario/calendario_padre', this.calendarClone).subscribe(
+        response => {
+          if (JSON.stringify(response) === JSON.stringify({})) {
+            this.activebutton = true;
+            this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_clon_error'));
+          } else {
+            this.activebutton = false;
+            this.activetabsClone = false;
+            this.activetabs = true;
+            this.calendarCloneOut.emit(this.calendarClone.Id);
+            this.calendarForNew = false;
+            this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
+            this.popUpManager.showInfoToast(this.translate.instant('calendario.clonar_calendario_fechas'));
+          }
+        },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
+        },
+      );
+    } else {
+      this.calendarClone = new CalendarioClone();
+      this.calendarClone = this.calendarFormClone.value;
+      this.calendarClone.Id = this.calendar.calendarioId
+      this.sgaMidService.post('clonar_calendario/', this.calendarClone).subscribe(
+        response => {
+          if (JSON.stringify(response) === JSON.stringify({})) {
+            this.activebutton = true;
+            this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_clon_error'));
+          } else {
+            this.activebutton = false;
+            this.activetabsClone = false;
+            this.activetabs = true;
+            this.calendarCloneOut.emit(this.calendarClone.Id);
+            this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
+          }
+        },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
+        },
+      );
+    }
   }
 
   ngOnChanges() {
-
     this.processes = [];
     this.processTable.load(this.processes);
     if (this.calendarForNew === true){
@@ -499,14 +528,18 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             this.calendar = this.calendarForm.value;
             this.uploadResolutionFile(this.fileResolucion)
               .then(fileID => {
-                this.calendar.DocumentoId = fileID;
-                this.calendar.DependenciaId = '{}';
-                this.calendar.Activo = true;
                 this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
                 this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
                 this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
+                this.calendar.DependenciaId = '{}';
+                this.calendar.DocumentoId = fileID;
+                this.calendar.AplicacionId = 0;
+                this.calendar.Activo = true;
+                this.calendar.FechaCreacion = momentTimezone.tz(this.calendar.FechaCreacion, 'America/Bogota').format('YYYY-MM-DD HH:mm');
+                this.calendar.FechaModificacion = momentTimezone.tz(this.calendar.FechaModificacion, 'America/Bogota').format('YYYY-MM-DD HH:mm');
                 this.calendar.CalendarioPadreId = {Id: this.calendarForEditId};
-                this.sgaMidService.post('modificar_calendario', this.calendar).subscribe(
+                console.log(this.calendar);
+                this.sgaMidService.post('consulta_calendario_academico/calendario_padre', this.calendar).subscribe(
                   response => {
                     this.calendar.calendarioId = response['Id'];
                     this.createdCalendar = true;
@@ -515,7 +548,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                   error => {
                     this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
                   },
-                );
+                )                
                 this.loading = false;
               }).catch(error => {
                 this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
