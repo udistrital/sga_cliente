@@ -118,7 +118,8 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
       response => {
         const data: any[] = response["Data"];
         if (Object.keys(data[0]).length > 0) {
-          this.salario = JSON.parse(data[0]["Valor"]).Valor; // puede cambiar 
+          const conceptoSalario = data.filter(obj => obj["ParametroId"]["TipoParametroId"]["Id"] === 1 )[0]; // identificador de Salario Minimo
+          this.salario = JSON.parse(conceptoSalario["Valor"]).Valor; // puede cambiar 
         } else {
           this.salario = 0;
           this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.no_salario'));
