@@ -208,6 +208,8 @@
         "placeholder_genero": "Ej: Femenino",
         "fecha_nacimiento": "Fecha de nacimiento",
         "placeholder_fecha_nacimiento": "Ej: 05/05/1995",
+        "fecha_expedicion": "Fecha de expedición del documento",
+        "placeholder_fecha_expedicion": "Ej: 05/05/2013",
         "documento_identificacion": "Documento de identificación",
         "placeholder_documento_identificacion": "Ej: documento.pdf",
         "foto": "Foto",
