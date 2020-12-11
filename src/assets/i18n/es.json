@@ -1111,7 +1111,8 @@
         "error_factor": "Por favor indique el factor del concepto",
         "error_nombre": "Por favor agregue el nombre del concepto",
         "confirmar_concepto": "¿Está seguro de agregar este concepto a los derechos pecuniarios?",
-        "inactivar_concepto": "¿Inactivar concepto?"
-
+        "inactivar_concepto": "¿Inactivar concepto?",
+        "registro_costo": "Los costos de los conceptos han sido guardados exitosamente",
+        "error_registro_costo": "Los costos de los conceptos no han podido ser guardados"
     }
 }

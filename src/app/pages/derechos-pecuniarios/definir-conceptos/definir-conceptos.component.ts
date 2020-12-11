@@ -5,6 +5,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { DialogoConceptosComponent } from '../dialogo-conceptos/dialogo-conceptos.component';
 import { Concepto } from '../../../@core/data/models/derechos-pecuniarios/concepto';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   selector: 'ngx-definir-conceptos',
@@ -17,7 +18,6 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   tablaConceptos: any;
   datosConceptos: LocalDataSource;
   salario: number;
-  costo: any[];
 
   @Input()
   datosCargados: any[] = [];
@@ -26,6 +26,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private dialog: MatDialog,
+    private sgaMidService: SgaMidService
   ) { }
 
   ngOnInit() {
@@ -91,17 +92,22 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
       var resultado = [];
       var smldv = this.salario/30;
       for (var i = 0; i < totalConcepto; i++){
-        this.datosCargados[i].Costo = smldv*this.datosCargados[i].Factor;
-        console.log(this.datosCargados[i].Nombre)
-        console.log(this.datosCargados[i].Costo)
-        this.costo = this.datosCargados[i].Costo
+        this.datosCargados[i].Costo = Math.round(smldv*this.datosCargados[i].Factor);
       }
     }
   }
 
   guardarValores(){
     console.log(this.datosCargados);
-    // Controlador del mid    
+    this.sgaMidService.post('crear_concepto/ActualizarValor/', this.datosCargados).subscribe(
+      response => {
+        
+        this.popUpManager.showSuccessAlert(this.translate.instant('derechos_pecuniarios.registro_costo'));
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error_registro_costo'));
+      },
+    );  
   }
 
   agregarConcepto() {

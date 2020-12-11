@@ -14,15 +14,15 @@ export class ListDerechosPecuniariosComponent implements OnInit {
   ngOnInit() {
     this.datosCargados = [
       {
-        Codigo: 8672,
+        Codigo: 1214,
         Nombre: 'Inscripción Pregrado',
-        Factor: 3,
+        Factor: 0.2,
       },
       {
-        Codigo: 12,
+        Codigo: 14,
         Nombre: 'Inscripción Postgrado',
-        Factor: 4,
-      },
+        Factor: 0.6,
+      },/*
       {
         Codigo: 40,
         Nombre: 'Certificado de notas',
@@ -72,7 +72,7 @@ export class ListDerechosPecuniariosComponent implements OnInit {
         Codigo: 40,
         Nombre: 'Certificado de notas',
         Factor: 0.5,
-      },
+      },*/
     ]
   }
 
