@@ -38,7 +38,8 @@
         "derechos_pecuniarios": {
             "derechos_pecuniarios": "Financial entitlements",
             "definir_conceptos": "Define Concepts",
-            "asignar_valores": "Assign Values"
+            "asignar_valores": "Assign Values",
+            "consultar_conceptos": "Consult concepts"
         },
         "archivo_icfes": {
             "archivo_icfes": "Icfes file",
@@ -1102,7 +1103,9 @@
         "error_factor": "Please give the factor of the concept",
         "error_nombre": "Please insert the name for the concept",
         "confirmar_concepto": "Are you sure to add this concept to the financial entitlements?",
-        "inactivar_concepto": "Inactive this concept?"
-
+        "inactivar_concepto": "Inactive this concept?",
+        "no_salario": "There's no registered salary for this validity",
+        "inactivo": "The chosen concept is now inactive.",
+        "actualizado": "The concept has been updated"
     }
 }

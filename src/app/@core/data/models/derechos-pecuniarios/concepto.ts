@@ -1,5 +1,7 @@
 export class Concepto {
-    Codigo: number;
+    Codigo: string;
     Nombre: string;
     Factor: number;
+    Id: number;
+    FactorId: number;
 }

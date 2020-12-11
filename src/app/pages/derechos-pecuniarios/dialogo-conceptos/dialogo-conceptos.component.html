@@ -11,7 +11,7 @@
             <div class="row">
               <div class="col-6">
                 <mat-form-field style="width: 100%;">
-                  <input matInput type="number" formControlName="Codigo" placeholder="{{ 'derechos_pecuniarios.codigo' | translate }}" required>
+                  <input matInput type="text" formControlName="Codigo" placeholder="{{ 'derechos_pecuniarios.codigo' | translate }}" required>
                   <mat-error *ngIf="formConcepto.get('Codigo').hasError('required') && formConcepto.get('Codigo').touched" >
                     {{ 'derechos_pecuniarios.error_codigo' | translate }}
                   </mat-error>
@@ -38,7 +38,7 @@
             </div>
             <div class="row">
               <div class="col-6">
-                <button (click)="cerrarDialogo()" class="btn btn-info btn-sm float-left"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+                <button type="button" (click)="cerrarDialogo()" class="btn btn-info btn-sm float-left"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
               </div>
               <div class="col-6">
                 <button class="btn btn-success btn-sm float-right" type="submit" [disabled]="formConcepto.invalid">{{ 'GLOBAL.guardar' | translate }} </button>

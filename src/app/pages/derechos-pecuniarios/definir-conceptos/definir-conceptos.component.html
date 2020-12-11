@@ -1,32 +1,34 @@
 <div class="row">
   <div class="col">
     <mat-card>
-      <mat-card-title>{{ 'derechos_pecuniarios.titulo' | translate }}</mat-card-title>
-      <mat-card-content>
-        <div class="row">
-          <div class="col-12 col-md-4">
-            <mat-form-field style="width: 100%;">
-              <mat-select placeholder="{{ 'derechos_pecuniarios.vigencia' | translate }}" >
-                <mat-option *ngFor="let vigencia of vigencias" [value]="vigencia.Id">{{ vigencia.Nombre }}</mat-option>
-              </mat-select>
-            </mat-form-field>
+      <fieldset [ngClass]="{'fieldseter':true} ">
+        <legend>
+          {{ 'derechos_pecuniarios.titulo' | translate }}
+        </legend>
+        <mat-card-content>
+          <div class="row">
+            <div class="col-12 col-md-4">
+              <mat-form-field style="width: 100%;">
+                <mat-select placeholder="{{ 'derechos_pecuniarios.vigencia' | translate }}" (selectionChange)="cargarSalario($event)" >
+                  <mat-option *ngFor="let vigencia of vigencias" [value]="vigencia.Id">{{ vigencia.Nombre }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-md-6">
+              <mat-form-field style="width: 100%;">
+                <input matInput type="number" [(ngModel)]="salario" placeholder="{{ 'derechos_pecuniarios.salario' | translate }}" readonly>
+              </mat-form-field>
+            </div>
+            <div *ngIf="mostrarCalcular" class="col-12 col-md-2">
+              <button mat-button type="button" (click)="calcularValores()" >{{ 'derechos_pecuniarios.boton_calcular' | translate }} </button>
+            </div>
           </div>
-          <div class="col-12 col-md-6">
-            <mat-form-field style="width: 100%;">
-              <input matInput type="number" placeholder="{{ 'derechos_pecuniarios.salario' | translate }}">
-            </mat-form-field>
-          </div>
-          <div class="col-12 col-md-2">
-            <button mat-button type="button" (click)="calcularValores()" >{{ 'derechos_pecuniarios.boton_calcular' | translate }} </button>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card>
-      <mat-card-title>{{ 'derechos_pecuniarios.conceptos' | translate }}</mat-card-title>
-      <mat-card-content>
-        <ng2-smart-table [settings]="tablaConceptos" [source]="datosConceptos" (create)="agregarConcepto()" (edit)="editarConcepto($event)" (delete)="inactivarConcepto($event)" ></ng2-smart-table>
-      </mat-card-content>
+        </mat-card-content>
+        <mat-card-title>{{ 'derechos_pecuniarios.conceptos' | translate }}</mat-card-title>
+        <mat-card-content>
+          <ng2-smart-table [settings]="tablaConceptos" [source]="datosConceptos" (create)="agregarConcepto()" (edit)="editarConcepto($event)" (delete)="inactivarConcepto($event)" ></ng2-smart-table>
+        </mat-card-content>
+      </fieldset>
     </mat-card>
   </div>
 </div>
