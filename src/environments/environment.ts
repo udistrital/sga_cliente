@@ -43,8 +43,8 @@ export const environment = {
   EVENTO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/sesiones_crud/v2/',
   OIKOS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/oikos_crud_api/v1/',
   PROYECTO_ACADEMICO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/proyecto_academico_crud/v1/',
-  SGA_MID_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/sga_mid/v1/',
-  //SGA_MID_SERVICE: 'http://localhost:8095/v1/',
+  // SGA_MID_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/sga_mid/v1/',
+  SGA_MID_SERVICE: 'http://localhost:8095/v1/',
   CLIENTE_HABILITAR_PERIODO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/core_crud/v1/',
   OFERTA_ACADEMICA_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/sesiones_crud/v2/',
   INSCRIPCION_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/inscripcion_crud/v2/',
@@ -65,5 +65,5 @@ export const environment = {
   CIDC_SERVICE: 'http://200.69.103.88:3114/api/v1/',
   EVALUACION_INSCRIPCION_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/evaluacion_inscripcion_crud/v2/',
   // EVALUACION_INSCRIPCION_SERVICE: 'http://localhost:8086/v1/',
-  PARAMETROS_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/',
+  PARAMETROS_SERVICE: 'pruebasapi.intranetoas.udistrital.edu.co:8510/v1/', //'http://localhost:8990/v1/', //
 };

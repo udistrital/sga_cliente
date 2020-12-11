@@ -191,8 +191,14 @@ export const MENU_ITEMS: MenuItem[] = [
     key: 'derechos_pecuniarios',
     children: [
       {
-        title: 'Definir Conceptos',
+        title: 'Consultar conceptos',
         icon: 'nb-list',
+        link: '/pages/derechos-pecuniarios/consultar-conceptos',
+        key: 'consultar_conceptos'
+      },
+      {
+        title: 'Definir Conceptos',
+        icon: 'nb-compose',
         link: '/pages/derechos-pecuniarios/crud-derechos-pecuniarios',
         key: 'definir_conceptos',
       },

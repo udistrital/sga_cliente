@@ -38,7 +38,8 @@
         "derechos_pecuniarios": {
             "derechos_pecuniarios": "Derechos Pecuniarios",
             "definir_conceptos": "Definir Conceptos",
-            "asignar_valores": "Asignar Valores"
+            "asignar_valores": "Asignar Valores",
+            "consultar_conceptos": "Consultar Conceptos"
         },
         "archivo_icfes": {
             "archivo_icfes": "Archivo Icfes",
@@ -1110,6 +1111,8 @@
         "error_nombre": "Por favor agregue el nombre del concepto",
         "confirmar_concepto": "¿Está seguro de agregar este concepto a los derechos pecuniarios?",
         "inactivar_concepto": "¿Inactivar concepto?",
-        "no_salario": "No hay salario registrado para esta vigencia"
+        "no_salario": "No hay salario registrado para esta vigencia",
+        "inactivo": "El concepto seleccionado se ecuentra ahora inactivo.",
+        "actualizado": "El concepto ha sido correctamente actualizado"
     }
 }

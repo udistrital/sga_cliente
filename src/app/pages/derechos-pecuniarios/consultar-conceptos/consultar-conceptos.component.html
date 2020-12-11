@@ -6,17 +6,13 @@
           {{ 'derechos_pecuniarios.titulo' | translate }}
         </legend>
         <mat-card-content>
-          <p>{{ 'derechos_pecuniarios.forma_vigencia' | translate }} </p>
           <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-4">
               <mat-form-field style="width: 100%;">
-                <mat-select [formControl]="vigenciaElegida" placeholder="{{ 'derechos_pecuniarios.vigencia' | translate }}" (selectionChange)="cambiarVigencia()">
+                <mat-select placeholder="{{ 'derechos_pecuniarios.vigencia' | translate }}" (selectionChange)="cargarDatos($event)" >
                   <mat-option *ngFor="let vigencia of vigencias" [value]="vigencia.Id">{{ vigencia.Nombre }}</mat-option>
                 </mat-select>
               </mat-form-field>
-            </div>
-            <div class="col-12 col-md-6">
-              <button mat-button type="button" (click)="copiarConceptos()" >{{ 'derechos_pecuniarios.boton_copiar' | translate }} </button>
             </div>
           </div>
         </mat-card-content>

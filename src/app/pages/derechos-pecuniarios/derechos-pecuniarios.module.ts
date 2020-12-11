@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DefinirConceptosComponent } from './definir-conceptos/definir-conceptos.component';
 import { DialogoConceptosComponent } from './dialogo-conceptos/dialogo-conceptos.component';
 import { ParametrosService } from '../../@core/data/parametros.service';
+import { ConsultarConceptosComponent } from './consultar-conceptos/consultar-conceptos.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ParametrosService } from '../../@core/data/parametros.service';
     ListDerechosPecuniariosComponent,
     CopiarConceptosComponent,
     DefinirConceptosComponent,
+    ConsultarConceptosComponent,
   ],
   providers: [
     PopUpManager,

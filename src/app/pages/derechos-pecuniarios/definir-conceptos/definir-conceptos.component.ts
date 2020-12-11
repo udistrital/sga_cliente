@@ -21,7 +21,10 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   tablaConceptos: any;
   datosConceptos: LocalDataSource;
   salario: number;
-  vigenciaActual: number; 
+  vigenciaActual: number;
+  
+  @Input()
+  mostrarCalcular: boolean = false;
 
   @Input()
   datosCargados: any[] = [];
@@ -211,7 +214,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
         }
         this.sgaMidService.put('derechos_pecuniarios/update/'+event.data.Id, updateConcepto).subscribe(
           response => {
-            console.log(response)
+            this.popUpManager.showSuccessAlert(this.translate.instant('derechos_pecuniarios.actualizado'));
             this.datosConceptos.update(event.data, concepto);
           },
           error => {
@@ -227,9 +230,16 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
       this.translate.instant('derechos_pecuniarios.inactivar_concepto')
     ).then(willDelete => {
       if(willDelete.value) {
-        //inactivar
+        this.sgaMidService.delete('derechos_pecuniarios', event.data).subscribe(
+          response => {
+            this.popUpManager.showSuccessAlert(this.translate.instant('derechos_pecuniarios.inactivo'));
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          }
+        )
       }
-    })
+    });
   }
 
 }
