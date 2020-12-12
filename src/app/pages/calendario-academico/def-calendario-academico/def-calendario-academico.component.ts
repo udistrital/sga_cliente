@@ -233,8 +233,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
               activities => {
                 activities.forEach(element => {
                   if (Object.keys(element).length !== 0) {
+                    let loadedActivity: Actividad = new Actividad();
                     if (element['EventoPadreId'] == null) {
-                      let loadedActivity: Actividad = new Actividad();
                       loadedActivity.actividadId = element['Id'];
                       loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
                       loadedActivity.Nombre = element['Nombre'];
@@ -270,6 +270,21 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                       process.actividades.push(loadedActivity);
                       this.createActivitiesTable();
                     }
+
+                    this.eventoService.get('calendario_evento_tipo_publico?query=CalendarioEventoId__Id:' + loadedActivity.actividadId).subscribe(
+                      (response: any[]) => {
+                        loadedActivity.responsables = response.map(
+                          result => {
+                            return { IdPublico: result["TipoPublicoId"]["Id"] }
+                          }
+                        );
+                        process.actividades.push(loadedActivity);
+                        this.createActivitiesTable();
+                      },
+                      error => {
+                        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                      },
+                    );
                   }
                 });
                 this.processTable.load(this.processes);
@@ -397,10 +412,10 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
         custom: [
-          // {
-          //   name: 'assign',
-          //   title: '<i class="nb-compose"></i>',
-          // },
+          {
+            name: 'assign',
+            title: '<i class="nb-compose"></i>',
+          },
           {
             name: 'edit',
             title: '<i class="nb-edit"></i>',
