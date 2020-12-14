@@ -187,6 +187,7 @@ export class CrudInfoPersonaComponent implements OnInit {
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
+          console.log(willDelete.value);
           const files = []
           this.info_info_persona = <any>infoPersona;
           if (this.info_info_persona.Foto.file !== undefined) {
