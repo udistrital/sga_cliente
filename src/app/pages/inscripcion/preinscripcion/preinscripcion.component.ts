@@ -125,6 +125,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     // ojo quitar comentario
     // this.loadInfoPostgrados();
     this.total = true;
+    this.show_info = true;
     // if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
     //   && this.inscripcion_id.toString() !== '0') {
     //   this.getInfoInscripcion();
