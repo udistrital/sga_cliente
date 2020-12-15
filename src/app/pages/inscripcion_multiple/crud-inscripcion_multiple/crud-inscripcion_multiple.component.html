@@ -1,10 +1,98 @@
 <toaster-container [toasterconfig]="config"></toaster-container>
-<!-- <ngx-dinamicform [normalform]="formInfoPersona" [modeloData]="info_info_persona"
-  (result)="validarForm($event)" [clean]="clean"
-  (percentage)="setPercentage($event)">
-</ngx-dinamicform> -->
+<div class="dinamic-form">
+    <fieldset [ngClass]="{'fieldseter':true} ">
+        <nb-card [hidden]="show_profile || show_info ">
+            <nb-card-body>
+                <!-- select periodo -->
+                <mat-form-field style="width: 40%;">
+                    <mat-label>{{ 'inscripcion.aviso_periodo' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="periodo" [disabled]='true'>
+                        <mat-option>--Seleccionar--</mat-option>
+                        <mat-option *ngFor="let item of periodos" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-    <nb-card  >
+                <!-- select Nivel -->
+
+                <mat-form-field style="width: 100%;">
+                    <mat-select [formControl]="CampoControl" [(ngModel)]="selectedLevel" placeholder="{{ 'calendario.para' | translate }}" (ngModelChange)="onSelectLevel()">
+                        <mat-option>--Seleccionar--</mat-option>
+                        <mat-option *ngFor="let nivel of nivel_load" [value]="nivel.id">{{ nivel.nombre }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="CampoControl.hasError('required')">{{ 'inscripcion.erro_selec_nivel' | translate }}</mat-error>
+                </mat-form-field>
+
+                <!-- select proyecto academico -->
+
+                <mat-form-field style="width: 100%;" *ngIf="showProyectoCurricular">
+                    <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedProject" placeholder="{{ 'oferta.proyecto' | translate }}">
+                        <mat-option>--Seleccionar--</mat-option>
+                        <mat-option *ngFor="let project of inscripcionProjects" [value]="project.Id">{{ project.Nombre }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'inscripcion.erro_selec' | translate }}</mat-error>
+                </mat-form-field>
+
+                <!-- select tipo de inscripcion -->
+                <mat-form-field style="width: 100%;" *ngIf="showTipoInscripcion">
+                    <mat-select [formControl]="Campo2Control" [(ngModel)]="tipo_inscripcion_selected" placeholder="{{ 'inscripcion.aviso_tipo' | translate }}" (ngModelChange)="viewtab()">
+                        <mat-option>--Seleccionar--</mat-option>
+                        <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="Campo2Control.hasError('required')">{{ 'inscripcion.aviso_tipo' | translate }}</mat-error>
+                </mat-form-field>
+
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo==true">
+                        <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
+                            <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
+                            <nb-card-body class="icon-form">
+                                <i class="fa fa-address-card-o fa-5x"></i>
+                                <p class="percentage">{{percentage_info}} %</p>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                </div>
+
+
+
+                <div style="width: 100%;" *ngIf="showTipoInscripcion && showProyectoCurricular">
+                    <fieldset [ngClass]="{'fieldseter':true} ">
+                        <legend> {{ 'inscripcion.opciones_usuario' | translate }} </legend>
+
+                        <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica">
+                            <nb-card class="exp-card" (click)="generar_recibo()">
+                                <nb-card-header>{{ 'inscripcion.generar_recibo' | translate }}</nb-card-header>
+                                <nb-card-body class="icon-form">
+                                    <i class="fa fa-barcode fa-5x"></i>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+
+                    </fieldset>
+
+                    <fieldset [ngClass]="{'fieldseter':true} ">
+                        <legend> {{ 'inscripcion.recibos_generados' | translate }} </legend>
+
+                        <ng2-smart-table [settings]="settings" [source]="dataSource">
+
+                        </ng2-smart-table>
+
+                    </fieldset>
+                </div>
+            </nb-card-body>
+        </nb-card>
+
+
+        <fieldset>
+            <div>
+
+
+
+                <!-- <nb-card  >
         <nb-card-body>
                 {{ 'inscripcion.mensaje_preinscripcion' | translate }}
           </nb-card-body>
@@ -15,7 +103,6 @@
                         <nb-card-body>
                             <mat-form-field style="width: 100%;">
                                 <mat-label>{{ 'inscripcion.select' | translate }}</mat-label>
-                                <!--mat-select [formControl]="Campo2Control" required [(ngModel)]="opcionSeleccionadoEnfasis"-->
                                 <mat-select [formControl]="Campo2Control" (selectionChange)="onCreateEmphasys($event)">
                                     <mat-option>--</mat-option>
                                     <mat-option *ngFor="let proyecto of proyectos" [value]="proyecto">
@@ -36,7 +123,7 @@
                 </div>
 
         </nb-card-body>
-      </nb-card>
-    
+      </nb-card> -->
 
-<!--ngx-loading [hidden]="!loading"></ngx-loading-->
+
+                <!--ngx-loading [hidden]="!loading"></ngx-loading-->

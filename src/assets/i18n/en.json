@@ -897,7 +897,16 @@
         "select": "Name of the academic project",
         "erro_selec": "Please select at least one academic project!",
         "error_proyecto_ya_existe": "The academic project has already been added!",
-        "realizar_preinscripcion": "Pre-registration"
+        "realizar_preinscripcion": "Pre-registration",
+        "erro_selec_nivel": "Please select the level!",
+        "opciones_usuario": "User options",
+        "recibos_generados": "Receipts generated (PIN)",
+        "generar_recibo": "Generate receipt",
+        "numero_recibo": "# Receipt",
+        "programa": "Program",
+        "fecha_generacion": "Generation date",
+        "descargar": "Download",
+        "opcion": "Option"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
@@ -1079,6 +1088,8 @@
         "actividad_hija_exito": "Successfully created daughter activity.",
         "buscar_calendario": "Search the academic calendar assigned to an academic project",
         "sin_calendario": "There are no calendars associated to this particular project",
+        "sin_proyecto_curricular": "No curricular projects have been found with the search criteria.",
+        "sin_tipo_inscripcion": "No registration types found with the search criteria.",
         "publico_repetido": "The chosen public type is already selected.",
         "no_publico": "You must select at lead one public type."
     },

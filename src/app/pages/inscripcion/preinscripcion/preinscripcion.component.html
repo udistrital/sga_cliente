@@ -1,8 +1,8 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <nb-card [hidden]="show_profile || show_info ">
-        <nb-card-body>
-                <!-- select periodo -->
-                <mat-form-field style="width: 40%;">
+    <!-- <nb-card [hidden]="show_profile || show_info ">
+        <nb-card-body> -->
+    <!-- select periodo -->
+    <!-- <mat-form-field style="width: 40%;">
                         <mat-label>{{ 'inscripcion.aviso_periodo' | translate }}:</mat-label>
                         <mat-select [(ngModel)]="periodo" [disabled]='true'>
                             <mat-option>--Seleccionar--</mat-option>
@@ -10,11 +10,11 @@
                                 {{item.Nombre}}
                             </mat-option>
                         </mat-select>
-                    </mat-form-field>
+                    </mat-form-field> -->
 
-            <!-- select Nivel -->
-           
-                <mat-form-field style="width: 100%;">
+    <!-- select Nivel -->
+
+    <!-- <mat-form-field style="width: 100%;">
                     <mat-label>{{ 'inscripcion.aviso_nivel' | translate }}:</mat-label>
                     <mat-select [(ngModel)]="selectednivel" (ngModelChange)="loadTipoInscripcion()" >
                         <mat-option>--Seleccionar--</mat-option>
@@ -22,10 +22,10 @@
                             {{item.nombre}}
                         </mat-option>
                     </mat-select>
-                </mat-form-field>
-                <!-- select tipo de inscripcion -->
+                </mat-form-field> -->
+    <!-- select tipo de inscripcion -->
 
-            <mat-form-field style="width: 100%;">
+    <!-- <mat-form-field style="width: 100%;">
                 <mat-label>{{ 'inscripcion.aviso_tipo' | translate }}:</mat-label>
                 <mat-select [(ngModel)]="tipo_inscripcion_selected" (ngModelChange)="viewtab()" >
                     <mat-option>--Seleccionar--</mat-option>
@@ -33,10 +33,10 @@
                         {{item.Nombre}}
                     </mat-option>
                 </mat-select>
-            </mat-form-field>
-            <!--ngx-loading [hidden]="!loading"></ngx-loading-->
+            </mat-form-field> -->
+    <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
-            <div class="row">
+    <!-- <div class="row">
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo==true">
                     <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
                         <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
@@ -49,7 +49,7 @@
             </div>
         </nb-card-body>
 
-    </nb-card>
+    </nb-card> -->
 
     <!--Formularios------------------------------------------------------------->
 
@@ -68,18 +68,18 @@
             </div>
             <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
-                    <ngx-crud-info-persona info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_preinscripcion')"  (result)="setPercentage_info($event,0)">
+                    <ngx-crud-info-persona info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_preinscripcion')" (result)="setPercentage_info($event,0)">
                     </ngx-crud-info-persona>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.preinscripcion' | translate }}" [active]="preinscripcion">
-                    <ngx-crud-inscripcion-multiple  inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info(1,1)">
+                    <ngx-crud-inscripcion-multiple inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info(1,1)">
                     </ngx-crud-inscripcion-multiple>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
     </nb-card>
 
-    
+
 
 
     <!--Vista de perfil------------------------------------------------------------->

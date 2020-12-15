@@ -889,7 +889,7 @@
         "info_caracteristica": "Información característica",
         "informacion_contacto": "Información de contacto",
         "informacion_familiar": "Información familiar",
-        "aviso_tipo": "seleccione el tipo de inscripción de desee realizar",
+        "aviso_tipo": "seleccione el tipo de inscripción que desea realizar",
         "aviso_periodo": "Período al cual se va a preinscribir",
         "idiomas": "Idiomas",
         "icfes": "Registro ICFES y colegio",
@@ -904,7 +904,16 @@
         "select": "Nombre del proyecto académico",
         "erro_selec": "Por favor seleccione al menos un proyecto académico!",
         "error_proyecto_ya_existe": "El proyecto académico ya fue agregado!",
-        "realizar_preinscripcion": "Preinscripción"
+        "realizar_preinscripcion": "Preinscripción",
+        "erro_selec_nivel": "Por favor seleccion el nivel!",
+        "opciones_usuario": "Opciones de usuario",
+        "recibos_generados": "Recibos generados (PIN)",
+        "generar_recibo": "Generar recibo",
+        "numero_recibo": "# Recibo",
+        "programa": "Programa",
+        "fecha_generacion": "Fecha generación",
+        "descargar": "Descargar",
+        "opcion": "Opción"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -1086,6 +1095,8 @@
         "actividad_hija_exito": "Actividad hija creada con éxito.",
         "buscar_calendario": "Buscar calendario académico asignado a un proyecto académico",
         "sin_calendario": "No se han encontrado calendarios asociados a este proyecto en particular.",
+        "sin_proyecto_curricular": "No se han encontrado proyectos curriculares con los criterios de busqueda.",
+        "sin_tipo_inscripcion": "No se han encontrado tipos de inscripción con los criterios de busqueda.",
         "publico_repetido": "El tipo de público elegido ya habia sido seleccionado.",
         "no_publico": "Debe seleccionar al menos un tipo de público."
     },
