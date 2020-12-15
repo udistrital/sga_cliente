@@ -1,7 +1,7 @@
 <toaster-container [toasterconfig]="config"></toaster-container>
 <div class="dinamic-form">
     <fieldset [ngClass]="{'fieldseter':true} ">
-        <nb-card [hidden]="show_profile || show_info ">
+        <nb-card>
             <nb-card-body>
                 <!-- select periodo -->
                 <mat-form-field style="width: 40%;">
@@ -46,7 +46,7 @@
                 </mat-form-field>
 
                 <div class="row">
-                    <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo==true">
+                    <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica">
                         <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
                             <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
                             <nb-card-body class="icon-form">
@@ -56,9 +56,6 @@
                         </nb-card>
                     </div>
                 </div>
-
-
-
                 <div style="width: 100%;" *ngIf="showTipoInscripcion && showProyectoCurricular">
                     <fieldset [ngClass]="{'fieldseter':true} ">
                         <legend> {{ 'inscripcion.opciones_usuario' | translate }} </legend>
