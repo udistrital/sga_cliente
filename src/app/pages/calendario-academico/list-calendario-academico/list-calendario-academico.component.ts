@@ -158,7 +158,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
 
   onCreate(event: any) {
-    this.activateTab(event.data.Id)
+    this.activateTab()
   }
 
   onUpdate(event: any){
