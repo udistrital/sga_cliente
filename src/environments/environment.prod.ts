@@ -58,4 +58,5 @@ export const environment = {
   RECIBO_SERVICE: 'http://api.planestic.udistrital.edu.co:9017/v1/',
   CIDC_SERVICE: 'http://200.69.103.88:3114/api/v1/',
   EVALUACION_INSCRIPCION_SERVICE: 'http://localhost:8095/v1/',
+  PARAMETROS_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/',
 };
