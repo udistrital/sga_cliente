@@ -19,8 +19,6 @@ export class ViewInfoPersonaComponent implements OnInit {
   info_persona_id: number;
   info_info_persona: InfoPersona;
   info_persona_user: string;
-  foto: any;
-  soporteDocumento: any;
 
   @Input('info_persona_id')
   set name(info_persona_id: number) {

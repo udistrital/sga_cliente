@@ -14,9 +14,12 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
+import { PopUpManager } from '../../../managers/popUpManager';
 import { ListService } from '../../../@core/store/services/list.service';
 import { UserService } from '../../../@core/data/users.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import * as moment from 'moment';
+import * as momentTimezone from 'moment-timezone';
 
 @Component({
   selector: 'ngx-crud-info-persona',
@@ -25,8 +28,6 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 })
 export class CrudInfoPersonaComponent implements OnInit {
   filesUp: any;
-  Foto: any;
-  SoporteDocumento: any;
   config: ToasterConfig;
   info_persona_id: number;
   inscripcion_id: number;
@@ -67,6 +68,8 @@ export class CrudInfoPersonaComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
+    private popUpManager: PopUpManager,
+    private popUpmanager: PopUpManager,
     private sgamidService: SgaMidService,
     private autenticationService: ImplicitAutenticationService,
     private documentoService: DocumentoService,
@@ -143,10 +146,9 @@ export class CrudInfoPersonaComponent implements OnInit {
   }
 
   createInfoPersona(infoPersona: any): void {
-
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('GLOBAL.crear') + '?',
+      text: this.translate.instant('GLOBAL.crear_info_persona'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -158,69 +160,36 @@ export class CrudInfoPersonaComponent implements OnInit {
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
-          console.log(willDelete.value);
           const files = []
           this.info_info_persona = <any>infoPersona;
-          if (this.info_info_persona.Foto.file !== undefined) {
-            files.push({
-              nombre: this.autenticationService.getPayload().sub,
-              name: this.autenticationService.getPayload().sub,
-              key: 'Foto',
-              file: this.info_info_persona.Foto.file, IdDocumento: 1,
+          this.info_info_persona.FechaNacimiento = momentTimezone.tz(this.info_info_persona.FechaNacimiento, 'America/Bogota').format('YYYY-MM-DD HH:mm');
+          this.info_info_persona.FechaExpedicion = momentTimezone.tz(this.info_info_persona.FechaExpedicion, 'America/Bogota').format('YYYY-MM-DD HH:mm');
+          this.info_info_persona.Usuario = this.autenticationService.getPayload().sub;
+          this.sgamidService.post('persona/guardar_persona', this.info_info_persona).subscribe(res => {                    
+            const r = <any>res                    
+            console.info(JSON.stringify(res));
+            if (r !== null && r.Type !== 'error') {
+              window.localStorage.setItem('ente', r.Id);
+              this.info_persona_id = r.Id;
+              sessionStorage.setItem('IdTercero', String(this.info_persona_id));
+              this.createInscripcion(this.info_persona_id);
+              this.loading = false;
+              this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.persona_creado'));
+            } else {
+              this.showToast('error', this.translate.instant('GLOBAL.error'),
+              this.translate.instant('GLOBAL.error'));
+            }
+          },
+          (error: HttpErrorResponse) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.crear') + '-' +
+                      this.translate.instant('GLOBAL.info_persona'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
-          }
-          if (this.info_info_persona.SoporteDocumento.file !== undefined) {
-            files.push({
-              nombre: this.autenticationService.getPayload().sub,
-              name: this.autenticationService.getPayload().sub,
-              key: 'SoporteDocumento',
-              file: this.info_info_persona.SoporteDocumento.file, IdDocumento: 2,
-            });
-          }
-          // this.nuxeoService.getDocumentos$(files, this.documentoService)
-          //   .subscribe(response => {
-              // if (Object.keys(response).length === files.length) {
-              //   this.filesUp = <any>response;
-
-                // if (this.filesUp['Foto'] !== undefined) {
-                //   this.info_info_persona.Foto = this.filesUp['Foto'].Id;
-                // }
-                // if (this.filesUp['SoporteDocumento'] !== undefined) {
-                //   this.info_info_persona.SoporteDocumento = this.filesUp['SoporteDocumento'].Id;
-                // }
-                this.info_info_persona.Usuario = this.autenticationService.getPayload().sub;
-                console.info(JSON.stringify(this.info_info_persona));
-                this.sgamidService.post('persona/guardar_persona', this.info_info_persona)
-                  .subscribe(res => {
-                    const r = <any>res
-                    console.info(JSON.stringify(res));
-                    if (r !== null && r.Type !== 'error') {
-                      window.localStorage.setItem('ente', r.Id);
-                      this.info_persona_id = r.Id;
-                      sessionStorage.setItem('IdTercero', String(this.info_persona_id));
-                      // this.loadInfoPersona();
-                      this.createInscripcion(this.info_persona_id);
-                      // this.loadInscripcion();
-                      this.loading = false;
-                      this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('GLOBAL.info_persona') + ' ' +
-                        this.translate.instant('GLOBAL.confirmarCrear'));
-                        this.eventChange.emit(true);
-                    } else {
-                      this.showToast('error', this.translate.instant('GLOBAL.error'),
-                        this.translate.instant('GLOBAL.error'));
-                    }
-                  },
-                    (error: HttpErrorResponse) => {
-                      Swal({
-                        type: 'error',
-                        title: error.status + '',
-                        text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('GLOBAL.crear') + '-' +
-                          this.translate.instant('GLOBAL.info_persona'),
-                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                      });
-                    });
+          });
               // }
         //     },
         //       (error: HttpErrorResponse) => {
@@ -255,27 +224,14 @@ export class CrudInfoPersonaComponent implements OnInit {
           this.loading = true;
           this.info_info_persona = <any>infoPersona;
           const files = [];
-          if (this.info_info_persona.Foto.file !== undefined) {
-            files.push({ file: this.info_info_persona.Foto.file, documento: this.Foto, key: 'Foto' });
-          }
-          if (this.info_info_persona.SoporteDocumento.file !== undefined) {
-            files.push({ file: this.info_info_persona.SoporteDocumento.file, documento: this.SoporteDocumento, key: 'SoporteDocumento' });
-          }
           if (files.length !== 0) {
             this.nuxeoService.updateDocument$(files, this.documentoService)
               .subscribe(response => {
                 if (Object.keys(response).length === files.length) {
                   const documentos_actualizados = <any>response;
-                  this.info_info_persona.Foto = this.Foto;
-                  this.info_info_persona.SoporteDocumento = this.SoporteDocumento;
                   this.sgamidService.put('persona/actualizar_persona', this.info_info_persona)
                     .subscribe(res => {
-                      if (documentos_actualizados['Foto'] !== undefined) {
-                        this.info_info_persona.Foto = documentos_actualizados['Foto'].url + '';
-                      }
-                      if (documentos_actualizados['SoporteDocumento'] !== undefined) {
-                        this.info_info_persona.SoporteDocumento = documentos_actualizados['SoporteDocumento'].url + '';
-                      }
+                      
                       this.loading = false;
                       this.loadInfoPersona();
                       this.programa = this.userService.getPrograma();
@@ -319,8 +275,6 @@ export class CrudInfoPersonaComponent implements OnInit {
                   });
                 });
           } else {
-            this.info_info_persona.Foto = this.Foto;
-            this.info_info_persona.SoporteDocumento = this.SoporteDocumento;
             this.sgamidService.put('persona/actualizar_persona', this.info_info_persona)
               .subscribe(res => {
                 this.loadInfoPersona();
@@ -480,6 +434,7 @@ export class CrudInfoPersonaComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
     })
       .then((result) => {
+        console.log(event)
         if (result.value) {
           console.info('info_info_persona' + this.info_info_persona)
           if (this.info_info_persona === undefined) {

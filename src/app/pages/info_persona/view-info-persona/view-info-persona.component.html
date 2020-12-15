@@ -10,19 +10,18 @@
           {{info_info_persona.PrimerApellido}}
           {{info_info_persona.SegundoApellido}}</li>
         <li><label><strong>{{"GLOBAL.fecha_nacimiento" | translate}}: </strong></label>
-          {{info_info_persona.FechaNacimiento | date : "yyyy/MM/dd"}}</li>
+          {{info_info_persona.FechaNacimiento | date : "YYYY/MM/DD"}}</li>
+        <li><label><strong>{{"GLOBAL.fecha_expedicion" | translate}}: </strong></label>
+           {{info_info_persona.FechaExpedicion | date : "YYYY/MM/DD"}}</li>
         <li><label><strong>{{"GLOBAL.genero" | translate}}: </strong></label>
           {{info_info_persona.Genero.Nombre}}</li>
         <li><label><strong>{{"GLOBAL.estado_civil" | translate}}: </strong></label>
-          {{info_info_persona.EstadoCivil.Nombre}} (<a [href]=soporteDocumento download="cedula.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</li>
+          {{info_info_persona.EstadoCivil.Nombre}}</li>
         <li><label><strong>{{info_info_persona.TipoIdentificacion.CodigoAbreviacion}}:
             </strong></label> {{info_info_persona.NumeroIdentificacion}}</li>
       </ul>
       <span *ngIf="url_editar" (click)="editar()" class="link"><i
           class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
-    </div>
-    <div class="col-md-6 col-sm-6 col-xs-12 pull-right">
-        <a [href]=foto download="{{info_info_persona.NumeroIdentificacion}}.jpg"><img class="user-picture img-tumbnail" [src]="foto"></a>
     </div>
   </nb-card-body>
 </nb-card>

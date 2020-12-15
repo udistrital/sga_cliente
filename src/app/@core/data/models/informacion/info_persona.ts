@@ -9,8 +9,8 @@ export class InfoPersona {
   SegundoApellido: string;
   TipoIdentificacion: TipoIdentificacion;
   NumeroIdentificacion: string;
-  FechaNacimiento: Date;
-  FechaExpedicion: Date;
+  FechaNacimiento: string;
+  FechaExpedicion: string;
   EstadoCivil: EstadoCivil;
   Genero: Genero;
   Usuario: string;  
