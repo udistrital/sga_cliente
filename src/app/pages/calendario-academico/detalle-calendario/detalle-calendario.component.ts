@@ -89,6 +89,10 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.idDetalle = params.get('Id');
+    });
+    this.loadSelects(this.idDetalle)
     this.createCalendar();
     this.createActivitiesTable();
   }

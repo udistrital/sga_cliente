@@ -107,9 +107,36 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   calcularValores() {
     if (this.datosConceptos.count() === 0) {
       this.popUpManager.showAlert('info', this.translate.instant('derechos_pecuniarios.no_conceptos'));
-    } else {
-      // aqui va la función de calcular los valores y el put para guardarlos
+    } else{
+      var totalConcepto=this.datosCargados.length;
+      var datosAntiguos = [];
+      var smldv = this.salario/30;
+      for (var i = 0; i < totalConcepto; i++){
+        datosAntiguos[i] = this.datosCargados[i];
+        this.datosCargados[i].Costo = Math.round(smldv*this.datosCargados[i].Factor);
+        this.datosConceptos.update(datosAntiguos[i], this.datosCargados[i]);
+      }
     }
+  }
+
+  guardarValores(){
+
+    this.popUpManager.showConfirmAlert(
+      this.translate.instant('derechos_pecuniarios.confirmar_guardar')
+    ).then(willSave => {
+      if(willSave.value) {
+        this.sgaMidService.post('derechos_pecuniarios/ActualizarValor/', this.datosCargados).subscribe(
+          response => {
+            this.popUpManager.showSuccessAlert(this.translate.instant('derechos_pecuniarios.registro_costo'));
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error_registro_costo'));
+          },
+        );  
+      }
+    });
+    console.log(this.datosCargados);
+    
   }
 
   cargarSalario(event) {

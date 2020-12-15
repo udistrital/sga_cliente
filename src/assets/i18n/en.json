@@ -1090,6 +1090,7 @@
         "forma_vigencia": "Select the validity from which you want to copy Financial entitlements concepts.",
         "boton_copiar": "Copy concepts",
         "boton_calcular": "Calculate values",
+        "boton_guardar": "Save", 
         "vigencia": "Validity",
         "codigo": "Code",
         "factor": "Factor",

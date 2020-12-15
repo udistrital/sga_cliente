@@ -123,35 +123,6 @@ export class CrudInfoPersonaComponent implements OnInit {
             const temp = <InfoPersona>res;
             this.info_info_persona = temp;
             const files = []
-            if (temp.Foto + '' !== '0') {
-              files.push({ Id: temp.Foto, key: 'Foto' });
-            }
-            if (temp.SoporteDocumento + '' !== '0') {
-              files.push({ Id: temp.SoporteDocumento, key: 'SoporteDocumento' });
-            }
-            this.nuxeoService.getDocumentoById$(files, this.documentoService)
-              .subscribe(response => {
-                const filesResponse = <any>response;
-                if (Object.keys(filesResponse).length === files.length) {
-                  this.Foto = temp.Foto;
-                  this.SoporteDocumento = temp.SoporteDocumento;
-                  temp.Foto = filesResponse['Foto'] + '';
-                  temp.SoporteDocumento = filesResponse['SoporteDocumento'] + '';
-                  this.info_info_persona = temp;
-                  this.loading = false;
-                }
-              },
-                (error: HttpErrorResponse) => {
-                  Swal({
-                    type: 'error',
-                    title: error.status + '',
-                    text: this.translate.instant('ERROR.' + error.status),
-                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                      this.translate.instant('GLOBAL.info_persona') + '|' +
-                      this.translate.instant('GLOBAL.soporte_documento'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  });
-                });
           }
         },
           (error: HttpErrorResponse) => {

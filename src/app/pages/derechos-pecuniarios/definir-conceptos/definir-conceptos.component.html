@@ -28,7 +28,11 @@
         <mat-card-content>
           <ng2-smart-table [settings]="tablaConceptos" [source]="datosConceptos" (create)="agregarConcepto()" (edit)="editarConcepto($event)" (delete)="inactivarConcepto($event)" ></ng2-smart-table>
         </mat-card-content>
+        <div class="text-center">
+          <button mat-button type="button" (click)="guardarValores()" >{{ 'derechos_pecuniarios.boton_guardar' | translate }} </button>
+        </div>
       </fieldset>
     </mat-card>
+    
   </div>
 </div>
