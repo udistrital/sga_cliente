@@ -146,7 +146,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         this.onEdit(event);
         break;
       case 'new':
-        this.onCreate(event);
+        this.onUpdate(event);
         break;
       case 'delete':
         this.onDelete(event);
@@ -158,9 +158,13 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
 
   onCreate(event: any) {
-    this.activateTab(event.data.Id, true);
+    this.activateTab()
   }
 
+  onUpdate(event: any){
+    this.activateTab(event.data.Id, true);
+  }
+  
   onEdit(event: any) {
     this.activateTab(event.data.Id); // ID del calendario seleccionado para edición
   }
