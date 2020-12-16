@@ -1,4 +1,6 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -13,7 +15,7 @@ import { ConceptoPut } from '../../../@core/data/models/derechos-pecuniarios/con
 @Component({
   selector: 'ngx-definir-conceptos',
   templateUrl: './definir-conceptos.component.html',
-  styleUrls: ['../derechos-pecuniarios.component.scss']
+  styleUrls: ['../derechos-pecuniarios.component.scss'],
 })
 export class DefinirConceptosComponent implements OnInit, OnChanges {
 
@@ -21,7 +23,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   tablaConceptos: any;
   datosConceptos: LocalDataSource;
   salario: number;
-  vigenciaActual: number;
+  vigenciaActual: FormControl;
   
   @Input()
   mostrarCalcular: boolean = false;
@@ -35,14 +37,27 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     private dialog: MatDialog,
     private parametrosService: ParametrosService,
     private sgaMidService: SgaMidService,
+    private activatedRoute: ActivatedRoute,
   ) {
+    this.vigenciaActual = new FormControl('')
     this.datosConceptos = new LocalDataSource();
   }
 
   ngOnInit() {
     this.parametrosService.get('periodo?limit=0&sortby=Id&order=desc').subscribe(
       response => {
-        this.vigencias = response["Data"];
+        this.vigencias = response['Data'];
+        this.activatedRoute.paramMap.subscribe(
+          params => {
+            if (params.get('Id') !== null) {
+              this.vigenciaActual.setValue(parseInt(params.get('Id')))
+              this.cargarSalario()
+            }
+          },
+          error => {
+            // pass
+          },
+        );
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -120,7 +135,6 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   }
 
   guardarValores(){
-
     this.popUpManager.showConfirmAlert(
       this.translate.instant('derechos_pecuniarios.confirmar_guardar')
     ).then(willSave => {
@@ -139,9 +153,8 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     
   }
 
-  cargarSalario(event) {
-    this.vigenciaActual = event.value;
-    this.parametrosService.get('parametro_periodo?limit=0&query=PeriodoId__Id:'+this.vigenciaActual).subscribe(
+  cargarSalario() {
+    this.parametrosService.get('parametro_periodo?limit=0&query=PeriodoId__Id:'+this.vigenciaActual.value).subscribe(
       response => {
         const data: any[] = response["Data"];
         if (Object.keys(data[0]).length > 0) {
@@ -159,7 +172,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
     );
 
     this.datosCargados = [];
-    this.sgaMidService.get('derechos_pecuniarios/' + this.vigenciaActual).subscribe(
+    this.sgaMidService.get('derechos_pecuniarios/' + this.vigenciaActual.value).subscribe(
       response => {
         var data: any[] = response['Data'];
         if (Object.keys(data).length > 0 && Object.keys(data[0]).length > 0) {
@@ -201,7 +214,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
           Valor: { NumFactor: concepto.Factor },
         };
         nuevoConcepto.Vigencia = {
-          Id: this.vigenciaActual
+          Id: this.vigenciaActual.value
         }
         this.sgaMidService.post('derechos_pecuniarios', nuevoConcepto).subscribe(
           response => {
@@ -238,7 +251,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
           Valor: { NumFactor: concepto.Factor },
         };
         updateConcepto.Vigencia = {
-          Id: this.vigenciaActual
+          Id: this.vigenciaActual.value
         }
         this.sgaMidService.put('derechos_pecuniarios/update/'+event.data.Id, updateConcepto).subscribe(
           response => {
