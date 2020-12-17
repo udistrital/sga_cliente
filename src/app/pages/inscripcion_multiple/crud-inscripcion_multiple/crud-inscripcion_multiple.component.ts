@@ -61,8 +61,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   loading: boolean;
   percentage: number;
   aceptaTerminos: boolean;
-  showProyectoCurricular: boolean = false;
-  showTipoInscripcion: boolean = false;
+  showProyectoCurricular: boolean;
+  showTipoInscripcion: boolean;
   programa: number;
   aspirante: number;
   periodo: any;
@@ -100,6 +100,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     private toasterService: ToasterService,
     private eventoService: EventoService) {
     // this.cargaproyectosacademicos();
+    this.showProyectoCurricular = false;
+    this.showTipoInscripcion = false;
     this.cargarPeriodo();
     this.dataSource = new LocalDataSource();
     this.createTable();
@@ -192,7 +194,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
       },
       mode: 'external',
-      
+
     }
     this.dataSource.load(this.data);
   }
@@ -211,120 +213,83 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         );
         this.loading = false;
         this.validateProject();
-        this.loadTipoInscripcion();
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.loading = false;
       },
     );
-  }
-
-  validateProject1() {
-    if (this.inscripcionProjects.length == 0) {
-      this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
-      this.showProyectoCurricular = false;
-    } else {
-      this.showProyectoCurricular = true;
-    }
   }
 
   validateProject() {
-    const inscripcionP: any = [];
-    this.cont = 0;
     this.inscripcionProjects = new Array;
     this.showProyectoCurricular = false;
-    for (let i = 0; i < this.projects.length; i += 1) {
-
-      this.sgaMidService.get('consulta_calendario_proyecto/' + this.projects[i]["Id"]).subscribe(
-        response => {
-          this.calendarioId = response["CalendarioId"];
-
-          if (this.calendarioId !== "0") {
-            this.eventoService.get('calendario_evento/?query=TipoEventoId__CalendarioID__Id:' + this.calendarioId + ",Activo:true&limit=0").subscribe(
-              activities => {
-                activities.forEach(element => {
-                  if (Object.keys(element).length !== 0) {
-                    if (element['Nombre'].toUpperCase().includes('INSCRIPCI')
-                      && element['Nombre'].toUpperCase().includes('ASPIRANTE')
-                      && element['Nombre'].toUpperCase().includes('PAGO')) {
-                      inscripcionP.push(this.projects[i])
-                      this.inscripcionProjects = inscripcionP;
-                      this.showProyectoCurricular = true;
-                      this.showTipoInscripcion = true;
-                    }
-                  }
-                });
-
-                if (this.projects.length == i + 1 && !this.showProyectoCurricular && this.inscripcionProjects.length == 0) {
-                  this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
-                  this.showProyectoCurricular = false;
-                  this.showTipoInscripcion = false;
-                }
-
-              },
-              error => {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-              },
-            );
-          } else {
-            this.cont ++;
-            if (this.projects.length == this.cont) {
-              this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
-              this.showProyectoCurricular = false;
-              this.showTipoInscripcion = false;
-            }
-          }
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          this.loading = false;
-        },
-      );
-
-    }
-  }
-
-  generar_recibo(){
-    console.log("sirve click!!!!!!!!!!!!!!!");
-    this.recibo_pago = new ReciboPago();
-    this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + " " + this.info_info_persona.SegundoNombre + " " + this.info_info_persona.PrimerApellido + " " + this.info_info_persona.SegundoApellido;
-    this.recibo_pago.DocumentoDelAspirante = this.info_info_persona.NumeroIdentificacion;
-    this.recibo_pago.Periodo = this.periodo.Nombre;
-    this.projectService.get('proyecto_academico_institucion/' + this.selectedProject).subscribe(
+    this.showTipoInscripcion = false;
+    this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel).subscribe(
       response => {
-        this.recibo_pago.ProyectoAspirante = response["Nombre"];
+
+        const r = <any>response;
+        if (response !== null && response !== "{}" && r.Type !== 'error' && r.length != 0) {
+          const inscripcionP = <Array<any>>response;
+          this.inscripcionProjects = inscripcionP;
+          this.showProyectoCurricular = true;
+          this.loadTipoInscripcion();
+        } else {
+          this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
+          this.showProyectoCurricular = false;
+          this.showTipoInscripcion = false;
+        }
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.loading = false;
       },
     );
-    var nivel = new String(this.selectedLevel)
-    if (nivel == '14'){
-      this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:13,PeriodoId__Id:2').subscribe(
-        response => {
-          this.recibo_pago.Descripcion = response["Data"][0]["ParametroId"]["Nombre"];
-          var valor = JSON.parse(response["Data"][0]["Valor"]);
-          this.recibo_pago.ValorDerecho = valor["Costo"]
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        },
-      );
-    } else {
-      this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:12,PeriodoId__Id:2').subscribe(
-        response => {
-          this.recibo_pago.Descripcion = response["Data"][0]["ParametroId"]["Nombre"];
-          var valor = JSON.parse(response["Data"][0]["Valor"]);
-          this.recibo_pago.ValorDerecho = valor["Costo"]
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        },
-      );
+
+  }
+
+  generar_recibo(){
+    if (this.info_info_persona != null){
+      this.recibo_pago = new ReciboPago();
+      this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + " " + this.info_info_persona.SegundoNombre + " " + this.info_info_persona.PrimerApellido + " " + this.info_info_persona.SegundoApellido;
+      this.recibo_pago.DocumentoDelAspirante = this.info_info_persona.NumeroIdentificacion;
+      this.recibo_pago.Periodo = this.periodo.Nombre;
+      for (var i = 0; i < this.inscripcionProjects.length; i++){
+        if (this.inscripcionProjects[i].ProyectoId === this.selectedProject){
+          this.recibo_pago.ProyectoAspirante = this.inscripcionProjects[i].NombreProyecto;
+          this.recibo_pago.Fecha_pago = this.inscripcionProjects[i].Evento[i].FechaInicioEvento;
+        } 
+      }
+      var nivel = new String(this.selectedLevel)
+      if (nivel == '14'){
+        this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:13,PeriodoId__Id:2').subscribe(
+          response => {
+            this.recibo_pago.Descripcion = response["Data"][0]["ParametroId"]["Nombre"];
+            var valor = JSON.parse(response["Data"][0]["Valor"]);
+            this.recibo_pago.ValorDerecho = valor["Costo"]
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          },
+        );
+      } else {
+        this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:12,PeriodoId__Id:2').subscribe(
+          response => {
+            this.recibo_pago.Descripcion = response["Data"][0]["ParametroId"]["Nombre"];
+            var valor = JSON.parse(response["Data"][0]["Valor"]);
+            this.recibo_pago.ValorDerecho = valor["Costo"]
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          },
+        );
+      }
+      //LLAMAR FUNCION RECIBO
+      console.log(this.recibo_pago)
+      this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
+      } else {
+        this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
     }
-    console.log(this.recibo_pago)
   }
 
   loadTipoInscripcion() {
@@ -344,12 +309,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             this.showTipoInscripcion = false;
             this.showProyectoCurricular = false;
           } else {
-            if(!this.showProyectoCurricular){
-              this.showTipoInscripcion = false;
-            }else{
-              this.showTipoInscripcion = true;
-            }
-            
+            this.showTipoInscripcion = true;
           }
         }
       },
