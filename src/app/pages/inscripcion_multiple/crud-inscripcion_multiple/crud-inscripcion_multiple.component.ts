@@ -50,8 +50,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   loading: boolean;
   percentage: number;
   aceptaTerminos: boolean;
-  showProyectoCurricular: boolean = false;
-  showTipoInscripcion: boolean = false;
+  showProyectoCurricular: boolean;
+  showTipoInscripcion: boolean;
   programa: number;
   aspirante: number;
   periodo: any;
@@ -88,6 +88,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     private toasterService: ToasterService,
     private eventoService: EventoService) {
     // this.cargaproyectosacademicos();
+    this.showProyectoCurricular = false;
+    this.showTipoInscripcion = false;
     this.cargarPeriodo();
     this.dataSource = new LocalDataSource();
     this.createTable();
@@ -95,7 +97,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.createTable();
     });
   }
-  
+
   createTable() {
     this.data = [
       {
@@ -151,7 +153,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
       },
       mode: 'external',
-      
+
     }
     this.dataSource.load(this.data);
   }
@@ -170,7 +172,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         );
         this.loading = false;
         this.validateProject();
-        this.loadTipoInscripcion();
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -179,69 +180,35 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     );
   }
 
-  validateProject1() {
-    if (this.inscripcionProjects.length == 0) {
-      this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
-      this.showProyectoCurricular = false;
-    } else {
-      this.showProyectoCurricular = true;
-    }
+  generar_recibo() {
+
   }
 
   validateProject() {
-    const inscripcionP: any = [];
-    this.cont = 0;
     this.inscripcionProjects = new Array;
     this.showProyectoCurricular = false;
-    for (let i = 0; i < this.projects.length; i += 1) {
+    this.showTipoInscripcion = false;
+    this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel).subscribe(
+      response => {
 
-      this.sgaMidService.get('consulta_calendario_proyecto/' + this.projects[i]["Id"]).subscribe(
-        response => {
-          this.calendarioId = response["CalendarioId"];
+        const r = <any>response;
+        if (response !== null && response !== "{}" && r.Type !== 'error' && r.length != 0) {
+          const inscripcionP = <Array<any>>response;
+          this.inscripcionProjects = inscripcionP;
+          this.showProyectoCurricular = true;
+          this.loadTipoInscripcion();
+        } else {
+          this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
+          this.showProyectoCurricular = false;
+          this.showTipoInscripcion = false;
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.loading = false;
+      },
+    );
 
-          if (this.calendarioId !== "0") {
-            this.eventoService.get('calendario_evento/?query=TipoEventoId__CalendarioID__Id:' + this.calendarioId + ",Activo:true&limit=0").subscribe(
-              activities => {
-                activities.forEach(element => {
-                  if (Object.keys(element).length !== 0) {
-                    if (element['Nombre'].toUpperCase().includes('INSCRIPCI')
-                      && element['Nombre'].toUpperCase().includes('ASPIRANTE')
-                      && element['Nombre'].toUpperCase().includes('PAGO')) {
-                      inscripcionP.push(this.projects[i])
-                      this.inscripcionProjects = inscripcionP;
-                      this.showProyectoCurricular = true;
-                      this.showTipoInscripcion = true;
-                    }
-                  }
-                });
-
-                if (this.projects.length == i + 1 && !this.showProyectoCurricular && this.inscripcionProjects.length == 0) {
-                  this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
-                  this.showProyectoCurricular = false;
-                  this.showTipoInscripcion = false;
-                }
-
-              },
-              error => {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-              },
-            );
-          } else {
-            this.cont ++;
-            if (this.projects.length == this.cont) {
-              this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
-              this.showProyectoCurricular = false;
-              this.showTipoInscripcion = false;
-            }
-          }
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          this.loading = false;
-        },
-      );
-
-    }
   }
 
   loadTipoInscripcion() {
@@ -261,12 +228,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             this.showTipoInscripcion = false;
             this.showProyectoCurricular = false;
           } else {
-            if(!this.showProyectoCurricular){
-              this.showTipoInscripcion = false;
-            }else{
-              this.showTipoInscripcion = true;
-            }
-            
+            this.showTipoInscripcion = true;
           }
         }
       },

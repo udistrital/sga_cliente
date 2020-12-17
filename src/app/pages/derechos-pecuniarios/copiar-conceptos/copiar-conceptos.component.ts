@@ -93,12 +93,10 @@ export class CopiarConceptosComponent implements OnInit {
 
     this.sgaMidService.post('derechos_pecuniarios/clonar', vigenciaClonar).subscribe(
       response => {
-        console.log(response)
-        this.router.navigate(['../definir-conceptos'], {relativeTo: this.route});
+        this.router.navigate(['../definir-conceptos', { Id: vigenciaClonar.VigenciaActual }], {relativeTo: this.route});
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        console.log(error);
       },
     );
   }

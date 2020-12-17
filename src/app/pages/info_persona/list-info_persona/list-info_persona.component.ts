@@ -81,9 +81,9 @@ export class ListInfoPersonaComponent implements OnInit {
             return value;
           },
         },
-        Foto: {
-          title: this.translate.instant('GLOBAL.foto'),
-          // type: 'string;',
+        FechaExpedicion: {
+          title: this.translate.instant('GLOBAL.fecha_nacimiento'),
+          // type: 'Date;',
           valuePrepareFunction: (value) => {
             return value;
           },

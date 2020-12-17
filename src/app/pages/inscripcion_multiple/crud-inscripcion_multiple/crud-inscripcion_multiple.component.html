@@ -3,6 +3,7 @@
     <fieldset [ngClass]="{'fieldseter':true} ">
         <nb-card>
             <nb-card-body>
+
                 <!-- select periodo -->
                 <mat-form-field style="width: 40%;">
                     <mat-label>{{ 'inscripcion.aviso_periodo' | translate }}:</mat-label>
@@ -29,7 +30,7 @@
                 <mat-form-field style="width: 100%;" *ngIf="showProyectoCurricular">
                     <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedProject" placeholder="{{ 'oferta.proyecto' | translate }}">
                         <mat-option>--Seleccionar--</mat-option>
-                        <mat-option *ngFor="let project of inscripcionProjects" [value]="project.Id">{{ project.Nombre }}</mat-option>
+                        <mat-option *ngFor="let project of inscripcionProjects" [value]="project.ProyectoId">{{ project.NombreProyecto }}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'inscripcion.erro_selec' | translate }}</mat-error>
                 </mat-form-field>
@@ -45,29 +46,16 @@
                     <mat-error *ngIf="Campo2Control.hasError('required')">{{ 'inscripcion.aviso_tipo' | translate }}</mat-error>
                 </mat-form-field>
 
-                <div class="row">
-                    <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica">
-                        <nb-card class="exp-card">
-                            <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
-                            <nb-card-body class="icon-form">
-                                <i class="fa fa-address-card-o fa-5x"></i>
-                                <!-- <p class="percentage">{{percentage_info}} %</p> -->
-                            </nb-card-body>
-                        </nb-card>
-                    </div>
-                </div>
                 <div style="width: 100%;" *ngIf="showTipoInscripcion && showProyectoCurricular">
                     <fieldset [ngClass]="{'fieldseter':true} ">
                         <legend> {{ 'inscripcion.opciones_usuario' | translate }} </legend>
 
-                        <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica">
-                            <nb-card class="exp-card" (click)="generar_recibo()">
-                                <nb-card-header>{{ 'inscripcion.generar_recibo' | translate }}</nb-card-header>
-                                <nb-card-body class="icon-form">
-                                    <i class="fa fa-barcode fa-5x"></i>
-                                </nb-card-body>
-                            </nb-card>
-                        </div>
+                        <nb-card class="exp-card text-center">
+                            <nb-card-header>{{ 'inscripcion.generar_recibo' | translate }}</nb-card-header>
+                            <nb-card-body class="icon-form text-center">
+                                <button class="fa fa-barcode fa-5x" (click)="generar_recibo()"></button>
+                            </nb-card-body>
+                        </nb-card>
 
                     </fieldset>
 

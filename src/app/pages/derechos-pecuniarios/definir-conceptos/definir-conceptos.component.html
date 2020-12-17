@@ -9,7 +9,7 @@
           <div class="row">
             <div class="col-12 col-md-4">
               <mat-form-field style="width: 100%;">
-                <mat-select placeholder="{{ 'derechos_pecuniarios.vigencia' | translate }}" (selectionChange)="cargarSalario($event)" >
+                <mat-select [formControl]="vigenciaActual" placeholder="{{ 'derechos_pecuniarios.vigencia' | translate }}" (selectionChange)="cargarSalario()" >
                   <mat-option *ngFor="let vigencia of vigencias" [value]="vigencia.Id">{{ vigencia.Nombre }}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -28,7 +28,7 @@
         <mat-card-content>
           <ng2-smart-table [settings]="tablaConceptos" [source]="datosConceptos" (create)="agregarConcepto()" (edit)="editarConcepto($event)" (delete)="inactivarConcepto($event)" ></ng2-smart-table>
         </mat-card-content>
-        <div class="text-center">
+        <div *ngIf="mostrarCalcular" class="text-center">
           <button mat-button type="button" (click)="guardarValores()" >{{ 'derechos_pecuniarios.boton_guardar' | translate }} </button>
         </div>
       </fieldset>
