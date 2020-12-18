@@ -46,17 +46,17 @@
                 </legend>
                 <div class="row">
                     <div class="col-3">
-                        <mat-form-field floatLabel="always">
-                            <input matInput type="text" formControlName="resolucion" placeholder="{{ 'calendario.numero_resolucion' | translate }} " required />
+                        <mat-form-field>
+                            <input matInput type="number" formControlName="resolucion" placeholder="{{ 'calendario.numero_resolucion' | translate }} " required />
                             <mat-error *ngIf="calendarForm.get('resolucion').hasError('required') && calendarForm.get('resolucion').touched">
                                 {{ 'calendario.error_resolucion' | translate }}
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div class="col-3">
-                        <mat-form-field floatLabel="always">
-                            <input matInput type="text" formControlName="anno" placeholder="{{ 'calendario.anno_resolucion' | translate }} " required/>
-                            <mat-error *ngIf="calendarForm.get('anno').hasError('minLength') &&calendarForm.get('anno').hasError('required') && calendarForm.get('anno').touched">
+                        <mat-form-field>
+                            <input matInput type="text" formControlName="anno" minlength="4" maxlength="4" pattern="^[0-9]*$" placeholder="{{ 'calendario.anno_resolucion' | translate }} " required />
+                            <mat-error *ngIf="calendarForm.get('anno').hasError('required') && calendarForm.get('anno').touched && calendarForm.get('anno').hasError('pattern') ">
                                 {{ 'calendario.error_anno' | translate }}
                             </mat-error>
                         </mat-form-field>
@@ -66,16 +66,16 @@
                     </div>
                     <div class="col-2">
                         <button mat-button type="button" (click)="fileInput.click()">
-              <span class="fa fa-paperclip fa-lg"></span>
-              <input formControlName="fileResolucion" #fileInput type="file" (change)="onInputFileResolucion($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
-            </button>
+                            <span class="fa fa-paperclip fa-lg"></span>
+                            <input formControlName="fileResolucion" #fileInput type="file" (change)="onInputFileResolucion($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
+                        </button>
                         <mat-error *ngIf="!fileResolucion">{{ 'ERROR.no_documento' | translate }}</mat-error>
                         <label *ngIf="fileResolucion">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucion.name}}</label>
                     </div>
                     <div class="col-2" *ngIf="editMode">
                         <button mat-button type="button" (click)="downloadFile(calendar.DocumentoId)">
-              <span class="fa fa-cloud-download fa-lg"></span>
-            </button>
+                            <span class="fa fa-cloud-download fa-lg"></span>
+                        </button>
                     </div>
                 </div>
             </fieldset>

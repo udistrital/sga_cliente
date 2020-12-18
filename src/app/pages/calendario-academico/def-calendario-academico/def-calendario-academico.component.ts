@@ -24,7 +24,6 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'ngx-def-calendario-academico',
@@ -73,7 +72,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     private eventoService: EventoService,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
-    private popUpmanager: PopUpManager,
   ) {
     this.calendarActivity = new ActividadHija();
     this.calendarioEvento = new CalendarioEvento();
@@ -278,7 +276,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   createCalendarForm() {
     this.calendarForm = this.builder.group({
       resolucion: ['', Validators.required],
-      anno: ['', [Validators.required, Validators.minLength(4)]],
+      anno: new FormControl('', {validators: [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]}),
       PeriodoId: '',
       Nivel: '',
       fileResolucion: ['', Validators.required],
@@ -293,7 +291,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   loadSelects() {
-    this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1').subscribe(
+    this.coreService.get('periodo?query=Activo:true&sortby=Id&order=desc&limit=1').subscribe(
       res => {
         this.periodos = res;
       },
@@ -304,7 +302,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   loadSelectsClone() {
-    this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc').subscribe(
+    this.coreService.get('periodo?query=Activo:true&sortby=Id&order=desc').subscribe(
       res => {
         this.periodosClone = res;
       },
@@ -405,7 +403,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   onActionActivity(event, process: Proceso) {
-    console.log(event)
     switch (event.action) {
       case 'edit':
         this.editActivity(event, process);
@@ -453,17 +450,17 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             assignConfig.data.calendarioEvento.TipoEventoId = event.data.TipoEventoId;
             this.eventoService.post('calendario_evento', assignConfig.data.calendarioEvento).subscribe(
               response => {
-                this.popUpmanager.showSuccessAlert(this.translate.instant('calendario.proyectos_exito'));
+                this.popUpManager.showSuccessAlert(this.translate.instant('calendario.proyectos_exito'));
               },
               error => {
-                this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
               },
             );
           }
         });
       },
       error => {
-        this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       },
     )
   }
@@ -622,17 +619,62 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   editProcess(event) {
-    console.log(event.data);
     const processConfig = new MatDialogConfig();
     processConfig.width = '800px';
     processConfig.height = '400px';
     processConfig.data = { calendar: this.calendar, editProcess: event.data };
     const editedProcess = this.dialog.open(ProcesoCalendarioAcademicoComponent, processConfig);
-    // PUT
+    editedProcess.afterClosed().subscribe((process: Proceso) => {
+      if(process != undefined) {
+        this.eventoService.get('tipo_evento/' + event.data.procesoId).subscribe(
+          response => {
+            const processPut = response;
+            processPut["Nombre"] = process.Nombre;
+            processPut["Descripcion"] = process.Descripcion;
+            processPut["TipoRecurrenciaId"] = process.TipoRecurrenciaId;
+            this.eventoService.put('tipo_evento', processPut).subscribe(
+            response => {
+                this.processTable.update(event.data, process)
+                this.popUpManager.showSuccessAlert(this.translate.instant('calendario.proceso_actualizado'));
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_proceso'));
+              },
+            );
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_proceso'));
+          },
+        )
+      }
+    });
   }
 
   deleteProcess(event) {
-
+    this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_inactivar_proceso')).then(
+      willDelete => {
+        if (willDelete.value) {
+          this.eventoService.get('tipo_evento/' + event.data.procesoId).subscribe(
+            response => {
+              const processInative = response;
+              processInative["Activo"] = false;
+              this.eventoService.put('tipo_evento', processInative).subscribe(
+                response => {
+                  this.processTable.update(event.data, process)
+                  this.popUpManager.showSuccessAlert(this.translate.instant('calendario.proceso_desactivado'));
+                },
+                error => {
+                  this.popUpManager.showErrorToast(this.translate.instant('calendario.error_inactivar_proceso'));
+                }
+              )
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('calendario.error_inactivar_proceso'));
+            }
+          )
+        }
+      }
+    )
   }
 
   addActivity(event, process: Proceso) {
@@ -664,13 +706,38 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   editActivity(event, process: Proceso) {
-    console.log(event.data)
     const activityConfig = new MatDialogConfig();
     activityConfig.width = '800px';
     activityConfig.height = '700px';
     activityConfig.data = { process: process, calendar: this.calendar, editActivity: event.data };
     const editedActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
-    // PUT
+    editedActivity.afterClosed().subscribe((activity: any) => {
+      if (activity !== undefined) {
+        this.eventoService.get('calendario_evento/' + event.data.actividadId).subscribe(
+          response => {
+            const activityPut = response;
+            activityPut['Nombre'] = activity.Actividad.Nombre;
+            activityPut['Descripcion'] = activity.Actividad.Descripcion;
+            activityPut['FechaInicio'] = activity.Actividad.FechaInicio;
+            activityPut['FechaFin'] = activity.Actividad.FechaFin;
+            this.eventoService.put('calendario_evento', activityPut).subscribe(
+              response => {
+                process.actividades.filter((actv: Actividad) => actv.actividadId === activity.Actividad)[0]
+                event.source.load(process.actividades);
+                this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
+                this.createActivitiesTable()
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+              },
+            );
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+          },
+        );
+      }
+    });
   }
 
   deleteActivity(event, process: Proceso) {
