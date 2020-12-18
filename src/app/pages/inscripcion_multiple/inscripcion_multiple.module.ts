@@ -4,6 +4,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { PersonaService } from '../../@core/data/persona.service';
 import { EnteService } from '../../@core/data/ente.service';
 import { InscripcionService } from '../../@core/data/inscripcion.service';
+import { ParametrosService } from '../../@core/data/parametros.service';
 import { CampusMidService } from '../../@core/data/campus_mid.service';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ToasterModule } from 'angular2-toaster';
@@ -26,6 +27,8 @@ import { CrudInscripcionMultipleComponent } from './crud-inscripcion_multiple/cr
     EnteService,
     CampusMidService,
     InscripcionService,
+    ParametrosService,
+    
   ],
   exports: [
     CrudInscripcionMultipleComponent,
