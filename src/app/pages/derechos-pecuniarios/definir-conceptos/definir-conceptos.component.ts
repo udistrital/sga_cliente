@@ -183,6 +183,9 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
             concepto.Nombre = obj.ParametroId.Nombre;
             concepto.FactorId = obj.Id
             concepto.Factor = JSON.parse(obj.Valor).NumFactor;
+            if (JSON.parse(obj.Valor).Costo !== undefined) {
+              concepto.Costo = JSON.parse(obj.Valor).Costo;
+            }
             this.datosCargados.push(concepto);
           });
         } else {
