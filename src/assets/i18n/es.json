@@ -555,6 +555,10 @@
         "error_subir_documento": "Ocurrió un error subiendo los documentos, por favor intente de nuevo.",
         "error_cargar_documento": "Ocurrió un error al descargar documentos"
     },
+    "recibo_pago": {
+        "generado": "El recibo de pago ha sido generado correctamente",
+        "no_generado": "El recibo no ha podido ser generado. Verifique su información personal"
+    },
     "produccion_academica": {
         "produccion_academica": "Producción académica",
         "producciones_academicas": "Producciones académicas",
