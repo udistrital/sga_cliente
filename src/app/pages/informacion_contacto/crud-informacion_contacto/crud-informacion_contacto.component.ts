@@ -13,6 +13,7 @@ import { IAppState } from '../../../@core/store/app.state';
 import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { Store } from '@ngrx/store';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-crud-informacion-contacto',
@@ -45,6 +46,7 @@ export class CrudInformacionContactoComponent implements OnInit {
   denied_acces: boolean = false;
 
   constructor(
+    private popUpManager: PopUpManager,
     private translate: TranslateService,
     private ubicacionesService: UbicacionService,
     private store: Store<IAppState>,
@@ -94,12 +96,12 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoResidencia: Array<any> = [];
     if (paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + paisSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + paisSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              departamentoResidencia.push(consultaHijos[i].LugarHijo);
+              departamentoResidencia.push(consultaHijos[i].LugarHijoId);
             }
           }
           this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = departamentoResidencia;
@@ -122,12 +124,12 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const ciudadResidencia: Array<any> = [];
     if (departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + departamentoSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + departamentoSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              ciudadResidencia.push(consultaHijos[i].LugarHijo);
+              ciudadResidencia.push(consultaHijos[i].LugarHijoId);
             }
           }
           this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = ciudadResidencia;
@@ -157,7 +159,7 @@ export class CrudInformacionContactoComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.loadInformacionContacto();
+    this.loadInformacionContacto();
   }
 
   loadInformacionContacto() {
@@ -266,7 +268,9 @@ export class CrudInformacionContactoComponent implements OnInit {
           this.sgaMidService.post('inscripciones/info_complementaria_tercero', this.info_informacion_contacto)
             .subscribe(res => {
               const r = <any>res;
+              console.info(res)
               if (r !== null && r.Type !== 'error') {
+                this.popUpManager.showSuccessAlert(this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
                 this.eventChange.emit(true);
                 this.showToast('info', this.translate.instant('GLOBAL.registrar'),
                   this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
