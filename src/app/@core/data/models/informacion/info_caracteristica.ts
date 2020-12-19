@@ -13,4 +13,5 @@ export class InfoCaracteristica {
   DepartamentoNacimiento: Lugar;
   TipoRelacionUbicacionEnte: number;
   Ente: number;
+  Tercero: number;
 }

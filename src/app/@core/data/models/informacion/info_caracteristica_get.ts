@@ -19,4 +19,5 @@ export class InfoCaracteristicaGet {
     };
   };
   Ente: number;
+  Tercero: number;
 }
