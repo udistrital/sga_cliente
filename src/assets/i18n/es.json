@@ -1082,6 +1082,7 @@
         "error_inactivar_actividad": "Ocurrió un error al inactivar la actividad. Por favor intente de nuevo.",
         "error_registro_actividad": "Ocurrió un error al registrar la actividad. Por favor intente de nuevo.",
         "error_pre_file": "Se requieren el año y numero de resolución para subir el archivo",
+        "calendario_existe": "Ya existe un calendario académico activo para el periodo y nivel elegidos.",
         "seguro_registrar_calendario": "¿Está seguro de registrar un nuevo calendario académico?",
         "seguro_registrar_proceso": "¿Está seguro de agregar un nuevo proceso al calendario académico?",
         "seguro_registrar_actividad": "¿Está seguro de agregar una actividad al proceso actual?",

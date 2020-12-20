@@ -8,7 +8,6 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AsignarCalendarioProyectoComponent } from '../asignar-calendario-proyecto/asignar-calendario-proyecto.component';
 import { EventoService } from '../../../@core/data/evento.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'ngx-list-calendario-academico',

@@ -1071,6 +1071,7 @@
         "error_inactivar_actividad": "An error ocurred while making the activity inacive. Please try again.",
         "error_registro_actividad": "An error ocurred while registering the activity. Please try again.",
         "error_pre_file": "Year and resolution number are requred to select a file.",
+        "calendario_existe": "There's already an active academic calendar for the chosen level and period.",
         "seguro_registrar_calendario": "Are you sure about creating a new academic calendar?",
         "seguro_registrar_proceso": "Are you sure about adding a new process to the academic calendar?",
         "seguro_registrar_actividad": "Are you sure about adding a new activity to the current process?",

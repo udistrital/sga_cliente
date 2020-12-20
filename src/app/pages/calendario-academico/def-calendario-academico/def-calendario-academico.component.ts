@@ -142,7 +142,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       );     
     } else if (this.calendarForEditId === 0) {
       this.activetabs = false;
-      this.activetabsClone = false
+      this.activetabsClone = false;
       this.createdCalendar = false;
       this.editMode = false;
       this.calendarForm.reset()
@@ -150,127 +150,67 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       this.createdCalendar = true;
       this.editMode = true;
       this.openTabs();
-      this.eventoService.get('calendario/' + this.calendarForEditId).subscribe(
-        calendar => {
+      this.loading = true;
+      this.sgaMidService.get('consulta_calendario_academico/' + this.calendarForEditId).subscribe(
+        (response: any[]) => {
+          const calendar = response[0];
           this.calendar = new Calendario();
           this.calendar.calendarioId = calendar['Id'];
-          this.calendar.DocumentoId = calendar['DocumentoId'];
-          this.calendar.Nivel = calendar['Nivel'];
-          this.calendar.Activo = calendar['Activo'];
-          this.calendar.PeriodoId = calendar['PeriodoId'];
-
-          this.documentoService.get('documento/' + this.calendar.DocumentoId).subscribe(
-            (documento: Documento) => {
-              this.fileResolucion = documento;
-              this.calendar.resolucion = JSON.parse(documento.Metadatos)['resolucion'];
-              this.calendar.anno = JSON.parse(documento.Metadatos)['anno'];
-              this.calendarForm.setValue({
-                resolucion: this.calendar.resolucion,
-                anno: this.calendar.anno,
-                PeriodoId: this.calendar.PeriodoId,
-                Nivel: this.calendar.Nivel,
-                fileResolucion: documento.Nombre,
-              });
-            },
-            error => {
-              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-            },
-          );
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        },
-      );
-      this.eventoService.get('tipo_evento?query=CalendarioID__Id:' + this.calendarForEditId).subscribe(
-        processes => {
-          console.log(processes)
-          processes.forEach(element => {
-            if (Object.keys(element).length !== 0) {
-              let loadedProcess: Proceso = new Proceso();
-              loadedProcess.procesoId = element['Id'];
-              loadedProcess.CalendarioId = { Id: this.calendarForEditId };
-              loadedProcess.Nombre = element['Nombre'];
-              loadedProcess.Descripcion = element['Descripcion'];
-              loadedProcess.TipoRecurrenciaId = { Id: element['TipoRecurrenciaId']['Id'] };
-              loadedProcess.actividades = [];
-              this.processes.push(loadedProcess);
-            }
-          });
-
-          this.processes.forEach(process => {
-            this.eventoService.get('calendario_evento?query=TipoEventoId__Id:' + process.procesoId).subscribe(
-              activities => {
-                activities.forEach(element => {
-                  if (Object.keys(element).length !== 0) {
-                    let loadedActivity: Actividad = new Actividad();
-                    if (element['EventoPadreId'] == null) {
-                      loadedActivity.actividadId = element['Id'];
+          this.calendar.DocumentoId = calendar['resolucion']['Id'];
+          this.calendar.resolucion = calendar['resolucion']['Resolucion'];
+          this.calendar.anno = calendar['resolucion']['Anno'];
+          this.fileResolucion = calendar['resolucion']['enlace'];
+          const processes: any[] = calendar['proceso'];
+          if (processes !== null) {
+            processes.forEach(element => {
+              if (Object.keys(element).length !== 0) {
+                const loadedProcess: Proceso = new Proceso();
+                loadedProcess.Nombre = element['Proceso'];
+                loadedProcess.CalendarioId = { Id: this.calendar.calendarioId};
+                loadedProcess.actividades = [];
+                const activities: any[] = element['Actividades']
+                if (activities !== null) {
+                  activities.forEach(element => {
+                    if (Object.keys(element).length !== 0) {
+                      let loadedActivity: Actividad = new Actividad();
+                      loadedActivity.actividadId = element['actividadId'];
                       loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
                       loadedActivity.Nombre = element['Nombre'];
                       loadedActivity.Descripcion = element['Descripcion'];
                       loadedActivity.Activo = element['Activo'];
                       loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
                       loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
-                      if (element['EventoPadreId'] != null) {
-                        loadedActivity.EventoPadreId = { 
-                          Id: element['EventoPadreId']['Id'], 
-                          FechaInicio: element['EventoPadreId']['FechaInicio'], 
-                          FechaFin: element['EventoPadreId']['FechaFin'] 
-                        };
-                      } else {
-                        loadedActivity.EventoPadreId = null;
-                      }
-
-                      this.eventoService.get('calendario_evento_tipo_publico?query=CalendarioEventoId__Id:' + loadedActivity.actividadId).subscribe(
-                        (response: any[]) => {
-                          loadedActivity.responsables = response.map(
-                            result => {
-                              return { IdPublico: result["TipoPublicoId"]["Id"] }
-                            },
-                          );
-                          process.actividades.push(loadedActivity);
-                          this.createActivitiesTable();
-                        },
-                        error => {
-                          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                        },
-                      );
-
-                      process.actividades.push(loadedActivity);
-                      this.createActivitiesTable();
+                      loadedActivity.responsables = element['Responsable'];
+                      loadedProcess.procesoId = element['TipoEventoId']['Id'];
+                      loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
+                      loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
+                      loadedProcess.actividades.push(loadedActivity)
+                      this.calendar.Nivel = element['TipoEventoId']['CalendarioID']['Nivel'];
+                      this.calendar.Activo = element['TipoEventoId']['CalendarioID']['Activo'];
+                      this.calendar.PeriodoId = element['TipoEventoId']['CalendarioID']['PeriodoId'];
                     }
+                  });
+                  this.processes.push(loadedProcess);
+                }
+              }
+            });
+            this.processTable.load(this.processes);
+          }
 
-                    this.eventoService.get('calendario_evento_tipo_publico?query=CalendarioEventoId__Id:' + loadedActivity.actividadId).subscribe(
-                      (response: any[]) => {
-                        loadedActivity.responsables = response.map(
-                          result => {
-                            return { IdPublico: result["TipoPublicoId"]["Id"] }
-                          }
-                        );
-                        process.actividades.push(loadedActivity);
-                        this.createActivitiesTable();
-                      },
-                      error => {
-                        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                      },
-                    );
-                  }
-                });
-                this.processTable.load(this.processes);
-              },
-              error => {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-              },
-            );
+          this.calendarForm.setValue({
+            resolucion: this.calendar.resolucion,
+            anno: this.calendar.anno,
+            PeriodoId: this.calendar.PeriodoId,
+            Nivel: this.calendar.Nivel,
+            fileResolucion: '',
           });
+          this.loading = false;
         },
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        },
+        }
       );
-
     }
-
   }
 
   createCalendarForm() {
@@ -476,29 +416,44 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           this.loading = true;
           if (this.fileResolucion) {
             this.calendar = this.calendarForm.value;
-            this.uploadResolutionFile(this.fileResolucion)
-              .then(fileID => {
-                this.calendar.DocumentoId = fileID;
-                this.calendar.DependenciaId = '{}';
-                this.calendar.Activo = true;
-                this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
-                this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
-                this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
-                this.eventoService.post('calendario', this.calendar).subscribe(
-                  response => {
-                    this.calendar.calendarioId = response['Id'];
-                    this.createdCalendar = true;
-                    console.log(this.calendar.calendarioId);
-                    this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
-                  },
-                  error => {
-                    this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
-                  },
-                );
-                this.loading = false;
-              }).catch(error => {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
-              });
+            this.eventoService.get('calendario?query=Activo:true').subscribe(
+              (response: Calendario[]) => {
+                let calendarExists = false;
+                response.forEach(calendar => {
+                  calendarExists = calendarExists || (this.calendar.Nivel === calendar.Nivel && this.calendar.PeriodoId === calendar.PeriodoId);
+                });
+                if (calendarExists) {
+                  this.loading = false;
+                  this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_existe'));
+                } else {
+                  this.uploadResolutionFile(this.fileResolucion).then(
+                    fileID => {
+                    this.calendar.DocumentoId = fileID;
+                    this.calendar.DependenciaId = '{}';
+                    this.calendar.Activo = true;
+                    this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
+                    this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
+                    this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
+                    this.eventoService.post('calendario', this.calendar).subscribe(
+                      response => {
+                        this.calendar.calendarioId = response['Id'];
+                        this.createdCalendar = true;
+                        this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
+                      },
+                      error => {
+                        this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
+                      },
+                    );
+                    this.loading = false;
+                    }).catch(error => {
+                      this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
+                  });
+                }
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+              }
+            );
           } else {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.no_documento'));
           }
@@ -736,6 +691,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
           },
         );
+        // update responsables
       }
     });
   }
@@ -797,10 +753,10 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           });
         }
       },
-        error => {
-          this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
-        },
-      );
+      error => {
+        this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
+      },
+    );
   }
 
 }
