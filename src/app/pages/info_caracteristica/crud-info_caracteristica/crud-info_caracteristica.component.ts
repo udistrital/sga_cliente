@@ -169,11 +169,12 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
    public loadInfoCaracteristica(): void {
+    console.info('entra al load' + this.info_caracteristica_id)
     this.loading = true;
-    if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
-      this.info_caracteristica_id.toString() !== '') {
+    if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
+      this.info_persona_id.toString() !== '') {
       this.denied_acces = false;
-      /*this.campusMidService.get('persona/consultar_complementarios/' + this.info_caracteristica_id)
+      this.sgamidService.get('persona/consultar_complementarios/' + this.info_persona_id)
         .subscribe(res => {
           if (res !== null) {
             this.datosGet = <InfoCaracteristicaGet>res;
@@ -201,7 +202,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.translate.instant('GLOBAL.info_caracteristica'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
-         });*/
+         });
     } else {
       this.info_info_caracteristica = undefined;
       this.clean = !this.clean;

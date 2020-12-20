@@ -111,7 +111,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.loadInfoPersona();
   }
 
   public loadInfoPersona(): void {
