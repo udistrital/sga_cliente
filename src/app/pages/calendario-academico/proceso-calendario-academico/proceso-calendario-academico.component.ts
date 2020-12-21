@@ -40,7 +40,9 @@ export class ProcesoCalendarioAcademicoComponent {
 
   saveProcess() {
     this.popUpManager.showConfirmAlert(
-      this.translate.instant('calendario.seguro_registrar_proceso'),
+      this.data.editProcess === undefined ?
+      this.translate.instant('calendario.seguro_registrar_proceso') :
+      this.translate.instant('calendario.seguro_modificar_proceso')
     ).then((ok) => {
       if (ok.value) {
         this.process = this.processForm.value;

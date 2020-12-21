@@ -8,7 +8,6 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AsignarCalendarioProyectoComponent } from '../asignar-calendario-proyecto/asignar-calendario-proyecto.component';
 import { EventoService } from '../../../@core/data/evento.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'ngx-list-calendario-academico',
@@ -33,7 +32,6 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     private route: ActivatedRoute,
     private sgaMidService: SgaMidService,
     private eventoService: EventoService,
-    private popUpmanager: PopUpManager,
     private dialog: MatDialog,
     private popUpManager: PopUpManager,
   ) {
@@ -64,7 +62,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         this.loading = false;
       },
       error => {
-        this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.loading = false;
       },
     );
@@ -73,11 +71,6 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   createTable() {
     this.settings = {
       columns: {
-        Id: {
-          title: 'ID',
-          editable: false,
-          width: '5%',
-        },
         Nombre: {
           title: this.translate.instant('calendario.nombre'),
           width: '25%',
@@ -108,44 +101,42 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         custom: [
           {
             name: 'assign',
-            title: '<i class="nb-compose"></i>',
+            title: '<i class="nb-compose" data-toggle="tooltip" title="'+ this.translate.instant('calendario.tooltip_asignar_proyecto') +'"></i>',
           },
           {
-            name: 'new',
-            title: '<i class="nb-plus-circled"></i>',
+            name: 'clone',
+            title: '<i class="nb-plus-circled" data-toggle="tooltip" title="'+ this.translate.instant('calendario.tooltip_clonar') +'"></i>',
           },
           {
             name: 'view',
-            title: '<i class="nb-home"></i>',
+            title: '<i class="nb-home" data-toggle="tooltip" title="'+ this.translate.instant('calendario.tooltip_detalle') +'"></i>',
           },
           {
             name: 'edit',
-            title: '<i class="nb-edit"></i>',
+            title: '<i class="nb-edit" data-toggle="tooltip" title="'+ this.translate.instant('calendario.tooltip_editar') +'"></i>',
           },
           {
             name: 'delete',
-            title: '<i class="nb-trash"></i>',
+            title: '<i class="nb-trash" data-toggle="tooltip" title="'+ this.translate.instant('calendario.tooltip_inactivar') +'"></i>',
           },
         ],
       },
       add: {
-        addButtonContent: '<i class="nb-plus"></i>',
+        addButtonContent: '<i class="nb-plus" data-toggle="tooltip" title="'+ this.translate.instant('calendario.tooltip_crear') +'"></i>',
       },
     }
     this.dataSource.load(this.data);
   }
 
   onAction(event) {
-    console.log(event)
     switch (event.action) {
       case 'view':
-        // this.router.navigate(['../detalle-calendario/'+event.data.Id], {relativeTo: this.route});
         this.router.navigate(['../detalle-calendario', { Id: event.data['Id'] }], { relativeTo: this.route });
         break;
       case 'edit':
         this.onEdit(event);
         break;
-      case 'new':
+      case 'clone':
         this.onUpdate(event);
         break;
       case 'delete':
@@ -170,61 +161,64 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
 
   onDelete(event: any) {
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.eliminar'),
-      text: this.translate.instant('calendario.seguro_continuar_inhabilitar_calendario'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt)
-      .then((willDelete) => {
-        if (willDelete.value) {
-          this.sgaMidService.put('consulta_calendario_academico/inhabilitar_calendario/' + event.data.Id, JSON.stringify({ "id": event.data.Id })).subscribe(
-            (response: any) => {
-              if (JSON.stringify(response) != "200") {
-                this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_no_inhabilitado'));
-              } else {
-                this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_inhabilitado'));
-                // this.ngOnInit();
-              }
-            },
-            error => {
-              this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
-            },
-          );
-        }
-      });
+    this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_continuar_inhabilitar_calendario'))
+    .then( willDelete => {
+      if (willDelete.value) {
+        this.sgaMidService.put('consulta_calendario_academico/inhabilitar_calendario/' + event.data.Id, JSON.stringify({ "id": event.data.Id })).subscribe(
+          (response: any) => {
+            if (JSON.stringify(response) != "200") {
+              this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_no_inhabilitado'));
+            } else {
+              this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_inhabilitado'));
+              this.createTable();
+            }
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
+          },
+        );
+      }
+    });
   }
 
   onAssign(event: any) {
     const assignConfig = new MatDialogConfig();
     assignConfig.width = '800px';
-    assignConfig.height = '400px';
+    assignConfig.height = '300px';
 
-    this.eventoService.get('calendario/' + event.data.Id).subscribe(
-      (calendar: Calendario) => {
-        assignConfig.data = { calendar: calendar, data: event.data };
-        const newAssign = this.dialog.open(AsignarCalendarioProyectoComponent, assignConfig);
-        newAssign.afterClosed().subscribe((data) => {
-          if (data !== undefined) {
-            calendar.DependenciaId = JSON.stringify({ proyectos: data })
-            this.eventoService.put('calendario', calendar).subscribe(
-              response => {
-                this.popUpmanager.showSuccessAlert(this.translate.instant('calendario.proyectos_exito'));
-              },
-              error => {
-                this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
-              },
-            );
-          }
-        });
+    this.eventoService.get('tipo_evento?limit=0&query=CalendarioID__Id:' + event.data.Id).subscribe(
+      response => {
+        if (Object.keys(response[0]).length === 0) {
+          this.popUpManager.showErrorAlert(this.translate.instant('calendario.no_asignable'))
+        } else {
+          this.eventoService.get('calendario/' + event.data.Id).subscribe(
+            (calendar: Calendario) => {
+              assignConfig.data = { calendar: calendar, data: event.data };
+              const newAssign = this.dialog.open(AsignarCalendarioProyectoComponent, assignConfig);
+              newAssign.afterClosed().subscribe((data) => {
+                if (data !== undefined) {
+                  calendar.DependenciaId = JSON.stringify({ proyectos: data })
+                  this.eventoService.put('calendario', calendar).subscribe(
+                    response => {
+                      this.popUpManager.showSuccessAlert(this.translate.instant('calendario.proyectos_exito'));
+                    },
+                    error => {
+                      this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                    },
+                  );
+                }
+              });
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            },
+          );
+        }
       },
       error => {
-        this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
-      }
-    )
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
   }
 
   changeTab(event: any) {
