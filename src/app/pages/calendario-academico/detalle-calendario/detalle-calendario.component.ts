@@ -135,6 +135,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           witdh: '20%',
           editable: false,
           filter: false,
+          valuePrepareFunction: (value: boolean) => value ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo'),
         },
       },
       mode: 'external',
@@ -181,6 +182,36 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
     activityConfig.height = '700px';
     activityConfig.data = { process: process, calendar: this.calendar, editActivity: event.data };
     const editedActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
+    editedActivity.afterClosed().subscribe((activity: any) => {
+      if (activity !== undefined) {
+        this.eventoService.get('calendario_evento/' + event.data.actividadId).subscribe(
+          response => {
+            const activityPut = response;
+            activityPut['Nombre'] = activity.Actividad.Nombre;
+            activityPut['Descripcion'] = activity.Actividad.Descripcion;
+            activityPut['FechaInicio'] = activity.Actividad.FechaInicio;
+            activityPut['FechaFin'] = activity.Actividad.FechaFin;
+            this.eventoService.put('calendario_evento', activityPut).subscribe(
+              response => {
+                const proceso = this.processes.filter(proc => proc.procesoId === process.procesoId)[0];
+                const i = proceso.actividades.findIndex(actv => actv.actividadId === activity.Actividad);
+                proceso.actividades[i] = activity.Actividad;
+                this.processTable.update(process, proceso);
+                this.processTable.refresh();
+                this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+              },
+            );
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+          },
+        );
+        // update responsables
+      }
+    });
   }
 
   assignActivity(event: any) {

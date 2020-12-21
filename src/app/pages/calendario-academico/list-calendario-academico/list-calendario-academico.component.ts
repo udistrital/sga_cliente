@@ -184,30 +184,41 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   onAssign(event: any) {
     const assignConfig = new MatDialogConfig();
     assignConfig.width = '800px';
-    assignConfig.height = '400px';
+    assignConfig.height = '300px';
 
-    this.eventoService.get('calendario/' + event.data.Id).subscribe(
-      (calendar: Calendario) => {
-        assignConfig.data = { calendar: calendar, data: event.data };
-        const newAssign = this.dialog.open(AsignarCalendarioProyectoComponent, assignConfig);
-        newAssign.afterClosed().subscribe((data) => {
-          if (data !== undefined) {
-            calendar.DependenciaId = JSON.stringify({ proyectos: data })
-            this.eventoService.put('calendario', calendar).subscribe(
-              response => {
-                this.popUpManager.showSuccessAlert(this.translate.instant('calendario.proyectos_exito'));
-              },
-              error => {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-              },
-            );
-          }
-        });
+    this.eventoService.get('tipo_evento?limit=0&query=CalendarioID__Id:' + event.data.Id).subscribe(
+      response => {
+        if (Object.keys(response[0]).length === 0) {
+          this.popUpManager.showErrorAlert(this.translate.instant('calendario.no_asignable'))
+        } else {
+          this.eventoService.get('calendario/' + event.data.Id).subscribe(
+            (calendar: Calendario) => {
+              assignConfig.data = { calendar: calendar, data: event.data };
+              const newAssign = this.dialog.open(AsignarCalendarioProyectoComponent, assignConfig);
+              newAssign.afterClosed().subscribe((data) => {
+                if (data !== undefined) {
+                  calendar.DependenciaId = JSON.stringify({ proyectos: data })
+                  this.eventoService.put('calendario', calendar).subscribe(
+                    response => {
+                      this.popUpManager.showSuccessAlert(this.translate.instant('calendario.proyectos_exito'));
+                    },
+                    error => {
+                      this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                    },
+                  );
+                }
+              });
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            },
+          );
+        }
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      }
-    )
+      },
+    );
   }
 
   changeTab(event: any) {

@@ -198,6 +198,31 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
     );
   }
 
+  onDeletePublic(event) {
+    this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_borrar_responsable')).then(
+      willDelete => {
+        if (willDelete.value) {
+          this.eventoService.get('tipo_publico/' + event.data.Id).subscribe(
+            response => {
+              this.eventoService.delete('tipo_publico', response).subscribe(
+                response => {
+                  this.updateSelect();
+                  this.popUpManager.showSuccessAlert(this.translate.instant('calendario.responsable_borrado'));
+                },
+                error => {
+                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                },
+              );
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            },
+          );
+        }
+      }
+    );
+  }
+
   openForm() {
     this.addPublic = true;
   }
