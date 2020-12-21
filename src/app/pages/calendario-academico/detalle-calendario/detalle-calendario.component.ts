@@ -164,7 +164,6 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   }
 
   onActionActivity(event, process: Proceso) {
-    console.log(event)
     switch (event.action) {
       case 'edit':
         this.editActivity(event, process);
@@ -176,11 +175,10 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   }
 
   editActivity(event, process: Proceso) {
-    console.log(event.data)
     const activityConfig = new MatDialogConfig();
     activityConfig.width = '800px';
     activityConfig.height = '700px';
-    activityConfig.data = { process: process, calendar: this.calendar, editActivity: event.data };
+    activityConfig.data = { process: process, calendar: this.periodos, editActivity: event.data };
     const editedActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
     editedActivity.afterClosed().subscribe((activity: any) => {
       if (activity !== undefined) {

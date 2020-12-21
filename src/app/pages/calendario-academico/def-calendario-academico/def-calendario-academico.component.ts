@@ -6,7 +6,6 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProcesoCalendarioAcademicoComponent } from '../proceso-calendario-academico/proceso-calendario-academico.component';
 import { ActividadCalendarioAcademicoComponent } from '../actividad-calendario-academico/actividad-calendario-academico.component';
-import { AsignarCalendarioProyectoComponent } from '../asignar-calendario-proyecto/asignar-calendario-proyecto.component';
 import { CrudPeriodoComponent } from '../../periodo/crud-periodo/crud-periodo.component';
 import { Proceso } from '../../../@core/data/models/calendario-academico/proceso';
 import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
@@ -14,7 +13,6 @@ import { Calendario } from '../../../@core/data/models/calendario-academico/cale
 import { ActividadHija } from '../../../@core/data/models/calendario-academico/actividadHija';
 import { CalendarioClone } from '../../../@core/data/models/calendario-academico/calendarioClone';
 import { CalendarioEvento } from '../../../@core/data/models/calendario-academico/calendarioEvento';
-import { Documento } from '../../../@core/data/models/documento/documento';
 import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 
@@ -608,10 +606,12 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             this.eventoService.put('calendario_evento', activityPut).subscribe(
               response => {
                 const proceso = this.processes.filter(proc => proc.procesoId === process.procesoId)[0];
-                const i = proceso.actividades.findIndex(actv => actv.actividadId === activity.Actividad);
+                const i: number = proceso.actividades.findIndex(actv => actv.actividadId === activity.Actividad);
                 proceso.actividades[i] = activity.Actividad;
+                proceso.actividades[i].responsables = activity.responsable;
                 this.processTable.update(process, proceso);
                 this.processTable.refresh();
+                this.createActivitiesTable()
                 this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
               },
               error => {
@@ -623,7 +623,14 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
           },
         );
-        // update responsables
+        this.sgaMidService.put('crear_actividad_calendario/update/' + event.data.actividadId, activity.responsable).subscribe(
+          response => {
+            this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+          },
+        );
       }
     });
   }

@@ -131,9 +131,9 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
     this.eventoService.get('tipo_publico?limit=0').subscribe(
       data => {
         this.responsables = data;
-        if (this.data.editActivity !== undefined && this.data.editActivity.responsables !== undefined) {
+        if (this.data.editActivity !== undefined && this.data.editActivity.responsables !== undefined && this.data.editActivity.responsables !== null) {
           this.tableSource.load(
-            this.responsables.filter(resp => this.data.editActivity.responsables.some(resp2 => resp2.IdPublico === resp.Id)),
+            this.responsables.filter(resp => this.data.editActivity.responsables.some(resp2 => resp2.responsableID === resp.Id)),
           );
         }
       },
