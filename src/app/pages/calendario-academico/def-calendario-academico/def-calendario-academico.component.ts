@@ -6,7 +6,6 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProcesoCalendarioAcademicoComponent } from '../proceso-calendario-academico/proceso-calendario-academico.component';
 import { ActividadCalendarioAcademicoComponent } from '../actividad-calendario-academico/actividad-calendario-academico.component';
-import { AsignarCalendarioProyectoComponent } from '../asignar-calendario-proyecto/asignar-calendario-proyecto.component';
 import { CrudPeriodoComponent } from '../../periodo/crud-periodo/crud-periodo.component';
 import { Proceso } from '../../../@core/data/models/calendario-academico/proceso';
 import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
@@ -14,7 +13,6 @@ import { Calendario } from '../../../@core/data/models/calendario-academico/cale
 import { ActividadHija } from '../../../@core/data/models/calendario-academico/actividadHija';
 import { CalendarioClone } from '../../../@core/data/models/calendario-academico/calendarioClone';
 import { CalendarioEvento } from '../../../@core/data/models/calendario-academico/calendarioEvento';
-import { Documento } from '../../../@core/data/models/documento/documento';
 import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 
@@ -24,7 +22,6 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'ngx-def-calendario-academico',
@@ -73,7 +70,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     private eventoService: EventoService,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
-    private popUpmanager: PopUpManager,
   ) {
     this.calendarActivity = new ActividadHija();
     this.calendarioEvento = new CalendarioEvento();
@@ -144,7 +140,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       );     
     } else if (this.calendarForEditId === 0) {
       this.activetabs = false;
-      this.activetabsClone = false
+      this.activetabsClone = false;
       this.createdCalendar = false;
       this.editMode = false;
       this.calendarForm.reset()
@@ -152,133 +148,74 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       this.createdCalendar = true;
       this.editMode = true;
       this.openTabs();
-      this.eventoService.get('calendario/' + this.calendarForEditId).subscribe(
-        calendar => {
+      this.loading = true;
+      this.sgaMidService.get('consulta_calendario_academico/' + this.calendarForEditId).subscribe(
+        (response: any[]) => {
+          const calendar = response[0];
           this.calendar = new Calendario();
           this.calendar.calendarioId = calendar['Id'];
-          this.calendar.DocumentoId = calendar['DocumentoId'];
+          this.calendar.DocumentoId = calendar['resolucion']['Id'];
+          this.calendar.resolucion = calendar['resolucion']['Resolucion'];
+          this.calendar.anno = calendar['resolucion']['Anno'];
           this.calendar.Nivel = calendar['Nivel'];
           this.calendar.Activo = calendar['Activo'];
           this.calendar.PeriodoId = calendar['PeriodoId'];
-
-          this.documentoService.get('documento/' + this.calendar.DocumentoId).subscribe(
-            (documento: Documento) => {
-              this.fileResolucion = documento;
-              this.calendar.resolucion = JSON.parse(documento.Metadatos)['resolucion'];
-              this.calendar.anno = JSON.parse(documento.Metadatos)['anno'];
-              this.calendarForm.setValue({
-                resolucion: this.calendar.resolucion,
-                anno: this.calendar.anno,
-                PeriodoId: this.calendar.PeriodoId,
-                Nivel: this.calendar.Nivel,
-                fileResolucion: documento.Nombre,
-              });
-            },
-            error => {
-              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-            },
-          );
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        },
-      );
-      this.eventoService.get('tipo_evento?query=CalendarioID__Id:' + this.calendarForEditId).subscribe(
-        processes => {
-          console.log(processes)
-          processes.forEach(element => {
-            if (Object.keys(element).length !== 0) {
-              let loadedProcess: Proceso = new Proceso();
-              loadedProcess.procesoId = element['Id'];
-              loadedProcess.CalendarioId = { Id: this.calendarForEditId };
-              loadedProcess.Nombre = element['Nombre'];
-              loadedProcess.Descripcion = element['Descripcion'];
-              loadedProcess.TipoRecurrenciaId = { Id: element['TipoRecurrenciaId']['Id'] };
-              loadedProcess.actividades = [];
-              this.processes.push(loadedProcess);
-            }
-          });
-
-          this.processes.forEach(process => {
-            this.eventoService.get('calendario_evento?query=TipoEventoId__Id:' + process.procesoId).subscribe(
-              activities => {
-                activities.forEach(element => {
-                  if (Object.keys(element).length !== 0) {
-                    let loadedActivity: Actividad = new Actividad();
-                    if (element['EventoPadreId'] == null) {
-                      loadedActivity.actividadId = element['Id'];
+          this.fileResolucion = calendar['resolucion']['Nombre'];
+          const processes: any[] = calendar['proceso'];
+          if (processes !== null) {
+            processes.forEach(element => {
+              if (Object.keys(element).length !== 0) {
+                const loadedProcess: Proceso = new Proceso();
+                loadedProcess.Nombre = element['Proceso'];
+                loadedProcess.CalendarioId = { Id: this.calendar.calendarioId};
+                loadedProcess.actividades = [];
+                const activities: any[] = element['Actividades']
+                if (activities !== null) {
+                  activities.forEach(element => {
+                    if (Object.keys(element).length !== 0) {
+                      let loadedActivity: Actividad = new Actividad();
+                      loadedActivity.actividadId = element['actividadId'];
                       loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
                       loadedActivity.Nombre = element['Nombre'];
                       loadedActivity.Descripcion = element['Descripcion'];
                       loadedActivity.Activo = element['Activo'];
                       loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
                       loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
-                      if (element['EventoPadreId'] != null) {
-                        loadedActivity.EventoPadreId = { 
-                          Id: element['EventoPadreId']['Id'], 
-                          FechaInicio: element['EventoPadreId']['FechaInicio'], 
-                          FechaFin: element['EventoPadreId']['FechaFin'] 
-                        };
-                      } else {
-                        loadedActivity.EventoPadreId = null;
-                      }
-
-                      this.eventoService.get('calendario_evento_tipo_publico?query=CalendarioEventoId__Id:' + loadedActivity.actividadId).subscribe(
-                        (response: any[]) => {
-                          loadedActivity.responsables = response.map(
-                            result => {
-                              return { IdPublico: result["TipoPublicoId"]["Id"] }
-                            },
-                          );
-                          process.actividades.push(loadedActivity);
-                          this.createActivitiesTable();
-                        },
-                        error => {
-                          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                        },
-                      );
-
-                      process.actividades.push(loadedActivity);
-                      this.createActivitiesTable();
+                      loadedActivity.responsables = element['Responsable'];
+                      loadedProcess.procesoId = element['TipoEventoId']['Id'];
+                      loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
+                      loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
+                      loadedProcess.actividades.push(loadedActivity);
                     }
+                  });
+                  this.processes.push(loadedProcess);
+                }
+              }
+            });
+            this.processTable.load(this.processes);
+          }
 
-                    this.eventoService.get('calendario_evento_tipo_publico?query=CalendarioEventoId__Id:' + loadedActivity.actividadId).subscribe(
-                      (response: any[]) => {
-                        loadedActivity.responsables = response.map(
-                          result => {
-                            return { IdPublico: result["TipoPublicoId"]["Id"] }
-                          }
-                        );
-                        process.actividades.push(loadedActivity);
-                        this.createActivitiesTable();
-                      },
-                      error => {
-                        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                      },
-                    );
-                  }
-                });
-                this.processTable.load(this.processes);
-              },
-              error => {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-              },
-            );
+          this.calendarForm.setValue({
+            resolucion: this.calendar.resolucion,
+            anno: this.calendar.anno,
+            PeriodoId: this.calendar.PeriodoId,
+            Nivel: this.calendar.Nivel,
+            fileResolucion: this.fileResolucion,
           });
+          this.loading = false;
         },
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        },
+          this.loading = false;
+        }
       );
-
     }
-
   }
 
   createCalendarForm() {
     this.calendarForm = this.builder.group({
       resolucion: ['', Validators.required],
-      anno: ['', [Validators.required, Validators.minLength(4)]],
+      anno: new FormControl('', {validators: [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]}),
       PeriodoId: '',
       Nivel: '',
       fileResolucion: ['', Validators.required],
@@ -293,7 +230,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   loadSelects() {
-    this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1').subscribe(
+    this.coreService.get('periodo?query=Activo:true&sortby=Id&order=desc&limit=1').subscribe(
       res => {
         this.periodos = res;
       },
@@ -304,7 +241,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   loadSelectsClone() {
-    this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc').subscribe(
+    this.coreService.get('periodo?query=Activo:true&sortby=Id&order=desc').subscribe(
       res => {
         this.periodosClone = res;
       },
@@ -374,98 +311,25 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           title: this.translate.instant('calendario.estado'),
           witdh: '20%',
           editable: false,
+          valuePrepareFunction: (value: boolean) => value ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo'),
         },
       },
       mode: 'external',
       actions: {
-        edit: false,
-        delete: false,
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
-        custom: [
-          {
-            name: 'assign',
-            title: '<i class="nb-compose"></i>',
-          },
-          {
-            name: 'edit',
-            title: '<i class="nb-edit"></i>',
-          },
-          {
-            name: 'delete',
-            title: '<i class="nb-trash"></i>',
-          },
-        ],
       },
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
       },
+      edit: {
+        editButtonContent: '<i class="nb-edit"></i>',
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+      },
       noDataMessage: this.translate.instant('calendario.sin_actividades'),
     }
-  }
-
-  onActionActivity(event, process: Proceso) {
-    console.log(event)
-    switch (event.action) {
-      case 'edit':
-        this.editActivity(event, process);
-        break;
-      case 'delete':
-        this.deleteActivity(event, process);
-        break;
-      case 'assign':
-        this.assignActivity(event);
-        break;
-    }
-  }
-
-  assignActivity(event: any) {
-    const assignConfig = new MatDialogConfig();
-    assignConfig.width = '800px';
-    assignConfig.height = '400px';
-
-    this.calendarActivity.Id = this.calendar.calendarioId
-    this.calendarActivity.Nombre = event.data.Nombre
-    this.calendarActivity.Dependencia = this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre
-    this.calendarActivity.Periodo = this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre
-    if (this.calendar.Activo) {
-      this.calendarActivity.Estado = 'Activo'
-    } else {
-      this.calendarActivity.Estado = 'Inactivo'
-    }
-
-    this.eventoService.get('calendario/' + this.calendarActivity.Id).subscribe(
-      (calendar: Calendario) => {
-        assignConfig.data = { calendar: calendar, data: this.calendarActivity, calendarioEvento: new CalendarioEvento };
-        const newAssign = this.dialog.open(AsignarCalendarioProyectoComponent, assignConfig);
-        newAssign.afterClosed().subscribe((data) => {
-          if (data !== undefined) {
-            assignConfig.data.calendarioEvento.Id = 0
-            assignConfig.data.calendarioEvento.Nombre = event.data.Nombre;
-            assignConfig.data.calendarioEvento.Descripcion = event.data.Descripcion;
-            assignConfig.data.calendarioEvento.FechaCreacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
-            assignConfig.data.calendarioEvento.FechaModificacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
-            assignConfig.data.calendarioEvento.FechaInicio = moment(event.data.FechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD') + 'T00:00:00-05:00';
-            assignConfig.data.calendarioEvento.FechaFin = moment(event.data.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD') + 'T00:00:00-05:00';
-            assignConfig.data.calendarioEvento.Activo = event.data.Activo;
-            assignConfig.data.calendarioEvento.DependenciaId = JSON.stringify({ proyectos: data });
-            assignConfig.data.calendarioEvento.EventoPadreId = { Id: event.data.actividadId };
-            assignConfig.data.calendarioEvento.TipoEventoId = event.data.TipoEventoId;
-            this.eventoService.post('calendario_evento', assignConfig.data.calendarioEvento).subscribe(
-              response => {
-                this.popUpmanager.showSuccessAlert(this.translate.instant('calendario.proyectos_exito'));
-              },
-              error => {
-                this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
-              },
-            );
-          }
-        });
-      },
-      error => {
-        this.popUpmanager.showErrorToast(this.translate.instant('ERROR.general'));
-      },
-    )
   }
 
   createCalendar(event) {
@@ -479,29 +343,44 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           this.loading = true;
           if (this.fileResolucion) {
             this.calendar = this.calendarForm.value;
-            this.uploadResolutionFile(this.fileResolucion)
-              .then(fileID => {
-                this.calendar.DocumentoId = fileID;
-                this.calendar.DependenciaId = '{}';
-                this.calendar.Activo = true;
-                this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
-                this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
-                this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
-                this.eventoService.post('calendario', this.calendar).subscribe(
-                  response => {
-                    this.calendar.calendarioId = response['Id'];
-                    this.createdCalendar = true;
-                    console.log(this.calendar.calendarioId);
-                    this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
-                  },
-                  error => {
-                    this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
-                  },
-                );
-                this.loading = false;
-              }).catch(error => {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
-              });
+            this.eventoService.get('calendario?query=Activo:true').subscribe(
+              (response: Calendario[]) => {
+                let calendarExists = false;
+                response.forEach(calendar => {
+                  calendarExists = calendarExists || (this.calendar.Nivel === calendar.Nivel && this.calendar.PeriodoId === calendar.PeriodoId);
+                });
+                if (calendarExists) {
+                  this.loading = false;
+                  this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_existe'));
+                } else {
+                  this.uploadResolutionFile(this.fileResolucion).then(
+                    fileID => {
+                    this.calendar.DocumentoId = fileID;
+                    this.calendar.DependenciaId = '{}';
+                    this.calendar.Activo = true;
+                    this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
+                    this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
+                    this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
+                    this.eventoService.post('calendario', this.calendar).subscribe(
+                      response => {
+                        this.calendar.calendarioId = response['Id'];
+                        this.createdCalendar = true;
+                        this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
+                      },
+                      error => {
+                        this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
+                      },
+                    );
+                    this.loading = false;
+                    }).catch(error => {
+                      this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
+                  });
+                }
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+              }
+            );
           } else {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.no_documento'));
           }
@@ -622,17 +501,62 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   editProcess(event) {
-    console.log(event.data);
     const processConfig = new MatDialogConfig();
     processConfig.width = '800px';
     processConfig.height = '400px';
     processConfig.data = { calendar: this.calendar, editProcess: event.data };
     const editedProcess = this.dialog.open(ProcesoCalendarioAcademicoComponent, processConfig);
-    // PUT
+    editedProcess.afterClosed().subscribe((process: Proceso) => {
+      if(process != undefined) {
+        this.eventoService.get('tipo_evento/' + event.data.procesoId).subscribe(
+          response => {
+            const processPut = response;
+            processPut["Nombre"] = process.Nombre;
+            processPut["Descripcion"] = process.Descripcion;
+            processPut["TipoRecurrenciaId"] = process.TipoRecurrenciaId;
+            this.eventoService.put('tipo_evento', processPut).subscribe(
+            response => {
+                this.processTable.update(event.data, process)
+                this.popUpManager.showSuccessAlert(this.translate.instant('calendario.proceso_actualizado'));
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_proceso'));
+              },
+            );
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_proceso'));
+          },
+        )
+      }
+    });
   }
 
   deleteProcess(event) {
-
+    this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_inactivar_proceso')).then(
+      willDelete => {
+        if (willDelete.value) {
+          this.eventoService.get('tipo_evento/' + event.data.procesoId).subscribe(
+            response => {
+              const processInative = response;
+              processInative['Activo'] = false;
+              this.eventoService.put('tipo_evento', processInative).subscribe(
+                response => {
+                  this.processTable.update(event.data, process)
+                  this.popUpManager.showSuccessAlert(this.translate.instant('calendario.proceso_desactivado'));
+                },
+                error => {
+                  this.popUpManager.showErrorToast(this.translate.instant('calendario.error_inactivar_proceso'));
+                }
+              )
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('calendario.error_inactivar_proceso'));
+            }
+          )
+        }
+      }
+    )
   }
 
   addActivity(event, process: Proceso) {
@@ -647,6 +571,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           response => {
             var actividad: Actividad = new Actividad();
             actividad = activity.Actividad;
+            actividad.actividadId = response['Id'];
             actividad.responsables = activity.responsable;
             actividad.FechaInicio = moment(actividad.FechaInicio).format('DD-MM-YYYY');
             actividad.FechaFin = moment(actividad.FechaFin).format('DD-MM-YYYY');
@@ -664,17 +589,79 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   editActivity(event, process: Proceso) {
-    console.log(event.data)
     const activityConfig = new MatDialogConfig();
     activityConfig.width = '800px';
     activityConfig.height = '700px';
     activityConfig.data = { process: process, calendar: this.calendar, editActivity: event.data };
     const editedActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
-    // PUT
+    editedActivity.afterClosed().subscribe((activity: any) => {
+      if (activity !== undefined) {
+        this.eventoService.get('calendario_evento/' + event.data.actividadId).subscribe(
+          response => {
+            const activityPut = response;
+            activityPut['Nombre'] = activity.Actividad.Nombre;
+            activityPut['Descripcion'] = activity.Actividad.Descripcion;
+            activityPut['FechaInicio'] = activity.Actividad.FechaInicio;
+            activityPut['FechaFin'] = activity.Actividad.FechaFin;
+            this.eventoService.put('calendario_evento', activityPut).subscribe(
+              response => {
+                const proceso = this.processes.filter(proc => proc.procesoId === process.procesoId)[0];
+                const i: number = proceso.actividades.findIndex(actv => actv.actividadId === activity.Actividad);
+                proceso.actividades[i] = activity.Actividad;
+                proceso.actividades[i].responsables = activity.responsable;
+                this.processTable.update(process, proceso);
+                this.processTable.refresh();
+                this.createActivitiesTable()
+                this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+              },
+            );
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+          },
+        );
+        this.sgaMidService.put('crear_actividad_calendario/update/' + event.data.actividadId, activity.responsable).subscribe(
+          response => {
+            this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+          },
+        );
+      }
+    });
   }
 
   deleteActivity(event, process: Proceso) {
-
+    this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_inactivar_actividad')).then(
+      willDelete => {
+        if (willDelete.value) {
+          this.eventoService.get('calendario_evento/' + event.data.actividadId).subscribe(
+            response => {
+              const activityInactive = response
+              activityInactive['Activo'] = false;
+              this.eventoService.put('calendario_evento', activityInactive).subscribe(
+                response => {
+                  const proceso = this.processes.filter(proc => proc.procesoId === process.procesoId)[0];
+                  proceso.actividades.filter(actv => actv.actividadId === event.data.actividadId)[0].Activo = false;
+                  this.processTable.update(process, proceso);
+                  this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_desactivada'));
+                },
+                error => {
+                  this.popUpManager.showErrorToast(this.translate.instant('calendario.error_inactivar_actividad'));
+                },
+              );
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('calendario.error_inactivar_actividad'));
+            },
+          );
+        }
+      }
+    );
   }
 
   openTabs() {
@@ -730,10 +717,10 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           });
         }
       },
-        error => {
-          this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
-        },
-      );
+      error => {
+        this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
+      },
+    );
   }
 
 }

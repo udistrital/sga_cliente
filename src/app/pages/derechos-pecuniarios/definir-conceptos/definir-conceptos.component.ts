@@ -183,6 +183,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
             concepto.Nombre = obj.ParametroId.Nombre;
             concepto.FactorId = obj.Id
             concepto.Factor = JSON.parse(obj.Valor).NumFactor;
+            console.log(obj.Valor)
             if (JSON.parse(obj.Valor).Costo !== undefined) {
               concepto.Costo = JSON.parse(obj.Valor).Costo;
             }
