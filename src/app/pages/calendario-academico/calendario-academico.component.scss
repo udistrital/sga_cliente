@@ -164,6 +164,12 @@
     color: #fff;
 }
 
+.mat-button:disabled,
+.mat-button[disabled] {
+    background-color: rgb(0, 123, 194) !important;
+    color: #ddd !important;
+}
+
 :host /deep/ ng2-st-tbody-edit-delete {
     display: flex !important;
     height: 0 !important;

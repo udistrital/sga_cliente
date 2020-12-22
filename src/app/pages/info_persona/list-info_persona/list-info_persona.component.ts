@@ -82,7 +82,7 @@ export class ListInfoPersonaComponent implements OnInit {
           },
         },
         FechaExpedicion: {
-          title: this.translate.instant('GLOBAL.fecha_nacimiento'),
+          title: this.translate.instant('GLOBAL.fecha_expedicion'),
           // type: 'Date;',
           valuePrepareFunction: (value) => {
             return value;

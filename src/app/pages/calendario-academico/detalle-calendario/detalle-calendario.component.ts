@@ -1,25 +1,20 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
+import { Router, ActivatedRoute } from '@angular/router';
+import { LocalDataSource } from 'ng2-smart-table';
+import { FormGroup } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ActividadCalendarioAcademicoComponent } from '../actividad-calendario-academico/actividad-calendario-academico.component';
+import { Proceso } from '../../../@core/data/models/calendario-academico/proceso';
+import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
+import { ActividadHija } from '../../../@core/data/models/calendario-academico/actividadHija';
+import { EventoService } from '../../../@core/data/evento.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DocumentoService } from '../../../@core/data/documento.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
-import Swal from 'sweetalert2';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import * as moment from 'moment';
-import { Proceso } from '../../../@core/data/models/calendario-academico/proceso';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ActividadCalendarioAcademicoComponent } from '../actividad-calendario-academico/actividad-calendario-academico.component';
-import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
-import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
-import { PopUpManager } from '../../../managers/popUpManager';
-import { ActividadHija } from '../../../@core/data/models/calendario-academico/actividadHija';
-import { LocalDataSource } from 'ng2-smart-table';
-import { EventoService } from '../../../@core/data/evento.service';
-import { Documento } from '../../../@core/data/models/documento/documento';
-import { FormGroup } from '@angular/forms';
 import { CalendarioEvento } from '../../../@core/data/models/calendario-academico/calendarioEvento';
+import { PopUpManager } from '../../../managers/popUpManager';
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-detalle-calendario',
@@ -36,7 +31,6 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   processSettings: any;
   activitiesSettings: any;
   idDetalle: any
-  idProject: any
   processes: Proceso[];
   calendar: Calendario;
   calendarActivity: ActividadHija;
@@ -57,7 +51,6 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
     private route: ActivatedRoute,
-    private matIconRegistry: MatIconRegistry,
     private router: Router,
     private dialog: MatDialog,
     private popUpManager: PopUpManager,
@@ -72,15 +65,9 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
       this.periodos = res;
 
       if (JSON.stringify(res[0]) === JSON.stringify({})) {
-        const options: any = {
-          title: this.translate.instant('GLOBAL.atencion'),
-          text: this.translate.instant('calendario.sin_procesos'),
-          icon: 'warning',
-          buttons: true,
-          dangerMode: true,
-          showCancelButton: true,
-        };
-        Swal(options).then((ok) => {
+        this.popUpManager.showConfirmAlert(
+          this.translate.instant('calendario.sin_procesos')
+        ).then((ok) => {
           this.router.navigate(['../list-calendario-academico'], { relativeTo: this.route });
         });
       }
@@ -90,122 +77,12 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.idDetalle = params.get('Id');
+      if (params.get('Id') !== null) {
+        this.idDetalle = params.get('Id');
+        this.loadSelects(this.idDetalle)
+      }
     });
-    this.loadSelects(this.idDetalle)
-    this.createCalendar();
     this.createActivitiesTable();
-  }
-
-  createCalendar() {
-    this.loading = true;
-    this.idDetalle = this.calendarForProject
-    if (this.calendarForEditId !== 0) {
-      this.idDetalle = this.calendarForEditId;
-    }
-    this.eventoService.get('calendario/' + this.idDetalle).subscribe(
-      calendar => {
-        this.calendar = new Calendario();
-        this.calendar.calendarioId = calendar['Id'];
-        this.calendar.DocumentoId = calendar['DocumentoId'];
-        this.calendar.Nivel = calendar['Nivel'];
-        this.calendar.Activo = calendar['Activo'];
-        this.calendar.PeriodoId = calendar['PeriodoId'];
-
-        this.documentoService.get('documento/' + this.calendar.DocumentoId).subscribe(
-          (documento: Documento) => {
-            this.fileResolucion = documento;
-            this.calendar.resolucion = JSON.parse(documento.Metadatos)['resolucion'];
-            this.calendar.anno = JSON.parse(documento.Metadatos)['anno'];
-            this.calendarForm.setValue({
-              resolucion: this.calendar.resolucion,
-              anno: this.calendar.anno,
-              PeriodoId: this.calendar.PeriodoId,
-              Nivel: this.calendar.Nivel,
-              fileResolucion: documento.Nombre,
-            });
-          },
-          error => {
-            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          },
-        );
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      },
-    );
-    this.eventoService.get('tipo_evento?query=CalendarioID__Id:' + this.calendarForEditId).subscribe(
-      processes => {
-        console.log(processes)
-        processes.forEach(element => {
-          if (Object.keys(element).length !== 0) {
-            let loadedProcess: Proceso = new Proceso();
-            loadedProcess.procesoId = element['Id'];
-            loadedProcess.CalendarioId = { Id: this.calendarForEditId };
-            loadedProcess.Nombre = element['Nombre'];
-            loadedProcess.Descripcion = element['Descripcion'];
-            loadedProcess.TipoRecurrenciaId = { Id: element['TipoRecurrenciaId']['Id'] };
-            loadedProcess.actividades = [];
-            this.processes.push(loadedProcess);
-          }
-        });
-
-        this.processes.forEach(process => {
-          this.eventoService.get('calendario_evento?query=TipoEventoId__Id:' + process.procesoId).subscribe(
-            activities => {
-              activities.forEach(element => {
-                if (Object.keys(element).length !== 0) {
-                  if (element['EventoPadreId'] == null) {
-                    let loadedActivity: Actividad = new Actividad();
-                    loadedActivity.actividadId = element['Id'];
-                    loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
-                    loadedActivity.Nombre = element['Nombre'];
-                    loadedActivity.Descripcion = element['Descripcion'];
-                    loadedActivity.Activo = element['Activo'];
-                    loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
-                    loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
-                    if (element['EventoPadreId'] != null) {
-                      loadedActivity.EventoPadreId = { Id: element['EventoPadreId']['Id'], FechaInicio: element['EventoPadreId']['FechaInicio'], FechaFin: element['EventoPadreId']['FechaFin'] };
-                    } else {
-                      loadedActivity.EventoPadreId = null;
-                    }
-
-                    this.eventoService.get('calendario_evento_tipo_publico?query=CalendarioEventoId__Id:' + loadedActivity.actividadId).subscribe(
-                      (response: any[]) => {
-                        loadedActivity.responsables = response.map(
-                          result => {
-                            return { IdPublico: result["TipoPublicoId"]["Id"] }
-                          }
-                        );
-                        process.actividades.push(loadedActivity);
-                        this.createActivitiesTable();
-                      },
-                      error => {
-                        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                      },
-                    );
-
-                    process.actividades.push(loadedActivity);
-                    this.createActivitiesTable();
-                  }
-                }
-              });
-              this.processTable.load(this.processes);
-            },
-            error => {
-              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-            },
-          );
-        });
-        this.loading = false;
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        this.loading = false;
-      },
-    );
-
-
   }
 
   ngOnChanges() {
@@ -238,14 +115,14 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           witdh: '20%',
           editable: false,
           filter: false,
-          valuePrepareFunction: (value) => { return value = moment(value).format('YYYY-MM-DD') },
+          valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
         },
         FechaFin: {
           title: this.translate.instant('calendario.fecha_fin'),
           witdh: '20%',
           editable: false,
           filter: false,
-          valuePrepareFunction: (value) => { return value = moment(value).format('YYYY-MM-DD') },
+          valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
         },
         Responsable: {
           title: this.translate.instant('calendario.responsable'),
@@ -258,6 +135,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           witdh: '20%',
           editable: false,
           filter: false,
+          valuePrepareFunction: (value: boolean) => value ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo'),
         },
       },
       mode: 'external',
@@ -286,7 +164,6 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   }
 
   onActionActivity(event, process: Proceso) {
-    console.log(event)
     switch (event.action) {
       case 'edit':
         this.editActivity(event, process);
@@ -298,12 +175,41 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   }
 
   editActivity(event, process: Proceso) {
-    console.log(event.data)
     const activityConfig = new MatDialogConfig();
     activityConfig.width = '800px';
     activityConfig.height = '700px';
-    activityConfig.data = { process: process, calendar: this.calendar, editActivity: event.data };
+    activityConfig.data = { process: process, calendar: this.periodos, editActivity: event.data };
     const editedActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
+    editedActivity.afterClosed().subscribe((activity: any) => {
+      if (activity !== undefined) {
+        this.eventoService.get('calendario_evento/' + event.data.actividadId).subscribe(
+          response => {
+            const activityPut = response;
+            activityPut['Nombre'] = activity.Actividad.Nombre;
+            activityPut['Descripcion'] = activity.Actividad.Descripcion;
+            activityPut['FechaInicio'] = activity.Actividad.FechaInicio;
+            activityPut['FechaFin'] = activity.Actividad.FechaFin;
+            this.eventoService.put('calendario_evento', activityPut).subscribe(
+              response => {
+                const proceso = this.processes.filter(proc => proc.procesoId === process.procesoId)[0];
+                const i = proceso.actividades.findIndex(actv => actv.actividadId === activity.Actividad);
+                proceso.actividades[i] = activity.Actividad;
+                this.processTable.update(process, proceso);
+                this.processTable.refresh();
+                this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+              },
+            );
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+          },
+        );
+        // update responsables
+      }
+    });
   }
 
   assignActivity(event: any) {
@@ -352,8 +258,8 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
         key: id_documento,
       },
     ];
-    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
-      .subscribe(response => {
+    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService).subscribe(
+      response => {
         const filesResponse = <any>response;
         if (Object.keys(filesResponse).length === filesToGet.length) {
           filesToGet.forEach((file: any) => {
@@ -362,14 +268,10 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           });
         }
       },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
+      error => {
+        this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
+      },
+    );
   }
 
   activateTab() {

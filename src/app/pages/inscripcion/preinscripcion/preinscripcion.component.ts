@@ -203,10 +203,14 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
 
 
   setPercentage_info(number, tab) {
+    setTimeout(()=>{
+      this.percentage_tab_info[tab] = (number * 100) / 2;
+      this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
+      this.setPercentage_total();      
+    });
+      
     console.info(number)
-    this.percentage_tab_info[tab] = (number * 100) / 2;
-    this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
-    this.setPercentage_total();
+    
   }
 
   setPercentage_acad(number, tab) {

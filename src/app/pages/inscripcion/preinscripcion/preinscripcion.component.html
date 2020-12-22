@@ -72,7 +72,7 @@
                     </ngx-crud-info-persona>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.preinscripcion' | translate }}" [active]="preinscripcion">
-                    <ngx-crud-inscripcion-multiple inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info(1,1)">
+                    <ngx-crud-inscripcion-multiple info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info(1,1)">
                     </ngx-crud-inscripcion-multiple>
                 </nb-tab>
             </nb-tabset>

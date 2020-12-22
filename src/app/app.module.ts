@@ -69,6 +69,7 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
+  MAT_DATE_LOCALE,
 } from '@angular/material';
 
 import { ImplicitAutenticationService } from './@core/utils/implicit_autentication.service';
@@ -129,6 +130,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTooltipModule,
     MatTreeModule,
     MatDialogModule,
+  ],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'es-CO'}
   ],
 })
 export class MaterialModule { }
