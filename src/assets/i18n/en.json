@@ -537,7 +537,7 @@
         "placeholder_descripcion_inscripcion": "ej: Applicant registration",
         "cupos_especiales": "Corresponds to special quotas?",
         "nivel": "Level",
-        "placeholder_nivel": "Select the level that is required to be assigned to the registration type",
+        "placeholder_nivel": "Select the level that is required to be assigned to the registration type"
     },
 
     "ERROR": {
@@ -1158,7 +1158,7 @@
         "estado": "State",
         "sin_procesos": "No registered registration types were found",
         "seguro_deshabilitar_tipo_inscripcion": "Are you sure to disable this registration type?",
-        "inactivar":"Disable",
+        "inactivar": "Disable",
         "tipo_inscripcion_deshabilitado": "Registration type disabled",
         "tipo_inscripcion_deshabilitado_error": "Error disabling registration type",
         "seguro_actualizar_tipo_inscripcion": "Are you sure to update this registration type?",
