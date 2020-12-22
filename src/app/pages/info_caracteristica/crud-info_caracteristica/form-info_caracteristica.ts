@@ -14,13 +14,8 @@ export let FORM_INFO_CARACTERISTICA = {
             placeholder_i18n: 'grupo_sanguineo',
             requerido: true,
             tipo: 'text',
-            key: 'Id',
-            opciones: [
-                { Id: 'A' },
-                { Id: 'AB' },
-                { Id: 'B' },
-                { Id: 'O' },
-            ],
+            opciones: [],
+            key: 'Nombre',
         },
         {
             etiqueta: 'select',
@@ -31,11 +26,8 @@ export let FORM_INFO_CARACTERISTICA = {
             placeholder_i18n: 'rh',
             requerido: true,
             tipo: 'text',
-            key: 'Id',
-            opciones: [
-                { Id: '-' },
-                { Id: '+' },
-            ],
+            opciones: [],
+            key: 'Nombre',
         },
         {
             etiqueta: 'select',

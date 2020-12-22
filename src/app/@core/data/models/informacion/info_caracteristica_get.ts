@@ -1,10 +1,12 @@
 import { GrupoEtnico } from './grupo_etnico';
 import { TipoDiscapacidad } from './tipo_discapacidad';
+import { GrupoSanguineo } from './grupo_sanguineo';
+import { Rh } from './rh_tercero';
 import { Lugar } from './lugar';
 
 export class InfoCaracteristicaGet {
-  GrupoSanguineo: string;
-  Rh: string;
+  GrupoSanguineo: GrupoSanguineo;
+  Rh: Rh;
   GrupoEtnico: GrupoEtnico;
   TipoDiscapacidad: Array<TipoDiscapacidad>;
   Lugar: {
@@ -19,4 +21,5 @@ export class InfoCaracteristicaGet {
     };
   };
   Ente: number;
+  Tercero: number;
 }

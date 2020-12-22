@@ -5,6 +5,7 @@ import { UbicacionService } from '../../@core/data/ubicacion.service';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ToasterModule } from 'angular2-toaster';
 import { SharedModule } from '../../shared/shared.module';
+import { UserService } from '../../@core/data/users.service';
 import { CrudInformacionContactoComponent } from './crud-informacion_contacto/crud-informacion_contacto.component';
 import { ViewInformacionContactoComponent } from './view-informacion_contacto/view-informacion_contacto.component';
 import { CrudInformacionFamiliarComponent } from './crud-informacion_familiar/crud-informacion_familiar.component';
@@ -24,6 +25,7 @@ import { CrudInformacionContactoExternaComponent } from './crud-informacion_cont
   ],
   providers: [
     UbicacionService,
+    UserService,
   ],
   exports: [
     CrudInformacionContactoComponent,

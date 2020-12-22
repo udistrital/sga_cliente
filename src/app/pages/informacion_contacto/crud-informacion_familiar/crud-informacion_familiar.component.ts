@@ -4,6 +4,7 @@ import { InfoContactoGet } from './../../../@core/data/models/ente/info_contacto
 import { InfoContactoPut } from './../../../@core/data/models/ente/info_contacto_put';
 import { TipoParentesco } from './../../../@core/data/models/terceros/tipo_parentesco';
 import { Tercero } from './../../../@core/data/models/terceros/tercero';
+import { UserService } from '../../../@core/data/users.service';
 import { TrPostInformacionFamiliar } from './../../../@core/data/models/terceros/tercero_familiar';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
@@ -17,6 +18,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { FormacionAcademicaRoutingModule } from '../../formacion_academica/formacion_academica-routing.module';
+import { PopUpManager } from '../../../managers/popUpManager';
 // import { IAppState } from '../../../@core/store/app.state';
 // import { ListService } from '../../../@core/store/services/list.service';
 // import { Store } from '@ngrx/store';
@@ -64,10 +66,12 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   loading: boolean;
 
   constructor(
+    private popUpManager: PopUpManager,
     private translate: TranslateService,
     private campusMidService: CampusMidService,
     private sgaMidService: SgaMidService,
     private ubicacionesService: UbicacionService,
+    private userService: UserService,
     private tercerosService: TercerosService,
     // private store: Store<IAppState>,
     // private listService: ListService,
@@ -85,6 +89,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
 
   construirForm() {
     // this.formInformacionContacto.titulo = this.translate.instant('GLOBAL.informacion_contacto');
+    this.info_persona_id = this.userService.getPersonaId();
     this.formInformacionFamiliar.btn = this.translate.instant('GLOBAL.guardar');
     for (let i = 0; i < this.formInformacionFamiliar.campos.length; i++) {
       this.formInformacionFamiliar.campos[i].label = this.translate.instant('GLOBAL.' + this.formInformacionFamiliar.campos[i].label_i18n);
@@ -108,11 +113,10 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.loadInfoPersona();
   }
 
   public loadInfoPersona(): void {
-    console.info('Ojoooooo cargar')
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '') {
@@ -141,17 +145,12 @@ export class CrudInformacionFamiliarComponent implements OnInit {
             this.formInformacionFamiliar.campos[this.getIndexForm('NombreFamiliarAlterno')].valor = this.datosGet['Alterno']['TerceroFamiliarId']
             ['NombreCompleto']
             this.loading = false;
+          } else{
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.info_caracteristica'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           });
     } else {
       this.info_info_familiar = undefined;
@@ -164,7 +163,9 @@ export class CrudInformacionFamiliarComponent implements OnInit {
 
 
   setPercentage(event) {
-    this.result.emit(event);
+    setTimeout(()=>{
+      this.result.emit(event);
+    });
   }
 
   private showToast(type: string, title: string, body: string) {
@@ -355,26 +356,42 @@ export class CrudInformacionFamiliarComponent implements OnInit {
             },
           ],
         }
-        console.info(informacionFamiliarPost)
-        this.sgaMidService.post('inscripciones/post_informacion_familiar', informacionFamiliarPost)
-            .subscribe((res: any) => {
-              if (res.Type === 'error') {
-                Swal({
-                  type: 'error',
-                  title: res.Code,
-                  text: this.translate.instant('ERROR.' + res.Code),
-                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                });
-                this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
-              } else {
-                this.showToast('success', this.translate.instant('GLOBAL.actualizar'),
-                    this.translate.instant('informacion_familiar.informacion_familiar_actualizada'));
-              }
-            }, () => {
-                this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
-            });
+        if (this.info_informacion_contacto === undefined && !this.denied_acces) {
+          this.createInfoFamiliar(informacionFamiliarPost);
+        this.result.emit(event); 
+  
+        } else {
+          this.updateInfoFamiliar(informacionFamiliarPost);
+        }
+               
       }
     });
+  }
+
+  updateInfoFamiliar(info_familiar: any){
+
+  }
+
+  createInfoFamiliar(info_familiar: any){
+    console.info(info_familiar)
+    console.info(JSON.stringify(info_familiar));
+    this.sgaMidService.post('inscripciones/post_informacion_familiar', info_familiar)
+      .subscribe((res: any) => {
+        if (res.Type === 'error') {
+          Swal({
+            type: 'error',
+            title: res.Code,
+            text: this.translate.instant('ERROR.' + res.Code),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+          this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
+          } else {
+            this.showToast('success', this.translate.instant('GLOBAL.actualizar'),
+            this.translate.instant('informacion_familiar.informacion_familiar_actualizada'));
+          }
+      }, () => {
+        this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
+      });
   }
 
 }
