@@ -23,7 +23,8 @@
                 "enfasis": "Enfásis",
                 "list_enfasis": "Listar enfásis",
                 "crud_enfasis": "Crear enfásis"
-            }
+            },
+            "tipo_inscripcion": "Tipo Inscripción"
         },
         "produccion_academica": {
             "produccion_academica": "Producción académica",
@@ -120,7 +121,7 @@
         "acepto_terminos": "He leido y estoy de acuerdo con los términos de la política de tratamiento y privacidad de la información",
         "cancelar": "Cancelar",
         "info_persona": "Información personal",
-        "persona_creado": "Su información personal ha sido guardada con éxito", 
+        "persona_creado": "Su información personal ha sido guardada con éxito",
         "info_criterio": "Criterios ICFES",
         "info_estado": "Estado de inscripción",
         "confirmarCrear": "ha sido creado(a)",
@@ -295,7 +296,8 @@
         "placeholder_nivel_escribe": "Ej: Medio",
         "nivel_escucha": "Nivel de escucha",
         "placeholder_nivel_escucha": "Ej: Medio",
-        "nivel_habla": "Nivel de habla","info": "¡Atención!",
+        "nivel_habla": "Nivel de habla",
+        "info": "¡Atención!",
         "clasificacion_nivel_idioma": "Clasificación del idioma",
         "placeholder_clasificacion_nivel_idioma": "Ej: A1",
         "tipo_icfes": "Tipo de ICFES",
@@ -535,7 +537,16 @@
         "Tipo": "TIPO",
         "Documento": "Número Documento",
         "Puntaje": "PUNTAJE",
-        "acciones": "Acciones"
+        "acciones": "Acciones",
+        "pregrado": "Pregrado",
+        "posgrado": "Posgrado",
+        "nombre_inscripcion": "Nombre",
+        "placeholder_nombre_inscripcion": "ej: Inscripción",
+        "descripcion_inscripcion": "Descripción",
+        "placeholder_descripcion_inscripcion": "ej: Inscripción de un aspirante",
+        "cupos_especiales": "¿Corresponde a cupos especiales?",
+        "nivel": "Nivel",
+        "placeholder_nivel": "Seleccione el nivel que se requiere asignar al tipo de inscripción",
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1154,5 +1165,21 @@
         "inactivo": "El concepto seleccionado se ecuentra ahora inactivo.",
         "actualizado": "El concepto ha sido correctamente actualizado",
         "confirmar_guardar": "¿Está seguro que desea guardar estos valores de derechos pecuniarios?"
+    },
+    "tipo_inscripcion": {
+        "titulo": "Tipos de Inscripción",
+        "sub_titulo": "Tipo de Inscripción",
+        "nivel": "Nivel",
+        "cupo_especial": "Cupo especial",
+        "estado": "Estado",
+        "sin_procesos": "No se encontraron tipos de inscripción registrados",
+        "seguro_deshabilitar_tipo_inscripcion": "¿Inactivar tipo de inscripción?",
+        "inactivar":"Inactivar",
+        "tipo_inscripcion_deshabilitado": "Tipo inscripción deshabilitado",
+        "tipo_inscripcion_deshabilitado_error": "Error deshabilitando tipo inscripción",
+        "seguro_actualizar_tipo_inscripcion": "¿Esta seguro de actualizar este tipo de inscripción?",
+        "tipo_inscripcion_actualizado": "Tipo inscripción actualizado",
+        "seguro_continuar_registrar_tipo_inscripcion": "¿Esta seguro de registrar este tipo de inscripción?",
+        "tipo_inscripcion_creado": "Tipo inscripción creado"
     }
 }
