@@ -18,6 +18,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { FormacionAcademicaRoutingModule } from '../../formacion_academica/formacion_academica-routing.module';
+import { PopUpManager } from '../../../managers/popUpManager';
 // import { IAppState } from '../../../@core/store/app.state';
 // import { ListService } from '../../../@core/store/services/list.service';
 // import { Store } from '@ngrx/store';
@@ -65,6 +66,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   loading: boolean;
 
   constructor(
+    private popUpManager: PopUpManager,
     private translate: TranslateService,
     private campusMidService: CampusMidService,
     private sgaMidService: SgaMidService,
@@ -115,7 +117,6 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   }
 
   public loadInfoPersona(): void {
-    console.info('Ojoooooo cargar')
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '') {
@@ -144,17 +145,12 @@ export class CrudInformacionFamiliarComponent implements OnInit {
             this.formInformacionFamiliar.campos[this.getIndexForm('NombreFamiliarAlterno')].valor = this.datosGet['Alterno']['TerceroFamiliarId']
             ['NombreCompleto']
             this.loading = false;
+          } else{
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.info_caracteristica'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           });
     } else {
       this.info_info_familiar = undefined;
@@ -167,7 +163,9 @@ export class CrudInformacionFamiliarComponent implements OnInit {
 
 
   setPercentage(event) {
-    this.result.emit(event);
+    setTimeout(()=>{
+      this.result.emit(event);
+    });
   }
 
   private showToast(type: string, title: string, body: string) {
@@ -358,10 +356,20 @@ export class CrudInformacionFamiliarComponent implements OnInit {
             },
           ],
         }
-        this.createInfoFamiliar(informacionFamiliarPost);
-        this.result.emit(event);        
+        if (this.info_informacion_contacto === undefined && !this.denied_acces) {
+          this.createInfoFamiliar(informacionFamiliarPost);
+        this.result.emit(event); 
+  
+        } else {
+          this.updateInfoFamiliar(informacionFamiliarPost);
+        }
+               
       }
     });
+  }
+
+  updateInfoFamiliar(info_familiar: any){
+
   }
 
   createInfoFamiliar(info_familiar: any){

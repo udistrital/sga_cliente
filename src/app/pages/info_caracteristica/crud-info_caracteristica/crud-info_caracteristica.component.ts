@@ -71,12 +71,11 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     this.listService.findTipoDiscapacidad();
     this.listService.findFactorRh();
     this.listService.findGrupoSanguineo();
-    this.loadLists();
     this.loading = false;
   }
 
   construirForm() {
-    // this.formInfoCaracteristica.titulo = this.translate.instant('GLOBAL.info_caracteristica');
+    //this.formInfoCaracteristica.titulo = this.translate.instant('GLOBAL.info_caracteristica');
     this.info_persona_id = this.userService.getPersonaId();
     this.formInfoCaracteristica.btn = this.translate.instant('GLOBAL.guardar');
     for (let i = 0; i < this.formInfoCaracteristica.campos.length; i++) {
@@ -90,7 +89,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   getSeleccion(event) {
-    console.info('consulta pais')
     if (event.nombre === 'PaisNacimiento') {
       this.paisSeleccionado = event.valor;
       this.loadOptionsDepartamentoNacimiento();
@@ -104,10 +102,8 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoNacimiento: Array<any> = [];
     if (this.paisSeleccionado) {
-      console.info(this.paisSeleccionado.Id)
       this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId__Id:' + this.paisSeleccionado.Id + ',LugarHijoId__Activo:true&limit=0').subscribe(
         res => {
-          console.info('entra');
            if (res !== null) {
               consultaHijos = <Array<Lugar>>res;
               for (let i = 0; i < consultaHijos.length; i++) {
@@ -169,7 +165,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
    public loadInfoCaracteristica(): void {
-    console.info('entra al load' + this.info_caracteristica_id)
+    this.loadLists();
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '') {
@@ -180,8 +176,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.datosGet = <InfoCaracteristicaGet>res;
             this.info_info_caracteristica = <InfoCaracteristica>res;
             this.info_info_caracteristica.Ente = (1 * this.info_caracteristica_id);
-            this.info_info_caracteristica.GrupoSanguineo = <any>{ Id: this.info_info_caracteristica.GrupoSanguineo };
-            this.info_info_caracteristica.Rh = <any>{ Id: this.info_info_caracteristica.Rh };
             this.info_info_caracteristica.TipoRelacionUbicacionEnte = 1;
             this.info_info_caracteristica.IdLugarEnte = this.datosGet.Lugar.Id;
             this.info_info_caracteristica.PaisNacimiento = this.datosGet.Lugar.Lugar.PAIS;
@@ -190,18 +184,15 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] =
             this.info_info_caracteristica.DepartamentoNacimiento;
             this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones[0] = this.info_info_caracteristica.Lugar;
+            this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSanguineo')].opciones[0] = this.datosGet.GrupoSanguineo;
+            this.formInfoCaracteristica.campos[this.getIndexForm('Rh')].opciones[0] = this.datosGet.Rh;
             this.loading = false;
+          } else{
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           }
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-            this.translate.instant('GLOBAL.info_caracteristica'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+          this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
          });
     } else {
       this.info_info_caracteristica = undefined;
@@ -211,45 +202,47 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     }
   }
 
-  // updateInfoCaracteristica(infoCaracteristica: any): void {
-  //   const opt: any = {
-  //     title: this.translate.instant('GLOBAL.actualizar'),
-  //     text: this.translate.instant('GLOBAL.actualizar') + '?',
-  //     icon: 'warning',
-  //     buttons: true,
-  //     dangerMode: true,
-  //     showCancelButton: true,
-  //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-  //   };
-  //   Swal(opt)
-  //     .then((willDelete) => {
-  //       if (willDelete.value) {
-  //         this.loading = true;
-  //         this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
-  //         this.campusMidService.put('persona/actualizar_complementarios', this.info_info_caracteristica)
-  //           .subscribe(res => {
-  //             this.loadInfoCaracteristica();
-  //             this.loading = false;
-  //             this.eventChange.emit(true);
-  //             this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
-  //               this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
-  //               this.translate.instant('GLOBAL.confirmarActualizar'));
-  //           },
-  //             (error: HttpErrorResponse) => {
-  //               this.loading = false;
-  //               Swal({
-  //                 type: 'error',
-  //                 title: error.status + '',
-  //                 text: this.translate.instant('ERROR.' + error.status),
-  //                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-  //                   this.translate.instant('GLOBAL.info_caracteristica'),
-  //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //               });
-  //             });
-  //       }
-  //     });
-  // }
+  updateInfoCaracteristica(infoCaracteristica: any): void {
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('GLOBAL.actualizar') + '?',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        if (willDelete.value) {
+          this.loading = true;
+          this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
+          this.info_info_caracteristica.Ente = this.info_persona_id;
+          this.sgamidService.put('persona/actualizar_complementarios', this.info_info_caracteristica)
+            .subscribe(res => {
+              this.loadInfoCaracteristica();
+              this.loading = false;
+              this.eventChange.emit(true);
+              this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+              this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
+              this.translate.instant('GLOBAL.confirmarActualizar'));
+              this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
+            },
+            (error: HttpErrorResponse) => {
+              this.loading = false;
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+            });
+        }
+      });
+  }
 
   createInfoCaracteristica(infoCaracteristica: any): void {
     const opt: any = {
@@ -275,9 +268,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             Lugar: info_info_caracteristica_post.LugarAnt,
           };
           info_info_caracteristica_post.Tercero = this.info_persona_id;
-          console.info(this.info_persona_id)
-          console.info(this.info_info_persona)
-          console.info(JSON.stringify(info_info_caracteristica_post));
           this.sgamidService.post('persona/guardar_complementarios', info_info_caracteristica_post)
             .subscribe(res => {
               if (res !== null) {
@@ -307,13 +297,15 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       if (this.info_info_caracteristica === undefined && !this.denied_acces) {
         this.createInfoCaracteristica(event.data.InfoCaracteristica);
       } else {
-        //this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+        this.updateInfoCaracteristica(event.data.InfoCaracteristica);
       }
     }
   }
 
   setPercentage(event) {
-    this.result.emit(event);
+    setTimeout(()=>{
+      this.result.emit(event);
+    });
   }
 
   private showToast(type: string, title: string, body: string) {
