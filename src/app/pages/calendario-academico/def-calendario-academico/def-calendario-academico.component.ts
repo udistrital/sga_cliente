@@ -172,7 +172,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                 const activities: any[] = element['Actividades']
                 if (activities !== null) {
                   activities.forEach(element => {
-                    if (Object.keys(element).length !== 0) {
+                    if (Object.keys(element).length !== 0 && element['EventoPadreId'] == null) {
                       let loadedActivity: Actividad = new Actividad();
                       loadedActivity.actividadId = element['actividadId'];
                       loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
