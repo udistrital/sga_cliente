@@ -546,7 +546,7 @@
         "placeholder_descripcion_inscripcion": "ej: Inscripción de un aspirante",
         "cupos_especiales": "¿Corresponde a cupos especiales?",
         "nivel": "Nivel",
-        "placeholder_nivel": "Seleccione el nivel que se requiere asignar al tipo de inscripción",
+        "placeholder_nivel": "Seleccione el nivel que se requiere asignar al tipo de inscripción"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1174,7 +1174,7 @@
         "estado": "Estado",
         "sin_procesos": "No se encontraron tipos de inscripción registrados",
         "seguro_deshabilitar_tipo_inscripcion": "¿Inactivar tipo de inscripción?",
-        "inactivar":"Inactivar",
+        "inactivar": "Inactivar",
         "tipo_inscripcion_deshabilitado": "Tipo inscripción deshabilitado",
         "tipo_inscripcion_deshabilitado_error": "Error deshabilitando tipo inscripción",
         "seguro_actualizar_tipo_inscripcion": "¿Esta seguro de actualizar este tipo de inscripción?",
