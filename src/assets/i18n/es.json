@@ -77,7 +77,7 @@
         },
         "periodo": {
             "periodo": "Habilitar período",
-            "lista_periodo": "Habilitar/Deshabilitar un período",
+            "lista_periodo": "Habilitar/Deshabilitar \nun período",
             "crud_periodo": "Crear un período"
         },
         "calendarioevento": {
@@ -681,9 +681,11 @@
         "seleccione_ano": "Por Favor Seleccione primero el año a realizar la operación",
         "seleccione_periodo": "Por favor primero seleccione el período a realizar la operación",
         "habilitado": "Este período ya esta habilitado",
+        "periodo_habilitar": "¿Está seguro de habilitar este período?",
         "periodo_habilitado": "Período habilitado!",
         "se_habilita": "Habilitado",
         "deshabilitado": "Este período ya esta deshabilitado",
+        "periodo_deshabilitar": "¿Está seguro de deshabilitar este período?",
         "periodo_deshabilitado": "Período deshabilitado!",
         "se_deshabilita": "Deshabilitado",
         "seguro_eliminar_periodo": "¿Esta seguro de eliminar este período?",

@@ -1,12 +1,11 @@
 import { Component, OnInit, Output, EventEmitter  } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Periodo } from './../../../@core/data/models/periodo/periodo';
-import { ClienteHabilitarPeriodoService } from '../../../@core/data/cliente_habilitar_periodo.service';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
+import { ParametrosService } from '../../../@core/data/parametros.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import Swal from 'sweetalert2';
-import 'style-loader!angular2-toaster/toaster.css';
+import * as moment from 'moment';
 
 
 @Component({
@@ -17,10 +16,9 @@ import 'style-loader!angular2-toaster/toaster.css';
 export class ListPeriodoComponent implements OnInit {
   uid: number;
   cambiotab: boolean = false;
-  config: ToasterConfig;
   settings: any;
   info_periodo: Periodo;
-  ano = [];
+  year = [];
   periodo = [];
   opcionSeleccionadoAno: string  = '0';
   verSeleccionAno: string        = '';
@@ -31,8 +29,11 @@ export class ListPeriodoComponent implements OnInit {
 
   source: LocalDataSource = new LocalDataSource();
 
-  constructor(private translate: TranslateService, private clienteHabilitarPeriodoService: ClienteHabilitarPeriodoService,
-    private toasterService: ToasterService) {
+  constructor(
+    private translate: TranslateService,
+    private parametrosService: ParametrosService,
+    private popUpManager: PopUpManager,
+  ) {
     this.loadData();
     this.cargarCampos();
     this.loadAno();
@@ -59,21 +60,14 @@ export class ListPeriodoComponent implements OnInit {
       },
       mode: 'external',
       columns: {
-        Id: {
-          title: this.translate.instant('GLOBAL.id'),
-          // type: 'number;',
-          valuePrepareFunction: (value) => {
-            return value;
-          },
-        },
-        Ano: {
+        Year: {
           title: this.translate.instant('GLOBAL.ano'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
           },
         },
-        Periodo: {
+        Ciclo: {
           title: this.translate.instant('GLOBAL.periodo'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
@@ -98,23 +92,17 @@ export class ListPeriodoComponent implements OnInit {
           title: this.translate.instant('GLOBAL.activo'),
           // type: 'boolean;',
           valuePrepareFunction: (value) => {
-            return value;
+            return value ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo');
           },
         },
-        NumeroOrden: {
-          title: this.translate.instant('GLOBAL.numero_orden'),
-          // type: 'number;',
-          valuePrepareFunction: (value) => {
-            return value;
-          },
+        InicioVigencia: {
+          title: this.translate.instant('GLOBAL.fecha_inicio'),
+          valuePrepareFunction: value => moment(value).format('DD-MM-YYYY'),
         },
-        TipoPeriodoId: {
-          title: this.translate.instant('GLOBAL.tipo_periodo'),
-          // type: 'tipo_periodo;',
-          valuePrepareFunction: (value) => {
-            return value.Nombre;
-          },
-        },
+        FinVigencia: {
+          title: this.translate.instant('GLOBAL.fecha_fin'),
+          valuePrepareFunction: value => moment(value).format('DD-MM-YYYY'),
+        }
       },
     };
   }
@@ -124,162 +112,101 @@ export class ListPeriodoComponent implements OnInit {
   }
 
   loadData(): void {
-    this.clienteHabilitarPeriodoService.get('periodo/?limit=0').subscribe(res => {
+    this.parametrosService.get('periodo?query=CodigoAbreviacion:PA&limit=0').subscribe(res => {
       if (res !== null) {
-        const data = <Array<any>>res;
+        const data = <any[]>res['Data'];
         this.source.load(data);
           }
     });
   }
+
   loadAno() {
-    this.clienteHabilitarPeriodoService.get('periodo/?fields=Ano')
+    this.parametrosService.get('periodo?query=CodigoAbreviacion:VG&fields=Year')
       .subscribe(res => {
         const r = <any>res;
-        if (res !== null && r.Periodo !== 'error') {
-          this.ano = <any>res;
-          this.ano = this.ano.filter((valorActual, indiceActual, arreglo) => {
+        if (res !== null && r.Status === '200') {
+          this.year = <any[]>res['Data'];
+          
+/*           this.year = this.year.filter((valorActual, indiceActual, arreglo) => {
           return arreglo.findIndex(valorDelArreglo => JSON.stringify(valorDelArreglo) === JSON.stringify(valorActual)) === indiceActual
         });
-
+ */
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
-          title: error.status + '',
-          text: this.translate.instant('ERROR.' + error.status),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        });
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status))
       });
   }
   capturarAno() {
     // Pasamos el valor seleccionado a la variable verSeleccion
   if (this.opcionSeleccionadoAno == null) {
-    const opt1: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('periodo.seleccione_ano'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    }; Swal(opt1)
-    .then((willDelete) => {
-      if (willDelete.value) {
-
-      }
-    });
-  }else {
-    this.verSeleccionAno = JSON.stringify(this.opcionSeleccionadoAno);
-    this.verSeleccionAno = this.verSeleccionAno.substring(8, 12);
+    this.popUpManager.showAlert(
+      this.translate.instant('GLOBAL.atencion'),
+      this.translate.instant('periodo.seleccione_ano')
+    );
+  } else {
+    this.verSeleccionAno = '' + this.opcionSeleccionadoAno['Year'];
     this.loadPeriodo();
   }
 }
   loadPeriodo() {
-  this.clienteHabilitarPeriodoService.get('periodo/?query=Ano:' + this.verSeleccionAno + '&fields=Periodo')
+  this.parametrosService.get('periodo?query=Year:' + this.verSeleccionAno + ',CodigoAbreviacion:PA&fields=Ciclo')
   .subscribe(res => {
     const r = <any>res;
-    if (res !== null && r.Type !== 'error') {
-      this.periodo = <any>res;
+    if (res !== null && r.Status === '200') {
+      this.periodo = <any[]>res['Data'];
     }
   },
   (error: HttpErrorResponse) => {
-    Swal({
-      type: 'error',
-      title: error.status + '',
-      text: this.translate.instant('ERROR.' + error.status),
-      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-    });
+    this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
   });
 }
 capturarPeriodo() {
   if (this.opcionSeleccionadoPeriodo == null) {
-    const opt1: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('periodo.seleccione_ano'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    }; Swal(opt1)
-    .then((willDelete) => {
-      if (willDelete.value) {
-
-      }
-    });
+    this.popUpManager.showAlert(
+      this.translate.instant('GLOBAL.atencion'),
+      this.translate.instant('periodo.seleccione_ano')
+    );
   }else {
-  this.verSeleccionPeriodo = JSON.stringify(this.opcionSeleccionadoPeriodo);
-  this.verSeleccionPeriodo = this.verSeleccionPeriodo.slice(12, -2);
+  this.verSeleccionPeriodo = this.opcionSeleccionadoPeriodo['Ciclo'];
   this.traerPeriodoSelect();
 }
 }
 traerPeriodoSelect() {
-    this.clienteHabilitarPeriodoService.get('periodo/?query=Ano:' + this.verSeleccionAno + ',Periodo:' + this.verSeleccionPeriodo)
+    this.parametrosService.get('periodo?query=Year:' + this.verSeleccionAno + ',Ciclo:' + this.verSeleccionPeriodo)
     .subscribe(res => {
       const r = <any>res;
-      if (res !== null && r.Type !== 'error') {
-        this.info_periodo = <Periodo>res[0];
+      if (res !== null && r.Status === '200') {
+        this.info_periodo = <Periodo>(<any[]> res['Data'])[0];
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
-        title: error.status + '',
-        text: this.translate.instant('ERROR.' + error.status),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
+      this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status))
     });
   }
 
    ActivarPeriodo() {
      if (this.info_periodo == null) {
-        const opt1: any = {
-          title: this.translate.instant('GLOBAL.atencion'),
-          text: this.translate.instant('periodo.seleccione_periodo'),
-          icon: 'warning',
-          buttons: true,
-          dangerMode: true,
-          showCancelButton: true,
-        };
-        Swal(opt1)
-        .then((willDelete) => {
-          if (willDelete.value) {
-          }
-        });
-     }else {
+        this.popUpManager.showAlert(
+          this.translate.instant('GLOBAL.atencion'),
+          this.translate.instant('periodo.seleccione_periodo')
+        );
+     } else {
      if (this.info_periodo.Activo === true) {
-    const opt1: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('periodo.habilitado'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt1)
-    .then((willDelete) => {
-      if (willDelete.value) {
-
-      }
-    });
-  }else {
-
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('periodo.periodo_habilitado'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt)
-    .then((willDelete) => {
-      if (willDelete.value) {
+    this.popUpManager.showAlert(
+      this.translate.instant('GLOBAL.atencion'),
+      this.translate.instant('periodo.habilitado')
+    );
+  } else {
+    this.popUpManager.showConfirmAlert(this.translate.instant('periodo.periodo_habilitar'))
+    .then((ok) => {
+      if (ok.value) {
         this.info_periodo.Activo = true;
-        this.clienteHabilitarPeriodoService.put('periodo', this.info_periodo)
+        this.parametrosService.put('periodo', this.info_periodo)
           .subscribe(res => {
             this.eventChange.emit(true);
-            this.showToast('info', this.translate.instant('periodo.se_habilita'), this.translate.instant('periodo.periodo_habilitado'));
             this.loadData();
+            this.popUpManager.showSuccessAlert(this.translate.instant('periodo.periodo_habilitado'));
           });
       }
     });
@@ -287,55 +214,26 @@ traerPeriodoSelect() {
 }}
 DeshabilitarPeriodo() {
   if (this.info_periodo == null) {
-    const opt1: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('periodo.seleccione_periodo'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt1)
-    .then((willDelete) => {
-      if (willDelete.value) {
-
-      }
-    });
- }else {
+    this.popUpManager.showAlert(
+      this.translate.instant('GLOBAL.atencion'),
+      this.translate.instant('periodo.seleccione_periodo')
+    );
+ } else {
   if (this.info_periodo.Activo === false) {
-    const opt1: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('periodo.deshabilitado'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt1)
-    .then((willDelete) => {
-      if (willDelete.value) {
-
-      }
-    });
-  }else {
-
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('periodo.periodo_deshabilitado'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt)
-    .then((willDelete) => {
-      if (willDelete.value) {
+    this.popUpManager.showAlert(
+      this.translate.instant('GLOBAL.atencion'),
+      this.translate.instant('periodo.deshabilitado')
+    )
+  } else {
+    this.popUpManager.showConfirmAlert(this.translate.instant('periodo.periodo_deshabilitar'))
+    .then((ok) => {
+      if (ok.value) {
         this.info_periodo.Activo = false;
-        this.clienteHabilitarPeriodoService.put('periodo', this.info_periodo)
+        this.parametrosService.put('periodo', this.info_periodo)
           .subscribe(res => {
             this.eventChange.emit(true);
-            this.showToast('info', this.translate.instant('periodo.se_deshabilita'), this.translate.instant('periodo.periodo_deshabilitado'));
             this.loadData();
+            this.popUpManager.showSuccessAlert(this.translate.instant('periodo.periodo_deshabilitado'));
           });
       }
     });
@@ -358,24 +256,17 @@ DeshabilitarPeriodo() {
   }
 
   onDelete(event): void {
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.eliminar'),
-      text: this.translate.instant('periodo.seguro_eliminar_periodo'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt)
-    .then((willDelete) => {
-
+    this.popUpManager.showConfirmAlert(
+      this.translate.instant('periodo.seguro_eliminar_periodo'),
+      this.translate.instant('GLOBAL.eliminar')
+    ).then((willDelete) => {
       if (willDelete.value) {
-        this.clienteHabilitarPeriodoService.delete('periodo/', event.data).subscribe(res => {
+        this.parametrosService.delete('periodo', event.data).subscribe(res => {
           if (res !== null) {
             this.loadData();
-            this.showToast('info', this.translate.instant('GLOBAL.eliminar'), this.translate.instant('periodo.periodo_eliminado'));
-            }
-         });
+            this.popUpManager.showSuccessAlert(this.translate.instant('periodo.periodo_eliminado'));
+          }
+        });
       }
     });
   }
@@ -402,27 +293,6 @@ DeshabilitarPeriodo() {
 
   itemselec(event): void {
     // console.log("afssaf");
-  }
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
   }
 
 }

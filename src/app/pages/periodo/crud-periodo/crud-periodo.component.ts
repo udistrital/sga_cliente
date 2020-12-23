@@ -69,7 +69,7 @@ export class CrudPeriodoComponent implements OnInit {
       this.parametrosService.get('periodo/' + this.periodo_id)
         .subscribe(res => {
           if (res !== null) {
-            this.info_periodo = <Periodo>res[0];
+            this.info_periodo = <Periodo>res['Data'];
             this.info_periodo.InicioVigencia = moment(this.info_periodo.InicioVigencia).format('YYYY-MM-DD');
             this.info_periodo.FinVigencia = moment(this.info_periodo.FinVigencia).format('YYYY-MM-DD');
           }
@@ -88,13 +88,15 @@ export class CrudPeriodoComponent implements OnInit {
       if (ok.value) {
         const p = <Periodo>periodo
         this.info_periodo.Year = p.Year;
-        this.info_periodo.Ciclo = p.Ciclo;
+        this.info_periodo.Ciclo = ''+p.Ciclo;
+        this.info_periodo.Nombre = this.info_periodo.Year + '-' + this.info_periodo.Ciclo;
         this.info_periodo.InicioVigencia = p.InicioVigencia;
         this.info_periodo.FinVigencia = p.FinVigencia;
-        this.info_periodo.Descripcion = this.info_periodo.Year + '-' + this.info_periodo.Ciclo;
+        this.info_periodo.Descripcion = 'Periodo académico ' + this.info_periodo.Nombre;;
         this.info_periodo.Activo = true;
         this.info_periodo.InicioVigencia = moment(this.info_periodo.InicioVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
         this.info_periodo.FinVigencia = moment(this.info_periodo.FinVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
+        console.log(this.info_periodo)
         this.parametrosService.put('periodo', this.info_periodo)
           .subscribe(res => {
             this.loadPeriodo();
@@ -122,7 +124,7 @@ export class CrudPeriodoComponent implements OnInit {
         this.info_periodo.AplicacionId = 41 // ID de SGA en Configuracion_CRUD
         this.parametrosService.post('periodo', this.info_periodo)
           .subscribe(res => {
-            this.info_periodo = <Periodo><unknown>res;
+            this.info_periodo = <Periodo>res['Data'];
             this.eventChange.emit(true);
             this.popUpManager.showSuccessAlert(this.translate.instant('periodo.periodo_creado'));
           });

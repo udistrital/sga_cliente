@@ -15,8 +15,8 @@
                                     <mat-label>{{ 'GLOBAL.ano' | translate }} :</mat-label>
                                     <mat-select [(ngModel)]="opcionSeleccionadoAno" (ngModelChange)="capturarAno()">
                                         <mat-option> {{ 'periodo.seleccion_ano' | translate }}</mat-option>
-                                        <mat-option *ngFor="let item of ano" [value]="item">
-                                            {{ item.Ano }}
+                                        <mat-option *ngFor="let item of year" [value]="item">
+                                            {{ item.Year }}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
@@ -32,7 +32,7 @@
                                     <mat-select [(ngModel)]="opcionSeleccionadoPeriodo" (ngModelChange)="capturarPeriodo()">
                                         <mat-option>{{ 'periodo.seleccion_periodo' | translate }}</mat-option>
                                         <mat-option *ngFor="let item of periodo" [value]="item">
-                                            {{ item.Periodo }}
+                                            {{ item.Ciclo }}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>

@@ -32,7 +32,7 @@ export class PopUpManager {
 
     public showAlert(status, text) {
         Swal({
-            type: status,
+            type: 'info',
             title: status,
             text: text,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
