@@ -5,4 +5,6 @@ export class TipoInscripcion {
     CodigoAbreviacion: string;
     Activo: boolean;
     NumeroOrden: number;
+    NivelId: number;
+    Especial: boolean;
 }

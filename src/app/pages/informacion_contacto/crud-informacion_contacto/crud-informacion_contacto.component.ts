@@ -13,6 +13,9 @@ import { IAppState } from '../../../@core/store/app.state';
 import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { Store } from '@ngrx/store';
+import { PopUpManager } from '../../../managers/popUpManager';
+import { InfoContactoGet } from '../../../@core/data/models/ente/info_contacto_get';
+import { InfoPersona } from './../../../@core/data/models/informacion/info_persona';
 
 @Component({
   selector: 'ngx-crud-informacion-contacto',
@@ -43,8 +46,11 @@ export class CrudInformacionContactoComponent implements OnInit {
   paisSeleccionado: any;
   departamentoSeleccionado: any;
   denied_acces: boolean = false;
+  loading: boolean;
+  info_persona_id: number;
 
   constructor(
+    private popUpManager: PopUpManager,
     private translate: TranslateService,
     private ubicacionesService: UbicacionService,
     private store: Store<IAppState>,
@@ -61,10 +67,12 @@ export class CrudInformacionContactoComponent implements OnInit {
     this.loadLists();
     this.persona_id = this.userService.getPersonaId();
     this.loadInformacionContacto();
+    this.loading = false;
   }
 
   construirForm() {
     // this.formInformacionContacto.titulo = this.translate.instant('GLOBAL.informacion_contacto');
+    this.info_persona_id = this.userService.getPersonaId();
     this.formInformacionContacto.btn = this.translate.instant('GLOBAL.guardar');
     for (let i = 0; i < this.formInformacionContacto.campos.length; i++) {
       this.formInformacionContacto.campos[i].label = this.translate.instant('GLOBAL.' + this.formInformacionContacto.campos[i].label_i18n);
@@ -94,12 +102,12 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoResidencia: Array<any> = [];
     if (paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + paisSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + paisSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              departamentoResidencia.push(consultaHijos[i].LugarHijo);
+              departamentoResidencia.push(consultaHijos[i].LugarHijoId);
             }
           }
           this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = departamentoResidencia;
@@ -122,12 +130,12 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const ciudadResidencia: Array<any> = [];
     if (departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + departamentoSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + departamentoSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              ciudadResidencia.push(consultaHijos[i].LugarHijo);
+              ciudadResidencia.push(consultaHijos[i].LugarHijoId);
             }
           }
           this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = ciudadResidencia;
@@ -157,29 +165,28 @@ export class CrudInformacionContactoComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.loadInformacionContacto();
+    this.loadInformacionContacto();
   }
 
   loadInformacionContacto() {
+    this.loading = true;
     if (this.persona_id) {
-      this.sgaMidService.get(`inscripciones/info_complementaria_tercero/${this.persona_id}`)
+      this.sgaMidService.get('inscripciones/info_complementaria_tercero/'+this.persona_id)
       .subscribe(res => {
         if (res !== null) {
           this.info_informacion_contacto = <any>res;
           this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = [this.info_informacion_contacto.PaisResidencia];
           this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = [this.info_informacion_contacto.DepartamentoResidencia];
           this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = [this.info_informacion_contacto.CiudadResidencia];
+          this.loading = false;
           this.result.emit(1);
+        } else {
+          this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+          this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
+          this.loading=false;
         });
     }
   }
@@ -190,14 +197,15 @@ export class CrudInformacionContactoComponent implements OnInit {
       const tercero = {
         Id: this.persona_id  || 1, // se debe cambiar solo por persona id
       }
+      console.info('estrato we'+formData.Estrato)
       const dataInfoContacto = {
         InfoComplementariaTercero: [
           {
-            // Estrato
+            //Estrato
             Id: 0,
             TerceroId: tercero,
-            InfoComplementariaId: {
-              Id: 38,
+            InfoComplementariaId:{
+              Id: 41,
             },
             Dato: JSON.stringify({value: formData.EstratoResidencia}),
             Activo: true,
@@ -207,7 +215,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             Id: 0,
             TerceroId: tercero,
             InfoComplementariaId: {
-              Id: 52,
+              Id: 55,
             },
             Dato: JSON.stringify({value: formData.CodigoPostal}),
             Activo: true,
@@ -217,7 +225,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             Id: 0,
             TerceroId: tercero,
             InfoComplementariaId: {
-              Id: 48,
+              Id: 51,
             },
             Dato: JSON.stringify({
               principal: formData.Telefono,
@@ -230,7 +238,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             Id: 0,
             TerceroId: tercero,
             InfoComplementariaId: {
-              Id: 51,
+              Id: 54,
             },
             Dato: JSON.stringify({
               country: formData.PaisResidencia,
@@ -242,9 +250,36 @@ export class CrudInformacionContactoComponent implements OnInit {
           },
         ],
       }
-      this.createInfoContacto(dataInfoContacto);
-      this.result.emit(event);
+      if (this.info_informacion_contacto === undefined && !this.denied_acces) {
+        this.createInfoContacto(dataInfoContacto);
+        this.result.emit(event);
+
+      } else {
+        this.updateInfoContacto(dataInfoContacto);
+      }
     }
+  }
+
+  updateInfoContacto(info_contacto: any): void{
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('GLOBAL.actualizar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        if (willDelete.value) {
+          this.loading = true;
+          this.info_informacion_contacto = <InformacionContacto>info_contacto;
+          this.info_informacion_contacto.Ente = this.info_persona_id;
+          //FUNCION PUT
+        }
+      });
   }
 
   createInfoContacto(info_contacto: any): void {
@@ -260,13 +295,19 @@ export class CrudInformacionContactoComponent implements OnInit {
     };
     Swal(opt)
       .then((willDelete) => {
+        this.loading=true;
         this.info_informacion_contacto = true;
         if (willDelete.value) {
           this.info_informacion_contacto = <any>info_contacto;
+          console.info("lo invoca")
+          console.info(this.info_informacion_contacto)
           this.sgaMidService.post('inscripciones/info_complementaria_tercero', this.info_informacion_contacto)
             .subscribe(res => {
               const r = <any>res;
+              console.info(res)
+              this.loading=false;
               if (r !== null && r.Type !== 'error') {
+                this.popUpManager.showSuccessAlert(this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
                 this.eventChange.emit(true);
                 this.showToast('info', this.translate.instant('GLOBAL.registrar'),
                   this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
@@ -292,7 +333,9 @@ export class CrudInformacionContactoComponent implements OnInit {
   }
 
   setPercentage(event) {
-    this.result.emit(event);
+    setTimeout(()=>{
+      this.result.emit(event);
+    });
   }
 
   private showToast(type: string, title: string, body: string) {
