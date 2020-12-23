@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
-import { CoreService } from '../../../@core/data/core.service';
+import { ParametrosService } from '../../../@core/data/parametros.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import * as moment from 'moment';
@@ -33,7 +33,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ActividadCalendarioAcademicoComponent>,
     private builder: FormBuilder,
-    private coreService: CoreService,
+    private parametrosService: ParametrosService,
     private eventoService: EventoService,
     private translate: TranslateService,
     private popUpManager: PopUpManager,
@@ -121,7 +121,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
   }
 
   fetchSelectData(period) {
-    this.coreService.get('periodo/' + period).subscribe(
+    this.parametrosService.get('periodo/' + period).subscribe(
       response => this.period = response['Nombre'],
     );
     this.updateSelect();
