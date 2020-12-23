@@ -15,6 +15,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { ListService } from '../../../@core/store/services/list.service';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-crud-formacion-academica',
@@ -50,6 +51,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   universidadConsultada: any;
 
   constructor(
+    private popUpManager: PopUpManager,
     private translate: TranslateService,
     private ubicacionesService: UbicacionService,
     private sgaMidService: SgaMidService,
@@ -209,7 +211,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   // }
 
   searchDoc(data) {
-    console.info("entra la lupita we")
     const nit = typeof data === 'string' ? data : data.data.Nit;
     const init = this.getIndexForm('Nit');
     const inombre = this.getIndexForm('NombreUniversidad');
@@ -418,27 +419,12 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                 }
               },
                 (error: HttpErrorResponse) => {
-                  Swal({
-                    type: 'error',
-                    title: error.status + '',
-                    text: this.translate.instant('ERROR.' + error.status),
-                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                      this.translate.instant('GLOBAL.formacion_academica') + '|' +
-                      this.translate.instant('GLOBAL.soporte_documento'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  });
+                  this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                 });
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.formacion_academica'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+            this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
           });
     } else {
       this.temp_info_academica = {};

@@ -78,22 +78,22 @@ export class ListFormacionAcademicaComponent implements OnInit {
       mode: 'external',
       columns: {
         NivelFormacion: {
-          title: this.translate.instant('GLOBAL.nivel_formacion'),
+          title: this.translate.instant('GLOBAL.nit'),
           width: '10%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        PaisUniversidad: {
-          title: this.translate.instant('GLOBAL.pais_universidad'),
-          width: '25%',
+        NombreUniversidad: {
+          title: this.translate.instant('GLOBAL.nombre_universidad'),
+          width: '28%',
           valuePrepareFunction: (value) => {
             return value;
           },
         },
-        NombreUniversidad: {
-          title: this.translate.instant('GLOBAL.nombre_universidad'),
-          width: '25%',
+        PaisUniversidad: {
+          title: this.translate.instant('GLOBAL.pais_universidad'),
+          width: '20%',
           valuePrepareFunction: (value) => {
             return value;
           },
@@ -106,10 +106,10 @@ export class ListFormacionAcademicaComponent implements OnInit {
           },
         },
         Metodologia: {
-          title: this.translate.instant('GLOBAL.metodologia'),
+          title: this.translate.instant('GLOBAL.fecha_inicio'),
           width: '10%',
           valuePrepareFunction: (value) => {
-            return value.Nombre;
+            return formatDate(value, 'yyyy-MM-dd', 'en');
           },
         },
         FechaFinalizacion: {

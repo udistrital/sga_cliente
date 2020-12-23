@@ -1185,5 +1185,8 @@
         "tipo_inscripcion_actualizado": "Tipo inscripción actualizado",
         "seguro_continuar_registrar_tipo_inscripcion": "¿Esta seguro de registrar este tipo de inscripción?",
         "tipo_inscripcion_creado": "Tipo inscripción creado"
+    },
+    "formacion_academica": {
+        "no_data": "No existen datos registrados de la formación académica"
     }
 }
