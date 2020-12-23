@@ -30,7 +30,7 @@ export let FORM_FORMACION_ACADEMICA = {
       placeholder_i18n: 'nombre_universidad',
       requerido: true,
       tipo: 'InfoPersona',
-      key: 'Nombre',
+      key: 'NombreCompleto',
       opciones: [],
     },
     {

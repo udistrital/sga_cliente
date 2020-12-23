@@ -108,6 +108,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               consultaHijos = <Array<Lugar>>res;
               for (let i = 0; i < consultaHijos.length; i++) {
                 departamentoNacimiento.push(consultaHijos[i].LugarHijoId);
+                console.info(consultaHijos[i].LugarHijoId)
               }
             }
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = departamentoNacimiento;
