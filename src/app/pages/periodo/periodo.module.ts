@@ -8,6 +8,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { CrudPeriodoComponent } from './crud-periodo/crud-periodo.component';
 import { ToasterService} from 'angular2-toaster';
 import { OfertaAcademicaService } from '../../@core/data/oferta_academica.service';
+import { ParametrosService } from '../../@core/data/parametros.service';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { OfertaAcademicaService } from '../../@core/data/oferta_academica.servic
     OfertaAcademicaService,
     ClienteHabilitarPeriodoService,
     ToasterService,
+    ParametrosService,
   ],
   exports: [
     CrudPeriodoComponent,

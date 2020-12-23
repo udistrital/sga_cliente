@@ -57,9 +57,9 @@ export class PopUpManager {
         });
     }
 
-    public showConfirmAlert(text): Promise<any> {
+    public showConfirmAlert(text, title=this.translate.instant('GLOBAL.atencion')): Promise<any> {
         const options: any = {
-            title: this.translate.instant('GLOBAL.atencion'),
+            title: title,
             text: text,
             type: 'warning',
             showCancelButton: true,
