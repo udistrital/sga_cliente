@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { formatDate } from '@angular/common';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-list-formacion-academica',
@@ -32,7 +33,9 @@ export class ListFormacionAcademicaComponent implements OnInit {
   loading: boolean;
   percentage: number;
 
-  constructor(private translate: TranslateService,
+  constructor(
+    private translate: TranslateService,
+    private popUpManager: PopUpManager,
     private toasterService: ToasterService,
     private userService: UserService,
     private campusMidService: CampusMidService,
@@ -160,55 +163,24 @@ export class ListFormacionAcademicaComponent implements OnInit {
                               }
                             },
                               (error: HttpErrorResponse) => {
-                                Swal({
-                                  type: 'error',
-                                  title: error.status + '',
-                                  text: this.translate.instant('ERROR.' + error.status),
-                                  footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                                    this.translate.instant('GLOBAL.formacion_academica') + '|' +
-                                    this.translate.instant('GLOBAL.pais_universidad'),
-                                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                                });
+                                this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                               });
                         }
                       },
                         (error: HttpErrorResponse) => {
-                          Swal({
-                            type: 'error',
-                            title: error.status + '',
-                            text: this.translate.instant('ERROR.' + error.status),
-                            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                              this.translate.instant('GLOBAL.formacion_academica') + '|' +
-                              this.translate.instant('GLOBAL.nombre_universidad'),
-                            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                          });
+                          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                         });
                   }
                 },
                   (error: HttpErrorResponse) => {
-                    Swal({
-                      type: 'error',
-                      title: error.status + '',
-                      text: this.translate.instant('ERROR.' + error.status),
-                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                        this.translate.instant('GLOBAL.formacion_academica') + '|' +
-                        this.translate.instant('GLOBAL.programa_academico'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                    });
+                    this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                   });
             }
           });
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.formacion_academica'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
         });
   }
 
