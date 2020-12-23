@@ -209,6 +209,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   // }
 
   searchDoc(data) {
+    console.info("entra la lupita we")
     const nit = typeof data === 'string' ? data : data.data.Nit;
     const init = this.getIndexForm('Nit');
     const inombre = this.getIndexForm('NombreUniversidad');
@@ -216,8 +217,9 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     const itel = this.getIndexForm('Telefono');
     const icorreo = this.getIndexForm('Correo');
     const iPais = this.getIndexForm('Pais');
+    console.info(nit)
     // this.sgaMidService.get(`tercero/identificacion/?Id=800088702&TipoId=7`)
-    this.sgaMidService.get(`tercero/identificacion/?Id=${nit}&TipoId=7`)
+    this.sgaMidService.get('formacion_academica/info_universidad/?Id='+nit)
       .subscribe((res: any) => {
         this.universidadConsultada = res;
         this.formInfoFormacionAcademica.campos[init].valor = res.NumeroIdentificacion;
