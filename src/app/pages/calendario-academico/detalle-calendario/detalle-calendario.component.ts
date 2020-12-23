@@ -39,6 +39,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   calendarForm: FormGroup;
   calendarioEvento: CalendarioEvento;
   loading: boolean = false;
+  responsable: string;
 
   @Input()
   calendarForProject: string = "0";
@@ -129,6 +130,17 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           witdh: '20%',
           editable: false,
           filter: false,
+          valuePrepareFunction: (value) => {
+
+            this.responsable = "";
+            for (let i = 0; i < value.length; i++) {
+              this.responsable = value[i]['Nombre'] + ", " + this.responsable; 
+            }
+            if (this.responsable != "") {
+              this.responsable = this.responsable.substring(0,this.responsable.length-2);
+            }
+            return this.responsable;
+          },
         },
         Activo: {
           title: this.translate.instant('calendario.estado'),
@@ -216,17 +228,17 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
     this.loading = true;
 
     this.calendarioEvento = new CalendarioEvento();
-    this.calendarActivity = new ActividadHija();
+    // this.calendarActivity = new ActividadHija();
 
-    this.calendarActivity.Id = this.calendar.calendarioId
-    this.calendarActivity.Nombre = event.data.Nombre
-    if (this.calendar.Activo) {
-      this.calendarActivity.Estado = 'Activo'
-    } else {
-      this.calendarActivity.Estado = 'Inactivo'
-    }
+    // this.calendarActivity.Id = this.calendar.calendarioId
+    // this.calendarActivity.Nombre = event.data.Nombre
+    // if (this.calendar.Activo) {
+    //   this.calendarActivity.Estado = 'Activo'
+    // } else {
+    //   this.calendarActivity.Estado = 'Inactivo'
+    // }
     this.calendarioEvento.Id = 0
-    this.calendarioEvento.Nombre = event.data.Nombre;
+    this.calendarioEvento.Nombre = "-" + event.data.Nombre;
     this.calendarioEvento.Descripcion = event.data.Descripcion;
     this.calendarioEvento.FechaCreacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
     this.calendarioEvento.FechaModificacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
@@ -242,7 +254,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
         this.loadSelects(this.calendarForProject);
         this.createActivitiesTable();
         this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_hija_exito'));
-        this.loading = false;
+        this.loading = false; 
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));

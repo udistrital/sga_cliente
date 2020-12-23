@@ -23,7 +23,8 @@
                 "enfasis": "Emphasis",
                 "list_enfasis": "Emphasis List",
                 "crud_enfasis": "Create Emphasis"
-            }
+            },
+            "tipo_inscripcion": "Inscription Type"
         },
         "produccion_academica": {
             "produccion_academica": "Academic Production",
@@ -527,7 +528,16 @@
         "Tipo": "TYPE",
         "Documento": "ID CARD",
         "Puntaje": "SCORE",
-        "acciones": "Actions"
+        "acciones": "Actions",
+        "pregrado": "Undergraduate",
+        "posgrado": "Postgraduate",
+        "nombre_inscripcion": "Name",
+        "placeholder_nombre_inscripcion": "ej: Inscription",
+        "descripcion_inscripcion": "Description",
+        "placeholder_descripcion_inscripcion": "ej: Applicant registration",
+        "cupos_especiales": "Corresponds to special quotas?",
+        "nivel": "Level",
+        "placeholder_nivel": "Select the level that is required to be assigned to the registration type"
     },
 
     "ERROR": {
@@ -1121,7 +1131,7 @@
         "forma_vigencia": "Select the validity from which you want to copy Financial entitlements concepts.",
         "boton_copiar": "Copy concepts",
         "boton_calcular": "Calculate values",
-        "boton_guardar": "Save", 
+        "boton_guardar": "Save",
         "vigencia": "Validity",
         "codigo": "Code",
         "factor": "Factor",
@@ -1139,5 +1149,21 @@
         "no_salario": "There's no registered salary for this validity",
         "inactivo": "The chosen concept is now inactive.",
         "actualizado": "The concept has been updated"
+    },
+    "tipo_inscripcion": {
+        "titulo": "Inscriptions Type",
+        "sub_titulo": "Inscription Type",
+        "nivel": "Level",
+        "cupo_especial": "Special space",
+        "estado": "State",
+        "sin_procesos": "No registered registration types were found",
+        "seguro_deshabilitar_tipo_inscripcion": "Are you sure to disable this registration type?",
+        "inactivar": "Disable",
+        "tipo_inscripcion_deshabilitado": "Registration type disabled",
+        "tipo_inscripcion_deshabilitado_error": "Error disabling registration type",
+        "seguro_actualizar_tipo_inscripcion": "Are you sure to update this registration type?",
+        "tipo_inscripcion_actualizado": "Updated registration type",
+        "seguro_continuar_registrar_tipo_inscripcion": "Are you sure you register this registration type?",
+        "tipo_inscripcion_creado": "Type register created"
     }
 }

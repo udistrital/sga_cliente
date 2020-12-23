@@ -9,6 +9,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { CrudInfoCaracteristicaComponent } from './crud-info_caracteristica/crud-info_caracteristica.component';
 import { ViewInfoCaracteristicaComponent } from './view-info_caracteristica/view-info_caracteristica.component';
 import { CrudInfoCaracteristicaPregradoComponent } from './crud-info_caracteristica_pregrado/crud-info_caracteristica_pregrado.component';
+import { SgaMidService } from '../../@core/data/sga_mid.service';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { CrudInfoCaracteristicaPregradoComponent } from './crud-info_caracterist
   providers: [
     PersonaService,
     UbicacionService,
+    SgaMidService,
   ],
   exports: [
     CrudInfoCaracteristicaComponent,

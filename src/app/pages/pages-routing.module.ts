@@ -69,6 +69,10 @@ const routes: Routes = [{
       loadChildren: './enfasis/enfasis.module#EnfasisModule',
     },
     {
+      path: 'tipo_inscripcion',
+      loadChildren: './tipo_inscripcion/tipo_inscripcion.module#TipoInscripcionModule',
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
