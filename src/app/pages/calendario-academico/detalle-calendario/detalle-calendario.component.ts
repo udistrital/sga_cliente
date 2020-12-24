@@ -15,6 +15,7 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { CalendarioEvento } from '../../../@core/data/models/calendario-academico/calendarioEvento';
 import { PopUpManager } from '../../../managers/popUpManager';
 import * as moment from 'moment';
+import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
 
 @Component({
   selector: 'ngx-detalle-calendario',
@@ -27,7 +28,6 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   calendarForEditId: number = 0;
   dataSource: any;
   data: any;
-  periodos: any;
   processSettings: any;
   activitiesSettings: any;
   idDetalle: any
@@ -62,18 +62,83 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
 
   loadSelects(id: any) {
     this.loading = true;
-    this.sgaMidService.get('consulta_calendario_academico/' + id).subscribe(res => {
-      this.periodos = res;
+    this.processes = [];
+    this.sgaMidService.get('consulta_calendario_academico/' + id).subscribe(
+      (response: any[]) => {
+        const calendar = response[0];
+        this.calendar = new Calendario();
+        this.calendar.Nombre = calendar['Nombre'];
+        this.calendar.ListaCalendario = calendar['ListaCalendario'];
+        this.calendar.calendarioId = calendar['Id'];
+        this.calendar.DocumentoId = calendar['resolucion']['Id'];
+        this.calendar.resolucion = calendar['resolucion']['Resolucion'];
+        this.calendar.anno = calendar['resolucion']['Anno'];
+        this.calendar.Nivel = calendar['Nivel'];
+        this.calendar.Activo = calendar['Activo'];
+        this.calendar.PeriodoId = calendar['PeriodoId'];
+        this.fileResolucion = calendar['resolucion']['Nombre'];
+        const processes: any[] = calendar['proceso'];
+        if (processes !== null) {
+          processes.forEach(element => {
+            if (Object.keys(element).length !== 0) {
+              const loadedProcess: Proceso = new Proceso();
+              loadedProcess.Nombre = element['Proceso'];
+              loadedProcess.CalendarioId = { Id: this.calendar.calendarioId};
+              loadedProcess.actividades = [];
+              const activities: any[] = element['Actividades']
+              if (activities !== null) {
+                activities.forEach(element => {
 
-      if (JSON.stringify(res[0]) === JSON.stringify({})) {
-        this.popUpManager.showConfirmAlert(
-          this.translate.instant('calendario.sin_procesos')
-        ).then((ok) => {
-          this.router.navigate(['../list-calendario-academico'], { relativeTo: this.route });
-        });
+                  this.route.paramMap.subscribe(params => {
+                    if (params.get('Id') !== null) {
+                      if (Object.keys(element).length !== 0 && element['EventoPadreId'] == null) {
+                        let loadedActivity: Actividad = new Actividad();
+                        loadedActivity.actividadId = element['actividadId'];
+                        loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
+                        loadedActivity.Nombre = element['Nombre'];
+                        loadedActivity.Descripcion = element['Descripcion'];
+                        loadedActivity.Activo = element['Activo'];
+                        loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
+                        loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
+                        loadedActivity.responsables = element['Responsable'];
+                        loadedProcess.procesoId = element['TipoEventoId']['Id'];
+                        loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
+                        loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
+                        loadedProcess.actividades.push(loadedActivity);
+                      }
+                    }else{
+                      if (Object.keys(element).length !== 0) {
+                        let loadedActivity: Actividad = new Actividad();
+                        loadedActivity.actividadId = element['actividadId'];
+                        loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
+                        loadedActivity.Nombre = element['Nombre'];
+                        loadedActivity.Descripcion = element['Descripcion'];
+                        loadedActivity.Activo = element['Activo'];
+                        loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
+                        loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
+                        loadedActivity.responsables = element['Responsable'];
+                        loadedProcess.procesoId = element['TipoEventoId']['Id'];
+                        loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
+                        loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
+                        loadedProcess.actividades.push(loadedActivity);
+                      }
+                    }
+                  });
+                  
+                  
+                });
+                this.processes.push(loadedProcess);
+              }
+            }
+          });
+        }
+        this.loading = false;
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.loading = false;
       }
-      this.loading = false;
-    });
+    );
   }
 
   ngOnInit() {
@@ -190,7 +255,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
     const activityConfig = new MatDialogConfig();
     activityConfig.width = '800px';
     activityConfig.height = '700px';
-    activityConfig.data = { process: process, calendar: this.periodos, editActivity: event.data };
+    activityConfig.data = { process: process, calendar: this.processes, editActivity: event.data };
     const editedActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
     editedActivity.afterClosed().subscribe((activity: any) => {
       if (activity !== undefined) {
