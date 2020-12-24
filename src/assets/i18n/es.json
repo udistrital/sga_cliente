@@ -77,7 +77,7 @@
         },
         "periodo": {
             "periodo": "Habilitar período",
-            "lista_periodo": "Habilitar/Deshabilitar un período",
+            "lista_periodo": "Habilitar/Deshabilitar \nun período",
             "crud_periodo": "Crear un período"
         },
         "calendarioevento": {
@@ -297,7 +297,9 @@
         "nivel_escucha": "Nivel de escucha",
         "placeholder_nivel_escucha": "Ej: Medio",
         "nivel_habla": "Nivel de habla",
-        "info": "¡Atención!",
+        "placeholder_nivel_habla": "Ej: Medio",
+        "nivel_lee": "Nivel de lectura",
+        "placeholder_nivel_lee": "Ej: Medio",
         "clasificacion_nivel_idioma": "Clasificación del idioma",
         "placeholder_clasificacion_nivel_idioma": "Ej: A1",
         "tipo_icfes": "Tipo de ICFES",
@@ -681,9 +683,11 @@
         "seleccione_ano": "Por Favor Seleccione primero el año a realizar la operación",
         "seleccione_periodo": "Por favor primero seleccione el período a realizar la operación",
         "habilitado": "Este período ya esta habilitado",
+        "periodo_habilitar": "¿Está seguro de habilitar este período?",
         "periodo_habilitado": "Período habilitado!",
         "se_habilita": "Habilitado",
         "deshabilitado": "Este período ya esta deshabilitado",
+        "periodo_deshabilitar": "¿Está seguro de deshabilitar este período?",
         "periodo_deshabilitado": "Período deshabilitado!",
         "se_deshabilita": "Deshabilitado",
         "seguro_eliminar_periodo": "¿Esta seguro de eliminar este período?",

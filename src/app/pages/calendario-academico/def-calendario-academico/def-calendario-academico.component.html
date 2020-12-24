@@ -25,7 +25,7 @@
                     <mat-form-field style="width: 100%;" floatLabel="always">
                         <mat-label>*{{ 'calendario.periodo' | translate }}: </mat-label>
                         <mat-select formControlName="PeriodoId" placeholder="2020-I, 2020-II, 2020-III" required>
-                            <mat-option>--Seleccionar--</mat-option>
+                            <mat-option value="">--Seleccionar--</mat-option>
                             <mat-option *ngFor="let periodo of periodos" [value]="periodo.Id">
                                 {{ periodo.Nombre }}
                             </mat-option>
