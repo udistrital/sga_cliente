@@ -14,17 +14,15 @@
                                     <mat-form-field style="width: 100%;" floatLabel="always">
                                         <mat-select placeholder="Seleccione la versión del calendario">
                                             <mat-option>--Seleccionar--</mat-option>
-                                            <mat-option *ngFor="let periodo of calendar" [value]="periodo.Id">
-                                                <mat-option *ngFor="let listCal of periodo.ListaCalendario" (click)="cambiarCalendario(listCal.Id)" [value]="listCal.Id">
-                                                    {{ listCal.Nombre }}
-                                                </mat-option>
+                                            <mat-option *ngFor="let listCal of calendar.ListaCalendario" (click)="cambiarCalendario(listCal.Id)" [value]="listCal.Id">
+                                                {{ listCal.Nombre }}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="col-12">
-                                {{ 'calendario.calendario_resolucion' | translate }} : {{ calendar.resolucion.Resolucion }} del año {{ calendar.resolucion.Anno }}
+                                {{ 'calendario.calendario_resolucion' | translate }} : {{ calendar.resolucion }} del año {{ calendar.anno }}
                                 <button mat-button type="button" (click)="downloadFile(calendar.resolucion.Id)">    
                                 <i class="fa fa-cloud-download" aria-hidden="true" ></i>
                             </button>
