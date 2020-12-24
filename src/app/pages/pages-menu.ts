@@ -10,7 +10,7 @@ export const MENU_ITEMS: MenuItem[] = [
     home: true,
     key: 'dashboard',
   },
-  {
+/*   {
     title: 'Producción Academica',
     icon: 'nb-edit',
     link: '',
@@ -23,8 +23,8 @@ export const MENU_ITEMS: MenuItem[] = [
         key: 'list_produccion_academica',
       },
     ],
-  },
-  {
+  }, */
+/*   {
     title: 'Eventos',
     icon: 'nb-compose',
     link: '',
@@ -37,7 +37,7 @@ export const MENU_ITEMS: MenuItem[] = [
         key: 'list_evento',
       },
     ],
-  },
+  }, */
   {
     title: 'Calendario académico',
     icon: 'nb-compose',
@@ -58,7 +58,7 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
-  {
+/*   {
     title: 'Tipo Periodo',
     icon: 'nb-compose',
     link: '/pages/tipo_periodo',
@@ -75,7 +75,7 @@ export const MENU_ITEMS: MenuItem[] = [
         key: 'crud_tipo_periodo',
       },
     ],
-  },
+  }, */
   {
     title: 'Periodo',
     icon: 'nb-gear',
@@ -84,11 +84,13 @@ export const MENU_ITEMS: MenuItem[] = [
     children: [
       {
         title: 'Lista Periodo',
+        icon: 'nb-list',
         link: '/pages/periodo/list-periodo',
         key: 'lista_periodo',
       },
       {
         title: 'CRUD Periodo',
+        icon: 'nb-edit',
         link: '/pages/periodo/crud-periodo',
         key: 'crud_periodo',
       },
@@ -105,11 +107,11 @@ export const MENU_ITEMS: MenuItem[] = [
         link: '/pages/calendarioevento/list-calendarioevento',
         key: 'lista_calendarioevento',
       },
-      // {
-      //   title: 'CRUD Calendarioevento',
-      //   link: '/pages/calendarioevento/crud-calendarioevento',
-      //   key: 'crud_calendarioevento',
-      // },
+      {
+        title: 'CRUD Calendarioevento',
+        link: '/pages/calendarioevento/crud-calendarioevento',
+        key: 'crud_calendarioevento',
+      },
     ],
   },
   {
