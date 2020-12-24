@@ -98,8 +98,8 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
                         loadedActivity.Nombre = element['Nombre'];
                         loadedActivity.Descripcion = element['Descripcion'];
                         loadedActivity.Activo = element['Activo'];
-                        loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
-                        loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
+                        loadedActivity.FechaInicio = moment(element['FechaInicio']).format('YYYY-MM-DD');
+                        loadedActivity.FechaFin = moment(element['FechaFin']).format('YYYY-MM-DD');
                         loadedActivity.responsables = element['Responsable'];
                         loadedProcess.procesoId = element['TipoEventoId']['Id'];
                         loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
@@ -114,8 +114,8 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
                         loadedActivity.Nombre = element['Nombre'];
                         loadedActivity.Descripcion = element['Descripcion'];
                         loadedActivity.Activo = element['Activo'];
-                        loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
-                        loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
+                        loadedActivity.FechaInicio = moment(element['FechaInicio']).format('YYYY-MM-DD');
+                        loadedActivity.FechaFin = moment(element['FechaFin']).format('YYYY-MM-DD');
                         loadedActivity.responsables = element['Responsable'];
                         loadedProcess.procesoId = element['TipoEventoId']['Id'];
                         loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
@@ -190,7 +190,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           filter: false,
           valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
         },
-        Responsable: {
+        responsables: {
           title: this.translate.instant('calendario.responsable'),
           witdh: '20%',
           editable: false,
