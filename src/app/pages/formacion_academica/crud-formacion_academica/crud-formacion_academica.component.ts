@@ -18,6 +18,7 @@ import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-crud-formacion-academica',
@@ -275,7 +276,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   }
 
   public loadInfoFormacionAcademica(): void {
-    this.temp_info_academica = {};
+    /*this.temp_info_academica = {};
     this.SoporteDocumento = [];
     this.info_formacion_academica = {};
     this.filesUp = <any>{};
@@ -370,7 +371,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       this.filesUp = <any>{};
       this.info_formacion_academica = undefined
       this.clean = !this.clean;
-    }
+    }*/
   }
 
   // updateInfoFormacionAcademica(infoFormacionAcademica: any): void {
@@ -486,10 +487,11 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         if (willDelete.value) {
           const files = [];
           this.info_formacion_academica = <any>infoFormacionAcademica;
-          if (this.info_formacion_academica.FormacionAcademica.Documento.file !== undefined) {
+          console.info(this.info_formacion_academica)
+          if (this.info_formacion_academica.InfoFormacionAcademica.Documento.file !== undefined) {
             files.push({
               nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-              file: this.info_formacion_academica.FormacionAcademica.Documento.file, IdDocumento: 3,
+              file: this.info_formacion_academica.InfoFormacionAcademica.Documento.file, IdDocumento: 3,
             });
           }
           this.nuxeoService.getDocumentos$(files, this.documentoService)
@@ -497,16 +499,18 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               if (Object.keys(response).length === files.length) {
                 this.filesUp = <any>response;
                 if (this.filesUp['Documento'] !== undefined) {
-                  this.info_formacion_academica.FormacionAcademica.Documento = this.filesUp['Documento'].Id;
+                  this.info_formacion_academica.InfoFormacionAcademica.Documento = this.filesUp['Documento'].Id;
                 }
                 // console.info('data post', JSON.stringify(this.info_formacion_academica));
                 this.sgaMidService.post('formacion_academica/', this.info_formacion_academica)
                   .subscribe(res => {
                     const r = <any>res;
                     if (r !== null && r.Type !== 'error') {
+                      const inombre = this.getIndexForm('NombreUniversidad');
                       this.eventChange.emit(true);
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('informacion_academica.informacion_academica_registrada'));
+                      this.translate.instant('informacion_academica.informacion_academica_registrada'));
+                      this.formInfoFormacionAcademica.campos[inombre].valor = '';
                       this.info_formacion_academica_id = 0;
                       this.info_formacion_academica = undefined;
                       this.clean = !this.clean;
@@ -551,43 +555,18 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       const formData = event.data.InfoFormacionAcademica;
-      const universidadData = {
-        UniversidadConsultada: this.universidadConsultada,
-        Validada: (this.universidadConsultada) ? true : false,
-        Nit: formData.Nit,
-        NombreUniversidad: formData.NombreUniversidad,
-        Pais: formData.Pais,
-        Direccion: formData.Direccion,
-        Correo: formData.Correo,
-        Telefono: formData.Telefono,
+      console.info(formData.ProgramaAcademico.Id);
+      const InfoFormacionAcademica = {
+        TerceroId: this.persona_id,
+        ProgramaAcademicoId: formData.ProgramaAcademico.Id,
+        FechaInicio: moment(formData.FechaInicio).format('DDMMYYYYY'),
+        FechaFinalizacion: moment(formData.FechaFinalizacion).format('DDMMYYYYY'),
+        TituloTrabajoGrado: formData.TituloTrabajoGrado,
+        DescripcionTrabajoGrado: formData.DescripcionTrabajoGrado,
+        DocumentoId: formData.Documento,
+        NitUniversidad: formData.Nit,
       };
-      const tercero = {
-        Id: this.persona_id, // se debe cambiar solo por persona id
-      }
-      const postData = {
-        InfoComplementariaTercero: [
-          {
-            // Información de la universidad
-            Id: 0,
-            TerceroId: tercero,
-            InfoComplementariaId: {
-              Id: this.infoComplementariaUniversidadId, // Completar id faltante
-            },
-            Dato: JSON.stringify(universidadData),
-            Activo: true,
-          },
-        ],
-        FormacionAcademica: {
-          Persona: this.persona_id,
-          Titulacion: formData.ProgramaAcademico,
-          FechaInicio: formData.FechaInicio,
-          FechaFinalizacion: formData.FechaFinalizacion,
-          Documento: formData.Documento,
-          TituloTrabajoGrado: formData.TituloTrabajoGrado,
-          DescripcionTrabajoGrado: formData.DescripcionTrabajoGrado,
-        },
-      }
-      this.createInfoFormacionAcademica(postData);
+      this.createInfoFormacionAcademica(InfoFormacionAcademica);
       this.result.emit(event);
     }
   }
