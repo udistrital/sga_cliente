@@ -394,6 +394,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         if (ok.value) {
           this.loading = true;
           if (this.fileResolucion) {
+            console.info(this.fileResolucion)
             this.calendar = this.calendarForm.value;
             this.uploadResolutionFile(this.fileResolucion)
               .then(fileID => {

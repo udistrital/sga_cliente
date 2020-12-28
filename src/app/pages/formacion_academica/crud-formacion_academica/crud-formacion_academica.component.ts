@@ -169,7 +169,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       .subscribe((res: any) => {
         this.universidadConsultada = res;
         this.formInfoFormacionAcademica.campos[init].valor = res.NumeroIdentificacion;
-        this.formInfoFormacionAcademica.campos[inombre].valor.Nombre = res.NombreCompleto["Nombre"];
+        this.formInfoFormacionAcademica.campos[inombre].valor = (res.NombreCompleto && res.NombreCompleto.Id) ? res.NombreCompleto : {Id: 0, Nombre: 'No registrado'}; //res.NombreCompleto;
         this.formInfoFormacionAcademica.campos[idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
         this.formInfoFormacionAcademica.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
         this.formInfoFormacionAcademica.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
@@ -220,11 +220,10 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       this.searchNit(nit);
     } else {
       if (Object.entries(this.formInfoFormacionAcademica.campos[inombre].valor).length !=0){
-        console.info("hay algo we")
+        console.info("hay algo")
         IdUniversidad = this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].valor.Id;
         this.tercerosService.get('datos_identificacion?query=TerceroId__Id:'+IdUniversidad).subscribe(
           (res: any) => {
-            console.info(res[0]["Numero"])
             this.searchNit(res[0]["Numero"])
           },
           (error: HttpErrorResponse) => {
@@ -232,7 +231,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           }
         )
       } else {
-        [this.formInfoFormacionAcademica.campos[inombre],
+        [//this.formInfoFormacionAcademica.campos[inombre],
          this.formInfoFormacionAcademica.campos[idir],
          this.formInfoFormacionAcademica.campos[icorreo],
          this.formInfoFormacionAcademica.campos[iPais],
@@ -487,22 +486,42 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         if (willDelete.value) {
           const files = [];
           this.info_formacion_academica = <any>infoFormacionAcademica;
-          console.info(this.info_formacion_academica)
-          if (this.info_formacion_academica.InfoFormacionAcademica.Documento.file !== undefined) {
+          if (this.info_formacion_academica.DocumentoId.file !== undefined) {
             files.push({
               nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-              file: this.info_formacion_academica.InfoFormacionAcademica.Documento.file, IdDocumento: 3,
+              file: this.info_formacion_academica.DocumentoId.file, IdDocumento: 3,
             });
           }
-          this.nuxeoService.getDocumentos$(files, this.documentoService)
+          return new Promise((resolve, reject) => {
+            this.nuxeoService.getDocumentos$(files, this.documentoService)
+              .subscribe(response => {
+                console.info("entra")
+                resolve(response['undefined'].Id); // desempacar el response, puede dejar de llamarse 'undefined'
+              }, error => {
+                console.info("no entra")
+                reject(error);
+              });
+          });
+          //console.info(this.info_formacion_academica.DocumentoId.file)
+          /*if (this.info_formacion_academica.DocumentoId.file !== undefined) {
+            files.push({
+              nombre: this.autenticationService.getPayload().sub, key: 'Documento',
+              file: this.info_formacion_academica.DocumentoId.file, IdDocumento: 3,
+            });
+          }
+          console.info(this.autenticationService.getPayload().sub)
+          this.nuxeoService.getDocumentos$([files], this.documentoService)
             .subscribe(response => {
+              console.info("pasa aca")
               if (Object.keys(response).length === files.length) {
                 this.filesUp = <any>response;
+                console.info('enytraa')
+                //console.info(response)
                 if (this.filesUp['Documento'] !== undefined) {
-                  this.info_formacion_academica.InfoFormacionAcademica.Documento = this.filesUp['Documento'].Id;
+                  this.info_formacion_academica.DocumentoId = this.filesUp['Documento'].Id;
                 }
                 // console.info('data post', JSON.stringify(this.info_formacion_academica));
-                this.sgaMidService.post('formacion_academica/', this.info_formacion_academica)
+                /*this.sgaMidService.post('formacion_academica/', this.info_formacion_academica)
                   .subscribe(res => {
                     const r = <any>res;
                     if (r !== null && r.Type !== 'error') {
@@ -529,8 +548,9 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                       });
                     });
               }
-            },
+            }, 
               (error: HttpErrorResponse) => {
+                console.info("no responde")
                 Swal({
                   type: 'error',
                   title: error.status + '',
@@ -538,7 +558,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                   footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
-              });
+              });*/
         }
       });
   }
@@ -555,7 +575,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       const formData = event.data.InfoFormacionAcademica;
-      console.info(formData.ProgramaAcademico.Id);
       const InfoFormacionAcademica = {
         TerceroId: this.persona_id,
         ProgramaAcademicoId: formData.ProgramaAcademico.Id,
