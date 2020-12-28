@@ -268,12 +268,15 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
             activityPut['FechaFin'] = activity.Actividad.FechaFin;
             this.eventoService.put('calendario_evento', activityPut).subscribe(
               response => {
-                const proceso = this.processes.filter(proc => proc.procesoId === process.procesoId)[0];
-                const i = proceso.actividades.findIndex(actv => actv.actividadId === activity.Actividad);
-                proceso.actividades[i] = activity.Actividad;
-                this.processTable.update(process, proceso);
-                this.processTable.refresh();
-                this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
+                this.sgaMidService.put('crear_actividad_calendario/update', {Id: event.data.actividadId, resp: activity.responsable}).subscribe(
+                  response => {
+                    this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
+                    this.loadSelects(this.calendar.calendarioId);
+                  },
+                  error => {
+                    this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
+                  },
+                );
               },
               error => {
                 this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
@@ -284,7 +287,6 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
             this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
           },
         );
-        // update responsables
       }
     });
   }

@@ -122,7 +122,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
 
   fetchSelectData(period) {
     this.parametrosService.get('periodo/' + period).subscribe(
-      response => this.period = response['Nombre'],
+      response => this.period = response['Data']['Nombre'],
     );
     this.updateSelect();
   }
