@@ -1,7 +1,6 @@
 import { Inscripcion } from './../../../@core/data/models/inscripcion/inscripcion';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
-import { CoreService } from '../../../@core/data/core.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -96,7 +95,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     private sgaMidService: SgaMidService,
     private parametrosService: ParametrosService,
     private inscripcionService: InscripcionService,
-    private coreService: CoreService,
     private toasterService: ToasterService,
     private eventoService: EventoService) {
     // this.cargaproyectosacademicos();
@@ -327,16 +325,16 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
+      this.parametrosService.get('periodo?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
         .subscribe(res => {
           const r = <any>res;
-          if (res !== null && r.Type !== 'error') {
-            this.periodo = <any>res[0];
+          if (res !== null && r.Status === '200') {
+            this.periodo = <any>res['Data'][0];
             window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
             // console.info('Id periodo')
             // console.info(this.periodo)
             resolve(this.periodo);
-            const periodos = <Array<any>>res;
+            const periodos = <any[]>res['Data'];
             periodos.forEach(element => {
               this.periodos.push(element);
             });

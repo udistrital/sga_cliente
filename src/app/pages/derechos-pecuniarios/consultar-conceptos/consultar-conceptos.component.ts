@@ -29,7 +29,7 @@ export class ConsultarConceptosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.parametrosService.get('periodo?limit=0&sortby=Id&order=desc').subscribe(
+    this.parametrosService.get('periodo?query=CodigoAbreviacion:VG&limit=0&sortby=Id&order=desc').subscribe(
       response => {
         this.vigencias = response["Data"];
       },

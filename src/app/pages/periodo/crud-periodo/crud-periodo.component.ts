@@ -1,12 +1,11 @@
-import { TipoPeriodo } from './../../../@core/data/models/periodo/tipo_periodo';
 import { Periodo } from './../../../@core/data/models/periodo/periodo';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ClienteHabilitarPeriodoService } from '../../../@core/data/cliente_habilitar_periodo.service';
+import { ParametrosService } from '../../../@core/data/parametros.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 import { FORM_PERIODO } from './form-periodo';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import Swal from 'sweetalert2';
-import 'style-loader!angular2-toaster/toaster.css';
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'ngx-crud-periodo',
@@ -14,7 +13,7 @@ import 'style-loader!angular2-toaster/toaster.css';
   styleUrls: ['./crud-periodo.component.scss'],
 })
 export class CrudPeriodoComponent implements OnInit {
-  config: ToasterConfig;
+
   periodo_id: number;
 
   @Input('periodo_id')
@@ -30,14 +29,16 @@ export class CrudPeriodoComponent implements OnInit {
   regPeriodo: any;
   clean: boolean;
 
-  constructor(private translate: TranslateService, private clienteHabilitarPeriodoService: ClienteHabilitarPeriodoService,
-    private toasterService: ToasterService) {
+  constructor(
+    private translate: TranslateService, 
+    private parametrosService: ParametrosService,
+    private popUpManager: PopUpManager,
+  ) {
     this.formPeriodo = FORM_PERIODO;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.loadOptionsTipoPeriodo();
    }
 
   construirForm() {
@@ -53,17 +54,6 @@ export class CrudPeriodoComponent implements OnInit {
     this.translate.use(language);
   }
 
-  loadOptionsTipoPeriodo(): void {
-    let tipoPeriodo: Array<any> = [];
-      this.clienteHabilitarPeriodoService.get('tipo_periodo/?limit=0')
-        .subscribe(res => {
-          if (res !== null) {
-            tipoPeriodo = <Array<TipoPeriodo>>res;
-          }
-          this.formPeriodo.campos[ this.getIndexForm('TipoPeriodo') ].opciones = tipoPeriodo;
-        });
-  }
-
   getIndexForm(nombre: String): number {
     for (let index = 0; index < this.formPeriodo.campos.length; index++) {
       const element = this.formPeriodo.campos[index];
@@ -74,13 +64,14 @@ export class CrudPeriodoComponent implements OnInit {
     return 0;
   }
 
-
   public loadPeriodo(): void {
     if (this.periodo_id !== undefined && this.periodo_id !== 0) {
-      this.clienteHabilitarPeriodoService.get('periodo/?query=id:' + this.periodo_id)
+      this.parametrosService.get('periodo/' + this.periodo_id)
         .subscribe(res => {
           if (res !== null) {
-            this.info_periodo = <Periodo>res[0];
+            this.info_periodo = <Periodo>res['Data'];
+            this.info_periodo.InicioVigencia = moment(this.info_periodo.InicioVigencia).format('YYYY-MM-DD');
+            this.info_periodo.FinVigencia = moment(this.info_periodo.FinVigencia).format('YYYY-MM-DD');
           }
         });
     } else  {
@@ -90,47 +81,52 @@ export class CrudPeriodoComponent implements OnInit {
   }
 
   updatePeriodo(periodo: any): void {
-
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.actualizar'),
-      text: this.translate.instant('periodo.seguro_actualizar_periodo'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt)
-    .then((willDelete) => {
-      if (willDelete.value) {
-        this.info_periodo = <Periodo>periodo;
-        this.clienteHabilitarPeriodoService.put('periodo', this.info_periodo)
+    this.popUpManager.showConfirmAlert(
+      this.translate.instant('periodo.seguro_actualizar_periodo'),
+      this.translate.instant('GLOBAL.actualizar')
+    ).then(ok => {
+      if (ok.value) {
+        const p = <Periodo>periodo
+        this.info_periodo.Year = p.Year;
+        this.info_periodo.Ciclo = ''+p.Ciclo;
+        this.info_periodo.Nombre = this.info_periodo.Year + '-' + this.info_periodo.Ciclo;
+        this.info_periodo.InicioVigencia = p.InicioVigencia;
+        this.info_periodo.FinVigencia = p.FinVigencia;
+        this.info_periodo.Descripcion = 'Periodo académico ' + this.info_periodo.Nombre;;
+        this.info_periodo.Activo = true;
+        this.info_periodo.InicioVigencia = moment(this.info_periodo.InicioVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
+        this.info_periodo.FinVigencia = moment(this.info_periodo.FinVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
+        console.log(this.info_periodo)
+        this.parametrosService.put('periodo', this.info_periodo)
           .subscribe(res => {
             this.loadPeriodo();
             this.eventChange.emit(true);
-            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('periodo.periodo_actualizado'));
+            this.popUpManager.showSuccessAlert(this.translate.instant('periodo.periodo_actualizado'))
           });
       }
     });
   }
 
   createPeriodo(periodo: any): void {
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.registrar'),
-      text: this.translate.instant('periodo.seguro_continuar_registrar_periodo'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt)
-    .then((willDelete) => {
-      if (willDelete.value) {
+    this.popUpManager.showConfirmAlert(
+      this.translate.instant('periodo.seguro_continuar_registrar_periodo'),
+      this.translate.instant('GLOBAL.registrar')
+    ).then(ok => {
+      if (ok.value) {
         this.info_periodo = <Periodo>periodo;
-        this.clienteHabilitarPeriodoService.post('periodo', this.info_periodo)
+        this.info_periodo.Ciclo = ''+this.info_periodo.Ciclo;
+        this.info_periodo.Nombre = this.info_periodo.Year + '-' + this.info_periodo.Ciclo;
+        this.info_periodo.Descripcion = 'Periodo académico ' + this.info_periodo.Nombre;
+        this.info_periodo.CodigoAbreviacion = 'PA';
+        this.info_periodo.Activo = true;
+        this.info_periodo.InicioVigencia = moment(this.info_periodo.InicioVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
+        this.info_periodo.FinVigencia = moment(this.info_periodo.FinVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
+        this.info_periodo.AplicacionId = 41 // ID de SGA en Configuracion_CRUD
+        this.parametrosService.post('periodo', this.info_periodo)
           .subscribe(res => {
-            this.info_periodo = <Periodo><unknown>res;
+            this.info_periodo = <Periodo>res['Data'];
             this.eventChange.emit(true);
-            this.showToast('success', this.translate.instant('GLOBAL.crear'), this.translate.instant('periodo.periodo_creado'));
+            this.popUpManager.showSuccessAlert(this.translate.instant('periodo.periodo_creado'));
           });
       }
     });
@@ -148,27 +144,6 @@ export class CrudPeriodoComponent implements OnInit {
         this.updatePeriodo(event.data.Periodo);
       }
     }
-  }
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
   }
 
 }

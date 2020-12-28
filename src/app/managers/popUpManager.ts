@@ -32,7 +32,7 @@ export class PopUpManager {
 
     public showAlert(status, text) {
         Swal({
-            type: status,
+            type: 'info',
             title: status,
             text: text,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -57,9 +57,9 @@ export class PopUpManager {
         });
     }
 
-    public showConfirmAlert(text): Promise<any> {
+    public showConfirmAlert(text, title=this.translate.instant('GLOBAL.atencion')): Promise<any> {
         const options: any = {
-            title: this.translate.instant('GLOBAL.atencion'),
+            title: title,
             text: text,
             type: 'warning',
             showCancelButton: true,

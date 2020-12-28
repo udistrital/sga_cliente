@@ -216,11 +216,11 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     var IdUniversidad;
     
     if (regex.test(nit) === true){
-      console.info("es int");
+      //console.info("es int");
       this.searchNit(nit);
     } else {
       if (Object.entries(this.formInfoFormacionAcademica.campos[inombre].valor).length !=0){
-        console.info("hay algo")
+        //console.info("hay algo")
         IdUniversidad = this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].valor.Id;
         this.tercerosService.get('datos_identificacion?query=TerceroId__Id:'+IdUniversidad).subscribe(
           (res: any) => {
@@ -489,39 +489,17 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           if (this.info_formacion_academica.DocumentoId.file !== undefined) {
             files.push({
               nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-              file: this.info_formacion_academica.DocumentoId.file, IdDocumento: 3,
+              file: this.info_formacion_academica.DocumentoId.file, IdDocumento: 16
             });
           }
-          return new Promise((resolve, reject) => {
-            this.nuxeoService.getDocumentos$(files, this.documentoService)
-              .subscribe(response => {
-                console.info("entra")
-                resolve(response['undefined'].Id); // desempacar el response, puede dejar de llamarse 'undefined'
-              }, error => {
-                console.info("no entra")
-                reject(error);
-              });
-          });
-          //console.info(this.info_formacion_academica.DocumentoId.file)
-          /*if (this.info_formacion_academica.DocumentoId.file !== undefined) {
-            files.push({
-              nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-              file: this.info_formacion_academica.DocumentoId.file, IdDocumento: 3,
-            });
-          }
-          console.info(this.autenticationService.getPayload().sub)
-          this.nuxeoService.getDocumentos$([files], this.documentoService)
+          this.nuxeoService.getDocumentos$(files, this.documentoService)
             .subscribe(response => {
-              console.info("pasa aca")
               if (Object.keys(response).length === files.length) {
                 this.filesUp = <any>response;
-                console.info('enytraa')
-                //console.info(response)
                 if (this.filesUp['Documento'] !== undefined) {
                   this.info_formacion_academica.DocumentoId = this.filesUp['Documento'].Id;
                 }
-                // console.info('data post', JSON.stringify(this.info_formacion_academica));
-                /*this.sgaMidService.post('formacion_academica/', this.info_formacion_academica)
+                this.sgaMidService.post('formacion_academica/', this.info_formacion_academica)
                   .subscribe(res => {
                     const r = <any>res;
                     if (r !== null && r.Type !== 'error') {
@@ -550,7 +528,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               }
             }, 
               (error: HttpErrorResponse) => {
-                console.info("no responde")
                 Swal({
                   type: 'error',
                   title: error.status + '',
@@ -558,7 +535,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                   footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
-              });*/
+              });
         }
       });
   }

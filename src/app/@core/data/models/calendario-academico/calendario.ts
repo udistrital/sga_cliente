@@ -12,4 +12,5 @@ export class Calendario {
     resolucion: number;
     anno: number; 
     calendarioId: number;
+    ListaCalendario: any[];
 }

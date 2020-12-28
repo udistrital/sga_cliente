@@ -132,7 +132,7 @@ export let FORM_FORMACION_ACADEMICA = {
       placeholder_i18n: 'soporte_documento',
       requerido: false,
       tipo: 'pdf',
-      tipoDocumento: 3,
+      tipoDocumento: 16,
       formatos: 'pdf',
       url: '',
       tamanoMaximo: 2,
