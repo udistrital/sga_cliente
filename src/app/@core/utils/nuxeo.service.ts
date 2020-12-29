@@ -61,6 +61,7 @@ export class NuxeoService {
                         .subscribe(res => {
                             if (res !== null) {
                                 const tipoDocumento = <TipoDocumento>res;
+                                console.info("Tipo doc");
                                 console.info(tipoDocumento);
                                 NuxeoService.nuxeo.operation('Document.Create')
                                     .params({

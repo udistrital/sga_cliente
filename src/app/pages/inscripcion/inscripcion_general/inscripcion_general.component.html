@@ -343,7 +343,7 @@
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
 
                 <nb-tab tabTitle="{{ 'inscripcion.formacion_academica' | translate }}" active=true>
-                    <ngx-crud-formacion-academica (result)="setPercentage_acad($event,0)"></ngx-crud-formacion-academica>
+                    <ngx-list-formacion-academica (result)="setPercentage_acad($event,0)"></ngx-list-formacion-academica>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}">
                     <ngx-list-idiomas (result)="setPercentage_acad($event,1)" (bridge_create_inscripcion)="create_inscription($event)" inscripcion_id="{{inscripcion_id}}"></ngx-list-idiomas>

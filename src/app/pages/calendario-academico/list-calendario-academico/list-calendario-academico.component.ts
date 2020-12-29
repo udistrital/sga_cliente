@@ -43,10 +43,12 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
   recargarDespuesClon(newItem) {
     this.calendarForEditId = newItem
+    this.ngOnInit()
   }
 
   ngOnInit() {
     this.loading = true;
+    this.data = []
     this.sgaMidService.get('consulta_calendario_academico?limit=0').subscribe(
       response => {
         response.map(calendar => {
@@ -170,7 +172,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
               this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_no_inhabilitado'));
             } else {
               this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_inhabilitado'));
-              this.createTable();
+              this.ngOnInit();
             }
           },
           error => {

@@ -58,6 +58,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   calendarForNew: boolean = false;
   @Output()
   calendarCloneOut = new EventEmitter<number>();
+  @Output()
+  newCalendar = new EventEmitter<void>();
 
   constructor(
     private sanitization: DomSanitizer,
@@ -153,7 +155,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         (response: any[]) => {
           const calendar = response[0];
           this.calendar = new Calendario();
-          this.calendar.calendarioId = calendar['Id'];
+          this.calendar.calendarioId = parseInt(calendar['Id']);
           this.calendar.DocumentoId = calendar['resolucion']['Id'];
           this.calendar.resolucion = calendar['resolucion']['Resolucion'];
           this.calendar.anno = calendar['resolucion']['Anno'];
@@ -193,6 +195,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
               }
             });
             this.processTable.load(this.processes);
+          } else {
+            this.loading = false;
           }
 
           this.calendarForm.setValue({
@@ -353,6 +357,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                   this.loading = false;
                   this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_existe'));
                 } else {
+                  console.info("file")
+                  console.info(this.fileResolucion)
                   this.uploadResolutionFile(this.fileResolucion).then(
                     fileID => {
                     this.calendar.DocumentoId = fileID;
@@ -366,6 +372,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                         this.calendar.calendarioId = response['Id'];
                         this.createdCalendar = true;
                         this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
+                        this.newCalendar.emit();
                       },
                       error => {
                         this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
@@ -394,6 +401,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         if (ok.value) {
           this.loading = true;
           if (this.fileResolucion) {
+            console.info(this.fileResolucion)
             this.calendar = this.calendarForm.value;
             this.uploadResolutionFile(this.fileResolucion)
               .then(fileID => {
@@ -462,6 +470,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   uploadResolutionFile(file) {
+    console.info(file);
     return new Promise((resolve, reject) => {
       this.nuxeoService.getDocumentos$([file], this.documentoService)
         .subscribe(response => {
@@ -611,7 +620,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             activityPut['FechaFin'] = activity.Actividad.FechaFin;
             this.eventoService.put('calendario_evento', activityPut).subscribe(
               response => {
-                this.sgaMidService.put('crear_actividad_calendario/update/' + event.data.actividadId, activity.responsable).subscribe(
+                this.sgaMidService.put('crear_actividad_calendario/update', {Id: event.data.actividadId, resp: activity.responsable}).subscribe(
                   response => {
                     this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
                     this.ngOnChanges();
@@ -691,6 +700,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         } else {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.formato_documento_pdf'));
         }
+        console.info("prueba")
+        console.info(file)
       }
     } else {
       this.popUpManager.showErrorToast(this.translate.instant('calendario.error_pre_file'));

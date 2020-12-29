@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { formatDate } from '@angular/common';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-list-formacion-academica',
@@ -32,7 +33,9 @@ export class ListFormacionAcademicaComponent implements OnInit {
   loading: boolean;
   percentage: number;
 
-  constructor(private translate: TranslateService,
+  constructor(
+    private translate: TranslateService,
+    private popUpManager: PopUpManager,
     private toasterService: ToasterService,
     private userService: UserService,
     private campusMidService: CampusMidService,
@@ -78,22 +81,22 @@ export class ListFormacionAcademicaComponent implements OnInit {
       mode: 'external',
       columns: {
         NivelFormacion: {
-          title: this.translate.instant('GLOBAL.nivel_formacion'),
+          title: this.translate.instant('GLOBAL.nit'),
           width: '10%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        PaisUniversidad: {
-          title: this.translate.instant('GLOBAL.pais_universidad'),
-          width: '25%',
+        NombreUniversidad: {
+          title: this.translate.instant('GLOBAL.nombre_universidad'),
+          width: '28%',
           valuePrepareFunction: (value) => {
             return value;
           },
         },
-        NombreUniversidad: {
-          title: this.translate.instant('GLOBAL.nombre_universidad'),
-          width: '25%',
+        PaisUniversidad: {
+          title: this.translate.instant('GLOBAL.pais_universidad'),
+          width: '20%',
           valuePrepareFunction: (value) => {
             return value;
           },
@@ -106,10 +109,10 @@ export class ListFormacionAcademicaComponent implements OnInit {
           },
         },
         Metodologia: {
-          title: this.translate.instant('GLOBAL.metodologia'),
+          title: this.translate.instant('GLOBAL.fecha_inicio'),
           width: '10%',
           valuePrepareFunction: (value) => {
-            return value.Nombre;
+            return formatDate(value, 'yyyy-MM-dd', 'en');
           },
         },
         FechaFinalizacion: {
@@ -160,55 +163,24 @@ export class ListFormacionAcademicaComponent implements OnInit {
                               }
                             },
                               (error: HttpErrorResponse) => {
-                                Swal({
-                                  type: 'error',
-                                  title: error.status + '',
-                                  text: this.translate.instant('ERROR.' + error.status),
-                                  footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                                    this.translate.instant('GLOBAL.formacion_academica') + '|' +
-                                    this.translate.instant('GLOBAL.pais_universidad'),
-                                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                                });
+                                this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                               });
                         }
                       },
                         (error: HttpErrorResponse) => {
-                          Swal({
-                            type: 'error',
-                            title: error.status + '',
-                            text: this.translate.instant('ERROR.' + error.status),
-                            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                              this.translate.instant('GLOBAL.formacion_academica') + '|' +
-                              this.translate.instant('GLOBAL.nombre_universidad'),
-                            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                          });
+                          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                         });
                   }
                 },
                   (error: HttpErrorResponse) => {
-                    Swal({
-                      type: 'error',
-                      title: error.status + '',
-                      text: this.translate.instant('ERROR.' + error.status),
-                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                        this.translate.instant('GLOBAL.formacion_academica') + '|' +
-                        this.translate.instant('GLOBAL.programa_academico'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                    });
+                    this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                   });
             }
           });
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.formacion_academica'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
         });
   }
 
