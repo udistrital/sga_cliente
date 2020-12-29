@@ -33,6 +33,7 @@ export class CalendarioProyectoComponent {
 
   onSelectLevel() {
     this.loading = true;
+    this.showCalendar = false;
     this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
       response => {
         this.projects = (<any[]>response).filter(
@@ -49,6 +50,7 @@ export class CalendarioProyectoComponent {
 
   onSelectProject() {
     this.loading = true;
+    this.showCalendar = false;
     this.sgaMidService.get('consulta_calendario_proyecto/' + this.selectedProject.value).subscribe(
       response => {
         this.calendarioId = response["CalendarioId"];
