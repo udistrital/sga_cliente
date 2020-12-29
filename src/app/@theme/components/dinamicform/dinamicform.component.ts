@@ -102,6 +102,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
   }
 
   onChange(event, c) {
+    console.info("Dinamic form")
+    console.info(c)
     console.info(c.valor);
     if (c.valor !== undefined) {
       c.urlTemp = URL.createObjectURL(event.srcElement.files[0])
