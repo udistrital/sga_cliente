@@ -196,15 +196,18 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           editable: false,
           filter: false,
           valuePrepareFunction: (value) => {
-
-            this.responsable = "";
-            for (let i = 0; i < value.length; i++) {
-              this.responsable = value[i]['Nombre'] + ", " + this.responsable; 
+            if(value != null){
+              this.responsable = "";
+              for (let i = 0; i < value.length; i++) {
+                this.responsable = value[i]['Nombre'] + ", " + this.responsable; 
+              }
+              if (this.responsable != "") {
+                this.responsable = this.responsable.substring(0,this.responsable.length-2);
+              }
+              return this.responsable;
+            }else{
+              return value;
             }
-            if (this.responsable != "") {
-              this.responsable = this.responsable.substring(0,this.responsable.length-2);
-            }
-            return this.responsable;
           },
         },
         Activo: {
@@ -305,10 +308,10 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
     this.calendarioEvento.Id = 0
     this.calendarioEvento.Nombre = "-" + event.data.Nombre;
     this.calendarioEvento.Descripcion = event.data.Descripcion;
-    this.calendarioEvento.FechaCreacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
-    this.calendarioEvento.FechaModificacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
-    this.calendarioEvento.FechaInicio = event.data.FechaInicio;
-    this.calendarioEvento.FechaFin = event.data.FechaFin;
+    // this.calendarioEvento.FechaCreacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
+    // this.calendarioEvento.FechaModificacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
+    this.calendarioEvento.FechaInicio = moment(event.data.FechaInicio).format('YYYY-MM-DDTHH:mm') + ':00Z';
+    this.calendarioEvento.FechaFin = moment(event.data.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
     this.calendarioEvento.Activo = event.data.Activo;
     this.calendarioEvento.DependenciaId = JSON.stringify({ proyectos: this.projectId });
     this.calendarioEvento.EventoPadreId = { Id: event.data.actividadId };
@@ -316,7 +319,11 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
 
     this.eventoService.post('calendario_evento', this.calendarioEvento).subscribe(
       response => {
-        this.loadSelects(this.calendarForProject);
+        if(this.calendarForProject != '0'){
+          this.loadSelects(this.calendarForProject);
+        }else{
+          this.loadSelects(this.idDetalle);
+        }
         this.createActivitiesTable();
         this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_hija_exito'));
         this.loading = false; 
