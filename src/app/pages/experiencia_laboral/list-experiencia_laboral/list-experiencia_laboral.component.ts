@@ -30,7 +30,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
   set name(ente_id: number) {
     if (ente_id !== undefined && ente_id !== null && ente_id.toString() !== '') {
       this.eid = ente_id;
-      this.loadData();
+      // this.loadData();
     }
   }
 
@@ -58,7 +58,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
     this.loading = false;
     this.persona_id = this.userService.getPersonaId();
     if (this.persona_id !== undefined && this.persona_id !== null && this.persona_id.toString() !== '') {
-      this.loadData();
+      // this.loadData();
     }
   }
 
@@ -192,7 +192,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
   onChange(event) {
     if (event) {
       this.uid = 0;
-      this.loadData();
+      // this.loadData();
     }
   }
 
@@ -220,7 +220,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
         if (willDelete.value) {
           this.experienciaService.delete('experiencia_laboral', event.data).subscribe(res => {
             if (res !== null) {
-              this.loadData();
+              // this.loadData();
               this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
                 this.translate.instant('GLOBAL.experiencia_laboral') + ' ' +
                 this.translate.instant('GLOBAL.confirmarEliminar'));

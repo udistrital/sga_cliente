@@ -963,7 +963,8 @@
         "documento_experiencia_laboral_no_registrado": "Error uploading support document",
         "seguro_continuar_registrar": "Are you sure you want to register this work experience?",
         "cargar_experiencia": "An error happened loading the work experience information",
-        "error_cargar_empresa": "An error happened loading the company information"
+        "error_cargar_empresa": "An error happened loading the company information",
+        "empresa_no_encontrada": "There is no information with the data entered"
     },
     "documento_programa": {
         "descuento_academico_no_registrado": "Academic discount not registered",
