@@ -51,6 +51,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   nivel_load = [{ nombre: 'Pregrado', id: 14 }, { nombre: 'Posgrado', id: 15 }];
   loading: boolean = false;
   editMode: boolean = false;
+  uploadMode: boolean = false;
 
   @Input()
   calendarForEditId: number = 0;
@@ -115,7 +116,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     if (this.calendarForNew === true){
       this.activetabs = false;
       this.createdCalendar = false;
-      this.editMode = true;
+      this.editMode = false;
+      this.uploadMode = true;
       
       this.eventoService.get('calendario/' + this.calendarForEditId).subscribe(
         calendar => {
@@ -143,10 +145,12 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       this.activetabsClone = false;
       this.createdCalendar = false;
       this.editMode = false;
+      this.uploadMode = true;
       this.calendarForm.reset()
     } else {
       this.createdCalendar = true;
       this.editMode = true;
+      this.uploadMode = false;
       this.openTabs();
       this.loading = true;
       this.sgaMidService.get('consulta_calendario_academico/' + this.calendarForEditId).subscribe(
