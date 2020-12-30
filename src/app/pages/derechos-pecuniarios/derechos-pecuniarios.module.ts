@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NbSpinnerModule } from '@nebular/theme';
 import { DerechosPecuniariosComponent } from './derechos-pecuniarios.component';
 import { DerechosPecuniariosRoutingComponent, routedComponents } from './derechos-pecuniarios-routing.module';
 import { CrudDerechosPecuniariosComponent } from './crud-derechos-pecuniarios/crud-derechos-pecuniarios.component';
@@ -22,6 +22,7 @@ import { ConsultarConceptosComponent } from './consultar-conceptos/consultar-con
   imports: [
     SharedModule,
     ThemeModule,
+    NbSpinnerModule,
     Ng2SmartTableModule,
     FormsModule,
     ReactiveFormsModule,

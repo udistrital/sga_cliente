@@ -67,9 +67,13 @@ export class CopiarConceptosComponent implements OnInit {
       },
       mode: 'external',
       actions: {
+        add: false,
+        edit: false,
+        delete: false,
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
       },
+/*
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
       },
@@ -79,6 +83,7 @@ export class CopiarConceptosComponent implements OnInit {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
       },
+*/
       noDataMessage: this.translate.instant('derechos_pecuniarios.no_data'),
     };
   }

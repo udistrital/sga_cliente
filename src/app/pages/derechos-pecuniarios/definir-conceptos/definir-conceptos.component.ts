@@ -22,14 +22,17 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
   vigencias: any[];
   tablaConceptos: any;
   datosConceptos: LocalDataSource;
-  salario: number;
+  salario: string;
+  salarioValor: number;
   vigenciaActual: FormControl;
+  guardable: boolean = false;
+  loading: boolean = false;
   
   @Input()
   mostrarCalcular: boolean = false;
 
   @Input()
-  datosCargados: any[] = [];
+  datosCargados: Concepto[] = [];
 
   constructor(
     private popUpManager: PopUpManager,
@@ -99,6 +102,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
           editable: false,
           width: '25%',
           filter: false,
+          valuePrepareFunction: (value: number) => value.toLocaleString('es-CO', {style: 'currency', currency: 'COP'}),
         },
       },
       mode: 'external',
@@ -121,52 +125,74 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
 
   calcularValores() {
     if (this.datosConceptos.count() === 0) {
-      this.popUpManager.showAlert('info', this.translate.instant('derechos_pecuniarios.no_conceptos'));
-    } else{
-      var totalConcepto=this.datosCargados.length;
-      var datosAntiguos = [];
-      var smldv = this.salario/30;
-      for (var i = 0; i < totalConcepto; i++){
+      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), 
+      this.translate.instant('derechos_pecuniarios.no_conceptos_valores'));
+    } else {
+      const totalConcepto = this.datosCargados.length;
+      const datosAntiguos = [];
+      const smldv = this.salarioValor / 30;
+      for (let i = 0; i < totalConcepto; i++) {
         datosAntiguos[i] = this.datosCargados[i];
-        this.datosCargados[i].Costo = Math.round(smldv*this.datosCargados[i].Factor);
+        switch (this.datosCargados[i].Codigo) {
+          case '43':
+            this.datosCargados[i].Costo = Math.round((this.salarioValor*this.datosCargados[i].Factor)/100)*100;
+            break;
+          case '15':
+            this.datosCargados[i].Costo = Math.round((smldv*this.datosCargados[i].Factor)/50)*50;
+            break;
+          default:
+            this.datosCargados[i].Costo = Math.round((smldv*this.datosCargados[i].Factor)/100)*100;
+        }
         this.datosConceptos.update(datosAntiguos[i], this.datosCargados[i]);
       }
+      this.guardable = true;
+      console.log(this.datosCargados)
     }
   }
 
   guardarValores(){
-    this.popUpManager.showConfirmAlert(
-      this.translate.instant('derechos_pecuniarios.confirmar_guardar')
-    ).then(willSave => {
-      if(willSave.value) {
-        this.sgaMidService.post('derechos_pecuniarios/ActualizarValor/', this.datosCargados).subscribe(
-          response => {
-            this.popUpManager.showSuccessAlert(this.translate.instant('derechos_pecuniarios.registro_costo'));
-          },
-          error => {
-            this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error_registro_costo'));
-          },
-        );  
-      }
-    });
-    console.log(this.datosCargados);
+    if (this.datosConceptos.count() === 0) {
+      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), 
+      this.translate.instant('derechos_pecuniarios.no_conceptos_valores'));
+    } else {
+      this.popUpManager.showConfirmAlert(
+        this.translate.instant('derechos_pecuniarios.confirmar_guardar')
+      ).then(willSave => {
+        if(willSave.value) {
+          this.loading = true;
+          this.sgaMidService.post('derechos_pecuniarios/ActualizarValor/', this.datosCargados).subscribe(
+            response => {
+              this.guardable = false;
+              this.loading = false;
+              this.popUpManager.showSuccessAlert(this.translate.instant('derechos_pecuniarios.registro_costo'));
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error_registro_costo'));
+            },
+          );  
+        }
+      });
+    }
     
   }
 
   cargarSalario() {
     this.parametrosService.get('parametro_periodo?limit=0&query=PeriodoId__Id:'+this.vigenciaActual.value).subscribe(
       response => {
-        const data: any[] = response["Data"];
+        const data: any[] = response['Data'];
         if (Object.keys(data[0]).length > 0) {
-          const conceptoSalario = data.filter(obj => obj["ParametroId"]["TipoParametroId"]["Id"] === 1 )[0]; // identificador de Salario Minimo
-          this.salario = JSON.parse(conceptoSalario["Valor"]).Valor; // puede cambiar 
+          const conceptoSalario = data.filter(obj => obj['ParametroId']['TipoParametroId']['Id'] === 1 )[0]; // identificador de Salario Minimo
+          this.salarioValor = JSON.parse(conceptoSalario['Valor']).Valor; // puede cambiar 
+          this.salario = this.salarioValor.toLocaleString('es-CO', {style: 'currency', currency: 'COP'});
         } else {
-          this.salario = 0;
+          this.salarioValor = 0;
+          this.salario = "";
           this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.no_salario'));
         }
       },
       error => {
-        this.salario = 0;
+        this.salarioValor = 0;
+        this.salario = "";
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       },
     );
@@ -183,7 +209,6 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
             concepto.Nombre = obj.ParametroId.Nombre;
             concepto.FactorId = obj.Id
             concepto.Factor = JSON.parse(obj.Valor).NumFactor;
-            console.log(obj.Valor)
             if (JSON.parse(obj.Valor).Costo !== undefined) {
               concepto.Costo = JSON.parse(obj.Valor).Costo;
             }
@@ -210,7 +235,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
         const nuevoConcepto = new ConceptoPost(); 
         nuevoConcepto.Concepto = {
           Nombre: concepto.Nombre,
-          CodigoAbreviacion: concepto.Codigo,
+          CodigoAbreviacion: concepto.Codigo.toString(),
           Activo: true,
           TipoParametroId: { Id: 2 }, // Identificador que agrupa los parametros de derechos pecuniarios
         };
@@ -220,11 +245,13 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
         nuevoConcepto.Vigencia = {
           Id: this.vigenciaActual.value
         }
+        console.log(nuevoConcepto)
         this.sgaMidService.post('derechos_pecuniarios', nuevoConcepto).subscribe(
           response => {
             concepto.Id = response["Concepto"]["Id"];
             concepto.FactorId = response["Factor"]["Id"];
             this.datosConceptos.append(concepto);
+            this.popUpManager.showSuccessAlert(this.translate.instant('derechos_pecuniarios.concepto_exito'))
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -278,6 +305,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
         this.sgaMidService.delete('derechos_pecuniarios', event.data).subscribe(
           response => {
             this.popUpManager.showSuccessAlert(this.translate.instant('derechos_pecuniarios.inactivo'));
+            this.cargarSalario();
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
