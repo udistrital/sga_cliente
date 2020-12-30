@@ -47,7 +47,9 @@ export class DialogoConceptosComponent {
 
   agregarConcepto() {
     this.popUpManager.showConfirmAlert(
-      this.translate.instant('derechos_pecuniarios.confirmar_concepto')
+      this.conceptoEditar === null ?
+      this.translate.instant('derechos_pecuniarios.confirmar_concepto') :
+      this.translate.instant('derechos_pecuniarios.modificar_concepto')
     ).then(ok => {
       if (ok.value) {
         this.concepto = this.formConcepto.value;

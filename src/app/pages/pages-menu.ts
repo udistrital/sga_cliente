@@ -96,7 +96,7 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
-  {
+/*   {
     title: 'Calendarioevento',
     icon: 'nb-compose',
     link: '/pages/calendarioevento',
@@ -113,7 +113,7 @@ export const MENU_ITEMS: MenuItem[] = [
         key: 'crud_calendarioevento',
       },
     ],
-  },
+  }, */
   {
     title: 'Proyecto Academico',
     icon: 'nb-edit',
