@@ -51,6 +51,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   nivel_load = [{ nombre: 'Pregrado', id: 14 }, { nombre: 'Posgrado', id: 15 }];
   loading: boolean = false;
   editMode: boolean = false;
+  uploadMode: boolean = false;
 
   @Input()
   calendarForEditId: number = 0;
@@ -117,7 +118,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     if (this.calendarForNew === true){
       this.activetabs = false;
       this.createdCalendar = false;
-      this.editMode = true;
+      this.editMode = false;
+      this.uploadMode = true;
       
       this.eventoService.get('calendario/' + this.calendarForEditId).subscribe(
         calendar => {
@@ -145,10 +147,12 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       this.activetabsClone = false;
       this.createdCalendar = false;
       this.editMode = false;
+      this.uploadMode = true;
       this.calendarForm.reset()
     } else {
       this.createdCalendar = true;
       this.editMode = true;
+      this.uploadMode = false;
       this.openTabs();
       this.loading = true;
       this.sgaMidService.get('consulta_calendario_academico/' + this.calendarForEditId).subscribe(
@@ -395,16 +399,19 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       }); 
 
     } else {
+      console.info("Calendario clone entra")
       this.activebutton = false;
       this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_registrar_calendario'))
       .then(ok => {
         if (ok.value) {
           this.loading = true;
+          console.info("punto de control 1")
           if (this.fileResolucion) {
             console.info(this.fileResolucion)
             this.calendar = this.calendarForm.value;
             this.uploadResolutionFile(this.fileResolucion)
               .then(fileID => {
+                console.info("Punto de control 2")
                 this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
                 this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
                 this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
@@ -415,13 +422,14 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                 this.calendar.FechaCreacion = momentTimezone.tz(this.calendar.FechaCreacion, 'America/Bogota').format('YYYY-MM-DD HH:mm');
                 this.calendar.FechaModificacion = momentTimezone.tz(this.calendar.FechaModificacion, 'America/Bogota').format('YYYY-MM-DD HH:mm');
                 this.calendar.CalendarioPadreId = {Id: this.calendarForEditId};
-                console.log(this.calendar);
+                //console.log(this.calendar);
+                console.info("Antes del post")
                 this.sgaMidService.post('consulta_calendario_academico/calendario_padre', this.calendar).subscribe(
                   response => {
+                    console.info("Se crea el calendario hijo")
                     this.calendar.calendarioId = response['Id'];
                     console.log(this.calendar.calendarioId)
                     this.createdCalendar = true;
-                    this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
                     console.log(this.calendar.calendarioId);
           
                     // Funcion clonar nueva
@@ -432,18 +440,27 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                     this.calendarClone.Nivel = this.calendar.Nivel;          
                     this.calendarClone.PeriodoId = this.calendar.PeriodoId;          
                     this.calendarClone.IdPadre = {Id: this.calendarForEditId};          
-                    console.log(this.calendarClone)          
+                    //console.log(this.calendarClone)   
+                    console.info("Antes de clonar procesos")
                     this.sgaMidService.post('clonar_calendario/calendario_padre', this.calendarClone).subscribe(          
-                      response => {          
+                      response => {   
+                        console.info("se clona el calendario")
+                        console.info(response)
                         if (JSON.stringify(response) === JSON.stringify({})) {          
                           this.activebutton = true;          
                           this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_clon_error'));          
                         } else {          
+                          console.info(response);
+                          this.calendarClone.Id = response["Id"];
+                          this.createdCalendar = true;      
+                          this.openTabs();
+                          console.info(this.calendarClone.Id)
                           this.activebutton = false;          
                           this.activetabsClone = false;          
                           this.activetabs = true;          
                           this.calendarCloneOut.emit(this.calendarClone.Id);          
-                          this.calendarForNew = false;          
+                          this.calendarForNew = false; 
+                          //this.ngOnChanges();         
                           this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));          
                           this.popUpManager.showInfoToast(this.translate.instant('calendario.clonar_calendario_fechas'));          
                         }          
@@ -452,6 +469,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                         this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));          
                       },          
                     );
+                    this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
                   },
                   error => {
                     this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
