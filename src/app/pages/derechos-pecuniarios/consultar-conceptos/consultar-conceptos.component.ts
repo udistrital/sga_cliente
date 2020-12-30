@@ -95,6 +95,7 @@ export class ConsultarConceptosComponent implements OnInit {
           editable: false,
           width: '25%',
           filter: false,
+          valuePrepareFunction: (value: number) => value.toLocaleString('es-CO', {style: 'currency', currency: 'COP'}),
         },
       },
       actions: {
