@@ -300,18 +300,19 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               .subscribe(res => {
                 const filesResponse = <any>res;
                 if (Object.keys(filesResponse).length === files.length) {
-                  var FechaI = new Date(this.temp_info_academica.FechaInicio)
+                  //var FechaI = new Date(this.temp_info_academica.FechaInicio)
+                  var FechaI = moment(this.temp_info_academica.FechaInicio, "DD-MM-YYYY").toDate();
+                  var FechaF = moment(this.temp_info_academica.FechaFinalizacion, "DD-MM-YYYY").toDate();
                   this.info_formacion_academica = {
                     Nit: this.temp_info_academica.Nit,
                     ProgramaAcademico: this.temp_info_academica.ProgramaAcademico,
-                    FechaInicio: moment(FechaI).format('DD-MM-YYYYY'),
-                    FechaFinalizacion: this.temp_info_academica.FechaFinalizacion,
+                    FechaInicio: FechaI,
+                    FechaFinalizacion: FechaF,
                     TituloTrabajoGrado: this.temp_info_academica.TituloTrabajoGrado,
                     DescripcionTrabajoGrado: this.temp_info_academica.DescripcionTrabajoGrado,
                     //Documento: filesResponse['Documento'],
                   }
-                  console.info(FechaI.toUTCString())
-                  console.info(this.info_formacion_academica.FechaInicio)
+                  
                   this.searchNit(this.temp_info_academica.Nit)
                   this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
                 }
