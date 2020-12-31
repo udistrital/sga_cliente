@@ -64,7 +64,7 @@
                     <div class="col-2">
                         <p>{{ 'calendario.etiqueta_documento' | translate }} </p>
                     </div>
-                    <div class="col-2">
+                    <div class="col-2" *ngIf="uploadMode">
                         <button mat-button type="button" (click)="fileInput.click()">
                             <span class="fa fa-paperclip fa-lg"></span>
                             <input formControlName="fileResolucion" #fileInput type="file" (change)="onInputFileResolucion($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>

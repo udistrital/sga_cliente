@@ -963,7 +963,8 @@
         "documento_experiencia_laboral_no_registrado": "Error uploading support document",
         "seguro_continuar_registrar": "Are you sure you want to register this work experience?",
         "cargar_experiencia": "An error happened loading the work experience information",
-        "error_cargar_empresa": "An error happened loading the company information"
+        "error_cargar_empresa": "An error happened loading the company information",
+        "empresa_no_encontrada": "There is no information with the data entered"
     },
     "documento_programa": {
         "descuento_academico_no_registrado": "Academic discount not registered",
@@ -1140,14 +1141,17 @@
         "no_data": "No registered concepts found",
         "conceptos": "Concepts",
         "salario": "Minimum Legal Monthly Valid Salary",
-        "no_conceptos": "There are no registered concepts to assign values for financial entitlements.",
+        "no_conceptos": "There are no registered concepts for the chosen validity.",
+        "no_conceptos_valores": "There are no registered concepts to assign values for financial entitlements.",
         "costo": "Cost",
         "agregar_concepto": "Add Concept",
         "error_codigo": "Please add a code for the concept",
         "error_factor": "Please give the factor of the concept",
         "error_nombre": "Please insert the name for the concept",
         "confirmar_concepto": "Are you sure to add this concept to the financial entitlements?",
+        "modificar_concepto": "Are you sure about modifying this concept?",
         "inactivar_concepto": "Inactive this concept?",
+        "concepto_exito": "The new concept has been successfully registered.",
         "no_salario": "There's no registered salary for this validity",
         "inactivo": "The chosen concept is now inactive.",
         "actualizado": "The concept has been updated"

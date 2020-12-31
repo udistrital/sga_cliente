@@ -982,7 +982,8 @@
         "documento_experiencia_laboral_no_registrado": "Error subiendo el documento de soporte",
         "seguro_continuar_registrar": "¿Está seguto de registrar esta experiencia laboral?",
         "cargar_experiencia": "Ocurruió un error al cargar la información de la experiencia laboral",
-        "error_cargar_empresa": "Ocurruió un error al cargar la información de la empresa"
+        "error_cargar_empresa": "Ocurruió un error al cargar la información de la empresa",
+        "empresa_no_encontrada": "No existe información con los datos ingrsados"
     },
     "documento_programa": {
         "documento_programa_no_registrado": "Documento no registrado",
@@ -1159,18 +1160,21 @@
         "no_data": "No se encontraron conceptos registrados",
         "conceptos": "Conceptos",
         "salario": "Salario Mínimo Legal Mensual Vigente (SMMLV)",
-        "no_conceptos": "No hay conceptos registrados para hacer la asignación de valores para los derechos pecuniarios.",
+        "no_conceptos": "No hay conceptos registrados para la vigencia seleccionada.",
+        "no_conceptos_valores": "No hay conceptos registrados para hacer la asignación de valores para los derechos pecuniarios.",
         "costo": "Costo",
         "agregar_concepto": "Agregar Concepto",
         "error_codigo": "Por favor ingrese el codigo del concepto",
         "error_factor": "Por favor indique el factor del concepto",
         "error_nombre": "Por favor agregue el nombre del concepto",
         "confirmar_concepto": "¿Está seguro de agregar este concepto a los derechos pecuniarios?",
+        "modificar_concepto": "¿Está seguro de modificar este concepto?",
         "inactivar_concepto": "¿Inactivar concepto?",
+        "concepto_exito": "El concepto ha sido registrado con éxito.",
         "registro_costo": "Los costos de los conceptos han sido guardados exitosamente",
         "error_registro_costo": "Los costos de los conceptos no han podido ser guardados",
         "no_salario": "No hay salario registrado para esta vigencia",
-        "inactivo": "El concepto seleccionado se ecuentra ahora inactivo.",
+        "inactivo": "El concepto seleccionado se encuentra ahora inactivo.",
         "actualizado": "El concepto ha sido correctamente actualizado",
         "confirmar_guardar": "¿Está seguro que desea guardar estos valores de derechos pecuniarios?"
     },
