@@ -22,6 +22,7 @@ import * as moment from 'moment';
 })
 export class ListFormacionAcademicaComponent implements OnInit {
   uid: number;
+  pid: number;
   cambiotab: boolean = false;
   config: ToasterConfig;
   settings: any;
@@ -108,7 +109,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
           title: this.translate.instant('GLOBAL.programa_academico'),
           width: '20%',
           valuePrepareFunction: (value) => {
-            return value;
+            return value.Nombre;
           },
         },
         FechaInicio: {
@@ -168,7 +169,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   onEdit(event): void {
-    this.uid = event.data.Id;
+    this.uid = event.data.Nit;
   }
 
   onCreate(event): void {
@@ -191,6 +192,11 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   itemselec(event): void {
+    console.info("Tocar tabla");
+    console.info(event)
+    console.info(event.data.Nit);
+    this.uid = event.data.Nit;
+    this.pid = event.data.ProgramaAcademico.Id;
   }
 
   onDelete(event): void {
