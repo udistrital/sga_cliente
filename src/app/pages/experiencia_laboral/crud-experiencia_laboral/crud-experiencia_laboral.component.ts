@@ -15,8 +15,10 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ListService } from '../../../@core/store/services/list.service';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-crud-experiencia-laboral',
@@ -54,6 +56,8 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   persona_id: number;
 
   constructor(
+    private autenticationService: ImplicitAutenticationService,
+    private popUpManager: PopUpManager,
     private translate: TranslateService,
     private toasterService: ToasterService,
     private organizacionService: OrganizacionService,
@@ -465,7 +469,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
             this.formInfoExperienciaLaboral.campos[icorreo],
             this.formInfoExperienciaLaboral.campos[ipais],
             this.formInfoExperienciaLaboral.campos[itipo],
-              this.formInfoExperienciaLaboral.campos[itel]]
+            this.formInfoExperienciaLaboral.campos[itel]]
               .forEach(element => {
                 element.deshabilitar = false;
               });
@@ -498,54 +502,60 @@ export class CrudExperienciaLaboralComponent implements OnInit {
           const files = [];
           if (this.info_experiencia_laboral.Experiencia.Soporte.file !== undefined) {
             files.push({
-              nombre: this.info_experiencia_laboral.Experiencia.Cargo.Nombre, key: 'Soporte',
-              file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 4,
+              nombre: this.autenticationService.getPayload().sub, key: 'Documento',
+              file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 16
             });
           }
-          this.nuxeoService.getDocumentos$(files, this.documentoService)
-            .subscribe(response => {
-              if (Object.keys(response).length === files.length) {
-                const filesUp = <any>response;
-                if (filesUp['Soporte'] !== undefined) {
-                  this.info_experiencia_laboral.Experiencia.Documento = filesUp['Soporte'].Id;
-                }
-                this.sgaMidService.post('experiencia_laboral/', this.info_experiencia_laboral)
-                  .subscribe(res => {
-                    const r = <any>res;
-                    if (r !== null && r.Type !== 'error') {
-                      this.eventChange.emit(true);
-                      this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('experiencia_laboral.experiencia_laboral_registrada'));
-                      this.info_experiencia_laboral_id = 0;
-                      this.info_experiencia_laboral = undefined;
-                      this.clean = !this.clean;
-                    } else {
-                      this.showToast('error', this.translate.instant('GLOBAL.error'),
-                        this.translate.instant('experiencia_laboral.experiencia_laboral_no_registrada'));
-                    }
-                  },
-                    (error: HttpErrorResponse) => {
-                      Swal({
-                        type: 'error',
-                        title: error.status + '',
-                        text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('experiencia_laboral.experiencia_laboral_no_registrada'),
-                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                      });
-                    });
-              }
-            },
-              (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
-                  title: error.status + '',
-                  text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('experiencia_laboral.documento_experiencia_laboral_no_registrado'),
-                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                });
-              });
+          this.uploadResolutionFile(files);
         }
       });
+  }
+
+  uploadResolutionFile(file) {
+    console.info(file);
+    return new Promise((resolve, reject) => {
+      this.nuxeoService.getDocumentos$(file, this.documentoService)
+        .subscribe(response => {
+          // resolve(response['undefined'].Id); // desempacar el response, puede dejar de llamarse 'undefined'
+          if (Object.keys(response).length === file.length) {
+            const filesUp = <any>response;
+            if (filesUp['Documento'] !== undefined) {
+              this.info_experiencia_laboral.Experiencia.DocumentoId = filesUp['Documento'].Id;
+              this.info_experiencia_laboral.Experiencia.EnlaceDocumento = filesUp['Documento'].Enlace;
+              this.postExperianciaLaboral();
+            }
+          }
+        }, error => {
+          reject(error);
+        });
+    });
+  }
+
+  postExperianciaLaboral() {
+    this.sgaMidService.post('experiencia_laboral/', this.info_experiencia_laboral)
+      .subscribe(res => {
+        const r = <any>res;
+        if (r !== null && r.Type !== 'error') {
+          this.eventChange.emit(true);
+          this.showToast('info', this.translate.instant('GLOBAL.crear'),
+            this.translate.instant('experiencia_laboral.experiencia_laboral_registrada'));
+          this.info_experiencia_laboral_id = 0;
+          this.info_experiencia_laboral = undefined;
+          this.clean = !this.clean;
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'),
+            this.translate.instant('experiencia_laboral.experiencia_laboral_no_registrada'));
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('experiencia_laboral.experiencia_laboral_no_registrada'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
   }
 
   // addUbicacionOrganizacion(ubicacion: any): void {
