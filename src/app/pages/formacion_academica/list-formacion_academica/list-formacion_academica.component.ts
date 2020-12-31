@@ -138,7 +138,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
     this.loading = true;
     this.sgaMidService.get('formacion_academica/?Id=' + this.persona_id)
     .subscribe(response => {
-      if(response !== null){
+      if(response !== null && response !== undefined && response !== '{}'){
         const data = <Array<any>>response;
         const dataInfo = <Array<any>>[];
         data.forEach(element => {
@@ -152,7 +152,11 @@ export class ListFormacionAcademicaComponent implements OnInit {
           this.source.load(dataInfo);
         })
       } else{
-        //CONTROL DE ERRORES
+        if (response === '{}'){
+          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+        } else {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
+        }
       }
     },
     (error: HttpErrorResponse) => {
@@ -185,16 +189,10 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   onChange(event) {
-    if (event) {
-      this.uid = 0;
-      this.loadData();
-    }
+  
   }
 
   itemselec(event): void {
-    console.info("Tocar tabla");
-    console.info(event)
-    console.info(event.data.Nit);
     this.uid = event.data.Nit;
     this.pid = event.data.ProgramaAcademico.Id;
   }
