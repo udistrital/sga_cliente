@@ -893,6 +893,8 @@
         "crear_registro": "Crear nuevo registro al proyecto académico"
     },
     "inscripcion": {
+        "info_update": "¡Atención! Ya existe información personal registrada, si desea actualizar sus datos contacte a su proyecto",
+        "info_no_existe": "No existen información registrada en la base de datos",
         "aviso_programa": "Seleccione el programa al que desea inscribirse",
         "aviso_nivel": "Seleccione el nivel al que desea inscribirse",
         "info_basica": "Información básica",
