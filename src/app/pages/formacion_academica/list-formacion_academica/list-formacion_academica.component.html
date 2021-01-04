@@ -5,7 +5,7 @@
       (delete)="onDelete($event)" (rowSelect)="itemselec($event)"
       (edit)="onEdit($event)" (create)="onCreate($event)">
     </ng2-smart-table>
-    <ngx-crud-formacion-academica [info_formacion_academica_id]="uid"
+    <ngx-crud-formacion-academica [info_formacion_academica_id]="uid" [info_proyecto_id]="pid" 
       (eventChange)="onChange($event)" (result)="getPercentage($event)"></ngx-crud-formacion-academica>
   </nb-card-body>
 </nb-card>

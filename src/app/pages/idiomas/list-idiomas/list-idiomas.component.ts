@@ -123,7 +123,7 @@ export class ListIdiomasComponent implements OnInit {
   loadData(): void {
     this.loading = true;
     this.persona_id = this.userService.getPersonaId() || 1;
-    this.idiomaService.get('conocimiento_idioma/?query=Persona:' + this.persona_id +
+    this.idiomaService.get('conocimiento_idioma?query=TercerosId:' + this.persona_id +
       '&limit=0')
       .subscribe(res => {
         if (res !== null && JSON.stringify(res[0]) !== '{}') {
@@ -171,7 +171,7 @@ export class ListIdiomasComponent implements OnInit {
     Swal(opt)
       .then((willDelete) => {
         if (willDelete.value) {
-          this.idiomaService.delete('conocimiento_idioma/', event.data).subscribe(res => {
+          this.idiomaService.delete('conocimiento_idioma', event.data).subscribe(res => {
             if (res !== null) {
               this.loadData();
               this.showToast('info', this.translate.instant('GLOBAL.eliminar'),

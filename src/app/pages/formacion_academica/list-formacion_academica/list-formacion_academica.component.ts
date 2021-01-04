@@ -5,6 +5,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { FormacionAcademicaService } from '../../../@core/data/formacion_academica.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
@@ -12,6 +13,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { formatDate } from '@angular/common';
 import { PopUpManager } from '../../../managers/popUpManager';
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-list-formacion-academica',
@@ -20,6 +22,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 })
 export class ListFormacionAcademicaComponent implements OnInit {
   uid: number;
+  pid: number;
   cambiotab: boolean = false;
   config: ToasterConfig;
   settings: any;
@@ -39,15 +42,16 @@ export class ListFormacionAcademicaComponent implements OnInit {
     private toasterService: ToasterService,
     private userService: UserService,
     private campusMidService: CampusMidService,
+    private sgaMidService: SgaMidService,
     private formacionService: FormacionAcademicaService,
     private ubicacionService: UbicacionService,
     private proyectoAcademicoService: ProyectoAcademicoService) {
-    this.loadData();
-    this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
     });
     this.persona_id = this.userService.getPersonaId();
+    this.loadData();
+    this.cargarCampos();
     this.loading = false;
   }
 
@@ -80,46 +84,46 @@ export class ListFormacionAcademicaComponent implements OnInit {
       },
       mode: 'external',
       columns: {
-        NivelFormacion: {
+        Nit: {
           title: this.translate.instant('GLOBAL.nit'),
           width: '10%',
           valuePrepareFunction: (value) => {
-            return value.Nombre;
+            return value;
           },
         },
-        NombreUniversidad: {
+        NombreCompleto: {
           title: this.translate.instant('GLOBAL.nombre_universidad'),
           width: '28%',
           valuePrepareFunction: (value) => {
             return value;
           },
         },
-        PaisUniversidad: {
+        Ubicacion: {
           title: this.translate.instant('GLOBAL.pais_universidad'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value;
           },
         },
-        Titulacion: {
+        ProgramaAcademico: {
           title: this.translate.instant('GLOBAL.programa_academico'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        Metodologia: {
+        FechaInicio: {
           title: this.translate.instant('GLOBAL.fecha_inicio'),
           width: '10%',
           valuePrepareFunction: (value) => {
-            return formatDate(value, 'yyyy-MM-dd', 'en');
+            return value;
           },
         },
         FechaFinalizacion: {
           title: this.translate.instant('GLOBAL.fecha_fin'),
           width: '10%',
           valuePrepareFunction: (value) => {
-            return formatDate(value, 'yyyy-MM-dd', 'en');
+            return value;
           },
         },
       },
@@ -132,56 +136,32 @@ export class ListFormacionAcademicaComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.formacionService.get('formacion_academica/?query=Persona:' + this.persona_id)
-      .subscribe(res => {
-        if (res !== null) {
-          const data = <Array<any>>res;
-          const data_info = <Array<any>>[];
-          data.forEach(element => {
-            if (element.Titulacion !== null && element.Titulacion !== undefined) {
-              this.proyectoAcademicoService.get('programa_academico/?query=Id:' + element.Titulacion)
-                .subscribe(programa => {
-                  if (programa !== null) {
-                    const programa_info = <any>programa[0];
-                    element.Titulacion = programa_info;
-                    element.Metodologia = programa_info.Metodologia;
-                    element.NivelFormacion = programa_info.NivelFormacion;
-                    this.campusMidService.get('organizacion/' + programa_info.Institucion)
-                      .subscribe(organizacion => {
-                        if (organizacion !== null) {
-                          const organizacion_info = <any>organizacion;
-                          element.NombreUniversidad = organizacion_info.Nombre;
-                          this.ubicacionService.get('lugar/' + organizacion_info.Ubicacion.UbicacionEnte.Lugar)
-                            .subscribe(pais => {
-                              if (pais !== null) {
-                                const pais_info = <any>pais;
-                                element.PaisUniversidad = pais_info.Nombre;
-                                data_info.push(element);
-                                this.loading = false;
-                                this.getPercentage(1);
-                                this.source.load(data_info);
-                              }
-                            },
-                              (error: HttpErrorResponse) => {
-                                this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-                              });
-                        }
-                      },
-                        (error: HttpErrorResponse) => {
-                          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-                        });
-                  }
-                },
-                  (error: HttpErrorResponse) => {
-                    this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-                  });
-            }
-          });
-        }
-      },
-        (error: HttpErrorResponse) => {
+    this.sgaMidService.get('formacion_academica/?Id=' + this.persona_id)
+    .subscribe(response => {
+      if(response !== null && response !== undefined && response !== '{}'){
+        const data = <Array<any>>response;
+        const dataInfo = <Array<any>>[];
+        data.forEach(element => {
+          const FechaI = element.FechaInicio;
+          const FechaF = element.FechaFinalizacion;
+          element.FechaInicio = FechaI.substring(0,2) + "-" + FechaI.substring(2,4) + "-" + FechaI.substring(4,8);
+          element.FechaFinalizacion = FechaF.substring(0,2) + "-" + FechaF.substring(2,4) + "-" + FechaF.substring(4,8);
+          dataInfo.push(element);
+          this.loading = false;
+          this.getPercentage(1);
+          this.source.load(dataInfo);
+        })
+      } else{
+        if (response === '{}'){
           this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-        });
+        } else {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
+        }
+      }
+    },
+    (error: HttpErrorResponse) => {
+      this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+    });
   }
 
   ngOnInit() {
@@ -193,7 +173,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   onEdit(event): void {
-    this.uid = event.data.Id;
+    this.uid = event.data.Nit;
   }
 
   onCreate(event): void {
@@ -209,13 +189,12 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   onChange(event) {
-    if (event) {
-      this.uid = 0;
-      this.loadData();
-    }
+  
   }
 
   itemselec(event): void {
+    this.uid = event.data.Nit;
+    this.pid = event.data.ProgramaAcademico.Id;
   }
 
   onDelete(event): void {

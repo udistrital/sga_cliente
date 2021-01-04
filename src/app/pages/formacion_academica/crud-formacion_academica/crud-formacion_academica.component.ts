@@ -28,6 +28,7 @@ import * as moment from 'moment';
 export class CrudFormacionAcademicaComponent implements OnInit {
   config: ToasterConfig;
   info_formacion_academica_id: number;
+  info_proyecto_id: number;
   organizacion: any;
   persona_id: number;
   SoporteDocumento: any;
@@ -36,7 +37,13 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
     this.info_formacion_academica_id = info_formacion_academica_id;
-    // this.loadInfoFormacionAcademica();
+      this.loadInfoFormacionAcademica();
+  }
+
+  @Input('info_proyecto_id')
+  set name_(info_proyecto_id: number) {
+    this.info_proyecto_id = info_proyecto_id;
+      this.loadInfoFormacionAcademica();
   }
 
   @Output() eventChange = new EventEmitter();
@@ -275,102 +282,56 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   }
 
   public loadInfoFormacionAcademica(): void {
-    /*this.temp_info_academica = {};
-    this.SoporteDocumento = [];
-    this.info_formacion_academica = {};
-    this.filesUp = <any>{};
-    // if (this.info_formacion_academica_id !== undefined &&
-    //   this.info_formacion_academica_id !== 0 &&
-    //   this.info_formacion_academica_id.toString() !== '') {
-    if (this.persona_id) {
-      // this.sgaMidService.get('formacion_academica' + this.info_formacion_academica_id)
-      this.sgaMidService.get('formacion_academica/by_tercero/' + this.persona_id)
-        .subscribe(res => {
-          if (res !== null) {
-            this.temp_info_academica = <any>res[0];
+    
+    if(this.info_formacion_academica_id !== 0 && this.info_proyecto_id !== 0 && this.persona_id !== 0){
+      this.temp_info_academica = {};
+      this.SoporteDocumento = [];
+      this.sgaMidService.get('formacion_academica/info_complementaria/?IdTercero='+this.persona_id+'&IdProyecto='+this.info_proyecto_id+'&Nit='+this.info_formacion_academica_id)
+        .subscribe((response: any) => {
+          this.temp_info_academica = <any>response;
+          if(response !== null && response !== undefined){
+            this.temp_info_academica = <any>response;
             const files = []
             if (this.temp_info_academica.Documento + '' !== '0') {
               files.push({ Id: this.temp_info_academica.Documento, key: 'Documento' });
             }
-            this.nuxeoService.getDocumentoById$(files, this.documentoService)
-              .subscribe(response => {
-                const filesResponse = <any>response;
+            if (this.temp_info_academica.Documento !== undefined && this.temp_info_academica.Documento !== null && this.temp_info_academica.Documento !== 0){
+              this.nuxeoService.getDocumentoById$(files, this.documentoService)
+              .subscribe(res => {
+                const filesResponse = <any>res;
                 if (Object.keys(filesResponse).length === files.length) {
+                  var FechaI = moment(this.temp_info_academica.FechaInicio, "DD-MM-YYYY").toDate();
+                  var FechaF = moment(this.temp_info_academica.FechaFinalizacion, "DD-MM-YYYY").toDate();
                   this.info_formacion_academica = {
-                    Nit: this.temp_info_academica.Institucion.Nit,
-                    NombreUniversidad: this.temp_info_academica.Institucion.NombreUniversidad,
-                    Pais: this.temp_info_academica.Institucion.Pais,
-                    Direccion: this.temp_info_academica.Institucion.Direccion,
-                    Correo: this.temp_info_academica.Institucion.Correo,
-                    Telefono: this.temp_info_academica.Institucion.Telefono,
-                    ProgramaAcademico: this.temp_info_academica.Titulacion,
-                    FechaInicio: this.temp_info_academica.FechaInicio,
-                    FechaFinalizacion: this.temp_info_academica.FechaFinalizacion,
+                    Nit: this.temp_info_academica.Nit,
+                    ProgramaAcademico: this.temp_info_academica.ProgramaAcademico,
+                    FechaInicio: FechaI,
+                    FechaFinalizacion: FechaF,
                     TituloTrabajoGrado: this.temp_info_academica.TituloTrabajoGrado,
                     DescripcionTrabajoGrado: this.temp_info_academica.DescripcionTrabajoGrado,
-                    // Documento: filesResponse['Documento'],
                   }
-                  // this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].url = filesResponse['Documento'] + '';
+                  this.searchNit(this.temp_info_academica.Nit)
                   this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
-                  // this.programaService.get('programa_academico/?query=id:' + this.temp.Titulacion.Id)
-                  //   .subscribe(programa => {
-                  //     if (programa !== null) {
-                  //       const programa_info = <ProgramaAcademico>programa[0];
-                  //       this.campusMidService.get('organizacion/' + programa_info.Institucion)
-                  //         .subscribe(organizacion => {
-                  //           if (organizacion !== null) {
-                  //             const organizacion_info = <any>organizacion;
-                  //             this.searchDoc(organizacion_info.NumeroIdentificacion);
-                  //             this.SoporteDocumento = this.temp.Documento;
-                  //             this.temp.Documento = filesResponse['Documento'] + '';
-                  //             this.temp.Titulacion = programa_info;
-                  //             this.temp.ProgramaAcademico = programa_info;
-                  //             this.info_formacion_academica = this.temp;
-                  //             this.formInfoFormacionAcademica.campos[this.getIndexForm('ProgramaAcademico')].opciones.push(programa_info);
-                  //             this.loading = false;
-                  //           }
-                  //         },
-                  //           (error: HttpErrorResponse) => {
-                  //             Swal({
-                  //               type: 'error',
-                  //               title: error.status + '',
-                  //               text: this.translate.instant('ERROR.' + error.status),
-                  //               footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                  //                 this.translate.instant('GLOBAL.formacion_academica') + '|' +
-                  //                 this.translate.instant('GLOBAL.nombre_universidad'),
-                  //               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  //             });
-                  //           });
-                  //     }
-                  //   },
-                  //     (error: HttpErrorResponse) => {
-                  //       Swal({
-                  //         type: 'error',
-                  //         title: error.status + '',
-                  //         text: this.translate.instant('ERROR.' + error.status),
-                  //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                  //           this.translate.instant('GLOBAL.formacion_academica') + '|' +
-                  //           this.translate.instant('GLOBAL.programa_academico'),
-                  //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  //       });
-                  //     });
                 }
               },
-                (error: HttpErrorResponse) => {
-                  this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-                });
+              (error: HttpErrorResponse) => {
+                this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+              });
+            }
           }
-        },
-          (error: HttpErrorResponse) => {
-            this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+          },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+            this.translate.instant('GLOBAL.formacion_academica') + '|' +
+            this.translate.instant('GLOBAL.nombre_universidad'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
-    } else {
-      this.temp_info_academica = {};
-      this.SoporteDocumento = [];
-      this.filesUp = <any>{};
-      this.info_formacion_academica = undefined
-      this.clean = !this.clean;
-    }*/
+        });
+    }
   }
 
   // updateInfoFormacionAcademica(infoFormacionAcademica: any): void {
@@ -545,8 +506,10 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   }
 
   setPercentage(event) {
-    this.percentage = event;
-    this.result.emit(this.percentage);
+    setTimeout(()=>{
+      this.percentage = event;
+      this.result.emit(this.percentage);     
+    });
   }
 
   validarForm(event) {
