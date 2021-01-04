@@ -12,6 +12,7 @@ import { ProyectoAcademicoService } from '../../@core/data/proyecto_academico.se
 import { OikosService } from '../../@core/data/oikos.service';
 import { PersonaService } from '../../@core/data/persona.service';
 import { UbicacionService } from '../../@core/data/ubicacion.service';
+import { UserService } from '../../@core/data/users.service';
 import { ProduccionAcademicaService } from '../../@core/data/produccion_academica.service';
 import { DescuentoAcademicoService } from '../../@core/data/descuento_academico.service';
 import { DocumentoProgramaService } from '../../@core/data/documento_programa.service';
@@ -83,7 +84,7 @@ import { PreinscripcionComponent } from './preinscripcion/preinscripcion.compone
     ProduccionAcademicaService,
     DocumentoProgramaService,
     DescuentoAcademicoService,
-
+    UserService,
   ],
    entryComponents: [
     CrudInfoPersonaComponent,

@@ -127,6 +127,7 @@
         "confirmarCrear": "has been created",
         "confirmarActualizar": "has been updated",
         "info_persona": "Personal data",
+        "no_info_persona": "There's no registered data por this User. Please enter your data.",
         "info_criterio": "ICFES criteria",
         "info_estado": "Registration Status",
         "guardar": "Save",
