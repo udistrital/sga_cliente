@@ -9,7 +9,8 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { OrganizacionService } from '../../../@core/data/organizacion.service';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
-import { Lugar } from '../../../@core/data/models/lugar/lugar';
+import { TercerosService } from '../../../@core/data/terceros.service';
+import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
 import { ExperienciaService } from '../../../@core/data/experiencia.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
@@ -68,6 +69,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private store: Store<IAppState>,
     private listService: ListService,
+    private tercerosService: TercerosService,
     private users: UserService) {
     this.formInfoExperienciaLaboral = FORM_EXPERIENCIA_LABORAL;
     this.construirForm();
@@ -431,10 +433,74 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   //       });
   // }
 
-
-
-  searchOrganizacion(data: any): void {
+  searchNit(data) {
+    const init = this.getIndexForm('Nit');
+    const inombre = this.getIndexForm('NombreEmpresa');
+    const itipo = this.getIndexForm('TipoOrganizacion');
+    const idir = this.getIndexForm('Direccion');
+    const itel = this.getIndexForm('Telefono');
+    const icorreo = this.getIndexForm('Correo');
+    const ipais = this.getIndexForm('Pais');
+    const regex = /^[0-9]*$/;
     const nit = typeof data === 'string' ? data : data.data.Nit;
+
+    if (regex.test(nit) === true) {
+      this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = true;
+      this.searchOrganizacion(nit);
+    } 
+      else {
+        this.clean = !this.clean;
+        this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
+        this.loadListEmpresa(nit);
+        this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
+      }
+  }
+
+  getSeleccion(event) {
+    var IdEmpresa;
+    if (event.nombre === 'NombreEmpresa') {
+      IdEmpresa = this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')].valor.Id;
+        this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdEmpresa).subscribe(
+          (res: any) => {
+            this.searchOrganizacion(res[0]["Numero"])
+          },
+          (error: HttpErrorResponse) => {
+
+          }
+        )
+    }
+  }
+
+  loadListEmpresa(nombre: string): void {
+    let consultaEmpresa: Array<any> = [];
+    const empresa: Array<any> = [];
+
+    this.sgaMidService.get('formacion_academica/info_universidad_nombre/?nombre=' + nombre)
+      .subscribe(res => {
+        if (res !== null) {
+          consultaEmpresa = <Array<InfoPersona>>res;
+          for (let i = 0; i < consultaEmpresa.length; i++) {
+            empresa.push(consultaEmpresa[i]);
+          }
+        }
+        this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')].opciones = empresa;
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.info_caracteristica') + '|' +
+              this.translate.instant('GLOBAL.ciudad_nacimiento'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+
+  }
+
+
+  searchOrganizacion(nit: string): void {
     const init = this.getIndexForm('Nit');
     const inombre = this.getIndexForm('NombreEmpresa');
     const itipo = this.getIndexForm('TipoOrganizacion');
