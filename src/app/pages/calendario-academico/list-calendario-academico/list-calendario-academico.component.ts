@@ -57,6 +57,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         } else if (response !== null && r.Response.Code == '400') {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
         } else {
+          response = response.Response.Body[1]
           response.map(calendar => {
             this.data.push({
               Id: calendar.Id,
