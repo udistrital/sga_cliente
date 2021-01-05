@@ -258,7 +258,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
     const activityConfig = new MatDialogConfig();
     activityConfig.width = '800px';
     activityConfig.height = '700px';
-    activityConfig.data = { process: process, calendar: this.processes, editActivity: event.data };
+    activityConfig.data = { process: process, calendar: this.calendar, editActivity: event.data };
     const editedActivity = this.dialog.open(ActividadCalendarioAcademicoComponent, activityConfig);
     editedActivity.afterClosed().subscribe((activity: any) => {
       if (activity !== undefined) {
