@@ -222,7 +222,7 @@ export class CrudIdiomasComponent implements OnInit {
 
   updateInfoIdioma(infoIdioma: InfoIdioma) {
     this.popUpManager.showConfirmAlert(
-      this.translate.instant('idioma.seguro_actializar_idioma'),
+      this.translate.instant('idiomas.seguro_actualizar_idioma'),
       this.translate.instant('GLOBAL.actualizar')
     ).then(willUpdate => {
       if (willUpdate.value) {
@@ -236,10 +236,9 @@ export class CrudIdiomasComponent implements OnInit {
           this.idiomaService.put('conocimiento_idioma', this.info_idioma).subscribe(
             (resp: any) => {
               if (resp !== null && resp.Type !== 'error') {
-                
+                this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_actualizada'));
+                this.eventChange.emit(true);
               }
-              this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_registrada'));
-              this.eventChange.emit(true);
             },
             error => {
               this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
@@ -256,7 +255,12 @@ export class CrudIdiomasComponent implements OnInit {
       if (!this.inscripcion_id) {
         this.crear_inscripcion.emit(this.formData);
       } else {
-        this.createInfoIdioma(this.formData);
+        if (this.info_idioma_id !== undefined && this.info_idioma_id !== 0 &&
+          this.info_idioma_id.toString() !== '') {
+            this.updateInfoIdioma(this.formData)
+          } else {
+            this.createInfoIdioma(this.formData);
+          }
       }
       this.result.emit(event);
     }
