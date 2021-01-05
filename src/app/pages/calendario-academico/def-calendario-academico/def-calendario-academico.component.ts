@@ -215,7 +215,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             Nivel: this.calendar.Nivel,
             fileResolucion: '',
           });
-          this.loading = false;
         },
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -347,7 +346,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
 
   createCalendar(event) {
     event.preventDefault();
-    console.log(this.calendarForNew)
     if (this.calendarForNew === false){
       this.activebutton = true;
       this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_registrar_calendario'))
@@ -404,92 +402,81 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       }); 
 
     } else {
-      console.info("Calendario clone entra")
-      this.activebutton = false;
+      this.activebutton = true;
       this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_registrar_calendario'))
       .then(ok => {
         if (ok.value) {
           this.loading = true;
-          console.info("punto de control 1")
           if (this.fileResolucion) {
-            console.info(this.fileResolucion)
             this.calendar = this.calendarForm.value;
-            this.uploadResolutionFile(this.fileResolucion)
-              .then(fileID => {
-                console.info("Punto de control 2")
+            this.uploadResolutionFile(this.fileResolucion).then(
+              fileID => {
+                this.calendar.DocumentoId = fileID;
+                this.calendar.DependenciaId = '{}';
+                this.calendar.Activo = true;
                 this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
                 this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
                 this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
-                this.calendar.DependenciaId = '{}';
-                this.calendar.DocumentoId = fileID;
                 this.calendar.AplicacionId = 0;
-                this.calendar.Activo = true;
                 this.calendar.FechaCreacion = momentTimezone.tz(this.calendar.FechaCreacion, 'America/Bogota').format('YYYY-MM-DD HH:mm');
                 this.calendar.FechaModificacion = momentTimezone.tz(this.calendar.FechaModificacion, 'America/Bogota').format('YYYY-MM-DD HH:mm');
                 this.calendar.CalendarioPadreId = {Id: this.calendarForEditId};
-                //console.log(this.calendar);
-                console.info("Antes del post")
                 this.sgaMidService.post('consulta_calendario_academico/calendario_padre', this.calendar).subscribe(
                   response => {
-                    console.info("Se crea el calendario hijo")
                     this.calendar.calendarioId = response['Id'];
-                    console.log(this.calendar.calendarioId)
-                    this.createdCalendar = true;
-                    console.log(this.calendar.calendarioId);
-          
-                    // Funcion clonar nueva
-          
-                    console.log(this.calendarForEditId);          
-                    this.calendarClone = new CalendarioClone();          
-                    this.calendarClone.Id = this.calendar.calendarioId;
-                    this.calendarClone.Nivel = this.calendar.Nivel;          
-                    this.calendarClone.PeriodoId = this.calendar.PeriodoId;          
-                    this.calendarClone.IdPadre = {Id: this.calendarForEditId};          
-                    //console.log(this.calendarClone)   
-                    console.info("Antes de clonar procesos")
-                    this.sgaMidService.post('clonar_calendario/calendario_padre', this.calendarClone).subscribe(          
-                      response => {   
-                        console.info("se clona el calendario")
-                        console.info(response)
-                        if (JSON.stringify(response) === JSON.stringify({})) {          
-                          this.activebutton = true;          
-                          this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_clon_error'));          
-                        } else {          
-                          console.info(response);
-                          this.calendarClone.Id = response["Id"];
-                          this.createdCalendar = true;      
-                          this.openTabs();
-                          console.info(this.calendarClone.Id)
-                          this.activebutton = false;          
-                          this.activetabsClone = false;          
-                          this.activetabs = true;          
-                          this.calendarCloneOut.emit(this.calendarClone.Id);          
-                          this.calendarForNew = false; 
-                          //this.ngOnChanges();         
-                          this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));          
-                          this.popUpManager.showInfoToast(this.translate.instant('calendario.clonar_calendario_fechas'));          
-                        }          
-                      },          
-                      error => {          
-                        this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));          
-                      },          
-                    );
-                    this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
+                    this.clonarPadre()
+                    this.loading = false;
                   },
                   error => {
                     this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
                   },
-                )                
+                )
                 this.loading = false;
-              }).catch(error => {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
-              });
+              }
+            ).catch(error => {
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
+            });          
+              
           } else {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.no_documento'));
           }
         }
       }); 
     }  
+  }
+
+  clonarPadre(){
+    this.loading = true;
+    this.calendarClone = new CalendarioClone();          
+    this.calendarClone.Id = this.calendar.calendarioId;
+    this.calendarClone.Nivel = this.calendar.Nivel;          
+    this.calendarClone.PeriodoId = this.calendar.PeriodoId;          
+    this.calendarClone.IdPadre = {Id: this.calendarForEditId};
+    
+    this.sgaMidService.post('clonar_calendario/calendario_padre', this.calendarClone).subscribe(          
+      (response: any) => {
+        if (response != null && response.Response.Code == '404') {          
+          this.activebutton = true;          
+          this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_clon_error'));          
+        } else  if (response != null && response.Response.Code == '400') {          
+          this.activebutton = true;          
+          this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_clon_error'));          
+        } else {       
+          this.calendarClone.Id = response.Response.Body[1].Id;
+          this.activebutton = false;          
+          this.activetabsClone = false;          
+          this.activetabs = true;                    
+          this.calendarForNew = false;           
+          this.calendarCloneOut.emit(this.calendarClone.Id);
+          this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito')); 
+          this.popUpManager.showInfoToast(this.translate.instant('calendario.clonar_calendario_fechas'));                   
+        }   
+        this.loading = false;  
+      },          
+      error => {          
+        this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));          
+      },          
+    );
   }
 
   uploadResolutionFile(file) {
