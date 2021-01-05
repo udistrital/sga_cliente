@@ -127,6 +127,7 @@
         "confirmarCrear": "has been created",
         "confirmarActualizar": "has been updated",
         "info_persona": "Personal data",
+        "no_info_persona": "There's no registered data por this User. Please enter your data.",
         "info_criterio": "ICFES criteria",
         "info_estado": "Registration Status",
         "guardar": "Save",
@@ -1124,7 +1125,8 @@
         "tooltip_detalle": "Open Calendar",
         "tooltip_editar": "Edit Calendar",
         "tooltip_inactivar": "Inactivate Calendar",
-        "tooltip_crear": "create Calendar"
+        "tooltip_crear": "create Calendar",
+        "sin_calendarios": "There are no calendars."
     },
     "derechos_pecuniarios": {
         "titulo": "Financial entitlements",

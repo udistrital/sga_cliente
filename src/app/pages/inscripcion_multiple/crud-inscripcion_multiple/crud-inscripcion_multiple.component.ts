@@ -111,7 +111,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   public loadInfoPersona(): void {
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
-      this.info_persona_id.toString() !== '') {
+      this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0') {
       this.sgaMidService.get('persona/consultar_persona/' + this.info_persona_id)
         .subscribe(res => {
           if (res !== null) {
@@ -134,6 +134,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.info_info_persona = undefined
       this.clean = !this.clean;
       this.loading = false;
+      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('GLOBAL.no_info_persona'));
     }
   }
   

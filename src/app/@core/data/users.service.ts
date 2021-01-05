@@ -13,7 +13,9 @@ const httpOptions = {
 // const path = environment.PERSONA_SERVICE;
 const path = environment.TERCEROS_SERVICE;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class UserService {
 
   private user$ = new Subject<[object]>();
@@ -30,10 +32,16 @@ export class UserService {
           if (res !== null) {
             this.user = res[0];
             console.info('User')
-            console.info(this.user)
-            this.user$.next(this.user);
-            // window.localStorage.setItem('ente', res[0].Ente);
-            window.localStorage.setItem('persona_id', res[0].Id);
+            if (Object.keys(this.user).length !== 0) {
+              console.info(this.user)
+              this.user$.next(this.user);
+              // window.localStorage.setItem('ente', res[0].Ente);
+              window.localStorage.setItem('persona_id', res[0].Id);
+            } else {
+              console.info(this.user)
+              //this.user$.next(this.user);
+              window.localStorage.setItem('persona_id', '0');
+            }
           }
         });
     }

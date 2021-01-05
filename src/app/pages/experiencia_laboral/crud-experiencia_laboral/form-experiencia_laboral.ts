@@ -28,6 +28,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       label_i18n: 'nombre_empresa',
       placeholder_i18n: 'nombre_empresa',
       requerido: true,
+      deshabilitar: true,
       tipo: 'InfoPersona',
       key: 'NombreCompleto',
       opciones: [],

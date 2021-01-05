@@ -121,6 +121,7 @@
         "acepto_terminos": "He leido y estoy de acuerdo con los términos de la política de tratamiento y privacidad de la información",
         "cancelar": "Cancelar",
         "info_persona": "Información personal",
+        "no_info_persona": "No hay información registrada para este Usuario. Por favor registre sus datos.",
         "persona_creado": "Su información personal ha sido guardada con éxito",
         "info_criterio": "Criterios ICFES",
         "info_estado": "Estado de inscripción",
@@ -1143,7 +1144,8 @@
         "tooltip_detalle": "Ver Calendario",
         "tooltip_editar": "Editar Calendario",
         "tooltip_inactivar": "Inactivar Calendario",
-        "tooltip_crear": "Crear Calendario"
+        "tooltip_crear": "Crear Calendario",
+        "sin_calendarios": "No existen calendarios."
     },
     "derechos_pecuniarios": {
         "titulo": "Derechos Pecuniarios",
