@@ -148,7 +148,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       this.createdCalendar = false;
       this.editMode = false;
       this.uploadMode = true;
-      this.calendarForm.reset()
+      this.calendarForm.reset();
+      this.fileResolucion = null;
     } else {
       this.createdCalendar = true;
       this.editMode = true;
@@ -208,7 +209,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             anno: this.calendar.anno,
             PeriodoId: this.calendar.PeriodoId,
             Nivel: this.calendar.Nivel,
-            fileResolucion: this.fileResolucion,
+            fileResolucion: '',
           });
           this.loading = false;
         },
