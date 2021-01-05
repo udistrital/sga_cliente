@@ -90,6 +90,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   clonarCalendario() {
+    this.loading = true;
     this.calendarClone = new CalendarioClone();
       this.calendarClone = this.calendarFormClone.value;
       this.calendarClone.Id = this.calendar.calendarioId
@@ -97,16 +98,19 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         response => {
           if (JSON.stringify(response) === JSON.stringify({})) {
             this.activebutton = true;
+            this.loading = false;
             this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_clon_error'));
           } else {
             this.activebutton = false;
             this.activetabsClone = false;
             this.activetabs = true;
             this.calendarCloneOut.emit(this.calendarClone.Id);
+            this.loading = false;
             this.popUpManager.showSuccessAlert(this.translate.instant('calendario.calendario_exito'));
           }
         },
         error => {
+          this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
         },
       );
@@ -203,7 +207,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           } else {
             this.loading = false;
           }
-
+          this.loading = false;
           this.calendarForm.setValue({
             resolucion: this.calendar.resolucion,
             anno: this.calendar.anno,
@@ -635,8 +639,10 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             const activityPut = response;
             activityPut['Nombre'] = activity.Actividad.Nombre;
             activityPut['Descripcion'] = activity.Actividad.Descripcion;
-            activityPut['FechaInicio'] = activity.Actividad.FechaInicio;
-            activityPut['FechaFin'] = activity.Actividad.FechaFin;
+            // activityPut['FechaInicio'] = activity.Actividad.FechaInicio;
+            // activityPut['FechaFin'] = activity.Actividad.FechaFin;
+            activityPut['FechaInicio'] = "2020-01-03T00:00:00Z";
+            activityPut['FechaFin'] =  moment(activity.Actividad.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
             this.eventoService.put('calendario_evento', activityPut).subscribe(
               response => {
                 this.sgaMidService.put('crear_actividad_calendario/update', {Id: event.data.actividadId, resp: activity.responsable}).subscribe(

@@ -1144,7 +1144,8 @@
         "tooltip_detalle": "Ver Calendario",
         "tooltip_editar": "Editar Calendario",
         "tooltip_inactivar": "Inactivar Calendario",
-        "tooltip_crear": "Crear Calendario"
+        "tooltip_crear": "Crear Calendario",
+        "sin_calendarios": "No existen calendarios."
     },
     "derechos_pecuniarios": {
         "titulo": "Derechos Pecuniarios",
