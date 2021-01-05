@@ -984,7 +984,8 @@
         "error_doble_examen": "You already have a language exam request with other language",
         "informacion_idioma_no_registrada": "Language information not registered",
         "informacion_idioma_registrada": "Language information registered",
-        "seguro_continuar_registrar": "Are you sure you want to register this language information?"
+        "seguro_continuar_registrar": "Are you sure you want to register this language information?",
+        "seguro_actializar_idioma": "Are you sure about updating this language information?"
     },
     "propuesta_grado": {
         "error_cargar_lineas_investigacion": "An error happened loading the research lines information",
