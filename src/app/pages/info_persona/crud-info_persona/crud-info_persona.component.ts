@@ -69,7 +69,6 @@ export class CrudInfoPersonaComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private popUpManager: PopUpManager,
-    private popUpmanager: PopUpManager,
     private sgamidService: SgaMidService,
     private autenticationService: ImplicitAutenticationService,
     private documentoService: DocumentoService,
@@ -119,7 +118,7 @@ export class CrudInfoPersonaComponent implements OnInit {
   public loadInfoPersona(): void {
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
-      this.info_persona_id.toString() !== '') {
+      this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0') {
       this.sgamidService.get('persona/consultar_persona/' + this.info_persona_id)
         .subscribe(res => {
           if (res !== null) {
@@ -142,6 +141,7 @@ export class CrudInfoPersonaComponent implements OnInit {
       this.info_info_persona = undefined
       this.clean = !this.clean;
       this.loading = false;
+      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('GLOBAL.no_info_persona'));
     }
   }
 

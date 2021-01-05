@@ -119,7 +119,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     private sgaMidService: SgaMidService,
   ) {
     this.imagenes = IMAGENES;
-    this.translate = translate;
+    //this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     // ojo quitar comentario
@@ -138,8 +138,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     //   }
     // }
 
-    this.loadData();
-    this.cargarPeriodo();
   }
 
   async loadData() {
@@ -395,7 +393,8 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.info_persona_id = this.userService.getPersonaId();
+    this.loadData();
+    //this.info_persona_id = this.userService.getPersonaId();
     // console.info(JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub)
     // this.usuariowso2 = JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub,
 

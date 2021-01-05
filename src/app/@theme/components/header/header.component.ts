@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { NotificacionesService } from '../../../@core/utils/notificaciones.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import { UserService } from '../../../@core/data/users.service';
 import { userInfo } from 'os';
 
 
@@ -31,6 +32,7 @@ export class HeaderComponent {
     private menuService: NbMenuService,
     private analyticsService: AnalyticsService,
     private router: Router,
+    private userService: UserService, // NO BORRAR PORQUE ES PARA QUE SE INICIALICE EL ID DEL USUARIO EN LOCAL STORAGE
     public notificacionService: NotificacionesService,
     public translate: TranslateService) {
     this.translate = translate;
