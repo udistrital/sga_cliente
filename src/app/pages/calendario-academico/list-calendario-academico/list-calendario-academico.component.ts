@@ -53,11 +53,12 @@ export class ListCalendarioAcademicoComponent implements OnInit {
       (response: any )=> {
         const r = <any>response;
         if (response !== null && r.Response.Code == '404') {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.404'));
+          // this.popUpManager.showErrorToast(this.translate.instant('ERROR.404'));
+          this.popUpManager.showInfoToast(this.translate.instant('calendario.sin_calendarios'));
         } else if (response !== null && r.Response.Code == '400') {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
         } else {
-          response.map(calendar => {
+          response.Response.Body[1].map(calendar => {
             this.data.push({
               Id: calendar.Id,
               Nombre: calendar.Nombre,

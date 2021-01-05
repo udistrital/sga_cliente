@@ -30,7 +30,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
   set name(ente_id: number) {
     if (ente_id !== undefined && ente_id !== null && ente_id.toString() !== '') {
       this.eid = ente_id;
-      // this.loadData();
+      this.loadData();
     }
   }
 

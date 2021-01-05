@@ -118,6 +118,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     this.translate.use(language);
   }
 
+
   getIndexForm(nombre: String): number {
     for (let index = 0; index < this.formInfoExperienciaLaboral.campos.length; index++) {
       const element = this.formInfoExperienciaLaboral.campos[index];
@@ -445,21 +446,21 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     const nit = typeof data === 'string' ? data : data.data.Nit;
 
     if (regex.test(nit) === true) {
-      this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = true;
+      // this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = true;
       this.searchOrganizacion(nit);
-    } 
-      else {
-        this.clean = !this.clean;
-        this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
-        this.loadListEmpresa(nit);
-        this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
-      }
+    }
+    else {
+      this.clean = !this.clean;
+      this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
+      this.loadListEmpresa(nit);
+      this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
+    }
   }
 
   getSeleccion(event) {
-    var IdEmpresa;
-    if (event.nombre === 'NombreEmpresa') {
-      IdEmpresa = this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')].valor.Id;
+      var IdEmpresa;
+      if (event.nombre === 'NombreEmpresa') {
+        IdEmpresa = this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')].valor.Id;
         this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdEmpresa).subscribe(
           (res: any) => {
             this.searchOrganizacion(res[0]["Numero"])
@@ -468,7 +469,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
 
           }
         )
-    }
+      }
   }
 
   loadListEmpresa(nombre: string): void {
@@ -511,18 +512,19 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     this.sgaMidService.get('experiencia_laboral/informacion_empresa/?Id=' + nit)
       .subscribe((res: any) => {
         this.formInfoExperienciaLaboral.campos[init].valor = res.NumeroIdentificacion;
-        this.formInfoExperienciaLaboral.campos[inombre].valor = res.NombreCompleto["Nombre"];
+        this.formInfoExperienciaLaboral.campos[inombre].valor = (res.NombreCompleto && res.NombreCompleto.Id) ? res.NombreCompleto : { Id: 0, NombreCompleto: 'No registrado' };
         this.formInfoExperienciaLaboral.campos[idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
         this.formInfoExperienciaLaboral.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
         this.formInfoExperienciaLaboral.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
         this.formInfoExperienciaLaboral.campos[ipais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : { Id: 0, Nombre: 'No registrado' };
         this.formInfoExperienciaLaboral.campos[itipo].valor = (res.TipoTerceroId && res.TipoTerceroId.Id) ? res.TipoTerceroId : { Id: 0, Nombre: 'No registrado' };
-        [this.formInfoExperienciaLaboral.campos[inombre],
-        this.formInfoExperienciaLaboral.campos[idir],
-        this.formInfoExperienciaLaboral.campos[icorreo],
-        this.formInfoExperienciaLaboral.campos[ipais],
-        this.formInfoExperienciaLaboral.campos[itipo],
-        this.formInfoExperienciaLaboral.campos[itel]]
+        [
+          this.formInfoExperienciaLaboral.campos[inombre],
+          this.formInfoExperienciaLaboral.campos[idir],
+          this.formInfoExperienciaLaboral.campos[icorreo],
+          this.formInfoExperienciaLaboral.campos[ipais],
+          this.formInfoExperienciaLaboral.campos[itipo],
+          this.formInfoExperienciaLaboral.campos[itel]]
           .forEach(element => {
             element.deshabilitar = element.valor ? true : false
           });
