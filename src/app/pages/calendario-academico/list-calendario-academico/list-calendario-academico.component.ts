@@ -43,10 +43,13 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   }
   recargarDespuesClon(newItem) {
     this.calendarForEditId = newItem
+    console.info("recarga")
+    console.info(this.calendarForEditId)
     this.ngOnInit()
   }
 
   ngOnInit() {
+    console.info("LLAMADO")
     this.loading = true;
     this.data = []
     this.sgaMidService.get('consulta_calendario_academico?limit=0').subscribe(
@@ -70,6 +73,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
           this.createTable();
         }
         this.loading = false;
+        console.info(this.loading)
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
