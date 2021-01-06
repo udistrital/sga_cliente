@@ -17,6 +17,10 @@ const routes: Routes = [{
         component: DashboardComponent,
     },
     {
+      path: 'solicitudes',
+      loadChildren: './solicitudes/solicitudes.module#SolicitudesModule'
+    },
+    {
       path: 'inscripcion',
       loadChildren: './inscripcion/inscripcion.module#InscripcionModule',
     },

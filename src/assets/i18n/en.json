@@ -106,6 +106,16 @@
             "asignacion_cupos": "Assignment of quotas",
             "actualizacion_estado": "Actulize aspirant status",
             "listado_aspirante": "List applicants"
+        },
+        "solicitudes": {
+            "solicitudes": "Basic data",
+            "solicitudes_lista": "List of requests",
+            "actualizacion_datos": "Updating ID number request",
+            "actualizacion_nombres": "Updating names request"
+        },
+        "gestionar_solicitudes": {
+            "gestionar_solicitudes": "Students basic data",
+            "solicitudes_actualizacion": "Updating data requests"
         }
     },
     "GLOBAL": {
