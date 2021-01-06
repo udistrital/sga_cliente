@@ -68,7 +68,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
         const calendar = response[0];
         this.calendar = new Calendario();
         this.calendar.Nombre = calendar['Nombre'];
-        //this.calendar.ListaCalendario = calendar['ListaCalendario'];
+        this.calendar.ListaCalendario = calendar['ListaCalendario'];
         this.calendar.calendarioId = calendar['Id'];
         this.calendar.DocumentoId = calendar['resolucion']['Id'];
         this.calendar.resolucion = calendar['resolucion']['Resolucion'];
