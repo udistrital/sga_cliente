@@ -84,7 +84,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
           data => {
             this.responsablesSelected = data.map(
               item => {
-                return { IdPublico: item.Id }
+                return { responsableID: item.Id }
               },
             );
             if (this.responsablesSelected.length > 0) {

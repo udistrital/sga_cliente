@@ -108,7 +108,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               consultaHijos = <Array<Lugar>>res;
               for (let i = 0; i < consultaHijos.length; i++) {
                 departamentoNacimiento.push(consultaHijos[i].LugarHijoId);
-                console.info(consultaHijos[i].LugarHijoId)
               }
             }
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = departamentoNacimiento;
@@ -182,12 +181,11 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.info_info_caracteristica.PaisNacimiento = this.datosGet.Lugar.Lugar.PAIS;
             this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.DEPARTAMENTO;
             this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.CIUDAD;
-            this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] =
-            this.info_info_caracteristica.DepartamentoNacimiento;
+            this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones[0] = this.info_info_caracteristica.PaisNacimiento;
+            this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] = this.info_info_caracteristica.DepartamentoNacimiento;
             this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones[0] = this.info_info_caracteristica.Lugar;
-            this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSanguineo')].opciones[0] = this.datosGet.GrupoSanguineo;
-            this.formInfoCaracteristica.campos[this.getIndexForm('Rh')].opciones[0] = this.datosGet.Rh;
             this.loading = false;
+            this.result.emit(1);
           } else{
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           }
@@ -206,7 +204,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   updateInfoCaracteristica(infoCaracteristica: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
-      text: this.translate.instant('GLOBAL.actualizar') + '?',
+      text: this.translate.instant('inscripcion.update'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -222,13 +220,13 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           this.info_info_caracteristica.Ente = this.info_persona_id;
           this.sgamidService.put('persona/actualizar_complementarios', this.info_info_caracteristica)
             .subscribe(res => {
-              this.loadInfoCaracteristica();
               this.loading = false;
-              this.eventChange.emit(true);
+              //this.eventChange.emit(true);
               this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
               this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
               this.translate.instant('GLOBAL.confirmarActualizar'));
               this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
+              this.loadInfoCaracteristica();
             },
             (error: HttpErrorResponse) => {
               this.loading = false;
@@ -274,7 +272,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
                 this.loading = false;
-                this.eventChange.emit(true);
+                //this.eventChange.emit(true);
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.guardar'));
               }
             },

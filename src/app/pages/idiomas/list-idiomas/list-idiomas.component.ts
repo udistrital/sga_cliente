@@ -1,12 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { IdiomaService } from '../../../@core/data/idioma.service';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { UserService } from '../../../@core/data/users.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import Swal from 'sweetalert2';
-import 'style-loader!angular2-toaster/toaster.css';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-list-idiomas',
@@ -17,7 +15,6 @@ export class ListIdiomasComponent implements OnInit {
   uid: number;
   inscripcion_id: number;
   cambiotab: boolean = false;
-  config: ToasterConfig;
   settings: any;
   source: LocalDataSource = new LocalDataSource();
 
@@ -37,10 +34,12 @@ export class ListIdiomasComponent implements OnInit {
   percentage: number;
   persona_id: number;
 
-  constructor(private translate: TranslateService,
+  constructor (
+    private translate: TranslateService,
     private idiomaService: IdiomaService,
     private userService: UserService,
-    private toasterService: ToasterService) {
+    private popUpManager: PopUpManager,
+  ) {
       this.loadData();
       this.cargarCampos();
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -133,16 +132,9 @@ export class ListIdiomasComponent implements OnInit {
             this.source.load(data);
         }
       },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.idiomas'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
+      (error: HttpErrorResponse) => {
+        this.popUpManager.showErrorAlert(this.translate.instant('ERROR.' + error.status));
+      });
   }
 
   onChange(event) {
@@ -158,60 +150,22 @@ export class ListIdiomasComponent implements OnInit {
   }
 
   onDelete(event): void {
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.eliminar'),
-      text: this.translate.instant('GLOBAL.eliminar') + '?',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-    };
-    Swal(opt)
+    this.popUpManager.showConfirmAlert(this.translate.instant('GLOBAL.eliminar') + '?')
       .then((willDelete) => {
         if (willDelete.value) {
           this.idiomaService.delete('conocimiento_idioma', event.data).subscribe(res => {
             if (res !== null) {
               this.loadData();
-              this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
-                this.translate.instant('GLOBAL.idioma') + ' ' +
-                this.translate.instant('GLOBAL.confirmarEliminar'));
+              this.popUpManager.showInfoToast(
+                this.translate.instant('GLOBAL.idioma') + ' ' + this.translate.instant('GLOBAL.confirmarEliminar')
+              );
             }
           },
             (error: HttpErrorResponse) => {
-              Swal({
-                type: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.eliminar') + '-' +
-                  this.translate.instant('GLOBAL.idioma'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              });
+              this.popUpManager.showErrorAlert(this.translate.instant('ERROR.' + error.status))
             });
         }
       });
-  }
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
   }
 
   ngOnInit() {

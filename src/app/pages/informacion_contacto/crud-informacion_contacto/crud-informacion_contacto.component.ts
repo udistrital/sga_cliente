@@ -175,17 +175,19 @@ export class CrudInformacionContactoComponent implements OnInit {
       .subscribe(res => {
         if (res !== null) {
           this.info_informacion_contacto = <any>res;
-          this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = [this.info_informacion_contacto.PaisResidencia];
-          this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = [this.info_informacion_contacto.DepartamentoResidencia];
-          this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = [this.info_informacion_contacto.CiudadResidencia];
+          if (this.info_informacion_contacto.PaisResidencia !== null && this.info_informacion_contacto.DepartamentoResidencia !== null && this.info_informacion_contacto.CiudadResidencia != null){
+            this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = [this.info_informacion_contacto.PaisResidencia];
+            this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = [this.info_informacion_contacto.DepartamentoResidencia];
+            this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = [this.info_informacion_contacto.CiudadResidencia];
+          }
           this.loading = false;
-          this.result.emit(1);
         } else {
           this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
         }
       },
         (error: HttpErrorResponse) => {
           this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
+          this.info_informacion_contacto = undefined;
           this.loading=false;
         });
     }
@@ -197,7 +199,6 @@ export class CrudInformacionContactoComponent implements OnInit {
       const tercero = {
         Id: this.persona_id  || 1, // se debe cambiar solo por persona id
       }
-      console.info('estrato we'+formData.Estrato)
       const dataInfoContacto = {
         InfoComplementariaTercero: [
           {
@@ -252,8 +253,6 @@ export class CrudInformacionContactoComponent implements OnInit {
       }
       if (this.info_informacion_contacto === undefined && !this.denied_acces) {
         this.createInfoContacto(dataInfoContacto);
-        this.result.emit(event);
-
       } else {
         this.updateInfoContacto(dataInfoContacto);
       }
@@ -278,6 +277,33 @@ export class CrudInformacionContactoComponent implements OnInit {
           this.info_informacion_contacto = <InformacionContacto>info_contacto;
           this.info_informacion_contacto.Ente = this.info_persona_id;
           //FUNCION PUT
+          this.sgaMidService.put('inscripciones/info_contacto', this.info_informacion_contacto).subscribe(
+            (res: any) => {
+              if(res !== null && res.Response.Code == '404'){
+                //MENSAJE DE NO HAY DATA
+              } else if (res !== null && res.Response.Code == '400'){
+                //MENSAJE DE ALGO ANDA MAL
+              } else if (res !== null && res.Response.Code == '200'){
+                this.loading = false;
+                this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+                this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
+                this.translate.instant('GLOBAL.confirmarActualizar'));
+                this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
+                this.loadInformacionContacto();
+              }
+            },
+            (error: HttpErrorResponse) => {
+              this.loading = false;
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+            }
+          );
         }
       });
   }
@@ -299,16 +325,13 @@ export class CrudInformacionContactoComponent implements OnInit {
         this.info_informacion_contacto = true;
         if (willDelete.value) {
           this.info_informacion_contacto = <any>info_contacto;
-          console.info("lo invoca")
-          console.info(this.info_informacion_contacto)
           this.sgaMidService.post('inscripciones/info_complementaria_tercero', this.info_informacion_contacto)
             .subscribe(res => {
               const r = <any>res;
-              console.info(res)
               this.loading=false;
               if (r !== null && r.Type !== 'error') {
                 this.popUpManager.showSuccessAlert(this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
-                this.eventChange.emit(true);
+                //this.eventChange.emit(true);
                 this.showToast('info', this.translate.instant('GLOBAL.registrar'),
                   this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
                 this.clean = !this.clean;

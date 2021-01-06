@@ -121,7 +121,7 @@ export class CrudInfoPersonaComponent implements OnInit {
       this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0') {
       this.sgamidService.get('persona/consultar_persona/' + this.info_persona_id)
         .subscribe(res => {
-          if (res !== null) {
+          if (res !== null && res.Id != undefined) {
             const temp = <InfoPersona>res;
             this.info_info_persona = temp;
             const files = []

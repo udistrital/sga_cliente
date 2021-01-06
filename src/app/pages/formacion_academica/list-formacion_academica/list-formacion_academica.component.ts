@@ -193,6 +193,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   itemselec(event): void {
+    console.info(event)
     this.uid = event.data.Nit;
     this.pid = event.data.ProgramaAcademico.Id;
   }
