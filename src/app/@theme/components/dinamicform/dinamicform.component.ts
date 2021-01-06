@@ -58,13 +58,15 @@ export class DinamicformComponent implements OnInit, OnChanges {
                       break;
                     case 'select':
                       if (element.hasOwnProperty('opciones')) {
-                        element.opciones.forEach((e1) => {
-                          if (this.modeloData[i].Id !== null) {
-                            if (e1.Id === this.modeloData[i].Id) {
-                              element.valor = e1;
+                        if(element.opciones != undefined){
+                          element.opciones.forEach((e1) => {
+                            if (this.modeloData[i].Id !== null) {
+                              if (e1.Id === this.modeloData[i].Id) {
+                                element.valor = e1;
+                              }
                             }
-                          }
-                        });
+                          });
+                        }
                       }
                       break;
                     case 'mat-date':

@@ -938,7 +938,8 @@
         "guardar": "Los datos han sido almacenados éxitosamente",
         "crear": "¿Está seguro que desea guardar esta información?",
         "actualizar": "La información ha sido actualizada con éxito",
-        "no_info": "No hay información registrada"
+        "no_info": "No hay información registrada",
+        "update": "¿Está seguro que desea actualizar la información?"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

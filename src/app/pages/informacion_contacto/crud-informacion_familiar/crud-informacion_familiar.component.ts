@@ -44,7 +44,6 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   set persona(info_persona_id: number) {
     this.info_persona_id = info_persona_id;
     this.loadInfoPersona();
-    console.info('ID_Persona_Familiar: ' + info_persona_id);
   }
 
 
@@ -52,7 +51,8 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
-  info_informacion_contacto: InformacionContacto;
+  //info_informacion_contacto: InformacionContacto;
+  info_informacion_familiar: any;
   formInformacionFamiliar: any;
   regInformacionContacto: any;
   clean: boolean;
@@ -73,16 +73,12 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     private ubicacionesService: UbicacionService,
     private userService: UserService,
     private tercerosService: TercerosService,
-    // private store: Store<IAppState>,
-    // private listService: ListService,
     private toasterService: ToasterService) {
     this.formInformacionFamiliar = FORM_INFORMACION_FAMILIAR;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    // this.listService.findPais();
-    // this.loadLists();
     this.loadOptionsParentesco();
     this.loading = false;
   }
@@ -122,31 +118,13 @@ export class CrudInformacionFamiliarComponent implements OnInit {
       this.info_persona_id.toString() !== '') {
         this.sgaMidService.get('persona/consultar_familiar/' + this.info_persona_id)
         .subscribe(res => {
-          console.info(res)
-          if (res !== null) {
-            this.datosGet = res;
-            this.tempcorreoPrincipal = JSON.parse(this.datosGet['Correos'][0]['Dato'])
-            this.tempcorreoAlterno = JSON.parse(this.datosGet['Correos'][1]['Dato'])
-            this.temptelefonoPrincipal = JSON.parse(this.datosGet['Numeros'][0]['Dato'])
-            this.temptelefonoAlterno = JSON.parse(this.datosGet['Numeros'][1]['Dato'])
-            this.tempdireccionPrincipal = JSON.parse(this.datosGet['Direcciones'][0]['Dato'])
-            this.tempdireccionAlterno = JSON.parse(this.datosGet['Direcciones'][1]['Dato'])
-            this.info_info_familiar = res;
-            this.formInformacionFamiliar.campos[this.getIndexForm('NombreFamiliarPrincipal')].valor = this.datosGet['Principal']['TerceroFamiliarId']
-            ['NombreCompleto']
-            this.formInformacionFamiliar.campos[this.getIndexForm('Parentesco')].valor = this.datosGet['Relaciones'][0]
-            this.formInformacionFamiliar.campos[this.getIndexForm('ParentescoAlterno')].valor = this.datosGet['Relaciones'][1]
-            this.formInformacionFamiliar.campos[this.getIndexForm('CorreoElectronico')].valor =  this.tempcorreoPrincipal.value
-            this.formInformacionFamiliar.campos[this.getIndexForm('CorreoElectronicoAlterno')].valor = this.tempcorreoAlterno.value
-            this.formInformacionFamiliar.campos[this.getIndexForm('Telefono')].valor = this.temptelefonoPrincipal.value
-            this.formInformacionFamiliar.campos[this.getIndexForm('TelefonoAlterno')].valor = this.temptelefonoAlterno.value
-            this.formInformacionFamiliar.campos[this.getIndexForm('DireccionResidencia')].valor = this.tempdireccionPrincipal.value
-            this.formInformacionFamiliar.campos[this.getIndexForm('DireccionResidenciaAlterno')].valor = this.tempdireccionAlterno.value
-            this.formInformacionFamiliar.campos[this.getIndexForm('NombreFamiliarAlterno')].valor = this.datosGet['Alterno']['TerceroFamiliarId']
-            ['NombreCompleto']
-            this.loading = false;
-          } else{
+          if(res !== null && res.Response.Code == '404'){
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
+          } else if (res !== null && res.Response.Code == '400'){
+            //MENSAJE DE ALGO ANDA MAL
+          } else if (res !== null && res.Response.Code == '200'){
+            this.info_info_familiar = <any>res.Response.Body[1];
+            this.loading = false;
           }
         },
           (error: HttpErrorResponse) => {
@@ -159,8 +137,6 @@ export class CrudInformacionFamiliarComponent implements OnInit {
       this.loading = false;
     }
   }
-
-
 
   setPercentage(event) {
     setTimeout(()=>{
@@ -189,14 +165,6 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     this.toasterService.popAsync(toast);
   }
 
-  public loadLists() {
-    // this.store.select((state) => state).subscribe(
-    //   (list) => {
-    //     this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
-    //   },
-    // );
-  }
-
   loadOptionsParentesco(): void {
     let parentescos: Array<any> = [];
     this.tercerosService.get('tipo_parentesco/?limit=0&query=Activo:true')
@@ -210,171 +178,155 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   }
 
   public validarForm(event: any) {
-    // console.log(event.data);
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.registrar'),
-      text: this.translate.instant('informacion_familiar.seguro_continuar_registrar'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    };
-    Swal(opt)
-    .then((willDelete) => {
-      if (willDelete.value) {
-        const formData = event.data.InformacionFamiliar;
-        const tercero: Tercero = {
-          Id: Number(this.info_persona_id),
-          NombreCompleto: undefined,
-          TipoContribuyenteId: {
-            Id: 1,
-            Nombre: undefined,
-          },
-        }
-        const informacionFamiliarPost: TrPostInformacionFamiliar = {
-          Tercero_Familiar: tercero,
-          Familiares: [
-            {
-              Familiar: {
-                Id: 0,
-                TerceroId: tercero,
-                TerceroFamiliarId: {
-                  Id: 0,
-                  NombreCompleto: formData.NombreFamiliarPrincipal,
-                  TipoContribuyenteId: {
-                    Id: 1,
-                    Nombre: undefined,
-                  },
-                },
-                TipoParentescoId: formData.Parentesco,
-                CodigoAbreviacion: 'CONTPRIN',
-              },
-              InformacionContacto: [
-                {
-                  // telefono
-                  Id: 0,
-                  TerceroId: tercero,
-                  InfoComplementariaId: {
-                    Id: 51,
-                    Nombre: undefined,
-                    CodigoAbreviacion: undefined,
-                    Activo: undefined,
-                    GrupoInfoComplementariaId: undefined,
-                  },
-                  Dato: JSON.stringify({value: formData.Telefono, Nombre: formData.CorreoElectronico }),
-                  Activo: true,
-                },
-                {
-                  // correo
-                  Id: 0,
-                  TerceroId: tercero,
-                  InfoComplementariaId: {
-                    Id: 53,
-                    Nombre: undefined,
-                    CodigoAbreviacion: undefined,
-                    Activo: undefined,
-                    GrupoInfoComplementariaId: undefined,
-                  },
-                  Dato: JSON.stringify({value: formData.CorreoElectronico}),
-                  Activo: true,
-                },
-                {
-                  // dirección
-                  Id: 0,
-                  TerceroId: tercero,
-                  InfoComplementariaId: {
-                    Id: 54,
-                    Nombre: undefined,
-                    CodigoAbreviacion: undefined,
-                    Activo: undefined,
-                    GrupoInfoComplementariaId: undefined,
-                  },
-                  Dato: JSON.stringify({value: formData.DireccionResidencia}),
-                  Activo: true,
-                },
-              ],
-            },
-            {
-              Familiar: {
-                Id: 0,
-                TerceroId: tercero,
-                TerceroFamiliarId: {
-                  Id: 0,
-                  NombreCompleto: formData.NombreFamiliarAlterno,
-                  TipoContribuyenteId: {
-                    Id: 1,
-                    Nombre: undefined,
-                  },
-                },
-                TipoParentescoId: formData.ParentescoAlterno,
-                CodigoAbreviacion: 'CONTALT',
-              },
-              InformacionContacto: [
-                {
-                  // telefono
-                  Id: 0,
-                  TerceroId: tercero,
-                  InfoComplementariaId: {
-                    Id: 51,
-                    Nombre: undefined,
-                    CodigoAbreviacion: undefined,
-                    Activo: undefined,
-                    GrupoInfoComplementariaId: undefined,
-                  },
-                  Dato: JSON.stringify({value: formData.TelefonoAlterno}),
-                  Activo: true,
-                },
-                {
-                  // correo
-                  Id: 0,
-                  TerceroId: tercero,
-                  InfoComplementariaId: {
-                    Id: 53,
-                    Nombre: undefined,
-                    CodigoAbreviacion: undefined,
-                    Activo: undefined,
-                    GrupoInfoComplementariaId: undefined,
-                  },
-                  Dato: JSON.stringify({value: formData.CorreoElectronicoAlterno}),
-                  Activo: true,
-                },
-                {
-                  // dirección
-                  Id: 0,
-                  TerceroId: tercero,
-                  InfoComplementariaId: {
-                    Id: 54,
-                    Nombre: undefined,
-                    CodigoAbreviacion: undefined,
-                    Activo: undefined,
-                    GrupoInfoComplementariaId: undefined,
-                  },
-                  Dato: JSON.stringify({value: formData.DireccionResidenciaAlterno}),
-                  Activo: true,
-                },
-              ],
-            },
-          ],
-        }
-        if (this.info_informacion_contacto === undefined && !this.denied_acces) {
-          this.createInfoFamiliar(informacionFamiliarPost);
-        this.result.emit(event); 
-  
-        } else {
-          this.updateInfoFamiliar(informacionFamiliarPost);
-        }
-               
+    if(event.valid){
+      const formData = event.data.InformacionFamiliar;
+      const tercero: Tercero = {
+        Id: Number(this.info_persona_id),
+        NombreCompleto: undefined,
+        TipoContribuyenteId: {
+          Id: 1,
+          Nombre: undefined,
+        },
       }
-    });
+      const informacionFamiliarPost: TrPostInformacionFamiliar = {
+        Tercero_Familiar: tercero,
+        Familiares: [
+          {
+            Familiar: {
+              Id: 0,
+              TerceroId: tercero,
+              TerceroFamiliarId: {
+                Id: 0,
+                NombreCompleto: formData.NombreFamiliarPrincipal,
+                TipoContribuyenteId: {
+                  Id: 1,
+                  Nombre: undefined,
+                },
+              },
+              TipoParentescoId: formData.Parentesco,
+              CodigoAbreviacion: 'CONTPRIN',
+            },
+            InformacionContacto: [
+              {
+                // telefono
+                Id: 0,
+                TerceroId: tercero,
+                InfoComplementariaId: {
+                  Id: 51,
+                  Nombre: undefined,
+                  CodigoAbreviacion: undefined,
+                  Activo: undefined,
+                  GrupoInfoComplementariaId: undefined,
+                },
+                Dato: JSON.stringify({value: formData.Telefono}),
+                Activo: true,
+              },
+              {
+                // correo
+                Id: 0,
+                TerceroId: tercero,
+                InfoComplementariaId: {
+                  Id: 53,
+                  Nombre: undefined,
+                  CodigoAbreviacion: undefined,
+                  Activo: undefined,
+                  GrupoInfoComplementariaId: undefined,
+                },
+                Dato: JSON.stringify({value: formData.CorreoElectronico}),
+                Activo: true,
+              },
+              {
+                // dirección
+                Id: 0,
+                TerceroId: tercero,
+                InfoComplementariaId: {
+                  Id: 54,
+                  Nombre: undefined,
+                  CodigoAbreviacion: undefined,
+                  Activo: undefined,
+                  GrupoInfoComplementariaId: undefined,
+                },
+                Dato: JSON.stringify({value: formData.DireccionResidencia}),
+                Activo: true,
+              },
+            ],
+          },
+          {
+            Familiar: {
+              Id: 0,
+              TerceroId: tercero,
+              TerceroFamiliarId: {
+                Id: 0,
+                NombreCompleto: formData.NombreFamiliarAlterno,
+                TipoContribuyenteId: {
+                  Id: 1,
+                  Nombre: undefined,
+                },
+              },
+              TipoParentescoId: formData.ParentescoAlterno,
+              CodigoAbreviacion: 'CONTALT',
+            },
+            InformacionContacto: [
+              {
+                // telefono
+                Id: 0,
+                TerceroId: tercero,
+                InfoComplementariaId: {
+                  Id: 51,
+                  Nombre: undefined,
+                  CodigoAbreviacion: undefined,
+                  Activo: undefined,
+                  GrupoInfoComplementariaId: undefined,
+                },
+                Dato: JSON.stringify({value: formData.TelefonoAlterno}),
+                Activo: true,
+              },
+              {
+                // correo
+                Id: 0,
+                TerceroId: tercero,
+                InfoComplementariaId: {
+                  Id: 53,
+                  Nombre: undefined,
+                  CodigoAbreviacion: undefined,
+                  Activo: undefined,
+                  GrupoInfoComplementariaId: undefined,
+                },
+                Dato: JSON.stringify({value: formData.CorreoElectronicoAlterno}),
+                Activo: true,
+              },
+              {
+                // dirección
+                Id: 0,
+                TerceroId: tercero,
+                InfoComplementariaId: {
+                  Id: 54,
+                  Nombre: undefined,
+                  CodigoAbreviacion: undefined,
+                  Activo: undefined,
+                  GrupoInfoComplementariaId: undefined,
+                },
+                Dato: JSON.stringify({value: formData.DireccionResidenciaAlterno}),
+                Activo: true,
+              },
+            ],
+          },
+        ],
+      }
+      if (this.info_info_familiar === undefined && !this.denied_acces) {
+        this.createInfoFamiliar(informacionFamiliarPost);  
+      } else {
+        this.updateInfoFamiliar(informacionFamiliarPost);
+      }
+    }
   }
 
   updateInfoFamiliar(info_familiar: any){
-
+    console.info("actualiza ")
   }
 
   createInfoFamiliar(info_familiar: any){
     console.info(info_familiar)
-    console.info(JSON.stringify(info_familiar));
     this.sgaMidService.post('inscripciones/post_informacion_familiar', info_familiar)
       .subscribe((res: any) => {
         if (res.Type === 'error') {
