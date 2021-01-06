@@ -62,7 +62,7 @@
     "angular-tree-component": "^8.4.0",
     "angular2-chartjs": "0.4.1",
     "angular2-toaster": "^7.0.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bootstrap": "4.3.1",
     "chart.js": "^2.8.0",
     "ckeditor": "4.11.0",
