@@ -1,3 +1,10 @@
-<p>
-  list-solicitudes-estudiante works!
-</p>
+<div class="col-12">
+  <nb-card>
+    <nb-card-header>
+      {{ 'MENU.gestionar_solicitudes.solicitudes_actualizacion' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+      <ng2-smart-table [settings]="estructuraTabla" [source]="solicitudes" (custom)="onclick($event)" ></ng2-smart-table>
+    </nb-card-body>
+  </nb-card>
+</div>

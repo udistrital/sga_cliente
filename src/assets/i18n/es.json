@@ -1208,5 +1208,11 @@
     },
     "formacion_academica": {
         "no_data": "No existen datos registrados de la formación académica"
+    },
+    "solicitudes": {
+        "numero": "Número",
+        "fecha": "Fecha de solicitud",
+        "tipo": "Tipo de solicitud",
+        "estado": "Estado de la solicitud"
     }
 }

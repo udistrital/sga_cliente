@@ -1183,5 +1183,11 @@
         "tipo_inscripcion_actualizado": "Updated registration type",
         "seguro_continuar_registrar_tipo_inscripcion": "Are you sure you register this registration type?",
         "tipo_inscripcion_creado": "Type register created"
+    },
+    "solicitudes": {
+        "numero": "Number",
+        "fecha": "Request date",
+        "tipo": "Type of request",
+        "estado": "Request status"
     }
 }

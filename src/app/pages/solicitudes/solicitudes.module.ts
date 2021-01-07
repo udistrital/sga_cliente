@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/shared.module';
 import { NbSpinnerModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ThemeModule } from '../../@theme/theme.module';
@@ -14,6 +15,7 @@ import { PopUpManager } from '../../managers/popUpManager';
   imports: [
     ThemeModule,
     CommonModule,
+    SharedModule,
     NbSpinnerModule,
     Ng2SmartTableModule,
     SolicitudesRoutingModule,
