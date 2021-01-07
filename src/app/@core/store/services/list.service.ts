@@ -204,7 +204,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.Pais).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.ubicacionService.get('lugar/?query=TipoLugarId__Nombre:PAIS,Activo:true&limit=0') // TODO: filtrar pais
+          this.ubicacionService.get('lugar?query=TipoLugar__Nombre:PAIS,Activo:true&limit=0') // TODO: filtrar pais
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.Pais, result);
