@@ -167,7 +167,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
 
   loadOptionsParentesco(): void {
     let parentescos: Array<any> = [];
-    this.tercerosService.get('tipo_parentesco/?limit=0&query=Activo:true')
+    this.tercerosService.get('tipo_parentesco?limit=0&query=Activo:true')
       .subscribe(res => {
         if (res !== null) {
           parentescos = <Array<TipoParentesco>>res;
@@ -323,6 +323,46 @@ export class CrudInformacionFamiliarComponent implements OnInit {
 
   updateInfoFamiliar(info_familiar: any){
     console.info("actualiza ")
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('GLOBAL.actualizar'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+    };
+    Swal(opt)
+      .then((willDelete) => {
+        if (willDelete.value) {
+          this.loading = true;
+          
+          //FUNCION PUT
+          this.sgaMidService.put('persona/info_familiar', this.info_info_familiar).subscribe(
+            (res: any) => {
+              if(res !== null && res.Response.Code == '404'){
+                //MENSAJE DE NO HAY DATA
+              } else if (res !== null && res.Response.Code == '400'){
+                //MENSAJE DE ALGO ANDA MAL
+              } else if (res !== null && res.Response.Code == '200'){
+                
+              }
+            },
+            (error: HttpErrorResponse) => {
+              this.loading = false;
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+            }
+          );
+        }
+      });
   }
 
   createInfoFamiliar(info_familiar: any){
