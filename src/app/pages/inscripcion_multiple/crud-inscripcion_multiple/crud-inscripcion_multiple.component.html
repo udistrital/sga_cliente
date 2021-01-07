@@ -18,7 +18,7 @@
                 <!-- select Nivel -->
 
                 <mat-form-field style="width: 100%;">
-                    <mat-select [formControl]="CampoControl" [(ngModel)]="selectedLevel" placeholder="{{ 'calendario.para' | translate }}" (ngModelChange)="onSelectLevel()">
+                    <mat-select [formControl]="CampoControl" [(ngModel)]="selectedLevel" placeholder="{{ 'calendario.para' | translate }}" (selectionChange)="onSelectLevel()">
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let nivel of nivel_load" [value]="nivel.id">{{ nivel.nombre }}</mat-option>
                     </mat-select>
@@ -28,7 +28,7 @@
                 <!-- select proyecto academico -->
 
                 <mat-form-field style="width: 100%;" *ngIf="showProyectoCurricular">
-                    <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedProject" placeholder="{{ 'oferta.proyecto' | translate }}">
+                    <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedProject" placeholder="{{ 'oferta.proyecto' | translate }}" (selectionChange)="onSelectProyecto()">
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let project of inscripcionProjects" [value]="project.ProyectoId">{{ project.NombreProyecto }}</mat-option>
                     </mat-select>
@@ -37,7 +37,7 @@
 
                 <!-- select tipo de inscripcion -->
                 <mat-form-field style="width: 100%;" *ngIf="showTipoInscripcion">
-                    <mat-select [formControl]="Campo2Control" [(ngModel)]="tipo_inscripcion_selected" placeholder="{{ 'inscripcion.aviso_tipo' | translate }}" >
+                    <mat-select [formControl]="Campo2Control" [(ngModel)]="tipo_inscripcion_selected" placeholder="{{ 'inscripcion.aviso_tipo' | translate }}" (selectionChange)="onSelectTipoInscripcion()">
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
                             {{item.Nombre}}
@@ -46,7 +46,7 @@
                     <mat-error *ngIf="Campo2Control.hasError('required')">{{ 'inscripcion.aviso_tipo' | translate }}</mat-error>
                 </mat-form-field>
 
-                <div style="width: 100%;" *ngIf="showTipoInscripcion && showProyectoCurricular">
+                <div style="width: 100%;" *ngIf="showInfo">
                     <fieldset [ngClass]="{'fieldseter':true} ">
                         <legend> {{ 'inscripcion.opciones_usuario' | translate }} </legend>
 

@@ -62,6 +62,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   aceptaTerminos: boolean;
   showProyectoCurricular: boolean;
   showTipoInscripcion: boolean;
+  showInfo: boolean
   programa: number;
   aspirante: number;
   periodo: any;
@@ -100,6 +101,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     // this.cargaproyectosacademicos();
     this.showProyectoCurricular = false;
     this.showTipoInscripcion = false;
+    this.showInfo = false
     this.cargarPeriodo();
     this.dataSource = new LocalDataSource();
     this.createTable();
@@ -220,10 +222,21 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     );
   }
 
+  onSelectProyecto() {
+    this.loadTipoInscripcion();
+  }
+
+  onSelectTipoInscripcion() {
+    if (this.inscripcionProjects != null){
+      this.showInfo = true;
+    }
+  }
+
   validateProject() {
     this.inscripcionProjects = new Array;
     this.showProyectoCurricular = false;
     this.showTipoInscripcion = false;
+    this.showInfo = false;
     this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel).subscribe(
       response => {
 
@@ -232,11 +245,12 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           const inscripcionP = <Array<any>>response;
           this.inscripcionProjects = inscripcionP;
           this.showProyectoCurricular = true;
-          this.loadTipoInscripcion();
+          // this.loadTipoInscripcion();
         } else {
           this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
           this.showProyectoCurricular = false;
           this.showTipoInscripcion = false;
+          this.showInfo = false;
         }
       },
       error => {
@@ -310,6 +324,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             this.popUpManager.showAlert('', this.translate.instant('calendario.sin_tipo_inscripcion'));
             this.showTipoInscripcion = false;
             this.showProyectoCurricular = false;
+            this.showInfo = false;
           } else {
             this.showTipoInscripcion = true;
           }
