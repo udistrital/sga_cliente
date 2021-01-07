@@ -101,60 +101,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   }
 
   getPais(event) {}
-  // getPais(event) {
-  //   this.paisSelecccionado = event.valor;
-  //   // this.loadOptionsPaisUniversidad();
-  // }
-
-  // loadInfoPostgrados(institucion) {
-  //   this.programaService.get('/programa_academico/?query=Institucion:' + institucion + '&limit=0')
-  //     .subscribe(res => {
-  //       if (res !== null) {
-  //         const r = <ProgramaAcademico>res;
-  //         this.formInfoFormacionAcademica.campos[this.getIndexForm('ProgramaAcademico')].opciones = r;
-  //       }
-  //     },
-  //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
-  //           title: error.status + '',
-  //           text: this.translate.instant('ERROR.' + error.status),
-  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //             this.translate.instant('GLOBAL.formacion_academica') + '|' +
-  //             this.translate.instant('GLOBAL.programa_academico'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       });
-  // }
-
-  // loadOptionsPaisUniversidad(): void {
-  //   let consultaHijos: Array<any> = [];
-  //   const ciudadUniversidad: Array<any> = [];
-  //   if (this.paisSelecccionado) {
-  //     this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.paisSelecccionado.Id + ',LugarHijo.Activo:true&limit=0')
-  //       .subscribe(res => {
-  //         if (res !== null) {
-  //           consultaHijos = <Array<Lugar>>res;
-  //           for (let i = 0; i < consultaHijos.length; i++) {
-  //             ciudadUniversidad.push(consultaHijos[i].LugarHijo);
-  //           }
-  //         }
-  //         this.formInfoFormacionAcademica.campos[this.getIndexForm('CiudadUniversidad')].opciones = ciudadUniversidad;
-  //       },
-  //         (error: HttpErrorResponse) => {
-  //           Swal({
-  //             type: 'error',
-  //             title: error.status + '',
-  //             text: this.translate.instant('ERROR.' + error.status),
-  //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //               this.translate.instant('GLOBAL.formacion_academica') + '|' +
-  //               this.translate.instant('GLOBAL.pais_universidad'),
-  //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //           });
-  //         });
-  //   }
-  // }
-
+ 
   getIndexForm(nombre: String): number {
     for (let index = 0; index < this.formInfoFormacionAcademica.campos.length; index++) {
       const element = this.formInfoFormacionAcademica.campos[index];
@@ -172,7 +119,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     const itel = this.getIndexForm('Telefono');
     const icorreo = this.getIndexForm('Correo');
     const iPais = this.getIndexForm('Pais');
-    this.sgaMidService.get('formacion_academica/info_universidad/?Id='+nit)
+    this.sgaMidService.get('formacion_academica/info_universidad?Id='+nit)
       .subscribe((res: any) => {
         this.universidadConsultada = res;
         this.formInfoFormacionAcademica.campos[init].valor = res.NumeroIdentificacion;
@@ -257,7 +204,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     let consultaUniversidades: Array<any> = []; 
     const universidad: Array<any> = [];
     
-    this.sgaMidService.get('formacion_academica/info_universidad_nombre/?nombre='+ nombre)
+    this.sgaMidService.get('formacion_academica/info_universidad_nombre?nombre='+ nombre)
       .subscribe(res => {
         if (res !== null) {
           consultaUniversidades = <Array<InfoPersona>>res;
@@ -286,7 +233,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     if(this.info_formacion_academica_id !== 0 && this.info_proyecto_id !== 0 && this.persona_id !== 0){
       this.temp_info_academica = {};
       this.SoporteDocumento = [];
-      this.sgaMidService.get('formacion_academica/info_complementaria/?IdTercero='+this.persona_id+'&IdProyecto='+this.info_proyecto_id+'&Nit='+this.info_formacion_academica_id)
+      this.sgaMidService.get('formacion_academica/info_complementaria?IdTercero='+this.persona_id+'&IdProyecto='+this.info_proyecto_id+'&Nit='+this.info_formacion_academica_id)
         .subscribe((response: any) => {
           this.temp_info_academica = <any>response;
           if(response !== null && response !== undefined){

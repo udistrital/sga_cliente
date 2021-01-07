@@ -253,15 +253,16 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + " " + this.info_info_persona.SegundoNombre + " " + this.info_info_persona.PrimerApellido + " " + this.info_info_persona.SegundoApellido;
       this.recibo_pago.DocumentoDelAspirante = this.info_info_persona.NumeroIdentificacion;
       this.recibo_pago.Periodo = this.periodo.Nombre;
+      console.info(this.inscripcionProjects)
       for (var i = 0; i < this.inscripcionProjects.length; i++){
         if (this.inscripcionProjects[i].ProyectoId === this.selectedProject){
           this.recibo_pago.ProyectoAspirante = this.inscripcionProjects[i].NombreProyecto;
-          this.recibo_pago.Fecha_pago = this.inscripcionProjects[i].Evento[i].FechaInicioEvento;
+          this.recibo_pago.Fecha_pago = this.inscripcionProjects[i].Evento[0].FechaInicioEvento;
         } 
       }
       var nivel = new String(this.selectedLevel)
       if (nivel == '14'){
-        this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:13,PeriodoId__Id:2').subscribe(
+        this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:13,PeriodoId__Id:3').subscribe(
           response => {
             this.recibo_pago.Descripcion = response["Data"][0]["ParametroId"]["Nombre"];
             var valor = JSON.parse(response["Data"][0]["Valor"]);
@@ -272,10 +273,12 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           },
         );
       } else {
-        this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:12,PeriodoId__Id:2').subscribe(
+        this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:12,PeriodoId__Id:3').subscribe(
           response => {
+            console.info(response)
             this.recibo_pago.Descripcion = response["Data"][0]["ParametroId"]["Nombre"];
             var valor = JSON.parse(response["Data"][0]["Valor"]);
+            console.info(valor)
             this.recibo_pago.ValorDerecho = valor["Costo"]
           },
           error => {
@@ -284,7 +287,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         );
       }
       //LLAMAR FUNCION RECIBO
-      console.log(this.recibo_pago)
+      console.info(this.recibo_pago)
       this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
       } else {
         this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
