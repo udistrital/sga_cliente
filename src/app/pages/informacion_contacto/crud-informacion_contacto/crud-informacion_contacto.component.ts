@@ -102,7 +102,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoResidencia: Array<any> = [];
     if (paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + paisSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId.Id:' + paisSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -130,7 +130,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const ciudadResidencia: Array<any> = [];
     if (departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + departamentoSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId.Id:' + departamentoSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
