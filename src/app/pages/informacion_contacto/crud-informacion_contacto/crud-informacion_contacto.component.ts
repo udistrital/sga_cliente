@@ -93,7 +93,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     } else if (event.nombre === 'DepartamentoResidencia') {
       if (this.departamentoSeleccionado !== event.valor) {
         this.departamentoSeleccionado = event.valor;
-        this.loadOptionsCiudadResidencia(event.valor);
+        this.loadOptionsCiudadResidencia();
       }
     }
   }
@@ -102,12 +102,12 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoResidencia: Array<any> = [];
     if (paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares?query=LugarPadre.Id:' + paisSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + paisSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              departamentoResidencia.push(consultaHijos[i].LugarHijoId);
+              departamentoResidencia.push(consultaHijos[i].LugarHijo);
             }
           }
           this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = departamentoResidencia;
@@ -126,16 +126,16 @@ export class CrudInformacionContactoComponent implements OnInit {
     }
   }
 
-  loadOptionsCiudadResidencia(departamentoSeleccionado): void {
+  loadOptionsCiudadResidencia(): void {
     let consultaHijos: Array<any> = [];
     const ciudadResidencia: Array<any> = [];
-    if (departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares?query=LugarPadre.Id:' + departamentoSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+    if (this.departamentoSeleccionado) {
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.departamentoSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              ciudadResidencia.push(consultaHijos[i].LugarHijoId);
+              ciudadResidencia.push(consultaHijos[i].LugarHijo);
             }
           }
           this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = ciudadResidencia;

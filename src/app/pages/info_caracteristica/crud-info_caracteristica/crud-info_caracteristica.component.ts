@@ -107,7 +107,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
            if (res !== null) {
               consultaHijos = <Array<Lugar>>res;
               for (let i = 0; i < consultaHijos.length; i++) {
-                departamentoNacimiento.push(consultaHijos[i].LugarHijoId);
+                departamentoNacimiento.push(consultaHijos[i].LugarHijo);
               }
             }
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = departamentoNacimiento;
@@ -135,7 +135,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              ciudadNacimiento.push(consultaHijos[i].LugarHijoId);
+              ciudadNacimiento.push(consultaHijos[i].LugarHijo);
             }
           }
           this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = ciudadNacimiento;
@@ -181,9 +181,10 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.info_info_caracteristica.PaisNacimiento = this.datosGet.Lugar.Lugar.PAIS;
             this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.DEPARTAMENTO;
             this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.CIUDAD;
-            this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones[0] = this.info_info_caracteristica.PaisNacimiento;
-            this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones[0] = this.info_info_caracteristica.DepartamentoNacimiento;
-            this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones[0] = this.info_info_caracteristica.Lugar;
+            this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = [this.info_info_caracteristica.PaisNacimiento];
+            this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = [this.info_info_caracteristica.DepartamentoNacimiento];
+            this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = [this.info_info_caracteristica.Lugar];
+            
             this.loading = false;
             this.result.emit(1);
           } else{

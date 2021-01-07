@@ -79,10 +79,11 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+    this.loadLists();
     this.persona_id = this.users.getPersonaId();
     this.listService.findPais();
     this.listService.findProgramaAcademico();
-    this.loadLists();
+    
   }
 
   construirForm() {
