@@ -1004,8 +1004,10 @@
         "error_nativo_examen": "No puede solicitar un exámen con su idioma nativo",
         "error_doble_examen": "Ya tiene registrado un idioma con exámen",
         "informacion_idioma_no_registrada": "Información de idioma no registrada",
-        "informacion_idiomaregistrada": "Información de idioma registrada",
-        "seguro_continuar_registrar": "¿Está seguto de registrar esta información de idioma?"
+        "informacion_idioma_registrada": "Información de idioma registrada",
+        "informacion_idioma_actualizada": "Información de idioma actualizada",
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta información de idioma?",
+        "seguro_actualizar_idioma": "¿Está seguro de guardar los cambios en la información de este idioma?"
     },
     "propuesta_grado": {
         "error_cargar_lineas_investigacion": "Ocurrió un error al cargar la información de las líneas de investigación",

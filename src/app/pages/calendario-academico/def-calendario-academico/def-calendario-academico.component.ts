@@ -95,12 +95,18 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       this.calendarClone = this.calendarFormClone.value;
       this.calendarClone.Id = this.calendar.calendarioId
       this.sgaMidService.post('clonar_calendario/', this.calendarClone).subscribe(
-        response => {
-          if (JSON.stringify(response) === JSON.stringify({})) {
+        (response: any )=> {
+          const r = <any>response;
+          if (response !== null && r.Data.Code == '404') {
+            this.activebutton = true;
+            this.loading = false;
+            this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_clon_error'));
+          } else if (response !== null && r.Data.Code == '400') {
             this.activebutton = true;
             this.loading = false;
             this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_clon_error'));
           } else {
+
             this.activebutton = false;
             this.activetabsClone = false;
             this.activetabs = true;

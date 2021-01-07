@@ -4,12 +4,11 @@ import { ClasificacionNivelIdioma } from './../../../@core/data/models/idioma/cl
 import { NivelIdioma } from './../../../@core/data/models/idioma/nivel_idioma';
 import { InfoIdioma } from './../../../@core/data/models/idioma/info_idioma';
 import { FORM_IDIOMAS } from './form-idiomas';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { IdiomaService } from '../../../@core/data/idioma.service';
 import { UserService } from '../../../@core/data/users.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 import Swal from 'sweetalert2';
-import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
@@ -22,7 +21,6 @@ import { InscripcionService } from '../../../@core/data/inscripcion.service';
   templateUrl: './crud-idiomas.component.html',
 })
 export class CrudIdiomasComponent implements OnInit {
-  config: ToasterConfig;
   info_idioma_id: number;
   inscripcion_id: number;
 
@@ -66,7 +64,7 @@ export class CrudIdiomasComponent implements OnInit {
     private store: Store<IAppState>,
     private listService: ListService,
     private sgaMidService: SgaMidService,
-    private toasterService: ToasterService) {
+    private popUpManager: PopUpManager) {
     this.formInfoIdioma = FORM_IDIOMAS;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -134,34 +132,18 @@ export class CrudIdiomasComponent implements OnInit {
   }
 
   createInfoIdioma(infoIdioma: any) {
-    this.formData = undefined;
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('idiomas.seguro_continuar_registrar'),
-      showCancelButton: true,
-      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-    };
-    Swal(opt)
-      .then((willDelete) => {
+    this.popUpManager.showConfirmAlert(
+      this.translate.instant('idiomas.seguro_continuar_registrar'), 
+      this.translate.instant('GLOBAL.crear')
+    ).then((willDelete) => {
         if (willDelete.value) {
           this.info_idioma = <InfoIdioma>infoIdioma;
           this.info_idioma.Persona = this.persona_id || 1;
           if (this.info_idioma.Nativo === true && this.info_idioma.Nativo === this.info_idioma.SeleccionExamen) {
-            Swal({
-              type: 'error',
-              title: this.translate.instant('GLOBAL.crear'),
-              text: this.translate.instant('idiomas.error_nativo_examen'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+            this.popUpManager.showErrorAlert(this.translate.instant('idiomas.error_nativo_examen'));
           } else if (this.info_idioma.SeleccionExamen === true && this.idioma_examen !== undefined) {
             // this.info_idioma.Idioma.Id !== this.idioma_examen) {
-            Swal({
-              type: 'error',
-              title: this.translate.instant('GLOBAL.crear'),
-              text: this.translate.instant('idiomas.doble_examen'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+            this.popUpManager.showErrorAlert(this.translate.instant('idiomas.doble_examen'))
           } else {
             this.idiomaService.post('conocimiento_idioma', this.info_idioma)
               .subscribe(res => {
@@ -180,8 +162,7 @@ export class CrudIdiomasComponent implements OnInit {
                         if (rex !== null && rex.Type !== 'error') {
                           this.idioma_examen = this.info_idioma.Idioma.Id;
                           this.eventChange.emit(true);
-                          this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                            this.translate.instant('idiomas.informacion_idioma_registrada'));
+                          this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_registrada'));
                           this.info_idioma_id = 0;
                           this.info_idioma = undefined;
                           this.clean = !this.clean;
@@ -198,8 +179,7 @@ export class CrudIdiomasComponent implements OnInit {
                       });
                   } else {
                     this.eventChange.emit(true);
-                    this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                      this.translate.instant('idiomas.informacion_idioma_registrada'));
+                    this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_registrada'));
                     this.info_idioma_id = 0;
                     this.info_idioma = undefined;
                     this.clean = !this.clean;
@@ -207,12 +187,7 @@ export class CrudIdiomasComponent implements OnInit {
                 }
               },
               (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
-                  title: error.status + '',
-                  text: this.translate.instant('idiomas.informacion_idioma_no_registrada'),
-                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                });
+                this.popUpManager.showErrorAlert(this.translate.instant('idiomas.informacion_idioma_no_registrada'))
               });
           }
         }
@@ -245,37 +220,50 @@ export class CrudIdiomasComponent implements OnInit {
     }
   }
 
+  updateInfoIdioma(infoIdioma: InfoIdioma) {
+    this.popUpManager.showConfirmAlert(
+      this.translate.instant('idiomas.seguro_actualizar_idioma'),
+      this.translate.instant('GLOBAL.actualizar')
+    ).then(willUpdate => {
+      if (willUpdate.value) {
+        this.info_idioma = infoIdioma;
+        if (this.info_idioma.Nativo === true && this.info_idioma.Nativo === this.info_idioma.SeleccionExamen) {
+          this.popUpManager.showErrorAlert(this.translate.instant('idiomas.error_nativo_examen'));
+        } else if (this.info_idioma.SeleccionExamen === true && this.idioma_examen !== undefined) {
+          // this.info_idioma.Idioma.Id !== this.idioma_examen) {
+          this.popUpManager.showErrorAlert(this.translate.instant('idiomas.doble_examen'))
+        } else {
+          this.idiomaService.put('conocimiento_idioma', this.info_idioma).subscribe(
+            (resp: any) => {
+              if (resp !== null && resp.Type !== 'error') {
+                this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_actualizada'));
+                this.eventChange.emit(true);
+              }
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
+            },
+          )
+        }
+      }
+    })
+  }
+
   validarForm(event) {
     if (event.valid) {
       this.formData = event.data.InfoIdioma;
       if (!this.inscripcion_id) {
         this.crear_inscripcion.emit(this.formData);
       } else {
-        this.createInfoIdioma(this.formData);
+        if (this.info_idioma_id !== undefined && this.info_idioma_id !== 0 &&
+          this.info_idioma_id.toString() !== '') {
+            this.updateInfoIdioma(this.formData)
+          } else {
+            this.createInfoIdioma(this.formData);
+          }
       }
       this.result.emit(event);
     }
-  }
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
   }
 
   public loadLists() {
