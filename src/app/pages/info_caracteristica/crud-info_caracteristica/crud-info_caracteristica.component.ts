@@ -222,7 +222,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           this.sgamidService.put('persona/actualizar_complementarios', this.info_info_caracteristica)
             .subscribe(res => {
               this.loading = false;
-              //this.eventChange.emit(true);
               this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
               this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
               this.translate.instant('GLOBAL.confirmarActualizar'));
@@ -273,7 +272,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
                 this.loading = false;
-                //this.eventChange.emit(true);
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.guardar'));
               }
             },

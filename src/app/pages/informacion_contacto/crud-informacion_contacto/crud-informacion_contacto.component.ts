@@ -262,7 +262,7 @@ export class CrudInformacionContactoComponent implements OnInit {
   updateInfoContacto(info_contacto: any): void{
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
-      text: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('inscripcion.update'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -276,17 +276,16 @@ export class CrudInformacionContactoComponent implements OnInit {
           this.loading = true;
           this.info_informacion_contacto = <InformacionContacto>info_contacto;
           this.info_informacion_contacto.Ente = this.info_persona_id;
-          //FUNCION PUT
           this.sgaMidService.put('inscripciones/info_contacto', this.info_informacion_contacto).subscribe(
             (res: any) => {
               if(res !== null && res.Response.Code == '404'){
-                //MENSAJE DE NO HAY DATA
+                this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_data'));
               } else if (res !== null && res.Response.Code == '400'){
-                //MENSAJE DE ALGO ANDA MAL
+                this.popUpManager.showAlert('', this.translate.instant('inscripcion.error_update'));
               } else if (res !== null && res.Response.Code == '200'){
                 this.loading = false;
                 this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
-                this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
+                this.translate.instant('GLOBAL.info_contacto') + ' ' +
                 this.translate.instant('GLOBAL.confirmarActualizar'));
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
                 this.loadInformacionContacto();
@@ -331,13 +330,12 @@ export class CrudInformacionContactoComponent implements OnInit {
               this.loading=false;
               if (r !== null && r.Type !== 'error') {
                 this.popUpManager.showSuccessAlert(this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
-                //this.eventChange.emit(true);
                 this.showToast('info', this.translate.instant('GLOBAL.registrar'),
-                  this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
+                this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
                 this.clean = !this.clean;
               } else {
                 this.showToast('error', this.translate.instant('GLOBAL.error'),
-                  this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'));
+                this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'));
               }
             },
             (error: HttpErrorResponse) => {
