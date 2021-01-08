@@ -229,11 +229,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
       }
 
     }
-    if (!this.normalform.btn) {
+/*  if (!this.normalform.btn) {
       if (this.validForm().valid) {
         this.resultSmart.emit(this.validForm());
       }
-    }
+    } */
     c.clase = 'form-control form-control-success';
     c.alerta = '';
     return true;

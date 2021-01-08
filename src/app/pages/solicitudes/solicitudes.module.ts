@@ -7,6 +7,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { SolicitudesRoutingModule, routedComponents } from './solicitudes-routing.module';
 
 import { PopUpManager } from '../../managers/popUpManager';
+import { DialogoSoporteComponent } from './dialogo-soporte/dialogo-soporte.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,9 @@ import { PopUpManager } from '../../managers/popUpManager';
   ],
   providers: [
     PopUpManager,
+  ],
+  entryComponents: [
+    DialogoSoporteComponent,
   ]
 })
 export class SolicitudesModule { }

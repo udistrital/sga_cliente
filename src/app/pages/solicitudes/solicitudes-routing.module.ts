@@ -5,6 +5,8 @@ import { SolicitudesComponent } from './solicitudes.component';
 import { ActualizacionDatosComponent } from './actualizacion-datos/actualizacion-datos.component';
 import { ActualizacionNombresComponent } from './actualizacion-nombres/actualizacion-nombres.component';
 import { ListSolicitudesEstudianteComponent } from './list-solicitudes-estudiante/list-solicitudes-estudiante.component';
+import { DatosSolicitanteComponent } from './datos-solicitante/datos-solicitante.component';
+import { DialogoSoporteComponent } from "./dialogo-soporte/dialogo-soporte.component";
 
 const routes: Routes = [{
     path: '',
@@ -40,4 +42,6 @@ export const routedComponents = [
     ActualizacionDatosComponent,
     ActualizacionNombresComponent,
     ListSolicitudesEstudianteComponent,
+    DatosSolicitanteComponent,
+    DialogoSoporteComponent,
 ]
