@@ -549,7 +549,9 @@
         "placeholder_descripcion_inscripcion": "ej: Inscripción de un aspirante",
         "cupos_especiales": "¿Corresponde a cupos especiales?",
         "nivel": "Nivel",
-        "placeholder_nivel": "Seleccione el nivel que se requiere asignar al tipo de inscripción"
+        "placeholder_nivel": "Seleccione el nivel que se requiere asignar al tipo de inscripción",
+        "info_contacto": "Información de contacto",
+        "info_familiar": "Información familiar"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -939,7 +941,8 @@
         "crear": "¿Está seguro que desea guardar esta información?",
         "actualizar": "La información ha sido actualizada con éxito",
         "no_info": "No hay información registrada",
-        "update": "¿Está seguro que desea actualizar la información?"
+        "update": "¿Está seguro que desea actualizar la información?",
+        "error_update": "Ha ocurrido un error inesperado. La información no pudo ser actualizada"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

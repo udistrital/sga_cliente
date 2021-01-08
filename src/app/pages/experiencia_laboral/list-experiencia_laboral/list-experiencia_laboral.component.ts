@@ -48,9 +48,9 @@ export class ListExperienciaLaboralComponent implements OnInit {
     private experienciaService: ExperienciaService,
     private userService: UserService,
     private organizacionService: OrganizacionService) {
-    // if (this.eid !== undefined && this.eid !== null && this.eid.toString() !== '') {
-    //   this.loadData();
-    // }
+    if (this.eid !== undefined && this.eid !== null && this.eid.toString() !== '') {
+      this.loadData();
+    }
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
@@ -58,7 +58,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
     this.loading = false;
     this.persona_id = this.userService.getPersonaId();
     if (this.persona_id !== undefined && this.persona_id !== null && this.persona_id.toString() !== '') {
-      // this.loadData();
+      this.loadData();
     }
   }
 
@@ -86,11 +86,11 @@ export class ListExperienciaLaboralComponent implements OnInit {
       },
       mode: 'external',
       columns: {
-        Organizacion: {
+        NombreEmpresa: {
           title: this.translate.instant('GLOBAL.nombre_empresa'),
           width: '35%',
           valuePrepareFunction: (value) => {
-            return value.Nombre;
+            return value.NombreCompleto;
           },
         },
         Cargo: {
@@ -124,38 +124,17 @@ export class ListExperienciaLaboralComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    // this.experienciaService.get('experiencia_laboral/?query=Persona:' + this.eid).subscribe(res => {
-    this.sgaMidService.get('experiencia_laboral/by_tercero/' + this.persona_id).subscribe(res => {
-      if (res !== null && JSON.stringify(res[0]) !== '{}') {
-        this.data = <Array<any>>res;
-        this.loading = false;
-        this.getPercentage(1);
-        this.source.load(this.data);
-        /*
-        this.data.forEach(element => {
-          this.organizacionService.get('organizacion/?query=Ente:' + element.Organizacion).subscribe(r => {
-            if (res !== null) {
-              element.Organizacion = r[0];
-            }
-            this.loading = false;
-            this.getPercentage(1);
-            this.source.load(this.data);
-          },
-            (error: HttpErrorResponse) => {
-              Swal({
-                type: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                  this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-                  this.translate.instant('GLOBAL.nombre_empresa'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              });
-            });
-        });
-        */
-      }
-    },
+    this.sgaMidService.get('experiencia_laboral/by_tercero/?Id=' + this.persona_id).subscribe(
+      (response: any) => {
+        const r = <any>response;
+        if (response !== null && r.Data.Code != '400') {
+
+          this.data = <Array<any>>response.Data.Body[1];
+          this.loading = false;
+          this.getPercentage(1);
+          this.source.load(this.data);
+        }
+      },
       (error: HttpErrorResponse) => {
         Swal({
           type: 'error',
