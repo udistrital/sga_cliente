@@ -322,10 +322,9 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   }
 
   updateInfoFamiliar(info_familiar: any){
-    console.info("actualiza ")
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
-      text: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('inscripcion.update'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -337,16 +336,20 @@ export class CrudInformacionFamiliarComponent implements OnInit {
       .then((willDelete) => {
         if (willDelete.value) {
           this.loading = true;
-          
           //FUNCION PUT
-          this.sgaMidService.put('persona/info_familiar', this.info_info_familiar).subscribe(
+          this.sgaMidService.put('persona/info_familiar', info_familiar).subscribe(
             (res: any) => {
               if(res !== null && res.Response.Code == '404'){
-                //MENSAJE DE NO HAY DATA
+                this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_data'));
               } else if (res !== null && res.Response.Code == '400'){
-                //MENSAJE DE ALGO ANDA MAL
+                this.popUpManager.showAlert('', this.translate.instant('inscripcion.error_update'));
               } else if (res !== null && res.Response.Code == '200'){
-                
+                this.loading = false;
+                this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+                this.translate.instant('GLOBAL.info_familiar') + ' ' +
+                this.translate.instant('GLOBAL.confirmarActualizar'));
+                this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
+                this.loadInfoPersona();
               }
             },
             (error: HttpErrorResponse) => {
@@ -366,7 +369,6 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   }
 
   createInfoFamiliar(info_familiar: any){
-    console.info(info_familiar)
     this.sgaMidService.post('inscripciones/post_informacion_familiar', info_familiar)
       .subscribe((res: any) => {
         if (res.Type === 'error') {
