@@ -347,14 +347,14 @@ export class CrudProduccionAcademicaComponent implements OnInit {
 
   public loadProduccionAcademica(): void {
     if (this.produccion_academica_selected !== undefined ) {
-      /*
-      this.produccionAcademicaService.get('produccion_academica/?query=id:' + this.produccion_academica_id)
+      
+      /*this.produccionAcademicaService.get('produccion_academica?query=id:' + this.produccion_academica_id)
         .subscribe(res => {
           if (res !== null) {
             this.info_produccion_academica = <ProduccionAcademicaPost>res[0];
           }
-        });
-      */
+        });*/
+      
       this.info_produccion_academica = JSON.parse(JSON.stringify(this.produccion_academica_selected));
       this.source_authors = this.info_produccion_academica.Autores;
       this.source.load(this.source_authors);

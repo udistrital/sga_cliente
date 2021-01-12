@@ -29,8 +29,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
     private user: UserService,
     private toasterService: ToasterService) {
     this.persona_id = user.getPersonaId() || 1;
-    // ojo quitar comentario
-    // this.loadData();
+    this.loadData();
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
@@ -55,13 +54,6 @@ export class ListProduccionAcademicaComponent implements OnInit {
       },
       mode: 'external',
       columns: {
-        // Persona: {
-        //   title: this.translate.instant('GLOBAL.persona'),
-        //   // type: 'number;',
-        //   valuePrepareFunction: (value) => {
-        //     return value;
-        //   },
-        // },
         Titulo: {
           title: this.translate.instant('produccion_academica.titulo_produccion_academica'),
           // type: 'string;',
@@ -111,9 +103,10 @@ export class ListProduccionAcademicaComponent implements OnInit {
   }
 
   loadData(): void {
+    console.info("loaddd data")
     this.sgaMidService.get('produccion_academica/' + this.persona_id).subscribe((res: any) => {
-    // this.campusMidService.get('produccion_academica/' + 5).subscribe((res: any) => {
       if (res !== null) {
+        console.info(res)
         if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
           const data = <Array<ProduccionAcademicaPost>>res;
           this.source.load(data);
@@ -137,6 +130,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadData();
   }
 
   onEdit(event): void {
@@ -276,7 +270,6 @@ export class ListProduccionAcademicaComponent implements OnInit {
       this.cambiotab = !this.cambiotab;
     }
   }
-
 
   itemselec(event): void {
     // console.log("afssaf");
