@@ -196,8 +196,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                       loadedActivity.Nombre = element['Nombre'];
                       loadedActivity.Descripcion = element['Descripcion'];
                       loadedActivity.Activo = element['Activo'];
-                      loadedActivity.FechaInicio = moment(element['FechaInicio']).format('DD-MM-YYYY');
-                      loadedActivity.FechaFin = moment(element['FechaFin']).format('DD-MM-YYYY');
+                      loadedActivity.FechaInicio = moment(element['FechaInicio'], 'YYYY-MM-DD').format('DD-MM-YYYY');
+                      loadedActivity.FechaFin = moment(element['FechaFin'], 'YYYY-MM-DD').format('DD-MM-YYYY');
                       loadedActivity.responsables = element['Responsable'];
                       loadedProcess.procesoId = element['TipoEventoId']['Id'];
                       loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
@@ -604,8 +604,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             actividad = activity.Actividad;
             actividad.actividadId = response['Id'];
             actividad.responsables = activity.responsable;
-            actividad.FechaInicio = moment(actividad.FechaInicio).format('DD-MM-YYYY');
-            actividad.FechaFin = moment(actividad.FechaFin).format('DD-MM-YYYY');
+            actividad.FechaInicio = moment(actividad.FechaInicio, 'YYYY-MM-DD').format('DD-MM-YYYY');
+            actividad.FechaFin = moment(actividad.FechaFin, 'YYYY-MM-DD').format('DD-MM-YYYY');
             this.processes.filter((proc: Proceso) => proc.procesoId === process.procesoId)[0].actividades.push(actividad);
             event.source.load(process.actividades);
             this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_exito'));
@@ -632,10 +632,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             const activityPut = response;
             activityPut['Nombre'] = activity.Actividad.Nombre;
             activityPut['Descripcion'] = activity.Actividad.Descripcion;
-            // activityPut['FechaInicio'] = activity.Actividad.FechaInicio;
-            // activityPut['FechaFin'] = activity.Actividad.FechaFin;
-            activityPut['FechaInicio'] = "2020-01-03T00:00:00Z";
-            activityPut['FechaFin'] =  moment(activity.Actividad.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
+            activityPut['FechaInicio'] = activity.Actividad.FechaInicio;
+            activityPut['FechaFin'] = activity.Actividad.FechaFin;
             this.eventoService.put('calendario_evento', activityPut).subscribe(
               response => {
                 this.sgaMidService.put('crear_actividad_calendario/update', {Id: event.data.actividadId, resp: activity.responsable}).subscribe(
