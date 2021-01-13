@@ -103,10 +103,8 @@ export class ListProduccionAcademicaComponent implements OnInit {
   }
 
   loadData(): void {
-    console.info("loaddd data")
     this.sgaMidService.get('produccion_academica/' + this.persona_id).subscribe((res: any) => {
       if (res !== null) {
-        console.info(res)
         if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
           const data = <Array<ProduccionAcademicaPost>>res;
           this.source.load(data);

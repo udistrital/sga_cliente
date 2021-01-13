@@ -9,6 +9,7 @@ import { ProduccionAcademicaPost } from './../../../@core/data/models/produccion
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ProduccionAcademicaService } from '../../../@core/data/produccion_academica.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 import { FORM_produccion_academica } from './form-produccion_academica';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -60,8 +61,10 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
   Metadatos: any[];
 
-  constructor(private translate: TranslateService,
+  constructor(
+    private translate: TranslateService,
     private produccionAcademicaService: ProduccionAcademicaService,
+    private popUpManager: PopUpManager,
     private user: UserService,
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
@@ -457,29 +460,26 @@ export class CrudProduccionAcademicaComponent implements OnInit {
     .then((willCreate) => {
       if (willCreate.value) {
         this.info_produccion_academica = <ProduccionAcademicaPost>ProduccionAcademica;
-        // this.info_produccion_academica.Persona = this.user.PersonaId();
-        /*this.produccionAcademicaService.post('produccion_academica', this.info_produccion_academica)
-          .subscribe(res => {
-            this.info_produccion_academica = <ProduccionAcademica>res;
-            this.eventChange.emit(true);
-            this.showToast('info', 'created', 'ProduccionAcademica created');
-          });
-          */
         this.sgaMidService.post('produccion_academica', this.info_produccion_academica)
         .subscribe((res: any) => {
-          if (res.Type === 'error') {
-            Swal({
-              type: 'error',
-               title: res.Code,
-              text: this.translate.instant('ERROR.' + res.Code),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-            this.showToast('error', 'error', this.translate.instant('produccion_academica.produccion_no_creada'));
-          } else {
-            this.info_produccion_academica = <ProduccionAcademicaPost>res.Body[1];
-            this.eventChange.emit(true);
-            this.showToast('success', this.translate.instant('GLOBAL.crear'), this.translate.instant('produccion_academica.produccion_creada'));
+          if (res !== null){
+            this.info_produccion_academica = <ProduccionAcademicaPost>res;
+            this.showToast('success', this.translate.instant('GLOBAL.crear'), 
+            this.translate.instant('produccion_academica.produccion_creada'));
+            this.popUpManager.showSuccessAlert(this.translate.instant('produccion_academica.produccion_creada'));
+          } else{
+            this.showToast('error', this.translate.instant('GLOBAL.error'),
+            this.translate.instant('produccion_academica.produccion_no_creada'));
           }
+        },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('informacion_academica.informacion_academica_no_registrada'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
         });
       }
     });
