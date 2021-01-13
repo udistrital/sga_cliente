@@ -106,6 +106,16 @@
             "asignacion_cupos": "Asignación de cupos",
             "actualizacion_estado": "Actulizar estado aspirantes",
             "listado_aspirante": "Listar aspirantes"
+        },
+        "solicitudes": {
+            "solicitudes": "Datos básicos",
+            "solicitudes_lista": "Lista de solicitudes realizadas",
+            "actualizacion_datos": "Solicitud de actualización\nde identificación",
+            "actualizacion_nombres": "Solicitud de actualización\nde nombres"
+        },
+        "gestionar_solicitudes": {
+            "gestionar_solicitudes": "Datos de estudiantes",
+            "solicitudes_actualizacion": "Solicitudes de actualización\nde datos"
         }
     },
     "GLOBAL": {
@@ -570,7 +580,9 @@
     },
     "recibo_pago": {
         "generado": "El recibo de pago ha sido generado correctamente",
-        "no_generado": "El recibo no ha podido ser generado. Verifique su información personal"
+        "no_generado": "El recibo no ha podido ser generado. Verifique su información personal",
+        "recibo_duplicado": "Ya ha generado un recibo con los criterios seleccionados",
+        "maximo_recibos": "Ya genero el maximo de recibos permitidos"
     },
     "produccion_academica": {
         "tipo_disciplina": "Tipos de disciplina",
@@ -1239,5 +1251,36 @@
     },
     "formacion_academica": {
         "no_data": "No existen datos registrados de la formación académica"
+    },
+    "solicitudes": {
+        "solicitud_datos": "Solicitud de Actualización de identificación",
+        "solicitud_nombres": "Solicitud de Actualización de nombres",
+        "solicitud_encabezado": "Datos de la solicitud",
+        "numero": "Número",
+        "fecha": "Fecha de solicitud",
+        "tipo": "Tipo de solicitud",
+        "estado": "Estado de la solicitud",
+        "solicitante": "Solicitante",
+        "nombre": "Nombre del Estudiante",
+        "codigo": "Código",
+        "carrera": "Carrera",
+        "telefono": "Telefono de contacto",
+        "correo_inst": "Correo electrónico institucional",
+        "correo_personal": "Correo electrónico personal",
+        "documento_actual": "Tipo de Identificación actual",
+        "numero_actual": "Número de identificación actual",
+        "expedicion_actual": "Fecha de expedición de la identificación actual",
+        "documento_nuevo": "Nuevo tipo de Identificación",
+        "numero_nuevo": "Número de identificación nuevo",
+        "expedicion_nuevo": "Fecha de expedición de la nueva identificación",
+        "soporte_id": "Soporte de la nueva identificación",
+        "ver_id": "Ver identificacion",
+        "seleccionar_archivo": "Seleccionar archivo",
+        "soporte": "Soporte",
+        "nombre_actual": "Nombre actual",
+        "nombre_": "Nombre",
+        "apellido": "Apellido",
+        "nombre_nuevo": "Nuevo nombre",
+        "soporte_nombre": "Soporte del nuevo nombre"
     }
 }

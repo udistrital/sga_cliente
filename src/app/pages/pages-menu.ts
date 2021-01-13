@@ -10,6 +10,46 @@ export const MENU_ITEMS: MenuItem[] = [
     home: true,
     key: 'dashboard',
   },
+  {
+    title: 'Solicitudes',
+    icon: 'nb-compose',
+    link: '',
+    key: 'solicitudes',
+    children: [
+      {
+        title: 'Lista de solicitudes',
+        icon: 'nb-list',
+        link: '/pages/solicitudes/list-solicitudes-estudiante',
+        key: 'solicitudes_lista'
+      },
+      {
+        title: 'Actualizar identificación',
+        icon: 'nb-edit',
+        link: '/pages/solicitudes/actualizacion-datos',
+        key: 'actualizacion_datos',
+      },
+      {
+        title: 'Actualizar nombres',
+        icon: 'nb-edit',
+        link: '/pages/solicitudes/actualizacion-nombres',
+        key: 'actualizacion_nombres',
+      },
+    ]
+  },
+  {
+    title: 'Gestionar solicitudes',
+    icon: 'nb-compose',
+    link: '',
+    key: 'gestionar_solicitudes',
+    children: [
+      {
+        title: 'Solicitudes de actualización',
+        icon: 'nb-list',
+        link: '/pages/solicitudes/gestionar-solicitudes',
+        key: 'solicitudes_actualizacion'
+      },
+    ]
+  },
 /*   {
     title: 'Producción Academica',
     icon: 'nb-edit',

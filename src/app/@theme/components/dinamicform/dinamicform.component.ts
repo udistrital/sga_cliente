@@ -60,7 +60,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
                       if (element.hasOwnProperty('opciones')) {
                         if(element.opciones != undefined){
                           element.opciones.forEach((e1) => {
-                            if (this.modeloData[i].Id !== null) {
+                            if (this.modeloData[i].Id !== null || this.modeloData[i].Id !== undefined) {
                               if (e1.Id === this.modeloData[i].Id) {
                                 element.valor = e1;
                               }
@@ -178,7 +178,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
     }
     if (c.requerido && ((c.valor === '' && c.etiqueta !== 'file') || c.valor === null || c.valor === undefined ||
       (JSON.stringify(c.valor) === '{}' && c.etiqueta !== 'file') || JSON.stringify(c.valor) === '[]')
-      || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && c.urlTemp === undefined))) {
+      || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && c.urlTemp === undefined)) 
+      || ((c.etiqueta === 'file' && c.valor.name === null) && (c.etiqueta === 'file' && c.urlTemp === null))) {
       c.alerta = '** Debe llenar este campo';
       c.clase = 'form-control form-control-danger';
       return false;
@@ -231,11 +232,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
       }
 
     }
-    if (!this.normalform.btn) {
+/*  if (!this.normalform.btn) {
       if (this.validForm().valid) {
         this.resultSmart.emit(this.validForm());
       }
-    }
+    } */
     c.clase = 'form-control form-control-success';
     c.alerta = '';
     return true;
