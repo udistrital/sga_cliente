@@ -23,6 +23,7 @@ import * as moment from 'moment';
 export class ListFormacionAcademicaComponent implements OnInit {
   uid: number;
   pid: number;
+  UpdateInfo: boolean = false;
   cambiotab: boolean = false;
   config: ToasterConfig;
   settings: any;
@@ -136,7 +137,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.sgaMidService.get('formacion_academica/?Id=' + this.persona_id)
+    this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
     .subscribe(response => {
       if(response !== null && response !== undefined && response !== '{}'){
         const data = <Array<any>>response;
@@ -165,7 +166,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.uid = 0;
+    this.loadData();
   }
 
   activetab(): void {
@@ -174,10 +175,13 @@ export class ListFormacionAcademicaComponent implements OnInit {
 
   onEdit(event): void {
     this.uid = event.data.Nit;
+    this.pid = event.data.ProgramaAcademico.Id;
+    this.UpdateInfo = true;
   }
 
   onCreate(event): void {
     this.uid = 0;
+    
   }
 
   selectTab(event): void {
@@ -189,7 +193,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   onChange(event) {
-  
+    console.info(event)
   }
 
   itemselec(event): void {

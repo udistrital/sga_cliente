@@ -32,6 +32,7 @@ import { TreeModule } from 'angular-tree-component';
 import { Store, StoreModule } from '@ngrx/store';
 import { rootReducer } from './@core/store/rootReducer';
 import { ListService } from './@core/store/services/list.service';
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import {
   MatSnackBarModule,
   MatAutocompleteModule,
@@ -69,6 +70,7 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
+  MAT_DATE_LOCALE,
 } from '@angular/material';
 
 import { ImplicitAutenticationService } from './@core/utils/implicit_autentication.service';
@@ -129,6 +131,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTooltipModule,
     MatTreeModule,
     MatDialogModule,
+    MatMomentDateModule,
+  ],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'es-CO'},
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
   ],
 })
 export class MaterialModule { }

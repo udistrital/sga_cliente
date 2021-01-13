@@ -21,6 +21,7 @@ import { DocumentoService } from '../../@core/data/documento.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
 import { PopUpManager } from '../../managers/popUpManager';
 import { CalendarioProyectoComponent } from './calendario-proyecto/calendario-proyecto.component';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/material-moment-adapter';
 
 
 
@@ -35,6 +36,7 @@ import { CalendarioProyectoComponent } from './calendario-proyecto/calendario-pr
     FormsModule,
     ReactiveFormsModule,
     NbSpinnerModule,
+    MatMomentDateModule,
   ],
   declarations: [
     routedComponents,
@@ -59,6 +61,7 @@ import { CalendarioProyectoComponent } from './calendario-proyecto/calendario-pr
     DocumentoService,
     NuxeoService,
     PopUpManager,
+    {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
   ],
 })
 export class CalendarioAcademicoModule { }

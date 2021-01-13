@@ -24,6 +24,8 @@ export class ListExperienciaLaboralComponent implements OnInit {
   settings: any;
   source: LocalDataSource = new LocalDataSource();
   data: Array<any>;
+  detalleExp: any;
+  indexSelect: number;
   crud = false;
 
   @Input('ente_id')
@@ -68,7 +70,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
         columnTitle: '',
         add: false,
         edit: true,
-        delete: true,
+        delete: false,
       },
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
@@ -148,16 +150,22 @@ export class ListExperienciaLaboralComponent implements OnInit {
 
   ngOnInit() {
     this.uid = 0;
+    this.indexSelect = NaN;
+    this.detalleExp = undefined;
   }
 
   onEdit(event): void {
     this.uid = event.data.Id;
+    this.indexSelect = event.index;
+    this.detalleExp = this.data[event.index];
     this.crud = true;
   }
 
   onCreate(event): void {
     this.uid = 0;
     this.crud = true;
+    this.indexSelect = NaN;
+    this.detalleExp = undefined;
   }
 
   selectTab(event): void {
@@ -171,7 +179,10 @@ export class ListExperienciaLaboralComponent implements OnInit {
   onChange(event) {
     if (event) {
       this.uid = 0;
-      // this.loadData();
+      this.indexSelect = NaN;
+      this.detalleExp = undefined;
+      this.loadData();
+      this.cargarCampos();
     }
   }
 

@@ -26,6 +26,7 @@ export class HttpErrorManager {
     // return an observable with a user-facing error message
     return throwError({
       status: error.status,
+      System: error.error.System,
       message: 'Something bad happened; please try again later.',
     });
   };

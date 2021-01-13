@@ -98,8 +98,8 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
                         loadedActivity.Nombre = element['Nombre'];
                         loadedActivity.Descripcion = element['Descripcion'];
                         loadedActivity.Activo = element['Activo'];
-                        loadedActivity.FechaInicio = moment(element['FechaInicio']).format('YYYY-MM-DD');
-                        loadedActivity.FechaFin = moment(element['FechaFin']).format('YYYY-MM-DD');
+                        loadedActivity.FechaInicio = moment(element['FechaInicio'], 'YYYY-MM-DD').format('DD-MM-YYYY');
+                        loadedActivity.FechaFin = moment(element['FechaFin'], 'YYYY-MM-DD').format('DD-MM-YYYY');
                         loadedActivity.responsables = element['Responsable'];
                         loadedProcess.procesoId = element['TipoEventoId']['Id'];
                         loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
@@ -181,14 +181,14 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           witdh: '20%',
           editable: false,
           filter: false,
-          valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
+          //valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
         },
         FechaFin: {
           title: this.translate.instant('calendario.fecha_fin'),
           witdh: '20%',
           editable: false,
           filter: false,
-          valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
+          //valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
         },
         responsables: {
           title: this.translate.instant('calendario.responsable'),
