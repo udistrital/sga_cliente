@@ -106,6 +106,16 @@
             "asignacion_cupos": "Assignment of quotas",
             "actualizacion_estado": "Actulize aspirant status",
             "listado_aspirante": "List applicants"
+        },
+        "solicitudes": {
+            "solicitudes": "Basic data",
+            "solicitudes_lista": "List of requests",
+            "actualizacion_datos": "Updating ID number request",
+            "actualizacion_nombres": "Updating names request"
+        },
+        "gestionar_solicitudes": {
+            "gestionar_solicitudes": "Students basic data",
+            "solicitudes_actualizacion": "Updating data requests"
         }
     },
     "GLOBAL": {
@@ -1175,5 +1185,35 @@
         "tipo_inscripcion_actualizado": "Updated registration type",
         "seguro_continuar_registrar_tipo_inscripcion": "Are you sure you register this registration type?",
         "tipo_inscripcion_creado": "Type register created"
+    },
+    "solicitudes": {
+        "solicitud_datos": "Request for updating ID number",
+        "solicitud_nombres": "Request for updating names",
+        "numero": "Number",
+        "fecha": "Request date",
+        "tipo": "Type of request",
+        "estado": "Request status",
+        "solicitante": "Petitioner",
+        "nombre": "Student name",
+        "codigo": "Code",
+        "carrera": "Career",
+        "telefono": "Telephone number",
+        "correo_inst": "Institutional email",
+        "correo_personal": "Personal email",
+        "documento_actual": "Current type of ID",
+        "numero_actual": "Current ID number",
+        "expedicion_actual": "Current ID issuance date",
+        "documento_nuevo": "New type of ID",
+        "numero_nuevo": "New ID number",
+        "expedicion_nuevo": "New ID issuance date",
+        "soporte_id": "Support document for the new ID",
+        "ver_id": "Open ID file",
+        "seleccionar_archivo": "Choose file",
+        "soporte": "Support",
+        "nombre_actual": "Actual name",
+        "nombre_": "First name",
+        "apellido": "last name",
+        "nombre_nuevo": "New name",
+        "soporte_nombre": "Support document for the new name"
     }
 }
