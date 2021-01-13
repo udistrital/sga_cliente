@@ -18,6 +18,7 @@ import { ParametrosService } from '../../../@core/data/parametros.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { from } from 'rxjs';
+import moment from 'moment';
 
 @Component({
   selector: 'ngx-crud-inscripcion-multiple',
@@ -26,7 +27,7 @@ import { from } from 'rxjs';
   providers: [EventoService],
 })
 export class CrudInscripcionMultipleComponent implements OnInit {
-  
+
   config: ToasterConfig;
   info_persona_id: number;
   inscripcion_id: number;
@@ -74,6 +75,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   nivel_load = [{ nombre: 'Pregrado', id: 14 }, { nombre: 'Posgrado', id: 15 }];
   selectedLevel: FormControl;
   selectedProject: FormControl;
+  tipo_inscripcion_selected: FormControl;
   projects: any[];
   countInscripcion: number = 0;
   cont: number = 0;
@@ -139,7 +141,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('GLOBAL.no_info_persona'));
     }
   }
-  
+
   createTable() {
     this.data = [
       {
@@ -226,8 +228,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.loadTipoInscripcion();
   }
 
-  onSelectTipoInscripcion() {
-    if (this.inscripcionProjects != null){
+  onSelectTipoInscripcion(tipo) {
+    if (this.inscripcionProjects != null) {
       this.showInfo = true;
     }
   }
@@ -261,21 +263,23 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   }
 
-  generar_recibo(){
-    if (this.info_info_persona != null){
+  generar_recibo() {
+    if (this.info_info_persona != null) {
       this.recibo_pago = new ReciboPago();
       this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + " " + this.info_info_persona.SegundoNombre + " " + this.info_info_persona.PrimerApellido + " " + this.info_info_persona.SegundoApellido;
       this.recibo_pago.DocumentoDelAspirante = this.info_info_persona.NumeroIdentificacion;
       this.recibo_pago.Periodo = this.periodo.Nombre;
       console.info(this.inscripcionProjects)
-      for (var i = 0; i < this.inscripcionProjects.length; i++){
-        if (this.inscripcionProjects[i].ProyectoId === this.selectedProject){
+      for (var i = 0; i < this.inscripcionProjects.length; i++) {
+        if (this.inscripcionProjects[i].ProyectoId === this.selectedProject) {
           this.recibo_pago.ProyectoAspirante = this.inscripcionProjects[i].NombreProyecto;
-          this.recibo_pago.Fecha_pago = this.inscripcionProjects[i].Evento[0].FechaInicioEvento;
-        } 
+          if (this.inscripcionProjects[i].Evento != null) {
+            this.recibo_pago.Fecha_pago = this.inscripcionProjects[i].Evento[0].FechaInicioEvento;
+          }
+        }
       }
       var nivel = new String(this.selectedLevel)
-      if (nivel == '14'){
+      if (nivel == '14') {
         this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:13,PeriodoId__Id:3').subscribe(
           response => {
             this.recibo_pago.Descripcion = response["Data"][0]["ParametroId"]["Nombre"];
@@ -300,11 +304,90 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           },
         );
       }
-      //LLAMAR FUNCION RECIBO
-      console.info(this.recibo_pago)
-      this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
-      } else {
-        this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+
+      this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.recibo_pago.DocumentoDelAspirante + '&limit=0')
+        .subscribe(res => {
+          const r = <any>res;
+          if (res !== null && r.Type !== 'error') {
+            const tiposInscripciones = <Array<any>>res;
+
+            if (tiposInscripciones.length >= 3) {
+              Swal({
+                type: 'error',
+                text: this.translate.instant('recibo_pago.maximo_recibos'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+
+              });
+            } else {
+              //LLAMAR FUNCION RECIBO
+              const inscripcion = {
+                Id: 0,
+                PersonaId: +this.recibo_pago.DocumentoDelAspirante,
+                ProgramaAcademicoId: +this.selectedProject,
+                ReciboInscripcionId: 0,
+                PeriodoId: this.periodo.Id,
+                AceptaTerminos: true,
+                FechaAceptaTerminos: new Date(),
+                Activo: true,
+                EstadoInscripcionId: { Id: 1 },
+                TipoInscripcionId: { Id: Number(this.tipo_inscripcion_selected) },
+              };
+              this.info_inscripcion = <Inscripcion>inscripcion;
+              this.inscripcionService.post('inscripcion/', inscripcion)
+                .subscribe((response) => {
+                  this.info_inscripcion = <Inscripcion><unknown>response;
+                  if (response !== null && response !== undefined) {
+                    const rex = <any>response;
+                    if (rex !== null && rex.Type !== 'error') {
+                      this.eventChange.emit(true);
+                      this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
+                    } else {
+                      this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+                    }
+                  }
+                },
+                  (error: any) => {
+                    if (error.System.Message.includes('duplicate')) {
+                      Swal({
+                        type: 'info',
+                        // title: error.status + '',
+                        // text: this.translate.instant('ERROR.' + error.status),
+                        text: this.translate.instant('recibo_pago.recibo_duplicado'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+
+                      });
+                    } else {
+                      Swal({
+                        type: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('recibo_pago.no_generado'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+
+                      });
+                    }
+                  });
+            }
+          }
+        },
+          (error: any) => {
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('recibo_pago.no_generado'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+
+            });
+          });
+
+
+
+
+      // console.info(this.recibo_pago)
+      // this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
+    } else {
+      this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
     }
   }
 
@@ -344,7 +427,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
+      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {
