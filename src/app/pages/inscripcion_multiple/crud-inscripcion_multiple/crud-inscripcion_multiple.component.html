@@ -39,7 +39,7 @@
                 <mat-form-field style="width: 100%;" *ngIf="showTipoInscripcion">
                     <mat-select [formControl]="Campo2Control" [(ngModel)]="tipo_inscripcion_selected" placeholder="{{ 'inscripcion.aviso_tipo' | translate }}" (selectionChange)="onSelectTipoInscripcion()">
                         <mat-option>--Seleccionar--</mat-option>
-                        <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
+                        <mat-option *ngFor="let item of tipo_inscripciones" [value]="item.Id">
                             {{item.Nombre}}
                         </mat-option>
                     </mat-select>

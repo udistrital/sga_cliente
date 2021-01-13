@@ -566,6 +566,12 @@
         "error_subir_documento": "An error ocurred uploading the documents, please try again.",
         "error_cargar_documento": "An error ocurred downloading the documents, please try again."
     },
+    "recibo_pago": {
+        "generado": "The payment receipt has been generated correctly",
+        "no_generado": "The receipt could not be generated. Verify your personal information",
+        "recibo_duplicado": "You have already generated a receipt with the selected criteria",
+        "maximo_recibos": "I already generate the maximum receipts allowed"
+    },
     "produccion_academica": {
         "produccion_academica": "Academic production",
         "producciones_academicas": "Academic productions",
