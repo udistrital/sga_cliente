@@ -458,10 +458,16 @@
                         </div>
 
                         <!--buttton -->
-                        <button class="{{c.claseBoton}}" *ngSwitchCase="'button'" (click)="auxButton(c)">
-                            {{c.info}}
-                            <i class="{{c.icono}}"></i>
-                        </button>
+                        <div *ngSwitchCase="'button'" class="row">
+                            <div class="{{c.claseGrid}}">
+                                {{c.info}}
+                            </div>
+                            <div class="{{c.claseGrid}}">
+                                <button class="{{c.claseBoton}}" (click)="auxButton(c)">
+                                    <i class="{{c.icono}}"></i>
+                                </button>
+                            </div>
+                        </div>
 
                         <!--label-->
                         <mat-label class="{{c.claseGrid}}" *ngSwitchCase="'label'">{{ c.label }}</mat-label>
