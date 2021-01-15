@@ -4,6 +4,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { DocumentoProgramaService } from '../../@core/data/documento_programa.service';
 import { InscripcionService } from '../../@core/data/inscripcion.service';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { NbSpinnerModule } from '@nebular/theme';
 import { ToasterModule } from 'angular2-toaster';
 import { SharedModule } from '../../shared/shared.module';
 import { CrudDocumentoProgramaComponent } from './crud-documento_programa/crud-documento_programa.component';
@@ -17,6 +18,7 @@ import { ViewDocumentoProgramaComponent } from './view-documento_programa/view-d
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
+    NbSpinnerModule,
   ],
   declarations: [
     ...routedComponents,
