@@ -5,6 +5,8 @@ import { ActualizacionDatos } from '../../../@core/data/models/solicitudes/actua
 import { Solicitante } from '../../../@core/data/models/solicitudes/solicitante';
 import { ACTUALIZAR_DATOS } from './form-actualizacion-datos';
 import { DialogoSoporteComponent } from '../dialogo-soporte/dialogo-soporte.component';
+import { TercerosService } from '../../../@core/data/terceros.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-actualizacion-datos',
@@ -16,15 +18,26 @@ export class ActualizacionDatosComponent implements OnInit {
   solicitante: Solicitante;
   solicitudForm: any;
   solicitudDatos: ActualizacionDatos;
-  tipoDocumento: any;
+  tipoDocumento: any[];
   
 
   constructor(
     private translate: TranslateService,
     private dialogo: MatDialog,
+    private tercerosService: TercerosService,
+    private popUpManager: PopUpManager,
   ) {
     this.solicitudForm = ACTUALIZAR_DATOS;
-    this.construirForm();
+    this.tercerosService.get('tipo_documento').subscribe(
+      response => {
+        this.tipoDocumento = response;
+        this.construirForm();
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
+    
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
@@ -38,9 +51,6 @@ export class ActualizacionDatosComponent implements OnInit {
     this.solicitante.CorreoPersonal = "correo@gmail.com"
     this.solicitante.Nombre = "Nombre de prueba"
     this.solicitante.Telefono = "+57 000-000-0000"
-    this.tipoDocumento = [
-      {}
-    ]
   }
 
   construirForm() {
@@ -50,12 +60,15 @@ export class ActualizacionDatosComponent implements OnInit {
       if (campo.etiqueta === 'button') {
         campo.info = this.translate.instant('solicitudes.' + campo.label_i18n)
       }
+      if (campo.etiqueta === 'select') {
+        campo.opciones = this.tipoDocumento;
+      }
       campo.label = this.translate.instant('solicitudes.' + campo.label_i18n);
     })
   }
 
   enviarSolicitud(event) {
-    console.log(event.data)
+    console.log(event)
   }
 
   abrirDialogoArchivo() {

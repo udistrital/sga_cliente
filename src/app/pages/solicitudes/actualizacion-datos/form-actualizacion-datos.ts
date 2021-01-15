@@ -12,6 +12,7 @@ export const ACTUALIZAR_DATOS = {
             label_i18n: 'fecha',
             deshabilitar: true,
             requerido: true,
+            valor : new Date().toLocaleDateString('es-CO'),
         },
         {
             etiqueta: 'div',
@@ -24,7 +25,8 @@ export const ACTUALIZAR_DATOS = {
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'documento_actual',
             requerido: true,
-            opciones: []
+            opciones: [],
+            key: 'Nombre',
         },
         {
             etiqueta: 'input',
@@ -53,7 +55,8 @@ export const ACTUALIZAR_DATOS = {
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'documento_nuevo',
             requerido: true,
-            opciones: []
+            opciones: [],
+            key: 'Nombre'
         },
         {
             etiqueta: 'input',
@@ -80,7 +83,8 @@ export const ACTUALIZAR_DATOS = {
             tipo: 'button',
             nombre: 'SoporteIdentificacion',
             icono: 'fa fa-file-pdf-o fa-5x',
-            claseBoton: 'col-12 col-sm-6 mat-button text-center',
+            claseBoton: 'mat-button float-right',
+            claseGrid: 'col-6 align-self-center',
             label_i18n: 'soporte_id',
             requerido: true,
         },

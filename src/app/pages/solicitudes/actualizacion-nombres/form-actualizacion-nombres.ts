@@ -12,6 +12,7 @@ export const ACTUALIZAR_NOMBRE = {
             label_i18n: 'fecha',
             deshabilitar: true,
             requerido: true,
+            valor : new Date().toLocaleDateString('es-CO'),
         },
         {
             etiqueta: 'div',
@@ -64,7 +65,8 @@ export const ACTUALIZAR_NOMBRE = {
             tipo: 'button',
             nombre: 'SoporteNombre',
             icono: 'fa fa-file-pdf-o fa-5x',
-            claseBoton: 'text-center',
+            claseBoton: 'mat-button float-right',
+            claseGrid: 'col-6 align-self-center',
             label_i18n: 'soporte_nombre',
             requerido: true,
         },

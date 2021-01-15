@@ -33,7 +33,7 @@ export class DialogoSoporteComponent implements OnInit {
 
   }
 
-  seleccionarArchivo() {
+  seleccionarArchivo(event) {
 
   }
 
