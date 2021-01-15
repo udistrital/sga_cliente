@@ -908,6 +908,9 @@
         "crear_registro": "Crear nuevo registro al proyecto académico"
     },
     "inscripcion": {
+        "estado": "Estado",
+        "nueva": "Realizar nueva preinscripción",
+        "listado": "Listado de preinscripciones",
         "aviso_programa": "Seleccione el programa al que desea inscribirse",
         "aviso_nivel": "Seleccione el nivel al que desea inscribirse",
         "info_basica": "Información básica",
@@ -945,6 +948,7 @@
         "recibos_generados": "Recibos generados (PIN)",
         "generar_recibo": "Generar recibo",
         "numero_recibo": "# Recibo",
+        "inscripcion": "Inscripción",
         "programa": "Programa",
         "fecha_generacion": "Fecha generación",
         "descargar": "Descargar",

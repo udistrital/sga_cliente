@@ -48,7 +48,8 @@ import { CrudDescuentoAcademicoComponent } from '../descuento_academico/crud-des
 import { PropuestaGradoModule } from '../propuesta_grado/propuesta_grado.module';
 import { CrudPropuestaGradoComponent } from '../propuesta_grado/crud-propuesta_grado/crud-propuesta_grado.component';
 import { PreinscripcionComponent } from './preinscripcion/preinscripcion.component';
-
+import { ButtonPaymentComponent } from '../../@theme/components/button-payment/button-payment.component';
+import { LinkDownloadComponent } from '../../@theme/components/link-download/link-download.component';
 
 @NgModule({
   imports: [
@@ -104,6 +105,8 @@ import { PreinscripcionComponent } from './preinscripcion/preinscripcion.compone
     ListDescuentoAcademicoComponent,
     CrudDescuentoAcademicoComponent,
     CrudPropuestaGradoComponent,
+    ButtonPaymentComponent,
+    LinkDownloadComponent,
    ],
   exports: [
     InscripcionGeneralComponent,

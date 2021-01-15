@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { UserService } from '../../../@core/data/users.service';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academico/institucion_enfasis';
 import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
@@ -17,8 +18,11 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { ButtonPaymentComponent } from '../../../@theme/components/button-payment/button-payment.component';
+import { LinkDownloadComponent } from '../../../@theme/components/link-download/link-download.component';
 import { from } from 'rxjs';
 import moment from 'moment';
+import * as momentTimezone from 'moment-timezone';
 
 @Component({
   selector: 'ngx-crud-inscripcion-multiple',
@@ -30,6 +34,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   config: ToasterConfig;
   info_persona_id: number;
+  persona_id: number;
   inscripcion_id: number;
   dataSource: LocalDataSource;
   data: any[] = [];
@@ -63,7 +68,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   aceptaTerminos: boolean;
   showProyectoCurricular: boolean;
   showTipoInscripcion: boolean;
-  showInfo: boolean
+  showInfo: boolean;
+  showNew: boolean;
   programa: number;
   aspirante: number;
   periodo: any;
@@ -96,6 +102,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
+    private userService: UserService,
     private parametrosService: ParametrosService,
     private inscripcionService: InscripcionService,
     private toasterService: ToasterService,
@@ -103,13 +110,16 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     // this.cargaproyectosacademicos();
     this.showProyectoCurricular = false;
     this.showTipoInscripcion = false;
-    this.showInfo = false
+    this.showInfo = false;
+    this.showNew = false;
     this.cargarPeriodo();
     this.dataSource = new LocalDataSource();
-    this.createTable();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
+    this.persona_id = this.userService.getPersonaId();
+    this.loadInfoInscripcion();
+    this.createTable();
   }
 
   public loadInfoPersona(): void {
@@ -143,68 +153,128 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   createTable() {
-    this.data = [
-      {
-        Recibo: "Recibo 1",
-        Programa: "Programa 1",
-        Fecha: "2020-12-14",
-        Descarga: "",
-        Opcion: ""
-      },
-      {
-        Recibo: "Recibo 2",
-        Programa: "Programa 2",
-        Fecha: "2020-12-14",
-        Descarga: "",
-        Opcion: ""
-      },
-      {
-        Recibo: "Recibo 3",
-        Programa: "Programa 3",
-        Fecha: "2020-12-14",
-        Descarga: "",
-        Opcion: ""
-      }
-    ]
-
     this.settings = {
-      actions: false,
+      actions: false, 
       columns: {
-        Recibo: {
+        ReciboInscripcionId: {
           title: this.translate.instant('inscripcion.numero_recibo'),
           editable: false,
-          width: '20%',
+          width: '15%',
+          filter: false,
+          valuePrepareFunction: (value) => {
+            return value;
+          }
         },
-        Programa: {
+        Id: {
+          title: this.translate.instant('inscripcion.inscripcion'),
+          editable: false,
+          width: '10%',
+          filter: false,
+          valuePrepareFunction: (value) => {
+            return value;
+          }
+        },
+        ProgramaAcademicoId: {
           title: this.translate.instant('inscripcion.programa'),
           width: '20%',
           editable: false,
+          filter: false,
+          valuePrepareFunction: (value) => {
+            return value;
+          }
         },
-        Fecha: {
+        FechaCreacion: {
           title: this.translate.instant('inscripcion.fecha_generacion'),
-          width: '20%',
+          width: '10%',
           editable: false,
+          filter: false,
+          valuePrepareFunction: (value) => {
+            return value;
+          }
+        },
+        Estado: {
+          title: this.translate.instant('inscripcion.estado'),
+          width: '5%',
+          editable: false,
+          filter: false,
+          position: 'center',
+          valuePrepareFunction: (value) => {
+            return value;
+          }
         },
         Descarga: {
           title: this.translate.instant('inscripcion.descargar'),
-          width: '20%',
+          width: '10%',
           editable: false,
+          filter: false,
+          renderComponent: LinkDownloadComponent,
+          type: 'custom',
         },
         Opcion: {
           title: this.translate.instant('inscripcion.opcion'),
-          width: '20%',
+          width: '10%',
           editable: false,
+          filter: false,
+          renderComponent: ButtonPaymentComponent,
+          type: 'custom',
         },
       },
       mode: 'external',
-
     }
-    this.dataSource.load(this.data);
   }
 
 
   useLanguage(language: string) {
     this.translate.use(language);
+  }
+
+  ngOnInit() {
+  }
+
+  loadInfoInscripcion() {
+    //Función del MID que retorna el estado del recibo
+    var Estado = ['Pago', 'No pago']; 
+    if (this.persona_id != null){
+      this.inscripcionService.get('inscripcion?query=PersonaId:' + this.persona_id + '&limit=0')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          const data = <Array<any>>res;
+          const dataInfo = <Array<any>>[];
+          console.info(res)
+          data.forEach(element => {
+            this.projectService.get('proyecto_academico_institucion/'+element.ProgramaAcademicoId).subscribe(
+              response => {
+                var randomEstado = Math.round(Math.random())  
+                var inscripcion = {
+                  Id: element.Id,
+                  ProgramaAcademicoId: response.Nombre,
+                  ReciboInscripcionId: element.ReciboInscripcionId,
+                  FechaCreacion: momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY'),
+                  Estado: Estado[randomEstado],
+                };
+                dataInfo.push(inscripcion);
+                this.loading = false;
+                this.dataSource.load(dataInfo);
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                this.loading = false;
+              },
+            );
+          })
+        }
+      },
+      (error: any) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('recibo_pago.no_generado'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
+    }
   }
 
   onSelectLevel() {
@@ -222,6 +292,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         this.loading = false;
       },
     );
+  }
+
+  nuevaPreinscripcion(){
+    this.showNew = true;
   }
 
   onSelectProyecto() {
@@ -307,6 +381,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
       this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.recibo_pago.DocumentoDelAspirante + '&limit=0')
         .subscribe(res => {
+          console.info(res)
           const r = <any>res;
           if (res !== null && r.Type !== 'error') {
             const tiposInscripciones = <Array<any>>res;
@@ -509,9 +584,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               });
             });
       });
-  }
-
-  ngOnInit() {
   }
 
   // empieza nuevo
