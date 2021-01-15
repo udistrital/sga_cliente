@@ -379,7 +379,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         );
       }
 
-      this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.recibo_pago.DocumentoDelAspirante + '&limit=0')
+      // this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.recibo_pago.DocumentoDelAspirante + '&limit=0')
+      this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_persona_id + '&limit=0')
         .subscribe(res => {
           console.info(res)
           const r = <any>res;
@@ -397,9 +398,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               //LLAMAR FUNCION RECIBO
               const inscripcion = {
                 Id: 0,
-                PersonaId: +this.recibo_pago.DocumentoDelAspirante,
+                // PersonaId: +this.recibo_pago.DocumentoDelAspirante,
+                PersonaId: +this.info_persona_id,
                 ProgramaAcademicoId: +this.selectedProject,
-                ReciboInscripcionId: 0,
+                ReciboInscripcionId: Math.floor((Math.random() * 1000) + 1),
                 PeriodoId: this.periodo.Id,
                 AceptaTerminos: true,
                 FechaAceptaTerminos: new Date(),

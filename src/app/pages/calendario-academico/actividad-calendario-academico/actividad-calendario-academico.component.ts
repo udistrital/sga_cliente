@@ -54,8 +54,8 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
       this.activityForm.setValue({
         Nombre: this.data.editActivity.Nombre,
         Descripcion: this.data.editActivity.Descripcion,
-        FechaInicio: moment(this.data.editActivity.FechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD'),
-        FechaFin: moment(this.data.editActivity.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+        FechaInicio: moment(this.data.editActivity.FechaInicio, 'DD-MM-YYYY'),
+        FechaFin: moment(this.data.editActivity.FechaFin, 'DD-MM-YYYY'),
       });
 
       if (this.data.editActivity.EventoPadreId !== undefined && this.data.editActivity.EventoPadreId !== null) {
@@ -77,8 +77,8 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
       if (ok.value) {
         this.activity = this.activityForm.value;
         this.activity.TipoEventoId = { Id: this.data.process.procesoId };
-        this.activity.FechaInicio = moment(this.activity.FechaInicio).format('YYYY-MM-DDTHH:mm') + ':00Z';
-        this.activity.FechaFin = moment(this.activity.FechaFin).format('YYYY-MM-DDTHH:mm') + ':00Z';
+        this.activity.FechaInicio = moment(this.activity.FechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DDTHH:mm') + ':00Z';
+        this.activity.FechaFin = moment(this.activity.FechaFin, 'DD-MM-YYYY').format('YYYY-MM-DDTHH:mm') + ':00Z';
         this.activity.Activo = true;
         this.tableSource.getAll().then(
           data => {
