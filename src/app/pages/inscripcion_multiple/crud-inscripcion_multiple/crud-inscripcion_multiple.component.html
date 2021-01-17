@@ -9,7 +9,7 @@
                 <hr width="0%">
                 <fieldset [ngClass]="{'fieldseter':true} ">
                     <legend> {{ 'inscripcion.recibos_generados' | translate }} </legend>
-                    <ng2-smart-table [settings]="settings" [source]="dataSource">
+                    <ng2-smart-table [settings]="settings" [source]="dataSource" (rowSelect)="itemSelect($event)"> 
                     </ng2-smart-table>
                     <hr width="0%">
                     <div class="text-center">

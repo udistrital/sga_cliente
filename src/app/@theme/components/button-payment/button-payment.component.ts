@@ -35,6 +35,7 @@ export class ButtonPaymentComponent implements ViewCell, OnInit {
   }
 
   showInscription(){
+    this.save.emit(true);
   }
 
 }

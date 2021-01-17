@@ -215,12 +215,27 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           width: '10%',
           editable: false,
           filter: false,
-          renderComponent: ButtonPaymentComponent,
           type: 'custom',
+          renderComponent: ButtonPaymentComponent,
+          onComponentInitFunction: (instance) => {
+            instance.save.subscribe(data => {
+              this.loadInscriptionModule(data);       
+            });
+          }       
         },
       },
       mode: 'external',
     }
+  }
+
+  loadInscriptionModule(data: any){
+    //console.info(data)    
+    console.info("Carga")
+    //Se direcciona al modulo que es 
+  }
+
+  itemSelect(event): void {
+    sessionStorage.setItem('IdInscripcion', event.data.Id)
   }
 
 
