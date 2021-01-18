@@ -8,7 +8,7 @@ export let FORM_DOCUMENTO_PROGRAMA = {
   campos: [
     {
       etiqueta: 'select',
-      claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+      claseGrid: 'col-12 col-md-6',
       nombre: 'DocumentoProgramaId',
       label_i18n: 'tipo_documento_programa',
       placeholder_i18n: 'tipo_documento_programa',
@@ -19,7 +19,7 @@ export let FORM_DOCUMENTO_PROGRAMA = {
     },
     {
       etiqueta: 'file',
-      claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+      claseGrid: 'col-12 col-md-6',
       clase: 'form-control',
       nombre: 'Documento',
       label_i18n: 'soporte_documento',

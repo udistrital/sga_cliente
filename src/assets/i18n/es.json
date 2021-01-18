@@ -576,7 +576,8 @@
         "formato_documento_pdf": "El formato del documento escogido no es pdf",
         "no_documento": "Debe seleccionar un archivo",
         "error_subir_documento": "Ocurrió un error subiendo los documentos, por favor intente de nuevo.",
-        "error_cargar_documento": "Ocurrió un error al descargar documentos"
+        "error_cargar_documento": "Ocurrió un error al descargar documentos",
+        "0": "El servicio solicitado no se encuentra disponible"
     },
     "recibo_pago": {
         "generado": "El recibo de pago ha sido generado correctamente",
@@ -1041,7 +1042,9 @@
         "documento_programa_no_registrado": "Documento no registrado",
         "documento_programa_registrado": "Documento registrado",
         "documento_documento_programa_no_registrado": "Error subiendo el documento de soporte",
-        "seguro_continuar_registrar": "¿Está seguto de registrar este documento?"
+        "seguro_continuar_registrar": "¿Está seguro de registrar este documento?",
+        "no_documentos": "No tiene documentos registrados.",
+        "documento_cambiar": "Seleccione el reemplazo para el tipo de documento elegido."
     },
     "descuento_academico": {
         "descuento_academico_no_registrado": "Descuento académico no registrado",
