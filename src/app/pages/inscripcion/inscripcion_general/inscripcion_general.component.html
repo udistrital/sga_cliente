@@ -1,8 +1,18 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <nb-card [hidden]="show_profile || show_info_pregrado || show_acad_pregrado || show_expe ||
     show_proy || show_prod || show_desc || show_docu ||show_info || show_acad || show_info_interna ||show_info_reingreso || show_info_externa || show_acad_externa">
-        <nb-card-header>
-            <!-- select tipo de inscripcion -->
+    
+    <nb-card-header>
+        <br/><br/>
+        <div class="col-12">
+            {{ 'inscripcion.periodo' | translate }}: {{ inscripcion.PeriodoId }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ 'inscripcion.nivel' | translate }}: {{ inscripcion.Nivel }} 
+        </div>
+        <br/>
+        <div class="col-12">
+            {{ 'inscripcion.tipo' | translate }}: {{ inscripcion.TipoInscripcion }}
+        </div>
+        <br/>
+            <!-- select tipo de inscripcion >
             <mat-form-field style="width: 100%;">
                 <mat-label>{{ 'inscripcion.aviso_tipo' | translate }}:</mat-label>
                 <mat-select [(ngModel)]="tipo_inscripcion_selected" (ngModelChange)="cargaproyectoseventosactivos()">
@@ -11,20 +21,27 @@
                         {{item.Nombre}}
                     </mat-option>
                 </mat-select>
-            </mat-form-field>
+            </mat-form-field-->
 
-            <!-- select programa -->
-            <div *ngIf="selectprograma">
-                <mat-form-field style="width: 100%;">
-                    <mat-label>{{ 'inscripcion.aviso_programa' | translate }}:</mat-label>
-                    <mat-select [(ngModel)]="selectedValue" (ngModelChange)="tipo_inscripcion()" [disabled]="SelectedTipoBool">
-                        <mat-option>--Seleccionar--</mat-option>
-                        <mat-option *ngFor="let item of posgrados" [value]="item">
-                            {{item.Nombre}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+            <!-- select programa >
+            
+            <mat-form-field style="width: 100%;">
+                <mat-label>{{ 'inscripcion.aviso_programa' | translate }}:</mat-label>
+                <mat-select [(ngModel)]="selectedValue" (ngModelChange)="tipo_inscripcion()">
+                    <mat-option>--Seleccionar--</mat-option>
+                    <mat-option *ngFor="let item of posgrados" [value]="item.ProyectoId">
+                        {{item.NombreProyecto}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field-->
+
+            <mat-form-field style="width: 100%;">
+                <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedValue" placeholder="{{ 'inscripcion.aviso_programa' | translate }}" (ngModelChange)="tipo_inscripcion()">
+                    <mat-option>--Seleccionar--</mat-option>
+                    <mat-option *ngFor="let item of posgrados" [value]="item.ProyectoId">{{ item.NombreProyecto }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            
             <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
             <div class="row">

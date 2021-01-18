@@ -235,7 +235,19 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   itemSelect(event): void {
-    sessionStorage.setItem('IdInscripcion', event.data.Id)
+    sessionStorage.setItem('IdInscripcion', event.data.Id);
+    sessionStorage.setItem('ProgramaAcademico', event.data.ProgramaAcademicoId);
+    this.inscripcionService.get('inscripcion/'+event.data.Id).subscribe(
+      (response: any) => {
+        sessionStorage.setItem('IdPeriodo', response.PeriodoId);
+        sessionStorage.setItem('IdTipoInscripcion', response.TipoInscripcionId.Id);
+        sessionStorage.setItem('ProgramaAcademicoId', response.ProgramaAcademicoId)
+      },
+      error => {
+        //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.loading = false;
+      }      
+    );
   }
 
 

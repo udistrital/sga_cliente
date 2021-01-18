@@ -14,4 +14,7 @@ export class Inscripcion {
   TipoInscripcionId: TipoInscripcion;
   EstadoInscripcionId: EstadoInscripcion;
   Activo: boolean;
+  TipoInscripcion: any;
+  Nivel: any;
+  IdNivel: number;
 }

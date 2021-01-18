@@ -943,6 +943,9 @@
         "crear_registro": "Crear nuevo registro al proyecto académico"
     },
     "inscripcion": {
+        "periodo": "Periodo al que se inscribe",
+        "nivel": "Nivel",
+        "tipo": "Tipo de inscripción",
         "estado": "Estado",
         "nueva": "Realizar nueva preinscripción",
         "listado": "Listado de preinscripciones",

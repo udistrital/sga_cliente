@@ -50,6 +50,7 @@ import { CrudPropuestaGradoComponent } from '../propuesta_grado/crud-propuesta_g
 import { PreinscripcionComponent } from './preinscripcion/preinscripcion.component';
 import { ButtonPaymentComponent } from '../../@theme/components/button-payment/button-payment.component';
 import { LinkDownloadComponent } from '../../@theme/components/link-download/link-download.component';
+import { ParametrosService } from '../../@core/data/parametros.service';
 
 @NgModule({
   imports: [
@@ -86,6 +87,7 @@ import { LinkDownloadComponent } from '../../@theme/components/link-download/lin
     DocumentoProgramaService,
     DescuentoAcademicoService,
     UserService,
+    ParametrosService,
   ],
    entryComponents: [
     CrudInfoPersonaComponent,
