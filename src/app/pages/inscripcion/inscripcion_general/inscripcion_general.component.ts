@@ -176,7 +176,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.loadTipoInscripcion(IdTipo);
     //Se carga el nivel del proyecto
     this.loadNivel(IdPrograma);
-    this.loadProject();
+    /*const proyecto = {
+      ProyectoId: parseInt(sessionStorage.getItem('ProgramaAcademicoId')),
+      //NombreProyecto: sessionStorage.getItem('ProgramaAcademico'),
+    }
+    this.selectedValue = proyecto;*/
 
     /*try {
       this.info_persona_id = this.userService.getPersonaId();
@@ -202,7 +206,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           if (response !== null && response !== "{}" && r.Type !== 'error' && r.length != 0) {
             const inscripcionP = <Array<any>>response;
             this.posgrados = inscripcionP;
-
+            this.selectedValue = parseInt(sessionStorage.getItem('ProgramaAcademicoId'));
           } else {
             //this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
           }
@@ -218,6 +222,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           if (response !== null && response !== "{}" && r.Type !== 'error' && r.length != 0) {
             const inscripcionP = <Array<any>>response;
             this.posgrados = inscripcionP;
+            this.selectedValue = parseInt(sessionStorage.getItem('ProgramaAcademicoId'));
           } else {
             //this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
           }
@@ -240,6 +245,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
             this.inscripcion.Nivel = res.Nombre;
             this.inscripcion.IdNivel = res.Id;
             sessionStorage.setItem('IdNivel', res.Id)
+            this.loadProject();
           }, 
           error => {
             //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -427,7 +433,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         });
   }*/
 
-  loadInfoPostgrados() {
+  /*loadInfoPostgrados() {
     // Tener el cuenta que el 5 corresponde al id del evento padre de inscripcion en una facultad
     this.sgaMidService.get('inscripciones/consultar_proyectos_eventos/5')
       .subscribe(res => {
@@ -453,7 +459,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });
-  }
+  }*/
   /*loadidInscripcion() {
     this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_persona_id)
       .subscribe(res => {
@@ -850,11 +856,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    const proyecto = {
-      ProyectoId: parseInt(sessionStorage.getItem('ProgramaAcademicoId')),
-      NombreProyecto: sessionStorage.getItem('ProgramaAcademico'),
-    }
-    this.selectedValue = <any>proyecto;
+    
     // console.info(JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub)
     // this.usuariowso2 = JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1])).sub,
 
@@ -886,7 +888,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   }
 
-  cargaproyectoseventosactivos() {
+  /*cargaproyectoseventosactivos() {
     this.SelectedTipoBool = false
     // this.selectedTipo = this.tipo_inscripcion_selected.Nombre
     console.info(this.selectedTipo)
@@ -894,11 +896,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     if (this.selectedValue === true) {
       this.tipo_inscripcion();
     }
-  }
+  }*/
   tipo_inscripcion() {
     console.info('Tipo metodo')
     console.info('Select programa')
-    if (this.selectedValue.Id === 1) {
+    if (this.inscripcion.IdNivel === 1) {
       this.selectedTipo = 'Pregrado'
     } else {
       this.selectedTipo = 'Posgrado'
@@ -907,12 +909,12 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     switch (this.selectedTipo) {
       case ('Pregrado'):
         this.selectTipo = 'Pregrado';
-        this.selectedValue = true;
+        //this.selectedValue = true;
         this.selectprograma = true;
         break;
       case ('Posgrado'):
         this.selectTipo = 'Posgrado';
-        this.selectedValue = true;
+        //this.selectedValue = true;
         this.selectprograma = true;
         break;
       case ('Transferencia interna'):
@@ -929,7 +931,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         break;
       case ('Profesionalización tecnólogos'):
         this.selectTipo = 'Pregrado';
-        this.selectedValue = true;
+        //this.selectedValue = true;
         this.selectprograma = true;
         break;
       case ('Ciclos propedéuticos'):
@@ -939,7 +941,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         break;
       case ('Movilidad Académica'):
         this.selectTipo = 'Pregrado';
-        this.selectedValue = true;
+        //this.selectedValue = true;
         this.selectprograma = true;
         break;
     }
