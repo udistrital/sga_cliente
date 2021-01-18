@@ -564,7 +564,8 @@
         "formato_documento_pdf": "The format of the chosen file is not pdf",
         "no_documento": "You must select a file",
         "error_subir_documento": "An error ocurred uploading the documents, please try again.",
-        "error_cargar_documento": "An error ocurred downloading the documents, please try again."
+        "error_cargar_documento": "An error ocurred downloading the documents, please try again.",
+        "0": "Service not available"
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",
@@ -1021,7 +1022,9 @@
         "descuento_academico_no_registrado": "Academic discount not registered",
         "descuento_academico_registrado": "Academic discount registered",
         "documento_descuento_academico_no_registrado": "Error uploading support document",
-        "seguro_continuar_registrar": "Are you sure you want to register this academic discount?"
+        "seguro_continuar_registrar": "Are you sure you want to register this academic discount?",
+        "no_documentos": "There are no registered documents.",
+        "documento_cambiar": "Please select the replacement document for the chosen item."
     },
     "descuento_academico": {
         "documento_programa_no_registrado": "Document not registered",
