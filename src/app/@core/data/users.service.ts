@@ -63,6 +63,10 @@ export class UserService {
     return parseInt(window.localStorage.getItem('persona_id'), 10);
   }
 
+  public getPeriodo(): number {
+    return parseInt(window.localStorage.getItem('IdPeriodo'), 10)
+  }
+
   public getUser() {
     return this.user$.asObservable();
   }
