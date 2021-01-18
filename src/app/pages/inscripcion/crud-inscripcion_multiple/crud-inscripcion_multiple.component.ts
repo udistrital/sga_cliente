@@ -70,6 +70,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   showTipoInscripcion: boolean;
   showInfo: boolean;
   showNew: boolean;
+  showInscription: boolean;
   programa: number;
   aspirante: number;
   periodo: any;
@@ -112,6 +113,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.showTipoInscripcion = false;
     this.showInfo = false;
     this.showNew = false;
+    this.showInscription = true;
     this.cargarPeriodo();
     this.dataSource = new LocalDataSource();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -232,6 +234,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     //console.info(data)    
     console.info("Carga")
     //Se direcciona al modulo que es 
+    this.showInscription = false;
   }
 
   itemSelect(event): void {

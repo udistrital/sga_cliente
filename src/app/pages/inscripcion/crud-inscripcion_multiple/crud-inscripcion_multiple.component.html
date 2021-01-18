@@ -2,7 +2,7 @@
 <div class="dinamic-form">
     <fieldset [ngClass]="{'fieldseter':true} ">
         <nb-card>
-            <nb-card-body>
+            <nb-card-body *ngIf="showInscription">
                 <nb-card-header>
                     {{ 'inscripcion.listado' | translate }}
                 </nb-card-header>
@@ -74,6 +74,9 @@
 
                     </fieldset>
                 </div>
+            </nb-card-body>
+            <nb-card-body *ngIf="!showInscription">
+                <ngx-inscripcion_general></ngx-inscripcion_general>
             </nb-card-body>
         </nb-card>
 

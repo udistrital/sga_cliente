@@ -38,7 +38,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   @Input('inscripcion_id')
   set name(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
-    console.info('Posgrado ins: ' + this.inscripcion_id)
     if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
       this.selectedValue = undefined;
       window.localStorage.setItem('programa', this.selectedValue);
@@ -241,7 +240,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         const IdNivel = response.NivelFormacionId.Id;
         this.programaService.get('nivel_formacion/'+IdNivel).subscribe(
           (res: any) => {
-            console.info(res)
             this.inscripcion.Nivel = res.Nombre;
             this.inscripcion.IdNivel = res.Id;
             sessionStorage.setItem('IdNivel', res.Id)
@@ -376,7 +374,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   perfil_editar(event): void {
-    console.info(event)
     switch (event) {
       case 'info_contacto':
 
@@ -415,7 +412,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         //         });
         //       });
         // }
-        console.info('Aqui evento cambio')
         this.show_info = false;
         this.show_profile = false;
         this.show_acad = false;
@@ -701,14 +697,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   tipo_inscripcion() {
-    console.info('Tipo metodo')
-    console.info('Select programa')
     if (this.inscripcion.IdNivel === 1) {
       this.selectedTipo = 'Pregrado'
     } else {
       this.selectedTipo = 'Posgrado'
     }
-    window.localStorage.setItem('programa', this.selectedValue.Id);
     switch (this.selectedTipo) {
       case ('Pregrado'):
         this.selectTipo = 'Pregrado';

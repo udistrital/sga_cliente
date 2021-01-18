@@ -18,9 +18,8 @@ import { DescuentoAcademicoService } from '../../@core/data/descuento_academico.
 import { DocumentoProgramaService } from '../../@core/data/documento_programa.service';
 import { CampusMidService } from '../../@core/data/campus_mid.service';
 import { InfoPersonaModule } from '../info_persona/info_persona.module';
-import { InscripcionMultipleModule} from '../inscripcion_multiple/inscripcion_multiple.module'
 import { CrudInfoPersonaComponent } from '../info_persona/crud-info_persona/crud-info_persona.component';
-import { CrudInscripcionMultipleComponent} from '../inscripcion_multiple/crud-inscripcion_multiple/crud-inscripcion_multiple.component'
+import { CrudInscripcionMultipleComponent} from './crud-inscripcion_multiple/crud-inscripcion_multiple.component'
 import { InfoCaracteristicaModule } from '../info_caracteristica/info_caracteristica.module';
 import { CrudInfoCaracteristicaComponent } from '../info_caracteristica/crud-info_caracteristica/crud-info_caracteristica.component';
 import { InformacionContactoModule } from '../informacion_contacto/informacion_contacto.module';
@@ -51,6 +50,8 @@ import { PreinscripcionComponent } from './preinscripcion/preinscripcion.compone
 import { ButtonPaymentComponent } from '../../@theme/components/button-payment/button-payment.component';
 import { LinkDownloadComponent } from '../../@theme/components/link-download/link-download.component';
 import { ParametrosService } from '../../@core/data/parametros.service';
+import { EnteService } from '../../@core/data/ente.service';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 @NgModule({
   imports: [
@@ -60,7 +61,6 @@ import { ParametrosService } from '../../@core/data/parametros.service';
     SharedModule,
     ToasterModule,
     InfoPersonaModule,
-    InscripcionMultipleModule,
     InfoCaracteristicaModule,
     InformacionContactoModule,
     FormacionAcademicaModule,
@@ -70,6 +70,7 @@ import { ParametrosService } from '../../@core/data/parametros.service';
     DocumentoProgramaModule,
     DescuentoAcademicoModule,
     PropuestaGradoModule,
+    Ng2SmartTableModule,
   ],
   declarations: [
     ...routedComponents,
@@ -88,6 +89,7 @@ import { ParametrosService } from '../../@core/data/parametros.service';
     DescuentoAcademicoService,
     UserService,
     ParametrosService,
+    EnteService,
   ],
    entryComponents: [
     CrudInfoPersonaComponent,
