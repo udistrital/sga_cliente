@@ -234,9 +234,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   loadInscriptionModule(){
-    //console.info(data)    
-    console.info("Carga")
-    //Se direcciona al modulo que es 
     this.showInscription = false;
   }
 
@@ -250,10 +247,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         sessionStorage.setItem('ProgramaAcademicoId', response.ProgramaAcademicoId);
         const EstadoIns = sessionStorage.getItem('EstadoInscripcion');
         if (EstadoIns === 'true'){
-          console.info("Funciona we")
           this.loadInscriptionModule();
-        } else{
-          console.info("f")
         }
       },
       error => {
@@ -281,7 +275,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         if (res !== null && r.Type !== 'error') {
           const data = <Array<any>>res;
           const dataInfo = <Array<any>>[];
-          console.info(res)
           data.forEach(element => {
             this.projectService.get('proyecto_academico_institucion/'+element.ProgramaAcademicoId).subscribe(
               response => {
@@ -383,7 +376,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + " " + this.info_info_persona.SegundoNombre + " " + this.info_info_persona.PrimerApellido + " " + this.info_info_persona.SegundoApellido;
       this.recibo_pago.DocumentoDelAspirante = this.info_info_persona.NumeroIdentificacion;
       this.recibo_pago.Periodo = this.periodo.Nombre;
-      console.info(this.inscripcionProjects)
       for (var i = 0; i < this.inscripcionProjects.length; i++) {
         if (this.inscripcionProjects[i].ProyectoId === this.selectedProject) {
           this.recibo_pago.ProyectoAspirante = this.inscripcionProjects[i].NombreProyecto;
@@ -407,10 +399,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       } else {
         this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:12,PeriodoId__Id:3').subscribe(
           response => {
-            console.info(response)
             this.recibo_pago.Descripcion = response["Data"][0]["ParametroId"]["Nombre"];
             var valor = JSON.parse(response["Data"][0]["Valor"]);
-            console.info(valor)
             this.recibo_pago.ValorDerecho = valor["Costo"]
           },
           error => {
@@ -422,7 +412,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       // this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.recibo_pago.DocumentoDelAspirante + '&limit=0')
       this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_persona_id + '&limit=0')
         .subscribe(res => {
-          console.info(res)
           const r = <any>res;
           if (res !== null && r.Type !== 'error') {
             const tiposInscripciones = <Array<any>>res;
@@ -516,8 +505,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           const tiposInscripciones = <Array<any>>res;
-          // console.info(tiposInscripciones)
-          //     console.info ('Bien')
           this.tipo_inscripciones = tiposInscripciones;
           // this.cargaproyectosacademicos();
           if (this.tipo_inscripciones.length == 0) {

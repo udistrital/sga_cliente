@@ -175,24 +175,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.loadTipoInscripcion(IdTipo);
     //Se carga el nivel del proyecto
     this.loadNivel(IdPrograma);
-    /*const proyecto = {
-      ProyectoId: parseInt(sessionStorage.getItem('ProgramaAcademicoId')),
-      //NombreProyecto: sessionStorage.getItem('ProgramaAcademico'),
-    }
-    this.selectedValue = proyecto;*/
-
-    /*try {
-      this.info_persona_id = this.userService.getPersonaId();
-      //await this.cargarPeriodo();
-      //await this.loadInfoInscripcion();
-    } catch (error) {
-      Swal({
-        type: 'error',
-        title: error.status + '',
-        text: this.translate.instant('inscripcion.error_cargar_informacion'),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    }*/
   }
 
   loadProject(){
@@ -701,6 +683,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.selectedTipo = 'Pregrado'
     } else {
       this.selectedTipo = 'Posgrado'
+    }
+    if (this.selectedValue != undefined){
+      sessionStorage.setItem('ProgramaAcademicoId', this.selectedValue);
     }
     switch (this.selectedTipo) {
       case ('Pregrado'):

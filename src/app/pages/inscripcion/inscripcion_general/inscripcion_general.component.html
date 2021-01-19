@@ -12,35 +12,14 @@
             {{ 'inscripcion.tipo' | translate }}: {{ inscripcion.TipoInscripcion }}
         </div>
         <br/>
-            <!-- select tipo de inscripcion >
-            <mat-form-field style="width: 100%;">
-                <mat-label>{{ 'inscripcion.aviso_tipo' | translate }}:</mat-label>
-                <mat-select [(ngModel)]="tipo_inscripcion_selected" (ngModelChange)="cargaproyectoseventosactivos()">
-                    <mat-option>--Seleccionar--</mat-option>
-                    <mat-option *ngFor="let item of tipo_inscripciones" [value]="item">
-                        {{item.Nombre}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field-->
+           
 
-            <!-- select programa >
-            
-            <mat-form-field style="width: 100%;">
-                <mat-label>{{ 'inscripcion.aviso_programa' | translate }}:</mat-label>
-                <mat-select [(ngModel)]="selectedValue" (ngModelChange)="tipo_inscripcion()">
-                    <mat-option>--Seleccionar--</mat-option>
-                    <mat-option *ngFor="let item of posgrados" [value]="item.ProyectoId">
-                        {{item.NombreProyecto}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field-->
-
-            <mat-form-field style="width: 100%;">
-                <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedValue" placeholder="{{ 'inscripcion.aviso_programa' | translate }}" (ngModelChange)="tipo_inscripcion()">
-                    <mat-option>--Seleccionar--</mat-option>
-                    <mat-option *ngFor="let item of posgrados" [value]="item.ProyectoId">{{ item.NombreProyecto }}</mat-option>
-                </mat-select>
-            </mat-form-field>
+        <mat-form-field style="width: 100%;">
+            <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedValue" placeholder="{{ 'inscripcion.aviso_programa' | translate }}" (ngModelChange)="tipo_inscripcion()">
+                <mat-option>--Seleccionar--</mat-option>
+                <mat-option *ngFor="let item of posgrados" [value]="item.ProyectoId">{{ item.NombreProyecto }}</mat-option>
+            </mat-select>
+        </mat-form-field>
             
             <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
