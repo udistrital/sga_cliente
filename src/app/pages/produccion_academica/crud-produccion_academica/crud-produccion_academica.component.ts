@@ -40,6 +40,9 @@ export class CrudProduccionAcademicaComponent implements OnInit {
 
   @Output() eventChange = new EventEmitter();
 
+  @Output('result') 
+  result: EventEmitter<any> = new EventEmitter();
+
   info_produccion_academica: ProduccionAcademicaPost;
   tiposProduccionAcademica: Array<TipoProduccionAcademica>;
   estadosAutor: Array<EstadoAutorProduccion>;
@@ -59,6 +62,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   DatosAdicionales: any;
   source: LocalDataSource = new LocalDataSource();
   Metadatos: any[];
+  percentage: number;
 
   constructor(private translate: TranslateService,
     private produccionAcademicaService: ProduccionAcademicaService,
@@ -118,6 +122,13 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       this.formProduccionAcademica.campos[i].placeholder =
         this.translate.instant('produccion_academica.placeholder_' + this.formProduccionAcademica.campos[i].label_i18n);
     }
+  }
+
+  setPercentage(event) {
+    setTimeout(()=>{
+      this.percentage = event;
+      this.result.emit(this.percentage);     
+    });
   }
 
   useLanguage(language: string) {
@@ -601,8 +612,10 @@ export class CrudProduccionAcademicaComponent implements OnInit {
             // console.log("metadatos", this.info_produccion_academica.Metadatos);
             if ( this.produccion_academica_selected === undefined ) {
               this.createProduccionAcademica(this.info_produccion_academica);
+              this.result.emit(event);
             } else {
               this.updateProduccionAcademica(this.info_produccion_academica);
+              this.result.emit(event);
             }
           })
           .catch(error => {
