@@ -45,6 +45,9 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   @Output()
   updateList = new EventEmitter<void>();
 
+  @Output('result') 
+  result: EventEmitter<any> = new EventEmitter();
+
   info_produccion_academica: ProduccionAcademicaPost;
   tiposProduccionAcademica: Array<TipoProduccionAcademica>;
   estadosAutor: Array<EstadoAutorProduccion>;
@@ -64,6 +67,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   DatosAdicionales: any;
   source: LocalDataSource = new LocalDataSource();
   Metadatos: any[];
+  percentage: number;
 
   constructor(
     private translate: TranslateService,
@@ -125,6 +129,13 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       this.formProduccionAcademica.campos[i].placeholder =
         this.translate.instant('produccion_academica.placeholder_' + this.formProduccionAcademica.campos[i].label_i18n);
     }
+  }
+
+  setPercentage(event) {
+    setTimeout(()=>{
+      this.percentage = event;
+      this.result.emit(this.percentage);     
+    });
   }
 
   useLanguage(language: string) {
@@ -498,18 +509,20 @@ export class CrudProduccionAcademicaComponent implements OnInit {
         });
       }
     } else {
-      this.source_authors.push({
-        // Nombre: this.getFullAuthorName(this.autorSeleccionado),
-        Nombre: this.autorSeleccionado.NombreCompleto,
-        PersonaId: this.autorSeleccionado.Id,
-        // EstadoAutorProduccion: this.estadosAutor.filter(estado => estado.Id === 3)[0],
-        EstadoAutorProduccionId: this.estadosAutor.filter(estado => estado.Id === estadoAutor)[0],
-        // PuedeBorrar: true,
-        PuedeBorrar: estadoAutor !== 1,
-      });
-      this.autorSeleccionado = undefined;
-      this.creandoAutor = false;
-      this.source.load(this.source_authors);
+      if (this.estadosAutor != undefined){
+        this.source_authors.push({
+          // Nombre: this.getFullAuthorName(this.autorSeleccionado),
+          Nombre: this.autorSeleccionado.NombreCompleto,
+          PersonaId: this.autorSeleccionado.Id,
+          // EstadoAutorProduccion: this.estadosAutor.filter(estado => estado.Id === 3)[0],
+          EstadoAutorProduccionId: this.estadosAutor.filter(estado => estado.Id === estadoAutor)[0],
+          // PuedeBorrar: true,
+          PuedeBorrar: estadoAutor !== 1,
+        });
+        this.autorSeleccionado = undefined;
+        this.creandoAutor = false;
+        this.source.load(this.source_authors);
+      }    
     }
   }
 
@@ -603,8 +616,10 @@ export class CrudProduccionAcademicaComponent implements OnInit {
             // console.log("metadatos", this.info_produccion_academica.Metadatos);
             if ( this.produccion_academica_selected === undefined ) {
               this.createProduccionAcademica(this.info_produccion_academica);
+              this.result.emit(event);
             } else {
               this.updateProduccionAcademica(this.info_produccion_academica);
+              this.result.emit(event);
             }
           })
           .catch(error => {

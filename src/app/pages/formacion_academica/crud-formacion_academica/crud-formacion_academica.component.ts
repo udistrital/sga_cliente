@@ -325,10 +325,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                 if (Object.keys(response).length === files.length) {
                   const documentos_actualizados = <any>response;
                   this.info_formacion_academica.DocumentoId = this.SoporteDocumento;
-                  console.info(this.info_formacion_academica)
                   this.sgaMidService.put('formacion_academica?Nit='+this.info_formacion_academica_id+'&IdProyecto='+this.info_proyecto_id, this.info_formacion_academica)
                     .subscribe(res => {
-                      console.info(res)
                       if (documentos_actualizados['Documento'] !== undefined) {
                         this.info_formacion_academica.DocumentoId = documentos_actualizados['Documento'].url + '';
                       }
@@ -405,7 +403,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     Swal(opt)
       .then((willDelete) => {
         if (willDelete.value) {
-          console.info(this.edit_status)
           const files = [];
           this.info_formacion_academica = <any>infoFormacionAcademica;
           if (this.info_formacion_academica.DocumentoId.file !== undefined) {
@@ -487,7 +484,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         DocumentoId: formData.Documento,
         NitUniversidad: formData.Nit,
       };
-      console.info(this.edit_status)
       if ((this.info_formacion_academica === null && this.info_proyecto_id === null) 
       || (this.info_formacion_academica_id === undefined && this.info_proyecto_id === undefined)){
         this.createInfoFormacionAcademica(InfoFormacionAcademica);
