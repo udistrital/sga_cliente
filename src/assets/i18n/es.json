@@ -944,6 +944,7 @@
         "crear_registro": "Crear nuevo registro al proyecto académico"
     },
     "inscripcion": {
+        "no_inscripcion": "No existe ninguna información de la inscripción registrada",
         "periodo": "Periodo al que se inscribe",
         "nivel": "Nivel",
         "tipo": "Tipo de inscripción",

@@ -509,18 +509,20 @@ export class CrudProduccionAcademicaComponent implements OnInit {
         });
       }
     } else {
-      this.source_authors.push({
-        // Nombre: this.getFullAuthorName(this.autorSeleccionado),
-        Nombre: this.autorSeleccionado.NombreCompleto,
-        PersonaId: this.autorSeleccionado.Id,
-        // EstadoAutorProduccion: this.estadosAutor.filter(estado => estado.Id === 3)[0],
-        EstadoAutorProduccionId: this.estadosAutor.filter(estado => estado.Id === estadoAutor)[0],
-        // PuedeBorrar: true,
-        PuedeBorrar: estadoAutor !== 1,
-      });
-      this.autorSeleccionado = undefined;
-      this.creandoAutor = false;
-      this.source.load(this.source_authors);
+      if (this.estadosAutor != undefined){
+        this.source_authors.push({
+          // Nombre: this.getFullAuthorName(this.autorSeleccionado),
+          Nombre: this.autorSeleccionado.NombreCompleto,
+          PersonaId: this.autorSeleccionado.Id,
+          // EstadoAutorProduccion: this.estadosAutor.filter(estado => estado.Id === 3)[0],
+          EstadoAutorProduccionId: this.estadosAutor.filter(estado => estado.Id === estadoAutor)[0],
+          // PuedeBorrar: true,
+          PuedeBorrar: estadoAutor !== 1,
+        });
+        this.autorSeleccionado = undefined;
+        this.creandoAutor = false;
+        this.source.load(this.source_authors);
+      }    
     }
   }
 

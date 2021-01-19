@@ -25,6 +25,7 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { resolve } from 'url';
 import { element } from '@angular/core/src/render3';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -124,6 +125,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   periodo: any;
 
   constructor(
+    private popUpManager: PopUpManager,
     private translate: TranslateService,
     private router: Router,
     private terceroService: TercerosService,
@@ -139,11 +141,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    // Ojo borrar despues de auditoria
-    //this.posgrados.push({Id: 1, Nombre: 'Ingenieria de Sistemas' }, {Id: 2, Nombre: 'Maestria en Ingeniera'});
-    // this.loadInfoPostgrados();
-
-    //this.loadTipoInscripcion();
     this.total = true;
     // if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
     //   && this.inscripcion_id.toString() !== '0') {
@@ -158,7 +155,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     // }
 
     this.loadData();
-    //this.cargarPeriodo();
   }
 
   async loadData() {
@@ -189,11 +185,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
             this.posgrados = inscripcionP;
             this.selectedValue = parseInt(sessionStorage.getItem('ProgramaAcademicoId'));
           } else {
-            //this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_inscripcion'));
           }
         },
         error => {
-          //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         },
       );
     } else{
@@ -205,11 +201,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
             this.posgrados = inscripcionP;
             this.selectedValue = parseInt(sessionStorage.getItem('ProgramaAcademicoId'));
           } else {
-            //this.popUpManager.showAlert('', this.translate.instant('calendario.sin_proyecto_curricular'));
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_inscripcion'));
           }
         },
         error => {
-          //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         },
       );
     }
@@ -228,12 +224,12 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
             this.loadProject();
           }, 
           error => {
-            //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
           }
         );
       }, 
       error => {
-        //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );
   }
@@ -244,7 +240,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.inscripcion.TipoInscripcion = response.Nombre;
       },
       error => {
-        //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );
   }
@@ -255,7 +251,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.inscripcion.PeriodoId = response.Data.Nombre;
       },
       error => {
-        //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );
   }

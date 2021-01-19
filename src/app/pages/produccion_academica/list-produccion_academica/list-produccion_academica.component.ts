@@ -115,6 +115,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
         if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
           const data = <Array<ProduccionAcademicaPost>>res;
           this.source.load(data);
+          this.result.emit(1);
         } else {
            Swal({
             type: 'error',
