@@ -186,12 +186,6 @@ export const MENU_ITEMS: MenuItem[] = [
         link: '/pages/inscripcion/preinscripcion',
         key: 'preinscripcion',
       },
-      {
-        title: 'Inscripcion',
-        icon: 'nb-edit',
-        link: '/pages/inscripcion/inscripcion_general',
-        key: 'inscripcion_general',
-      },
     ],
   },
   {
