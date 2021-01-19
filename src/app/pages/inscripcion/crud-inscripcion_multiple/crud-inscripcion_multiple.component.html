@@ -2,10 +2,25 @@
 <div class="dinamic-form">
     <fieldset [ngClass]="{'fieldseter':true} ">
         <nb-card>
-            <nb-card-body>
+            <nb-card-body *ngIf="showInscription">
+                <nb-card-header>
+                    {{ 'inscripcion.listado' | translate }}
+                </nb-card-header>
+                <hr width="0%">
+                <fieldset [ngClass]="{'fieldseter':true} ">
+                    <legend> {{ 'inscripcion.recibos_generados' | translate }} </legend>
+                    <ng2-smart-table [settings]="settings" [source]="dataSource" (rowSelect)="itemSelect($event)"> 
+                    </ng2-smart-table>
+                    <hr width="0%">
+                    <div class="text-center">
+                        <button mat-button type="button" (click)="nuevaPreinscripcion()" >{{ 'inscripcion.nueva' | translate }}</button>
+                    </div>
+
+                </fieldset>
+                <hr width="100%">
 
                 <!-- select periodo -->
-                <mat-form-field style="width: 40%;">
+                <mat-form-field style="width: 40%;" *ngIf="showNew">
                     <mat-label>{{ 'inscripcion.aviso_periodo' | translate }}:</mat-label>
                     <mat-select [(ngModel)]="periodo" [disabled]='true'>
                         <mat-option>--Seleccionar--</mat-option>
@@ -17,7 +32,7 @@
 
                 <!-- select Nivel -->
 
-                <mat-form-field style="width: 100%;">
+                <mat-form-field style="width: 100%;" *ngIf="showNew">
                     <mat-select [formControl]="CampoControl" [(ngModel)]="selectedLevel" placeholder="{{ 'calendario.para' | translate }}" (selectionChange)="onSelectLevel()">
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let nivel of nivel_load" [value]="nivel.id">{{ nivel.nombre }}</mat-option>
@@ -58,16 +73,10 @@
                         </nb-card>
 
                     </fieldset>
-
-                    <fieldset [ngClass]="{'fieldseter':true} ">
-                        <legend> {{ 'inscripcion.recibos_generados' | translate }} </legend>
-
-                        <ng2-smart-table [settings]="settings" [source]="dataSource">
-
-                        </ng2-smart-table>
-
-                    </fieldset>
                 </div>
+            </nb-card-body>
+            <nb-card-body *ngIf="!showInscription">
+                <ngx-inscripcion_general></ngx-inscripcion_general>
             </nb-card-body>
         </nb-card>
 

@@ -1,0 +1,9 @@
+<!--Botón de pago cuando el recibo se encuentra en estado de "No pago"-->
+<button *ngIf="notPaid" (click)="showOptions()">
+  <img src="assets/images/BtnPagar.png">
+</button>
+
+<!--Botón de pago cuando el recibo se encuentra en estado de "No pago"-->
+<button *ngIf="isPaid" (click)="showInscription()">
+  <img src="assets/images/BtnInscripcion.png">
+</button>
