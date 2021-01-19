@@ -23,6 +23,7 @@ import { LinkDownloadComponent } from '../../../@theme/components/link-download/
 import { from } from 'rxjs';
 import moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
+import { load } from '@angular/core/src/render3';
 
 @Component({
   selector: 'ngx-crud-inscripcion-multiple',
@@ -119,9 +120,11 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
+    sessionStorage.setItem('EstadoInscripcion', 'false'); 
     this.persona_id = this.userService.getPersonaId();
     this.loadInfoInscripcion();
     this.createTable();
+    
   }
 
   public loadInfoPersona(): void {
@@ -221,7 +224,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           renderComponent: ButtonPaymentComponent,
           onComponentInitFunction: (instance) => {
             instance.save.subscribe(data => {
-              this.loadInscriptionModule(data);       
+              sessionStorage.setItem('EstadoInscripcion', data);     
             });
           }       
         },
@@ -230,7 +233,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     }
   }
 
-  loadInscriptionModule(data: any){
+  loadInscriptionModule(){
     //console.info(data)    
     console.info("Carga")
     //Se direcciona al modulo que es 
@@ -244,7 +247,14 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       (response: any) => {
         sessionStorage.setItem('IdPeriodo', response.PeriodoId);
         sessionStorage.setItem('IdTipoInscripcion', response.TipoInscripcionId.Id);
-        sessionStorage.setItem('ProgramaAcademicoId', response.ProgramaAcademicoId)
+        sessionStorage.setItem('ProgramaAcademicoId', response.ProgramaAcademicoId);
+        const EstadoIns = sessionStorage.getItem('EstadoInscripcion');
+        if (EstadoIns === 'true'){
+          console.info("Funciona we")
+          this.loadInscriptionModule();
+        } else{
+          console.info("f")
+        }
       },
       error => {
         //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));

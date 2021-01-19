@@ -32,6 +32,7 @@ export class ButtonPaymentComponent implements ViewCell, OnInit {
 
   showOptions(){
     console.info("Llamar PSE")
+    this.save.emit(false);
   }
 
   showInscription(){
