@@ -9,6 +9,8 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-list-descuento-academico',
@@ -53,11 +55,14 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     private mid: CampusMidService,
     private descuentoService: DescuentoAcademicoService,
     private inscripcionService: InscripcionService,
+    private sgaMidService: SgaMidService,
+    private popUpManager: PopUpManager,
     private toasterService: ToasterService) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
     });
+    this.loadData();
     this.loading = false;
   }
 
@@ -67,7 +72,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         columnTitle: '',
         add: false,
         edit: true,
-        delete: true,
+        delete: false,
       },
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
@@ -101,22 +106,23 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   }
 
   loadData(): void {
-    this.inscripcionService.get('inscripcion/' + this.inscripcion)
-      .subscribe(dato_inscripcion => {
-        const inscripciondata = <any>dato_inscripcion;
-        this.programa = inscripciondata.ProgramaAcademicoId;
-        this.periodo = inscripciondata.PeriodoId;
-        this.programa = 16;
-        this.mid.get(`descuento_academico/descuentopersonaperiododependencia?` +
-          `PersonaId=${this.persona}&DependenciaId=${this.programa}&PeriodoId=${this.periodo}`)
-          .subscribe(res => {
-            console.info(JSON.stringify(res))
-            if (res !== null) {
-              // this.data.push(<SolicitudDescuento>res);
-              this.data = <Array<SolicitudDescuento>>res;
-              this.getPercentage(1);
-              this.source.load(this.data);
-            }
+    // this.inscripcionService.get('inscripcion/' + this.inscripcion)
+    //   .subscribe(dato_inscripcion => {
+    //     const inscripciondata = <any>dato_inscripcion;
+    //     this.programa = inscripciondata.ProgramaAcademicoId;
+    //     this.periodo = inscripciondata.PeriodoId;
+    //     this.programa = 16;
+        this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' +
+          'PersonaId='+Number(window.localStorage.getItem('persona_id'))+'&DependenciaId='+Number(window.sessionStorage.getItem('ProgramaAcademicoId'))+'&PeriodoId='+Number(window.sessionStorage.getItem('IdPeriodo')))
+          .subscribe((result: any) => {
+            const r = <any>result.Data.Body[1];
+                if (result !== null && result.Data.Code == '404') {
+                  this.popUpManager.showAlert('', this.translate.instant('inscripcion.sin_descuento'));
+                }else {
+                  this.data = <Array<SolicitudDescuento>>r;
+                  this.getPercentage(1);
+                  this.source.load(this.data);
+                }
           },
             (error: HttpErrorResponse) => {
               Swal({
@@ -189,18 +195,18 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         //       });
         //     });
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-              this.translate.instant('GLOBAL.admision'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-      });
+      // },
+      //   (error: HttpErrorResponse) => {
+      //     Swal({
+      //       type: 'error',
+      //       title: error.status + '',
+      //       text: this.translate.instant('ERROR.' + error.status),
+      //       footer: this.translate.instant('GLOBAL.cargar') + '-' +
+      //         this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+      //         this.translate.instant('GLOBAL.admision'),
+      //       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      //     });
+      // });
   }
 
   ngOnInit() {
