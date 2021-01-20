@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
@@ -21,8 +21,10 @@ export class ListProduccionAcademicaComponent implements OnInit {
   config: ToasterConfig;
   settings: any;
   persona_id: number;
-
   source: LocalDataSource = new LocalDataSource();
+  percentage: number;
+
+  @Output('result') result: EventEmitter<any> = new EventEmitter();
 
   constructor(private translate: TranslateService,
     private sgaMidService: SgaMidService,
@@ -34,6 +36,11 @@ export class ListProduccionAcademicaComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
     });
+  }
+
+  getPercentage(event) {
+    this.percentage = event;
+    this.result.emit(this.percentage);
   }
 
   cargarCampos() {
@@ -108,6 +115,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
         if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
           const data = <Array<ProduccionAcademicaPost>>res;
           this.source.load(data);
+          this.result.emit(1);
         } else {
            Swal({
             type: 'error',

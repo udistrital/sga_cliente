@@ -106,7 +106,7 @@
 </div>
 <div [hidden]="!formConstruido">
     <toaster-container [toasterconfig]="config"></toaster-container>
-    <ngx-dinamicform [normalform]="formProduccionAcademica" [modeloData]="DatosAdicionales" (result)="validarForm($event)" [clean]="clean">
+    <ngx-dinamicform [normalform]="formProduccionAcademica" [modeloData]="DatosAdicionales" (result)="validarForm($event)" [clean]="clean" (percentage)="setPercentage($event)">
     </ngx-dinamicform>
 </div>
 

@@ -5,26 +5,15 @@ import { InscripcionGeneralComponent } from './inscripcion_general/inscripcion_g
 import { PerfilComponent } from './perfil/perfil.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
 import { PreinscripcionComponent } from './preinscripcion/preinscripcion.component';
+import { CrudInscripcionMultipleComponent } from './crud-inscripcion_multiple/crud-inscripcion_multiple.component';
 
 const routes: Routes = [{
   path: '',
   component: InscripcionComponent,
   children: [{
-    path: 'inscripcion_general',
-    component: InscripcionGeneralComponent,
-    // data: {
-    //   roles: [
-    //     'ADMIN_CAMPUS',
-    //     'ASPIRANTE',
-    //     'Internal/selfsignup',
-    //     'Internal/everyone',
-    //   ],
-    // },
-  },
-{
-  path: 'preinscripcion',
-  component: PreinscripcionComponent,
-}],
+    path: 'preinscripcion',
+    component: PreinscripcionComponent,
+  }],
 }];
 
 @NgModule({
@@ -43,4 +32,5 @@ export const routedComponents = [
   InscripcionGeneralComponent,
   PerfilComponent,
   PreinscripcionComponent,
+  CrudInscripcionMultipleComponent,
 ];
