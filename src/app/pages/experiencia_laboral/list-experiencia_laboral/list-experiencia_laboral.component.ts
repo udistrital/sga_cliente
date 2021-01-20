@@ -126,7 +126,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.sgaMidService.get('experiencia_laboral/by_tercero/?Id=' + this.persona_id).subscribe(
+    this.sgaMidService.get('experiencia_laboral/by_tercero?Id=' + this.persona_id).subscribe(
       (response: any) => {
         const r = <any>response;
         if (response !== null && r.Data.Code != '400') {

@@ -961,6 +961,7 @@
         "produccion_academica": "Producción académica",
         "documento_programa": "Documentos solicitados",
         "descuento_matricula": "Descuentos de matrícula",
+        "sin_descuento": "No hay descuentos registrados",
         "propuesta_grado": "Propuesta de trabajo de grado",
         "inscribirse": "Inscribirse",
         "info_persona": "Información personal",
