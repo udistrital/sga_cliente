@@ -105,7 +105,8 @@
             "criterios": "Admissions criteria for projects",
             "asignacion_cupos": "Assignment of quotas",
             "actualizacion_estado": "Actulize aspirant status",
-            "listado_aspirante": "List applicants"
+            "listado_aspirante": "List applicants",
+            "administrar_criterios": "Manage admission criteria"
         },
         "solicitudes": {
             "solicitudes": "Basic data",
@@ -124,6 +125,7 @@
         "preinscripcion": "Pre-registration",
         "preinscripcion_2": "You want to pre-register",
         "id": "Id",
+        "estado": "Status",
         "activo": "Active",
         "inactivo": "Inactive",
         "aceptar": "Accept",
@@ -1067,7 +1069,15 @@
         "prueba": "Criteria Test",
         "criterio_icfes": "Percentages for the ICFES criterion",
         "actualizacion_estado": "Actulizar estado aspirantes",
-        "enlistar": "Enlist applicants"
+        "enlistar": "Enlist applicants",
+        "criterios_subcriterios": "Criteria and Subcriteria",
+        "criterios": "Criteria",
+        "subcriterios": "Subcriteria",
+        "nuevo_criterio": "New Criteria",
+        "error_nombre_criterio": "Please give a name to the criteria",
+        "error_desc_criterio": "Please add a description to the criteria",
+        "seguro_crear_criterio": "Are you sure about adding a new criteria?",
+        "seguro_modificar_criterio": "Are you sure about modifying this criteria?"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",

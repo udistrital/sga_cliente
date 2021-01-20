@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ThemeModule } from '../../@theme/theme.module';
 import { SharedModule } from '../../shared/shared.module';
 import { ToasterModule } from 'angular2-toaster';
+import { MatDialogModule } from '@angular/material/dialog'
 import { NuxeoService } from './../../@core/utils/nuxeo.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { UtilidadesService } from '../../@core/utils/utilidades.service';
@@ -21,6 +22,8 @@ import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.co
 import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizacion_estado.component';
 import { ListadoAspiranteComponent } from './listado_aspirantes/listado_aspirante.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { AdministradorCriteriosComponent } from './administrador-criterios/administrador-criterios.component';
+import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios.component';
 
 
 
@@ -29,6 +32,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
     ThemeModule,
     AdmisionRoutingModule,
     MatExpansionModule,
+    MatDialogModule,
     SharedModule,
     Ng2SmartTableModule,
     ToasterModule,
@@ -51,12 +55,15 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
    entryComponents: [
     CrudCriterioIcfesComponent,
     CrudAsignacionCupoComponent,
+    DialogoCriteriosComponent,
    ],
   exports: [
     CriterioAdmisionComponent,
     AsignacionCuposComponent,
     ActualizacionEstadoComponent,
     ListadoAspiranteComponent,
+    AdministradorCriteriosComponent,
+    DialogoCriteriosComponent,
   ],
 })
 export class AdmisionModule { }
