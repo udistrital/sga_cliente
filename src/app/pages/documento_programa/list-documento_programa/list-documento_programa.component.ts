@@ -40,7 +40,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.inscripcion = info2;
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
-        this.loadData();
+        
     }
   }
 
@@ -98,7 +98,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
 
   loadData(): void {
     this.soporteDocumento = [];
-    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId:' + this.inscripcion).subscribe(
+    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' + this.inscripcion).subscribe(
       (response: any[]) => {
         if (Object.keys(response[0]).length > 0) {
           response.forEach(soporte => {
@@ -124,6 +124,12 @@ export class ListDocumentoProgramaComponent implements OnInit {
 
   ngOnInit() {
     this.uid = 0;
+    this.soporteDocumento = [];
+    this.inscripcion = parseInt(sessionStorage.getItem('IdInscripcion'));
+    if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
+      this.inscripcion.toString() !== '') {
+        this.loadData();
+    }
   }
 
   onOpen(event) {
@@ -167,10 +173,11 @@ export class ListDocumentoProgramaComponent implements OnInit {
   }
 
   onChange(event) {
-    if (event) {
-      this.getPercentage(this.soporteDocumento.length / event)
+    if (event === true) {
       this.uid = 0;
       this.loadData();
+    } else {
+      this.getPercentage(this.soporteDocumento.length / event)
     }
   }
 
