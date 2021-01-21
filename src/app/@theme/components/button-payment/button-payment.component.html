@@ -7,3 +7,6 @@
 <button *ngIf="isPaid" (click)="showInscription()">
   <img src="assets/images/BtnInscripcion.png">
 </button>
+
+<!--Label cuando el recibo de pago se encuentra vencido-->
+<label *ngIf="vencido">Sin pago</label>
