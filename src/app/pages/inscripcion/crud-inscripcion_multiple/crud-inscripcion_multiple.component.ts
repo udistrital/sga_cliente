@@ -164,7 +164,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         ReciboInscripcion: {
           title: this.translate.instant('inscripcion.numero_recibo'),
           editable: false,
-          width: '15%',
+          width: '10%',
           filter: false,
           valuePrepareFunction: (value) => {
             return value;
@@ -181,7 +181,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
         ProgramaAcademicoId: {
           title: this.translate.instant('inscripcion.programa'),
-          width: '20%',
+          width: '30%',
           editable: false,
           filter: false,
           valuePrepareFunction: (value) => {
@@ -190,7 +190,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
         FechaCreacion: {
           title: this.translate.instant('inscripcion.fecha_generacion'),
-          width: '10%',
+          width: '15%',
           editable: false,
           filter: false,
           valuePrepareFunction: (value) => {
@@ -199,7 +199,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
         Estado: {
           title: this.translate.instant('inscripcion.estado'),
-          width: '5%',
+          width: '10%',
           editable: false,
           filter: false,
           position: 'center',
@@ -209,7 +209,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
         Descarga: {
           title: this.translate.instant('inscripcion.descargar'),
-          width: '10%',
+          width: '12%',
           editable: false,
           filter: false,
           renderComponent: LinkDownloadComponent,
@@ -217,7 +217,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
         Opcion: {
           title: this.translate.instant('inscripcion.opcion'),
-          width: '10%',
+          width: '13%',
           editable: false,
           filter: false,
           type: 'custom',
@@ -281,7 +281,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                 element.ReciboInscripcion = NumRecibo;
                 element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                 element.ProgramaAcademicoId = res.Nombre;
-                
+                this.result.emit(1);
                 dataInfo.push(element);
                 this.loading = false;
                 this.dataSource.load(dataInfo);

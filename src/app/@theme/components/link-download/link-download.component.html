@@ -1,9 +1,10 @@
 <!--Botón de descarga cuando el recibo se encuentra activo-->
 <button *ngIf="download" (click)="showDownload()">
-  <img src="assets/images/busqueda.png " width="13" height="13"> Visualizar recibo
+  <i class='fa fa-search'></i> Visualizar recibo
 </button>
 
 <!--Botón de bloqueo cuando el recibo se encuentra inactivo-->
-<button *ngIf="expired" (click)="showExpired()">
-  Expired 
-</button>
+<label class="boton-personalizado" *ngIf="expired">
+  &nbsp;<i class="fa fa-times"></i> Recibo vencido</label>
+
+  
