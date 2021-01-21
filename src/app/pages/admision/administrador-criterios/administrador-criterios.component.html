@@ -1,0 +1,28 @@
+<nb-card>
+  <nb-card-body>
+    <div class=col-12>
+      <fieldset [ngClass]="{'fieldseter':true}" >
+        <legend>
+            {{ 'admision.criterios_subcriterios' | translate }}
+        </legend>
+        <mat-tab-group>
+          <mat-tab label="{{ 'admision.criterios' | translate }}">
+              <ng2-smart-table [settings]="criterioSettings" [source]="criterioSource" (create)="agregarCriterio()" (edit)="editarCriterio($event)" (delete)="inactivarCriterio($event)"></ng2-smart-table>
+          </mat-tab>
+          <mat-tab label="{{ 'admision.subcriterios' | translate }}">
+              <mat-accordion>
+                  <mat-expansion-panel *ngFor="let criterio of criterios">
+                      <mat-expansion-panel-header>
+                          <mat-panel-title>
+                              {{ criterio.Nombre }}
+                          </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <ng2-smart-table [settings]="subcriterioSettings" [source]="criterio.Subcriterios" (create)="agregarSubcriterio($event, criterio)" (edit)="editarSubcriterio($event)" (delete)="inactivarCriterio($event)"></ng2-smart-table>
+                  </mat-expansion-panel>
+              </mat-accordion>
+          </mat-tab>
+        </mat-tab-group>
+      </fieldset>
+    </div>
+  </nb-card-body>
+</nb-card>

@@ -195,6 +195,12 @@ export const MENU_ITEMS: MenuItem[] = [
     key: 'admision',
     children: [
       {
+        title: 'Administrar criterios',
+        icon: 'nb-list',
+        link: '/pages/admision/administrar-criterios',
+        key: 'administrar_criterios',
+      },
+      {
         title: 'Criterios admisión',
         icon: 'nb-edit',
         link: '/pages/admision/criterio_admision',

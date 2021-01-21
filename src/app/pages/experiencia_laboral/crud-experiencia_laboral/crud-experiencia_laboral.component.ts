@@ -259,7 +259,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     let consultaEmpresa: Array<any> = [];
     const empresa: Array<any> = [];
 
-    this.sgaMidService.get('formacion_academica/info_universidad_nombre/?nombre=' + nombre)
+    this.sgaMidService.get('formacion_academica/info_universidad_nombre?nombre=' + nombre)
       .subscribe(res => {
         if (res !== null) {
           consultaEmpresa = <Array<InfoPersona>>res;

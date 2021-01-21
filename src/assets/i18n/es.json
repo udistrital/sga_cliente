@@ -105,7 +105,8 @@
             "criterios": "Criterios de admisiones \npor proyectos",
             "asignacion_cupos": "Asignación de cupos",
             "actualizacion_estado": "Actulizar estado aspirantes",
-            "listado_aspirante": "Listar aspirantes"
+            "listado_aspirante": "Listar aspirantes",
+            "administrar_criterios": "Administrar criterios\nde admisión"
         },
         "solicitudes": {
             "solicitudes": "Datos básicos",
@@ -124,6 +125,7 @@
         "preinscripcion": "Preinscripcion",
         "preinscripcion_2": "Desea realizar preinscripcion",
         "id": "Id",
+        "estado": "Estado",
         "activo": "Activo",
         "inactivo": "Inactivo",
         "aceptar": "Aceptar",
@@ -961,6 +963,7 @@
         "produccion_academica": "Producción académica",
         "documento_programa": "Documentos solicitados",
         "descuento_matricula": "Descuentos de matrícula",
+        "sin_descuento": "No hay descuentos registrados",
         "propuesta_grado": "Propuesta de trabajo de grado",
         "inscribirse": "Inscribirse",
         "info_persona": "Información personal",
@@ -1095,7 +1098,25 @@
         "prueba": "Criterio Prueba",
         "criterio_icfes": "Porcentajes para el criterio ICFES",
         "actualizacion_estado": "Actulizar estado aspirantes",
-        "enlistar": "Enlistar aspirantes"
+        "enlistar": "Enlistar aspirantes",
+        "criterios_subcriterios": "Criterios y Subcriterios",
+        "criterios": "Criterios",
+        "subcriterios": "Subcriterios",
+        "nuevo_criterio": "Crear o modificar Criterio",
+        "error_nombre_criterio": "Por favor digite el nombre del criterio",
+        "error_desc_criterio": "Por favor digite la descripción del criterio",
+        "error_codigo_criterio": "Por favor indique el codigo de abreviación del criterio.",
+        "seguro_crear_criterio": "¿Está seguro de agregar un nuevo criterio?",
+        "seguro_modificar_criterio": "¿Está seguro de modificar este criterio?",
+        "seguro_inactivar_criterio": "¿Está seguro de inactivar este criterio?",
+        "criterio_exito": "El nuevo criterio ha sido registrado con éxito.",
+        "criterio_modificado": "El criterio ha sido actualizado con éxito.",
+        "criterio_inactivado": "El criterio ha sido inactivado con éxito.",
+        "error_registro_criterio": "Ocurrió un error al registrar el nuevo criterio.",
+        "error_modificar_criterio": "Ocurrió un error al modificar el criterio.",
+        "error_inactivar_criterio": "No se ha podido inactivar el criterio.",
+        "error_cargar": "No se ha podido obtener la información de los criterios.",
+        "no_criterios": "No hay criterios registrados"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

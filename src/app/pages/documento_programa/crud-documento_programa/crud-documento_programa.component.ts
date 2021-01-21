@@ -79,8 +79,8 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.programa = this.userService.getPrograma();
-    this.periodo = this.userService.getPeriodo();
+    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId')) // this.userService.getPrograma();
+    this.periodo = parseInt(sessionStorage.getItem('IdPeriodo')) // this.userService.getPeriodo();
     this.loadLists();
   }
 
