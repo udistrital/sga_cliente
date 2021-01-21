@@ -105,7 +105,8 @@
             "criterios": "Admissions criteria for projects",
             "asignacion_cupos": "Assignment of quotas",
             "actualizacion_estado": "Actulize aspirant status",
-            "listado_aspirante": "List applicants"
+            "listado_aspirante": "List applicants",
+            "administrar_criterios": "Manage admission criteria"
         },
         "solicitudes": {
             "solicitudes": "Basic data",
@@ -124,6 +125,7 @@
         "preinscripcion": "Pre-registration",
         "preinscripcion_2": "You want to pre-register",
         "id": "Id",
+        "estado": "Status",
         "activo": "Active",
         "inactivo": "Inactive",
         "aceptar": "Accept",
@@ -1069,7 +1071,25 @@
         "prueba": "Criteria Test",
         "criterio_icfes": "Percentages for the ICFES criterion",
         "actualizacion_estado": "Actulizar estado aspirantes",
-        "enlistar": "Enlist applicants"
+        "enlistar": "Enlist applicants",
+        "criterios_subcriterios": "Criteria and Subcriteria",
+        "criterios": "Criteria",
+        "subcriterios": "Subcriteria",
+        "nuevo_criterio": "Create or modify Criteria",
+        "error_nombre_criterio": "Please give a name to the criteria",
+        "error_desc_criterio": "Please add a description to the criteria",
+        "error_codigo_criterio": "Please add an abbreviation code to the criteria",
+        "seguro_crear_criterio": "Are you sure about adding a new criteria?",
+        "seguro_modificar_criterio": "Are you sure about modifying this criteria?",
+        "seguro_inactivar_criterio": "Are you sure obout deactivating this criteria?",
+        "criterio_exito": "The new criteria has been successfully created.",
+        "criterio_modificado": "The criteria has been successfully updated",
+        "criterio_inactivado": "The criteria has been successfully inactivated.",
+        "error_registro_criterio": "An error occurred while creating the criteria",
+        "error_modificar_criterio": "An error occurred while modifying the criteria",
+        "error_inactivar_criterio": "An error occurred while deactivating the criteria",
+        "error_cargar": "The criteria data could not be loaded.",
+        "no_criterios": "No registered criteria."
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",

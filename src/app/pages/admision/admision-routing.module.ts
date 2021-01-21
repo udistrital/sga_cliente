@@ -6,26 +6,34 @@ import { CriterioAdmisionComponent } from './criterio_admision/criterio_admision
 import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.component';
 import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizacion_estado.component';
 import { ListadoAspiranteComponent } from './listado_aspirantes/listado_aspirante.component';
+import { AdministradorCriteriosComponent } from './administrador-criterios/administrador-criterios.component';
+import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios.component';
 
 const routes: Routes = [{
   path: '',
   component: AdmisionComponent,
-  children: [{
-  path: 'criterio_admision',
-  component: CriterioAdmisionComponent,
-},
-{
-  path: 'asignacion_cupos',
-  component: AsignacionCuposComponent,
-},
-{
-  path: 'actualizacion_estado',
-  component: ActualizacionEstadoComponent,
-},
-{
-  path: 'listado_aspirante',
-  component: ListadoAspiranteComponent,
-}],
+  children: [
+    {
+      path: 'criterio_admision',
+      component: CriterioAdmisionComponent,
+    },
+    {
+      path: 'asignacion_cupos',
+      component: AsignacionCuposComponent,
+    },
+    {
+      path: 'actualizacion_estado',
+      component: ActualizacionEstadoComponent,
+    },
+    {
+      path: 'listado_aspirante',
+      component: ListadoAspiranteComponent,
+    },
+    {
+      path: 'administrar-criterios',
+      component: AdministradorCriteriosComponent,
+    },
+  ],
 }];
 
 @NgModule({
@@ -45,4 +53,6 @@ export const routedComponents = [
   AsignacionCuposComponent,
   ActualizacionEstadoComponent,
   ListadoAspiranteComponent,
+  AdministradorCriteriosComponent,
+  DialogoCriteriosComponent,
 ];
