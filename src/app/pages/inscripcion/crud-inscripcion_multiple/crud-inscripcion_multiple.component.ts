@@ -267,8 +267,9 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   loadInfoInscripcion() {
     //Función del MID que retorna el estado del recibo
-    if (this.persona_id != null){
-      this.sgaMidService.get('inscripciones/estado_recibos/'+this.persona_id).subscribe(
+    var PeriodoActual = localStorage.getItem('IdPeriodo')
+    if (this.persona_id != null && PeriodoActual != null){
+      this.sgaMidService.get('inscripciones/estado_recibos/'+this.persona_id+'/'+PeriodoActual).subscribe(
         (response: any) => {
           console.info(response)
           const data = <Array<any>>response.Response.Body[1].Inscripciones;
