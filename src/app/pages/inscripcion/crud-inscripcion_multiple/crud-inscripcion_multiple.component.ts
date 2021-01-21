@@ -127,6 +127,13 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     
   }
 
+  return(){
+    this.showInscription = true;
+    sessionStorage.setItem('EstadoInscripcion', 'false');
+    this.loadInfoInscripcion();
+    this.createTable();
+  }
+
   public loadInfoPersona(): void {
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&

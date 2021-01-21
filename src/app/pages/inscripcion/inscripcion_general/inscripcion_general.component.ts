@@ -52,6 +52,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
+  @Output() changeTab: EventEmitter<any> = new EventEmitter();
 
   config: ToasterConfig;
   inscripcion_id: number;
@@ -155,6 +156,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     // }
 
     this.loadData();
+  }
+
+  activateTab(){
+    //No se muestra la vsita de inscripción sino la de preinscripción
+    this.changeTab.emit(false);
   }
 
   async loadData() {
