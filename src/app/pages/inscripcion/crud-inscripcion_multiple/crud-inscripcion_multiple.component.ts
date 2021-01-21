@@ -161,7 +161,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.settings = {
       actions: false, 
       columns: {
-        ReciboInscripcionId: {
+        ReciboInscripcion: {
           title: this.translate.instant('inscripcion.numero_recibo'),
           editable: false,
           width: '15%',
@@ -267,26 +267,22 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   loadInfoInscripcion() {
     //Función del MID que retorna el estado del recibo
-    var Estado = ['Pago', 'No pago']; 
     if (this.persona_id != null){
-      this.inscripcionService.get('inscripcion?query=PersonaId:' + this.persona_id + '&limit=0')
-      .subscribe(res => {
-        const r = <any>res;
-        if (res !== null && r.Type !== 'error') {
-          const data = <Array<any>>res;
-          const dataInfo = <Array<any>>[];
+      this.sgaMidService.get('inscripciones/estado_recibos/'+this.persona_id).subscribe(
+        (response: any) => {
+          console.info(response)
+          const data = <Array<any>>response.Response.Body[1].Inscripciones;
+          const dataInfo = <Array<any>>[];          
           data.forEach(element => {
             this.projectService.get('proyecto_academico_institucion/'+element.ProgramaAcademicoId).subscribe(
-              response => {
-                var randomEstado = Math.round(Math.random())  
-                var inscripcion = {
-                  Id: element.Id,
-                  ProgramaAcademicoId: response.Nombre,
-                  ReciboInscripcionId: element.ReciboInscripcionId,
-                  FechaCreacion: momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY'),
-                  Estado: Estado[randomEstado],
-                };
-                dataInfo.push(inscripcion);
+              res => {
+                var auxRecibo = element.ReciboInscripcion;
+                var NumRecibo =  auxRecibo.split("/",1);
+                element.ReciboInscripcion = NumRecibo;
+                element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
+                element.ProgramaAcademicoId = res.Nombre;
+                
+                dataInfo.push(element);
                 this.loading = false;
                 this.dataSource.load(dataInfo);
               },
@@ -296,17 +292,11 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               },
             );
           })
-        }
-      },
-      (error: any) => {
-        Swal({
-          type: 'error',
-          title: error.status + '',
-          text: this.translate.instant('ERROR.' + error.status),
-          footer: this.translate.instant('recibo_pago.no_generado'),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        });
-      });
+        }, error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          this.loading = false;
+        },
+      );
     }
   }
 
@@ -430,7 +420,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                 // PersonaId: +this.recibo_pago.DocumentoDelAspirante,
                 PersonaId: +this.info_persona_id,
                 ProgramaAcademicoId: +this.selectedProject,
-                ReciboInscripcionId: Math.floor((Math.random() * 1000) + 1),
+                ReciboInscripcion: Math.floor((Math.random() * 1000) + 1),
                 PeriodoId: this.periodo.Id,
                 AceptaTerminos: true,
                 FechaAceptaTerminos: new Date(),

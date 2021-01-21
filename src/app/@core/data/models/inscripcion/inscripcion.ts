@@ -6,7 +6,7 @@ export class Inscripcion {
   PersonaId: any;
   ProgramaAcademicoId: any;
   ReciboMatriculaId: number;
-  ReciboInscripcionId: number;
+  ReciboInscripcion: number;
   PeriodoId: any;
   EnfasisId: any;
   AceptaTerminos: boolean;
