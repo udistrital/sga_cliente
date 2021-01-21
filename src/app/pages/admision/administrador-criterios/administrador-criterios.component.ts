@@ -4,22 +4,27 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Criterio } from '../../../@core/data/models/admision/criterio';
 import { DialogoCriteriosComponent } from '../dialogo-criterios/dialogo-criterios.component';
+import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
-  selector: 'administrador-criterios',
+  selector: 'ngx-administrador-criterios',
   templateUrl: './administrador-criterios.component.html',
   styleUrls: ['./administrador-criterios.component.scss']
 })
 export class AdministradorCriteriosComponent implements OnInit {
 
-  criterios: any[];
+  criterios: Criterio[];
   criterioSettings: any;
   criterioSource: LocalDataSource;
   subcriterioSettings: any;
+  dialogConfig: MatDialogConfig;
 
   constructor(
     private translate: TranslateService,
     private dialog: MatDialog,
+    private admisiones: EvaluacionInscripcionService,
+    private popUpManager: PopUpManager,
   ) {
     this.inicializarTablas()
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -28,6 +33,36 @@ export class AdministradorCriteriosComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.criterios = [];
+    this.criterioSource = new LocalDataSource();
+    this.admisiones.get('requisito?limit=0&query=Activo:true').subscribe(
+      (response: any) => {
+        this.criterios = <Criterio[]>response.filter(c => c['RequisitoPadreId'] === null);
+        this.criterios.forEach(criterio => {
+          this.admisiones.get('requisito?limit=0&query=Activo:true,RequisitoPadreId.Id:' + criterio.Id).subscribe(
+            (response: any) => {
+              if (response.length > 0 && Object.keys(response[0]).length > 0) {
+                criterio.Subcriterios = <Criterio[]>response;
+              } else {
+                criterio.Subcriterios = [];
+              }
+            },
+            error => {
+              criterio.Subcriterios = [];
+              this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+            }
+          );
+        });
+        this.criterioSource.load(this.criterios);
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+      }
+    );
+    this.dialogConfig = new MatDialogConfig();
+    this.dialogConfig.width = '800px';
+    this.dialogConfig.height = '380px';
+    this.dialogConfig.data = {};
   }
 
   inicializarTablas() {
@@ -58,6 +93,7 @@ export class AdministradorCriteriosComponent implements OnInit {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
       },
+      noDataMessage: this.translate.instant('admision.no_criterios'),
     }
 
     this.subcriterioSettings = {
@@ -72,10 +108,11 @@ export class AdministradorCriteriosComponent implements OnInit {
           width: '30%',
           editable: false,
         },
-        Estado: {
+        Activo: {
           title: this.translate.instant('GLOBAL.estado'),
           width: '30%',
           editable: false,
+          valuePrepareFunction: (activo: boolean) => activo ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo'),
         },
       },
       mode: 'external',
@@ -92,40 +129,106 @@ export class AdministradorCriteriosComponent implements OnInit {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
       },
+      noDataMessage: this.translate.instant('admision.no_criterios'),
     }
   }
 
   agregarCriterio() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '800px';
-    dialogConfig.height = '300px';
-    dialogConfig.data = {};
-    const criterioDialog = this.dialog.open(DialogoCriteriosComponent, dialogConfig);
+    const criterioDialog = this.dialog.open(DialogoCriteriosComponent, this.dialogConfig);
     criterioDialog.afterClosed().subscribe((criterio: Criterio) => {
       if (criterio !== undefined) {
-        console.log(criterio)
+        this.admisiones.post('requisito', criterio).subscribe(
+          (response: any) => {
+            const newCriterio: Criterio = <Criterio>response;
+            newCriterio.Subcriterios = [];
+            this.criterios.push(newCriterio);
+            this.criterioSource.load(this.criterios);
+            this.popUpManager.showSuccessAlert(this.translate.instant('admision.criterio_exito'));
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('admision.error_registro_criterio'));
+          }
+        );
       }
     });
   }
 
   editarCriterio(event) {
-
+    this.dialogConfig.data = { oldCriterio: event.data };
+    const criterioDialog = this.dialog.open(DialogoCriteriosComponent, this.dialogConfig);
+    criterioDialog.afterClosed().subscribe((criterio: Criterio) => {
+      if (criterio !== undefined) {
+        this.admisiones.put('requisito', criterio).subscribe(
+          (response: any) => {
+            const updatedCriterio: Criterio = <Criterio>response;
+            this.criterioSource.update(event.data, updatedCriterio);
+            this.popUpManager.showSuccessAlert(this.translate.instant('admision.criterio_modificado'));
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('admision.error_modificar_criterio'));
+          }
+        );
+      }
+    });
   }
 
   inactivarCriterio(event) {
-
+    this.popUpManager.showConfirmAlert(this.translate.instant('admision.seguro_inactivar_criterio')).then(
+      willDelete => {
+        if (willDelete.value) {
+          const criterio = <Criterio>event.data;
+          criterio.Activo = false;
+          this.admisiones.put('requisito', criterio).subscribe(
+            response => {
+              this.popUpManager.showSuccessAlert(this.translate.instant('admision.criterio_inactivado'));
+              this.ngOnInit();
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('admision.error_inactivar_criterio'));
+            }
+          );
+        }
+      }
+    );
   }
 
-  agregarSubcriterio(event, criterio) {
-
+  agregarSubcriterio(event, criterio: Criterio) {
+    this.dialogConfig.data = {};
+    const criterioDialog = this.dialog.open(DialogoCriteriosComponent, this.dialogConfig);
+    criterioDialog.afterClosed().subscribe((subCriterio: Criterio) => {
+      if (subCriterio !== undefined) {
+        subCriterio.RequisitoPadreId = { Id: criterio.Id };
+        this.admisiones.post('requisito', subCriterio).subscribe(
+          (response: any) => {
+            const newSubcriterio: Criterio = <Criterio>response;
+            criterio.Subcriterios.push(newSubcriterio);
+            event.source.load(criterio.Subcriterios);
+            this.popUpManager.showSuccessAlert(this.translate.instant('admision.criterio_exito'));
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('admision.error_registro_criterio'));
+          }
+        );
+      }
+    });
   }
 
-  editarSubcriterio(event, criterio) {
-
-  }
-
-  inactivarSubcriterio(event, criterio) {
-
+  editarSubcriterio(event) {
+    this.dialogConfig.data = { oldCriterio: event.data };
+    const subcriterioDialog = this.dialog.open(DialogoCriteriosComponent, this.dialogConfig);
+    subcriterioDialog.afterClosed().subscribe((subcriterio: Criterio) => {
+      if (subcriterio !== undefined) {
+        this.admisiones.put('requisito', subcriterio).subscribe(
+          (response: any) => {
+            this.popUpManager.showSuccessAlert(this.translate.instant('admision.criterio_modificado'));
+            this.ngOnInit()
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('admision.error_modificar_criterio'));
+          }
+        );
+      }
+    });
   }
 
 }

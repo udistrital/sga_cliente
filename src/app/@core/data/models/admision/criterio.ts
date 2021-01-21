@@ -7,6 +7,6 @@ export class Criterio {
     NumeroOrden: number;
     FechaCreacion: Date;
     FechaModificacion: Date;
-    RequisitoPadreId: number;
+    RequisitoPadreId: { Id: number };
     Subcriterios: Criterio[];
 }

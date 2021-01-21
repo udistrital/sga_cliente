@@ -1073,11 +1073,21 @@
         "criterios_subcriterios": "Criteria and Subcriteria",
         "criterios": "Criteria",
         "subcriterios": "Subcriteria",
-        "nuevo_criterio": "New Criteria",
+        "nuevo_criterio": "Create or modify Criteria",
         "error_nombre_criterio": "Please give a name to the criteria",
         "error_desc_criterio": "Please add a description to the criteria",
+        "error_codigo_criterio": "Please add an abbreviation code to the criteria",
         "seguro_crear_criterio": "Are you sure about adding a new criteria?",
-        "seguro_modificar_criterio": "Are you sure about modifying this criteria?"
+        "seguro_modificar_criterio": "Are you sure about modifying this criteria?",
+        "seguro_inactivar_criterio": "Are you sure obout deactivating this criteria?",
+        "criterio_exito": "The new criteria has been successfully created.",
+        "criterio_modificado": "The criteria has been successfully updated",
+        "criterio_inactivado": "The criteria has been successfully inactivated.",
+        "error_registro_criterio": "An error occurred while creating the criteria",
+        "error_modificar_criterio": "An error occurred while modifying the criteria",
+        "error_inactivar_criterio": "An error occurred while deactivating the criteria",
+        "error_cargar": "The criteria data could not be loaded.",
+        "no_criterios": "No registered criteria."
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",

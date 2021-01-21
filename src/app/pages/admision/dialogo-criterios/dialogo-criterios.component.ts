@@ -6,7 +6,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { Criterio } from '../../../@core/data/models/admision/criterio';
 
 @Component({
-  selector: 'dialogo-criterios',
+  selector: 'ngx-dialogo-criterios',
   templateUrl: './dialogo-criterios.component.html',
   styleUrls: ['./dialogo-criterios.component.scss']
 })
@@ -22,16 +22,21 @@ export class DialogoCriteriosComponent implements OnInit {
     private popUpManager: PopUpManager,
     @Inject(MAT_DIALOG_DATA) private data: any,
   ) {
-    this.dialogRef.backdropClick().subscribe(() => this.closeDialog());
+    this.dialogRef.backdropClick().subscribe(() => this.dialogRef.close());
   }
 
   ngOnInit() {
     this.criterioForm = this.builder.group({
       Nombre: ['', Validators.required],
       Descripcion: ['', Validators.required],
+      CodigoAbreviacion: ['', Validators.required],
     });
     if (this.data.oldCriterio !== undefined) {
-      this.criterioForm.setValue(this.data.oldCriterio);
+      this.criterioForm.setValue({
+        Nombre: this.data.oldCriterio.Nombre,
+        Descripcion: this.data.oldCriterio.Descripcion,
+        CodigoAbreviacion: this.data.oldCriterio.CodigoAbreviacion,
+      });
     }
   }
 
@@ -43,21 +48,20 @@ export class DialogoCriteriosComponent implements OnInit {
     ).then(ok => {
       if(ok.value) {
         if (this.data.oldCriterio === undefined) {
-          this.criterio =  new Criterio();
+          this.criterio = new Criterio();
           this.criterio = this.criterioForm.value;
           this.criterio.Activo = true;
           this.criterio.NumeroOrden = 1;
-          this.dialogRef.close(this.criterio);
+          this.criterio.RequisitoPadreId = null;
         } else {
-          this.data.oldCriterio = this.criterioForm.value;
-          this.dialogRef.close(this.data.oldCriterio);
+          this.criterio = this.data.oldCriterio;
+          this.criterio.Nombre = this.criterioForm.value.Nombre;
+          this.criterio.Descripcion = this.criterioForm.value.Descripcion;
+          this.criterio.CodigoAbreviacion = this.criterioForm.value.CodigoAbreviacion;
         }
+        this.dialogRef.close(this.criterio);
       }
     });
-  }
-
-  closeDialog() {
-    this.dialogRef.close();
   }
 
 }
