@@ -1,7 +1,17 @@
 
 button {
-    background-color: white;
-    border-radius:10px;
+    border-radius:3px;
     outline: none;
     border: none;
+    background-color: rgb(60, 141, 188);
+    color: #fff;
+    text-align: center;
+    font-size: 9.6px;
+    width: 80px;
+    height: 25px;   
 }
+
+label {
+    font-size: 9.6px;  
+}
+

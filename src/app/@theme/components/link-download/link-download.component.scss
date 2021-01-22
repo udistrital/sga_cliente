@@ -1,7 +1,15 @@
 button{
-    background-color: white;
+    background-color: transparent;
     border-radius:10px;
     outline: none;
     border: none;
-    color: blue;
+    color: rgb(20, 116, 196);
+}
+
+.boton-personalizado{
+    background-color: rgb(221, 75, 57);
+    color:#ffffff;
+    width: 81px;
+    height: 13px;
+    font-size: 9.6px;;
 }

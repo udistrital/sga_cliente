@@ -21,7 +21,10 @@ export class LinkDownloadComponent implements ViewCell, OnInit{
   constructor(private translate: TranslateService) {}
 
   ngOnInit() {
-    if(this.rowData.Estado === 'No pago'){
+    if(this.rowData.Estado === 'Pendiente pago'){
+      this.download = true;
+      this.expired = false;
+    } else if (this.rowData.Estado === 'Pago'){
       this.download = true;
       this.expired = false;
     } else{

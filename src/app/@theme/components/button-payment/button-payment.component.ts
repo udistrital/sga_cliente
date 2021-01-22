@@ -12,6 +12,7 @@ export class ButtonPaymentComponent implements ViewCell, OnInit {
   
   notPaid: boolean;
   isPaid: boolean;
+  vencido: boolean;
 
   @Input() value: string | number;
   @Input() rowData: any;
@@ -21,12 +22,18 @@ export class ButtonPaymentComponent implements ViewCell, OnInit {
   constructor(private translate: TranslateService) {}
 
   ngOnInit() {
-    if(this.rowData.Estado === 'No pago'){
+    if(this.rowData.Estado === 'Pendiente pago'){
       this.notPaid = true;
       this.isPaid = false;
-    } else{
+      this.vencido = false;      
+    } else if (this.rowData.Estado === 'Pago'){
       this.notPaid = false;
       this.isPaid = true;
+      this.vencido = false;
+    } else {
+      this.notPaid = false;
+      this.isPaid = false;
+      this.vencido = true;
     }
   }
 

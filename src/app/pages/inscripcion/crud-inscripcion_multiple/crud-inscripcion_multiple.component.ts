@@ -127,6 +127,13 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     
   }
 
+  return(){
+    this.showInscription = true;
+    sessionStorage.setItem('EstadoInscripcion', 'false');
+    this.loadInfoInscripcion();
+    this.createTable();
+  }
+
   public loadInfoPersona(): void {
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
@@ -161,10 +168,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.settings = {
       actions: false, 
       columns: {
-        ReciboInscripcionId: {
+        ReciboInscripcion: {
           title: this.translate.instant('inscripcion.numero_recibo'),
           editable: false,
-          width: '15%',
+          width: '10%',
           filter: false,
           valuePrepareFunction: (value) => {
             return value;
@@ -181,7 +188,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
         ProgramaAcademicoId: {
           title: this.translate.instant('inscripcion.programa'),
-          width: '20%',
+          width: '30%',
           editable: false,
           filter: false,
           valuePrepareFunction: (value) => {
@@ -190,7 +197,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
         FechaCreacion: {
           title: this.translate.instant('inscripcion.fecha_generacion'),
-          width: '10%',
+          width: '15%',
           editable: false,
           filter: false,
           valuePrepareFunction: (value) => {
@@ -199,7 +206,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
         Estado: {
           title: this.translate.instant('inscripcion.estado'),
-          width: '5%',
+          width: '10%',
           editable: false,
           filter: false,
           position: 'center',
@@ -209,7 +216,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
         Descarga: {
           title: this.translate.instant('inscripcion.descargar'),
-          width: '10%',
+          width: '12%',
           editable: false,
           filter: false,
           renderComponent: LinkDownloadComponent,
@@ -217,7 +224,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
         Opcion: {
           title: this.translate.instant('inscripcion.opcion'),
-          width: '10%',
+          width: '13%',
           editable: false,
           filter: false,
           type: 'custom',
@@ -267,26 +274,23 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   loadInfoInscripcion() {
     //Función del MID que retorna el estado del recibo
-    var Estado = ['Pago', 'No pago']; 
-    if (this.persona_id != null){
-      this.inscripcionService.get('inscripcion?query=PersonaId:' + this.persona_id + '&limit=0')
-      .subscribe(res => {
-        const r = <any>res;
-        if (res !== null && r.Type !== 'error') {
-          const data = <Array<any>>res;
-          const dataInfo = <Array<any>>[];
+    var PeriodoActual = localStorage.getItem('IdPeriodo')
+    if (this.persona_id != null && PeriodoActual != null){
+      this.sgaMidService.get('inscripciones/estado_recibos/'+this.persona_id+'/'+PeriodoActual).subscribe(
+        (response: any) => {
+          console.info(response)
+          const data = <Array<any>>response.Response.Body[1].Inscripciones;
+          const dataInfo = <Array<any>>[];          
           data.forEach(element => {
             this.projectService.get('proyecto_academico_institucion/'+element.ProgramaAcademicoId).subscribe(
-              response => {
-                var randomEstado = Math.round(Math.random())  
-                var inscripcion = {
-                  Id: element.Id,
-                  ProgramaAcademicoId: response.Nombre,
-                  ReciboInscripcionId: element.ReciboInscripcionId,
-                  FechaCreacion: momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY'),
-                  Estado: Estado[randomEstado],
-                };
-                dataInfo.push(inscripcion);
+              res => {
+                var auxRecibo = element.ReciboInscripcion;
+                var NumRecibo =  auxRecibo.split("/",1);
+                element.ReciboInscripcion = NumRecibo;
+                element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
+                element.ProgramaAcademicoId = res.Nombre;
+                this.result.emit(1);
+                dataInfo.push(element);
                 this.loading = false;
                 this.dataSource.load(dataInfo);
               },
@@ -296,17 +300,11 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               },
             );
           })
-        }
-      },
-      (error: any) => {
-        Swal({
-          type: 'error',
-          title: error.status + '',
-          text: this.translate.instant('ERROR.' + error.status),
-          footer: this.translate.instant('recibo_pago.no_generado'),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        });
-      });
+        }, error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          this.loading = false;
+        },
+      );
     }
   }
 
@@ -430,7 +428,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                 // PersonaId: +this.recibo_pago.DocumentoDelAspirante,
                 PersonaId: +this.info_persona_id,
                 ProgramaAcademicoId: +this.selectedProject,
-                ReciboInscripcionId: Math.floor((Math.random() * 1000) + 1),
+                ReciboInscripcion: Math.floor((Math.random() * 1000) + 1),
                 PeriodoId: this.periodo.Id,
                 AceptaTerminos: true,
                 FechaAceptaTerminos: new Date(),
