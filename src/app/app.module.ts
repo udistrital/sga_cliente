@@ -75,6 +75,7 @@ import {
 
 import { ImplicitAutenticationService } from './@core/utils/implicit_autentication.service';
 import { PersonaService } from './@core/data/persona.service';
+import { ParametrosService } from './@core/data/parametros.service';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -172,6 +173,7 @@ export class MaterialModule { }
   providers: [ImplicitAutenticationService,
     ListService,
     PersonaService,
+    ParametrosService,
     { provide: APP_BASE_HREF, useValue: '/' },
   ],
 })

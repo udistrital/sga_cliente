@@ -345,4 +345,13 @@ export class ListReducer {
         return state;
     }
   }
+
+  static listReducerTipoParametro(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.TipoParametro:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
 }

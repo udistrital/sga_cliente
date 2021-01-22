@@ -1078,7 +1078,9 @@
         "error_documento_propuesta_grado": "Ocurrió un error al cargar el documento de la propuesta de grado",
         "propuesta_grado_no_registrada": "Propuesta de grado no registrada",
         "propuesta_grado_registrada": "Propuesta de grado registrada",
-        "seguro_continuar_registrar": "¿Está seguto de registrar esta propuesta de grado?"
+        "propuesta_grado_actualizada": "Propuesta de grado actualizada",
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta propuesta de grado?",
+        "seguro_continuar_actualizar": "¿Está seguro de actualizar esta propuesta de grado?"
     },
     "informacion_familiar": {
         "informacion_familiar_no_actualizada": "Información familiar no actualizada",

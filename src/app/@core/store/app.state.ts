@@ -7,6 +7,7 @@ import { NivelFormacion } from '../data/models/proyecto_academico/nivel_formacio
 import { Metodologia } from '../data/models/proyecto_academico/metodologia';
 import { Lugar } from '../data/models/lugar/lugar';
 import { LineaInvestigacion } from '../data/models/investigacion/linea_investigacion';
+import { TipoParametro } from '../data/models/parametro/tipo_parametro';
 import { Idioma } from '../data/models/idioma/idioma';
 import { GrupoEtnico } from '../data/models/informacion/grupo_etnico';
 import { EstadoCivil } from '../data/models/informacion/estado_civil';
@@ -33,6 +34,7 @@ export interface IAppState {
   listGrupoEtnico: GrupoEtnico[],
   listIdioma: Idioma[],
   listLineaInvestigacion: LineaInvestigacion[],
+  listTipoParametro: TipoParametro[],
   listPais: Lugar[],
   listCiudad: Lugar[],
   listLugar: Lugar[],
