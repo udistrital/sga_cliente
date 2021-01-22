@@ -64,7 +64,7 @@ export class CrudPeriodoComponent implements OnInit {
     return 0;
   }
 
-  public loadPeriodo(): void {
+  loadPeriodo(): void {
     if (this.periodo_id !== undefined && this.periodo_id !== 0) {
       this.parametrosService.get('periodo/' + this.periodo_id)
         .subscribe(res => {

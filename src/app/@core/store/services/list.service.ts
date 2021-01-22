@@ -14,6 +14,8 @@ import { ExperienciaService } from '../../data/experiencia.service';
 import { DocumentoProgramaService } from '../../data/documento_programa.service';
 import { DescuentoAcademicoService } from '../../data/descuento_academico.service';
 import { CIDCService } from '../../data/cidc.service';
+import { ParametrosService } from '../../data/parametros.service';
+
 @Injectable()
 export class ListService {
 
@@ -28,7 +30,8 @@ export class ListService {
     private experienciaService: ExperienciaService,
     private cidcService: CIDCService,
     // private producccionAcademicaService: ProduccionAcademicaService,
-    private enteService: EnteService,
+    private enteService: EnteService,    
+    private parametrosService: ParametrosService,
     private descuentoAcademicoService: DescuentoAcademicoService,
     private documentoProgramaService: DocumentoProgramaService,
     private store: Store<IAppState>) {
@@ -475,15 +478,36 @@ export class ListService {
     );
   }
 
+
+public findTipoParametro() {
+  this.store.select(REDUCER_LIST.TipoParametro).subscribe(
+    (list: any) => {
+      if (!list || list.length === 0) {
+        this.parametrosService.get('parametro?query=TipoParametroId:13')
+          .subscribe(
+            (result: any) => {
+              const r = <any>result.Data;
+              this.addList(REDUCER_LIST.TipoParametro, r);
+            },
+            error => {
+              this.addList(REDUCER_LIST.TipoParametro, []);
+            },
+          );
+      }
+    },
+  );
+}
+
   public findGrupoInvestigacion() {
     this.store.select(REDUCER_LIST.GrupoInvestigacion).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           // this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
-          this.cidcService.get('research_group')
+          this.cidcService.get('research_group/?query=Activo:true&limit=0')
             .subscribe(
-              (result: any[]) => {
-                this.addList(REDUCER_LIST.GrupoInvestigacion, result);
+              (result: any) => {
+                const r = <any>result.data;
+                this.addList(REDUCER_LIST.GrupoInvestigacion, r);
               },
               error => {
                 this.addList(REDUCER_LIST.GrupoInvestigacion, []);

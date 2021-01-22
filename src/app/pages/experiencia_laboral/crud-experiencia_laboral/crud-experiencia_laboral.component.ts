@@ -292,7 +292,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     const itel = this.getIndexForm('Telefono');
     const icorreo = this.getIndexForm('Correo');
     const ipais = this.getIndexForm('Pais');
-    this.sgaMidService.get('experiencia_laboral/informacion_empresa/?Id=' + nit)
+    this.sgaMidService.get('experiencia_laboral/informacion_empresa?Id=' + nit)
       .subscribe((res: any) => {
         this.formInfoExperienciaLaboral.campos[init].valor = res.NumeroIdentificacion;
         this.formInfoExperienciaLaboral.campos[inombre].valor = (res.NombreCompleto && res.NombreCompleto.Id) ? res.NombreCompleto : { Id: 0, NombreCompleto: 'No registrado' };
