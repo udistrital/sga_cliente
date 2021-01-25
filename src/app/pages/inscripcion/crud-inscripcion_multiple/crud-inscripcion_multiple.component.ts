@@ -53,7 +53,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   set persona(info_persona_id: number) {
     this.info_persona_id = info_persona_id;
     this.loadInfoPersona();
-    console.info('InfoPersonaIdPersona: ' + info_persona_id);
   }
 
   @Output() eventChange = new EventEmitter();
@@ -276,35 +275,43 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     //Función del MID que retorna el estado del recibo
     var PeriodoActual = localStorage.getItem('IdPeriodo')
     if (this.persona_id != null && PeriodoActual != null){
-      this.sgaMidService.get('inscripciones/estado_recibos/'+this.persona_id+'/'+PeriodoActual).subscribe(
-        (response: any) => {
-          console.info(response)
-          const data = <Array<any>>response.Response.Body[1].Inscripciones;
-          const dataInfo = <Array<any>>[];          
-          data.forEach(element => {
-            this.projectService.get('proyecto_academico_institucion/'+element.ProgramaAcademicoId).subscribe(
-              res => {
-                var auxRecibo = element.ReciboInscripcion;
-                var NumRecibo =  auxRecibo.split("/",1);
-                element.ReciboInscripcion = NumRecibo;
-                element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
-                element.ProgramaAcademicoId = res.Nombre;
-                this.result.emit(1);
-                dataInfo.push(element);
-                this.loading = false;
-                this.dataSource.load(dataInfo);
-              },
-              error => {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                this.loading = false;
-              },
-            );
-          })
-        }, error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          this.loading = false;
-        },
-      );
+      //if (this.persona_id != null){
+        this.sgaMidService.get('inscripciones/estado_recibos/'+this.persona_id+'/'+PeriodoActual).subscribe(
+          (response: any) => {
+            if (response !== null && response.Response.Code === '400'){
+              this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));    
+            } else if (response != null && response.Response.Code === '404'){
+              //this.popUpManager.showInfoToast(this.translate.instant('inscripcion.no_inscripcion')); 
+              this.showToast('info', this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
+            } else {
+              const data = <Array<any>>response.Response.Body[1].Inscripciones;
+              const dataInfo = <Array<any>>[];          
+              data.forEach(element => {
+                this.projectService.get('proyecto_academico_institucion/'+element.ProgramaAcademicoId).subscribe(
+                  res => {
+                    var auxRecibo = element.ReciboInscripcion;
+                    var NumRecibo =  auxRecibo.split("/",1);
+                    element.ReciboInscripcion = NumRecibo;
+                    element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
+                    element.ProgramaAcademicoId = res.Nombre;
+                    this.result.emit(1);
+                    dataInfo.push(element);
+                    this.loading = false;
+                    this.dataSource.load(dataInfo);
+                  },
+                  error => {
+                    this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                    this.loading = false;
+                  },
+                );
+            })
+            }
+          }, error => {
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            this.loading = false;
+          },
+        );
+      //}
     }
   }
 
@@ -484,10 +491,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
             });
           });
-
-
-
-
       // console.info(this.recibo_pago)
       // this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
     } else {
@@ -535,8 +538,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           if (res !== null && r.Status === '200') {
             this.periodo = <any>res['Data'][0];
             window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
-            // console.info('Id periodo')
-            // console.info(this.periodo)
             resolve(this.periodo);
             const periodos = <any[]>res['Data'];
             periodos.forEach(element => {
@@ -645,7 +646,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   preinscripcion() {
     this.proyectos_preinscripcion = [];
-    // console.info(this.proyectos_preinscripcion)
     this.arr_proyecto.forEach(proyecto => {
       Number(localStorage.getItem('IdNivel'))
       this.proyectos_preinscripcion.push({
