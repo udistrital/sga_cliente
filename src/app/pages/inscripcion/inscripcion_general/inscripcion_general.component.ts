@@ -159,7 +159,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   activateTab(){
-    //No se muestra la vsita de inscripción sino la de preinscripción
+    //No se muestra la vista de inscripción sino la de preinscripción
     this.changeTab.emit(false);
   }
 
