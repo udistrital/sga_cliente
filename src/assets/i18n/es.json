@@ -946,6 +946,7 @@
         "crear_registro": "Crear nuevo registro al proyecto académico"
     },
     "inscripcion": {
+        "error": "Ha ocurrido un error inesperado al cargar la información",
         "no_inscripcion": "No existe ninguna información de la inscripción registrada",
         "periodo": "Periodo al que se inscribe",
         "nivel": "Nivel",
@@ -986,7 +987,7 @@
         "erro_selec": "Por favor seleccione al menos un proyecto académico!",
         "error_proyecto_ya_existe": "El proyecto académico ya fue agregado!",
         "realizar_preinscripcion": "Preinscripción",
-        "erro_selec_nivel": "Por favor seleccion el nivel!",
+        "erro_selec_nivel": "Por favor, seleccione el nivel",
         "opciones_usuario": "Opciones de usuario",
         "recibos_generados": "Recibos generados (PIN)",
         "generar_recibo": "Generar recibo",
