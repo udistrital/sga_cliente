@@ -101,6 +101,7 @@
             "preinscripcion": "Preinscripción a \nproyectos académicos"
         },
         "admision": {
+            "evaluacion_aspirantes": "Evaluación de aspirantes", 
             "admision": "Admisiones",
             "criterios": "Criterios de admisiones \npor proyectos",
             "asignacion_cupos": "Asignación de cupos",
@@ -1096,8 +1097,9 @@
         "aviso_criterios": "Seleccione los criterios que desea asignar a los proyectos académicos",
         "erro_selec_criterio": "Por favor seleccione al menos un criterio!",
         "info_icfes": "Criterio ICFES",
-        "entrevista": "Criterio Entrevista",
-        "prueba": "Criterio Prueba",
+        "entrevista": "Criterio entrevista",
+        "prueba": "Criterio prueba",
+        "hoja_vida": "Criterio hoja de vida",
         "criterio_icfes": "Porcentajes para el criterio ICFES",
         "actualizacion_estado": "Actulizar estado aspirantes",
         "enlistar": "Enlistar aspirantes",

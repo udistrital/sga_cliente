@@ -101,6 +101,7 @@
             "preinscripcion": "Pre-registration for academic projects"
         },
         "admision": {
+            "evaluacion_aspirantes": "Aspirant evaluation",
             "admision": "Admissions",
             "criterios": "Admissions criteria for projects",
             "asignacion_cupos": "Assignment of quotas",
