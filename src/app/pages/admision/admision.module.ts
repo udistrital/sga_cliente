@@ -24,8 +24,8 @@ import { ListadoAspiranteComponent } from './listado_aspirantes/listado_aspirant
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { AdministradorCriteriosComponent } from './administrador-criterios/administrador-criterios.component';
 import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios.component';
-
-
+import { EvaluacionAspirantesComponent } from './evaluacion-aspirantes/evaluacion-aspirantes.component';
+import { ParametrosService } from '../../@core/data/parametros.service';
 
 @NgModule({
   imports: [
@@ -51,6 +51,7 @@ import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios
     OikosService,
     PersonaService,
     UbicacionService,
+    ParametrosService,
   ],
    entryComponents: [
     CrudCriterioIcfesComponent,
@@ -64,6 +65,7 @@ import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios
     ListadoAspiranteComponent,
     AdministradorCriteriosComponent,
     DialogoCriteriosComponent,
+    EvaluacionAspirantesComponent,
   ],
 })
 export class AdmisionModule { }
