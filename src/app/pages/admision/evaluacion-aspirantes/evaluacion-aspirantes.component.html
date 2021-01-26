@@ -2,7 +2,7 @@
   <nb-card-body>
     <div class=col-12>
       <fieldset [ngClass]="{'fieldseter':true}" >
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="showTab">
           <nb-card [hidden]="show_profile || show_icfes ">
               <nb-card-header>
                 <!-- select periodo -->
@@ -81,28 +81,30 @@
                 </div>
               </nb-card-header>
       
-          </nb-card>
-      
-          <!--Formularios------------------------------------------------------------->
-      
-      
-          <!-- <nb-card [hidden]="!show_info_pregrado"> -->
-          <nb-card [hidden]="!show_icfes">
-              <nb-card-body>
-                  <div class="row">
-                      <div class="col-md-1" align="left">
-                          <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_icfes=false; show_acad=false;
-                          ">X</button>
-                      </div>
-                  </div>
-                  <nb-tabset fullWidth>
-                      <nb-tab tabTitle="{{ 'admision.criterio_icfes' | translate }}" [active]="preinscripcion">
-                          <ngx-crud-criterio-icfes [info_proyectos]="this.proyectos_selected" [info_periodo]="this.periodo"  >
-                          </ngx-crud-criterio-icfes>
-                      </nb-tab>
-                  </nb-tabset>
-              </nb-card-body>
-          </nb-card>  
+          </nb-card>   
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="!showTab">
+          <nb-card-header>
+            <div class="col-12">
+              {{ 'admision.criterio' | translate }}: {{ tipo_criterio.Nombre }}
+            </div>            
+          </nb-card-header>
+          <div class="body_criterios">
+            {{ 'admision.programa' | translate }}: {{ tipo_criterio.ProgramaAcademico }}
+            <br/><br/>
+            {{ 'admision.periodo' | translate }}: {{ tipo_criterio.Periodo }}
+          </div>        
+          <br/>
+          <div class="aviso_criterio" align="center">
+            <label class="fondo_aviso">
+              <strong>{{ 'admision.nota' | translate }}:</strong> {{ 'admision.aviso' | translate }}
+            </label>
+          </div>
+          <br/>
+          <ng2-smart-table [settings]="settings" [source]="dataSource"></ng2-smart-table>
+          <br/><br/><br/>
+          <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+
         </div>
       </fieldset>
     </div>

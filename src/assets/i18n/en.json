@@ -1062,6 +1062,11 @@
         "seguro_continuar_registrar": "Are you sure you want to register this family information?"
     },
     "admision": {
+        "nota": "NOTE",
+        "aviso": "The score for each item to be evaluated corresponds to a value between 0 and 100 points",
+        "criterio": "Criterion",
+        "programa": "Academic program",
+        "periodo": "Admission process period",
         "aviso_periodo": "Period in which the admission criteria are defined",
         "aviso_nivel": "Select the level to which you want to define the admission criteria",
         "aviso_proyecto": "Selections the academic projects you wish to define the admission criteria",
@@ -1072,6 +1077,7 @@
         "info_icfes": "Criteria ICFES ",
         "entrevista": "Criteria Interview",
         "prueba": "Criteria Test",
+        "hoja_vida": "Resume criteria",
         "criterio_icfes": "Percentages for the ICFES criterion",
         "actualizacion_estado": "Actulizar estado aspirantes",
         "enlistar": "Enlist applicants",

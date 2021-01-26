@@ -1089,9 +1089,15 @@
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información familiar?"
     },
     "admision": {
+        "aspirante": "Aspirantes",
+        "nota": "NOTA",
+        "aviso": "El puntaje para cada item a evaluar corresponde a un valor entre 0 y 100 puntos",
+        "criterio": "Criterio",
+        "programa": "Programa académico",
+        "periodo": "Periodo proceso de admisión",
         "aviso_periodo": "Período en el cual se define los criterios de admisión",
         "aviso_nivel": "Seleccione el nivel al que desea definir los criterios de admisión",
-        "aviso_proyecto": "Seleciones el/los proyectos académicos que desea definir los criterios de admisión",
+        "aviso_proyecto": "Selecione el/los proyectos académicos que desea definir los criterios de admisión",
         "erro_selec_nivel": "Por favor seleccion el nivel!",
         "erro_selec_proyecto": "Por favor seleccione al menos un proyecto!",
         "aviso_criterios": "Seleccione los criterios que desea asignar a los proyectos académicos",
