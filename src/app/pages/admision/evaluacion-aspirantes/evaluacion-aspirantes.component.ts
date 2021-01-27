@@ -139,6 +139,10 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
+    this.settings = {
+      actions: false,
+      mode: 'external',
+    }
   }
 
 
@@ -229,7 +233,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
     const IdCriterio = sessionStorage.getItem('tipo_criterio')
     await this.loadColumn(IdCriterio).then(
       response => {
-        data = response
+        data = response;    
       }
     )
     this.settings = {
@@ -238,6 +242,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
       actions: false,
       mode: 'external',
     }
+    var Aspirantes = this.settings.columns[0]
+    //this.dataSource = new LocalDataSource([{Aspirantes:'Jai'}, {Aspirantes:'Jack'}])
   }
 
   setPercentage_info(number, tab) {
@@ -326,11 +332,10 @@ export class EvaluacionAspirantesComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.evaluacionService.get('requisito?query=RequisitoPadreId:'+IdCriterio+'&limit=0').subscribe(
         (response: any) => {
-          const dataInfo = <Array<any>>[];
-          var data = <Array<any>>[];
+          var data: any = {};
      
           //Columna de aspirantes
-          var Aspirantes = {
+          data.Aspirantes = {
             title: this.translate.instant('admision.aspirante'),
             editable: false,
             filter: false,
@@ -339,10 +344,9 @@ export class EvaluacionAspirantesComponent implements OnInit {
               return value;
             }
           }
-          dataInfo.push(Aspirantes)
           if (response.length > 1){
             for (var i = 0; i < response.length; i++){
-              var subcriterios = {
+              data[response[i].Nombre] = {
                 title: response[i].Nombre,
                 editable: true,
                 filter: false,
@@ -350,10 +354,9 @@ export class EvaluacionAspirantesComponent implements OnInit {
                   return value;
                 }
               }
-              dataInfo.push(subcriterios)
             }
           } else {
-            var puntaje = {
+            data.Puntaje = {
               title: 'Puntaje',
               editable: true,
               filter: false,
@@ -361,10 +364,9 @@ export class EvaluacionAspirantesComponent implements OnInit {
                 return value;
               }
             }
-            dataInfo.push(puntaje)
           }
-          //this.createTable(dataInfo)
-          resolve(dataInfo)
+          resolve(data)
+          console.info(data)
         },
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
