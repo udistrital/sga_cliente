@@ -120,7 +120,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
+      this.coreService.get('periodo?query=Activo:true&sortby=Id&order=desc&limit=1')
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {

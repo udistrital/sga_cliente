@@ -999,7 +999,8 @@
         "actualizar": "La información ha sido actualizada con éxito",
         "no_info": "No hay información registrada",
         "update": "¿Está seguro que desea actualizar la información?",
-        "error_update": "Ha ocurrido un error inesperado. La información no pudo ser actualizada"
+        "error_update": "Ha ocurrido un error inesperado. La información no pudo ser actualizada",
+        "error_update_programa_seleccionado": "Ya se encuentra un proceso de inscripción con el programa seleccionado"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

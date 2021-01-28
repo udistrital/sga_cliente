@@ -967,7 +967,8 @@
         "programa": "Program",
         "fecha_generacion": "Generation date",
         "descargar": "Download",
-        "opcion": "Option"
+        "opcion": "Option",
+        "error_update_programa_seleccionado": "There is already a registration process with the selected program"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
