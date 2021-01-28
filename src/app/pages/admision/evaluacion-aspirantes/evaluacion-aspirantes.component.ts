@@ -21,6 +21,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { load } from '@angular/core/src/render3';
+import { CheckboxAssistanceComponent } from '../../../@theme/components/checkbox-assistance/checkbox-assistance.component';
 
 @Component({
   selector: 'evaluacion-aspirantes',
@@ -242,8 +243,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
       actions: false,
       mode: 'external',
     }
-    var Aspirantes = this.settings.columns[0]
-    //this.dataSource = new LocalDataSource([{Aspirantes:'Jai'}, {Aspirantes:'Jack'}])
   }
 
   setPercentage_info(number, tab) {
@@ -282,6 +281,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   perfil_editar(event): void {
+    this.dataSource.load([{Aspirantes:'Ana Perez Perez'}, {Aspirantes:'Pepito Palacios'}])
     this.tipo_criterio = new TipoCriterio();
     this.tipo_criterio.Periodo = this.periodo.Nombre;
     var proyecto = [];
@@ -332,41 +332,88 @@ export class EvaluacionAspirantesComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.evaluacionService.get('requisito?query=RequisitoPadreId:'+IdCriterio+'&limit=0').subscribe(
         (response: any) => {
-          var data: any = {};
+          this.evaluacionService.get('requisito/'+IdCriterio).subscribe(
+            (res: any) => {
+              console.info(res)
+              var data: any = {};
+              var porcentaje = {
+                "areas":[
+                  {"Matemáticas": "14%"},
+                  {"Física": "14%"},
+                  {"Química": "14%"},
+                  {"Lenguaje": "14%"},
+                  {"Biología": "14%"},
+                  {"Ciencias Sociales": "14%"},
+                  {"Filosofía": "16%"}
+                ]
+              }
+
+              /*var porcentaje = {
+                "areas":[
+                  {"Expresión oral": "35%"},
+                  {"Compresión Oral": "35%"},
+                  {"Presentación Personal": "30%"}
+                ] 
+              }*/
      
-          //Columna de aspirantes
-          data.Aspirantes = {
-            title: this.translate.instant('admision.aspirante'),
-            editable: false,
-            filter: false,
-            width: '40%',
-            valuePrepareFunction: (value) => {
-              return value;
-            }
-          }
-          if (response.length > 1){
-            for (var i = 0; i < response.length; i++){
-              data[response[i].Nombre] = {
-                title: response[i].Nombre,
+              //Columna de aspirantes
+              data.Aspirantes = {
+                title: this.translate.instant('admision.aspirante'),
                 editable: true,
                 filter: false,
+                width: '40%',
                 valuePrepareFunction: (value) => {
                   return value;
                 }
               }
-            }
-          } else {
-            data.Puntaje = {
-              title: 'Puntaje',
-              editable: true,
-              filter: false,
-              valuePrepareFunction: (value) => {
-                return value;
+
+              //Columna de asistencia si lo requiere
+              if (res.Asistencia === true){
+                data.Asistencia = {
+                  title: this.translate.instant('admision.asistencia'),
+                  editable: true,
+                  filter: false,
+                  width: '4%',
+                  renderComponent: CheckboxAssistanceComponent,
+                  type: 'custom',              
+                }
               }
+          
+              if (response.length > 1){
+                for (var key in porcentaje.areas){
+                  for (var key2 in porcentaje.areas[key]){
+                    for (var i = 0; i < response.length; i++){    
+                      if (key2 == response[i].Nombre){
+                        data[response[i].Nombre] = {
+                          title: response[i].Nombre + ' (' + porcentaje.areas[key][key2] + ')', 
+                          editable: true,
+                          filter: false,      
+                          valuePrepareFunction: (value) => {
+                            return value;
+                          }
+                        }
+                        break;
+                      }
+                    }
+                  }
+                }
+              } else {
+                data.Puntaje = {
+                  title: 'Puntaje',
+                  editable: true,
+                  filter: false,
+                  valuePrepareFunction: (value) => {
+                    return value;
+                  }
+                }
+              }
+              resolve(data)
+            }, 
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+              reject(error)
             }
-          }
-          resolve(data)
-          console.info(data)
+          );
         },
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));

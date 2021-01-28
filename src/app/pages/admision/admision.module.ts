@@ -26,6 +26,7 @@ import { AdministradorCriteriosComponent } from './administrador-criterios/admin
 import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios.component';
 import { EvaluacionAspirantesComponent } from './evaluacion-aspirantes/evaluacion-aspirantes.component';
 import { ParametrosService } from '../../@core/data/parametros.service';
+import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-assistance/checkbox-assistance.component';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { ParametrosService } from '../../@core/data/parametros.service';
     CrudCriterioIcfesComponent,
     CrudAsignacionCupoComponent,
     DialogoCriteriosComponent,
+    CheckboxAssistanceComponent,
    ],
   exports: [
     CriterioAdmisionComponent,
