@@ -75,8 +75,14 @@ export class AdministradorCriteriosComponent implements OnInit {
         },
         Descripcion: {
           title: this.translate.instant('GLOBAL.descripcion'),
-          width: '70%',
+          width: '50%',
           editable: false,
+        },
+        Asistencia: {
+          title: this.translate.instant('admision.asistencia'),
+          width: '20%',
+          editable: false,
+          valuePrepareFunction: (asist: boolean) => asist ? this.translate.instant('admision.asistencia') : this.translate.instant('GLOBAL.NA'),
         }
       },
       mode: 'external',
@@ -134,6 +140,7 @@ export class AdministradorCriteriosComponent implements OnInit {
   }
 
   agregarCriterio() {
+    this.dialogConfig.data = {};
     const criterioDialog = this.dialog.open(DialogoCriteriosComponent, this.dialogConfig);
     criterioDialog.afterClosed().subscribe((criterio: Criterio) => {
       if (criterio !== undefined) {
@@ -193,7 +200,7 @@ export class AdministradorCriteriosComponent implements OnInit {
   }
 
   agregarSubcriterio(event, criterio: Criterio) {
-    this.dialogConfig.data = {};
+    this.dialogConfig.data = {sub: true};
     const criterioDialog = this.dialog.open(DialogoCriteriosComponent, this.dialogConfig);
     criterioDialog.afterClosed().subscribe((subCriterio: Criterio) => {
       if (subCriterio !== undefined) {
@@ -214,7 +221,7 @@ export class AdministradorCriteriosComponent implements OnInit {
   }
 
   editarSubcriterio(event) {
-    this.dialogConfig.data = { oldCriterio: event.data };
+    this.dialogConfig.data = { oldCriterio: event.data, sub: true };
     const subcriterioDialog = this.dialog.open(DialogoCriteriosComponent, this.dialogConfig);
     subcriterioDialog.afterClosed().subscribe((subcriterio: Criterio) => {
       if (subcriterio !== undefined) {
