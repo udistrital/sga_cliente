@@ -20,7 +20,8 @@ export class ViewIdiomasComponent implements OnInit {
   set info(info: number) {
     if (info) {
       this.persona_id = info;
-      this.loadInfoIdioma();
+      // this.loadInfoIdioma();
+      this.loadData();
     }
   };
 
@@ -45,6 +46,7 @@ export class ViewIdiomasComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.persona_id = this.users.getPersonaId() || 1;
+    this.loadData();
   }
 
   useLanguage(language: string) {
@@ -55,58 +57,25 @@ export class ViewIdiomasComponent implements OnInit {
     this.url_editar.emit(true);
   }
 
-  public loadInfoIdioma(): void {
-    this.idiomaService.get('conocimiento_idioma/?query=Persona:' + this.persona_id +
+  loadData(): void {
+    this.idiomaService.get('conocimiento_idioma?query=TercerosId:' + this.persona_id +
       '&limit=0')
       .subscribe(res => {
-        if (res !== null) {
-          this.info_idioma = <Array<any>>res;
-          if (this.inscripcion !== undefined && this.inscripcion !== 0 && this.inscripcion.toString() !== '') {
-            this.inscripcionService.get('inscripcion_posgrado/?query=InscripcionId:' + this.inscripcion)
-              .subscribe(resexamen => {
-                this.info_examen = <any>resexamen[0].Id ? <any>resexamen[0] : undefined;
-                if (this.info_examen && this.info_examen !== null && this.info_examen.Type !== 'error') {
-                  this.idiomaService.get('idioma/' + this.info_examen.Idioma)
-                    .subscribe(resex => {
-                      if (resex !== null) {
-                        this.info_examen.Idioma = <any>resex;
-                      }
-                    },
-                      (error: HttpErrorResponse) => {
-                        Swal({
-                          type: 'error',
-                          title: error.status + '',
-                          text: this.translate.instant('ERROR.' + error.status),
-                          footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                            this.translate.instant('GLOBAL.idiomas'),
-                          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                        });
-                      });
-                }
-              },
-                (error: HttpErrorResponse) => {
-                  Swal({
-                    type: 'error',
-                    title: error.status + '',
-                    text: this.translate.instant('ERROR.' + error.status),
-                    footer: this.translate.instant('GLOBAL.crear') + '-' +
-                      this.translate.instant('GLOBAL.idioma_examen'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  });
-                });
-          }
+        if (res !== null && JSON.stringify(res[0]) !== '{}') {
+          const data = <Array<any>>res;
+          this.info_idioma = data;
         }
       },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.idiomas'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('GLOBAL.cargar') + '-' +
+            this.translate.instant('GLOBAL.idiomas'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+      });
   }
 
   ngOnInit() {

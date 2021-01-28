@@ -4,7 +4,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
-import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { SgaMidService } from './../../../@core/data/sga_mid.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserService } from '../../../@core/data/users.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -47,6 +47,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.persona_id = this.users.getPersonaId();
+    this.loadData();
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -57,8 +58,41 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     this.translate.use(language);
   }
 
+  public editar(): void {
+    this.url_editar.emit(true);
+  }
+
   loadData(): void {
-    this.sgaMidService.get('formacion_academica/by_tercero/' + this.persona_id)
+    this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
+    .subscribe(response => {
+      if(response !== null && response !== undefined && response !== '{}'){
+        const data = <Array<any>>response;
+        const dataInfo = <Array<any>>[];
+        data.forEach(element => {
+          const FechaI = element.FechaInicio;
+          const FechaF = element.FechaFinalizacion;
+          element.FechaInicio = FechaI.substring(0,2) + "/" + FechaI.substring(2,4) + "/" + FechaI.substring(4,8);
+          element.FechaFinalizacion = FechaF.substring(0,2) + "/" + FechaF.substring(2,4) + "/" + FechaF.substring(4,8);
+          dataInfo.push(element);
+        })
+        this.info_formacion_academica = data;
+      } 
+    },
+    (error: HttpErrorResponse) => {
+      Swal({
+        type: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        footer: this.translate.instant('GLOBAL.cargar') + '-' +
+          this.translate.instant('GLOBAL.formacion_academica') + '|' +
+          this.translate.instant('GLOBAL.soporte_documento'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
+  }
+
+  loadDataOld(): void {
+    this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
       .subscribe(res => {
         if (res !== null) {
           const temp_info_academica = <any>res[0];
