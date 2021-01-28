@@ -155,6 +155,7 @@
         "si": "Si",
         "no": "No",
         "cerrar": "Cerrar",
+        "NA": "No aplica",
         "accion_no_permitida": "Acción no permitida",
         "confirmar": "Confirmar",
         "filtrar": "Filtrar",
@@ -165,7 +166,6 @@
         "informacion_contacto": "Información de contacto",
         "placeholder_fecha_fin": "Ej: 24/08/2018",
         "periodo": "Período",
-        "placeholder_periodo": "Ej: 1",
         "alerta_llenar_campo": "Debe llenar este campo",
         "tipo_periodo": "Tipo Período",
         "placeholder_tipo_periodo": "ej: Administratico, Académico",
@@ -179,8 +179,6 @@
         "placeholder_activo": "ej: Activo",
         "numero_orden": "Numero orden",
         "placeholder_numero_orden": "ej: 1,2,3",
-        "placeholder_periodo": "ej: periodo",
-        "ano": "Año",
         "placeholder_ano": "ej: 2019",
         "placeholder_periodo": "ej: I,II,III",
         "tiporecurrencia": "tipo recurrencia",
@@ -366,7 +364,6 @@
         "fecha_publicacion": "Fecha de publicación",
         "placeholder_fecha_publicacion": "Ej: 12/31/2000",
         "ano": "Año",
-        "placeholder_ano": "Ej: 2001",
         "mes": "Mes de publicación",
         "placeholder_mes": "Ej: Octubre",
         "titulo_capitulo": "Título del capítulo publicado",
@@ -1119,7 +1116,9 @@
         "error_modificar_criterio": "Ocurrió un error al modificar el criterio.",
         "error_inactivar_criterio": "No se ha podido inactivar el criterio.",
         "error_cargar": "No se ha podido obtener la información de los criterios.",
-        "no_criterios": "No hay criterios registrados"
+        "no_criterios": "No hay criterios registrados",
+        "asistencia": "Asistencia",
+        "requiere_asistencia": "¿Requiere asistencia?"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

@@ -34,6 +34,11 @@
           </mat-form-field>
         </div>
       </div>
+      <div class="row my-2" *ngIf="!subcriterio">
+        <div class="col-12">
+          <mat-checkbox formControlName="Asistencia" ><mat-label> {{ 'admision.requiere_asistencia' | translate }}</mat-label></mat-checkbox>
+        </div>
+      </div>  
       <div class="row">
         <div class="col-12 ml-auto">
           <button class="float-right" mat-button type="submit" [disabled]="criterioForm.invalid">{{ 'GLOBAL.guardar' | translate }} </button>
