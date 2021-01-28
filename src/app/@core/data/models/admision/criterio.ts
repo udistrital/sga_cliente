@@ -3,6 +3,7 @@ export class Criterio {
     Nombre: string;
     Descripcion: string;
     CodigoAbreviacion: string;
+    Asistencia: boolean;
     Activo: boolean;
     NumeroOrden: number;
     FechaCreacion: Date;
