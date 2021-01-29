@@ -158,8 +158,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.loadData();
   }
 
-  activateTab(){
-    //No se muestra la vsita de inscripción sino la de preinscripción
+  activateTab() {
+    //No se muestra la vista de inscripción sino la de preinscripción
     this.changeTab.emit(false);
   }
 
@@ -179,10 +179,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.loadNivel(IdPrograma);
   }
 
-  loadProject(){
+  loadProject() {
     this.posgrados = new Array;
     const IdNivel = parseInt(sessionStorage.getItem('IdNivel'));
-    if (IdNivel === 1){
+    if (IdNivel === 1) {
       this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + 14).subscribe(
         response => {
           const r = <any>response;
@@ -198,7 +198,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         },
       );
-    } else{
+    } else {
       this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + 15).subscribe(
         response => {
           const r = <any>response;
@@ -215,25 +215,25 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         },
       );
     }
-    
+
   }
 
   loadNivel(IdPrograma: number) {
     this.programaService.get('proyecto_academico_institucion/' + IdPrograma).subscribe(
       (response: any) => {
         const IdNivel = response.NivelFormacionId.Id;
-        this.programaService.get('nivel_formacion/'+IdNivel).subscribe(
+        this.programaService.get('nivel_formacion/' + IdNivel).subscribe(
           (res: any) => {
             this.inscripcion.Nivel = res.Nombre;
             this.inscripcion.IdNivel = res.Id;
             sessionStorage.setItem('IdNivel', res.Id)
             this.loadProject();
-          }, 
+          },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
           }
         );
-      }, 
+      },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
@@ -341,16 +341,74 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4;
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_docu)) / 4;
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_proy)) / 4;
-    if (this.info_inscripcion !== undefined) {
-      if (this.info_inscripcion.EstadoInscripcionId.Id > 1) {
-        this.percentage_total = 100;
-      }
+
+    if (sessionStorage.EstadoInscripcion) {
       if (this.percentage_total >= 100) {
-        if (this.info_inscripcion.EstadoInscripcionId.Id === 1) {
-          this.total = false;
-        }
+        this.total = false;
       }
     }
+    // if (this.info_inscripcion !== undefined) {
+    //   if (this.info_inscripcion.EstadoInscripcionId.Id > 1) {
+    //     this.percentage_total = 100;
+    //   }
+    //   if (this.percentage_total >= 100) {
+    //     if (this.info_inscripcion.EstadoInscripcionId.Id === 1) {
+    //       this.total = false;
+    //     }
+    //   }
+    // }
+  }
+
+  realizarInscripcion() {
+
+    this.inscripcionService.get('inscripcion/' + parseInt(sessionStorage.IdInscripcion)).subscribe(
+      (response: any) => {
+        const inscripcionPut: any = response;
+        inscripcionPut.ProgramaAcademicoId = parseInt(sessionStorage.ProgramaAcademicoId);
+
+        this.inscripcionService.get('estado_inscripcion?query=Nombre:INSCRITO').subscribe(
+          (response: any) => {
+            const estadoInscripcio: any = response[0];
+            inscripcionPut.EstadoInscripcionId = estadoInscripcio;
+
+            this.inscripcionService.put('inscripcion/', inscripcionPut)
+              .subscribe(res_ins => {
+                const r_ins = <any>res_ins;
+                if (res_ins !== null && r_ins.Type !== 'error') {
+                  this.loading = false;
+                  this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
+                }
+              },
+                (error: any) => {
+                  if (error.System.Message.includes('duplicate')) {
+                    Swal({
+                      type: 'info',
+                      text: this.translate.instant('inscripcion.error_update_programa_seleccionado'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+
+                    });
+                  } else {
+                    Swal({
+                      type: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                        this.translate.instant('GLOBAL.admision'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                  }
+                });
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          }
+        );
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
+
   }
 
   useLanguage(language: string) {
@@ -686,7 +744,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     } else {
       this.selectedTipo = 'Posgrado'
     }
-    if (this.selectedValue != undefined){
+    if (this.selectedValue != undefined) {
       sessionStorage.setItem('ProgramaAcademicoId', this.selectedValue);
     }
     switch (this.selectedTipo) {

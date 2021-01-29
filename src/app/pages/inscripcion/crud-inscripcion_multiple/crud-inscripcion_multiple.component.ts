@@ -53,7 +53,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   set persona(info_persona_id: number) {
     this.info_persona_id = info_persona_id;
     this.loadInfoPersona();
-    console.info('InfoPersonaIdPersona: ' + info_persona_id);
   }
 
   @Output() eventChange = new EventEmitter();
@@ -81,15 +80,17 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   proyectos_preinscripcion: any[];
   proyectos_preinscripcion_post: any;
   nivel_load = [{ nombre: 'Pregrado', id: 14 }, { nombre: 'Posgrado', id: 15 }];
-  selectedLevel: FormControl;
-  selectedProject: FormControl;
-  tipo_inscripcion_selected: FormControl;
+  selectedLevel: any;
+  selectedProject: any;
+  tipo_inscripcion_selected: any;
   projects: any[];
   countInscripcion: number = 0;
   cont: number = 0;
   inscripcionProjects: any[];
   calendarioId: string = '0';
   projectId: number = 0;
+  parametro: string;
+  recibo_generado: any;
 
   arr_proyecto: InstitucionEnfasis[] = [];
   source_emphasys: LocalDataSource = new LocalDataSource();
@@ -173,36 +174,24 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           editable: false,
           width: '10%',
           filter: false,
-          valuePrepareFunction: (value) => {
-            return value;
-          }
         },
         Id: {
           title: this.translate.instant('inscripcion.inscripcion'),
           editable: false,
           width: '10%',
           filter: false,
-          valuePrepareFunction: (value) => {
-            return value;
-          }
         },
         ProgramaAcademicoId: {
           title: this.translate.instant('inscripcion.programa'),
           width: '30%',
           editable: false,
           filter: false,
-          valuePrepareFunction: (value) => {
-            return value;
-          }
         },
         FechaCreacion: {
           title: this.translate.instant('inscripcion.fecha_generacion'),
           width: '15%',
           editable: false,
           filter: false,
-          valuePrepareFunction: (value) => {
-            return value;
-          }
         },
         Estado: {
           title: this.translate.instant('inscripcion.estado'),
@@ -210,9 +199,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           editable: false,
           filter: false,
           position: 'center',
-          valuePrepareFunction: (value) => {
-            return value;
-          }
         },
         Descarga: {
           title: this.translate.instant('inscripcion.descargar'),
@@ -221,6 +207,9 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           filter: false,
           renderComponent: LinkDownloadComponent,
           type: 'custom',
+          onComponentInitFunction: (instance) => {
+            instance.save.subscribe((data) => this.descargarReciboPago(data))
+          }
         },
         Opcion: {
           title: this.translate.instant('inscripcion.opcion'),
@@ -277,35 +266,50 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     //Función del MID que retorna el estado del recibo
     var PeriodoActual = localStorage.getItem('IdPeriodo')
     if (this.persona_id != null && PeriodoActual != null){
-      this.sgaMidService.get('inscripciones/estado_recibos/'+this.persona_id+'/'+PeriodoActual).subscribe(
-        (response: any) => {
-          console.info(response)
-          const data = <Array<any>>response.Response.Body[1].Inscripciones;
-          const dataInfo = <Array<any>>[];          
-          data.forEach(element => {
-            this.projectService.get('proyecto_academico_institucion/'+element.ProgramaAcademicoId).subscribe(
-              res => {
-                var auxRecibo = element.ReciboInscripcion;
-                var NumRecibo =  auxRecibo.split("/",1);
-                element.ReciboInscripcion = NumRecibo;
-                element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
-                element.ProgramaAcademicoId = res.Nombre;
-                this.result.emit(1);
-                dataInfo.push(element);
-                this.loading = false;
-                this.dataSource.load(dataInfo);
-              },
-              error => {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                this.loading = false;
-              },
-            );
-          })
-        }, error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          this.loading = false;
-        },
-      );
+      //if (this.persona_id != null){
+        this.sgaMidService.get('inscripciones/estado_recibos/'+this.persona_id+'/'+PeriodoActual).subscribe(
+          (response: any) => {
+            if (response !== null && response.Response.Code === '400'){
+              this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));    
+            } else if (response != null && response.Response.Code === '404'){
+              //this.popUpManager.showInfoToast(this.translate.instant('inscripcion.no_inscripcion')); 
+              this.showToast('info', this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
+            } else {
+              const data = <Array<any>>response.Response.Body[1].Inscripciones;
+              const dataInfo = <Array<any>>[];          
+              data.forEach(element => {
+                this.projectService.get('proyecto_academico_institucion/'+element.ProgramaAcademicoId).subscribe(
+                  res => {
+                    var auxRecibo = element.ReciboInscripcion;
+                    var NumRecibo =  auxRecibo.split("/",1);
+                    element.ReciboInscripcion = NumRecibo;
+                    element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
+                    element.ProgramaAcademicoId = res.Nombre;
+                    this.result.emit(1);
+                    dataInfo.push(element);
+                    this.loading = false;
+                    this.dataSource.load(dataInfo);
+                    //this.selectedLevel = res.NivelFormacionId.Id
+                    this.projectService.get('nivel_formacion/'+res.NivelFormacionId.Id).subscribe(
+                      response => {
+                        this.selectedLevel = this.nivel_load.filter((nv) => nv.nombre === response['Descripcion'])[0].id;
+                        sessionStorage.setItem('nivel', this.selectedLevel.toString())
+                      }
+                    )
+                  },
+                  error => {
+                    this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                    this.loading = false;
+                  },
+                );
+            })
+            }
+          }, error => {
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            this.loading = false;
+          },
+        );
+      //}
     }
   }
 
@@ -371,50 +375,12 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   generar_recibo() {
     if (this.info_info_persona != null) {
-      this.recibo_pago = new ReciboPago();
-      this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + " " + this.info_info_persona.SegundoNombre + " " + this.info_info_persona.PrimerApellido + " " + this.info_info_persona.SegundoApellido;
-      this.recibo_pago.DocumentoDelAspirante = this.info_info_persona.NumeroIdentificacion;
-      this.recibo_pago.Periodo = this.periodo.Nombre;
-      for (var i = 0; i < this.inscripcionProjects.length; i++) {
-        if (this.inscripcionProjects[i].ProyectoId === this.selectedProject) {
-          this.recibo_pago.ProyectoAspirante = this.inscripcionProjects[i].NombreProyecto;
-          if (this.inscripcionProjects[i].Evento != null) {
-            this.recibo_pago.Fecha_pago = this.inscripcionProjects[i].Evento[0].FechaInicioEvento;
-          }
-        }
-      }
-      var nivel = new String(this.selectedLevel)
-      if (nivel == '14') {
-        this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:13,PeriodoId__Id:3').subscribe(
-          response => {
-            this.recibo_pago.Descripcion = response["Data"][0]["ParametroId"]["Nombre"];
-            var valor = JSON.parse(response["Data"][0]["Valor"]);
-            this.recibo_pago.ValorDerecho = valor["Costo"]
-          },
-          error => {
-            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          },
-        );
-      } else {
-        this.parametrosService.get('parametro_periodo?query=ParametroId__TipoParametroId__Id:2,ParametroId__CodigoAbreviacion:12,PeriodoId__Id:3').subscribe(
-          response => {
-            this.recibo_pago.Descripcion = response["Data"][0]["ParametroId"]["Nombre"];
-            var valor = JSON.parse(response["Data"][0]["Valor"]);
-            this.recibo_pago.ValorDerecho = valor["Costo"]
-          },
-          error => {
-            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          },
-        );
-      }
-
       // this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.recibo_pago.DocumentoDelAspirante + '&limit=0')
       this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_persona_id + '&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Type !== 'error') {
             const tiposInscripciones = <Array<any>>res;
-
             if (tiposInscripciones.length >= 3) {
               Swal({
                 type: 'error',
@@ -423,7 +389,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
               });
             } else {
-              //LLAMAR FUNCION RECIBO
               const inscripcion = {
                 Id: 0,
                 // PersonaId: +this.recibo_pago.DocumentoDelAspirante,
@@ -485,14 +450,67 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
             });
           });
-
-
-
-
-      // console.info(this.recibo_pago)
       // this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
     } else {
       this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+    }
+  }
+
+  descargarReciboPago(data) {
+    this.itemSelect({data: data})
+    if (this.selectedLevel === undefined) {
+      this.selectedLevel = parseInt(sessionStorage.getItem('nivel'));
+    }
+    if (this.info_info_persona != null) {
+      this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'))
+      this.recibo_pago = new ReciboPago();
+      this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + " " + this.info_info_persona.SegundoNombre + " " + this.info_info_persona.PrimerApellido + " " + this.info_info_persona.SegundoApellido;
+      this.recibo_pago.DocumentoDelAspirante = this.info_info_persona.NumeroIdentificacion;
+      this.recibo_pago.Periodo = this.periodo.Nombre;
+      this.recibo_pago.ProyectoAspirante = data['ProgramaAcademicoId']
+      this.recibo_pago.Comprobante = data['ReciboInscripcion'][0];
+      if (this.selectedLevel === 14) {
+        this.parametro = '13';
+      } else if (this.selectedLevel === 15) {
+        this.parametro = '12';
+      }
+      
+      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel).subscribe(
+        (response: any[]) => {
+          if (response !== null && response.length !== 0) {
+            this.inscripcionProjects = response;
+            this.inscripcionProjects.forEach(proyecto => {
+              if (proyecto.ProyectoId === this.selectedProject && proyecto.Evento != null) {
+                this.recibo_pago.Fecha_pago = moment(proyecto.Evento[0].FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
+              }
+            });
+            this.parametrosService.get('parametro_periodo?query=ParametroId.TipoParametroId.Id:2,ParametroId.CodigoAbreviacion:'+ this.parametro +',PeriodoId.Id:3').subscribe(
+              response => {
+                const parametro = <any>response['Data'][0];
+                this.recibo_pago.Descripcion = parametro['ParametroId']['Nombre'];
+                var valor = JSON.parse(parametro['Valor']);
+                this.recibo_pago.ValorDerecho = valor['Costo']
+                this.sgaMidService.post('generar_recibo', this.recibo_pago).subscribe(
+                  response => {
+                    const reciboData = new Uint8Array(atob(response['Data']).split('').map(char => char.charCodeAt(0)));
+                    this.recibo_generado = window.URL.createObjectURL(new Blob([reciboData], {type: 'application/pdf'}));
+                    window.open(this.recibo_generado);
+                  },
+                  error => {
+                    this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+                  }
+                );
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+              },
+            );
+          }
+        },
+        error => {
+          this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('calendario.sin_proyecto_curricular'));
+        }
+      );
     }
   }
 
@@ -536,8 +554,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           if (res !== null && r.Status === '200') {
             this.periodo = <any>res['Data'][0];
             window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
-            // console.info('Id periodo')
-            // console.info(this.periodo)
             resolve(this.periodo);
             const periodos = <any[]>res['Data'];
             periodos.forEach(element => {
@@ -646,7 +662,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   preinscripcion() {
     this.proyectos_preinscripcion = [];
-    // console.info(this.proyectos_preinscripcion)
     this.arr_proyecto.forEach(proyecto => {
       Number(localStorage.getItem('IdNivel'))
       this.proyectos_preinscripcion.push({

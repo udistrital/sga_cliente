@@ -156,6 +156,7 @@
         "si": "Si",
         "no": "No",
         "cerrar": "Cerrar",
+        "NA": "No aplica",
         "accion_no_permitida": "Acción no permitida",
         "confirmar": "Confirmar",
         "filtrar": "Filtrar",
@@ -166,7 +167,6 @@
         "informacion_contacto": "Información de contacto",
         "placeholder_fecha_fin": "Ej: 24/08/2018",
         "periodo": "Período",
-        "placeholder_periodo": "Ej: 1",
         "alerta_llenar_campo": "Debe llenar este campo",
         "tipo_periodo": "Tipo Período",
         "placeholder_tipo_periodo": "ej: Administratico, Académico",
@@ -180,8 +180,6 @@
         "placeholder_activo": "ej: Activo",
         "numero_orden": "Numero orden",
         "placeholder_numero_orden": "ej: 1,2,3",
-        "placeholder_periodo": "ej: periodo",
-        "ano": "Año",
         "placeholder_ano": "ej: 2019",
         "placeholder_periodo": "ej: I,II,III",
         "tiporecurrencia": "tipo recurrencia",
@@ -367,7 +365,6 @@
         "fecha_publicacion": "Fecha de publicación",
         "placeholder_fecha_publicacion": "Ej: 12/31/2000",
         "ano": "Año",
-        "placeholder_ano": "Ej: 2001",
         "mes": "Mes de publicación",
         "placeholder_mes": "Ej: Octubre",
         "titulo_capitulo": "Título del capítulo publicado",
@@ -947,6 +944,7 @@
         "crear_registro": "Crear nuevo registro al proyecto académico"
     },
     "inscripcion": {
+        "error": "Ha ocurrido un error inesperado al cargar la información",
         "no_inscripcion": "No existe ninguna información de la inscripción registrada",
         "periodo": "Periodo al que se inscribe",
         "nivel": "Nivel",
@@ -987,7 +985,7 @@
         "erro_selec": "Por favor seleccione al menos un proyecto académico!",
         "error_proyecto_ya_existe": "El proyecto académico ya fue agregado!",
         "realizar_preinscripcion": "Preinscripción",
-        "erro_selec_nivel": "Por favor seleccion el nivel!",
+        "erro_selec_nivel": "Por favor, seleccione el nivel",
         "opciones_usuario": "Opciones de usuario",
         "recibos_generados": "Recibos generados (PIN)",
         "generar_recibo": "Generar recibo",
@@ -1002,7 +1000,8 @@
         "actualizar": "La información ha sido actualizada con éxito",
         "no_info": "No hay información registrada",
         "update": "¿Está seguro que desea actualizar la información?",
-        "error_update": "Ha ocurrido un error inesperado. La información no pudo ser actualizada"
+        "error_update": "Ha ocurrido un error inesperado. La información no pudo ser actualizada",
+        "error_update_programa_seleccionado": "Ya se encuentra un proceso de inscripción con el programa seleccionado"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -1128,7 +1127,9 @@
         "error_modificar_criterio": "Ocurrió un error al modificar el criterio.",
         "error_inactivar_criterio": "No se ha podido inactivar el criterio.",
         "error_cargar": "No se ha podido obtener la información de los criterios.",
-        "no_criterios": "No hay criterios registrados"
+        "no_criterios": "No hay criterios registrados",
+        "asistencia": "Asistencia",
+        "requiere_asistencia": "¿Requiere asistencia?"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

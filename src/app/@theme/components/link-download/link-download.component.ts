@@ -34,7 +34,7 @@ export class LinkDownloadComponent implements ViewCell, OnInit{
   }
 
   showDownload(){
-    console.info("Llamar API MID para generacion del recibo")
+    this.save.emit(this.rowData);
   }
   
   showExpired(){

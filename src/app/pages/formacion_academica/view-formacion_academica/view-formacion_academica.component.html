@@ -7,22 +7,21 @@
                 <tbody *ngIf="info_formacion_academica">
                     <tr *ngFor="let formacion of info_formacion_academica">
                         <td>
-                            <p><b>{{formacion.FechaInicio | date:'dd/MM/yyyy'}}
-                                    - {{formacion.FechaFinalizacion |
-                                    date:'dd/MM/yyyy'}} </b></p>
+                            <p><b>{{formacion.FechaInicio }}
+                                    - {{formacion.FechaFinalizacion }} </b></p>
                             <!-- <p><b>{{formacion.PaisUniversidad}}</b></p> -->
-                            <p><b>{{formacion.Pais.Nombre}}</b></p>
-                            <p><b>{{formacion.Titulacion.NivelFormacionId.Nombre}}</b></p>
-                            <p><b>{{formacion.Titulacion.MetodologiaId.Nombre}}</b></p>
+                            <p><b>{{formacion.Ubicacion}}</b></p>
+                            <p><b>{{formacion.ProgramaAcademico.Nombre}}</b></p>
+                            <!-- <p><b>{{formacion.Titulacion.MetodologiaId.Nombre}}</b></p> -->
                         </td>
                         <td>
-                            <p>{{formacion.NombreUniversidad}}</p>
-                            <p>{{formacion.Titulacion.Nombre}}</p>
+                            <p>{{formacion.NombreCompleto}}</p>
+                            <!-- <p>{{formacion.Titulacion.Nombre}}</p>
                             <p><b>{{"GLOBAL.titulo_trabajo_grado" | translate}}:
                                 </b>{{formacion.TituloTrabajoGrado}} -
                                 {{formacion.DescripcionTrabajoGrado}}</p>
                             <p>(<a [href]=formacion.Documento download="Formacion{{formacion.FechaFinalizacion |
-                                date:'yyyy'}}.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</p>
+                                date:'yyyy'}}.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</p> -->
                         </td>
                     </tr>
                 </tbody>

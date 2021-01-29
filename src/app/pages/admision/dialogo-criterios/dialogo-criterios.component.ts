@@ -14,6 +14,7 @@ export class DialogoCriteriosComponent implements OnInit {
 
   criterio: Criterio;
   criterioForm: FormGroup;
+  subcriterio: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<DialogoCriteriosComponent>,
@@ -22,6 +23,7 @@ export class DialogoCriteriosComponent implements OnInit {
     private popUpManager: PopUpManager,
     @Inject(MAT_DIALOG_DATA) private data: any,
   ) {
+    this.subcriterio = data.sub;
     this.dialogRef.backdropClick().subscribe(() => this.dialogRef.close());
   }
 
@@ -30,12 +32,14 @@ export class DialogoCriteriosComponent implements OnInit {
       Nombre: ['', Validators.required],
       Descripcion: ['', Validators.required],
       CodigoAbreviacion: ['', Validators.required],
+      Asistencia: [false, Validators.required],
     });
     if (this.data.oldCriterio !== undefined) {
       this.criterioForm.setValue({
         Nombre: this.data.oldCriterio.Nombre,
         Descripcion: this.data.oldCriterio.Descripcion,
         CodigoAbreviacion: this.data.oldCriterio.CodigoAbreviacion,
+        Asistencia: this.data.oldCriterio.Asistencia,
       });
     }
   }
@@ -58,6 +62,7 @@ export class DialogoCriteriosComponent implements OnInit {
           this.criterio.Nombre = this.criterioForm.value.Nombre;
           this.criterio.Descripcion = this.criterioForm.value.Descripcion;
           this.criterio.CodigoAbreviacion = this.criterioForm.value.CodigoAbreviacion;
+          this.criterio.Asistencia = this.criterioForm.value.Asistencia;
         }
         this.dialogRef.close(this.criterio);
       }

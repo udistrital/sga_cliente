@@ -155,6 +155,7 @@
         "si": "Yes",
         "no": "No",
         "cerrar": "Close",
+        "NA": "Doesn't apply",
         "accion_no_permitida": "Action not allowed",
         "filtrar": "Filter",
         "Limpiar": "Clean",
@@ -166,7 +167,6 @@
         "placeholder_fecha_fin": "E.g.: 24/08/2018",
         "periodo": "Period",
         "info_caracteristica": "Characteristic data",
-        "placeholder_periodo": "E.g.: 1",
         "alerta_llenar_campo": "You must fill this field",
         "tipo_periodo": "Type Period ",
         "placeholder_tipo_periodo": "E.g.: Administrative, Academic",
@@ -180,7 +180,6 @@
         "placeholder_activo": "E.g.: Active",
         "numero_orden": "Order number",
         "placeholder_numero_orden": "E.g.: 1,2,3",
-        "placeholder_periodo": "E.g.: Period",
         "ano": "Year",
         "placeholder_ano": "E.g.: 2019",
         "placeholder_periodo": "E.g.: I,II,III",
@@ -284,10 +283,6 @@
         "placeholder_telefono_universidad": "E.g.: 55555555",
         "programa_academico": "Academic program",
         "placeholder_programa_academico": "E.g.: Electronic engineering",
-        "fecha_inicio": "Start date",
-        "placeholder_fecha_inicio": "E.g.: 24/12/2016",
-        "fecha_fin": "End date",
-        "placeholder_fecha_fin": "E.g.: 24/08/2018",
         "titulo_trabajo_grado": "Thesis title",
         "placeholder_titulo_trabajo_grado": "E.g.: Thesis title",
         "descripcion_trabajo_grado": "Thesis description",
@@ -348,8 +343,6 @@
         "placeholder_tipo_publicacion": "E.g.: Complete book",
         "fecha_publicacion": "Publication date",
         "placeholder_fecha_publicacion": "E.g.: 12/31/2000",
-        "ano": "Publication year",
-        "placeholder_ano": "E.g.: 2002",
         "mes": "Publication month",
         "placeholder_mes": "E.g.: April",
         "titulo_capitulo": "Published chapter title",
@@ -975,7 +968,8 @@
         "programa": "Program",
         "fecha_generacion": "Generation date",
         "descargar": "Download",
-        "opcion": "Option"
+        "opcion": "Option",
+        "error_update_programa_seleccionado": "There is already a registration process with the selected program"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
@@ -1101,7 +1095,9 @@
         "error_modificar_criterio": "An error occurred while modifying the criteria",
         "error_inactivar_criterio": "An error occurred while deactivating the criteria",
         "error_cargar": "The criteria data could not be loaded.",
-        "no_criterios": "No registered criteria."
+        "no_criterios": "No registered criteria.",
+        "asistencia": "Attendance",
+        "requiere_asistencia": "Requires attendance?"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",

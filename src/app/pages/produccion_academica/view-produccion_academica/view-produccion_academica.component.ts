@@ -46,6 +46,7 @@ export class ViewProduccionAcademicaComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.persona_id = this.users.getPersonaId();
+    this.loadData();
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -54,6 +55,10 @@ export class ViewProduccionAcademicaComponent implements OnInit {
 
   useLanguage(language: string) {
     this.translate.use(language);
+  }
+
+  public editar(): void {
+    this.url_editar.emit(true);
   }
 
   loadData(): void {

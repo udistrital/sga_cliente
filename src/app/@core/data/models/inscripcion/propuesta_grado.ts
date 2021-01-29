@@ -15,4 +15,5 @@ export class PropuestaGrado {
   InscripcionId: Inscripcion;
   TipoProyecto: TipoProyecto;
   TipoProyectoId: TipoProyecto;
+  Soporte: any;
 }
