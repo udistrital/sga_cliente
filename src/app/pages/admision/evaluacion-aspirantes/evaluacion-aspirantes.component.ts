@@ -379,7 +379,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
                 title: this.translate.instant('admision.aspirante'),
                 editable: false,
                 filter: false,
-                width: '40%',
+                width: '55%',
                 valuePrepareFunction: (value) => {
                   return value;
                 }
@@ -420,6 +420,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
                   title: 'Puntaje',
                   //editable: true,
                   filter: false,
+                  width: '35%',
                   valuePrepareFunction: (value) => {
                     return value;
                   }
