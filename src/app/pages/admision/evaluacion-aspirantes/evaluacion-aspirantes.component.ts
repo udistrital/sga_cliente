@@ -22,6 +22,7 @@ import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_ins
 import { PopUpManager } from '../../../managers/popUpManager';
 import { load } from '@angular/core/src/render3';
 import { CheckboxAssistanceComponent } from '../../../@theme/components/checkbox-assistance/checkbox-assistance.component';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'evaluacion-aspirantes',
@@ -140,10 +141,10 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
-    this.settings = {
+    /*this.settings = {
       actions: false,
       mode: 'external',
-    }
+    }*/
   }
 
 
@@ -217,7 +218,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   loadCriterios() {
-    this.evaluacionService.get('requisito?limit=0&query=Activo:true').subscribe(
+    this.evaluacionService.get('requisito?limit=0&query=Activo:true&sortby=Id&order=asc').subscribe(
       (response: any) => {
         if (response !== null || response !== undefined){
           this.criterios = <any>response.filter(c => c['RequisitoPadreId'] === null);
@@ -238,10 +239,23 @@ export class EvaluacionAspirantesComponent implements OnInit {
       }
     )
     this.settings = {
-      hideSubHeader: true,
+      //hideSubHeader: true,
       columns: data,
-      actions: false,
-      mode: 'external',
+      actions: {
+        edit: true,
+        add: false,
+        delete: false,
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+        width: '5%'
+      },
+      edit: {
+        editButtonContent: '<i class="nb-edit"></i>',
+        saveButtonContent: '<i class="nb-checkmark-circle"></i>',
+        cancelButtonContent: '<i class="nb-close-circled"></i>',
+      },
+      
+      //mode: 'external',
     }
   }
 
@@ -280,7 +294,11 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.translate.use(language);
   }
 
-  perfil_editar(event): void {
+  guardarEvaluacion(){
+    
+  }
+
+  async perfil_editar(event) {
     this.dataSource.load([{Aspirantes:'Ana Perez Perez'}, {Aspirantes:'Pepito Palacios'}])
     this.tipo_criterio = new TipoCriterio();
     this.tipo_criterio.Periodo = this.periodo.Nombre;
@@ -295,31 +313,31 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.tipo_criterio.ProgramaAcademico = proyecto; 
     switch (event) {
       case 'info_icfes':
-        this.selectTipoIcfes = true;
         this.tipo_criterio.Nombre = this.criterios[0].Nombre;
         sessionStorage.setItem('tipo_criterio', '1')
-        this.createTable();
+        await this.createTable();
+        this.selectTipoIcfes = true;
         this.showTab = false;
         break;
       case 'info_entrevista':
-        this.preinscripcion = true;
         this.tipo_criterio.Nombre = this.criterios[1].Nombre;
         sessionStorage.setItem('tipo_criterio', '2')
-        this.createTable();
+        await this.createTable();
+        this.selectTipoEntrevista = true;
         this.showTab = false;
         break;
       case 'info_prueba':
-        this.selectTipoPrueba = true;
         this.tipo_criterio.Nombre = this.criterios[2].Nombre;
         sessionStorage.setItem('tipo_criterio', '3')
-        this.createTable();
+        await this.createTable();
+        this.selectTipoPrueba = true;
         this.showTab = false;
         break;
       case 'info_hoja':
-        this.selectTipoHojaVida = true;
         this.tipo_criterio.Nombre = this.criterios[3].Nombre;
         sessionStorage.setItem('tipo_criterio', '11')
-        this.createTable();
+        await this.createTable();
+        this.selectTipoHojaVida = true;
         this.showTab = false;
         break;
       default:
@@ -359,7 +377,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
               //Columna de aspirantes
               data.Aspirantes = {
                 title: this.translate.instant('admision.aspirante'),
-                editable: true,
+                editable: false,
                 filter: false,
                 width: '40%',
                 valuePrepareFunction: (value) => {
@@ -371,7 +389,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
               if (res.Asistencia === true){
                 data.Asistencia = {
                   title: this.translate.instant('admision.asistencia'),
-                  editable: true,
+                  editable: false,
                   filter: false,
                   width: '4%',
                   renderComponent: CheckboxAssistanceComponent,
@@ -400,7 +418,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
               } else {
                 data.Puntaje = {
                   title: 'Puntaje',
-                  editable: true,
+                  //editable: true,
                   filter: false,
                   valuePrepareFunction: (value) => {
                     return value;

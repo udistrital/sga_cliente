@@ -1062,6 +1062,9 @@
         "seguro_continuar_registrar": "Are you sure you want to register this family information?"
     },
     "admision": {
+        "guardar": "Save",
+        "asistencia": "Assistance",
+        "aspirante": "Aspirants",
         "nota": "NOTE",
         "aviso": "The score for each item to be evaluated corresponds to a value between 0 and 100 points",
         "criterio": "Criterion",
@@ -1070,10 +1073,10 @@
         "aviso_periodo": "Period in which the admission criteria are defined",
         "aviso_nivel": "Select the level to which you want to define the admission criteria",
         "aviso_proyecto": "Selections the academic projects you wish to define the admission criteria",
-        "erro_selec_nivel": "Please select the level!",
-        "erro_selec_proyecto": "Please select at least one project!",
+        "erro_selec_nivel": "Please, select the level!",
+        "erro_selec_proyecto": "Please, select at least one project!",
         "aviso_criterios": "Select the criteria you want to assign to academic projects",
-        "erro_selec_criterio": "Please select at least one criterion!",
+        "erro_selec_criterio": "Please, select at least one criterion!",
         "info_icfes": "Criteria ICFES ",
         "entrevista": "Criteria Interview",
         "prueba": "Criteria Test",

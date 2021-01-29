@@ -102,6 +102,10 @@
           </div>
           <br/>
           <ng2-smart-table [settings]="settings" [source]="dataSource"></ng2-smart-table>
+          <br/>
+          <div class="text-center">
+            <button mat-button type="button" (click)="guardarEvaluacion()" >{{ 'admision.guardar' | translate }}</button>
+          </div>
           <br/><br/><br/>
           <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
 
