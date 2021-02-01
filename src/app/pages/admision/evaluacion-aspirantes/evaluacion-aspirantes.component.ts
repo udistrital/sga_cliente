@@ -235,7 +235,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
     const IdCriterio = sessionStorage.getItem('tipo_criterio')
     await this.loadColumn(IdCriterio).then(
       response => {
-        data = response;    
+        data = response; 
       }
     )
     this.settings = {
@@ -256,33 +256,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
       },
       
       //mode: 'external',
-    }
-  }
-
-  setPercentage_info(number, tab) {
-    console.info(number)
-    this.percentage_tab_info[tab] = (number * 100) / 2;
-    this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
-    this.setPercentage_total();
-  }
-
-  setPercentage_acad(number, tab) {
-    this.percentage_tab_acad[tab] = (number * 100) / 2;
-    this.percentage_acad = Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad));
-    this.setPercentage_total();
-  }
-  setPercentage_total() {
-    this.percentage_total = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info)) / 2;
-    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4;
-    if (this.info_inscripcion !== undefined) {
-      if (this.info_inscripcion.EstadoInscripcionId.Id > 1) {
-        this.percentage_total = 100;
-      }
-      if (this.percentage_total >= 100) {
-        if (this.info_inscripcion.EstadoInscripcionId.Id === 1) {
-          this.total = false;
-        }
-      }
     }
   }
 
@@ -344,86 +317,75 @@ export class EvaluacionAspirantesComponent implements OnInit {
     }
   }
 
-  loadColumn(IdCriterio: any){
+  async loadColumn(IdCriterio: any){
     return new Promise((resolve, reject) => {
       this.evaluacionService.get('requisito?query=RequisitoPadreId:'+IdCriterio+'&limit=0').subscribe(
         (response: any) => {
           this.evaluacionService.get('requisito/'+IdCriterio).subscribe(
-            (res: any) => {
+            async (res: any) => {
               var data: any = {};
-              var porcentaje = {
-                "areas":[
-                  {"Matemáticas": "14%"},
-                  {"Física": "14%"},
-                  {"Química": "14%"},
-                  {"Lenguaje": "14%"},
-                  {"Biología": "14%"},
-                  {"Ciencias Sociales": "14%"},
-                  {"Filosofía": "16%"}
-                ]
-              }
+              var porcentaje: any;
 
-              /*var porcentaje = {
-                "areas":[
-                  {"Expresión oral": "35%"},
-                  {"Compresión Oral": "35%"},
-                  {"Presentación Personal": "30%"}
-                ] 
-              }*/
-     
-              //Columna de aspirantes
-              data.Aspirantes = {
-                title: this.translate.instant('admision.aspirante'),
-                editable: false,
-                filter: false,
-                width: '55%',
-                valuePrepareFunction: (value) => {
-                  return value;
-                }
-              }
+                  //Columna de aspirantes
+                  data.Aspirantes = {
+                    title: this.translate.instant('admision.aspirante'),
+                    editable: false,
+                    filter: false,
+                    width: '55%',
+                    valuePrepareFunction: (value) => {
+                      return value;
+                    }
+                  }
 
-              //Columna de asistencia si lo requiere
-              if (res.Asistencia === true){
-                data.Asistencia = {
-                  title: this.translate.instant('admision.asistencia'),
-                  editable: false,
-                  filter: false,
-                  width: '4%',
-                  renderComponent: CheckboxAssistanceComponent,
-                  type: 'custom',              
-                }
-              }
+                  //Columna de asistencia si lo requiere
+                  if (res.Asistencia === true){
+                    data.Asistencia = {
+                      title: this.translate.instant('admision.asistencia'),
+                      editable: false,
+                      filter: false,
+                      width: '4%',
+                      renderComponent: CheckboxAssistanceComponent,
+                      type: 'custom',              
+                    }
+                  }
           
-              if (response.length > 1){
-                for (var key in porcentaje.areas){
-                  for (var key2 in porcentaje.areas[key]){
-                    for (var i = 0; i < response.length; i++){    
-                      if (key2 == response[i].Nombre){
-                        data[response[i].Nombre] = {
-                          title: response[i].Nombre + ' (' + porcentaje.areas[key][key2] + ')', 
-                          editable: true,
-                          filter: false,      
-                          valuePrepareFunction: (value) => {
-                            return value;
+                  if (response.length > 1){
+                    await this.getPercentageSub(IdCriterio).then(
+                      res => {
+                        porcentaje = res
+                      }
+                    )
+
+                    for (var key in porcentaje.areas){
+                      for (var key2 in porcentaje.areas[key]){
+                        for (var i = 0; i < response.length; i++){    
+                          if (key2 == response[i].Nombre){
+                            data[response[i].Nombre] = {
+                              title: response[i].Nombre + ' (' + porcentaje.areas[key][key2] + '%)', 
+                              editable: true,
+                              filter: false,      
+                              valuePrepareFunction: (value) => {
+                                return value;
+                              }
+                            }
+                            break;
                           }
                         }
-                        break;
+                      }
+                    } 
+                    
+                  } else {
+                    data.Puntaje = {
+                      title: 'Puntaje',
+                      //editable: true,
+                      filter: false,
+                      width: '35%',
+                      valuePrepareFunction: (value) => {
+                        return value;
                       }
                     }
                   }
-                }
-              } else {
-                data.Puntaje = {
-                  title: 'Puntaje',
-                  //editable: true,
-                  filter: false,
-                  width: '35%',
-                  valuePrepareFunction: (value) => {
-                    return value;
-                  }
-                }
-              }
-              resolve(data)
+                  resolve(data)
             }, 
             error => {
               this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
@@ -444,6 +406,23 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   ngOnChanges() {
+  }
+
+  getPercentageSub(IdCriterio: any){
+    return new Promise((resolve, reject) => {
+      this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id+',RequisitoId:'+IdCriterio).subscribe(
+        (Res: any) => {
+          console.info(Res)
+          var porcentaje = JSON.parse(Res[0].PorcentajeEspecifico)
+          resolve(porcentaje)
+                                 
+        }, 
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+          reject(error)
+        }
+      );
+    });
   }
 
   viewtab() {
