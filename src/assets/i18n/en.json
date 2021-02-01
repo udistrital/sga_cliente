@@ -968,7 +968,10 @@
         "fecha_generacion": "Generation date",
         "descargar": "Download",
         "opcion": "Option",
-        "error_update_programa_seleccionado": "There is already a registration process with the selected program"
+        "error_update_programa_seleccionado": "There is already a registration process with the selected program",
+        "imprimir_comprobante": "Print and keep this voucher",
+        "comprobante_inscripcion": "Inscription Voucher",
+        "info_comprobante": "Fulfilling this form means the candidate has known the official admissions manual for the ACTUAL PERIOD and according with the 1571 law from 2012 authorizes expressly and unequivocally the data management according to the proper functions of the University in his condition of High Education Institution."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",

@@ -1,14 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DocumentoProgramaService } from '../../../@core/data/documento_programa.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { UserService } from '../../../@core/data/users.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { HttpErrorResponse } from '@angular/common/http';
-import Swal from 'sweetalert2';
-import { element } from '@angular/core/src/render3';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-view-documento-programa',
@@ -19,6 +16,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   persona_id: number;
   inscripcion_id: number;
   periodo_id: number;
+  programa_id: number;
   estado_inscripcion: number;
   info_documento_programa: any;
   programaDocumento: any;
@@ -33,24 +31,21 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   @Input('inscripcion_id')
   set info2(info2: number) {
     this.inscripcion_id = info2;
-    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== '') {
-      this.loadData();
-    }
   }
 
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private translate: TranslateService,
-    private documentoProgramaService: DocumentoProgramaService,
+  constructor(
+    private translate: TranslateService,
     private inscripcionService: InscripcionService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
-    private users: UserService) {
+    private popUpManager: PopUpManager, 
+    private userService: UserService) {
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       });
-      this.persona_id = this.users.getPersonaId();
   }
 
   useLanguage(language: string) {
@@ -61,209 +56,46 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     return this.sanitization.bypassSecurityTrustUrl(oldURL);
   }
 
+  editar() {
+    this.url_editar.emit(true);
+  }
+
   loadData(): void {
     this.info_documento_programa = <any>[];
-    this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
-      .subscribe(dato_inscripcion => {
-        const inscripciondata = <any>dato_inscripcion;
-        const programa = inscripciondata.ProgramaAcademicoId;
-        const periodo = inscripciondata.PeriodoId;
-        this.documentoProgramaService.get('soporte_documento_programa/?query=PersonaId:' +
-          this.persona_id + '&limit=0')
-          .subscribe(res => {
-            if (res !== null && JSON.stringify(res[0]) !== '{}') {
-              res.forEach(doc => {
-                this.documentoProgramaService.get('documento_programa/' + doc.DocumentoProgramaId.Id)
-                  .subscribe(documentoPrograma => {
-                    if (documentoPrograma !== null && JSON.stringify(documentoPrograma[0]) !== '{}') {
-                      this.programaDocumento =  <Array<any>>documentoPrograma;
-                      // if (this.programaDocumento.PeriodoId === this.periodo) {
-                        doc.DocumentoPrograma = this.programaDocumento;
-                        this.documentoProgramaService.get('tipo_documento_programa/' +
-                          this.programaDocumento.TipoDocumentoProgramaId.Id)
-                          .subscribe(tipoDocumentoPrograma => {
-                            if (tipoDocumentoPrograma !== null && JSON.stringify(tipoDocumentoPrograma[0]) !== '{}') {
-                              const tipoProgramaDocumento =  <Array<any>>tipoDocumentoPrograma;
-                              doc.DocumentoPrograma.TipoDocumentoPrograma = tipoProgramaDocumento;
-                              this.info_documento_programa.push(doc);
-                              this.nuxeoService.getDocumentoById$([
-                                { Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId},
-                              ], this.documentoService)
-                                .subscribe(response => {
-                                  const documentosSoporte = <Array<any>>response;
-                                  // if (Object.values(documentosSoporte).length === data.length) {
-                                    // for (let i = 0; i < data.length; i++) {
-                                  doc.Documento = this.cleanURL(documentosSoporte['DocumentoPrograma' + doc.DocumentoId + '']);
-                                    // }
-                                  // }
-                                },
-                                (error: HttpErrorResponse) => {
-                                  Swal({
-                                    type: 'error',
-                                    title: error.status + '',
-                                    text: this.translate.instant('ERROR.' + error.status),
-                                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                                      this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-                                      this.translate.instant('GLOBAL.soporte_documento'),
-                                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                                  });
-                                });
-                          }
-                        },
-                          (error: HttpErrorResponse) => {
-                            Swal({
-                              type: 'error',
-                              title: error.status + '',
-                              text: this.translate.instant('ERROR.' + error.status),
-                              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                                this.translate.instant('GLOBAL.tipo_documento_programa'),
-                              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                            });
-                          });
-                      // }
-                    }
-                  },
-                    (error: HttpErrorResponse) => {
-                      Swal({
-                        type: 'error',
-                        title: error.status + '',
-                        text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                          this.translate.instant('GLOBAL.documento_programa'),
-                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                      });
-                    });
-              });
-            }
-          },
-            (error: HttpErrorResponse) => {
-              Swal({
-                type: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                  this.translate.instant('GLOBAL.documento_programa'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              });
-            });
-      },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.documento_programa') + '|' +
-              this.translate.instant('GLOBAL.admision'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    console.log(this.persona_id, this.inscripcion_id)
+    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId:' + this.inscripcion_id + ',DocumentoProgramaId.ProgramaId:' + this.programa_id).subscribe(
+      (response: any[]) => {
+        if (response !== null && Object.keys(response[0]).length > 0) {
+          this.info_documento_programa = response;
+          this.info_documento_programa.forEach(doc => {
+            this.docSoporte.push({Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId})
           });
-        });
-    // this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
-    //   .subscribe(dato_inscripcion => {
-    //     const inscripciondata = <any>dato_inscripcion;
-    //     this.periodo_id = inscripciondata.PeriodoId;
-    //     const programa = inscripciondata.ProgramaAcademicoId;
-    //     this.estado_inscripcion = inscripciondata.EstadoInscripcionId.Id;
-    //     this.documentoProgramaService.get('soporte_documento_programa/?query=PersonaId:' + this.persona_id +
-    //       ',DocumentoProgramaId.PeriodoId:' + this.periodo_id + ',DocumentoProgramaId.ProgramaId:' + programa +
-    //       '&sortby=Id&order=asc&limit=0')
-    //       .subscribe(res => {
-    //         if (res !== null) {
-    //           this.dataSop = <Array<any>>res;
-    //           const soportesSop = [];
-    //           let archivos = 0;
-    //           for (let i = 0; i < this.dataSop.length; i++) {
-    //             if (this.dataSop[i].DocumentoId + '' !== '0') {
-    //               soportesSop.push({ Id: this.dataSop[i].DocumentoId, key: 'DocumentoSop' + i });
-    //               archivos = i;
-    //             }
-    //           }
-
-    //           this.nuxeo.getDocumentoById$(soportesSop, this.docService)
-    //           .subscribe(response2 => {
-    //             this.docSoporte = <Array<any>>response2;
-    //             if (Object.values(this.docSoporte).length > this.dataSop.length && this.docSoporte['DocumentoSop' + archivos] !== undefined &&
-    //               this.dataSop[archivos].DocumentoId > 0) {
-    //                 let contadorSop = 0;
-    //                 this.dataSop.forEach(elementSop => {
-    //                   this.documentoProgramaService.get('documento_programa/' + elementSop.DocumentoProgramaId.Id)
-    //                     .subscribe(documentoPrograma => {
-    //                       if (documentoPrograma !== null) {
-    //                         this.programaDocumento =  <any>documentoPrograma;
-    //                         if (this.programaDocumento.PeriodoId === this.periodo_id) {
-    //                           elementSop.DocumentoPrograma = this.programaDocumento;
-    //                           this.documentoProgramaService.get('tipo_documento_programa/' +
-    //                             this.programaDocumento.TipoDocumentoProgramaId.Id)
-    //                             .subscribe(tipoDocumentoPrograma => {
-    //                               if (tipoDocumentoPrograma !== null) {
-    //                                 elementSop.TipoDocumentoPrograma = <any>tipoDocumentoPrograma;
-    //                                 elementSop.DocumentoId = this.cleanURL(this.docSoporte['DocumentoSop' + contadorSop] + '');
-    //                                 contadorSop++;
-    //                                 this.info_documento_programa.push(elementSop);
-    //                               }
-    //                             },
-    //                               (error: HttpErrorResponse) => {
-    //                                 Swal({
-    //                                   type: 'error',
-    //                                   title: error.status + '',
-    //                                   text: this.translate.instant('ERROR.' + error.status),
-    //                                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
-    //                                     this.translate.instant('GLOBAL.tipo_documento_programa'),
-    //                                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-    //                                 });
-    //                               });
-    //                         }
-    //                       }
-    //                     },
-    //                       (error: HttpErrorResponse) => {
-    //                         Swal({
-    //                           type: 'error',
-    //                           title: error.status + '',
-    //                           text: this.translate.instant('ERROR.' + error.status),
-    //                           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-    //                             this.translate.instant('GLOBAL.documento_programa'),
-    //                           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-    //                         });
-    //                       });
-    //                 });
-    //               }
-    //             },
-    //             (error: HttpErrorResponse) => {
-    //               Swal({
-    //                 type: 'error',
-    //                 title: error.status + '',
-    //                 text: this.translate.instant('ERROR.' + error.status),
-    //                 footer: this.translate.instant('GLOBAL.cargar') + '-' +
-    //                   this.translate.instant('GLOBAL.documento_programa') + '|' +
-    //                   this.translate.instant('GLOBAL.soporte_documento'),
-    //                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-    //               });
-    //             });
-    //         }
-    //       },
-    //         (error: HttpErrorResponse) => {
-    //           Swal({
-    //             type: 'error',
-    //             title: error.status + '',
-    //             text: this.translate.instant('ERROR.' + error.status),
-    //             footer: this.translate.instant('GLOBAL.cargar') + '-' +
-    //               this.translate.instant('GLOBAL.documento_programa'),
-    //             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-    //           });
-    //         });
-    //   },
-    //     (error: HttpErrorResponse) => {
-    //       Swal({
-    //         type: 'error',
-    //         title: error.status + '',
-    //         text: this.translate.instant('ERROR.' + error.status),
-    //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
-    //           this.translate.instant('GLOBAL.admision'),
-    //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-    //       });
-    // });
+          this.nuxeoService.getDocumentoById$(this.docSoporte, this.documentoService).subscribe(
+            (res: any) => {
+              if (Object.keys(res).length > 0)  {
+                this.info_documento_programa.forEach(doc => {
+                  doc.Documento = this.cleanURL(res['DocumentoPrograma' + doc.DocumentoId]);
+                });
+              }
+            },
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
+            }
+          );         
+        } else {
+          this.info_documento_programa = null
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
+      }
+    );
   }
 
   ngOnInit() {
+    this.programa_id = parseInt(sessionStorage.getItem('ProgramaAcademicoId'));
+    this.persona_id = this.persona_id ? this.persona_id : this.userService.getPersonaId();
+    this.inscripcion_id = this.inscripcion_id ? this.inscripcion_id : parseInt(sessionStorage.getItem('IdInscripcion'));
+    this.loadData();
   }
 }

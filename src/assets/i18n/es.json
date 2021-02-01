@@ -560,7 +560,9 @@
         "nivel": "Nivel",
         "placeholder_nivel": "Seleccione el nivel que se requiere asignar al tipo de inscripción",
         "info_contacto": "Información de contacto",
-        "info_familiar": "Información familiar"
+        "info_familiar": "Información familiar",
+        "institucion": "Institución",
+        "programa": "Programa"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1000,7 +1002,10 @@
         "no_info": "No hay información registrada",
         "update": "¿Está seguro que desea actualizar la información?",
         "error_update": "Ha ocurrido un error inesperado. La información no pudo ser actualizada",
-        "error_update_programa_seleccionado": "Ya se encuentra un proceso de inscripción con el programa seleccionado"
+        "error_update_programa_seleccionado": "Ya se encuentra un proceso de inscripción con el programa seleccionado",
+        "imprimir_comprobante": "Imprima y conserve este comprobante",
+        "comprobante_inscripcion": "Comprobante de Inscripción",
+        "info_comprobante": "El diligenciamiento del presente formulario indica que el aspirante ha conocido el instructivo oficial de admisiones del PERIODO ACADÉMICO en curso, y acorde con la ley 1581 de 2012, autoriza de manera expresa e inequívoca, que sus datos personales sean tratados conforme a las funciones propias de la Universidad, en su condición de Institución de Educación Suoerior."
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
