@@ -141,7 +141,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.dataSource = new LocalDataSource();
     this.loadData();
     this.loadCriterios();
-    this.loadAspirantes();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
@@ -222,6 +221,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   loadCriterios() {
+    
     this.evaluacionService.get('requisito?limit=0&query=Activo:true&sortby=Id&order=asc').subscribe(
       (response: any) => {
         if (response !== null || response !== undefined){
@@ -263,8 +263,9 @@ export class EvaluacionAspirantesComponent implements OnInit {
     }
   }
 
-  activeCriterios() {
+  async activeCriterios() {
     this.selectcriterio = false;
+    await this.loadAspirantes();
   }
 
   useLanguage(language: string) {
@@ -322,7 +323,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   loadAspirantes(){
-    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5&sortby=Id&order=asc').subscribe(
+    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id+'&sortby=Id&order=asc').subscribe(
       (response: any) => {
         const data = <Array<any>>response;
         data.forEach(element => {
@@ -458,6 +459,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   viewtab() {
+    
     this.selectTipoIcfes = false;
     this.selectTipoEntrevista = false;
     this.selectTipoPrueba = false;
