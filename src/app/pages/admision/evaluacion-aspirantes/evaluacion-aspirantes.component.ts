@@ -5,6 +5,9 @@ import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { UserService } from '../../../@core/data/users.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service' 
 import { ParametrosService } from '../../../@core/data/parametros.service';
+import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
+import { InscripcionService } from '../../../@core/data/inscripcion.service';
+import { TercerosService } from '../../../@core/data/terceros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import { TipoCriterio } from '../../../@core/data/models/admision/tipo_criterio';
@@ -16,9 +19,7 @@ import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { from } from 'rxjs';
 import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
-import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
-import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { load } from '@angular/core/src/render3';
 import { CheckboxAssistanceComponent } from '../../../@theme/components/checkbox-assistance/checkbox-assistance.component';
@@ -126,7 +127,9 @@ export class EvaluacionAspirantesComponent implements OnInit {
     private parametrosService: ParametrosService,
     private projectService: ProyectoAcademicoService,
     private evaluacionService: EvaluacionInscripcionService,
-    private popUpManager: PopUpManager,) {
+    private tercerosService: TercerosService,
+    private popUpManager: PopUpManager,
+    private inscripcionService: InscripcionService,) {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {});
     this.total = true;
@@ -138,6 +141,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.dataSource = new LocalDataSource();
     this.loadData();
     this.loadCriterios();
+    this.loadAspirantes();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
@@ -268,11 +272,11 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   guardarEvaluacion(){
-    
+    console.info(this.dataSource["data"])
   }
 
   async perfil_editar(event) {
-    this.dataSource.load([{Aspirantes:'Ana Perez Perez'}, {Aspirantes:'Pepito Palacios'}])
+    //this.dataSource.load([{Aspirantes:'Ana Perez Perez'}, {Aspirantes:'Pepito Palacios'}])
     this.tipo_criterio = new TipoCriterio();
     this.tipo_criterio.Periodo = this.periodo.Nombre;
     var proyecto;
@@ -285,28 +289,28 @@ export class EvaluacionAspirantesComponent implements OnInit {
     switch (event) {
       case 'info_icfes':
         this.tipo_criterio.Nombre = this.criterios[0].Nombre;
-        sessionStorage.setItem('tipo_criterio', '1')
+        sessionStorage.setItem('tipo_criterio', '1');
         await this.createTable();
         this.selectTipoIcfes = true;
         this.showTab = false;
         break;
       case 'info_entrevista':
         this.tipo_criterio.Nombre = this.criterios[1].Nombre;
-        sessionStorage.setItem('tipo_criterio', '2')
+        sessionStorage.setItem('tipo_criterio', '2');
         await this.createTable();
         this.selectTipoEntrevista = true;
         this.showTab = false;
         break;
       case 'info_prueba':
         this.tipo_criterio.Nombre = this.criterios[2].Nombre;
-        sessionStorage.setItem('tipo_criterio', '3')
+        sessionStorage.setItem('tipo_criterio', '3');
         await this.createTable();
         this.selectTipoPrueba = true;
         this.showTab = false;
         break;
       case 'info_hoja':
         this.tipo_criterio.Nombre = this.criterios[3].Nombre;
-        sessionStorage.setItem('tipo_criterio', '11')
+        sessionStorage.setItem('tipo_criterio', '11');
         await this.createTable();
         this.selectTipoHojaVida = true;
         this.showTab = false;
@@ -317,7 +321,36 @@ export class EvaluacionAspirantesComponent implements OnInit {
     }
   }
 
-  async loadColumn(IdCriterio: any){
+  loadAspirantes(){
+    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5&sortby=Id&order=asc').subscribe(
+      (response: any) => {
+        const data = <Array<any>>response;
+        data.forEach(element => {
+          console.info(element.PersonaId)   
+          this.tercerosService.get('tercero/'+element.PersonaId).subscribe(
+            (res: any) => {
+              console.info(res)
+              var aspiranteAux = {
+                Id: res.Id,
+                Aspirantes: res.NombreCompleto
+              }
+              console.info(response)
+              this.Aspirantes.push(aspiranteAux);
+              this.dataSource.load(this.Aspirantes);
+            }, 
+            error => {
+              this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+            }
+          );                
+        });
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+      }
+    );
+  }
+
+  loadColumn(IdCriterio: any){
     return new Promise((resolve, reject) => {
       this.evaluacionService.get('requisito?query=RequisitoPadreId:'+IdCriterio+'&limit=0').subscribe(
         (response: any) => {
@@ -352,7 +385,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
                   if (response.length > 1){
                     await this.getPercentageSub(IdCriterio).then(
                       res => {
-                        porcentaje = res
+                        porcentaje = res;
                       }
                     )
 
@@ -412,7 +445,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id+',RequisitoId:'+IdCriterio).subscribe(
         (Res: any) => {
-          console.info(Res)
           var porcentaje = JSON.parse(Res[0].PorcentajeEspecifico)
           resolve(porcentaje)
                                  
