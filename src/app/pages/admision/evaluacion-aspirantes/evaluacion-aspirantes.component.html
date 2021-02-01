@@ -26,7 +26,7 @@
                 <!-- select proyectos -->
                 <mat-form-field style="width: 100%;">
                   <mat-label>{{ 'admision.aviso_proyecto' | translate }}:</mat-label>
-                  <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="activeCriterios()" [disabled]='selectprograma' multiple>
+                  <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="activeCriterios()" [disabled]='selectprograma'>
                     <mat-option *ngFor="let item of proyectos" [value]="item.Id">{{item.Nombre}}</mat-option>
                   </mat-select>
                   <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'admision.erro_selec_proyecto' | translate }}</mat-error>

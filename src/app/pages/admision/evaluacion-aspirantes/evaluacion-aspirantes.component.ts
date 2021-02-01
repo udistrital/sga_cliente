@@ -302,12 +302,10 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.dataSource.load([{Aspirantes:'Ana Perez Perez'}, {Aspirantes:'Pepito Palacios'}])
     this.tipo_criterio = new TipoCriterio();
     this.tipo_criterio.Periodo = this.periodo.Nombre;
-    var proyecto = [];
-    for (var i = 0; i < this.proyectos_selected.length; i++){
-      for (var j = 0; j < this.proyectos.length; j++){
-        if (this.proyectos_selected[i] === this.proyectos[j].Id){
-          proyecto[i] = this.proyectos[j].Nombre;
-        }
+    var proyecto;
+    for (var i = 0; i < this.proyectos.length; i++){
+      if (this.proyectos_selected === this.proyectos[i].Id){
+        proyecto = this.proyectos[i].Nombre;
       }
     }
     this.tipo_criterio.ProgramaAcademico = proyecto; 
@@ -352,7 +350,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
         (response: any) => {
           this.evaluacionService.get('requisito/'+IdCriterio).subscribe(
             (res: any) => {
-              console.info(res)
               var data: any = {};
               var porcentaje = {
                 "areas":[
