@@ -227,6 +227,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       },
       mode: 'external',
     }
+    //console.info(this.settings.columns)  
   }
 
   loadInscriptionModule(){
