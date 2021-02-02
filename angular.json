@@ -207,5 +207,8 @@
       "styleext": "scss"
     },
     "@schematics/angular:directive": {}
+  },
+  "cli": {
+    "analytics": "34d42271-f678-427f-a73f-fed6422b4f57"
   }
 }

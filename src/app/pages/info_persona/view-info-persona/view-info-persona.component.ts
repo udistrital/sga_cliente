@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { UserService } from '../../../@core/data/users.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 
 @Component({
@@ -20,20 +21,22 @@ export class ViewInfoPersonaComponent implements OnInit {
   info_info_persona: InfoPersona;
   info_persona_user: string;
 
-  @Input('info_persona_id')
-  set name(info_persona_id: number) {
-    this.info_persona_id = info_persona_id;
+  @Input('persona_id')
+  set name(persona_id: number) {
+    this.info_persona_id = persona_id;
     this.loadInfoPersona();
   }
 
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private campusMidService: CampusMidService,
+  constructor(private sgaMidService: SgaMidService,
     private documentoService: DocumentoService,
     private sanitization: DomSanitizer,
     private nuxeoService: NuxeoService,
-    private translate: TranslateService) {
+    private translate: TranslateService,
+    private userService: UserService,
+    private popUpManager: PopUpManager) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     // this.loadInfoPersona();
@@ -55,9 +58,9 @@ export class ViewInfoPersonaComponent implements OnInit {
   }
 
   public loadInfoPersona(): void {
-    const id = this.info_persona_id ? this.info_persona_id : this.info_persona_user ? this.info_persona_user : undefined;
+    const id = this.info_persona_id ? this.info_persona_id : this.userService.getPersonaId();
     if (id !== undefined && id !== 0 && id.toString() !== '') {
-      this.campusMidService.get('persona/consultar_persona/' + id)
+      this.sgaMidService.get('persona/consultar_persona/' + id)
         .subscribe(res => {
           const r = <any>res;
           if (r !== null && r.Type !== 'error') {
@@ -67,14 +70,7 @@ export class ViewInfoPersonaComponent implements OnInit {
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.info_persona'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
           });
     } else {
       this.info_info_persona = undefined

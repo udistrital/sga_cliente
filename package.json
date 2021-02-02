@@ -97,6 +97,7 @@
     "nuxeo": "^3.6.0",
     "oidc-auth": "^0.6.0",
     "pace-js": "1.0.2",
+    "pdfmake": "^0.1.70",
     "popper.js": "^1.14.7",
     "roboto-fontface": "0.8.0",
     "rxjs": "^6.5.2",
@@ -112,7 +113,7 @@
   },
   "devDependencies": {
     "@agm/core": "^1.0.0-beta.5",
-    "@angular-devkit/build-angular": "~0.13.0",
+    "@angular-devkit/build-angular": "^0.13.10",
     "@angular/cli": "^7.3.9",
     "@angular/compiler-cli": "^7.2.15",
     "@angular/language-service": "7.2.15",

@@ -224,6 +224,12 @@ export const MENU_ITEMS: MenuItem[] = [
         link: '/pages/admision/listado_aspirante',
         key: 'listado_aspirante',
       },
+      {
+        title: 'Evaluación de aspirantes',
+        icon: 'nb-edit',
+        link: '/pages/admision/evaluacion-aspirantes',
+        key: 'evaluacion_aspirantes',
+      },
     ],
   },
   {

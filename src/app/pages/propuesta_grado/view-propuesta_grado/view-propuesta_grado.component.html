@@ -1,9 +1,10 @@
 <nb-card>
-    <nb-card-header>{{"inscripcion.propuesta_grado" | translate}}
-    </nb-card-header>
     <nb-card-body class="row container">
         <div class="col-md-12">
             <table class="table-responsive">
+                <thead>
+                    <tr><th colspan="2">{{"inscripcion.propuesta_grado" | translate}}</th></tr>
+                </thead>
                 <tbody *ngIf="info_propuesta_grado">
                     <tr>
                         <td>
@@ -15,14 +16,17 @@
                         </td>
                         <td>
                             <p><b>{{"GLOBAL.titulo_proyecto" | translate}}:</b> {{info_propuesta_grado.Nombre}}</p>
-                            <p><b>{{"GLOBAL.formato_proyecto" | translate}}:</b> (<a [href]=info_propuesta_grado.Soporte download="Propuesta.pdf">
-                {{"GLOBAL.soporte_documento" | translate}}</a>)</p>
+                            <p><b>{{"GLOBAL.formato_proyecto" | translate}}:</b> 
+                                <a [href]=info_propuesta_grado.Soporte download="Propuesta.pdf">
+                                    <i class="fa fa-eye fa-2x"></i>
+                                </a>
+                            </p>
                             <p><b>{{"GLOBAL.resumen" | translate}}:</b> {{info_propuesta_grado.Resumen}}</p>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <span *ngIf="url_editar && (estado_inscripcion < 2)" (click)="editar()" class="link">
+            <span *ngIf="url_editar" (click)="editar()" class="link">
         <i class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
         </div>
     </nb-card-body>

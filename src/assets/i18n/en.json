@@ -101,6 +101,7 @@
             "preinscripcion": "Pre-registration for academic projects"
         },
         "admision": {
+            "evaluacion_aspirantes": "Aspirant evaluation",
             "admision": "Admissions",
             "criterios": "Admissions criteria for projects",
             "asignacion_cupos": "Assignment of quotas",
@@ -968,7 +969,10 @@
         "fecha_generacion": "Generation date",
         "descargar": "Download",
         "opcion": "Option",
-        "error_update_programa_seleccionado": "There is already a registration process with the selected program"
+        "error_update_programa_seleccionado": "There is already a registration process with the selected program",
+        "imprimir_comprobante": "Print and keep this voucher",
+        "comprobante_inscripcion": "Inscription Voucher",
+        "info_comprobante": "Fulfilling this form means the candidate has known the official admissions manual for the ACTUAL PERIOD and according with the 1571 law from 2012 authorizes expressly and unequivocally the data management according to the proper functions of the University in his condition of High Education Institution."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
@@ -1055,16 +1059,25 @@
         "seguro_continuar_registrar": "Are you sure you want to register this family information?"
     },
     "admision": {
+        "guardar": "Save",
+        "asistencia": "Assistance",
+        "aspirante": "Aspirants",
+        "nota": "NOTE",
+        "aviso": "The score for each item to be evaluated corresponds to a value between 0 and 100 points",
+        "criterio": "Criterion",
+        "programa": "Academic program",
+        "periodo": "Admission process period",
         "aviso_periodo": "Period in which the admission criteria are defined",
         "aviso_nivel": "Select the level to which you want to define the admission criteria",
         "aviso_proyecto": "Selections the academic projects you wish to define the admission criteria",
-        "erro_selec_nivel": "Please select the level!",
-        "erro_selec_proyecto": "Please select at least one project!",
+        "erro_selec_nivel": "Please, select the level!",
+        "erro_selec_proyecto": "Please, select at least one project!",
         "aviso_criterios": "Select the criteria you want to assign to academic projects",
-        "erro_selec_criterio": "Please select at least one criterion!",
+        "erro_selec_criterio": "Please, select at least one criterion!",
         "info_icfes": "Criteria ICFES ",
         "entrevista": "Criteria Interview",
         "prueba": "Criteria Test",
+        "hoja_vida": "Resume criteria",
         "criterio_icfes": "Percentages for the ICFES criterion",
         "actualizacion_estado": "Actulizar estado aspirantes",
         "enlistar": "Enlist applicants",
