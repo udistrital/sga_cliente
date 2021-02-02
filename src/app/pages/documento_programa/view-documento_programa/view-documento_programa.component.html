@@ -1,22 +1,29 @@
 <nb-card>
-  <nb-card-header>{{"inscripcion.documento_programa" | translate}}
-  </nb-card-header>
   <nb-card-body class="row container">
     <div class="col-md-12">
       <table class="table-responsive">
+        <thead>
+          <tr><th colspan="3">{{ 'inscripcion.documento_programa' | translate}}</th></tr>
+          <tr class="subheader">
+            <th>{{ 'GLOBAL.soporte_documento' | translate }}</th>
+            <th>{{ 'GLOBAL.estado' | translate  }} </th>
+            <th>{{ 'solicitudes.soporte' | translate }} </th>
+          </tr>
+        </thead>
         <tbody *ngIf="info_documento_programa">
           <tr *ngFor="let documento of info_documento_programa">
             <td>
-              <p>{{documento.DocumentoPrograma.TipoDocumentoPrograma.Nombre}}</p>
+              <p>{{documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre}}</p>
             </td>
+            <td></td>
             <td *ngIf="documento.DocumentoId !== undefined">
-              <p>(<a [href]=documento.Documento download="{{documento.DocumentoPrograma.TipoDocumentoPrograma.Nombre}}.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</p>
+              <p><a [href]=documento.Documento download="{{documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre}}.pdf"><i class="fa fa-eye fa-2x"></i></a></p>
             </td>
           </tr>
         </tbody>
       </table>
-      <span *ngIf="url_editar && (estado_inscripcion < 2)" (click)="editar()" class="link">
-        <i class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
+      <span *ngIf="url_editar" (click)="editar()" class="link">
+        <i class="ion-edit"></i>{{ 'GLOBAL.actualizar' | translate}}</span>
     </div>
   </nb-card-body>
 </nb-card>

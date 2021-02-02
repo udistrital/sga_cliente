@@ -1,28 +1,24 @@
 <nb-card>
-    <nb-card-header>{{"GLOBAL.formacion_academica" | translate}}
-    </nb-card-header>
     <nb-card-body class="row container">
         <div class="col-md-12">
             <table class="table-responsive">
+                <thead>
+                    <tr><th colspan="5">{{"GLOBAL.formacion_academica" | translate}}</th></tr>
+                    <tr class="subheader">
+                        <th>{{ 'GLOBAL.institucion' | translate }}</th>
+                        <th>{{ 'GLOBAL.programa' | translate }}</th>
+                        <th>{{ 'GLOBAL.nivel' | translate }}</th>
+                        <th>{{ 'GLOBAL.fecha_inicio' | translate }}</th>
+                        <th>{{ 'GLOBAL.fecha_fin' | translate }}</th>
+                    </tr>
+                </thead>
                 <tbody *ngIf="info_formacion_academica">
                     <tr *ngFor="let formacion of info_formacion_academica">
-                        <td>
-                            <p><b>{{formacion.FechaInicio }}
-                                    - {{formacion.FechaFinalizacion }} </b></p>
-                            <!-- <p><b>{{formacion.PaisUniversidad}}</b></p> -->
-                            <p><b>{{formacion.Ubicacion}}</b></p>
-                            <p><b>{{formacion.ProgramaAcademico.Nombre}}</b></p>
-                            <!-- <p><b>{{formacion.Titulacion.MetodologiaId.Nombre}}</b></p> -->
-                        </td>
-                        <td>
-                            <p>{{formacion.NombreCompleto}}</p>
-                            <!-- <p>{{formacion.Titulacion.Nombre}}</p>
-                            <p><b>{{"GLOBAL.titulo_trabajo_grado" | translate}}:
-                                </b>{{formacion.TituloTrabajoGrado}} -
-                                {{formacion.DescripcionTrabajoGrado}}</p>
-                            <p>(<a [href]=formacion.Documento download="Formacion{{formacion.FechaFinalizacion |
-                                date:'yyyy'}}.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</p> -->
-                        </td>
+                        <td>{{formacion.NombreCompleto}}</td>
+                        <td>{{formacion.ProgramaAcademico.Nombre}}</td>
+                        <td></td>
+                        <td>{{formacion.FechaInicio }}</td>
+                        <td>{{formacion.FechaFinalizacion }}</td>
                     </tr>
                 </tbody>
             </table>

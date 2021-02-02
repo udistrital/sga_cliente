@@ -124,6 +124,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   selectprograma: boolean = true;
   imagenes: any;
   periodo: any;
+  imprimir: boolean = false;
 
   constructor(
     private popUpManager: PopUpManager,
@@ -377,6 +378,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                 if (res_ins !== null && r_ins.Type !== 'error') {
                   this.loading = false;
                   this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
+                  this.imprimir = true;
+                  this.perfil_editar('perfil');
                 }
               },
                 (error: any) => {

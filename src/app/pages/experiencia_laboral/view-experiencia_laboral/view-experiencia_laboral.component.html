@@ -1,26 +1,28 @@
 <nb-card>
-    <nb-card-header>{{"inscripcion.experiencia_laboral" | translate}}
-    </nb-card-header>
     <nb-card-body class="row container">
         <div class="col-md-12">
             <table class="table-responsive">
+                <thead>
+                    <tr><th colspan="6">{{"inscripcion.experiencia_laboral" | translate}}</th></tr>
+                    <tr class="subheader">
+                        <th>{{ 'GLOBAL.nombre_empresa' | translate }}</th>
+                        <th>{{ 'GLOBAL.cargo' | translate }}</th>
+                        <th>{{ 'GLOBAL.fecha_inicio' | translate }}</th>
+                        <th>{{ 'GLOBAL.fecha_fin' | translate }}</th>
+                        <th>{{ 'GLOBAL.tipo_vinculacion' | translate }}</th>
+                        <th>{{ 'solicitudes.soporte' | translate }}</th>
+                    </tr>
+                </thead>
                 <tbody *ngIf="info_experiencia_laboral">
                     <tr *ngFor="let experiencia of info_experiencia_laboral">
+                        <td>{{experiencia.NombreEmpresa.NombreCompleto}}</td>
+                        <td>{{experiencia.Cargo.Nombre}}</td>
+                        <td>{{experiencia.FechaInicio | date:'dd/MM/yyyy'}}</td>
+                        <td>{{experiencia.FechaFinalizacion | date:'dd/MM/yyyy'}}</td>
+                        <td>{{experiencia.TipoVinculacion.Nombre}}</td>
                         <td>
-                            <p><b>{{experiencia.FechaInicio |
-                                    date:'dd/MM/yyyy'}} -
-                                    {{experiencia.FechaFinalizacion |
-                                    date:'dd/MM/yyyy'}} </b></p>
-                            <p><b>{{experiencia.Ubicacion.Nombre}}</b></p>
-                            <p><b>{{experiencia.TipoVinculacion.Nombre}}</b></p>
-                            <p><b>{{experiencia.TipoDedicacion.Nombre}}</b></p>
-                        </td>
-                        <td>
-                            <p>{{experiencia.NombreEmpresa.Nombre}}</p>
-                            <p><b>{{"GLOBAL.cargo" | translate}}: </b>{{experiencia.Cargo.Nombre}} - {{experiencia.Actividades}}</p>
-                            <p></p>
-                            <p>(<a [href]=experiencia.Soporte download="Experiencia{{experiencia.FechaFinalizacion |
-                                date:'yyyy'}}.pdf">{{"GLOBAL.soporte_documento" | translate}}</a>)</p>
+                            <a [href]=experiencia.Soporte download="Experiencia{{experiencia.FechaFinalizacion |
+                                date:'yyyy'}}.pdf"><i class="fa fa-eye fa-2x"></i></a>
                         </td>
                     </tr>
                 </tbody>
