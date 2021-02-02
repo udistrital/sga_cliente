@@ -1088,6 +1088,7 @@
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información familiar?"
     },
     "admision": {
+        "no_data": "No hay información registrada",
         "guardar": "Guardar",
         "asistencia": "Asistencia",
         "aspirante": "Aspirantes",

@@ -101,7 +101,7 @@
             </label>
           </div>
           <br/>
-          <ng2-smart-table [settings]="settings" [source]="dataSource"></ng2-smart-table>
+          <ng2-smart-table [settings]="settings" [source]="dataSource" (rowSelect)="itemSelect($event)"></ng2-smart-table>
           <br/>
           <div class="text-center">
             <button mat-button type="button" (click)="guardarEvaluacion()" >{{ 'admision.guardar' | translate }}</button>
