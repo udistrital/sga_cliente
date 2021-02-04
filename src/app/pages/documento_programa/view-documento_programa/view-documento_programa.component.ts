@@ -62,7 +62,6 @@ export class ViewDocumentoProgramaComponent implements OnInit {
 
   loadData(): void {
     this.info_documento_programa = <any>[];
-    console.log(this.persona_id, this.inscripcion_id)
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId:' + this.inscripcion_id + ',DocumentoProgramaId.ProgramaId:' + this.programa_id).subscribe(
       (response: any[]) => {
         if (response !== null && Object.keys(response[0]).length > 0) {

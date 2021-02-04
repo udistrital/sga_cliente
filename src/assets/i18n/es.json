@@ -958,7 +958,7 @@
         "aviso_nivel": "Seleccione el nivel al que desea inscribirse",
         "info_basica": "Información básica",
         "aviso_progreso": "Para el registro a un proyecto es necesario completar cada uno de los bloques de informacion que son solicitados al 100%",
-        "perfil": "Perfil",
+        "perfil": "Detalle de inscripción",
         "formacion_academica": "Formación académica",
         "experiencia_laboral": "Experiencia laboral",
         "produccion_academica": "Producción académica",
@@ -1094,7 +1094,6 @@
     },
     "admision": {
         "guardar": "Guardar",
-        "asistencia": "Asistencia",
         "aspirante": "Aspirantes",
         "nota": "NOTA",
         "aviso": "El puntaje para cada item a evaluar corresponde a un valor entre 0 y 100 puntos",

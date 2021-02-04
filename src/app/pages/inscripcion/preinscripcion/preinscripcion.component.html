@@ -58,13 +58,13 @@
     <nb-card [hidden]="!show_info">
         <nb-card-body>
             <div class="row">
-                <div class="col-md-11">
+                <div class="col-md-12">
                     <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
                 </div>
-                <div class="col-md-1" align="right">
+<!--                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false;">X</button>
-                </div>
+                </div> -->
             </div>
             <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
