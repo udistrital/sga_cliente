@@ -8,6 +8,7 @@ import { ParametrosService } from '../../../@core/data/parametros.service';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { TercerosService } from '../../../@core/data/terceros.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import { TipoCriterio } from '../../../@core/data/models/admision/tipo_criterio';
@@ -129,6 +130,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
     private projectService: ProyectoAcademicoService,
     private evaluacionService: EvaluacionInscripcionService,
     private tercerosService: TercerosService,
+    private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
     private inscripcionService: InscripcionService,) {
     this.translate = translate;
@@ -274,6 +276,18 @@ export class EvaluacionAspirantesComponent implements OnInit {
     Evaluacion.ProgramaId = this.proyectos_selected;
     Evaluacion.CriterioId = sessionStorage.getItem('tipo_criterio');
     console.info(Evaluacion)
+    this.sgaMidService.post('admision/registrar_evaluacion', Evaluacion).subscribe(
+      (response: any) => {
+        if (response.Response.Code == "200"){
+          this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'));
+        } else {
+          this.popUpManager.showErrorToast(this.translate.instant('admision.registro_error'));
+        }
+      }, 
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+      }
+    );
   }
 
   async perfil_editar(event) {

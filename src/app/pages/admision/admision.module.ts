@@ -28,6 +28,7 @@ import { EvaluacionAspirantesComponent } from './evaluacion-aspirantes/evaluacio
 import { ParametrosService } from '../../@core/data/parametros.service';
 import { InscripcionService } from '../../@core/data/inscripcion.service';
 import { TercerosService } from '../../@core/data/terceros.service';
+import { SgaMidService } from '../../@core/data/sga_mid.service';
 import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-assistance/checkbox-assistance.component';
 
 @NgModule({
@@ -57,6 +58,7 @@ import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-as
     ParametrosService,
     InscripcionService,
     TercerosService,
+    SgaMidService,
   ],
    entryComponents: [
     CrudCriterioIcfesComponent,
