@@ -98,7 +98,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
 
   loadData(): void {
     this.soporteDocumento = [];
-    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' + this.inscripcion).subscribe(
+    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' + this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
       (response: any[]) => {
         if (Object.keys(response[0]).length > 0) {
           response.forEach(soporte => {
@@ -126,6 +126,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.uid = 0;
     this.soporteDocumento = [];
     this.inscripcion = parseInt(sessionStorage.getItem('IdInscripcion'));
+    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'))
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
         this.loadData();

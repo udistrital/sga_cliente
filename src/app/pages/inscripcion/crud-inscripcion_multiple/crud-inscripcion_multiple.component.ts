@@ -1,11 +1,9 @@
 import { Inscripcion } from './../../../@core/data/models/inscripcion/inscripcion';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import 'style-loader!angular2-toaster/toaster.css';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
@@ -24,6 +22,7 @@ import { from } from 'rxjs';
 import moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { load } from '@angular/core/src/render3';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'ngx-crud-inscripcion-multiple',
@@ -33,7 +32,6 @@ import { load } from '@angular/core/src/render3';
 })
 export class CrudInscripcionMultipleComponent implements OnInit {
 
-  config: ToasterConfig;
   info_persona_id: number;
   persona_id: number;
   inscripcion_id: number;
@@ -91,6 +89,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   projectId: number = 0;
   parametro: string;
   recibo_generado: any;
+  recibos_pendientes: number;
+  parametros_pago: any;
 
   arr_proyecto: InstitucionEnfasis[] = [];
   source_emphasys: LocalDataSource = new LocalDataSource();
@@ -108,7 +108,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     private userService: UserService,
     private parametrosService: ParametrosService,
     private inscripcionService: InscripcionService,
-    private toasterService: ToasterService,
     private eventoService: EventoService) {
     // this.cargaproyectosacademicos();
     this.showProyectoCurricular = false;
@@ -220,7 +219,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           renderComponent: ButtonPaymentComponent,
           onComponentInitFunction: (instance) => {
             instance.save.subscribe(data => {
-              sessionStorage.setItem('EstadoInscripcion', data);     
+              sessionStorage.setItem('EstadoInscripcion', data.estado);
+              if (data.estado === false || data.estado === 'false') {
+                this.abrirPago(data.data);
+              }
             });
           }       
         },
@@ -260,6 +262,12 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.parametros_pago = {
+      recibo: '',
+      REFERENCIA: '',
+      NUM_DOC_IDEN: '',
+      TIPO_DOC_IDEN: '',
+    };
   }
 
   loadInfoInscripcion() {
@@ -272,11 +280,11 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             if (response !== null && response.Response.Code === '400'){
               this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));    
             } else if (response != null && response.Response.Code === '404'){
-              //this.popUpManager.showInfoToast(this.translate.instant('inscripcion.no_inscripcion')); 
-              this.showToast('info', this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
+              this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion')); 
             } else {
               const data = <Array<any>>response.Response.Body[1].Inscripciones;
-              const dataInfo = <Array<any>>[];          
+              const dataInfo = <Array<any>>[];
+              this.recibos_pendientes = 0;
               data.forEach(element => {
                 this.projectService.get('proyecto_academico_institucion/'+element.ProgramaAcademicoId).subscribe(
                   res => {
@@ -285,10 +293,14 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                     element.ReciboInscripcion = NumRecibo;
                     element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                     element.ProgramaAcademicoId = res.Nombre;
+                    if (element.Estado === 'Pendiente pago') {
+                      this.recibos_pendientes++;
+                    }
                     this.result.emit(1);
                     dataInfo.push(element);
                     this.loading = false;
                     this.dataSource.load(dataInfo);
+                    this.dataSource.setSort([{field: 'FechaCreacion', direction: 'asc'}]);
                     //this.selectedLevel = res.NivelFormacionId.Id
                     this.projectService.get('nivel_formacion/'+res.NivelFormacionId.Id).subscribe(
                       response => {
@@ -381,13 +393,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           const r = <any>res;
           if (res !== null && r.Type !== 'error') {
             const tiposInscripciones = <Array<any>>res;
-            if (tiposInscripciones.length >= 3) {
-              Swal({
-                type: 'error',
-                text: this.translate.instant('recibo_pago.maximo_recibos'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-
-              });
+            if (this.recibos_pendientes >= 3) {
+              this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
             } else {
               const inscripcion = {
                 Id: 0,
@@ -512,6 +519,21 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         }
       );
     }
+  }
+
+  abrirPago(data) {
+    this.parametros_pago.NUM_DOC_IDEN = this.info_info_persona.NumeroIdentificacion;
+    this.parametros_pago.REFERENCIA = data['ReciboInscripcion'][0];
+    this.parametros_pago.TIPO_DOC_IDEN = this.info_info_persona.TipoIdentificacion.CodigoAbreviacion;
+    const url = new URLSearchParams(this.parametros_pago).toString();
+    const ventanaPSE = window.open(environment.PSE_SERVICE + url, 'PagosPSE', 'width=600,height=800,resizable,scrollbars,status');
+    ventanaPSE.focus();
+    const timer = window.setInterval(() => {
+      if(ventanaPSE.closed) {
+        window.clearInterval(timer);
+        this.loadInfoInscripcion();
+      }
+    }, 5000);
   }
 
   loadTipoInscripcion() {
@@ -697,26 +719,5 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   setPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);
-  }
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
   }
 }

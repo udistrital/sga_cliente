@@ -3,16 +3,31 @@ table.rwd_auto {
   width: 100%;
   display: inline-table;
   margin: 0 0 10px;
+  border: black solid 1px;
+  border-collapse: collapse;
 }
 .table-responsive th,
 .rwd_auto th {
   padding: 5px;
   text-align: center;
+  border-bottom: black solid 1px;
+  border-top: black solid 1px;
+  background-color: rgb(0, 162, 255);
+  color: floralwhite;
+}
+.table-responsive .subheader th {
+  border-bottom: black solid 1px;
+  border-top: black solid 1px;
+  background-color: #F5F5F5;
+  font-weight: normal;
+  color: black;
 }
 .table-responsive td,
 .rwd_auto td {
-  border-bottom: 1px solid #ccc;
+  border-bottom: black solid 1px;
+  border-top: black solid 1px;
   padding: 5px;
+  text-align: center;
 }
 .rwd {
   width: 100%;

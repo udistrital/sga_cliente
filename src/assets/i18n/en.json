@@ -931,7 +931,7 @@
         "aviso_nivel": "Select the level to which you want to register",
         "info_basica": "Basic information",
         "aviso_progreso": "For the registration to a project it is necessary to complete each of the information blocks that are requested 100%",
-        "perfil": "Profile",
+        "perfil": "Inscription Detail",
         "formacion_academica": "Academic training",
         "experiencia_laboral": "Work experience",
         "produccion_academica": "Academic production",
@@ -969,7 +969,10 @@
         "fecha_generacion": "Generation date",
         "descargar": "Download",
         "opcion": "Option",
-        "error_update_programa_seleccionado": "There is already a registration process with the selected program"
+        "error_update_programa_seleccionado": "There is already a registration process with the selected program",
+        "imprimir_comprobante": "Print and keep this voucher",
+        "comprobante_inscripcion": "Inscription Voucher",
+        "info_comprobante": "Fulfilling this form means the candidate has known the official admissions manual for the ACTUAL PERIOD and according with the 1571 law from 2012 authorizes expressly and unequivocally the data management according to the proper functions of the University in his condition of High Education Institution."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
@@ -1061,7 +1064,6 @@
         "registro_exito": "The stored information has been saved successfully",
         "no_data": "No information recorded",
         "guardar": "Save",
-        "asistencia": "Assistance",
         "aspirante": "Aspirants",
         "nota": "NOTE",
         "aviso": "The score for each item to be evaluated corresponds to a value between 0 and 100 points",
