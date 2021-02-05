@@ -19,12 +19,13 @@ import 'style-loader!angular2-toaster/toaster.css';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { from } from 'rxjs';
-import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
+import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { load } from '@angular/core/src/render3';
 import { CheckboxAssistanceComponent } from '../../../@theme/components/checkbox-assistance/checkbox-assistance.component';
 import { takeUntil } from 'rxjs/operators';
+import { timingSafeEqual } from 'crypto';
 
 @Component({
   selector: 'evaluacion-aspirantes',
@@ -90,6 +91,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   show_acad = false;
   Aspirantes = [];
 
+  save: boolean;
   asistencia: boolean;
   info_persona: boolean;
   loading: boolean;
@@ -136,6 +138,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {});
     this.total = true;
+    this.save = true;
     this.selectTipoIcfes = false;
     this.selectTipoEntrevista = false;
     this.selectTipoPrueba = false;
@@ -260,9 +263,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   async activeCriterios() {
-    this.dataSource.load([]);
     this.selectcriterio = false;
-    await this.loadAspirantes();
   }
 
   useLanguage(language: string) {
@@ -275,7 +276,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
     Evaluacion.PeriodoId = this.periodo.Id;
     Evaluacion.ProgramaId = this.proyectos_selected;
     Evaluacion.CriterioId = sessionStorage.getItem('tipo_criterio');
-    console.info(Evaluacion)
     this.sgaMidService.post('admision/registrar_evaluacion', Evaluacion).subscribe(
       (response: any) => {
         if (response.Response.Code == "200"){
@@ -291,6 +291,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   async perfil_editar(event) {
+    this.save = true;
     this.tipo_criterio = new TipoCriterio();
     this.tipo_criterio.Periodo = this.periodo.Nombre;
     var proyecto;
@@ -305,6 +306,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
         this.tipo_criterio.Nombre = this.criterios[0].Nombre;
         sessionStorage.setItem('tipo_criterio', '1');
         this.ngOnChanges();
+        await this.loadAspirantes();
+        await this.loadInfo(1);
         await this.createTable();
         this.selectTipoIcfes = true;
         this.showTab = false;
@@ -313,6 +316,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
         this.tipo_criterio.Nombre = this.criterios[1].Nombre;
         sessionStorage.setItem('tipo_criterio', '2');
         this.ngOnChanges();
+        await this.loadAspirantes();
+        await this.loadInfo(2);
         await this.createTable();
         this.selectTipoEntrevista = true;
         this.showTab = false;
@@ -321,6 +326,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
         this.tipo_criterio.Nombre = this.criterios[2].Nombre;
         sessionStorage.setItem('tipo_criterio', '3');
         this.ngOnChanges();
+        await this.loadAspirantes();
+        await this.loadInfo(3);
         await this.createTable();
         this.selectTipoPrueba = true;
         this.showTab = false;
@@ -329,6 +336,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
         this.tipo_criterio.Nombre = this.criterios[3].Nombre;
         sessionStorage.setItem('tipo_criterio', '11');
         this.ngOnChanges();
+        await this.loadAspirantes();
+        await this.loadInfo(11);
         await this.createTable();
         this.selectTipoHojaVida = true;
         this.showTab = false;
@@ -370,6 +379,32 @@ export class EvaluacionAspirantesComponent implements OnInit {
         this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
       }
     );
+  }
+
+  loadInfo(IdCriterio: number){
+    return new Promise((resolve, reject) => {
+      this.sgaMidService.get('admision/consultar_evaluacion/'+this.proyectos_selected+'/'+this.periodo.Id+'/'+IdCriterio).subscribe(
+        (response: any) => {
+          if (response.Response.Code === "200"){
+            const data = <Array<any>>response.Response.Body[0].areas;
+            this.dataSource.load(data)
+            this.save = false;
+            resolve(data)
+          } else if (response.Response.Code === "404"){
+            this.dataSource.load([]);
+            resolve(response)
+          } else {
+            this.popUpManager.showErrorToast(this.translate.instant('admision.error'));
+            this.dataSource.load([]);
+            resolve("error")  
+          }
+        }, 
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('admision.error'));
+          reject(error)
+        }
+      );
+    });
   }
 
   itemSelect(event): void{    
@@ -442,7 +477,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
                     } 
                     
                   } else {
-                    data.Puntaje = {
+                    data.Puntuacion = {
                       title: 'Puntaje',
                       //editable: true,
                       filter: false,
@@ -473,8 +508,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   ngOnChanges() {
-    console.info("CAMBIA")
-    console.info(this.Aspirantes.length)
+    this.dataSource.load([]);
+    this.Aspirantes = [];
     for (var i = 0; i < this.Aspirantes.length; i++){
       this.Aspirantes[i].Asistencia = false;
     }

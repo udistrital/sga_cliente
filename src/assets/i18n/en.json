@@ -1056,6 +1056,10 @@
         "seguro_continuar_registrar": "Are you sure you want to register this family information?"
     },
     "admision": {
+        "error": "An unexpected error has occurred",
+        "registro_error": "An unexpected error occurred while saving information",
+        "registro_exito": "The stored information has been saved successfully",
+        "no_data": "No information recorded",
         "guardar": "Save",
         "asistencia": "Assistance",
         "aspirante": "Aspirants",
