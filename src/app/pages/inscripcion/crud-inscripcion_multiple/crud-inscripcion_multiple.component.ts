@@ -22,6 +22,7 @@ import { from } from 'rxjs';
 import moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { load } from '@angular/core/src/render3';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'ngx-crud-inscripcion-multiple',
@@ -89,6 +90,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   parametro: string;
   recibo_generado: any;
   recibos_pendientes: number;
+  parametros_pago: any;
 
   arr_proyecto: InstitucionEnfasis[] = [];
   source_emphasys: LocalDataSource = new LocalDataSource();
@@ -217,7 +219,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           renderComponent: ButtonPaymentComponent,
           onComponentInitFunction: (instance) => {
             instance.save.subscribe(data => {
-              sessionStorage.setItem('EstadoInscripcion', data);     
+              sessionStorage.setItem('EstadoInscripcion', data.estado);
+              if (data.estado === false || data.estado === 'false') {
+                this.abrirPago(data.data);
+              }
             });
           }       
         },
@@ -257,6 +262,12 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.parametros_pago = {
+      recibo: '',
+      REFERENCIA: '',
+      NUM_DOC_IDEN: '',
+      TIPO_DOC_IDEN: '',
+    };
   }
 
   loadInfoInscripcion() {
@@ -508,6 +519,21 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         }
       );
     }
+  }
+
+  abrirPago(data) {
+    this.parametros_pago.NUM_DOC_IDEN = this.info_info_persona.NumeroIdentificacion;
+    this.parametros_pago.REFERENCIA = data['ReciboInscripcion'][0];
+    this.parametros_pago.TIPO_DOC_IDEN = this.info_info_persona.TipoIdentificacion.CodigoAbreviacion;
+    const url = new URLSearchParams(this.parametros_pago).toString();
+    const ventanaPSE = window.open(environment.PSE_SERVICE + url, 'PagosPSE', 'width=600,height=800,resizable,scrollbars,status');
+    ventanaPSE.focus();
+    const timer = window.setInterval(() => {
+      if(ventanaPSE.closed) {
+        window.clearInterval(timer);
+        this.loadInfoInscripcion();
+      }
+    }, 5000);
   }
 
   loadTipoInscripcion() {
