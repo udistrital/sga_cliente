@@ -45,9 +45,9 @@ export class ViewInscripcionComponent implements OnInit {
 
   loadInscripcion() {
     this.inscripcion.Programa = sessionStorage.getItem('ProgramaAcademico');
-    this.inscripcionService.get('inscripcion/' + this.inscripcion_id).subscribe(
-      (response: any) => {
-        this.inscripcion.Estado = response.EstadoInscripcionId.Nombre;
+    this.inscripcionService.get('inscripcion?query=Id:' + this.inscripcion_id).subscribe(
+      (response: any[]) => {
+        this.inscripcion.Estado = response[0].EstadoInscripcionId.Nombre;
       },
       (error: HttpErrorResponse) => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
