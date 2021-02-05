@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, OnChanges } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import pdfMake from 'pdfmake/build/pdfmake';
 import html2canvas from 'html2canvas';
@@ -12,7 +12,6 @@ export class PerfilComponent implements OnInit {
 
   info_persona_id: number;
   info_inscripcion_id: number;
-  imprimir: boolean;
 
   @Input('info_persona_id')
   set name(info_persona_id: number) {
@@ -24,13 +23,7 @@ export class PerfilComponent implements OnInit {
     this.info_inscripcion_id = info_inscripcion_id;
   }
 
-  @Input('imprimir')
-  set impr(imprimir: boolean) {
-    this.imprimir = imprimir;
-    if (this.imprimir) {
-      setTimeout(() => this.generarComprobante().then(() => this.imprimir = false), 4000);
-    }
-  }
+  @Input('imprimir') imprimir: boolean = false;
 
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
@@ -51,6 +44,16 @@ export class PerfilComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnChanges() {
+    this.imprimir = this.imprimir.toString() === 'true';
+  }
+
+  activarImprimir(event: boolean) {
+    if (this.imprimir && event) {
+      setTimeout(() => this.generarComprobante().then(() => this.imprimir = false), 500);
+    }
   }
 
   generarComprobante(): Promise<any> {

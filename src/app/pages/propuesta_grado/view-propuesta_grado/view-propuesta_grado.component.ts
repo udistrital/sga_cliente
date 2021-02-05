@@ -32,12 +32,15 @@ export class ViewPropuestaGradoComponent implements OnInit {
     this.inscripcion_id = info2;
     if (this.inscripcion_id !== null && this.inscripcion_id !== 0 &&
       this.inscripcion_id.toString() !== '') {
-      this.loadData();
+      //this.loadData();
     }
   }
 
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
+
+  // tslint:disable-next-line: no-output-rename
+  @Output('listo') listo: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private translate: TranslateService,
     private inscripcionService: InscripcionService,
@@ -49,7 +52,6 @@ export class ViewPropuestaGradoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.persona_id = this.users.getPersonaId();
-    this.loadPropuestaGrado();
   }
 
   public editar(): void {
@@ -259,6 +261,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
                             // this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones.push(temp.LineaInvestigacion);
                             temp.TipoProyecto = temp.TipoProyectoId;
                             this.info_propuesta_grado = temp;
+                            this.listo.emit(true);
                           }
                         },
                           (error: HttpErrorResponse) => {
@@ -314,5 +317,6 @@ export class ViewPropuestaGradoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadPropuestaGrado();
   }
 }

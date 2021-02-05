@@ -610,6 +610,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_proy = false;
         this.show_prod = false;
         this.show_desc = false;
+        this.imprimir = false;
         break;
     }
   }

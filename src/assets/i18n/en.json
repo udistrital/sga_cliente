@@ -931,7 +931,7 @@
         "aviso_nivel": "Select the level to which you want to register",
         "info_basica": "Basic information",
         "aviso_progreso": "For the registration to a project it is necessary to complete each of the information blocks that are requested 100%",
-        "perfil": "Profile",
+        "perfil": "Inscription Detail",
         "formacion_academica": "Academic training",
         "experiencia_laboral": "Work experience",
         "produccion_academica": "Academic production",
@@ -1060,7 +1060,6 @@
     },
     "admision": {
         "guardar": "Save",
-        "asistencia": "Assistance",
         "aspirante": "Aspirants",
         "nota": "NOTE",
         "aviso": "The score for each item to be evaluated corresponds to a value between 0 and 100 points",
