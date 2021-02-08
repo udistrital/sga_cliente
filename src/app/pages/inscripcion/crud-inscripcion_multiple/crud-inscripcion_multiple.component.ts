@@ -222,6 +222,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               sessionStorage.setItem('EstadoInscripcion', data.estado);
               if (data.estado === false || data.estado === 'false') {
                 this.abrirPago(data.data);
+              } else if (data.estado === true || data.estado === 'true') {
+                this.itemSelect({data: data.data});
               }
             });
           }       
@@ -300,7 +302,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                     dataInfo.push(element);
                     this.loading = false;
                     this.dataSource.load(dataInfo);
-                    this.dataSource.setSort([{field: 'FechaCreacion', direction: 'asc'}]);
+                    this.dataSource.setSort([{field: 'Id', direction: 'desc'}]);
                     //this.selectedLevel = res.NivelFormacionId.Id
                     this.projectService.get('nivel_formacion/'+res.NivelFormacionId.Id).subscribe(
                       response => {
