@@ -1093,6 +1093,8 @@
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información familiar?"
     },
     "admision": {
+        "numero": "Solo son permitidos números en un rango de 0-100. Verifique la información e intente nuevamente.",
+        "vacio": "Existen campos vacíos en la tabla. Verifique la información e intente nuevamente.",
         "calcular": "Calcular el puntaje final de los aspirantes",
         "error": "Ha ocurrido un error inesperado",
         "registro_error": "Ocurrió un error inesperado al guardar la información",

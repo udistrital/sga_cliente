@@ -122,6 +122,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   tipo_criterio: TipoCriterio;
   dataSource: LocalDataSource;
   settings: any;
+  columnas = [];
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -252,7 +253,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
           this.selectTipoEntrevista = false;
           this.selectTipoPrueba = false;
           this.selectTipoHojaVida = false;
-          this.popUpManager.showToast('info', this.translate.instant('admision.no_data'));
+          this.popUpManager.showToast('info', this.translate.instant('admision.no_data'),this.translate.instant('GLOBAL.info'));
         }
       },
       error => {
@@ -287,10 +288,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
     }
   }
 
-  async activeCriterios() {
-    this.selectcriterio = false;
-  }
-
   useLanguage(language: string) {
     this.translate.use(language);
   }
@@ -301,18 +298,52 @@ export class EvaluacionAspirantesComponent implements OnInit {
     Evaluacion.PeriodoId = this.periodo.Id;
     Evaluacion.ProgramaId = this.proyectos_selected;
     Evaluacion.CriterioId = sessionStorage.getItem('tipo_criterio');
-    this.sgaMidService.post('admision/registrar_evaluacion', Evaluacion).subscribe(
-      (response: any) => {
-        if (response.Response.Code == "200"){
-          this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'));
+    var aux = Evaluacion.Aspirantes;
+    // Bandera para campos vacios
+    var vacio = false;
+    // Bandera para solo numeros/rango 0-100
+    var numero = false;
+    const regex = /^[0-9]*$/;
+    for (var i = 0; i < aux.length; i++){
+      for (var j = 0; j < this.columnas.length; j++){
+        if (aux[i][this.columnas[j]] === undefined || aux[i][this.columnas[j]] === ""){
+          vacio = true;
+          break;
         } else {
-          this.popUpManager.showErrorToast(this.translate.instant('admision.registro_error'));
+          if (regex.test(aux[i][this.columnas[j]]) === true){
+            var auxNumero = parseInt(aux[i][this.columnas[j]])
+            if (auxNumero >= 0 && auxNumero <= 100){
+              break;
+            } else {
+              numero = true;
+            }
+          } else {
+            numero = true;
+            break;
+          }
         }
-      }, 
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
       }
-    );
+    }
+
+    // Validaciones
+    if (vacio === true){
+      this.popUpManager.showToast('info', this.translate.instant('admision.vacio'),this.translate.instant('GLOBAL.info'));
+    } else if (numero === true){
+      this.popUpManager.showToast('info', this.translate.instant('admision.numero'),this.translate.instant('GLOBAL.info'));
+    } else {
+      this.sgaMidService.post('admision/registrar_evaluacion', Evaluacion).subscribe(
+        (response: any) => {
+          if (response.Response.Code == "200"){
+            this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'));
+          } else {
+            this.popUpManager.showErrorToast(this.translate.instant('admision.registro_error'));
+          }
+        }, 
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+        }
+      );
+    }
   }
 
   async perfil_editar(event) {
@@ -487,6 +518,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
                       for (var key2 in porcentaje.areas[key]){
                         for (var i = 0; i < response.length; i++){    
                           if (key2 == response[i].Nombre){
+                            this.columnas.push(response[i].Nombre);
                             data[response[i].Nombre] = {
                               title: response[i].Nombre + ' (' + porcentaje.areas[key][key2] + '%)', 
                               editable: true,
@@ -502,6 +534,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
                     } 
                     
                   } else {
+                    this.columnas.push("Puntuacion");
                     data.Puntuacion = {
                       title: 'Puntaje',
                       editable: true,
@@ -534,6 +567,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   ngOnChanges() {
+    this.columnas = [];
     this.dataSource.load([]);
     this.Aspirantes = [];
     for (var i = 0; i < this.Aspirantes.length; i++){
