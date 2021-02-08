@@ -1093,6 +1093,7 @@
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información familiar?"
     },
     "admision": {
+        "calcular": "Calcular el puntaje final de los aspirantes",
         "error": "Ha ocurrido un error inesperado",
         "registro_error": "Ocurrió un error inesperado al guardar la información",
         "registro_exito": "La información almacenada ha sido guardada con éxito",

@@ -91,6 +91,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   show_acad = false;
   Aspirantes = [];
 
+  notas: boolean;
   save: boolean;
   asistencia: boolean;
   info_persona: boolean;
@@ -113,6 +114,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   tag_view_pre: boolean;
   selectprograma: boolean = true;
   selectcriterio: boolean = true;
+  btnCalculo: boolean = true;
   imagenes: any;
   periodo: any;
   nivel_load: any;
@@ -139,6 +141,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {});
     this.total = true;
     this.save = true;
+    this.notas = false;
     this.selectTipoIcfes = false;
     this.selectTipoEntrevista = false;
     this.selectTipoPrueba = false;
@@ -146,7 +149,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.showTab = true;
     this.dataSource = new LocalDataSource();
     this.loadData();
-    this.loadCriterios();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
@@ -209,31 +211,54 @@ export class EvaluacionAspirantesComponent implements OnInit {
 
   loadProyectos() {
     this.selectprograma = false;
-    this.projectService.get('proyecto_academico_institucion?query=NivelFormacionId:'+Number(this.selectednivel)+'&limit=0').subscribe(
-      (response: any) => {
-        if (response !== null || response !== undefined){
-          this.proyectos = <any>response;
-        }
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        this.loading = false;
-      },
-    );
+    if (this.selectednivel !== NaN){
+      this.projectService.get('proyecto_academico_institucion?query=NivelFormacionId:'+Number(this.selectednivel)+'&limit=0').subscribe(
+        (response: any) => {
+          if (response !== null || response !== undefined){
+            this.proyectos = <any>response;
+          }
+        },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          this.loading = false;
+        },
+      );
+    }
   }
 
   loadCriterios() {
-    
-    this.evaluacionService.get('requisito?limit=0&query=Activo:true&sortby=Id&order=asc').subscribe(
+    this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:9').subscribe(
       (response: any) => {
-        if (response !== null || response !== undefined){
-          this.criterios = <any>response.filter(c => c['RequisitoPadreId'] === null);
+        if (response[0].Id !== undefined && response[0] !== '{}'){
+          this.criterios = <any>response;
+          this.selectcriterio = false;
+          this.notas = false;
+          this.selectTipoIcfes = false;
+          this.selectTipoEntrevista = false;
+          this.selectTipoPrueba = false;
+          this.selectTipoHojaVida = false;
+          this.criterio_selected = [];
+        } else {
+          var Criterios = [];
+          Criterios[0] = {
+            RequisitoId: {
+              Id: 0,
+              Nombre: '',
+            }
+          }
+          this.criterios = <any>Criterios;
+          this.notas = false;
+          this.selectTipoIcfes = false;
+          this.selectTipoEntrevista = false;
+          this.selectTipoPrueba = false;
+          this.selectTipoHojaVida = false;
+          this.popUpManager.showToast('info', this.translate.instant('admision.no_data'));
         }
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
       }
-    );
+    );   
   }
 
   async createTable(){
@@ -479,7 +504,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
                   } else {
                     data.Puntuacion = {
                       title: 'Puntaje',
-                      //editable: true,
+                      editable: true,
+                      type: "number",
                       filter: false,
                       width: '35%',
                       valuePrepareFunction: (value) => {
@@ -532,6 +558,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   viewtab() {
+    this.notas = true;
     this.selectTipoIcfes = false;
     this.selectTipoEntrevista = false;
     this.selectTipoPrueba = false;
