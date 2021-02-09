@@ -243,7 +243,6 @@ export class CrudPropuestaGradoComponent implements OnInit {
   }
 
   uploadResolutionFile(file) {
-    console.info(file);
     return new Promise((resolve, reject) => {
       this.nuxeoService.getDocumentos$(file, this.documentoService)
         .subscribe(response => {
@@ -316,7 +315,6 @@ export class CrudPropuestaGradoComponent implements OnInit {
   }
 
   putPropuestaGrado(file) {
-    console.info(file);
     if(file.length > 0)
     {
       return new Promise((resolve, reject) => {

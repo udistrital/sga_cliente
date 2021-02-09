@@ -146,7 +146,6 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
         this.datosConceptos.update(datosAntiguos[i], this.datosCargados[i]);
       }
       this.guardable = true;
-      console.log(this.datosCargados)
     }
   }
 
@@ -245,7 +244,6 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
         nuevoConcepto.Vigencia = {
           Id: this.vigenciaActual.value
         }
-        console.log(nuevoConcepto)
         this.sgaMidService.post('derechos_pecuniarios', nuevoConcepto).subscribe(
           response => {
             concepto.Id = response["Concepto"]["Id"];

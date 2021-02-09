@@ -36,7 +36,7 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
   }
 
   onclick(event) {
-    console.log(event.data)
+    // console.log(event.data)
   }
 
   construirTabla() {

@@ -53,7 +53,6 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     this.inscripcion = inscripcion_id;
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
-        // console.info('InscripcionDes: ' + this.inscripcion);
         // this.loadOptionsTipoDescuento();
     }
   }

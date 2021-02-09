@@ -104,14 +104,10 @@ export class DinamicformComponent implements OnInit, OnChanges {
   }
 
   onChange(event, c) {
-    console.info("Dinamic form")
-    console.info(c)
-    console.info(c.valor);
     if (c.valor !== undefined) {
       c.urlTemp = URL.createObjectURL(event.srcElement.files[0])
       c.url = this.cleanURL(c.urlTemp);
       c.valor = event.srcElement.files[0];
-      console.info(c);
       this.validCampo(c);
       c.File = event.srcElement.files[0];
     }
@@ -120,7 +116,6 @@ export class DinamicformComponent implements OnInit, OnChanges {
       c.urlTemp = URL.createObjectURL(event.srcElement.files[0])
       c.url = this.cleanURL(c.urlTemp);
       c.valor = event.srcElement.files[0];
-      // console.info(c);
       this.validCampo(c);
       c.File = event.srcElement.files[0];
     }

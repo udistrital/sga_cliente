@@ -31,14 +31,11 @@ export class UserService {
         .subscribe(res => {
           if (res !== null) {
             this.user = res[0];
-            console.info('User')
             if (Object.keys(this.user).length !== 0) {
-              console.info(this.user)
               this.user$.next(this.user);
               // window.localStorage.setItem('ente', res[0].Ente);
               window.localStorage.setItem('persona_id', res[0].Id);
             } else {
-              console.info(this.user)
               //this.user$.next(this.user);
               window.localStorage.setItem('persona_id', '0');
             }

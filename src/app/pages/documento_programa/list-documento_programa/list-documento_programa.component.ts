@@ -159,7 +159,6 @@ export class ListDocumentoProgramaComponent implements OnInit {
   onEdit(event): void {
     this.uid = event.data.TipoDocumentoId;
     this.soporteId = event.data.SoporteDocumentoId;
-    console.log(event)
   }
 
   onAction(event): void {
