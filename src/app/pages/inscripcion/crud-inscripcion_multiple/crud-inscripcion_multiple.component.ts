@@ -222,6 +222,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               sessionStorage.setItem('EstadoInscripcion', data.estado);
               if (data.estado === false || data.estado === 'false') {
                 this.abrirPago(data.data);
+              } else if (data.estado === true || data.estado === 'true') {
+                this.itemSelect({data: data.data});
               }
             });
           }       
@@ -229,7 +231,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       },
       mode: 'external',
     }
-    //console.info(this.settings.columns)  
   }
 
   loadInscriptionModule(){
@@ -300,7 +301,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                     dataInfo.push(element);
                     this.loading = false;
                     this.dataSource.load(dataInfo);
-                    this.dataSource.setSort([{field: 'FechaCreacion', direction: 'asc'}]);
+                    this.dataSource.setSort([{field: 'Id', direction: 'desc'}]);
                     //this.selectedLevel = res.NivelFormacionId.Id
                     this.projectService.get('nivel_formacion/'+res.NivelFormacionId.Id).subscribe(
                       response => {
@@ -702,7 +703,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.proyectos_preinscripcion_post = {
         DatosPreinscripcion: this.info_inscripcion,
       }
-      // console.info(JSON.stringify(this.proyectos_preinscripcion_post));
       this.createInscripcion(5);
     } else {
       Swal({

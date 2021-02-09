@@ -9,7 +9,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 })
 export class CheckboxAssistanceComponent implements ViewCell, OnInit{
 
-  Assistance: boolean;
+  Assistance: any;
 
   @Input() value: string | number;
   @Input() rowData: any;
@@ -20,6 +20,10 @@ export class CheckboxAssistanceComponent implements ViewCell, OnInit{
 
   ngOnInit() {
     this.Assistance = true;
+  }
+
+  funcion(event): void{
+    this.save.emit(event.target.checked);
   }
 
 }

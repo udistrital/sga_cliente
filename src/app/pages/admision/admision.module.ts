@@ -26,6 +26,9 @@ import { AdministradorCriteriosComponent } from './administrador-criterios/admin
 import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios.component';
 import { EvaluacionAspirantesComponent } from './evaluacion-aspirantes/evaluacion-aspirantes.component';
 import { ParametrosService } from '../../@core/data/parametros.service';
+import { InscripcionService } from '../../@core/data/inscripcion.service';
+import { TercerosService } from '../../@core/data/terceros.service';
+import { SgaMidService } from '../../@core/data/sga_mid.service';
 import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-assistance/checkbox-assistance.component';
 
 @NgModule({
@@ -53,6 +56,9 @@ import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-as
     PersonaService,
     UbicacionService,
     ParametrosService,
+    InscripcionService,
+    TercerosService,
+    SgaMidService,
   ],
    entryComponents: [
     CrudCriterioIcfesComponent,

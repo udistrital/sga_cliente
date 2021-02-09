@@ -394,7 +394,6 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   }
 
   uploadResolutionFile(file) {
-    console.info(file);
     return new Promise((resolve, reject) => {
       this.nuxeoService.getDocumentos$(file, this.documentoService)
         .subscribe(response => {

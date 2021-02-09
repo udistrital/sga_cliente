@@ -370,8 +370,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                   this.loading = false;
                   this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_existe'));
                 } else {
-                  console.info("file")
-                  console.info(this.fileResolucion)
                   this.uploadResolutionFile(this.fileResolucion).then(
                     fileID => {
                     this.calendar.DocumentoId = fileID;
@@ -486,7 +484,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   uploadResolutionFile(file) {
-    console.info(file);
     return new Promise((resolve, reject) => {
       this.nuxeoService.getDocumentos$([file], this.documentoService)
         .subscribe(response => {
@@ -716,8 +713,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         } else {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.formato_documento_pdf'));
         }
-        console.info("prueba")
-        console.info(file)
       }
     } else {
       this.popUpManager.showErrorToast(this.translate.instant('calendario.error_pre_file'));

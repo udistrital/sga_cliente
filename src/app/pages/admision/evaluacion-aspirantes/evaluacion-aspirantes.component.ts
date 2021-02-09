@@ -5,6 +5,10 @@ import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { UserService } from '../../../@core/data/users.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service' 
 import { ParametrosService } from '../../../@core/data/parametros.service';
+import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
+import { InscripcionService } from '../../../@core/data/inscripcion.service';
+import { TercerosService } from '../../../@core/data/terceros.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import { TipoCriterio } from '../../../@core/data/models/admision/tipo_criterio';
@@ -15,14 +19,13 @@ import 'style-loader!angular2-toaster/toaster.css';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { from } from 'rxjs';
-import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
-import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { FormControl, Validators } from '@angular/forms';
-import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { load } from '@angular/core/src/render3';
 import { CheckboxAssistanceComponent } from '../../../@theme/components/checkbox-assistance/checkbox-assistance.component';
 import { takeUntil } from 'rxjs/operators';
+import { timingSafeEqual } from 'crypto';
 
 @Component({
   selector: 'evaluacion-aspirantes',
@@ -88,6 +91,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
   show_acad = false;
   Aspirantes = [];
 
+  save: boolean;
+  asistencia: boolean;
   info_persona: boolean;
   loading: boolean;
   ultimo_select: number;
@@ -126,10 +131,14 @@ export class EvaluacionAspirantesComponent implements OnInit {
     private parametrosService: ParametrosService,
     private projectService: ProyectoAcademicoService,
     private evaluacionService: EvaluacionInscripcionService,
-    private popUpManager: PopUpManager,) {
+    private tercerosService: TercerosService,
+    private sgaMidService: SgaMidService,
+    private popUpManager: PopUpManager,
+    private inscripcionService: InscripcionService,) {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {});
     this.total = true;
+    this.save = true;
     this.selectTipoIcfes = false;
     this.selectTipoEntrevista = false;
     this.selectTipoPrueba = false;
@@ -141,10 +150,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
-    /*this.settings = {
-      actions: false,
-      mode: 'external',
-    }*/
   }
 
 
@@ -218,6 +223,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   loadCriterios() {
+    
     this.evaluacionService.get('requisito?limit=0&query=Activo:true&sortby=Id&order=asc').subscribe(
       (response: any) => {
         if (response !== null || response !== undefined){
@@ -239,7 +245,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
       }
     )
     this.settings = {
-      //hideSubHeader: true,
       columns: data,
       actions: {
         edit: true,
@@ -254,12 +259,10 @@ export class EvaluacionAspirantesComponent implements OnInit {
         saveButtonContent: '<i class="nb-checkmark-circle"></i>',
         cancelButtonContent: '<i class="nb-close-circled"></i>',
       },
-      
-      //mode: 'external',
     }
   }
 
-  activeCriterios() {
+  async activeCriterios() {
     this.selectcriterio = false;
   }
 
@@ -268,11 +271,27 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   guardarEvaluacion(){
-    
+    var Evaluacion: any = {};
+    Evaluacion.Aspirantes = this.Aspirantes;
+    Evaluacion.PeriodoId = this.periodo.Id;
+    Evaluacion.ProgramaId = this.proyectos_selected;
+    Evaluacion.CriterioId = sessionStorage.getItem('tipo_criterio');
+    this.sgaMidService.post('admision/registrar_evaluacion', Evaluacion).subscribe(
+      (response: any) => {
+        if (response.Response.Code == "200"){
+          this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'));
+        } else {
+          this.popUpManager.showErrorToast(this.translate.instant('admision.registro_error'));
+        }
+      }, 
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+      }
+    );
   }
 
   async perfil_editar(event) {
-    this.dataSource.load([{Aspirantes:'Ana Perez Perez'}, {Aspirantes:'Pepito Palacios'}])
+    this.save = true;
     this.tipo_criterio = new TipoCriterio();
     this.tipo_criterio.Periodo = this.periodo.Nombre;
     var proyecto;
@@ -285,28 +304,40 @@ export class EvaluacionAspirantesComponent implements OnInit {
     switch (event) {
       case 'info_icfes':
         this.tipo_criterio.Nombre = this.criterios[0].Nombre;
-        sessionStorage.setItem('tipo_criterio', '1')
+        sessionStorage.setItem('tipo_criterio', '1');
+        this.ngOnChanges();
+        await this.loadAspirantes();
+        await this.loadInfo(1);
         await this.createTable();
         this.selectTipoIcfes = true;
         this.showTab = false;
         break;
       case 'info_entrevista':
         this.tipo_criterio.Nombre = this.criterios[1].Nombre;
-        sessionStorage.setItem('tipo_criterio', '2')
+        sessionStorage.setItem('tipo_criterio', '2');
+        this.ngOnChanges();
+        await this.loadAspirantes();
+        await this.loadInfo(2);
         await this.createTable();
         this.selectTipoEntrevista = true;
         this.showTab = false;
         break;
       case 'info_prueba':
         this.tipo_criterio.Nombre = this.criterios[2].Nombre;
-        sessionStorage.setItem('tipo_criterio', '3')
+        sessionStorage.setItem('tipo_criterio', '3');
+        this.ngOnChanges();
+        await this.loadAspirantes();
+        await this.loadInfo(3);
         await this.createTable();
         this.selectTipoPrueba = true;
         this.showTab = false;
         break;
       case 'info_hoja':
         this.tipo_criterio.Nombre = this.criterios[3].Nombre;
-        sessionStorage.setItem('tipo_criterio', '11')
+        sessionStorage.setItem('tipo_criterio', '11');
+        this.ngOnChanges();
+        await this.loadAspirantes();
+        await this.loadInfo(11);
         await this.createTable();
         this.selectTipoHojaVida = true;
         this.showTab = false;
@@ -317,7 +348,72 @@ export class EvaluacionAspirantesComponent implements OnInit {
     }
   }
 
-  async loadColumn(IdCriterio: any){
+  loadAspirantes(){
+    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id+'&sortby=Id&order=asc').subscribe(
+      (response: any) => {
+        if (response !== '[{}]') {
+          const data = <Array<any>>response;
+          data.forEach(element => {  
+            if (element.PersonaId != undefined) {
+              this.tercerosService.get('tercero/'+element.PersonaId).subscribe(
+                (res: any) => {
+                  var aspiranteAux = {
+                    Id: res.Id,
+                    Aspirantes: res.NombreCompleto,
+                    Asistencia: false
+                  }
+                  this.Aspirantes.push(aspiranteAux);
+                  this.dataSource.load(this.Aspirantes);
+                }, 
+                error => {
+                  this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+                }
+              );
+            }                
+          });
+        } else {
+          this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+      }
+    );
+  }
+
+  loadInfo(IdCriterio: number){
+    return new Promise((resolve, reject) => {
+      this.sgaMidService.get('admision/consultar_evaluacion/'+this.proyectos_selected+'/'+this.periodo.Id+'/'+IdCriterio).subscribe(
+        (response: any) => {
+          if (response.Response.Code === "200"){
+            const data = <Array<any>>response.Response.Body[0].areas;
+            this.dataSource.load(data)
+            this.save = false;
+            resolve(data)
+          } else if (response.Response.Code === "404"){
+            this.dataSource.load([]);
+            resolve(response)
+          } else {
+            this.popUpManager.showErrorToast(this.translate.instant('admision.error'));
+            this.dataSource.load([]);
+            resolve("error")  
+          }
+        }, 
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('admision.error'));
+          reject(error)
+        }
+      );
+    });
+  }
+
+  itemSelect(event): void{    
+    if (this.asistencia != undefined){
+      event.data.Asistencia = this.asistencia;
+    }
+  }
+
+  loadColumn(IdCriterio: any){
     return new Promise((resolve, reject) => {
       this.evaluacionService.get('requisito?query=RequisitoPadreId:'+IdCriterio+'&limit=0').subscribe(
         (response: any) => {
@@ -344,15 +440,21 @@ export class EvaluacionAspirantesComponent implements OnInit {
                       editable: false,
                       filter: false,
                       width: '4%',
+                      type: 'custom',
                       renderComponent: CheckboxAssistanceComponent,
-                      type: 'custom',              
+                      onComponentInitFunction: (instance) => {
+                        instance.save.subscribe(data => {
+                          //sessionStorage.setItem('EstadoInscripcion', data);     
+                          this.asistencia = data;
+                        });
+                      }                                     
                     }
                   }
           
                   if (response.length > 1){
                     await this.getPercentageSub(IdCriterio).then(
                       res => {
-                        porcentaje = res
+                        porcentaje = res;
                       }
                     )
 
@@ -375,7 +477,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
                     } 
                     
                   } else {
-                    data.Puntaje = {
+                    data.Puntuacion = {
                       title: 'Puntaje',
                       //editable: true,
                       filter: false,
@@ -406,13 +508,17 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   ngOnChanges() {
+    this.dataSource.load([]);
+    this.Aspirantes = [];
+    for (var i = 0; i < this.Aspirantes.length; i++){
+      this.Aspirantes[i].Asistencia = false;
+    }
   }
 
   getPercentageSub(IdCriterio: any){
     return new Promise((resolve, reject) => {
       this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id+',RequisitoId:'+IdCriterio).subscribe(
         (Res: any) => {
-          console.info(Res)
           var porcentaje = JSON.parse(Res[0].PorcentajeEspecifico)
           resolve(porcentaje)
                                  

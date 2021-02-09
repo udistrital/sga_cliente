@@ -32,7 +32,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   @Input('inscripcion_id')
   set name(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
-    console.info('Posgrado ins: ' + this.inscripcion_id)
     if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
       this.selectedValue = undefined;
       window.localStorage.setItem('programa', this.selectedValue);
@@ -142,10 +141,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
 
   async loadData() {
     try {
-      console.info('LoadData')
       this.info_persona_id = this.userService.getPersonaId();
-      console.info('Carga hecha')
-      console.info(this.info_persona_id)
       await this.cargarPeriodo();
       await this.loadInfoInscripcion();
     } catch (error) {
@@ -166,8 +162,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
         if (res !== null && r.Status === '200') {
           this.periodo = <any>res['Data'][0];
           window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
-          console.info('Id periodo')
-          console.info(this.periodo)
           resolve(this.periodo);
           const periodos = <any[]>res['Data'];
          periodos.forEach(element => {
@@ -206,9 +200,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
       this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
       this.setPercentage_total();      
     });
-      
-    console.info(number)
-    
   }
 
   setPercentage_acad(number, tab) {
@@ -240,9 +231,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           const tiposInscripciones = <Array<any>>res;
-          console.info(tiposInscripciones)
-              console.info ('Bien')
-            this.tipo_inscripciones = tiposInscripciones;
+          this.tipo_inscripciones = tiposInscripciones;
         }
       },
         (error: HttpErrorResponse) => {
@@ -264,8 +253,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           const programaPosgrados = <Array<any>>res;
-          console.info('Proyectos')
-          console.info(programaPosgrados)
           programaPosgrados.forEach(element => {
             this.posgrados.push(element);
           });
@@ -291,7 +278,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.inscripcion_id = res[0].Id
-          console.info('Id  inscripcion: ' + this.inscripcion_id)
           window.localStorage.setItem('IdInscripcion', String(this.inscripcion_id));
           this.getInfoInscripcion() ;
         }else {
@@ -363,7 +349,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   }
 
   perfil_editar(event): void {
-    console.info(event)
     switch (event) {
       case 'info_persona':
         this.show_info = true;
@@ -427,12 +412,9 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   }
 
   viewtab() {
-    console.info('Tipo metodo')
-    console.info('Select programa')
-    console.info(this.selectedValue)
     window.localStorage.setItem('IdTipoInscripcion', this.tipo_inscripcion_selected.Id);
     this.selectTipo = true;
-    }
+  }
     // updateEstadoAdmision() {
     //   const opt: any = {
     //     title: this.translate.instant('GLOBAL.inscribirse'),

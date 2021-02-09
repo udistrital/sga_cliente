@@ -186,10 +186,8 @@ export class CrudEventoComponent implements OnInit {
         EventoPadre: (this.calendario_evento_selected.CalendarioEvento.EventoPadreId) ?
           this.calendario_evento_selected.CalendarioEvento.EventoPadreId.Id : undefined,
       }
-      this.info_calendario_evento.Evento.FechaFin = momentTimezone.tz(this.info_calendario_evento.Evento.FechaFin, 'America/Bogota')
-        .format('YYYY-MM-DD HH:mm');
-      this.info_calendario_evento.Evento.FechaInicio = momentTimezone.tz(this.info_calendario_evento.Evento.FechaInicio, 'America/Bogota')
-        .format('YYYY-MM-DD HH:mm');
+      this.info_calendario_evento.Evento.FechaFin = momentTimezone.tz(this.info_calendario_evento.Evento.FechaFin, 'America/Bogota').toDate();
+      this.info_calendario_evento.Evento.FechaInicio = momentTimezone.tz(this.info_calendario_evento.Evento.FechaInicio, 'America/Bogota').toDate();
       this.source.load(this.info_calendario_evento.EncargadosEvento);
       this.encargados_borrados = [];
       this.publicos_borrados = [];
