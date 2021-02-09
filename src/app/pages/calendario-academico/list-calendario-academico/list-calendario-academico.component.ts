@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -34,6 +35,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     private eventoService: EventoService,
     private dialog: MatDialog,
     private popUpManager: PopUpManager,
+    private sanitizer: DomSanitizer,
   ) {
     this.dataSource = new LocalDataSource();
     this.createTable();
@@ -111,23 +113,23 @@ export class ListCalendarioAcademicoComponent implements OnInit {
         custom: [
           {
             name: 'assign',
-            title: '<i class="nb-compose" data-toggle="tooltip" title="' + this.translate.instant('calendario.tooltip_asignar_proyecto') + '"></i>',
+            title: this.cleanCode('<i class="nb-compose" data-toggle="tooltip" title="' + this.translate.instant('calendario.tooltip_asignar_proyecto') + '"></i>'),
           },
           {
             name: 'clone',
-            title: '<i class="nb-plus-circled" data-toggle="tooltip" title="' + this.translate.instant('calendario.tooltip_clonar') + '"></i>',
+            title: this.cleanCode('<i class="nb-plus-circled" data-toggle="tooltip" title="' + this.translate.instant('calendario.tooltip_clonar') + '"></i>'),
           },
           {
             name: 'view',
-            title: '<i class="nb-home" data-toggle="tooltip" title="' + this.translate.instant('calendario.tooltip_detalle') + '"></i>',
+            title: this.cleanCode('<i class="nb-home" data-toggle="tooltip" title="' + this.translate.instant('calendario.tooltip_detalle') + '"></i>'),
           },
           {
             name: 'edit',
-            title: '<i class="nb-edit" data-toggle="tooltip" title="' + this.translate.instant('calendario.tooltip_editar') + '"></i>',
+            title: this.cleanCode('<i class="nb-edit" data-toggle="tooltip" title="' + this.translate.instant('calendario.tooltip_editar') + '"></i>'),
           },
           {
             name: 'delete',
-            title: '<i class="nb-trash" data-toggle="tooltip" title="' + this.translate.instant('calendario.tooltip_inactivar') + '"></i>',
+            title: this.cleanCode('<i class="nb-trash" data-toggle="tooltip" title="' + this.translate.instant('calendario.tooltip_inactivar') + '"></i>'),
           },
         ],
       },
@@ -136,6 +138,10 @@ export class ListCalendarioAcademicoComponent implements OnInit {
       },
     }
     this.dataSource.load(this.data);
+  }
+
+  cleanCode(code: string) {
+    return this.sanitizer.bypassSecurityTrustHtml(code)
   }
 
   onAction(event) {
