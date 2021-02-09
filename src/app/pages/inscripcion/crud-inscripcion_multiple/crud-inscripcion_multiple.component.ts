@@ -231,7 +231,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       },
       mode: 'external',
     }
-    //console.info(this.settings.columns)  
   }
 
   loadInscriptionModule(){
@@ -704,7 +703,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.proyectos_preinscripcion_post = {
         DatosPreinscripcion: this.info_inscripcion,
       }
-      // console.info(JSON.stringify(this.proyectos_preinscripcion_post));
       this.createInscripcion(5);
     } else {
       Swal({

@@ -36,7 +36,6 @@ export class CrudInfoPersonaComponent implements OnInit {
   set persona(info_persona_id: number) {
     this.info_persona_id = info_persona_id;
     this.loadInfoPersona();
-    console.info('InfoPersonaIdPersona: ' + info_persona_id);
   }
 
 
@@ -46,7 +45,6 @@ export class CrudInfoPersonaComponent implements OnInit {
     if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
       && this.inscripcion_id.toString() !== '0') {
       // this.loadInscripcion();
-      console.info('inscripcionId: ' + inscripcion_id);
     }
   }
 
@@ -169,7 +167,6 @@ export class CrudInfoPersonaComponent implements OnInit {
           this.info_info_persona.Usuario = this.autenticationService.getPayload().sub;
           this.sgamidService.post('persona/guardar_persona', this.info_info_persona).subscribe(res => {                    
             const r = <any>res                    
-            console.info(JSON.stringify(res));
             if (r !== null && r.Type !== 'error') {
               window.localStorage.setItem('ente', r.Id);
               this.info_persona_id = r.Id;
@@ -353,7 +350,6 @@ export class CrudInfoPersonaComponent implements OnInit {
     this.info_inscripcion = <Inscripcion>inscripcionPost;
     this.info_inscripcion.PersonaId = Number(this.info_persona_id);
     this.info_inscripcion.Id = Number(this.inscripcion_id);
-    console.info(JSON.stringify(this.info_inscripcion));
     this.inscripcionService.post('inscripcion', this.info_inscripcion)
       .subscribe(res => {
         this.info_inscripcion = <Inscripcion><unknown>res;
@@ -412,7 +408,6 @@ export class CrudInfoPersonaComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       if (this.info_inscripcion === undefined) {
-        console.info('Listo para registro')
          this.validarTerminos(event);
       } else {
         if (this.info_inscripcion.AceptaTerminos !== true) {
@@ -436,9 +431,7 @@ export class CrudInfoPersonaComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
     })
       .then((result) => {
-        console.log(event)
         if (result.value) {
-          console.info('info_info_persona' + this.info_info_persona)
           if (this.info_info_persona === undefined) {
             this.createInfoPersona(event.data.InfoPersona);
           } else {
@@ -472,7 +465,6 @@ export class CrudInfoPersonaComponent implements OnInit {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.periodo = <any>res[0];
-          // console.info(this.periodo);
         }
       },
         (error: HttpErrorResponse) => {

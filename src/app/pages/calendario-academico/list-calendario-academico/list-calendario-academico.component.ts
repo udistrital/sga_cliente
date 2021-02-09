@@ -70,7 +70,6 @@ export class ListCalendarioAcademicoComponent implements OnInit {
           this.createTable();
         }
         this.loading = false;
-        console.info(this.loading)
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));

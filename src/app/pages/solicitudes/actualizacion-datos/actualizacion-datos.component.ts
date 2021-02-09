@@ -68,7 +68,7 @@ export class ActualizacionDatosComponent implements OnInit {
   }
 
   enviarSolicitud(event) {
-    console.log(event)
+    // console.log(event)
   }
 
   abrirDialogoArchivo() {

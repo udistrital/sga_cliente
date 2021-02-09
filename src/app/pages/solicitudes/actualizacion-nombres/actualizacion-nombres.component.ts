@@ -51,7 +51,7 @@ export class ActualizacionNombresComponent implements OnInit {
   }
 
   enviarSolicitud(event) {
-    console.log(event.data)
+    // console.log(event.data)
   }
 
   abrirDialogoArchivo() {

@@ -15,7 +15,6 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { ListService } from '../../../@core/store/services/list.service';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../../@core/store/app.state';
-import { info } from 'console';
 import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
