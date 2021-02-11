@@ -329,7 +329,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
           if (regex.test(aux[i][this.columnas[j]]) === true){
             var auxNumero = parseInt(aux[i][this.columnas[j]])
             if (auxNumero >= 0 && auxNumero <= 100){
-              break;
             } else {
               numero = true;
               break;
