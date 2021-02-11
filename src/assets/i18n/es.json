@@ -1093,6 +1093,9 @@
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información familiar?"
     },
     "admision": {
+        "calculo_error": "Ocurrió un error al calcular el puntaje",
+        "calculo_exito": "El puntaje final ha sido calculado con éxito",
+        "no_criterio": "El proyecto curricular seleccionado no tiene criterios relacionados",
         "numero": "Solo son permitidos números en un rango de 0-100. Verifique la información e intente nuevamente.",
         "vacio": "Existen campos vacíos en la tabla. Verifique la información e intente nuevamente.",
         "calcular": "Calcular el puntaje final de los aspirantes",
