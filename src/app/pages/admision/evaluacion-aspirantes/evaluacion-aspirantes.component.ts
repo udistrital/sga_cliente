@@ -365,11 +365,14 @@ export class EvaluacionAspirantesComponent implements OnInit {
     }
   }
 
-  calcularEvaluacion(){
+  async calcularEvaluacion(){
     var Evaluacion: any = {};
-    Evaluacion.IdPersona = [];
+    Evaluacion.IdPersona = <Array<any>>[];
     Evaluacion.IdPeriodo = this.periodo.Id;
     Evaluacion.IdPrograma = this.proyectos_selected;
+    this.ngOnChanges();
+    await this.loadAspirantes();
+    await this.loadInfo(this.criterios[0].RequisitoId.Id);
     for(var i = 0; i < this.Aspirantes.length; i++){
       Evaluacion.IdPersona[i] = {"Id": this.Aspirantes[i].Id};
     }
@@ -486,36 +489,42 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   loadAspirantes(){
-    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id+'&sortby=Id&order=asc').subscribe(
-      (response: any) => {
-        if (response !== '[{}]') {
-          const data = <Array<any>>response;
-          data.forEach(element => {  
-            if (element.PersonaId != undefined) {
-              this.tercerosService.get('tercero/'+element.PersonaId).subscribe(
-                (res: any) => {
-                  var aspiranteAux = {
-                    Id: res.Id,
-                    Aspirantes: res.NombreCompleto
-                    //Asistencia: false
+    return new Promise((resolve, reject) => {
+      this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id+'&sortby=Id&order=asc').subscribe(
+        (response: any) => {
+          if (response !== '[{}]') {
+            const data = <Array<any>>response;
+            data.forEach(element => {  
+              if (element.PersonaId != undefined) {
+                this.tercerosService.get('tercero/'+element.PersonaId).subscribe(
+                  (res: any) => { 
+                    var aspiranteAux = {
+                      Id: res.Id,
+                      Aspirantes: res.NombreCompleto
+                    }
+                    this.Aspirantes.push(aspiranteAux);
+                    this.dataSource.load(this.Aspirantes);
+                  }, 
+                  error => {
+                    this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+                    
                   }
-                  this.Aspirantes.push(aspiranteAux);
-                  this.dataSource.load(this.Aspirantes);
-                }, 
-                error => {
-                  this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-                }
-              );
-            }                
-          });
-        } else {
-          this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
+                );
+              }                
+            });
+            resolve(this.Aspirantes)
+          } else {
+            reject("Error");
+            this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
+          }
+        },
+        error => {
+          reject(error);
+          this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
         }
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-      }
-    );
+      );
+    });
+    
   }
 
   loadInfo(IdCriterio: number){
