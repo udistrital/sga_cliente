@@ -1,46 +1,45 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <nb-card [hidden]="show_profile || show_icfes ">
         <nb-card-header>
-                <!-- select periodo -->
-                <mat-form-field style="width: 40%;">
-                        <mat-label>{{ 'admision.aviso_periodo' | translate }}:</mat-label>
-                        <mat-select [(ngModel)]="periodo" [disabled]='true'>
-                            <mat-option>--Seleccionar--</mat-option>
-                            <mat-option *ngFor="let item of periodos" [value]="item">
-                                {{item.Nombre}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-            <!-- select Nivel -->
-           
-                <mat-form-field style="width: 100%;">
-                    <mat-label>{{ 'admision.aviso_nivel' | translate }}:</mat-label>
-                    <mat-select [formControl]="CampoControl" [(ngModel)]="selectednivel" (selectionChange)="loadProyectos()" >
-                        <mat-option>--Seleccionar--</mat-option>
-                        <mat-option *ngFor="let item of nivel_load" [value]="item">
-                            {{item.nombre}}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="CampoControl.hasError('required')">{{ 'admision.erro_selec_nivel' | translate }}</mat-error>
-                </mat-form-field>
-
-                <!-- select proyectos -->
-            <mat-form-field style="width: 100%;">
-                <mat-label>{{ 'admision.aviso_proyecto' | translate }}:</mat-label>
-                <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="activeCriterios()" [disabled]='selectprograma' multiple>
-                    <mat-option *ngFor="let item of proyectos" [value]="item">
+            <!-- select periodo -->
+            <mat-form-field style="width: 40%;">
+                <mat-label>{{ 'admision.aviso_periodo' | translate }}:</mat-label>
+                <mat-select [(ngModel)]="periodo" [disabled]='true'>
+                    <mat-option>--Seleccionar--</mat-option>
+                    <mat-option *ngFor="let item of periodos" [value]="item">
                         {{item.Nombre}}
                     </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- select Nivel -->
+
+            <mat-form-field style="width: 100%;">
+                <mat-label>{{ 'admision.aviso_nivel' | translate }}:</mat-label>
+                <mat-select [formControl]="CampoControl" [(ngModel)]="selectednivel" (selectionChange)="loadProyectos()">
+                    <mat-option>--Seleccionar--</mat-option>
+                    <mat-option *ngFor="let item of nivel_load" [value]="item.id">
+                        {{item.nombre}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="CampoControl.hasError('required')">{{ 'admision.erro_selec_nivel' | translate }}</mat-error>
+            </mat-form-field>
+
+            <!-- select proyectos -->
+            <mat-form-field style="width: 100%;">
+                <mat-label>{{ 'admision.aviso_proyecto' | translate }}:</mat-label>
+                <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="activeCriterios()">
+                    <mat-option>--Seleccionar--</mat-option>
+                    <mat-option *ngFor="let project of proyectos" [value]="project.Id">{{ project.Nombre }}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'admision.erro_selec_proyecto' | translate }}</mat-error>
             </mat-form-field>
             <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
-             <!-- select criterios -->
-             <mat-form-field style="width: 100%;">
+            <!-- select criterios -->
+            <mat-form-field style="width: 100%;">
                 <mat-label>{{ 'admision.aviso_criterios' | translate }}:</mat-label>
-                <mat-select [formControl]="Campo2Control" [(ngModel)]="criterio_selected"  (selectionChange)="viewtab()" [disabled]='selectcriterio' multiple>
+                <mat-select [formControl]="Campo2Control" [(ngModel)]="criterio_selected" (selectionChange)="viewtab()" [disabled]='selectcriterio' multiple>
                     <mat-option *ngFor="let item of criterios" [value]="item">
                         {{item.Nombre}}
                     </mat-option>
@@ -56,9 +55,12 @@
                             <i class="fa fa-graduation-cap fa-5x"></i>
                         </nb-card-body>
                     </nb-card>
-                </div>       
 
-      <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipoEntrevista==true">
+
+
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipoEntrevista==true">
                     <nb-card class="exp-card" (click)="perfil_editar('info_entrevista')">
                         <nb-card-header>{{ 'admision.entrevista' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -94,16 +96,16 @@
             </div>
             <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'admision.criterio_icfes' | translate }}" [active]="preinscripcion">
-                    <ngx-crud-criterio-icfes [info_proyectos]="this.proyectos_selected" [info_periodo]="this.periodo"  >
+                    <ngx-crud-criterio-icfes [info_proyectos]="this.proyectos_selected" [info_periodo]="this.periodo">
                     </ngx-crud-criterio-icfes>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
     </nb-card>
 
-    
 
 
 
-  
+
+
 </div>

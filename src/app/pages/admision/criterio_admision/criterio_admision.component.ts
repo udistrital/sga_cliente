@@ -21,6 +21,7 @@ import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
+import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -115,6 +116,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
   constructor(
+    private projectService: ProyectoAcademicoService,
     private translate: TranslateService,
     private router: Router,
     private terceroService: TercerosService,
@@ -198,7 +200,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     }
   }
 
-  loadProyectos() {
+  loadProyectos1() {
     // window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
     this.selectprograma = false;
     this.oikosService.get('dependencia/?query=DependenciaTipoDependencia.TipoDependenciaId.Id:' + Number(this.selectednivel.id) +
@@ -221,8 +223,31 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
           });
         });
   }
+
   activeCriterios() {
   this.selectcriterio = false;
+}
+
+loadProyectos() {
+  // window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
+  this.selectprograma = false;
+  this.loading = true;
+  this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
+    res => {
+      this.proyectos = (<any[]>res).filter(
+        project => this.nivel_load.filter((val) => Number(this.selectednivel) === val.id)[0].nombre === project['NivelFormacionId']['Descripcion'],
+      );
+    },
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('GLOBAL.cargar') + '-' +
+            this.translate.instant('GLOBAL.programa_academico'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
 }
   loadCriterios() {
     this.evaluacionService.get('requisito/?query=Activo:true&limit=0')
