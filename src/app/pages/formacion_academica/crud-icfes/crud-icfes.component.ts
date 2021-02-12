@@ -33,7 +33,6 @@ export class CrudIcfesComponent implements OnInit {
   @Input('info_persona_id')
   set inscripcion(info_persona_id: number) {
     this.info_persona_id = info_persona_id;
-    console.info('ID_FormacionAcademica_Pregrado' + this.info_persona_id)
     this.loadInfoFormacionAcademica();
   }
 
@@ -104,8 +103,6 @@ export class CrudIcfesComponent implements OnInit {
     this.result.emit(this.percentage);
   }
   getSeleccion(event) {
-    console.info('Evento')
-    console.info(event)
     if (event.nombre === 'PaisResidencia') {
       this.paisSeleccionado = event.valor;
       this.loadOptionsDepartamentoResidencia();
@@ -139,7 +136,6 @@ export class CrudIcfesComponent implements OnInit {
       if (this.paisSeleccionado.Nombre.toString().toLowerCase() === 'colombia' &&
         (event.valor.Nombre.toString().toLowerCase() === 'bogotá' ||
           event.valor.Nombre.toString().toLowerCase() === 'bogota')) {
-        console.info('Bogotaaaaaaaa')
          this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
          this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = true;
          this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = true;
@@ -160,17 +156,14 @@ export class CrudIcfesComponent implements OnInit {
         this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = true;
         // this.formIcfes.campos[this.getIndexForm('Colegio')].valor = 0;
         this.construirForm();
-        console.info('otroooooooooo con cundinamarca')
       }
 
     }else if (event.nombre === 'Tipo') {
-      console.info('select tipo')
       this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
       this.tipoSeleccionado = event.valor;
       if ( String(this.tipoSeleccionado['Id']).toLowerCase() === 'oficial' &&
       (String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
       String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota'))  {
-        console.info('ojo consulta oficial')
         this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
         this.construirForm();
@@ -178,7 +171,6 @@ export class CrudIcfesComponent implements OnInit {
       }else if (String(this.tipoSeleccionado.Id).toLowerCase() === 'privado' &&
       (String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
       String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota'))  {
-        console.info('ojo consulta privado')
         this.formIcfes.campos[this.getIndexForm('Colegio')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('Tipo')].ocultar = false;
         this.construirForm();
@@ -187,12 +179,10 @@ export class CrudIcfesComponent implements OnInit {
         this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = false;
         this.tipocolegio = 7;
-        console.info('bien ')
       }else if ( String(this.tipoSeleccionado['Id']).toLowerCase() === 'privado') {
         this.formIcfes.campos[this.getIndexForm('NombreColegio')].ocultar = false;
         this.formIcfes.campos[this.getIndexForm('DireccionColegio')].ocultar = false;
         this.tipocolegio = 12;
-        console.info('bien ')
       }
 
     }else {
@@ -317,8 +307,6 @@ export class CrudIcfesComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const localidadResidencia: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      console.info('ID ciudad')
-      console.info(this.ciudadSeleccionada.Id)
       this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.ciudadSeleccionada.Id + ',LugarHijo.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
@@ -327,7 +315,6 @@ export class CrudIcfesComponent implements OnInit {
               localidadResidencia.push(consultaHijos[i].LugarHijo);
             }
           }
-          console.info(localidadResidencia)
           this.formIcfes.campos[this.getIndexForm('LocalidadResidencia')].opciones = localidadResidencia;
         },
           (error: HttpErrorResponse) => {
@@ -346,19 +333,14 @@ export class CrudIcfesComponent implements OnInit {
 
   public loadInfoFormacionAcademica(): void {
     this.loading = true;
-    console.info('Metodo')
-    console.info(this.info_persona_id)
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '') {
-        console.info('Metodo paso')
       this.denied_acces = false;
 
       this.sgaMidService.get('persona/consultar_formacion_pregrado/' + this.info_persona_id)
         .subscribe(res => {
           if (res !== null) {
             this.datosGet = <any>res;
-            console.info('ojooooooo')
-            console.info(this.datosGet)
             this.formIcfes.campos[this.getIndexForm('TipoIcfes')].valor = res['TipoIcfes']
             this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfes')].valor = res['NúmeroRegistroIcfes']
             this.formIcfes.campos[this.getIndexForm('NúmeroRegistroIcfesConfirmar')].valor = res['NúmeroRegistroIcfes']
@@ -563,7 +545,6 @@ export class CrudIcfesComponent implements OnInit {
               'Activo': true,
              },
            };
-           console.info(JSON.stringify(this.datosPost));
            this.sgaMidService.post('inscripciones/post_info_icfes_colegio_nuevo', this.datosPost)
              .subscribe(res => {
               const r = <any>res;
@@ -596,7 +577,6 @@ export class CrudIcfesComponent implements OnInit {
   validarForm(event) {
     if ( String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogotá' ||
     String(this.ciudadSeleccionada.Nombre).toLowerCase() === 'bogota') {
-      console.info('No crear colegio')
       this.persiona_id =  Number(this.info_persona_id);
       this.id_inscripcion = Number(localStorage.getItem('IdInscripcion'));
       const inscripcion = {
@@ -634,12 +614,9 @@ export class CrudIcfesComponent implements OnInit {
         ],
         dataColegio: this.formIcfes.campos[this.getIndexForm('Colegio')].valor,
       }
-      console.info(JSON.stringify(dataIcfesColegio));
       this.createIcfesColegio(dataIcfesColegio);
       this.result.emit(event);
     }else {
-      console.info('crear colegio')
-      console.info(this.formIcfes.campos[this.getIndexForm('Valido')].valor)
       this.createColegioeIcfesColegio();
     }
   }

@@ -20,7 +20,6 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
 import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
-import { info } from 'console';
 import { combineAll } from 'rxjs/operators';
 
 @Component({
@@ -185,11 +184,9 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     var IdUniversidad;
     
     if (regex.test(nit) === true){
-      //console.info("es int");
       this.searchNit(nit);
     } else {
       if (Object.entries(this.formInfoFormacionAcademica.campos[inombre].valor).length !=0 && this.formInfoFormacionAcademica.campos[inombre].valor != null){
-        //console.info("hay algo")
         IdUniversidad = this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].valor.Id;
         this.tercerosService.get('datos_identificacion?query=TerceroId__Id:'+IdUniversidad).subscribe(
           (res: any) => {

@@ -64,7 +64,6 @@ export class ListService {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:7')
             .subscribe(
               (result: any[]) => {
-                console.info(result)
                 this.addList(REDUCER_LIST.Sanguineo, result);
               },
               error => {
@@ -525,8 +524,6 @@ public findTipoParametro() {
           this.coreService.get('periodo/?query=Activo:true&limit=0')
             .subscribe(
               (result: any[]) => {
-                console.info('Entro')
-                console.info(result)
                 this.addList(REDUCER_LIST.PeriodoAcademico, result);
               },
               error => {

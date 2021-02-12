@@ -96,7 +96,6 @@ export class CrudPeriodoComponent implements OnInit {
         this.info_periodo.Activo = true;
         this.info_periodo.InicioVigencia = moment(this.info_periodo.InicioVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
         this.info_periodo.FinVigencia = moment(this.info_periodo.FinVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
-        console.log(this.info_periodo)
         this.parametrosService.put('periodo', this.info_periodo)
           .subscribe(res => {
             this.loadPeriodo();

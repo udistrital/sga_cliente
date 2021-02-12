@@ -32,7 +32,6 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
     if (this.informacion_contacto_id !== undefined && this.informacion_contacto_id !== 0 &&
       this.informacion_contacto_id.toString() !== '') {
       this.loadInformacionContacto();
-      console.info('ID_Contacto_Pregrado' + this.informacion_contacto_id)
     }
   }
 
@@ -205,8 +204,6 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
     let consultaHijos: Array<any> = [];
     const localidadResidencia: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      console.info('ID ciudad')
-      console.info(this.ciudadSeleccionada.Id)
       this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.ciudadSeleccionada.Id + ',LugarHijo.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
@@ -215,7 +212,6 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
               localidadResidencia.push(consultaHijos[i].LugarHijo);
             }
           }
-          console.info(localidadResidencia)
           this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')].opciones = localidadResidencia;
         },
           (error: HttpErrorResponse) => {
@@ -460,7 +456,6 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
            if (loc !== null) {
              this.datosPost.UbicacionTercero.Lugar = <Lugar>{Id: this.info_informacion_contacto.LocalidadResidencia};
            }
-           console.info(JSON.stringify(this.datosPost));
            this.sgamidService.post('persona/guardar_datos_contacto/', this.datosPost)
              .subscribe(res => {
                if (res !== null) {
@@ -492,7 +487,6 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
   }
 
   ngOnChanges(changes) {
-    console.info('Cambio detectado')
   }
 
   validarForm(event) {

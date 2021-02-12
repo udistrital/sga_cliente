@@ -155,7 +155,6 @@ export class CrudIdiomasComponent implements OnInit {
                       Activo: true,
                       InscripcionId: {Id: Number(this.inscripcion_id)},
                     };
-                    console.info(JSON.stringify(examen));
                     this.inscripcionService.post('inscripcion_posgrado/', examen)
                       .subscribe(resexamen => {
                         const rex = <any>resexamen;

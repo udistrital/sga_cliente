@@ -227,7 +227,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
    this.loadfechaaltacalidad();
    this.checkofrece = Boolean(JSON.parse(this.data.oferta_check));
    this.checkciclos = Boolean(JSON.parse(this.data.ciclos_check));
-   this.fecha_creacion_calificado = momentTimezone.tz(this.data.fecha_creacion_registro[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm');
+   this.fecha_creacion_calificado = new Date(momentTimezone.tz(this.data.fecha_creacion_registro[0], 'America/Bogota').format('YYYY-MM-DDTHH:mm'));
    this.checkalta =  Boolean(JSON.parse(this.data.tieneregistroaltacalidad));
    // this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DD HH:mm');
    // enfasis
@@ -272,7 +272,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       if (this.data.fecha_creacion_registro_alta[0] == null) {
         this.fecha_creacion_alta = null
       }else {
-        this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DD HH:mm');
+        this.fecha_creacion_alta = new Date(momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DD HH:mm'));
       }
     }
 
@@ -280,7 +280,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       if (this.data.fechainiciocoordinador == null) {
         this.fecha_creacion_cordin = null
       }else {
-        this.fecha_creacion_cordin = momentTimezone.tz(this.data.fechainiciocoordinador, 'America/Bogota').format('YYYY-MM-DD HH:mm');
+        this.fecha_creacion_cordin = new Date(momentTimezone.tz(this.data.fechainiciocoordinador, 'America/Bogota').format('YYYY-MM-DD HH:mm'));
       }
     }
 
