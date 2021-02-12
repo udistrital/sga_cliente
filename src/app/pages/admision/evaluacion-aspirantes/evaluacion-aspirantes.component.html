@@ -26,7 +26,7 @@
                 <!-- select proyectos -->
                 <mat-form-field style="width: 100%;">
                   <mat-label>{{ 'admision.aviso_proyecto' | translate }}:</mat-label>
-                  <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="activeCriterios()" [disabled]='selectprograma'>
+                  <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="loadCriterios()" [disabled]='selectprograma'>
                     <mat-option *ngFor="let item of proyectos" [value]="item.Id">{{item.Nombre}}</mat-option>
                   </mat-select>
                   <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'admision.erro_selec_proyecto' | translate }}</mat-error>
@@ -36,7 +36,7 @@
                 <mat-form-field style="width: 100%;">
                   <mat-label>{{ 'admision.aviso_criterios' | translate }}:</mat-label>
                   <mat-select [formControl]="Campo2Control" [(ngModel)]="criterio_selected"  (selectionChange)="viewtab()" [disabled]='selectcriterio' multiple>
-                    <mat-option *ngFor="let item of criterios" [value]="item.Id">{{item.Nombre}}</mat-option>
+                    <mat-option *ngFor="let item of criterios" [value]="item.RequisitoId.Id">{{item.RequisitoId.Nombre}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="Campo2Control.hasError('required')">{{ 'admision.erro_selec_criterio' | translate }}</mat-error>
                 </mat-form-field>
@@ -78,6 +78,12 @@
                       </nb-card-body>
                     </nb-card>
                   </div>
+                </div>
+                <br/>
+
+                <!--Botón de calculo de nota final-->
+                <div class="text-center">
+                  <button mat-button type="button" *ngIf="notas" (click)="calcularEvaluacion()" [disabled]='btnCalculo'>{{ 'admision.calcular' | translate }}</button>
                 </div>
               </nb-card-header>
       

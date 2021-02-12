@@ -101,7 +101,7 @@
             "preinscripcion": "Preinscripción a \nproyectos académicos"
         },
         "admision": {
-            "evaluacion_aspirantes": "Evaluación de aspirantes", 
+            "evaluacion_aspirantes": "Evaluación de aspirantes",
             "admision": "Admisiones",
             "criterios": "Criterios de admisiones \npor proyectos",
             "asignacion_cupos": "Asignación de cupos",
@@ -1093,6 +1093,12 @@
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información familiar?"
     },
     "admision": {
+        "calculo_error": "Ocurrió un error al calcular el puntaje",
+        "calculo_exito": "El puntaje final de los aspirantes ha sido calculado con éxito",
+        "no_criterio": "El proyecto curricular seleccionado no tiene criterios relacionados",
+        "numero": "Solo son permitidos números en un rango de 0-100. Verifique la información e intente nuevamente",
+        "vacio": "Existen campos vacíos en la tabla. Verifique la información e intente nuevamente",
+        "calcular": "Calcular el puntaje final de los aspirantes",
         "error": "Ha ocurrido un error inesperado",
         "registro_error": "Ocurrió un error inesperado al guardar la información",
         "registro_exito": "La información almacenada ha sido guardada con éxito",
@@ -1102,6 +1108,9 @@
         "nota": "NOTA",
         "aviso": "El puntaje para cada item a evaluar corresponde a un valor entre 0 y 100 puntos",
         "criterio": "Criterio",
+        "porcentaje": "Porcentaje",
+        "porcentajeIncompleto": "El porcentaje total debe ser 100%",
+        "total": "Total",
         "programa": "Programa académico",
         "periodo": "Periodo proceso de admisión",
         "aviso_periodo": "Periodo en el cual se define los criterios de admisión",
