@@ -1059,6 +1059,12 @@
         "seguro_continuar_registrar": "Are you sure you want to register this family information?"
     },
     "admision": {
+        "calculo_error": "An error occurred while calculating the score",
+        "calculo_exito": "The final score of the applicants has been calculated successfully",
+        "no_criterio": "The selected curricular project does not have related criteria",
+        "numero": "Only numbers in the range 0-100 are allowed. Please check the information and try again",
+        "vacio": "There are empty fields in the table. Please check the information and try again",
+        "calcular": "Calculate the final score of the aspirants",
         "error": "An unexpected error has occurred",
         "registro_error": "An unexpected error occurred while saving information",
         "registro_exito": "The stored information has been saved successfully",
