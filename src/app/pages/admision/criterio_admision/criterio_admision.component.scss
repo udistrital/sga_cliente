@@ -24,3 +24,14 @@
 .percentage {
     font-size: 1.6rem;
 }
+
+.mat-button {
+    background-color: rgb(0, 162, 255);
+    color: #fff;
+}
+
+.mat-button:disabled,
+.mat-button[disabled] {
+    background-color: rgb(0, 123, 194) !important;
+    color: #ddd !important;
+}
