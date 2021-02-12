@@ -216,7 +216,13 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   loadProyectos() {
+    this.notas = false;
     this.selectprograma = false;
+    this.selectTipoIcfes = false;
+    this.selectTipoEntrevista = false;
+    this.selectTipoPrueba = false;
+    this.selectTipoHojaVida = false;
+    this.criterio_selected = [];
     if (this.selectednivel !== NaN){
       this.projectService.get('proyecto_academico_institucion?query=NivelFormacionId:'+Number(this.selectednivel)+'&limit=0').subscribe(
         (response: any) => {
@@ -237,6 +243,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
       (response: any) => {
         if (response[0].Id !== undefined && response[0] !== '{}'){
           this.criterios = <any>response;
+          this.btnCalculo = true;
           this.selectcriterio = false;
           this.notas = false;
           this.selectTipoIcfes = false;
