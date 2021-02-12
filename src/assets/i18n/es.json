@@ -101,7 +101,7 @@
             "preinscripcion": "Preinscripción a \nproyectos académicos"
         },
         "admision": {
-            "evaluacion_aspirantes": "Evaluación de aspirantes", 
+            "evaluacion_aspirantes": "Evaluación de aspirantes",
             "admision": "Admisiones",
             "criterios": "Criterios de admisiones \npor proyectos",
             "asignacion_cupos": "Asignación de cupos",
@@ -1108,6 +1108,9 @@
         "nota": "NOTA",
         "aviso": "El puntaje para cada item a evaluar corresponde a un valor entre 0 y 100 puntos",
         "criterio": "Criterio",
+        "porcentaje": "Porcentaje",
+        "porcentajeIncompleto": "El porcentaje total debe ser 100%",
+        "total": "Total",
         "programa": "Programa académico",
         "periodo": "Periodo proceso de admisión",
         "aviso_periodo": "Periodo en el cual se define los criterios de admisión",
