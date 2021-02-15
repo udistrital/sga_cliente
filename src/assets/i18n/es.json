@@ -111,13 +111,16 @@
         },
         "solicitudes": {
             "solicitudes": "Datos básicos",
-            "solicitudes_lista": "Lista de solicitudes realizadas",
-            "actualizacion_datos": "Solicitud de actualización\nde identificación",
-            "actualizacion_nombres": "Solicitud de actualización\nde nombres"
+            "solicitudes_lista": "Lista de solicitudes realizadas"
         },
         "gestionar_solicitudes": {
             "gestionar_solicitudes": "Datos de estudiantes",
             "solicitudes_actualizacion": "Solicitudes de actualización\nde datos"
+        }, 
+        "solicitud": {
+            "solicitud": "Actualización de datos",
+            "actualizacion_datos": "Solicitud de actualización\nde identificación",
+            "actualizacion_nombres": "Solicitud de actualización\nde nombres"
         }
     },
     "GLOBAL": {

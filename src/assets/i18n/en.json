@@ -111,13 +111,16 @@
         },
         "solicitudes": {
             "solicitudes": "Basic data",
-            "solicitudes_lista": "List of requests",
-            "actualizacion_datos": "Updating ID number request",
-            "actualizacion_nombres": "Updating names request"
+            "solicitudes_lista": "List of requests"
         },
         "gestionar_solicitudes": {
             "gestionar_solicitudes": "Students basic data",
             "solicitudes_actualizacion": "Updating data requests"
+        },
+        "solicitud": {
+            "solicitud": "Data update",
+            "actualizacion_datos": "Updating ID number request",
+            "actualizacion_nombres": "Updating names request"
         }
     },
     "GLOBAL": {

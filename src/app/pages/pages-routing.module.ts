@@ -21,6 +21,10 @@ const routes: Routes = [{
       loadChildren: './solicitudes/solicitudes.module#SolicitudesModule'
     },
     {
+      path: 'solicitud',
+      loadChildren: './solicitud/solicitudes.module#SolicitudesModule'
+    },
+    {
       path: 'inscripcion',
       loadChildren: './inscripcion/inscripcion.module#InscripcionModule',
     },
