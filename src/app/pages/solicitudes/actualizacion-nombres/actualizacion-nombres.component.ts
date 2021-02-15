@@ -5,6 +5,8 @@ import { ActualizacionNombre } from '../../../@core/data/models/solicitudes/actu
 import { Solicitante } from '../../../@core/data/models/solicitudes/solicitante';
 import { DialogoSoporteComponent } from '../dialogo-soporte/dialogo-soporte.component';
 import { ACTUALIZAR_NOMBRE } from './form-actualizacion-nombres';
+import { TercerosService } from '../../../@core/data/terceros.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 
 @Component({
@@ -20,10 +22,12 @@ export class ActualizacionNombresComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
-    private dialogo: MatDialog,
-  ) {
+    private popUpManager: PopUpManager,
+    private tercerosService: TercerosService,
+    private dialogo: MatDialog,) {
     this.solicitudForm = ACTUALIZAR_NOMBRE;
     this.construirForm();
+    this.loadInfo();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
@@ -48,6 +52,33 @@ export class ActualizacionNombresComponent implements OnInit {
       }
       campo.label = this.translate.instant('solicitudes.' + campo.label_i18n);
     })
+  }
+
+  loadInfo(){
+    var TerceroId = parseInt(localStorage.getItem('persona_id'))
+    if (TerceroId != undefined){
+      this.tercerosService.get('tercero/'+TerceroId).subscribe(
+        (response: any) => {
+          if (response !== undefined && response !== ""){
+            this.solicitudForm.campos[this.getIndexForm('NombreActual')].valor = response["PrimerNombre"] + " " + response["SegundoNombre"]
+            this.solicitudForm.campos[this.getIndexForm('ApellidoActual')].valor = response["PrimerApellido"] + " " + response["SegundoApellido"];
+          }
+        }, 
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        }
+      );
+    }
+  }
+
+  getIndexForm(nombre: String): number {
+    for (let index = 0; index < this.solicitudForm.campos.length; index++) {
+      const element = this.solicitudForm.campos[index];
+      if (element.nombre === nombre) {
+        return index
+      }
+    }
+    return 0;
   }
 
   enviarSolicitud(event) {

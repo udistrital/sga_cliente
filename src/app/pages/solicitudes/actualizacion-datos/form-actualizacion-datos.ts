@@ -24,6 +24,7 @@ export const ACTUALIZAR_DATOS = {
             nombre: 'TipoDocumentoActual',
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'documento_actual',
+            deshabilitar: true,
             requerido: true,
             opciones: [],
             key: 'Nombre',
@@ -35,14 +36,18 @@ export const ACTUALIZAR_DATOS = {
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'numero_actual',
             requerido: true,
+            deshabilitar: true,
+            key: 'Numero'
         },
         {
             etiqueta: 'input',
-            tipo: 'date',
+            tipo: 'text',
             nombre: 'FechaExpedicionActual',
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'expedicion_actual',
             requerido: true,
+            deshabilitar: true,
+            key: 'FechaExpedicion',
         },
         {
             etiqueta: 'div',

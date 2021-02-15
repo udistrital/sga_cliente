@@ -7,6 +7,8 @@ import { ACTUALIZAR_DATOS } from './form-actualizacion-datos';
 import { DialogoSoporteComponent } from '../dialogo-soporte/dialogo-soporte.component';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import * as moment from 'moment';
+import * as momentTimezone from 'moment-timezone';
 
 @Component({
   selector: 'ngx-actualizacion-datos',
@@ -25,9 +27,9 @@ export class ActualizacionDatosComponent implements OnInit {
     private translate: TranslateService,
     private dialogo: MatDialog,
     private tercerosService: TercerosService,
-    private popUpManager: PopUpManager,
-  ) {
+    private popUpManager: PopUpManager,) {
     this.solicitudForm = ACTUALIZAR_DATOS;
+    this.loadInfo();
     this.tercerosService.get('tipo_documento').subscribe(
       response => {
         this.tipoDocumento = response;
@@ -37,7 +39,6 @@ export class ActualizacionDatosComponent implements OnInit {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );
-    
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
@@ -51,6 +52,36 @@ export class ActualizacionDatosComponent implements OnInit {
     this.solicitante.CorreoPersonal = "correo@gmail.com"
     this.solicitante.Nombre = "Nombre de prueba"
     this.solicitante.Telefono = "+57 000-000-0000"
+  }
+
+  loadInfo(){
+    var TerceroId = parseInt(localStorage.getItem('persona_id'))
+    if (TerceroId != undefined){
+      this.tercerosService.get('datos_identificacion?query=TerceroId:'+TerceroId).subscribe(
+        (response: any) => {
+          if (response[0] !== undefined && response[0] !== ""){
+            this.solicitudForm.campos[this.getIndexForm('TipoDocumentoActual')].valor = response[0]["TipoDocumentoId"];
+            this.solicitudForm.campos[this.getIndexForm('NumeroActual')].valor = response[0]["Numero"];
+            if (response[0]["FechaExpedicion"] !== null){
+              this.solicitudForm.campos[this.getIndexForm('FechaExpedicionActual')].valor = momentTimezone.tz(response[0]["FechaExpedicion"], 'America/Bogota').format('DD/MM/YYYY');
+            }
+          }
+        }, 
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        }
+      );
+    }
+  }
+
+  getIndexForm(nombre: String): number {
+    for (let index = 0; index < this.solicitudForm.campos.length; index++) {
+      const element = this.solicitudForm.campos[index];
+      if (element.nombre === nombre) {
+        return index
+      }
+    }
+    return 0;
   }
 
   construirForm() {

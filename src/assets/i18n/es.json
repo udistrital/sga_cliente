@@ -1344,9 +1344,11 @@
         "seleccionar_archivo": "Seleccionar archivo",
         "soporte": "Soporte",
         "nombre_actual": "Nombre actual",
+        "apellido_actual": "Apellido actual",
         "nombre_": "Nombre",
         "apellido": "Apellido",
         "nombre_nuevo": "Nuevo nombre",
+        "apellido_nuevo": "Nuevo Apellido",
         "soporte_nombre": "Soporte del nuevo nombre"
     }
 }
