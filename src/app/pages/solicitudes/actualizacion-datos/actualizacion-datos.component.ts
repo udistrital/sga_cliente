@@ -4,11 +4,14 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { ActualizacionDatos } from '../../../@core/data/models/solicitudes/actualizacion-datos';
 import { Solicitante } from '../../../@core/data/models/solicitudes/solicitante';
 import { ACTUALIZAR_DATOS } from './form-actualizacion-datos';
-import { DialogoSoporteComponent } from '../dialogo-soporte/dialogo-soporte.component';
 import { TercerosService } from '../../../@core/data/terceros.service';
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
 import { PopUpManager } from '../../../managers/popUpManager';
-import * as moment from 'moment';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import * as momentTimezone from 'moment-timezone';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'ngx-actualizacion-datos',
@@ -21,12 +24,15 @@ export class ActualizacionDatosComponent implements OnInit {
   solicitudForm: any;
   solicitudDatos: ActualizacionDatos;
   tipoDocumento: any[];
-  
+  filesUp: any;  
 
   constructor(
     private translate: TranslateService,
     private dialogo: MatDialog,
+    private autenticationService: ImplicitAutenticationService,
     private tercerosService: TercerosService,
+    private documentoService: DocumentoService,
+    private nuxeoService: NuxeoService,
     private popUpManager: PopUpManager,) {
     this.solicitudForm = ACTUALIZAR_DATOS;
     this.loadInfo();
@@ -99,17 +105,53 @@ export class ActualizacionDatosComponent implements OnInit {
   }
 
   enviarSolicitud(event) {
-    // console.log(event)
+    if (event.valid){
+      const opt: any = {
+        title: this.translate.instant('solicitudes.enviar'),
+        text: this.translate.instant('solicitudes.confirmar_envio'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+      };
+      Swal(opt)
+        .then((willDelete) => {
+          if (willDelete.value) {
+            const files = [];
+            var Solicitud: any = {};
+            this.solicitudDatos = event.data.solicitudDatos;
+            if (this.solicitudDatos["Documento"].file !== undefined) {
+              files.push({
+                nombre: this.autenticationService.getPayload().sub, key: 'Documento',
+                file: this.solicitudDatos["Documento"].file , IdDocumento: 25
+              });
+            }
+            this.nuxeoService.getDocumentos$(files, this.documentoService)
+              .subscribe(response => {
+                if (Object.keys(response).length === files.length) {
+                  this.filesUp = <any>response;
+                  if (this.filesUp['Documento'] !== undefined) {
+                    this.solicitudDatos["Documento"] = this.filesUp['Documento'].Id;
+                  }
+                }
+                Solicitud.Solicitud = this.solicitudDatos;
+                Solicitud.Solicitante = parseInt(localStorage.getItem('persona_id'))
+                console.info(Solicitud)
+              }, 
+              (error: HttpErrorResponse) => {
+                console.info("errro")
+                Swal({
+                  type: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
+          }
+        });
+    }
   }
-
-  abrirDialogoArchivo() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '400px';
-    dialogConfig.height = '300px';
-    const dialogo = this.dialogo.open(DialogoSoporteComponent, dialogConfig);
-    dialogo.afterClosed().subscribe(archivo => {
-      
-    });
-  }
-
 }

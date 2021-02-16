@@ -2,7 +2,7 @@ export const ACTUALIZAR_NOMBRE = {
     titulo: 'solicitud_encabezado',
     tipo_formulario: 'mini',
     modelo: '',
-    btn: 'enviar',
+    btn: 'Enviar',
     campos: [
         {
             etiqueta: 'input',
@@ -53,14 +53,18 @@ export const ACTUALIZAR_NOMBRE = {
             requerido: true,
         },
         {
-            etiqueta: 'button',
-            tipo: 'button',
-            nombre: 'SoporteNombre',
-            icono: 'fa fa-file-pdf-o fa-5x',
-            claseBoton: 'mat-button float-right',
-            claseGrid: 'col-6 align-self-center',
-            label_i18n: 'soporte_nombre',
+            etiqueta: 'file',
+            claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+            clase: 'form-control',
+            nombre: 'Documento',
+            label_i18n: 'soporte_id',
+            placeholder_i18n: 'soporte_documento',
             requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
         },
     ]
 }

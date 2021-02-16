@@ -22,7 +22,7 @@ const routes: Routes = [{
     },
     {
       path: 'solicitud',
-      loadChildren: './solicitud/solicitudes.module#SolicitudesModule'
+      loadChildren: './solicitudes/solicitudes.module#SolicitudesModule'
     },
     {
       path: 'inscripcion',

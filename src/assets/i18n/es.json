@@ -1319,6 +1319,8 @@
         "no_data": "No existen datos registrados de la formación académica"
     },
     "solicitudes": {
+        "enviar": "Enviar",
+        "confirmar_envio": "¿Está seguro/a que desea enviar esta solicitud?",
         "solicitud_datos": "Solicitud de Actualización de identificación",
         "solicitud_nombres": "Solicitud de Actualización de nombres",
         "solicitud_encabezado": "Datos de la solicitud",
