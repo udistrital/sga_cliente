@@ -7,11 +7,14 @@ import { ACTUALIZAR_DATOS } from './form-actualizacion-datos';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import Swal from 'sweetalert2';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'ngx-actualizacion-datos',
@@ -33,6 +36,7 @@ export class ActualizacionDatosComponent implements OnInit {
     private tercerosService: TercerosService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
+    private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,) {
     this.solicitudForm = ACTUALIZAR_DATOS;
     this.loadInfo();
@@ -63,6 +67,8 @@ export class ActualizacionDatosComponent implements OnInit {
   loadInfo(){
     var TerceroId = parseInt(localStorage.getItem('persona_id'))
     if (TerceroId != undefined){
+      var hoy = new Date();
+      this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor = hoy.getFullYear()+"/"+(hoy.getMonth()+1)+"/"+hoy.getDate();
       this.tercerosService.get('datos_identificacion?query=TerceroId:'+TerceroId).subscribe(
         (response: any) => {
           if (response[0] !== undefined && response[0] !== ""){
@@ -136,12 +142,33 @@ export class ActualizacionDatosComponent implements OnInit {
                     this.solicitudDatos["Documento"] = this.filesUp['Documento'].Id;
                   }
                 }
+                this.solicitudDatos.FechaExpedicionNuevo = momentTimezone.tz(this.solicitudDatos.FechaExpedicionNuevo, 'America/Bogota').format('DD/MM/YYYY');
+                this.solicitudDatos.FechaSolicitud = momentTimezone.tz(this.solicitudDatos.FechaSolicitud, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+                this.solicitudDatos.FechaSolicitud = this.solicitudDatos.FechaSolicitud + ' +0000 +0000';
                 Solicitud.Solicitud = this.solicitudDatos;
                 Solicitud.Solicitante = parseInt(localStorage.getItem('persona_id'))
                 console.info(Solicitud)
+                this.sgaMidService.post('solicitud_evaluacion/registrar_solicitud', Solicitud).subscribe(
+                  (res: any) => {
+                    if(res.Response.Code === "200"){
+                      //Funcion get
+                      this.popUpManager.showSuccessAlert(this.translate.instant('solicitudes.crear_exito'));
+                    } else {
+                      this.popUpManager.showErrorToast(this.translate.instant('solicitudes.crear_error'));
+                    }
+                  },
+                  (error: HttpErrorResponse) => {
+                    Swal({
+                      type: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                  }
+                );
               }, 
               (error: HttpErrorResponse) => {
-                console.info("errro")
                 Swal({
                   type: 'error',
                   title: error.status + '',

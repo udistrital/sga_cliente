@@ -12,7 +12,7 @@ export const ACTUALIZAR_DATOS = {
             label_i18n: 'fecha',
             deshabilitar: true,
             requerido: true,
-            valor : new Date().toLocaleDateString('es-CO'),
+            key: 'FechaSolicitud',
         },
         {
             etiqueta: 'div',

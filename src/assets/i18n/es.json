@@ -1319,6 +1319,8 @@
         "no_data": "No existen datos registrados de la formación académica"
     },
     "solicitudes": {
+        "crear_error": "Ocurrió un error inesperado al enviar la solicitud",
+        "crear_exito": "La solicitud se ha enviado correctamente",
         "enviar": "Enviar",
         "confirmar_envio": "¿Está seguro/a que desea enviar esta solicitud?",
         "solicitud_datos": "Solicitud de Actualización de identificación",

@@ -12,7 +12,6 @@ export const ACTUALIZAR_NOMBRE = {
             label_i18n: 'fecha',
             deshabilitar: true,
             requerido: true,
-            valor : new Date().toLocaleDateString('es-CO'),
         },
         {
             etiqueta: 'div',
