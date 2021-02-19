@@ -15,17 +15,16 @@ import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion'
 import { IMAGENES } from './imagenes';
 import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
-import 'style-loader!angular2-toaster/toaster.css';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { from } from 'rxjs';
-import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -34,7 +33,6 @@ import { PopUpManager } from '../../../managers/popUpManager';
   styleUrls: ['./criterio_admision.component.scss'],
 })
 export class CriterioAdmisionComponent implements OnInit, OnChanges {
-  toasterService: any;
 
   @Input('criterios_select')
   set name(inscripcion_id: number) {
@@ -54,7 +52,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
-  config: ToasterConfig;
   inscripcion_id: number;
   info_persona_id: number;
   info_ente_id: number;
@@ -87,7 +84,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   proyectos = [];
   criterios = [];
   periodos = [];
-  nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
+  niveles: NivelFormacion[];
 
   show_icfes = false;
   show_profile = false;
@@ -146,6 +143,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     this.total = true;
     this.data = [];
     this.porcentajeTotal = 0;
+    this.nivel_load()
     this.loadData();
     this.loadCriterios();
   }
@@ -164,6 +162,17 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
     }
+  }
+
+  nivel_load() {
+    this.projectService.get('nivel_formacion?limit=0').subscribe(
+      (response: NivelFormacion[]) => {
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
   }
 
   cargarPeriodo() {
@@ -224,11 +233,9 @@ loadProyectos() {
   // window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
   this.selectprograma = false;
   this.loading = true;
-  this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
+  this.projectService.get('proyecto_academico_institucion?limit=0&query=NivelFormacionId.Id:' + this.selectednivel).subscribe(
     res => {
-      this.proyectos = (<any[]>res).filter(
-        project => this.nivel_load.filter((val) => Number(this.selectednivel) === val.id)[0].nombre === project['NivelFormacionId']['Descripcion'],
-      );
+      this.proyectos = <any[]>res;
     },
       (error: HttpErrorResponse) => {
         Swal({
@@ -436,8 +443,7 @@ loadProyectos() {
         const r = <any>res;
         if (r !== null && r.Type !== 'error') {
         } else {
-          this.showToast('error', this.translate.instant('GLOBAL.error'),
-            this.translate.instant('GLOBAL.error'));
+          this.popUpManager.showErrorToast(this.translate.instant('GLOBAL.error'));
         }
       },
         (error: HttpErrorResponse) => {
@@ -458,8 +464,7 @@ loadProyectos() {
         const r = <any>res;
         if (r !== null && r.Type !== 'error') {
         } else {
-          this.showToast('error', this.translate.instant('GLOBAL.error'),
-            this.translate.instant('GLOBAL.error'));
+          this.popUpManager.showErrorToast(this.translate.instant('GLOBAL.error'));
         }
       },
         (error: HttpErrorResponse) => {
@@ -515,24 +520,4 @@ loadProyectos() {
     });
   }
 
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
-  }
 }

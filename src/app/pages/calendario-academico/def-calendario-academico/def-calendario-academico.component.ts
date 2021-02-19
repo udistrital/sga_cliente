@@ -11,6 +11,7 @@ import { Proceso } from '../../../@core/data/models/calendario-academico/proceso
 import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
 import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
 import { ActividadHija } from '../../../@core/data/models/calendario-academico/actividadHija';
+import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 import { CalendarioClone } from '../../../@core/data/models/calendario-academico/calendarioClone';
 import { CalendarioEvento } from '../../../@core/data/models/calendario-academico/calendarioEvento';
 import * as moment from 'moment';
@@ -22,6 +23,7 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { EventoService } from '../../../@core/data/evento.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 
 @Component({
   selector: 'ngx-def-calendario-academico',
@@ -48,7 +50,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   createdCalendar: boolean = false;
   periodos: any;
   periodosClone: any;
-  nivel_load = [{ nombre: 'Pregrado', id: 14 }, { nombre: 'Posgrado', id: 15 }];
+  niveles: NivelFormacion[];
   loading: boolean = false;
   editMode: boolean = false;
   uploadMode: boolean = false;
@@ -72,6 +74,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     private documentoService: DocumentoService,
     private eventoService: EventoService,
     private sgaMidService: SgaMidService,
+    private proyectoService: ProyectoAcademicoService,
     private popUpManager: PopUpManager,
   ) {
     this.calendarActivity = new ActividadHija();
@@ -256,6 +259,15 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.periodos = [{ Id: 15, Nombre: '2019-3' }]
       });
+
+    this.proyectoService.get('nivel_formacion?limit=0').subscribe(
+      (response: NivelFormacion[]) => {
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
   }
 
   loadSelectsClone() {
@@ -377,7 +389,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                     this.calendar.Activo = true;
                     this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
                     this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
-                    this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
+                    this.calendar.Nombre += ' ' + this.niveles.filter(nivel => nivel.Id === this.calendar.Nivel)[0].Nombre;
                     this.eventoService.post('calendario', this.calendar).subscribe(
                       response => {
                         this.calendar.calendarioId = response['Id'];
@@ -420,7 +432,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                 this.calendar.Activo = true;
                 this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
                 this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
-                this.calendar.Nombre += ' ' + this.nivel_load.filter(nivel => nivel.id === this.calendar.Nivel)[0].nombre;
+                this.calendar.Nombre += ' ' + this.niveles.filter(nivel => nivel.Id === this.calendar.Nivel)[0].Nombre;
                 this.calendar.AplicacionId = 0;
                 this.calendar.FechaCreacion = momentTimezone.tz(this.calendar.FechaCreacion, 'America/Bogota').format('YYYY-MM-DD HH:mm');
                 this.calendar.FechaModificacion = momentTimezone.tz(this.calendar.FechaModificacion, 'America/Bogota').format('YYYY-MM-DD HH:mm');

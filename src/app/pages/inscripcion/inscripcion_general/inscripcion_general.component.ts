@@ -183,40 +183,21 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   loadProject() {
     this.posgrados = new Array;
     const IdNivel = parseInt(sessionStorage.getItem('IdNivel'));
-    if (IdNivel === 1) {
-      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + 14).subscribe(
-        response => {
-          const r = <any>response;
-          if (response !== null && response !== "{}" && r.Type !== 'error' && r.length != 0) {
-            const inscripcionP = <Array<any>>response;
-            this.posgrados = inscripcionP;
-            this.selectedValue = parseInt(sessionStorage.getItem('ProgramaAcademicoId'));
-          } else {
-            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_inscripcion'));
-          }
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        },
-      );
-    } else {
-      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + 15).subscribe(
-        response => {
-          const r = <any>response;
-          if (response !== null && response !== "{}" && r.Type !== 'error' && r.length != 0) {
-            const inscripcionP = <Array<any>>response;
-            this.posgrados = inscripcionP;
-            this.selectedValue = parseInt(sessionStorage.getItem('ProgramaAcademicoId'));
-          } else {
-            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_inscripcion'));
-          }
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        },
-      );
-    }
-
+    this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + IdNivel).subscribe(
+      response => {
+        const r = <any>response;
+        if (response !== null && response !== "{}" && r.Type !== 'error' && r.length != 0) {
+          const inscripcionP = <Array<any>>response;
+          this.posgrados = inscripcionP;
+          this.selectedValue = parseInt(sessionStorage.getItem('ProgramaAcademicoId'));
+        } else {
+          this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_inscripcion'));
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
   }
 
   loadNivel(IdPrograma: number) {
