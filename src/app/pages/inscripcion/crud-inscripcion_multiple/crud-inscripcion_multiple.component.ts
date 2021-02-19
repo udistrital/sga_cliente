@@ -123,11 +123,12 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
-    sessionStorage.setItem('EstadoInscripcion', 'false'); 
+    sessionStorage.setItem('EstadoInscripcion', 'false');
     this.persona_id = this.userService.getPersonaId();
     this.loadInfoInscripcion();
     this.createTable();
-    
+    this.loading = false;
+
   }
 
   return(){
@@ -148,8 +149,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             this.info_info_persona = temp;
             const files = []
           }
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -169,7 +172,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   createTable() {
     this.settings = {
-      actions: false, 
+      actions: false,
       columns: {
         ReciboInscripcion: {
           title: this.translate.instant('inscripcion.numero_recibo'),
@@ -229,7 +232,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                 this.itemSelect({data: data.data});
               }
             });
-          }       
+          }
         },
       },
       mode: 'external',
@@ -241,6 +244,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   itemSelect(event): void {
+    this.loading = true;
     sessionStorage.setItem('IdInscripcion', event.data.Id);
     sessionStorage.setItem('ProgramaAcademico', event.data.ProgramaAcademicoId);
     this.inscripcionService.get('inscripcion/'+event.data.Id).subscribe(
@@ -252,11 +256,12 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         if (EstadoIns === 'true'){
           this.loadInscriptionModule();
         }
+        this.loading = false;
       },
       error => {
         //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.loading = false;
-      }      
+      }
     );
   }
 
@@ -286,6 +291,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   loadInfoInscripcion() {
+    this.loading = true;
     //Función del MID que retorna el estado del recibo
     var PeriodoActual = localStorage.getItem('IdPeriodo')
     if (this.persona_id != null && PeriodoActual != null){
@@ -293,9 +299,9 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         this.sgaMidService.get('inscripciones/estado_recibos/'+this.persona_id+'/'+PeriodoActual).subscribe(
           (response: any) => {
             if (response !== null && response.Response.Code === '400'){
-              this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));    
+              this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));
             } else if (response != null && response.Response.Code === '404'){
-              this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion')); 
+              this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
             } else {
               const data = <Array<any>>response.Response.Body[1].Inscripciones;
               const dataInfo = <Array<any>>[];
@@ -318,21 +324,23 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                     this.dataSource.setSort([{field: 'Id', direction: 'desc'}]);
                     this.selectedLevel = res.NivelFormacionId.Id
                     sessionStorage.setItem('nivel', this.selectedLevel.toString())
+                    this.loading = false;
                   },
                   error => {
-                    this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
                     this.loading = false;
+                    this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
                   },
                 );
             })
             }
           }, error => {
-            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
             this.loading = false;
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
           },
         );
       //}
     }
+    this.loading = false;
   }
 
   onSelectLevel() {
@@ -344,8 +352,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         this.validateProject();
       },
       error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.loading = false;
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       },
     );
   }
@@ -369,9 +377,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.showProyectoCurricular = false;
     this.showTipoInscripcion = false;
     this.showInfo = false;
+    this.loading = true;
     this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel).subscribe(
       response => {
-
+        this.loading = false;
         const r = <any>response;
         if (response !== null && response !== "{}" && r.Type !== 'error' && r.length != 0) {
           const inscripcionP = <Array<any>>response;
@@ -386,8 +395,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         }
       },
       error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.loading = false;
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       },
     );
 
@@ -476,9 +485,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       } else if (this.selectedLevel === 2) {
         this.parametro = '12';
       }
-      
+      this.loading = true;
       this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel).subscribe(
         (response: any[]) => {
+          this.loading = false;
           if (response !== null && response.length !== 0) {
             this.inscripcionProjects = response;
             this.inscripcionProjects.forEach(proyecto => {
@@ -486,30 +496,36 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                 this.recibo_pago.Fecha_pago = moment(proyecto.Evento[0].FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
               }
             });
+            this.loading = true;
             this.parametrosService.get('parametro_periodo?query=ParametroId.TipoParametroId.Id:2,ParametroId.CodigoAbreviacion:'+ this.parametro +',PeriodoId.Id:3').subscribe(
               response => {
+                this.loading = false;
                 const parametro = <any>response['Data'][0];
                 this.recibo_pago.Descripcion = parametro['ParametroId']['Nombre'];
                 var valor = JSON.parse(parametro['Valor']);
                 this.recibo_pago.ValorDerecho = valor['Costo']
                 this.sgaMidService.post('generar_recibo', this.recibo_pago).subscribe(
                   response => {
+                    this.loading = false;
                     const reciboData = new Uint8Array(atob(response['Data']).split('').map(char => char.charCodeAt(0)));
                     this.recibo_generado = window.URL.createObjectURL(new Blob([reciboData], {type: 'application/pdf'}));
                     window.open(this.recibo_generado);
                   },
                   error => {
+                    this.loading = false;
                     this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
                   }
                 );
               },
               error => {
+                this.loading = false;
                 this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
               },
             );
           }
         },
         error => {
+          this.loading = false;
           this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('calendario.sin_proyecto_curricular'));
         }
       );
@@ -532,10 +548,12 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   loadTipoInscripcion() {
+    this.loading = true;
     this.tipo_inscripciones = new Array;
     window.localStorage.setItem('IdNivel', String(this.selectedLevel));
     this.inscripcionService.get('tipo_inscripcion?query=NivelId:' + Number(this.selectedLevel) + ',Activo:true&sortby=NumeroOrden&order=asc')
       .subscribe(res => {
+        this.loading = false;
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           const tiposInscripciones = <Array<any>>res;
@@ -552,6 +570,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         }
       },
         (error: HttpErrorResponse) => {
+          this.loading = false;
           Swal({
             type: 'error',
             title: error.status + '',
@@ -564,6 +583,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   cargarPeriodo() {
+    this.loading = true;
     return new Promise((resolve, reject) => {
       this.parametrosService.get('periodo?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
         .subscribe(res => {
@@ -577,24 +597,29 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               this.periodos.push(element);
             });
           }
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             reject(error);
           });
     });
   }
 
   public loadInscripcion(): void {
+    this.loading = true;
     if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
       && this.inscripcion_id.toString() !== '0') {
       this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
         .subscribe(res => {
+          this.loading = false;
           if (res !== null) {
             this.info_inscripcion = <Inscripcion>res;
             this.aceptaTerminos = true;
           }
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -606,6 +631,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             });
           });
     }
+    this.loading = false;
   }
 
   createInscripcion(tercero_id): void {
@@ -620,8 +646,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     }; Swal(opt)
       .then((willDelete) => {
+        this.loading = true;
         this.sgaMidService.post('inscripciones/post_preinscripcion', this.proyectos_preinscripcion_post)
           .subscribe(res => {
+            this.loading = false;
             this.info_inscripcion = <Inscripcion><unknown>res;
             this.inscripcion_id = this.info_inscripcion.Id;
             this.eventChange.emit(true);
@@ -634,6 +662,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             this.eventChange.emit(true);
           },
             (error: HttpErrorResponse) => {
+              this.loading = false;
               Swal({
                 type: 'error',
                 title: error.status + '',

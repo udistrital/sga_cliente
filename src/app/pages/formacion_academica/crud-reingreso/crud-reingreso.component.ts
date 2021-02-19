@@ -117,14 +117,17 @@ export class CrudReingresoComponent implements OnInit {
   }
 
   cargarPeriodo(): void {
+    this.loading = true;
     this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.periodo = <any>res[0];
         }
+        this.loading = false;
       },
       (error: HttpErrorResponse) => {
+        this.loading = false;
         Swal({
           type: 'error',
           title: error.status + '',

@@ -123,8 +123,10 @@ export class CrudTransferenciaInternaComponent implements OnInit {
                 this.showToast('error', this.translate.instant('GLOBAL.error'),
                   this.translate.instant('transferencia_interna.transferencia_no_registrada'));
               }
+              this.loading = false;
             },
             (error: HttpErrorResponse) => {
+              this.loading = false;
               Swal({
                 type: 'error',
                 title: error.status + '',
@@ -143,14 +145,17 @@ export class CrudTransferenciaInternaComponent implements OnInit {
   }
 
   cargarPeriodo(): void {
+    this.loading = true;
     this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.periodo = <any>res[0];
         }
+        this.loading = false;
       },
       (error: HttpErrorResponse) => {
+        this.loading = false;
         Swal({
           type: 'error',
           title: error.status + '',

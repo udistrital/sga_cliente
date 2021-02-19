@@ -1,5 +1,5 @@
 <div class="dinamic-form">
-    <fieldset [ngClass]="{'fieldseter':true} ">
+    <fieldset [ngClass]="{'fieldseter':true} " [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
         <nb-card>
             <nb-card-body *ngIf="showInscription">
                 <nb-card-header>
@@ -8,11 +8,11 @@
                 <hr width="0%">
                 <fieldset [ngClass]="{'fieldseter':true} ">
                     <legend> {{ 'inscripcion.recibos_generados' | translate }} </legend>
-                    <ng2-smart-table [settings]="settings" [source]="dataSource" (rowSelect)="itemSelect($event)"> 
+                    <ng2-smart-table [settings]="settings" [source]="dataSource" (rowSelect)="itemSelect($event)">
                     </ng2-smart-table>
                     <hr width="0%">
                     <div class="text-center">
-                        <button mat-button type="button" (click)="nuevaPreinscripcion()" >{{ 'inscripcion.nueva' | translate }}</button>
+                        <button mat-button type="button" (click)="nuevaPreinscripcion()">{{ 'inscripcion.nueva' | translate }}</button>
                     </div>
 
                 </fieldset>
@@ -91,7 +91,7 @@
           </nb-card-body>
         <nb-card-body >
             <div class="col-sm-12">
-          
+
                     <nb-card class="m-4" accent="info">
                         <nb-card-body>
                             <mat-form-field style="width: 100%;">

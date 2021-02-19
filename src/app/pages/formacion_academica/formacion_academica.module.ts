@@ -17,6 +17,7 @@ import { CrudTransferenciaInternaComponent } from './crud-transferencia_interna/
 import { CrudReingresoComponent } from './crud-reingreso/crud-reingreso.component';
 import { CrudIcfesExternoComponent } from './crud-icfes_externo/crud-icfes_externo.component';
 import { CrudExternoComponent } from './crud-externo/crud-externo.component';
+import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { CrudExternoComponent } from './crud-externo/crud-externo.component';
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
+    NbSpinnerModule
   ],
   declarations: [
     ...routedComponents,

@@ -9,6 +9,7 @@ import { CrudIdiomasComponent } from './crud-idiomas/crud-idiomas.component';
 import { ListIdiomasComponent } from './list-idiomas/list-idiomas.component';
 import { ViewIdiomasComponent } from './view-idiomas/view-idiomas.component';
 import { UserService } from '../../@core/data/users.service';
+import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { UserService } from '../../@core/data/users.service';
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
+    NbSpinnerModule
   ],
   declarations: [
     ...routedComponents,

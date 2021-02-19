@@ -10,6 +10,7 @@ import { CrudInfoCaracteristicaComponent } from './crud-info_caracteristica/crud
 import { ViewInfoCaracteristicaComponent } from './view-info_caracteristica/view-info_caracteristica.component';
 import { CrudInfoCaracteristicaPregradoComponent } from './crud-info_caracteristica_pregrado/crud-info_caracteristica_pregrado.component';
 import { SgaMidService } from '../../@core/data/sga_mid.service';
+import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { SgaMidService } from '../../@core/data/sga_mid.service';
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
+    NbSpinnerModule
   ],
   declarations: [
     ...routedComponents,
