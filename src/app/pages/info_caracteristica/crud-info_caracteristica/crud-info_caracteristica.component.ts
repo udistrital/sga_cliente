@@ -98,6 +98,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   loadOptionsDepartamentoNacimiento(): void {
+    this.loading = true;
     let consultaHijos: Array<any> = [];
     const departamentoNacimiento: Array<any> = [];
     if (this.paisSeleccionado) {
@@ -109,9 +110,11 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                 departamentoNacimiento.push(consultaHijos[i].LugarHijo);
               }
             }
+            this.loading = false;
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = departamentoNacimiento;
         },
         (error: HttpErrorResponse) => {
+          this.loading = false;
           Swal({
             type: 'error',
             title: error.status + '',
@@ -123,9 +126,11 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           });
         });
     }
+    this.loading = false;
   }
 
   loadOptionsCiudadNacimiento(): void {
+    this.loading = true;
     let consultaHijos: Array<any> = [];
     const ciudadNacimiento: Array<any> = [];
     if (this.departamentoSeleccionado) {
@@ -137,9 +142,11 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               ciudadNacimiento.push(consultaHijos[i].LugarHijo);
             }
           }
+          this.loading = false;
           this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = ciudadNacimiento;
         },
         (error: HttpErrorResponse) => {
+          this.loading = false;
           Swal({
             type: 'error',
             title: error.status + '',
@@ -151,6 +158,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           });
         });
     }
+    this.loading = false;
   }
 
   getIndexForm(nombre: String): number {
@@ -183,14 +191,16 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = [this.info_info_caracteristica.PaisNacimiento];
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = [this.info_info_caracteristica.DepartamentoNacimiento];
             this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = [this.info_info_caracteristica.Lugar];
-            
+
             this.loading = false;
             this.result.emit(1);
           } else{
+            this.loading = false;
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           }
         },
         (error: HttpErrorResponse) => {
+          this.loading = false;
           this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
          });
     } else {
@@ -239,6 +249,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               });
             });
         }
+        this.loading = false;
       });
   }
 
@@ -273,15 +284,19 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                 this.loading = false;
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.guardar'));
               }
+              this.loading = false;
             },
             (error: HttpErrorResponse) => {
+              this.loading = false;
               Swal({
                 type: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
               });
             });
+            this.loading = false;
         }
+        this.loading = false;
     });
   }
 

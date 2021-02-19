@@ -95,6 +95,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   }
 
   findDescuentoAcademico(programa: any) {
+    this.loading = true;
           // this.descuentoAcademicoService.get('tipo_descuento/?limit=0&query=Activo:true')
           this.sgaMidService.get('descuento_academico/descuentoAcademicoByID/'+programa)
             .subscribe(
@@ -110,14 +111,17 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                     }
                   });
                 }
+                this.loading = false;
               },
               error => {
+                this.loading = false;
                 this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = []
               },
             );
   }
 
   cargarPeriodo() {
+    this.loading = true;
     return new Promise((resolve, reject) => {
       this.coreService.get('periodo?query=Activo:true&sortby=Id&order=desc&limit=1')
       .subscribe(res => {
@@ -126,8 +130,10 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
           this.periodo = <any>res[0].Id;
           resolve(this.periodo);
         }
+        this.loading = false;
       },
       (error: HttpErrorResponse) => {
+        this.loading = false;
         reject(error);
       });
     });
@@ -258,9 +264,9 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                     this.temp.Documento = filesResponse['Documento'] + '';
                     this.info_descuento_academico = this.temp;
                     // this.info_descuento_academico.DescuentoDependencia = this.temp.DescuentosDependenciaId;
-                    this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].valor = (this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId && this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Id) ? 
-                    { Id: this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Id, 
-                      Nombre: this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Id + '. ' + this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Nombre} : 
+                    this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].valor = (this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId && this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Id) ?
+                    { Id: this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Id,
+                      Nombre: this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Id + '. ' + this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Nombre} :
                       { Id: 0, Nombre: 'No registrado' };
                     this.info_descuento_academico.Periodo = this.periodo;
                     this.info_descuento_academico.Documento = filesResponse['Documento'] + '';
@@ -279,8 +285,10 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                     });
                   });
             }
+            this.loading = false;
           },
             (error: HttpErrorResponse) => {
+              this.loading = false;
               Swal({
                 type: 'error',
                 title: error.status + '',
@@ -567,8 +575,10 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
                         this.translate.instant('descuento_academico.descuento_academico_no_registrado'));
                     }
+                    this.loading = false;
                   },
                     (error: HttpErrorResponse) => {
+                      this.loading = false;
                       Swal({
                         type: 'error',
                         title: error.status + '',
@@ -578,8 +588,10 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                       });
                     });
               }
+              this.loading = false;
             },
               (error: HttpErrorResponse) => {
+                this.loading = false;
                 Swal({
                   type: 'error',
                   title: error.status + '',

@@ -174,13 +174,14 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
     //Se carga el nombre del periodo al que se inscribió
     this.loadPeriodo(IdPeriodo);
-    //Se carga el tipo de inscripción 
+    //Se carga el tipo de inscripción
     this.loadTipoInscripcion(IdTipo);
     //Se carga el nivel del proyecto
     this.loadNivel(IdPrograma);
   }
 
   loadProject() {
+    this.loading = true;
     this.posgrados = new Array;
     const IdNivel = parseInt(sessionStorage.getItem('IdNivel'));
     if (IdNivel === 1) {
@@ -194,8 +195,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           } else {
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_inscripcion'));
           }
+          this.loading = false;
         },
         error => {
+          this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         },
       );
@@ -210,8 +213,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           } else {
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_inscripcion'));
           }
+          this.loading = false;
         },
         error => {
+          this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         },
       );
@@ -220,44 +225,54 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   loadNivel(IdPrograma: number) {
+    this.loading = true;
     this.programaService.get('proyecto_academico_institucion/' + IdPrograma).subscribe(
       (response: any) => {
         const IdNivel = response.NivelFormacionId.Id;
         this.programaService.get('nivel_formacion/' + IdNivel).subscribe(
           (res: any) => {
+            this.loading = false;
             this.inscripcion.Nivel = res.Nombre;
             this.inscripcion.IdNivel = res.Id;
             sessionStorage.setItem('IdNivel', res.Id)
             this.loadProject();
           },
           error => {
+            this.loading = false;
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
           }
         );
       },
       error => {
+        this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );
   }
 
   loadTipoInscripcion(IdTipo: number) {
+    this.loading = true;
     this.inscripcionService.get('tipo_inscripcion/' + IdTipo).subscribe(
       (response: any) => {
+        this.loading = false;
         this.inscripcion.TipoInscripcion = response.Nombre;
       },
       error => {
+        this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );
   }
 
   loadPeriodo(IdPeriodo: number) {
+    this.loading = true;
     this.parametrosService.get('periodo/' + IdPeriodo).subscribe(
       (response: any) => {
+        this.loading = false;
         this.inscripcion.PeriodoId = response.Data.Nombre;
       },
       error => {
+        this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );
@@ -277,14 +292,17 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       },
       TipoInscripcionId: this.tipo_inscripcion_selected,
     }
+    this.loading = true;
     this.inscripcionService.post('inscripcion', info_inscripcion_temp)
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.inscripcion_id = r.Id;
         }
+        this.loading = false;
       },
         (error: HttpErrorResponse) => {
+          this.loading = false;
           Swal({
             type: 'error',
             title: error.status + '',
@@ -361,19 +379,24 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   realizarInscripcion() {
-
+    this.loading = true;
     this.inscripcionService.get('inscripcion/' + parseInt(sessionStorage.IdInscripcion)).subscribe(
       (response: any) => {
+        this.loading = false;
         const inscripcionPut: any = response;
         inscripcionPut.ProgramaAcademicoId = parseInt(sessionStorage.ProgramaAcademicoId);
 
+        this.loading = true;
         this.inscripcionService.get('estado_inscripcion?query=Nombre:INSCRITO').subscribe(
           (response: any) => {
+            this.loading = false;
             const estadoInscripcio: any = response[0];
             inscripcionPut.EstadoInscripcionId = estadoInscripcio;
 
+            this.loading = true;
             this.inscripcionService.put('inscripcion/', inscripcionPut)
               .subscribe(res_ins => {
+                this.loading = false;
                 const r_ins = <any>res_ins;
                 if (res_ins !== null && r_ins.Type !== 'error') {
                   this.loading = false;
@@ -383,6 +406,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                 }
               },
                 (error: any) => {
+                  this.loading = false;
                   if (error.System.Message.includes('duplicate')) {
                     Swal({
                       type: 'info',
@@ -391,6 +415,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
                     });
                   } else {
+                    this.loading = false;
                     Swal({
                       type: 'error',
                       title: error.status + '',
@@ -403,11 +428,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                 });
           },
           error => {
+            this.loading = false;
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
           }
         );
       },
       error => {
+        this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );

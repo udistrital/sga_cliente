@@ -45,6 +45,7 @@ export class CrudPreguntasComponent implements OnInit {
   temp: any;
   clean: boolean;
   percentage: number;
+  loading: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -126,6 +127,7 @@ export class CrudPreguntasComponent implements OnInit {
     };
     Swal(opt)
       .then((willDelete) => {
+        this.loading = true;
         if (willDelete.value) {
           this.info_universidad = <any>infoUniversidad;
           this.sgaMidService.post('inscripciones/info_complementaria_universidad', this.info_universidad)
@@ -140,8 +142,10 @@ export class CrudPreguntasComponent implements OnInit {
                 this.showToast('error', this.translate.instant('GLOBAL.error'),
                   this.translate.instant('universidad_form.universidad_form_no_registrado'));
               }
+              this.loading = false;
             },
             (error: HttpErrorResponse) => {
+              this.loading = false;
               Swal({
                 type: 'error',
                 title: error.status + '',

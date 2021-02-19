@@ -31,6 +31,7 @@ export class CrudInfoPersonaComponent implements OnInit {
   config: ToasterConfig;
   info_persona_id: number;
   inscripcion_id: number;
+  loading: boolean = false;
 
   @Input('info_persona_id')
   set persona(info_persona_id: number) {
@@ -57,7 +58,6 @@ export class CrudInfoPersonaComponent implements OnInit {
   regInfoPersona: any;
   info_inscripcion: any;
   clean: boolean;
-  loading: boolean;
   percentage: number;
   aceptaTerminos: boolean;
   programa: number;
@@ -124,8 +124,10 @@ export class CrudInfoPersonaComponent implements OnInit {
             this.info_info_persona = temp;
             const files = []
           }
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -165,8 +167,9 @@ export class CrudInfoPersonaComponent implements OnInit {
           this.info_info_persona.FechaExpedicion = momentTimezone.tz(this.info_info_persona.FechaExpedicion, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
           this.info_info_persona.FechaExpedicion = this.info_info_persona.FechaExpedicion + ' +0000 +0000';
           this.info_info_persona.Usuario = this.autenticationService.getPayload().sub;
-          this.sgamidService.post('persona/guardar_persona', this.info_info_persona).subscribe(res => {                    
-            const r = <any>res                    
+          this.loading = true;
+          this.sgamidService.post('persona/guardar_persona', this.info_info_persona).subscribe(res => {
+            const r = <any>res
             if (r !== null && r.Type !== 'error') {
               window.localStorage.setItem('ente', r.Id);
               this.info_persona_id = r.Id;
@@ -178,8 +181,10 @@ export class CrudInfoPersonaComponent implements OnInit {
               this.showToast('error', this.translate.instant('GLOBAL.error'),
               this.translate.instant('GLOBAL.error'));
             }
+            this.loading = false;
           },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -230,7 +235,7 @@ export class CrudInfoPersonaComponent implements OnInit {
                   const documentos_actualizados = <any>response;
                   this.sgamidService.put('persona/actualizar_persona', this.info_info_persona)
                     .subscribe(res => {
-                      
+
                       this.loading = false;
                       this.loadInfoPersona();
                       this.programa = this.userService.getPrograma();
@@ -251,6 +256,7 @@ export class CrudInfoPersonaComponent implements OnInit {
                         this.translate.instant('GLOBAL.confirmarActualizar'));
                     },
                       (error: HttpErrorResponse) => {
+                        this.loading = false;
                         Swal({
                           type: 'error',
                           title: error.status + '',
@@ -261,8 +267,10 @@ export class CrudInfoPersonaComponent implements OnInit {
                         });
                       });
                 }
+                this.loading = false;
               },
                 (error: HttpErrorResponse) => {
+                  this.loading = false;
                   Swal({
                     type: 'error',
                     title: error.status + '',
@@ -296,6 +304,7 @@ export class CrudInfoPersonaComponent implements OnInit {
                   this.translate.instant('GLOBAL.confirmarActualizar'));
               },
                 (error: HttpErrorResponse) => {
+                  this.loading = false;
                   Swal({
                     type: 'error',
                     title: error.status + '',
@@ -311,6 +320,7 @@ export class CrudInfoPersonaComponent implements OnInit {
   }
 
   public loadInscripcion(): void {
+    this.loading = true;
     if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
       && this.inscripcion_id.toString() !== '0') {
       this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
@@ -319,8 +329,10 @@ export class CrudInfoPersonaComponent implements OnInit {
             this.info_inscripcion = <Inscripcion>res;
             this.aceptaTerminos = true;
           }
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -332,6 +344,7 @@ export class CrudInfoPersonaComponent implements OnInit {
             });
           });
     }
+    this.loading = false;
   }
 
   createInscripcion(tercero_id): void {
@@ -350,11 +363,13 @@ export class CrudInfoPersonaComponent implements OnInit {
     this.info_inscripcion = <Inscripcion>inscripcionPost;
     this.info_inscripcion.PersonaId = Number(this.info_persona_id);
     this.info_inscripcion.Id = Number(this.inscripcion_id);
+    this.loading = true;
     this.inscripcionService.post('inscripcion', this.info_inscripcion)
       .subscribe(res => {
         this.info_inscripcion = <Inscripcion><unknown>res;
         this.inscripcion_id = this.info_inscripcion.Id;
         this.eventChange.emit(true);
+        this.loading = false;
         Swal({
           type: 'info',
           title: this.translate.instant('GLOBAL.crear'),
@@ -363,6 +378,7 @@ export class CrudInfoPersonaComponent implements OnInit {
         });
       },
       (error: HttpErrorResponse) => {
+        this.loading = false;
         Swal({
           type: 'error',
           title: error.status + '',
@@ -460,14 +476,17 @@ export class CrudInfoPersonaComponent implements OnInit {
   }
 
   cargarPeriodo(): void {
+    this.loading = true;
     this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.periodo = <any>res[0];
         }
+        this.loading = false;
       },
         (error: HttpErrorResponse) => {
+          this.loading = false;
           Swal({
             type: 'error',
             title: error.status + '',

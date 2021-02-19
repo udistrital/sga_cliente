@@ -27,7 +27,6 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
   styleUrls: ['./preinscripcion.component.scss'],
 })
 export class PreinscripcionComponent implements OnInit, OnChanges {
-  toasterService: any;
 
   @Input('inscripcion_id')
   set name(inscripcion_id: number) {
@@ -91,7 +90,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   show_acad = false;
 
   info_persona: boolean;
-  loading: boolean;
   button_politica: boolean = true;
   programa_seleccionado: any;
   viewtag: any;
@@ -106,6 +104,9 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   imagenes: any;
   periodo: any;
   selectednivel: any;
+
+  loading: boolean = false;
+  toasterService: any;
 
   constructor(
     private translate: TranslateService,
@@ -155,6 +156,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   }
 
   cargarPeriodo() {
+    this.loading = true;
     return new Promise((resolve, reject) => {
       this.parametrosService.get('periodo?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
       .subscribe(res => {
@@ -167,15 +169,19 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
          periodos.forEach(element => {
             this.periodos.push(element);
           });
+          this.loading = false;
         }
+        this.loading = false;
       },
       (error: HttpErrorResponse) => {
         reject(error);
+        this.loading = false;
       });
     });
   }
 
   loadInfoInscripcion() {
+    this.loading = true;
     return new Promise((resolve, reject) => {
       this.inscripcionService.get(`inscripcion?limit=1&query=PeriodoId:${this.periodo.Id},PersonaId:${this.info_persona_id || 4}`)
       .subscribe(res => {
@@ -185,9 +191,11 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
             this.inscripcion_id = r[0].Id;
           }
         }
+        this.loading = false;
         resolve(this.inscripcion_id);
       },
       (error: HttpErrorResponse) => {
+        this.loading = false;
         reject(error);
       });
     });
@@ -198,7 +206,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     setTimeout(()=>{
       this.percentage_tab_info[tab] = (number * 100) / 2;
       this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
-      this.setPercentage_total();      
+      this.setPercentage_total();
     });
   }
 
@@ -225,6 +233,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   }
 
   loadTipoInscripcion() {
+    this.loading = true;
     window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
     this.inscripcionService.get('tipo_inscripcion/?query=NivelId:' + Number(this.selectednivel.id) + ',Activo:true&sortby=NumeroOrden&order=asc')
       .subscribe(res => {
@@ -233,8 +242,10 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
           const tiposInscripciones = <Array<any>>res;
           this.tipo_inscripciones = tiposInscripciones;
         }
+        this.loading = false;
       },
         (error: HttpErrorResponse) => {
+          this.loading = false;
           Swal({
             type: 'error',
             title: error.status + '',
@@ -248,6 +259,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
 
   loadInfoPostgrados() {
     // Tener el cuenta que el 5 corresponde al id del evento padre de inscripcion en una facultad
+    this.loading = true;
     this.sgaMidService.get('inscripciones/consultar_proyectos_eventos/5')
       .subscribe(res => {
         const r = <any>res;
@@ -257,10 +269,12 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
             this.posgrados.push(element);
           });
         }
+        this.loading = false;
       },
         (error: HttpErrorResponse) => {
           this.posgrados = [];
           this.posgrados.push({Id: 1, Nombre: 'test'});
+          this.loading = false;
           Swal({
             type: 'error',
             title: error.status + '',
@@ -273,6 +287,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   }
 
   loadidInscripcion() {
+    this.loading = true;
     this.inscripcionService.get('inscripcion/?query=PersonaId:' + this.info_persona_id )
       .subscribe(res => {
         const r = <any>res;
@@ -283,8 +298,10 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
         }else {
           this.inscripcion_id = undefined;
         }
+        this.loading = false;
       },
         (error: HttpErrorResponse) => {
+          this.loading = false;
           Swal({
             type: 'error',
             title: error.status + '',
@@ -297,11 +314,13 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   }
 
   getInfoInscripcion() {
+    this.loading = true;
     if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
       && this.inscripcion_id.toString() !== '0') {
       this.loading = true;
       this.inscripcionService.get('inscripcion/' + this.inscripcion_id)
         .subscribe(inscripcion => {
+          this.loading = false;
           this.info_inscripcion = <any>inscripcion;
           if (inscripcion !== null && this.info_inscripcion.Type !== 'error') {
             this.estado_inscripcion = this.info_inscripcion.EstadoInscripcionId.Id;
@@ -310,6 +329,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
             }
             this.programaService.get('dependencia/' + this.info_inscripcion.ProgramaAcademicoId)
               .subscribe(res_programa => {
+                this.loading = false;
                 const programa_admision = <any>res_programa;
                 if (res_programa !== null && programa_admision.Type !== 'error') {
                   // this.selectedValue = programa_admision;
@@ -319,6 +339,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
                 }
               },
                 (error: HttpErrorResponse) => {
+                  this.loading = false;
                   Swal({
                     type: 'error',
                     title: error.status + '',
@@ -332,6 +353,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
           }
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',

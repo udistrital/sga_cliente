@@ -70,7 +70,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
   formPropuestaGrado: any;
   regPropuestaGrado: any;
   clean: boolean;
-  loading: boolean;
+  loading: boolean = false;
   existePropuesta: boolean;
   percentage: number;
   grupoSeleccionado: any;
@@ -182,8 +182,10 @@ export class CrudPropuestaGradoComponent implements OnInit {
                       });
                     });
               }
+              this.loading = false;
             },
               (error: HttpErrorResponse) => {
+                this.loading = false;
                 Swal({
                   type: 'error',
                   title: error.status + '',
@@ -197,8 +199,10 @@ export class CrudPropuestaGradoComponent implements OnInit {
         } else {
           this.loading = false;
         }
+        this.loading = false;
       },
         (error: HttpErrorResponse) => {
+          this.loading = false;
           Swal({
             type: 'error',
             title: error.status + '',
@@ -243,6 +247,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
   }
 
   uploadResolutionFile(file) {
+    this.loading = true;
     return new Promise((resolve, reject) => {
       this.nuxeoService.getDocumentos$(file, this.documentoService)
         .subscribe(response => {
@@ -263,11 +268,13 @@ export class CrudPropuestaGradoComponent implements OnInit {
               this.info_propuesta_grado_post.LineaInvestigacionId = this.info_propuesta_grado.LineaInvestigacion.id;
               // this.info_propuesta_grado.InscripcionId = { Id: Number(window.sessionStorage.getItem('IdInscripcion')) };
 
+              this.loading = true;
               this.inscripcionService.get('inscripcion/' + Number(window.sessionStorage.getItem('IdInscripcion')))
                 .subscribe(res => {
                   const r = <any>res;
                   if (r !== null && r.Type !== 'error') {
                     this.info_propuesta_grado_post.InscripcionId = r;
+                    this.loading = true;
                     this.inscripcionService.post('propuesta/', this.info_propuesta_grado_post)
                       .subscribe(res => {
                         const r = <any>res;
@@ -281,8 +288,10 @@ export class CrudPropuestaGradoComponent implements OnInit {
                           this.showToast('error', this.translate.instant('GLOBAL.error'),
                             this.translate.instant('GLOBAL.error'));
                         }
+                        this.loading = false;
                       },
                         (error: HttpErrorResponse) => {
+                          this.loading = false;
                           Swal({
                             type: 'error',
                             title: error.status + '',
@@ -296,8 +305,10 @@ export class CrudPropuestaGradoComponent implements OnInit {
                     this.showToast('error', this.translate.instant('GLOBAL.error'),
                       this.translate.instant('GLOBAL.error'));
                   }
+                  this.loading = false;
                 },
                   (error: HttpErrorResponse) => {
+                    this.loading = false;
                     Swal({
                       type: 'error',
                       title: error.status + '',
@@ -308,7 +319,9 @@ export class CrudPropuestaGradoComponent implements OnInit {
                   });
             }
           }
+          this.loading = false;
         }, error => {
+          this.loading = false;
           reject(error);
         });
     });
@@ -339,6 +352,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
   }
 
   actualizar(documentoID: number){
+    this.loading = true;
     this.info_propuesta_grado_post = new PropuestaPost;
       this.info_propuesta_grado_post.Id = this.info_propuesta_grado.Id;
       this.info_propuesta_grado_post.Activo = true;
@@ -354,6 +368,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
           const r = <any>res;
           if (r !== null && r.Type !== 'error') {
             this.info_propuesta_grado_post.InscripcionId = r;
+            this.loading = true;
             this.inscripcionService.put('propuesta/', this.info_propuesta_grado_post)
               .subscribe(res => {
                 const r = <any>res;
@@ -367,8 +382,10 @@ export class CrudPropuestaGradoComponent implements OnInit {
                   this.showToast('error', this.translate.instant('GLOBAL.error'),
                     this.translate.instant('GLOBAL.error'));
                 }
+                this.loading = false;
               },
                 (error: HttpErrorResponse) => {
+                  this.loading = false;
                   Swal({
                     type: 'error',
                     title: error.status + '',
@@ -382,8 +399,10 @@ export class CrudPropuestaGradoComponent implements OnInit {
             this.showToast('error', this.translate.instant('GLOBAL.error'),
               this.translate.instant('GLOBAL.error'));
           }
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -442,12 +461,14 @@ export class CrudPropuestaGradoComponent implements OnInit {
   }
 
   public loadLists() {
+    this.loading = true;
     this.store.select((state) => state).subscribe(
       (list) => {
         this.formPropuestaGrado.campos[this.getIndexForm('GrupoInvestigacion')].opciones = list.listGrupoInvestigacion[0];
         this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones = list.listLineaInvestigacion[0];
         this.formPropuestaGrado.campos[this.getIndexForm('TipoProyectoId')].opciones = list.listTipoProyecto[0];
         // this.formPropuestaGrado.campos[this.getIndexForm('TipoProyectoId')].opciones = list.listTipoParametro[0];
+        this.loading = false;
       },
     );
   }

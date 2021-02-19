@@ -112,6 +112,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     //     this.programa = inscripciondata.ProgramaAcademicoId;
     //     this.periodo = inscripciondata.PeriodoId;
     //     this.programa = 16;
+    this.loading = true;
         this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' +
           'PersonaId='+Number(window.localStorage.getItem('persona_id'))+'&DependenciaId='+Number(window.sessionStorage.getItem('ProgramaAcademicoId'))+'&PeriodoId='+Number(window.sessionStorage.getItem('IdPeriodo')))
           .subscribe((result: any) => {
@@ -123,8 +124,10 @@ export class ListDescuentoAcademicoComponent implements OnInit {
                   this.getPercentage(1);
                   this.source.load(this.data);
                 }
+                this.loading = false;
           },
             (error: HttpErrorResponse) => {
+              this.loading = false;
               Swal({
                 type: 'error',
                 title: error.status + '',
@@ -233,6 +236,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     };
     Swal(opt)
       .then((willDelete) => {
+        this.loading = true;
         if (willDelete.value) {
           this.mid.delete('descuento_academico', event.data).subscribe(res => {
             if (res !== null) {
@@ -241,8 +245,10 @@ export class ListDescuentoAcademicoComponent implements OnInit {
                 this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
                 this.translate.instant('GLOBAL.confirmarEliminar'));
             }
+            this.loading = false;
           },
             (error: HttpErrorResponse) => {
+              this.loading = false;
               Swal({
                 type: 'error',
                 title: error.status + '',
@@ -253,6 +259,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
               });
             });
         }
+        this.loading = false;
       });
   }
 

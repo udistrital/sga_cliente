@@ -11,7 +11,7 @@ import { ViewProduccionAcademicaComponent } from './view-produccion_academica/vi
 import { UserService } from '../../@core/data/users.service';
 import { PersonaService } from '../../@core/data/persona.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
-
+import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
   imports: [
@@ -20,6 +20,7 @@ import { NuxeoService } from '../../@core/utils/nuxeo.service';
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
+    NbSpinnerModule
   ],
   declarations: [
     ...routedComponents,
