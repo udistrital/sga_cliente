@@ -10,6 +10,7 @@ import { ToasterModule } from 'angular2-toaster';
 import { SharedModule } from '../../shared/shared.module';
 import { CrudInfoPersonaComponent } from './crud-info_persona/crud-info_persona.component';
 import { ViewInfoPersonaComponent } from './view-info-persona/view-info-persona.component';
+import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { ViewInfoPersonaComponent } from './view-info-persona/view-info-persona.
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
+    NbSpinnerModule
   ],
   declarations: [
     ...routedComponents,

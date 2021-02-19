@@ -1,6 +1,6 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <nb-card [hidden]="show_profile || show_info_pregrado || show_acad_pregrado || show_expe ||
-    show_proy || show_prod || show_desc || show_docu ||show_info || show_acad || show_info_interna ||show_info_reingreso || show_info_externa || show_acad_externa">
+    show_proy || show_prod || show_desc || show_docu ||show_info || show_acad || show_info_interna ||show_info_reingreso || show_info_externa || show_acad_externa" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
 
         <nb-card-header>
 

@@ -15,11 +15,9 @@ import { TipoCriterio } from '../../../@core/data/models/admision/tipo_criterio'
 import { LocalDataSource } from 'ng2-smart-table';
 import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
-import 'style-loader!angular2-toaster/toaster.css';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { from } from 'rxjs';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { element, load } from '@angular/core/src/render3';
@@ -52,7 +50,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
-  config: ToasterConfig;
   inscripcion_id: number;
   info_persona_id: number;
   info_ente_id: number;
@@ -726,27 +723,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
           break;
       }
     }
-  }
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
   }
 
 }

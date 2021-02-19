@@ -96,6 +96,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   }
 
   loadOptionsDepartamentoNacimiento(): void {
+    this.loading = true;
     let consultaHijos: Array<any> = [];
     const departamentoNacimiento: Array<any> = [];
     if (this.paisSeleccionado) {
@@ -109,8 +110,10 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
             }
           }
           this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = departamentoNacimiento;
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -125,6 +128,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   }
 
   loadOptionsCiudadNacimiento(): void {
+    this.loading = true;
     let consultaHijos: Array<any> = [];
     const ciudadNacimiento: Array<any> = [];
     if (this.departamentoSeleccionado) {
@@ -137,8 +141,10 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
             }
           }
           this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = ciudadNacimiento;
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -190,8 +196,10 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
             this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].valor = res['TipoDiscapacidad'];
             this.loading = false;
           }
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -280,6 +288,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
               }
             },
               (error: HttpErrorResponse) => {
+                this.loading = false;
                 Swal({
                   type: 'error',
                   title: error.status + '',

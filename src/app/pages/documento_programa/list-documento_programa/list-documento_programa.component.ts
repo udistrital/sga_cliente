@@ -40,7 +40,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.inscripcion = info2;
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
-        
+
     }
   }
 
@@ -97,6 +97,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
   }
 
   loadData(): void {
+    this.loading = true;
     this.soporteDocumento = [];
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' + this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
       (response: any[]) => {
@@ -115,8 +116,10 @@ export class ListDocumentoProgramaComponent implements OnInit {
             this.translate.instant('GLOBAL.info'), this.translate.instant('documento_programa.no_documentos')
           )
         }
+        this.loading = false;
       },
       (error: HttpErrorResponse) => {
+        this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
       },
     );

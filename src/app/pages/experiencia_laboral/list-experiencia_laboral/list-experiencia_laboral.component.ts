@@ -136,8 +136,10 @@ export class ListExperienciaLaboralComponent implements OnInit {
           this.getPercentage(1);
           this.source.load(this.data);
         }
+        this.loading = false;
       },
       (error: HttpErrorResponse) => {
+        this.loading = false;
         Swal({
           type: 'error',
           title: error.status + '',
@@ -207,6 +209,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
     };
     Swal(opt)
       .then((willDelete) => {
+        this.loading = true;
         if (willDelete.value) {
           this.experienciaService.delete('experiencia_laboral', event.data).subscribe(res => {
             if (res !== null) {
@@ -215,8 +218,10 @@ export class ListExperienciaLaboralComponent implements OnInit {
                 this.translate.instant('GLOBAL.experiencia_laboral') + ' ' +
                 this.translate.instant('GLOBAL.confirmarEliminar'));
             }
+            this.loading = false;
           },
             (error: HttpErrorResponse) => {
+              this.loading = false;
               Swal({
                 type: 'error',
                 title: error.status + '',
@@ -227,6 +232,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
               });
             });
         }
+        this.loading = false;
       });
   }
 

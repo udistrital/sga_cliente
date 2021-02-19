@@ -21,6 +21,9 @@ import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
+import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
+import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -59,7 +62,7 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   proyectos = [];
   criterios = [];
   periodos = [];
-  nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
+  niveles: NivelFormacion[];
 
   show_cupos = false;
   show_profile = false;
@@ -100,6 +103,8 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
     private coreService: CoreService,
     private evaluacionService: EvaluacionInscripcionService,
     private sgaMidService: SgaMidService,
+    private popUpManager: PopUpManager,
+    private projectService: ProyectoAcademicoService,
   ) {
     this.imagenes = IMAGENES;
     this.translate = translate;
@@ -107,6 +112,7 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
     });
     this.total = true;
     this.cargarPeriodo();
+    this.nivel_load()
   }
 
 
@@ -131,11 +137,22 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
     });
   }
 
+  nivel_load() {
+    this.projectService.get('nivel_formacion?limit=0').subscribe(
+      (response: NivelFormacion[]) => {
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
+  }
+
 
   loadProyectos() {
     // window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
     this.selectprograma = false;
-    this.oikosService.get('dependencia/?query=DependenciaTipoDependencia.TipoDependenciaId.Id:' + Number(this.selectednivel.id) +
+    this.oikosService.get('dependencia?query=DependenciaTipoDependencia.TipoDependenciaId.Id:' + Number(this.selectednivel) +
     ',Activo:true&limit=0')
       .subscribe(res => {
         const r = <any>res;
@@ -174,32 +191,10 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
 
   ngOnInit() {
 
-    }
+  }
 
   ngOnChanges() {
 
   }
 
-
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
-  }
 }

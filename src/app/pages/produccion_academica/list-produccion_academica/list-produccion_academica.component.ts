@@ -23,6 +23,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
   persona_id: number;
   source: LocalDataSource = new LocalDataSource();
   percentage: number;
+  loading: boolean = true;
 
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
@@ -110,6 +111,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
   }
 
   loadData(): void {
+    this.loading = true;
     this.sgaMidService.get('produccion_academica/' + this.persona_id).subscribe((res: any) => {
       if (res !== null) {
         if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
@@ -125,7 +127,9 @@ export class ListProduccionAcademicaComponent implements OnInit {
           });
         }
       }
+      this.loading = false;
     }, (error: HttpErrorResponse) => {
+      this.loading = false;
       Swal({
         type: 'error',
         title: error.status + '',
@@ -231,6 +235,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
             acepta: isAuthor.value ? true : false,
             AutorProduccionAcademica: data.EstadoEnteAutorId,
           }
+          this.loading = true;
           this.sgaMidService.put('produccion_academica/estado_autor_produccion/' + dataPut.AutorProduccionAcademica.Id, dataPut)
           .subscribe((res: any) => {
             if (res.Type === 'error') {
@@ -245,7 +250,9 @@ export class ListProduccionAcademicaComponent implements OnInit {
               this.loadData();
               this.showToast('success', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('produccion_academica.estado_autor_actualizado'));
             }
+            this.loading = false;
           }, (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',

@@ -34,7 +34,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
-  loading: boolean;
+  loading: boolean = true;
   percentage: number;
 
   constructor(
@@ -159,8 +159,10 @@ export class ListFormacionAcademicaComponent implements OnInit {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
         }
       }
+      this.loading = false;
     },
     (error: HttpErrorResponse) => {
+      this.loading = false;
       this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
     });
   }
@@ -181,7 +183,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
 
   onCreate(event): void {
     this.uid = 0;
-    
+
   }
 
   selectTab(event): void {
@@ -213,6 +215,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
     };
     Swal(opt)
       .then((willDelete) => {
+        this.loading = true;
         if (willDelete.value) {
           this.campusMidService.delete('formacionacademica', event.data).subscribe(res => {
             if (res !== null) {
@@ -221,8 +224,10 @@ export class ListFormacionAcademicaComponent implements OnInit {
                 this.translate.instant('GLOBAL.formacion_academica') + ' ' +
                 this.translate.instant('GLOBAL.confirmarEliminar'));
             }
+            this.loading = false;
           },
             (error: HttpErrorResponse) => {
+              this.loading = false;
               Swal({
                 type: 'error',
                 title: error.status + '',
@@ -233,6 +238,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
               });
             });
         }
+        this.loading = false;
       });
   }
 

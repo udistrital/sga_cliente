@@ -53,6 +53,7 @@ import { ParametrosService } from '../../@core/data/parametros.service';
 import { EnteService } from '../../@core/data/ente.service';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.component';
+import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
   imports: [
@@ -72,6 +73,7 @@ import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.co
     DescuentoAcademicoModule,
     PropuestaGradoModule,
     Ng2SmartTableModule,
+    NbSpinnerModule
   ],
   declarations: [
     ...routedComponents,
