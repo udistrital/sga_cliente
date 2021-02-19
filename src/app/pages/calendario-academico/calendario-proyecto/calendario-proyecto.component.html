@@ -9,7 +9,7 @@
                     <nb-card-body>
                         <mat-form-field style="width: 100%;">
                             <mat-select [formControl]="selectedLevel" placeholder="{{ 'calendario.para' | translate }}" (selectionChange)="onSelectLevel()">
-                                <mat-option *ngFor="let nivel of nivel_load" [value]="nivel.id">{{ nivel.nombre }}</mat-option>
+                                <mat-option *ngFor="let nivel of niveles" [value]="nivel.Id">{{ nivel.Nombre }}</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field style="width: 100%;">

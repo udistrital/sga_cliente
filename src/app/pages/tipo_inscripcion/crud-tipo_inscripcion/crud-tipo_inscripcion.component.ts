@@ -2,14 +2,15 @@
 import { TipoInscripcion } from './../../../@core/data/models/inscripcion/tipo_inscripcion';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
+import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
+import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
+import { PopUpManager } from '../../../managers/popUpManager';
 import { FORM_TIPO_INSCRIPCION } from './form-tipo_inscripcion';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { ListService } from '../../../@core/store/services/list.service';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../../@core/store/app.state';
-import 'style-loader!angular2-toaster/toaster.css';
 
 @Component({
   selector: 'ngx-crud-tipo-inscripcion',
@@ -17,9 +18,8 @@ import 'style-loader!angular2-toaster/toaster.css';
   styleUrls: ['./crud-tipo_inscripcion.component.scss'],
 })
 export class CrudTipoInscripcionComponent implements OnInit {
-  config: ToasterConfig;
   tipo_inscripcion_id: number;
-  nivel_load: [{ nombre: 'Pregrado', id: 14 }, { nombre: 'Posgrado', id: 15 }];
+  niveles: NivelFormacion[];
 
   @Input('tipo_periodo_id')
   set name(tipo_inscripcion_id: number) {
@@ -36,11 +36,12 @@ export class CrudTipoInscripcionComponent implements OnInit {
 
   constructor(private translate: TranslateService, 
     private inscripcionService: InscripcionService,
-    private toasterService: ToasterService,
+    private projectService: ProyectoAcademicoService,
+    private popUpManager: PopUpManager,
     private store: Store<IAppState>
     ) {
     this.formTipoInscripcion = FORM_TIPO_INSCRIPCION;
-    this.construirForm();
+    this.nivel_load();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
@@ -49,16 +50,30 @@ export class CrudTipoInscripcionComponent implements OnInit {
   construirForm() {
     this.formTipoInscripcion.titulo = this.translate.instant('tipo_inscripcion.sub_titulo');
     this.formTipoInscripcion.btn = this.translate.instant('GLOBAL.guardar');
-    for (let i = 0; i < this.formTipoInscripcion.campos.length; i++) {
-      this.formTipoInscripcion.campos[i].label = this.translate.instant('GLOBAL.' + this.formTipoInscripcion.campos[i].label_i18n);
-      this.formTipoInscripcion.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' + this.formTipoInscripcion.campos[i].label_i18n);
-    }
+    this.formTipoInscripcion.campos.forEach(campo => {
+      campo.label = this.translate.instant('GLOBAL.' + campo.label_i18n);
+      campo.placeholder = this.translate.instant('GLOBAL.placeholder_' + campo.label_i18n);
+      if (campo.etiqueta === 'select') {
+        campo.opciones = this.niveles;
+      }
+    });
   }
 
   useLanguage(language: string) {
     this.translate.use(language);
   }
 
+  nivel_load() {
+    this.projectService.get('nivel_formacion?limit=0').subscribe(
+      (response: NivelFormacion[]) => {
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+        this.construirForm();
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
+  }
 
   getIndexForm(nombre: String): number {
     for (let index = 0; index < this.formTipoInscripcion.campos.length; index++) {
@@ -110,7 +125,7 @@ export class CrudTipoInscripcionComponent implements OnInit {
           .subscribe(res => {
             this.loadTipoInscripcion();
             this.eventChange.emit(true);
-            this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('tipo_inscripcion.tipo_inscripcion_actualizado'));
+            this.popUpManager.showSuccessAlert(this.translate.instant('tipo_inscripcion.tipo_inscripcion_actualizado'))
           });
       }
     });
@@ -140,7 +155,7 @@ export class CrudTipoInscripcionComponent implements OnInit {
           .subscribe(res => {
             this.info_tipo_inscripcion = <TipoInscripcion><unknown>res;
             this.eventChange.emit(true);
-            this.showToast('success', this.translate.instant('GLOBAL.crear'), this.translate.instant('tipo_periodo.tipo_periodo_creado'));
+            this.popUpManager.showSuccessAlert(this.translate.instant('tipo_periodo.tipo_periodo_creado'))
           });
       }
     });
@@ -158,27 +173,6 @@ export class CrudTipoInscripcionComponent implements OnInit {
         this.updateTipoInscripcion(event.data.TipoInscripcion);
       }
     }
-  }
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
   }
 
 }

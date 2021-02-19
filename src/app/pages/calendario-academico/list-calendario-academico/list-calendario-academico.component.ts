@@ -4,11 +4,13 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { SgaMidService } from '../../../@core/data/sga_mid.service'
+import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service'
 import { Calendario } from '../../../@core/data/models/calendario-academico/calendario';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AsignarCalendarioProyectoComponent } from '../asignar-calendario-proyecto/asignar-calendario-proyecto.component';
 import { EventoService } from '../../../@core/data/evento.service';
+import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 
 @Component({
   selector: 'ngx-list-calendario-academico',
@@ -24,7 +26,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   calendars: Calendario[] = [];
   calendarForEditId: number = 0;
   calendarForNew: boolean = false;
-  nivel_load = [{ nombre: 'Pregrado', id: 14 }, { nombre: 'Posgrado', id: 15 }];
+  niveles: NivelFormacion[];
   loading: boolean = false;
 
   constructor(
@@ -33,6 +35,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     private route: ActivatedRoute,
     private sgaMidService: SgaMidService,
     private eventoService: EventoService,
+    private proyectoService: ProyectoAcademicoService,
     private dialog: MatDialog,
     private popUpManager: PopUpManager,
     private sanitizer: DomSanitizer,
@@ -42,6 +45,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
+    this.nivel_load()
   }
   recargarDespuesClon(newItem) {
     this.calendarForEditId = newItem
@@ -65,7 +69,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
               Id: calendar.Id,
               Nombre: calendar.Nombre,
               Periodo: calendar.Periodo,
-              Dependencia: this.nivel_load.filter(nivel => nivel.id === calendar.Nivel)[0].nombre,
+              Dependencia: this.niveles.filter(nivel => nivel.Id === calendar.Nivel)[0].Nombre,
               Estado: calendar.Activo ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo'),
             });
           });
@@ -142,6 +146,17 @@ export class ListCalendarioAcademicoComponent implements OnInit {
 
   cleanCode(code: string) {
     return this.sanitizer.bypassSecurityTrustHtml(code)
+  }
+
+  nivel_load() {
+    this.proyectoService.get('nivel_formacion?limit=0').subscribe(
+      (response: NivelFormacion[]) => {
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
   }
 
   onAction(event) {

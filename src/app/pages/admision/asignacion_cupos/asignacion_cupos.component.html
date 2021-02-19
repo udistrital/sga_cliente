@@ -18,8 +18,8 @@
                     <mat-label>{{ 'cupos.aviso_nivel' | translate }}:</mat-label>
                     <mat-select [formControl]="CampoControl" [(ngModel)]="selectednivel" (selectionChange)="loadProyectos()" >
                         <mat-option>--Seleccionar--</mat-option>
-                        <mat-option *ngFor="let item of nivel_load" [value]="item">
-                            {{item.nombre}}
+                        <mat-option *ngFor="let item of niveles" [value]="item.Id">
+                            {{item.Nombre}}
                         </mat-option>
                     </mat-select>
                     <mat-error *ngIf="CampoControl.hasError('required')">{{ 'cupos.erro_selec_nivel' | translate }}</mat-error>

@@ -639,7 +639,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     this.metodologia = {
       Id: this.opcionSeleccionadoMeto['Id'],
     }
-    this.nivel_formacion = {
+    this.nivel_formacion = <NivelFormacion>{
       Id: this.opcionSeleccionadoNivel['Id'],
     }
     this.proyecto_academico = {
@@ -774,7 +774,7 @@ putinformacionregistro() {
       this.metodologia = {
         Id: this.opcionSeleccionadoMeto['Id'],
       }
-      this.nivel_formacion = {
+      this.nivel_formacion = <NivelFormacion>{
         Id: this.opcionSeleccionadoNivel['Id'],
       }
       this.proyecto_academico = {
@@ -913,7 +913,7 @@ putinformacionregistro() {
     this.metodologia = {
       Id: this.opcionSeleccionadoMeto['Id'],
     }
-    this.nivel_formacion = {
+    this.nivel_formacion = <NivelFormacion>{
       Id: this.opcionSeleccionadoNivel['Id'],
     }
     this.proyecto_academico = {

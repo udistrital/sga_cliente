@@ -65,13 +65,7 @@ export let FORM_TIPO_INSCRIPCION = {
             requerido: true,
             tipo: "any",
             key: 'Nombre',
-            opciones: [{
-                'Id': 14, 'Nombre': 'Pregrado'
-            },
-            {
-                'Id': 15, 'Nombre': 'Posgrado'
-            },
-            ],
+            opciones: [],
         },
     ],
 }

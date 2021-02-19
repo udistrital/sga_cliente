@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
@@ -14,7 +15,7 @@ export class CalendarioProyectoComponent {
 
   selectedLevel: FormControl;
   selectedProject: FormControl;
-  nivel_load = [{nombre: 'Pregrado', id: 14}, { nombre: 'Posgrado', id: 15}];
+  niveles: NivelFormacion[];
   projects: any[];
   calendarioId: string = '';
   projectId: number = 0;
@@ -29,16 +30,15 @@ export class CalendarioProyectoComponent {
   ) {
     this.selectedLevel = new FormControl('');
     this.selectedProject = new FormControl('');
+    this.nivel_load();
   }
 
   onSelectLevel() {
     this.loading = true;
     this.showCalendar = false;
-    this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
+    this.projectService.get('proyecto_academico_institucion?limit=0&fields=Id,Nombre&query=NivelFormacionId.Id:' + this.selectedLevel.value).subscribe(
       response => {
-        this.projects = (<any[]>response).filter(
-          project => this.nivel_load.filter((val) => this.selectedLevel.value === val.id)[0].nombre === project['NivelFormacionId']['Descripcion'],
-        );
+        this.projects = <any[]>response
         this.loading = false;
       },
       error => {
@@ -67,6 +67,17 @@ export class CalendarioProyectoComponent {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.loading = false;
       },
+    );
+  }
+
+  nivel_load() {
+    this.projectService.get('nivel_formacion?limit=0').subscribe(
+      (response: NivelFormacion[]) => {
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
     );
   }
 

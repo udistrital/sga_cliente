@@ -34,7 +34,7 @@
                 <mat-form-field style="width: 100%;" *ngIf="showNew">
                     <mat-select [formControl]="CampoControl" [(ngModel)]="selectedLevel" placeholder="{{ 'calendario.para' | translate }}" (selectionChange)="onSelectLevel()">
                         <mat-option>--Seleccionar--</mat-option>
-                        <mat-option *ngFor="let nivel of nivel_load" [value]="nivel.id">{{ nivel.nombre }}</mat-option>
+                        <mat-option *ngFor="let nivel of niveles" [value]="nivel.Id">{{ nivel.Nombre }}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="CampoControl.hasError('required')">{{ 'inscripcion.erro_selec_nivel' | translate }}</mat-error>
                 </mat-form-field>

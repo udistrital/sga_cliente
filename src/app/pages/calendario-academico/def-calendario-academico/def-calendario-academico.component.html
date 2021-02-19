@@ -10,8 +10,8 @@
                         <mat-label>*{{ 'calendario.para' | translate }} </mat-label>
                         <mat-select formControlName="Nivel" placeholder="Pregrado/Posgrado" required>
                             <mat-option>--Seleccionar--</mat-option>
-                            <mat-option *ngFor="let nivel of nivel_load" [value]="nivel.id">
-                                {{ nivel.nombre }}
+                            <mat-option *ngFor="let nivel of niveles" [value]="nivel.Id">
+                                {{ nivel.Nombre }}
                             </mat-option>
                         </mat-select>
                         <mat-error *ngIf="calendarForm.get('Nivel').hasError('required') && calendarForm.get('Nivel').touched">
@@ -118,8 +118,8 @@
                                 <mat-label>*{{ 'calendario.para' | translate }} </mat-label>
                                 <mat-select formControlName="NivelClone" placeholder="Pregrado/Posgrado" required>
                                     <mat-option>--Seleccionar--</mat-option>
-                                    <mat-option *ngFor="let nivelClone of nivel_load" [value]="nivelClone.id">
-                                        {{ nivelClone.nombre }}
+                                    <mat-option *ngFor="let nivelClone of niveles" [value]="nivelClone.Id">
+                                        {{ nivelClone.Nombre }}
                                     </mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="calendarFormClone.get('NivelClone').hasError('required') && calendarFormClone.get('NivelClone').touched">
