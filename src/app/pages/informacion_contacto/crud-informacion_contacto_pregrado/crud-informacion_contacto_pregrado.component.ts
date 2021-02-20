@@ -54,7 +54,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
   datosPost: any;
   datosGet: any;
   datosPut: any;
-  loading: boolean;
+  loading: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -144,6 +144,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
   }
 
   loadOptionsDepartamentoResidencia(): void {
+    this.loading = true;
     let consultaHijos: Array<any> = [];
     const departamentoResidencia: Array<any> = [];
     if (this.paisSeleccionado) {
@@ -157,8 +158,10 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
             }
           }
           this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = departamentoResidencia;
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -173,6 +176,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
   }
 
   loadOptionsCiudadResidencia(): void {
+    this.loading = true;
     let consultaHijos: Array<any> = [];
     const ciudadResidencia: Array<any> = [];
     if (this.departamentoSeleccionado) {
@@ -185,8 +189,10 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
             }
           }
           this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = ciudadResidencia;
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -201,6 +207,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
   }
 
   loadOptionsLocalidadResidencia(): void {
+    this.loading = true;
     let consultaHijos: Array<any> = [];
     const localidadResidencia: Array<any> = [];
     if (this.departamentoSeleccionado) {
@@ -213,8 +220,10 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
             }
           }
           this.formInformacionContacto.campos[this.getIndexForm('LocalidadResidencia')].opciones = localidadResidencia;
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal({
               type: 'error',
               title: error.status + '',
@@ -303,8 +312,10 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
             }
             this.loading = false;
           }
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             if (error.status.toString() !== '200') {
               Swal({
                 type: 'error',
@@ -456,6 +467,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
            if (loc !== null) {
              this.datosPost.UbicacionTercero.Lugar = <Lugar>{Id: this.info_informacion_contacto.LocalidadResidencia};
            }
+           this.loading = true;
            this.sgamidService.post('persona/guardar_datos_contacto/', this.datosPost)
              .subscribe(res => {
                if (res !== null) {
@@ -466,8 +478,10 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
                    this.translate.instant('GLOBAL.informacion_contacto') + ' ' +
                    this.translate.instant('GLOBAL.confirmarCrear'));
                }
+               this.loading = false;
              },
                (error: HttpErrorResponse) => {
+                this.loading = false;
                  Swal({
                    type: 'error',
                    title: error.status + '',

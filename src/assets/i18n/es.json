@@ -970,6 +970,7 @@
         "sin_descuento": "No hay descuentos registrados",
         "propuesta_grado": "Propuesta de trabajo de grado",
         "inscribirse": "Inscribirse",
+        "seguro_inscribirse": "¿Está seguro de generar la inscripción con la información seleccionada?",
         "info_persona": "Información personal",
         "info_caracteristica": "Información característica",
         "informacion_contacto": "Información de contacto",
@@ -984,7 +985,7 @@
         "transferencia": "Datos de transferencia",
         "error_registrar_informacion": "Ocurrió un error al registrar la información de la inscripción",
         "error_cargar_informacion": "Ocurrió un error al cargar la información de la inscripción",
-        "preinscripcion": "Preinscripcion a proyecto académicos",
+        "preinscripcion": "Preinscripcion a proyectos académicos",
         "mensaje_preinscripcion": "Para realizar la preinscripción a uno o más proyectos académicos por favor seleccione el (los) proyectos a los que se desea presentar y finalice la preinscripción oprimiendo el boton de Preinscripción.",
         "select": "Nombre del proyecto académico",
         "erro_selec": "Por favor seleccione al menos un proyecto académico!",
@@ -1009,7 +1010,7 @@
         "error_update_programa_seleccionado": "Ya se encuentra un proceso de inscripción con el programa seleccionado",
         "imprimir_comprobante": "Imprima y conserve este comprobante",
         "comprobante_inscripcion": "Comprobante de Inscripción",
-        "info_comprobante": "El diligenciamiento del presente formulario indica que el aspirante ha conocido el instructivo oficial de admisiones del PERIODO ACADÉMICO en curso, y acorde con la ley 1581 de 2012, autoriza de manera expresa e inequívoca, que sus datos personales sean tratados conforme a las funciones propias de la Universidad, en su condición de Institución de Educación Suoerior."
+        "info_comprobante": "El diligenciamiento del presente formulario indica que el aspirante ha conocido el instructivo oficial de admisiones del PERIODO ACADÉMICO en curso, y acorde con la ley 1581 de 2012, autoriza de manera expresa e inequívoca, que sus datos personales sean tratados conforme a las funciones propias de la Universidad, en su condición de Institución de Educación Superior."
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

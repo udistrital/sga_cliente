@@ -14,6 +14,7 @@ import { ImplicitAutenticationService } from '../../@core/utils/implicit_autenti
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../@core/data/documento.service';
 import { UserService } from '../../@core/data/users.service';
+import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { UserService } from '../../@core/data/users.service';
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
+    NbSpinnerModule
   ],
   declarations: [
     ...routedComponents,

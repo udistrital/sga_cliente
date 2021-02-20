@@ -30,7 +30,7 @@ export class ListService {
     private experienciaService: ExperienciaService,
     private cidcService: CIDCService,
     // private producccionAcademicaService: ProduccionAcademicaService,
-    private enteService: EnteService,    
+    private enteService: EnteService,
     private parametrosService: ParametrosService,
     private descuentoAcademicoService: DescuentoAcademicoService,
     private documentoProgramaService: DocumentoProgramaService,
@@ -38,6 +38,7 @@ export class ListService {
 
   }
 
+  loading: boolean = false;
 
   public findGenero() {
     this.store.select(REDUCER_LIST.Genero).subscribe(
@@ -498,6 +499,7 @@ public findTipoParametro() {
 }
 
   public findGrupoInvestigacion() {
+    this.loading = true;
     this.store.select(REDUCER_LIST.GrupoInvestigacion).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
@@ -513,6 +515,7 @@ public findTipoParametro() {
               },
             );
         }
+        this.loading = false;
       },
     );
   }

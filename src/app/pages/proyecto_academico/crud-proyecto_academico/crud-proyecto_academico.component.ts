@@ -570,7 +570,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       this.metodologia = {
         Id: this.opcionSeleccionadoMeto['Id'],
       }
-      this.nivel_formacion = {
+      this.nivel_formacion = <NivelFormacion>{
         Id: this.opcionSeleccionadoNivel['Id'],
       }
       this.proyecto_academico = {

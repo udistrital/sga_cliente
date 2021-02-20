@@ -9,6 +9,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { CrudPropuestaGradoComponent } from './crud-propuesta_grado/crud-propuesta_grado.component';
 import { ViewPropuestaGradoComponent } from './view-propuesta_grado/view-propuesta_grado.component';
 import { UserService } from '../../@core/data/users.service';
+import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { UserService } from '../../@core/data/users.service';
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
+    NbSpinnerModule
   ],
   declarations: [
     ...routedComponents,

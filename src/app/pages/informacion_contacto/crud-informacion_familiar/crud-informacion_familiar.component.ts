@@ -63,7 +63,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   datosPost: any;
   datosGet: any;
   datosPut: any;
-  loading: boolean;
+  loading: boolean = false;
 
   constructor(
     private popUpManager: PopUpManager,
@@ -126,8 +126,10 @@ export class CrudInformacionFamiliarComponent implements OnInit {
             this.info_info_familiar = <any>res.Response.Body[1];
             this.loading = false;
           }
+          this.loading = false;
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           });
     } else {
@@ -166,15 +168,18 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   }
 
   loadOptionsParentesco(): void {
+    this.loading = true;
     let parentescos: Array<any> = [];
     this.tercerosService.get('tipo_parentesco?limit=0&query=Activo:true')
       .subscribe(res => {
         if (res !== null) {
           parentescos = <Array<TipoParentesco>>res;
         }
+        this.loading = false;
         this.formInformacionFamiliar.campos[ this.getIndexForm('Parentesco') ].opciones = parentescos;
         this.formInformacionFamiliar.campos[ this.getIndexForm('ParentescoAlterno') ].opciones = parentescos;
       });
+      this.loading = false;
   }
 
   public validarForm(event: any) {
@@ -337,6 +342,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
         if (willDelete.value) {
           this.loading = true;
           //FUNCION PUT
+          this.loading = true;
           this.sgaMidService.put('persona/info_familiar', info_familiar).subscribe(
             (res: any) => {
               if(res !== null && res.Response.Code == '404'){
@@ -351,6 +357,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
                 this.loadInfoPersona();
               }
+              this.loading = false;
             },
             (error: HttpErrorResponse) => {
               this.loading = false;
@@ -369,6 +376,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
   }
 
   createInfoFamiliar(info_familiar: any){
+    this.loading = true;
     this.sgaMidService.post('inscripciones/post_informacion_familiar', info_familiar)
       .subscribe((res: any) => {
         if (res.Type === 'error') {
@@ -383,7 +391,9 @@ export class CrudInformacionFamiliarComponent implements OnInit {
             this.showToast('success', this.translate.instant('GLOBAL.actualizar'),
             this.translate.instant('informacion_familiar.informacion_familiar_actualizada'));
           }
+          this.loading = false;
       }, () => {
+        this.loading = false;
         this.showToast('error', 'Error', this.translate.instant('informacion_familiar.informacion_familiar_no_actualizada'));
       });
   }

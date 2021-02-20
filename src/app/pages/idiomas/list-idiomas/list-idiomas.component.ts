@@ -131,8 +131,10 @@ export class ListIdiomasComponent implements OnInit {
             this.getPercentage(1);
             this.source.load(data);
         }
+        this.loading = false;
       },
       (error: HttpErrorResponse) => {
+        this.loading = true;
         this.popUpManager.showErrorAlert(this.translate.instant('ERROR.' + error.status));
       });
   }
@@ -150,6 +152,7 @@ export class ListIdiomasComponent implements OnInit {
   }
 
   onDelete(event): void {
+    this.loading = true;
     this.popUpManager.showConfirmAlert(this.translate.instant('GLOBAL.eliminar') + '?')
       .then((willDelete) => {
         if (willDelete.value) {
@@ -160,11 +163,14 @@ export class ListIdiomasComponent implements OnInit {
                 this.translate.instant('GLOBAL.idioma') + ' ' + this.translate.instant('GLOBAL.confirmarEliminar')
               );
             }
+            this.loading = false;
           },
             (error: HttpErrorResponse) => {
+              this.loading = false;
               this.popUpManager.showErrorAlert(this.translate.instant('ERROR.' + error.status))
             });
         }
+        this.loading = false;
       });
   }
 
