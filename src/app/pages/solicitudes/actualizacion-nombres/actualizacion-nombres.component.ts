@@ -130,7 +130,6 @@ export class ActualizacionNombresComponent implements OnInit {
                 this.solicitudDatos.FechaSolicitud = this.solicitudDatos.FechaSolicitud + ' +0000 +0000';
                 Solicitud.Solicitud = this.solicitudDatos;
                 Solicitud.Solicitante = parseInt(localStorage.getItem('persona_id'))
-                console.info(Solicitud)
                 this.sgaMidService.post('solicitud_evaluacion/registrar_solicitud', Solicitud).subscribe(
                   (res: any) => {
                     if(res.Response.Code === "200"){
