@@ -1278,6 +1278,12 @@
         "tipo_inscripcion_creado": "Type register created"
     },
     "solicitudes": {
+        "error": "An unexpected error occurred and the request could not be fulfilled",
+        "no_data": "There is no registered request",
+        "crear_error": "An unexpected error occurred while submitting the request",
+        "crear_exito": "The request has been sent successfully",
+        "enviar": "Send",
+        "confirmar_envio": "Are you sure you want to send this request?",
         "solicitud_datos": "Request for updating ID number",
         "solicitud_nombres": "Request for updating names",
         "numero": "Number",

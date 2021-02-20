@@ -26,6 +26,7 @@ export class ActualizacionNombresComponent implements OnInit {
   solicitudForm: any;
   solicitudDatos: ActualizacionNombre;
   filesUp: any; 
+  SoporteDocumento: any; 
 
   constructor(
     private translate: TranslateService,
@@ -39,6 +40,7 @@ export class ActualizacionNombresComponent implements OnInit {
     this.solicitudForm = ACTUALIZAR_NOMBRE;
     this.construirForm();
     this.loadInfo();
+    this.loadInfoNueva();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
@@ -63,6 +65,49 @@ export class ActualizacionNombresComponent implements OnInit {
       }
       campo.label = this.translate.instant('solicitudes.' + campo.label_i18n);
     })
+  }
+
+  loadInfoNueva(){
+    var IdPersona = localStorage.getItem('persona_id');
+    this.SoporteDocumento = [];
+    this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/'+IdPersona+'/16').subscribe(
+      (response: any) => {
+        if (response.Response.Code === "200"){
+          this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].valor = response.Response.Body[0].NombreNuevo;
+          this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].deshabilitar = true;  
+          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].valor = response.Response.Body[0].ApellidoNuevo;
+          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = true; 
+          this.solicitudForm.Documento = response.Response.Body[0].Documento;
+          const files = []
+          if (this.solicitudForm.Documento + '' !== '0') {
+            files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
+          }
+          if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0){
+            this.nuxeoService.getDocumentoById$(files, this.documentoService)
+              .subscribe(res => {
+                const filesResponse = <any>res;
+                if (Object.keys(filesResponse).length === files.length) {
+                  this.SoporteDocumento = this.solicitudForm.Documento;
+                  this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
+                  this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                }
+              },
+              (error: HttpErrorResponse) => {
+                this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+              }
+            );
+          }
+        } else if (response.Response.Code === "404"){
+          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
+          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
+        } else{
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
   }
 
   loadInfo(){
@@ -130,6 +175,7 @@ export class ActualizacionNombresComponent implements OnInit {
                 this.solicitudDatos.FechaSolicitud = this.solicitudDatos.FechaSolicitud + ' +0000 +0000';
                 Solicitud.Solicitud = this.solicitudDatos;
                 Solicitud.Solicitante = parseInt(localStorage.getItem('persona_id'))
+                Solicitud.TipoSolicitud = 4;
                 this.sgaMidService.post('solicitud_evaluacion/registrar_solicitud', Solicitud).subscribe(
                   (res: any) => {
                     if(res.Response.Code === "200"){

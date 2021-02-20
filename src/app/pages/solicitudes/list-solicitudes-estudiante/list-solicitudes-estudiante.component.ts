@@ -36,11 +36,9 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
   }
 
   ngOnInit() {
-   
   }
 
   onclick(event) {
-    console.info(event)
     if (event.data.Tipo === "Actualizar ID"){
       this.showSolicitudID = true;
       this.showTable = false;
@@ -65,9 +63,9 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
           });
           this.solicitudes.load(dataInfo);
         } else if (response.Response.Code === "404"){
-
+          this.popUpManager.showToast('info', this.translate.instant('solicitudes.no_data'),this.translate.instant('GLOBAL.info'));
         } else {
-
+          this.popUpManager.showToast('info', this.translate.instant('solicitudes.error'),this.translate.instant('GLOBAL.error'));
         }
       },
       error => {

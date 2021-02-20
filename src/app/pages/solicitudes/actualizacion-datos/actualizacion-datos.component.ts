@@ -27,7 +27,8 @@ export class ActualizacionDatosComponent implements OnInit {
   solicitudForm: any;
   solicitudDatos: ActualizacionDatos;
   tipoDocumento: any[];
-  filesUp: any;  
+  filesUp: any; 
+  SoporteDocumento: any; 
 
   constructor(
     private translate: TranslateService,
@@ -40,6 +41,7 @@ export class ActualizacionDatosComponent implements OnInit {
     private popUpManager: PopUpManager,) {
     this.solicitudForm = ACTUALIZAR_DATOS;
     this.loadInfo();
+    this.loadInfoNueva();
     this.tercerosService.get('tipo_documento').subscribe(
       response => {
         this.tipoDocumento = response;
@@ -62,6 +64,54 @@ export class ActualizacionDatosComponent implements OnInit {
     this.solicitante.CorreoPersonal = "correo@gmail.com"
     this.solicitante.Nombre = "Nombre de prueba"
     this.solicitante.Telefono = "+57 000-000-0000"
+  }
+
+  loadInfoNueva(){
+    var IdPersona = localStorage.getItem('persona_id')
+    this.SoporteDocumento = [];
+    this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/'+IdPersona+'/15').subscribe(
+      (response: any) => {
+        if (response.Response.Code === "200"){
+          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].valor = momentTimezone.tz(response.Response.Body[0].FechaExpedicionNuevo, 'America/Bogota').format('YYYY-MM-DD');
+          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = true;  
+          this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].valor = response.Response.Body[0].TipoDocumentoNuevo;
+          this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = true;  
+          this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].valor = response.Response.Body[0].NumeroNuevo;
+          this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].deshabilitar = true; 
+          this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = true; 
+          this.solicitudForm.Documento = response.Response.Body[0].Documento;
+          const files = []
+          if (this.solicitudForm.Documento + '' !== '0') {
+            files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
+          }
+          if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0){
+            this.nuxeoService.getDocumentoById$(files, this.documentoService)
+              .subscribe(res => {
+                const filesResponse = <any>res;
+                if (Object.keys(filesResponse).length === files.length) {
+                  this.SoporteDocumento = this.solicitudForm.Documento;
+                  this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
+                  this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                }
+              },
+              (error: HttpErrorResponse) => {
+                this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+              }
+            );
+          }
+        } else if (response.Response.Code === "404"){
+          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = false;
+          this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = false; 
+          this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].deshabilitar = false; 
+          this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false; 
+        } else{
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
   }
 
   loadInfo(){
@@ -147,6 +197,7 @@ export class ActualizacionDatosComponent implements OnInit {
                 this.solicitudDatos.FechaSolicitud = this.solicitudDatos.FechaSolicitud + ' +0000 +0000';
                 Solicitud.Solicitud = this.solicitudDatos;
                 Solicitud.Solicitante = parseInt(localStorage.getItem('persona_id'))
+                Solicitud.TipoSolicitud = 3;
                 this.sgaMidService.post('solicitud_evaluacion/registrar_solicitud', Solicitud).subscribe(
                   (res: any) => {
                     if(res.Response.Code === "200"){
