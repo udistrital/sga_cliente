@@ -4,9 +4,17 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { ActualizacionDatos } from '../../../@core/data/models/solicitudes/actualizacion-datos';
 import { Solicitante } from '../../../@core/data/models/solicitudes/solicitante';
 import { ACTUALIZAR_DATOS } from './form-actualizacion-datos';
-import { DialogoSoporteComponent } from '../dialogo-soporte/dialogo-soporte.component';
 import { TercerosService } from '../../../@core/data/terceros.service';
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import * as moment from 'moment';
+import * as momentTimezone from 'moment-timezone';
+import Swal from 'sweetalert2';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'ngx-actualizacion-datos',
@@ -19,15 +27,21 @@ export class ActualizacionDatosComponent implements OnInit {
   solicitudForm: any;
   solicitudDatos: ActualizacionDatos;
   tipoDocumento: any[];
-  
+  filesUp: any; 
+  SoporteDocumento: any; 
 
   constructor(
     private translate: TranslateService,
     private dialogo: MatDialog,
+    private autenticationService: ImplicitAutenticationService,
     private tercerosService: TercerosService,
-    private popUpManager: PopUpManager,
-  ) {
+    private documentoService: DocumentoService,
+    private nuxeoService: NuxeoService,
+    private sgaMidService: SgaMidService,
+    private popUpManager: PopUpManager,) {
     this.solicitudForm = ACTUALIZAR_DATOS;
+    this.loadInfo();
+    this.loadInfoNueva();
     this.tercerosService.get('tipo_documento').subscribe(
       response => {
         this.tipoDocumento = response;
@@ -37,7 +51,6 @@ export class ActualizacionDatosComponent implements OnInit {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );
-    
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
@@ -51,6 +64,86 @@ export class ActualizacionDatosComponent implements OnInit {
     this.solicitante.CorreoPersonal = "correo@gmail.com"
     this.solicitante.Nombre = "Nombre de prueba"
     this.solicitante.Telefono = "+57 000-000-0000"
+  }
+
+  loadInfoNueva(){
+    var IdPersona = localStorage.getItem('persona_id')
+    this.SoporteDocumento = [];
+    this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/'+IdPersona+'/15').subscribe(
+      (response: any) => {
+        if (response.Response.Code === "200"){
+          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].valor = momentTimezone.tz(response.Response.Body[0].FechaExpedicionNuevo, 'America/Bogota').format('YYYY-MM-DD');
+          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = true;  
+          this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].valor = response.Response.Body[0].TipoDocumentoNuevo;
+          this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = true;  
+          this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].valor = response.Response.Body[0].NumeroNuevo;
+          this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].deshabilitar = true; 
+          this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = true; 
+          this.solicitudForm.Documento = response.Response.Body[0].Documento;
+          const files = []
+          if (this.solicitudForm.Documento + '' !== '0') {
+            files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
+          }
+          if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0){
+            this.nuxeoService.getDocumentoById$(files, this.documentoService)
+              .subscribe(res => {
+                const filesResponse = <any>res;
+                if (Object.keys(filesResponse).length === files.length) {
+                  this.SoporteDocumento = this.solicitudForm.Documento;
+                  this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
+                  this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                }
+              },
+              (error: HttpErrorResponse) => {
+                this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+              }
+            );
+          }
+        } else if (response.Response.Code === "404"){
+          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = false;
+          this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = false; 
+          this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].deshabilitar = false; 
+          this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false; 
+        } else{
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
+  }
+
+  loadInfo(){
+    var TerceroId = parseInt(localStorage.getItem('persona_id'))
+    if (TerceroId != undefined){
+      var hoy = new Date();
+      this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor = hoy.getFullYear()+"/"+(hoy.getMonth()+1)+"/"+hoy.getDate();
+      this.tercerosService.get('datos_identificacion?query=TerceroId:'+TerceroId).subscribe(
+        (response: any) => {
+          if (response[0] !== undefined && response[0] !== ""){
+            this.solicitudForm.campos[this.getIndexForm('TipoDocumentoActual')].valor = response[0]["TipoDocumentoId"];
+            this.solicitudForm.campos[this.getIndexForm('NumeroActual')].valor = response[0]["Numero"];
+            if (response[0]["FechaExpedicion"] !== null){
+              this.solicitudForm.campos[this.getIndexForm('FechaExpedicionActual')].valor = momentTimezone.tz(response[0]["FechaExpedicion"], 'America/Bogota').format('DD/MM/YYYY');
+            }
+          }
+        }, 
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        }
+      );
+    }
+  }
+
+  getIndexForm(nombre: String): number {
+    for (let index = 0; index < this.solicitudForm.campos.length; index++) {
+      const element = this.solicitudForm.campos[index];
+      if (element.nombre === nombre) {
+        return index
+      }
+    }
+    return 0;
   }
 
   construirForm() {
@@ -68,17 +161,74 @@ export class ActualizacionDatosComponent implements OnInit {
   }
 
   enviarSolicitud(event) {
-    // console.log(event)
+    if (event.valid){
+      const opt: any = {
+        title: this.translate.instant('solicitudes.enviar'),
+        text: this.translate.instant('solicitudes.confirmar_envio'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+      };
+      Swal(opt)
+        .then((willDelete) => {
+          if (willDelete.value) {
+            const files = [];
+            var Solicitud: any = {};
+            this.solicitudDatos = event.data.solicitudDatos;
+            if (this.solicitudDatos["Documento"].file !== undefined) {
+              files.push({
+                nombre: this.autenticationService.getPayload().sub, key: 'Documento',
+                file: this.solicitudDatos["Documento"].file , IdDocumento: 25
+              });
+            }
+            this.nuxeoService.getDocumentos$(files, this.documentoService)
+              .subscribe(response => {
+                if (Object.keys(response).length === files.length) {
+                  this.filesUp = <any>response;
+                  if (this.filesUp['Documento'] !== undefined) {
+                    this.solicitudDatos["Documento"] = this.filesUp['Documento'].Id;
+                  }
+                }
+                this.solicitudDatos.FechaExpedicionNuevo = momentTimezone.tz(this.solicitudDatos.FechaExpedicionNuevo, 'America/Bogota').format('DD/MM/YYYY');
+                this.solicitudDatos.FechaSolicitud = momentTimezone.tz(this.solicitudDatos.FechaSolicitud, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+                this.solicitudDatos.FechaSolicitud = this.solicitudDatos.FechaSolicitud + ' +0000 +0000';
+                Solicitud.Solicitud = this.solicitudDatos;
+                Solicitud.Solicitante = parseInt(localStorage.getItem('persona_id'))
+                Solicitud.TipoSolicitud = 3;
+                this.sgaMidService.post('solicitud_evaluacion/registrar_solicitud', Solicitud).subscribe(
+                  (res: any) => {
+                    if(res.Response.Code === "200"){
+                      //Funcion get
+                      this.popUpManager.showSuccessAlert(this.translate.instant('solicitudes.crear_exito'));
+                    } else {
+                      this.popUpManager.showErrorToast(this.translate.instant('solicitudes.crear_error'));
+                    }
+                  },
+                  (error: HttpErrorResponse) => {
+                    Swal({
+                      type: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                  }
+                );
+              }, 
+              (error: HttpErrorResponse) => {
+                Swal({
+                  type: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
+          }
+        });
+    }
   }
-
-  abrirDialogoArchivo() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '400px';
-    dialogConfig.height = '300px';
-    const dialogo = this.dialogo.open(DialogoSoporteComponent, dialogConfig);
-    dialogo.afterClosed().subscribe(archivo => {
-      
-    });
-  }
-
 }
