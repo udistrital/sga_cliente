@@ -160,12 +160,26 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     );
   }
 
+  activateTab(){
+    this.showProfile = true;
+  }
+
   loadPerfil(event){
     this.tercerosService.get('datos_identificacion?query=numero:' + event.data.Identificacion).subscribe(
       (response: any) => {
-        this.info_persona_id = response[0].TerceroId.Id;
-        this.inscripcion_id = event.data["Credencial"];
-        this.showProfile = false;
+        this.projectService.get('proyecto_academico_institucion/'+this.proyectos_selected).subscribe(
+          (res: any) => {
+            this.info_persona_id = response[0].TerceroId.Id;
+            this.inscripcion_id = event.data["Credencial"];
+            sessionStorage.setItem('IdInscripcion', event.data["Credencial"]);
+            sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
+            sessionStorage.setItem('ProgramaAcademico', res.Nombre);
+            this.showProfile = false;
+          },
+          error => {
+            this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+          }
+        );
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));

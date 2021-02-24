@@ -41,8 +41,8 @@ import { DocumentoProgramaModule } from '../documento_programa/documento_program
 import { DescuentoAcademicoModule } from '../descuento_academico/descuento_academico.module';
 import { PropuestaGradoModule } from '../propuesta_grado/propuesta_grado.module';
 import { ProduccionAcademicaModule } from '../produccion_academica/produccion_academica.module';
-import { PerfilAdmitidosComponent } from './perfil-admitidos/perfil-admitidos.component';
-import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.component';
+import { PerfilComponent } from '../inscripcion/perfil/perfil.component';
+import { ViewInscripcionComponent } from '../inscripcion/view-inscripcion/view-inscripcion.component';
 
 @NgModule({
   imports: [
@@ -71,7 +71,7 @@ import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.co
   declarations: [
     ...routedComponents,
     EvaluacionDocumentosInscritosComponent,
-    PerfilAdmitidosComponent,
+    PerfilComponent,
     ViewInscripcionComponent,
   ],
   providers: [

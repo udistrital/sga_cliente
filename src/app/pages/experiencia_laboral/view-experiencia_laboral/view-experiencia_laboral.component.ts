@@ -71,7 +71,6 @@ export class ViewExperienciaLaboralComponent implements OnInit {
         const r = <any>response;
         const soportes = [];
         if (response !== null && r.Data.Code != '400') {
-
           this.data = <Array<any>>response.Data.Body[1];
           this.info_experiencia_laboral = this.data;
 
