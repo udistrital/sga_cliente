@@ -174,6 +174,8 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
             sessionStorage.setItem('IdInscripcion', event.data["Credencial"]);
             sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
             sessionStorage.setItem('ProgramaAcademico', res.Nombre);
+            sessionStorage.setItem('IdPeriodo', this.periodo.Id);
+            console.info(this.periodo.Id)
             this.showProfile = false;
           },
           error => {
