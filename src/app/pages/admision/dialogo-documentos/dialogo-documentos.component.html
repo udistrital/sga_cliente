@@ -1,0 +1,37 @@
+<div class="dinamic-form" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+  <form novalidate [formGroup]="revisionForm" (ngSubmit)="guardarRevision()" class="form-horizontal" >
+    <fieldset [ngClass]="{'fieldseter': true} ">
+      <legend>
+        {{ 'admision.revisar_docs' | translate }}
+      </legend>
+      <div class="row">
+        <div class="col-12">
+          <pdf-viewer [src]="documento" [original-size]="false"></pdf-viewer>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <mat-label>{{ 'admision.doc_valido' | translate }}* </mat-label>
+        </div>
+        <div class="col-9">
+          <mat-slide-toggle formControlName="aprobado" ></mat-slide-toggle>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <mat-label>{{ 'GLOBAL.observacion' | translate }} </mat-label>
+        </div>
+        <div class="col-9">
+          <mat-form-field style="width: 100%;">
+            <textarea matInput formControlName="observacion" ></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 ml-auto">
+          <button class="float-right" mat-button type="submit" [disabled]="revisionForm.invalid">{{ 'GLOBAL.guardar' | translate }} </button>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>

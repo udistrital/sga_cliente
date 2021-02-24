@@ -1113,7 +1113,10 @@
         "error_cargar": "The criteria data could not be loaded.",
         "no_criterios": "No registered criteria.",
         "asistencia": "Attendance",
-        "requiere_asistencia": "Requires attendance?"
+        "requiere_asistencia": "Requires attendance?",
+        "revisar_docs": "Review documents",
+        "doc_valido": "Valid document",
+        "seguro_revision": "Are you sure about registering this document review?"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",

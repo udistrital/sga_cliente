@@ -9,6 +9,7 @@ import { ListadoAspiranteComponent } from './listado_aspirantes/listado_aspirant
 import { AdministradorCriteriosComponent } from './administrador-criterios/administrador-criterios.component';
 import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios.component';
 import { EvaluacionAspirantesComponent } from './evaluacion-aspirantes/evaluacion-aspirantes.component';
+import { DialogoDocumentosComponent } from './dialogo-documentos/dialogo-documentos.component';
 
 const routes: Routes = [{
   path: '',
@@ -61,4 +62,5 @@ export const routedComponents = [
   AdministradorCriteriosComponent,
   DialogoCriteriosComponent,
   EvaluacionAspirantesComponent,
+  DialogoDocumentosComponent,
 ];
