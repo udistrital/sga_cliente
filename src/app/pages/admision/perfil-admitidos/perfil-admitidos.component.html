@@ -1,0 +1,77 @@
+<div #comprobante>
+  <nb-card>
+    <nb-card-body>
+      <div>
+        <div class="row" [hidden]="imprimir">
+          
+        </div>
+        <div class="row" *ngIf="imprimir">
+          <div class="col-md-12">
+            <nb-card>
+              <nb-card-header class="row container">
+                <div class="col-md-12">
+                  <div class="col-md-12 info-comprobante">
+                    <h4 class="text-center">{{ 'inscripcion.comprobante_inscripcion' | translate }} </h4>
+                  </div>
+                </div>
+              </nb-card-header>
+            </nb-card>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <view-inscripcion class="col-md-12"></view-inscripcion>
+        <ngx-view-info-persona (url_editar)="editar($event,'info_persona')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-info-persona>
+        <!--<ngx-view-info-caracteristica
+          (url_editar)="editar($event,'info_caracteristica')"
+          info_caracteristica_id="{{info_persona_id}}" class="col-md-6"></ngx-view-info-caracteristica> 
+        <ngx-view-informacion-contacto
+          (url_editar)="editar($event,'info_contacto')"
+          persona_id="{{info_persona_id}}" class="col-md-6"></ngx-view-informacion-contacto>-->
+        <ngx-view-formacion-academica (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-formacion-academica>
+        <ngx-view-idiomas (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" inscripcion_id="{{info_inscripcion_id}}" class="col-md-12"></ngx-view-idiomas>
+        <ngx-view-experiencia-laboral (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-experiencia-laboral>
+        <!--<ngx-view-libro (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-libro>
+        <ngx-view-articulo (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-articulo>
+        <ngx-view-traduccion (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-traduccion>
+        <ngx-view-otra-publicacion (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-otra-publicacion>
+        <ngx-view-otro-documento (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-otro-documento>
+        <ngx-view-produccion-tecnica (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion-tecnica>
+        <ngx-view-produccion-artes-arqu-diseno (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion-artes-arqu-diseno>-->
+        <ngx-view-produccion-academica (url_editar)="editar($event,'default')"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion-academica>
+        <ngx-view-documento-programa *ngIf="info_inscripcion_id" (url_editar)="editar($event,'default')" inscripcion_id="{{info_inscripcion_id}}"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-documento-programa>
+        <ngx-view-descuento-academico (url_editar)="editar($event,'default')" inscripcion_id="{{info_inscripcion_id}}"
+          persona_id="{{info_persona_id}}" inscripcion_id="{{info_inscripcion_id}}" class="col-md-12"></ngx-view-descuento-academico>
+        <ngx-view-propuesta-grado (url_editar)="editar($event,'default')" (listo)="activarImprimir($event)" inscripcion_id="{{info_inscripcion_id}}"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-propuesta-grado>
+        <ngx-view-documento-programa (url_editar)="editar($event, 'default')" inscripcion_id="{{info_inscripcion_id}}"
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-documento-programa>
+        <div class="col-md-12">
+          <nb-card *ngIf="imprimir">
+            <nb-card-body class="row container">
+              <div class="col-md-12">
+                <div class="col-md-12 info-comprobante">
+                  <h5 class="text-center">{{ 'inscripcion.imprimir_comprobante' | translate }} </h5>
+                  <p>{{ 'inscripcion.info_comprobante' | translate }} </p>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</div>
