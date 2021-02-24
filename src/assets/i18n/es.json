@@ -101,6 +101,7 @@
             "preinscripcion": "Preinscripción a \nproyectos académicos"
         },
         "admision": {
+            "evaluacion_documentos": "Evaluación de documentos \nde inscritos",
             "evaluacion_aspirantes": "Evaluación de aspirantes",
             "admision": "Admisiones",
             "criterios": "Criterios de admisiones \npor proyectos",
@@ -1094,6 +1095,15 @@
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información familiar?"
     },
     "admision": {
+        "error_proyecto": "Por favor, seleccione un proyecto",
+        "proyecto": "Seleccione el proyecto académico",
+        "nivel": "Seleccione el nivel",
+        "estado": "Estado",
+        "nombre": "Nombre",
+        "id": "Identificación",
+        "credencial": "Credencial",
+        "periodo_": "*Periodo académico: *",
+        "inscripcion": "Inscripciones por proyecto académico",
         "calculo_error": "Ocurrió un error al calcular el puntaje",
         "calculo_exito": "El puntaje final de los aspirantes ha sido calculado con éxito",
         "no_criterio": "El proyecto curricular seleccionado no tiene criterios relacionados",

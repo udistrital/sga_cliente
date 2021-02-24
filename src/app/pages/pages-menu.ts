@@ -225,6 +225,12 @@ export const MENU_ITEMS: MenuItem[] = [
         key: 'listado_aspirante',
       },
       {
+        title: 'Evaluación de documentos de inscritos',
+        icon: 'nb-edit',
+        link: '/pages/admision/evaluacion-documentos-inscritos',
+        key: 'evaluacion_documentos',
+      },
+      {
         title: 'Evaluación de aspirantes',
         icon: 'nb-edit',
         link: '/pages/admision/evaluacion-aspirantes',
