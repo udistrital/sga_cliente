@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { LocalDataSource } from 'ng2-smart-table';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { PopUpManager } from '../../../managers/popUpManager';
+import * as momentTimezone from 'moment-timezone';
 
 @Component({
   selector: 'list-solicitudes-estudiante',
@@ -12,31 +15,63 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
   datosSolicitudes: any[];
   estructuraTabla: any;
   solicitudes: LocalDataSource;
+  showTable: boolean;
+  showSolicitudID: boolean;
+  showSolicitudNombre: boolean;
 
   constructor(
-    private translate: TranslateService
+    private translate: TranslateService,
+    private sgaMidService: SgaMidService,
+    private popUpManager: PopUpManager,
   ) {
+    this.showTable = true;
+    this.showSolicitudID = false;
+    this.showSolicitudNombre = false;
     this.solicitudes = new LocalDataSource();
-    this.construirTabla()
+    this.loadSolicitud();
+    this.construirTabla();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirTabla();
     });
   }
 
   ngOnInit() {
-    this.datosSolicitudes = [
-      {
-        Numero: 5,
-        Fecha: '06-01-2021',
-        Tipo: 'Actualizacion de datos',
-        Estado: 'Radicada',
-      },
-    ]
-    this.solicitudes.load(this.datosSolicitudes);
   }
 
   onclick(event) {
-    // console.log(event.data)
+    if (event.data.Tipo === "Actualizar ID"){
+      this.showSolicitudID = true;
+      this.showTable = false;
+      this.showSolicitudNombre = false;
+    } else {
+      this.showSolicitudNombre = true;
+      this.showSolicitudID = false;
+      this.showTable = false;
+    }
+  }
+
+  loadSolicitud(){
+    var IdTercero = localStorage.getItem('persona_id');
+    this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/'+IdTercero).subscribe(
+      (response: any) => {
+        if (response.Response.Code === "200"){
+          const data = <Array<any>>response.Response.Body[0].Response;
+          const dataInfo = <Array<any>>[];
+          data.forEach(element => {
+            element.Fecha = momentTimezone.tz(element.Fecha, 'America/Bogota').format('DD/MM/YYYY');
+            dataInfo.push(element)
+          });
+          this.solicitudes.load(dataInfo);
+        } else if (response.Response.Code === "404"){
+          this.popUpManager.showToast('info', this.translate.instant('solicitudes.no_data'),this.translate.instant('GLOBAL.info'));
+        } else {
+          this.popUpManager.showToast('info', this.translate.instant('solicitudes.error'),this.translate.instant('GLOBAL.error'));
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );    
   }
 
   construirTabla() {
@@ -46,21 +81,25 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
           title: this.translate.instant('solicitudes.numero'),
           width: '20%',
           editable: false,
+          filter: false,
         },
         Fecha: {
           title: this.translate.instant('solicitudes.fecha'),
           width: '20%',
           editable: false,
+          filter: false,
         },
         Tipo: {
           title: this.translate.instant('solicitudes.tipo'),
-          width: '20%',
+          width: '35%',
           editable: false,
+          filter: false,
         },
         Estado: {
           title: this.translate.instant('solicitudes.estado'),
           width: '20%',
           editable: false,
+          filter: false,
         },
       },
       mode: 'external',
@@ -69,16 +108,22 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
         add: false,
         edit: false,
         delete: false,
-        position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
         custom: [
           {
             name: 'view',
             title: '<i class="fa fa-eye"></i>'
           }
-        ]
+        ],
+        position: 'right'
       }
     }
+  }
+
+  activateTab(){
+    this.showTable = true;
+    this.showSolicitudID = false;
+    this.showSolicitudNombre = false;
   }
 
 }

@@ -2,7 +2,7 @@ export const ACTUALIZAR_DATOS = {
     titulo: 'solicitud_encabezado',
     tipo_formulario: 'mini',
     modelo: 'solicitudDatos',
-    btn: 'enviar',
+    btn: 'Enviar',
     campos: [
         {
             etiqueta: 'input',
@@ -12,7 +12,7 @@ export const ACTUALIZAR_DATOS = {
             label_i18n: 'fecha',
             deshabilitar: true,
             requerido: true,
-            valor : new Date().toLocaleDateString('es-CO'),
+            key: 'FechaSolicitud',
         },
         {
             etiqueta: 'div',
@@ -24,6 +24,7 @@ export const ACTUALIZAR_DATOS = {
             nombre: 'TipoDocumentoActual',
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'documento_actual',
+            deshabilitar: true,
             requerido: true,
             opciones: [],
             key: 'Nombre',
@@ -35,14 +36,18 @@ export const ACTUALIZAR_DATOS = {
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'numero_actual',
             requerido: true,
+            deshabilitar: true,
+            key: 'Numero'
         },
         {
             etiqueta: 'input',
-            tipo: 'date',
+            tipo: 'text',
             nombre: 'FechaExpedicionActual',
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'expedicion_actual',
             requerido: true,
+            deshabilitar: true,
+            key: 'FechaExpedicion',
         },
         {
             etiqueta: 'div',
@@ -79,14 +84,18 @@ export const ACTUALIZAR_DATOS = {
             claseGrid: 'offset-sm-6'
         },
         {
-            etiqueta: 'button',
-            tipo: 'button',
-            nombre: 'SoporteIdentificacion',
-            icono: 'fa fa-file-pdf-o fa-5x',
-            claseBoton: 'mat-button float-right',
-            claseGrid: 'col-6 align-self-center',
+            etiqueta: 'file',
+            claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+            clase: 'form-control',
+            nombre: 'Documento',
             label_i18n: 'soporte_id',
+            placeholder_i18n: 'soporte_documento',
             requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
         },
     ]
 }
