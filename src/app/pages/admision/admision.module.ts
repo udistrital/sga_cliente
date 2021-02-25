@@ -22,6 +22,8 @@ import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.co
 import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizacion_estado.component';
 import { ListadoAspiranteComponent } from './listado_aspirantes/listado_aspirante.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { NbSpinnerModule } from '@nebular/theme';
 import { AdministradorCriteriosComponent } from './administrador-criterios/administrador-criterios.component';
 import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios.component';
 import { EvaluacionAspirantesComponent } from './evaluacion-aspirantes/evaluacion-aspirantes.component';
@@ -30,6 +32,7 @@ import { InscripcionService } from '../../@core/data/inscripcion.service';
 import { TercerosService } from '../../@core/data/terceros.service';
 import { SgaMidService } from '../../@core/data/sga_mid.service';
 import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-assistance/checkbox-assistance.component';
+import { DialogoDocumentosComponent } from './dialogo-documentos/dialogo-documentos.component';
 import { EvaluacionDocumentosInscritosComponent } from './evaluacion-documentos-inscritos/evaluacion-documentos-inscritos.component';
 import { from } from 'rxjs';
 import { InfoPersonaModule } from '../info_persona/info_persona.module';
@@ -52,6 +55,8 @@ import { ViewInscripcionComponent } from '../inscripcion/view-inscripcion/view-i
     MatDialogModule,
     SharedModule,
     Ng2SmartTableModule,
+    NgxExtendedPdfViewerModule,
+    NbSpinnerModule,
     ToasterModule,
     FormacionAcademicaModule,
     CriterioIcfesModule,
@@ -92,7 +97,7 @@ import { ViewInscripcionComponent } from '../inscripcion/view-inscripcion/view-i
     CrudAsignacionCupoComponent,
     DialogoCriteriosComponent,
     CheckboxAssistanceComponent,
-    
+    DialogoDocumentosComponent,
    ],
   exports: [
     CriterioAdmisionComponent,
@@ -102,7 +107,6 @@ import { ViewInscripcionComponent } from '../inscripcion/view-inscripcion/view-i
     AdministradorCriteriosComponent,
     DialogoCriteriosComponent,
     EvaluacionAspirantesComponent,
-    
   ],
 })
 export class AdmisionModule { }
