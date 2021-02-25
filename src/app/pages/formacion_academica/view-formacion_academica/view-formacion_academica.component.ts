@@ -65,7 +65,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   loadData(): void {
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
     .subscribe(response => {
-      if(response.Response.Code === "200"){
+      if(response !== null && response !== undefined && response !== '{}'){
         const data = <Array<any>>response;
         const dataInfo = <Array<any>>[];
         data.forEach(element => {
