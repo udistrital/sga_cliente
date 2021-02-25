@@ -171,11 +171,11 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
           (res: any) => {
             this.info_persona_id = response[0].TerceroId.Id;
             this.inscripcion_id = event.data["Credencial"];
+            sessionStorage.setItem('TerceroId', response[0].TerceroId.Id);
             sessionStorage.setItem('IdInscripcion', event.data["Credencial"]);
             sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
             sessionStorage.setItem('ProgramaAcademico', res.Nombre);
             sessionStorage.setItem('IdPeriodo', this.periodo.Id);
-            console.info(this.periodo.Id)
             this.showProfile = false;
           },
           error => {
