@@ -10,6 +10,7 @@ import { AdministradorCriteriosComponent } from './administrador-criterios/admin
 import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios.component';
 import { EvaluacionAspirantesComponent } from './evaluacion-aspirantes/evaluacion-aspirantes.component';
 import { DialogoDocumentosComponent } from './dialogo-documentos/dialogo-documentos.component';
+import { EvaluacionDocumentosInscritosComponent } from './evaluacion-documentos-inscritos/evaluacion-documentos-inscritos.component';
 
 const routes: Routes = [{
   path: '',
@@ -34,6 +35,10 @@ const routes: Routes = [{
     {
       path: 'administrar-criterios',
       component: AdministradorCriteriosComponent,
+    },
+    {
+      path: 'evaluacion-documentos-inscritos',
+      component: EvaluacionDocumentosInscritosComponent,
     },
     {
       path: 'evaluacion-aspirantes',
@@ -63,4 +68,5 @@ export const routedComponents = [
   DialogoCriteriosComponent,
   EvaluacionAspirantesComponent,
   DialogoDocumentosComponent,
+  EvaluacionDocumentosInscritosComponent,
 ];

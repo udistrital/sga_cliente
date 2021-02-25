@@ -51,7 +51,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.persona_id = this.users.getPersonaId();
+    //this.persona_id = this.users.getPersonaId();
   }
 
   public editar(): void {

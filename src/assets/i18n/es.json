@@ -101,6 +101,7 @@
             "preinscripcion": "Preinscripción a \nproyectos académicos"
         },
         "admision": {
+            "evaluacion_documentos": "Evaluación de documentos \nde inscritos",
             "evaluacion_aspirantes": "Evaluación de aspirantes",
             "admision": "Admisiones",
             "criterios": "Criterios de admisiones \npor proyectos",
@@ -111,13 +112,16 @@
         },
         "solicitudes": {
             "solicitudes": "Datos básicos",
-            "solicitudes_lista": "Lista de solicitudes realizadas",
-            "actualizacion_datos": "Solicitud de actualización\nde identificación",
-            "actualizacion_nombres": "Solicitud de actualización\nde nombres"
+            "solicitudes_lista": "Lista de solicitudes realizadas"
         },
         "gestionar_solicitudes": {
             "gestionar_solicitudes": "Datos de estudiantes",
             "solicitudes_actualizacion": "Solicitudes de actualización\nde datos"
+        }, 
+        "solicitud": {
+            "solicitud": "Actualización de datos",
+            "actualizacion_datos": "Solicitud de actualización\nde identificación",
+            "actualizacion_nombres": "Solicitud de actualización\nde nombres"
         }
     },
     "GLOBAL": {
@@ -1094,6 +1098,15 @@
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información familiar?"
     },
     "admision": {
+        "error_proyecto": "Por favor, seleccione un proyecto",
+        "proyecto": "Seleccione el proyecto académico",
+        "nivel": "Seleccione el nivel",
+        "estado": "Estado",
+        "nombre": "Nombre",
+        "id": "Identificación",
+        "credencial": "Credencial",
+        "periodo_": "*Periodo académico: *",
+        "inscripcion": "Inscripciones por proyecto académico",
         "calculo_error": "Ocurrió un error al calcular el puntaje",
         "calculo_exito": "El puntaje final de los aspirantes ha sido calculado con éxito",
         "no_criterio": "El proyecto curricular seleccionado no tiene criterios relacionados",
@@ -1320,6 +1333,12 @@
         "no_data": "No existen datos registrados de la formación académica"
     },
     "solicitudes": {
+        "error": "Ha ocurrido un error inesperado y no se pudo cumplir la solicitud",
+        "no_data": "No hay ninguna solicitud registrada",
+        "crear_error": "Ocurrió un error inesperado al enviar la solicitud",
+        "crear_exito": "La solicitud se ha enviado correctamente",
+        "enviar": "Enviar",
+        "confirmar_envio": "¿Está seguro/a que desea enviar esta solicitud?",
         "solicitud_datos": "Solicitud de Actualización de identificación",
         "solicitud_nombres": "Solicitud de Actualización de nombres",
         "solicitud_encabezado": "Datos de la solicitud",
@@ -1345,9 +1364,11 @@
         "seleccionar_archivo": "Seleccionar archivo",
         "soporte": "Soporte",
         "nombre_actual": "Nombre actual",
+        "apellido_actual": "Apellido actual",
         "nombre_": "Nombre",
         "apellido": "Apellido",
         "nombre_nuevo": "Nuevo nombre",
+        "apellido_nuevo": "Nuevo Apellido",
         "soporte_nombre": "Soporte del nuevo nombre"
     }
 }

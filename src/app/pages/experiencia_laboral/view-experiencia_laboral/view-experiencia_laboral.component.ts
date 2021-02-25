@@ -48,7 +48,8 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.persona_id = this.users.getPersonaId();
+    //this.persona_id = this.users.getPersonaId();
+    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
     this.loadData();
   }
 
@@ -68,19 +69,15 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     this.info_experiencia_laboral = <any>[];
     this.sgaMidService.get('experiencia_laboral/by_tercero?Id=' + this.persona_id).subscribe(
       (response: any) => {
-        const r = <any>response;
         const soportes = [];
-        if (response !== null && r.Data.Code != '400') {
-
+        if (response.Data.Code === '200') {
           this.data = <Array<any>>response.Data.Body[1];
           this.info_experiencia_laboral = this.data;
-
           for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
             if (this.info_experiencia_laboral[i].Soporte + '' !== '0') {
               soportes.push({ Id: this.info_experiencia_laboral[i].Soporte, key: 'DocumentoExp' + i });
             }
           }
-
           this.nuxeoService.getDocumentoById$(soportes, this.documentoService)
             .subscribe(response => {
               this.documentosSoporte = <Array<any>>response;
@@ -101,6 +98,13 @@ export class ViewExperienciaLaboralComponent implements OnInit {
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
+        } if (response.Data.Code === "400") {
+          Swal({
+            type: 'error',
+            text: this.translate.instant('ERROR 400'),
+            footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
         }
       },
       (error: HttpErrorResponse) => {
@@ -112,7 +116,6 @@ export class ViewExperienciaLaboralComponent implements OnInit {
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       });
-
   }
 
   ngOnInit() {

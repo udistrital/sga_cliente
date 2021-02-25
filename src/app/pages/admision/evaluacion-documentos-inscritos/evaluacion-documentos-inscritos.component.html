@@ -1,0 +1,53 @@
+<nb-card>
+  <nb-card-body>
+    <div class=col-12>
+      <fieldset [ngClass]="{'fieldseter':true}" >
+        <legend>
+          &nbsp; {{ 'admision.inscripcion' | translate }}
+        </legend>
+
+        <div *ngIf="showProfile">
+          <!--Periodo académico-->
+          <mat-form-field style="width: 35%;">
+            <mat-label>{{ 'admision.periodo_' | translate }}:</mat-label>
+            <mat-select [(ngModel)]="periodo" [disabled]='true'>
+              <mat-option *ngFor="let item of periodos" [value]="item"> {{item.Nombre}} </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Nivel -->
+          <mat-form-field style="width: 75%;">
+            <mat-label>{{ 'admision.nivel' | translate }}:</mat-label>
+            <mat-select [formControl]="CampoControl" [(ngModel)]="selectednivel" (selectionChange)="loadProyectos()" >
+              <mat-option *ngFor="let item of nivel_load" [value]="item.Id"> {{item.Nombre}} </mat-option>
+            </mat-select>
+            <mat-error *ngIf="CampoControl.hasError('required')">{{ 'admision.erro_selec_nivel' | translate }}</mat-error>
+          </mat-form-field>
+
+          <!-- Proyecto académico -->
+          <mat-form-field style="width: 75%;">
+            <mat-label>{{ 'admision.proyecto' | translate }}:</mat-label>
+            <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="loadInscritos()" [disabled]='selectprograma'>
+              <mat-option *ngFor="let item of proyectos" [value]="item.Id">{{item.Nombre}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'admision.error_proyecto' | translate }}</mat-error>
+          </mat-form-field>
+          <br/><br/>
+
+            <!--Tabla-->
+            <nb-card-body>
+              <ng2-smart-table [settings]="settings" [source]="dataSource" (custom)="loadPerfil($event)"></ng2-smart-table>
+            </nb-card-body>
+        </div>
+
+        <div *ngIf="!showProfile">
+          <div class="button-return" style="padding-left: 3rem; padding-top: 2rem;">
+            <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+          </div>
+          
+          <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}" imprimir="{{imprimir}}"></ngx-perfil>
+        </div>
+      </fieldset>
+    </div>
+  </nb-card-body>
+</nb-card>

@@ -5,6 +5,9 @@ import { NbSpinnerModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ThemeModule } from '../../@theme/theme.module';
 import { SolicitudesRoutingModule, routedComponents } from './solicitudes-routing.module';
+import { NuxeoService } from '../../@core/utils/nuxeo.service';
+import { SgaMidService } from '../../@core/data/sga_mid.service';
+import { TercerosService } from '../../@core/data/terceros.service';
 
 import { PopUpManager } from '../../managers/popUpManager';
 import { DialogoSoporteComponent } from './dialogo-soporte/dialogo-soporte.component';
@@ -26,6 +29,9 @@ import { DialogoSoporteComponent } from './dialogo-soporte/dialogo-soporte.compo
   ],
   providers: [
     PopUpManager,
+    NuxeoService,
+    SgaMidService,
+    TercerosService,
   ],
   entryComponents: [
     DialogoSoporteComponent,

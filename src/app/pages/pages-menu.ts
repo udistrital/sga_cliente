@@ -12,7 +12,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     title: 'Solicitudes',
-    icon: 'nb-compose',
+    icon: 'nb-list',
     link: '',
     key: 'solicitudes',
     children: [
@@ -22,6 +22,14 @@ export const MENU_ITEMS: MenuItem[] = [
         link: '/pages/solicitudes/list-solicitudes-estudiante',
         key: 'solicitudes_lista'
       },
+    ]
+  },
+  {
+    title: 'Solicitud',
+    icon: 'nb-loop',
+    link: '',
+    key: 'solicitud',
+    children: [
       {
         title: 'Actualizar identificación',
         icon: 'nb-edit',
@@ -223,6 +231,12 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: 'nb-compose',
         link: '/pages/admision/listado_aspirante',
         key: 'listado_aspirante',
+      },
+      {
+        title: 'Evaluación de documentos de inscritos',
+        icon: 'nb-edit',
+        link: '/pages/admision/evaluacion-documentos-inscritos',
+        key: 'evaluacion_documentos',
       },
       {
         title: 'Evaluación de aspirantes',

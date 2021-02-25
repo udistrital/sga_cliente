@@ -101,6 +101,7 @@
             "preinscripcion": "Pre-registration for academic projects"
         },
         "admision": {
+            "evaluacion_documentos": "Evaluation of registration\n documents",
             "evaluacion_aspirantes": "Aspirant evaluation",
             "admision": "Admissions",
             "criterios": "Admissions criteria for projects",
@@ -111,13 +112,16 @@
         },
         "solicitudes": {
             "solicitudes": "Basic data",
-            "solicitudes_lista": "List of requests",
-            "actualizacion_datos": "Updating ID number request",
-            "actualizacion_nombres": "Updating names request"
+            "solicitudes_lista": "List of requests"
         },
         "gestionar_solicitudes": {
             "gestionar_solicitudes": "Students basic data",
             "solicitudes_actualizacion": "Updating data requests"
+        },
+        "solicitud": {
+            "solicitud": "Data update",
+            "actualizacion_datos": "Updating ID number request",
+            "actualizacion_nombres": "Updating names request"
         }
     },
     "GLOBAL": {
@@ -1060,6 +1064,15 @@
         "seguro_continuar_registrar": "Are you sure you want to register this family information?"
     },
     "admision": {
+        "error_proyecto": "Please, select a project",
+        "proyecto": "Select the academic project",
+        "nivel": "Select level",
+        "estado": "State",
+        "nombre": "Name",
+        "id": "ID",
+        "credencial": "Credential",
+        "periodo_": "*Academic period: *",
+        "inscripcion": "Inscription by academic project",
         "calculo_error": "An error occurred while calculating the score",
         "calculo_exito": "The final score of the applicants has been calculated successfully",
         "no_criterio": "The selected curricular project does not have related criteria",
@@ -1279,6 +1292,12 @@
         "tipo_inscripcion_creado": "Type register created"
     },
     "solicitudes": {
+        "error": "An unexpected error occurred and the request could not be fulfilled",
+        "no_data": "There is no registered request",
+        "crear_error": "An unexpected error occurred while submitting the request",
+        "crear_exito": "The request has been sent successfully",
+        "enviar": "Send",
+        "confirmar_envio": "Are you sure you want to send this request?",
         "solicitud_datos": "Request for updating ID number",
         "solicitud_nombres": "Request for updating names",
         "numero": "Number",

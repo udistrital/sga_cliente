@@ -64,7 +64,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     this.info_documento_programa = <any>[];
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId:' + this.inscripcion_id + ',DocumentoProgramaId.ProgramaId:' + this.programa_id).subscribe(
       (response: any[]) => {
-        if (response !== null && Object.keys(response[0]).length > 0) {
+        if (response !== null && Object.keys(response[0]).length > 0 && response[0] != '{}') {
           this.info_documento_programa = response;
           this.info_documento_programa.forEach(doc => {
             this.docSoporte.push({Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId})
