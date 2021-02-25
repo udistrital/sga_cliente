@@ -46,7 +46,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.persona_id = this.users.getPersonaId();
+    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
     this.loadData();
   }
 
@@ -65,7 +65,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   loadData(): void {
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
     .subscribe(response => {
-      if(response !== null && response !== undefined && response !== '{}'){
+      if(response.Response.Code === "200"){
         const data = <Array<any>>response;
         const dataInfo = <Array<any>>[];
         data.forEach(element => {

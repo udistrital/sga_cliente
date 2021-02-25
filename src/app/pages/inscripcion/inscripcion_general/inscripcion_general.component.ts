@@ -139,6 +139,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private programaService: ProyectoAcademicoService,
     private sgaMidService: SgaMidService,
   ) {
+    sessionStorage.setItem('TerceroId', this.userService.getPersonaId().toString());
     this.imagenes = IMAGENES;
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {

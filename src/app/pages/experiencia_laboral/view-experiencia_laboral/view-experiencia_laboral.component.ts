@@ -67,14 +67,12 @@ export class ViewExperienciaLaboralComponent implements OnInit {
 
   loadData(): void {
     this.info_experiencia_laboral = <any>[];
-    console.info(this.persona_id)
     this.sgaMidService.get('experiencia_laboral/by_tercero?Id=' + this.persona_id).subscribe(
       (response: any) => {
         const soportes = [];
         if (response.Data.Code === '200') {
           this.data = <Array<any>>response.Data.Body[1];
           this.info_experiencia_laboral = this.data;
-          console.info(this.info_experiencia_laboral)
           for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
             if (this.info_experiencia_laboral[i].Soporte + '' !== '0') {
               soportes.push({ Id: this.info_experiencia_laboral[i].Soporte, key: 'DocumentoExp' + i });
