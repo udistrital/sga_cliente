@@ -30,6 +30,7 @@ export class CrudAsignacionCupoComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
+  info_actualizar_estados: any;
   info_info_persona: any;
   info_cupos: any;
   info_criterio_icfes_post: any;
@@ -40,6 +41,7 @@ export class CrudAsignacionCupoComponent implements OnInit {
   loading: boolean;
   percentage: number;
   aceptaTerminos: boolean;
+  showListadoAspirantes:boolean = false;
   programa: number;
   aspirante: number;
   periodo: any;
@@ -47,7 +49,11 @@ export class CrudAsignacionCupoComponent implements OnInit {
   source_emphasys: LocalDataSource = new LocalDataSource();
   porcentaje_subcriterio_total: number;
   settings_emphasys: any;
+  settings_emphasys1: any;
   arr_cupos: any[] = [];
+  show_listado: boolean = false;
+  info_consultar_aspirantes: any;
+
   constructor(
     private translate: TranslateService,
     private sgamidService: SgaMidService,
@@ -89,6 +95,70 @@ export class CrudAsignacionCupoComponent implements OnInit {
         this.construirForm();
       });
       this.loading = false;
+
+      this.settings_emphasys1 = {
+        delete: {
+          deleteButtonContent: '<i class="nb-trash"></i>',
+          confirmDelete: true,
+        },
+        actions: {
+          delete: false,
+          edit: false,
+          add: false,
+          position: 'right',
+        },
+        mode: 'external',
+        columns: {
+          TipoDocumento: {
+            title: this.translate.instant('GLOBAL.Tipo'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value;
+            },
+            width: '2%',
+          },
+          NumeroDocumento: {
+            title: this.translate.instant('GLOBAL.Documento'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value;
+            },
+            width: '8%',
+          },
+          NombreAspirante: {
+            title: this.translate.instant('GLOBAL.Nombre'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value;
+            },
+            width: '50%',
+          },
+          NotaFinal: {
+            title: this.translate.instant('GLOBAL.Puntaje'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value;
+            },
+            width: '5%',
+          },
+          TipoInscripcionId: {
+            title: this.translate.instant('GLOBAL.TipoInscripcion'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value.Nombre;
+            },
+            width: '25%',
+          },
+          EstadoInscripcionId: {
+            title: this.translate.instant('GLOBAL.Estado'),
+            // type: 'string;',
+            valuePrepareFunction: (value) => {
+              return value.Nombre;
+            },
+            width: '10%',
+          },
+        },
+      };
   }
 
   construirForm() {
@@ -144,9 +214,13 @@ export class CrudAsignacionCupoComponent implements OnInit {
   }
   createCupos() {
 
+    this.showListadoAspirantes = false;
+    this.show_listado = false;
     const opt: any = {
-      title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('GLOBAL.crear') + '?',
+      // title: this.translate.instant('GLOBAL.crear'),
+      // text: this.translate.instant('GLOBAL.crear') + '?',
+      title: this.translate.instant('GLOBAL.actualizar'),
+      text: this.translate.instant('GLOBAL.actualizar') + '?',
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -167,6 +241,8 @@ export class CrudAsignacionCupoComponent implements OnInit {
                       this.showToast('info', this.translate.instant('GLOBAL.crear'),
                         this.translate.instant('GLOBAL.info_cupos') + ' ' +
                         this.translate.instant('GLOBAL.confirmarCrear'));
+                        this.cambiarestados();
+                        this.showListadoAspirantes = true;
                         this.eventChange.emit(true);
                     } else {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
@@ -212,9 +288,11 @@ export class CrudAsignacionCupoComponent implements OnInit {
   calculocupos(InfoCupos: any): void {
     // Se definen el calculos de los cupos segun historia de usuario la funcion redondea segun decimas por encima por encima de .5
     this.info_cupos = <any>InfoCupos;
-    this.info_cupos.Proyectos = this.info_proyectos;
+    const proyectos = [];
+    proyectos.push(this.info_proyectos);
+    this.info_cupos.Proyectos = proyectos;
     this.info_cupos.Periodo = this.info_periodo;
-    this.info_cupos.CuposOpcionados = Number(Math.trunc((Number(this.info_cupos.CuposAsignados) ) * 0.5 ))
+    // this.info_cupos.CuposOpcionados = Number(Math.trunc((Number(this.info_cupos.CuposAsignados) ) * 0.5 ))
     this.info_cupos.CuposEspeciales = {
       ComunidadesNegras : String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40 ) * 2 )),
       DesplazadosVictimasConflicto : String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40 ) * 1 )),
@@ -224,6 +302,70 @@ export class CrudAsignacionCupoComponent implements OnInit {
       ProgramaReincorporacion: '1',
     }
 
+  }
+
+  cambiarestados() {
+    this.info_actualizar_estados = {}
+    this.info_actualizar_estados.Proyectos = this.info_cupos.Proyectos;
+    this.info_actualizar_estados.Periodo = this.info_cupos.Periodo;
+    console.info(JSON.stringify(this.info_actualizar_estados));
+    this.sgamidService.post('admision/cambioestado', this.info_actualizar_estados)
+      .subscribe(res => {
+        const r = <any>res
+        if (r !== null && r.Type !== 'error') {
+          this.loading = false;
+          this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+            this.translate.instant('GLOBAL.info_estado') + ' ' +
+            this.translate.instant('GLOBAL.confirmarActualizar'));
+            this.eventChange.emit(true);
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'),
+            this.translate.instant('GLOBAL.error'));
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+              this.translate.instant('GLOBAL.info_estado'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
+
+  mostrartabla() {
+    this.show_listado = true
+
+    this.info_consultar_aspirantes = {
+      Id_proyecto: Number(this.info_cupos.Proyectos.Id),
+      Id_periodo: Number(this.info_cupos.Periodo.Id),
+    }
+          this.sgamidService.post('admision/consulta_aspirantes', this.info_consultar_aspirantes)
+            .subscribe(res => {
+              const r = <any>res
+              if (r !== null && r.Type !== 'error') {
+                this.loading = false;
+                r.sort((puntaje_mayor, puntaje_menor ) =>  puntaje_menor.NotaFinal - puntaje_mayor.NotaFinal )
+                 const data = <Array<any>>r;
+                 this.source_emphasys.load(data);
+
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('GLOBAL.error'));
+              }
+            },
+              (error: HttpErrorResponse) => {
+                Swal({
+                  type: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                    this.translate.instant('GLOBAL.info_estado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
   }
 
 
