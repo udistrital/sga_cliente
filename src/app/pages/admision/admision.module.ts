@@ -22,7 +22,7 @@ import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.co
 import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizacion_estado.component';
 import { ListadoAspiranteComponent } from './listado_aspirantes/listado_aspirante.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { NbSpinnerModule } from '@nebular/theme';
 import { AdministradorCriteriosComponent } from './administrador-criterios/administrador-criterios.component';
 import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios.component';
@@ -42,7 +42,7 @@ import { DialogoDocumentosComponent } from './dialogo-documentos/dialogo-documen
     MatDialogModule,
     SharedModule,
     Ng2SmartTableModule,
-    PdfViewerModule,
+    NgxExtendedPdfViewerModule,
     NbSpinnerModule,
     ToasterModule,
     FormacionAcademicaModule,
