@@ -209,8 +209,10 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.show_listado = true
 
     this.info_consultar_aspirantes = {
-      Id_proyecto: Number(this.proyectos_selected['Id']),
-      Id_periodo: Number(this.periodo['Id']),
+      // Id_proyecto: Number(this.proyectos_selected['Id']),
+      // Id_periodo: Number(this.periodo['Id']),
+      Id_proyecto: 16,
+      Id_periodo: 2,
     }
           this.sgamidService.post('admision/consulta_aspirantes', this.info_consultar_aspirantes)
             .subscribe(res => {

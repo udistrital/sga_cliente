@@ -116,7 +116,7 @@
         "gestionar_solicitudes": {
             "gestionar_solicitudes": "Datos de estudiantes",
             "solicitudes_actualizacion": "Solicitudes de actualización\nde datos"
-        }, 
+        },
         "solicitud": {
             "solicitud": "Actualización de datos",
             "actualizacion_datos": "Solicitud de actualización\nde identificación",
@@ -542,8 +542,10 @@
         "area_5": "Inglés",
         "placeholder_area_5": "Ej: 10 % del 100% del criterio ICFES ",
         "error_porcentaje_total": "El porcentaje de los subcriterios es mayor o menor al 100% posible, ajuste los porcentajes de los subcriterios por favor!",
-        "cupos_asignados": "Ingrese el numero de cupos asignados para el periodo y el/los proyectos académicos selecionados",
+        "cupos_asignados": "Número de cupos ADMITIDOS",
         "placeholder_cupos_asignados": "Ej: 120 cupos",
+        "cupos_opcionados": "Número de cupos OPCIONADOS",
+        "placeholder_cupos_opcionados": "Ej: 60 cupos",
         "cupos": "Cupos especiales",
         "numero_cupos": "Numero de cupos especiales asigndos por el concejo superior",
         "info_cupos": "Cupos Asignados",
@@ -566,7 +568,8 @@
         "info_contacto": "Información de contacto",
         "info_familiar": "Información familiar",
         "institucion": "Institución",
-        "programa": "Programa"
+        "programa": "Programa",
+        "proyecto_academico": "proyecto académico"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1166,7 +1169,9 @@
         "erro_selec_nivel": "Por favor seleccion el nivel!",
         "erro_selec_proyecto": "Por favor seleccione al menos un proyecto!",
         "cupos": "Definición de los cupos para el periodo y el/los proyectos académicos selecionados",
-        "asignar": "Asignar cupos"
+        "asignar": "Asignar cupos",
+        "seleccionar_admitidos": "Seleccionar admitidos",
+        "ver_listado_aspirantes": "Ver listado de aspirantes"
     },
     "calendario": {
         "seguro_continuar_inhabilitar_calendario": "¿Esta seguro de inhabilitar este Calendario?",

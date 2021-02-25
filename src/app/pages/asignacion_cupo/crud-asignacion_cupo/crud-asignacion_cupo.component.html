@@ -1,17 +1,27 @@
 <toaster-container [toasterconfig]="config"></toaster-container>
-<ngx-dinamicform [normalform]="formAsigancionCupo" [modeloData]="info_info_persona"
-  (result)="validarForm($event)" [clean]="clean"
- >
+<ngx-dinamicform [normalform]="formAsigancionCupo" [modeloData]="info_info_persona" (result)="validarForm($event)" [clean]="clean">
 </ngx-dinamicform>
 <nb-card [hidden]="!show_calculos_cupos" accent="info">
-        <nb-card-body>
-            <div class="row">
-                <div class="col-12">
-                    <ng2-smart-table [settings]="settings_emphasys" [(source)]="source_emphasys" (delete)="onDeleteEmphasys($event)" (create)="onCreateEmphasys($event)">
-                    </ng2-smart-table>
-                </div>
+    <nb-card-body>
+        <div class="row">
+            <div class="col-12">
+                <ng2-smart-table [settings]="settings_emphasys" [(source)]="source_emphasys" (delete)="onDeleteEmphasys($event)" (create)="onCreateEmphasys($event)">
+                </ng2-smart-table>
             </div>
-        </nb-card-body>
-        <button   mat-button (click)="createCupos()"  type="submit"  nbButton status="success">{{ 'cupos.asignar' | translate }} </button>
+        </div>
+    </nb-card-body>
+    <button *ngIf="!showListadoAspirantes" mat-button (click)="createCupos()" type="submit" nbButton status="success">{{ 'cupos.seleccionar_admitidos' | translate }} </button>
+    <button *ngIf="showListadoAspirantes" mat-button (click)="mostrartabla()" type="submit" nbButton status="success">{{ 'cupos.ver_listado_aspirantes' | translate }} </button>
+</nb-card>
+
+<nb-card [hidden]="!show_listado" accent="info">
+    <nb-card-body>
+        <div class="row">
+            <div class="col-12">
+                <ng2-smart-table [settings]="settings_emphasys1" [(source)]="source_emphasys1">
+                </ng2-smart-table>
+            </div>
+        </div>
+    </nb-card-body>
 </nb-card>
 <!--ngx-loading [hidden]="!loading"></ngx-loading-->
