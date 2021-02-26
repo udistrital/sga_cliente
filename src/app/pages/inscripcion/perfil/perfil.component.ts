@@ -23,10 +23,16 @@ export class PerfilComponent implements OnInit {
     this.info_inscripcion_id = info_inscripcion_id;
   }
 
+  @Input('en_revision')
+  en_revision: boolean = false;
+
   @Input('imprimir') imprimir: boolean = false;
 
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
+
+  // tslint:disable-next-line: no-output-rename
+  @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('comprobante') comprobante: ElementRef;
 
@@ -48,6 +54,7 @@ export class PerfilComponent implements OnInit {
 
   ngOnChanges() {
     this.imprimir = this.imprimir.toString() === 'true';
+    this.en_revision = this.en_revision.toString() === 'true';
   }
 
   activarImprimir(event: boolean) {
@@ -83,6 +90,14 @@ export class PerfilComponent implements OnInit {
         }
       ).catch(error => reject(error));
     })
+  }
+
+  abrirDocumento(documento: any) {
+    if (this.en_revision) {
+      this.revisar_doc.emit(documento)
+    } else {
+      window.open(documento)
+    }
   }
 
 }

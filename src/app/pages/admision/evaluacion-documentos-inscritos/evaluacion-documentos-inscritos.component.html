@@ -45,7 +45,7 @@
             <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
           </div>
           
-          <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}" imprimir="{{imprimir}}"></ngx-perfil>
+          <ngx-perfil (revisar_doc)="revisarDocumento($event)" [en_revision]="true" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}" ></ngx-perfil>
         </div>
       </fieldset>
     </div>

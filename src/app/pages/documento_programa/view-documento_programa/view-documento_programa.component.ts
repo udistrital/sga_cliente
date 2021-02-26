@@ -36,6 +36,9 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
+  // tslint:disable-next-line: no-output-rename
+  @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
+
   constructor(
     private translate: TranslateService,
     private inscripcionService: InscripcionService,
@@ -96,5 +99,9 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     this.persona_id = this.persona_id ? this.persona_id : this.userService.getPersonaId();
     this.inscripcion_id = this.inscripcion_id ? this.inscripcion_id : parseInt(sessionStorage.getItem('IdInscripcion'));
     this.loadData();
+  }
+
+  abrirDocumento(documento: any) {
+    this.revisar_doc.emit(documento)
   }
 }

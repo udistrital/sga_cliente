@@ -3,8 +3,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { NuxeoService } from '../../../@core/utils/nuxeo.service';
-import { DocumentoService } from '../../../@core/data/documento.service';
 
 @Component({
   selector: 'dialogo-documentos',
@@ -23,21 +21,19 @@ export class DialogoDocumentosComponent implements OnInit {
     private translate: TranslateService,
     private popUpManager: PopUpManager,
     private builder: FormBuilder,
-    private nuxeoService: NuxeoService,
-    private documentoService: DocumentoService,
   ) {
     this.crearForm();
     this.dialogRef.backdropClick().subscribe(() => this.dialogRef.close());
   }
 
   ngOnInit() {
-    this.downloadFile(this.data.documento_id)
+    this.documento = this.data.documento['changingThisBreaksApplicationSecurity'];
   }
 
   crearForm() {
     this.revisionForm = this.builder.group({
       observacion: [''],
-      aprobado: ['', Validators.required],
+      aprobado: [false, Validators.required],
     });
   }
 
@@ -49,30 +45,6 @@ export class DialogoDocumentosComponent implements OnInit {
         }
       }
     )
-  }
-
-  downloadFile(id_documento: any) {
-    const filesToGet = [
-      {
-        Id: id_documento,
-        key: id_documento,
-      },
-    ];
-    this.loading = true;
-    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService).subscribe(
-      response => {
-        const filesResponse = <any>response;
-        if (Object.keys(filesResponse).length === filesToGet.length) {
-          filesToGet.forEach((file: any) => {
-            this.documento = filesResponse[file.Id];
-            this.loading = false;
-          });
-        }
-      },
-      error => {
-        this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
-      },
-    );
   }
 
 }
