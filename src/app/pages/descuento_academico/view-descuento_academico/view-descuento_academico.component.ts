@@ -69,7 +69,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
 
   loadData(): void {
     this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' +
-      'PersonaId=' + Number(window.localStorage.getItem('persona_id')) + '&DependenciaId=' + Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
+      'PersonaId=' + Number(window.sessionStorage.getItem('TerceroId')) + '&DependenciaId=' + Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
       .subscribe((result: any) => {
         const r = <any>result.Data.Body[1];
         if (result !== null && result.Data.Code == '200') {

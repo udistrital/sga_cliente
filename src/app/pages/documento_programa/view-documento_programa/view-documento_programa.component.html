@@ -17,7 +17,8 @@
             </td>
             <td></td>
             <td *ngIf="documento.DocumentoId !== undefined">
-              <p><a [href]=documento.Documento download="{{documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre}}.pdf"><i class="fa fa-eye fa-2x"></i></a></p>
+              <p><button mat-button type="button" (click)="abrirDocumento(documento)">
+                <i class="fa fa-eye fa-2x"></i></button></p>
             </td>
           </tr>
         </tbody>

@@ -45,7 +45,7 @@ export class ViewProduccionAcademicaComponent implements OnInit {
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.persona_id = this.users.getPersonaId();
+    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
     this.loadData();
   }
 
@@ -62,16 +62,16 @@ export class ViewProduccionAcademicaComponent implements OnInit {
   }
 
   loadData(): void {
-    this.sgaMidService.get('produccion_academica/' + this.persona_id).subscribe((res: any) => {
-      // this.campusMidService.get('produccion_academica/' + 5).subscribe((res: any) => {
+    this.sgaMidService.get('produccion_academica/pr_academica/' + this.persona_id)
+      .subscribe((res: any) => {
         if (res !== null) {
-          if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
+          if (res.Response.Code === "200"){
             this.info_produccion_academica = <Array<ProduccionAcademicaPost>>res;
-          } else {
-             Swal({
+          } else if (res.Response.Code === "400") {
+            Swal({
               type: 'error',
-              title: '404',
-              text: this.translate.instant('ERROR.404'),
+              title: '400',
+              text: this.translate.instant('ERROR.400'),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
           }

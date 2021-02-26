@@ -45,7 +45,7 @@ export class ViewIdiomasComponent implements OnInit {
     private idiomaService: IdiomaService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.persona_id = this.users.getPersonaId() || 1;
+    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
     this.loadData();
   }
 

@@ -41,6 +41,14 @@ table.rwd_auto {
   white-space: nowrap;
 }
 
+.mat-button {
+  color: rgb(0, 162, 255);
+}
+
+.mat-button:hover {
+  color: rgb(0, 123, 194);
+}
+
 @media only screen and (max-width: 760px), (min-width: 768px) and (max-width: 1024px) {
   table.table-responsive,
   .table-responsive thead,

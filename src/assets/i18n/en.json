@@ -101,6 +101,7 @@
             "preinscripcion": "Pre-registration for academic projects"
         },
         "admision": {
+            "evaluacion_documentos": "Evaluation of registration\n documents",
             "evaluacion_aspirantes": "Aspirant evaluation",
             "admision": "Admissions",
             "criterios": "Admissions criteria for projects",
@@ -527,8 +528,10 @@
         "area_5": "English",
         "placeholder_area_5": "E.g: 10% of 100% of the ICFES criteria",
         "error_porcentaje_total": "The percentage of sub-criteria is greater or less than 100% possible, adjust the percentages of sub-criteria please!",
-        "cupos_asignados": "Enter the number of seats allocated for the period and the selected academic projects",
+        "cupos_asignados": "Number of places ALLOWED",
         "placeholder_cupos_asignados": "E.g: 120 places ",
+        "cupos_opcionados": "Number of OPTIONAL places",
+        "placeholder_cupos_opcionados": "E.g: 60 places",
         "cupos": "Special quotas",
         "numero_cupos": "Number of special quotas allocated by the superior council",
         "info_cupos": "Assigned Quotas",
@@ -547,7 +550,8 @@
         "placeholder_descripcion_inscripcion": "ej: Applicant registration",
         "cupos_especiales": "Corresponds to special quotas?",
         "nivel": "Level",
-        "placeholder_nivel": "Select the level that is required to be assigned to the registration type"
+        "placeholder_nivel": "Select the level that is required to be assigned to the registration type",
+        "proyecto_academico": "Academic Project"
     },
 
     "ERROR": {
@@ -1063,6 +1067,15 @@
         "seguro_continuar_registrar": "Are you sure you want to register this family information?"
     },
     "admision": {
+        "error_proyecto": "Please, select a project",
+        "proyecto": "Select the academic project",
+        "nivel": "Select level",
+        "estado": "State",
+        "nombre": "Name",
+        "id": "ID",
+        "credencial": "Credential",
+        "periodo_": "*Academic period: *",
+        "inscripcion": "Inscription by academic project",
         "calculo_error": "An error occurred while calculating the score",
         "calculo_exito": "The final score of the applicants has been calculated successfully",
         "no_criterio": "The selected curricular project does not have related criteria",
@@ -1116,7 +1129,10 @@
         "error_cargar": "The criteria data could not be loaded.",
         "no_criterios": "No registered criteria.",
         "asistencia": "Attendance",
-        "requiere_asistencia": "Requires attendance?"
+        "requiere_asistencia": "Requires attendance?",
+        "revisar_docs": "Review documents",
+        "doc_valido": "Valid document",
+        "seguro_revision": "Are you sure about registering this document review?"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",
@@ -1131,7 +1147,9 @@
         "erro_selec_nivel": "Please select the level!",
         "erro_selec_proyecto": "Please select at least one project!",
         "cupos": "Definition of quotas for the period and the selected academic projects",
-        "asignar": "Assign quotas"
+        "asignar": "Assign quotas",
+        "seleccionar_admitidos": "Select admitted",
+        "ver_listado_aspirantes": "Show list of applicants"
     },
     "calendario": {
         "seguro_continuar_inhabilitar_calendario": "¿Are you sure to disable this Calendar?",

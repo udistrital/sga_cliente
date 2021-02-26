@@ -22,6 +22,8 @@ import { AsignacionCuposComponent } from './asignacion_cupos/asignacion_cupos.co
 import { ActualizacionEstadoComponent } from './actualizacion_estado/actualizacion_estado.component';
 import { ListadoAspiranteComponent } from './listado_aspirantes/listado_aspirante.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { NbSpinnerModule } from '@nebular/theme';
 import { AdministradorCriteriosComponent } from './administrador-criterios/administrador-criterios.component';
 import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios.component';
 import { EvaluacionAspirantesComponent } from './evaluacion-aspirantes/evaluacion-aspirantes.component';
@@ -30,6 +32,20 @@ import { InscripcionService } from '../../@core/data/inscripcion.service';
 import { TercerosService } from '../../@core/data/terceros.service';
 import { SgaMidService } from '../../@core/data/sga_mid.service';
 import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-assistance/checkbox-assistance.component';
+import { DialogoDocumentosComponent } from './dialogo-documentos/dialogo-documentos.component';
+import { EvaluacionDocumentosInscritosComponent } from './evaluacion-documentos-inscritos/evaluacion-documentos-inscritos.component';
+import { from } from 'rxjs';
+import { InfoPersonaModule } from '../info_persona/info_persona.module';
+import { InfoCaracteristicaModule } from '../info_caracteristica/info_caracteristica.module';
+import { InformacionContactoModule } from '../informacion_contacto/informacion_contacto.module';
+import { IdiomasModule } from '../idiomas/idiomas.module';
+import { ExperienciaLaboralModule } from '../experiencia_laboral/experiencia_laboral.module';
+import { DocumentoProgramaModule } from '../documento_programa/documento_programa.module';
+import { DescuentoAcademicoModule } from '../descuento_academico/descuento_academico.module';
+import { PropuestaGradoModule } from '../propuesta_grado/propuesta_grado.module';
+import { ProduccionAcademicaModule } from '../produccion_academica/produccion_academica.module';
+import { PerfilComponent } from '../inscripcion/perfil/perfil.component';
+import { ViewInscripcionComponent } from '../inscripcion/view-inscripcion/view-inscripcion.component';
 
 @NgModule({
   imports: [
@@ -39,13 +55,29 @@ import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-as
     MatDialogModule,
     SharedModule,
     Ng2SmartTableModule,
+    NgxExtendedPdfViewerModule,
+    NbSpinnerModule,
     ToasterModule,
     FormacionAcademicaModule,
     CriterioIcfesModule,
     AsignacionCupoModule,
+
+    InfoPersonaModule,
+    InfoCaracteristicaModule,
+    InformacionContactoModule,
+    FormacionAcademicaModule,
+    IdiomasModule,
+    ExperienciaLaboralModule,
+    ProduccionAcademicaModule,
+    DocumentoProgramaModule,
+    DescuentoAcademicoModule,
+    PropuestaGradoModule,
   ],
   declarations: [
     ...routedComponents,
+    EvaluacionDocumentosInscritosComponent,
+    PerfilComponent,
+    ViewInscripcionComponent,
   ],
   providers: [
     ImplicitAutenticationService,
@@ -65,6 +97,7 @@ import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-as
     CrudAsignacionCupoComponent,
     DialogoCriteriosComponent,
     CheckboxAssistanceComponent,
+    DialogoDocumentosComponent,
    ],
   exports: [
     CriterioAdmisionComponent,

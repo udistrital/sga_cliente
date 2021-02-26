@@ -1,9 +1,9 @@
-@import '../../@theme/styles/themes';
+@import '../../../@theme/styles/themes';
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~@nebular/theme/styles/global/breakpoints';
 @include nb-install-component() {
     nb-card {
-        padding: 1rem;
+        padding: 3rem;
     }
     .fieldseter {
         display: flow-root;
@@ -27,6 +27,13 @@
     }
 }
 
+.mat-form-field{
+    padding-left: 2rem;
+}
+
+.button-return{
+    padding: 3px;
+}
 
 :host /deep/ ng2-st-tbody-edit-delete {
     display: flex !important;
