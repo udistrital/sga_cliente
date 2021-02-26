@@ -6,6 +6,7 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
 import { PreinscripcionComponent } from './preinscripcion/preinscripcion.component';
 import { CrudInscripcionMultipleComponent } from './crud-inscripcion_multiple/crud-inscripcion_multiple.component';
+import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.component';
 
 const routes: Routes = [{
   path: '',
@@ -33,4 +34,5 @@ export const routedComponents = [
   PerfilComponent,
   PreinscripcionComponent,
   CrudInscripcionMultipleComponent,
+  ViewInscripcionComponent,
 ];
