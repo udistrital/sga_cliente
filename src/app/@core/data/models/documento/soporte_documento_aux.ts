@@ -3,4 +3,6 @@ export class SoporteDocumentoAux {
     TipoDocumento: string;
     TipoDocumentoId: number;
     SoporteDocumentoId: number;
+    EstadoObservacion: string;
+    Observacion: string;
 }

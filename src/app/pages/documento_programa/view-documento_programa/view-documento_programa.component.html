@@ -1,30 +1,38 @@
 <nb-card>
-  <nb-card-body class="row container">
-    <div class="col-md-12">
-      <table class="table-responsive">
-        <thead>
-          <tr><th colspan="3">{{ 'inscripcion.documento_programa' | translate}}</th></tr>
-          <tr class="subheader">
-            <th>{{ 'GLOBAL.soporte_documento' | translate }}</th>
-            <th>{{ 'GLOBAL.estado' | translate  }} </th>
-            <th>{{ 'solicitudes.soporte' | translate }} </th>
-          </tr>
-        </thead>
-        <tbody *ngIf="info_documento_programa">
-          <tr *ngFor="let documento of info_documento_programa">
-            <td>
-              <p>{{documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre}}</p>
-            </td>
-            <td></td>
-            <td *ngIf="documento.DocumentoId !== undefined">
-              <p><button mat-button type="button" (click)="abrirDocumento(documento)">
+    <nb-card-body class="row container">
+        <div class="col-md-12">
+            <table class="table-responsive">
+                <thead>
+                    <tr>
+                        <th colspan="4">{{ 'inscripcion.documento_programa' | translate}}</th>
+                    </tr>
+                    <tr class="subheader">
+                        <th>{{ 'GLOBAL.soporte_documento' | translate }}</th>
+                        <th>{{ 'GLOBAL.estado' | translate }} </th>
+                        <th>{{ 'admision.observacion' | translate }} </th>
+                        <th>{{ 'solicitudes.soporte' | translate }} </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="info_documento_programa">
+                    <tr *ngFor="let documento of info_documento_programa">
+                        <td>
+                            <p>{{documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre}}</p>
+                        </td>
+                        <td>
+                            <p>{{documento.estadoObservacion}}</p>
+                        </td>
+                        <td>
+                            <p>{{documento.observacion}}</p>
+                        </td>
+                        <td *ngIf="documento.DocumentoId !== undefined">
+                            <p><button mat-button type="button" (click)="abrirDocumento(documento)">
                 <i class="fa fa-eye fa-2x"></i></button></p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <span *ngIf="url_editar" (click)="editar()" class="link">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <span *ngIf="url_editar" (click)="editar()" class="link">
         <i class="ion-edit"></i>{{ 'GLOBAL.actualizar' | translate}}</span>
-    </div>
-  </nb-card-body>
+        </div>
+    </nb-card-body>
 </nb-card>
