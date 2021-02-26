@@ -1167,7 +1167,8 @@
         "requiere_asistencia": "¿Requiere asistencia?",
         "revisar_docs": "Revisión de documentos",
         "doc_valido": "Documento válido",
-        "seguro_revision": "¿Está seguro de registrar esta revisión del documento?"
+        "seguro_revision": "¿Está seguro de registrar esta revisión del documento?",
+        "observacion": "Observación"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

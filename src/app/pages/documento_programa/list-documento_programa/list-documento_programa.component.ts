@@ -7,6 +7,7 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { SoporteDocumentoAux } from '../../../@core/data/models/documento/soporte_documento_aux';
+import { Documento } from '../../../@core/data/models/documento/documento';
 
 @Component({
   selector: 'ngx-list-documento-programa',
@@ -29,6 +30,8 @@ export class ListDocumentoProgramaComponent implements OnInit {
   soporteDocumento: SoporteDocumentoAux[];
   soporteId: number;
   source: LocalDataSource = new LocalDataSource();
+  estadoObservacion: string = '';
+  observacion: string = '';
 
   @Input('persona_id')
   set info(info: number) {
@@ -70,7 +73,17 @@ export class ListDocumentoProgramaComponent implements OnInit {
       columns: {
         TipoDocumento: {
           title: this.translate.instant('GLOBAL.tipo_documento_programa'),
-          width: '90%',
+          width: '30%',
+          editable: false,
+        },
+        EstadoObservacion: {
+          title: this.translate.instant('admision.estado'),
+          width: '10%',
+          editable: false,
+        },
+        Observacion: {
+          title: this.translate.instant('admision.observacion'),
+          width: '60%',
           editable: false,
         },
       },
@@ -96,21 +109,26 @@ export class ListDocumentoProgramaComponent implements OnInit {
     };
   }
 
-  loadData(): void {
+  async loadData() {
     this.loading = true;
     this.soporteDocumento = [];
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' + this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
       (response: any[]) => {
         if (Object.keys(response[0]).length > 0) {
-          response.forEach(soporte => {
+          response.forEach(async soporte => {
             const documento: SoporteDocumentoAux = new SoporteDocumentoAux();
             documento.TipoDocumentoId = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Id'];
             documento.TipoDocumento = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Nombre'];
             documento.DocumentoId = soporte['DocumentoId'];
-            documento.SoporteDocumentoId = soporte['Id']
+            documento.SoporteDocumentoId = soporte['Id'];
+            await this.cargarEstadoDocumento(documento);
+            documento.EstadoObservacion = this.estadoObservacion;
+            documento.Observacion = this.observacion;
+
             this.soporteDocumento.push(documento);
+            this.source.load(this.soporteDocumento);
           });
-          this.source.load(this.soporteDocumento);
+
         } else {
           this.popUpManager.showAlert(
             this.translate.instant('GLOBAL.info'), this.translate.instant('documento_programa.no_documentos')
@@ -123,6 +141,24 @@ export class ListDocumentoProgramaComponent implements OnInit {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
       },
     );
+  }
+
+  cargarEstadoDocumento(documento: SoporteDocumentoAux){
+    return new Promise((resolve) => {
+    this.documentoService.get('documento/' + documento.DocumentoId).subscribe(
+      (doc: Documento) => {
+        let metadatos = JSON.parse(doc.Metadatos);
+        if (metadatos.aprobado){
+          this.estadoObservacion = 'Aprobado';
+          this.observacion = '';
+        }else{
+          this.estadoObservacion = 'No Aprobado';
+          this.observacion = metadatos.observacion;
+        }
+        resolve(this.estadoObservacion)
+      });
+    });
+
   }
 
   ngOnInit() {
