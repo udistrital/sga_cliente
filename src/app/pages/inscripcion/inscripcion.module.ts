@@ -78,7 +78,6 @@ import { NbSpinnerModule } from '@nebular/theme';
   ],
   declarations: [
     ...routedComponents,
-    ViewInscripcionComponent,
   ],
   providers: [
     ImplicitAutenticationService,

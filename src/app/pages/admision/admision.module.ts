@@ -34,7 +34,6 @@ import { SgaMidService } from '../../@core/data/sga_mid.service';
 import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-assistance/checkbox-assistance.component';
 import { DialogoDocumentosComponent } from './dialogo-documentos/dialogo-documentos.component';
 import { EvaluacionDocumentosInscritosComponent } from './evaluacion-documentos-inscritos/evaluacion-documentos-inscritos.component';
-import { from } from 'rxjs';
 import { InfoPersonaModule } from '../info_persona/info_persona.module';
 import { InfoCaracteristicaModule } from '../info_caracteristica/info_caracteristica.module';
 import { InformacionContactoModule } from '../informacion_contacto/informacion_contacto.module';
@@ -44,8 +43,7 @@ import { DocumentoProgramaModule } from '../documento_programa/documento_program
 import { DescuentoAcademicoModule } from '../descuento_academico/descuento_academico.module';
 import { PropuestaGradoModule } from '../propuesta_grado/propuesta_grado.module';
 import { ProduccionAcademicaModule } from '../produccion_academica/produccion_academica.module';
-import { PerfilComponent } from '../inscripcion/perfil/perfil.component';
-import { ViewInscripcionComponent } from '../inscripcion/view-inscripcion/view-inscripcion.component';
+import { InscripcionModule } from '../inscripcion/inscripcion.module';
 
 @NgModule({
   imports: [
@@ -61,7 +59,7 @@ import { ViewInscripcionComponent } from '../inscripcion/view-inscripcion/view-i
     FormacionAcademicaModule,
     CriterioIcfesModule,
     AsignacionCupoModule,
-
+    InscripcionModule,
     InfoPersonaModule,
     InfoCaracteristicaModule,
     InformacionContactoModule,
@@ -75,9 +73,6 @@ import { ViewInscripcionComponent } from '../inscripcion/view-inscripcion/view-i
   ],
   declarations: [
     ...routedComponents,
-    EvaluacionDocumentosInscritosComponent,
-    PerfilComponent,
-    ViewInscripcionComponent,
   ],
   providers: [
     ImplicitAutenticationService,
@@ -107,6 +102,7 @@ import { ViewInscripcionComponent } from '../inscripcion/view-inscripcion/view-i
     AdministradorCriteriosComponent,
     DialogoCriteriosComponent,
     EvaluacionAspirantesComponent,
+    EvaluacionDocumentosInscritosComponent,
   ],
 })
 export class AdmisionModule { }
