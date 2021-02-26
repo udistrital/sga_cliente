@@ -47,6 +47,7 @@ export class CrudAsignacionCupoComponent implements OnInit {
   periodo: any;
   show_calculos_cupos = false;
   source_emphasys: LocalDataSource = new LocalDataSource();
+  source_emphasys1: LocalDataSource = new LocalDataSource();
   porcentaje_subcriterio_total: number;
   settings_emphasys: any;
   settings_emphasys1: any;
