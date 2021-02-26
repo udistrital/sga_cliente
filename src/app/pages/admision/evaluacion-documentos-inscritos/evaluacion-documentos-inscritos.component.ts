@@ -7,16 +7,19 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { LocalDataSource } from 'ng2-smart-table';
-import Swal from 'sweetalert2';
+import { DocumentoService } from '../../../@core/data/documento.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { combineAll } from 'rxjs/operators';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogoDocumentosComponent } from '../dialogo-documentos/dialogo-documentos.component';
+import { Documento } from '../../../@core/data/models/documento/documento';
 
 
 @Component({
   selector: 'evaluacion-documentos-inscritos',
   templateUrl: './evaluacion-documentos-inscritos.component.html',
-  styleUrls: ['./evaluacion-documentos-inscritos.component.scss']
+  styleUrls: ['./evaluacion-documentos-inscritos.component.scss'],
 })
 export class EvaluacionDocumentosInscritosComponent implements OnInit {
 
@@ -44,6 +47,8 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     private popUpManager: PopUpManager,
     private inscripcionService: InscripcionService,
     private tercerosService: TercerosService,
+    private documentoService: DocumentoService,
+    private dialog: MatDialog,
   ) {
     this.dataSource = new LocalDataSource();
     this.showProfile = true;
@@ -63,12 +68,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
       await this.cargarPeriodo();
       await this.loadLevel();
     } catch (error) {
-      Swal({
-        type: 'error',
-        title: error.status + '',
-        text: this.translate.instant('inscripcion.error_cargar_informacion'),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
+      this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.error_cargar_informacion'));
     }
   }
 
@@ -229,6 +229,39 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
         ]
       }
     }
+  }
+
+  revisarDocumento(documento: any) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '1300px';
+    assignConfig.height = '750px';
+    assignConfig.data = {documento: documento.Documento}
+    const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
+    console.log(documento)
+    dialogo.afterClosed().subscribe(data => {
+      if (data) {
+        this.documentoService.get('documento/' + documento.DocumentoId).subscribe(
+          (documento: Documento) => {
+            documento.Metadatos = JSON.stringify(data);
+            this.documentoService.put('documento', documento).subscribe(
+              response => {
+                this.popUpManager.showSuccessAlert(this.translate.instant('admision.revision_guardada'))
+                if (!data.aprobado && data.observacion !== '') {
+                  // llamar funcion que envia correo con la observacion
+                  // enviarCorreo(data.observacion);
+                }
+              },
+              error => {
+                this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
+              }
+            )
+          },
+          error => {
+            this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
+          }
+        )
+      }
+    })
   }
 
 }
