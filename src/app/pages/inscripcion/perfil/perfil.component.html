@@ -1,6 +1,6 @@
 <div #comprobante>
   <nb-card>
-    <nb-card-body>
+    <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
       <div>
         <div class="row" [hidden]="imprimir">
           <div class="col-md-11 text-center">
