@@ -231,16 +231,15 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     }
   }
 
-  revisarDocumento(documento: any) {
+  revisarDocumento(doc: any) {
     const assignConfig = new MatDialogConfig();
     assignConfig.width = '1300px';
     assignConfig.height = '750px';
-    assignConfig.data = {documento: documento.Documento}
+    assignConfig.data = {documento: doc}
     const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
-    console.log(documento)
     dialogo.afterClosed().subscribe(data => {
       if (data) {
-        this.documentoService.get('documento/' + documento.DocumentoId).subscribe(
+        this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
           (documento: Documento) => {
             documento.Metadatos = JSON.stringify(data);
             this.documentoService.put('documento', documento).subscribe(
