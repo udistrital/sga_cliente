@@ -86,12 +86,12 @@
     <!--Vista de perfil------------------------------------------------------------->
 
     <!-- <div [hidden]="!show_profile"> -->
-    <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <!--nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
         <nb-card-body>
             <div *ngIf="show_profile">
                 <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}"></ngx-perfil>
             </div>
         </nb-card-body>
     </nb-card>
-    <!-- </nb-card> -->
+    <-- </nb-card> -->
 </div>
