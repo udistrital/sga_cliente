@@ -8,7 +8,7 @@ import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { UserService } from '../../../@core/data/users.service';
-import { CoreService } from '../../../@core/data/core.service';
+import { ParametrosService } from '../../../@core/data/parametros.service';
 import { TercerosService} from '../../../@core/data/terceros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
@@ -129,9 +129,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     private translate: TranslateService,
     private router: Router,
     private terceroService: TercerosService,
-    private oikosService: OikosService,
     private userService: UserService,
-    private coreService: CoreService,
+    private parametrosService: ParametrosService,
     private evaluacionService: EvaluacionInscripcionService,
     private sgaMidService: SgaMidService,
   ) {
@@ -177,14 +176,13 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
+      this.parametrosService.get('periodo?query=Activo:true&sortby=Id&order=desc&limit=1')
       .subscribe(res => {
-        const r = <any>res;
-        if (res !== null && r.Type !== 'error') {
-          this.periodo = <any>res[0];
+        const periodos = <any[]>res['Data'];
+        if (res !== null && res['Success']) {
+          this.periodo = <any>periodos[0];
           window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
           resolve(this.periodo);
-          const periodos = <Array<any>>res;
          periodos.forEach(element => {
             this.periodos.push(element);
           });

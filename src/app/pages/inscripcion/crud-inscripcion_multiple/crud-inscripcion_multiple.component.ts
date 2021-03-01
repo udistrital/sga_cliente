@@ -452,6 +452,9 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                           this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
                         }
                       );
+                    } else {
+                      this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+                      this.loading = false; 
                     }
                   });
                 }
