@@ -1,12 +1,12 @@
 <div #comprobante>
   <nb-card>
-    <nb-card-body>
+    <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
       <div>
         <div class="row" [hidden]="imprimir">
           <div class="col-md-11 text-center">
             <h1>{{ 'inscripcion.perfil' | translate }}</h1>
           </div>
-          <div class="col-md-1 float-right">
+          <div class="col-md-1 float-right" *ngIf="!en_revision">
             <button class="btn btn-danger btn-icon input-group-text btn-tn"
               (click)="editar($event,'salir_perfil')">X</button>
           </div>

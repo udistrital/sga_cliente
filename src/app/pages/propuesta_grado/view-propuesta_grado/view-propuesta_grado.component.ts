@@ -302,6 +302,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
                 });
               });
         } else {
+          this.listo.emit(true);
         }
       },
         (error: HttpErrorResponse) => {

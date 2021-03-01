@@ -12,6 +12,7 @@ export class PerfilComponent implements OnInit {
 
   info_persona_id: number;
   info_inscripcion_id: number;
+  loading: boolean;
 
   @Input('info_persona_id')
   set name(info_persona_id: number) {
@@ -39,6 +40,7 @@ export class PerfilComponent implements OnInit {
   constructor(private translate: TranslateService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
+    this.loading = true;
   }
 
   useLanguage(language: string) {
@@ -58,8 +60,14 @@ export class PerfilComponent implements OnInit {
   }
 
   activarImprimir(event: boolean) {
+    console.info(event)
+    console.info(this.imprimir)
+    console.info("imprime")
     if (this.imprimir && event) {
       setTimeout(() => this.generarComprobante().then(() => this.imprimir = false), 500);
+      this.loading = false;
+    } else {
+      this.loading = false;
     }
   }
 
@@ -88,7 +96,11 @@ export class PerfilComponent implements OnInit {
           pdfDoc.download();
           resolve(true)
         }
-      ).catch(error => reject(error));
+      ).catch(
+        error => {
+          reject(error);
+        }
+      );
     })
   }
 
