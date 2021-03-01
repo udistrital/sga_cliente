@@ -76,6 +76,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
             this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
               (documento: Documento) => {
                 let metadatos = JSON.parse(documento.Metadatos);
+                doc.aprobado = metadatos.aprobado;
                 if (metadatos.aprobado){
                   doc.estadoObservacion = 'Aprobado';
                   doc.observacion = '';

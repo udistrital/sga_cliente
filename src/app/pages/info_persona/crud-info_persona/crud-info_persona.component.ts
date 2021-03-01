@@ -174,7 +174,6 @@ export class CrudInfoPersonaComponent implements OnInit {
               window.localStorage.setItem('ente', r.Id);
               this.info_persona_id = r.Id;
               sessionStorage.setItem('IdTercero', String(this.info_persona_id));
-              this.createInscripcion(this.info_persona_id);
               this.loading = false;
               this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.persona_creado'));
             } else {
@@ -240,7 +239,6 @@ export class CrudInfoPersonaComponent implements OnInit {
                       this.loadInfoPersona();
                       this.programa = this.userService.getPrograma();
                       if (this.inscripcion_id === 0) {
-                        this.createInscripcion(this.info_persona_id);
                         this.loadInscripcion();
                       } else if (this.inscripcion_id !== 0 && this.info_inscripcion.ProgramaAcademicoId !== this.programa && this.programa > 0) {
                         // this.updateInscripcion();
@@ -288,7 +286,6 @@ export class CrudInfoPersonaComponent implements OnInit {
                 this.loading = false;
                 this.programa = this.userService.getPrograma();
                 if (this.inscripcion_id === 0) {
-                  this.createInscripcion(this.info_persona_id);
                   this.loadInscripcion();
                 } else if (this.inscripcion_id !== 0 && this.info_inscripcion.ProgramaAcademicoId !== this.programa && this.programa > 0) {
                   // this.updateInscripcion();
@@ -345,50 +342,6 @@ export class CrudInfoPersonaComponent implements OnInit {
           });
     }
     this.loading = false;
-  }
-
-  createInscripcion(tercero_id): void {
-    this.aspirante = tercero_id;
-    this.programa = Number(localStorage.getItem('programa'));
-    const inscripcionPost = {
-      PeriodoId: this.periodo.Id,
-      PersonaId: this.aspirante,
-      ProgramaAcademicoId: this.programa,
-      EstadoInscripcionId: {Id: 1},
-      TipoInscripcionId: {Id: 1},
-      AceptaTerminos: true,
-      FechaAceptaTerminos: new Date(),
-      Id: this.inscripcion_id,
-    };
-    this.info_inscripcion = <Inscripcion>inscripcionPost;
-    this.info_inscripcion.PersonaId = Number(this.info_persona_id);
-    this.info_inscripcion.Id = Number(this.inscripcion_id);
-    this.loading = true;
-    this.inscripcionService.post('inscripcion', this.info_inscripcion)
-      .subscribe(res => {
-        this.info_inscripcion = <Inscripcion><unknown>res;
-        this.inscripcion_id = this.info_inscripcion.Id;
-        this.eventChange.emit(true);
-        this.loading = false;
-        Swal({
-          type: 'info',
-          title: this.translate.instant('GLOBAL.crear'),
-          text: this.translate.instant('GLOBAL.inscrito') + ' ' + this.periodo.Nombre,
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        });
-      },
-      (error: HttpErrorResponse) => {
-        this.loading = false;
-        Swal({
-          type: 'error',
-          title: error.status + '',
-          text: this.translate.instant('ERROR.' + error.status),
-          footer: this.translate.instant('GLOBAL.crear') + '-' +
-            this.translate.instant('GLOBAL.info_persona') + '|' +
-            this.translate.instant('GLOBAL.admision'),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        });
-      });
   }
 
   // updateInscripcion(): void {

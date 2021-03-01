@@ -44,8 +44,9 @@
           <div class="button-return" style="padding-left: 3rem; padding-top: 2rem;">
             <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
           </div>
-          
-          <ngx-perfil (revisar_doc)="revisarDocumento($event)" [en_revision]="true" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}" ></ngx-perfil>
+          <div class="text-center">
+            <ngx-perfil (revisar_doc)="revisarDocumento($event)" [en_revision]="true" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}" ></ngx-perfil>
+          </div>
         </div>
       </fieldset>
     </div>

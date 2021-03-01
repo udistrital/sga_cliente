@@ -27,7 +27,12 @@ export class DialogoDocumentosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.documento = this.data.documento['changingThisBreaksApplicationSecurity'];
+    this.loading = true;
+    this.documento = this.data.documento.Documento['changingThisBreaksApplicationSecurity'];
+    this.revisionForm.setValue({
+      observacion: this.data.documento.observacion,
+      aprobado: this.data.documento.aprobado,
+    });
   }
 
   crearForm() {
@@ -45,6 +50,10 @@ export class DialogoDocumentosComponent implements OnInit {
         }
       }
     )
+  }
+
+  docCargado() {
+    this.loading = false;
   }
 
 }
