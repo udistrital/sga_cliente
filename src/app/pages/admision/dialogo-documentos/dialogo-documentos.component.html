@@ -6,7 +6,7 @@
       </legend>
       <div class="row">
         <div class="col-6">
-          <ngx-extended-pdf-viewer [src]="documento" [height]="'65vh'" [useBrowserLocale]="true" ></ngx-extended-pdf-viewer>
+          <ngx-extended-pdf-viewer [src]="documento" [height]="'65vh'" [useBrowserLocale]="true" (pdfLoaded)="docCargado()"></ngx-extended-pdf-viewer>
         </div>
         <div class="col-6 d-flex align-items-start flex-column">
           <div class="row mb-auto" style="width: 100%;">
