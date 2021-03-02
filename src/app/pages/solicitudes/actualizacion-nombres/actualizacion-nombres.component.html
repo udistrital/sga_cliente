@@ -7,6 +7,7 @@
       <ngx-datos-solicitante [solicitante]="solicitante" ></ngx-datos-solicitante>
 
       <ngx-dinamicform [normalform]="solicitudForm" [modeloData]="solicitudDatos" (result)="enviarSolicitud($event)"></ngx-dinamicform>
+      <ngx-dinamicform [normalform]="respuestaSolicitudForm" [modeloData]="solicitudRespuesta" (result)="enviarRespuesta($event)"></ngx-dinamicform>
     </nb-card-body>
   </nb-card>
 </div>

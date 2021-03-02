@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { ActualizacionDatos } from '../../../@core/data/models/solicitudes/actualizacion-datos';
+import { RespuestaSolicitud } from '../../../@core/data/models/solicitudes/respuesta-solicitud';
 import { Solicitante } from '../../../@core/data/models/solicitudes/solicitante';
 import { ACTUALIZAR_DATOS } from './form-actualizacion-datos';
+import { RESPUESTA_SOLICITUD } from './form-respuesta-solicitud';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
@@ -25,7 +27,9 @@ export class ActualizacionDatosComponent implements OnInit {
 
   solicitante: Solicitante;
   solicitudForm: any;
+  respuestaSolicitudForm: any;
   solicitudDatos: ActualizacionDatos;
+  solicitudRespuesta: RespuestaSolicitud;
   tipoDocumento: any[];
   filesUp: any; 
   SoporteDocumento: any; 
@@ -40,6 +44,7 @@ export class ActualizacionDatosComponent implements OnInit {
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,) {
     this.solicitudForm = ACTUALIZAR_DATOS;
+    this.respuestaSolicitudForm = RESPUESTA_SOLICITUD;
     this.loadInfo();
     this.loadInfoNueva();
     this.tercerosService.get('tipo_documento').subscribe(
@@ -64,6 +69,10 @@ export class ActualizacionDatosComponent implements OnInit {
     this.solicitante.CorreoPersonal = "correo@gmail.com"
     this.solicitante.Nombre = "Nombre de prueba"
     this.solicitante.Telefono = "+57 000-000-0000"
+  }
+
+  enviarRespuesta(event) {
+    console.info(event);
   }
 
   loadInfoNueva(){
@@ -122,6 +131,7 @@ export class ActualizacionDatosComponent implements OnInit {
       this.tercerosService.get('datos_identificacion?query=TerceroId:'+TerceroId).subscribe(
         (response: any) => {
           if (response[0] !== undefined && response[0] !== ""){
+            this.solicitudForm.btn = "";
             this.solicitudForm.campos[this.getIndexForm('TipoDocumentoActual')].valor = response[0]["TipoDocumentoId"];
             this.solicitudForm.campos[this.getIndexForm('NumeroActual')].valor = response[0]["Numero"];
             if (response[0]["FechaExpedicion"] !== null){
@@ -148,7 +158,7 @@ export class ActualizacionDatosComponent implements OnInit {
 
   construirForm() {
     this.solicitudForm.titulo = this.translate.instant('solicitudes.solicitud_encabezado');
-
+    this.respuestaSolicitudForm.titulo = this.translate.instant('solicitudes.solicitud_respuesta');
     this.solicitudForm.campos.forEach(campo => {
       if (campo.etiqueta === 'button') {
         campo.info = this.translate.instant('solicitudes.' + campo.label_i18n)
@@ -156,6 +166,9 @@ export class ActualizacionDatosComponent implements OnInit {
       if (campo.etiqueta === 'select') {
         campo.opciones = this.tipoDocumento;
       }
+      campo.label = this.translate.instant('solicitudes.' + campo.label_i18n);
+    });
+    this.respuestaSolicitudForm.campos.forEach(campo => {
       campo.label = this.translate.instant('solicitudes.' + campo.label_i18n);
     })
   }

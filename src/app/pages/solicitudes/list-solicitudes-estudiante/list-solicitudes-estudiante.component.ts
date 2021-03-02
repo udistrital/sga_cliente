@@ -55,6 +55,7 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
     this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/'+IdTercero).subscribe(
       (response: any) => {
         if (response.Response.Code === "200"){
+          console.info(response.Response.Body[0].Response)
           const data = <Array<any>>response.Response.Body[0].Response;
           const dataInfo = <Array<any>>[];
           data.forEach(element => {
