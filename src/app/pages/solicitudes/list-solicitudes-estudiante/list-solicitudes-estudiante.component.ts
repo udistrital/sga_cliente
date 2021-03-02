@@ -80,25 +80,31 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
       columns: {
         Numero: {
           title: this.translate.instant('solicitudes.numero'),
-          width: '20%',
+          width: '10%',
           editable: false,
           filter: false,
         },
         Fecha: {
           title: this.translate.instant('solicitudes.fecha'),
-          width: '20%',
+          width: '15%',
           editable: false,
           filter: false,
         },
         Tipo: {
           title: this.translate.instant('solicitudes.tipo'),
-          width: '35%',
+          width: '20%',
           editable: false,
           filter: false,
         },
         Estado: {
           title: this.translate.instant('solicitudes.estado'),
-          width: '20%',
+          width: '15%',
+          editable: false,
+          filter: false,
+        },
+        Observacion: {
+          title: this.translate.instant('solicitudes.observacion'),
+          width: '30%',
           editable: false,
           filter: false,
         },
