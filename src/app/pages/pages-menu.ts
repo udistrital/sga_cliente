@@ -106,6 +106,38 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
+  {
+    title:'Prácticas académicas',
+    icon: 'nb-compose',
+    link: '',
+    key: 'practicas_academicas',
+    children: [
+      {
+        title: 'Nueva solicitud',
+        icon: 'nb-compose',
+        link: '/pages/practicas-academicas/nueva-solicitud',
+        key: 'crear_nueva_practica'
+      },
+      {
+        title: 'Nuevas solicitudes',
+        icon: 'nb-list',
+        link: '',
+        key: 'ver_nuevas_solicitudes'
+      },
+      {
+        title: 'Solicitudes en proceso',
+        icon: 'nb-list',
+        link: '',
+        key: 'en_proceso'
+      },
+      {
+        title: 'Invitacion',
+        icon: 'nb-edit',
+        link: '',
+        key: 'invitacion'
+      }
+    ]
+  },
 /*   {
     title: 'Tipo Periodo',
     icon: 'nb-compose',

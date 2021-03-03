@@ -122,6 +122,13 @@
             "solicitud": "Actualización de datos",
             "actualizacion_datos": "Solicitud de actualización\nde identificación",
             "actualizacion_nombres": "Solicitud de actualización\nde nombres"
+        },
+        "practicas_academicas": {
+            "practicas_academicas": "Prácticas académicas",
+            "crear_nueva_practica": "Nueva solicitud",
+            "ver_nuevas_solicitudes": "Nuevas solicitudes",
+            "en_proceso": "Solicitudes en proceso",
+            "invitacion": "Invitación a prácticas\nacadémicas"
         }
     },
     "GLOBAL": {
@@ -1376,5 +1383,8 @@
         "nombre_nuevo": "Nuevo nombre",
         "apellido_nuevo": "Nuevo Apellido",
         "soporte_nombre": "Soporte del nuevo nombre"
+    },
+    "practicas-academicas": {
+
     }
 }

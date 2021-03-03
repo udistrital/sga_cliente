@@ -122,6 +122,13 @@
             "solicitud": "Data update",
             "actualizacion_datos": "Updating ID number request",
             "actualizacion_nombres": "Updating names request"
+        },
+        "practicas_academicas": {
+            "practicas_academicas": "Academic practices",
+            "crear_nueva_practica": "New Request",
+            "ver_nuevas_solicitudes": "New requests",
+            "en_proceso": "Requests in process",
+            "invitacion": "Invitation to academic\npractices"
         }
     },
     "GLOBAL": {
@@ -1332,5 +1339,8 @@
         "apellido": "last name",
         "nombre_nuevo": "New name",
         "soporte_nombre": "Support document for the new name"
+    },
+    "practicas-academicas": {
+
     }
 }
