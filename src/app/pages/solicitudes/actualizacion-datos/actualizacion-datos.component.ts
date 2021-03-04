@@ -81,7 +81,9 @@ export class ActualizacionDatosComponent implements OnInit {
     this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/'+IdPersona+'/15').subscribe(
       (response: any) => {
         if (response.Response.Code === "200"){
-          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].valor = momentTimezone.tz(response.Response.Body[0].FechaExpedicionNuevo, 'America/Bogota').format('YYYY-MM-DD');
+          this.solicitudForm.btn = "";
+          var date = moment(response.Response.Body[0].FechaExpedicionNuevo, "DD/MM/YYYY").toDate()
+          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].valor = momentTimezone.tz(date, 'America/Bogota').format('YYYY-MM-DD');
           this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = true;  
           this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].valor = response.Response.Body[0].TipoDocumentoNuevo;
           this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = true;  
@@ -131,7 +133,6 @@ export class ActualizacionDatosComponent implements OnInit {
       this.tercerosService.get('datos_identificacion?query=TerceroId:'+TerceroId).subscribe(
         (response: any) => {
           if (response[0] !== undefined && response[0] !== ""){
-            this.solicitudForm.btn = "";
             this.solicitudForm.campos[this.getIndexForm('TipoDocumentoActual')].valor = response[0]["TipoDocumentoId"];
             this.solicitudForm.campos[this.getIndexForm('NumeroActual')].valor = response[0]["Numero"];
             if (response[0]["FechaExpedicion"] !== null){
