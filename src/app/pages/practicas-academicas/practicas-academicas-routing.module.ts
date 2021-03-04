@@ -24,7 +24,7 @@ const routes: Routes = [{
 })
 export class PracticasAcademicasRoutingModule { }
 
-export const routedModules = [
+export const routedComponents = [
     PracticasAcademicasComponent,
     NuevaSolicitudComponent,
 ]

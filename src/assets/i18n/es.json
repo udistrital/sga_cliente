@@ -1384,7 +1384,22 @@
         "apellido_nuevo": "Nuevo Apellido",
         "soporte_nombre": "Soporte del nuevo nombre"
     },
-    "practicas-academicas": {
-
+    "practicas_academicas": {
+        "datos": "Datos de la solicitud",
+        "periodo": "Periodo Académico",
+        "proyecto": "Proyecto académico",
+        "espacio_academico": "Espacio Académico",
+        "semestre": "Semestre del espacio académico",
+        "numero_estudiantes": "Número de estudiantes",
+        "num_grupos": "Número de grupos",
+        "fecha_salida": "Fecha y hora de salida",
+        "fecha_regreso": "Fecha y hora de regreso",
+        "duracion": "Duración (dias)",
+        "numero_vehiculos": "Número de vehiculos",
+        "tipo_vehiculo": "Tipo de vehiculo",
+        "cronograma_practica": "Cronograma",
+        "presupuesto_practica": "Presupuesto",
+        "presentacion_practica": "Presentación Práctica Académica",
+        "lista_estudiantes": "Lista de estudiantes"
     }
 }
