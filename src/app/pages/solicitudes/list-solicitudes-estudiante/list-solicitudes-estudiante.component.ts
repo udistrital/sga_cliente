@@ -18,6 +18,9 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
   showTable: boolean;
   showSolicitudID: boolean;
   showSolicitudNombre: boolean;
+  rol: any;
+  loading: boolean;
+  listaDatos = [];
 
   constructor(
     private translate: TranslateService,
@@ -28,7 +31,15 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
     this.showSolicitudID = false;
     this.showSolicitudNombre = false;
     this.solicitudes = new LocalDataSource();
-    this.loadSolicitud();
+    this.loading = true;
+    //ROL 9759 || 9813: Estudiante
+    //ROL 94: Admin
+    this.rol = parseInt(localStorage.getItem('persona_id'));
+    if (this.rol === 9759 || this.rol === 9813){
+      this.loadSolicitud();
+    } else if (this.rol === 94){
+      this.loadList(); 
+    } 
     this.construirTabla();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirTabla();
@@ -39,7 +50,7 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
   }
 
   onclick(event) {
-    if (event.data.Tipo === "Actualizar ID"){
+    if (event.data.Tipo === "Actualización de identificación"){
       this.showSolicitudID = true;
       this.showTable = false;
       this.showSolicitudNombre = false;
@@ -50,12 +61,58 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
     }
   }
 
+  async loadList(){
+    for (var i = 15; i < 21; i++){
+      await this.loadSolicitudes(i);
+    }
+    var listaFinal = [];
+    for (var i = 0; i < this.listaDatos.length; i++){
+      listaFinal[i] = this.listaDatos[i][0];
+    }
+    this.solicitudes.load(listaFinal);
+  }
+
+  loadSolicitudes(IdEstadoTipoSolicitud: number){
+    return new Promise((resolve, reject) => {
+      this.loading = true;
+      this.sgaMidService.get('solicitud_evaluacion/consultar_solicitudes/'+IdEstadoTipoSolicitud).subscribe(
+        (response: any) => {
+          if (response.Response.Code === "200"){
+            const data = <Array<any>>response.Response.Body[0].Data;
+            const dataInfo = <Array<any>>[];
+            data.forEach(element => {
+              element.Fecha = momentTimezone.tz(element.Fecha, 'America/Bogota').format('DD/MM/YYYY');
+              dataInfo.push(element)
+            });
+            if (dataInfo !== undefined){
+              this.listaDatos.push(dataInfo)
+            }
+            this.loading = false;
+            resolve(dataInfo)
+          } else if (response.Response.Code === "400"){
+            this.loading = false;
+            this.popUpManager.showToast('info', this.translate.instant('solicitudes.error'),this.translate.instant('GLOBAL.error'));          
+            resolve([]);
+          } else if (response.Response.Code === "404"){
+            this.loading = false;
+            resolve([])
+            //this.popUpManager.showToast('info', this.translate.instant('solicitudes.no_data'),this.translate.instant('GLOBAL.info'));
+          }
+        },
+        error => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          reject(error);
+        }
+      );
+    });
+  }
+
   loadSolicitud(){
     var IdTercero = localStorage.getItem('persona_id');
     this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/'+IdTercero).subscribe(
       (response: any) => {
         if (response.Response.Code === "200"){
-          console.info(response.Response.Body[0].Response)
           const data = <Array<any>>response.Response.Body[0].Response;
           const dataInfo = <Array<any>>[];
           data.forEach(element => {
@@ -63,13 +120,17 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
             dataInfo.push(element)
           });
           this.solicitudes.load(dataInfo);
+          this.loading = false;
         } else if (response.Response.Code === "404"){
+          this.loading = false;
           this.popUpManager.showToast('info', this.translate.instant('solicitudes.no_data'),this.translate.instant('GLOBAL.info'));
         } else {
+          this.loading = false;
           this.popUpManager.showToast('info', this.translate.instant('solicitudes.error'),this.translate.instant('GLOBAL.error'));
         }
       },
       error => {
+        this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );    

@@ -1,9 +1,9 @@
 <nb-card>
   <div class="col-12" *ngIf="showTable">
-    <fieldset [ngClass]="{'fieldseter':true}" >
+    <fieldset [ngClass]="{'fieldseter':true}" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
       <legend>
         &nbsp;{{ 'MENU.gestionar_solicitudes.solicitudes_actualizacion' | translate }}
-    </legend>
+      </legend>
       <nb-card-header>
         
       </nb-card-header>

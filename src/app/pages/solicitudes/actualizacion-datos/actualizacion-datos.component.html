@@ -3,10 +3,12 @@
     <nb-card-header>
       {{ 'solicitudes.solicitud_datos' | translate }}
     </nb-card-header>
-    <nb-card-body>
+    <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
       <ngx-datos-solicitante [solicitante]="solicitante" ></ngx-datos-solicitante>
       <ngx-dinamicform [normalform]="solicitudForm" [modeloData]="solicitudDatos" (result)="enviarSolicitud($event)"></ngx-dinamicform>
-      <ngx-dinamicform [normalform]="respuestaSolicitudForm" [modeloData]="solicitudRespuesta" (result)="enviarRespuesta($event)"></ngx-dinamicform>
+      <div *ngIf = "Admin">
+        <ngx-dinamicform [normalform]="respuestaSolicitudForm" [modeloData]="solicitudRespuesta" (result)="enviarRespuesta($event)"></ngx-dinamicform>
+      </div>
     </nb-card-body>
   </nb-card>
 </div>

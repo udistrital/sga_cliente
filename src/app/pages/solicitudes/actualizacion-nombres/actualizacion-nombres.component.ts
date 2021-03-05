@@ -31,6 +31,9 @@ export class ActualizacionNombresComponent implements OnInit {
   solicitudRespuesta: RespuestaSolicitud;
   filesUp: any; 
   SoporteDocumento: any; 
+  rol: any;
+  Admin: boolean = false;
+  loading: boolean;
 
   constructor(
     private translate: TranslateService,
@@ -44,8 +47,17 @@ export class ActualizacionNombresComponent implements OnInit {
     this.solicitudForm = ACTUALIZAR_NOMBRE;
     this.respuestaSolicitudForm = RESPUESTA_SOLICITUD;
     this.construirForm();
+    this.loading = true;
+    //ROL 9759: Estudiante
+    //ROL 94: Admin
+    this.rol = parseInt(localStorage.getItem('persona_id'))
     this.loadInfo();
     this.loadInfoNueva();
+    if (this.rol === 9757 || this.rol === 9813){
+      this.Admin = false;
+    } else if (this.rol === 94){
+      this.Admin = true;
+    } 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
@@ -103,21 +115,67 @@ export class ActualizacionNombresComponent implements OnInit {
                   this.solicitudForm.btn = "";
                   this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
                   this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                  this.loading = false;
                 }
               },
               (error: HttpErrorResponse) => {
+                this.loading = false;
                 this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
               }
             );
           }
         } else if (response.Response.Code === "404"){
-          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
-          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
+          this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/'+IdPersona+'/18').subscribe(
+            (response: any) => {
+              if (response.Response.Code === "200"){
+                this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].valor = response.Response.Body[0].NombreNuevo;
+                this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].deshabilitar = true;  
+                this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].valor = response.Response.Body[0].ApellidoNuevo;
+                this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = true; 
+                this.solicitudForm.Documento = response.Response.Body[0].Documento;
+                const files = []
+                if (this.solicitudForm.Documento + '' !== '0') {
+                  files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
+                }
+                if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0){
+                  this.nuxeoService.getDocumentoById$(files, this.documentoService)
+                    .subscribe(res => {
+                      const filesResponse = <any>res;
+                      if (Object.keys(filesResponse).length === files.length) {
+                        this.SoporteDocumento = this.solicitudForm.Documento;
+                        this.solicitudForm.btn = "";
+                        this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
+                        this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                        this.loading = false;
+                      }
+                    },
+                    (error: HttpErrorResponse) => {
+                      this.loading = false;
+                      this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+                    }
+                  );
+                }
+              } else if (response.Response.Code === "404"){
+                this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
+                this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
+                this.loading = false;
+              } else{
+                this.loading = false;
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+              }
+            },
+            error => {
+              this.loading = false;
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            }
+          );
         } else{
+          this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         }
       },
       error => {
+        this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );

@@ -32,7 +32,10 @@ export class ActualizacionDatosComponent implements OnInit {
   solicitudRespuesta: RespuestaSolicitud;
   tipoDocumento: any[];
   filesUp: any; 
-  SoporteDocumento: any; 
+  SoporteDocumento: any;
+  rol: any;
+  Admin: boolean = false;
+  loading: boolean;
 
   constructor(
     private translate: TranslateService,
@@ -45,8 +48,17 @@ export class ActualizacionDatosComponent implements OnInit {
     private popUpManager: PopUpManager,) {
     this.solicitudForm = ACTUALIZAR_DATOS;
     this.respuestaSolicitudForm = RESPUESTA_SOLICITUD;
+    this.loading = true;
+    //ROL 9759: Estudiante
+    //ROL 94: Admin
+    this.rol = parseInt(localStorage.getItem('persona_id'))
     this.loadInfo();
     this.loadInfoNueva();
+    if (this.rol === 9757 || this.rol === 9813){
+      this.Admin = false;
+    } else if (this.rol === 94){
+      this.Admin = true;
+    }    
     this.tercerosService.get('tipo_documento').subscribe(
       response => {
         this.tipoDocumento = response;
@@ -110,23 +122,73 @@ export class ActualizacionDatosComponent implements OnInit {
                   this.SoporteDocumento = this.solicitudForm.Documento;
                   this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
                   this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                  this.loading = false;
                 }
               },
               (error: HttpErrorResponse) => {
+                this.loading = false;
                 this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
               }
             );
           }
         } else if (response.Response.Code === "404"){
-          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = false;
-          this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = false; 
-          this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].deshabilitar = false; 
-          this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false; 
+          this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/'+IdPersona+'/17').subscribe(
+            (response: any) => {
+              if (response.Response.Code === "200"){
+                this.solicitudForm.btn = "";
+                var date = moment(response.Response.Body[0].FechaExpedicionNuevo, "DD/MM/YYYY").toDate()
+                this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].valor = momentTimezone.tz(date, 'America/Bogota').format('YYYY-MM-DD');
+                this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = true;  
+                this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].valor = response.Response.Body[0].TipoDocumentoNuevo;
+                this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = true;  
+                this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].valor = response.Response.Body[0].NumeroNuevo;
+                this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].deshabilitar = true; 
+                this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = true; 
+                this.solicitudForm.Documento = response.Response.Body[0].Documento;
+                const files = []
+                if (this.solicitudForm.Documento + '' !== '0') {
+                  files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
+                }
+                if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0){
+                  this.nuxeoService.getDocumentoById$(files, this.documentoService)
+                    .subscribe(res => {
+                      const filesResponse = <any>res;
+                      if (Object.keys(filesResponse).length === files.length) {
+                        this.SoporteDocumento = this.solicitudForm.Documento;
+                        this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
+                        this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                        this.loading = false;
+                      }
+                    },
+                    (error: HttpErrorResponse) => {
+                      this.loading = false;
+                      this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+                    }
+                  );
+                }
+              } else if (response.Response.Code === "404"){
+                this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = false;
+                this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = false; 
+                this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].deshabilitar = false; 
+                this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false; 
+                this.loading = false;
+              } else{
+                this.loading = false;
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+              }
+            },
+            error => {
+              this.loading = false;
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            }
+          );
         } else{
+          this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         }
       },
       error => {
+        this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );
@@ -182,6 +244,7 @@ export class ActualizacionDatosComponent implements OnInit {
   }
 
   enviarSolicitud(event) {
+    this.loading = true;
     if (event.valid){
       const opt: any = {
         title: this.translate.instant('solicitudes.enviar'),
@@ -223,12 +286,15 @@ export class ActualizacionDatosComponent implements OnInit {
                   (res: any) => {
                     if(res.Response.Code === "200"){
                       //Funcion get
+                      this.loading = false;
                       this.popUpManager.showSuccessAlert(this.translate.instant('solicitudes.crear_exito'));
                     } else {
+                      this.loading = false;
                       this.popUpManager.showErrorToast(this.translate.instant('solicitudes.crear_error'));
                     }
                   },
                   (error: HttpErrorResponse) => {
+                    this.loading = false;
                     Swal({
                       type: 'error',
                       title: error.status + '',
@@ -240,6 +306,7 @@ export class ActualizacionDatosComponent implements OnInit {
                 );
               }, 
               (error: HttpErrorResponse) => {
+                this.loading = false;
                 Swal({
                   type: 'error',
                   title: error.status + '',
