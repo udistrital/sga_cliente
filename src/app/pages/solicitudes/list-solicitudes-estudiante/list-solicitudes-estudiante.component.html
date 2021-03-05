@@ -8,7 +8,7 @@
         
       </nb-card-header>
       <nb-card-body>
-        <ng2-smart-table [settings]="estructuraTabla" [source]="solicitudes" (custom)="onclick($event)" ></ng2-smart-table>
+        <ng2-smart-table [settings]="estructuraTabla" [source]="solicitudes" (custom)="onclick($event)" (rowSelect)="itemselec($event)"></ng2-smart-table>
       </nb-card-body>
     </fieldset>
   </div>

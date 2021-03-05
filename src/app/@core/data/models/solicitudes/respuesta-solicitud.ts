@@ -1,4 +1,5 @@
 export class RespuestaSolicitud {
-    Aprobado: string;
+    Aprobado: boolean;
     Observacion: string;
+    SolicitudId: number;
 }

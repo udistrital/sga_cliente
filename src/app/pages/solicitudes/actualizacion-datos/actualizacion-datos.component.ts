@@ -72,7 +72,14 @@ export class ActualizacionDatosComponent implements OnInit {
   }
 
   enviarRespuesta(event) {
-    console.info(event);
+    this.solicitudRespuesta = new RespuestaSolicitud();
+    this.solicitudRespuesta.SolicitudId = parseInt(sessionStorage.getItem('Solicitud'));
+    this.solicitudRespuesta.Observacion = this.respuestaSolicitudForm.campos[this.getIndexForm('Observacion')].valor;
+    if (this.respuestaSolicitudForm.campos[1].valor === ""){
+      this.respuestaSolicitudForm.campos[1].valor = false;
+    }
+    this.solicitudRespuesta.Aprobado = this.respuestaSolicitudForm.campos[1].valor;
+    console.info(this.solicitudRespuesta)
   }
 
   loadInfoNueva(){

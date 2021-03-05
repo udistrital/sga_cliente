@@ -75,6 +75,10 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
     );    
   }
 
+  itemselec(event) {
+    sessionStorage.setItem('Solicitud', event.data["Numero"]);
+  }
+
   construirTabla() {
     this.estructuraTabla = {
       columns: {
