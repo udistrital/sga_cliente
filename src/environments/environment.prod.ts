@@ -60,4 +60,5 @@ export const environment = {
   EVALUACION_INSCRIPCION_SERVICE: 'http://localhost:8095/v1/',
   PARAMETROS_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/',
   PSE_SERVICE: 'https://pruebasfuncionarios.portaloas.udistrital.edu.co/botonPago/index.php?',
+  GOOGLE_MID_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8514/v1/',
 };
