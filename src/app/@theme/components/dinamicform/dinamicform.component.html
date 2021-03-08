@@ -463,8 +463,9 @@
                                 {{c.info}}
                             </div>
                             <div class="{{c.claseGrid}}">
-                                <button class="{{c.claseBoton}}" (click)="auxButton(c)">
+                                <button mat-button class="{{c.claseBoton}}" (click)="auxButton(c)">
                                     <i class="{{c.icono}}"></i>
+                                    {{ c.label }}
                                 </button>
                             </div>
                         </div>

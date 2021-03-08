@@ -122,6 +122,13 @@
             "solicitud": "Actualización de datos",
             "actualizacion_datos": "Solicitud de actualización\nde identificación",
             "actualizacion_nombres": "Solicitud de actualización\nde nombres"
+        },
+        "practicas_academicas": {
+            "practicas_academicas": "Prácticas académicas",
+            "crear_nueva_practica": "Nueva solicitud",
+            "ver_nuevas_solicitudes": "Nuevas solicitudes",
+            "en_proceso": "Solicitudes en proceso",
+            "invitacion": "Invitación a prácticas\nacadémicas"
         }
     },
     "GLOBAL": {
@@ -1376,5 +1383,33 @@
         "nombre_nuevo": "Nuevo nombre",
         "apellido_nuevo": "Nuevo Apellido",
         "soporte_nombre": "Soporte del nuevo nombre"
+    },
+    "practicas_academicas": {
+        "titulo": "Solicitud de práctica Académica",
+        "lista_titulo": "Lista de solicitudes de prácticas académicas",
+        "datos": "Datos de la solicitud",
+        "periodo": "Periodo Académico",
+        "proyecto": "Proyecto académico",
+        "espacio_academico": "Espacio Académico",
+        "semestre": "Semestre del espacio académico",
+        "numero_estudiantes": "Número de estudiantes",
+        "num_grupos": "Número de grupos",
+        "fecha_salida": "Fecha y hora de salida",
+        "fecha_regreso": "Fecha y hora de regreso",
+        "duracion": "Duración (dias)",
+        "numero_vehiculos": "Número de vehiculos",
+        "tipo_vehiculo": "Tipo de vehiculo",
+        "cronograma_practica": "Cronograma",
+        "presupuesto_practica": "Presupuesto",
+        "presentacion_practica": "Presentación Práctica Académica",
+        "lista_estudiantes": "Lista de estudiantes",
+        "nombre": "Nombre del Docente",
+        "vinculacion": "Tipo de vinculación",
+        "correo": "Correo electrónico",
+        "telefono": "Teléfono de contacto",
+        "agregar_docente": "Agregar docente",
+        "solicitante": "Solicitante",
+        "no_data": "No hay prácticas académicas registradas",
+        "estado_docente": "Estatus del autor"
     }
 }
