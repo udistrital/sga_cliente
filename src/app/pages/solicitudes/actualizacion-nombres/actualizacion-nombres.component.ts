@@ -15,7 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import Swal from 'sweetalert2';
 import * as momentTimezone from 'moment-timezone';
-
+import * as moment from 'moment';
 
 @Component({
   selector: 'actualizacion-nombres',
@@ -51,16 +51,73 @@ export class ActualizacionNombresComponent implements OnInit {
     //ROL 9759: Estudiante
     //ROL 94: Admin
     this.rol = parseInt(localStorage.getItem('persona_id'))
-    this.loadInfo();
-    this.loadInfoNueva();
-    if (this.rol === 9757 || this.rol === 9813){
+    if (this.rol === 9759 || this.rol === 9813){
       this.Admin = false;
+      this.loadInfo();
+      this.loadInfoNueva();
     } else if (this.rol === 94){
       this.Admin = true;
+      this.loadInfoById();
     } 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+  }
+
+  loadInfoById(){
+    var IdSolicitud = sessionStorage.getItem("Solicitud")
+    if (IdSolicitud != undefined){
+      this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/solicitud/'+IdSolicitud).subscribe(
+        (response: any) => {
+          console.info(response)
+          if (response.Response.Code === "200"){
+            this.solicitudForm.btn = "";
+            var date = moment(response.Response.Body[0].FechaExpedicionNuevo, "DD/MM/YYYY").toDate()
+            this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor = momentTimezone.tz(response.Response.Body[0].FechaSolicitud, 'America/Bogota').format('DD/MM/YYYY');
+            this.solicitudForm.campos[this.getIndexForm('NombreActual')].valor = response.Response.Body[0].NombreActual;
+            this.solicitudForm.campos[this.getIndexForm('NombreActual')].deshabilitar = true;
+            this.solicitudForm.campos[this.getIndexForm('ApellidoActual')].valor = response.Response.Body[0].ApellidoActual;
+            this.solicitudForm.campos[this.getIndexForm('ApellidoActual')].deshabilitar = true;
+            this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].valor = response.Response.Body[0].NombreNuevo;
+            this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].deshabilitar = true;
+            this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].valor = response.Response.Body[0].ApellidoNuevo;
+            this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = true;
+            this.solicitudForm.Documento = response.Response.Body[0].Documento;
+            const files = []
+            if (this.solicitudForm.Documento + '' !== '0') {
+              files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
+            }
+            if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0){
+              this.nuxeoService.getDocumentoById$(files, this.documentoService)
+                .subscribe(res => {
+                  const filesResponse = <any>res;
+                  if (Object.keys(filesResponse).length === files.length) {
+                    this.SoporteDocumento = this.solicitudForm.Documento;
+                    this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
+                    this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                    this.loading = false;
+                  }
+                },
+                (error: HttpErrorResponse) => {
+                  this.loading = false;
+                  this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+                }
+              );
+            }
+            this.loading = false;
+          } else if (response.Response.Code === "404"){
+            this.loading = false;
+          } else if (response.Response.Code === "400"){
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            this.loading = false;
+          }
+        }, 
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          this.loading = false;
+        }       
+      );
+    }
   }
   
   ngOnInit() {

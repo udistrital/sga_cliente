@@ -50,6 +50,7 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
   }
 
   onclick(event) {
+    sessionStorage.setItem('Solicitud', event.data.Numero);
     if (event.data.Tipo === "Actualización de identificación"){
       this.showSolicitudID = true;
       this.showTable = false;
@@ -134,10 +135,6 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );    
-  }
-
-  itemselec(event) {
-    sessionStorage.setItem('Solicitud', event.data["Numero"]);
   }
 
   construirTabla() {
