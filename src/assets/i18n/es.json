@@ -1346,6 +1346,9 @@
         "no_data": "No existen datos registrados de la formación académica"
     },
     "solicitudes": {
+        "doc_valido": "¿El documento enviado es aprobado para esta solicitud",
+        "observacion": "Observación",
+        "solicitud_respuesta": "Respuesta de la solicitud",
         "error": "Ha ocurrido un error inesperado y no se pudo cumplir la solicitud",
         "no_data": "No hay ninguna solicitud registrada",
         "crear_error": "Ocurrió un error inesperado al enviar la solicitud",
