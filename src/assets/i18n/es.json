@@ -1385,6 +1385,8 @@
         "soporte_nombre": "Soporte del nuevo nombre"
     },
     "practicas_academicas": {
+        "titulo": "Solicitud de práctica Académica",
+        "lista_titulo": "Lista de solicitudes de prácticas académicas",
         "datos": "Datos de la solicitud",
         "periodo": "Periodo Académico",
         "proyecto": "Proyecto académico",
@@ -1400,6 +1402,14 @@
         "cronograma_practica": "Cronograma",
         "presupuesto_practica": "Presupuesto",
         "presentacion_practica": "Presentación Práctica Académica",
-        "lista_estudiantes": "Lista de estudiantes"
+        "lista_estudiantes": "Lista de estudiantes",
+        "nombre": "Nombre del Docente",
+        "vinculacion": "Tipo de vinculación",
+        "correo": "Correo electrónico",
+        "telefono": "Teléfono de contacto",
+        "agregar_docente": "Agregar docente",
+        "solicitante": "Solicitante",
+        "no_data": "No hay prácticas académicas registradas",
+        "estado_docente": "Estatus del autor"
     }
 }

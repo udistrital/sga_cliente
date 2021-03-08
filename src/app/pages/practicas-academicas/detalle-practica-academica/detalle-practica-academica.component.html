@@ -1,0 +1,35 @@
+<div class="col-12">
+  <nb-card>
+    <nb-card-header>
+      {{ 'practicas_academicas.titulo' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+      <form class="dinamic-form" novalidate [formGroup]="formDocente" >
+        <fieldset [ngClass]="{'fieldseter':true} ">
+          <legend>
+            {{ 'practicas_academicas.solicitante' | translate }}
+          </legend>
+          <div class="row">
+            <div class="col-12 col-md-4">
+              <mat-form-field style="width: 100%;">
+                <input matInput type="text" formControlName="NombreDocente" placeholder="{{ 'practicas_academicas.nombre' | translate}}" />
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-md-4">
+              <mat-form-field style="width: 100%;">
+                <input matInput type="text" formControlName="NumeroDocumento" placeholder="{{ 'GLOBAL.numero_documento' | translate}}" />
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-md-4">
+              <mat-form-field style="width: 100%;">
+                <input matInput type="text" formControlName="EstadoDocente" placeholder="{{ 'practicas_academicas.estado_docente' | translate}}" />
+              </mat-form-field>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+      
+      <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas" ></ngx-dinamicform>
+    </nb-card-body>
+  </nb-card>
+</div>

@@ -12,7 +12,8 @@ export const FORM_SOLICITUD_PRACTICAS = {
             label_i18n: 'periodo',
             requerido: true,
             opciones: [],
-            key: 'Nombre'
+            key: 'Nombre',
+            deshabilitar: false,
         },
         {
             etiqueta: 'select',
@@ -22,7 +23,8 @@ export const FORM_SOLICITUD_PRACTICAS = {
             label_i18n: 'proyecto',
             requerido: true,
             opciones: [],
-            key: 'Nombre'
+            key: 'Nombre',
+            deshabilitar: false,
         },
         {
             etiqueta: 'select',
@@ -32,39 +34,47 @@ export const FORM_SOLICITUD_PRACTICAS = {
             label_i18n: 'espacio_academico',
             requerido: true,
             opciones: [],
-            key: 'Nombre'
+            key: 'Nombre',
+            deshabilitar: false,
         },
         {
             etiqueta: 'input',
-            tipo: 'text',
+            tipo: 'number',
             nombre: 'Semestre',
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'semestre',
             requerido: true,
+            minimo: 0,
+            deshabilitar: false,
         },
         {
             etiqueta: 'input',
-            tipo: 'text',
+            tipo: 'number',
             nombre: 'NumeroEstudiantes',
             claseGrid: "col-12 col-md-6",
             label_i18n: 'numero_estudiantes',
             requerido: true,
+            minimo: 0,
+            deshabilitar: false,
         },
         {
             etiqueta: 'input',
-            tipo: 'text',
+            tipo: 'number',
             nombre: 'NumeroGrupos',
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'num_grupos',
             requerido: true,
+            minimo: 0,
+            deshabilitar: false,
         },
         {
-            etiqueta: 'input',
+            etiqueta: 'mat-date',
             tipo: 'datetime-local',
             nombre: 'FechaHoraSalida',
             claseGrid: 'col-12 col-sm-6 col-md-4',
             label_i18n: 'fecha_salida',
             requerido: true,
+            deshabilitar: false,
         },
         {
             etiqueta: 'input',
@@ -73,22 +83,27 @@ export const FORM_SOLICITUD_PRACTICAS = {
             claseGrid: 'col-12 col-sm-6 col-md-4',
             label_i18n: 'fecha_regreso',
             requerido: true,
+            deshabilitar: false,
         },
         {
             etiqueta: 'input',
-            tipo: 'text',
+            tipo: 'number',
             nombre: 'Duracion',
             claseGrid: 'col-12 col-sm-6 col-md-4',
             label_i18n: 'duracion',
             requerido: true,
+            minimo: 0,
+            deshabilitar: false,
         },
         {
             etiqueta: 'input',
-            tipo: 'text',
+            tipo: 'number',
             nombre: 'NumeroVehiculos',
             claseGrid: 'col-12 col-sm-6',
             label_i18n: 'numero_vehiculos',
             requerido: true,
+            minimo: 0,
+            deshabilitar: false,
         },
         {
             etiqueta: 'select',
@@ -98,7 +113,8 @@ export const FORM_SOLICITUD_PRACTICAS = {
             label_i18n: 'tipo_vehiculo',
             requerido: true,
             opciones: [],
-            key: 'Nombre'
+            key: 'Nombre',
+            deshabilitar: false,
         },
         {
             etiqueta: 'file',
@@ -112,6 +128,7 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
+            deshabilitar: false,
         },
         {
             etiqueta: 'file',
@@ -125,6 +142,7 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
+            deshabilitar: false,
         },
         {
             etiqueta: 'file',
@@ -138,6 +156,7 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
+            deshabilitar: false,
         },
         {
             etiqueta: 'file',
@@ -151,6 +170,7 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
+            deshabilitar: false,
         },
     ]
 }

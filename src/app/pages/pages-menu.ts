@@ -121,13 +121,13 @@ export const MENU_ITEMS: MenuItem[] = [
       {
         title: 'Nuevas solicitudes',
         icon: 'nb-list',
-        link: '',
+        link: '/pages/practicas-academicas/lista-practicas',
         key: 'ver_nuevas_solicitudes'
       },
       {
         title: 'Solicitudes en proceso',
         icon: 'nb-list',
-        link: '',
+        link: '/pages/practicas-academicas/lista-practicas',
         key: 'en_proceso'
       },
       {

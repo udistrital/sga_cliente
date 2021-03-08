@@ -1341,6 +1341,8 @@
         "soporte_nombre": "Support document for the new name"
     },
     "practicas_academicas": {
+        "titulo": "Academic Practice Request",
+        "lista_titulo": "List of Academic Practices Request",
         "datos": "Request data",
         "periodo": "Academic period",
         "proyecto": "Academic Project",
@@ -1356,6 +1358,14 @@
         "cronograma_practica": "Schedule",
         "presupuesto_practica": "Budget",
         "presentacion_practica": "Academic practice result",
-        "lista_estudiantes": "Students list"
+        "lista_estudiantes": "Students list",
+        "nombre": "Teacher Name",
+        "vinculacion": "Bonding type",
+        "correo": "Email",
+        "telefono": "Telephone number",
+        "agregar_docente": "Add teacher",
+        "solicitante": "Petitioner",
+        "no_data": "There are no registered academic practices",
+        "estado_docente": "Author status"
     }
 }

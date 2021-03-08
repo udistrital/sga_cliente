@@ -1,26 +1,32 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-import { Periodo } from '../../../@core/data/models/periodo/periodo';
 import { FORM_SOLICITUD_PRACTICAS } from '../form-solicitud-practica';
 
 @Component({
-  selector: 'ngx-nueva-solicitud',
-  templateUrl: './nueva-solicitud.component.html',
+  selector: 'ngx-detalle-practica-academica',
+  templateUrl: './detalle-practica-academica.component.html',
   styleUrls: ['../practicas-academicas.component.scss'],
 })
-export class NuevaSolicitudComponent implements OnInit {
+export class DetallePracticaAcademicaComponent implements OnInit {
 
+  formDocente: FormGroup;
   InfoPracticasAcademicas: any;
   FormPracticasAcademicas: any;
   periodos: any[];
   proyectos: any[];
   espaciosAcademicos: any;
   tiposVehiculo: any;
-  limpiar: boolean = true;
 
   constructor(
-    private translate: TranslateService,
+    private builder: FormBuilder,
+    private translate: TranslateService
   ) {
+    this.formDocente = this.builder.group({
+      NombreDocente: [{value: '', disabled: true}],
+      NumeroDocumento: [{value: '', disabled: true}],
+      EstadoDocente: [{value: '', disabled: true}],
+    });
     this.FormPracticasAcademicas = FORM_SOLICITUD_PRACTICAS;
     this.inicializiarDatos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -29,6 +35,11 @@ export class NuevaSolicitudComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.formDocente.setValue({
+      NombreDocente: 'Docente de prueba',
+      NumeroDocumento: '123456789',
+      EstadoDocente: 'Autor principal',
+    });
     this.construirForm();
   }
 
@@ -42,12 +53,24 @@ export class NuevaSolicitudComponent implements OnInit {
       {Nombre: 'Bus', Id: 3},
       {Nombre: 'Otro', Id: 4},
     ]
-    this.InfoPracticasAcademicas = null;
+    this.InfoPracticasAcademicas = {
+      Periodo: {Id: 1},
+      Proyecto: {Id: 1},
+      EspacioAcademico: {Id: 1},
+      Semestre: 2,
+      NumeroEstudiantes: 40,
+      NumeroGrupos: 2,
+      FechaHoraSalida: '',
+      FechaHoraRegreso: '',
+      Duracion: 2,
+      NumeroVehiculos: 1,
+      TipoVehiculo: {Id: 1}
+    }
   }
 
   construirForm() {
     this.FormPracticasAcademicas.titulo = this.translate.instant('practicas_academicas.datos');
-    this.FormPracticasAcademicas.btn = this.translate.instant('solicitudes.enviar')
+    this.FormPracticasAcademicas.btn = ''
     this.FormPracticasAcademicas.campos.forEach(campo => {
       if (campo.etiqueta === 'select') {
         switch (campo.nombre) {
@@ -66,12 +89,8 @@ export class NuevaSolicitudComponent implements OnInit {
         }
       }
       campo.label = this.translate.instant('practicas_academicas.' + campo.label_i18n);
-      campo.deshabilitar = false;
+      campo.deshabilitar = true;
     });
-  }
-
-  enviarSolicitud(event) {
-    console.log(event)
   }
 
 }
