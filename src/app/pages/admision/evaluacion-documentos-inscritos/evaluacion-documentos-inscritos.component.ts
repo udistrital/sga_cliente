@@ -14,6 +14,10 @@ import { combineAll } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoDocumentosComponent } from '../dialogo-documentos/dialogo-documentos.component';
 import { Documento } from '../../../@core/data/models/documento/documento';
+import { GoogleService } from '../../../@core/data/google.service';
+import { Invitacion } from '../../../@core/data/models/correo/invitacion';
+import { InvitacionTemplate } from '../../../@core/data/models/correo/invitacionTemplate';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -34,11 +38,13 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   proyectos_selected: any[];
   inscripcion_id: any;
   showProfile: boolean;
+  invitacion: Invitacion;
+  invitacionTemplate: InvitacionTemplate;
 
   periodos = [];
   proyectos = [];
   Aspirantes = [];
-  
+
   constructor(
     private translate: TranslateService,
     private userService: UserService,
@@ -49,7 +55,10 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     private tercerosService: TercerosService,
     private documentoService: DocumentoService,
     private dialog: MatDialog,
+    private googleMidService: GoogleService,
   ) {
+    this.invitacion = new Invitacion();
+    this.invitacionTemplate = new InvitacionTemplate();
     this.dataSource = new LocalDataSource();
     this.showProfile = true;
     this.loadData();
@@ -130,10 +139,10 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
       (response: any) => {
         if (response !== '[{}]') {
           const data = <Array<any>>response;
-          data.forEach(element => {  
+          data.forEach(element => {
             if (element.PersonaId != undefined) {
               this.tercerosService.get('datos_identificacion?query=TerceroId:'+element.PersonaId).subscribe(
-                (res: any) => { 
+                (res: any) => {
                   var aspiranteAux = {
                     Credencial: element.Id,
                     Identificacion: res[0].Numero,
@@ -142,13 +151,13 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                   }
                   this.Aspirantes.push(aspiranteAux);
                   this.dataSource.load(this.Aspirantes);
-                }, 
+                },
                 error => {
                   this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-                  
+
                 }
               );
-            }                
+            }
           });
         } else {
           this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
@@ -248,6 +257,20 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                 if (!data.aprobado && data.observacion !== '') {
                   // llamar funcion que envia correo con la observacion
                   // enviarCorreo(data.observacion);
+                  const correo = JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).email;
+                  if(correo != undefined){
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    this.invitacionTemplate.Fecha = new Date().toLocaleDateString('es-CO', options);
+                    this.invitacionTemplate.ContenidoProduccion = this.makeHtmlTemplate(data);
+                    this.invitacion.to = [];
+                    this.invitacion.to.push(correo);
+                    this.invitacion.cc = [];
+                    this.invitacion.bcc = [];
+                    this.invitacion.subject = 'Observación documento solicitado';
+                    this.invitacion.templateName = 'observacion_documento.html';
+                    this.invitacion.templateData = this.invitacionTemplate;
+                    this.sendCorreo();
+                  }
                 }
               },
               error => {
@@ -262,5 +285,61 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
       }
     })
   }
+
+  sendCorreo() {
+    this.googleMidService.post('notificacion', this.invitacion)
+      .subscribe((res: any) => {
+          Swal({
+            title: `Éxito al Enviar Observación.`,
+          });
+          this.invitacion.to = [];
+          this.invitacion.templateData = null;
+      });
+  }
+
+  makeHtmlTemplate(data: any) {
+    return `
+    <div class=\"row\">
+      <div class=\"encabezado\">
+        Título:
+      </div>
+      <div class=\"dato\">
+        Revisión de documentos
+      </div>
+    </div>
+    <div class=\"row\">
+      <div class=\"encabezado\">
+        Observación:
+      </div>
+      <div class=\"dato\">
+        ${data.observacion}
+      </div>
+    </div>
+    `
+    // + this.makeRowMetadato();
+  }
+
+  // makeRowMetadato(): string {
+  //   let metadatoList: string = ``;
+  //   this.solicitud_selected.ProduccionAcademica.Metadatos.forEach(metadato => {
+  //     if (JSON.parse(metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.FormDefinition).etiqueta === 'input' &&
+  //       metadato.Valor) {
+  //       metadatoList += `
+  //           <div class=\"row\">
+  //             <div class=\"encabezado\">
+  //               ${this.translate
+  //           .instant('produccion_academica.labels.' + JSON.parse(metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.FormDefinition).label_i18n)
+  //         }
+  //             </div>
+  //             <div class=\"dato\">
+  //               ${metadato.Valor}
+  //             </div>
+  //           </div>
+
+  //           `
+  //     }
+  //   })
+  //   return metadatoList;
+  // }
 
 }

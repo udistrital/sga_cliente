@@ -1,0 +1,12 @@
+<div class="col-12">
+  <nb-card>
+    <nb-card-header>
+      {{ 'practicas_academicas.titulo' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+      <ngx-solicitante-practica></ngx-solicitante-practica>
+
+      <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas" [clean]="limpiar" (result)="enviarSolicitud($event)"></ngx-dinamicform>
+    </nb-card-body>
+  </nb-card>
+</div>

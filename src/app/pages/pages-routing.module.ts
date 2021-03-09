@@ -25,6 +25,10 @@ const routes: Routes = [{
       loadChildren: './solicitudes/solicitudes.module#SolicitudesModule'
     },
     {
+      path: 'practicas-academicas',
+      loadChildren: './practicas-academicas/practicas-academicas.module#PracticasAcademicasModule'
+    },
+    {
       path: 'inscripcion',
       loadChildren: './inscripcion/inscripcion.module#InscripcionModule',
     },

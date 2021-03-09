@@ -122,6 +122,13 @@
             "solicitud": "Data update",
             "actualizacion_datos": "Updating ID number request",
             "actualizacion_nombres": "Updating names request"
+        },
+        "practicas_academicas": {
+            "practicas_academicas": "Academic practices",
+            "crear_nueva_practica": "New Request",
+            "ver_nuevas_solicitudes": "New requests",
+            "en_proceso": "Requests in process",
+            "invitacion": "Invitation to academic\npractices"
         }
     },
     "GLOBAL": {
@@ -1332,5 +1339,33 @@
         "apellido": "last name",
         "nombre_nuevo": "New name",
         "soporte_nombre": "Support document for the new name"
+    },
+    "practicas_academicas": {
+        "titulo": "Academic Practice Request",
+        "lista_titulo": "List of Academic Practices Request",
+        "datos": "Request data",
+        "periodo": "Academic period",
+        "proyecto": "Academic Project",
+        "espacio_academico": "Academic course",
+        "semestre": "Academic course semester",
+        "numero_estudiantes": "Number of students",
+        "num_grupos": "Number of groups",
+        "fecha_salida": "Date and time of departure",
+        "fecha_regreso": "Date and time of arrival",
+        "duracion": "Duration (days)",
+        "numero_vehiculos": "Number of vehicles",
+        "tipo_vehiculo": "Vehicle type",
+        "cronograma_practica": "Schedule",
+        "presupuesto_practica": "Budget",
+        "presentacion_practica": "Academic practice result",
+        "lista_estudiantes": "Students list",
+        "nombre": "Teacher Name",
+        "vinculacion": "Bonding type",
+        "correo": "Email",
+        "telefono": "Telephone number",
+        "agregar_docente": "Add teacher",
+        "solicitante": "Petitioner",
+        "no_data": "There are no registered academic practices",
+        "estado_docente": "Author status"
     }
 }

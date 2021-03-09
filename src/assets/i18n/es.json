@@ -122,6 +122,13 @@
             "solicitud": "Actualización de datos",
             "actualizacion_datos": "Solicitud de actualización\nde identificación",
             "actualizacion_nombres": "Solicitud de actualización\nde nombres"
+        },
+        "practicas_academicas": {
+            "practicas_academicas": "Prácticas académicas",
+            "crear_nueva_practica": "Nueva solicitud",
+            "ver_nuevas_solicitudes": "Nuevas solicitudes",
+            "en_proceso": "Solicitudes en proceso",
+            "invitacion": "Invitación a prácticas\nacadémicas"
         }
     },
     "GLOBAL": {
@@ -1074,7 +1081,7 @@
         "descuento_academico_no_registrado": "Descuento académico no registrado",
         "descuento_academico_registrado": "Descuento académico registrado",
         "documento_descuento_academico_no_registrado": "Error subiendo el documento de soporte",
-        "seguro_continuar_registrar": "¿Está seguto de registrar este descuento académico?"
+        "seguro_continuar_registrar": "¿Está seguro de registrar este descuento académico?"
     },
     "idiomas": {
         "error_cargar_informacion_idiomas": "Ocurrió un error al cargar la información de los idiomas",
@@ -1339,6 +1346,9 @@
         "no_data": "No existen datos registrados de la formación académica"
     },
     "solicitudes": {
+        "doc_valido": "¿El documento enviado es aprobado para esta solicitud",
+        "observacion": "Observación",
+        "solicitud_respuesta": "Respuesta de la solicitud",
         "error": "Ha ocurrido un error inesperado y no se pudo cumplir la solicitud",
         "no_data": "No hay ninguna solicitud registrada",
         "crear_error": "Ocurrió un error inesperado al enviar la solicitud",
@@ -1376,5 +1386,33 @@
         "nombre_nuevo": "Nuevo nombre",
         "apellido_nuevo": "Nuevo Apellido",
         "soporte_nombre": "Soporte del nuevo nombre"
+    },
+    "practicas_academicas": {
+        "titulo": "Solicitud de práctica Académica",
+        "lista_titulo": "Lista de solicitudes de prácticas académicas",
+        "datos": "Datos de la solicitud",
+        "periodo": "Periodo Académico",
+        "proyecto": "Proyecto académico",
+        "espacio_academico": "Espacio Académico",
+        "semestre": "Semestre del espacio académico",
+        "numero_estudiantes": "Número de estudiantes",
+        "num_grupos": "Número de grupos",
+        "fecha_salida": "Fecha y hora de salida",
+        "fecha_regreso": "Fecha y hora de regreso",
+        "duracion": "Duración (dias)",
+        "numero_vehiculos": "Número de vehiculos",
+        "tipo_vehiculo": "Tipo de vehiculo",
+        "cronograma_practica": "Cronograma",
+        "presupuesto_practica": "Presupuesto",
+        "presentacion_practica": "Presentación Práctica Académica",
+        "lista_estudiantes": "Lista de estudiantes",
+        "nombre": "Nombre del Docente",
+        "vinculacion": "Tipo de vinculación",
+        "correo": "Correo electrónico",
+        "telefono": "Teléfono de contacto",
+        "agregar_docente": "Agregar docente",
+        "solicitante": "Solicitante",
+        "no_data": "No hay prácticas académicas registradas",
+        "estado_docente": "Estatus del autor"
     }
 }
