@@ -143,20 +143,25 @@ export class ListDocumentoProgramaComponent implements OnInit {
     );
   }
 
-  cargarEstadoDocumento(documento: SoporteDocumentoAux){
+  cargarEstadoDocumento(documento: SoporteDocumentoAux) {
     return new Promise((resolve) => {
-    this.documentoService.get('documento/' + documento.DocumentoId).subscribe(
-      (doc: Documento) => {
-        let metadatos = JSON.parse(doc.Metadatos);
-        if (metadatos.aprobado){
-          this.estadoObservacion = 'Aprobado';
-          this.observacion = '';
-        }else{
-          this.estadoObservacion = 'No Aprobado';
-          this.observacion = metadatos.observacion;
-        }
-        resolve(this.estadoObservacion)
-      });
+      this.documentoService.get('documento/' + documento.DocumentoId).subscribe(
+        (doc: Documento) => {
+          if (doc.Metadatos == '') {
+            this.estadoObservacion = '';
+            this.observacion = '';
+          } else {
+            let metadatos = JSON.parse(doc.Metadatos);
+            if (metadatos.aprobado) {
+              this.estadoObservacion = 'Aprobado';
+              this.observacion = '';
+            } else {
+              this.estadoObservacion = 'No Aprobado';
+              this.observacion = metadatos.observacion;
+            }
+          }
+          resolve(this.estadoObservacion)
+        });
     });
 
   }
@@ -168,7 +173,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'))
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
-        this.loadData();
+      this.loadData();
     }
   }
 
@@ -189,10 +194,10 @@ export class ListDocumentoProgramaComponent implements OnInit {
           });
         }
       },
-      error => {
-        this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
-      },
-    );
+        error => {
+          this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
+        },
+      );
   }
 
   onEdit(event): void {
@@ -201,7 +206,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
   }
 
   onAction(event): void {
-    switch(event.action) {
+    switch (event.action) {
       case 'open':
         this.onOpen(event);
         break;
@@ -216,7 +221,8 @@ export class ListDocumentoProgramaComponent implements OnInit {
       this.uid = 0;
       this.loadData();
     } else {
-      this.getPercentage(this.soporteDocumento.length / event)
+      // this.getPercentage(this.soporteDocumento.length / event)
+      this.getPercentage(event)
     }
   }
 
