@@ -226,6 +226,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           onComponentInitFunction: (instance) => {
             instance.save.subscribe(data => {
               sessionStorage.setItem('EstadoInscripcion', data.estado);
+              // Solamente se usa esta linea para pruebas saltaldo el pago de recibo
+              // sessionStorage.setItem('EstadoInscripcion', 'true');
               if (data.estado === false || data.estado === 'false') {
                 this.abrirPago(data.data);
               } else if (data.estado === true || data.estado === 'true') {
@@ -409,6 +411,28 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.popUpManager.showConfirmAlert(this.translate.instant('inscripcion.seguro_inscribirse')).then(
         ok => {
           if(ok.value) {
+            if(this.info_info_persona == undefined){
+              this.sgaMidService.get('persona/consultar_persona/' + this.info_persona_id)
+              .subscribe(res => {
+                if (res !== null) {
+                  const temp = <InfoPersona>res;
+                  this.info_info_persona = temp;
+                  const files = []
+                }
+                this.loading = false;
+              },
+                (error: HttpErrorResponse) => {
+                  this.loading = false;
+                  Swal({
+                    type: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                      this.translate.instant('GLOBAL.info_persona'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
+                });
+            }
             const inscripcion = {
               Id: parseInt(this.info_info_persona.NumeroIdentificacion, 10),
               Nombre: `${this.info_info_persona.PrimerNombre} ${this.info_info_persona.SegundoNombre}`,
@@ -454,7 +478,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                       );
                     } else {
                       this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
-                      this.loading = false; 
+                      this.loading = false;
                     }
                   });
                 }

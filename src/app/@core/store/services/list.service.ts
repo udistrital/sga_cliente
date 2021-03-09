@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { PersonaService } from '../../data/persona.service';
 import { Injectable } from '@angular/core';
 import { IAppState } from '../app.state';
@@ -498,15 +499,15 @@ public findTipoParametro() {
   );
 }
 
-  public findGrupoInvestigacion() {
+  public async findGrupoInvestigacion() {
     this.loading = true;
     this.store.select(REDUCER_LIST.GrupoInvestigacion).subscribe(
-      (list: any) => {
+      async (list: any) => {
         if (!list || list.length === 0) {
           // this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
           this.cidcService.get('research_group/?query=Activo:true&limit=0')
             .subscribe(
-              (result: any) => {
+              async (result: any) => {
                 const r = <any>result.data;
                 this.addList(REDUCER_LIST.GrupoInvestigacion, r);
               },

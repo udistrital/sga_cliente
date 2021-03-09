@@ -19,7 +19,7 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { CoreService } from '../../../@core/data/core.service';
-
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-crud-descuento-academico',
@@ -81,6 +81,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     private store: Store<IAppState>,
     private listService: ListService,
     private nuxeoService: NuxeoService,
+    private popUpManager: PopUpManager,
     // private user: UserService,
     private toasterService: ToasterService) {
     this.formDescuentoAcademico = FORM_DESCUENTO;
@@ -566,14 +567,16 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                     if (r !== null && r.Type !== 'error') {
                       this.loading = false;
                       this.eventChange.emit(true);
-                      this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('descuento_academico.descuento_academico_registrado'));
+                      // this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                      // this.translate.instant('descuento_academico.descuento_academico_registrado'));
+                      this.popUpManager.showSuccessAlert(this.translate.instant('descuento_academico.descuento_academico_registrado'));
                       this.descuento_academico_id = 0;
                       this.info_descuento_academico = undefined;
                       this.clean = !this.clean;
                     } else {
-                      this.showToast('error', this.translate.instant('GLOBAL.error'),
-                        this.translate.instant('descuento_academico.descuento_academico_no_registrado'));
+                      this.popUpManager.showErrorToast(this.translate.instant('documento_programa.documento_programa_no_registrado'));
+                      // this.showToast('error', this.translate.instant('GLOBAL.error'),
+                      //   this.translate.instant('descuento_academico.descuento_academico_no_registrado'));
                     }
                     this.loading = false;
                   },
