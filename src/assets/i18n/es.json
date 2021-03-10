@@ -1346,6 +1346,7 @@
         "no_data": "No existen datos registrados de la formación académica"
     },
     "solicitudes": {
+        "respuesta": "La respuesta a esta solicitud ha sido registrada correctamente",
         "doc_valido": "¿El documento enviado es aprobado para esta solicitud",
         "observacion": "Observación",
         "solicitud_respuesta": "Respuesta de la solicitud",

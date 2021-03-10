@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import Swal from 'sweetalert2';
 import { from } from 'rxjs';
+import { cpuUsage } from 'process';
 
 @Component({
   selector: 'ngx-actualizacion-datos',
@@ -92,9 +93,8 @@ export class ActualizacionDatosComponent implements OnInit {
           console.info(response)
           if (response.Response.Code === "200"){
             this.solicitudForm.btn = "";
-            var date = moment(response.Response.Body[0].FechaExpedicionNuevo, "DD/MM/YYYY").toDate()
             this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor = momentTimezone.tz(response.Response.Body[0].FechaSolicitud, 'America/Bogota').format('DD/MM/YYYY');
-            this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].valor = momentTimezone.tz(date, 'America/Bogota').format('YYYY-MM-DD');
+            this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].valor = momentTimezone.tz(response.Response.Body[0].FechaExpedicionNuevo, 'America/Bogota').format('YYYY-MM-DD');
             this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = true;
             this.solicitudForm.campos[this.getIndexForm('TipoDocumentoActual')].valor = response.Response.Body[0].TipoDocumentoActual;
             this.solicitudForm.campos[this.getIndexForm('TipoDocumentoActual')].deshabilitar = true;
@@ -145,6 +145,7 @@ export class ActualizacionDatosComponent implements OnInit {
   }
 
   enviarRespuesta(event) {
+    this.loading = true;
     this.solicitudRespuesta = new RespuestaSolicitud();
     this.solicitudRespuesta.SolicitudId = parseInt(sessionStorage.getItem('Solicitud'));
     this.solicitudRespuesta.Observacion = this.respuestaSolicitudForm.campos[this.getIndexForm('Observacion')].valor;
@@ -153,6 +154,22 @@ export class ActualizacionDatosComponent implements OnInit {
     }
     this.solicitudRespuesta.Aprobado = this.respuestaSolicitudForm.campos[1].valor;
     console.info(this.solicitudRespuesta)
+    this.sgaMidService.post('solicitud_evaluacion/registrar_evolucion',this.solicitudRespuesta).subscribe(
+      (response: any) => {
+        if (response.Response.Code === "200") {
+          this.loading = false;
+          this.loadInfoById();
+          this.popUpManager.showSuccessAlert(this.translate.instant('solicitudes.respuesta'));
+        } else if (response.Response.Code === "400") {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('solicitudes.error'));
+        }
+      },
+      error => {
+        this.loading = false;
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
   }
 
   loadInfoNueva(){
@@ -162,8 +179,7 @@ export class ActualizacionDatosComponent implements OnInit {
       (response: any) => {
         if (response.Response.Code === "200"){
           this.solicitudForm.btn = "";
-          var date = moment(response.Response.Body[0].FechaExpedicionNuevo, "DD/MM/YYYY").toDate()
-          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].valor = momentTimezone.tz(date, 'America/Bogota').format('YYYY-MM-DD');
+          this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].valor = momentTimezone.tz(response.Response.Body[0].FechaExpedicionNuevo, 'America/Bogota').format('YYYY-MM-DD');
           this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = true;  
           this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].valor = response.Response.Body[0].TipoDocumentoNuevo;
           this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = true;  
@@ -260,6 +276,7 @@ export class ActualizacionDatosComponent implements OnInit {
     if (TerceroId != undefined){
       var hoy = new Date();
       this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor = hoy.getFullYear()+"/"+(hoy.getMonth()+1)+"/"+hoy.getDate();
+      console.info(this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor)
       this.tercerosService.get('datos_identificacion?query=TerceroId:'+TerceroId).subscribe(
         (response: any) => {
           if (response[0] !== undefined && response[0] !== ""){
@@ -305,7 +322,6 @@ export class ActualizacionDatosComponent implements OnInit {
   }
 
   enviarSolicitud(event) {
-    this.loading = true;
     if (event.valid){
       const opt: any = {
         title: this.translate.instant('solicitudes.enviar'),
@@ -319,6 +335,7 @@ export class ActualizacionDatosComponent implements OnInit {
       };
       Swal(opt)
         .then((willDelete) => {
+          this.loading = true;
           if (willDelete.value) {
             const files = [];
             var Solicitud: any = {};
@@ -337,7 +354,10 @@ export class ActualizacionDatosComponent implements OnInit {
                     this.solicitudDatos["Documento"] = this.filesUp['Documento'].Id;
                   }
                 }
-                this.solicitudDatos.FechaExpedicionNuevo = momentTimezone.tz(this.solicitudDatos.FechaExpedicionNuevo, 'America/Bogota').format('DD/MM/YYYY');
+                this.solicitudDatos.FechaExpedicionActual = momentTimezone.tz(this.solicitudDatos.FechaExpedicionActual, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+                this.solicitudDatos.FechaExpedicionActual = this.solicitudDatos.FechaExpedicionActual + ' +0000 +0000';
+                this.solicitudDatos.FechaExpedicionNuevo = momentTimezone.tz(this.solicitudDatos.FechaExpedicionNuevo, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+                this.solicitudDatos.FechaExpedicionNuevo = this.solicitudDatos.FechaExpedicionNuevo + ' +0000 +0000';
                 this.solicitudDatos.FechaSolicitud = momentTimezone.tz(this.solicitudDatos.FechaSolicitud, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
                 this.solicitudDatos.FechaSolicitud = this.solicitudDatos.FechaSolicitud + ' +0000 +0000';
                 Solicitud.Solicitud = this.solicitudDatos;

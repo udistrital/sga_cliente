@@ -131,7 +131,30 @@ export class ActualizacionNombresComponent implements OnInit {
   }
 
   enviarRespuesta(event) {
-    console.info(event);
+    this.loading = true;
+    this.solicitudRespuesta = new RespuestaSolicitud();
+    this.solicitudRespuesta.SolicitudId = parseInt(sessionStorage.getItem('Solicitud'));
+    this.solicitudRespuesta.Observacion = this.respuestaSolicitudForm.campos[this.getIndexForm('Observacion')].valor;
+    if (this.respuestaSolicitudForm.campos[1].valor === ""){
+      this.respuestaSolicitudForm.campos[1].valor = false;
+    }
+    this.solicitudRespuesta.Aprobado = this.respuestaSolicitudForm.campos[1].valor;
+    this.sgaMidService.post('solicitud_evaluacion/registrar_evolucion', this.solicitudRespuesta).subscribe(
+      (response: any) => {
+        if (response.Response.Code === "200") {
+          this.loading = false;
+          this.loadInfoById();
+          this.popUpManager.showSuccessAlert(this.translate.instant('solicitudes.respuesta'));
+        } else if (response.Response.Code === "400") {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('solicitudes.error'));
+        }
+      },
+      error => {
+        this.loading = false;
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
   }
 
   construirForm() {
@@ -203,14 +226,16 @@ export class ActualizacionNombresComponent implements OnInit {
                         this.solicitudForm.btn = "";
                         this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
                         this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
-                        this.loading = false;
                       }
+                      this.loading = false;
                     },
                     (error: HttpErrorResponse) => {
                       this.loading = false;
                       this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                     }
                   );
+                } else {
+                  this.loading = false;
                 }
               } else if (response.Response.Code === "404"){
                 this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
@@ -282,6 +307,7 @@ export class ActualizacionNombresComponent implements OnInit {
       Swal(opt)
         .then((willDelete) => {
           if (willDelete.value) {
+            this.loading = true;
             const files = [];
             var Solicitud: any = {};
             this.solicitudDatos = event.data;
@@ -308,12 +334,15 @@ export class ActualizacionNombresComponent implements OnInit {
                   (res: any) => {
                     if(res.Response.Code === "200"){
                       //Funcion get
+                      this.loading = false;
                       this.popUpManager.showSuccessAlert(this.translate.instant('solicitudes.crear_exito'));
                     } else {
+                      this.loading = false;
                       this.popUpManager.showErrorToast(this.translate.instant('solicitudes.crear_error'));
                     }
                   },
                   (error: HttpErrorResponse) => {
+                    this.loading = false;
                     Swal({
                       type: 'error',
                       title: error.status + '',
@@ -325,6 +354,7 @@ export class ActualizacionNombresComponent implements OnInit {
                 );
               }, 
               (error: HttpErrorResponse) => {
+                this.loading = false;
                 Swal({
                   type: 'error',
                   title: error.status + '',
