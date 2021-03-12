@@ -1,14 +1,14 @@
 <nb-card>
   <div class="col-12" *ngIf="showTable">
-    <fieldset [ngClass]="{'fieldseter':true}" >
+    <fieldset [ngClass]="{'fieldseter':true}" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
       <legend>
         &nbsp;{{ 'MENU.gestionar_solicitudes.solicitudes_actualizacion' | translate }}
-    </legend>
+      </legend>
       <nb-card-header>
         
       </nb-card-header>
       <nb-card-body>
-        <ng2-smart-table [settings]="estructuraTabla" [source]="solicitudes" (custom)="onclick($event)" ></ng2-smart-table>
+        <ng2-smart-table [settings]="estructuraTabla" [source]="solicitudes" (custom)="onclick($event)"></ng2-smart-table>
       </nb-card-body>
     </fieldset>
   </div>

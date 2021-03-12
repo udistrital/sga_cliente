@@ -9,6 +9,7 @@ import { ProduccionAcademicaPost } from './../../../@core/data/models/produccion
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-list-produccion-academica',
@@ -30,6 +31,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
   constructor(private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private user: UserService,
+    private popUpManager: PopUpManager,
     private toasterService: ToasterService) {
     this.persona_id = user.getPersonaId() || 1;
     this.loadData();
@@ -112,9 +114,12 @@ export class ListProduccionAcademicaComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.sgaMidService.get('produccion_academica/' + this.persona_id).subscribe((res: any) => {
+    this.sgaMidService.get('produccion_academica/' + this.persona_id)
+    .subscribe(res => {
       if (res !== null) {
-        if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
+        if(res !== null && res.length < 1){
+          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+        }else if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
           const data = <Array<ProduccionAcademicaPost>>res;
           this.source.load(data);
           this.result.emit(1);

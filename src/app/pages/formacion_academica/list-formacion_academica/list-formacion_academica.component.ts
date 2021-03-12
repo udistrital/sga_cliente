@@ -139,7 +139,9 @@ export class ListFormacionAcademicaComponent implements OnInit {
     this.loading = true;
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
     .subscribe(response => {
-      if(response !== null && response !== undefined && response !== '{}'){
+      if(response !== null && response.Response.Code === '404'){
+        this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+      }else if(response !== null && response !== undefined && response !== '{}'){
         const data = <Array<any>>response;
         const dataInfo = <Array<any>>[];
         data.forEach(element => {

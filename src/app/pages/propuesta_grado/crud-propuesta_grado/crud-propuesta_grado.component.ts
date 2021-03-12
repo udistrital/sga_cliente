@@ -16,6 +16,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { ListService } from '../../../@core/store/services/list.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-crud-propuesta-grado',
@@ -85,18 +86,25 @@ export class CrudPropuestaGradoComponent implements OnInit {
     private cidcService: CIDCService,
     private store: Store<IAppState>,
     private listService: ListService,
+    private popUpManager: PopUpManager,
     private toasterService: ToasterService) {
     this.formPropuestaGrado = FORM_PROPUESTA_GRADO;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.listService.findGrupoInvestigacion();
+    this.cargarValores();
     this.listService.findLineaInvestigacion();
     this.listService.findTipoProyecto();
     // this.listService.findTipoParametro();
     this.loadLists();
     this.loadPropuestaGrado();
+  }
+
+  async cargarValores(){
+    this.loading = true;
+    await this.listService.findGrupoInvestigacion();
+    this.loading = false;
   }
 
   construirForm() {
@@ -282,11 +290,13 @@ export class CrudPropuestaGradoComponent implements OnInit {
                           this.info_propuesta_grado = <PropuestaGrado><unknown>res;
                           this.loading = false;
                           this.eventChange.emit(true);
-                          this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                            this.translate.instant('propuesta_grado.propuesta_grado_registrada'));
+                          // this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                          //   this.translate.instant('propuesta_grado.propuesta_grado_registrada'));
+                            this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_registrada'));
                         } else {
-                          this.showToast('error', this.translate.instant('GLOBAL.error'),
-                            this.translate.instant('GLOBAL.error'));
+                          // this.showToast('error', this.translate.instant('GLOBAL.error'),
+                          //   this.translate.instant('GLOBAL.error'));
+                            this.popUpManager.showErrorToast(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
                         }
                         this.loading = false;
                       },
@@ -376,11 +386,13 @@ export class CrudPropuestaGradoComponent implements OnInit {
                   this.info_propuesta_grado = <PropuestaGrado><unknown>res;
                   this.loading = false;
                   this.eventChange.emit(true);
-                  this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
-                    this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
+                  // this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+                  //   this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
+                  this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
                 } else {
-                  this.showToast('error', this.translate.instant('GLOBAL.error'),
-                    this.translate.instant('GLOBAL.error'));
+                  // this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  //   this.translate.instant('GLOBAL.error'));
+                  this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
                 }
                 this.loading = false;
               },
