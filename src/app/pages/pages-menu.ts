@@ -342,6 +342,12 @@ export const MENU_ITEMS: MenuItem[] = [
             link: '/pages/reportes/inscripciones/inscritos-proyecto',
             key: 'inscritos_por_proyecto',
           },
+          {
+            title: 'Admitidos por proyecto',
+            icon: 'nb-list',
+            link: '/pages/reportes/inscripciones/admision-proyecto',
+            key: 'admision_por_proyecto',
+          },
         ],
       },
       {
