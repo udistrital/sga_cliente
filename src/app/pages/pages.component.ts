@@ -34,13 +34,18 @@ export class PagesComponent implements OnInit {
 
   constructor(
     public menuws: MenuService,
-    private translate: TranslateService) { }
+    private translate: TranslateService) { 
+      console.info("entra aca")
+    }
 
   ngOnInit() {
+    console.info(this.autenticacion.live())
     if (!this.autenticacion.live()) {
       this.roles = (JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).role).filter((data: any) => (data.indexOf('/') === -1));
-      this.menuws.get(this.roles + '/configuracionv2').subscribe(
+      console.info(this.roles)
+      this.menuws.get(this.roles + '/configuracionv1').subscribe(
         data => {
+          console.info(data)
           this.dataMenu = <any>data;
           for (let i = 0; i < this.dataMenu.length; i++) {
             if (this.dataMenu[i].TipoOpcion === 'Menú') {
