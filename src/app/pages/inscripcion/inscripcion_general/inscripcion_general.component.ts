@@ -1,29 +1,17 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
-import { Router, ResolveEnd } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
-import { OikosService } from '../../../@core/data/oikos.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { UserService } from '../../../@core/data/users.service';
-import { CoreService } from '../../../@core/data/core.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
-import { TercerosService } from '../../../@core/data/terceros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { IMAGENES } from './imagenes';
-import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
-import 'style-loader!angular2-toaster/toaster.css';
-import * as jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import { from } from 'rxjs';
-import { ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
-import { resolve } from 'url';
-import { element } from '@angular/core/src/render3';
+
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
 
@@ -54,7 +42,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   @Output('result') result: EventEmitter<any> = new EventEmitter();
   @Output() changeTab: EventEmitter<any> = new EventEmitter();
 
-  config: ToasterConfig;
   inscripcion_id: number;
   info_persona_id: number;
   info_ente_id: number;
@@ -129,13 +116,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   constructor(
     private popUpManager: PopUpManager,
     private translate: TranslateService,
-    private router: Router,
-    private terceroService: TercerosService,
     private inscripcionService: InscripcionService,
     private userService: UserService,
-    private coreService: CoreService,
     private parametrosService: ParametrosService,
-    //private programaService: OikosService,
     private programaService: ProyectoAcademicoService,
     private sgaMidService: SgaMidService,
   ) {
@@ -859,111 +842,4 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   //     });
   // }
 
-  // public captureScreen() {
-  //   this.loading = true;
-  //   const data1 = document.getElementById('info_basica');
-  //   const data2 = document.getElementById('formacion_academica');
-  //   const data3 = document.getElementById('experiencia_laboral');
-  //   const data4 = document.getElementById('produccion_academica');
-  //   const data5 = document.getElementById('documento_programa');
-  //   const data6 = document.getElementById('descuento_matricula');
-  //   const data7 = document.getElementById('propuesta_grado');
-  //   html2canvas(data1).then(canvas => {
-  //     const imgWidth = 50;
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  //     const imgData = this.imagenes.escudo;
-  //     const contentDataURL = canvas.toDataURL('image/png');
-
-  //     html2canvas(data2).then(canvas2 => {
-  //       const imgWidth2 = 50;
-  //       const imgHeight2 = (canvas2.height * imgWidth2) / canvas2.width;
-  //       const contentDataURL2 = canvas2.toDataURL('image/png');
-
-  //       html2canvas(data3).then(canvas3 => {
-  //         const imgWidth3 = 50;
-  //         const imgHeight3 = (canvas3.height * imgWidth3) / canvas3.width;
-  //         const contentDataURL3 = canvas3.toDataURL('image/png');
-
-  //         html2canvas(data4).then(canvas4 => {
-  //           const imgWidth4 = 50;
-  //           const imgHeight4 = (canvas4.height * imgWidth4) / canvas4.width;
-  //           const contentDataURL4 = canvas4.toDataURL('image/png');
-
-  //           html2canvas(data5).then(canvas5 => {
-  //             const imgWidth5 = 50;
-  //             const imgHeight5 = (canvas5.height * imgWidth5) / canvas5.width;
-  //             const contentDataURL5 = canvas5.toDataURL('image/png');
-
-  //             html2canvas(data6).then(canvas6 => {
-  //               const imgWidth6 = 50;
-  //               const imgHeight6 = (canvas6.height * imgWidth6) / canvas6.width;
-  //               const contentDataURL6 = canvas6.toDataURL('image/png');
-
-  //               html2canvas(data7).then(canvas7 => {
-  //                 const imgWidth7 = 50;
-  //                 const imgHeight7 = (canvas7.height * imgWidth7) / canvas7.width;
-  //                 const contentDataURL7 = canvas7.toDataURL('image/png');
-  //                 const pdf = new jsPDF('p', 'mm', 'letter');
-
-  //                 pdf.setFontSize(20);
-  //                 pdf.addImage(imgData, 'PNG', 10, 10, 92, 35);
-  //                 pdf.text(`Comprobante de inscripción`, 65, 55);
-  //                 pdf.setFontSize(12);
-
-  //                 pdf.text(`Nombres: ${this.datos_persona['PrimerNombre']} ${this.datos_persona['SegundoNombre']}`, 15, 68);
-  //                 pdf.text(`Apellidos: ${this.datos_persona['PrimerApellido']} ${this.datos_persona['SegundoApellido']}`, 15, 75);
-  //                 pdf.text('Documento de identificación: ' + this.datos_persona['TipoIdentificacion']['CodigoAbreviacion'] + ' ' +
-  //                   this.datos_persona['NumeroIdentificacion'],
-  //                   15, 82);
-  //                 pdf.text(`Fecha de inscripción: ${formatDate(new Date(), 'yyyy-MM-dd', 'en')}`, 15, 89);
-  //                 pdf.text(`Programa académico: ${this.selectedValue.Nombre}`, 15, 96);
-
-  //                 pdf.text(`Formulario: `, 15, 103);
-  //                 pdf.addImage(contentDataURL, 'PNG', 18, 108, imgWidth, imgHeight);
-  //                 pdf.addImage(contentDataURL2, 'PNG', 82, 108, imgWidth2, imgHeight2);
-  //                 pdf.addImage(contentDataURL3, 'PNG', 147, 108, imgWidth3, imgHeight3);
-  //                 pdf.addImage(contentDataURL4, 'PNG', 18, 148, imgWidth4, imgHeight4);
-  //                 pdf.addImage(contentDataURL5, 'PNG', 82, 148, imgWidth5, imgHeight5);
-  //                 pdf.addImage(contentDataURL6, 'PNG', 147, 148, imgWidth6, imgHeight6);
-  //                 pdf.addImage(contentDataURL7, 'PNG', 82, 188, imgWidth7, imgHeight7);
-  //                 pdf.setFontSize(9);
-  //                 pdf.text(`Universidad Distrital Francisco José de Caldas`, 78, 256);
-  //                 pdf.text(`Carrera 7 # 40B - 53 - Bogotá D.C. - Colombia`, 78, 262);
-  //                 pdf.text(`Teléfono (Colombia) : +57 3 323-9300`, 83, 267);
-
-  //                 const nombre_archivo = `${this.datos_persona['PrimerNombre']}_${this.datos_persona['PrimerApellido']}_` +
-  //                   `${this.datos_persona['NumeroIdentificacion']}`;
-
-  //                 this.loading = false;
-  //                 pdf.save(`${nombre_archivo}.pdf`);
-  //                 this.eventChange.emit(true);
-  //                 this.router.navigate(['/pages/procesos_admisiones/estado_admision']);
-  //               });
-  //             });
-  //           });
-  //         });
-  //       });
-  //     });
-  //   });
-  // }
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
-  }
 }

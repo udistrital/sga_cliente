@@ -1,24 +1,14 @@
-import { DataModule } from './../../../@core/data/data.module';
 import { Criterio } from './../../../@core/data/models/admision/criterio';
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
-import { Router, ResolveEnd } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
-import { OikosService } from '../../../@core/data/oikos.service';
-import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { UserService } from '../../../@core/data/users.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
-import { TercerosService} from '../../../@core/data/terceros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import { IMAGENES } from './imagenes';
-import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
-import * as jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import { from } from 'rxjs';
-import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
@@ -127,12 +117,9 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     private popUpManager: PopUpManager,
     private projectService: ProyectoAcademicoService,
     private translate: TranslateService,
-    private router: Router,
-    private terceroService: TercerosService,
     private userService: UserService,
     private parametrosService: ParametrosService,
     private evaluacionService: EvaluacionInscripcionService,
-    private sgaMidService: SgaMidService,
   ) {
     this.imagenes = IMAGENES;
     this.translate = translate;
