@@ -35,7 +35,7 @@ export class ActualizacionDatosComponent implements OnInit {
   filesUp: any; 
   SoporteDocumento: any;
   rol: any;
-  Admin: boolean = false;
+  Admin: boolean;
   loading: boolean;
 
   constructor(
@@ -50,17 +50,21 @@ export class ActualizacionDatosComponent implements OnInit {
     this.solicitudForm = ACTUALIZAR_DATOS;
     this.respuestaSolicitudForm = RESPUESTA_SOLICITUD;
     this.loading = true;
-    //ROL 9759: Estudiante
-    //ROL 94: Admin
-    this.rol = parseInt(localStorage.getItem('persona_id'))
-    if (this.rol === 9759 || this.rol === 9813){
-      this.Admin = false;
-      this.loadInfo();
-      this.loadInfoNueva();
-    } else if (this.rol === 94){
-      this.Admin = true;
-      this.loadInfoById();
-    }    
+    this.Admin = false;
+    this.rol = this.autenticationService.getPayload().role;
+    for (var i = 0; i < this.rol.length; i++){
+      if(this.rol[i] === "ADMIN_CAMPUS" || this.rol[i] === "COORDINADOR" || this.rol[i] === "FUNCIONARIO"){
+        this.Admin = true;
+        this.loadInfoById();
+        break;
+      } else if (this.rol[i] === "ESTUDIANTE"){
+        this.Admin = false;
+        this.loadInfo();
+        this.loadInfoNueva();
+        break;
+      }
+    }
+
     this.tercerosService.get('tipo_documento').subscribe(
       response => {
         this.tipoDocumento = response;
@@ -90,7 +94,6 @@ export class ActualizacionDatosComponent implements OnInit {
     if (IdSolicitud != undefined){
       this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/solicitud/'+IdSolicitud).subscribe(
         (response: any) => {
-          console.info(response)
           if (response.Response.Code === "200"){
             this.solicitudForm.btn = "";
             this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor = momentTimezone.tz(response.Response.Body[0].FechaSolicitud, 'America/Bogota').format('DD/MM/YYYY');
@@ -119,8 +122,8 @@ export class ActualizacionDatosComponent implements OnInit {
                     this.SoporteDocumento = this.solicitudForm.Documento;
                     this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
                     this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
-                    this.loading = false;
                   }
+                  this.loading = false;
                 },
                 (error: HttpErrorResponse) => {
                   this.loading = false;
@@ -141,6 +144,8 @@ export class ActualizacionDatosComponent implements OnInit {
           this.loading = false;
         }       
       );
+    } else {
+      this.loading = false;
     }
   }
 
@@ -153,7 +158,6 @@ export class ActualizacionDatosComponent implements OnInit {
       this.respuestaSolicitudForm.campos[1].valor = false;
     }
     this.solicitudRespuesta.Aprobado = this.respuestaSolicitudForm.campos[1].valor;
-    console.info(this.solicitudRespuesta)
     this.sgaMidService.post('solicitud_evaluacion/registrar_evolucion',this.solicitudRespuesta).subscribe(
       (response: any) => {
         if (response.Response.Code === "200") {
@@ -234,14 +238,16 @@ export class ActualizacionDatosComponent implements OnInit {
                         this.SoporteDocumento = this.solicitudForm.Documento;
                         this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
                         this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
-                        this.loading = false;
                       }
+                      this.loading = false;
                     },
                     (error: HttpErrorResponse) => {
                       this.loading = false;
                       this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                     }
                   );
+                } else {
+                  this.loading = false;
                 }
               } else if (response.Response.Code === "404"){
                 this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = false;
@@ -276,7 +282,6 @@ export class ActualizacionDatosComponent implements OnInit {
     if (TerceroId != undefined){
       var hoy = new Date();
       this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor = hoy.getFullYear()+"/"+(hoy.getMonth()+1)+"/"+hoy.getDate();
-      console.info(this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor)
       this.tercerosService.get('datos_identificacion?query=TerceroId:'+TerceroId).subscribe(
         (response: any) => {
           if (response[0] !== undefined && response[0] !== ""){

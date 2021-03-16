@@ -48,17 +48,21 @@ export class ActualizacionNombresComponent implements OnInit {
     this.respuestaSolicitudForm = RESPUESTA_SOLICITUD;
     this.construirForm();
     this.loading = true;
-    //ROL 9759: Estudiante
-    //ROL 94: Admin
-    this.rol = parseInt(localStorage.getItem('persona_id'))
-    if (this.rol === 9759 || this.rol === 9813){
-      this.Admin = false;
-      this.loadInfo();
-      this.loadInfoNueva();
-    } else if (this.rol === 94){
-      this.Admin = true;
-      this.loadInfoById();
-    } 
+
+    this.rol = this.autenticationService.getPayload().role;
+    for (var i = 0; i < this.rol.length; i++){
+      if(this.rol[i] === "ADMIN_CAMPUS" || this.rol[i] === "COORDINADOR" || this.rol[i] === "FUNCIONARIO"){
+        this.Admin = true;
+        this.loadInfoById();
+        break;
+      } else if (this.rol[i] === "ESTUDIANTE"){
+        this.Admin = false;
+        this.loadInfo();
+        this.loadInfoNueva();
+        break;
+      }
+    }
+
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
@@ -69,7 +73,6 @@ export class ActualizacionNombresComponent implements OnInit {
     if (IdSolicitud != undefined){
       this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/solicitud/'+IdSolicitud).subscribe(
         (response: any) => {
-          console.info(response)
           if (response.Response.Code === "200"){
             this.solicitudForm.btn = "";
             var date = moment(response.Response.Body[0].FechaExpedicionNuevo, "DD/MM/YYYY").toDate()
