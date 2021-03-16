@@ -40,7 +40,6 @@ export class PagesComponent implements OnInit {
   ngOnInit() {
     if (this.autenticacion.live()) {
       this.roles = (JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).role).filter((data: any) => (data.indexOf('/') === -1));
-      
       this.object = {
         title: 'dashboard',
         icon: 'nb-home',
@@ -73,13 +72,6 @@ export class PagesComponent implements OnInit {
                     key: this.dataMenu[i].Nombre,
                   };
                 }
-                /*if (i === 0) {
-                  this.object.title = 'dashboard';
-                  this.object.icon = 'nb-home';
-                  this.object.home = true;
-                  this.object.key = 'dashboard';
-                  this.object.link = '/pages/dashboard';
-                }*/
               } else {
                 if (!this.dataMenu[i].Url.indexOf('http')) {
                   this.object = {
@@ -100,13 +92,6 @@ export class PagesComponent implements OnInit {
                     children: [],
                   };
                 }
-                /*if (i === 0) {
-                  this.object.title = 'dashboard';
-                  this.object.icon = 'nb-home';
-                  this.object.home = true;
-                  this.object.key = 'dashboard';
-                  this.object.link = '/pages/dashboard';
-                }*/
                 for (let j = 0; j < this.dataMenu[i].Opciones.length; j++) {
                   if (this.dataMenu[i].TipoOpcion === 'Menú') {
                     if (!this.dataMenu[i].Opciones[j].Opciones) {
@@ -147,7 +132,7 @@ export class PagesComponent implements OnInit {
               this.translate.instant('GLOBAL.menu'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
-          this.menu = MENU_ITEMS;
+          //this.menu = MENU_ITEMS;
           this.translateMenu();
         });
     } else {

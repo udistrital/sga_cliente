@@ -4,6 +4,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import * as momentTimezone from 'moment-timezone';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   selector: 'list-solicitudes-estudiante',
@@ -26,19 +27,23 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
+    private autenticationService: ImplicitAutenticationService,
   ) {
     this.showTable = true;
     this.showSolicitudID = false;
     this.showSolicitudNombre = false;
     this.solicitudes = new LocalDataSource();
     this.loading = true;
-    //ROL 9759 || 9813: Estudiante
-    //ROL 94: Admin
-    this.rol = parseInt(localStorage.getItem('persona_id'));
-    if (this.rol === 9759 || this.rol === 9813){
-      this.loadSolicitud();
-    } else if (this.rol === 94){
-      this.loadList(); 
+
+    this.rol = this.autenticationService.getPayload().role;
+    for (var i = 0; i < this.rol.length; i++){
+      if(this.rol[i] === "ADMIN_CAMPUS" || this.rol[i] === "COORDINADOR" || this.rol[i] === "FUNCIONARIO"){
+        this.loadList(); 
+        break;
+      } else if (this.rol[i] === "ESTUDIANTE"){
+        this.loadSolicitud();
+        break;
+      }
     } 
     this.construirTabla();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
