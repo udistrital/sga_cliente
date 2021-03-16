@@ -35,17 +35,23 @@ export class PagesComponent implements OnInit {
   constructor(
     public menuws: MenuService,
     private translate: TranslateService) { 
-      console.info("entra aca")
     }
 
   ngOnInit() {
-    console.info(this.autenticacion.live())
-    if (!this.autenticacion.live()) {
+    if (this.autenticacion.live()) {
       this.roles = (JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).role).filter((data: any) => (data.indexOf('/') === -1));
-      console.info(this.roles)
-      this.menuws.get(this.roles + '/configuracionv1').subscribe(
+      
+      this.object = {
+        title: 'dashboard',
+        icon: 'nb-home',
+        url: '#/pages/dashboard',
+        home: true,
+        key: 'dashboard',
+      };
+      this.results.push(this.object);
+      
+      this.menuws.get(this.roles + '/SGA').subscribe(
         data => {
-          console.info(data)
           this.dataMenu = <any>data;
           for (let i = 0; i < this.dataMenu.length; i++) {
             if (this.dataMenu[i].TipoOpcion === 'Menú') {
@@ -53,7 +59,7 @@ export class PagesComponent implements OnInit {
                 if (!this.dataMenu[i].Url.indexOf('http')) {
                   this.object = {
                     title: this.dataMenu[i].Nombre,
-                    icon: '',
+                    icon: 'nb-compose',
                     url: this.dataMenu[i].Url,
                     home: false,
                     key: this.dataMenu[i].Nombre,
@@ -61,22 +67,24 @@ export class PagesComponent implements OnInit {
                 } else {
                   this.object = {
                     title: this.dataMenu[i].Nombre,
-                    icon: '',
+                    icon: 'nb-compose',
                     link: this.dataMenu[i].Url,
                     home: false,
                     key: this.dataMenu[i].Nombre,
                   };
                 }
-                if (i === 0) {
-                  this.object.title = 'Dashboard';
+                /*if (i === 0) {
+                  this.object.title = 'dashboard';
                   this.object.icon = 'nb-home';
                   this.object.home = true;
-                }
+                  this.object.key = 'dashboard';
+                  this.object.link = '/pages/dashboard';
+                }*/
               } else {
                 if (!this.dataMenu[i].Url.indexOf('http')) {
                   this.object = {
                     title: this.dataMenu[i].Nombre,
-                    icon: '',
+                    icon: 'nb-compose',
                     url: this.dataMenu[i].Url,
                     home: false,
                     key: this.dataMenu[i].Nombre,
@@ -85,25 +93,27 @@ export class PagesComponent implements OnInit {
                 } else {
                   this.object = {
                     title: this.dataMenu[i].Nombre,
-                    icon: '',
+                    icon: 'nb-compose',
                     link: this.dataMenu[i].Url,
                     home: false,
                     key: this.dataMenu[i].Nombre,
                     children: [],
                   };
                 }
-                if (i === 0) {
-                  this.object.title = 'Dashboard';
+                /*if (i === 0) {
+                  this.object.title = 'dashboard';
                   this.object.icon = 'nb-home';
                   this.object.home = true;
-                }
+                  this.object.key = 'dashboard';
+                  this.object.link = '/pages/dashboard';
+                }*/
                 for (let j = 0; j < this.dataMenu[i].Opciones.length; j++) {
                   if (this.dataMenu[i].TipoOpcion === 'Menú') {
                     if (!this.dataMenu[i].Opciones[j].Opciones) {
                       if (!this.dataMenu[i].Opciones[j].Url.indexOf('http')) {
                         this.hijo = {
                           title: this.dataMenu[i].Opciones[j].Nombre,
-                          icon: '',
+                          icon: 'nb-list',
                           url: this.dataMenu[i].Opciones[j].Url,
                           home: false,
                           key: this.dataMenu[i].Opciones[j].Nombre,
@@ -111,7 +121,7 @@ export class PagesComponent implements OnInit {
                       } else {
                         this.hijo = {
                           title: this.dataMenu[i].Opciones[j].Nombre,
-                          icon: '',
+                          icon: 'nb-list',
                           link: this.dataMenu[i].Opciones[j].Url,
                           home: false,
                           key: this.dataMenu[i].Opciones[j].Nombre,
@@ -142,7 +152,7 @@ export class PagesComponent implements OnInit {
         });
     } else {
       this.rol = 'PUBLICO';
-      this.menu = MENU_ITEMS;
+      //this.menu = MENU_ITEMS;
       this.translateMenu();
     }
     this.translateMenu();
