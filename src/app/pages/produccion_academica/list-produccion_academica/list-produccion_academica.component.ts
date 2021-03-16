@@ -34,7 +34,6 @@ export class ListProduccionAcademicaComponent implements OnInit {
     private popUpManager: PopUpManager,
     private toasterService: ToasterService) {
     this.persona_id = user.getPersonaId() || 1;
-    this.loadData();
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
