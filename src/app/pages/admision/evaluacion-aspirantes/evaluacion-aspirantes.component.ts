@@ -228,7 +228,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   loadCriterios() {
-    this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:9').subscribe(
+    this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id).subscribe(
       (response: any) => {
         if (response[0].Id !== undefined && response[0] !== '{}'){
           this.criterios = <any>response;
@@ -442,7 +442,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
         this.showTab = false;
         break;
       case 'info_entrevista':
-        this.tipo_criterio.Nombre = this.criterios[1].RequisitoId.Nombre;
+        this.tipo_criterio.Nombre = 'Entrevista'//this.criterios[1].RequisitoId.Nombre;
         sessionStorage.setItem('tipo_criterio', '2');
         this.ngOnChanges();
         await this.loadAspirantes();
@@ -464,7 +464,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
         this.showTab = false;
         break;
       case 'info_hoja':
-        this.tipo_criterio.Nombre = this.criterios[3].RequisitoId.Nombre;
+        this.tipo_criterio.Nombre = 'Hoja de vida'//this.criterios[3].RequisitoId.Nombre;
         sessionStorage.setItem('tipo_criterio', '11');
         this.ngOnChanges();
         await this.loadAspirantes();
