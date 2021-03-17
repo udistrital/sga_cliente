@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogConfig, MatDialog } from '@angular/material';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { ActualizacionDatos } from '../../../@core/data/models/solicitudes/actualizacion-datos';
 import { RespuestaSolicitud } from '../../../@core/data/models/solicitudes/respuesta-solicitud';
@@ -16,13 +15,11 @@ import { ImplicitAutenticationService } from '../../../@core/utils/implicit_aute
 import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import Swal from 'sweetalert2';
-import { from } from 'rxjs';
-import { cpuUsage } from 'process';
 
 @Component({
   selector: 'ngx-actualizacion-datos',
   templateUrl: './actualizacion-datos.component.html',
-  styleUrls: ['../solicitudes.component.scss']
+  styleUrls: ['../solicitudes.component.scss'],
 })
 export class ActualizacionDatosComponent implements OnInit {
 
@@ -40,7 +37,6 @@ export class ActualizacionDatosComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
-    private dialogo: MatDialog,
     private autenticationService: ImplicitAutenticationService,
     private tercerosService: TercerosService,
     private documentoService: DocumentoService,

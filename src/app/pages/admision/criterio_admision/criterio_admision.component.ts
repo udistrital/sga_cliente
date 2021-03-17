@@ -365,7 +365,7 @@ loadProyectos() {
       this.popUpManager.showErrorToast(this.translate.instant('admision.porcentajeIncompleto'));
     } else{
 
-    this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'+this.proyectos_selected+',Activo:true&limit=0')
+    this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id+',Activo:true&limit=0')
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
@@ -427,6 +427,7 @@ loadProyectos() {
       .subscribe(res => {
         const r = <any>res;
         if (r !== null && r.Type !== 'error') {
+          this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'));
         } else {
           this.popUpManager.showErrorToast(this.translate.instant('GLOBAL.error'));
         }
@@ -448,6 +449,7 @@ loadProyectos() {
       .subscribe(res => {
         const r = <any>res;
         if (r !== null && r.Type !== 'error') {
+          this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'));
         } else {
           this.popUpManager.showErrorToast(this.translate.instant('GLOBAL.error'));
         }
