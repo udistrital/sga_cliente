@@ -33,13 +33,13 @@ export const MENU_ITEMS: MenuItem[] = [
       {
         title: 'Actualizar identificación',
         icon: 'nb-edit',
-        link: '/pages/solicitudes/actualizacion-datos',
+        link: '/pages/solicitud/actualizacion-datos',
         key: 'actualizacion_datos',
       },
       {
         title: 'Actualizar nombres',
         icon: 'nb-edit',
-        link: '/pages/solicitudes/actualizacion-nombres',
+        link: '/pages/solicitud/actualizacion-nombres',
         key: 'actualizacion_nombres',
       },
     ]
@@ -341,6 +341,12 @@ export const MENU_ITEMS: MenuItem[] = [
             icon: 'nb-list',
             link: '/pages/reportes/inscripciones/inscritos-proyecto',
             key: 'inscritos_por_proyecto',
+          },
+          {
+            title: 'Admitidos por proyecto',
+            icon: 'nb-list',
+            link: '/pages/reportes/inscripciones/admision-proyecto',
+            key: 'admision_por_proyecto',
           },
         ],
       },

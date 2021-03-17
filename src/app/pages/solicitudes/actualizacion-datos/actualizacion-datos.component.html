@@ -6,7 +6,7 @@
     <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
       <ngx-datos-solicitante [solicitante]="solicitante" ></ngx-datos-solicitante>
       <ngx-dinamicform [normalform]="solicitudForm" [modeloData]="solicitudDatos" (result)="enviarSolicitud($event)"></ngx-dinamicform>
-      <div *ngIf = "Admin">
+      <div *ngIf="Admin">
         <ngx-dinamicform [normalform]="respuestaSolicitudForm" [modeloData]="solicitudRespuesta" (result)="enviarRespuesta($event)"></ngx-dinamicform>
       </div>
     </nb-card-body>

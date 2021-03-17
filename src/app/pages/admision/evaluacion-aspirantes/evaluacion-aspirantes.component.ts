@@ -1,7 +1,6 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { UserService } from '../../../@core/data/users.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service' 
 import { ParametrosService } from '../../../@core/data/parametros.service';
@@ -13,17 +12,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import { TipoCriterio } from '../../../@core/data/models/admision/tipo_criterio';
 import { LocalDataSource } from 'ng2-smart-table';
-import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
-import * as jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import { from } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { element, load } from '@angular/core/src/render3';
 import { CheckboxAssistanceComponent } from '../../../@theme/components/checkbox-assistance/checkbox-assistance.component';
-import { flatMap, takeUntil } from 'rxjs/operators';
-import { timingSafeEqual } from 'crypto';
 
 @Component({
   selector: 'evaluacion-aspirantes',
@@ -236,7 +228,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   loadCriterios() {
-    this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:9').subscribe(
+    this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id).subscribe(
       (response: any) => {
         if (response[0].Id !== undefined && response[0] !== '{}'){
           this.criterios = <any>response;
@@ -450,7 +442,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
         this.showTab = false;
         break;
       case 'info_entrevista':
-        this.tipo_criterio.Nombre = this.criterios[1].RequisitoId.Nombre;
+        this.tipo_criterio.Nombre = 'Entrevista'//this.criterios[1].RequisitoId.Nombre;
         sessionStorage.setItem('tipo_criterio', '2');
         this.ngOnChanges();
         await this.loadAspirantes();
@@ -472,7 +464,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
         this.showTab = false;
         break;
       case 'info_hoja':
-        this.tipo_criterio.Nombre = this.criterios[3].RequisitoId.Nombre;
+        this.tipo_criterio.Nombre = 'Hoja de vida'//this.criterios[3].RequisitoId.Nombre;
         sessionStorage.setItem('tipo_criterio', '11');
         this.ngOnChanges();
         await this.loadAspirantes();
