@@ -111,7 +111,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     private parametrosService: ParametrosService,
     private inscripcionService: InscripcionService,
     private eventoService: EventoService) {
-    // this.cargaproyectosacademicos();
     this.showProyectoCurricular = false;
     this.showTipoInscripcion = false;
     this.showInfo = false;
@@ -261,7 +260,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         this.loading = false;
       },
       error => {
-        //this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.loading = false;
       }
     );
@@ -282,9 +280,12 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   nivel_load() {
-    this.projectService.get('nivel_formacion?limit=0').subscribe(
+    //Solo se cargan el nivel de posgrado
+    this.projectService.get('nivel_formacion?query=Id:2').subscribe(
       (response: NivelFormacion[]) => {
-        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+        console.info(response)
+        this.niveles = response//.filter(nivel => nivel.NivelFormacionPadreId === null)
+        console.info(this.niveles)
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -324,8 +325,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                     this.loading = false;
                     this.dataSource.load(dataInfo);
                     this.dataSource.setSort([{field: 'Id', direction: 'desc'}]);
-                    this.selectedLevel = res.NivelFormacionId.Id
-                    sessionStorage.setItem('nivel', this.selectedLevel.toString())
+                    //this.selectedLevel = res.NivelFormacionId.Id
+                    sessionStorage.setItem('nivel', res.NivelFormacionId.Id.toString())
                     this.loading = false;
                   },
                   error => {
