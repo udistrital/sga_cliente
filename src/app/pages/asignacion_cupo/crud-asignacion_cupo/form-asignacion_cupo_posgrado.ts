@@ -15,6 +15,7 @@ export let FORM_ASIGNACION_CUPO_POSGRADO = {
             tipo: 'number',
             minimo: 0,
             maximolog: 999,
+            key: 'cupos',
         },
     ],
 }

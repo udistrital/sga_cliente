@@ -13,8 +13,8 @@
             </div>
         </div>
     </nb-card-body>
-    <button *ngIf="!showListadoAspirantes" mat-button (click)="createCupos()" type="submit" nbButton status="success">{{ 'cupos.seleccionar_admitidos' | translate }} </button>
-    <button *ngIf="showListadoAspirantes" mat-button (click)="mostrartabla()" type="submit" nbButton status="success">{{ 'cupos.ver_listado_aspirantes' | translate }} </button>
+    <!-- <button *ngIf="!showListadoAspirantes" mat-button (click)="createCupos()" type="submit" nbButton status="success">{{ 'cupos.seleccionar_admitidos' | translate }} </button>
+    <button *ngIf="showListadoAspirantes" mat-button (click)="mostrartabla()" type="submit" nbButton status="success">{{ 'cupos.ver_listado_aspirantes' | translate }} </button> -->
 </nb-card>
 
 <nb-card [hidden]="!show_listado" accent="info">

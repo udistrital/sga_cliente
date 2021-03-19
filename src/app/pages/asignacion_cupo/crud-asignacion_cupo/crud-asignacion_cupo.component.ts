@@ -280,15 +280,17 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
               const r = <any>res
               if (r !== null && r.Type !== 'error') {
                 this.loading = false;
-                this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                  this.translate.instant('GLOBAL.info_cupos') + ' ' +
-                  this.translate.instant('GLOBAL.confirmarCrear'));
-                this.cambiarestados();
+                // this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                //   this.translate.instant('GLOBAL.info_cupos') + ' ' +
+                //   this.translate.instant('GLOBAL.confirmarCrear'));
+                  this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_cupos') + ' ' + this.translate.instant('GLOBAL.confirmarCrear'));
+                // this.cambiarestados();
                 this.showListadoAspirantes = true;
                 this.eventChange.emit(true);
               } else {
-                this.showToast('error', this.translate.instant('GLOBAL.error'),
-                  this.translate.instant('GLOBAL.error'));
+                // this.showToast('error', this.translate.instant('GLOBAL.error'),
+                //   this.translate.instant('GLOBAL.error'));
+                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
               }
             },
               (error: HttpErrorResponse) => {
@@ -385,7 +387,7 @@ calculocupos(InfoCupos: any): void {
   this.info_cupos.Proyectos = proyectos;
   this.info_cupos.Periodo = this.info_periodo;
   // this.info_cupos.CuposOpcionados = Number(Math.trunc((Number(this.info_cupos.CuposAsignados) ) * 0.5 ))
-
+  this.createCupos();
 
 }
 
