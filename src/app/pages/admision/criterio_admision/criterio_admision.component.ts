@@ -7,7 +7,6 @@ import { UserService } from '../../../@core/data/users.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
-import { IMAGENES } from './imagenes';
 import Swal from 'sweetalert2';
 import { FormControl, Validators } from '@angular/forms';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
@@ -100,7 +99,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   tag_view_pre: boolean;
   selectprograma: boolean = true;
   selectcriterio: boolean = true;
-  imagenes: any;
   periodo: any;
   selectednivel: any ;
 
@@ -121,7 +119,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     private parametrosService: ParametrosService,
     private evaluacionService: EvaluacionInscripcionService,
   ) {
-    this.imagenes = IMAGENES;
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });

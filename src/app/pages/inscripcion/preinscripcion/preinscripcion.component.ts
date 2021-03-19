@@ -8,7 +8,6 @@ import { UserService } from '../../../@core/data/users.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
-import { IMAGENES } from './imagenes';
 import Swal from 'sweetalert2';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
@@ -92,7 +91,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   tag_view_posg: boolean;
   tag_view_pre: boolean;
   selectprograma: boolean = true;
-  imagenes: any;
   periodo: any;
   selectednivel: any;
 
@@ -107,7 +105,6 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     private programaService: OikosService,
     private sgaMidService: SgaMidService,
   ) {
-    this.imagenes = IMAGENES;
     //this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });

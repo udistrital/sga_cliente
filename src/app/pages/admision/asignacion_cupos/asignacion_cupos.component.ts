@@ -8,7 +8,6 @@ import { CoreService } from '../../../@core/data/core.service';
 import { TercerosService} from '../../../@core/data/terceros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
-import { IMAGENES } from './imagenes';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
@@ -78,7 +77,6 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   tag_view_pre: boolean;
   selectprograma: boolean = true;
   selectcriterio: boolean = true;
-  imagenes: any;
   periodo: any;
   selectednivel: any ;
 
@@ -98,7 +96,6 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
     private popUpManager: PopUpManager,
     private projectService: ProyectoAcademicoService,
   ) {
-    this.imagenes = IMAGENES;
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
