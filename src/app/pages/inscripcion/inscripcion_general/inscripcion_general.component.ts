@@ -8,7 +8,6 @@ import { ParametrosService } from '../../../@core/data/parametros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
-import { IMAGENES } from './imagenes';
 import Swal from 'sweetalert2';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
@@ -109,7 +108,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   tag_view_posg: boolean;
   tag_view_pre: boolean;
   selectprograma: boolean = true;
-  imagenes: any;
   periodo: any;
   imprimir: boolean = false;
 
@@ -123,7 +121,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private sgaMidService: SgaMidService,
   ) {
     sessionStorage.setItem('TerceroId', this.userService.getPersonaId().toString());
-    this.imagenes = IMAGENES;
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });

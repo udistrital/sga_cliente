@@ -104,6 +104,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     private programaService: OikosService,
     private sgaMidService: SgaMidService,
   ) {
+    //this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.total = true;

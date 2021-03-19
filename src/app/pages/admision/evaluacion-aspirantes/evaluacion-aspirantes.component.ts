@@ -108,7 +108,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
   loadEntrevista: boolean = false;
   loadPrueba: boolean = false;
   loadHV: boolean = false;
-  imagenes: any;
   periodo: any;
   nivel_load: any;
   selectednivel: any;
