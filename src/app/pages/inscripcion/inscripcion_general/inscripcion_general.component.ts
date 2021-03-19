@@ -277,7 +277,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   setPercentage_info(number, tab) {
-    this.percentage_tab_info[tab] = (number * 100) / 3;
+    this.percentage_tab_info[tab] = (number * 100) / 2;
     this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
     this.setPercentage_total();
   }

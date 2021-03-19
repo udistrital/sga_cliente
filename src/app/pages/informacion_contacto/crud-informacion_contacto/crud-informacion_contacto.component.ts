@@ -63,11 +63,12 @@ export class CrudInformacionContactoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+    this.loading = true;
     this.listService.findPais();
     this.loadLists();
     this.persona_id = this.userService.getPersonaId();
     this.loadInformacionContacto();
-    this.loading = false;
+    
   }
 
   construirForm() {
@@ -175,7 +176,6 @@ export class CrudInformacionContactoComponent implements OnInit {
   }
 
   loadInformacionContacto() {
-    this.loading = true;
     if (this.persona_id) {
       this.sgaMidService.get('inscripciones/info_complementaria_tercero/'+this.persona_id)
       .subscribe(res => {
