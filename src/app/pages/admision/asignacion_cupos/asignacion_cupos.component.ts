@@ -54,6 +54,7 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   criterios = [];
   periodos = [];
   niveles: NivelFormacion[];
+  nivelSelect: NivelFormacion[];
 
   show_cupos = false;
   show_profile = false;
@@ -81,6 +82,7 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   imagenes: any;
   periodo: any;
   selectednivel: any ;
+  esPosgrado: boolean = false;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -210,11 +212,27 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
     switch (event) {
       case 'info_cupos':
         this.show_cupos = true;
+        this.validarNvel();
         break;
         default:
             this.show_cupos = false;
         break;
     }
+  }
+
+  validarNvel(){
+    this.esPosgrado = false;
+    this.projectService.get('nivel_formacion?query=Id:'+Number(this.selectednivel)).subscribe(
+      (response: NivelFormacion[]) => {
+        this.nivelSelect = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+        if(this.nivelSelect[0].Nombre == 'Posgrado'){
+          this.esPosgrado = true;
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
   }
 
   ngOnInit() {
