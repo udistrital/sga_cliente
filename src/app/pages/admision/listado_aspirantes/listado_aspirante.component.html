@@ -73,7 +73,11 @@
 
         </nb-card-header>
 
-        <button mat-button (click)="mostrartabla()" type="submit" nbButton status="success" [disabled]="buttoncambio">{{ 'admision.enlistar' | translate }}</button>
+        <!-- <button mat-button (click)="mostrartabla()" type="submit" nbButton status="success" [disabled]="buttoncambio">{{ 'admision.enlistar' | translate }}</button> -->
+    </nb-card>
+
+    <nb-card [hidden]="!show_listado" accent="info">
+        <nb-card-header>{{ 'cupos.cupos_proyecto' | translate }}: {{cuposProyecto}}</nb-card-header>
     </nb-card>
 
     <nb-card [hidden]="!show_listado" accent="info">

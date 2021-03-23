@@ -152,7 +152,7 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   nivel_load() {
     this.projectService.get('nivel_formacion?limit=0').subscribe(
       (response: NivelFormacion[]) => {
-        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null && nivel.Nombre == 'Posgrado')
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));

@@ -19,6 +19,7 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
+import { InscripcionService } from '../../../@core/data/inscripcion.service';
 
 @Component({
   selector: 'ngx-crud-asignacion-cupo',
@@ -72,7 +73,8 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
     private projectService: ProyectoAcademicoService,
     private popUpManager: PopUpManager,
     private evaluacionService: EvaluacionInscripcionService,
-    private toasterService: ToasterService) {
+    private toasterService: ToasterService,
+    private inscripcionService: InscripcionService,) {
     this.settings_emphasys = {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -283,14 +285,14 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
                 // this.showToast('info', this.translate.instant('GLOBAL.crear'),
                 //   this.translate.instant('GLOBAL.info_cupos') + ' ' +
                 //   this.translate.instant('GLOBAL.confirmarCrear'));
-                  this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_cupos') + ' ' + this.translate.instant('GLOBAL.confirmarCrear'));
-                // this.cambiarestados();
+                this.cambiarestados();
+                this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_cupos') + ' ' + this.translate.instant('GLOBAL.confirmarCrear'));
                 this.showListadoAspirantes = true;
                 this.eventChange.emit(true);
               } else {
                 // this.showToast('error', this.translate.instant('GLOBAL.error'),
                 //   this.translate.instant('GLOBAL.error'));
-                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
               }
             },
               (error: HttpErrorResponse) => {
@@ -317,163 +319,235 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
     this.show_posgrado = this.info_nivel;
 
     if (this.info_proyectos != undefined && this.info_proyectos != null) {
-    this.evaluacionService.get('cupos_por_dependencia/?query=DependenciaId:' + Number(this.info_proyectos.Id) + '&limit=0').subscribe(
-      (response: any) => {
-        if (response !== null && response !== undefined && response[0].Id !== undefined ) {
+      this.evaluacionService.get('cupos_por_dependencia/?query=DependenciaId:' + Number(this.info_proyectos.Id) + '&limit=0').subscribe(
+        (response: any) => {
+          if (response !== null && response !== undefined && response[0].Id !== undefined) {
 
-          if(this.show_posgrado){
-            this.formAsigancionCupoPosgrado.campos[this.getIndexFormPosgrado('CuposAsignados')].valor = response[0].CuposHabilitados;
-          }else{
-            this.formAsigancionCupoPregrado.campos[this.getIndexFormPregrado('CuposAsignados')].valor = response[0].CuposHabilitados;
-            this.formAsigancionCupoPregrado.campos[this.getIndexFormPregrado('CuposOpcionados')].valor = response[0].CuposOpcionados;
+            if (this.show_posgrado) {
+              this.formAsigancionCupoPosgrado.campos[this.getIndexFormPosgrado('CuposAsignados')].valor = response[0].CuposHabilitados;
+            } else {
+              this.formAsigancionCupoPregrado.campos[this.getIndexFormPregrado('CuposAsignados')].valor = response[0].CuposHabilitados;
+              this.formAsigancionCupoPregrado.campos[this.getIndexFormPregrado('CuposOpcionados')].valor = response[0].CuposOpcionados;
+            }
+          } else {
+            if (this.show_posgrado) {
+              this.formAsigancionCupoPosgrado.campos[this.getIndexFormPosgrado('CuposAsignados')].valor = 0;
+            } else {
+              this.formAsigancionCupoPregrado.campos[this.getIndexFormPregrado('CuposAsignados')].valor = 0;
+              this.formAsigancionCupoPregrado.campos[this.getIndexFormPregrado('CuposOpcionados')].valor = 0;
+            }
           }
-        }else{
-          if(this.show_posgrado){
-            this.formAsigancionCupoPosgrado.campos[this.getIndexFormPosgrado('CuposAsignados')].valor = 0;
-          }else{
-            this.formAsigancionCupoPregrado.campos[this.getIndexFormPregrado('CuposAsignados')].valor = 0;
-            this.formAsigancionCupoPregrado.campos[this.getIndexFormPregrado('CuposOpcionados')].valor = 0;
+        },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        },
+      );
+    }
+  }
+
+  validarForm(event) {
+    if (event.valid) {
+      const cupos = event.data.InfoCupos.CuposAsignados
+      const datos = [{ Nombre: 'Comunidades Negras', Cupos: Math.trunc((Number(cupos) / 40) * 2) },
+      { Nombre: 'Desplazados víctimas del conflicto  armado', Cupos: Math.trunc((Number(cupos) / 40) * 1) },
+      { Nombre: 'Comunidades indígenas', Cupos: Math.trunc((Number(cupos) / 40) * 2) },
+      { Nombre: 'Mejor Bachiller de los Colegios Públicos del Distrito Capital', Cupos: Math.trunc((Number(cupos) / 40) * 1) },
+      { Nombre: 'Beneficiarios de la ley 1084 de 2006 ', Cupos: 1 },
+      { Nombre: 'Beneficiarios del Programa de Reincorporación y/o Reintegración en el marco del programa para la paz', Cupos: 1 }];
+      const data = <Array<any>>datos;
+      this.source_emphasys.load(data);
+      this.show_calculos_cupos = true;
+      this.calculocupos(event.data.InfoCupos)
+    }
+  }
+
+  calculocupos(InfoCupos: any): void {
+    // Se definen el calculos de los cupos segun historia de usuario la funcion redondea segun decimas por encima por encima de .5
+    this.info_cupos = <any>InfoCupos;
+    if (this.show_posgrado) {
+      this.info_cupos.CuposOpcionados = 0;
+      this.info_cupos.CuposEspeciales = {
+        ComunidadesNegras: '0',
+        DesplazadosVictimasConflicto: '0',
+        ComunidadesIndiginas: '0',
+        MejorBachiller: '0',
+        Ley1084: '0',
+        ProgramaReincorporacion: '0',
+      }
+    } else {
+      this.info_cupos.CuposEspeciales = {
+        ComunidadesNegras: String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40) * 2)),
+        DesplazadosVictimasConflicto: String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40) * 1)),
+        ComunidadesIndiginas: String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40) * 2)),
+        MejorBachiller: String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40) * 1)),
+        Ley1084: '1',
+        ProgramaReincorporacion: '1',
+      }
+    }
+    const proyectos = [];
+    proyectos.push(this.info_proyectos);
+    this.info_cupos.Proyectos = proyectos;
+    this.info_cupos.Periodo = this.info_periodo;
+    // this.info_cupos.CuposOpcionados = Number(Math.trunc((Number(this.info_cupos.CuposAsignados) ) * 0.5 ))
+    this.createCupos();
+
+  }
+
+  // cambiarestados() {
+  //   this.info_actualizar_estados = {}
+  //   this.info_actualizar_estados.Proyectos = this.info_cupos.Proyectos;
+  //   this.info_actualizar_estados.Periodo = this.info_cupos.Periodo;
+  //   console.info(JSON.stringify(this.info_actualizar_estados));
+  //   this.sgamidService.post('admision/cambioestado', this.info_actualizar_estados)
+  //     .subscribe(res => {
+  //       const r = <any>res
+  //       if (r !== null && r.Type !== 'error') {
+  //         this.loading = false;
+  //         this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+  //           this.translate.instant('GLOBAL.info_estado') + ' ' +
+  //           this.translate.instant('GLOBAL.confirmarActualizar'));
+  //         this.eventChange.emit(true);
+  //       } else {
+  //         this.showToast('error', this.translate.instant('GLOBAL.error'),
+  //           this.translate.instant('GLOBAL.error'));
+  //       }
+  //     },
+  //       (error: HttpErrorResponse) => {
+  //         Swal({
+  //           type: 'error',
+  //           title: error.status + '',
+  //           text: this.translate.instant('ERROR.' + error.status),
+  //           footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+  //             this.translate.instant('GLOBAL.info_estado'),
+  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+  //         });
+  //       });
+  // }
+
+  cambiarestados() {
+    this.inscripcionService.get('inscripcion?query=ProgramaAcademicoId:' + Number(this.info_proyectos.Id) + ',PeriodoId:' + this.info_periodo.Id + '&sortby=Id&order=asc').subscribe(
+      (res: any) => {
+        const r = <any>res
+        if (res !== '[{}]') {
+          if (r !== null && r.Type !== 'error') {
+            this.loading = false;
+            let filtro = r.filter(filtro => filtro.EstadoInscripcionId.Id === 2 || filtro.EstadoInscripcionId.Id === 4 || filtro.EstadoInscripcionId.Id === 5);
+            filtro = filtro.sort((puntaje_mayor, puntaje_menor) => puntaje_menor.NotaFinal - puntaje_mayor.NotaFinal)
+            const data = <Array<any>>filtro;
+            // this.source_emphasys.load(data);
+
+            data.forEach((element, index) => {
+              if (element.PersonaId != undefined) {
+                  if ((index + 1) <= this.info_cupos.CuposAsignados) {
+                    element.EstadoInscripcionId.Id = 2;
+                    this.inscripcionService.put('inscripcion/', element)
+                      .subscribe(res => {
+                        this.loading = false;
+                      },
+                        (error: HttpErrorResponse) => {
+                          this.loading = false;
+                          Swal({
+                            type: 'error',
+                            title: error.status + '',
+                            text: this.translate.instant('ERROR.' + error.status),
+                            footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                              this.translate.instant('GLOBAL.info_estado'),
+                            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                          });
+                        });
+                  } else {
+                    element.EstadoInscripcionId.Id = 4;
+                    this.inscripcionService.put('inscripcion/', element)
+                      .subscribe(res => {
+                        this.loading = false;
+                      },
+                        (error: HttpErrorResponse) => {
+                          this.loading = false;
+                          Swal({
+                            type: 'error',
+                            title: error.status + '',
+                            text: this.translate.instant('ERROR.' + error.status),
+                            footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                              this.translate.instant('GLOBAL.info_estado'),
+                            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                          });
+                        });
+                  }
+              }
+            });
+
+          } else {
+            this.showToast('error', this.translate.instant('GLOBAL.error'),
+              this.translate.instant('GLOBAL.error'));
           }
+        } else {
+          this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
         }
       },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      (error: HttpErrorResponse) => {
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+            this.translate.instant('GLOBAL.info_estado'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
+  }
+
+  mostrartabla() {
+    this.show_listado = true
+
+    this.info_consultar_aspirantes = {
+      Id_proyecto: Number(this.info_cupos.Proyectos.Id),
+      Id_periodo: Number(this.info_cupos.Periodo.Id),
+    }
+    this.sgamidService.post('admision/consulta_aspirantes', this.info_consultar_aspirantes)
+      .subscribe(res => {
+        const r = <any>res
+        if (r !== null && r.Type !== 'error') {
+          this.loading = false;
+          r.sort((puntaje_mayor, puntaje_menor) => puntaje_menor.NotaFinal - puntaje_mayor.NotaFinal)
+          const data = <Array<any>>r;
+          this.source_emphasys.load(data);
+
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'),
+            this.translate.instant('GLOBAL.error'));
+        }
       },
-    );
-  }
-}
-
-validarForm(event) {
-  if (event.valid) {
-    const cupos = event.data.InfoCupos.CuposAsignados
-    const datos = [{ Nombre: 'Comunidades Negras', Cupos: Math.trunc((Number(cupos) / 40) * 2) },
-    { Nombre: 'Desplazados víctimas del conflicto  armado', Cupos: Math.trunc((Number(cupos) / 40) * 1) },
-    { Nombre: 'Comunidades indígenas', Cupos: Math.trunc((Number(cupos) / 40) * 2) },
-    { Nombre: 'Mejor Bachiller de los Colegios Públicos del Distrito Capital', Cupos: Math.trunc((Number(cupos) / 40) * 1) },
-    { Nombre: 'Beneficiarios de la ley 1084 de 2006 ', Cupos: 1 },
-    { Nombre: 'Beneficiarios del Programa de Reincorporación y/o Reintegración en el marco del programa para la paz', Cupos: 1 }];
-    const data = <Array<any>>datos;
-    this.source_emphasys.load(data);
-    this.show_calculos_cupos = true;
-    this.calculocupos(event.data.InfoCupos)
-  }
-}
-
-calculocupos(InfoCupos: any): void {
-  // Se definen el calculos de los cupos segun historia de usuario la funcion redondea segun decimas por encima por encima de .5
-  this.info_cupos = <any>InfoCupos;
-  if(this.show_posgrado){
-    this.info_cupos.CuposOpcionados=0;
-    this.info_cupos.CuposEspeciales = {
-      ComunidadesNegras: '0',
-      DesplazadosVictimasConflicto: '0',
-      ComunidadesIndiginas: '0',
-      MejorBachiller: '0',
-      Ley1084: '0',
-      ProgramaReincorporacion: '0',
-    }
-  }else{
-    this.info_cupos.CuposEspeciales = {
-      ComunidadesNegras: String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40) * 2)),
-      DesplazadosVictimasConflicto: String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40) * 1)),
-      ComunidadesIndiginas: String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40) * 2)),
-      MejorBachiller: String(Math.trunc((Number(this.info_cupos.CuposAsignados) / 40) * 1)),
-      Ley1084: '1',
-      ProgramaReincorporacion: '1',
-    }
-  }
-  const proyectos = [];
-  proyectos.push(this.info_proyectos);
-  this.info_cupos.Proyectos = proyectos;
-  this.info_cupos.Periodo = this.info_periodo;
-  // this.info_cupos.CuposOpcionados = Number(Math.trunc((Number(this.info_cupos.CuposAsignados) ) * 0.5 ))
-  this.createCupos();
-
-}
-
-cambiarestados() {
-  this.info_actualizar_estados = {}
-  this.info_actualizar_estados.Proyectos = this.info_cupos.Proyectos;
-  this.info_actualizar_estados.Periodo = this.info_cupos.Periodo;
-  console.info(JSON.stringify(this.info_actualizar_estados));
-  this.sgamidService.post('admision/cambioestado', this.info_actualizar_estados)
-    .subscribe(res => {
-      const r = <any>res
-      if (r !== null && r.Type !== 'error') {
-        this.loading = false;
-        this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
-          this.translate.instant('GLOBAL.info_estado') + ' ' +
-          this.translate.instant('GLOBAL.confirmarActualizar'));
-        this.eventChange.emit(true);
-      } else {
-        this.showToast('error', this.translate.instant('GLOBAL.error'),
-          this.translate.instant('GLOBAL.error'));
-      }
-    },
-      (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
-          title: error.status + '',
-          text: this.translate.instant('ERROR.' + error.status),
-          footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-            this.translate.instant('GLOBAL.info_estado'),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        (error: HttpErrorResponse) => {
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+              this.translate.instant('GLOBAL.info_estado'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
         });
-      });
-}
-
-mostrartabla() {
-  this.show_listado = true
-
-  this.info_consultar_aspirantes = {
-    Id_proyecto: Number(this.info_cupos.Proyectos.Id),
-    Id_periodo: Number(this.info_cupos.Periodo.Id),
   }
-  this.sgamidService.post('admision/consulta_aspirantes', this.info_consultar_aspirantes)
-    .subscribe(res => {
-      const r = <any>res
-      if (r !== null && r.Type !== 'error') {
-        this.loading = false;
-        r.sort((puntaje_mayor, puntaje_menor) => puntaje_menor.NotaFinal - puntaje_mayor.NotaFinal)
-        const data = <Array<any>>r;
-        this.source_emphasys.load(data);
-
-      } else {
-        this.showToast('error', this.translate.instant('GLOBAL.error'),
-          this.translate.instant('GLOBAL.error'));
-      }
-    },
-      (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
-          title: error.status + '',
-          text: this.translate.instant('ERROR.' + error.status),
-          footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-            this.translate.instant('GLOBAL.info_estado'),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        });
-      });
-}
 
 
   private showToast(type: string, title: string, body: string) {
-  this.config = new ToasterConfig({
-    // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-    positionClass: 'toast-top-center',
-    timeout: 5000,  // ms
-    newestOnTop: true,
-    tapToDismiss: false, // hide on click
-    preventDuplicates: true,
-    animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-    limit: 5,
-  });
-  const toast: Toast = {
-    type: type, // 'default', 'info', 'success', 'warning', 'error'
-    title: title,
-    body: body,
-    showCloseButton: true,
-    bodyOutputType: BodyOutputType.TrustedHtml,
-  };
-  this.toasterService.popAsync(toast);
-}
+    this.config = new ToasterConfig({
+      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
+      positionClass: 'toast-top-center',
+      timeout: 5000,  // ms
+      newestOnTop: true,
+      tapToDismiss: false, // hide on click
+      preventDuplicates: true,
+      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
+      limit: 5,
+    });
+    const toast: Toast = {
+      type: type, // 'default', 'info', 'success', 'warning', 'error'
+      title: title,
+      body: body,
+      showCloseButton: true,
+      bodyOutputType: BodyOutputType.TrustedHtml,
+    };
+    this.toasterService.popAsync(toast);
+  }
 }

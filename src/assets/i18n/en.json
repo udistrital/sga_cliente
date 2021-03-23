@@ -1159,7 +1159,8 @@
         "cupos": "Definition of quotas for the period and the selected academic projects",
         "asignar": "Assign quotas",
         "seleccionar_admitidos": "Select admitted",
-        "ver_listado_aspirantes": "Show list of applicants"
+        "ver_listado_aspirantes": "Show list of applicants",
+        "cupos_proyecto": "Number of assigned places"
     },
     "calendario": {
         "seguro_continuar_inhabilitar_calendario": "¿Are you sure to disable this Calendar?",

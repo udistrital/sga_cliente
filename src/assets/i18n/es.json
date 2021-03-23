@@ -1194,7 +1194,8 @@
         "cupos": "Definición de los cupos para el periodo y el/los proyectos académicos selecionados",
         "asignar": "Asignar cupos",
         "seleccionar_admitidos": "Seleccionar admitidos",
-        "ver_listado_aspirantes": "Ver listado de aspirantes"
+        "ver_listado_aspirantes": "Ver listado de aspirantes",
+        "cupos_proyecto": "Cantidad de cupos asignados"
     },
     "calendario": {
         "seguro_continuar_inhabilitar_calendario": "¿Esta seguro de inhabilitar este Calendario?",
