@@ -17,6 +17,7 @@ import { ParametrosService } from '../../../@core/data/parametros.service';
 import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { TercerosService } from '../../../@core/data/terceros.service';
+import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -63,6 +64,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   show_listado = false;
   niveles: NivelFormacion[];
   Aspirantes = [];
+  cuposProyecto: number;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -77,7 +79,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     private popUpManager: PopUpManager,
     private inscripcionService: InscripcionService,
     private tercerosService: TercerosService,
-    private toasterService: ToasterService) {
+    private toasterService: ToasterService,
+    private evaluacionService: EvaluacionInscripcionService,) {
     this.settings_emphasys = {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -147,6 +150,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     });
     this.cargarPeriodo();
     this.nivel_load();
+    this.show_listado = false;
   }
 
 
@@ -174,11 +178,26 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   nivel_load() {
     this.projectService.get('nivel_formacion?limit=0').subscribe(
       (response: NivelFormacion[]) => {
-        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null && nivel.Nombre == 'Posgrado')
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
+    );
+  }
+
+  cargarCantidadCupos() {
+    this.evaluacionService.get('cupos_por_dependencia/?query=DependenciaId:' + Number(this.proyectos_selected.Id) + '&limit=0').subscribe(
+      (response: any) => {
+        if (response !== null && response !== undefined && response[0].Id !== undefined) {
+          this.cuposProyecto = response[0].CuposHabilitados;
+        } else {
+          this.cuposProyecto = 0;
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
     );
   }
 
@@ -189,14 +208,16 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
 
 
   activar_button() {
-    this.buttoncambio = false
-
-
+    this.buttoncambio = false;
+    this.cargarCantidadCupos();
+    this.mostrartabla();
   }
 
   loadProyectos() {
+    this.show_listado = false;
     this.selectprograma = false;
-    if (this.selectednivel !== NaN) {
+    this.proyectos = [];
+    if (this.selectednivel !== NaN && this.selectednivel !== undefined) {
       this.projectService.get('proyecto_academico_institucion?query=NivelFormacionId:' + Number(this.selectednivel) + '&limit=0').subscribe(
         (response: any) => {
           if (response !== null || response !== undefined) {
@@ -248,7 +269,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.source_emphasys = new LocalDataSource();
     this.Aspirantes = [];
 
-    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=Id&order=asc').subscribe(
+    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:2,ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=Id&order=asc').subscribe(
       (res: any) => {
         const r = <any>res
         if (res !== '[{}]') {
@@ -259,7 +280,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             // this.source_emphasys.load(data);
             data.forEach(element => {
               if (element.PersonaId != undefined) {
-                this.tercerosService.get('tercero/'+element.PersonaId).subscribe(
+                this.tercerosService.get('tercero/' + element.PersonaId).subscribe(
                   (res: any) => {
                     var aspiranteAux = {
                       NumeroDocumento: res.Id,
