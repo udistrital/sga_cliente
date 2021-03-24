@@ -130,6 +130,10 @@
             "ver_nuevas_solicitudes": "New requests",
             "en_proceso": "Requests in process",
             "invitacion": "Invitation to academic\npractices"
+        },
+        "espacios_academicos": {
+            "espacios_academicos": "Academic spaces",
+            "preinscripcion_espacios": "Academic spaces\npre-registration"
         }
     },
     "GLOBAL": {
@@ -559,7 +563,9 @@
         "cupos_especiales": "Corresponds to special quotas?",
         "nivel": "Level",
         "placeholder_nivel": "Select the level that is required to be assigned to the registration type",
-        "proyecto_academico": "Academic Project"
+        "proyecto_academico": "Academic Project",
+        "creditos": "Credits",
+        "clasificacion": "Type"
     },
 
     "ERROR": {
@@ -1369,5 +1375,13 @@
         "solicitante": "Petitioner",
         "no_data": "There are no registered academic practices",
         "estado_docente": "Author status"
+    },
+    "espacios_academicos": {
+        "preinscripcion_titulo": "Academic spaces Pre-registration",
+        "preinscribir_boton": "Pre-register academic spaces",
+        "sin_preinscripcion": "The student doesn't have any pre-registration for this academic period",
+        "seleccionar": "Select academic spaces to pre-register",
+        "adicionar": "Add",
+        "periodo_formacion": "Studying Period"
     }
 }

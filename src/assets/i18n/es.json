@@ -130,6 +130,10 @@
             "ver_nuevas_solicitudes": "Nuevas solicitudes",
             "en_proceso": "Solicitudes en proceso",
             "invitacion": "Invitación a prácticas\nacadémicas"
+        },
+        "espacios_academicos": {
+            "espacios_academicos": "Espacios Académicos",
+            "preinscripcion_espacios": "Preinscripción de\nEspacios Académicos"
         }
     },
     "GLOBAL": {
@@ -578,7 +582,9 @@
         "info_familiar": "Información familiar",
         "institucion": "Institución",
         "programa": "Programa",
-        "proyecto_academico": "proyecto académico"
+        "proyecto_academico": "Proyecto Curricular",
+        "creditos": "Créditos",
+        "clasificacion": "Clasificación"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1417,5 +1423,13 @@
         "solicitante": "Solicitante",
         "no_data": "No hay prácticas académicas registradas",
         "estado_docente": "Estatus del autor"
+    },
+    "espacios_academicos": {
+        "preinscripcion_titulo": "Preinscripción de Espacios académicos",
+        "preinscribir_boton": "Preinscribir espacios académicos",
+        "sin_preinscripcion": "El Estudiante no tiene preinscripciones para el periodo académico actual",
+        "seleccionar": "Seleccione los espacios académicos a preinscribir",
+        "adicionar": "Adicionar",
+        "periodo_formacion": "Periodo de Formación"
     }
 }
