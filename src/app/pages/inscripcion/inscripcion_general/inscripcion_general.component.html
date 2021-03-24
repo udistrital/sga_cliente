@@ -198,7 +198,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -233,7 +233,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_reingreso=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -255,7 +255,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_interna=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -279,7 +279,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
 
@@ -305,7 +305,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_acad_externa=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -331,7 +331,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
 
@@ -358,7 +358,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -380,7 +380,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -402,7 +402,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -424,7 +424,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -446,7 +446,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -464,5 +464,7 @@
     <div *ngIf="show_profile">
         <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}" imprimir="{{imprimir}}"></ngx-perfil>
     </div>
-    <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+    <div *ngIf="showRegreso">
+        <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+    </div>
 </div>

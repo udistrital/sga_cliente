@@ -134,8 +134,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   return(){
     this.showInscription = true;
     sessionStorage.setItem('EstadoInscripcion', 'false');
-    this.loadInfoInscripcion();
-    this.createTable();
   }
 
   public loadInfoPersona(): void {
@@ -284,9 +282,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     //Solo se cargan el nivel de posgrado
     this.projectService.get('nivel_formacion?query=Id:2').subscribe(
       (response: NivelFormacion[]) => {
-        console.info(response)
         this.niveles = response//.filter(nivel => nivel.NivelFormacionPadreId === null)
-        console.info(this.niveles)
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -486,7 +482,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                       this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.recibo_duplicado'));
                     } else if (response.Code === '400') {
                       reject([]);
-                      console.info("entra 1")
                       this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
                     }
                     this.loading = false;
@@ -643,7 +638,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            reject(error);
+            reject([]);
           });
     });
   }

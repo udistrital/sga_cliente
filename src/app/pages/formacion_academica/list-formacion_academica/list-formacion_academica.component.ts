@@ -53,7 +53,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
     this.persona_id = this.userService.getPersonaId();
     this.loadData();
     this.cargarCampos();
-    this.loading = false;
+    this.loading = true;
   }
 
   getPercentage(event) {
@@ -140,9 +140,10 @@ export class ListFormacionAcademicaComponent implements OnInit {
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
     .subscribe(response => {
       if(response !== null && response.Response.Code === '404'){
+        this.loading = false;
         this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-      }else if(response !== null && response !== undefined && response !== '{}'){
-        const data = <Array<any>>response;
+      } else if(response !== null && response.Response.Code === '200'){
+        const data = <Array<any>>response.Response.Body[0];
         const dataInfo = <Array<any>>[];
         data.forEach(element => {
           const FechaI = element.FechaInicio;
@@ -150,18 +151,14 @@ export class ListFormacionAcademicaComponent implements OnInit {
           element.FechaInicio = FechaI.substring(0,2) + "-" + FechaI.substring(2,4) + "-" + FechaI.substring(4,8);
           element.FechaFinalizacion = FechaF.substring(0,2) + "-" + FechaF.substring(2,4) + "-" + FechaF.substring(4,8);
           dataInfo.push(element);
-          this.loading = false;
           this.getPercentage(1);
           this.source.load(dataInfo);
-        })
+        });
+        this.loading = false;
       } else{
-        if (response === '{}'){
-          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-        } else {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
-        }
+        this.loading = false;
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
       }
-      this.loading = false;
     },
     (error: HttpErrorResponse) => {
       this.loading = false;

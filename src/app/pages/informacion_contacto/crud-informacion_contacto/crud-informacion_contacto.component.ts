@@ -46,7 +46,7 @@ export class CrudInformacionContactoComponent implements OnInit {
   paisSeleccionado: any;
   departamentoSeleccionado: any;
   denied_acces: boolean = false;
-  loading: boolean;
+  loading: boolean = true;
   info_persona_id: number;
 
   constructor(
@@ -63,7 +63,6 @@ export class CrudInformacionContactoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    this.loading = true;
     this.listService.findPais();
     this.loadLists();
     this.persona_id = this.userService.getPersonaId();
@@ -146,18 +145,18 @@ export class CrudInformacionContactoComponent implements OnInit {
           this.loading = false;
           this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = ciudadResidencia;
         },
-          (error: HttpErrorResponse) => {
-            this.loading = false;
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
-                this.translate.instant('GLOBAL.ciudad_residencia'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+              this.translate.instant('GLOBAL.ciudad_residencia'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
+        });
     }
   }
 
@@ -188,12 +187,11 @@ export class CrudInformacionContactoComponent implements OnInit {
           }
           this.loading = false;
         } else {
+          this.loading = false;
           this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
         }
-        this.loading = false;
       },
         (error: HttpErrorResponse) => {
-          this.loading = false;
           this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           this.info_informacion_contacto = undefined;
           this.loading=false;
@@ -291,7 +289,6 @@ export class CrudInformacionContactoComponent implements OnInit {
               } else if (res !== null && res.Response.Code == '400'){
                 this.popUpManager.showAlert('', this.translate.instant('inscripcion.error_update'));
               } else if (res !== null && res.Response.Code == '200'){
-                this.loading = false;
                 this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                 this.translate.instant('GLOBAL.info_contacto') + ' ' +
                 this.translate.instant('GLOBAL.confirmarActualizar'));
@@ -313,7 +310,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             }
           );
         }
-        this.loading = false;
+        //this.loading = false;
       });
   }
 
@@ -337,7 +334,6 @@ export class CrudInformacionContactoComponent implements OnInit {
           this.sgaMidService.post('inscripciones/info_complementaria_tercero', this.info_informacion_contacto)
             .subscribe(res => {
               const r = <any>res;
-              this.loading=false;
               if (r !== null && r.Type !== 'error') {
                 this.popUpManager.showSuccessAlert(this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
                 this.showToast('info', this.translate.instant('GLOBAL.registrar'),
@@ -361,8 +357,7 @@ export class CrudInformacionContactoComponent implements OnInit {
               this.showToast('error', this.translate.instant('GLOBAL.error'),
                 this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'));
             });
-          }
-          this.loading = false;
+        }
       });
   }
 

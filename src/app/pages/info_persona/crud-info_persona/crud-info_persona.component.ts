@@ -85,8 +85,7 @@ export class CrudInfoPersonaComponent implements OnInit {
       this.listService.findGenero();
       this.listService.findEstadoCivil();
       this.listService.findTipoIdentificacion();
-      this.loading = false;
-      this.cargarPeriodo();
+      this.loading = true;
       this.loadLists();
   }
 
@@ -114,7 +113,6 @@ export class CrudInfoPersonaComponent implements OnInit {
   }
 
   public loadInfoPersona(): void {
-    this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 && this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0'){
       this.sgamidService.get('persona/consultar_persona/' + this.info_persona_id)
         .subscribe(res => {
@@ -126,17 +124,17 @@ export class CrudInfoPersonaComponent implements OnInit {
           }
           this.loading = false;
         },
-          (error: HttpErrorResponse) => {
-            this.loading = false;
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.info_persona'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          Swal({
+            type: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.info_persona'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
+        });
     } else {
       this.info_info_persona = undefined
       this.clean = !this.clean;
@@ -158,8 +156,8 @@ export class CrudInfoPersonaComponent implements OnInit {
     };
     Swal(opt)
       .then((willDelete) => {
-        this.loading = true;
         if (willDelete.value) {
+          this.loading = true;
           const files = []
           this.info_info_persona = <any>infoPersona;
           this.info_info_persona.FechaNacimiento = momentTimezone.tz(this.info_info_persona.FechaNacimiento, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
@@ -167,14 +165,12 @@ export class CrudInfoPersonaComponent implements OnInit {
           this.info_info_persona.FechaExpedicion = momentTimezone.tz(this.info_info_persona.FechaExpedicion, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
           this.info_info_persona.FechaExpedicion = this.info_info_persona.FechaExpedicion + ' +0000 +0000';
           this.info_info_persona.Usuario = this.autenticationService.getPayload().sub;
-          this.loading = true;
           this.sgamidService.post('persona/guardar_persona', this.info_info_persona).subscribe(res => {
             const r = <any>res
             if (r !== null && r.Type !== 'error') {
               window.localStorage.setItem('ente', r.Id);
               this.info_persona_id = r.Id;
               sessionStorage.setItem('IdTercero', String(this.info_persona_id));
-              this.loading = false;
               this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.persona_creado'));
             } else {
               this.showToast('error', this.translate.instant('GLOBAL.error'),
@@ -247,29 +243,6 @@ export class CrudInfoPersonaComponent implements OnInit {
   setPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);
-  }
-
-  cargarPeriodo(): void {
-    this.loading = true;
-    this.coreService.get('periodo/?query=Activo:true&sortby=Id&order=desc&limit=1')
-      .subscribe(res => {
-        const r = <any>res;
-        if (res !== null && r.Type !== 'error') {
-          this.periodo = <any>res[0];
-        }
-        this.loading = false;
-      },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.periodo_academico'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
   }
 
   public loadLists() {
