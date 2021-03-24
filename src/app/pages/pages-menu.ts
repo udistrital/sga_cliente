@@ -58,6 +58,20 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ]
   },
+  {
+    title: 'Espacios académicos',
+    icon: 'nb-list',
+    link: '',
+    key: 'espacios_academicos',
+    children: [
+      {
+        title: 'Preinscripcion espacios',
+        icon: 'nb-list',
+        link: '/pages/espacios-academicos',
+        key: 'preinscripcion_espacios'
+      }
+    ]
+  },
 /*   {
     title: 'Producción Academica',
     icon: 'nb-edit',

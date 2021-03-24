@@ -15,6 +15,7 @@ export class CheckboxAssistanceComponent implements ViewCell, OnInit{
   @Input() rowData: any;
 
   @Output() save: EventEmitter<any> = new EventEmitter();
+  @Output() row: EventEmitter<any> = new EventEmitter();
 
   constructor(private translate: TranslateService) { }
 
@@ -24,6 +25,9 @@ export class CheckboxAssistanceComponent implements ViewCell, OnInit{
 
   funcion(event): void{
     this.save.emit(event.target.checked);
+    if (event.target.checked) {
+      this.row.emit(this.rowData);
+    }
   }
 
 }
