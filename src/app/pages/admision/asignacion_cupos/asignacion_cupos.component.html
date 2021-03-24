@@ -47,7 +47,7 @@
         <nb-card-body>
             <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'cupos.cupos' | translate }}" [active]="preinscripcion">
-                    <ngx-crud-asignacion-cupo [info_proyectos]="this.proyectos_selected" [info_periodo]="this.periodo">
+                    <ngx-crud-asignacion-cupo [info_proyectos]="this.proyectos_selected" [info_periodo]="this.periodo" [info_nivel]="this.esPosgrado">
                     </ngx-crud-asignacion-cupo>
                 </nb-tab>
             </nb-tabset>

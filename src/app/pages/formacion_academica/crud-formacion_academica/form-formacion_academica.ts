@@ -32,6 +32,7 @@ export let FORM_FORMACION_ACADEMICA = {
       tipo: 'InfoPersona',
       key: 'NombreCompleto',
       opciones: [],
+      entrelazado: true,
     },
     {
       etiqueta: 'select',

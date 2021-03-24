@@ -113,23 +113,21 @@ export class ListProduccionAcademicaComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    this.sgaMidService.get('produccion_academica/' + this.persona_id)
+    this.sgaMidService.get('produccion_academica/pr_academica/' + this.persona_id)
     .subscribe(res => {
-      if (res !== null) {
-        if(res !== null && res.length < 1){
-          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-        }else if (Object.keys(res[0]).length > 0 && res.Type !== 'error') {
-          const data = <Array<ProduccionAcademicaPost>>res;
+      console.info(res)
+      if(res !== null && res.Response.Code === "200"){
+        const data = <Array<ProduccionAcademicaPost>>res.Response.Body[0];
           this.source.load(data);
           this.result.emit(1);
-        } else {
-           Swal({
-            type: 'error',
-            title: '404',
-            text: this.translate.instant('ERROR.404'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        }
+      } else if (res !== null && res.Response.Code === "404"){
+        this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+      } else {
+        Swal({
+          type: 'error',
+          text: this.translate.instant('ERROR.400'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
       }
       this.loading = false;
     }, (error: HttpErrorResponse) => {

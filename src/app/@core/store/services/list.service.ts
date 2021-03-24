@@ -45,7 +45,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.Genero).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:6')
+          this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:6&sortby=Id&order=asc&limit=2')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.Genero, result);

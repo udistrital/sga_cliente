@@ -58,6 +58,20 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ]
   },
+  {
+    title: 'Espacios académicos',
+    icon: 'nb-list',
+    link: '',
+    key: 'espacios_academicos',
+    children: [
+      {
+        title: 'Preinscripcion espacios',
+        icon: 'nb-list',
+        link: '/pages/espacios-academicos',
+        key: 'preinscripcion_espacios'
+      }
+    ]
+  },
 /*   {
     title: 'Producción Academica',
     icon: 'nb-edit',
@@ -258,12 +272,12 @@ export const MENU_ITEMS: MenuItem[] = [
       //   link: '/pages/admision/actualizacion_estado',
       //   key: 'actualizacion_estado',
       // },
-      // {
-      //   title: 'Listado Aspirante',
-      //   icon: 'nb-compose',
-      //   link: '/pages/admision/listado_aspirante',
-      //   key: 'listado_aspirante',
-      // },
+      {
+        title: 'Listado Aspirante',
+        icon: 'nb-compose',
+        link: '/pages/admision/listado_aspirante',
+        key: 'listado_aspirante',
+      },
       {
         title: 'Actualizacion Estado',
         icon: 'nb-compose',

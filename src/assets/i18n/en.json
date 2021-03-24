@@ -130,6 +130,10 @@
             "ver_nuevas_solicitudes": "New requests",
             "en_proceso": "Requests in process",
             "invitacion": "Invitation to academic\npractices"
+        },
+        "espacios_academicos": {
+            "espacios_academicos": "Academic spaces",
+            "preinscripcion_espacios": "Academic spaces\npre-registration"
         }
     },
     "GLOBAL": {
@@ -559,7 +563,9 @@
         "cupos_especiales": "Corresponds to special quotas?",
         "nivel": "Level",
         "placeholder_nivel": "Select the level that is required to be assigned to the registration type",
-        "proyecto_academico": "Academic Project"
+        "proyecto_academico": "Academic Project",
+        "creditos": "Credits",
+        "clasificacion": "Type"
     },
 
     "ERROR": {
@@ -1117,7 +1123,7 @@
         "prueba": "Criteria Test",
         "hoja_vida": "Resume criteria",
         "criterio_icfes": "Percentages for the ICFES criterion",
-        "actualizacion_estado": "Actulizar estado aspirantes",
+        "actualizacion_estado": "Actulize aspirant status",
         "enlistar": "Enlist applicants",
         "criterios_subcriterios": "Criteria and Subcriteria",
         "criterios": "Criteria",
@@ -1159,7 +1165,8 @@
         "cupos": "Definition of quotas for the period and the selected academic projects",
         "asignar": "Assign quotas",
         "seleccionar_admitidos": "Select admitted",
-        "ver_listado_aspirantes": "Show list of applicants"
+        "ver_listado_aspirantes": "Show list of applicants",
+        "cupos_proyecto": "Number of assigned places"
     },
     "calendario": {
         "seguro_continuar_inhabilitar_calendario": "¿Are you sure to disable this Calendar?",
@@ -1369,5 +1376,13 @@
         "solicitante": "Petitioner",
         "no_data": "There are no registered academic practices",
         "estado_docente": "Author status"
+    },
+    "espacios_academicos": {
+        "preinscripcion_titulo": "Academic spaces Pre-registration",
+        "preinscribir_boton": "Pre-register academic spaces",
+        "sin_preinscripcion": "The student doesn't have any pre-registration for this academic period",
+        "seleccionar": "Select academic spaces to pre-register",
+        "adicionar": "Add",
+        "periodo_formacion": "Studying Period"
     }
 }

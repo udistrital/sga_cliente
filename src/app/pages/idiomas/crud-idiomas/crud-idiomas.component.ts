@@ -74,7 +74,7 @@ export class CrudIdiomasComponent implements OnInit {
     this.listService.findNivelIdioma();
     this.listService.findClasificacionNivelIdioma();
     this.loadLists();
-
+    
     this.persona_id = this.users.getPersonaId();
   }
 

@@ -49,7 +49,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   departamentoSeleccionado: any;
   clean: boolean;
   denied_acces: boolean = false;
-  loading: boolean;
+  loading: boolean = true;
 
   constructor(
     private popUpManager: PopUpManager,
@@ -70,7 +70,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     this.listService.findTipoDiscapacidad();
     this.listService.findFactorRh();
     this.listService.findGrupoSanguineo();
-    this.loading = false;
   }
 
   construirForm() {
@@ -125,8 +124,9 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });
+    } else{
+      this.loading = false;
     }
-    this.loading = false;
   }
 
   loadOptionsCiudadNacimiento(): void {
@@ -157,8 +157,9 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });
+    } else {
+      this.loading = false;
     }
-    this.loading = false;
   }
 
   getIndexForm(nombre: String): number {
@@ -191,7 +192,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = [this.info_info_caracteristica.PaisNacimiento];
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = [this.info_info_caracteristica.DepartamentoNacimiento];
             this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = [this.info_info_caracteristica.Lugar];
-
             this.loading = false;
             this.result.emit(1);
           } else{
@@ -248,8 +248,9 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
               });
             });
+        } else {
+          this.loading = false;
         }
-        this.loading = false;
       });
   }
 
@@ -266,8 +267,8 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     };
     Swal(opt)
       .then((willDelete) => {
-        this.loading = true;
         if (willDelete.value) {
+          this.loading = true;
           const info_info_caracteristica_post = <any>infoCaracteristica;
           info_info_caracteristica_post.TipoRelacionUbicacionEnte = 1;
           info_info_caracteristica_post.Ente = (1 * this.info_caracteristica_id);
@@ -281,7 +282,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             .subscribe(res => {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
-                this.loading = false;
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.guardar'));
               }
               this.loading = false;
@@ -294,9 +294,9 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                 text: this.translate.instant('ERROR.' + error.status),
               });
             });
-            this.loading = false;
+        } else{
+          this.loading = false;
         }
-        this.loading = false;
     });
   }
 
