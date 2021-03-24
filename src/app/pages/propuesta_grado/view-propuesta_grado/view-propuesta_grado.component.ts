@@ -264,57 +264,61 @@ export class ViewPropuestaGradoComponent implements OnInit {
                             this.listo.emit(true);
                           }
                         },
-                          (error: HttpErrorResponse) => {
-                            Swal({
-                              type: 'error',
-                              title: error.status + '',
-                              text: this.translate.instant('ERROR.' + error.status),
-                              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                                this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-                                this.translate.instant('GLOBAL.linea_investigacion'),
-                              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                            });
+                        (error: HttpErrorResponse) => {
+                          this.listo.emit(false);
+                          Swal({
+                            type: 'error',
+                            title: error.status + '',
+                            text: this.translate.instant('ERROR.' + error.status),
+                            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                              this.translate.instant('GLOBAL.propuesta_grado') + '|' +
+                              this.translate.instant('GLOBAL.linea_investigacion'),
+                            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                           });
+                        });
                     }
                   },
-                    (error: HttpErrorResponse) => {
-                      Swal({
-                        type: 'error',
-                        title: error.status + '',
-                        text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                          this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-                          this.translate.instant('GLOBAL.grupo_investigacion'),
-                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                      });
+                  (error: HttpErrorResponse) => {
+                    this.listo.emit(false);
+                    Swal({
+                      type: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                        this.translate.instant('GLOBAL.propuesta_grado') + '|' +
+                        this.translate.instant('GLOBAL.grupo_investigacion'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                     });
+                  });
               }
             },
-              (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
-                  title: error.status + '',
-                  text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                    this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-                    this.translate.instant('GLOBAL.soporte_documento'),
-                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                });
+            (error: HttpErrorResponse) => {
+              this.listo.emit(false);
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                  this.translate.instant('GLOBAL.propuesta_grado') + '|' +
+                  this.translate.instant('GLOBAL.soporte_documento'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
               });
+            });
         } else {
           this.listo.emit(true);
         }
       },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.propuesta_grado'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+      (error: HttpErrorResponse) => {
+        this.listo.emit(false);
+        Swal({
+          type: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('GLOBAL.cargar') + '-' +
+            this.translate.instant('GLOBAL.propuesta_grado'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+      });
   }
 
   ngOnInit() {

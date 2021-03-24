@@ -121,7 +121,7 @@
 
 
     <!-- <nb-card [hidden]="!show_info_pregrado"> -->
-    <nb-card *ngIf="show_info_pregrado">
+    <!--nb-card *ngIf="show_info_pregrado">
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
@@ -133,12 +133,12 @@
             show_desc=false;">X</button>
                 </div>
             </div>
-            <nb-tabset fullWidth>
+            <nb-tabset fullWidth-->
                 <!-- <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
                     <ngx-crud-info-persona info_persona_id={{this.info_persona_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" >
                     </ngx-crud-info-persona>
                 </nb-tab> -->
-                <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}" [active]="info_caracteristica">
+                <!--nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}" [active]="info_caracteristica">
                     <ngx-crud-info-caracteristica_pregrado info_caracteristica_id={{this.info_persona_id}} (eventChange)="perfil_editar('info_contacto')" (result)="setPercentage_info($event,1)">
                     </ngx-crud-info-caracteristica_pregrado>
                 </nb-tab>
@@ -152,7 +152,7 @@
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
-    </nb-card>
+    </nb-card-->
 
     <!-- <nb-card [hidden]="!show_info_externa"> -->
     <nb-card *ngIf="show_info_externa">
@@ -198,12 +198,11 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth>
                 <!-- <nb-tab tabTitle="{{ 'inscripcion.info_persona' | translate }}" [active]="info_persona">
-
                     <ngx-crud-info-persona info_persona_id={{this.info_ente_id}} inscripcion_id={{this.inscripcion_id}} (eventChange)="perfil_editar('info_caracteristica')" >
                     </ngx-crud-info-persona>
                 </nb-tab> -->
@@ -215,10 +214,10 @@
                     <ngx-crud-informacion-contacto informacion_contacto_id={{this.info_ente_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-contacto>
                 </nb-tab>
-                <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}">
+                <!--nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}">
                     <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,3)">
                     </ngx-crud-informacion-familiar>
-                </nb-tab>
+                </nb-tab-->
             </nb-tabset>
         </nb-card-body>
     </nb-card>
@@ -234,7 +233,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_reingreso=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -256,7 +255,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_interna=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -280,7 +279,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
 
@@ -306,7 +305,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_acad_externa=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -332,7 +331,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
 
@@ -359,7 +358,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -381,7 +380,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -403,7 +402,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -425,7 +424,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -447,7 +446,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
             show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false;">X</button>
+            show_desc=false; showRegreso=true;">X</button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -465,5 +464,7 @@
     <div *ngIf="show_profile">
         <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}" imprimir="{{imprimir}}"></ngx-perfil>
     </div>
-    <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+    <div *ngIf="showRegreso">
+        <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+    </div>
 </div>

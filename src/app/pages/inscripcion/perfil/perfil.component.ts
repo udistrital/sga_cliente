@@ -60,12 +60,13 @@ export class PerfilComponent implements OnInit {
   }
 
   activarImprimir(event: boolean) {
-    console.info(event)
-    console.info(this.imprimir)
-    console.info("imprime")
     if (this.imprimir && event) {
-      setTimeout(() => this.generarComprobante().then(() => this.imprimir = false), 500);
-      this.loading = false;
+      setTimeout(() => this.generarComprobante()
+      .then(() => {
+        console.info("entra aca")
+        this.imprimir = false;
+        this.loading = false;
+      }), 500);
     } else {
       this.loading = false;
     }

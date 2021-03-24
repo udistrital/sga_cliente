@@ -48,6 +48,10 @@ export class PagesComponent implements OnInit {
         key: 'dashboard',
       };
       this.results.push(this.object);
+
+      if (this.roles.length === 0){
+        this.roles = "ASPIRANTE";
+      }
       
       this.menuws.get(this.roles + '/SGA').subscribe(
         data => {

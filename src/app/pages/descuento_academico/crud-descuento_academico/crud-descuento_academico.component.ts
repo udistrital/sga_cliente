@@ -97,33 +97,33 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
 
   findDescuentoAcademico(programa: any) {
     this.loading = true;
-          // this.descuentoAcademicoService.get('tipo_descuento/?limit=0&query=Activo:true')
-          this.sgaMidService.get('descuento_academico/descuentoAcademicoByID/'+programa)
-            .subscribe(
-              (result: any) => {
-                const r = <any>result.Data.Body[1];
-                if (result !== null && result.Data.Code == '404') {
-                  this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = []
-                } else{
-                  this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = r.map((result: any) => {
-                    return {
-                      Id: result.Id,
-                      Nombre: result.Id + '. ' + result.Nombre,
-                    }
-                  });
-                }
-                this.loading = false;
-              },
-              error => {
-                this.loading = false;
-                this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = []
-              },
-            );
+    // this.descuentoAcademicoService.get('tipo_descuento/?limit=0&query=Activo:true')
+    this.sgaMidService.get('descuento_academico/descuentoAcademicoByID/'+programa)
+    .subscribe(
+      (result: any) => {
+        const r = <any>result.Data.Body[1];
+        if (result !== null && result.Data.Code == '404') {
+          this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = []
+        } else{
+          this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = r.map((result: any) => {
+            return {
+              Id: result.Id,
+              Nombre: result.Id + '. ' + result.Nombre,
+            }
+          });
+        }
+        this.loading = false;
+      },
+      error => {
+        this.loading = false;
+        this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = []
+      },
+    );
   }
 
   cargarPeriodo() {
-    this.loading = true;
     return new Promise((resolve, reject) => {
+      this.loading = true;
       this.coreService.get('periodo?query=Activo:true&sortby=Id&order=desc&limit=1')
       .subscribe(res => {
         const r = <any>res;
@@ -271,8 +271,8 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                       { Id: 0, Nombre: 'No registrado' };
                     this.info_descuento_academico.Periodo = this.periodo;
                     this.info_descuento_academico.Documento = filesResponse['Documento'] + '';
-                    this.loading = false;
                   }
+                  this.loading = false;
                 },
                   (error: HttpErrorResponse) => {
                     Swal({
@@ -288,17 +288,17 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
             }
             this.loading = false;
           },
-            (error: HttpErrorResponse) => {
-              this.loading = false;
-              Swal({
-                type: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                  this.translate.instant('GLOBAL.descuento_matricula'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              });
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            Swal({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.descuento_matricula'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
+          });
     } else {
       this.temp = {};
       this.SoporteDescuento = [];
@@ -535,8 +535,8 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     };
     Swal(opt)
       .then((willDelete) => {
-        this.loading = true;
         if (willDelete.value) {
+          this.loading = true;
           const files = [];
           this.info_descuento_academico = <SolicitudDescuento>DescuentoAcademico;
           this.info_descuento_academico.PersonaId = Number(window.localStorage.getItem('persona_id'));
@@ -565,7 +565,6 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                   .subscribe(res => {
                     const r = <any>res
                     if (r !== null && r.Type !== 'error') {
-                      this.loading = false;
                       this.eventChange.emit(true);
                       // this.showToast('info', this.translate.instant('GLOBAL.crear'),
                       // this.translate.instant('descuento_academico.descuento_academico_registrado'));
@@ -580,29 +579,29 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                     }
                     this.loading = false;
                   },
-                    (error: HttpErrorResponse) => {
-                      this.loading = false;
-                      Swal({
-                        type: 'error',
-                        title: error.status + '',
-                        text: this.translate.instant('ERROR.' + error.status),
-                        footer: this.translate.instant('descuento_academico.descuento_academico_no_registrado'),
-                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                      });
+                  (error: HttpErrorResponse) => {
+                    this.loading = false;
+                    Swal({
+                      type: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('descuento_academico.descuento_academico_no_registrado'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                     });
+                  });
               }
               this.loading = false;
             },
-              (error: HttpErrorResponse) => {
-                this.loading = false;
-                Swal({
-                  type: 'error',
-                  title: error.status + '',
-                  text: this.translate.instant('ERROR.' + error.status),
-                  footer: this.translate.instant('descuento_academico.documento_descuento_academico_no_registrado'),
-                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                });
+            (error: HttpErrorResponse) => {
+              this.loading = false;
+              Swal({
+                type: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('descuento_academico.documento_descuento_academico_no_registrado'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
               });
+            });
         }
       });
   }
