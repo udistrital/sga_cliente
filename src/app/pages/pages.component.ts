@@ -38,7 +38,7 @@ export class PagesComponent implements OnInit {
     }
 
   ngOnInit() {
-    if (this.autenticacion.live()) {
+    if (!this.autenticacion.live()) {
       this.roles = (JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).role).filter((data: any) => (data.indexOf('/') === -1));
       this.object = {
         title: 'dashboard',
@@ -141,7 +141,7 @@ export class PagesComponent implements OnInit {
         });
     } else {
       this.rol = 'PUBLICO';
-      //this.menu = MENU_ITEMS;
+      this.menu = MENU_ITEMS;
       this.translateMenu();
     }
     this.translateMenu();

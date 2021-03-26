@@ -141,7 +141,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'));
     const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'))
     const IdPrograma = parseInt(sessionStorage.getItem('ProgramaAcademicoId'))
-
     //Se carga el nombre del periodo al que se inscribió
     this.loadPeriodo(IdPeriodo);
     //Se carga el tipo de inscripción
@@ -283,13 +282,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   setPercentage_proy(number, tab) {
     this.percentage_tab_proy[tab] = (number * 100) / 1;
     this.percentage_proy = Math.round(UtilidadesService.getSumArray(this.percentage_tab_proy));
-    this.setPercentage_total();
   }
 
   setPercentage_desc(number, tab) {
     this.percentage_tab_desc[tab] = (number * 100) / 1;
     this.percentage_desc = Math.round(UtilidadesService.getSumArray(this.percentage_tab_desc));
-    this.setPercentage_total();
   }
 
   setPercentage_docu(number, tab) {
@@ -302,14 +299,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.percentage_tab_prod[tab] = (number * 100) / 1;
     this.percentage_prod = Math.round(UtilidadesService.getSumArray(this.percentage_tab_prod));
     this.percentage_prod = (this.percentage_prod * 100) / this.percentage_prod;
-    this.setPercentage_total();
   }
 
   setPercentage_total() {
     this.percentage_total = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info)) / 4;
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4;
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_docu)) / 4;
-    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_proy)) / 4;
+    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_expe)) / 4;
 
     if (sessionStorage.EstadoInscripcion) {
       if (this.percentage_total >= 100) {
