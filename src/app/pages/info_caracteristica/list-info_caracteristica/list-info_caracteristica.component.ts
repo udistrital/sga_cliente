@@ -183,6 +183,7 @@ export class ListInfoCaracteristicaComponent implements OnInit {
     if (event) {
       this.loadData();
       this.cambiotab = !this.cambiotab;
+      console.info(this.cambiotab)
     }
   }
 

@@ -3,6 +3,7 @@ import { Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
+import { IdiomaService } from '../../../@core/data/idioma.service';
 import { UserService } from '../../../@core/data/users.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -116,16 +117,19 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private inscripcionService: InscripcionService,
+    private idiomaService: IdiomaService,
     private userService: UserService,
     private parametrosService: ParametrosService,
     private programaService: ProyectoAcademicoService,
     private sgaMidService: SgaMidService,
   ) {
     sessionStorage.setItem('TerceroId', this.userService.getPersonaId().toString());
+    this.info_persona_id = this.userService.getPersonaId();
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.total = true;
+    this.loading = true;
     this.loadData();
   }
 
@@ -265,6 +269,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.percentage_tab_info[tab] = (number * 100) / 2;
     this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
     this.setPercentage_total();
+    
   }
 
   setPercentage_acad(number, tab) {
@@ -324,6 +329,220 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     // }
   }
 
+  loadPercentageInfoCaracteristica(){
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.sgaMidService.get('persona/consultar_complementarios/' + this.info_persona_id)
+        .subscribe(res => {
+          if (res !== null && JSON.stringify(res[0]) !== '{}') {
+            this.percentage_info = this.percentage_info + 50;
+            this.percentage_tab_info[1] = 50;
+          } else {
+            this.percentage_info = this.percentage_info + 0;
+            this.percentage_tab_info[1] = 0;
+          } 
+          this.loading = false;
+          resolve(this.percentage_info);
+        }, 
+        error => {
+          this.loading = false;
+          reject(error);
+        });
+    });
+  }
+
+  loadPercentageInfoContacto(){
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.sgaMidService.get('inscripciones/info_complementaria_tercero/'+this.info_persona_id)
+        .subscribe(res => {
+          if (res !== null && JSON.stringify(res[0]) !== '{}') {
+            this.percentage_info = this.percentage_info + 50;
+            this.percentage_tab_info[2] = 50;
+          } else {
+            this.percentage_info = this.percentage_info + 0;
+            this.percentage_tab_info[2] = 0;
+          }
+          this.loading = false;
+          resolve(this.percentage_info);
+        },
+        error => {
+          this.loading = false;
+          reject(error);
+        });
+    });
+  }
+
+  loadPercentageFormacionAcademica(){
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.sgaMidService.get('formacion_academica?Id=' + this.info_persona_id)
+        .subscribe(res => {
+          if (res.Response.Code === "200"){
+            this.percentage_acad = this.percentage_acad + 50;
+            this.percentage_tab_acad[1] = 50;
+          } else {
+            this.percentage_acad = this.percentage_acad + 0;
+            this.percentage_tab_acad[1] = 0;
+          }
+          this.loading = false;
+          resolve(this.percentage_acad)
+        },
+        error => {
+          this.loading = false;
+          reject(error)
+        });
+    });
+  }
+
+  loadPercentageIdiomas(){
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.idiomaService.get('conocimiento_idioma?query=TercerosId:' + this.info_persona_id +'&limit=0')
+        .subscribe(res => {
+          if (res !== null && JSON.stringify(res[0]) !== '{}') {
+            this.percentage_acad = this.percentage_acad + 50;
+            this.percentage_tab_acad[2] = 50;
+          } else {
+            this.percentage_acad = this.percentage_acad + 0;
+            this.percentage_tab_acad[2] = 0;
+          } 
+          this.loading = false;
+          resolve(this.percentage_acad);
+        },
+        error => {
+          this.loading = false;
+          reject(error);
+        });
+    });
+  }
+
+  loadPercentageExperienciaLaboral(){
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.sgaMidService.get('experiencia_laboral/by_tercero?Id=' + this.info_persona_id)
+        .subscribe((res: any) => {
+          if(res.Data.Code === "200"){
+            this.percentage_expe = 100;
+            this.percentage_tab_expe[1] = 100;
+          } else {
+            this.percentage_expe = 0;
+            this.percentage_tab_expe[1] = 0;
+          }
+          this.loading = false;
+          resolve(this.percentage_expe);
+        },
+        error => {
+          this.loading = false;
+          reject(error);
+        });
+    });
+  }
+
+  loadPercentageProduccionAcademica(){
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.sgaMidService.get('produccion_academica/pr_academica/' + this.info_persona_id)
+        .subscribe(res => {
+          if(res.Response.Code === "200"){
+            this.percentage_prod = 100;
+          } else {
+            this.percentage_prod = 0;            
+          }
+          this.loading = false;
+          resolve(this.percentage_prod);
+        },
+        error => {
+          this.loading = false;
+          reject(error);
+        });
+    });
+  }
+
+  loadPercentageDocumentos(){
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' + this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId)).subscribe(
+        (res: any[]) => {
+          if (res !== null && JSON.stringify(res[0]) !== '{}') {
+            this.percentage_docu = 100;
+            this.percentage_tab_docu[1] = 100;
+          } else {
+            this.percentage_docu = 0;
+            this.percentage_tab_docu[1] = 0;
+          } 
+          this.loading = false;
+          resolve(this.percentage_docu);
+        },
+        error => {
+          this.loading = false;
+          reject(error);
+        });
+    });
+  }
+
+  loadPercentageDescuentos(){
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' + 'PersonaId='+Number(window.localStorage.getItem('persona_id'))+'&DependenciaId='+Number(window.sessionStorage.getItem('ProgramaAcademicoId'))+'&PeriodoId='+Number(window.sessionStorage.getItem('IdPeriodo')))
+        .subscribe((res: any) => {
+          if(res.Data.Code === "200"){
+            this.percentage_desc = 100;
+          } else {
+            this.percentage_desc = 0;
+          }
+          this.loading = false;
+          resolve(this.percentage_desc)
+        },
+        error => {
+          this.loading = false;
+          reject(error);
+        });
+    });
+  }
+
+  async ngOnInit() {
+    
+    // Consulta si hay información en el tab de información personal
+    if (this.percentage_info === 0){ 
+      await this.loadPercentageInfoCaracteristica();
+      await this.loadPercentageInfoContacto();
+    }
+
+    //Consulta si hay información en formación académica
+    if(this.percentage_acad === 0){
+      await this.loadPercentageFormacionAcademica();      
+      await this.loadPercentageIdiomas();
+    }
+
+    //Consulta si hay información en experiencia laboral
+    if(this.percentage_expe === 0){
+      await this.loadPercentageExperienciaLaboral();
+    }
+
+    //Consulta si hay información en produccion academica
+    if(this.percentage_prod === 0){
+      await this.loadPercentageProduccionAcademica();
+    }
+
+    //Consulta si hay información en documentos solicitados
+    if(this.percentage_docu === 0){
+      await this.loadPercentageDocumentos();
+    }
+
+    //Consulta si hay información en descuento
+    if(this.percentage_desc === 0){
+      await this.loadPercentageDescuentos();
+    }
+
+    //Consulta si hay información en propuesta trabajo de grado
+    if(this.percentage_proy === 0){
+      //Pendiente
+    }
+    
+    this.setPercentage_total();
+  }
+
   realizarInscripcion() {
     this.loading = true;
     this.inscripcionService.get('inscripcion/' + parseInt(sessionStorage.IdInscripcion)).subscribe(
@@ -351,27 +570,27 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                   this.perfil_editar('perfil');
                 }
               },
-                (error: any) => {
-                  this.loading = false;
-                  if (error.System.Message.includes('duplicate')) {
-                    Swal({
-                      type: 'info',
-                      text: this.translate.instant('inscripcion.error_update_programa_seleccionado'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              (error: any) => {
+                this.loading = false;
+                if (error.System.Message.includes('duplicate')) {
+                  Swal({
+                    type: 'info',
+                    text: this.translate.instant('inscripcion.error_update_programa_seleccionado'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
 
-                    });
-                  } else {
-                    this.loading = false;
-                    Swal({
-                      type: 'error',
-                      title: error.status + '',
-                      text: this.translate.instant('ERROR.' + error.status),
-                      footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-                        this.translate.instant('GLOBAL.admision'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                    });
-                  }
-                });
+                  });
+                } else {
+                  this.loading = false;
+                  Swal({
+                    type: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                      this.translate.instant('GLOBAL.admision'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
+                }
+              });
           },
           error => {
             this.loading = false;
@@ -723,9 +942,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     } else if (event.tabTitle === this.translate.instant('GLOBAL.informacion_contacto')) {
       this.perfil_editar('info_contacto');
     }
-  }
-
-  ngOnInit() {
   }
 
   ngOnChanges() {

@@ -31,7 +31,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       this.info_caracteristica_id = info_caracteristica_id;
       if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
        this.info_caracteristica_id.toString() !== '') {
-        this.loadInfoCaracteristica();
+        //this.loadInfoCaracteristica();
       }
     }
 
@@ -70,6 +70,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     this.listService.findTipoDiscapacidad();
     this.listService.findFactorRh();
     this.listService.findGrupoSanguineo();
+    this.loadInfoCaracteristica();
   }
 
   construirForm() {
@@ -301,7 +302,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadInfoCaracteristica();
+    //this.loadInfoCaracteristica();
   }
 
   validarForm(event) {
