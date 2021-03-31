@@ -355,6 +355,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                       this.loadInfoFormacionAcademica();
                       this.updateFormacion.emit();
                       this.loading = false;
+                      this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab2'));
                     },
                     (error: HttpErrorResponse) => {
                       this.loading = false;
@@ -456,6 +457,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                       this.info_formacion_academica = undefined;
                       this.clean = !this.clean;
                       this.updateFormacion.emit();
+                      this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab2'));
                     } else {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
                         this.translate.instant('informacion_academica.informacion_academica_no_registrada'));

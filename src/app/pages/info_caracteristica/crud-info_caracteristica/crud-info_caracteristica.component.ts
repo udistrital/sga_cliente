@@ -237,6 +237,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               this.translate.instant('GLOBAL.confirmarActualizar'));
               this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
               this.loadInfoCaracteristica();
+              this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab'));
             },
             (error: HttpErrorResponse) => {
               this.loading = false;
@@ -284,6 +285,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.guardar'));
+                this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab'));
               }
               this.loading = false;
             },

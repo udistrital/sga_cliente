@@ -172,6 +172,7 @@ export class CrudInfoPersonaComponent implements OnInit {
               this.info_persona_id = r.Id;
               sessionStorage.setItem('IdTercero', String(this.info_persona_id));
               this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.persona_creado'));
+              this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab3'));
             } else {
               this.showToast('error', this.translate.instant('GLOBAL.error'),
               this.translate.instant('GLOBAL.error'));

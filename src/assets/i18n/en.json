@@ -949,6 +949,9 @@
         "crear_registro": "Create new registration to the Academic Project"
     },
     "inscripcion": {
+        "cambiar_tab": "Attention! Remember to fill in the contact information found in this same tab",
+        "cambiar_tab2": "Attention! Remember to fill in the information for your language level found on this same tab",
+        "cambiar_tab3": "Attention! Remember to fill in the information of your registration that is in this same tab",
         "aviso_programa": "Select the program you wish to enroll",
         "aviso_nivel": "Select the level to which you want to register",
         "info_basica": "Basic information",
