@@ -968,6 +968,9 @@
         "crear_registro": "Crear nuevo registro al proyecto académico"
     },
     "inscripcion": {
+        "cambiar_tab": "¡Atención! Recuerde llenar la información de contacto que se encuentra en esta misma pestaña",
+        "cambiar_tab2": "¡Atención! Recuerde llenar la información de su nivel de idiomas que se encuentra en esta misma pestaña",
+        "cambiar_tab3": "¡Atención! Recuerde llenar la información de su inscripción que se encuentra en esta misma pestaña",
         "error": "Ha ocurrido un error inesperado al cargar la información",
         "no_inscripcion": "No existe ninguna información de la inscripción registrada",
         "periodo": "Periodo al que se inscribe",
@@ -1075,7 +1078,9 @@
         "seguro_continuar_registrar": "¿Está seguto de registrar esta experiencia laboral?",
         "cargar_experiencia": "Ocurruió un error al cargar la información de la experiencia laboral",
         "error_cargar_empresa": "Ocurruió un error al cargar la información de la empresa",
-        "empresa_no_encontrada": "No existe información con los datos ingrsados"
+        "empresa_no_encontrada": "No existe información con los datos ingresados",
+        "no_data": "No existe información registrada de la experiencia laboral",
+        "error": "Ha ocurrido un error inesperado al cargar la información"
     },
     "documento_programa": {
         "documento_programa_no_registrado": "Documento no registrado",

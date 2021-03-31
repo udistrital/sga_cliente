@@ -114,6 +114,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.soporteDocumento = [];
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' + this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
       (response: any[]) => {
+        console.info(Object.keys(response[0]).length)
         if (Object.keys(response[0]).length > 0) {
           response.forEach(async soporte => {
             const documento: SoporteDocumentoAux = new SoporteDocumentoAux();
@@ -124,15 +125,12 @@ export class ListDocumentoProgramaComponent implements OnInit {
             await this.cargarEstadoDocumento(documento);
             documento.EstadoObservacion = this.estadoObservacion;
             documento.Observacion = this.observacion;
-
             this.soporteDocumento.push(documento);
             this.source.load(this.soporteDocumento);
+            this.getPercentage(1);
           });
-
         } else {
-          this.popUpManager.showAlert(
-            this.translate.instant('GLOBAL.info'), this.translate.instant('documento_programa.no_documentos')
-          )
+          this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('documento_programa.no_documentos'));
         }
         this.loading = false;
       },
@@ -220,10 +218,10 @@ export class ListDocumentoProgramaComponent implements OnInit {
     if (event === true) {
       this.uid = 0;
       this.loadData();
-    } else {
+    } /*else {
       // this.getPercentage(this.soporteDocumento.length / event)
       this.getPercentage(event)
-    }
+    }*/
   }
 
   getPercentage(event) {

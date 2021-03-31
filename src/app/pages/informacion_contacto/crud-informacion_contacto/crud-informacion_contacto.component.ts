@@ -66,8 +66,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     this.listService.findPais();
     this.loadLists();
     this.persona_id = this.userService.getPersonaId();
-    this.loadInformacionContacto();
-    
+    this.loadInformacionContacto(); 
   }
 
   construirForm() {

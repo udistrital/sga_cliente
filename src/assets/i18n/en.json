@@ -949,6 +949,9 @@
         "crear_registro": "Create new registration to the Academic Project"
     },
     "inscripcion": {
+        "cambiar_tab": "Attention! Remember to fill in the contact information found in this same tab",
+        "cambiar_tab2": "Attention! Remember to fill in the information for your language level found on this same tab",
+        "cambiar_tab3": "Attention! Remember to fill in the information of your registration that is in this same tab",
         "aviso_programa": "Select the program you wish to enroll",
         "aviso_nivel": "Select the level to which you want to register",
         "info_basica": "Basic information",
@@ -1041,7 +1044,9 @@
         "seguro_continuar_registrar": "Are you sure you want to register this work experience?",
         "cargar_experiencia": "An error happened loading the work experience information",
         "error_cargar_empresa": "An error happened loading the company information",
-        "empresa_no_encontrada": "There is no information with the data entered"
+        "empresa_no_encontrada": "There is no information with the data entered",
+        "no_data": "There is not registered information on work experience",
+        "error": "An unexpected error occurred while loading the information"
     },
     "documento_programa": {
         "descuento_academico_no_registrado": "Academic discount not registered",
