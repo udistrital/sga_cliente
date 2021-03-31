@@ -10,6 +10,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { ExperienciaService } from '../../../@core/data/experiencia.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { formatDate } from '@angular/common';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-list-experiencia-laboral',
@@ -49,6 +50,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
     private sgaMidService: SgaMidService,
     private experienciaService: ExperienciaService,
     private userService: UserService,
+    private popUpManager: PopUpManager,
     private organizacionService: OrganizacionService) {
     if (this.eid !== undefined && this.eid !== null && this.eid.toString() !== '') {
       this.loadData();
@@ -128,13 +130,16 @@ export class ListExperienciaLaboralComponent implements OnInit {
     this.loading = true;
     this.sgaMidService.get('experiencia_laboral/by_tercero?Id=' + this.persona_id).subscribe(
       (response: any) => {
-        const r = <any>response;
-        if (response !== null && r.Data.Code != '400') {
-
+        if (response !== null && response.Data.Code === '200') {
           this.data = <Array<any>>response.Data.Body[1];
           this.loading = false;
           this.getPercentage(1);
           this.source.load(this.data);
+        } else if(response !== null && response.Data.Code === '404'){
+          this.popUpManager.showToast('info', this.translate.instant('experiencia_laboral.no_data'));
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'),
+            this.translate.instant('experiencia_laboral.error'));
         }
         this.loading = false;
       },

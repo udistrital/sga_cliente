@@ -31,7 +31,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       this.info_caracteristica_id = info_caracteristica_id;
       if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
        this.info_caracteristica_id.toString() !== '') {
-        this.loadInfoCaracteristica();
+        //this.loadInfoCaracteristica();
       }
     }
 
@@ -70,6 +70,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     this.listService.findTipoDiscapacidad();
     this.listService.findFactorRh();
     this.listService.findGrupoSanguineo();
+    this.loadInfoCaracteristica();
   }
 
   construirForm() {
@@ -236,6 +237,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               this.translate.instant('GLOBAL.confirmarActualizar'));
               this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
               this.loadInfoCaracteristica();
+              this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab'));
             },
             (error: HttpErrorResponse) => {
               this.loading = false;
@@ -283,6 +285,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.guardar'));
+                this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab'));
               }
               this.loading = false;
             },
@@ -301,7 +304,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadInfoCaracteristica();
+    //this.loadInfoCaracteristica();
   }
 
   validarForm(event) {
