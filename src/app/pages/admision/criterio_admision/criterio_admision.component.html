@@ -53,14 +53,30 @@
                 <div style="width:800px; margin:0 auto;" id="info_tipo" *ngIf="selectTipo==true">
 
                     <ng2-smart-table [settings]="settings" [source]="dataSource" (rowSelect)="onEdit($event)"></ng2-smart-table>
+                    <br/>
                     <div class="col-4" style="width:800px; margin:0 auto;">
                         <mat-label>{{ 'admision.total' | translate }}: {{ porcentajeTotal }} %</mat-label>
                     </div>
                     <br/>
-
                     <div class="col-4" style="width:800px; margin:0 auto;">
                         <button mat-button type="button" (click)="guardar()">{{ 'GLOBAL.guardar' | translate }} </button>
                     </div>
+                    <div *ngIf="mostrarSubcriterio">
+                        <br/>
+                        <mat-label>{{ 'admision.subcriterios' | translate }}</mat-label>
+                        <ng2-smart-table [settings]="settingsSubcriterio" [source]="dataSourceSubcriterio" (rowSelect)="onEditSubcriterio($event)"></ng2-smart-table>
+                        <br/>
+                        <div class="col-4" style="width:800px; margin:0 auto;">
+                            <mat-label>{{ 'admision.total' | translate }}: {{ porcentajeSubcriterioTotal }} %</mat-label>
+                        </div>
+                        <br/>
+                        <div class="col-4" style="width:800px; margin:0 auto;">
+                            <button mat-button type="button" (click)="guardarSubcriterio()">{{ 'admision.guardarSubcriterio' | translate }} </button>
+                        </div>
+                    </div>
+                    <br/>
+
+
                 </div>
 
                 <!-- <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipoIcfes==true">
