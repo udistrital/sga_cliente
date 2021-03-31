@@ -269,7 +269,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.source_emphasys = new LocalDataSource();
     this.Aspirantes = [];
 
-    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:2,ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=Id&order=asc').subscribe(
+    this.inscripcionService.get('inscripcion?query=ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=Id&order=asc').subscribe(
       (res: any) => {
         const r = <any>res
         if (res !== '[{}]') {
