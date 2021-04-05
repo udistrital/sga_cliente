@@ -162,7 +162,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   nivel_load() {
     this.projectService.get('nivel_formacion?limit=0').subscribe(
       (response: NivelFormacion[]) => {
-        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null)
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null && nivel.Nombre == 'Posgrado')
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -170,15 +170,35 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     );
   }
 
+  // cargarPeriodo() {
+  //   return new Promise((resolve, reject) => {
+  //     this.parametrosService.get('periodo?query=Activo:true&sortby=Id&order=desc&limit=1')
+  //       .subscribe(res => {
+  //         const periodos = <any[]>res['Data'];
+  //         if (res !== null && res['Success']) {
+  //           this.periodo = <any>periodos[0];
+  //           window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
+  //           resolve(this.periodo);
+  //           periodos.forEach(element => {
+  //             this.periodos.push(element);
+  //           });
+  //         }
+  //       },
+  //         (error: HttpErrorResponse) => {
+  //           reject(error);
+  //         });
+  //   });
+  // }
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo?query=Activo:true&sortby=Id&order=desc&limit=1')
+      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
         .subscribe(res => {
-          const periodos = <any[]>res['Data'];
-          if (res !== null && res['Success']) {
-            this.periodo = <any>periodos[0];
+          const r = <any>res;
+          if (res !== null && r.Status === '200') {
+            this.periodo = <any>res['Data'][0];
             window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
             resolve(this.periodo);
+            const periodos = <any[]>res['Data'];
             periodos.forEach(element => {
               this.periodos.push(element);
             });
