@@ -1,24 +1,15 @@
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
-import { NuxeoService } from '../../../@core/utils/nuxeo.service';
-import { Inscripcion } from './../../../@core/data/models/inscripcion/inscripcion';
 import { InfoPersona } from './../../../@core/data/models/informacion/info_persona';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DocumentoService } from '../../../@core/data/documento.service';
-import { InscripcionService } from '../../../@core/data/inscripcion.service';
-import { CoreService } from '../../../@core/data/core.service';
 import { FORM_INFO_PERSONA } from './form-info_persona';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import 'style-loader!angular2-toaster/toaster.css';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { ListService } from '../../../@core/store/services/list.service';
-import { UserService } from '../../../@core/data/users.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
-import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 
 @Component({
@@ -28,7 +19,6 @@ import * as momentTimezone from 'moment-timezone';
 })
 export class CrudInfoPersonaComponent implements OnInit {
   filesUp: any;
-  config: ToasterConfig;
   info_persona_id: number;
   inscripcion_id: number;
   loading: boolean = false;
@@ -53,6 +43,9 @@ export class CrudInfoPersonaComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
+  // tslint:disable-next-line: no-output-rename
+  @Output('success') success: EventEmitter<any> = new EventEmitter();
+
   info_info_persona: any;
   formInfoPersona: any;
   regInfoPersona: any;
@@ -69,14 +62,9 @@ export class CrudInfoPersonaComponent implements OnInit {
     private popUpManager: PopUpManager,
     private sgamidService: SgaMidService,
     private autenticationService: ImplicitAutenticationService,
-    private documentoService: DocumentoService,
-    private nuxeoService: NuxeoService,
     private store: Store<IAppState>,
     private listService: ListService,
-    private inscripcionService: InscripcionService,
-    private coreService: CoreService,
-    private userService: UserService,
-    private toasterService: ToasterService) {
+  ) {
       this.formInfoPersona = FORM_INFO_PERSONA;
       this.construirForm();
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -172,10 +160,9 @@ export class CrudInfoPersonaComponent implements OnInit {
               this.info_persona_id = r.Id;
               sessionStorage.setItem('IdTercero', String(this.info_persona_id));
               this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.persona_creado'));
-              this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab3'));
+              this.success.emit();
             } else {
-              this.showToast('error', this.translate.instant('GLOBAL.error'),
-              this.translate.instant('GLOBAL.error'));
+              this.popUpManager.showErrorToast(this.translate.instant('GLOBAL.error'))
             }
             this.loading = false;
           },
@@ -256,24 +243,4 @@ export class CrudInfoPersonaComponent implements OnInit {
     );
   }
 
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
-  }
 }

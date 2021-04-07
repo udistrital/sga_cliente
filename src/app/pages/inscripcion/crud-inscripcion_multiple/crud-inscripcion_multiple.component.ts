@@ -58,6 +58,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   @Output() eventChange = new EventEmitter();
   @Output('result') result: EventEmitter<any> = new EventEmitter();
+  @Output('ocultarBarra') ocultarBarra: EventEmitter<boolean> = new EventEmitter();
+
 
   info_info_persona: InfoPersona;
   recibo_pago: ReciboPago;
@@ -779,5 +781,9 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   setPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);
+  }
+
+  ocultarBarraExterna(event: boolean) {
+    this.ocultarBarra.emit(event);
   }
 }
