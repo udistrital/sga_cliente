@@ -57,7 +57,7 @@ export class ListTipoInscripcionComponent implements OnInit {
           title: this.translate.instant('tipo_inscripcion.nivel'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
-            return value == 14 ? this.translate.instant('GLOBAL.pregrado') : this.translate.instant('GLOBAL.posgrado');
+            return value == 1 ? this.translate.instant('GLOBAL.pregrado') : this.translate.instant('GLOBAL.posgrado');
           },
         },
         Especial: {
