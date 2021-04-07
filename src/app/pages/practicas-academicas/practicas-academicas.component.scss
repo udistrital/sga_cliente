@@ -1,6 +1,4 @@
 @import '../../@theme/styles/themes';
-@import '~bootstrap/scss/mixins/breakpoints';
-@import '~@nebular/theme/styles/global/breakpoints';
 @include nb-install-component() {
     nb-card {
         padding: 1rem;
@@ -28,9 +26,9 @@
 }
 
 .dinamic-form {
-background-color: nb-theme(color-bg);
-color: nb-theme(card-fg-heading);
-padding: 1rem;
+    background-color: nb-theme(color-bg);
+    color: nb-theme(card-fg-heading);
+    padding: 1rem;
 }
 
 .mat-button {

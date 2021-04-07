@@ -1,6 +1,4 @@
 @import '../../@theme/styles/themes';
-@import '~bootstrap/scss/mixins/breakpoints';
-@import '~@nebular/theme/styles/global/breakpoints';
 @include nb-install-component() {
     ::ng-deep .mat-input-element::placeholder {
         color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
