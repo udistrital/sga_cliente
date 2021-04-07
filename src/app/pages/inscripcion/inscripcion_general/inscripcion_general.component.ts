@@ -41,6 +41,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
   @Output() changeTab: EventEmitter<any> = new EventEmitter();
+  @Output() ocultarBarra: EventEmitter<boolean> = new EventEmitter();
 
   inscripcion_id: number;
   info_persona_id: number;
@@ -610,6 +611,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   perfil_editar(event): void {
+    this.ocultarBarra.emit(true);
     switch (event) {
       case 'info_contacto':
         this.showRegreso = false;
@@ -990,5 +992,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.selectprograma = true;
         break;
     }
+  }
+
+  mostrarBarraExterna() {
+    this.ocultarBarra.emit(false);
   }
 }

@@ -1,15 +1,10 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
-import { OikosService } from '../../../@core/data/oikos.service';
-import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { UserService } from '../../../@core/data/users.service';
-import { ParametrosService } from '../../../@core/data/parametros.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
-import Swal from 'sweetalert2';
-import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -17,7 +12,7 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
   templateUrl: './preinscripcion.component.html',
   styleUrls: ['./preinscripcion.component.scss'],
 })
-export class PreinscripcionComponent implements OnInit, OnChanges {
+export class PreinscripcionComponent implements OnInit {
 
   @Input('inscripcion_id')
   set name(inscripcion_id: number) {
@@ -46,7 +41,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   inscripcion: Inscripcion;
   preinscripcion: boolean;
   step = 0;
-  cambioTab = 0;
+  isBarraOculta: boolean = false;
   nForms: number;
   SelectedTipoBool: boolean = true;
   info_inscripcion: any;
@@ -94,15 +89,11 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
   selectednivel: any;
 
   loading: boolean = false;
-  toasterService: any;
 
   constructor(
     private translate: TranslateService,
-    private inscripcionService: InscripcionService,
     private userService: UserService,
-    private parametrosService: ParametrosService,
-    private programaService: OikosService,
-    private sgaMidService: SgaMidService,
+    private popUpManager: PopUpManager,
   ) {
     //this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -115,12 +106,7 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     try {
       this.info_persona_id = this.userService.getPersonaId();
     } catch (error) {
-      Swal({
-        type: 'error',
-        title: error.status + '',
-        text: this.translate.instant('inscripcion.error_cargar_informacion'),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
+      this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.error_cargar_informacion'));
     }
   }
 
@@ -191,7 +177,13 @@ export class PreinscripcionComponent implements OnInit, OnChanges {
     this.loadData();
   }
 
-  ngOnChanges() {
-
+  cambioTab() {
+    this.info_persona = false;
+    this.preinscripcion = true;
   }
+
+  ocultarBarra(event: boolean) {
+    this.isBarraOculta = event;
+  }
+
 }

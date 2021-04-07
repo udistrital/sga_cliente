@@ -75,7 +75,7 @@
                 </div>
             </nb-card-body>
             <nb-card-body *ngIf="!showInscription">
-                <ngx-inscripcion_general (changeTab)="return()"></ngx-inscripcion_general>
+                <ngx-inscripcion_general (changeTab)="return()" (ocultarBarra)="ocultarBarraExterna($event)"></ngx-inscripcion_general>
             </nb-card-body>
         </nb-card>
 
