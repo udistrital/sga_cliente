@@ -1145,6 +1145,7 @@
         "nota": "NOTA",
         "aviso": "El puntaje para cada item a evaluar corresponde a un valor entre 0 y 100 puntos",
         "criterio": "Criterio",
+        "subCriterio": "SubCriterio",
         "porcentaje": "Porcentaje",
         "porcentajeIncompleto": "El porcentaje total debe ser 100%",
         "total": "Total",
@@ -1188,7 +1189,8 @@
         "revisar_docs": "Revisión de documentos",
         "doc_valido": "Documento válido",
         "seguro_revision": "¿Está seguro de registrar esta revisión del documento?",
-        "observacion": "Observación"
+        "observacion": "Observación",
+        "guardarSubcriterio": "Guardar subcriterio"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

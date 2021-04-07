@@ -1132,6 +1132,7 @@
         "enlistar": "Enlist applicants",
         "criterios_subcriterios": "Criteria and Subcriteria",
         "criterios": "Criteria",
+        "subCriterio": "Subcriteria",
         "subcriterios": "Subcriteria",
         "nuevo_criterio": "Create or modify Criteria",
         "error_nombre_criterio": "Please give a name to the criteria",
@@ -1153,7 +1154,8 @@
         "revisar_docs": "Review documents",
         "doc_valido": "Valid document",
         "seguro_revision": "Are you sure about registering this document review?",
-        "observacion": "Observation"
+        "observacion": "Observation",
+        "guardarSubcriterio": "Save subcriteria"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",

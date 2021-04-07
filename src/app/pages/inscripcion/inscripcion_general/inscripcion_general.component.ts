@@ -41,6 +41,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
   @Output() changeTab: EventEmitter<any> = new EventEmitter();
+  @Output() ocultarBarra: EventEmitter<boolean> = new EventEmitter();
 
   inscripcion_id: number;
   info_persona_id: number;
@@ -335,10 +336,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         .subscribe(res => {
           if (res !== null && JSON.stringify(res[0]) !== '{}') {
             this.percentage_info = this.percentage_info + 50;
-            this.percentage_tab_info[0] = 50;
+            this.percentage_tab_info[1] = 50;
           } else {
             this.percentage_info = this.percentage_info + 0;
-            this.percentage_tab_info[0] = 0;
+            this.percentage_tab_info[1] = 0;
           } 
           this.loading = false;
           resolve(this.percentage_info);
@@ -357,10 +358,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         .subscribe(res => {
           if (res !== null && JSON.stringify(res[0]) !== '{}') {
             this.percentage_info = this.percentage_info + 50;
-            this.percentage_tab_info[1] = 50;
+            this.percentage_tab_info[2] = 50;
           } else {
             this.percentage_info = this.percentage_info + 0;
-            this.percentage_tab_info[1] = 0;
+            this.percentage_tab_info[2] = 0;
           }
           this.loading = false;
           resolve(this.percentage_info);
@@ -610,6 +611,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   perfil_editar(event): void {
+    this.ocultarBarra.emit(true);
     switch (event) {
       case 'info_contacto':
         this.showRegreso = false;
@@ -990,5 +992,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.selectprograma = true;
         break;
     }
+  }
+
+  mostrarBarraExterna() {
+    this.ocultarBarra.emit(false);
   }
 }
