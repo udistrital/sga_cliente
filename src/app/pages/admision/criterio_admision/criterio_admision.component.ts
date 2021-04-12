@@ -409,8 +409,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
 
     if (!$event.isSelected) {
       this.requisitoId = $event.data.Id;
-      this.mostrarSubcriterio = true;
       if ($event.data.Subcriterios.length > 0) {
+        this.mostrarSubcriterio = true;
         this.createSubCriterios($event.data.Subcriterios);
       } else {
         this.dataSubcriterios = [];
@@ -503,16 +503,22 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
                   if (this.requisitoId == r[i].RequisitoId.Id) {
                     var requisitoPut = r[i];
                     //for recorrer subcriterios
-                    let PorcentajeEspecifico = [];
+                    // let PorcentajeEspecifico = [];
+                    var objectConcat = [{}];
                     for (let i = 0; i < this.dataSubcriterios.length; i++) {
-                      PorcentajeEspecifico.push({
-                        Subcriterio: this.dataSubcriterios[i].Criterio,
-                        Porcentaje: this.dataSubcriterios[i].Porcentaje,
-                        Abreviación: ""
-                      });
+                      // PorcentajeEspecifico.push({
+                      //   Subcriterio: this.dataSubcriterios[i].Criterio,
+                      //   Porcentaje: this.dataSubcriterios[i].Porcentaje,
+                      //   Abreviación: ""
+                      // });
+                      var object = {};
+                      object[this.dataSubcriterios[i].Criterio] = this.dataSubcriterios[i].Porcentaje;
+                      object['Abreviación'] = "";
+
+                      objectConcat[i] = object;
                     }
                     this.areas = {};
-                    this.areas.areas = PorcentajeEspecifico;
+                    this.areas.areas = objectConcat;
                     requisitoPut.PorcentajeEspecifico = JSON.stringify(this.areas);
 
                     this.requisitoPut(requisitoPut);
