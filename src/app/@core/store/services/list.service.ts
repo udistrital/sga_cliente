@@ -208,7 +208,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.Pais).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.ubicacionService.get('lugar?query=TipoLugar__Nombre:PAIS,Activo:true&limit=0') // TODO: filtrar pais
+          this.ubicacionService.get('lugar?query=TipoLugarId__Nombre:PAIS,Activo:true&limit=0') // TODO: filtrar pais
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.Pais, result);
@@ -543,7 +543,7 @@ public findTipoParametro() {
     this.store.select(REDUCER_LIST.LocalidadesBogota).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.ubicacionService.get('lugar?limit=0&query=TipoLugar__Id:3')
+          this.ubicacionService.get('lugar?limit=0&query=TipoLugarId__Id:3')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.LocalidadesBogota, result);
