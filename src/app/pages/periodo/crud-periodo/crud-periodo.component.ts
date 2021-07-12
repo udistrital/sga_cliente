@@ -13,7 +13,6 @@ import * as moment from 'moment';
   styleUrls: ['./crud-periodo.component.scss'],
 })
 export class CrudPeriodoComponent implements OnInit {
-
   periodo_id: number;
 
   @Input('periodo_id')
@@ -30,7 +29,7 @@ export class CrudPeriodoComponent implements OnInit {
   clean: boolean;
 
   constructor(
-    private translate: TranslateService, 
+    private translate: TranslateService,
     private parametrosService: ParametrosService,
     private popUpManager: PopUpManager,
   ) {
@@ -39,14 +38,18 @@ export class CrudPeriodoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-   }
+  }
 
   construirForm() {
     this.formPeriodo.titulo = this.translate.instant('GLOBAL.periodo');
     this.formPeriodo.btn = this.translate.instant('GLOBAL.guardar');
     for (let i = 0; i < this.formPeriodo.campos.length; i++) {
-      this.formPeriodo.campos[i].label = this.translate.instant('GLOBAL.' + this.formPeriodo.campos[i].label_i18n);
-      this.formPeriodo.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' + this.formPeriodo.campos[i].label_i18n);
+      this.formPeriodo.campos[i].label = this.translate.instant(
+        'GLOBAL.' + this.formPeriodo.campos[i].label_i18n,
+      );
+      this.formPeriodo.campos[i].placeholder = this.translate.instant(
+        'GLOBAL.placeholder_' + this.formPeriodo.campos[i].label_i18n,
+      );
     }
   }
 
@@ -58,7 +61,7 @@ export class CrudPeriodoComponent implements OnInit {
     for (let index = 0; index < this.formPeriodo.campos.length; index++) {
       const element = this.formPeriodo.campos[index];
       if (element.nombre === nombre) {
-        return index
+        return index;
       }
     }
     return 0;
@@ -66,69 +69,99 @@ export class CrudPeriodoComponent implements OnInit {
 
   loadPeriodo(): void {
     if (this.periodo_id !== undefined && this.periodo_id !== 0) {
-      this.parametrosService.get('periodo/' + this.periodo_id)
+      this.parametrosService
+        .get('periodo/' + this.periodo_id)
         .subscribe(res => {
           if (res !== null) {
             this.info_periodo = <Periodo>res['Data'];
-            this.info_periodo.InicioVigencia = moment(this.info_periodo.InicioVigencia).format('YYYY-MM-DD');
-            this.info_periodo.FinVigencia = moment(this.info_periodo.FinVigencia).format('YYYY-MM-DD');
+            this.info_periodo.InicioVigencia = moment(
+              this.info_periodo.InicioVigencia,
+            ).format('YYYY-MM-DD');
+            this.info_periodo.FinVigencia = moment(
+              this.info_periodo.FinVigencia,
+            ).format('YYYY-MM-DD');
           }
         });
-    } else  {
+    } else {
       this.info_periodo = undefined;
       this.clean = !this.clean;
     }
   }
 
   updatePeriodo(periodo: any): void {
-    this.popUpManager.showConfirmAlert(
-      this.translate.instant('periodo.seguro_actualizar_periodo'),
-      this.translate.instant('GLOBAL.actualizar')
-    ).then(ok => {
-      if (ok.value) {
-        const p = <Periodo>periodo
-        this.info_periodo.Year = p.Year;
-        this.info_periodo.Ciclo = ''+p.Ciclo;
-        this.info_periodo.Nombre = this.info_periodo.Year + '-' + this.info_periodo.Ciclo;
-        this.info_periodo.InicioVigencia = p.InicioVigencia;
-        this.info_periodo.FinVigencia = p.FinVigencia;
-        this.info_periodo.Descripcion = 'Periodo académico ' + this.info_periodo.Nombre;;
-        this.info_periodo.Activo = true;
-        this.info_periodo.InicioVigencia = moment(this.info_periodo.InicioVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
-        this.info_periodo.FinVigencia = moment(this.info_periodo.FinVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
-        this.parametrosService.put('periodo', this.info_periodo)
-          .subscribe(res => {
-            this.loadPeriodo();
-            this.eventChange.emit(true);
-            this.popUpManager.showSuccessAlert(this.translate.instant('periodo.periodo_actualizado'))
-          });
-      }
-    });
+    this.popUpManager
+      .showConfirmAlert(
+        this.translate.instant('periodo.seguro_actualizar_periodo'),
+        this.translate.instant('GLOBAL.actualizar'),
+      )
+      .then(ok => {
+        if (ok.value) {
+          const p = <Periodo>periodo;
+          this.info_periodo.Year = p.Year;
+          this.info_periodo.Ciclo = '' + p.Ciclo;
+          this.info_periodo.Nombre =
+            this.info_periodo.Year + '-' + this.info_periodo.Ciclo;
+          this.info_periodo.InicioVigencia = p.InicioVigencia;
+          this.info_periodo.FinVigencia = p.FinVigencia;
+          this.info_periodo.Descripcion =
+            'Periodo académico ' + this.info_periodo.Nombre;
+          this.info_periodo.Activo = true;
+          this.info_periodo.InicioVigencia =
+            moment(this.info_periodo.InicioVigencia).format(
+              'YYYY-MM-DDTHH:mm',
+            ) + ':00Z';
+          this.info_periodo.FinVigencia =
+            moment(this.info_periodo.FinVigencia).format('YYYY-MM-DDTHH:mm') +
+            ':00Z';
+          this.parametrosService
+            .put('periodo', this.info_periodo)
+            .subscribe(res => {
+              this.loadPeriodo();
+              this.eventChange.emit(true);
+              this.popUpManager.showSuccessAlert(
+                this.translate.instant('periodo.periodo_actualizado'),
+              );
+            });
+        }
+      });
   }
 
   createPeriodo(periodo: any): void {
-    this.popUpManager.showConfirmAlert(
-      this.translate.instant('periodo.seguro_continuar_registrar_periodo'),
-      this.translate.instant('GLOBAL.registrar')
-    ).then(ok => {
-      if (ok.value) {
-        this.info_periodo = <Periodo>periodo;
-        this.info_periodo.Ciclo = ''+this.info_periodo.Ciclo;
-        this.info_periodo.Nombre = this.info_periodo.Year + '-' + this.info_periodo.Ciclo;
-        this.info_periodo.Descripcion = 'Periodo académico ' + this.info_periodo.Nombre;
-        this.info_periodo.CodigoAbreviacion = 'PA';
-        this.info_periodo.Activo = true;
-        this.info_periodo.InicioVigencia = moment(this.info_periodo.InicioVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
-        this.info_periodo.FinVigencia = moment(this.info_periodo.FinVigencia).format('YYYY-MM-DDTHH:mm') + ':00Z';
-        this.info_periodo.AplicacionId = 41 // ID de SGA en Configuracion_CRUD
-        this.parametrosService.post('periodo', this.info_periodo)
-          .subscribe(res => {
-            this.info_periodo = <Periodo>res['Data'];
-            this.eventChange.emit(true);
-            this.popUpManager.showSuccessAlert(this.translate.instant('periodo.periodo_creado'));
-          });
-      }
-    });
+    this.popUpManager
+      .showConfirmAlert(
+        this.translate.instant('periodo.seguro_continuar_registrar_periodo'),
+        this.translate.instant('GLOBAL.registrar'),
+      )
+      .then(ok => {
+        if (ok.value) {
+          this.info_periodo = <Periodo>periodo;
+          this.info_periodo.Ciclo = '' + this.info_periodo.Ciclo;
+          this.info_periodo.Nombre =
+            this.info_periodo.Year + '-' + this.info_periodo.Ciclo;
+          this.info_periodo.Descripcion =
+            'Periodo académico ' + this.info_periodo.Nombre;
+          this.info_periodo.CodigoAbreviacion = 'PA';
+          this.info_periodo.Activo = true;
+          this.info_periodo.InicioVigencia =
+            moment(this.info_periodo.InicioVigencia).format(
+              'YYYY-MM-DDTHH:mm',
+            ) + ':00Z';
+          this.info_periodo.FinVigencia =
+            moment(this.info_periodo.FinVigencia).format('YYYY-MM-DDTHH:mm') +
+            ':00Z';
+          this.info_periodo.AplicacionId = 41; // ID de SGA en Configuracion_CRUD
+          this.parametrosService
+            .post('periodo', this.info_periodo)
+            .subscribe(res => {
+              this.info_periodo = <Periodo>res['Data'];
+              this.eventChange.emit(true);
+              window.location.href = '#/pages/periodo/list-periodo';
+              this.popUpManager.showSuccessAlert(
+                this.translate.instant('periodo.periodo_creado'),
+              );
+            });
+        }
+      });
   }
 
   ngOnInit() {
@@ -144,5 +177,4 @@ export class CrudPeriodoComponent implements OnInit {
       }
     }
   }
-
 }

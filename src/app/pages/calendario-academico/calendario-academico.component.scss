@@ -44,6 +44,19 @@
             border-color: nb-theme(color-primary);
         }
     }
+    img {
+      cursor: pointer;
+    }
+    ngb-rating {
+      outline: none;
+    }
+    ngb-rating i {
+      color: nb-theme(color-success);
+      @include nb-for-theme(cosmic) {
+          color: nb-theme(color-primary);
+      }
+    }
+
 }
 
 .mat-button {
@@ -64,7 +77,6 @@
 
 :host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
     display: inline-block;
-    width: 50px;
     text-align: center;
     font-size: 1.1em;
 }
@@ -76,6 +88,9 @@
 
 :host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
     color: #5dcfe3;
+    i.nb-trash:hover {
+        color: #b5261b;
+    }
 }
 
 :host ::ng-deep .nb-theme-default ng2-smart-table table tr td {

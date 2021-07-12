@@ -21,6 +21,7 @@ import Swal from 'sweetalert2';
 
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'evaluacion-documentos-inscritos',
   templateUrl: './evaluacion-documentos-inscritos.component.html',
   styleUrls: ['./evaluacion-documentos-inscritos.component.scss'],
@@ -102,10 +103,10 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     });
   }
 
-  loadLevel(){
+  loadLevel() {
     this.projectService.get('nivel_formacion?limit=2').subscribe(
       (response: any) => {
-        if (response !== null || response !== undefined){
+        if (response !== null || response !== undefined) {
           this.nivel_load = <any>response;
         }
       },
@@ -118,10 +119,10 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   loadProyectos() {
     this.dataSource.load([]);
     this.Aspirantes = [];
-    if (this.selectednivel !== NaN){
-      this.projectService.get('proyecto_academico_institucion?query=NivelFormacionId:'+Number(this.selectednivel)+'&limit=0').subscribe(
+    if (this.selectednivel !== NaN) {
+      this.projectService.get('proyecto_academico_institucion?query=NivelFormacionId:' + Number(this.selectednivel) + '&limit=0').subscribe(
         (response: any) => {
-          if (response !== null || response !== undefined){
+          if (response !== null || response !== undefined) {
             this.proyectos = <any>response;
           }
         },
@@ -132,18 +133,20 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     }
   }
 
-  loadInscritos(){
+  loadInscritos() {
     this.dataSource.load([]);
     this.Aspirantes = [];
-    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:'+this.proyectos_selected+',PeriodoId:'+this.periodo.Id+'&sortby=Id&order=asc').subscribe(
+    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
+                                this.proyectos_selected + ',PeriodoId:' + this.periodo.Id +
+                                '&sortby=Id&order=asc').subscribe(
       (response: any) => {
         if (response !== '[{}]') {
           const data = <Array<any>>response;
           data.forEach(element => {
             if (element.PersonaId != undefined) {
-              this.tercerosService.get('datos_identificacion?query=TerceroId:'+element.PersonaId).subscribe(
+              this.tercerosService.get('datos_identificacion?query=TerceroId:' + element.PersonaId).subscribe(
                 (res: any) => {
-                  var aspiranteAux = {
+                  const aspiranteAux = {
                     Credencial: element.Id,
                     Identificacion: res[0].Numero,
                     Nombre: res[0].TerceroId.NombreCompleto,
@@ -155,7 +158,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                 error => {
                   this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
 
-                }
+                },
               );
             }
           });
@@ -165,23 +168,23 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-      }
+      },
     );
   }
 
-  activateTab(){
+  activateTab() {
     this.showProfile = true;
   }
 
-  loadPerfil(event){
+  loadPerfil(event) {
     this.tercerosService.get('datos_identificacion?query=numero:' + event.data.Identificacion).subscribe(
       (response: any) => {
-        this.projectService.get('proyecto_academico_institucion/'+this.proyectos_selected).subscribe(
+        this.projectService.get('proyecto_academico_institucion/' + this.proyectos_selected).subscribe(
           (res: any) => {
             this.info_persona_id = response[0].TerceroId.Id;
-            this.inscripcion_id = event.data["Credencial"];
+            this.inscripcion_id = event.data['Credencial'];
             sessionStorage.setItem('TerceroId', response[0].TerceroId.Id);
-            sessionStorage.setItem('IdInscripcion', event.data["Credencial"]);
+            sessionStorage.setItem('IdInscripcion', event.data['Credencial']);
             sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
             sessionStorage.setItem('ProgramaAcademico', res.Nombre);
             sessionStorage.setItem('IdPeriodo', this.periodo.Id);
@@ -189,16 +192,16 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-          }
+          },
         );
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-      }
+      },
     );
   }
 
-  createTable(){
+  createTable() {
     this.settings = {
       columns: {
         Credencial: {
@@ -233,11 +236,14 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
         custom: [
           {
             name: 'view',
-            title: '<i class="fa fa-eye"></i>'
-          }
-        ]
-      }
-    }
+            title:
+              '<i class="nb-search" title="' +
+              this.translate.instant('admision.tooltip_ver_registro') +
+              '"></i>',
+          },
+        ],
+      },
+    };
   }
 
   revisarDocumento(doc: any) {
@@ -258,7 +264,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                   // llamar funcion que envia correo con la observacion
                   // enviarCorreo(data.observacion);
                   const correo = JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).email;
-                  if(correo != undefined){
+                  if (correo != undefined) {
                     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                     this.invitacionTemplate.Fecha = new Date().toLocaleDateString('es-CO', options);
                     this.invitacionTemplate.ContenidoProduccion = this.makeHtmlTemplate(data);
@@ -275,12 +281,12 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
               },
               error => {
                 this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
-              }
+              },
             )
           },
           error => {
             this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
-          }
+          },
         )
       }
     })

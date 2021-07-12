@@ -748,7 +748,13 @@
         "seguro_actualizar_tipo_periodo": "¿Esta seguro de actualizar este tipo de período?",
         "tipo_periodo_actualizado": "Tipo período actualizado",
         "seguro_eliminar_tipo_periodo": "¿Esta seguro de eliminar este tipo de período?",
-        "tipo_periodo_eliminado": "Tipo período eliminado"
+        "tipo_periodo_eliminado": "Tipo período eliminado",
+        "tooltip_editar": "Editar tipo de período",
+        "tooltip_eliminar": "Eliminar tipo de período",
+        "tooltip_crear": "Crear tipo de período",
+        "tooltip_ver_registro": "Ver",
+        "tooltip_cancelar": "Cancelar",
+        "tooltip_guargar": "Guardar"
     },
     "periodo": {
         "seguro_actualizar_periodo": "¿Esta seguro de actualizar este período?",
@@ -773,7 +779,14 @@
         "seleccion_ano": "--Seleccionar año--",
         "seleccion_periodo": "--Seleccionar período--",
         "buton_habilitar": "Habilitar",
-        "buton_deshabilitar": "Deshabilitar"
+        "buton_deshabilitar": "Deshabilitar",
+        "tooltip_clonar": "Clonar periodo",
+        "tooltip_detalle": "Ver periodo",
+        "tooltip_editar": "Editar periodo",
+        "tooltip_eliminar": "Eliminar periodo",
+        "tooltip_crear":"Crear periodo",
+        "tooltip_cancelar": "Cancelar",
+        "tooltip_guargar": "Guardar"
     },
     "oferta": {
         "seguro_actualizar_periodo": "¿Esta seguro de actualizar este oferta académica?",
@@ -1190,7 +1203,13 @@
         "doc_valido": "Documento válido",
         "seguro_revision": "¿Está seguro de registrar esta revisión del documento?",
         "observacion": "Observación",
-        "guardarSubcriterio": "Guardar subcriterio"
+        "guardarSubcriterio": "Guardar subcriterio",
+        "tooltip_editar": "Editar criterio",
+        "tooltip_eliminar": "Eliminar criterio",
+        "tooltip_crear": "Crear criterio",
+        "tooltip_ver_registro": "Ver",
+        "tooltip_cancelar": "Cancelar",
+        "tooltip_guargar": "Guardar"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",
@@ -1211,7 +1230,7 @@
         "cupos_proyecto": "Cantidad de cupos asignados"
     },
     "calendario": {
-        "seguro_continuar_inhabilitar_calendario": "¿Esta seguro de inhabilitar este Calendario?",
+        "seguro_continuar_inhabilitar_calendario": "¿Esta seguro de inhabilitar este calendario?",
         "calendario_inhabilitado": "Calendario inhabilitado",
         "calendario_no_inhabilitado": "Calendario no inhabilitado",
         "clonar_calendario_nombre": "Seleccione el periodo académico y el nivel del cual quiere copiar el calendario académico:",
@@ -1224,7 +1243,7 @@
         "periodo": "Periodo Académico",
         "dependencia": "Tipo de dependencia",
         "estado": "Estado",
-        "definicion": "Definición del Calendario Académico",
+        "definicion": "Definición del calendario Académico",
         "para": "Calendario Académico para:",
         "agregar_periodo": "Agregar periodo académico",
         "resolucion": "Resolución de creación",
@@ -1302,12 +1321,22 @@
         "publico_repetido": "El tipo de público elegido ya habia sido seleccionado.",
         "no_publico": "Debe seleccionar al menos un tipo de público.",
         "tooltip_asignar_proyecto": "Asignar a Proyectos",
-        "tooltip_clonar": "Clonar Calendario",
-        "tooltip_detalle": "Ver Calendario",
-        "tooltip_editar": "Editar Calendario",
-        "tooltip_inactivar": "Inactivar Calendario",
-        "tooltip_crear": "Crear Calendario",
-        "sin_calendarios": "No existen calendarios."
+        "tooltip_clonar": "Clonar calendario",
+        "tooltip_clonar_actividad": "Clonar actividad",
+        "tooltip_detalle": "Ver calendario",
+        "tooltip_editar": "Editar calendario",
+        "tooltip_editar_actividad": "Editar actividad",
+        "tooltip_editar_proceso": "Editar proceso",
+        "tooltip_inactivar": "Inactivar calendario",
+        "tooltip_eliminar": "Eliminar",
+        "tooltip_eliminar_actividad": "Eliminar actividad",
+        "tooltip_eliminar_proceso": "Eliminar proceso",
+        "tooltip_crear": "Crear calendario",
+        "tooltip_crear_actividad": "Crear actividad",
+        "tooltip_crear_proceso": "Crear proceso",
+        "sin_calendarios": "No existen calendarios.",
+        "subir_resolucion": "Subir resolución",
+        "descargar_resolucion": "Descargar resolución"
     },
     "derechos_pecuniarios": {
         "titulo": "Derechos Pecuniarios",
@@ -1340,7 +1369,13 @@
         "no_salario": "No hay salario registrado para esta vigencia",
         "inactivo": "El concepto seleccionado se encuentra ahora inactivo.",
         "actualizado": "El concepto ha sido correctamente actualizado",
-        "confirmar_guardar": "¿Está seguro que desea guardar estos valores de derechos pecuniarios?"
+        "confirmar_guardar": "¿Está seguro que desea guardar estos valores de derechos pecuniarios?",
+        "tooltip_eliminar": "Eliminar derecho pecunario",
+        "tooltip_crear": "Crear derecho pecunario",
+        "tooltip_editar": "Editar derecho pecunario",
+        "tooltip_cancelar": "Cancelar",
+        "tooltip_guargar": "Guardar"
+
     },
     "tipo_inscripcion": {
         "titulo": "Tipos de Inscripción",
@@ -1356,7 +1391,12 @@
         "seguro_actualizar_tipo_inscripcion": "¿Esta seguro de actualizar este tipo de inscripción?",
         "tipo_inscripcion_actualizado": "Tipo inscripción actualizado",
         "seguro_continuar_registrar_tipo_inscripcion": "¿Esta seguro de registrar este tipo de inscripción?",
-        "tipo_inscripcion_creado": "Tipo inscripción creado"
+        "tipo_inscripcion_creado": "Tipo de inscripción creado",
+        "tooltip_eliminar": "Eliminar tipo de inscripción",
+        "tooltip_crear": "Crear tipo de inscripción",
+        "tooltip_editar": "Editar tipo de inscripción",
+        "tooltip_cancelar": "Cancelar",
+        "tooltip_guargar": "Guardar"
     },
     "formacion_academica": {
         "no_data": "No existen datos registrados de la formación académica"
@@ -1402,7 +1442,8 @@
         "apellido": "Apellido",
         "nombre_nuevo": "Nuevo nombre",
         "apellido_nuevo": "Nuevo Apellido",
-        "soporte_nombre": "Soporte del nuevo nombre"
+        "soporte_nombre": "Soporte del nuevo nombre",
+        "tooltip_ver_registro": "Ver"
     },
     "practicas_academicas": {
         "titulo": "Solicitud de práctica Académica",
@@ -1430,7 +1471,8 @@
         "agregar_docente": "Agregar docente",
         "solicitante": "Solicitante",
         "no_data": "No hay prácticas académicas registradas",
-        "estado_docente": "Estatus del autor"
+        "estado_docente": "Estatus del autor",
+        "tooltip_ver_registro": "Ver"
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Preinscripción de Espacios académicos",

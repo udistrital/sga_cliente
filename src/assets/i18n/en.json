@@ -87,7 +87,7 @@
             "crud_calendarioevento": "Crud calendar event"
         },
         "calendarioacademico": {
-            "calendarioacademico": "Academic Calendar",
+            "calendarioacademico": "Academic calendar",
             "list_calendarioacademico": "List of academic calendars",
             "buscar_calendario_proyecto": "Search calendar by project"
         },
@@ -730,7 +730,13 @@
         "seguro_actualizar_tipo_periodo": "Are you sure you update this type of period?",
         "tipo_periodo_actualizado": "Updated period type",
         "seguro_eliminar_tipo_periodo": "Are you sure you want to eliminate this type of period?",
-        "tipo_periodo_eliminado": "Type period removed"
+        "tipo_periodo_eliminado": "Type period removed",
+        "tooltip_editar": "Edit type of period",
+        "tooltip_eliminar": "Delete type of period",
+        "tooltip_crear": "Create type of period",
+        "tooltip_ver_registro": "View",
+        "tooltip_cancelar": "Cancel",
+        "tooltip_guargar": "Save"
     },
     "periodo": {
         "seguro_actualizar_periodo": "Are you sure you update this period?",
@@ -755,7 +761,14 @@
         "seleccion_ano": "--Select Year--",
         "seleccion_periodo": "--Select Period--",
         "buton_habilitar": "Enable",
-        "buton_deshabilitar": "To disable"
+        "buton_deshabilitar": "To disable",
+        "tooltip_clonar": "Clone period",
+        "tooltip_detalle": "Open period",
+        "tooltip_editar": "Edit period",
+        "tooltip_eliminar": "Delete period",
+        "tooltip_crear":"Create period",
+        "tooltip_cancelar": "Cancel",
+        "tooltip_guargar": "Save"
     },
     "oferta": {
         "seguro_actualizar_periodo": "Are you sure you update this Academic Offer?",
@@ -1155,7 +1168,13 @@
         "doc_valido": "Valid document",
         "seguro_revision": "Are you sure about registering this document review?",
         "observacion": "Observation",
-        "guardarSubcriterio": "Save subcriteria"
+        "guardarSubcriterio": "Save subcriteria",
+        "tooltip_editar": "Edit criteria",
+        "tooltip_eliminar": "Delete criteria",
+        "tooltip_crear": "Create new criteria",
+        "tooltip_ver_registro": "View",
+        "tooltip_cancelar": "Cancel",
+        "tooltip_guargar": "Save"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",
@@ -1176,21 +1195,21 @@
         "cupos_proyecto": "Number of assigned places"
     },
     "calendario": {
-        "seguro_continuar_inhabilitar_calendario": "¿Are you sure to disable this Calendar?",
+        "seguro_continuar_inhabilitar_calendario": "¿Are you sure to disable this calendar?",
         "calendario_inhabilitado": "Calendar disabled",
         "calendario_no_inhabilitado": "Calendar not disabled",
         "clonar_calendario_nombre": "Select the academic period and the level from which you want to copy the academic calendar:",
         "clonar_calendario": "Clone calendar",
         "clonar_calendario_fechas": "Remember to update the dates of the activities",
-        "calendario_resolucion": "Academic Calendar defined by resolution",
-        "calendario_academico": "Academic Calendar",
-        "calendarios_academicos": "Academic Calendars",
+        "calendario_resolucion": "Academic calendar defined by resolution",
+        "calendario_academico": "Academic calendar",
+        "calendarios_academicos": "Academic calendars",
         "nombre": "Name",
         "periodo": "Academic Period",
         "dependencia": "Type of Dependency",
         "estado": "Status",
-        "definicion": "Defining Academic Calendar",
-        "para": "Academic Calendar for:",
+        "definicion": "Defining Academic calendar",
+        "para": "Academic calendar for:",
         "agregar_periodo": "Add Academic Period",
         "resolucion": "Resolution",
         "numero_resolucion": "Resolution N°",
@@ -1267,12 +1286,22 @@
         "publico_repetido": "The chosen public type is already selected.",
         "no_publico": "You must select at least one public type.",
         "tooltip_asignar_proyecto": "Assign to Projects",
-        "tooltip_clonar": "Clone Calendar",
-        "tooltip_detalle": "Open Calendar",
-        "tooltip_editar": "Edit Calendar",
-        "tooltip_inactivar": "Inactivate Calendar",
-        "tooltip_crear": "create Calendar",
-        "sin_calendarios": "There are no calendars."
+        "tooltip_clonar": "Clone calendar",
+        "tooltip_clonar_actividad": "Clone activity",
+        "tooltip_detalle": "Open calendar",
+        "tooltip_editar": "Edit calendar",
+        "tooltip_editar_actividad": "Edit activity",
+        "tooltip_editar_proceso": "Edit process",
+        "tooltip_inactivar": "Inactivate calendar",
+        "tooltip_eliminar": "Delete",
+        "tooltip_eliminar_actividad": "Delete activity",
+        "tooltip_eliminar_proceso": "Delete process",
+        "tooltip_crear": "Create calendar",
+        "tooltip_crear_actividad": "Create activity",
+        "tooltip_crear_proceso": "Create process",
+        "sin_calendarios": "There are no calendars.",
+        "subir_resolucion": "Upload resolution",
+        "descargar_resolucion": "Download resolution"
     },
     "derechos_pecuniarios": {
         "titulo": "Financial entitlements",
@@ -1302,7 +1331,12 @@
         "concepto_exito": "The new concept has been successfully registered.",
         "no_salario": "There's no registered salary for this validity",
         "inactivo": "The chosen concept is now inactive.",
-        "actualizado": "The concept has been updated"
+        "actualizado": "The concept has been updated",
+        "tooltip_eliminar": "Delete concept",
+        "tooltip_crear": "Create concept",
+        "tooltip_editar": "Edit concept",
+        "tooltip_cancelar": "Cancel",
+        "tooltip_guargar": "Save"
     },
     "tipo_inscripcion": {
         "titulo": "Inscriptions Type",
@@ -1318,7 +1352,12 @@
         "seguro_actualizar_tipo_inscripcion": "Are you sure to update this registration type?",
         "tipo_inscripcion_actualizado": "Updated registration type",
         "seguro_continuar_registrar_tipo_inscripcion": "Are you sure you register this registration type?",
-        "tipo_inscripcion_creado": "Type register created"
+        "tipo_inscripcion_creado": "Type register created",
+        "tooltip_eliminar": "Delete registration type",
+        "tooltip_crear": "Create new registration type",
+        "tooltip_editar": "Edit registration type",
+        "tooltip_cancelar": "Cancel",
+        "tooltip_guargar": "Save"
     },
     "solicitudes": {
         "error": "An unexpected error occurred and the request could not be fulfilled",
@@ -1354,7 +1393,8 @@
         "nombre_": "First name",
         "apellido": "last name",
         "nombre_nuevo": "New name",
-        "soporte_nombre": "Support document for the new name"
+        "soporte_nombre": "Support document for the new name",
+        "tooltip_ver_registro": "View"
     },
     "practicas_academicas": {
         "titulo": "Academic Practice Request",
@@ -1382,7 +1422,8 @@
         "agregar_docente": "Add teacher",
         "solicitante": "Petitioner",
         "no_data": "There are no registered academic practices",
-        "estado_docente": "Author status"
+        "estado_docente": "Author status",
+        "tooltip_ver_registro": "View"
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Academic spaces Pre-registration",

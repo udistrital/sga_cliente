@@ -10,7 +10,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 @Component({
   selector: 'ngx-administrador-criterios',
   templateUrl: './administrador-criterios.component.html',
-  styleUrls: ['./administrador-criterios.component.scss']
+  styleUrls: ['./administrador-criterios.component.scss'],
 })
 export class AdministradorCriteriosComponent implements OnInit {
 
@@ -50,14 +50,14 @@ export class AdministradorCriteriosComponent implements OnInit {
             error => {
               criterio.Subcriterios = [];
               this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-            }
+            },
           );
         });
         this.criterioSource.load(this.criterios);
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-      }
+      },
     );
     this.dialogConfig = new MatDialogConfig();
     this.dialogConfig.width = '800px';
@@ -82,8 +82,11 @@ export class AdministradorCriteriosComponent implements OnInit {
           title: this.translate.instant('admision.asistencia'),
           width: '20%',
           editable: false,
-          valuePrepareFunction: (asist: boolean) => asist ? this.translate.instant('admision.asistencia') : this.translate.instant('GLOBAL.NA'),
-        }
+          valuePrepareFunction: (asist: boolean) =>
+            asist
+              ? this.translate.instant('admision.asistencia')
+              : this.translate.instant('GLOBAL.NA'),
+        },
       },
       mode: 'external',
       actions: {
@@ -91,16 +94,25 @@ export class AdministradorCriteriosComponent implements OnInit {
         columnTitle: this.translate.instant('GLOBAL.acciones'),
       },
       add: {
-        addButtonContent: '<i class="nb-plus"></i>',
+        addButtonContent:
+          '<i class="nb-plus" title="' +
+          this.translate.instant('admision.tooltip_crear') +
+          '"></i>',
       },
       edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
+        editButtonContent:
+          '<i class="nb-edit" title="' +
+          this.translate.instant('admision.tooltip_editar') +
+          '"></i>',
       },
       delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
+        deleteButtonContent:
+          '<i class="nb-trash" title="' +
+          this.translate.instant('admision.tooltip_eliminar') +
+          '"></i>',
       },
       noDataMessage: this.translate.instant('admision.no_criterios'),
-    }
+    };
 
     this.subcriterioSettings = {
       columns: {
@@ -118,7 +130,10 @@ export class AdministradorCriteriosComponent implements OnInit {
           title: this.translate.instant('GLOBAL.estado'),
           width: '30%',
           editable: false,
-          valuePrepareFunction: (activo: boolean) => activo ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo'),
+          valuePrepareFunction: (activo: boolean) =>
+            activo
+              ? this.translate.instant('GLOBAL.activo')
+              : this.translate.instant('GLOBAL.inactivo'),
         },
       },
       mode: 'external',
@@ -127,16 +142,42 @@ export class AdministradorCriteriosComponent implements OnInit {
         columnTitle: this.translate.instant('GLOBAL.acciones'),
       },
       add: {
-        addButtonContent: '<i class="nb-plus"></i>',
+        addButtonContent:
+          '<i class="nb-plus" title="' +
+          this.translate.instant('admision.tooltip_crear') +
+          '"></i>',
+        createButtonContent:
+          '<i class="nb-checkmark" title="' +
+          this.translate.instant('admision.tooltip_guardar') +
+          '"></i>',
+        cancelButtonContent:
+          '<i class="nb-close" title="' +
+          this.translate.instant('admision.tooltip_cancelar') +
+          '"></i>',
       },
       edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
+        editButtonContent:
+          '<i class="nb-edit" title="' +
+          this.translate.instant('admision.tooltip_editar') +
+          '"></i>',
+        saveButtonContent:
+          '<i class="nb-checkmark" title="' +
+          this.translate.instant('admision.tooltip_guargar') +
+          '"></i>',
+        cancelButtonContent:
+          '<i class="nb-close" title="' +
+          this.translate.instant('admision.tooltip_cancelar') +
+          '"></i>',
       },
       delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
+        deleteButtonContent:
+          '<i class="nb-trash" title="' +
+          this.translate.instant('admision.tooltip_eliminar') +
+          '"></i>',
+        confirmDelete: true,
       },
       noDataMessage: this.translate.instant('admision.no_criterios'),
-    }
+    };
   }
 
   agregarCriterio() {
@@ -154,7 +195,7 @@ export class AdministradorCriteriosComponent implements OnInit {
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('admision.error_registro_criterio'));
-          }
+          },
         );
       }
     });
@@ -173,7 +214,7 @@ export class AdministradorCriteriosComponent implements OnInit {
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('admision.error_modificar_criterio'));
-          }
+          },
         );
       }
     });
@@ -192,10 +233,10 @@ export class AdministradorCriteriosComponent implements OnInit {
             },
             error => {
               this.popUpManager.showErrorToast(this.translate.instant('admision.error_inactivar_criterio'));
-            }
+            },
           );
         }
-      }
+      },
     );
   }
 
@@ -214,7 +255,7 @@ export class AdministradorCriteriosComponent implements OnInit {
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('admision.error_registro_criterio'));
-          }
+          },
         );
       }
     });
@@ -232,7 +273,7 @@ export class AdministradorCriteriosComponent implements OnInit {
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('admision.error_modificar_criterio'));
-          }
+          },
         );
       }
     });

@@ -35,42 +35,48 @@ export class ListTipoInscripcionComponent implements OnInit {
         Id: {
           title: this.translate.instant('GLOBAL.id'),
           // type: 'number;',
-          valuePrepareFunction: (value) => {
+          valuePrepareFunction: value => {
             return value;
           },
         },
         Nombre: {
           title: this.translate.instant('GLOBAL.nombre'),
           // type: 'string;',
-          valuePrepareFunction: (value) => {
+          valuePrepareFunction: value => {
             return value;
           },
         },
         Descripcion: {
           title: this.translate.instant('GLOBAL.descripcion'),
           // type: 'string;',
-          valuePrepareFunction: (value) => {
+          valuePrepareFunction: value => {
             return value;
           },
         },
         NivelId: {
           title: this.translate.instant('tipo_inscripcion.nivel'),
           // type: 'string;',
-          valuePrepareFunction: (value) => {
-            return value == 1 ? this.translate.instant('GLOBAL.pregrado') : this.translate.instant('GLOBAL.posgrado');
+          valuePrepareFunction: value => {
+            return value == 1
+              ? this.translate.instant('GLOBAL.pregrado')
+              : this.translate.instant('GLOBAL.posgrado');
           },
         },
         Especial: {
           title: this.translate.instant('tipo_inscripcion.cupo_especial'),
           // type: 'boolean;',
-          valuePrepareFunction: (value) => {
-            return value ? this.translate.instant('GLOBAL.si') : this.translate.instant('GLOBAL.no');
+          valuePrepareFunction: value => {
+            return value
+              ? this.translate.instant('GLOBAL.si')
+              : this.translate.instant('GLOBAL.no');
           },
         },
         Activo: {
           title: this.translate.instant('tipo_inscripcion.estado'),
-          valuePrepareFunction: (value) => {
-            return value ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo');
+          valuePrepareFunction: value => {
+            return value
+              ? this.translate.instant('GLOBAL.activo')
+              : this.translate.instant('GLOBAL.inactivo');
           },
         },
       },
@@ -80,17 +86,38 @@ export class ListTipoInscripcionComponent implements OnInit {
         columnTitle: this.translate.instant('GLOBAL.acciones'),
       },
       add: {
-        addButtonContent: '<i class="nb-plus"></i>',
-        createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
+        addButtonContent:
+          '<i class="nb-plus" title="' +
+          this.translate.instant('tipo_inscripcion.tooltip_crear') +
+          '"></i>',
+        createButtonContent:
+          '<i class="nb-checkmark" title="' +
+          this.translate.instant('tipo_inscripcion.tooltip_guardar') +
+          '"></i>',
+        cancelButtonContent:
+          '<i class="nb-close" title="' +
+          this.translate.instant('tipo_inscripcion.tooltip_cancelar') +
+          '"></i>',
       },
       edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
-        saveButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
+        editButtonContent:
+          '<i class="nb-edit" title="' +
+          this.translate.instant('tipo_inscripcion.tooltip_editar') +
+          '"></i>',
+        saveButtonContent:
+          '<i class="nb-checkmark" title="' +
+          this.translate.instant('tipo_inscripcion.tooltip_guardar') +
+          '"></i>',
+        cancelButtonContent:
+          '<i class="nb-close" title="' +
+          this.translate.instant('tipo_inscripcion.tooltip_cancelar') +
+          '"></i>',
       },
       delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
+        deleteButtonContent:
+          '<i class="nb-trash" title="' +
+          this.translate.instant('tipo_inscripcion.tooltip_eliminar') +
+          '"></i>',
         confirmDelete: true,
       },
       noDataMessage: this.translate.instant('tipo_inscripcion.sin_procesos'),
@@ -126,37 +153,58 @@ export class ListTipoInscripcionComponent implements OnInit {
   }
 
   onDelete(event): void {
-    this.popUpManager.showConfirmAlert(
-      this.translate.instant('tipo_inscripcion.seguro_deshabilitar_tipo_inscripcion'),
-      this.translate.instant('tipo_inscripcion.inactivar')
-    ).then((willDelete) => {
+    this.popUpManager
+      .showConfirmAlert(
+        this.translate.instant(
+          'tipo_inscripcion.seguro_deshabilitar_tipo_inscripcion',
+        ),
+        this.translate.instant('tipo_inscripcion.inactivar'),
+      )
+      .then(willDelete => {
         if (willDelete.value) {
-          this.inscripcionService.put('tipo_inscripcion/' + event.data.Id, JSON.stringify({
-            "Activo": false,
-            "CodigoAbreviacion": event.data.CodigoAbreviacion,
-            "Descripcion": event.data.Descripcion,
-            "Especial": event.data.Especial,
-            "FechaCreacion": event.data.FechaCreacion,
-            "FechaModificacion": event.data.FechaModificacion,
-            "Id": event.data.Id,
-            "NivelId": event.data.NivelId,
-            "Nombre": event.data.Nombre,
-            "NumeroOrden": event.data.NumeroOrden
-          })).subscribe(
-            (response: any) => {
-              if (JSON.stringify(response) == null) {
-                this.popUpManager.showErrorAlert(this.translate.instant('tipo_inscripcion.tipo_inscripcion_deshabilitado_error'));
-              } else {
-                this.popUpManager.showSuccessAlert(this.translate.instant('tipo_inscripcion.tipo_inscripcion_deshabilitado'));
-                // this.ngOnInit();
-                this.loadData();
-                this.cargarCampos();
-              }
-            },
-            error => {
-              this.popUpManager.showErrorToast(this.translate.instant('tipo_inscripcion.tipo_inscripcion_deshabilitado_error'));
-            },
-          );
+          this.inscripcionService
+            .put(
+              'tipo_inscripcion/' + event.data.Id,
+              JSON.stringify({
+                Activo: false,
+                CodigoAbreviacion: event.data.CodigoAbreviacion,
+                Descripcion: event.data.Descripcion,
+                Especial: event.data.Especial,
+                FechaCreacion: event.data.FechaCreacion,
+                FechaModificacion: event.data.FechaModificacion,
+                Id: event.data.Id,
+                NivelId: event.data.NivelId,
+                Nombre: event.data.Nombre,
+                NumeroOrden: event.data.NumeroOrden,
+              }),
+            )
+            .subscribe(
+              (response: any) => {
+                if (JSON.stringify(response) == null) {
+                  this.popUpManager.showErrorAlert(
+                    this.translate.instant(
+                      'tipo_inscripcion.tipo_inscripcion_deshabilitado_error',
+                    ),
+                  );
+                } else {
+                  this.popUpManager.showSuccessAlert(
+                    this.translate.instant(
+                      'tipo_inscripcion.tipo_inscripcion_deshabilitado',
+                    ),
+                  );
+                  // this.ngOnInit();
+                  this.loadData();
+                  this.cargarCampos();
+                }
+              },
+              error => {
+                this.popUpManager.showErrorToast(
+                  this.translate.instant(
+                    'tipo_inscripcion.tipo_inscripcion_deshabilitado_error',
+                  ),
+                );
+              },
+            );
         }
       });
   }
@@ -180,9 +228,7 @@ export class ListTipoInscripcionComponent implements OnInit {
     }
   }
 
-
   itemselec(event): void {
     // console.log("afssaf");
   }
-
 }
