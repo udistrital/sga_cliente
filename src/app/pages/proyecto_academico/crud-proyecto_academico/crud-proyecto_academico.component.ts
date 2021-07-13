@@ -39,6 +39,7 @@ import * as momentTimezone from 'moment-timezone';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { type } from 'os';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -155,7 +156,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         format: 'YYYY-MM-DD HH:mm',
         showTwentyFourHours: false,
         showSeconds: false,
-        returnedValueType: 'String',
+        returnedValueicon: 'String',
       }
       this.basicform = formBuilder.group({
         codigo_snies: ['', Validators.required],
@@ -210,7 +211,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       columns: {
         Nombre: {
           title: this.translate.instant('GLOBAL.nombre'),
-          // type: 'string;',
+          // icon: 'string;',
           valuePrepareFunction: (value) => {
             return value;
           },
@@ -228,8 +229,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       const matSelect: MatSelect = event.source;
       matSelect.writeValue(null);
     } else {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon: 'error',
         title: 'ERROR',
         text: this.translate.instant('enfasis.error_enfasis_ya_existe'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -443,8 +444,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon: 'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -460,8 +461,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon: 'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -477,8 +478,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon: 'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -494,8 +495,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon: 'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -511,8 +512,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon: 'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -528,8 +529,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon: 'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -545,8 +546,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon: 'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -706,7 +707,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         dangerMode: true,
         showCancelButton: true,
       };
-      Swal(opt)
+      Swal.fire(opt)
       .then(async (willCreate) => {
         if (willCreate.value) {
           // Subir archivos
@@ -719,8 +720,8 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           this.sgamidService.post('proyecto_academico', this.proyecto_academicoPost)
           .subscribe((res: any) => {
             if (res.Type === 'error') {
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon: 'error',
                 title: res.Code,
                 text: this.translate.instant('ERROR.' + res.Code),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -734,7 +735,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
                 buttons: true,
                 dangerMode: true,
                 showCancelButton: true,
-              }; Swal(opt1)
+              }; Swal.fire(opt1)
               .then((willDelete) => {
                 if (willDelete.value) {
                   this.checkregistro = true;
@@ -753,7 +754,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         buttons: true,
         dangerMode: true,
         showCancelButton: true,
-      }; Swal(opt1)
+      }; Swal.fire(opt1)
       .then((willDelete) => {
         if (willDelete.value) {
 
@@ -769,10 +770,10 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         buttons: true,
         dangerMode: true,
         showCancelButton: true,
-      }; Swal(opt2)
+      }; Swal.fire(opt2)
   }
 }
-  private showToast(type: string, title: string, body: string) {
+  private showToast(icon: string, title: string, body: string) {
     this.config = new ToasterConfig({
       // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
       positionClass: 'toast-top-center',
@@ -784,7 +785,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       limit: 5,
     });
     const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
+      type: icon, // 'default', 'info', 'success', 'warning', 'error'
       title: title,
       body: body,
       showCloseButton: true,

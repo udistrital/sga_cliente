@@ -176,8 +176,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -217,8 +217,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
     }
   },
   (error: HttpErrorResponse) => {
-    Swal({
-      type: 'error',
+    Swal.fire({
+      icon:'error',
       title: error.status + '',
       text: this.translate.instant('ERROR.' + error.status),
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -266,8 +266,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
     }
   },
   (error: HttpErrorResponse) => {
-    Swal({
-      type: 'error',
+    Swal.fire({
+      icon:'error',
       title: error.status + '',
       text: this.translate.instant('ERROR.' + error.status),
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -348,8 +348,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
     }
   },
   (error: HttpErrorResponse) => {
-    Swal({
-      type: 'error',
+    Swal.fire({
+      icon:'error',
       title: error.status + '',
       text: this.translate.instant('ERROR.' + error.status),
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -412,8 +412,8 @@ promesaid_modificar(id: number): Promise<{id: number}> {
   }
 },
 (error: HttpErrorResponse) => {
-  Swal({
-    type: 'error',
+  Swal.fire({
+    icon:'error',
     title: error.status + '',
     text: this.translate.instant('ERROR.' + error.status),
     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -441,7 +441,7 @@ inhabilitarProyecto(row: any): void {
     dangerMode: true,
     showCancelButton: true,
   };
-  Swal(opt)
+  Swal.fire(opt)
   .then((willDelete) => {
     if (willDelete.value) {
       const proyectoAModificar = row.ProyectoAcademico;

@@ -110,7 +110,7 @@ export class CrudTipoInscripcionComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) => {
       if (willDelete.value) {
         if(tipoInscripcion['Activo'] == ''){
@@ -140,7 +140,7 @@ export class CrudTipoInscripcionComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) => {
       if (willDelete.value) {
         if(tipoInscripcion['Activo'] == ''){

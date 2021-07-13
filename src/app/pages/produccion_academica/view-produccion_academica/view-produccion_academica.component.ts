@@ -68,8 +68,8 @@ export class ViewProduccionAcademicaComponent implements OnInit {
           if (res.Response.Code === "200"){
             this.info_produccion_academica = <Array<ProduccionAcademicaPost>>res;
           } else if (res.Response.Code === "400") {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: '400',
               text: this.translate.instant('ERROR.400'),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -77,8 +77,8 @@ export class ViewProduccionAcademicaComponent implements OnInit {
           }
         }
       }, (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

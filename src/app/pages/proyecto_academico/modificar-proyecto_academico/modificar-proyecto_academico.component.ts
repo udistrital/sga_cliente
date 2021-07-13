@@ -352,8 +352,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           }
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -370,8 +370,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -390,8 +390,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         this.arr_enfasis_proyecto.push(enfasis_temporal);
         this.source_emphasys.load(this.arr_enfasis_proyecto);
       } else {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: 'ERROR',
           text: this.translate.instant('enfasis.error_enfasis_ya_existe'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -489,8 +489,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -512,8 +512,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -534,8 +534,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -556,8 +556,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -578,8 +578,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -601,8 +601,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -711,7 +711,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then(async (willCreate) => {
       if (willCreate.value) {
 
@@ -724,8 +724,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         this.proyectoacademicoService.put('tr_proyecto_academico/informacion_basica/' + Number(this.data.idproyecto), informacion_basicaPut)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
                title: res.Code,
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -851,7 +851,7 @@ putinformacionregistro() {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then(async (willCreate) => {
       if (willCreate.value) {
         if (this.fileRegistroCalificado) {
@@ -865,8 +865,8 @@ putinformacionregistro() {
         this.proyectoacademicoService.put('tr_proyecto_academico/registro/' + Number(this.data.idproyecto), registro_put)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
                title: res.Code,
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -972,7 +972,7 @@ putinformacionregistro() {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then(async (willCreate) => {
       if (willCreate.value) {
         if (this.fileRegistroCalificado) {
@@ -982,8 +982,8 @@ putinformacionregistro() {
         this.proyectoacademicoService.put('tr_proyecto_academico/registro/' + Number(this.data.idproyecto), registro_put)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
                title: res.Code,
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -1066,7 +1066,7 @@ registrocoordinador() {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then(async (willCreate) => {
       if (willCreate.value) {
 
@@ -1078,8 +1078,8 @@ registrocoordinador() {
         this.sgamidService.post('proyecto_academico/coordinador/' + String(this.data.Id), this.coordinador_data)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
                title: res.Code,
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

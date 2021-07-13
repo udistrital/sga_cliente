@@ -215,7 +215,7 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then(async (willCreate) => {
       if (willCreate.value) {
         await this.uploadFilesCreacionRegistro([this.fileDocumento]);
@@ -223,8 +223,8 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
         this.sgamidService.post('proyecto_academico/' + String(this.data.endpoint + '/' + String(this.data.IdProyecto)), this.registro_nuevo)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
                title: res.Code,
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -249,8 +249,8 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
       }
     })
     .catch((res) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
          title: res.Code,
         text: this.translate.instant('ERROR.' + res.Code),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

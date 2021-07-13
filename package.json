@@ -101,7 +101,7 @@
     "rxjs": "^6.6.3",
     "rxjs-compat": "^6.6.3",
     "socicon": "3.0.5",
-    "sweetalert2": "^7.33.1",
+    "sweetalert2": "^9.11.0",
     "tinymce": "^4.9.11",
     "ts-md5": "^1.2.7",
     "typeface-exo": "0.0.22",

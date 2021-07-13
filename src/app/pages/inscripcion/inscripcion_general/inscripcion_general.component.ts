@@ -257,8 +257,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       },
         (error: HttpErrorResponse) => {
           this.loading = false;
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('inscripcion.error_registrar_informacion'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -573,7 +573,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
               (error: any) => {
                 this.loading = false;
                 if (error.System.Message.includes('duplicate')) {
-                  Swal({
+                  Swal.fire({
                     type: 'info',
                     text: this.translate.instant('inscripcion.error_update_programa_seleccionado'),
                     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -581,8 +581,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                   });
                 } else {
                   this.loading = false;
-                  Swal({
-                    type: 'error',
+                  Swal.fire({
+                    icon:'error',
                     title: error.status + '',
                     text: this.translate.instant('ERROR.' + error.status),
                     footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -640,8 +640,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         //       }
         //     },
         //       (error: HttpErrorResponse) => {
-        //         Swal({
-        //           type: 'error',
+        //         Swal.fire({
+        //           icon:'error',
         //           title: error.status + '',
         //           text: this.translate.instant('ERROR.' + error.status),
         //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
