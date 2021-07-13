@@ -209,7 +209,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       this.dataSource.filterPredicate = (data: any, filter: string) => this.filterPredicate(data.ProyectoAcademico.Nombre, filter);
       this.dataSource.data.forEach((data: any) => data.proyecto = data.ProyectoAcademico.Nombre); // para ordenar por nommbre de proyecto
     }else {
-      Swal(opt1)
+      Swal.fire(opt1)
       .then((willDelete) => {
         if (willDelete.value) {
         }
@@ -258,7 +258,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.proyecto_padre_id = res.map((data: any) => (data.ProyectoAcademico.ProyectoPadreId))[0];
         this.openDialogConsulta();
       }else {
-      Swal(opt1)
+      Swal.fire(opt1)
       .then((willDelete) => {
         if (willDelete.value) {
         }
@@ -340,7 +340,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         this.proyecto_padre_id = res.map((data: any) => (data.ProyectoAcademico.ProyectoPadreId))[0];
         this.openDialogModificar();
       }else {
-      Swal(opt1)
+      Swal.fire(opt1)
       .then((willDelete) => {
         if (willDelete.value) {
         }
@@ -404,7 +404,7 @@ promesaid_modificar(id: number): Promise<{id: number}> {
     this.fecha_inicio_coordinador = this.coordinador['FechaInicio'];
     this.id_documento_registro_coordinador = this.coordinador['ResolucionAsignacionId'];
   }else {
-    Swal(opt1)
+    Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
       }

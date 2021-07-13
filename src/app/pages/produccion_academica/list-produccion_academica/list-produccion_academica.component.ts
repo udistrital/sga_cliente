@@ -231,7 +231,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
           confirmButtonText: this.translate.instant('GLOBAL.si'),
           cancelButtonText: this.translate.instant('GLOBAL.no'),
         };
-         Swal(optConfirmar)
+         Swal.fire(optConfirmar)
         .then((isAuthor) => {
           const dataPut = {
             acepta: isAuthor.value ? true : false,

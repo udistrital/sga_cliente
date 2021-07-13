@@ -693,7 +693,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             this.inscripcion_id = this.info_inscripcion.Id;
             this.eventChange.emit(true);
             Swal.fire({
-              type: 'info',
+              icon: 'info',
               title: this.translate.instant('GLOBAL.crear'),
               text: this.translate.instant('GLOBAL.inscrito') + ' ' + this.periodo.Nombre,
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

@@ -100,7 +100,7 @@ export class ListCalendarioeventoComponent implements OnInit {
       buttons: true,
       dangerMode: true,
       showCancelButton: true,
-    }; Swal(opt1)
+    }; Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
 
@@ -129,7 +129,7 @@ loadevento() {
     this.dataSource = new MatTableDataSource();
     this.dataSource = res;
   }else {
-    Swal(opt1)
+    Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
 
@@ -173,7 +173,7 @@ capturarPeriodo() {
       buttons: true,
       dangerMode: true,
       showCancelButton: true,
-    }; Swal(opt1)
+    }; Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
 
@@ -214,7 +214,7 @@ traerPeriodoSelect() {
           dangerMode: true,
           showCancelButton: true,
         };
-        Swal(opt1)
+        Swal.fire(opt1)
         .then((willDelete) => {
           if (willDelete.value) {
           }

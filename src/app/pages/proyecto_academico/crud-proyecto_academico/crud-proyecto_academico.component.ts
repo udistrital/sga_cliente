@@ -711,7 +711,29 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       .then(async (willCreate) => {
         if (willCreate.value) {
           // Subir archivos
+          Swal.fire({
+            title: 'Creando proyecto académico ...',
+            html: `<b></b>`,
+            timerProgressBar: true,
+            onOpen: () => {
+              Swal.showLoading();
+            },
+          });
+          let content = Swal.getHtmlContainer()
+          if (content) {
+            const b: any = content.querySelector('b')
+            if (b) {
+              b.textContent = 'Subiendo Documentos ...'
+            }
+          }
           await this.uploadFilesCreacionProyecto([this.fileResolucion, this.fileActoAdministrativo]);
+          content = Swal.getHtmlContainer()
+          if (content) {
+            const b: any = content.querySelector('b')
+            if (b) {
+              b.textContent = 'Almacenando información ...'
+            }
+          }
           // console.log("subio archivo");
           // console.log("idDocumentoResolucion", this.idDocumentoResolucion);
           // console.log("idDocumentoAdministrativo", this.idDocumentoAdministrativo);
@@ -727,11 +749,13 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
               });
               this.showToast('error', 'error', this.translate.instant('proyecto.proyecto_no_creado'));
+              Swal.close();
             } else {
+              Swal.close();
               const opt1: any = {
                 title: this.translate.instant('proyecto.creado'),
                 text: this.translate.instant('proyecto.proyecto_creado'),
-                icon: 'warning',
+                icon: 'success',
                 buttons: true,
                 dangerMode: true,
                 showCancelButton: true,
@@ -743,6 +767,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
                 }
               });
             }
+          }, (error) => {
+            Swal.close();
+            console.log(error)
           });
         }
       });

@@ -238,7 +238,7 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
               buttons: true,
               dangerMode: true,
               showCancelButton: true,
-            }; Swal(opt1)
+            }; Swal.fire(opt1)
             .then((willDelete) => {
               if (willDelete.value) {
               }
@@ -265,7 +265,7 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
       buttons: true,
       dangerMode: true,
       showCancelButton: true,
-    }; Swal(opt1)
+    }; Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
 

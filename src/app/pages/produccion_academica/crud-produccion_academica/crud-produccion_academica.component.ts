@@ -574,7 +574,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       this.info_produccion_academica.Fecha === undefined ||
       this.info_produccion_academica.Resumen === undefined) {
         Swal.fire({
-          type: 'warning',
+          icon: 'warning',
           title: 'ERROR',
           text: this.translate.instant('produccion_academica.alerta_llenar_campos_datos_basicos'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

@@ -574,7 +574,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                 this.loading = false;
                 if (error.System.Message.includes('duplicate')) {
                   Swal.fire({
-                    type: 'info',
+                    icon: 'info',
                     text: this.translate.instant('inscripcion.error_update_programa_seleccionado'),
                     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
 

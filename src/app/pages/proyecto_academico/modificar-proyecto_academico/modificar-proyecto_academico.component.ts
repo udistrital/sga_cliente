@@ -743,7 +743,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
               buttons: true,
               dangerMode: true,
               showCancelButton: true,
-            }; Swal(opt1)
+            }; Swal.fire(opt1)
             .then((willDelete) => {
               if (willDelete.value) {
               }
@@ -760,7 +760,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       buttons: true,
       dangerMode: true,
       showCancelButton: true,
-    }; Swal(opt1)
+    }; Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
 
@@ -881,7 +881,7 @@ putinformacionregistro() {
               buttons: true,
               dangerMode: true,
               showCancelButton: true,
-            }; Swal(opt1)
+            }; Swal.fire(opt1)
             .then((willDelete) => {
               if (willDelete.value) {
               }
@@ -900,7 +900,7 @@ putinformacionregistro() {
         buttons: true,
         dangerMode: true,
         showCancelButton: true,
-      }; Swal(opt1)
+      }; Swal.fire(opt1)
       .then((willDelete) => {
         if (willDelete.value) {
 
@@ -998,7 +998,7 @@ putinformacionregistro() {
               buttons: true,
               dangerMode: true,
               showCancelButton: true,
-            }; Swal(opt1)
+            }; Swal.fire(opt1)
             .then((willDelete) => {
               if (willDelete.value) {
               }
@@ -1017,7 +1017,7 @@ putinformacionregistro() {
       buttons: true,
       dangerMode: true,
       showCancelButton: true,
-    }; Swal(opt1)
+    }; Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
 
@@ -1094,7 +1094,7 @@ registrocoordinador() {
               buttons: true,
               dangerMode: true,
               showCancelButton: true,
-            }; Swal(opt1)
+            }; Swal.fire(opt1)
             .then((willDelete) => {
               if (willDelete.value) {
               }
@@ -1113,7 +1113,7 @@ registrocoordinador() {
     buttons: true,
     dangerMode: true,
     showCancelButton: true,
-  }; Swal(opt1)
+  }; Swal.fire(opt1)
   .then((willDelete) => {
     if (willDelete.value) {
 

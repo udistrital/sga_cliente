@@ -111,7 +111,7 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
     this.dataSource = new MatTableDataSource();
     this.dataSource = res
   }else {
-    Swal(opt1)
+    Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
       }
