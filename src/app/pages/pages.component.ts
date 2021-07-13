@@ -8,20 +8,18 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { ImplicitAutenticationService } from './../@core/utils/implicit_autentication.service';
-
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'ngx-pages',
   template: `
     <ngx-sample-layout>
-      <nb-menu [items]='menu'></nb-menu>
+      <nb-menu [items]="menu"></nb-menu>
       <router-outlet></router-outlet>
     </ngx-sample-layout>
   `,
 })
-
 export class PagesComponent implements OnInit {
-
   public menu = [];
   public results = [];
   object: MenuItem;
@@ -30,16 +28,18 @@ export class PagesComponent implements OnInit {
   rol: String;
   dataMenu: any;
   roles: any;
-  private autenticacion= new ImplicitAutenticationService;
+  private autenticacion = new ImplicitAutenticationService();
 
   constructor(
     public menuws: MenuService,
-    private translate: TranslateService) { 
-    }
+    private translate: TranslateService,
+  ) {}
 
   ngOnInit() {
     if (this.autenticacion.live()) {
-      this.roles = (JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).role).filter((data: any) => (data.indexOf('/') === -1));
+      this.roles = JSON.parse(
+        atob(localStorage.getItem('id_token').split('.')[1]),
+      ).role.filter((data: any) => data.indexOf('/') === -1);
       this.object = {
         title: 'dashboard',
         icon: 'nb-home',
@@ -49,10 +49,10 @@ export class PagesComponent implements OnInit {
       };
       this.results.push(this.object);
 
-      if (this.roles.length === 0){
-        this.roles = "ASPIRANTE";
+      if (this.roles.length === 0) {
+        this.roles = 'ASPIRANTE';
       }
-      
+
       this.menuws.get(this.roles + '/SGA').subscribe(
         data => {
           this.dataMenu = <any>data;
@@ -128,24 +128,47 @@ export class PagesComponent implements OnInit {
           this.translateMenu();
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.menu'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-          //this.menu = MENU_ITEMS;
+          if (this.dataMenu === undefined) {
+            Swal.fire({
+              icon: 'info',
+              title: this.translate.instant('ERROR.rol_insuficiente_titulo'),
+              text: this.translate.instant('ERROR.rol_insuficiente'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              onAfterClose: () => {
+                window.location.href =
+                  environment.TOKEN.SIGN_OUT_URL +
+                  '?id_token_hint=' +
+                  window.localStorage.getItem('id_token') +
+                  '&post_logout_redirect_uri=' +
+                  environment.TOKEN.SIGN_OUT_REDIRECT_URL +
+                  '&state=' +
+                  window.localStorage.getItem('state');
+              },
+            });
+          } else {
+            Swal.fire({
+              type: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer:
+                this.translate.instant('GLOBAL.cargar') +
+                '-' +
+                this.translate.instant('GLOBAL.menu'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          }
+          // this.menu = MENU_ITEMS;
           this.translateMenu();
-        });
+        },
+      );
     } else {
       this.rol = 'PUBLICO';
-      //this.menu = MENU_ITEMS;
+      // this.menu = MENU_ITEMS;
       this.translateMenu();
     }
     this.translateMenu();
-    this.translate.onLangChange.subscribe((event: LangChangeEvent) => { // Live reload
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      // Live reload
       this.translateMenu();
     });
   }
@@ -164,9 +187,10 @@ export class PagesComponent implements OnInit {
   private translateMenuTitle(menuItem: MenuItem, prefix: string = ''): void {
     let key = '';
     try {
-      key = (prefix !== '')
-        ? PagesComponent.getMenuItemKey(menuItem, prefix)
-        : PagesComponent.getMenuItemKey(menuItem);
+      key =
+        prefix !== ''
+          ? PagesComponent.getMenuItemKey(menuItem, prefix)
+          : PagesComponent.getMenuItemKey(menuItem);
     } catch (e) {
       // Key not found, don't change the menu item
       return;
@@ -179,7 +203,10 @@ export class PagesComponent implements OnInit {
       // apply same on every child
       menuItem.children.forEach((childMenuItem: MenuItem) => {
         // We remove the nested key and then use it as prefix for every child
-        this.translateMenuTitle(childMenuItem, PagesComponent.trimLastSelector(key));
+        this.translateMenuTitle(
+          childMenuItem,
+          PagesComponent.trimLastSelector(key),
+        );
       });
     }
   }
@@ -190,7 +217,10 @@ export class PagesComponent implements OnInit {
    * @param prefix
    * @returns {string}
    */
-  private static getMenuItemKey(menuItem: MenuItem, prefix: string = 'MENU'): string {
+  private static getMenuItemKey(
+    menuItem: MenuItem,
+    prefix: string = 'MENU',
+  ): string {
     if (menuItem.key == null) {
       throw new Error('Key not found');
     }
