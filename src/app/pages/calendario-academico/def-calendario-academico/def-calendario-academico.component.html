@@ -65,7 +65,7 @@
                         <p>{{ 'calendario.etiqueta_documento' | translate }} </p>
                     </div>
                     <div class="col-2" *ngIf="uploadMode">
-                        <button mat-button type="button" (click)="fileInput.click()">
+                        <button mat-button type="button" (click)="fileInput.click()" title="{{'calendario.subir_resolucion'|translate}}">
                             <span class="fa fa-paperclip fa-lg"></span>
                             <input formControlName="fileResolucion" #fileInput type="file" (change)="onInputFileResolucion($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
                         </button>
@@ -73,7 +73,7 @@
                         <label *ngIf="fileResolucion">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucion.name}}</label>
                     </div>
                     <div class="col-2" *ngIf="editMode">
-                        <button mat-button type="button" (click)="downloadFile(calendar.DocumentoId)">
+                        <button mat-button type="button" (click)="downloadFile(calendar.DocumentoId)" title="{{'calendario.descargar_resolucion'|translate}}">
                             <span class="fa fa-cloud-download fa-lg"></span>
                         </button>
                     </div>
