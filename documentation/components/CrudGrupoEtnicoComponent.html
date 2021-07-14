@@ -2550,7 +2550,7 @@ export class CrudGrupoEtnicoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
       if (willDelete.value) {
         this.info_grupo_etnico &#x3D; &lt;GrupoEtnico&gt;grupoEtnico;
@@ -2573,7 +2573,7 @@ export class CrudGrupoEtnicoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
       if (willDelete.value) {
         this.info_grupo_etnico &#x3D; &lt;GrupoEtnico&gt;grupoEtnico;

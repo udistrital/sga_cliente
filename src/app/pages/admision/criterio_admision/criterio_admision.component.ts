@@ -150,8 +150,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       console.info(this.info_persona_id);
       await this.cargarPeriodo();
     } catch (error) {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('inscripcion.error_cargar_informacion'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -263,28 +263,20 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   loadProyectos() {
     this.selectprograma = false;
     this.loading = true;
-    this.projectService
-      .get(
-        'proyecto_academico_institucion?limit=0&query=NivelFormacionId.Id:' +
-          this.selectednivel,
-      )
-      .subscribe(
-        res => {
-          this.proyectos = <any[]>res;
-        },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer:
-              this.translate.instant('GLOBAL.cargar') +
-              '-' +
-              this.translate.instant('GLOBAL.programa_academico'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        },
-      );
+    this.projectService.get('proyecto_academico_institucion?limit=0&query=NivelFormacionId.Id:' + this.selectednivel).subscribe(
+      res => {
+        this.proyectos = <any[]>res;
+      },
+      (error: HttpErrorResponse) => {
+        Swal.fire({
+          icon:'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('GLOBAL.cargar') + '-' +
+            this.translate.instant('GLOBAL.programa_academico'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
   }
   loadCriterios() {
     this.evaluacionService
@@ -324,8 +316,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
           }
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer:
@@ -591,8 +583,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
             }
           },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer:
@@ -655,8 +647,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
             }
           },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer:
@@ -696,8 +688,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
           }
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer:
@@ -727,8 +719,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
           }
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer:

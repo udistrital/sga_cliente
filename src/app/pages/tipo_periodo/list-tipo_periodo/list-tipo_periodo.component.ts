@@ -161,7 +161,8 @@ export class ListTipoPeriodoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt).then(willDelete => {
+    Swal.fire(opt)
+    .then((willDelete) => {
       if (willDelete.value) {
         this.clienteHabilitarPeriodoService
           .delete('tipo_periodo/', event.data)

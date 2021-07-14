@@ -166,8 +166,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
                           }
                         },
                           (error: HttpErrorResponse) => {
-                            Swal({
-                              type: 'error',
+                            Swal.fire({
+                              icon:'error',
                               title: error.status + '',
                               text: this.translate.instant('ERROR.' + error.status),
                               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -179,8 +179,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
                     }
                   },
                     (error: HttpErrorResponse) => {
-                      Swal({
-                        type: 'error',
+                      Swal.fire({
+                        icon:'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
                         footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -194,8 +194,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
             },
               (error: HttpErrorResponse) => {
                 this.loading = false;
-                Swal({
-                  type: 'error',
+                Swal.fire({
+                  icon:'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -211,8 +211,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
       },
         (error: HttpErrorResponse) => {
           this.loading = false;
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -234,7 +234,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.info_propuesta_grado = <PropuestaGrado>propuestaGrado;
@@ -302,8 +302,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
                       },
                         (error: HttpErrorResponse) => {
                           this.loading = false;
-                          Swal({
-                            type: 'error',
+                          Swal.fire({
+                            icon:'error',
                             title: error.status + '',
                             text: this.translate.instant('ERROR.' + error.status),
                             footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),
@@ -319,8 +319,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
                 },
                   (error: HttpErrorResponse) => {
                     this.loading = false;
-                    Swal({
-                      type: 'error',
+                    Swal.fire({
+                      icon:'error',
                       title: error.status + '',
                       text: this.translate.instant('ERROR.' + error.status),
                       footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),
@@ -398,8 +398,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
               },
                 (error: HttpErrorResponse) => {
                   this.loading = false;
-                  Swal({
-                    type: 'error',
+                  Swal.fire({
+                    icon:'error',
                     title: error.status + '',
                     text: this.translate.instant('ERROR.' + error.status),
                     footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),
@@ -415,8 +415,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),

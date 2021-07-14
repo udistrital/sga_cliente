@@ -3112,7 +3112,7 @@ export class CrudInformacionContactoComponent implements OnInit {
       confirmButtonText: this.translate.instant(&#x27;GLOBAL.aceptar&#x27;),
       cancelButtonText: this.translate.instant(&#x27;GLOBAL.cancelar&#x27;),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) &#x3D;&gt; {
         if (willDelete.value) {
           this.info_informacion_contacto &#x3D; &lt;InformacionContacto&gt;informacionContacto;
@@ -3171,7 +3171,7 @@ export class CrudInformacionContactoComponent implements OnInit {
       confirmButtonText: this.translate.instant(&#x27;GLOBAL.aceptar&#x27;),
       cancelButtonText: this.translate.instant(&#x27;GLOBAL.cancelar&#x27;),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) &#x3D;&gt; {
         if (willDelete.value) {
           this.info_informacion_contacto &#x3D; &lt;InformacionContacto&gt;informacionContacto;

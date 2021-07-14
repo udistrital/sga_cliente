@@ -120,8 +120,8 @@ export class CrudIdiomasComponent implements OnInit {
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('idiomas.error_cargar_informacion_idiomas'),
@@ -168,8 +168,8 @@ export class CrudIdiomasComponent implements OnInit {
                         }
                       },
                       (error: HttpErrorResponse) => {
-                        Swal({
-                          type: 'error',
+                        Swal.fire({
+                          icon:'error',
                           title: error.status + '',
                           text: this.translate.instant('ERROR.' + error.status),
                           footer: this.translate.instant('idiomas.informacion_idioma_no_registrada'),
@@ -204,8 +204,8 @@ export class CrudIdiomasComponent implements OnInit {
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('idiomas.error_cargar_informacion_idiomas'),

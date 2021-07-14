@@ -295,7 +295,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   sendCorreo() {
     this.googleMidService.post('notificacion', this.invitacion)
       .subscribe((res: any) => {
-          Swal({
+          Swal.fire({
             title: `Éxito al Enviar Observación.`,
           });
           this.invitacion.to = [];

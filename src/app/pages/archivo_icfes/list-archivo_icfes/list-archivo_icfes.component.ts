@@ -108,7 +108,7 @@ export class ListArchivoIcfesComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) => {
 
       if (willDelete.value) {

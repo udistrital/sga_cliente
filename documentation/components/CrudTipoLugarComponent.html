@@ -2550,7 +2550,7 @@ export class CrudTipoLugarComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
       if (willDelete.value) {
         this.info_tipo_lugar &#x3D; &lt;TipoLugar&gt;tipoLugar;
@@ -2573,7 +2573,7 @@ export class CrudTipoLugarComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
       if (willDelete.value) {
         this.info_tipo_lugar &#x3D; &lt;TipoLugar&gt;tipoLugar;

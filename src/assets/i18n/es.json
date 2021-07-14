@@ -600,6 +600,8 @@
         "no_documento": "Debe seleccionar un archivo",
         "error_subir_documento": "Ocurrió un error subiendo los documentos, por favor intente de nuevo.",
         "error_cargar_documento": "Ocurrió un error al descargar documentos",
+        "rol_insuficiente_titulo": "El usuario no cuenta con permisos",
+        "rol_insuficiente": "El usuario no cuenta con los permisos suficientes para usar el sistema.",
         "0": "El servicio solicitado no se encuentra disponible"
     },
     "recibo_pago": {
@@ -1169,7 +1171,6 @@
         "aviso_proyecto": "Selecione el proyecto académico que desea definir los criterios de admisión",
         "erro_selec_nivel": "Por favor, seleccione el nivel",
         "erro_selec_proyecto": "Por favor, seleccione al menos un proyecto",
-        "aviso_criterios": "Seleccione los criterios que desea asignar a los proyectos académicos",
         "aviso_criterios": "Seleccione los criterios que desea evaluar",
         "erro_selec_criterio": "Por favor, seleccione al menos un criterio",
         "info_icfes": "Criterio ICFES",

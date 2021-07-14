@@ -582,6 +582,8 @@
         "no_documento": "You must select a file",
         "error_subir_documento": "An error ocurred uploading the documents, please try again.",
         "error_cargar_documento": "An error ocurred downloading the documents, please try again.",
+        "rol_insuficiente_titulo": "The user does not have permissions",
+        "rol_insuficiente": "The user does not have sufficient permissions to use the system .",
         "0": "Service not available"
     },
     "recibo_pago": {

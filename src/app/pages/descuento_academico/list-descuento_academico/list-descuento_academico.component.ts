@@ -128,8 +128,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
           },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -161,8 +161,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         //                   }
         //                 },
         //                   (error: HttpErrorResponse) => {
-        //                     Swal({
-        //                       type: 'error',
+        //                     Swal.fire({
+        //                       icon:'error',
         //                       title: error.status + '',
         //                       text: this.translate.instant('ERROR.' + error.status),
         //                       footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -175,8 +175,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         //           }
         //         },
         //           (error: HttpErrorResponse) => {
-        //             Swal({
-        //               type: 'error',
+        //             Swal.fire({
+        //               icon:'error',
         //               title: error.status + '',
         //               text: this.translate.instant('ERROR.' + error.status),
         //               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -188,8 +188,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         //     });
         //   },
         //     (error: HttpErrorResponse) => {
-        //       Swal({
-        //         type: 'error',
+        //       Swal.fire({
+        //         icon:'error',
         //         title: error.status + '',
         //         text: this.translate.instant('ERROR.' + error.status),
         //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -200,8 +200,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         //     });
       // },
       //   (error: HttpErrorResponse) => {
-      //     Swal({
-      //       type: 'error',
+      //     Swal.fire({
+      //       icon:'error',
       //       title: error.status + '',
       //       text: this.translate.instant('ERROR.' + error.status),
       //       footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -234,7 +234,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
@@ -249,8 +249,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
           },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.eliminar') + '-' +
