@@ -118,8 +118,8 @@ export class ListInformacionContactoComponent implements OnInit {
       }
     },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -151,7 +151,7 @@ export class ListInformacionContactoComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.ubicacionesService.delete('informacion_contacto/', event.data).subscribe(res => {
@@ -163,8 +163,8 @@ export class ListInformacionContactoComponent implements OnInit {
             }
           },
             (error: HttpErrorResponse) => {
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

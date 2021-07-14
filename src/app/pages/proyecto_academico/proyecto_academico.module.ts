@@ -8,7 +8,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { CrudProyectoAcademicoComponent } from './crud-proyecto_academico/crud-proyecto_academico.component';
 import { ListProyectoAcademicoComponent } from './list-proyecto_academico/list-proyecto_academico.component';
 import { UserService } from '../../@core/data/users.service';
-import { PersonaService } from '../../@core/data/persona.service';
+import { TercerosService } from '../../@core/data/terceros.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
 import { NbDialogService } from '@nebular/theme';
 import {NgDatepickerModule} from 'ng2-datepicker';
@@ -43,7 +43,7 @@ import {DpDatePickerModule} from 'ng2-date-picker';
   providers: [
     ProduccionAcademicaService,
     UserService,
-    PersonaService,
+    TercerosService,
     NuxeoService,
     NbDialogService,
     ListEnfasisService,

@@ -108,8 +108,8 @@ export class PagoComprobanteComponent implements OnInit {
                 }
               },
                 (error: HttpErrorResponse) => {
-                  Swal({
-                    type: 'error',
+                  Swal.fire({
+                    icon:'error',
                     title: error.status + '',
                     text: this.translate.instant('ERROR.' + error.status),
                     footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -122,8 +122,8 @@ export class PagoComprobanteComponent implements OnInit {
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -144,7 +144,7 @@ export class PagoComprobanteComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
@@ -200,8 +200,8 @@ export class PagoComprobanteComponent implements OnInit {
                                     }
                                   },
                                     (error: HttpErrorResponse) => {
-                                      Swal({
-                                        type: 'error',
+                                      Swal.fire({
+                                        icon:'error',
                                         title: error.status + '',
                                         text: this.translate.instant('ERROR.' + error.status),
                                         footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -212,8 +212,8 @@ export class PagoComprobanteComponent implements OnInit {
                               }
                             },
                               (error: HttpErrorResponse) => {
-                                Swal({
-                                  type: 'error',
+                                Swal.fire({
+                                  icon:'error',
                                   title: error.status + '',
                                   text: this.translate.instant('ERROR.' + error.status),
                                   footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -224,8 +224,8 @@ export class PagoComprobanteComponent implements OnInit {
                         }
                       },
                         (error: HttpErrorResponse) => {
-                          Swal({
-                            type: 'error',
+                          Swal.fire({
+                            icon:'error',
                             title: error.status + '',
                             text: this.translate.instant('ERROR.' + error.status),
                             footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -236,8 +236,8 @@ export class PagoComprobanteComponent implements OnInit {
                     }
                   },
                     (error: HttpErrorResponse) => {
-                      Swal({
-                        type: 'error',
+                      Swal.fire({
+                        icon:'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
                         footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -248,8 +248,8 @@ export class PagoComprobanteComponent implements OnInit {
               }
             },
               (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
+                Swal.fire({
+                  icon:'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -273,7 +273,7 @@ export class PagoComprobanteComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.loading = true;
@@ -302,8 +302,8 @@ export class PagoComprobanteComponent implements OnInit {
                         this.translate.instant('GLOBAL.confirmarActualizar'));
                     },
                       (error: HttpErrorResponse) => {
-                        Swal({
-                          type: 'error',
+                        Swal.fire({
+                          icon:'error',
                           title: error.status + '',
                           text: this.translate.instant('ERROR.' + error.status),
                           footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -314,8 +314,8 @@ export class PagoComprobanteComponent implements OnInit {
                 }
               },
                 (error: HttpErrorResponse) => {
-                  Swal({
-                    type: 'error',
+                  Swal.fire({
+                    icon:'error',
                     title: error.status + '',
                     text: this.translate.instant('ERROR.' + error.status),
                     footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -337,8 +337,8 @@ export class PagoComprobanteComponent implements OnInit {
                   this.translate.instant('GLOBAL.confirmarActualizar'));
               },
                 (error: HttpErrorResponse) => {
-                  Swal({
-                    type: 'error',
+                  Swal.fire({
+                    icon:'error',
                     title: error.status + '',
                     text: this.translate.instant('ERROR.' + error.status),
                     footer: this.translate.instant('GLOBAL.actualizar') + '-' +

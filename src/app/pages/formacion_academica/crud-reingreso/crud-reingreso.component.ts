@@ -79,7 +79,7 @@ export class CrudReingresoComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
@@ -99,8 +99,8 @@ export class CrudReingresoComponent implements OnInit {
               }
             },
             (error: HttpErrorResponse) => {
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('reingreso.reingreso_no_registrado'),
@@ -128,8 +128,8 @@ export class CrudReingresoComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         this.loading = false;
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('GLOBAL.cargar') + '-' +

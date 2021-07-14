@@ -150,8 +150,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       console.info(this.info_persona_id)
       await this.cargarPeriodo();
     } catch (error) {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('inscripcion.error_cargar_informacion'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -252,8 +252,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
         this.proyectos = <any[]>res;
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -286,8 +286,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -531,8 +531,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -584,8 +584,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -617,8 +617,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -639,8 +639,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.actualizar') + '-' +

@@ -110,7 +110,7 @@ export class CrudArchivoIcfesComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willCreate) => {
       if (willCreate.value) {
         const formModel = this.preparePost();

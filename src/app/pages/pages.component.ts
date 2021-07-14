@@ -36,7 +36,6 @@ export class PagesComponent implements OnInit {
     private translate: TranslateService) {
     }
 
-
   translateTree(tree: any) {
       const trans = tree.map((n: any) => {
           let node = {};
@@ -96,6 +95,7 @@ export class PagesComponent implements OnInit {
           this.translateMenu();
         },
         (error: HttpErrorResponse) => {
+
           if (this.dataMenu === undefined) {
             Swal.fire({
               icon: 'info',
@@ -123,6 +123,7 @@ export class PagesComponent implements OnInit {
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
           }
+
           //this.menu = MENU_ITEMS;
           this.translateMenu();
         });

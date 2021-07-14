@@ -159,8 +159,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           if (!error.status) {
             error.status = 409;
           }
-          Swal({
-             type: 'error',
+          Swal.fire({
+             icon:'error',
              title: error.status + '',
              text: this.translate.instant('ERROR.' + error.status),
              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -171,8 +171,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       if (!error.status) {
         error.status = 409;
       }
-      Swal({
-         type: 'error',
+      Swal.fire({
+         icon:'error',
          title: error.status + '',
          text: this.translate.instant('ERROR.' + error.status),
          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -321,8 +321,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
             this.formConstruido = true;
           }
         }, (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -341,8 +341,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           this.formProduccionAcademica.campos[this.getIndexForm('Ubicacion')].opciones = ciudadPublicacion;
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -406,8 +406,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
               }
             },
             (error: HttpErrorResponse) => {
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -438,7 +438,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) => {
       if (willDelete.value) {
         this.info_produccion_academica = <ProduccionAcademicaPost>ProduccionAcademica;
@@ -468,7 +468,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willCreate) => {
       if (willCreate.value) {
         this.info_produccion_academica = <ProduccionAcademicaPost>ProduccionAcademica;
@@ -486,8 +486,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           }
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('informacion_academica.informacion_academica_no_registrada'),
@@ -501,8 +501,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   agregarAutor(mostrarError: boolean, estadoAutor: number): void {
     if (this.source_authors.find( author => author.PersonaId === this.autorSeleccionado.Id) ) {
       if (mostrarError) {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: 'ERROR',
           text: this.translate.instant('produccion_academica.error_autor_ya_existe'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -535,8 +535,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       this.source_authors.splice(this.source_authors.indexOf(event.data), this.source_authors.indexOf(event.data));
       this.source.load(this.source_authors);
     } else {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: 'ERROR',
         text: this.translate.instant('produccion_academica.error_autor_borrar'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -573,8 +573,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       if (this.info_produccion_academica.Titulo === undefined ||
       this.info_produccion_academica.Fecha === undefined ||
       this.info_produccion_academica.Resumen === undefined) {
-        Swal({
-          type: 'warning',
+        Swal.fire({
+          icon: 'warning',
           title: 'ERROR',
           text: this.translate.instant('produccion_academica.alerta_llenar_campos_datos_basicos'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -624,8 +624,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           })
           .catch(error => {
             // console.log("error subiendo archivos", error);
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: 'ERROR',
               text: this.translate.instant('ERROR.error_subir_documento'),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -639,8 +639,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
     if (!this.editando) {
       this.creandoAutor = !this.creandoAutor;
     } else {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: 'ERROR',
         text: this.translate.instant('produccion_academica.error_no_puede_editar_autores'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
