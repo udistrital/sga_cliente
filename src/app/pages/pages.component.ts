@@ -23,8 +23,6 @@ import { ImplicitAutenticationService } from './../@core/utils/implicit_autentic
 export class PagesComponent implements OnInit {
 
   public menu = [];
-  public results = [];
-  object: MenuItem;
   hijo: MenuItem;
   hijo2: MenuItem;
   rol: String;
@@ -37,17 +35,53 @@ export class PagesComponent implements OnInit {
     private translate: TranslateService) { 
     }
 
+    
+  translateTree(tree: any) {
+      const trans = tree.map((n: any) => {
+          let node = {};
+          if (!n.Url.indexOf('http')) {
+            node = {
+              title: n.Nombre,
+              icon: 'nb-list',
+              url: n.Url,
+              home: false,
+              key: n.Nombre,
+              children: [],
+            };
+          } else {
+            node = {
+              title: n.Nombre,
+              icon: 'nb-list',
+              link: n.Url,
+              home: false,
+              key: n.Nombre,
+            };
+          }
+          if (n.hasOwnProperty('Opciones')) {
+              if (n.Opciones !== null) {
+                  const children = this.translateTree(n.Opciones);
+                  node = { ...node, ...{ children: children }, ...{ icon: 'nb-compose'} };
+              }
+              return node;
+          } else {
+              return node;
+          }
+      });
+      return trans;
+  }
+
+
   ngOnInit() {
     if (this.autenticacion.live()) {
       this.roles = (JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).role).filter((data: any) => (data.indexOf('/') === -1));
-      this.object = {
+      const homeOption =  {
         title: 'dashboard',
         icon: 'nb-home',
         url: '#/pages/dashboard',
         home: true,
         key: 'dashboard',
-      };
-      this.results.push(this.object);
+      }
+      this.menu = [homeOption]
 
       if (this.roles.length === 0){
         this.roles = "ASPIRANTE";
@@ -56,80 +90,13 @@ export class PagesComponent implements OnInit {
       this.menuws.get(this.roles + '/SGA').subscribe(
         data => {
           this.dataMenu = <any>data;
-          for (let i = 0; i < this.dataMenu.length; i++) {
-            if (this.dataMenu[i].TipoOpcion === 'Menú') {
-              if (!this.dataMenu[i].Opciones) {
-                if (!this.dataMenu[i].Url.indexOf('http')) {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    url: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                  };
-                } else {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    link: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                  };
-                }
-              } else {
-                if (!this.dataMenu[i].Url.indexOf('http')) {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    url: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                    children: [],
-                  };
-                } else {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    link: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                    children: [],
-                  };
-                }
-                for (let j = 0; j < this.dataMenu[i].Opciones.length; j++) {
-                  if (this.dataMenu[i].TipoOpcion === 'Menú') {
-                    if (!this.dataMenu[i].Opciones[j].Opciones) {
-                      if (!this.dataMenu[i].Opciones[j].Url.indexOf('http')) {
-                        this.hijo = {
-                          title: this.dataMenu[i].Opciones[j].Nombre,
-                          icon: 'nb-list',
-                          url: this.dataMenu[i].Opciones[j].Url,
-                          home: false,
-                          key: this.dataMenu[i].Opciones[j].Nombre,
-                        };
-                      } else {
-                        this.hijo = {
-                          title: this.dataMenu[i].Opciones[j].Nombre,
-                          icon: 'nb-list',
-                          link: this.dataMenu[i].Opciones[j].Url,
-                          home: false,
-                          key: this.dataMenu[i].Opciones[j].Nombre,
-                        };
-                      }
-                    }
-                    this.object.children.push(this.hijo);
-                  }
-                }
-              }
-              this.results.push(this.object);
-            }
-          }
-          this.menu = this.results;
+          this.menu = this.translateTree(this.dataMenu)
+          this.menu.unshift(homeOption);
           this.translateMenu();
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +

@@ -110,8 +110,8 @@ export class ListAdmisionComponent implements OnInit {
                       }
                     },
                       (error: HttpErrorResponse) => {
-                        Swal({
-                          type: 'error',
+                        Swal.fire({
+                          icon:'error',
                           title: error.status + '',
                           text: this.translate.instant('ERROR.' + error.status),
                           footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -123,8 +123,8 @@ export class ListAdmisionComponent implements OnInit {
                   }
                 },
                   (error: HttpErrorResponse) => {
-                    Swal({
-                      type: 'error',
+                    Swal.fire({
+                      icon:'error',
                       title: error.status + '',
                       text: this.translate.instant('ERROR.' + error.status),
                       footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -137,8 +137,8 @@ export class ListAdmisionComponent implements OnInit {
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +

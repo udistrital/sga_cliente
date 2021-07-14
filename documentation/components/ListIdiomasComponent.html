@@ -2657,7 +2657,7 @@ export class ListIdiomasComponent implements OnInit {
           confirmButtonText: this.translate.instant(&#x27;GLOBAL.aceptar&#x27;),
           cancelButtonText: this.translate.instant(&#x27;GLOBAL.cancelar&#x27;),
         };
-        Swal(opt)
+        Swal.fire(opt)
         .then((willDelete) &#x3D;&gt; {
             if (willDelete.value) {
                 /** this.Service.delete(&#x27;&#x27;, event.data).subscribe(res &#x3D;&gt; {

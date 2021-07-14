@@ -91,7 +91,7 @@ export class CrudEnfasisComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) => {
       if (willDelete.value) {
         this.info_enfasis = <Enfasis>enfasis;
@@ -120,7 +120,7 @@ export class CrudEnfasisComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) => {
       if (willDelete.value) {
         this.info_enfasis = <Enfasis>enfasis;

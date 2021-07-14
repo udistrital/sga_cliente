@@ -153,8 +153,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -425,8 +425,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               },
                 (error: HttpErrorResponse) => {
                   this.loading = false;
-                  Swal({
-                    type: 'error',
+                  Swal.fire({
+                    icon:'error',
                     title: error.status + '',
                     text: this.translate.instant('ERROR.' + error.status),
                     footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -610,8 +610,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       },
         (error: HttpErrorResponse) => {
           this.loading = false;
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -659,8 +659,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -683,7 +683,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-    }; Swal(opt)
+    }; Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         this.sgaMidService.post('inscripciones/post_preinscripcion', this.proyectos_preinscripcion_post)
@@ -692,8 +692,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             this.info_inscripcion = <Inscripcion><unknown>res;
             this.inscripcion_id = this.info_inscripcion.Id;
             this.eventChange.emit(true);
-            Swal({
-              type: 'info',
+            Swal.fire({
+              icon: 'info',
               title: this.translate.instant('GLOBAL.crear'),
               text: this.translate.instant('GLOBAL.inscrito') + ' ' + this.periodo.Nombre,
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -702,8 +702,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -724,8 +724,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       const matSelect: MatSelect = event.source;
       matSelect.writeValue(null);
     } else {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: 'ERROR',
         text: this.translate.instant('inscripcion.error_proyecto_ya_existe'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -767,8 +767,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       }
       this.createInscripcion(5);
     } else {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: 'ERROR',
         text: this.translate.instant('inscripcion.erro_selec'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

@@ -246,8 +246,8 @@ export class CrudEventoComponent implements OnInit {
           if (!error.status) {
             error.status = 409;
           }
-          Swal({
-             type: 'error',
+          Swal.fire({
+             icon:'error',
              title: error.status + '',
              text: this.translate.instant('ERROR.' + error.status),
              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -258,8 +258,8 @@ export class CrudEventoComponent implements OnInit {
       if (!error.status) {
         error.status = 409;
       }
-      Swal({
-         type: 'error',
+      Swal.fire({
+         icon:'error',
          title: error.status + '',
          text: this.translate.instant('ERROR.' + error.status),
          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -307,8 +307,8 @@ export class CrudEventoComponent implements OnInit {
   agregarEncargado(mostrarError: boolean, rolEncargado: number): void {
     if (this.info_calendario_evento.EncargadosEvento.find( encargado => encargado.EncargadoId === this.persona_seleccionada.Id) ) {
       if (mostrarError) {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: 'ERROR',
           text: this.translate.instant('evento.error_encargado_ya_existe'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -521,7 +521,7 @@ export class CrudEventoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willCreate) => {
       if (willCreate.value) {
         this.info_calendario_evento = <CalendarioEventoPost>calendarioEventoPost;
@@ -542,8 +542,8 @@ export class CrudEventoComponent implements OnInit {
         this.campusMidService.post('evento', this.info_calendario_evento)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: res.Code,
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -570,7 +570,7 @@ export class CrudEventoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) => {
       if (willDelete.value) {
         this.info_calendario_evento = <CalendarioEventoPost>calendarioEventoPost;
@@ -591,8 +591,8 @@ export class CrudEventoComponent implements OnInit {
         this.campusMidService.put('evento/' + this.info_calendario_evento.Evento.Id, info_calendario_evento_put)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: res.Code,
               text: this.translate.instant('ERROR.' + res.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

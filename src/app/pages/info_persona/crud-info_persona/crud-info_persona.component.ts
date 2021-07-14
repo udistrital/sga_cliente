@@ -114,8 +114,8 @@ export class CrudInfoPersonaComponent implements OnInit {
         },
         (error: HttpErrorResponse) => {
           this.loading = false;
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -142,7 +142,7 @@ export class CrudInfoPersonaComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.loading = true;
@@ -168,8 +168,8 @@ export class CrudInfoPersonaComponent implements OnInit {
           },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -200,7 +200,7 @@ export class CrudInfoPersonaComponent implements OnInit {
   }
 
   validarTerminos(event) {
-    Swal({
+    Swal.fire({
       title: this.translate.instant('GLOBAL.terminos_datos'),
       width: 800,
       allowOutsideClick: true,
@@ -218,8 +218,8 @@ export class CrudInfoPersonaComponent implements OnInit {
             this.formInfoPersona.btn = "";
           }
         } else if (result.value === 0) {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             text: this.translate.instant('GLOBAL.rechazo_terminos'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });

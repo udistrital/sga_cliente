@@ -159,8 +159,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
       await this.cargarPeriodo();
       await this.loadLevel();
     } catch (error) {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('inscripcion.error_cargar_informacion'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

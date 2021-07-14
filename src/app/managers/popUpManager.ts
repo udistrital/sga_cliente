@@ -31,8 +31,8 @@ export class PopUpManager {
     }
 
     public showAlert(status, text) {
-        Swal({
-            type: 'info',
+        Swal.fire({
+            icon: 'info',
             title: status,
             text: text,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -40,8 +40,8 @@ export class PopUpManager {
     }
 
     public showSuccessAlert(text) {
-        Swal({
-            type: 'success',
+        Swal.fire({
+            icon: 'success',
             title: this.translate.instant('GLOBAL.operacion_exitosa'),
             text: text,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -49,8 +49,8 @@ export class PopUpManager {
     }
 
     public showErrorAlert(text) {
-        Swal({
-            type: 'error',
+        Swal.fire({
+            icon:'error',
             title: this.translate.instant('GLOBAL.error'),
             text: text,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -66,6 +66,6 @@ export class PopUpManager {
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
         };
-        return Swal(options);
+        return Swal.fire(options);
     }
 }

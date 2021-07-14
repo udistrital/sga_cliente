@@ -125,7 +125,7 @@ export class CrudPreguntasComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
@@ -146,8 +146,8 @@ export class CrudPreguntasComponent implements OnInit {
             },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('universidad_form.universidad_form_no_registrado'),
