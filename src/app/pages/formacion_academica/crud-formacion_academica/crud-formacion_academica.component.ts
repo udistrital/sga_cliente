@@ -166,8 +166,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               element.deshabilitar = false;
             });
         }
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('informacion_academica.error_cargar_universidad'),
@@ -237,8 +237,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         this.loading = false;
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -299,8 +299,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           },
         (error: HttpErrorResponse) => {
           this.loading = false;
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -325,7 +325,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.loading = true;
@@ -359,8 +359,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                     },
                     (error: HttpErrorResponse) => {
                       this.loading = false;
-                      Swal({
-                        type: 'error',
+                      Swal.fire({
+                        icon:'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
                         footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -374,8 +374,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               },
               (error: HttpErrorResponse) => {
                 this.loading = false;
-                  Swal({
-                    type: 'error',
+                  Swal.fire({
+                    icon:'error',
                     title: error.status + '',
                     text: this.translate.instant('ERROR.' + error.status),
                     footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -400,8 +400,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               },
               (error: HttpErrorResponse) => {
                 this.loading = false;
-                Swal({
-                  type: 'error',
+                Swal.fire({
+                  icon:'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -425,7 +425,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.loading = true;
@@ -466,8 +466,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                   },
                   (error: HttpErrorResponse) => {
                     this.loading = false;
-                      Swal({
-                        type: 'error',
+                      Swal.fire({
+                        icon:'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
                         footer: this.translate.instant('informacion_academica.informacion_academica_no_registrada'),
@@ -479,8 +479,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
             },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),

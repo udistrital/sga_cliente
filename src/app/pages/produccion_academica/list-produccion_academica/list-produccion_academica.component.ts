@@ -123,8 +123,8 @@ export class ListProduccionAcademicaComponent implements OnInit {
       } else if (res !== null && res.Response.Code === "404"){
         this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
       } else {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           text: this.translate.instant('ERROR.400'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
@@ -132,8 +132,8 @@ export class ListProduccionAcademicaComponent implements OnInit {
       this.loading = false;
     }, (error: HttpErrorResponse) => {
       this.loading = false;
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -171,7 +171,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
         dangerMode: true,
         showCancelButton: true,
       };
-      Swal(opt)
+      Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.sgaMidService.delete('produccion_academica', event.data).subscribe((res: any) => {
@@ -185,8 +185,8 @@ export class ListProduccionAcademicaComponent implements OnInit {
               }
             }
            }, (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -201,7 +201,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
         icon: 'warning',
         buttons: false,
       };
-      Swal(opt);
+      Swal.fire(opt);
     } else if (event.data.EstadoEnteAutorId.EstadoAutorProduccionId.Id === 3) {
       this.updateEstadoAutor(event.data);
     } else {
@@ -218,7 +218,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willConfirm) => {
       if (willConfirm.value) {
         const optConfirmar: any = {
@@ -231,7 +231,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
           confirmButtonText: this.translate.instant('GLOBAL.si'),
           cancelButtonText: this.translate.instant('GLOBAL.no'),
         };
-         Swal(optConfirmar)
+         Swal.fire(optConfirmar)
         .then((isAuthor) => {
           const dataPut = {
             acepta: isAuthor.value ? true : false,
@@ -241,8 +241,8 @@ export class ListProduccionAcademicaComponent implements OnInit {
           this.sgaMidService.put('produccion_academica/estado_autor_produccion/' + dataPut.AutorProduccionAcademica.Id, dataPut)
           .subscribe((res: any) => {
             if (res.Type === 'error') {
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: res.Code,
                 text: this.translate.instant('ERROR.' + res.Code),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -255,8 +255,8 @@ export class ListProduccionAcademicaComponent implements OnInit {
             this.loading = false;
           }, (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

@@ -57,8 +57,8 @@ export class ListCalendarioeventoComponent implements OnInit {
     }
   },
   (error: HttpErrorResponse) => {
-    Swal({
-      type: 'error',
+    Swal.fire({
+      icon:'error',
       title: error.status + '',
       text: this.translate.instant('ERROR.' + error.status),
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -83,8 +83,8 @@ export class ListCalendarioeventoComponent implements OnInit {
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -100,7 +100,7 @@ export class ListCalendarioeventoComponent implements OnInit {
       buttons: true,
       dangerMode: true,
       showCancelButton: true,
-    }; Swal(opt1)
+    }; Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
 
@@ -129,7 +129,7 @@ loadevento() {
     this.dataSource = new MatTableDataSource();
     this.dataSource = res;
   }else {
-    Swal(opt1)
+    Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
 
@@ -138,8 +138,8 @@ loadevento() {
   }
 },
 (error: HttpErrorResponse) => {
-  Swal({
-    type: 'error',
+  Swal.fire({
+    icon:'error',
     title: error.status + '',
     text: this.translate.instant('ERROR.' + error.status),
     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -156,8 +156,8 @@ loadevento() {
     }
   },
   (error: HttpErrorResponse) => {
-    Swal({
-      type: 'error',
+    Swal.fire({
+      icon:'error',
       title: error.status + '',
       text: this.translate.instant('ERROR.' + error.status),
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -173,7 +173,7 @@ capturarPeriodo() {
       buttons: true,
       dangerMode: true,
       showCancelButton: true,
-    }; Swal(opt1)
+    }; Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
 
@@ -195,8 +195,8 @@ traerPeriodoSelect() {
       }
     },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -214,7 +214,7 @@ traerPeriodoSelect() {
           dangerMode: true,
           showCancelButton: true,
         };
-        Swal(opt1)
+        Swal.fire(opt1)
         .then((willDelete) => {
           if (willDelete.value) {
           }
@@ -247,7 +247,7 @@ traerPeriodoSelect() {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) => {
 
       if (willDelete.value) {

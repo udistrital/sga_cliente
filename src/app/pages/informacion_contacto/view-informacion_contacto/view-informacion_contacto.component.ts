@@ -58,8 +58,8 @@ export class ViewInformacionContactoComponent implements OnInit {
             }
           },
             (error: HttpErrorResponse) => {
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'),
@@ -76,8 +76,8 @@ export class ViewInformacionContactoComponent implements OnInit {
       //     }
       //   },
       //     (error: HttpErrorResponse) => {
-      //       Swal({
-      //         type: 'error',
+      //       Swal.fire({
+      //         icon:'error',
       //         title: error.status + '',
       //         text: this.translate.instant('ERROR.' + error.status),
       //         footer: this.translate.instant('GLOBAL.cargar') + '-' +

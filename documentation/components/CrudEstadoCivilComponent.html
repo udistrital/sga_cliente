@@ -2550,7 +2550,7 @@ export class CrudEstadoCivilComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
       if (willDelete.value) {
         this.info_estado_civil &#x3D; &lt;EstadoCivil&gt;estadoCivil;
@@ -2573,7 +2573,7 @@ export class CrudEstadoCivilComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
       if (willDelete.value) {
         this.info_estado_civil &#x3D; &lt;EstadoCivil&gt;estadoCivil;

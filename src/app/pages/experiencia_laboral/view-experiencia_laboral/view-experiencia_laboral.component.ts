@@ -88,8 +88,8 @@ export class ViewExperienciaLaboralComponent implements OnInit {
               }
             },
               (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
+                Swal.fire({
+                  icon:'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -99,8 +99,8 @@ export class ViewExperienciaLaboralComponent implements OnInit {
                 });
               });
         } if (response.Data.Code === "400") {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             text: this.translate.instant('ERROR 400'),
             footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -108,8 +108,8 @@ export class ViewExperienciaLaboralComponent implements OnInit {
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),

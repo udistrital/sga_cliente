@@ -72,8 +72,8 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -111,7 +111,7 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
     this.dataSource = new MatTableDataSource();
     this.dataSource = res
   }else {
-    Swal(opt1)
+    Swal.fire(opt1)
     .then((willDelete) => {
       if (willDelete.value) {
       }
@@ -119,8 +119,8 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
   }
 },
 (error: HttpErrorResponse) => {
-  Swal({
-    type: 'error',
+  Swal.fire({
+    icon:'error',
     title: error.status + '',
     text: this.translate.instant('ERROR.' + error.status),
     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

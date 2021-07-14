@@ -3131,7 +3131,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       confirmButtonText: this.translate.instant(&#x27;GLOBAL.aceptar&#x27;),
       cancelButtonText: this.translate.instant(&#x27;GLOBAL.cancelar&#x27;),
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
       if (willDelete.value) {
         this.info_info_caracteristica &#x3D; &lt;InfoCaracteristica&gt;infoCaracteristica;
@@ -3158,7 +3158,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       confirmButtonText: this.translate.instant(&#x27;GLOBAL.aceptar&#x27;),
       cancelButtonText: this.translate.instant(&#x27;GLOBAL.cancelar&#x27;),
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
       if (willDelete.value) {
         this.info_info_caracteristica &#x3D; &lt;InfoCaracteristica&gt;infoCaracteristica;

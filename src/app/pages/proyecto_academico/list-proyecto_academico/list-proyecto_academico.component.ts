@@ -235,8 +235,8 @@ export class ListProyectoAcademicoComponent implements OnInit {
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -270,15 +270,15 @@ export class ListProyectoAcademicoComponent implements OnInit {
             (data: any) => (data.proyecto = data.ProyectoAcademico.Nombre),
           ); // para ordenar por nommbre de proyecto
         } else {
-          Swal(opt1).then(willDelete => {
+          Swal.fire(opt1).then(willDelete => {
             if (willDelete.value) {
             }
           });
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -338,15 +338,15 @@ export class ListProyectoAcademicoComponent implements OnInit {
             )[0];
             this.openDialogConsulta();
           } else {
-            Swal(opt1).then(willDelete => {
+            Swal.fire(opt1).then(willDelete => {
               if (willDelete.value) {
               }
             });
           }
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -498,15 +498,15 @@ export class ListProyectoAcademicoComponent implements OnInit {
             )[0];
             this.openDialogModificar();
           } else {
-            Swal(opt1).then(willDelete => {
+            Swal.fire(opt1).then(willDelete => {
               if (willDelete.value) {
               }
             });
           }
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -568,15 +568,15 @@ export class ListProyectoAcademicoComponent implements OnInit {
               'ResolucionAsignacionId'
             ];
           } else {
-            Swal(opt1).then(willDelete => {
+            Swal.fire(opt1).then(willDelete => {
               if (willDelete.value) {
               }
             });
           }
         },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -620,7 +620,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt).then(willDelete => {
+    Swal.fire(opt).then(willDelete => {
       if (willDelete.value) {
         const proyectoAModificar = row.ProyectoAcademico;
         proyectoAModificar.Activo = !proyectoAModificar.Activo;

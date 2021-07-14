@@ -100,7 +100,7 @@ export class CrudCalendarioeventoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) => {
       if (willDelete.value) {
         this.info_calendarioevento = <Calendarioevento>calendarioevento;
@@ -123,7 +123,7 @@ export class CrudCalendarioeventoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) => {
       if (willDelete.value) {
         this.info_calendarioevento = <Calendarioevento>calendarioevento;
