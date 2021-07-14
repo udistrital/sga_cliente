@@ -10,121 +10,89 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { ImplicitAutenticationService } from './../@core/utils/implicit_autentication.service';
 import { environment } from '../../environments/environment';
 
+
 @Component({
   selector: 'ngx-pages',
   template: `
     <ngx-sample-layout>
-      <nb-menu [items]="menu"></nb-menu>
+      <nb-menu [items]='menu'></nb-menu>
       <router-outlet></router-outlet>
     </ngx-sample-layout>
   `,
 })
+
 export class PagesComponent implements OnInit {
+
   public menu = [];
-  public results = [];
-  object: MenuItem;
   hijo: MenuItem;
   hijo2: MenuItem;
   rol: String;
   dataMenu: any;
   roles: any;
-  private autenticacion = new ImplicitAutenticationService();
+  private autenticacion= new ImplicitAutenticationService;
 
   constructor(
     public menuws: MenuService,
-    private translate: TranslateService,
-  ) {}
+    private translate: TranslateService) {
+    }
+
+
+  translateTree(tree: any) {
+      const trans = tree.map((n: any) => {
+          let node = {};
+          if (!n.Url.indexOf('http')) {
+            node = {
+              title: n.Nombre,
+              icon: 'nb-list',
+              url: n.Url,
+              home: false,
+              key: n.Nombre,
+              children: [],
+            };
+          } else {
+            node = {
+              title: n.Nombre,
+              icon: 'nb-list',
+              link: n.Url,
+              home: false,
+              key: n.Nombre,
+            };
+          }
+          if (n.hasOwnProperty('Opciones')) {
+              if (n.Opciones !== null) {
+                  const children = this.translateTree(n.Opciones);
+                  node = { ...node, ...{ children: children }, ...{ icon: 'nb-compose'} };
+              }
+              return node;
+          } else {
+              return node;
+          }
+      });
+      return trans;
+  }
+
 
   ngOnInit() {
     if (this.autenticacion.live()) {
-      this.roles = JSON.parse(
-        atob(localStorage.getItem('id_token').split('.')[1]),
-      ).role.filter((data: any) => data.indexOf('/') === -1);
-      this.object = {
+      this.roles = (JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).role).filter((data: any) => (data.indexOf('/') === -1));
+      const homeOption =  {
         title: 'dashboard',
         icon: 'nb-home',
         url: '#/pages/dashboard',
         home: true,
         key: 'dashboard',
-      };
-      this.results.push(this.object);
+      }
+      this.menu = [homeOption]
 
-      if (this.roles.length === 0) {
+      if (this.roles.length === 0){
         this.roles = 'ASPIRANTE';
       }
 
       this.menuws.get(this.roles + '/SGA').subscribe(
         data => {
           this.dataMenu = <any>data;
-          for (let i = 0; i < this.dataMenu.length; i++) {
-            if (this.dataMenu[i].TipoOpcion === 'Menú') {
-              if (!this.dataMenu[i].Opciones) {
-                if (!this.dataMenu[i].Url.indexOf('http')) {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    url: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                  };
-                } else {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    link: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                  };
-                }
-              } else {
-                if (!this.dataMenu[i].Url.indexOf('http')) {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    url: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                    children: [],
-                  };
-                } else {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    link: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                    children: [],
-                  };
-                }
-                for (let j = 0; j < this.dataMenu[i].Opciones.length; j++) {
-                  if (this.dataMenu[i].TipoOpcion === 'Menú') {
-                    if (!this.dataMenu[i].Opciones[j].Opciones) {
-                      if (!this.dataMenu[i].Opciones[j].Url.indexOf('http')) {
-                        this.hijo = {
-                          title: this.dataMenu[i].Opciones[j].Nombre,
-                          icon: 'nb-list',
-                          url: this.dataMenu[i].Opciones[j].Url,
-                          home: false,
-                          key: this.dataMenu[i].Opciones[j].Nombre,
-                        };
-                      } else {
-                        this.hijo = {
-                          title: this.dataMenu[i].Opciones[j].Nombre,
-                          icon: 'nb-list',
-                          link: this.dataMenu[i].Opciones[j].Url,
-                          home: false,
-                          key: this.dataMenu[i].Opciones[j].Nombre,
-                        };
-                      }
-                    }
-                    this.object.children.push(this.hijo);
-                  }
-                }
-              }
-              this.results.push(this.object);
-            }
-          }
-          this.menu = this.results;
+          this.menu = this.translateTree(this.dataMenu)
+          this.menu.unshift(homeOption);
           this.translateMenu();
         },
         (error: HttpErrorResponse) => {
@@ -147,28 +115,24 @@ export class PagesComponent implements OnInit {
             });
           } else {
             Swal.fire({
-              type: 'error',
+              icon: 'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
-              footer:
-                this.translate.instant('GLOBAL.cargar') +
-                '-' +
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
                 this.translate.instant('GLOBAL.menu'),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
           }
-          // this.menu = MENU_ITEMS;
+          //this.menu = MENU_ITEMS;
           this.translateMenu();
-        },
-      );
+        });
     } else {
       this.rol = 'PUBLICO';
-      // this.menu = MENU_ITEMS;
+      //this.menu = MENU_ITEMS;
       this.translateMenu();
     }
     this.translateMenu();
-    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      // Live reload
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => { // Live reload
       this.translateMenu();
     });
   }
@@ -187,10 +151,9 @@ export class PagesComponent implements OnInit {
   private translateMenuTitle(menuItem: MenuItem, prefix: string = ''): void {
     let key = '';
     try {
-      key =
-        prefix !== ''
-          ? PagesComponent.getMenuItemKey(menuItem, prefix)
-          : PagesComponent.getMenuItemKey(menuItem);
+      key = (prefix !== '')
+        ? PagesComponent.getMenuItemKey(menuItem, prefix)
+        : PagesComponent.getMenuItemKey(menuItem);
     } catch (e) {
       // Key not found, don't change the menu item
       return;
@@ -203,10 +166,7 @@ export class PagesComponent implements OnInit {
       // apply same on every child
       menuItem.children.forEach((childMenuItem: MenuItem) => {
         // We remove the nested key and then use it as prefix for every child
-        this.translateMenuTitle(
-          childMenuItem,
-          PagesComponent.trimLastSelector(key),
-        );
+        this.translateMenuTitle(childMenuItem, PagesComponent.trimLastSelector(key));
       });
     }
   }
@@ -217,10 +177,7 @@ export class PagesComponent implements OnInit {
    * @param prefix
    * @returns {string}
    */
-  private static getMenuItemKey(
-    menuItem: MenuItem,
-    prefix: string = 'MENU',
-  ): string {
+  private static getMenuItemKey(menuItem: MenuItem, prefix: string = 'MENU'): string {
     if (menuItem.key == null) {
       throw new Error('Key not found');
     }
