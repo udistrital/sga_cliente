@@ -5,7 +5,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'ngx-list-practicas-academicas',
   templateUrl: './list-practicas-academicas.component.html',
-  styleUrls: ['../practicas-academicas.component.scss']
+  styleUrls: ['../practicas-academicas.component.scss'],
 })
 export class ListPracticasAcademicasComponent implements OnInit {
 
@@ -45,7 +45,7 @@ export class ListPracticasAcademicasComponent implements OnInit {
           title: this.translate.instant('solicitudes.estado'),
           width: '20%',
           editable: false,
-        }
+        },
       },
       mode: 'external',
       hideSubHeader: true,
@@ -58,12 +58,17 @@ export class ListPracticasAcademicasComponent implements OnInit {
         custom: [
           {
             name: 'view',
-            title: '<i class="fa fa-eye"></i>',
-          }
-        ]
+            title:
+              '<i class="nb-search" title="' +
+              this.translate.instant(
+                'practicas_academicas.tooltip_ver_registro',
+              ) +
+              '"></i>',
+          },
+        ],
       },
       noDataMessage: this.translate.instant('practicas_academicas.no_data'),
-    }
+    };
   }
 
   ngOnInit() {

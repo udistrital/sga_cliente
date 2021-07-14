@@ -15,6 +15,7 @@
         -webkit-padding-end: 1rem;
         -webkit-padding-after: 1rem;
         min-width: -moz-min-content;
+        overflow: auto;
         border-width: 2px;
         border-radius: 0.4rem;
         border-style: groove;
@@ -36,7 +37,6 @@
     width: 50px;
     text-align: center;
     font-size: 1.1em;
-    color: rgb(79, 185, 255);
 }
 
 :host /deep/ ng2-st-tbody-custom {

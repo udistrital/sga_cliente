@@ -11,10 +11,9 @@ import { PopUpManager } from '../../../managers/popUpManager';
 @Component({
   selector: 'ngx-copiar-conceptos',
   templateUrl: './copiar-conceptos.component.html',
-  styleUrls: ['../derechos-pecuniarios.component.scss']
+  styleUrls: ['../derechos-pecuniarios.component.scss'],
 })
 export class CopiarConceptosComponent implements OnInit {
-
   vigenciaElegida: FormControl;
   vigencias: any[];
   tablaConceptos: any;
@@ -34,14 +33,18 @@ export class CopiarConceptosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.parametrosService.get('periodo?query=CodigoAbreviacion:VG&limit=0&sortby=Id&order=desc').subscribe(
-      response => {
-        this.vigencias = response['Data'];
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      },
-    );
+    this.parametrosService
+      .get('periodo?query=CodigoAbreviacion:VG&limit=0&sortby=Id&order=desc')
+      .subscribe(
+        response => {
+          this.vigencias = response['Data'];
+        },
+        error => {
+          this.popUpManager.showErrorToast(
+            this.translate.instant('ERROR.general'),
+          );
+        },
+      );
     this.crearTablaConceptos();
   }
 
@@ -73,7 +76,7 @@ export class CopiarConceptosComponent implements OnInit {
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
       },
-/*
+      /*
       add: {
         addButtonContent: '<i class="nb-plus"></i>',
       },
@@ -89,46 +92,59 @@ export class CopiarConceptosComponent implements OnInit {
   }
 
   copiarConceptos() {
-    //copiar conceptos
+    // copiar conceptos
     // redirige a la de definir con los datos copiados
     const vigenciaClonar = {
       VigenciaActual: this.vigencias.filter(vig => vig.Activo === true)[0].Id,
-      VigenciaAnterior: this.vigenciaElegida.value
-    }
+      VigenciaAnterior: this.vigenciaElegida.value,
+    };
 
-    this.sgaMidService.post('derechos_pecuniarios/clonar', vigenciaClonar).subscribe(
-      response => {
-        this.router.navigate(['../definir-conceptos', { Id: vigenciaClonar.VigenciaActual }], {relativeTo: this.route});
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      },
-    );
+    this.sgaMidService
+      .post('derechos_pecuniarios/clonar', vigenciaClonar)
+      .subscribe(
+        response => {
+          this.router.navigate(
+            ['../definir-conceptos', { Id: vigenciaClonar.VigenciaActual }],
+            { relativeTo: this.route },
+          );
+        },
+        error => {
+          this.popUpManager.showErrorToast(
+            this.translate.instant('ERROR.general'),
+          );
+        },
+      );
   }
 
   cambiarVigencia() {
     this.datosCargados = [];
-    this.sgaMidService.get('derechos_pecuniarios/' + this.vigenciaElegida.value).subscribe(
-      response => {
-        var data: any[] = response['Data'];
-        if (Object.keys(data).length > 0 && Object.keys(data[0]).length > 0) {
-          data.forEach(obj => {
-            var concepto = new Concepto();
-            concepto.Id = obj.ParametroId.Id;
-            concepto.Codigo = obj.ParametroId.CodigoAbreviacion;
-            concepto.Nombre = obj.ParametroId.Nombre;
-            concepto.Factor = JSON.parse(obj.Valor).NumFactor;
-            this.datosCargados.push(concepto);
-          });
-        } else {
-          this.popUpManager.showAlert('info', this.translate.instant('derechos_pecuniarios.no_conceptos'));
-        }
-        this.datosConceptos.load(this.datosCargados);
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      },
-    );
+    this.sgaMidService
+      .get('derechos_pecuniarios/' + this.vigenciaElegida.value)
+      .subscribe(
+        response => {
+          const data: any[] = response['Data'];
+          if (Object.keys(data).length > 0 && Object.keys(data[0]).length > 0) {
+            data.forEach(obj => {
+              const concepto = new Concepto();
+              concepto.Id = obj.ParametroId.Id;
+              concepto.Codigo = obj.ParametroId.CodigoAbreviacion;
+              concepto.Nombre = obj.ParametroId.Nombre;
+              concepto.Factor = JSON.parse(obj.Valor).NumFactor;
+              this.datosCargados.push(concepto);
+            });
+          } else {
+            this.popUpManager.showAlert(
+              'info',
+              this.translate.instant('derechos_pecuniarios.no_conceptos'),
+            );
+          }
+          this.datosConceptos.load(this.datosCargados);
+        },
+        error => {
+          this.popUpManager.showErrorToast(
+            this.translate.instant('ERROR.general'),
+          );
+        },
+      );
   }
-
 }
