@@ -44,31 +44,34 @@ export class AuthInterceptor implements HttpInterceptor {
 
       // send cloned request with header to the next handler.
       return next.handle(authReq).pipe(
-        tap(event => {
-          // There may be other events besides the response.
-          if (event instanceof HttpErrorResponse) {
-            // cache.put(req, event); // Update the cache.
-            this.router.navigate(['/']);
-            this.pUpManager.showErrorToast(this.translate.instant(`ERROR.${event['status']}`))
-          } else {
-            if (event['body']) {
-
-              if (event['body'] !== null) {
-
-                if (event['body']['Body'] !== undefined && event['body']['Body'] === null) {
+        tap(
+          event => {
+            // There may be other events besides the response.
+            if (event instanceof HttpErrorResponse) {
+              // cache.put(req, event); // Update the cache.
+              this.router.navigate(['/']);
+              this.pUpManager.showErrorToast(
+                this.translate.instant(`ERROR.${event['status']}`),
+              );
+            } else {
+              if (event['body']) {
+                if (event['body'] !== null) {
+                  if (
+                    event['body']['Body'] !== undefined &&
+                    event['body']['Body'] === null
+                  ) {
+                    this.pUpManager.showInfoToast('No se encontraron Datos');
+                  }
+                } else {
                   this.pUpManager.showInfoToast('No se encontraron Datos');
                 }
-
-              } else {
-                this.pUpManager.showInfoToast('No se encontraron Datos');
               }
             }
-          }
-        },
-          (error: any) => {
-            console.error(error);
-            this.pUpManager.showErrorToast(this.translate.instant(`ERROR.${error['status']}`))
           },
+          // (error: any) => {
+          //   console.error(error);
+          //   this.pUpManager.showErrorToast(this.translate.instant(`ERROR.${error['status']}`))
+          // },
         ),
         finalize(() => this.loaderService.hide()),
       );

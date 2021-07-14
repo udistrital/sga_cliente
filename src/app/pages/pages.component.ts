@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { ImplicitAutenticationService } from './../@core/utils/implicit_autentication.service';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -32,10 +33,9 @@ export class PagesComponent implements OnInit {
 
   constructor(
     public menuws: MenuService,
-    private translate: TranslateService) { 
+    private translate: TranslateService) {
     }
 
-    
   translateTree(tree: any) {
       const trans = tree.map((n: any) => {
           let node = {};
@@ -84,9 +84,9 @@ export class PagesComponent implements OnInit {
       this.menu = [homeOption]
 
       if (this.roles.length === 0){
-        this.roles = "ASPIRANTE";
+        this.roles = 'ASPIRANTE';
       }
-      
+
       this.menuws.get(this.roles + '/SGA').subscribe(
         data => {
           this.dataMenu = <any>data;
@@ -95,14 +95,35 @@ export class PagesComponent implements OnInit {
           this.translateMenu();
         },
         (error: HttpErrorResponse) => {
-          Swal.fire({
-            icon:'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.menu'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+
+          if (this.dataMenu === undefined) {
+            Swal.fire({
+              icon: 'info',
+              title: this.translate.instant('ERROR.rol_insuficiente_titulo'),
+              text: this.translate.instant('ERROR.rol_insuficiente'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              onAfterClose: () => {
+                window.location.href =
+                  environment.TOKEN.SIGN_OUT_URL +
+                  '?id_token_hint=' +
+                  window.localStorage.getItem('id_token') +
+                  '&post_logout_redirect_uri=' +
+                  environment.TOKEN.SIGN_OUT_REDIRECT_URL +
+                  '&state=' +
+                  window.localStorage.getItem('state');
+              },
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.menu'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          }
+
           //this.menu = MENU_ITEMS;
           this.translateMenu();
         });
