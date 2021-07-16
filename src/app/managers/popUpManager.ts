@@ -23,9 +23,8 @@ export class PopUpManager {
 
     public showErrorToast(message: string) {
         let status: any = 'danger';
-        const duration: any = 0
         if (message === 'ERROR.200') {
-            this.toast.show('', this.translate.instant('GLOBAL.no_informacion_registrada'),{status: NbToastStatus.WARNING,duration:500000});
+            this.toast.show('', this.translate.instant('GLOBAL.no_informacion_registrada'),{status: NbToastStatus.WARNING});
         } else {
             this.toast.show(message, this.translate.instant('GLOBAL.error'), { status });
         }
