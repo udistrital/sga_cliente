@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
+import { NbToastrConfig } from '@nebular/theme/components/toastr/toastr-config';
+import { NbToastStatus } from '@nebular/theme/components/toastr/model';
 
 
 @Injectable({
@@ -20,9 +22,9 @@ export class PopUpManager {
     }
 
     public showErrorToast(message: string) {
-        const status: any = 'danger';
+        let status: any = 'danger';
         if (message === 'ERROR.200') {
-            console.log(message);
+            this.toast.show('', this.translate.instant('GLOBAL.no_informacion_registrada'),{status: NbToastStatus.WARNING});
         } else {
             this.toast.show(message, this.translate.instant('GLOBAL.error'), { status });
         }
