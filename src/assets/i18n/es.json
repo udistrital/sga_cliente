@@ -138,6 +138,7 @@
     },
     "GLOBAL": {
         "cargando": "Cargando...",
+        "no_informacion_registrada":"No hay información registrada",
         "info": "¡Atención!",
         "preinscripcion": "Preinscripcion",
         "preinscripcion_2": "Desea realizar preinscripcion",

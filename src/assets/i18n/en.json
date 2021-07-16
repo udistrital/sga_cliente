@@ -139,6 +139,7 @@
     "GLOBAL": {
         "cargando": "Loading...",
         "info": "Warning!",
+        "no_informacion_registrada": "There is not registered information",
         "preinscripcion": "Pre-registration",
         "preinscripcion_2": "You want to pre-register",
         "id": "Id",
