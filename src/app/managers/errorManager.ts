@@ -24,10 +24,14 @@ export class HttpErrorManager {
         `body was: ${error.error}`);
     }
     // return an observable with a user-facing error message
-    return throwError({
-      status: error.status,
-      System: error.error.System,
-      message: 'Something bad happened; please try again later.',
-    });
+    if(error.status === 200){
+      return []
+    }else {
+      return throwError({
+        status: error.status,
+        System: error.error.System,
+        message: 'Something bad happened; please try again later.',
+      });
+    }
   };
 }
