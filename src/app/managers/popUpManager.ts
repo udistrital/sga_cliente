@@ -21,7 +21,11 @@ export class PopUpManager {
 
     public showErrorToast(message: string) {
         const status: any = 'danger';
-        this.toast.show(message, this.translate.instant('GLOBAL.error'), { status });
+        if (message === 'ERROR.200') {
+            console.log(message);
+        } else {
+            this.toast.show(message, this.translate.instant('GLOBAL.error'), { status });
+        }
     }
 
     public showInfoToast(message: string) {
@@ -50,14 +54,14 @@ export class PopUpManager {
 
     public showErrorAlert(text) {
         Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: this.translate.instant('GLOBAL.error'),
             text: text,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
     }
 
-    public showConfirmAlert(text, title=this.translate.instant('GLOBAL.atencion')): Promise<any> {
+    public showConfirmAlert(text, title = this.translate.instant('GLOBAL.atencion')): Promise<any> {
         const options: any = {
             title: title,
             text: text,
