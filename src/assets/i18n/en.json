@@ -113,6 +113,7 @@
         },
         "solicitudes": {
             "solicitudes": "Basic data",
+            "doc_valido": "Select the state for this requests",
             "solicitudes_lista": "List of requests"
         },
         "gestionar_solicitudes": {

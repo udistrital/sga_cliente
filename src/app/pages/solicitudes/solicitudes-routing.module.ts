@@ -6,7 +6,7 @@ import { ActualizacionDatosComponent } from './actualizacion-datos/actualizacion
 import { ActualizacionNombresComponent } from './actualizacion-nombres/actualizacion-nombres.component';
 import { ListSolicitudesEstudianteComponent } from './list-solicitudes-estudiante/list-solicitudes-estudiante.component';
 import { DatosSolicitanteComponent } from './datos-solicitante/datos-solicitante.component';
-import { DialogoSoporteComponent } from "./dialogo-soporte/dialogo-soporte.component";
+import { DialogoSoporteComponent } from './dialogo-soporte/dialogo-soporte.component';
 
 const routes: Routes = [{
     path: '',
@@ -23,7 +23,7 @@ const routes: Routes = [{
         {
             path: 'list-solicitudes-estudiante',
             component: ListSolicitudesEstudianteComponent,
-        }
+        },
     ],
 }];
 
@@ -33,7 +33,7 @@ const routes: Routes = [{
     ],
     exports: [
         RouterModule,
-    ]
+    ],
 })
 export class SolicitudesRoutingModule { }
 

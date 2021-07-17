@@ -35,6 +35,6 @@ import { DialogoSoporteComponent } from './dialogo-soporte/dialogo-soporte.compo
   ],
   entryComponents: [
     DialogoSoporteComponent,
-  ]
+  ],
 })
 export class SolicitudesModule { }

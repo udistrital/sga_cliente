@@ -16,7 +16,7 @@ export const ACTUALIZAR_DATOS = {
         },
         {
             etiqueta: 'div',
-            claseGrid: 'offset-sm-6'
+            claseGrid: 'offset-sm-6',
         },
         {
             etiqueta: 'select',
@@ -37,7 +37,7 @@ export const ACTUALIZAR_DATOS = {
             label_i18n: 'numero_actual',
             requerido: true,
             deshabilitar: true,
-            key: 'Numero'
+            key: 'Numero',
         },
         {
             etiqueta: 'input',
@@ -51,7 +51,7 @@ export const ACTUALIZAR_DATOS = {
         },
         {
             etiqueta: 'div',
-            claseGrid: 'offset-sm-6'
+            claseGrid: 'offset-sm-6',
         },
         {
             etiqueta: 'select',
@@ -61,7 +61,7 @@ export const ACTUALIZAR_DATOS = {
             label_i18n: 'documento_nuevo',
             requerido: true,
             opciones: [],
-            key: 'Nombre'
+            key: 'Nombre',
         },
         {
             etiqueta: 'input',
@@ -81,7 +81,7 @@ export const ACTUALIZAR_DATOS = {
         },
         {
             etiqueta: 'div',
-            claseGrid: 'offset-sm-6'
+            claseGrid: 'offset-sm-6',
         },
         {
             etiqueta: 'file',
@@ -97,5 +97,5 @@ export const ACTUALIZAR_DATOS = {
             url: '',
             tamanoMaximo: 2,
         },
-    ]
+    ],
 }

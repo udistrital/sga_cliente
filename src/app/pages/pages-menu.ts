@@ -20,9 +20,9 @@ export const MENU_ITEMS: MenuItem[] = [
         title: 'Lista de solicitudes',
         icon: 'nb-list',
         link: '/pages/solicitudes/list-solicitudes-estudiante',
-        key: 'solicitudes_lista'
+        key: 'solicitudes_lista',
       },
-    ]
+    ],
   },
   {
     title: 'Solicitud',
@@ -42,7 +42,7 @@ export const MENU_ITEMS: MenuItem[] = [
         link: '/pages/solicitud/actualizacion-nombres',
         key: 'actualizacion_nombres',
       },
-    ]
+    ],
   },
   {
     title: 'Gestionar solicitudes',
@@ -54,9 +54,9 @@ export const MENU_ITEMS: MenuItem[] = [
         title: 'Solicitudes de actualización',
         icon: 'nb-list',
         link: '/pages/solicitudes/gestionar-solicitudes',
-        key: 'solicitudes_actualizacion'
+        key: 'solicitudes_actualizacion',
       },
-    ]
+    ],
   },
   {
     title: 'Espacios académicos',
@@ -68,9 +68,9 @@ export const MENU_ITEMS: MenuItem[] = [
         title: 'Preinscripcion espacios',
         icon: 'nb-list',
         link: '/pages/espacios-academicos',
-        key: 'preinscripcion_espacios'
-      }
-    ]
+        key: 'preinscripcion_espacios',
+      },
+    ],
   },
 /*   {
     title: 'Producción Academica',
@@ -121,7 +121,7 @@ export const MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
-    title:'Prácticas académicas',
+    title: 'Prácticas académicas',
     icon: 'nb-compose',
     link: '',
     key: 'practicas_academicas',
@@ -130,27 +130,27 @@ export const MENU_ITEMS: MenuItem[] = [
         title: 'Nueva solicitud',
         icon: 'nb-compose',
         link: '/pages/practicas-academicas/nueva-solicitud',
-        key: 'crear_nueva_practica'
+        key: 'crear_nueva_practica',
       },
       {
         title: 'Nuevas solicitudes',
         icon: 'nb-list',
         link: '/pages/practicas-academicas/lista-practicas',
-        key: 'ver_nuevas_solicitudes'
+        key: 'ver_nuevas_solicitudes',
       },
       {
         title: 'Solicitudes en proceso',
         icon: 'nb-list',
         link: '/pages/practicas-academicas/lista-practicas',
-        key: 'en_proceso'
+        key: 'en_proceso',
       },
       {
         title: 'Invitacion',
         icon: 'nb-edit',
         link: '',
-        key: 'invitacion'
-      }
-    ]
+        key: 'invitacion',
+      },
+    ],
   },
 /*   {
     title: 'Tipo Periodo',
@@ -308,7 +308,7 @@ export const MENU_ITEMS: MenuItem[] = [
         title: 'Consultar conceptos',
         icon: 'nb-list',
         link: '/pages/derechos-pecuniarios/consultar-conceptos',
-        key: 'consultar_conceptos'
+        key: 'consultar_conceptos',
       },
       {
         title: 'Definir Conceptos',

@@ -1405,7 +1405,7 @@
     },
     "solicitudes": {
         "respuesta": "La respuesta a esta solicitud ha sido registrada correctamente",
-        "doc_valido": "¿El documento enviado es aprobado para esta solicitud",
+        "doc_valido": "Seleccione el estado para esta solicitud",
         "observacion": "Observación",
         "solicitud_respuesta": "Respuesta de la solicitud",
         "error": "Ha ocurrido un error inesperado y no se pudo cumplir la solicitud",

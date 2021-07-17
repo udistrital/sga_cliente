@@ -74,9 +74,13 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
     for (let i = 15; i < 21; i++) {
       await this.loadSolicitudes(i);
     }
+    await this.loadSolicitudes(33); // Actualización de identificación APLAZADA
+    await this.loadSolicitudes(34); // Actualización de nombre APLAZADA
     const listaFinal = [];
     for (let i = 0; i < this.listaDatos.length; i++) {
-      listaFinal[i] = this.listaDatos[i][0];
+      this.listaDatos[i].forEach(solicitudes => {
+        listaFinal.push(solicitudes);
+      });
     }
     this.solicitudes.load(listaFinal);
   }
@@ -230,5 +234,6 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
     this.showTable = true;
     this.showSolicitudID = false;
     this.showSolicitudNombre = false;
+    sessionStorage.setItem('Solicitud', null)
   }
 }
