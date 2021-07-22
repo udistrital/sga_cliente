@@ -594,6 +594,7 @@
         "maximo_recibos": "I already generate the maximum receipts allowed"
     },
     "produccion_academica": {
+        "titulo_revista":"Magazine title",
         "tipo_disciplina": "Discipline type",
         "placeholder_tipo_disciplina": "E.g.: Audiovisual arts",
         "idioma_traducido": "Translated language",
