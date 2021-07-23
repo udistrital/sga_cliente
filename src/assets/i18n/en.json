@@ -107,7 +107,7 @@
             "admision": "Admissions",
             "criterios": "Admissions criteria for projects",
             "asignacion_cupos": "Assignment of quotas",
-            "actualizacion_estado": "Actulize aspirant status",
+            "actualizacion_estado": "Assignment of quotas for projects",
             "listado_aspirante": "List applicants",
             "administrar_criterios": "Manage admission criteria"
         },
@@ -1303,7 +1303,7 @@
         "prueba": "Criteria Test",
         "hoja_vida": "Resume criteria",
         "criterio_icfes": "Percentages for the ICFES criterion",
-        "actualizacion_estado": "Actulize aspirant status",
+        "actualizacion_estado": "Assignment of quotas for projects",
         "enlistar": "Enlist applicants",
         "criterios_subcriterios": "Criteria and Subcriteria",
         "criterios": "Criteria",

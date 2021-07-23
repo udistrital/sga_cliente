@@ -107,7 +107,7 @@
             "admision": "Admisiones",
             "criterios": "Criterios de admisiones \npor proyectos",
             "asignacion_cupos": "Asignación de cupos",
-            "actualizacion_estado": "Actualizar estado aspirantes",
+            "actualizacion_estado": "Asignación de cupos por proyecto",
             "listado_aspirante": "Listar aspirantes",
             "administrar_criterios": "Administrar criterios\nde admisión"
         },
@@ -1337,7 +1337,7 @@
         "prueba": "Criterio prueba",
         "hoja_vida": "Criterio hoja de vida",
         "criterio_icfes": "Porcentajes para el criterio ICFES",
-        "actualizacion_estado": "Actualizar estado aspirantes",
+        "actualizacion_estado": "Asignación de cupos por proyecto",
         "enlistar": "Enlistar aspirantes",
         "criterios_subcriterios": "Criterios y Subcriterios",
         "criterios": "Criterios",
