@@ -54,27 +54,6 @@ export class ListIdiomasComponent implements OnInit {
 
   cargarCampos() {
     this.settings = {
-      actions: {
-        columnTitle: '',
-        add: false,
-        edit: true,
-        delete: true,
-      },
-      add: {
-        addButtonContent: '<i class="nb-plus"></i>',
-        createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
-        saveButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
-        confirmDelete: true,
-      },
-      mode: 'external',
       columns: {
         Idioma: {
           title: this.translate.instant('GLOBAL.idioma'),
@@ -111,6 +90,23 @@ export class ListIdiomasComponent implements OnInit {
             return value.Nombre;
           },
         },
+      },
+      mode: 'external',
+      actions: {
+        add: false,
+        edit: true,
+        delete: true,
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+      },
+      edit: {
+        editButtonContent: '<i class="nb-edit"></i>',
+        saveButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close"></i>',
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: true,
       },
     };
   }

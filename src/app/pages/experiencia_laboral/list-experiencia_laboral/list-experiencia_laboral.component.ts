@@ -68,27 +68,6 @@ export class ListExperienciaLaboralComponent implements OnInit {
 
   cargarCampos() {
     this.settings = {
-      actions: {
-        columnTitle: '',
-        add: false,
-        edit: true,
-        delete: false,
-      },
-      add: {
-        addButtonContent: '<i class="nb-plus"></i>',
-        createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
-        saveButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
-        confirmDelete: true,
-      },
-      mode: 'external',
       columns: {
         NombreEmpresa: {
           title: this.translate.instant('GLOBAL.nombre_empresa'),
@@ -118,6 +97,28 @@ export class ListExperienciaLaboralComponent implements OnInit {
             return formatDate(value, 'yyyy-MM-dd', 'en');
           },
         },
+      },
+      mode: 'external',
+      actions: {
+        add: false,
+        edit: true,
+        delete: false,
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+      },
+      add: {
+        addButtonContent: '<i class="nb-plus"></i>',
+        createButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close"></i>',
+      },
+      edit: {
+        editButtonContent: '<i class="nb-edit"></i>',
+        saveButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close"></i>',
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: true,
       },
     };
   }
