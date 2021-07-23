@@ -8,7 +8,7 @@ export let FORM_FORMACION_ACADEMICA = {
   campos: [
     {
       etiqueta: 'input',
-      claseGrid: 'col-lg-11 col-md-11 col-sm-11 col-xs-11',
+      claseGrid: 'col-lg-10 col-md-9 col-sm-8 col-xs-8',
       nombre: 'Nit',
       label_i18n: 'nit',
       placeholder_i18n: 'nit',
@@ -17,10 +17,11 @@ export let FORM_FORMACION_ACADEMICA = {
     },
     {
       etiqueta: 'button',
-      claseGrid: 'col-lg-1 col-md-1 col-sm-1 col-xs-1',
+      claseGrid: 'col-lg-2 col-md-3 col-sm-4 col-xs-4',
       nombre: 'BusquedaBoton',
-      claseBoton: 'btn btn-primary btn-sm',
+      claseBoton: 'btn btn-primary btn-tiny',
       icono: 'fa fa-search',
+      label_i18n: 'buscar',
     },
     {
       etiqueta: 'select',

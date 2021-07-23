@@ -7,7 +7,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
   campos: [
     {
       etiqueta: 'input',
-      claseGrid: 'col-lg-11 col-md-11 col-sm-11 col-xs-11',
+      claseGrid: 'col-lg-10 col-md-10 col-sm-9 col-xs-8',
       nombre: 'Nit',
       label_i18n: 'nit',
       placeholder_i18n: 'nit',
@@ -16,10 +16,11 @@ export let FORM_EXPERIENCIA_LABORAL = {
     },
     {
       etiqueta: 'button',
-      claseGrid: 'col-lg-1 col-md-1 col-sm-1 col-xs-1',
+      claseGrid: 'col-lg-2 col-md-2 col-sm-3 col-xs-4',
       nombre: 'BusquedaBoton',
       claseBoton: 'btn btn-primary btn-sm',
       icono: 'fa fa-search',
+      label_i18n: 'buscar',
     },
     {
       etiqueta: 'select',

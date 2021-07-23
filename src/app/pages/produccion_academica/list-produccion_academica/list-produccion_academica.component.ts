@@ -15,7 +15,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
   selector: 'ngx-list-produccion-academica',
   templateUrl: './list-produccion_academica.component.html',
   styleUrls: ['./list-produccion_academica.component.scss'],
-  })
+})
 export class ListProduccionAcademicaComponent implements OnInit {
   prod_selected: ProduccionAcademicaPost;
   cambiotab: boolean = false;
@@ -47,21 +47,6 @@ export class ListProduccionAcademicaComponent implements OnInit {
 
   cargarCampos() {
     this.settings = {
-      add: {
-        addButtonContent: '<i class="nb-plus"></i>',
-        createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
-        saveButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
-        confirmDelete: true,
-      },
-      mode: 'external',
       columns: {
         Titulo: {
           title: this.translate.instant('produccion_academica.titulo_produccion_academica'),
@@ -104,6 +89,28 @@ export class ListProduccionAcademicaComponent implements OnInit {
           width: '10%',
         },
       },
+      mode: 'external',
+      actions: {
+        add: true,
+        edit: true,
+        delete: true,
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+      },
+      add: {
+        addButtonContent: '<i class="nb-plus"></i>',
+        createButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close"></i>',
+      },
+      edit: {
+        editButtonContent: '<i class="nb-edit"></i>',
+        saveButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close"></i>',
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash"></i>',
+        confirmDelete: true,
+      },
     };
   }
 
@@ -114,31 +121,30 @@ export class ListProduccionAcademicaComponent implements OnInit {
   loadData(): void {
     this.loading = true;
     this.sgaMidService.get('produccion_academica/pr_academica/' + this.persona_id)
-    .subscribe(res => {
-      console.info(res)
-      if(res !== null && res.Response.Code === "200"){
-        const data = <Array<ProduccionAcademicaPost>>res.Response.Body[0];
+      .subscribe(res => {
+        if (res !== null && res.Response.Code === '200') {
+          const data = <Array<ProduccionAcademicaPost>>res.Response.Body[0];
           this.source.load(data);
           this.result.emit(1);
-      } else if (res !== null && res.Response.Code === "404"){
-        this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-      } else {
+        } else if (res !== null && res.Response.Code === '404') {
+          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+        } else {
+          Swal.fire({
+            icon: 'error',
+            text: this.translate.instant('ERROR.400'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        }
+        this.loading = false;
+      }, (error: HttpErrorResponse) => {
+        this.loading = false;
         Swal.fire({
-          icon:'error',
-          text: this.translate.instant('ERROR.400'),
+          icon: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
-      }
-      this.loading = false;
-    }, (error: HttpErrorResponse) => {
-      this.loading = false;
-      Swal.fire({
-        icon:'error',
-        title: error.status + '',
-        text: this.translate.instant('ERROR.' + error.status),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
-    });
   }
 
   ngOnInit() {
@@ -172,28 +178,28 @@ export class ListProduccionAcademicaComponent implements OnInit {
         showCancelButton: true,
       };
       Swal.fire(opt)
-      .then((willDelete) => {
-        if (willDelete.value) {
-          this.sgaMidService.delete('produccion_academica', event.data).subscribe((res: any) => {
-            if (res !== null) {
-              if (res.Body.Id !== undefined) {
-                this.source.load([]);
-                this.loadData();
-                this.showToast('info', 'Ok', this.translate.instant('produccion_academica.produccion_eliminada'));
-              } else {
-                this.showToast('info', 'Error', this.translate.instant('produccion_academica.produccion_no_eliminada'));
+        .then((willDelete) => {
+          if (willDelete.value) {
+            this.sgaMidService.delete('produccion_academica', event.data).subscribe((res: any) => {
+              if (res !== null) {
+                if (res.Body.Id !== undefined) {
+                  this.source.load([]);
+                  this.loadData();
+                  this.showToast('info', 'Ok', this.translate.instant('produccion_academica.produccion_eliminada'));
+                } else {
+                  this.showToast('info', 'Error', this.translate.instant('produccion_academica.produccion_no_eliminada'));
+                }
               }
-            }
-           }, (error: HttpErrorResponse) => {
-            Swal.fire({
-              icon:'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            }, (error: HttpErrorResponse) => {
+              Swal.fire({
+                icon: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
             });
-          });
-        }
-      });
+          }
+        });
     } else if (event.data.EstadoEnteAutorId.EstadoAutorProduccionId.Id === 2) {
       const opt: any = {
         title: 'Error',
@@ -219,52 +225,53 @@ export class ListProduccionAcademicaComponent implements OnInit {
       showCancelButton: true,
     };
     Swal.fire(opt)
-    .then((willConfirm) => {
-      if (willConfirm.value) {
-        const optConfirmar: any = {
-          title: this.translate.instant('GLOBAL.confirmar'),
-          text: this.translate.instant('produccion_academica.confirma_participar_produccion'),
-          icon: 'warning',
-          buttons: true,
-          dangerMode: true,
-          showCancelButton: true,
-          confirmButtonText: this.translate.instant('GLOBAL.si'),
-          cancelButtonText: this.translate.instant('GLOBAL.no'),
-        };
-         Swal.fire(optConfirmar)
-        .then((isAuthor) => {
-          const dataPut = {
-            acepta: isAuthor.value ? true : false,
-            AutorProduccionAcademica: data.EstadoEnteAutorId,
-          }
-          this.loading = true;
-          this.sgaMidService.put('produccion_academica/estado_autor_produccion/' + dataPut.AutorProduccionAcademica.Id, dataPut)
-          .subscribe((res: any) => {
-            if (res.Type === 'error') {
-              Swal.fire({
-                icon:'error',
-                title: res.Code,
-                text: this.translate.instant('ERROR.' + res.Code),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              });
-              this.showToast('error', 'Error', this.translate.instant('produccion_academica.estado_autor_no_actualizado'));
-            } else {
-              this.loadData();
-              this.showToast('success', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('produccion_academica.estado_autor_actualizado'));
-            }
-            this.loading = false;
-          }, (error: HttpErrorResponse) => {
-            this.loading = false;
-            Swal.fire({
-              icon:'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      .then((willConfirm) => {
+        if (willConfirm.value) {
+          const optConfirmar: any = {
+            title: this.translate.instant('GLOBAL.confirmar'),
+            text: this.translate.instant('produccion_academica.confirma_participar_produccion'),
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+            confirmButtonText: this.translate.instant('GLOBAL.si'),
+            cancelButtonText: this.translate.instant('GLOBAL.no'),
+          };
+          Swal.fire(optConfirmar)
+            .then((isAuthor) => {
+              const dataPut = {
+                acepta: isAuthor.value ? true : false,
+                AutorProduccionAcademica: data.EstadoEnteAutorId,
+              }
+              this.loading = true;
+              this.sgaMidService.put('produccion_academica/estado_autor_produccion/' + dataPut.AutorProduccionAcademica.Id, dataPut)
+                .subscribe((res: any) => {
+                  if (res.Type === 'error') {
+                    Swal.fire({
+                      icon: 'error',
+                      title: res.Code,
+                      text: this.translate.instant('ERROR.' + res.Code),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                    this.showToast('error', 'Error', this.translate.instant('produccion_academica.estado_autor_no_actualizado'));
+                  } else {
+                    this.loadData();
+                    this.showToast('success', this.translate.instant('GLOBAL.actualizar'),
+                      this.translate.instant('produccion_academica.estado_autor_actualizado'));
+                  }
+                  this.loading = false;
+                }, (error: HttpErrorResponse) => {
+                  this.loading = false;
+                  Swal.fire({
+                    icon: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
+                });
             });
-          });
-        });
-      }
-    });
+        }
+      });
   }
 
   activetab(): void {

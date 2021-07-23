@@ -1,8 +1,8 @@
 export let FORM_IDIOMAS = {
   // titulo: 'Idiomas',
   tipo_formulario: 'mini',
-  alertas: true,
   btn: 'Guardar',
+  alertas: true,
   modelo: 'InfoIdioma',
   campos: [
     {
