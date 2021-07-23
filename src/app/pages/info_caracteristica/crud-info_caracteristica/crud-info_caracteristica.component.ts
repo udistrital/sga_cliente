@@ -31,7 +31,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       this.info_caracteristica_id = info_caracteristica_id;
       if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
        this.info_caracteristica_id.toString() !== '') {
-        //this.loadInfoCaracteristica();
+        // this.loadInfoCaracteristica();
       }
     }
 
@@ -74,7 +74,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   construirForm() {
-    //this.formInfoCaracteristica.titulo = this.translate.instant('GLOBAL.info_caracteristica');
+    // this.formInfoCaracteristica.titulo = this.translate.instant('GLOBAL.info_caracteristica');
     this.info_persona_id = this.userService.getPersonaId();
     this.formInfoCaracteristica.btn = this.translate.instant('GLOBAL.guardar');
     for (let i = 0; i < this.formInfoCaracteristica.campos.length; i++) {
@@ -102,12 +102,13 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoNacimiento: Array<any> = [];
     if (this.paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares?query=LugarPadre__Id:' + this.paisSeleccionado.Id + ',LugarHijo__Activo:true&limit=0').subscribe(
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId__Id:' + this.paisSeleccionado.Id +
+        ',LugarHijoId__Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre').subscribe(
         res => {
            if (res !== null) {
               consultaHijos = <Array<Lugar>>res;
               for (let i = 0; i < consultaHijos.length; i++) {
-                departamentoNacimiento.push(consultaHijos[i].LugarHijo);
+                departamentoNacimiento.push(consultaHijos[i].LugarHijoId);
               }
             }
             this.loading = false;
@@ -116,7 +117,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
         (error: HttpErrorResponse) => {
           this.loading = false;
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -125,7 +126,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });
-    } else{
+    } else {
       this.loading = false;
     }
   }
@@ -135,12 +136,13 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const ciudadNacimiento: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares?query=LugarPadre__Id:' + this.departamentoSeleccionado.Id + ',LugarHijo__Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId__Id:' + this.departamentoSeleccionado.Id
+        + ',LugarHijoId__Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              ciudadNacimiento.push(consultaHijos[i].LugarHijo);
+              ciudadNacimiento.push(consultaHijos[i].LugarHijoId);
             }
           }
           this.loading = false;
@@ -149,7 +151,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
         (error: HttpErrorResponse) => {
           this.loading = false;
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -173,7 +175,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     return 0;
   }
 
-   public loadInfoCaracteristica(): void {
+  public loadInfoCaracteristica(): void {
     this.loadLists();
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
@@ -195,7 +197,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = [this.info_info_caracteristica.Lugar];
             this.loading = false;
             this.result.emit(1);
-          } else{
+          } else {
             this.loading = false;
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           }
@@ -242,7 +244,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             (error: HttpErrorResponse) => {
               this.loading = false;
               Swal.fire({
-                icon:'error',
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -292,19 +294,19 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             (error: HttpErrorResponse) => {
               this.loading = false;
               Swal.fire({
-                icon:'error',
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
               });
-            });
-        } else{
+              });
+        } else {
           this.loading = false;
         }
     });
   }
 
   ngOnInit() {
-    //this.loadInfoCaracteristica();
+    // this.loadInfoCaracteristica();
   }
 
   validarForm(event) {
@@ -318,7 +320,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   setPercentage(event) {
-    setTimeout(()=>{
+    setTimeout(() => {
       this.result.emit(event);
     });
   }

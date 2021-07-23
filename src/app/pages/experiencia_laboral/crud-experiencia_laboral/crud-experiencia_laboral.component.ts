@@ -204,7 +204,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         Swal.fire({
-          icon:'error',
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -229,8 +229,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     if (regex.test(nit) === true) {
       // this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = true;
       this.searchOrganizacion(nit);
-    }
-    else {
+    } else {
       this.clean = !this.clean;
       this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
       this.loadListEmpresa(nit);
@@ -239,16 +238,16 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   }
 
   getSeleccion(event) {
-    var IdEmpresa;
+    let IdEmpresa;
     if (event.nombre === 'NombreEmpresa') {
       IdEmpresa = this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')].valor.Id;
       this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdEmpresa).subscribe(
         (res: any) => {
-          this.searchOrganizacion(res[0]["Numero"])
+          this.searchOrganizacion(res[0]['Numero'])
         },
         (error: HttpErrorResponse) => {
 
-        }
+        },
       )
     }
   }
@@ -268,7 +267,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         Swal.fire({
-          icon:'error',
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -325,7 +324,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         }
         this.loading = false;
         Swal.fire({
-          icon:'error',
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('experiencia_laboral.empresa_no_encontrada'),
@@ -357,7 +356,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
             if (this.info_experiencia_laboral.Experiencia.Soporte.file !== undefined) {
               files.push({
                 nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-                file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 16
+                file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 16,
               });
             }
 
@@ -386,7 +385,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
             if (this.info_experiencia_laboral.Experiencia.Soporte.file !== undefined) {
               files.push({
                 nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-                file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 16
+                file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 16,
               });
             }
             this.uploadResolutionFile(files);
@@ -447,7 +446,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         (error: HttpErrorResponse) => {
           this.loading = false;
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('experiencia_laboral.experiencia_laboral_no_registrada'),
@@ -480,7 +479,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
       (error: HttpErrorResponse) => {
         this.loading = false;
         Swal.fire({
-          icon:'error',
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('experiencia_laboral.experiencia_laboral_no_registrada'),

@@ -66,7 +66,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     this.listService.findPais();
     this.loadLists();
     this.persona_id = this.userService.getPersonaId();
-    this.loadInformacionContacto(); 
+    this.loadInformacionContacto();
   }
 
   construirForm() {
@@ -102,12 +102,12 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoResidencia: Array<any> = [];
     if (paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + paisSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + paisSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              departamentoResidencia.push(consultaHijos[i].LugarHijo);
+              departamentoResidencia.push(consultaHijos[i].LugarHijoId);
             }
           }
           this.loading = false;
@@ -116,7 +116,7 @@ export class CrudInformacionContactoComponent implements OnInit {
           (error: HttpErrorResponse) => {
             this.loading = false;
             Swal.fire({
-              icon:'error',
+              icon: 'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -133,12 +133,13 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const ciudadResidencia: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.departamentoSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + this.departamentoSeleccionado.Id +
+        ',LugarHijoId.Activo:true,TipoRelacionLugarId.Id:2&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              ciudadResidencia.push(consultaHijos[i].LugarHijo);
+              ciudadResidencia.push(consultaHijos[i].LugarHijoId);
             }
           }
           this.loading = false;
@@ -147,7 +148,7 @@ export class CrudInformacionContactoComponent implements OnInit {
         (error: HttpErrorResponse) => {
           this.loading = false;
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -175,11 +176,12 @@ export class CrudInformacionContactoComponent implements OnInit {
 
   loadInformacionContacto() {
     if (this.persona_id) {
-      this.sgaMidService.get('inscripciones/info_complementaria_tercero/'+this.persona_id)
+      this.sgaMidService.get('inscripciones/info_complementaria_tercero/' + this.persona_id)
       .subscribe(res => {
         if (res !== null) {
           this.info_informacion_contacto = <any>res;
-          if (this.info_informacion_contacto.PaisResidencia !== null && this.info_informacion_contacto.DepartamentoResidencia !== null && this.info_informacion_contacto.CiudadResidencia != null){
+          if (this.info_informacion_contacto.PaisResidencia !== null && this.info_informacion_contacto.DepartamentoResidencia !== null
+            && this.info_informacion_contacto.CiudadResidencia != null) {
             this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = [this.info_informacion_contacto.PaisResidencia];
             this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = [this.info_informacion_contacto.DepartamentoResidencia];
             this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = [this.info_informacion_contacto.CiudadResidencia];
@@ -193,7 +195,7 @@ export class CrudInformacionContactoComponent implements OnInit {
         (error: HttpErrorResponse) => {
           this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           this.info_informacion_contacto = undefined;
-          this.loading=false;
+          this.loading = false;
         });
     }
   }
@@ -210,7 +212,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             //Estrato
             Id: 0,
             TerceroId: tercero,
-            InfoComplementariaId:{
+            InfoComplementariaId: {
               Id: 41,
             },
             Dato: JSON.stringify({value: formData.EstratoResidencia}),
@@ -264,7 +266,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     }
   }
 
-  updateInfoContacto(info_contacto: any): void{
+  updateInfoContacto(info_contacto: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
       text: this.translate.instant('inscripcion.update'),
@@ -283,11 +285,11 @@ export class CrudInformacionContactoComponent implements OnInit {
           this.info_informacion_contacto.Ente = this.info_persona_id;
           this.sgaMidService.put('inscripciones/info_contacto', this.info_informacion_contacto).subscribe(
             (res: any) => {
-              if(res !== null && res.Response.Code == '404'){
+              if (res !== null && res.Response.Code == '404') {
                 this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_data'));
-              } else if (res !== null && res.Response.Code == '400'){
+              } else if (res !== null && res.Response.Code == '400') {
                 this.popUpManager.showAlert('', this.translate.instant('inscripcion.error_update'));
-              } else if (res !== null && res.Response.Code == '200'){
+              } else if (res !== null && res.Response.Code == '200') {
                 this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                 this.translate.instant('GLOBAL.info_contacto') + ' ' +
                 this.translate.instant('GLOBAL.confirmarActualizar'));
@@ -299,17 +301,17 @@ export class CrudInformacionContactoComponent implements OnInit {
             (error: HttpErrorResponse) => {
               this.loading = false;
               Swal.fire({
-                icon:'error',
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
                 this.translate.instant('GLOBAL.info_caracteristica'),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
               });
-            }
+            },
           );
         }
-        //this.loading = false;
+        // this.loading = false;
       });
   }
 
@@ -326,7 +328,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     };
     Swal.fire(opt)
       .then((willDelete) => {
-        this.loading=true;
+        this.loading = true;
         this.info_informacion_contacto = true;
         if (willDelete.value) {
           this.info_informacion_contacto = <any>info_contacto;
@@ -347,7 +349,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             (error: HttpErrorResponse) => {
               this.loading = false;
               Swal.fire({
-                icon:'error',
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'),
@@ -361,7 +363,7 @@ export class CrudInformacionContactoComponent implements OnInit {
   }
 
   setPercentage(event) {
-    setTimeout(()=>{
+    setTimeout(() => {
       this.result.emit(event);
     });
   }

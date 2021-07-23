@@ -25,7 +25,7 @@
                         <textarea *ngSwitchCase="'textarea'" [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                             [ngModelOptions]="{standalone: true}" type="text" id="{{c.nombre}}" class="{{c.clase}}"
                             placeholder="{{c.placeholder}}">
-            </textarea>
+                        </textarea>
 
                         <!-- radio -->
                         <div *ngSwitchCase="'radio'">
@@ -126,7 +126,7 @@
                     <textarea *ngSwitchCase="'textarea'" [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                         [ngModelOptions]="{standalone: true}" type="text" id="{{c.nombre}}" class="{{c.clase}}"
                         placeholder="{{c.placeholder}}">
-          </textarea>
+                    </textarea>
 
                     <!-- radio -->
                     <div *ngSwitchCase="'radio'">
@@ -215,7 +215,7 @@
                     <textarea *ngSwitchCase="'textarea'" [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                         [ngModelOptions]="{standalone: true}" type="text" id="{{c.nombre}}" class="{{c.clase}}"
                         placeholder="{{c.placeholder}}">
-          </textarea>
+                    </textarea>
 
                     <!-- radio -->
                     <div *ngSwitchCase="'radio'">
@@ -459,9 +459,6 @@
 
                         <!--buttton -->
                         <div *ngSwitchCase="'button'" class="row">
-                            <div class="{{c.claseGrid}}">
-                                {{c.info}}
-                            </div>
                             <div class="{{c.claseGrid}}">
                                 <button mat-button class="{{c.claseBoton}}" (click)="auxButton(c)">
                                     <i class="{{c.icono}}"></i>
