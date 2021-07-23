@@ -613,6 +613,7 @@
         "maximo_recibos": "Ya genero el maximo de recibos permitidos"
     },
     "produccion_academica": {
+        "titulo_revista":"Titulo de revista",
         "tipo_disciplina": "Tipos de disciplina",
         "placeholder_tipo_disciplina": "Ej: Artes plásticas y visuales",
         "idioma_traducido": "Idioma traducido",
