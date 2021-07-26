@@ -17,15 +17,15 @@
                 </thead>
                 <tbody *ngIf="info_idioma">
                     <tr *ngFor="let idioma of info_idioma">
-                        <td>{{idioma.Idioma.Nombre}}</td>
+                        <td>{{idioma.IdiomaId.Nombre}}</td>
                         <td *ngIf="idioma.Nativo; else elseTemplate2">Si</td>
                         <ng-template #elseTemplate2>
                             <td>No</td>
                         </ng-template>
-                        <td>{{idioma.NivelEscribe.Nombre}}</td>
-                        <td>{{idioma.NivelEscucha.Nombre}}</td>
-                        <td>{{idioma.NivelHabla.Nombre}}</td>
-                        <td>{{idioma.NivelLee.Nombre}}</td>
+                        <td>{{idioma.NivelEscribeId.Nombre}}</td>
+                        <td>{{idioma.NivelEscuchaId.Nombre}}</td>
+                        <td>{{idioma.NivelHablaId.Nombre}}</td>
+                        <td>{{idioma.NivelLeeId.Nombre}}</td>
                     </tr>
                 </tbody>
             </table>
