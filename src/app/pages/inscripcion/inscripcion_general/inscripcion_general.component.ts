@@ -127,15 +127,14 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     sessionStorage.setItem('TerceroId', this.userService.getPersonaId().toString());
     this.info_persona_id = this.userService.getPersonaId();
     this.translate = translate;
-    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-    });
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => { });
     this.total = true;
     this.loading = true;
     this.loadData();
   }
 
   activateTab() {
-    //No se muestra la vista de inscripción sino la de preinscripción
+    // No se muestra la vista de inscripción sino la de preinscripción
     this.changeTab.emit(false);
   }
 

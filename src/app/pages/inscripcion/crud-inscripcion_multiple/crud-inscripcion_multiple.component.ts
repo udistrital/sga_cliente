@@ -241,6 +241,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   loadInscriptionModule() {
+    this.inscripcion_id = parseInt(sessionStorage.getItem('IdInscripcion'))
     this.showInscription = false;
   }
 

@@ -150,7 +150,7 @@
         "aceptar": "Accept",
         "cancelar": "Cancel",
         "salir": "Get out",
-        "eliminar": "Delete",
+        "eliminar": "Remove",
         "actualizar": "Update",
         "crear": "Create",
         "asignar": "To assign",
@@ -160,6 +160,7 @@
         "info_persona": "Personal data",
         "no_info_persona": "There's no registered data por this User. Please enter your data.",
         "info_criterio": "ICFES criteria",
+        "confirmarEliminar": "has been removed",
         "info_estado": "Registration Status",
         "guardar": "Save",
         "formulario": "Form",
@@ -567,7 +568,9 @@
         "placeholder_nivel": "Select the level that is required to be assigned to the registration type",
         "proyecto_academico": "Academic Project",
         "creditos": "Credits",
-        "clasificacion": "Type"
+        "clasificacion": "Type",
+        "tooltip_ver_registro": "View",
+        "tooltip_editar_registro": "Edit"
     },
 
     "ERROR": {
@@ -830,7 +833,10 @@
         "placeholder_tipo_produccion_audiovisual": "E.g.: Video",
         "placeholder_tipo_universidad": "E.g.: National",
         "placeholder_titulo_convalidado": "E.g.: Software Engineering",
-        "placeholder_puntaje": "E.g.: 25"
+        "placeholder_puntaje": "E.g.: 25",
+        "tooltip_editar": "Edit academic production",
+        "tooltip_eliminar": "Remove academic production",
+        "tooltip_crear": "Create academic production"
     },
     "archivo_icfes": {
         "archivo_icfes": "Icfes file",
@@ -894,7 +900,7 @@
         "seguro_eliminar_tipo_periodo": "Are you sure you want to eliminate this type of period?",
         "tipo_periodo_eliminado": "Type period removed",
         "tooltip_editar": "Edit type of period",
-        "tooltip_eliminar": "Delete type of period",
+        "tooltip_eliminar": "Remove type of period",
         "tooltip_crear": "Create type of period",
         "tooltip_ver_registro": "View",
         "tooltip_cancelar": "Cancel",
@@ -916,7 +922,7 @@
         "periodo_deshabilitado": "Period Disabled!",
         "se_deshabilita": "Disabled",
         "seguro_eliminar_periodo": "Are you sure to eliminate this period?",
-        "periodo_eliminado": "Deleted Period",
+        "periodo_eliminado": "Removed Period",
         "titulo": "Enable Period",
         "subtitulo": "Academic period",
         "explicacion": "To enable the admissions process, register a new period or activate an academic period.",
@@ -1221,7 +1227,10 @@
         "error_cargar_empresa": "An error happened loading the company information",
         "empresa_no_encontrada": "There is no information with the data entered",
         "no_data": "There is not registered information on work experience",
-        "error": "An unexpected error occurred while loading the information"
+        "error": "An unexpected error occurred while loading the information",
+        "tooltip_editar": "Edit work experience",
+        "tooltip_eliminar": "Remove work experience",
+        "tooltip_crear": "Create work experience"
     },
     "documento_programa": {
         "descuento_academico_no_registrado": "Academic discount not registered",
@@ -1245,7 +1254,10 @@
         "informacion_idioma_registrada": "Language information registered",
         "informacion_idioma_actualizada": "Language information updated.",
         "seguro_continuar_registrar": "Are you sure you want to register this language information?",
-        "seguro_actualizar_idioma": "Are you sure about updating this language information?"
+        "seguro_actualizar_idioma": "Are you sure about updating this language information?","eliminar": "Do you want to remove the language?",
+        "tooltip_editar": "Edit language",
+        "tooltip_eliminar": "Remove language",
+        "tooltip_crear": "Create language"
     },
     "propuesta_grado": {
         "error_cargar_lineas_investigacion": "An error happened loading the research lines information",
@@ -1332,7 +1344,7 @@
         "observacion": "Observation",
         "guardarSubcriterio": "Save subcriteria",
         "tooltip_editar": "Edit criteria",
-        "tooltip_eliminar": "Delete criteria",
+        "tooltip_eliminar": "Remove criteria",
         "tooltip_crear": "Create new criteria",
         "tooltip_ver_registro": "View",
         "tooltip_cancelar": "Cancel",
@@ -1455,9 +1467,9 @@
         "tooltip_editar_actividad": "Edit activity",
         "tooltip_editar_proceso": "Edit process",
         "tooltip_inactivar": "Inactivate calendar",
-        "tooltip_eliminar": "Delete",
-        "tooltip_eliminar_actividad": "Delete activity",
-        "tooltip_eliminar_proceso": "Delete process",
+        "tooltip_eliminar": "Remove",
+        "tooltip_eliminar_actividad": "Remove activity",
+        "tooltip_eliminar_proceso": "Remove process",
         "tooltip_crear": "Create calendar",
         "tooltip_crear_actividad": "Create activity",
         "tooltip_crear_proceso": "Create process",
@@ -1494,7 +1506,7 @@
         "no_salario": "There's no registered salary for this validity",
         "inactivo": "The chosen concept is now inactive.",
         "actualizado": "The concept has been updated",
-        "tooltip_eliminar": "Delete concept",
+        "tooltip_eliminar": "Remove concept",
         "tooltip_crear": "Create concept",
         "tooltip_editar": "Edit concept",
         "tooltip_cancelar": "Cancel",
@@ -1515,13 +1527,23 @@
         "tipo_inscripcion_actualizado": "Updated registration type",
         "seguro_continuar_registrar_tipo_inscripcion": "Are you sure you register this registration type?",
         "tipo_inscripcion_creado": "Type register created",
-        "tooltip_eliminar": "Delete registration type",
+        "tooltip_eliminar": "Remove registration type",
         "tooltip_crear": "Create new registration type",
         "tooltip_editar": "Edit registration type",
         "tooltip_cancelar": "Cancel",
         "tooltip_guargar": "Save"
     },
+    "formacion_academica": {
+      "no_data": "There are no registered data on academic training",
+      "tooltip_editar": "Edit academic training",
+      "tooltip_eliminar": "Remove academic training",
+      "tooltip_crear": "Create academic training"
+    },
     "solicitudes": {
+        "respuesta": "The response to this request has been successfully recorded",
+        "doc_valido": "The document sent is approved for this request?",
+        "observacion": "Note",
+        "solicitud_respuesta": "Respuesta de la solicitud",
         "error": "An unexpected error occurred and the request could not be fulfilled",
         "no_data": "There is no registered request",
         "crear_error": "An unexpected error occurred while submitting the request",

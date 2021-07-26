@@ -46,7 +46,7 @@
                         <!-- checkbox -->
                         <div *ngSwitchCase="'checkbox'" class="form-group validation-checkboxes">
                             <input type="checkbox" class="customised-control-input" [disabled]="c.deshabilitar"
-                                [checked]="c.valor" (change)="c.valor = !c.valor"> {{c.nombre}}?
+                                [checked]="c.valor" (change)="c.valor = !c.valor"> {{c.nombre}}
                         </div>
 
                         <!-- date material -->
@@ -147,7 +147,7 @@
                     <!-- checkbox -->
                     <div *ngSwitchCase="'checkbox'" class="form-group validation-checkboxes">
                         <input type="checkbox" class="customised-control-input" [disabled]="c.deshabilitar"
-                            [checked]="c.valor" (change)="c.valor = !c.valor"> {{c.nombre}}?
+                            [checked]="c.valor" (change)="c.valor = !c.valor"> {{c.nombre}}
                     </div>
 
 
@@ -236,7 +236,7 @@
                     <!-- checkbox -->
                     <div *ngSwitchCase="'checkbox'" class="form-group validation-checkboxes">
                         <input type="checkbox" class="customised-control-input" [disabled]="c.deshabilitar"
-                            [checked]="c.valor" (change)="c.valor = !c.valor"> {{c.nombre}}?
+                            [checked]="c.valor" (change)="c.valor = !c.valor"> {{c.nombre}}
                     </div>
 
                     <!-- date material -->
@@ -339,7 +339,7 @@
                         <div *ngSwitchCase="'checkbox'" class="form-group validation-checkboxes">
                             <mat-checkbox type="checkbox" class="customised-control-input" [disabled]="c.deshabilitar"
                                 color="primary" [(checked)]="c.valor" (change)="c.valor = !c.valor; c.alerta = '';">
-                                {{c.requerido?'* '+c.label:c.label}}?</mat-checkbox>
+                                {{c.requerido?'* '+c.label:c.label}}</mat-checkbox>
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
                         </div>
 

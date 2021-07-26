@@ -26,6 +26,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   dataDes: Array<any>;
   solicituddescuento: SolicitudDescuento;
   docDesSoporte = [];
+  variable = this.translate.instant('GLOBAL.tooltip_ver_registro')
 
   @Input('persona_id')
   set info(info: number) {
@@ -49,7 +50,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
     private inscripcionService: InscripcionService,
-    private sgaMidService: SgaMidService,) {
+    private sgaMidService: SgaMidService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.loadData();
@@ -69,7 +70,8 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
 
   loadData(): void {
     this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' +
-      'PersonaId=' + Number(window.sessionStorage.getItem('TerceroId')) + '&DependenciaId=' + Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
+      'PersonaId=' + Number(window.sessionStorage.getItem('TerceroId')) + '&DependenciaId=' +
+      Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
       .subscribe((result: any) => {
         const r = <any>result.Data.Body[1];
         if (result !== null && result.Data.Code == '200') {
@@ -94,7 +96,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({
-                  icon:'error',
+                  icon: 'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -109,7 +111,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
       },
         (error: HttpErrorResponse) => {
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -147,7 +149,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
                   },
                     (error: HttpErrorResponse) => {
                       Swal.fire({
-                        icon:'error',
+                        icon: 'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
                         footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -161,7 +163,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
           },
             (error: HttpErrorResponse) => {
               Swal.fire({
-                icon:'error',
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -173,7 +175,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
       },
         (error: HttpErrorResponse) => {
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +

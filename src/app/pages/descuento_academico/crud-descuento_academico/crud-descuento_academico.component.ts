@@ -98,13 +98,13 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   findDescuentoAcademico(programa: any) {
     this.loading = true;
     // this.descuentoAcademicoService.get('tipo_descuento/?limit=0&query=Activo:true')
-    this.sgaMidService.get('descuento_academico/descuentoAcademicoByID/'+programa)
+    this.sgaMidService.get('descuento_academico/descuentoAcademicoByID/' + programa)
     .subscribe(
       (result: any) => {
         const r = <any>result.Data.Body[1];
         if (result !== null && result.Data.Code == '404') {
           this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = []
-        } else{
+        } else {
           this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].opciones = r.map((result: any) => {
             return {
               Id: result.Id,
@@ -276,7 +276,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                 },
                   (error: HttpErrorResponse) => {
                     Swal.fire({
-                      icon:'error',
+                      icon: 'error',
                       title: error.status + '',
                       text: this.translate.instant('ERROR.' + error.status),
                       footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -291,7 +291,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
           (error: HttpErrorResponse) => {
             this.loading = false;
             Swal.fire({
-              icon:'error',
+              icon: 'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -582,7 +582,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                   (error: HttpErrorResponse) => {
                     this.loading = false;
                     Swal.fire({
-                      icon:'error',
+                      icon: 'error',
                       title: error.status + '',
                       text: this.translate.instant('ERROR.' + error.status),
                       footer: this.translate.instant('descuento_academico.descuento_academico_no_registrado'),
@@ -595,7 +595,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
             (error: HttpErrorResponse) => {
               this.loading = false;
               Swal.fire({
-                icon:'error',
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('descuento_academico.documento_descuento_academico_no_registrado'),
