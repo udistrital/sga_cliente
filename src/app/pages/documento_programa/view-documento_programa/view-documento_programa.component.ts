@@ -23,6 +23,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   programaDocumento: any;
   dataSop: Array<any>;
   docSoporte = [];
+  variable = this.translate.instant('GLOBAL.tooltip_ver_registro')
 
   @Input('persona_id')
   set info(info: number) {
@@ -66,7 +67,8 @@ export class ViewDocumentoProgramaComponent implements OnInit {
 
   loadData(): void {
     this.info_documento_programa = <any>[];
-    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId:' + this.inscripcion_id + ',DocumentoProgramaId.ProgramaId:' + this.programa_id).subscribe(
+    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId:' +
+      this.inscripcion_id + ',DocumentoProgramaId.ProgramaId:' + this.programa_id).subscribe(
       (response: any[]) => {
         if (response !== null && Object.keys(response[0]).length > 0 && response[0] != '{}') {
           this.info_documento_programa = response;
@@ -77,10 +79,10 @@ export class ViewDocumentoProgramaComponent implements OnInit {
               (documento: Documento) => {
                 let metadatos = JSON.parse(documento.Metadatos);
                 doc.aprobado = metadatos.aprobado;
-                if (metadatos.aprobado){
+                if (metadatos.aprobado) {
                   doc.estadoObservacion = 'Aprobado';
                   doc.observacion = '';
-                }else{
+                } else {
                   doc.estadoObservacion = 'No Aprobado';
                   doc.observacion = metadatos.observacion;
                 }
@@ -97,7 +99,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
             },
             error => {
               this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
-            }
+            },
           );
         } else {
           this.info_documento_programa = null
@@ -105,7 +107,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
-      }
+        },
     );
   }
 

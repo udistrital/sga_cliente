@@ -107,17 +107,17 @@ export class ListExperienciaLaboralComponent implements OnInit {
         columnTitle: this.translate.instant('GLOBAL.acciones'),
       },
       add: {
-        addButtonContent: '<i class="nb-plus"></i>',
+        addButtonContent: '<i class="nb-plus" title="' + this.translate.instant('experiencia_laboral.tooltip_crear') + '"></i>',
         createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
       },
       edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
+        editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('experiencia_laboral.tooltip_editar') + '"></i>',
         saveButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
       },
       delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
+        deleteButtonContent: '<i class="nb-trash" title="' + this.translate.instant('experiencia_laboral.tooltip_eliminar') + '"></i>',
         confirmDelete: true,
       },
     };
@@ -136,7 +136,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
           this.loading = false;
           this.getPercentage(1);
           this.source.load(this.data);
-        } else if(response !== null && response.Data.Code === '404'){
+        } else if (response !== null && response.Data.Code === '404') {
           this.popUpManager.showToast('info', this.translate.instant('experiencia_laboral.no_data'));
         } else {
           this.showToast('error', this.translate.instant('GLOBAL.error'),
@@ -147,7 +147,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
       (error: HttpErrorResponse) => {
         this.loading = false;
         Swal.fire({
-          icon:'error',
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),
@@ -229,7 +229,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
             (error: HttpErrorResponse) => {
               this.loading = false;
               Swal.fire({
-                icon:'error',
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.eliminar') + '-' +

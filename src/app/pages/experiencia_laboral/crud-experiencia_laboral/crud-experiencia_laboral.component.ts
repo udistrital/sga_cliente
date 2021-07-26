@@ -159,17 +159,23 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     const isoporte = this.getIndexForm('Soporte');
 
     this.formInfoExperienciaLaboral.campos[init].valor = this.detalleExp.Nit;
-    this.formInfoExperienciaLaboral.campos[inombre].valor = (this.detalleExp.NombreEmpresa && this.detalleExp.NombreEmpresa.Id) ? this.detalleExp.NombreEmpresa : { Id: 0, NombreCompleto: 'No registrado' };
+    this.formInfoExperienciaLaboral.campos[inombre].valor = (this.detalleExp.NombreEmpresa &&
+      this.detalleExp.NombreEmpresa.Id) ? this.detalleExp.NombreEmpresa : { Id: 0, NombreCompleto: 'No registrado' };
     this.formInfoExperienciaLaboral.campos[idir].valor = (this.detalleExp.Direccion) ? this.detalleExp.Direccion : 'No registrado';
     this.formInfoExperienciaLaboral.campos[itel].valor = (this.detalleExp.Telefono) ? this.detalleExp.Telefono : 'No registrado';
     this.formInfoExperienciaLaboral.campos[icorreo].valor = (this.detalleExp.Correo) ? this.detalleExp.Correo : 'No registrado';
-    this.formInfoExperienciaLaboral.campos[ipais].valor = (this.detalleExp.Ubicacion && this.detalleExp.Ubicacion.Id) ? this.detalleExp.Ubicacion : { Id: 0, Nombre: 'No registrado' };
-    this.formInfoExperienciaLaboral.campos[itipo].valor = (this.detalleExp.TipoTerceroId && this.detalleExp.TipoTerceroId.Id) ? this.detalleExp.TipoTerceroId : { Id: 0, Nombre: 'No registrado' };
+    this.formInfoExperienciaLaboral.campos[ipais].valor = (this.detalleExp.Ubicacion &&
+      this.detalleExp.Ubicacion.Id) ? this.detalleExp.Ubicacion : { Id: 0, Nombre: 'No registrado' };
+    this.formInfoExperienciaLaboral.campos[itipo].valor = (this.detalleExp.TipoTerceroId &&
+      this.detalleExp.TipoTerceroId.Id) ? this.detalleExp.TipoTerceroId : { Id: 0, Nombre: 'No registrado' };
     this.formInfoExperienciaLaboral.campos[ifechaInicio].valor = (this.detalleExp.FechaInicio);
     this.formInfoExperienciaLaboral.campos[ifechaFin].valor = (this.detalleExp.FechaFinalizacion);
-    this.formInfoExperienciaLaboral.campos[itipoDedicacion].valor = (this.detalleExp.TipoDedicacion && this.detalleExp.TipoDedicacion.Id) ? this.detalleExp.TipoDedicacion : { Id: 0, Nombre: 'No registrado' };
-    this.formInfoExperienciaLaboral.campos[itipoVinculacion].valor = (this.detalleExp.TipoVinculacion && this.detalleExp.TipoVinculacion.Id) ? this.detalleExp.TipoVinculacion : { Id: 0, Nombre: 'No registrado' };
-    this.formInfoExperienciaLaboral.campos[icargo].valor = (this.detalleExp.Cargo && this.detalleExp.Cargo.Id) ? this.detalleExp.Cargo : { Id: 0, Nombre: 'No registrado' };
+    this.formInfoExperienciaLaboral.campos[itipoDedicacion].valor = (this.detalleExp.TipoDedicacion &&
+      this.detalleExp.TipoDedicacion.Id) ? this.detalleExp.TipoDedicacion : { Id: 0, Nombre: 'No registrado' };
+    this.formInfoExperienciaLaboral.campos[itipoVinculacion].valor = (this.detalleExp.TipoVinculacion &&
+      this.detalleExp.TipoVinculacion.Id) ? this.detalleExp.TipoVinculacion : { Id: 0, Nombre: 'No registrado' };
+    this.formInfoExperienciaLaboral.campos[icargo].valor = (this.detalleExp.Cargo &&
+      this.detalleExp.Cargo.Id) ? this.detalleExp.Cargo : { Id: 0, Nombre: 'No registrado' };
     this.formInfoExperienciaLaboral.campos[iactividades].valor = (this.detalleExp.Actividades);
     // this.formInfoExperienciaLaboral.campos[init].deshabilitar = true;
     const files = [
@@ -278,7 +284,6 @@ export class CrudExperienciaLaboralComponent implements OnInit {
       });
   }
 
-
   searchOrganizacion(nit: string): void {
     this.loading = true;
     const init = this.getIndexForm('Nit');
@@ -291,12 +296,14 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     this.sgaMidService.get('experiencia_laboral/informacion_empresa?Id=' + nit)
       .subscribe((res: any) => {
         this.formInfoExperienciaLaboral.campos[init].valor = res.NumeroIdentificacion;
-        this.formInfoExperienciaLaboral.campos[inombre].valor = (res.NombreCompleto && res.NombreCompleto.Id) ? res.NombreCompleto : { Id: 0, NombreCompleto: 'No registrado' };
+        this.formInfoExperienciaLaboral.campos[inombre].valor = (res.NombreCompleto &&
+          res.NombreCompleto.Id) ? res.NombreCompleto : { Id: 0, NombreCompleto: 'No registrado' };
         this.formInfoExperienciaLaboral.campos[idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
         this.formInfoExperienciaLaboral.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
         this.formInfoExperienciaLaboral.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
         this.formInfoExperienciaLaboral.campos[ipais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : { Id: 0, Nombre: 'No registrado' };
-        this.formInfoExperienciaLaboral.campos[itipo].valor = (res.TipoTerceroId && res.TipoTerceroId.Id) ? res.TipoTerceroId : { Id: 0, Nombre: 'No registrado' };
+        this.formInfoExperienciaLaboral.campos[itipo].valor = (res.TipoTerceroId &&
+          res.TipoTerceroId.Id) ? res.TipoTerceroId : { Id: 0, Nombre: 'No registrado' };
         [
           this.formInfoExperienciaLaboral.campos[inombre],
           this.formInfoExperienciaLaboral.campos[idir],
@@ -359,7 +366,6 @@ export class CrudExperienciaLaboralComponent implements OnInit {
                 file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 16,
               });
             }
-
             this.uploadResolutionFile(files);
           }
         });
@@ -381,14 +387,14 @@ export class CrudExperienciaLaboralComponent implements OnInit {
       .then((willDelete) => {
         if (willDelete.value) {
           this.info_experiencia_laboral = <any>infoExperienciaLaboral;
-            const files = [];
-            if (this.info_experiencia_laboral.Experiencia.Soporte.file !== undefined) {
-              files.push({
-                nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-                file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 16,
-              });
-            }
-            this.uploadResolutionFile(files);
+          const files = [];
+          if (this.info_experiencia_laboral.Experiencia.Soporte.file !== undefined) {
+            files.push({
+              nombre: this.autenticationService.getPayload().sub, key: 'Documento',
+              file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 16,
+            });
+          }
+          this.uploadResolutionFile(files);
         }
       });
   }
@@ -407,7 +413,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
                 this.info_experiencia_laboral.indexSelect = this.indexSelect;
                 this.info_experiencia_laboral.terceroID = this.persona_id;
                 this.putExperianciaLaboral();
-              } else{
+              } else {
                 this.postExperianciaLaboral();
               }
             } else {
@@ -463,7 +469,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         if (r !== null && r.Type !== 'error') {
           this.eventChange.emit(true);
           this.showToast('info', this.translate.instant('GLOBAL.crear'),
-          this.translate.instant('experiencia_laboral.experiencia_laboral_registrada'));
+            this.translate.instant('experiencia_laboral.experiencia_laboral_registrada'));
           this.info_experiencia_laboral_id = 0;
           this.info_experiencia_laboral = undefined;
           this.indexSelect = NaN;

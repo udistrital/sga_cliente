@@ -705,7 +705,7 @@ public findTipoParametro() {
     this.store.select(REDUCER_LIST.Cargo).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.experienciaService.get('cargo/?limit=0&query=Activo:true')
+          this.experienciaService.get('cargo/?limit=0&query=Activo:true&order=asc&sortby=Nombre')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.Cargo, result);

@@ -35,6 +35,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   organizacion: any;
   soporte: any;
   documentosSoporte = [];
+  variable = this.translate.instant('solicitudes.tooltip_ver_registro')
 
   constructor(
     private translate: TranslateService,
@@ -49,8 +50,8 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     //this.persona_id = this.users.getPersonaId();
-    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
-    this.loadData();
+  //  this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
+  //  this.loadData();
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -60,7 +61,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   useLanguage(language: string) {
     this.translate.use(language);
   }
-  
+
   public editar(): void {
     this.url_editar.emit(true);
   }

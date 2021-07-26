@@ -45,8 +45,8 @@ export class ViewProduccionAcademicaComponent implements OnInit {
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
-    this.loadData();
+//    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
+//    this.loadData();
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -65,11 +65,11 @@ export class ViewProduccionAcademicaComponent implements OnInit {
     this.sgaMidService.get('produccion_academica/pr_academica/' + this.persona_id)
       .subscribe((res: any) => {
         if (res !== null) {
-          if (res.Response.Code === "200"){
-            this.info_produccion_academica = <Array<ProduccionAcademicaPost>>res;
-          } else if (res.Response.Code === "400") {
+          if (res.Response.Code === '200') {
+            this.info_produccion_academica = <Array<ProduccionAcademicaPost>>res.Response.Body[0];
+          } else if (res.Response.Code === '400') {
             Swal.fire({
-              icon:'error',
+              icon: 'error',
               title: '400',
               text: this.translate.instant('ERROR.400'),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -78,7 +78,7 @@ export class ViewProduccionAcademicaComponent implements OnInit {
         }
       }, (error: HttpErrorResponse) => {
         Swal.fire({
-          icon:'error',
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

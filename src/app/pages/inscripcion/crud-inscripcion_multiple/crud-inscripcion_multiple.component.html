@@ -1,5 +1,7 @@
 <div class="dinamic-form">
-    <fieldset [ngClass]="{'fieldseter':true} " [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <fieldset [ngClass]="{'fieldseter':true} "
+              [nbSpinner]="loading" nbSpinnerStatus="success"
+              nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
         <nb-card>
             <nb-card-body *ngIf="showInscription">
                 <nb-card-header>
@@ -8,11 +10,15 @@
                 <hr width="0%">
                 <fieldset [ngClass]="{'fieldseter':true} ">
                     <legend> {{ 'inscripcion.recibos_generados' | translate }} </legend>
-                    <ng2-smart-table [settings]="settings" [source]="dataSource" (rowSelect)="itemSelect($event)">
+                    <ng2-smart-table [settings]="settings"
+                                     [source]="dataSource"
+                                     (rowSelect)="itemSelect($event)">
                     </ng2-smart-table>
                     <hr width="0%">
                     <div class="text-center">
-                        <button mat-button type="button" (click)="nuevaPreinscripcion()">{{ 'inscripcion.nueva' | translate }}</button>
+                        <button mat-button type="button" (click)="nuevaPreinscripcion()">
+                          {{ 'inscripcion.nueva' | translate }}
+                        </button>
                     </div>
 
                 </fieldset>
@@ -32,32 +38,51 @@
                 <!-- select Nivel -->
 
                 <mat-form-field style="width: 100%;" *ngIf="showNew">
-                    <mat-select [formControl]="CampoControl" [(ngModel)]="selectedLevel" placeholder="{{ 'calendario.para' | translate }}" (selectionChange)="onSelectLevel()">
+                    <mat-select [formControl]="CampoControl"
+                                [(ngModel)]="selectedLevel"
+                                placeholder="{{ 'calendario.para' | translate }}"
+                                (selectionChange)="onSelectLevel()">
                         <mat-option>--Seleccionar--</mat-option>
-                        <mat-option *ngFor="let nivel of niveles" [value]="nivel.Id">{{ nivel.Nombre }}</mat-option>
+                        <mat-option *ngFor="let nivel of niveles" [value]="nivel.Id">
+                            {{ nivel.Nombre }}
+                        </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="CampoControl.hasError('required')">{{ 'inscripcion.erro_selec_nivel' | translate }}</mat-error>
+                    <mat-error *ngIf="CampoControl.hasError('required')">
+                      {{ 'inscripcion.erro_selec_nivel' | translate }}
+                    </mat-error>
                 </mat-form-field>
 
                 <!-- select proyecto academico -->
 
                 <mat-form-field style="width: 100%;" *ngIf="showProyectoCurricular">
-                    <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedProject" placeholder="{{ 'oferta.proyecto' | translate }}" (selectionChange)="onSelectProyecto()">
+                    <mat-select [formControl]="Campo1Control"
+                                [(ngModel)]="selectedProject"
+                                placeholder="{{ 'oferta.proyecto' | translate }}"
+                                (selectionChange)="onSelectProyecto()">
                         <mat-option>--Seleccionar--</mat-option>
-                        <mat-option *ngFor="let project of inscripcionProjects" [value]="project.ProyectoId">{{ project.NombreProyecto }}</mat-option>
+                        <mat-option *ngFor="let project of inscripcionProjects" [value]="project.ProyectoId">
+                            {{ project.NombreProyecto }}
+                        </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'inscripcion.erro_selec' | translate }}</mat-error>
+                    <mat-error *ngIf="Campo1Control.hasError('required')">
+                        {{ 'inscripcion.erro_selec' | translate }}
+                    </mat-error>
                 </mat-form-field>
 
                 <!-- select tipo de inscripcion -->
                 <mat-form-field style="width: 100%;" *ngIf="showTipoInscripcion">
-                    <mat-select [formControl]="Campo2Control" [(ngModel)]="tipo_inscripcion_selected" placeholder="{{ 'inscripcion.aviso_tipo' | translate }}" (selectionChange)="onSelectTipoInscripcion()">
+                    <mat-select [formControl]="Campo2Control"
+                                [(ngModel)]="tipo_inscripcion_selected"
+                                placeholder="{{ 'inscripcion.aviso_tipo' | translate }}"
+                                (selectionChange)="onSelectTipoInscripcion()">
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of tipo_inscripciones" [value]="item.Id">
                             {{item.Nombre}}
                         </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="Campo2Control.hasError('required')">{{ 'inscripcion.aviso_tipo' | translate }}</mat-error>
+                    <mat-error *ngIf="Campo2Control.hasError('required')">
+                        {{ 'inscripcion.aviso_tipo' | translate }}
+                    </mat-error>
                 </mat-form-field>
 
                 <div style="width: 100%;" *ngIf="showInfo">
@@ -75,13 +100,16 @@
                 </div>
             </nb-card-body>
             <nb-card-body *ngIf="!showInscription">
-                <ngx-inscripcion_general (changeTab)="return()" (ocultarBarra)="ocultarBarraExterna($event)"></ngx-inscripcion_general>
+                <ngx-inscripcion_general (changeTab)="return()"
+                                         (ocultarBarra)="ocultarBarraExterna($event)"
+                                         [inscripcion_id]="this.inscripcion_id">
+                </ngx-inscripcion_general>
             </nb-card-body>
         </nb-card>
 
 
-        <fieldset>
-            <div>
+      </fieldset>
+    <div>
 
 
 

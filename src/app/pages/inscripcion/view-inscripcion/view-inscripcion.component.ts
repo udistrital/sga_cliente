@@ -24,7 +24,7 @@ export class ViewInscripcionComponent implements OnInit {
     private inscripcionService: InscripcionService,
     private parametrosService: ParametrosService,
     private userService: UserService,
-    private popUpManager: PopUpManager
+    private popUpManager: PopUpManager,
   ) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -51,7 +51,7 @@ export class ViewInscripcionComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
-      }
+      },
     );
     this.parametrosService.get('periodo/' + this.periodo_id).subscribe(
       (resp: any) => {
@@ -59,7 +59,7 @@ export class ViewInscripcionComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
-      }
+      },
     )
   }
 

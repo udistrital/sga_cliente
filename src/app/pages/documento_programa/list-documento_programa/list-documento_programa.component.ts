@@ -98,13 +98,13 @@ export class ListDocumentoProgramaComponent implements OnInit {
         custom: [
           {
             name: 'open',
-            title: '<i class="nb-compose"></i>'
+            title: '<i class="nb-compose" title="' + this.translate.instant('GLOBAL.tooltip_ver_registro') + '"></i>',
           },
           {
             name: 'edit',
-            title: '<i class="nb-edit"></i>'
-          }
-        ]
+            title: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
+          },
+        ],
       },
     };
   }
@@ -112,7 +112,8 @@ export class ListDocumentoProgramaComponent implements OnInit {
   async loadData() {
     this.loading = true;
     this.soporteDocumento = [];
-    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' + this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
+    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
+      this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
       (response: any[]) => {
         console.info(Object.keys(response[0]).length)
         if (Object.keys(response[0]).length > 0) {

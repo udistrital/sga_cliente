@@ -1,5 +1,14 @@
-<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+<nb-card [nbSpinner]="loading"
+         nbSpinnerStatus="success"
+         nbSpinnerSize="xxlarge"
+         nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <toaster-container [toasterconfig]="config"></toaster-container>
-    <ngx-dinamicform [normalform]="formInfoExperienciaLaboral" [modeloData]="info_experiencia_laboral" (result)="validarForm($event)" (resultAux)="searchNit($event)" [clean]="clean" (interlaced)="getSeleccion($event)" (percentage)="setPercentage($event)">
+    <ngx-dinamicform [normalform]="formInfoExperienciaLaboral"
+                     [modeloData]="info_experiencia_laboral"
+                     (result)="validarForm($event)"
+                     (resultAux)="searchNit($event)"
+                     [clean]="clean"
+                     (interlaced)="getSeleccion($event)"
+                     (percentage)="setPercentage($event)">
     </ngx-dinamicform>
 </nb-card>

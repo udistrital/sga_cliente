@@ -15,18 +15,14 @@
                 </thead>
                 <tbody *ngIf="info_documento_programa">
                     <tr *ngFor="let documento of info_documento_programa">
-                        <td>
-                            <p>{{documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre}}</p>
-                        </td>
-                        <td>
-                            <p>{{documento.estadoObservacion}}</p>
-                        </td>
-                        <td>
-                            <p>{{documento.observacion}}</p>
-                        </td>
+                        <td> {{documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre}} </td>
+                        <td> {{documento.estadoObservacion}} </td>
+                        <td> {{documento.observacion}} </td>
                         <td *ngIf="documento.DocumentoId !== undefined">
-                            <p><button mat-button type="button" (click)="abrirDocumento(documento)">
-                <i class="fa fa-eye fa-2x"></i></button></p>
+                          <a [href]=documento.Documento
+                             download="{{documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre}}.pdf">
+                             <i class="nb-search" title={{variable}}></i>
+                          </a>
                         </td>
                     </tr>
                 </tbody>

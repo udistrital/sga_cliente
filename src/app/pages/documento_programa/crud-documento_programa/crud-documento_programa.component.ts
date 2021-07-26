@@ -85,7 +85,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=ProgramaId:'+this.programa).subscribe(
+    this.inscripcionService.get('documento_programa?query=ProgramaId:' + this.programa).subscribe(
       response => {
         this.tipo_documentos = <any[]>response;
         this.eventChange.emit(this.tipo_documentos.length);
@@ -134,14 +134,14 @@ export class CrudDocumentoProgramaComponent implements OnInit {
     this.info_documento_programa.DocumentoProgramaId = { Id: this.documento_programa_id }
     this.popUpManager.showAlert(
       this.translate.instant('GLOBAL.info'),
-      this.translate.instant('documento_programa.documento_cambiar')
+      this.translate.instant('documento_programa.documento_cambiar'),
     );
   }
 
   createDocumentoPrograma(documentoPrograma: any): void {
     this.popUpManager.showConfirmAlert(
       this.translate.instant('documento_programa.seguro_continuar_registrar'),
-      this.translate.instant('GLOBAL.crear')
+      this.translate.instant('GLOBAL.crear'),
     ).then((ok) => {
       if (ok.value) {
         this.loading = true;
@@ -149,7 +149,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
         this.info_documento_programa.PersonaId = Number(this.persona) || 1;
         this.info_documento_programa.DocumentoProgramaId = this.info_documento_programa.DocumentoProgramaId;
         const file = {
-          file: this.info_documento_programa.Documento.file, 
+          file: this.info_documento_programa.Documento.file,
           IdDocumento: 6,
         }
         this.uploadFile(file).then(
@@ -158,7 +158,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
             soporteDocumentoPrograma.DocumentoId = fileId;
             soporteDocumentoPrograma.DocumentoProgramaId = {
               Id: this.tipo_documentos.filter(
-                obj => obj.TipoDocumentoProgramaId.Id === this.info_documento_programa.DocumentoProgramaId.Id
+                obj => obj.TipoDocumentoProgramaId.Id === this.info_documento_programa.DocumentoProgramaId.Id,
               )[0].Id,
             };
             soporteDocumentoPrograma.InscripcionId = {Id: Number(this.inscripcion)};
@@ -175,14 +175,14 @@ export class CrudDocumentoProgramaComponent implements OnInit {
               error => {
                 this.popUpManager.showErrorToast(this.translate.instant('documento_programa.documento_programa_no_registrado'));
                 this.loading = false;
-              }
+              },
             )
-          }
+          },
         ).catch(
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
             this.loading = false;
-          }
+          },
         );
       }
     });
@@ -191,7 +191,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   updateDocumentoPrograma(documentoPrograma: any) {
     this.popUpManager.showConfirmAlert(
       this.translate.instant('documento_programa.seguro_continuar_registrar'),
-      this.translate.instant('GLOBAL.actualizar')
+      this.translate.instant('GLOBAL.actualizar'),
     ).then((ok) => {
       if (ok.value) {
         this.loading = true;
@@ -201,14 +201,14 @@ export class CrudDocumentoProgramaComponent implements OnInit {
             this.info_documento_programa = <SoporteDocumentoPrograma>documentoPrograma;
             this.info_documento_programa.PersonaId = Number(this.persona) || 1;
             const file = {
-              file: this.info_documento_programa.Documento.file, 
+              file: this.info_documento_programa.Documento.file,
               IdDocumento: 6,
             }
             this.uploadFile(file).then(
               fileId => {
                 soporte.DocumentoId = fileId;
                 this.inscripcionService.put('soporte_documento_programa', soporte).subscribe(
-                  response => {
+                  (response: any) => {
                     this.loading = false;
                     this.popUpManager.showSuccessAlert(this.translate.instant('documento_programa.documento_programa_registrado'));
                     this.documento_programa_id = 0;
@@ -219,20 +219,20 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                   error => {
                     this.popUpManager.showErrorToast(this.translate.instant('documento_programa.documento_programa_no_registrado'));
                     this.loading = false;
-                  }
+                  },
                 )
-              }
+              },
             ).catch(
               error => {
                 this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
                 this.loading = false;
-              }
+              },
             );
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
             this.loading = false;
-          }
+          },
         );
       }
     });
