@@ -22,7 +22,6 @@ export let FORM_IDIOMAS = {
       nombre: 'Nativo',
       label_i18n: 'idioma_nativo_pregunta',
       placeholder_i18n: 'nativo',
-      requerido: true,
       valor: false,
       tipo: 'checkbox',
     },
@@ -33,7 +32,6 @@ export let FORM_IDIOMAS = {
       label_i18n: 'idioma_examen_pregunta',
       placeholder_i18n: 'idioma_examen',
       valor: false,
-      requerido: true,
       tipo: 'checkbox',
     },
     {

@@ -68,7 +68,7 @@ export class ViewIdiomasComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         Swal.fire({
-          icon:'error',
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('GLOBAL.cargar') + '-' +

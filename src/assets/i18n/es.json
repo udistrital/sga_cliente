@@ -160,6 +160,7 @@
         "confirmarActualizar": "ha sido actualizado(a)",
         "salir": "Salir",
         "eliminar": "Eliminar",
+        "confirmarEliminar": "se ha eliminado",
         "actualizar": "Actualizar",
         "crear": "Crear",
         "asignar": "Asignar",
@@ -586,7 +587,9 @@
         "programa": "Programa",
         "proyecto_academico": "Proyecto Curricular",
         "creditos": "Créditos",
-        "clasificacion": "Clasificación"
+        "clasificacion": "Clasificación",
+        "tooltip_ver_registro": "Ver",
+        "tooltip_editar_registro": "Editar"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -847,7 +850,10 @@
         "placeholder_tipo_produccion_audiovisual": "Ej: Video",
         "placeholder_tipo_universidad": "Ej: Nacional",
         "placeholder_titulo_convalidado": "Ej: Ingeniería de sistemas",
-        "placeholder_puntaje": "Ej: 25"
+        "placeholder_puntaje": "Ej: 25",
+        "tooltip_editar": "Editar producción académica",
+        "tooltip_eliminar": "Eliminar producción académica",
+        "tooltip_crear": "Crear producción académica"
     },
     "archivo_icfes": {
         "archivo_icfes": "Archivo de registros del icfes",
@@ -1254,7 +1260,10 @@
         "error_cargar_empresa": "Ocurruió un error al cargar la información de la empresa",
         "empresa_no_encontrada": "No existe información con los datos ingresados",
         "no_data": "No existe información registrada de la experiencia laboral",
-        "error": "Ha ocurrido un error inesperado al cargar la información"
+        "error": "Ha ocurrido un error inesperado al cargar la información",
+        "tooltip_editar": "Editar experiencia laboral",
+        "tooltip_eliminar": "Eliminar experiencia laboral",
+        "tooltip_crear": "Crear experiencia laboral"
     },
     "documento_programa": {
         "documento_programa_no_registrado": "Documento no registrado",
@@ -1278,7 +1287,11 @@
         "informacion_idioma_registrada": "Información de idioma registrada",
         "informacion_idioma_actualizada": "Información de idioma actualizada",
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información de idioma?",
-        "seguro_actualizar_idioma": "¿Está seguro de guardar los cambios en la información de este idioma?"
+        "seguro_actualizar_idioma": "¿Está seguro de guardar los cambios en la información de este idioma?",
+        "eliminar": "¿Desea eliminar el idioma?",
+        "tooltip_editar": "Editar idioma",
+        "tooltip_eliminar": "Eliminar idioma",
+        "tooltip_crear": "Crear idioma"
     },
     "propuesta_grado": {
         "error_cargar_lineas_investigacion": "Ocurrió un error al cargar la información de las líneas de investigación",
@@ -1559,11 +1572,14 @@
         "tooltip_guargar": "Guardar"
     },
     "formacion_academica": {
-        "no_data": "No existen datos registrados de la formación académica"
+        "no_data": "No existen datos registrados de la formación académica",
+        "tooltip_editar": "Editar formación",
+        "tooltip_eliminar": "Eliminar formación",
+        "tooltip_crear": "Crear formación"
     },
     "solicitudes": {
         "respuesta": "La respuesta a esta solicitud ha sido registrada correctamente",
-        "doc_valido": "¿El documento enviado es aprobado para esta solicitud",
+        "doc_valido": "¿El documento enviado es aprobado para esta solicitud?",
         "observacion": "Observación",
         "solicitud_respuesta": "Respuesta de la solicitud",
         "error": "Ha ocurrido un error inesperado y no se pudo cumplir la solicitud",
