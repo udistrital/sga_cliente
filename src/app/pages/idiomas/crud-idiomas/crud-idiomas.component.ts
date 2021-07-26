@@ -144,7 +144,7 @@ export class CrudIdiomasComponent implements OnInit {
         if (this.info_idioma.SeleccionExamen != true) {
           this.info_idioma.SeleccionExamen = false
         }
-        this.info_idioma.Persona = this.persona_id || 1;
+        this.info_idioma.TerceroId = this.persona_id || 1;
         if (this.info_idioma.Nativo === true && this.info_idioma.Nativo === this.info_idioma.SeleccionExamen) {
           this.popUpManager.showErrorAlert(this.translate.instant('idiomas.error_nativo_examen'));
         } else if (this.info_idioma.SeleccionExamen === true && this.idioma_examen !== undefined) {
@@ -157,7 +157,7 @@ export class CrudIdiomasComponent implements OnInit {
               if (r !== null && r.Type !== 'error') {
                 if (this.info_idioma.SeleccionExamen === true) {
                   const examen = {
-                    Idioma: this.info_idioma.Idioma.Id,
+                    Idioma: this.info_idioma.IdiomaId.Id,
                     Activo: true,
                     InscripcionId: { Id: Number(this.inscripcion_id) },
                   };
@@ -165,7 +165,7 @@ export class CrudIdiomasComponent implements OnInit {
                     .subscribe(resexamen => {
                       const rex = <any>resexamen;
                       if (rex !== null && rex.Type !== 'error') {
-                        this.idioma_examen = this.info_idioma.Idioma.Id;
+                        this.idioma_examen = this.info_idioma.IdiomaId.Id;
                         this.eventChange.emit(true);
                         this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_registrada'));
                         this.info_idioma_id = 0;
@@ -206,7 +206,7 @@ export class CrudIdiomasComponent implements OnInit {
         .subscribe(res => {
           if (res !== null) {
             this.info_idioma = <InfoIdioma>res[0];
-            this.idioma = this.info_idioma.Idioma.Id;
+            this.idioma = this.info_idioma.IdiomaId.Id;
           }
         },
           (error: HttpErrorResponse) => {
@@ -274,12 +274,12 @@ export class CrudIdiomasComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
-        this.formInfoIdioma.campos[this.getIndexForm('Idioma')].opciones = list.listIdioma[0];
-        this.formInfoIdioma.campos[this.getIndexForm('NivelEscribe')].opciones = list.listNivelIdioma[0];
-        this.formInfoIdioma.campos[this.getIndexForm('NivelEscucha')].opciones = list.listNivelIdioma[0];
-        this.formInfoIdioma.campos[this.getIndexForm('NivelHabla')].opciones = list.listNivelIdioma[0];
-        this.formInfoIdioma.campos[this.getIndexForm('NivelLee')].opciones = list.listNivelIdioma[0];
-        this.formInfoIdioma.campos[this.getIndexForm('ClasificacionNivelIdioma')].opciones = list.listClasificacionNivelIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('IdiomaId')].opciones = list.listIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('NivelEscribeId')].opciones = list.listNivelIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('NivelEscuchaId')].opciones = list.listNivelIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('NivelHablaId')].opciones = list.listNivelIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('NivelLeeId')].opciones = list.listNivelIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('NivelId')].opciones = list.listClasificacionNivelIdioma[0];
       },
     );
   }

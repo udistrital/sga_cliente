@@ -55,35 +55,35 @@ export class ListIdiomasComponent implements OnInit {
   cargarCampos() {
     this.settings = {
       columns: {
-        Idioma: {
+        IdiomaId: {
           title: this.translate.instant('GLOBAL.idioma'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        NivelEscribe: {
+        NivelEscribeId: {
           title: this.translate.instant('GLOBAL.nivel_escribe'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        NivelEscucha: {
+        NivelEscuchaId: {
           title: this.translate.instant('GLOBAL.nivel_escucha'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        NivelHabla: {
+        NivelHablaId: {
           title: this.translate.instant('GLOBAL.nivel_habla'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        NivelLee: {
+        NivelLeeId: {
           title: this.translate.instant('GLOBAL.nivel_lee'),
           width: '20%',
           valuePrepareFunction: (value) => {
