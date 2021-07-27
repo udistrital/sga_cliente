@@ -34,7 +34,7 @@ export let FORM_PROPUESTA_GRADO = {
       placeholder_i18n: 'placeholder_linea_investigacion',
       requerido: true,
       tipo: 'LineaInvestigacion',
-      key: 'name',
+      key: 'st_name',
       opciones: [],
     },
     {
