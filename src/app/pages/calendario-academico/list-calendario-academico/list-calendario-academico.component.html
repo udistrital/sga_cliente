@@ -1,5 +1,6 @@
 <div class="col-12">
-    <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" 
+    *ngIsGranted="['CONTRATISTAS', 'CONTRATISTA2']">
         <nb-card-header>
             {{ 'calendario.calendarios_academicos' | translate }}
         </nb-card-header>
