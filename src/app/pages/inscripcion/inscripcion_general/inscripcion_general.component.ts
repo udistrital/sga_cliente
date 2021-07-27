@@ -11,7 +11,6 @@ import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion'
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import Swal from 'sweetalert2';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
-
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
 
@@ -145,11 +144,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'));
     const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'))
     const IdPrograma = parseInt(sessionStorage.getItem('ProgramaAcademicoId'))
-    //Se carga el nombre del periodo al que se inscribió
+    // Se carga el nombre del periodo al que se inscribió
     this.loadPeriodo(IdPeriodo);
-    //Se carga el tipo de inscripción
+    // Se carga el tipo de inscripción
     this.loadTipoInscripcion(IdTipo);
-    //Se carga el nivel del proyecto
+    // Se carga el nivel del proyecto
     this.loadNivel(IdPrograma);
   }
 
@@ -503,6 +502,25 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     });
   }
 
+  loadPercentageTrabajoDeGrado() {
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.inscripcionService.get('propuesta?query=Activo:true,InscripcionId:' +
+        Number(window.sessionStorage.getItem('IdInscripcion'))).subscribe((res: any) => {
+          if (res !== null && JSON.stringify(res[0]) !== '{}') {
+            this.percentage_proy = 100;
+          }
+          this.loading = false;
+          resolve(this.percentage_proy)
+
+        },
+          error => {
+            this.loading = false;
+            reject(error);
+          });
+    });
+  }
+
   async ngOnInit() {
 
     // Consulta si hay información en el tab de información personal
@@ -539,7 +557,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
     // Consulta si hay información en propuesta trabajo de grado
     if (this.percentage_proy === 0) {
-      // Pendiente
+      await this.loadPercentageTrabajoDeGrado();
     }
 
     this.setPercentage_total();
