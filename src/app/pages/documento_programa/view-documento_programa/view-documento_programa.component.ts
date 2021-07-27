@@ -69,44 +69,46 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     this.info_documento_programa = <any>[];
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId:' +
       this.inscripcion_id + ',DocumentoProgramaId.ProgramaId:' + this.programa_id).subscribe(
-      (response: any[]) => {
-        if (response !== null && Object.keys(response[0]).length > 0 && response[0] != '{}') {
-          this.info_documento_programa = response;
-          this.info_documento_programa.forEach(doc => {
-            this.docSoporte.push({ Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId })
+        (response: any[]) => {
+          if (response !== null && Object.keys(response[0]).length > 0 && response[0] != '{}') {
+            this.info_documento_programa = response;
+            this.info_documento_programa.forEach(doc => {
+              this.docSoporte.push({ Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId })
 
-            this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
-              (documento: Documento) => {
-                let metadatos = JSON.parse(documento.Metadatos);
-                doc.aprobado = metadatos.aprobado;
-                if (metadatos.aprobado) {
-                  doc.estadoObservacion = 'Aprobado';
-                  doc.observacion = '';
-                } else {
-                  doc.estadoObservacion = 'No Aprobado';
-                  doc.observacion = metadatos.observacion;
-                }
-              });
-
-          });
-          this.nuxeoService.getDocumentoById$(this.docSoporte, this.documentoService).subscribe(
-            (res: any) => {
-              if (Object.keys(res).length > 0) {
-                this.info_documento_programa.forEach(doc => {
-                  doc.Documento = this.cleanURL(res['DocumentoPrograma' + doc.DocumentoId]);
+              this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
+                (documento: Documento) => {
+                  if (documento.Metadatos !== '') {
+                    let metadatos = JSON.parse(documento.Metadatos);
+                    doc.aprobado = metadatos.aprobado;
+                    if (metadatos.aprobado) {
+                      doc.estadoObservacion = 'Aprobado';
+                      doc.observacion = '';
+                    } else {
+                      doc.estadoObservacion = 'No Aprobado';
+                      doc.observacion = metadatos.observacion;
+                    }
+                  }
                 });
-              }
-            },
-            error => {
-              this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
-            },
-          );
-        } else {
-          this.info_documento_programa = null
-        }
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
+
+            });
+            this.nuxeoService.getDocumentoById$(this.docSoporte, this.documentoService).subscribe(
+              (res: any) => {
+                if (Object.keys(res).length > 0) {
+                  this.info_documento_programa.forEach(doc => {
+                    doc.Documento = this.cleanURL(res['DocumentoPrograma' + doc.DocumentoId]);
+                  });
+                }
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
+              },
+            );
+          } else {
+            this.info_documento_programa = null
+          }
+        },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
         },
     );
   }

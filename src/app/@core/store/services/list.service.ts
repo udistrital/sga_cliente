@@ -190,7 +190,7 @@ export class ListService {
       (list: any) => {
         if (!list || list.length === 0) {
           // this.coreService.get('linea_investigacion/?query=Activo:true&limit=0')
-          this.cidcService.get('research_focus')
+          this.cidcService.get('subtypes/by-type/53')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.LineaInvestigacion, result);
@@ -387,8 +387,6 @@ export class ListService {
     );
   }
 
-
-
   public findTipoICFES() {
     this.store.select(REDUCER_LIST.ICFES).subscribe(
       (list: any) => {
@@ -505,7 +503,7 @@ public findTipoParametro() {
       async (list: any) => {
         if (!list || list.length === 0) {
           // this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
-          this.cidcService.get('research_group/?query=Activo:true&limit=0')
+          this.cidcService.get('research_units/?query=Activo:true&limit=0')
             .subscribe(
               async (result: any) => {
                 const r = <any>result.data;

@@ -49,6 +49,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
   @Input('inscripcion_id')
   set info2(inscripcion_id: number) {
     if (inscripcion_id !== undefined && inscripcion_id !== 0 && inscripcion_id.toString() !== '') {
+      this.loading = true;
       this.inscripcion_id = inscripcion_id;
       // if (this.inscripcion_id !== undefined && this.inscripcion_id !== null && this.inscripcion_id !== 0 &&
       //   this.inscripcion_id.toString() !== '') {
@@ -93,15 +94,16 @@ export class CrudPropuestaGradoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+    this.loading = true;
     this.cargarValores();
     this.listService.findLineaInvestigacion();
     this.listService.findTipoProyecto();
     // this.listService.findTipoParametro();
     this.loadLists();
-    this.loadPropuestaGrado();
+    //this.loadPropuestaGrado();
   }
 
-  async cargarValores(){
+  async cargarValores() {
     this.loading = true;
     await this.listService.findGrupoInvestigacion();
     this.loading = false;
@@ -150,11 +152,11 @@ export class CrudPropuestaGradoComponent implements OnInit {
               if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2['FormatoProyecto'] !== undefined)) {
                 temp.FormatoProyecto = filesResponse_2['FormatoProyecto'] + '';
                 this.FormatoProyecto = temp.DocumentoId;
-                this.cidcService.get('research_group/' + temp.GrupoInvestigacionId)
+                this.cidcService.get('research_units/' + temp.GrupoInvestigacionId)
                   .subscribe(grupo => {
                     if (grupo !== null) {
                       temp.GrupoInvestigacion = <any>grupo;
-                      this.cidcService.get('research_focus/' + temp.LineaInvestigacionId)
+                      this.cidcService.get('subtypes/by-type/' + temp.LineaInvestigacionId)
                         .subscribe(linea => {
                           if (linea !== null) {
                             temp.LineaInvestigacion = <any>linea;
@@ -167,7 +169,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
                         },
                           (error: HttpErrorResponse) => {
                             Swal.fire({
-                              icon:'error',
+                              icon: 'error',
                               title: error.status + '',
                               text: this.translate.instant('ERROR.' + error.status),
                               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -180,7 +182,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
                   },
                     (error: HttpErrorResponse) => {
                       Swal.fire({
-                        icon:'error',
+                        icon: 'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
                         footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -195,7 +197,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
               (error: HttpErrorResponse) => {
                 this.loading = false;
                 Swal.fire({
-                  icon:'error',
+                  icon: 'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -212,7 +214,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
         (error: HttpErrorResponse) => {
           this.loading = false;
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -220,13 +222,13 @@ export class CrudPropuestaGradoComponent implements OnInit {
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });
-      this.loading = false;
+    this.loading = false;
   }
 
   createPropuestaGrado(propuestaGrado: any): void {
     const opt: any = {
-      title: this.existePropuesta? this.translate.instant('GLOBAL.actualizar'): this.translate.instant('GLOBAL.crear'),
-      text: this.existePropuesta? this.translate.instant('propuesta_grado.seguro_continuar_actualizar') :this.translate.instant('propuesta_grado.seguro_continuar_registrar'),
+      title: this.existePropuesta ? this.translate.instant('GLOBAL.actualizar') : this.translate.instant('GLOBAL.crear'),
+      text: this.existePropuesta ? this.translate.instant('propuesta_grado.seguro_continuar_actualizar') : this.translate.instant('propuesta_grado.seguro_continuar_registrar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -242,7 +244,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
           if (this.info_propuesta_grado.FormatoProyecto.file !== undefined) {
             files.push({
               nombre: this.autenticationService.getPayload().sub, key: 'FormatoProyecto',
-              file: this.info_propuesta_grado.FormatoProyecto.file, IdDocumento: 7
+              file: this.info_propuesta_grado.FormatoProyecto.file, IdDocumento: 7,
             });
           }
           if (this.existePropuesta) {
@@ -292,18 +294,18 @@ export class CrudPropuestaGradoComponent implements OnInit {
                           this.eventChange.emit(true);
                           // this.showToast('info', this.translate.instant('GLOBAL.crear'),
                           //   this.translate.instant('propuesta_grado.propuesta_grado_registrada'));
-                            this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_registrada'));
+                          this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_registrada'));
                         } else {
                           // this.showToast('error', this.translate.instant('GLOBAL.error'),
                           //   this.translate.instant('GLOBAL.error'));
-                            this.popUpManager.showErrorToast(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
+                          this.popUpManager.showErrorToast(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
                         }
                         this.loading = false;
                       },
                         (error: HttpErrorResponse) => {
                           this.loading = false;
                           Swal.fire({
-                            icon:'error',
+                            icon: 'error',
                             title: error.status + '',
                             text: this.translate.instant('ERROR.' + error.status),
                             footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),
@@ -320,7 +322,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
                   (error: HttpErrorResponse) => {
                     this.loading = false;
                     Swal.fire({
-                      icon:'error',
+                      icon: 'error',
                       title: error.status + '',
                       text: this.translate.instant('ERROR.' + error.status),
                       footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),
@@ -338,8 +340,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
   }
 
   putPropuestaGrado(file) {
-    if(file.length > 0)
-    {
+    if (file.length > 0) {
       return new Promise((resolve, reject) => {
         this.nuxeoService.getDocumentos$(file, this.documentoService)
           .subscribe(response => {
@@ -354,75 +355,75 @@ export class CrudPropuestaGradoComponent implements OnInit {
             reject(error);
           });
       });
-    }else {
+    } else {
       return new Promise((resolve, reject) => {
         this.actualizar(this.info_propuesta_grado.DocumentoId);
       });
     }
   }
 
-  actualizar(documentoID: number){
+  actualizar(documentoID: number) {
     this.loading = true;
     this.info_propuesta_grado_post = new PropuestaPost;
-      this.info_propuesta_grado_post.Id = this.info_propuesta_grado.Id;
-      this.info_propuesta_grado_post.Activo = true;
-      this.info_propuesta_grado_post.Nombre = this.info_propuesta_grado.Nombre;
-      this.info_propuesta_grado_post.Resumen = this.info_propuesta_grado.Resumen;
-      this.info_propuesta_grado_post.TipoProyectoId = this.info_propuesta_grado.TipoProyectoId;
-      this.info_propuesta_grado_post.DocumentoId = documentoID;
-      this.info_propuesta_grado_post.GrupoInvestigacionId = this.info_propuesta_grado.GrupoInvestigacion.id;
-      this.info_propuesta_grado_post.LineaInvestigacionId = this.info_propuesta_grado.LineaInvestigacion.id;
+    this.info_propuesta_grado_post.Id = this.info_propuesta_grado.Id;
+    this.info_propuesta_grado_post.Activo = true;
+    this.info_propuesta_grado_post.Nombre = this.info_propuesta_grado.Nombre;
+    this.info_propuesta_grado_post.Resumen = this.info_propuesta_grado.Resumen;
+    this.info_propuesta_grado_post.TipoProyectoId = this.info_propuesta_grado.TipoProyectoId;
+    this.info_propuesta_grado_post.DocumentoId = documentoID;
+    this.info_propuesta_grado_post.GrupoInvestigacionId = this.info_propuesta_grado.GrupoInvestigacion.id;
+    this.info_propuesta_grado_post.LineaInvestigacionId = this.info_propuesta_grado.LineaInvestigacion.id;
 
-      this.inscripcionService.get('inscripcion/' + Number(window.sessionStorage.getItem('IdInscripcion')))
-        .subscribe(res => {
-          const r = <any>res;
-          if (r !== null && r.Type !== 'error') {
-            this.info_propuesta_grado_post.InscripcionId = r;
-            this.loading = true;
-            this.inscripcionService.put('propuesta/', this.info_propuesta_grado_post)
-              .subscribe(res => {
-                const r = <any>res;
-                if (r !== null && r.Type !== 'error') {
-                  this.info_propuesta_grado = <PropuestaGrado><unknown>res;
-                  this.loading = false;
-                  this.eventChange.emit(true);
-                  // this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
-                  //   this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
-                  this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
-                } else {
-                  // this.showToast('error', this.translate.instant('GLOBAL.error'),
-                  //   this.translate.instant('GLOBAL.error'));
-                  this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
-                }
+    this.inscripcionService.get('inscripcion/' + Number(window.sessionStorage.getItem('IdInscripcion')))
+      .subscribe(res => {
+        const r = <any>res;
+        if (r !== null && r.Type !== 'error') {
+          this.info_propuesta_grado_post.InscripcionId = r;
+          this.loading = true;
+          this.inscripcionService.put('propuesta/', this.info_propuesta_grado_post)
+            .subscribe(res => {
+              const r = <any>res;
+              if (r !== null && r.Type !== 'error') {
+                this.info_propuesta_grado = <PropuestaGrado><unknown>res;
                 this.loading = false;
-              },
-                (error: HttpErrorResponse) => {
-                  this.loading = false;
-                  Swal.fire({
-                    icon:'error',
-                    title: error.status + '',
-                    text: this.translate.instant('ERROR.' + error.status),
-                    footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  });
+                this.eventChange.emit(true);
+                // this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+                //   this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
+                this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
+              } else {
+                // this.showToast('error', this.translate.instant('GLOBAL.error'),
+                //   this.translate.instant('GLOBAL.error'));
+                this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
+              }
+              this.loading = false;
+            },
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
+              });
 
-          } else {
-            this.showToast('error', this.translate.instant('GLOBAL.error'),
-              this.translate.instant('GLOBAL.error'));
-          }
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'),
+            this.translate.instant('GLOBAL.error'));
+        }
+        this.loading = false;
+      },
+        (error: HttpErrorResponse) => {
           this.loading = false;
-        },
-          (error: HttpErrorResponse) => {
-            this.loading = false;
-            Swal.fire({
-              icon:'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
+        });
   }
 
   ngOnInit() {

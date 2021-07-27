@@ -150,13 +150,15 @@ export class ListDocumentoProgramaComponent implements OnInit {
             this.estadoObservacion = '';
             this.observacion = '';
           } else {
-            let metadatos = JSON.parse(doc.Metadatos);
-            if (metadatos.aprobado) {
-              this.estadoObservacion = 'Aprobado';
-              this.observacion = '';
-            } else {
-              this.estadoObservacion = 'No Aprobado';
-              this.observacion = metadatos.observacion;
+            if (doc.Metadatos !== '') {
+              let metadatos = JSON.parse(doc.Metadatos);
+              if (metadatos.aprobado) {
+                this.estadoObservacion = 'Aprobado';
+                this.observacion = '';
+              } else {
+                this.estadoObservacion = 'No Aprobado';
+                this.observacion = metadatos.observacion;
+              }
             }
           }
           resolve(this.estadoObservacion)
