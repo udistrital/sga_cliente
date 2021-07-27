@@ -76,6 +76,7 @@
     "jquery": "^3.5.1",
     "leaflet": "1.2.0",
     "lint": "^0.7.0",
+    "lodash": "^4.17.21",
     "map": "^1.0.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
