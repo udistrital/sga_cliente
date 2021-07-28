@@ -119,15 +119,16 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.showInfo = false;
     this.showNew = false;
     this.showInscription = true;
-    this.cargarPeriodo();
     this.nivel_load();
     this.dataSource = new LocalDataSource();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
     sessionStorage.setItem('EstadoInscripcion', 'false');
-    this.persona_id = this.userService.getPersonaId();
-    this.loadInfoInscripcion();
+    this.info_persona_id = this.userService.getPersonaId();
+    if (localStorage.getItem('IdPeriodo') === undefined) {
+      this.loadInfoPersona();
+    }
     this.createTable();
     this.loading = false;
 
@@ -148,6 +149,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           this.info_info_persona = temp;
           const files = []
         }
+        this.loadInfoInscripcion();
         this.loading = false;
       },
         (error: HttpErrorResponse) => {
@@ -241,7 +243,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   loadInscriptionModule() {
-    this.inscripcion_id = parseInt(sessionStorage.getItem('IdInscripcion'))
+    this.inscripcion_id = parseInt(sessionStorage.getItem('IdInscripcion'), 10)
     this.showInscription = false;
   }
 
@@ -291,13 +293,14 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     );
   }
 
-  loadInfoInscripcion() {
+  async loadInfoInscripcion() {
     this.loading = true;
     // Función del MID que retorna el estado del recibo
+    await this.cargarPeriodo()
     const PeriodoActual = localStorage.getItem('IdPeriodo')
-    if (this.persona_id != null && PeriodoActual != null) {
+    if (this.info_persona_id != null && PeriodoActual != null) {
       // if (this.persona_id != null){
-      this.sgaMidService.get('inscripciones/estado_recibos/' + this.persona_id + '/' + PeriodoActual).subscribe(
+      await this.sgaMidService.get('inscripciones/estado_recibos/' + this.info_persona_id + '/' + PeriodoActual).subscribe(
         (response: any) => {
           if (response !== null && response.Response.Code === '400') {
             this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));
@@ -388,7 +391,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       response => {
         this.loading = false;
         const r = <any>response;
-        if (response !== null && response !== '{}' && r.Type !== 'error' && r.length != 0) {
+        if (response !== null && response !== '{}' && r.Type !== 'error' && r.length !== 0) {
           const inscripcionP = <Array<any>>response;
           this.inscripcionProjects = inscripcionP;
           this.showProyectoCurricular = true;
@@ -513,10 +516,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   descargarReciboPago(data) {
     this.itemSelect({ data: data })
     if (this.selectedLevel === undefined) {
-      this.selectedLevel = parseInt(sessionStorage.getItem('nivel'));
+      this.selectedLevel = parseInt(sessionStorage.getItem('nivel'), 10);
     }
     if (this.info_info_persona != null) {
-      this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'))
+      this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
       this.recibo_pago = new ReciboPago();
       this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + ' ' +
         this.info_info_persona.SegundoNombre + ' ' + this.info_info_persona.PrimerApellido + ' ' + this.info_info_persona.SegundoApellido;
@@ -604,7 +607,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           const tiposInscripciones = <Array<any>>res;
           this.tipo_inscripciones = tiposInscripciones;
           // this.cargaproyectosacademicos();
-          if (this.tipo_inscripciones.length == 0) {
+          if (this.tipo_inscripciones.length === 0) {
             this.popUpManager.showAlert('', this.translate.instant('calendario.sin_tipo_inscripcion'));
             this.showTipoInscripcion = false;
             this.showProyectoCurricular = false;
