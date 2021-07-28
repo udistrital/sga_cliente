@@ -100,22 +100,26 @@ export class CrudInfoPersonaComponent implements OnInit {
     return 0;
   }
 
-  public loadInfoPersona(): void {
-    if (this.info_persona_id !== undefined && this.info_persona_id !== 0 && this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0'){
-      this.sgamidService.get('persona/consultar_persona/' + this.info_persona_id)
+  public async loadInfoPersona() {
+    if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
+      this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0') {
+      await this.sgamidService.get('persona/consultar_persona/' + this.info_persona_id)
         .subscribe(res => {
-          if (res !== null && res.Id != undefined) {
+          if (res !== null && res.Id !== undefined) {
             const temp = <InfoPersona>res;
             this.info_info_persona = temp;
             const files = []
-            this.formInfoPersona.btn = "";
+            this.formInfoPersona.btn = '';
+            this.formInfoPersona.campos[this.getIndexForm('Genero')].valor = temp.Genero;
+            this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].valor = temp.EstadoCivil;
+            this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].valor = temp.TipoIdentificacion;
           }
           this.loading = false;
         },
         (error: HttpErrorResponse) => {
           this.loading = false;
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -169,7 +173,7 @@ export class CrudInfoPersonaComponent implements OnInit {
           (error: HttpErrorResponse) => {
             this.loading = false;
             Swal.fire({
-              icon:'error',
+              icon: 'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -193,7 +197,7 @@ export class CrudInfoPersonaComponent implements OnInit {
         if (this.info_inscripcion.AceptaTerminos !== true) {
          this.validarTerminos(event);
         } else {
-          this.formInfoPersona.btn = "";
+          this.formInfoPersona.btn = '';
         }
       }
     }
@@ -215,11 +219,11 @@ export class CrudInfoPersonaComponent implements OnInit {
           if (this.info_info_persona === undefined) {
             this.createInfoPersona(event.data.InfoPersona);
           } else {
-            this.formInfoPersona.btn = "";
+            this.formInfoPersona.btn = '';
           }
         } else if (result.value === 0) {
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             text: this.translate.instant('GLOBAL.rechazo_terminos'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
