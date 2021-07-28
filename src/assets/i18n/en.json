@@ -570,7 +570,8 @@
         "creditos": "Credits",
         "clasificacion": "Type",
         "tooltip_ver_registro": "View",
-        "tooltip_editar_registro": "Edit"
+        "tooltip_editar_registro": "Edit",
+        "tooltip_descargar": "Download"
     },
 
     "ERROR": {
@@ -674,7 +675,6 @@
         "placeholder_resumen": "e.g. summary",
         "ISBN": "ISBN",
         "titulo_libro": "Book title",
-        "titulo_revista": "Magazine name",
         "URL": "URL",
         "DOI": "DOI",
         "idioma_traduccion": "Traduction language",

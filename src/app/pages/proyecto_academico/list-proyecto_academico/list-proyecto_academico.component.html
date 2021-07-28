@@ -10,25 +10,28 @@
         </nb-card>
         <nb-card>
             <nb-card-body>
-                <mat-form-field>
+                <!-- <mat-form-field>
                     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{ 'oferta.filtro' | translate }}">
-                </mat-form-field>
+                </mat-form-field> -->
 
-                <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-                    <!--  Columna ID-->
+                <ng2-smart-table [settings]="settings"
+                                 [source]="source"
+                                 (rowSelect)="highlight($event)"
+                                 (custom)="onAction($event)">
+                </ng2-smart-table>
+
+                <!-- <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
                     <ng-container matColumnDef="Id" >
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.id' | translate }}</mat-header-cell>
                         <mat-cell *matCellDef="let row; let i = index" class="text-capitalize"> {{row.ProyectoAcademico.Id}} </mat-cell>
                     </ng-container>
 
-                    <!-- Columna Apellido -->
                     <ng-container matColumnDef="NombreFacultad">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'consultaproyecto.facultad' | translate }}</mat-header-cell>
                         <mat-cell *matCellDef="let row"> {{row.NombreFacultad }} </mat-cell>
                     </ng-container>
 
-                    <!-- Columna Nombre-->
                     <ng-container matColumnDef="proyecto">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.nombre' | translate }} </mat-header-cell>
                         <mat-cell *matCellDef="let row" class="text-capitalize"> {{row.proyecto}} </mat-cell>
@@ -88,7 +91,7 @@
 
                     <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="highlight(row,$event)"></mat-row>
-                </mat-table>
+                </mat-table> -->
 
 
             </nb-card-body>
