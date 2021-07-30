@@ -17,6 +17,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
+import * as momentTimezone from 'moment-timezone';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { MatTableDataSource } from '@angular/material';
@@ -32,7 +33,7 @@ import { ProyectoAcademicoInstitucion } from '../../../@core/data/models/proyect
 @Component({
   selector: 'ngx-list-proyecto-academico',
   templateUrl: './list-proyecto_academico.component.html',
-  styleUrls: ['./list-proyecto_academico.component.scss'],
+  styleUrls: ['../proyecto_academico.component.scss'],
 })
 export class ListProyectoAcademicoComponent implements OnInit {
   config: ToasterConfig;
@@ -40,7 +41,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   dataSource: any;
   index: any;
   idproyecto: any;
-  datosbasico: InformacionBasica;
+ // datosbasico: InformacionBasica;
   codigosnies: Number;
   facultad: string;
   nombre: String;
@@ -82,20 +83,19 @@ export class ListProyectoAcademicoComponent implements OnInit {
   fecha_inicio_coordinador: Date;
   vigencia_resolucion_meses: string;
   vigencia_resolucion_anos: string;
-  primer_nombre: string;
-  segundo_nombre: string;
-  primer_apellido: string;
+ // primer_nombre: string;
+ // segundo_nombre: string;
+ // primer_apellido: string;
   id_coordinador: any;
-  segundo_apellido: string;
-  nombre_completo: string;
-  source: LocalDataSource = new LocalDataSource();
+ // segundo_apellido: string;
+ // nombre_completo: string;
   proyectoJson: any;
   id_documento_acto: string;
   id_documento_registor_calificado: string;
   id_documento_alta_calidad: string;
   id_documento_registro_coordinador: number;
   proyecto_padre_id: ProyectoAcademicoInstitucion;
-  displayedColumns = [
+ /* displayedColumns = [
     'Id',
     'NombreFacultad',
     'proyecto',
@@ -107,7 +107,10 @@ export class ListProyectoAcademicoComponent implements OnInit {
     'Consulta',
     'editar',
     'inhabilitar',
-  ];
+  ];*/
+
+  listaDatos = []
+  source: LocalDataSource;
 
   constructor(
     private translate: TranslateService,
@@ -116,10 +119,134 @@ export class ListProyectoAcademicoComponent implements OnInit {
     public dialog: MatDialog,
     private toasterService: ToasterService,
   ) {
+    this.source = new LocalDataSource();
+
     this.loadproyectos();
+    this.loadData();
+    // this.source.load(this.listaDatos)
+
+    this.cargarCampos();
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.cargarCampos();
+    });
   }
 
   @ViewChild(MatSort) sort: MatSort;
+
+  cargarCampos() {
+    this.settings = {
+      columns: {
+        Id: {
+          title: this.translate.instant('consultaproyecto.id'),
+          width: '5%',
+        },
+        NombreFacultad: {
+          title: this.translate.instant('consultaproyecto.facultad'),
+          width: '15%',
+        },
+        proyecto: {
+          title: this.translate.instant('consultaproyecto.nombre'),
+          width: '25%',
+        },
+        NivelProyecto: {
+          title: this.translate.instant('consultaproyecto.nivel'),
+          width: '8%',
+        },
+        codigo: {
+          title: this.translate.instant('consultaproyecto.codigo'),
+          width: '7%',
+        },
+        OfertaLetra: {
+          title: this.translate.instant('consultaproyecto.activo'),
+          width: '3%',
+        },
+        FechaVenimientoAcreditacion: {
+          title: this.translate.instant('consultaproyecto.registro'),
+          width: '10%',
+        },
+        FechaVenimientoCalidad: {
+          title: this.translate.instant('consultaproyecto.calidad'),
+          width: '10%',
+        },
+      },
+      mode: 'external',
+      actions: {
+        add: false,
+        edit: false,
+        delete: false,
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+
+        custom: [
+          {
+            name: 'consulta',
+            title: '<i class="nb-search" title="' +
+              this.translate.instant('consultaproyecto.consulta') +
+              '"></i>',
+          },
+          {
+            name: 'editar',
+            title: '<i class="nb-edit" title="' +
+              this.translate.instant('consultaproyecto.editar') +
+              '"></i>',
+          },
+          {
+            name: 'inhabilitar',
+            title: '<i class="nb-locked" title="' +
+              this.translate.instant('consultaproyecto.inhabilitar') +
+              '"></i>',
+          },
+        ],
+      },
+    };
+    this.source.load(this.listaDatos);
+  }
+
+  loadData(): void {
+    this.sgamidService.get('consulta_proyecto_academico/').subscribe(res => {
+      if (res !== null) {
+        const data = <Array<any>>res;
+        data.forEach(element => {
+          if (element.FechaVenimientoAcreditacion !== null) {
+            element.FechaVenimientoAcreditacion = momentTimezone.tz(element.FechaVenimientoAcreditacion, 'America/Bogota').format('DD-MM-YYYY')
+          }
+          if (element.FechaVenimientoCalidad !== null) {
+            element.FechaVenimientoCalidad = momentTimezone.tz(element.FechaVenimientoCalidad, 'america/Bogota').format('DD-MM-YYYY')
+          }
+          element.codigo = element.ProyectoAcademico.CodigoSnies
+          element.NivelProyecto = element.ProyectoAcademico.NivelFormacionId.Nombre
+          element.proyecto = element.ProyectoAcademico.Nombre
+          element.Id = element.ProyectoAcademico.Id
+          this.source.load(data)
+        });
+      }
+    },
+      (error: HttpErrorResponse) => {
+        Swal.fire({
+          icon: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          footer: this.translate.instant('GLOBAL.cargar') + '-' +
+            this.translate.instant('GLOBAL.proyecto_academico'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      });
+  }
+
+  onAction(event) {
+    this.highlight(event)
+    switch (event.action) {
+      case 'consulta':
+        this.promesaid_consulta(event);
+        break;
+      case 'editar':
+        this.promesaid_modificar(event);
+        break;
+      case 'inhabilitar':
+        this.inhabilitarProyecto(event.data);
+        break;
+    }
+  }
 
   openDialogConsulta(): void {
     const dialogRef = this.dialog.open(ConsultaProyectoAcademicoComponent, {
@@ -219,7 +346,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     return data.indexOf(filter) >= 0;
   }
 
-  applyFilter(filterValue: string) {
+/*  applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
@@ -243,13 +370,14 @@ export class ListProyectoAcademicoComponent implements OnInit {
         });
       });
     */
-  }
+ // }*/
 
   useLanguage(language: string) {
     this.translate.use(language);
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
+
   loadproyectos() {
     const opt1: any = {
       title: this.translate.instant('GLOBAL.atencion'),
@@ -261,6 +389,9 @@ export class ListProyectoAcademicoComponent implements OnInit {
     };
     this.sgamidService.get('consulta_proyecto_academico/').subscribe(
       (res: any[]) => {
+        res.forEach(element => {
+          this.listaDatos.push(element)
+        });
         if (res !== null && res[0] !== 'error') {
           this.dataSource = new MatTableDataSource(res);
           this.dataSource.sort = this.sort;
@@ -296,6 +427,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
+    console.log(this.idproyecto)
     this.sgamidService
       .get('consulta_proyecto_academico/' + this.idproyecto)
       .subscribe(
@@ -535,7 +667,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   }
 
   highlight(row): void {
-    this.idproyecto = row.ProyectoAcademico.Id;
+    this.idproyecto = row.data.ProyectoAcademico.Id;
   }
 
   consultacoordinador() {
@@ -550,7 +682,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     this.proyectoacademicoService
       .get(
         'proyecto_academico_rol_tercero_dependencia/?query=ProyectoAcademicoInstitucionId.Id:' +
-          this.idproyecto,
+        this.idproyecto,
       )
       .subscribe(
         (res: any) => {
