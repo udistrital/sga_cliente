@@ -1,23 +1,35 @@
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
 import { Component, OnInit } from '@angular/core';
-import { AnalyticsService } from './@core/utils/analytics.service';
-import {TranslateService} from '@ngx-translate/core';
+import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
+
 
 @Component({
-  selector: 'ngx-app',
-  template: '<router-outlet></router-outlet>',
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor(private analytics: AnalyticsService, private translateService: TranslateService) {
+  loadRouting = false;
+  environment = environment;
+  loadingRouter: boolean;
+  title = 'configuracion-cliente';
+  constructor(private router: Router,
+  ) {
   }
   ngOnInit(): void {
-    this.analytics.trackPageViews();
-    this.translateService.addLangs(['es', 'en']);
-    this.translateService.setDefaultLang('es');
-    this.translateService.use(this.translateService.getBrowserLang());
+    const oas = document.querySelector('ng-uui-oas');
+    oas.addEventListener('user', (event: any) => {
+      if (event.detail) {
+        this.loadRouting = true;
+      }
+    });
+
+    oas.addEventListener('option', (event: any) => {
+      if (event.detail) {
+        setTimeout(()=>(this.router.navigate([event.detail.Url])),50 )
+        ;
+      }
+    });
+
   }
 }

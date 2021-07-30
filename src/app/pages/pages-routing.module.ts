@@ -9,89 +9,78 @@ const routes: Routes = [{
   component: PagesComponent,
   children: [
     {
-      path: 'archivo_icfes',
-      loadChildren: './archivo_icfes/archivo_icfes.module#ArchivoIcfesModule',
+      path: 'dashboard',
+      component: DashboardComponent,
     },
     {
-        path: 'dashboard',
-        component: DashboardComponent,
+      path: 'aplicacion',
+      loadChildren: () => import('./aplicacion/aplicacion.module')
+        .then(m => m.AplicacionModule )
     },
     {
-      path: 'solicitudes',
-      loadChildren: './solicitudes/solicitudes.module#SolicitudesModule'
+      path: 'perfil',
+      loadChildren: () => import('./perfil/perfil.module')
+        .then(m => m.PerfilModule )
     },
     {
-      path: 'solicitud',
-      loadChildren: './solicitudes/solicitudes.module#SolicitudesModule'
+      path: 'notificacion_configuracion',
+      loadChildren: () => import('./notificacion_configuracion/notificacion_configuracion.module')
+        .then(m => m.NotificacionConfiguracionModule )
     },
     {
-      path: 'practicas-academicas',
-      loadChildren: './practicas-academicas/practicas-academicas.module#PracticasAcademicasModule'
+      path: 'notificacion_configuracion_perfil',
+      loadChildren: () => import('./notificacion_configuracion_perfil/notificacion_configuracion_perfil.module')
+      .then(m => m.NotificacionConfiguracionPerfilModule )
     },
     {
-      path: 'espacios-academicos',
-      loadChildren: './espacios-academicos/espacios-academicos.module#EspaciosAcademicosModule'
+      path: 'menu_opcion',
+      loadChildren: () => import('./menu_opcion/menu_opcion.module')
+      .then(m => m.MenuOpcionModule )
     },
     {
-      path: 'inscripcion',
-      loadChildren: './inscripcion/inscripcion.module#InscripcionModule',
+      path: 'perfil_x_menu_opcion',
+      loadChildren: () => import('./perfil_x_menu_opcion/perfil_x_menu_opcion.module')
+      .then(m => m.PerfilXMenuOpcionModule )
     },
+    // {
+    //   path: 'notificacion',
+    //   loadChildren: () => import('./notificacion/notificacion.module')
+    //     .then(m => m.NotificacionModule )
+    // },
+    // {
+    //   path: 'notificacion_estado',
+    //   loadChildren: () => import('./notificacion_estado/notificacion_estado.module')
+    //     .then(m => m.NotificacionEstadoModule )
+    // },
+    // {
+    //   path: 'metodo_http',
+    //   loadChildren: () => import('./metodo_http/metodo_http.module')
+    //     .then(m => m.MetodoHttpModule )
+    // },
+    // {
+    //   path: 'notificacion_tipo',
+    //   loadChildren: () => import('./notificacion_tipo/notificacion_tipo.module')
+    //     .then(m => m.NotificacionTipoModule )
+    // },
+    // {
+    //   path: 'notificacion_estado_usuario',
+    //   loadChildren: () => import('./notificacion_estado_usuario/notificacion_estado_usuario.module')
+    //     .then(m => m.NotificacionEstadoUsuarioModule )
+    // },
+    // {
+    //   path: 'parametro',
+    //   loadChildren: () => import('./parametro/parametro.module')
+    //     .then(m => m.ParametroModule )
+    // },
+    // {
+    //   path: 'menu_opcion_padre',
+    //   loadChildren: () => import('./menu_opcion_padre/menu_opcion_padre.module')
+    //     .then(m => m.MenuOpcionPadreModule )
+    // },
     {
-      path: 'admision',
-      loadChildren: './admision/admision.module#AdmisionModule',
-    },
-    {
-      path: 'evento',
-      loadChildren: './evento/evento.module#EventoModule',
-    },
-    {
-      path: 'calendario-academico',
-      loadChildren: './calendario-academico/calendario-academico.module#CalendarioAcademicoModule',
-    },
-    {
-      path: 'derechos-pecuniarios',
-      loadChildren: './derechos-pecuniarios/derechos-pecuniarios.module#DerechosPecuniariosModule',
-    },
-    {
-        path: 'perfil',
-        loadChildren: './perfil/perfil.module#PerfilModule',
-    },
-    {
-      path: 'produccion_academica',
-      loadChildren: './produccion_academica/produccion_academica.module#ProduccionAcademicaModule',
-    },
-    {
-      path: 'reportes',
-      loadChildren: './reportes/reportes.module#ReportesModule',
-    },
-    {
-      path: 'tipo_periodo',
-      loadChildren: './tipo_periodo/tipo_periodo.module#TipoPeriodoModule',
-    },
-    {
-      path: 'periodo',
-      loadChildren: './periodo/periodo.module#PeriodoModule',
-    },
-    {
-      path: 'calendarioevento',
-      loadChildren: './calendarioevento/calendarioevento.module#CalendarioeventoModule',
-    },
-    {
-      path: 'proyecto_academico',
-      loadChildren: './proyecto_academico/proyecto_academico.module#ProyectoAcademicoModule',
-    },
-    {
-      path: 'enfasis',
-      loadChildren: './enfasis/enfasis.module#EnfasisModule',
-    },
-    {
-      path: 'tipo_inscripcion',
-      loadChildren: './tipo_inscripcion/tipo_inscripcion.module#TipoInscripcionModule',
-    },
-    {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
+      path: '',
+      redirectTo: 'dashboard',
+      pathMatch: 'full',
     },
   ],
 }];

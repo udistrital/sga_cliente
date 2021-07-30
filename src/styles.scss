@@ -1,0 +1,199 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://pruebasassets.portaloas.udistrital.edu.co/athenea-style.css");
+@import "~@angular/material/theming";
+// @import '~ngx-toastr/toastr';
+
+
+@include mat-core();
+
+// material customize
+
+$primary: (
+    50: var(--primary),
+    100: var(--primary),
+    200: var(--primary),
+    300: var(--primary),
+    400: var(--primary),
+    500: var(--primary),
+    600: var(--primary),
+    700: var(--primary),
+    800: var(--primary),
+    900: var(--primary),
+    A100: var(--primary),
+    A200: var(--primary),
+    A400: var(--primary),
+    A700: var(--primary),
+    contrast: (
+        50: white,
+        100: white,
+        200: white,
+        300: white,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: white,
+        A200: white,
+        A400: white,
+        A700: white,
+    ),
+);
+
+$mat-mytheme-primary: mat-palette($primary, 100);
+$mat-mytheme-accent: mat-palette($mat-green, A200, A100, A400);
+
+$mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
+@include angular-material-theme($mat-mytheme);
+
+// Include theme styles for Angular Material components.
+
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    background-color: #f1f5f8;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.main-container {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    width: 100vw;
+    display: flex;
+    flex-wrap: nowrap;
+    position: fixed;
+    top: 5.6rem;
+    height: calc(-165px + 100vh);
+    left: 0;
+    overflow: auto;
+}
+
+// .main-container {
+//     animation: fade 1s;
+
+//     @keyframes fade {
+//         from {
+//             opacity: 0;
+//         }
+
+//         to {
+//             opacity: 1;
+//         }
+//     }
+// }
+
+.main-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 2px;
+}
+
+.material-icons.md-18 {
+    font-size: 18px;
+}
+.material-icons.md-24 {
+    font-size: 24px;
+}
+.material-icons.md-30 {
+    font-size: 30px;
+}
+.material-icons.md-36 {
+    font-size: 36px;
+}
+.material-icons.md-48 {
+    font-size: 48px;
+}
+
+// tables
+table {
+    thead {
+        border: 2px solid var(--color700);
+        tr {
+            th {
+                background-color: var(--primary);
+                text-align: center;
+                .ng2-smart-action.ng2-smart-action-add-add.ng-star-inserted {
+                    color: #fff;
+                }
+                .ng2-smart-action.ng2-smart-action-add-add ,
+                .ng2-smart-action.ng2-smart-action-add-add >span{
+                    color: #fff;
+                }
+                .ng2-smart-title,
+                .ng2-smart-title > * > a {
+                    color: #fff !important;
+                }
+                * > div > * > a {
+                    color: #fff;
+                }
+                color: #fff;
+                &:nth-child(n + 2) {
+                    border-left: 2px solid var(--color200);
+                }
+            }
+        }
+    }
+    tbody {
+        border: 2px solid var(--color700);
+        tr {
+            &.selected {
+                background-color: var(--color100) !important;
+            }
+            td {
+                font-size: 0.875em !important;
+                margin: 0 !important;
+                padding: 0.2em 0.5em !important;
+                &:nth-child(n + 2) {
+                    border-left: 1px solid var(--color700);
+                }
+                *:nth-child(2) > a {
+                    color: var(--primary);
+                }
+            }
+        }
+    }
+    & + * {
+        justify-content: center !important;
+        margin-top: 1em;
+        nav > ul > li {
+            &.active > span.page-link {
+                color: #fff;
+                background-color: var(--primary) !important;
+                border-color: var(--primary) !important;
+            }
+            a.page-link:focus {
+                box-shadow: 0 0 0 0.2rem var(--color200);
+            }
+            a.page-link:hover {
+                background-color: var(--color100);
+            }
+            a {
+                color: var(--primary) !important;
+            }
+        }
+    }
+}
+
+.mat-card-title {
+    color: var(--primary);
+}
+
+.form-control {
+    border: 1px solid var(--color200);
+    &:focus {
+        border-color: var(--color500);
+        box-shadow: 0 0 0 0.2rem var(--color100);
+    }
+}
+
+.swal2-icon.swal2-info {
+    border-color: var(--color200) !important;
+    color: var(--primary) !important;
+}
+
+.mat-card {
+    width: 100%;
+}

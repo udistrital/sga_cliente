@@ -1,85 +1,27 @@
-# sga_cliente
-Cliente del Sistema de Gestión Academica hecho con Angular 7
+# ConfiguracionCliente
 
-## Especificaciones Técnicas
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.4.
 
-### Tecnologías Implementadas y Versiones
-* [ngxAdmin](https://github.com/akveo/ngx-admin)
-* [Angular 7.0](https://angular.io/)
-* [Bootstrap 4](https://getbootstrap.com/docs/4.5/getting-started/introduction/)
-* [Nebular 4](https://akveo.github.io/nebular/4.6.0/)
+## Development server
 
-### Variables de Entorno
-```shell
-# En Pipeline
-SLACK_AND_WEBHOOK: WEBHOOK de Slack Grupo ci-covid-serverles
-AWS_ACCESS_KEY_ID: llave de acceso ID Usuario AWS
-AWS_SECRET_ACCESS_KEY: Secreto de Usuario AWS
-```
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-### Ejecución del Proyecto
+## Code scaffolding
 
-Clonar el proyecto del repositorio de git
-```bash
-# clone the project
-git clone https://github.com/udistrital/sga_cliente.git
-# enter the project directory
-cd sga_cliente
-```
-Iniciar el servidor en local
-```bash
-# install dependency
-npx npm install
-or
-npm install
-# start server
-npx ng serve
-# Whenever you want to change the port just run
-npx ng dev --port = 9528
-```
-Linter
-```bash
-# Angular linter
-npm run lint
-# run linter and auto fix
-npm run lint:fix
-# run linter on styles
-npm run lint:styles
-# run lint UI
-npm run lint:ci
-```
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-### Ejecución Dockerfile
-```bash
-# Does not apply
-```
-### Ejecución docker-compose
-```bash
-# Does not apply
-```
-### Ejecución Pruebas
+## Build
 
-Pruebas unitarias powered by Jest
-```bash
-# run unit test
-npm run test
-# Runt linter + unit test
-npm run test:ui
-```
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Estado CI
+## Running unit tests
 
-| Develop | Relese 0.0.1 | Master |
-| -- | -- | -- |
-| [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/sga_cliente/status.svg?ref=refs/heads/develop)](https://hubci.portaloas.udistrital.edu.co/udistrital/sga_cliente) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/sga_cliente/status.svg?ref=refs/heads/release/0.0.1)](https://hubci.portaloas.udistrital.edu.co/udistrital/sga_cliente) | Copied
-[![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/sga_cliente/status.svg)](https://hubci.portaloas.udistrital.edu.co/udistrital/sga_cliente) |
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Licencia
+## Running end-to-end tests
 
-[This file is part of sga_cliente.](LICENSE)
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-sga_cliente is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (atSara Sampaio your option) any later version.
+## Further help
 
-sga_cliente is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with sga_cliente. If not, see https://www.gnu.org/licenses/.
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

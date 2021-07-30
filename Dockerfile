@@ -1,10 +1,8 @@
-FROM node:12.10.0
-
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-COPY . .
-RUN npm install -g @angular/cli
-RUN npm install
-RUN npm install node-sass
-EXPOSE 4200
-CMD ng serve --host 0.0.0.0
+FROM python:3.0
+RUN pip install awscli
+WORKDIR /
+COPY entrypoint.sh entrypoint.sh
+COPY main main
+COPY conf/app.conf conf/app.conf
+RUN chmod +x main entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

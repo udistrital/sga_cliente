@@ -2,16 +2,15 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
-import { ThemeModule } from '../@theme/theme.module';
+import { MatCardModule } from '@angular/material/card';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SharedModule } from '../shared/shared.module';
-import { ConfiguracionService } from '../@core/data/configuracion.service';
-import { MenuService } from '../@core/data/menu.service';
-import { CampusMidService } from '../@core/data/campus_mid.service';
-import { SgaMidService } from '../@core/data/sga_mid.service';
-import { DocumentoService } from '../@core/data/documento.service';
-import { MatDialogModule } from '@angular/material';
 
-
+export const httpLoaderFactory = (http: HttpClient) => new TranslateHttpLoader(http, './../assets/i18n/', '.json');
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -19,23 +18,25 @@ const PAGES_COMPONENTS = [
 
 @NgModule({
   imports: [
+    MatCardModule,
+    CommonModule,
+    HttpClientModule,
     PagesRoutingModule,
-    ThemeModule,
     DashboardModule,
-    SharedModule,
-    MatDialogModule,
+    SharedModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
   ],
+  exports: [],
   declarations: [
     ...PAGES_COMPONENTS,
   ],
-  entryComponents: [
-  ],
   providers: [
-    ConfiguracionService,
-    MenuService,
-    CampusMidService,
-    SgaMidService,
-    DocumentoService,
   ],
 })
 export class PagesModule {

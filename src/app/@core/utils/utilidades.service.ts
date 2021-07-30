@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/observable/of';
-
 
 @Injectable({
     providedIn: 'root',
 })
 export class UtilidadesService {
 
-    static userArray: any[];
-    static jsonArray: any[];
+    userArray: any[];
+    jsonArray: any[];
 
     constructor() {
     }
 
-    static getSumArray(array): any {
+    getSumArray(array): any {
         let sum = 0;
         array.forEach(element => {
             sum += element;
@@ -27,11 +25,11 @@ export class UtilidadesService {
             node = {
                 id: n.Id,
                 name: n.Nombre,
-            }
+            };
             if (n.hasOwnProperty('Opciones')) {
                 if (n.Opciones !== null) {
                     const children = this.translateTree(n.Opciones);
-                    node = { ...node, ...{ children: children } };
+                    node = { ...node, ...{ children } };
                 }
                 return node;
             } else {
