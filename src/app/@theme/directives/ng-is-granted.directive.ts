@@ -3,6 +3,11 @@ import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject, Subject } from 'rxjs';
 import * as _ from 'lodash';
 
+
+/* use directive: 
+*ngIsGranted="['rol1', 'rol2']"
+*/
+
 @Directive({ selector: '[ngIsGranted]' })
 export class NgIsGrantedDirective implements OnDestroy {
     private destroy$ = new Subject<void>();
