@@ -589,7 +589,8 @@
         "creditos": "Créditos",
         "clasificacion": "Clasificación",
         "tooltip_ver_registro": "Ver",
-        "tooltip_editar_registro": "Editar"
+        "tooltip_editar_registro": "Editar",
+        "tooltip_descargar": "Descargar"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -691,7 +692,6 @@
         "ISBN": "ISBN",
         "editorial": "Nombre editorial",
         "titulo_libro": "Título del libro",
-        "titulo_revista": "Nombre de la revista",
         "URL": "URL",
         "DOI": "DOI",
         "idioma_traduccion":"Idioma de traducción",
