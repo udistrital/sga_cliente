@@ -107,7 +107,7 @@
             "admision": "Admisiones",
             "criterios": "Criterios de admisiones \npor proyectos",
             "asignacion_cupos": "Asignación de cupos",
-            "actualizacion_estado": "Asignación de cupos por proyecto",
+            "actualizacion_estado": "Asignación de cupos \npor proyecto",
             "listado_aspirante": "Listar aspirantes",
             "administrar_criterios": "Administrar criterios\nde admisión"
         },
@@ -162,6 +162,7 @@
         "eliminar": "Eliminar",
         "confirmarEliminar": "se ha eliminado",
         "actualizar": "Actualizar",
+        "confirmar_actualizar": "¿Actualizar?",
         "crear": "Crear",
         "asignar": "Asignar",
         "registrar": "Registrar",
@@ -1331,6 +1332,7 @@
         "aspirante": "Aspirantes",
         "nota": "NOTA",
         "aviso": "El puntaje para cada item a evaluar corresponde a un valor entre 0 y 100 puntos",
+        "aviso_sub": "Recuerde asignar los porcentajes por subcriterio al seleccionar el criterio en la tabla",
         "criterio": "Criterio",
         "subCriterio": "SubCriterio",
         "porcentaje": "Porcentaje",
@@ -1382,7 +1384,11 @@
         "tooltip_crear": "Crear criterio",
         "tooltip_ver_registro": "Ver",
         "tooltip_cancelar": "Cancelar",
-        "tooltip_guargar": "Guardar"
+        "tooltip_guargar": "Guardar",
+        "criterios_proyectos": "Criterios por proyecto académico",
+        "evaluacion_aspirantes": "Evaluación de aspirantes",
+        "listar_aspirantes": "Listar aspirantes",
+        "cupos_proyectos": "Asignación de cupos por proyecto académico"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

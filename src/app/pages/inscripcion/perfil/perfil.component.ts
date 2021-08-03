@@ -63,7 +63,7 @@ export class PerfilComponent implements OnInit {
     if (this.imprimir && event) {
       setTimeout(() => this.generarComprobante()
       .then(() => {
-        console.info("entra aca")
+        console.info('entra aca')
         this.imprimir = false;
         this.loading = false;
       }), 500);
@@ -91,16 +91,16 @@ export class PerfilComponent implements OnInit {
                 pageBreak: 'before',
                 scale: 1,
               },
-            ]
+            ],
           }
           const pdfDoc = pdfMake.createPdf(docDefinition);
           pdfDoc.download();
           resolve(true)
-        }
+        },
       ).catch(
         error => {
           reject(error);
-        }
+        },
       );
     })
   }
