@@ -1,0 +1,13 @@
+<mat-card [nbSpinner]="loading"
+         nbSpinnerStatus="success"
+         nbSpinnerSize="xxlarge"
+         nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <ngx-dinamicform [normalform]="formInfoExperienciaLaboral"
+                     [modeloData]="info_experiencia_laboral"
+                     (result)="validarForm($event)"
+                     (resultAux)="searchNit($event)"
+                     [clean]="clean"
+                     (interlaced)="getSeleccion($event)"
+                     (percentage)="setPercentage($event)">
+    </ngx-dinamicform>
+</mat-card>

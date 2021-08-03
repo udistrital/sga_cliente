@@ -1,0 +1,29 @@
+<mat-card>
+    <mat-card-content>
+        <div class="col-md-12">
+            <table class="table-responsive">
+                <thead>
+                    <tr>
+                        <th colspan="2">{{"inscripcion.descuento_matricula" | translate}}</th>
+                    </tr>
+                    <tr class="subheader">
+                        <th>{{ 'GLOBAL.soporte_documento' | translate }}</th>
+                        <th>{{ 'solicitudes.soporte' | translate }} </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="info_descuento">
+                    <tr *ngFor="let descuento of info_descuento">
+                        <td> {{descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre}} </td>
+                        <td *ngIf="descuento.DocumentoId !== undefined">
+                            <a [href]=descuento.Soporte
+                                download="{{descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre}}.pdf">
+                                <i class="nb-search" title={{variable}}></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <span *ngIf="url_editar" (click)="editar()" class="link">
+                <i class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
+        </div>
+    </mat-card-content>
+</mat-card>

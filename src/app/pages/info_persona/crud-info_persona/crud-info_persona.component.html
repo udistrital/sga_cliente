@@ -1,0 +1,12 @@
+<mat-card [nbSpinner]="loading"
+         nbSpinnerStatus="success"
+         nbSpinnerSize="xxlarge"
+         nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <ngx-dinamicform [normalform]="formInfoPersona"
+                     [modeloData]="info_info_persona"
+                     (result)="validarForm($event)"
+                     [clean]="clean"
+                     (percentage)="setPercentage($event)">
+    </ngx-dinamicform>
+</mat-card>
+<!--ngx-loading [hidden]="!loading"></ngx-loading-->

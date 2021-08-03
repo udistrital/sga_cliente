@@ -5,11 +5,13 @@ import { pluck } from 'rxjs/operators';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
+import { ToasterConfig } from 'angular2-toaster';
 
 @Component({
   selector: 'ngx-pages',
   template: `
     <ngx-loading></ngx-loading>
+    <toaster-container [toasterconfig]="config"></toaster-container>
     <div *ngIf="loaded" class="main-container">
       <router-outlet></router-outlet>
     </div>
@@ -23,6 +25,14 @@ export class PagesComponent implements OnInit {
   loaded = false;
   userData: any;
   loadingRouter = false;
+  public config: ToasterConfig = 
+    new ToasterConfig({typeClasses: {
+      error: 'toast-error',
+      info: 'toast-info',
+      wait: 'toast-wait',
+      success: 'toast-success',
+      warning: 'toast-warning'
+    }});
   constructor(
     private router: Router,
     private translateService: TranslateService,

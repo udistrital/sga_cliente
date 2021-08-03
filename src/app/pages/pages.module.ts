@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SharedModule } from '../shared/shared.module';
-
+import {ToasterModule} from 'angular2-toaster'
 export const httpLoaderFactory = (http: HttpClient) => new TranslateHttpLoader(http, './../assets/i18n/', '.json');
 
 const PAGES_COMPONENTS = [
@@ -23,6 +23,7 @@ const PAGES_COMPONENTS = [
     HttpClientModule,
     PagesRoutingModule,
     DashboardModule,
+    ToasterModule.forRoot(),
     SharedModule.forRoot(),
     TranslateModule.forRoot({
       loader: {

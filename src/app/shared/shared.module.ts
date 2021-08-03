@@ -23,11 +23,15 @@ const materialModules = [
 import {
   DinamicformComponent,
   LoadingComponent,
+  ButtonPaymentComponent,
+  LinkDownloadComponent,
 } from '../shared/components';
 
 const SharedComponents = [
   DinamicformComponent,
-  LoadingComponent
+  LoadingComponent,
+  ButtonPaymentComponent,
+  LinkDownloadComponent,
 ];
 
 @NgModule({

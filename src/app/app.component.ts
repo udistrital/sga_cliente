@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { UserDataService } from './pages/services/userDataService';
 
 
 @Component({
@@ -13,21 +14,30 @@ export class AppComponent implements OnInit {
   environment = environment;
   loadingRouter: boolean;
   title = 'configuracion-cliente';
-  constructor(private router: Router,
-  ) {
-  }
+  constructor(
+    private router: Router,
+    private userService: UserDataService 
+  ) {}
+  
   ngOnInit(): void {
     const oas = document.querySelector('ng-uui-oas');
+
     oas.addEventListener('user', (event: any) => {
       if (event.detail) {
         this.loadRouting = true;
+        this.userService.updateUser(event.detail);
       }
     });
 
     oas.addEventListener('option', (event: any) => {
       if (event.detail) {
-        setTimeout(()=>(this.router.navigate([event.detail.Url])),50 )
-        ;
+        setTimeout(()=>(this.router.navigate([event.detail.Url])),50 );
+      }
+    });
+
+    oas.addEventListener('logout', (event: any) => {
+      if (event.detail) {
+        console.log(event.detail);
       }
     });
 

@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-content>
+    <div class="col-md-12">
+      <table class="table-responsive">
+        <thead>
+          <tr><th colspan="3">{{ 'inscripcion.info_basica' | translate }}</th></tr>
+        </thead>
+        <tbody *ngIf="info_info_persona">
+          <tr>
+            <td>{{ 'GLOBAL.documento_identificacion' | translate }} </td>
+            <td>{{info_info_persona.TipoIdentificacion.CodigoAbreviacion}}: {{info_info_persona.NumeroIdentificacion}}</td>
+          </tr>
+          <tr>
+            <td>{{ 'GLOBAL.nombres' | translate }}: {{info_info_persona.PrimerNombre}} {{info_info_persona.SegundoNombre}}</td>
+            <td>{{ 'GLOBAL.apellidos' | translate }}: {{info_info_persona.PrimerApellido}} {{info_info_persona.SegundoApellido}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+<!--       <ul>
+        <li><label><strong>{{"GLOBAL.fecha_nacimiento" | translate}}: </strong></label>
+          {{info_info_persona.FechaNacimiento | date : "YYYY/MM/DD"}}</li>
+        <li><label><strong>{{"GLOBAL.fecha_expedicion" | translate}}: </strong></label>
+           {{info_info_persona.FechaExpedicion | date : "YYYY/MM/DD"}}</li>
+        <li><label><strong>{{"GLOBAL.genero" | translate}}: </strong></label>
+          {{info_info_persona.Genero.Nombre}}</li>
+        <li><label><strong>{{"GLOBAL.estado_civil" | translate}}: </strong></label>
+          {{info_info_persona.EstadoCivil.Nombre}}</li>
+        <li><label><strong>
+            </strong></label> </li>
+      </ul> -->
+      <span *ngIf="url_editar" (click)="editar()" class="link"><i
+          class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
+    </div>
+  </mat-card-content>
+</mat-card>

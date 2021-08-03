@@ -1,0 +1,20 @@
+<mat-card [nbSpinner]="loading"
+         nbSpinnerStatus="success"
+         nbSpinnerSize="xxlarge"
+         nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <mat-card-content>
+        <ng2-smart-table [settings]="settings"
+                         [source]="source"
+                         (delete)="onDelete($event)"
+                         (rowSelect)="itemselec($event)"
+                         (edit)="onEdit($event)"
+                         (create)="onCreate($event)">
+        </ng2-smart-table>
+        <ngx-crud-idiomas [info_idioma_id]="uid"
+                          inscripcion_id={{this.inscripcion_id}}
+                          (eventChange)="onChange($event)"
+                          (result)="getPercentage($event)"
+                          (crear_inscripcion)="crear_inscripcion($event)">
+        </ngx-crud-idiomas>
+    </mat-card-content>
+</mat-card>
