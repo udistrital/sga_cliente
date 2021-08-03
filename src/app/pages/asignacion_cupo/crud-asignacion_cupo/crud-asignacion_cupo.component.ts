@@ -207,7 +207,6 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
     this.translate.use(language);
   }
 
-
   getIndexFormPregrado(nombre: String): number {
     for (let index = 0; index < this.formAsigancionCupoPregrado.campos.length; index++) {
       const element = this.formAsigancionCupoPregrado.campos[index];
@@ -244,6 +243,7 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
       });
     }
   }
+
   onDeleteEmphasys(event: any) {
     const findInArray = (value, array, attr) => {
       for (let i = 0; i < array.length; i += 1) {
@@ -256,15 +256,15 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
     this.arr_cupos.splice(findInArray(event.data.Id, this.arr_cupos, 'Id'), 1);
     this.source_emphasys.load(this.arr_cupos);
   }
-  createCupos() {
 
+  createCupos() {
     this.showListadoAspirantes = false;
     this.show_listado = false;
     const opt: any = {
       // title: this.translate.instant('GLOBAL.crear'),
       // text: this.translate.instant('GLOBAL.crear') + '?',
       title: this.translate.instant('GLOBAL.actualizar'),
-      text: this.translate.instant('GLOBAL.actualizar') + '?',
+      text: this.translate.instant('GLOBAL.confirmar_actualizar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -297,7 +297,7 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({
-                  icon:'error',
+                  icon: 'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.crear') + '-' +
