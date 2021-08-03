@@ -3,7 +3,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpHeade
 import { Router } from '@angular/router';
 
 import { tap, finalize, takeUntil } from 'rxjs/operators';
-import { PopUpManager } from '../managers/popUpManager';
+import { PopUpManager } from './../../managers/popUpManager';
 import { LoaderService } from '../utils/load.service';
 import { Observable } from 'rxjs';
 

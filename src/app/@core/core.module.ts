@@ -3,6 +3,7 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // import { AuthGuard } from './_guards/auth.guard';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 export const throwIfAlreadyLoaded = (parentModule: any, moduleName: string) => {
   if (parentModule) {
@@ -13,7 +14,7 @@ export const throwIfAlreadyLoaded = (parentModule: any, moduleName: string) => {
 @NgModule({
   imports: [
     CommonModule,
-
+    TranslateModule.forChild()
   ],
   exports: [
   ],

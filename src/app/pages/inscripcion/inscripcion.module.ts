@@ -54,6 +54,7 @@ import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.co
 import { PerfilComponent } from './perfil/perfil.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
+import { CoreModule } from 'src/app/@core/core.module';
 
 @NgModule({
   imports: [
@@ -74,6 +75,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     DescuentoAcademicoModule,
     PropuestaGradoModule,
     Ng2SmartTableModule,
+    CoreModule,
   ],
   declarations: [
     ...routedComponents,

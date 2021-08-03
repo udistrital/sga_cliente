@@ -1,14 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { Injectable, forwardRef, Inject, NgZone } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpErrorManager {
   constructor(
-    public snack: MatSnackBar,
    ) {}
 
   public handleError(error: HttpErrorResponse) {

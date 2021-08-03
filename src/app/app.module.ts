@@ -21,7 +21,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    CoreModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot({
       loader: {

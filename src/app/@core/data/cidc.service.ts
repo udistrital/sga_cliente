@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { environment } from './../../../environments/environment';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { RequestManager } from './../managers/requestManager';
+import { RequestManager } from './../../managers/requestManager';
 
 const httpOptions = {
     headers: new HttpHeaders({
