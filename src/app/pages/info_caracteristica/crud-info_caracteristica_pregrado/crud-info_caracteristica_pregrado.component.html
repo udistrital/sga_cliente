@@ -1,4 +1,4 @@
-<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+<mat-card>
     <div *ngIf="!denied_acces">
         <toaster-container [toasterconfig]="config"></toaster-container>
         <ngx-dinamicform [normalform]="formInfoCaracteristica" [modeloData]="info_info_caracteristica" (result)="validarForm($event)" [clean]="clean" (interlaced)="getSeleccion($event)" (percentage)="setPercentage($event)">

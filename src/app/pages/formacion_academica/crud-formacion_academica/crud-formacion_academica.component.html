@@ -1,8 +1,4 @@
-<nb-card [nbSpinner]="loading"
-    nbSpinnerStatus="success"
-    nbSpinnerSize="xxlarge"
-    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-    <toaster-container [toasterconfig]="config"></toaster-container>
+<mat-card>
     <ngx-dinamicform
       [normalform]="formInfoFormacionAcademica"
       [modeloData]="info_formacion_academica"

@@ -1,5 +1,4 @@
-<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-    <toaster-container [toasterconfig]="config"></toaster-container>
+<mat-card>
     <ngx-dinamicform [normalform]="formUniversidad" [modeloData]="info_universidad" (result)="validarForm($event)" [clean]="clean" (percentage)="setPercentage($event)">
     </ngx-dinamicform>
 </mat-card>

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
@@ -10,6 +10,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SharedModule } from '../shared/shared.module';
 import {ToasterModule} from 'angular2-toaster'
+import { throwIfAlreadyLoaded } from '../@core/core.module';
 export const httpLoaderFactory = (http: HttpClient) => new TranslateHttpLoader(http, './../assets/i18n/', '.json');
 
 const PAGES_COMPONENTS = [
@@ -25,13 +26,7 @@ const PAGES_COMPONENTS = [
     DashboardModule,
     ToasterModule.forRoot(),
     SharedModule.forRoot(),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
+    TranslateModule.forChild()
   ],
   exports: [],
   declarations: [
@@ -41,4 +36,10 @@ const PAGES_COMPONENTS = [
   ],
 })
 export class PagesModule {
+  constructor(
+    @Optional() @SkipSelf() parentModule: PagesModule,
+  ) {
+    throwIfAlreadyLoaded(parentModule, 'PagesModule');
+  }
+
 }

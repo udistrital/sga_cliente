@@ -1,9 +1,6 @@
 <div #comprobante>
   <mat-card>
-    <mat-card-content [nbSpinner]="loading"
-                  nbSpinnerStatus="success"
-                  nbSpinnerSize="xxlarge"
-                  nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <mat-card-content>
       <div>
         <div class="row" [hidden]="imprimir">
           <div class="col-md-11 text-center">
@@ -16,7 +13,7 @@
         <div class="row" *ngIf="imprimir">
           <div class="col-md-12">
             <mat-card>
-              <nb-card-header class="row container">
+              <mat-card-title class="row container">
                 <div class="col-md-12">
                   <div class="col-md-12 info-comprobante">
                     <h4 class="text-center">
@@ -24,7 +21,7 @@
                     </h4>
                   </div>
                 </div>
-              </nb-card-header>
+              </mat-card-title>
             </mat-card>
           </div>
         </div>
@@ -91,7 +88,7 @@
                                      class="col-md-12">
         </ngx-view-documento-programa>
         <div class="col-md-12">
-          <nb-card *ngIf="imprimir">
+          <mat-card *ngIf="imprimir">
             <mat-card-content class="row container">
               <div class="col-md-12">
                 <div class="col-md-12 info-comprobante">

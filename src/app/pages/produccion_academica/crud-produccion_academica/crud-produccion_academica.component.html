@@ -260,9 +260,9 @@
         </label>
 
         <mat-card>
-            <nb-card-header>
+            <mat-card-title>
                 Tiny MCE
-            </nb-card-header>
+            </mat-card-title>
             <mat-card-content>
                 <ngx-tiny-mce ngDefaultControl [(ngModel)]="c.valor" [ngModelOptions]="{standalone: true}" id="{{c.nombre}}" name="{{c.nombre}}" (ngModelChange)="validCampo(c)" type="text"></ngx-tiny-mce>
             </mat-card-content>

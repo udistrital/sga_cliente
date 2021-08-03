@@ -1,7 +1,4 @@
-<mat-card [nbSpinner]="loading"
-         nbSpinnerStatus="success"
-         nbSpinnerSize="xxlarge"
-         nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+<mat-card>
     <mat-card-content>
         <toaster-container [toasterconfig]="config"></toaster-container>
         <ngx-crud-descuento-academico [descuento_academico_id]="uid"

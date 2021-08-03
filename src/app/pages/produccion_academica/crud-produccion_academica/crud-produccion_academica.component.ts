@@ -21,7 +21,6 @@ import { MetadatoSubtipoProduccion } from '../../../@core/data/models/produccion
 import { Tercero } from '../../../@core/data/models/terceros/tercero';
 // import { p } from '@angular/core/src/render3';
 import { LocalDataSource } from 'ng2-smart-table';
-import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 
 @Component({
   selector: 'ngx-crud-produccion-academica',

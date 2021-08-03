@@ -1,5 +1,5 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <nb-card [hidden]="show_profile ||
+    <mat-card [hidden]="show_profile ||
              show_info_pregrado ||
              show_acad_pregrado ||
              show_expe || show_proy ||
@@ -7,12 +7,8 @@
              show_docu ||show_info ||
              show_acad || show_info_interna ||
              show_info_reingreso || show_info_externa ||
-             show_acad_externa"
-             [nbSpinner]="loading"
-             nbSpinnerStatus="success"
-             nbSpinnerSize="xxlarge"
-             nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-        <nb-card-header>
+             show_acad_externa">
+        <mat-card-title>
 
             <div class="col-12">
                 {{ 'inscripcion.periodo' | translate }}: {{ this.inscripcion.PeriodoId }}
@@ -44,8 +40,8 @@
                      selectTipo=='Posgrado'|| selectTipo=='Transferencia interna'||
                      selectTipo=='Reingreso' || selectTipo=='Transferencia externa'||
                      selectTipo=='Transferencia externa'">
-                    <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
-                        <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
+                    <mat-card class="exp-card" (click)="perfil_editar('info_persona')">
+                        <mat-card-title>{{ 'inscripcion.info_basica' | translate }}</mat-card-title>
                         <mat-card-content class="icon-form">
                             <i class="fa fa-address-card-o fa-5x"></i>
                             <p class="percentage">{{percentage_info}} %</p>
@@ -57,8 +53,8 @@
                      id="formacion_academica" *ngIf="selectTipo=='Pregrado' &&
                      selectedValue || selectTipo=='Posgrado' ||
                      selectTipo=='Transferencia externa'">
-                    <nb-card class="exp-card" (click)="perfil_editar('formacion_academica')">
-                        <nb-card-header>{{ 'inscripcion.formacion_academica' | translate }}</nb-card-header>
+                    <mat-card class="exp-card" (click)="perfil_editar('formacion_academica')">
+                        <mat-card-title>{{ 'inscripcion.formacion_academica' | translate }}</mat-card-title>
                         <mat-card-content class="icon-form">
                             <i class="fa fa-graduation-cap fa-5x"></i>
                             <p class="percentage">{{percentage_acad}} %</p>
@@ -68,8 +64,8 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center"
                      id="experiencia_laboral" *ngIf="selectTipo=='Posgrado' && selectedValue">
-                    <nb-card class="exp-card" (click)="perfil_editar('experiencia_laboral')">
-                        <nb-card-header>{{ 'inscripcion.experiencia_laboral' | translate }}</nb-card-header>
+                    <mat-card class="exp-card" (click)="perfil_editar('experiencia_laboral')">
+                        <mat-card-title>{{ 'inscripcion.experiencia_laboral' | translate }}</mat-card-title>
                         <mat-card-content class="icon-form">
                             <i class="fa fa-briefcase fa-5x"></i>
                             <p class="percentage">{{percentage_expe}} %</p>
@@ -79,8 +75,8 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center"
                      *ngIf="selectTipo=='Posgrado' && selectedValue" id="produccion_academica">
-                    <nb-card class="exp-card" (click)="perfil_editar('produccion_academica')">
-                        <nb-card-header>{{ 'inscripcion.produccion_academica' | translate }}</nb-card-header>
+                    <mat-card class="exp-card" (click)="perfil_editar('produccion_academica')">
+                        <mat-card-title>{{ 'inscripcion.produccion_academica' | translate }}</mat-card-title>
                         <mat-card-content class="icon-form">
                             <i class="fa fa-book fa-5x"></i>
                             <p class="percentage">{{percentage_prod}} %</p>
@@ -90,8 +86,8 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center"
                      *ngIf="selectTipo=='Posgrado' && selectedValue" id="documento_programa">
-                    <nb-card class="exp-card" (click)="perfil_editar('documento_programa')">
-                        <nb-card-header>{{ 'inscripcion.documento_programa' | translate }}</nb-card-header>
+                    <mat-card class="exp-card" (click)="perfil_editar('documento_programa')">
+                        <mat-card-title>{{ 'inscripcion.documento_programa' | translate }}</mat-card-title>
                         <mat-card-content class="icon-form">
                             <i class="fa fa-list-alt fa-5x"></i>
                             <p class="percentage">{{percentage_docu}} %</p>
@@ -101,8 +97,8 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center"
                      *ngIf="selectTipo=='Posgrado' && selectedValue" id="descuento_matricula">
-                    <nb-card class="exp-card" (click)="perfil_editar('descuento_matricula')">
-                        <nb-card-header>{{ 'inscripcion.descuento_matricula' | translate }}</nb-card-header>
+                    <mat-card class="exp-card" (click)="perfil_editar('descuento_matricula')">
+                        <mat-card-title>{{ 'inscripcion.descuento_matricula' | translate }}</mat-card-title>
                         <mat-card-content class="icon-form">
                             <i class="fa fa-dollar fa-5x"></i>
                             <p class="percentage">{{percentage_desc}} %</p>
@@ -112,8 +108,8 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center"
                      *ngIf="selectTipo=='Posgrado' && selectedValue" id="propuesta_grado">
-                    <nb-card class="exp-card" (click)="perfil_editar('propuesta_grado')">
-                        <nb-card-header>{{ 'inscripcion.propuesta_grado' | translate }}</nb-card-header>
+                    <mat-card class="exp-card" (click)="perfil_editar('propuesta_grado')">
+                        <mat-card-title>{{ 'inscripcion.propuesta_grado' | translate }}</mat-card-title>
                         <mat-card-content class="icon-form">
                             <i class="fa fa-file-pdf-o fa-5x"></i>
                             <p class="percentage">{{percentage_proy}} %</p>
@@ -123,15 +119,15 @@
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center"
                      *ngIf="selectTipo=='Posgrado' && selectedValue">
-                    <nb-card class="exp-card" (click)="perfil_editar('perfil')">
-                        <nb-card-header>{{ 'inscripcion.perfil' | translate }}</nb-card-header>
+                    <mat-card class="exp-card" (click)="perfil_editar('perfil')">
+                        <mat-card-title>{{ 'inscripcion.perfil' | translate }}</mat-card-title>
                         <mat-card-content class="icon-form">
                             <i class="fa fa-user fa-5x"></i>
                         </mat-card-content>
                     </mat-card>
                 </div>
             </div>
-        </nb-card-header>
+        </mat-card-title>
 
         <mat-card-content class="example-items-rows trans text-center">
             <div class="col-md-12">
@@ -155,7 +151,7 @@
     <!--Formularios------------------------------------------------------------->
 
 
-    <!-- <nb-card [hidden]="!show_info_pregrado"> -->
+    <!-- <mat-card [hidden]="!show_info_pregrado"> -->
     <!--nb-card *ngIf="show_info_pregrado">
         <mat-card-content>
             <div class="row">
@@ -189,8 +185,8 @@
         </mat-card-content>
     </nb-card-->
 
-    <!-- <nb-card [hidden]="!show_info_externa"> -->
-    <nb-card *ngIf="show_info_externa">
+    <!-- <mat-card [hidden]="!show_info_externa"> -->
+    <mat-card *ngIf="show_info_externa">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -235,8 +231,8 @@
         </mat-card-content>
     </mat-card>
 
-    <!-- <nb-card [hidden]="!show_info"> -->
-    <nb-card *ngIf="show_info">
+    <!-- <mat-card [hidden]="!show_info"> -->
+    <mat-card *ngIf="show_info">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -279,8 +275,8 @@
     </mat-card>
 
 
-    <!-- <nb-card [hidden]="!show_info_reingreso"> -->
-    <nb-card *ngIf="show_info_reingreso">
+    <!-- <mat-card [hidden]="!show_info_reingreso"> -->
+    <mat-card *ngIf="show_info_reingreso">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -305,8 +301,8 @@
     </mat-card>
 
 
-    <!-- <nb-card [hidden]="!show_info_interna"> -->
-    <nb-card *ngIf="show_info_interna">
+    <!-- <mat-card [hidden]="!show_info_interna"> -->
+    <mat-card *ngIf="show_info_interna">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -333,8 +329,8 @@
     <!-- TAG y formularios de formacion academica -->
 
 
-    <!-- <nb-card [hidden]="!show_acad_pregrado"> -->
-    <nb-card *ngIf="show_acad_pregrado">
+    <!-- <mat-card [hidden]="!show_acad_pregrado"> -->
+    <mat-card *ngIf="show_acad_pregrado">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -363,8 +359,8 @@
     </mat-card>
 
 
-    <!-- <nb-card [hidden]="!show_acad_externa"> -->
-    <nb-card *ngIf="show_acad_externa">
+    <!-- <mat-card [hidden]="!show_acad_externa"> -->
+    <mat-card *ngIf="show_acad_externa">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -393,8 +389,8 @@
     </mat-card>
 
 
-    <!-- <nb-card [hidden]="!show_acad"> -->
-    <nb-card *ngIf="show_acad">
+    <!-- <mat-card [hidden]="!show_acad"> -->
+    <mat-card *ngIf="show_acad">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -427,8 +423,8 @@
     </mat-card>
 
 
-    <!-- <nb-card [hidden]="!show_expe"> -->
-    <nb-card *ngIf="show_expe">
+    <!-- <mat-card [hidden]="!show_expe"> -->
+    <mat-card *ngIf="show_expe">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -453,8 +449,8 @@
         </mat-card-content>
     </mat-card>
 
-    <!-- <nb-card [hidden]="!show_prod"> -->
-    <nb-card *ngIf="show_prod">
+    <!-- <mat-card [hidden]="!show_prod"> -->
+    <mat-card *ngIf="show_prod">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -479,8 +475,8 @@
         </mat-card-content>
     </mat-card>
 
-    <!-- <nb-card [hidden]="!show_docu"> -->
-    <nb-card *ngIf="show_docu">
+    <!-- <mat-card [hidden]="!show_docu"> -->
+    <mat-card *ngIf="show_docu">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -507,8 +503,8 @@
         </mat-card-content>
     </mat-card>
 
-    <!-- <nb-card [hidden]="!show_desc"> -->
-    <nb-card *ngIf="show_desc">
+    <!-- <mat-card [hidden]="!show_desc"> -->
+    <mat-card *ngIf="show_desc">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
@@ -535,8 +531,8 @@
         </mat-card-content>
     </mat-card>
 
-    <!-- <nb-card [hidden]="!show_proy"> -->
-    <nb-card *ngIf="show_proy">
+    <!-- <mat-card [hidden]="!show_proy"> -->
+    <mat-card *ngIf="show_proy">
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">

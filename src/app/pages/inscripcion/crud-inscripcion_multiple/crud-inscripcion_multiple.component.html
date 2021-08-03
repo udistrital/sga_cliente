@@ -1,12 +1,10 @@
 <div class="dinamic-form">
-    <fieldset [ngClass]="{'fieldseter':true} "
-              [nbSpinner]="loading" nbSpinnerStatus="success"
-              nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <fieldset>
         <mat-card>
             <mat-card-content *ngIf="showInscription">
-                <nb-card-header>
+                <mat-card-title>
                     {{ 'inscripcion.listado' | translate }}
-                </nb-card-header>
+                </mat-card-title>
                 <hr width="0%">
                 <fieldset [ngClass]="{'fieldseter':true} ">
                     <legend> {{ 'inscripcion.recibos_generados' | translate }} </legend>
@@ -89,8 +87,8 @@
                     <fieldset [ngClass]="{'fieldseter':true} ">
                         <legend> {{ 'inscripcion.opciones_usuario' | translate }} </legend>
 
-                        <nb-card class="exp-card text-center">
-                            <nb-card-header>{{ 'inscripcion.generar_recibo' | translate }}</nb-card-header>
+                        <mat-card class="exp-card text-center">
+                            <mat-card-title>{{ 'inscripcion.generar_recibo' | translate }}</mat-card-title>
                             <mat-card-content class="icon-form text-center">
                                 <button class="fa fa-barcode fa-5x" (click)="generar_recibo()"></button>
                             </mat-card-content>
@@ -113,14 +111,14 @@
 
 
 
-                <!-- <nb-card  >
+                <!-- <mat-card  >
         <mat-card-content>
                 {{ 'inscripcion.mensaje_preinscripcion' | translate }}
           </mat-card-content>
         <mat-card-content >
             <div class="col-sm-12">
 
-                    <nb-card class="m-4" accent="info">
+                    <mat-card class="m-4" accent="info">
                         <mat-card-content>
                             <mat-form-field style="width: 100%;">
                                 <mat-label>{{ 'inscripcion.select' | translate }}</mat-label>

@@ -7,6 +7,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { APP_BASE_HREF, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { CoreModule } from './@core/core.module';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -20,11 +23,14 @@ import { CoreModule } from './@core/core.module';
     AppRoutingModule,
     CoreModule,
     BrowserAnimationsModule,
-    // ToastrModule.forRoot({
-    //   timeOut: 10000,
-    //   positionClass: 'toast-top-right',
-    //   preventDuplicates: true,
-    // })
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      },
+      isolate: false
+    }),
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [
@@ -35,3 +41,7 @@ import { CoreModule } from './@core/core.module';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}

@@ -1,7 +1,4 @@
-<div [nbSpinner]="loading"
-     nbSpinnerStatus="success"
-     nbSpinnerSize="xxlarge"
-     nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+<div>
   <ngx-dinamicform [normalform]="formDocumentoPrograma"
                    [modeloData]="info_documento_programa"
                    (result)="validarForm($event)"
