@@ -2,7 +2,11 @@
   <nb-card-body>
     <div class=col-12>
       <fieldset [ngClass]="{'fieldseter':true}" >
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="showTab">
+        <legend>
+          &nbsp; {{ 'admision.evaluacion_aspirantes' | translate }}
+        </legend>
+
+        <div *ngIf="showTab">
           <nb-card [hidden]="show_profile || show_icfes ">
               <nb-card-header>
                 <!-- select periodo -->
@@ -12,67 +16,57 @@
                     <mat-option *ngFor="let item of periodos" [value]="item"> {{item.Nombre}} </mat-option>
                   </mat-select>
                 </mat-form-field>
-      
+
                 <!-- select Nivel -->
                 <mat-form-field style="width: 100%;">
                   <mat-label>{{ 'admision.aviso_nivel' | translate }}:</mat-label>
-                  <mat-select [formControl]="CampoControl" [(ngModel)]="selectednivel" (selectionChange)="loadProyectos()" >
-                    <mat-option>--Seleccionar--</mat-option>
+                  <mat-select [formControl]="CampoControl"
+                              [(ngModel)]="selectednivel"
+                              (selectionChange)="loadProyectos()" >
                     <mat-option *ngFor="let item of nivel_load" [value]="item.Id"> {{item.Nombre}} </mat-option>
                   </mat-select>
                   <mat-error *ngIf="CampoControl.hasError('required')">{{ 'admision.erro_selec_nivel' | translate }}</mat-error>
                 </mat-form-field>
-      
+
                 <!-- select proyectos -->
                 <mat-form-field style="width: 100%;">
                   <mat-label>{{ 'admision.aviso_proyecto' | translate }}:</mat-label>
-                  <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="loadCriterios()" [disabled]='selectprograma'>
+                  <mat-select [formControl]="Campo1Control"
+                              [(ngModel)]="proyectos_selected"
+                              (selectionChange)="loadCriterios()"
+                              [disabled]='selectprograma'>
                     <mat-option *ngFor="let item of proyectos" [value]="item.Id">{{item.Nombre}}</mat-option>
                   </mat-select>
-                  <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'admision.erro_selec_proyecto' | translate }}</mat-error>
+                  <mat-error *ngIf="Campo1Control.hasError('required')">
+                    {{ 'admision.erro_selec_proyecto' | translate }}
+                  </mat-error>
                 </mat-form-field>
-      
+
                 <!-- select criterios -->
                 <mat-form-field style="width: 100%;">
                   <mat-label>{{ 'admision.aviso_criterios' | translate }}:</mat-label>
-                  <mat-select [formControl]="Campo2Control" [(ngModel)]="criterio_selected"  (selectionChange)="viewtab()" [disabled]='selectcriterio' multiple>
-                    <mat-option *ngFor="let item of criterios" [value]="item.RequisitoId.Id">{{item.RequisitoId.Nombre}}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="Campo2Control.hasError('required')">{{ 'admision.erro_selec_criterio' | translate }}</mat-error>
+                  <mat-select [formControl]="Campo2Control"
+                              [(ngModel)]="criterio_selected"
+                              (selectionChange)="viewtab()"
+                              [disabled]='selectcriterio' multiple>
+                    <mat-option *ngFor="let item of criterios" [value]="item.RequisitoId">
+                      {{ item.RequisitoId.Nombre }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="Campo2Control.hasError('required')">
+                    {{ 'admision.erro_selec_criterio' | translate }}
+                  </mat-error>
                 </mat-form-field>
-                
+
                 <!-- Tag de criterios -->
                 <div class="row">
-                  <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipoIcfes">
-                    <nb-card class="exp-card" (click)="perfil_editar('info_icfes')">
-                      <nb-card-header>{{ 'admision.info_icfes' | translate }}</nb-card-header>
-                      <nb-card-body class="icon-form">
-                        <i class="fa fa-graduation-cap fa-5x"></i>
-                      </nb-card-body>
-                    </nb-card>
-                  </div>       
-      
-                  <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipoEntrevista">
-                    <nb-card class="exp-card" (click)="perfil_editar('info_entrevista')">
-                      <nb-card-header>{{ 'admision.entrevista' | translate }}</nb-card-header>
-                      <nb-card-body class="icon-form">
-                        <i class="fa fa-address-card-o fa-5x"></i>
-                      </nb-card-body>
-                    </nb-card>
-                  </div>
-      
-                  <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipoPrueba">
-                    <nb-card class="exp-card" (click)="perfil_editar('info_prueba')">
-                      <nb-card-header>{{ 'admision.prueba' | translate }}</nb-card-header>
-                      <nb-card-body class="icon-form">
-                        <i class="fa fa-book fa-5x"></i>
-                      </nb-card-body>
-                    </nb-card>
-                  </div>
 
-                  <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipoHojaVida">
-                    <nb-card class="exp-card" (click)="perfil_editar('info_hoja')">
-                      <nb-card-header>{{ 'admision.hoja_vida' | translate }}</nb-card-header>
+                  <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngFor=" let criterio of criterio_selected">
+                    <!-- {{criterio}}
+                    {{criterio.Nombre.toLowerCase().split(' ').join('_') }} -->
+                    <nb-card class="exp-card"
+                             (click)="perfil_editar(criterio)">
+                      <nb-card-header>{{ 'Criterio ' + ajustarTitulo(criterio.Nombre) }}</nb-card-header>
                       <nb-card-body class="icon-form">
                         <i class="fa fa-folder fa-5x"></i>
                       </nb-card-body>
@@ -86,34 +80,44 @@
                   <button mat-button type="button" *ngIf="notas" (click)="calcularEvaluacion()" [disabled]='btnCalculo'>{{ 'admision.calcular' | translate }}</button>
                 </div>
               </nb-card-header>
-      
-          </nb-card>   
+
+          </nb-card>
         </div>
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="!showTab">
-          <nb-card-header>
-            <div class="col-12">
-              {{ 'admision.criterio' | translate }}: {{ tipo_criterio.Nombre }}
-            </div>            
-          </nb-card-header>
-          <div class="body_criterios">
-            {{ 'admision.programa' | translate }}: {{ tipo_criterio.ProgramaAcademico }}
-            <br/><br/>
-            {{ 'admision.periodo' | translate }}: {{ tipo_criterio.Periodo }}
-          </div>        
-          <br/>
-          <div class="aviso_criterio" align="center">
-            <label class="fondo_aviso">
-              <strong>{{ 'admision.nota' | translate }}:</strong> {{ 'admision.aviso' | translate }}
-            </label>
-          </div>
-          <br/>
-          <ng2-smart-table [settings]="settings" [source]="dataSource" (rowSelect)="itemSelect($event)"></ng2-smart-table>
+
+        <div *ngIf="!showTab">
+          <nb-card style="margin: 0px;">
+            <nb-card-header>
+              <div class="col-12">
+                {{ 'admision.criterio' | translate }}: {{ tipo_criterio.Nombre }}
+              </div>
+            <div class="body_criterios">
+              {{ 'admision.programa' | translate }}: {{ tipo_criterio.ProgramaAcademico }}
+              <br/><br/>
+              {{ 'admision.periodo' | translate }}: {{ tipo_criterio.Periodo }}
+            </div>
+            <br/>
+            <div class="aviso_criterio" align="center">
+              <label class="fondo_aviso" style="margin: 0px;">
+                <strong>{{ 'admision.nota' | translate }}:</strong> {{ 'admision.aviso' | translate }}
+              </label>
+            </div>
+            <br/>
+            <ng2-smart-table [settings]="settings"
+                             [source]="dataSource"
+                             (rowSelect)="itemSelect($event)">
+          </ng2-smart-table>
           <br/>
           <div class="text-center">
-            <button mat-button type="button" *ngIf="save" (click)="guardarEvaluacion()" >{{ 'admision.guardar' | translate }}</button>
+            <button mat-button type="button" (click)="guardarEvaluacion()">
+              {{ 'admision.guardar' | translate }}
+            </button>
           </div>
-          <br/><br/><br/>
-          <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+          <br/><br/>
+          <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i>
+            {{ 'GLOBAL.regresar' | translate }}
+          </button>
+        </nb-card-header>
+        </nb-card>
 
         </div>
       </fieldset>

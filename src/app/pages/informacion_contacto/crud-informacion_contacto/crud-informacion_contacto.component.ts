@@ -46,7 +46,7 @@ export class CrudInformacionContactoComponent implements OnInit {
   paisSeleccionado: any;
   departamentoSeleccionado: any;
   denied_acces: boolean = false;
-  loading: boolean = true;
+  loading: boolean;
   info_persona_id: number;
 
   constructor(
@@ -209,7 +209,7 @@ export class CrudInformacionContactoComponent implements OnInit {
       const dataInfoContacto = {
         InfoComplementariaTercero: [
           {
-            //Estrato
+            // Estrato
             Id: 0,
             TerceroId: tercero,
             InfoComplementariaId: {
