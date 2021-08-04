@@ -104,6 +104,7 @@
             <br/>
             <ng2-smart-table [settings]="settings"
                              [source]="dataSource"
+                             (editConfirm)="onEditConfirm($event)"
                              (rowSelect)="itemSelect($event)">
           </ng2-smart-table>
           <br/>
