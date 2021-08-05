@@ -10,6 +10,12 @@ import { CoreModule } from './@core/core.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { Store, StoreModule } from '@ngrx/store';
+import { rootReducer } from './@core/store/rootReducer';
+import { ListService } from './@core/store/services/list.service';
+import { PersonaService } from './@core/data/persona.service';
+import { ParametrosService } from './@core/data/parametros.service';
+import { SharedModule } from './shared/shared.module';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -17,7 +23,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
     AppComponent
   ],
   imports: [
+    StoreModule.forRoot(rootReducer),
     CommonModule,
+    SharedModule,
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
@@ -30,9 +38,13 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
       },
       isolate: false
     }),
+    StoreModule.forRoot({}, {}),
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [
+    ListService,
+    PersonaService,
+    ParametrosService,
     //{ provide: APP_BASE_HREF, useValue: '/' },
     { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],

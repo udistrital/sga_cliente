@@ -10,11 +10,14 @@ import { ListDocumentoProgramaComponent } from './list-documento_programa/list-d
 import { ViewDocumentoProgramaComponent } from './view-documento_programa/view-documento_programa.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   imports: [
+    BrowserModule,
     MatCardModule,
-    MatTabsModule,,
+    MatTabsModule,
     DocumentoProgramaRoutingModule,
     Ng2SmartTableModule,
     SharedModule,

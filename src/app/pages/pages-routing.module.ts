@@ -61,11 +61,11 @@ const routes: Routes = [{
     //     loadChildren: () => import('./perfil/perfil.module')
     //     .then(m => m.)
     // },
-    {
-      path: 'produccion_academica',
-      loadChildren: () => import('./produccion_academica/produccion_academica.module')
-      .then(m => m.ProduccionAcademicaModule)
-    },
+    // {
+    //   path: 'produccion_academica',
+    //   loadChildren: () => import('./produccion_academica/produccion_academica.module')
+    //   .then(m => m.ProduccionAcademicaModule)
+    // },
     // {
     //   path: 'reportes',
     //   loadChildren: () => import('./reportes/reportes.module')

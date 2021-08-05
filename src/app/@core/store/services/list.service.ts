@@ -42,7 +42,7 @@ export class ListService {
   loading: boolean = false;
 
   public findGenero() {
-    this.store.select(REDUCER_LIST.Genero).subscribe(
+    this.store.select('listGenero').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:6&sortby=Id&order=asc&limit=2')
@@ -60,7 +60,7 @@ export class ListService {
   }
 
   public findGrupoSanguineo() {
-    this.store.select(REDUCER_LIST.Sanguineo).subscribe(
+    this.store.select('listGrupoSanguineo').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:7')
@@ -78,7 +78,7 @@ export class ListService {
   }
 
   public findFactorRh() {
-    this.store.select(REDUCER_LIST.RH).subscribe(
+    this.store.select('listFactorRh').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:8')
@@ -96,7 +96,7 @@ export class ListService {
   }
 
   public findClasificacionNivelIdioma() {
-    this.store.select(REDUCER_LIST.ClasificacionNivelIdioma).subscribe(
+    this.store.select('listNivelIdioma').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.idiomaService.get('clasificacion_nivel_idioma/?query=Activo:true&limit=0')
@@ -114,7 +114,7 @@ export class ListService {
   }
 
   public findEstadoInscripcion() {
-    this.store.select(REDUCER_LIST.EstadoInscripcion).subscribe(
+    this.store.select('listEstadoInscripcion').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.inscripcionService.get('estado_inscripcion/?query=Activo:true&limit=0')
@@ -132,7 +132,7 @@ export class ListService {
   }
 
   public findEstadoCivil() {
-    this.store.select(REDUCER_LIST.EstadoCivil).subscribe(
+    this.store.select('listEstadoCivil').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:2')
@@ -150,7 +150,7 @@ export class ListService {
   }
 
   public findGrupoEtnico() {
-    this.store.select(REDUCER_LIST.GrupoEtnico).subscribe(
+    this.store.select('listGrupoEtnico').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:3')
@@ -168,7 +168,7 @@ export class ListService {
   }
 
   public findIdioma() {
-    this.store.select(REDUCER_LIST.Idioma).subscribe(
+    this.store.select('listIdioma').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.idiomaService.get('idioma/?query=Activo:true&limit=0')
@@ -186,7 +186,7 @@ export class ListService {
   }
 
   public findLineaInvestigacion() {
-    this.store.select(REDUCER_LIST.LineaInvestigacion).subscribe(
+    this.store.select('listLineaInvestigacion').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           // this.coreService.get('linea_investigacion/?query=Activo:true&limit=0')
@@ -205,7 +205,7 @@ export class ListService {
   }
 
   public findPais() {
-    this.store.select(REDUCER_LIST.Pais).subscribe(
+    this.store.select('listPais').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.ubicacionService.get('lugar?query=TipoLugarId__Nombre:PAIS,Activo:true&limit=0') // TODO: filtrar pais
@@ -223,7 +223,7 @@ export class ListService {
   }
 
   public findCiudad() {
-    this.store.select(REDUCER_LIST.Ciudad).subscribe(
+    this.store.select('listCiudad').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.ubicacionService.get('lugar/?query=Activo:true&limit=0') // TODO: filtrar ciudad
@@ -241,7 +241,7 @@ export class ListService {
   }
 
   public findLugar() {
-    this.store.select(REDUCER_LIST.Lugar).subscribe(
+    this.store.select('listLugar').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.ubicacionService.get('lugar/?query=Activo:true&limit=0')
@@ -259,7 +259,7 @@ export class ListService {
   }
 
   public findMetodologia() {
-    this.store.select(REDUCER_LIST.Metodologia).subscribe(
+    this.store.select('listMetodologia').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.programaAcademicoService.get('metodologia/?query=Activo:true&limit=0')
@@ -277,7 +277,7 @@ export class ListService {
   }
 
   public findNivelFormacion() {
-    this.store.select(REDUCER_LIST.NivelFormacion).subscribe(
+    this.store.select('listNivelFormacion').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.programaAcademicoService.get('nivel_formacion/?query=Activo:true&limit=0')
@@ -295,7 +295,7 @@ export class ListService {
   }
 
   public findNivelIdioma() {
-    this.store.select(REDUCER_LIST.NivelIdioma).subscribe(
+    this.store.select('listNivelIdioma').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.idiomaService.get('valor_nivel_idioma/?query=Activo:true&limit=0')
@@ -313,7 +313,7 @@ export class ListService {
   }
 
   public findProgramaAcademico() {
-    this.store.select(REDUCER_LIST.ProgramaAcademico).subscribe(
+    this.store.select('listProgramaAcademico').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.programaAcademicoService.get('proyecto_academico_institucion/?query=Activo:true&limit=0')
@@ -331,7 +331,7 @@ export class ListService {
   }
 
   public findTipoContacto() {
-    this.store.select(REDUCER_LIST.TipoContacto).subscribe(
+    this.store.select('listTipoContacto').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.enteService.get('tipo_contacto/?query=Activo:true&limit=0')
@@ -349,7 +349,7 @@ export class ListService {
   }
 
   public findTipoDiscapacidad() {
-    this.store.select(REDUCER_LIST.TipoDiscapacidad).subscribe(
+    this.store.select('listTipoDiscapacidad').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:1')
@@ -367,7 +367,7 @@ export class ListService {
   }
 
   public findEPS() {
-    this.store.select(REDUCER_LIST.EPS).subscribe(
+    this.store.select('listEPS').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('tercero_tipo_tercero/?query=TipoTerceroId.Id:3&limit=0')
@@ -388,7 +388,7 @@ export class ListService {
   }
 
   public findTipoICFES() {
-    this.store.select(REDUCER_LIST.ICFES).subscribe(
+    this.store.select('listICFES').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.inscripcionService.get('tipo_icfes')
@@ -406,7 +406,7 @@ export class ListService {
   }
 
   public findTipoLugar() {
-    this.store.select(REDUCER_LIST.TipoLugar).subscribe(
+    this.store.select('listTipoLugar').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.ubicacionService.get('tipo_lugar/?query=Activo:true&limit=0')
@@ -424,7 +424,7 @@ export class ListService {
   }
 
   public findTitulacion() {
-    this.store.select(REDUCER_LIST.Titulacion).subscribe(
+    this.store.select('listTitulacion').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.programaAcademicoService.get('titulacion/?query=Activo:true&limit=0')
@@ -442,7 +442,7 @@ export class ListService {
   }
 
   public findTipoIdentificacion() {
-    this.store.select(REDUCER_LIST.TipoIdentificacion).subscribe(
+    this.store.select('listTipoIdentificacion').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('tipo_documento/?query=Activo:true&limit=0')
@@ -460,7 +460,7 @@ export class ListService {
   }
 
   public findTipoProyecto() {
-    this.store.select(REDUCER_LIST.TipoProyecto).subscribe(
+    this.store.select('listTipoProyecto').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.inscripcionService.get('tipo_proyecto/?query=Activo:true&limit=0')
@@ -479,7 +479,7 @@ export class ListService {
 
 
 public findTipoParametro() {
-  this.store.select(REDUCER_LIST.TipoParametro).subscribe(
+  this.store.select('listTipoParametro').subscribe(
     (list: any) => {
       if (!list || list.length === 0) {
         this.parametrosService.get('parametro?query=TipoParametroId:13')
@@ -499,7 +499,7 @@ public findTipoParametro() {
 
   public async findGrupoInvestigacion() {
     this.loading = true;
-    this.store.select(REDUCER_LIST.GrupoInvestigacion).subscribe(
+    this.store.select('listGrupoInvestigacion').subscribe(
       async (list: any) => {
         if (!list || list.length === 0) {
           // this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
@@ -520,7 +520,7 @@ public findTipoParametro() {
   }
 
   public findPeriodoAcademico() {
-    this.store.select(REDUCER_LIST.PeriodoAcademico).subscribe(
+    this.store.select('listPeriodoAcademico').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.coreService.get('periodo/?query=Activo:true&limit=0')
@@ -538,7 +538,7 @@ public findTipoParametro() {
   }
 
   public findLocalidadesBogota() {
-    this.store.select(REDUCER_LIST.LocalidadesBogota).subscribe(
+    this.store.select('listLocalidadesBogota').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.ubicacionService.get('lugar?limit=0&query=TipoLugarId__Id:3')
@@ -556,7 +556,7 @@ public findTipoParametro() {
   }
 
   public findTipoColegio() {
-    this.store.select(REDUCER_LIST.TipoColegio).subscribe(
+    this.store.select('listTipoColegio').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_13')
@@ -574,7 +574,7 @@ public findTipoParametro() {
   }
 
   public findSemestresSinEstudiar() {
-    this.store.select(REDUCER_LIST.SemestresSinEstudiar).subscribe(
+    this.store.select('listSemestresSinEstudiar').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_14')
@@ -592,7 +592,7 @@ public findTipoParametro() {
   }
 
   public findMediosEnteroUniversidad() {
-    this.store.select(REDUCER_LIST.MediosEnteroUniversidad).subscribe(
+    this.store.select('listMediosEnteroUniversidad').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_12')
@@ -610,7 +610,7 @@ public findTipoParametro() {
   }
 
   public findSePresentaAUniversidadPor() {
-    this.store.select(REDUCER_LIST.SePresentaAUniversidadPor).subscribe(
+    this.store.select('listSePresentaAUniversidadPor').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_15')
@@ -628,7 +628,7 @@ public findTipoParametro() {
   }
 
   public findTipoInscripcionUniversidad() {
-    this.store.select(REDUCER_LIST.TipoInscripcionUniversidad).subscribe(
+    this.store.select('listTipoInscripcionUniversidad').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria?limit=0&query=GrupoInfoComplementariaId__CodigoAbreviacion:Grupo_16')
@@ -646,7 +646,7 @@ public findTipoParametro() {
   }
 
   public findTipoDedicacion() {
-    this.store.select(REDUCER_LIST.TipoDedicacion).subscribe(
+    this.store.select('listTipoDedicacion').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.experienciaService.get('tipo_dedicacion/?limit=0&query=Activo:true')
@@ -664,7 +664,7 @@ public findTipoParametro() {
   }
 
   public findTipoVinculacion() {
-    this.store.select(REDUCER_LIST.TipoVinculacion).subscribe(
+    this.store.select('listTipoVinculacion').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.experienciaService.get('tipo_vinculacion/?limit=0&query=Activo:true')
@@ -682,7 +682,7 @@ public findTipoParametro() {
   }
 
   public findTipoOrganizacion() {
-    this.store.select(REDUCER_LIST.TipoOrganizacion).subscribe(
+    this.store.select('listTipoOrganizacion').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('tipo_tercero/?limit=0&query=Activo:true')
@@ -700,7 +700,7 @@ public findTipoParametro() {
   }
 
   public findCargo() {
-    this.store.select(REDUCER_LIST.Cargo).subscribe(
+    this.store.select('listCargo').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.experienciaService.get('cargo/?limit=0&query=Activo:true&order=asc&sortby=Nombre')
@@ -718,7 +718,7 @@ public findTipoParametro() {
   }
 
   public findDocumentoPrograma() {
-    this.store.select(REDUCER_LIST.DocumentoPrograma).subscribe(
+    this.store.select('listDocumentoPrograma').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.documentoProgramaService.get('documento_programa/?limit=0&query=Activo:true')
@@ -736,7 +736,7 @@ public findTipoParametro() {
   }
 
   public findDescuentoDependencia() {
-    this.store.select(REDUCER_LIST.DescuentoDependencia).subscribe(
+    this.store.select('listDescuentoDependencia').subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.descuentoAcademicoService.get('descuentos_dependencia/?limit=0&query=Activo:true')
