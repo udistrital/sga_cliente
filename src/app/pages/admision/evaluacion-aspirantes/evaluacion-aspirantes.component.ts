@@ -17,6 +17,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { CheckboxAssistanceComponent } from '../../../@theme/components/checkbox-assistance/checkbox-assistance.component';
 import { async } from '@angular/core/testing';
+import { resolve } from 'url';
 
 @Component({
   selector: 'evaluacion-aspirantes',
@@ -224,7 +225,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
           this.criterio_selected = [];
           this.criterios.forEach(async element => {
             await this.criterio_selected.push(element.RequisitoId)
-           // await this.loadInfo(element.RequisitoId.Id);
+            // await this.loadInfo(element.RequisitoId.Id);
           });
           this.viewtab();
         } else {
@@ -283,69 +284,81 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   onEditConfirm(event) {
-    event.confirm.resolve(event.newData);
+    this.guardarEvaluacion(event.newData).then(() => event.confirm.resolve(event.newData))
   }
 
-  async guardarEvaluacion() {
-    const Evaluacion: any = {};
-    // Evaluacion.Aspirantes = this.Aspirantes;
-    await this.dataSource.getElements().then(datos => Evaluacion.Aspirantes = datos)
-    // Evaluacion.Aspirantes = this.dataSource.data;
-    Evaluacion.PeriodoId = this.periodo.Id;
-    Evaluacion.ProgramaId = this.proyectos_selected;
-    Evaluacion.CriterioId = sessionStorage.getItem('tipo_criterio');
-    const aux = Evaluacion.Aspirantes;
-    // Bandera para campos vacios
-    let vacio = false;
-    // Bandera para solo numeros/rango 0-100
-    let numero = false;
-    const regex = /^[0-9]*$/;
-    for (let i = 0; i < aux.length; i++) {
-      for (let j = 0; j < this.columnas.length; j++) {
-        if (aux[i][this.columnas[j]] === undefined || aux[i][this.columnas[j]] === '') {
-          vacio = true;
-          break;
+  async guardarEvaluacion(datos) {
+    return new Promise((resolve, reject) => {
+      const Evaluacion: any = {};
+      // Evaluacion.Aspirantes = this.Aspirantes;
+      // await this.dataSource.getElements().then(datos => Evaluacion.Aspirantes = datos)
+      // Evaluacion.Aspirantes = this.dataSource.data;
+      Evaluacion.Aspirantes = [datos]
+      Evaluacion.PeriodoId = this.periodo.Id;
+      Evaluacion.ProgramaId = this.proyectos_selected;
+      Evaluacion.CriterioId = sessionStorage.getItem('tipo_criterio');
+      const aux = Evaluacion.Aspirantes;
+      // Bandera para campos vacios
+      let vacio = false;
+      // Bandera para solo numeros/rango 0-100
+      let numero = false;
+      const regex = /^[0-9]*$/;
+      for (let i = 0; i < aux.length; i++) {
+        if (aux[i]["Asistencia"] == "s" || aux[i]["Asistencia"] == "si" || aux[i]["Asistencia"] == "sí" || aux[i]["Asistencia"] == "S" || aux[i]["Asistencia"] == "SI" || aux[i]["Asistencia"] == "SÍ" || aux[i]["Asistencia"] == "true" || aux[i]["Asistencia"] == "True" || aux[i]["Asistencia"] == "TRUE") {
+          aux[i]["Asistencia"] = true;
         } else {
-          if (regex.test(aux[i][this.columnas[j]]) === true) {
-            const auxNumero = parseInt(aux[i][this.columnas[j]], 10)
-            if (auxNumero >= 0 && auxNumero <= 100) {
+          aux[i]["Asistencia"] = false
+        }
+        for (let j = 0; j < this.columnas.length; j++) {
+          if (aux[i][this.columnas[j]] === undefined || aux[i][this.columnas[j]] === '') {
+            vacio = true;
+            break;
+          } else {
+            if (regex.test(aux[i][this.columnas[j]]) === true) {
+              const auxNumero = parseInt(aux[i][this.columnas[j]], 10)
+              if (auxNumero >= 0 && auxNumero <= 100) {
+              } else {
+                numero = true;
+                break;
+              }
             } else {
               numero = true;
               break;
             }
-          } else {
-            numero = true;
-            break;
           }
         }
       }
-    }
 
-    // Validaciones
-    if (vacio === true) {
-      this.popUpManager.showToast('info', this.translate.instant('admision.vacio'), this.translate.instant('GLOBAL.info'));
-    } else if (numero === true) {
-      this.popUpManager.showToast('info', this.translate.instant('admision.numero'), this.translate.instant('GLOBAL.info'));
-    } else {
-      this.sgaMidService.post('admision/registrar_evaluacion', Evaluacion).subscribe(
-        (response: any) => {
-          if (response.Response.Code === '200') {
-            this.criterio_selected.forEach(criterio => {
-              if (criterio.Id === Evaluacion.CriterioId) {
-                criterio['evaluado'] = true;
-              }
-            })
-            this.loadInfo(parseInt(Evaluacion.CriterioId, 10));
-            this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'));
-          } else {
-            this.popUpManager.showErrorToast(this.translate.instant('admision.registro_error'));
-          }
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-        },
-      );
-    }
+      // Validaciones
+      if (vacio === true) {
+        this.popUpManager.showToast('info', this.translate.instant('admision.vacio'), this.translate.instant('GLOBAL.info'));
+      } else if (numero === true) {
+        this.popUpManager.showToast('info', this.translate.instant('admision.numero'), this.translate.instant('GLOBAL.info'));
+      } else {
+        this.sgaMidService.post('admision/registrar_evaluacion', Evaluacion).subscribe(
+          (response: any) => {
+            if (response.Response.Code === '200') {
+              this.criterio_selected.forEach(criterio => {
+                if (criterio.Id === Evaluacion.CriterioId) {
+                  criterio['evaluado'] = true;
+                }
+              })
+              this.loadInfo(parseInt(Evaluacion.CriterioId, 10));
+              resolve('')
+              this.popUpManager.showToast('success', this.translate.instant('admision.registro_exito'), this.translate.instant('GLOBAL.operacion_exitosa'));
+              // this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'));
+            } else {
+              reject()
+              this.popUpManager.showErrorToast(this.translate.instant('admision.registro_error'));
+            }
+          },
+          error => {
+            reject()
+            this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+          },
+        );
+      }
+    });
   }
 
   async calcularEvaluacion() {

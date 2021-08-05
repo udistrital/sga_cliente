@@ -1298,6 +1298,7 @@
         "aspirante": "Aspirants",
         "nota": "NOTE",
         "aviso": "The score for each item to be evaluated corresponds to a value between 0 and 100 points",
+        "aviso_no_edicion": "Once the items have been assigned to the applicant, it will not be possible to edit them",
         "aviso_sub": "Remember to assign the percentages by sub-criterion when selecting the criterion in the table",
         "criterio": "Criterion",
         "porcentaje": "Porcentage",
