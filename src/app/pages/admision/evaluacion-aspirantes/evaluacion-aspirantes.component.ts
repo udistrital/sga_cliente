@@ -237,6 +237,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
             },
           };
           this.criterios = <any>Criterios;
+          this.criterio_selected = [];
           this.notas = false;
           this.popUpManager.showToast('info', this.translate.instant('admision.no_criterio'), this.translate.instant('GLOBAL.info'));
         }
@@ -307,7 +308,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
         if (aux[i]["Asistencia"] == "s" || aux[i]["Asistencia"] == "si" || aux[i]["Asistencia"] == "sí" || aux[i]["Asistencia"] == "S" || aux[i]["Asistencia"] == "SI" || aux[i]["Asistencia"] == "SÍ" || aux[i]["Asistencia"] == "true" || aux[i]["Asistencia"] == "True" || aux[i]["Asistencia"] == "TRUE") {
           aux[i]["Asistencia"] = true;
         } else {
-          aux[i]["Asistencia"] = false
+          aux[i]["Asistencia"] = ''
         }
         for (let j = 0; j < this.columnas.length; j++) {
           if (aux[i][this.columnas[j]] === undefined || aux[i][this.columnas[j]] === '') {
@@ -464,16 +465,26 @@ export class EvaluacionAspirantesComponent implements OnInit {
   async loadInfo(IdCriterio: number) {
     return new Promise((resolve, reject) => {
       this.sgaMidService.get('admision/consultar_evaluacion/' + this.proyectos_selected + '/' + this.periodo.Id + '/' + IdCriterio).subscribe(
-        (response: any) => {
+        async (response: any) => {
           if (response.Response.Code === '200') {
             const data = <Array<any>>response.Response.Body[0].areas;
             if (data !== undefined) {
-              data.forEach(asistente => {
+              data.forEach(async asistente => {
                 if (asistente['Asistencia'] === '') {
                   asistente['Asistencia'] = false
                 }
+                await this.dataSource.getElements().then(datos => {
+                  datos.forEach(aspirante => {
+                    if (asistente.Aspirantes === aspirante.Aspirantes) {
+                      for (let columna in asistente) {
+                        aspirante[columna] = asistente[columna]
+                      }
+                    }
+                  });
+                });
               })
-              this.dataSource.load(data);
+              // this.dataSource.load(data);
+              // await this.dataSource.getElements().then(datos => console.log('despues', datos))
             } else {
               this.btnCalculo = true;
             }
@@ -526,6 +537,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
                 title: this.translate.instant('admision.aspirante'),
                 editable: false,
                 filter: false,
+                sort: true,
+                sortDirection: 'asc',
                 width: '55%',
                 valuePrepareFunction: (value) => {
                   return value;
