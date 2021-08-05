@@ -11,12 +11,12 @@ import { UserService } from '../../@core/data/users.service';
 import { PersonaService } from '../../@core/data/persona.service';
 import { NuxeoService } from './../../@core/utils/nuxeo.service';
 import { MatCardModule } from '@angular/material/card';
-import { MatTab } from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   imports: [
     MatCardModule,
-    MatTab,
+    MatTabsModule,
     ProduccionAcademicaRoutingModule,
     Ng2SmartTableModule,
     ToasterModule,
