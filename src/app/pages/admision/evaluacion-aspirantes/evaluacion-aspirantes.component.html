@@ -98,20 +98,21 @@
             <br/>
             <div class="aviso_criterio" align="center">
               <label class="fondo_aviso" style="margin: 0px;">
-                <strong>{{ 'admision.nota' | translate }}:</strong> {{ 'admision.aviso' | translate }}
+                <strong>{{ 'admision.nota' | translate }}:</strong> {{ 'admision.aviso' | translate }}. <br> {{ 'admision.aviso_no_edicion' | translate}}
               </label>
             </div>
             <br/>
             <ng2-smart-table [settings]="settings"
                              [source]="dataSource"
+                             (editConfirm)="onEditConfirm($event)"
                              (rowSelect)="itemSelect($event)">
           </ng2-smart-table>
-          <br/>
+          <!-- <br/>
           <div class="text-center">
             <button mat-button type="button" (click)="guardarEvaluacion()">
               {{ 'admision.guardar' | translate }}
             </button>
-          </div>
+          </div> -->
           <br/><br/>
           <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i>
             {{ 'GLOBAL.regresar' | translate }}

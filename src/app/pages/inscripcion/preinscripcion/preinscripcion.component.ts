@@ -87,6 +87,7 @@ export class PreinscripcionComponent implements OnInit {
   selectprograma: boolean = true;
   periodo: any;
   selectednivel: any;
+  habilitar_inscripcion: boolean = true;
 
   loading: boolean = false;
 
@@ -114,6 +115,9 @@ export class PreinscripcionComponent implements OnInit {
     setTimeout(() => {
       this.percentage_tab_info[tab] = (number * 100) / 2;
       this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
+      if (number === 1) {
+        this.habilitar_inscripcion = false;
+      }
       this.setPercentage_total();
     });
   }
