@@ -17,7 +17,7 @@ import { DocumentoProgramaService } from '../../@core/data/documento_programa.se
 import { CampusMidService } from '../../@core/data/campus_mid.service';
 import { InfoPersonaModule } from '../info_persona/info_persona.module';
 import { CrudInfoPersonaComponent } from '../info_persona/crud-info_persona/crud-info_persona.component';
-import { CrudInscripcionMultipleComponent} from './crud-inscripcion_multiple/crud-inscripcion_multiple.component'
+import { CrudInscripcionMultipleComponent } from './crud-inscripcion_multiple/crud-inscripcion_multiple.component'
 import { InfoCaracteristicaModule } from '../info_caracteristica/info_caracteristica.module';
 import { CrudInfoCaracteristicaComponent } from '../info_caracteristica/crud-info_caracteristica/crud-info_caracteristica.component';
 import { InformacionContactoModule } from '../informacion_contacto/informacion_contacto.module';
@@ -45,7 +45,7 @@ import { CrudDescuentoAcademicoComponent } from '../descuento_academico/crud-des
 import { PropuestaGradoModule } from '../propuesta_grado/propuesta_grado.module';
 import { CrudPropuestaGradoComponent } from '../propuesta_grado/crud-propuesta_grado/crud-propuesta_grado.component';
 import { PreinscripcionComponent } from './preinscripcion/preinscripcion.component';
-import { ButtonPaymentComponent } from './../../shared/components/button-payment/button-payment.component' 
+import { ButtonPaymentComponent } from './../../shared/components/button-payment/button-payment.component'
 import { LinkDownloadComponent } from './../../shared/components/link-download/link-download.component';
 import { ParametrosService } from '../../@core/data/parametros.service';
 import { EnteService } from '../../@core/data/ente.service';
@@ -54,11 +54,21 @@ import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.co
 import { PerfilComponent } from './perfil/perfil.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CoreModule } from 'src/app/@core/core.module';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatProgressBarModule,
+    MatFormFieldModule,
     MatCardModule,
+    MatSelectModule,
     MatTabsModule,
     InscripcionRoutingModule,
     MatExpansionModule,
@@ -75,7 +85,6 @@ import { CoreModule } from 'src/app/@core/core.module';
     DescuentoAcademicoModule,
     PropuestaGradoModule,
     Ng2SmartTableModule,
-    CoreModule,
   ],
   declarations: [
     ...routedComponents,
@@ -95,7 +104,7 @@ import { CoreModule } from 'src/app/@core/core.module';
     ParametrosService,
     EnteService,
   ],
-   entryComponents: [
+  entryComponents: [
     CrudInfoPersonaComponent,
     CrudInscripcionMultipleComponent,
     CrudInfoCaracteristicaComponent,
@@ -115,7 +124,7 @@ import { CoreModule } from 'src/app/@core/core.module';
     CrudPropuestaGradoComponent,
     ButtonPaymentComponent,
     LinkDownloadComponent,
-   ],
+  ],
   exports: [
     InscripcionGeneralComponent,
     PreinscripcionComponent,

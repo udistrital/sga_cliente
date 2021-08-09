@@ -3,13 +3,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-12">
-                    <ngb-progressbar showValue="true"
-                                     type="success"
-                                     [value]="percentage_info"
-                                     [animated]="true"
-                                     [height]="'15px'"
-                                     [hidden]="isBarraOculta">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_info" [hidden]="isBarraOculta">
+                    </mat-progress-bar>
                 </div>
             </div>
             <mat-tab-group fullWidth [selectedIndex]="info_persona">

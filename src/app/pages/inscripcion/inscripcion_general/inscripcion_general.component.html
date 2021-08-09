@@ -131,11 +131,8 @@
 
         <mat-card-content class="example-items-rows trans text-center">
             <div class="col-md-12">
-                <ngb-progressbar showValue="true" type="success"
-                                 [value]="percentage_total"
-                                 [animated]="true"
-                                 [height]="'15px'">
-                </ngb-progressbar>
+                <mat-progress-bar mode="determinated" color="primary" [value]="percentage_info">
+                </mat-progress-bar>
                 <blockquote class="blockquote">
                     <li>{{ 'inscripcion.aviso_progreso' | translate}}</li>
                 </blockquote>
@@ -190,11 +187,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success"
-                                     [value]="percentage_info"
-                                     [animated]="true"
-                                     [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_info">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -236,10 +230,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success"
-                                     [value]="percentage_info"
-                                     [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_info" [hidden]="isBarraOculta">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -280,9 +272,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info"
-                                     [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_info">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -306,9 +297,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info"
-                                     [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_info">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -334,9 +324,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success"
-                                     [value]="percentage_acad" [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_acad">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -364,9 +353,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_acad"
-                                     [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_acad">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -394,9 +382,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_acad"
-                                     [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_acad">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -428,9 +415,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_expe"
-                                     [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_expe">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -454,9 +440,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_prod"
-                                     [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_prod">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -480,9 +465,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_docu"
-                                     [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_docu">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -508,9 +492,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_desc"
-                                     [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_desc">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"
@@ -536,9 +519,8 @@
         <mat-card-content>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_proy"
-                                     [animated]="true" [height]="'15px'">
-                    </ngb-progressbar>
+                    <mat-progress-bar mode="determinated" color="primary" [value]="percentage_proy">
+                    </mat-progress-bar>
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn"

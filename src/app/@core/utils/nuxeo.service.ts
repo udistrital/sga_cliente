@@ -4,7 +4,7 @@ import { environment } from './../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Documento } from './../data/models/documento/documento'
 import { TipoDocumento } from './../data/models/documento/tipo_documento'
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class NuxeoService {

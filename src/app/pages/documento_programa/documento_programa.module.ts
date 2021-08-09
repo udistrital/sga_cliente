@@ -11,11 +11,9 @@ import { ViewDocumentoProgramaComponent } from './view-documento_programa/view-d
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   imports: [
-    BrowserModule,
     MatCardModule,
     MatTabsModule,
     DocumentoProgramaRoutingModule,

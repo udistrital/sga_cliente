@@ -23,7 +23,9 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "allowedCommonJsDependencies": [
-              "lodash"
+              "lodash",
+              "nuxeo",
+              "moment-timezone"
             ],
             "aot": true,
             "assets": [
