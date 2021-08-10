@@ -28,8 +28,8 @@ export class CrudDocumentoProgramaComponent implements OnInit {
     this.documento_programa_id = documento_programa_id;
     if (this.documento_programa_id !== undefined && this.documento_programa_id !== null &&
       this.documento_programa_id !== 0 && this.documento_programa_id.toString() !== '') {
-        this.loadDocumentoPrograma();
-      }
+      this.loadDocumentoPrograma();
+    }
   }
 
   @Input('persona_id')
@@ -161,7 +161,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                 obj => obj.TipoDocumentoProgramaId.Id === this.info_documento_programa.DocumentoProgramaId.Id,
               )[0].Id,
             };
-            soporteDocumentoPrograma.InscripcionId = {Id: Number(this.inscripcion)};
+            soporteDocumentoPrograma.InscripcionId = { Id: Number(this.inscripcion) };
             this.inscripcionService.post('soporte_documento_programa', soporteDocumentoPrograma).subscribe(
               response => {
                 this.loading = false;
@@ -250,7 +250,9 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   }
 
   setPercentage(event) {
-    this.percentage += event;
+    if (event !== 1 && this.tipo_documentos.length !== 1) {
+      this.percentage += event.toFixed(2);
+    }
     this.result.emit(this.percentage);
   }
 
