@@ -23,6 +23,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
   cambiotab: boolean = false;
   contador: number;
   settings: any;
+  tipo_documentos: any[];
   data: any;
   info_data: any;
   programaDocumento: any;
@@ -66,6 +67,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
       this.cargarCampos();
     });
     this.loading = false;
+    this.percentage = 0;
   }
 
   cargarCampos() {
@@ -114,32 +116,34 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.soporteDocumento = [];
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
       this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
-      (response: any[]) => {
-        console.info(Object.keys(response[0]).length)
-        if (Object.keys(response[0]).length > 0) {
-          response.forEach(async soporte => {
-            const documento: SoporteDocumentoAux = new SoporteDocumentoAux();
-            documento.TipoDocumentoId = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Id'];
-            documento.TipoDocumento = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Nombre'];
-            documento.DocumentoId = soporte['DocumentoId'];
-            documento.SoporteDocumentoId = soporte['Id'];
-            await this.cargarEstadoDocumento(documento);
-            documento.EstadoObservacion = this.estadoObservacion;
-            documento.Observacion = this.observacion;
-            this.soporteDocumento.push(documento);
-            this.source.load(this.soporteDocumento);
-            this.getPercentage(1);
-          });
-        } else {
-          this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('documento_programa.no_documentos'));
-        }
-        this.loading = false;
-      },
-      (error: HttpErrorResponse) => {
-        this.loading = false;
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
-      },
-    );
+        (response: any[]) => {
+          console.info(Object.keys(response[0]).length)
+          if (Object.keys(response[0]).length > 0) {
+            response.forEach(async soporte => {
+              const documento: SoporteDocumentoAux = new SoporteDocumentoAux();
+              documento.TipoDocumentoId = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Id'];
+              documento.TipoDocumento = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Nombre'];
+              documento.DocumentoId = soporte['DocumentoId'];
+              documento.SoporteDocumentoId = soporte['Id'];
+              await this.cargarEstadoDocumento(documento);
+              documento.EstadoObservacion = this.estadoObservacion;
+              documento.Observacion = this.observacion;
+              this.soporteDocumento.push(documento);
+              this.source.load(this.soporteDocumento);
+              if (documento.EstadoObservacion !== 'No aprobado') {
+                this.getPercentage(1 / this.tipo_documentos.length);
+              }
+            });
+          } else {
+            this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('documento_programa.no_documentos'));
+          }
+          this.loading = false;
+        },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
+        },
+      );
   }
 
   cargarEstadoDocumento(documento: SoporteDocumentoAux) {
@@ -151,12 +155,12 @@ export class ListDocumentoProgramaComponent implements OnInit {
             this.observacion = '';
           } else {
             if (doc.Metadatos !== '') {
-              let metadatos = JSON.parse(doc.Metadatos);
+              const metadatos = JSON.parse(doc.Metadatos);
               if (metadatos.aprobado) {
                 this.estadoObservacion = 'Aprobado';
                 this.observacion = '';
               } else {
-                this.estadoObservacion = 'No Aprobado';
+                this.estadoObservacion = 'No aprobado';
                 this.observacion = metadatos.observacion;
               }
             }
@@ -176,6 +180,18 @@ export class ListDocumentoProgramaComponent implements OnInit {
       this.inscripcion.toString() !== '') {
       this.loadData();
     }
+    this.loadLists();
+  }
+
+  public loadLists() {
+    this.inscripcionService.get('documento_programa?query=ProgramaId:' + this.programa).subscribe(
+      response => {
+        this.tipo_documentos = <any[]>response;
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
   }
 
   onOpen(event) {
@@ -228,7 +244,9 @@ export class ListDocumentoProgramaComponent implements OnInit {
   }
 
   getPercentage(event) {
-    this.percentage = event;
+    if (event !== undefined) {
+      this.percentage += event;
+    }
     this.result.emit(this.percentage);
   }
 
