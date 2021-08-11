@@ -87,6 +87,7 @@ export class PreinscripcionComponent implements OnInit {
   selectprograma: boolean = true;
   periodo: any;
   selectednivel: any;
+  habilitar_inscripcion: boolean = true;
 
   loading: boolean = false;
 
@@ -95,11 +96,11 @@ export class PreinscripcionComponent implements OnInit {
     private userService: UserService,
     private popUpManager: PopUpManager,
   ) {
-    //this.translate = translate;
+    // this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.total = true;
-    this.show_info = true;  
+    this.show_info = true;
   }
 
   async loadData() {
@@ -111,9 +112,12 @@ export class PreinscripcionComponent implements OnInit {
   }
 
   setPercentage_info(number, tab) {
-    setTimeout(()=>{
+    setTimeout(() => {
       this.percentage_tab_info[tab] = (number * 100) / 2;
       this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
+      if (number === 1) {
+        this.habilitar_inscripcion = false;
+      }
       this.setPercentage_total();
     });
   }
@@ -123,6 +127,7 @@ export class PreinscripcionComponent implements OnInit {
     this.percentage_acad = Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad));
     this.setPercentage_total();
   }
+
   setPercentage_total() {
     this.percentage_total = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info)) / 2;
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4;
@@ -149,7 +154,7 @@ export class PreinscripcionComponent implements OnInit {
       case 'info_persona':
         this.show_info = true;
         break;
-        case 'info_preinscripcion':
+      case 'info_preinscripcion':
           this.preinscripcion = true;
           break;
       case 'perfil':
@@ -162,6 +167,7 @@ export class PreinscripcionComponent implements OnInit {
         break;
     }
   }
+
   selectTab(event): void {
     if (event.tabTitle === this.translate.instant('GLOBAL.info_persona')) {
       if (this.info_persona)

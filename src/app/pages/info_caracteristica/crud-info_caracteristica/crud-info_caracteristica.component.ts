@@ -49,7 +49,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   departamentoSeleccionado: any;
   clean: boolean;
   denied_acces: boolean = false;
-  loading: boolean = true;
+  loading: boolean;
 
   constructor(
     private popUpManager: PopUpManager,

@@ -82,7 +82,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
                     doc.aprobado = metadatos.aprobado;
                     if (metadatos.aprobado) {
                       doc.estadoObservacion = 'Aprobado';
-                      doc.observacion = '';
+                      doc.observacion = metadatos.observacion;
                     } else {
                       doc.estadoObservacion = 'No Aprobado';
                       doc.observacion = metadatos.observacion;

@@ -94,20 +94,20 @@
         "proyecto_academico": {
             "proyecto_academico": "Academic Project",
             "list_proyecto_academico": "Academic Project List",
-            "crud_proyecto_academico": "Registration of an academic project"
+            "crud_proyecto_academico": "Registration of an academic \nproject"
         },
         "inscripcion": {
             "inscripcion": "Inscription",
             "inscripcion_general": "Enrollment in an academic project",
-            "preinscripcion": "Pre-registration for academic projects"
+            "preinscripcion": "Pre-registration for \nacademic projects"
         },
         "admision": {
             "evaluacion_documentos": "Evaluation of registration\n documents",
             "evaluacion_aspirantes": "Aspirant evaluation",
             "admision": "Admissions",
-            "criterios": "Admissions criteria for projects",
+            "criterios": "Admissions criteria for \nprojects",
             "asignacion_cupos": "Assignment of quotas",
-            "actualizacion_estado": "Assignment of quotas for projects",
+            "actualizacion_estado": "Assignment of quotas \nfor projects",
             "listado_aspirante": "List applicants",
             "administrar_criterios": "Manage admission criteria"
         },
@@ -152,6 +152,7 @@
         "salir": "Get out",
         "eliminar": "Remove",
         "actualizar": "Update",
+        "confirmar_actualizar": "Update?",
         "crear": "Create",
         "asignar": "To assign",
         "registrar": "Register",
@@ -159,6 +160,7 @@
         "confirmarActualizar": "has been updated",
         "info_persona": "Personal data",
         "no_info_persona": "There's no registered data por this User. Please enter your data.",
+        "persona_creado": "Your personal information has been saved successfully",
         "info_criterio": "ICFES criteria",
         "confirmarEliminar": "has been removed",
         "info_estado": "Registration Status",
@@ -203,6 +205,7 @@
         "placeholder_ano": "E.g.: 2019",
         "placeholder_periodo": "E.g.: I,II,III",
         "tiporecurrencia": "Recurrence type",
+        "crear_info_persona": "Are you sure you want to save personal information?\n You will not be able to modify it after accepting.",
         "placeholder_tiporecurrencia": "E.g.: Recurrence type",
         "codigoabreviacion": "abbreviation code",
         "placeholder_codigoabreviacion": "E.g.: abbreviation code",
@@ -570,7 +573,8 @@
         "creditos": "Credits",
         "clasificacion": "Type",
         "tooltip_ver_registro": "View",
-        "tooltip_editar_registro": "Edit"
+        "tooltip_editar_registro": "Edit",
+        "tooltip_descargar": "Download"
     },
 
     "ERROR": {
@@ -674,7 +678,6 @@
         "placeholder_resumen": "e.g. summary",
         "ISBN": "ISBN",
         "titulo_libro": "Book title",
-        "titulo_revista": "Magazine name",
         "URL": "URL",
         "DOI": "DOI",
         "idioma_traduccion": "Traduction language",
@@ -1297,6 +1300,8 @@
         "aspirante": "Aspirants",
         "nota": "NOTE",
         "aviso": "The score for each item to be evaluated corresponds to a value between 0 and 100 points",
+        "aviso_no_edicion": "Once the items have been assigned to the applicant, it will not be possible to edit them",
+        "aviso_sub": "Remember to assign the percentages by sub-criterion when selecting the criterion in the table",
         "criterio": "Criterion",
         "porcentaje": "Porcentage",
         "porcentajeIncompleto": "The total percentage must be 100%",
@@ -1348,7 +1353,11 @@
         "tooltip_crear": "Create new criteria",
         "tooltip_ver_registro": "View",
         "tooltip_cancelar": "Cancel",
-        "tooltip_guargar": "Save"
+        "tooltip_guargar": "Save",
+        "criterios_proyectos": "Criteria by academic project",
+        "evaluacion_aspirantes": "Applicant evaluation",
+        "listar_aspirantes": "List applicants",
+        "cupos_proyectos": "Allocation of quotas per academic project"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",

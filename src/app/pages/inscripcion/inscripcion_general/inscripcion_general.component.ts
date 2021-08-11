@@ -8,6 +8,7 @@ import { UserService } from '../../../@core/data/users.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
+import { DocumentoService } from '../../../@core/data/documento.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import Swal from 'sweetalert2';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
@@ -107,6 +108,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   tipo_inscripcion_selected: any;
   selectTipo: any;
   selectTabView: any;
+  tipo_documentos: any[];
   tag_view_posg: boolean;
   tag_view_pre: boolean;
   selectprograma: boolean = true;
@@ -117,6 +119,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private inscripcionService: InscripcionService,
+    private documentoService: DocumentoService,
     private idiomaService: IdiomaService,
     private userService: UserService,
     private parametrosService: ParametrosService,
@@ -342,10 +345,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.loading = false;
           resolve(this.percentage_info);
         },
-        error => {
-          this.loading = false;
-          reject(error);
-        });
+          error => {
+            this.loading = false;
+            reject(error);
+          });
     });
   }
 
@@ -364,10 +367,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.loading = false;
           resolve(this.percentage_info);
         },
-        error => {
-          this.loading = false;
-          reject(error);
-        });
+          error => {
+            this.loading = false;
+            reject(error);
+          });
     });
   }
 
@@ -386,10 +389,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.loading = false;
           resolve(this.percentage_acad)
         },
-        error => {
-          this.loading = false;
-          reject(error)
-        });
+          error => {
+            this.loading = false;
+            reject(error)
+          });
     });
   }
 
@@ -408,10 +411,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.loading = false;
           resolve(this.percentage_acad);
         },
-        error => {
-          this.loading = false;
-          reject(error);
-        });
+          error => {
+            this.loading = false;
+            reject(error);
+          });
     });
   }
 
@@ -422,18 +425,18 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         .subscribe((res: any) => {
           if (res.Data.Code === '200') {
             this.percentage_expe = 100;
-            this.percentage_tab_expe[1] = 100;
+            this.percentage_tab_expe[0] = 100;
           } else {
             this.percentage_expe = 0;
-            this.percentage_tab_expe[1] = 0;
+            this.percentage_tab_expe[0] = 0;
           }
           this.loading = false;
           resolve(this.percentage_expe);
         },
-        error => {
-          this.loading = false;
-          reject(error);
-        });
+          error => {
+            this.loading = false;
+            reject(error);
+          });
     });
   }
 
@@ -450,10 +453,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.loading = false;
           resolve(this.percentage_prod);
         },
-        error => {
-          this.loading = false;
-          reject(error);
-        });
+          error => {
+            this.loading = false;
+            reject(error);
+          });
     });
   }
 
@@ -461,22 +464,40 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.loading = true;
     return new Promise((resolve, reject) => {
       this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
-       this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId)).subscribe(
-        (res: any[]) => {
-          if (res !== null && JSON.stringify(res[0]) !== '{}') {
-            this.percentage_docu = 100;
-            this.percentage_tab_docu[1] = 100;
-          } else {
-            this.percentage_docu = 0;
-            this.percentage_tab_docu[1] = 0;
-          }
-          this.loading = false;
-          resolve(this.percentage_docu);
-        },
-        error => {
-          this.loading = false;
-          reject(error);
-        });
+        this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId)).subscribe(
+          (res: any[]) => {
+            if (res !== null && JSON.stringify(res[0]) !== '{}') {
+              this.percentage_docu = 0;
+              for (let i = 0; i < res.length; i++) {
+                this.documentoService.get('documento/' + res[i].DocumentoId).subscribe(
+                  response => {
+
+                    if (response.Metadatos === '') {
+                      this.percentage_docu += Math.round((1 / this.tipo_documentos.length * 100) * 100) / 100
+                    } else {
+                      if (response.Metadatos !== '') {
+                        if (JSON.parse(response.Metadatos).aprobado) {
+                          this.percentage_docu += Math.round((1 / this.tipo_documentos.length * 100) * 100) / 100
+                        }
+                      }
+                    }
+
+                    this.percentage_tab_docu[0] = this.percentage_docu;
+                    this.loading = false;
+                  })
+              };
+              resolve(this.percentage_docu);
+            } else {
+              this.percentage_docu = 0;
+              this.percentage_tab_docu[0] = 0;
+              this.loading = false;
+              resolve(this.percentage_docu);
+            }
+          },
+          error => {
+            this.loading = false;
+            reject(error);
+          });
     });
   }
 
@@ -484,7 +505,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.loading = true;
     return new Promise((resolve, reject) => {
       this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' + 'PersonaId=' +
-       Number(window.localStorage.getItem('persona_id')) + '&DependenciaId=' +
+        Number(window.localStorage.getItem('persona_id')) + '&DependenciaId=' +
         Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
         .subscribe((res: any) => {
           if (res.Data.Code === '200') {
@@ -495,10 +516,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.loading = false;
           resolve(this.percentage_desc)
         },
-        error => {
-          this.loading = false;
-          reject(error);
-        });
+          error => {
+            this.loading = false;
+            reject(error);
+          });
     });
   }
 
@@ -521,7 +542,19 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     });
   }
 
+  public loadLists() {
+    this.inscripcionService.get('documento_programa?query=ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId)).subscribe(
+      response => {
+        this.tipo_documentos = <any[]>response;
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
+  }
+
   async ngOnInit() {
+    await this.loadLists();
 
     // Consulta si hay información en el tab de información personal
     if (this.percentage_info === 0) {
@@ -590,27 +623,27 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                   this.perfil_editar('perfil');
                 }
               },
-              (error: any) => {
-                this.loading = false;
-                if (error.System.Message.includes('duplicate')) {
-                  Swal.fire({
-                    icon: 'info',
-                    text: this.translate.instant('inscripcion.error_update_programa_seleccionado'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-
-                  });
-                } else {
+                (error: any) => {
                   this.loading = false;
-                  Swal.fire({
-                    icon: 'error',
-                    title: error.status + '',
-                    text: this.translate.instant('ERROR.' + error.status),
-                    footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-                      this.translate.instant('GLOBAL.admision'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  });
-                }
-              });
+                  if (error.System.Message.includes('duplicate')) {
+                    Swal.fire({
+                      icon: 'info',
+                      text: this.translate.instant('inscripcion.error_update_programa_seleccionado'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+
+                    });
+                  } else {
+                    this.loading = false;
+                    Swal.fire({
+                      icon: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                        this.translate.instant('GLOBAL.admision'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                  }
+                });
           },
           error => {
             this.loading = false;

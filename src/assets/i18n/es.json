@@ -107,7 +107,7 @@
             "admision": "Admisiones",
             "criterios": "Criterios de admisiones \npor proyectos",
             "asignacion_cupos": "Asignación de cupos",
-            "actualizacion_estado": "Asignación de cupos por proyecto",
+            "actualizacion_estado": "Asignación de cupos \npor proyecto",
             "listado_aspirante": "Listar aspirantes",
             "administrar_criterios": "Administrar criterios\nde admisión"
         },
@@ -162,6 +162,7 @@
         "eliminar": "Eliminar",
         "confirmarEliminar": "se ha eliminado",
         "actualizar": "Actualizar",
+        "confirmar_actualizar": "¿Actualizar?",
         "crear": "Crear",
         "asignar": "Asignar",
         "registrar": "Registrar",
@@ -203,7 +204,7 @@
         "placeholder_periodo": "ej: I,II,III",
         "tiporecurrencia": "tipo recurrencia",
         "info_caracteristica": "Información característica",
-        "crear_info_persona": "¿Está seguro que desea guardar la información personal?",
+        "crear_info_persona": "¿Está seguro que desea guardar la información personal?\n No podrá modificarla después de aceptar.",
         "placeholder_tiporecurrencia": "ej: tipo recurrencia",
         "codigoabreviacion": "código abreviación",
         "placeholder_codigoabreviacion": "ej: codigo abreviacion",
@@ -589,7 +590,8 @@
         "creditos": "Créditos",
         "clasificacion": "Clasificación",
         "tooltip_ver_registro": "Ver",
-        "tooltip_editar_registro": "Editar"
+        "tooltip_editar_registro": "Editar",
+        "tooltip_descargar": "Descargar"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -691,7 +693,6 @@
         "ISBN": "ISBN",
         "editorial": "Nombre editorial",
         "titulo_libro": "Título del libro",
-        "titulo_revista": "Nombre de la revista",
         "URL": "URL",
         "DOI": "DOI",
         "idioma_traduccion":"Idioma de traducción",
@@ -1331,6 +1332,8 @@
         "aspirante": "Aspirantes",
         "nota": "NOTA",
         "aviso": "El puntaje para cada item a evaluar corresponde a un valor entre 0 y 100 puntos",
+        "aviso_no_edicion": "Una vez asignados los ítems para el aspirante no será posible editarlos",
+        "aviso_sub": "Recuerde asignar los porcentajes por subcriterio al seleccionar el criterio en la tabla",
         "criterio": "Criterio",
         "subCriterio": "SubCriterio",
         "porcentaje": "Porcentaje",
@@ -1382,7 +1385,11 @@
         "tooltip_crear": "Crear criterio",
         "tooltip_ver_registro": "Ver",
         "tooltip_cancelar": "Cancelar",
-        "tooltip_guargar": "Guardar"
+        "tooltip_guargar": "Guardar",
+        "criterios_proyectos": "Criterios por proyecto académico",
+        "evaluacion_aspirantes": "Evaluación de aspirantes",
+        "listar_aspirantes": "Listar aspirantes",
+        "cupos_proyectos": "Asignación de cupos por proyecto académico"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

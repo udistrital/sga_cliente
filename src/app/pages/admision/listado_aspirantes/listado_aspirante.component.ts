@@ -80,7 +80,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     private inscripcionService: InscripcionService,
     private tercerosService: TercerosService,
     private toasterService: ToasterService,
-    private evaluacionService: EvaluacionInscripcionService,) {
+    private evaluacionService: EvaluacionInscripcionService) {
     this.settings_emphasys = {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -120,6 +120,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         },
         NotaFinal: {
           title: this.translate.instant('GLOBAL.Puntaje'),
+          sort: true,
+          sortDirection: 'desc',
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
@@ -182,7 +184,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      }
+      },
     );
   }
 
@@ -269,33 +271,31 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.source_emphasys = new LocalDataSource();
     this.Aspirantes = [];
 
-    this.inscripcionService.get('inscripcion?query=ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=Id&order=asc').subscribe(
+    this.inscripcionService.get('inscripcion?query=ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=NotaFinal&order=desc').subscribe(
       (res: any) => {
         const r = <any>res
         if (res !== '[{}]') {
           if (r !== null && r.Type !== 'error') {
             this.loading = false;
-            r.sort((puntaje_mayor, puntaje_menor) => puntaje_menor.NotaFinal - puntaje_mayor.NotaFinal)
             const data = <Array<any>>r;
             // this.source_emphasys.load(data);
             data.forEach(element => {
               if (element.PersonaId != undefined) {
                 this.tercerosService.get('tercero/' + element.PersonaId).subscribe(
                   (res: any) => {
-                    var aspiranteAux = {
+                    let aspiranteAux = {
                       NumeroDocumento: res.Id,
                       NombreAspirante: res.NombreCompleto,
                       NotaFinal: element.NotaFinal,
                       TipoInscripcionId: element.TipoInscripcionId,
-                      EstadoInscripcionId: element.EstadoInscripcionId
+                      EstadoInscripcionId: element.EstadoInscripcionId,
                     }
                     this.Aspirantes.push(aspiranteAux);
                     this.source_emphasys.load(this.Aspirantes);
                   },
                   error => {
                     this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-
-                  }
+                  },
                 );
               }
             });
@@ -310,7 +310,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       },
       (error: HttpErrorResponse) => {
         Swal.fire({
-          icon:'error',
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('GLOBAL.actualizar') + '-' +

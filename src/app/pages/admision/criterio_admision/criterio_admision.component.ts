@@ -188,6 +188,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   //         });
   //   });
   // }
+
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
       this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
@@ -208,7 +209,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
           });
     });
   }
-
 
   setPercentage_info(number, tab) {
     console.info(number)
@@ -237,9 +237,58 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     }
   }
 
+  limpiarDatos() {
+    this.criterios.forEach(criterio => {
+      criterio['Porcentaje'] = 0
+      criterio.Subcriterios.forEach(sub => {
+        sub['Porcentaje'] = 0
+      });
+    })
+  }
 
   activeCriterios() {
     this.selectcriterio = false;
+    this.criterio_selected = [];
+    this.limpiarDatos()
+
+    this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:' + this.proyectos_selected +
+      ',PeriodoId:' + this.periodo.Id).subscribe(response => {
+        const r = <any>response;
+        if (r[0].Id !== undefined && r[0] !== '{}' && r.Type !== 'error') {
+          r.forEach(element => {
+            const criterio_aux = this.criterios.find(e => e.Id === element.RequisitoId.Id)
+            const subcriterios_aux = JSON.parse(element.PorcentajeEspecifico).areas
+            criterio_aux['Porcentaje'] = element.PorcentajeGeneral
+
+            criterio_aux.Subcriterios.forEach(sub => {
+              if (subcriterios_aux != undefined) {
+                subcriterios_aux.forEach(sub_aux => {
+                  if (sub_aux.Id === sub.Id) {
+                    sub['Porcentaje'] = parseInt(sub_aux['Porcentaje'], 10)
+                  }
+                });
+              }
+            });
+            this.criterio_selected.push(criterio_aux)
+          });
+
+          this.Campo2Control = new FormControl(this.criterio_selected)
+          this.viewtab();
+        } else {
+          this.criterio_selected = []
+          this.Campo2Control = new FormControl(this.criterio_selected)
+          // this.viewtab();
+          this.selectTipo = false
+        }
+      },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+        },
+      );
+
+    if (this.criterio_selected.length === 0) {
+      this.selectTipo = false
+    }
   }
 
   loadProyectos() {
@@ -261,6 +310,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
         });
       });
   }
+
   loadCriterios() {
     this.evaluacionService.get('requisito/?query=Activo:true&limit=0')
       .subscribe(res => {
@@ -268,10 +318,14 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
         if (res !== null && r.Type !== 'error') {
           this.criterios = <Criterio[]>res.filter(c => c['RequisitoPadreId'] === null);
           this.criterios.forEach(criterio => {
+            criterio['Porcentaje'] = 0
             this.admisiones.get('requisito?limit=0&query=Activo:true,RequisitoPadreId.Id:' + criterio.Id).subscribe(
               (response: any) => {
                 if (response.length > 0 && Object.keys(response[0]).length > 0) {
                   criterio.Subcriterios = <Criterio[]>response;
+                  criterio.Subcriterios.forEach(sub => {
+                    sub['Porcentaje'] = 0
+                  });
                 } else {
                   criterio.Subcriterios = [];
                 }
@@ -295,6 +349,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
           });
         });
   }
+
   useLanguage(language: string) {
     this.translate.use(language);
   }
@@ -322,25 +377,33 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-
   }
-
-
 
   viewtab() {
     console.info('Tipo criterio')
-    console.info(this.criterio_selected)
-    // this.selectTipoIcfes = false;
-    // this.selectTipoEntrevista = false;
-    // this.selectTipoPrueba = false;
-    this.selectTipo = true
-    this.data = [];
-    this.dataSource = new LocalDataSource();
-    for (let i = 0; i < this.criterio_selected.length; i++) {
-      this.createTable(this.criterio_selected[i]);
-      this.selectTipoIcfes = true;
+    console.info(typeof (this.criterio_selected[0]))
+    if (this.criterio_selected === []) {
+      this.Campo2Control = new FormControl(this.criterio_selected)
+      this.selectTipo = false
+    } else {
+      console.info(this.criterio_selected)
+      // Porcentaje: element.PorcentajeGeneral,
+      this.criterio_selected.forEach(criterio => {
+        criterio['Criterio'] = criterio.Nombre
+        criterio['Porcentaje'] = criterio.Porcentaje
+        criterio.Subcriterios.forEach(subcriterio => {
+          subcriterio['Porcentaje'] = subcriterio.Porcentaje
+        });
+      })
+      this.selectTipo = true
+      this.data = [];
+      this.dataSource = new LocalDataSource();
+      for (let i = 0; i < this.criterio_selected.length; i++) {
+        this.createTable(this.criterio_selected[i]);
+        this.selectTipoIcfes = true;
+      }
+      this.calcularPorcentaje();
     }
-    this.calcularPorcentaje();
   }
 
   createSubCriterios(subcriterios: any) {
@@ -349,7 +412,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       this.dataSubcriterios.push({
         Id: subcriterios[i].Id,
         Criterio: subcriterios[i].Nombre,
-        Porcentaje: 0,
+        Porcentaje: subcriterios[i].Porcentaje,
+        CodigoAbreviacion: subcriterios[i].CodigoAbreviacion,
       });
     }
   }
@@ -358,9 +422,10 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     this.data.push({
       Id: criterio.Id,
       Criterio: criterio.Nombre,
-      Porcentaje: 0,
+      Porcentaje: criterio.Porcentaje,
       Subcriterios: criterio.Subcriterios,
     });
+
     this.dataSource.load(this.data);
     this.settings = {
       columns: {
@@ -392,16 +457,13 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       },
       edit: {
         editButtonContent:
-          '<i class="nb-edit" title="' +
-          this.translate.instant('admision.tooltip_editar') +
+          '<i class="nb-edit" title="' + this.translate.instant('admision.tooltip_editar') +
           '"></i>',
         saveButtonContent:
-          '<i class="nb-checkmark" title="' +
-          this.translate.instant('admision.tooltip_guargar') +
+          '<i class="nb-checkmark" title="' + this.translate.instant('admision.tooltip_guargar') +
           '"></i>',
         cancelButtonContent:
-          '<i class="nb-close" title="' +
-          this.translate.instant('admision.tooltip_cancelar') +
+          '<i class="nb-close" title="' + this.translate.instant('admision.tooltip_cancelar') +
           '"></i>',
       },
     }
@@ -473,7 +535,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
               '"></i>',
           },
         }
-        // }
       } else {
         this.dataSubcriterios.push({});
       }
@@ -509,7 +570,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       this.popUpManager.showErrorToast(this.translate.instant('admision.porcentajeIncompleto'));
     } else {
 
-      this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:' + this.proyectos_selected + ',PeriodoId:' + this.periodo.Id + ',Activo:true&limit=0')
+      this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:'
+        + this.proyectos_selected + ',PeriodoId:' + this.periodo.Id + ',Activo:true&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Type !== 'error') {
@@ -519,7 +581,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
                 for (let i = 0; i < res.length; i++) {
                   if (this.requisitoId == r[i].RequisitoId.Id) {
                     const requisitoPut = r[i];
-                    //for recorrer subcriterios
+                    // for recorrer subcriterios
                     // let PorcentajeEspecifico = [];
                     const objectConcat = [{}];
                     for (let i = 0; i < this.dataSubcriterios.length; i++) {
@@ -529,8 +591,10 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
                       //   Abreviación: ""
                       // });
                       const object = {};
-                      object[this.dataSubcriterios[i].Criterio] = this.dataSubcriterios[i].Porcentaje;
-                      object['Abreviación'] = '';
+                      object['Id'] = this.dataSubcriterios[i].Id
+                      object['Nombre'] = this.dataSubcriterios[i].Criterio
+                      object['Porcentaje'] = this.dataSubcriterios[i].Porcentaje;
+                      object['Abreviación'] = this.dataSubcriterios[i].CodigoAbreviacion;
 
                       objectConcat[i] = object;
                     }
@@ -566,7 +630,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       this.popUpManager.showErrorToast(this.translate.instant('admision.porcentajeIncompleto'));
     } else {
 
-      this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:' + this.proyectos_selected + ',PeriodoId:' + this.periodo.Id + ',Activo:true&limit=0')
+      this.evaluacionService.get('requisito_programa_academico?query=ProgramaAcademicoId:' +
+        this.proyectos_selected + ',PeriodoId:' + this.periodo.Id + ',Activo:true&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Type !== 'error') {
@@ -574,7 +639,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
               for (let j = 0; j < this.dataSource.data.length; j++) {
                 let existe = false;
 
-                for (let i = 0; i < res.length; i++) {
+                for (let i = 0; i < r.length; i++) {
                   if (this.dataSource.data[j].Id == r[i].RequisitoId.Id) {
                     var requisitoPut = r[i];
                     requisitoPut.PorcentajeGeneral = +this.dataSource.data[j].Porcentaje;
@@ -584,10 +649,10 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
                 }
 
                 if (!existe) {
-                  //post
+                  // post
                   this.requisitoPost(j);
                 } else {
-                  //put
+                  // put
                   this.requisitoPut(requisitoPut);
                 }
 

@@ -11,7 +11,12 @@
         <nb-card>
             <nb-card-body>
 
-                <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                <ng2-smart-table [settings]="settings"
+                                 [source]="source"
+                                 (custom)="onAction($event)">
+                </ng2-smart-table>
+
+                <!-- <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
                     <ng-container matColumnDef="Id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'consultaproyecto.id' | translate }}</mat-header-cell>
                         <mat-cell *matCellDef="let row; let i = index" class="text-capitalize"> {{row.Id}} </mat-cell>
@@ -37,7 +42,6 @@
                         <mat-cell *matCellDef="let row">
                             <button mat-button type="button" (click)="downloadFile(row.EnlaceActo)">
                                 <mat-icon>cloud_download</mat-icon>
-                                <!--span>Select</span-->
                             </button>
                         </mat-cell>
                     </ng-container>
@@ -65,7 +69,7 @@
 
                     <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="highlight(row,$event)"></mat-row>
-                </mat-table>
+                </mat-table>  -->
 
 
             </nb-card-body>

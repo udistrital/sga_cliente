@@ -1,0 +1,203 @@
+@import '../../@theme/styles/themes';
+@include nb-install-component() {
+    ::ng-deep .mat-input-element::placeholder {
+        color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+    }
+    ::ng-deep .mat-input-placeholder {
+        color: nb-theme(color-fg-text);
+    }
+    ::ng-deep .mat-select-value {
+        color: nb-theme(color-fg-text);
+    }
+    ::ng-deep .mat-select-placeholder {
+        color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+    }
+    ::ng-deep .mat-form-field-underline {
+        background-color: nb-theme(form-control-border-color);
+    }
+    nb-card-body {
+        overflow: visible;
+    }
+    legend {
+        padding: 10px;
+    }
+    nb-card {
+        padding: 1rem;
+    }
+    .fieldseter {
+        display: flow-root;
+        -moz-padding-start: 1rem;
+        -moz-padding-end: 1rem;
+        -moz-padding-after: 1rem;
+        -webkit-margin-start: 1rem;
+        -webkit-margin-end: 1rem;
+        -webkit-padding-before: 1rem;
+        -webkit-padding-start: 1rem;
+        -webkit-padding-end: 1rem;
+        -webkit-padding-after: 1rem;
+        min-width: -moz-min-content;
+        border-width: 2px;
+        border-radius: 0.4rem;
+        border-style: groove;
+        border-color: nb-theme(color-success);
+        @include nb-for-theme(cosmic) {
+            border-color: nb-theme(color-primary);
+        }
+    }
+    img {
+      cursor: pointer;
+    }
+    ngb-rating {
+      outline: none;
+    }
+    ngb-rating i {
+      color: nb-theme(color-success);
+      @include nb-for-theme(cosmic) {
+          color: nb-theme(color-primary);
+      }
+    }
+
+}
+
+.mat-button {
+    background-color: rgb(0, 162, 255);
+    color: #fff;
+}
+
+.mat-button:disabled,
+.mat-button[disabled] {
+    background-color: rgb(0, 123, 194) !important;
+    color: #ddd !important;
+}
+
+:host ::ng-deep ng2-st-tbody-edit-delete {
+    display: flex !important;
+    height: 0 !important;
+}
+
+:host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
+    display: inline-block;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+:host ::ng-deep ng2-st-tbody-custom {
+    display: flex;
+    justify-content: space-around;
+}
+
+:host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+    color: #5dcfe3;
+    i.nb-trash:hover {
+        color: #b5261b;
+    }
+}
+
+:host ::ng-deep .nb-theme-default ng2-smart-table table tr td {
+  font-size: 0.95rem;
+}
+
+:host ::ng-deep .nb-theme-default ng2-smart-table table th {
+  padding-right: 0.725rem
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.mat-column-Id {
+  flex: 0 0 50px;
+}
+
+.mat-column-NombreFacultad {
+  flex: 0 0 150px;
+  justify-content:center;
+}
+.mat-column-proyecto {
+  flex: 0 0 150px;
+  justify-content:center;
+}
+
+.mat-column-Nivel-Proyecto {
+  flex: 0 0 100px;
+  justify-content:center;
+}
+
+.mat-column-codigo {
+  flex: 0 0 100px;
+  justify-content:center;
+}
+
+.mat-column-OfertaLetra {
+  flex: 0 0 100px;
+  justify-content:center;
+}
+
+.mat-column-FechaVenimientoAcreditacion {
+  flex: 0 0 110px;
+  justify-content:center;
+}
+
+.mat-column-FechaVenimientoCalidad {
+  flex: 0 0 110px;
+  justify-content:center;
+}
+
+.mat-column-Consulta {
+  flex: 0 0 80px;
+  justify-content:center;
+}
+
+.mat-column-editar {
+  flex: 0 0 80px;
+  justify-content:center;
+}
+
+.mat-column-inhabilitar {
+  flex: 0 0 80px;
+  justify-content:center;
+}
+
+.example-header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-table {
+  overflow: auto;
+}
+
+.mat-row, .mat-header-row {
+  justify-content: space-around;
+}
+
+.mat-row:nth-child(even) {
+  background-color: rgb(255, 255, 255);
+}
+
+.mat-row:nth-child(odd) {
+  background-color: rgb(255, 255, 255);
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.encabezado {
+  background-color: rgb(220, 221, 238);
+}
+
+.explicacion {
+  font-size: 12pt;
+}
+
+.titulo {
+  font-size: 16pt;
+}

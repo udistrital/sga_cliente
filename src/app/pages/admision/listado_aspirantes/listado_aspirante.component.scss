@@ -11,12 +11,11 @@
   /deep/ .mat-select-value {
     color: nb-theme(color-fg-text);
   }
-  
+
   .mat-button, .mat-raised-button {
     background-color:rgb(0, 162, 255);
     color: #fff;
   }
-
 
   /deep/ .mat-select-placeholder {
     color: transparentize($color: nb-theme(color-fg-text), $amount: 0.6);
@@ -25,22 +24,17 @@
   /deep/ .mat-form-field-underline {
     background-color: nb-theme(form-control-border-color);
   }
-  nb-card-body{
-    overflow: visible;
+
+  nb-card-header{
+    font-size: 1rem;
   }
 
-  .input-group {
-    margin-bottom: 1rem;
-  }
-
-  legend {
-    padding: 10px;
-  }
   .dinamic-form {
     background-color: nb-theme(color-bg);
     color: nb-theme(card-fg-heading);
     padding: 1rem;
   }
+
   nb-card {
     padding: 1rem;
   }
@@ -50,14 +44,12 @@
     -moz-padding-start: 1rem;
     -moz-padding-end: 1rem;
     -moz-padding-after: 1rem;
-
     -webkit-margin-start: 1rem;
     -webkit-margin-end: 1rem;
     -webkit-padding-before: 1rem;
     -webkit-padding-start: 1rem;
     -webkit-padding-end: 1rem;
     -webkit-padding-after: 1rem;
-
     min-width: -moz-min-content;
     border-width: 2px;
     border-radius: 0.4rem;
@@ -67,7 +59,26 @@
         border-color: nb-theme(color-primary);
     }
   }
+
   img {
     cursor: pointer;
   }
+}
+
+.mat-expansion-panel-body{
+  overflow: auto;
+}
+
+.mat-expansion-panel-header {
+    border-bottom-style: solid;
+    border-bottom-color: rgb(156, 220, 255);
+    border-bottom-width: thin;
+}
+
+.exp-card {
+    align-content: center;
+    cursor: pointer;
+    width: 13.5rem;
+    height: 14.5rem;
+    transition: background-color 1s;
 }

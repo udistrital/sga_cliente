@@ -256,15 +256,16 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
       if (data) {
         this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
           (documento: Documento) => {
+            this.showProfile = true
             documento.Metadatos = JSON.stringify(data);
             this.documentoService.put('documento', documento).subscribe(
               response => {
-                this.popUpManager.showSuccessAlert(this.translate.instant('admision.revision_guardada'))
+                this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'))
                 if (!data.aprobado && data.observacion !== '') {
                   // llamar funcion que envia correo con la observacion
                   // enviarCorreo(data.observacion);
                   const correo = JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).email;
-                  if (correo != undefined) {
+                  if (correo !== undefined) {
                     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                     this.invitacionTemplate.Fecha = new Date().toLocaleDateString('es-CO', options);
                     this.invitacionTemplate.ContenidoProduccion = this.makeHtmlTemplate(data);
@@ -278,6 +279,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                     this.sendCorreo();
                   }
                 }
+                this.showProfile = false
               },
               error => {
                 this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
@@ -296,7 +298,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     this.googleMidService.post('notificacion', this.invitacion)
       .subscribe((res: any) => {
           Swal.fire({
-            title: `Éxito al Enviar Observación.`,
+            title: `Éxito al enviar observación.`,
           });
           this.invitacion.to = [];
           this.invitacion.templateData = null;
