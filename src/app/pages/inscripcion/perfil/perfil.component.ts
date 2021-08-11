@@ -62,7 +62,6 @@ export class PerfilComponent implements OnInit {
     this.en_revision = this.en_revision.toString() === 'true';
   }
 
-<<<<<<< HEAD
   ifFinishLoaded(event) {
     const finishLoaded = new Promise((resolve, reject) => {
       interval(1000)
@@ -90,18 +89,6 @@ export class PerfilComponent implements OnInit {
           this.imprimir = false;
           this.loading = false;
         })
-=======
-  activarImprimir(event: boolean) {
-    if (this.imprimir && event) {
-      setTimeout(() => this.generarComprobante()
-      .then(() => {
-        console.info('entra aca')
-        this.imprimir = false;
-        this.loading = false;
-      }), 500);
-    } else {
-      this.loading = false;
->>>>>>> 661a5d8bd0674b7701b7144db276fc01cfc17673
     }
 
   }
