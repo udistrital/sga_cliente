@@ -65,7 +65,7 @@ steps:
     sonar_token:
       from_secret: SONAR_TOKEN
     ver: 1.0
-    exclusions: "**/node_modules/**,**/*.spec.ts,documentation/"
+    exclusions: "**/node_modules/**,**/*.spec.ts,documentation/**"
   when:
     branch:
     - develop
