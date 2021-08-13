@@ -304,7 +304,7 @@
                     <div class=" form-group">
                         <!-- input -->
                         <mat-form-field *ngSwitchCase="'input'" style="width: 100%;" class="form-group"
-                            floatLabel="always" [hidden]= "c.ocultar">
+                            floatLabel="always" [hidden]="c.ocultar">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <input matInput [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" type="{{c.tipo}}" id="{{c.nombre}}"
@@ -324,8 +324,8 @@
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
                         </mat-form-field>
 
-                            <!-- input log 1 -->
-                            <mat-form-field *ngSwitchCase="'inputLog1'" style="width: 100%;" class="form-group"
+                        <!-- input log 1 -->
+                        <mat-form-field *ngSwitchCase="'inputLog1'" style="width: 100%;" class="form-group"
                             floatLabel="always">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <input matInput [(ngModel)]="c.valor" (ngModelChange)="validlog1(c)"
@@ -384,7 +384,8 @@
                         </mat-form-field>
 
                         <!-- select -->
-                        <mat-form-field *ngSwitchCase="'select'" style="width: 100%;" floatLabel="always" [hidden]= "c.ocultar">
+                        <mat-form-field *ngSwitchCase="'select'" style="width: 100%;" floatLabel="always"
+                            [hidden]="c.ocultar">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <mat-select [placeholder]="c.valor?(c.key?c.valor[c.key]:c.valor|json):c.placeholder"
                                 [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
@@ -397,8 +398,8 @@
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
                         </mat-form-field>
 
-                        <!-- select multiple-->
-                        <mat-form-field *ngSwitchCase="'selectmultiple'" style="width: 100%;" floatLabel="always" >
+                        <!-- select multiple -->
+                        <mat-form-field *ngSwitchCase="'selectmultiple'" style="width: 100%;" floatLabel="always">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <mat-select [placeholder]="c.valor?(c.key?c.valor[c.key]:c.valor|json):c.placeholder"
                                 [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
@@ -407,6 +408,24 @@
                                     {{c.key?item[c.key]:item | json}}
                                 </mat-option>
                             </mat-select>
+                            <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
+                        </mat-form-field>
+
+                        <!-- auto complete-->
+                        <mat-form-field *ngSwitchCase="'autocomplete'" style="width: 100%;" floatLabel="always"
+                            class="example-full-width">
+                            <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
+                            <input matInput type="text"
+                                [placeholder]="c.valor?(c.key?c.valor[c.key]:c.valor|json):c.placeholder"
+                                aria-label="Number" [matAutocomplete]="auto"
+                                (keyup)="searchTerm$.next({text: $event.target.value, path: c.path, query: c.query, field: c, keyToFilter: c.keyToFilter})">
+                            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                [displayWith]="displayWithFn"
+                                (optionSelected)="setNewValue({element: $event, field: c})">
+                                <mat-option *ngFor="let item of c.opciones" [value]="item">
+                                    {{c.key?item[c.key]:item | json}}
+                                </mat-option>
+                            </mat-autocomplete>
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
                         </mat-form-field>
 

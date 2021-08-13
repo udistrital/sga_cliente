@@ -1,3 +1,5 @@
+import { environment } from "../../../../environments/environment"
+
 export let FORM_EXPERIENCIA_LABORAL = {
   tipo_formulario: 'mini',
   alertas: true,
@@ -129,11 +131,14 @@ export let FORM_EXPERIENCIA_LABORAL = {
       opciones: [],
     },
     {
-      etiqueta: 'select',
+      etiqueta: 'autocomplete',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'Cargo',
       label_i18n: 'cargo',
       placeholder_i18n: 'cargo',
+      path: environment.EXPERIENCIA_SERVICE,
+      query: "cargo/?limit=0&query=Activo:true,Nombre__icontains:ROLE_TEXT_HERE&order=asc&sortby=Nombre&fields=Id,Nombre",
+      keyToFilter: 'ROLE_TEXT_HERE',
       requerido: true,
       tipo: 'text',
       key: 'Nombre',
