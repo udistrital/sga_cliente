@@ -99,7 +99,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     this.listService.findPais();
     this.listService.findTipoDedicacion();
     this.listService.findTipoVinculacion();
-    this.listService.findCargo();
+    //this.listService.findCargo();
     this.loadLists();
   }
 
@@ -116,7 +116,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   }
 
   construirForm() {
-    // this.formInfoExperienciaLaboral.titulo = this.translate.instant('GLOBAL.experiencia_laboral');
+    this.formInfoExperienciaLaboral.titulo = this.translate.instant('GLOBAL.experiencia_laboral');
     this.formInfoExperienciaLaboral.btn = this.translate.instant('GLOBAL.guardar');
     this.formInfoExperienciaLaboral.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
     for (let i = 0; i < this.formInfoExperienciaLaboral.campos.length; i++) {
