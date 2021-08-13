@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild } from '@angular/core';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
+import { AnyService } from '../../../@core/data/any.service';
 
 @Component({
   selector: 'ngx-dinamicform',
@@ -20,16 +23,54 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() interlaced: EventEmitter<any> = new EventEmitter();
   @Output() percentage: EventEmitter<any> = new EventEmitter();
   data: any;
+  searchTerm$ = new Subject<any>();
   @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
-
-  constructor(private sanitization: DomSanitizer) {
+  init: boolean;
+  constructor(
+    private sanitization: DomSanitizer,
+    private anyService: AnyService,
+      ) {
     this.data = {
       valid: true,
       data: {},
       percentage: 0,
       files: [],
     };
+
+    this.searchTerm$
+      .pipe(
+        debounceTime(700),
+        distinctUntilChanged(),
+        filter(data => (data.text).length > 3),
+        switchMap(({text, path, query,keyToFilter, field}) => this.searchEntries(text, path, query, keyToFilter, field)),
+      ).subscribe((response:any) => {
+        const fieldAutocomplete = this.normalform.campos.filter((field)=>(field.nombre  === response.options.field.nombre));
+        fieldAutocomplete[0].opciones = response.queryOptions;
+      });
   }
+
+  displayWithFn(field){
+    return field?field.Nombre:'';
+  }
+
+  setNewValue({element, field}){
+    field.valor = element.option.value;
+    this.validCampo(field);
+  }
+
+  searchEntries(text, path, query, keyToFilter, field){
+
+    const channelOptions = new BehaviorSubject<any>({field: field});
+    const options$ = channelOptions.asObservable();
+    const queryOptions$ = this.anyService.get(path, query.replace(keyToFilter, text))
+    return combineLatest([options$, queryOptions$]).pipe(
+      map(([options$, queryOptions$]) => ({
+        options: options$, 
+        queryOptions: queryOptions$,
+      }))
+    );
+  }
+
 
   ngOnChanges(changes) {
     if (changes.normalform !== undefined) {
@@ -58,7 +99,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
                       break;
                     case 'select':
                       if (element.hasOwnProperty('opciones')) {
-                        if(element.opciones != undefined){
+                        if (element.opciones != undefined) {
                           element.opciones.forEach((e1) => {
                             if (this.modeloData[i].Id !== null || this.modeloData[i].Id !== undefined) {
                               if (e1.Id === this.modeloData[i].Id) {
@@ -88,11 +129,13 @@ export class DinamicformComponent implements OnInit, OnChanges {
         }
       }
     }
-    if (changes.clean !== undefined) {
+    if (changes.clean !== undefined && this.init) {
       this.clearForm();
       this.clean = false;
     }
   }
+
+
 
   download(url, title, w, h) {
     const left = (screen.width / 2) - (w / 2);
@@ -144,6 +187,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     }
   }
   ngOnInit() {
+    this.init = true;
     if (!this.normalform.tipo_formulario) {
       this.normalform.tipo_formulario = 'grid';
     }
@@ -173,7 +217,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     }
     if (c.requerido && ((c.valor === '' && c.etiqueta !== 'file') || c.valor === null || c.valor === undefined ||
       (JSON.stringify(c.valor) === '{}' && c.etiqueta !== 'file') || JSON.stringify(c.valor) === '[]')
-      || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && c.urlTemp === undefined)) 
+      || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && c.urlTemp === undefined))
       || ((c.etiqueta === 'file' && c.valor.name === null) && (c.etiqueta === 'file' && c.urlTemp === null))) {
       c.alerta = '** Debe llenar este campo';
       c.clase = 'form-control form-control-danger';
@@ -227,11 +271,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
       }
 
     }
-/*  if (!this.normalform.btn) {
-      if (this.validForm().valid) {
-        this.resultSmart.emit(this.validForm());
-      }
-    } */
+    /*  if (!this.normalform.btn) {
+          if (this.validForm().valid) {
+            this.resultSmart.emit(this.validForm());
+          }
+        } */
     c.clase = 'form-control form-control-success';
     c.alerta = '';
     return true;
@@ -285,8 +329,9 @@ export class DinamicformComponent implements OnInit, OnChanges {
     }
 
     this.result.emit(this.data);
+    console.log(this.data);
     if (this.data.valid)
-    this.percentage.emit(this.data.percentage);
+      this.percentage.emit(this.data.percentage);
     return this.data;
   }
 
@@ -322,5 +367,9 @@ export class DinamicformComponent implements OnInit, OnChanges {
 
   isEqual(obj1, obj2) {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
+  }
+
+  ngOnDestroy() {
+    this.clearForm();
   }
 }
