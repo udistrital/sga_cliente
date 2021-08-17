@@ -42,15 +42,15 @@ export class DinamicformComponent implements OnInit, OnChanges {
         debounceTime(700),
         distinctUntilChanged(),
         filter(data => (data.text).length > 3),
-        switchMap(({text, path, query,keyToFilter, field}) => this.searchEntries(text, path, query, keyToFilter, field)),
-      ).subscribe((response:any) => {
-        const fieldAutocomplete = this.normalform.campos.filter((field)=>(field.nombre  === response.options.field.nombre));
+        switchMap(({ text, path, query, keyToFilter, field }) => this.searchEntries(text, path, query, keyToFilter, field)),
+      ).subscribe((response: any) => {
+        const fieldAutocomplete = this.normalform.campos.filter((field) => (field.nombre === response.options.field.nombre));
         fieldAutocomplete[0].opciones = response.queryOptions;
       });
   }
 
   displayWithFn(field){
-    return field?field.Nombre:'';
+    return field ? field.Nombre : '';
   }
 
   setNewValue({element, field}){
@@ -65,9 +65,9 @@ export class DinamicformComponent implements OnInit, OnChanges {
     const queryOptions$ = this.anyService.get(path, query.replace(keyToFilter, text))
     return combineLatest([options$, queryOptions$]).pipe(
       map(([options$, queryOptions$]) => ({
-        options: options$, 
+        options: options$,
         queryOptions: queryOptions$,
-      }))
+      })),
     );
   }
 
@@ -217,8 +217,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
     }
     if (c.requerido && ((c.valor === '' && c.etiqueta !== 'file') || c.valor === null || c.valor === undefined ||
       (JSON.stringify(c.valor) === '{}' && c.etiqueta !== 'file') || JSON.stringify(c.valor) === '[]')
-      || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && c.urlTemp === undefined))
-      || ((c.etiqueta === 'file' && c.valor.name === null) && (c.etiqueta === 'file' && c.urlTemp === null))) {
+      || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && (c.urlTemp === undefined || c.urlTemp === '')))
+      || ((c.etiqueta === 'file' && c.valor.name === null) && (c.etiqueta === 'file' && (c.urlTemp === null || c.urlTemp === '')))) {
       c.alerta = '** Debe llenar este campo';
       c.clase = 'form-control form-control-danger';
       return false;
@@ -329,7 +329,6 @@ export class DinamicformComponent implements OnInit, OnChanges {
     }
 
     this.result.emit(this.data);
-    console.log(this.data);
     if (this.data.valid)
       this.percentage.emit(this.data.percentage);
     return this.data;
