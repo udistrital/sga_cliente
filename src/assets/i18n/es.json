@@ -122,7 +122,8 @@
         "solicitud": {
             "solicitud": "Actualización de datos",
             "actualizacion_datos": "Solicitud de actualización\nde identificación",
-            "actualizacion_nombres": "Solicitud de actualización\nde nombres"
+            "actualizacion_nombres": "Solicitud de actualización\nde nombres",
+            "actualizacion" : "Solicitudes de actualización\nde datos"
         },
         "practicas_academicas": {
             "practicas_academicas": "Prácticas académicas",
@@ -137,6 +138,7 @@
         }
     },
     "GLOBAL": {
+        "detalle": "Detalle",
         "cargando": "Cargando...",
         "buscar": "Buscar",
         "no_informacion_registrada":"No hay información registrada",
@@ -1590,7 +1592,7 @@
         "observacion": "Observación",
         "solicitud_respuesta": "Respuesta de la solicitud",
         "error": "Ha ocurrido un error inesperado y no se pudo cumplir la solicitud",
-        "no_data": "No hay ninguna solicitud registrada",
+        "no_data": "No existen solicitudes registradas",
         "crear_error": "Ocurrió un error inesperado al enviar la solicitud",
         "crear_exito": "La solicitud se ha enviado correctamente",
         "enviar": "Enviar",
@@ -1626,7 +1628,13 @@
         "nombre_nuevo": "Nuevo nombre",
         "apellido_nuevo": "Nuevo Apellido",
         "soporte_nombre": "Soporte del nuevo nombre",
-        "tooltip_ver_registro": "Ver"
+        "tooltip_ver_registro": "Ver",
+        "consultar_boton": "Consultar solicitudes",
+        "generar_nombre_boton": "Actualizar nombres",
+        "generar_id_boton": "Actualizar identificación",
+        "generar_solicitud": "Generar nueva solicitud",
+        "modificar_solicitud": "Modificar la solicitud",
+        "responder_solicitud": "Dar respuesta a la solicitud"
     },
     "practicas_academicas": {
         "titulo": "Solicitud de práctica Académica",
