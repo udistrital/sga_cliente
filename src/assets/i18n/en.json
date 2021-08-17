@@ -122,7 +122,8 @@
         "solicitud": {
             "solicitud": "Data update",
             "actualizacion_datos": "Updating ID number request",
-            "actualizacion_nombres": "Updating names request"
+            "actualizacion_nombres": "Updating names request",
+            "actualizacion" : "Data update requests"
         },
         "practicas_academicas": {
             "practicas_academicas": "Academic practices",
@@ -137,6 +138,7 @@
         }
     },
     "GLOBAL": {
+        "detalle": "Detail",
         "cargando": "Loading...",
         "buscar": "Search",
         "info": "Warning!",
@@ -1552,7 +1554,7 @@
         "respuesta": "The response to this request has been successfully recorded",
         "doc_valido": "The document sent is approved for this request?",
         "observacion": "Note",
-        "solicitud_respuesta": "Respuesta de la solicitud",
+        "solicitud_respuesta": "Request response",
         "error": "An unexpected error occurred and the request could not be fulfilled",
         "no_data": "There is no registered request",
         "crear_error": "An unexpected error occurred while submitting the request",
@@ -1587,7 +1589,13 @@
         "apellido": "last name",
         "nombre_nuevo": "New name",
         "soporte_nombre": "Support document for the new name",
-        "tooltip_ver_registro": "View"
+        "tooltip_ver_registro": "View",
+        "consultar_boton": "Consult requests",
+        "generar_nombre_boton": "Update name",
+        "generar_id_boton": "Update ID ",
+        "generar_solicitud": "Generate new request",
+        "modificar_solicitud": "Modify the request",
+        "responder_solicitud": "Respond to the request"
     },
     "practicas_academicas": {
         "titulo": "Academic Practice Request",
