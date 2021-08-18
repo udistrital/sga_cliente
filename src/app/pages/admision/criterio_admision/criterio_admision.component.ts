@@ -575,7 +575,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Type !== 'error') {
-            if (res.length > 1) {
+            if (res.length >= 1) {
               for (let j = 0; j < this.dataSource.data.length; j++) {
 
                 for (let i = 0; i < res.length; i++) {
