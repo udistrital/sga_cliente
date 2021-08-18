@@ -26,9 +26,9 @@ export class HeaderComponent {
   username = '';
   userMenu = [{ title: 'ver todas', icon: 'fa fa-list' }];
   public noNotify: any = '0';
-  private autenticacion= new ImplicitAutenticationService;
 
   constructor(private sidebarService: NbSidebarService,
+    private autenticacion: ImplicitAutenticationService,
     private menuService: NbMenuService,
     private analyticsService: AnalyticsService,
     private router: Router,
@@ -74,7 +74,7 @@ export class HeaderComponent {
   }
 
   logout() {
-    this.autenticacion.logout();
+    this.autenticacion.logout('from header');
    // this.liveTokenValue = auth.live(true);
   }
 

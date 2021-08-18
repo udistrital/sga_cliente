@@ -1,34 +1,238 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>SGA</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0">
-    <meta http-equiv="expires" content="0">
-    <meta http-equiv="pragma" content="no-cache">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-  </head>
-  <body>
-    <ngx-app>Loading...</ngx-app>
-    <style>
-      @-webkit-keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-      @-moz-keyframes spin{0%{-moz-transform:rotate(0)}100%{-moz-transform:rotate(360deg)}}
-      @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-      .spinner{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1003;background: #ffffff;background-image: url('../../../../assets/images/preloader.png');background-position: center;background-repeat: no-repeat;overflow:hidden}
-      .spinner div:first-child{display:block;position:relative;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:60%;box-shadow:0 10px 10px 0 rgb(255, 225, 0);transform:translate3d(0,0,0);animation:spin 2s linear infinite}
-      .spinner div:first-child:after,.spinner div:first-child:before{content:'';position:absolute;border-radius:50%}
-      .spinner div:first-child:before{top:5px;left:5px;right:5px;bottom:5px;box-shadow:0 10px 10px 0 rgb(255, 225, 0);-webkit-animation:spin 3s linear infinite;animation:spin 3s linear infinite}
-      .spinner div:first-child:after{top:15px;left:15px;right:15px;bottom:15px;box-shadow:0 10px 10px 0 rgb(255, 0, 0);animation:spin 1.5s linear infinite}
-    </style>
-    <div id="nb-global-spinner" class="spinner">
-      <div class="blob blob-0"></div>
-      <div class="blob blob-1"></div>
-      <div class="blob blob-2"></div>
-      <div class="blob blob-3"></div>
-      <div class="blob blob-4"></div>
-      <div class="blob blob-5"></div>
+
+<head>
+  <meta charset="utf-8">
+  <title>SGA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0">
+  <meta http-equiv="expires" content="0">
+  <meta http-equiv="pragma" content="no-cache">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+  <ngx-app>
+    <div class="cssload-thecube">
+      <div class="cssload-cube cssload-c1"></div>
+      <div class="cssload-cube cssload-c2"></div>
+      <div class="cssload-cube cssload-c4"></div>
+      <div class="cssload-cube cssload-c3"></div>
     </div>
-  </body>
+  </ngx-app>
+  <style>
+    .cssload-thecube {
+      z-index: 1000;
+      width: 14vh;
+      height: 14vh;
+      margin: 0 auto;
+      margin-top: 138px;
+      position: relative;
+      transform: rotateZ(45deg);
+      -o-transform: rotateZ(45deg);
+      -ms-transform: rotateZ(45deg);
+      -webkit-transform: rotateZ(45deg);
+      -moz-transform: rotateZ(45deg);
+    }
+
+    .cssload-thecube .cssload-cube {
+      position: relative;
+      transform: rotateZ(45deg);
+      -o-transform: rotateZ(45deg);
+      -ms-transform: rotateZ(45deg);
+      -webkit-transform: rotateZ(45deg);
+      -moz-transform: rotateZ(45deg);
+    }
+
+    .cssload-thecube .cssload-cube {
+      float: left;
+      width: 50%;
+      height: 50%;
+      position: relative;
+      transform: scale(1.1);
+      -o-transform: scale(1.1);
+      -ms-transform: scale(1.1);
+      -webkit-transform: scale(1.1);
+      -moz-transform: scale(1.1);
+    }
+
+    .cssload-thecube .cssload-cube:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #03678F;
+      animation: cssload-fold-thecube 2.76s infinite linear both;
+      -o-animation: cssload-fold-thecube 2.76s infinite linear both;
+      -ms-animation: cssload-fold-thecube 2.76s infinite linear both;
+      -webkit-animation: cssload-fold-thecube 2.76s infinite linear both;
+      -moz-animation: cssload-fold-thecube 2.76s infinite linear both;
+      transform-origin: 100% 100%;
+      -o-transform-origin: 100% 100%;
+      -ms-transform-origin: 100% 100%;
+      -webkit-transform-origin: 100% 100%;
+      -moz-transform-origin: 100% 100%;
+    }
+
+    .cssload-thecube .cssload-c2 {
+      transform: scale(1.1) rotateZ(90deg);
+      -o-transform: scale(1.1) rotateZ(90deg);
+      -ms-transform: scale(1.1) rotateZ(90deg);
+      -webkit-transform: scale(1.1) rotateZ(90deg);
+      -moz-transform: scale(1.1) rotateZ(90deg);
+    }
+
+    .cssload-thecube .cssload-c3 {
+      transform: scale(1.1) rotateZ(180deg);
+      -o-transform: scale(1.1) rotateZ(180deg);
+      -ms-transform: scale(1.1) rotateZ(180deg);
+      -webkit-transform: scale(1.1) rotateZ(180deg);
+      -moz-transform: scale(1.1) rotateZ(180deg);
+    }
+
+    .cssload-thecube .cssload-c4 {
+      transform: scale(1.1) rotateZ(270deg);
+      -o-transform: scale(1.1) rotateZ(270deg);
+      -ms-transform: scale(1.1) rotateZ(270deg);
+      -webkit-transform: scale(1.1) rotateZ(270deg);
+      -moz-transform: scale(1.1) rotateZ(270deg);
+    }
+
+    .cssload-thecube .cssload-c2:before {
+      animation-delay: 0.35s;
+      -o-animation-delay: 0.35s;
+      -ms-animation-delay: 0.35s;
+      -webkit-animation-delay: 0.35s;
+      -moz-animation-delay: 0.35s;
+    }
+
+    .cssload-thecube .cssload-c3:before {
+      animation-delay: 0.69s;
+      -o-animation-delay: 0.69s;
+      -ms-animation-delay: 0.69s;
+      -webkit-animation-delay: 0.69s;
+      -moz-animation-delay: 0.69s;
+    }
+
+    .cssload-thecube .cssload-c4:before {
+      animation-delay: 1.04s;
+      -o-animation-delay: 1.04s;
+      -ms-animation-delay: 1.04s;
+      -webkit-animation-delay: 1.04s;
+      -moz-animation-delay: 1.04s;
+    }
+
+
+
+    @keyframes cssload-fold-thecube {
+
+      0%,
+      10% {
+        transform: perspective(385px) rotateX(-180deg);
+        opacity: 0;
+      }
+
+      25%,
+      75% {
+        transform: perspective(385px) rotateX(0deg);
+        opacity: 1;
+      }
+
+      90%,
+      100% {
+        transform: perspective(385px) rotateY(180deg);
+        opacity: 0;
+      }
+    }
+
+    @-o-keyframes cssload-fold-thecube {
+
+      0%,
+      10% {
+        -o-transform: perspective(385px) rotateX(-180deg);
+        opacity: 0;
+      }
+
+      25%,
+      75% {
+        -o-transform: perspective(385px) rotateX(0deg);
+        opacity: 1;
+      }
+
+      90%,
+      100% {
+        -o-transform: perspective(385px) rotateY(180deg);
+        opacity: 0;
+      }
+    }
+
+    @-ms-keyframes cssload-fold-thecube {
+
+      0%,
+      10% {
+        -ms-transform: perspective(385px) rotateX(-180deg);
+        opacity: 0;
+      }
+
+      25%,
+      75% {
+        -ms-transform: perspective(385px) rotateX(0deg);
+        opacity: 1;
+      }
+
+      90%,
+      100% {
+        -ms-transform: perspective(385px) rotateY(180deg);
+        opacity: 0;
+      }
+    }
+
+    @-webkit-keyframes cssload-fold-thecube {
+
+      0%,
+      10% {
+        -webkit-transform: perspective(385px) rotateX(-180deg);
+        opacity: 0;
+      }
+
+      25%,
+      75% {
+        -webkit-transform: perspective(385px) rotateX(0deg);
+        opacity: 1;
+      }
+
+      90%,
+      100% {
+        -webkit-transform: perspective(385px) rotateY(180deg);
+        opacity: 0;
+      }
+    }
+
+    @-moz-keyframes cssload-fold-thecube {
+
+      0%,
+      10% {
+        -moz-transform: perspective(385px) rotateX(-180deg);
+        opacity: 0;
+      }
+
+      25%,
+      75% {
+        -moz-transform: perspective(385px) rotateX(0deg);
+        opacity: 1;
+      }
+
+      90%,
+      100% {
+        -moz-transform: perspective(385px) rotateY(180deg);
+        opacity: 0;
+      }
+    }
+  </style>
+
+</body>
+
 </html>

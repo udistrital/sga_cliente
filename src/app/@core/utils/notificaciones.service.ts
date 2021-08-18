@@ -26,13 +26,13 @@ export class NotificacionesService {
 
     private arrayMessagesSubject = new Subject();
     public arrayMessages$ = this.arrayMessagesSubject.asObservable();
-    private autenticacion = new ImplicitAutenticationService;
     timerPing$ = interval(30000);
     roles: any;
 
 
     constructor(
         private confService: ConfiguracionService,
+        private autenticacion: ImplicitAutenticationService,
     ) {
         this.listMessage = [];
         this.notificacion_estado_usuario = []

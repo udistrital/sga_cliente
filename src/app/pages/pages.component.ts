@@ -29,10 +29,10 @@ export class PagesComponent implements OnInit {
   rol: String;
   dataMenu: any;
   roles: any;
-  private autenticacion= new ImplicitAutenticationService;
 
   constructor(
     public menuws: MenuService,
+    private autenticacion: ImplicitAutenticationService,
     private translate: TranslateService) {
     }
 
