@@ -9,6 +9,8 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { ImplicitAutenticationService } from './../@core/utils/implicit_autentication.service';
 import { environment } from '../../environments/environment';
+import { NbSidebarService } from '@nebular/theme';
+import { RouteConfigLoadStart, Router } from '@angular/router';
 
 
 @Component({
@@ -33,7 +35,14 @@ export class PagesComponent implements OnInit {
   constructor(
     public menuws: MenuService,
     private autenticacion: ImplicitAutenticationService,
+    protected sidebarService: NbSidebarService,
+    private router: Router,
     private translate: TranslateService) {
+      router.events.subscribe((event) => {
+        if (event instanceof RouteConfigLoadStart) {
+          this.sidebarService.collapse('menu-sidebar');
+        }
+      });
     }
 
   translateTree(tree: any) {
@@ -140,6 +149,8 @@ export class PagesComponent implements OnInit {
       const roles = (roleUser.concat(roleUserService)).filter((data: any) => (data.indexOf('/') === -1))
       this.getMenu(roles);
     })
+
+    
   }
 
   private translateMenu(): void {
