@@ -37,6 +37,7 @@ export class AsignarCalendarioProyectoComponent implements OnInit {
       return false
     }
   }
+
   ngOnInit() {
     this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
       response => {
