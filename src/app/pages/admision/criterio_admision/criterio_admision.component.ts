@@ -291,13 +291,28 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     }
   }
 
+  filtrarProyecto(proyecto) {
+    if (this.selectednivel === proyecto['NivelFormacionId']['Id']) {
+      return true
+    }
+    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
+      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Id'] === this.selectednivel) {
+        return true
+      }
+    } else {
+      return false
+    }
+  }
+
   loadProyectos() {
     // window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
     this.selectprograma = false;
     this.loading = true;
-    this.projectService.get('proyecto_academico_institucion?limit=0&query=NivelFormacionId.Id:' + this.selectednivel).subscribe(
+    this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
       res => {
-        this.proyectos = <any[]>res;
+        this.proyectos = <any[]>res.filter(
+          proyecto => this.filtrarProyecto(proyecto),
+        );
       },
       (error: HttpErrorResponse) => {
         Swal.fire({

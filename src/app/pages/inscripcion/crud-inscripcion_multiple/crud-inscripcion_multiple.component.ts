@@ -347,15 +347,28 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.loading = false;
   }
 
+  filtrarProyecto(proyecto) {
+    if (this.selectedLevel === proyecto['NivelFormacionId']['Id']) {
+      return true
+    }
+    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
+      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Id'] === this.selectedLevel) {
+        return true
+      }
+    } else {
+      return false
+    }
+  }
+
   onSelectLevel() {
     this.loading = true;
     if (this.selectedLevel === undefined) {
       this.popUpManager.showInfoToast(this.translate.instant('inscripcion.erro_selec_nivel'))
       this.loading = false;
     } else {
-      this.projectService.get('proyecto_academico_institucion?limit=0&fields=Id,Nombre&query=NivelFormacionId.Id:' + this.selectedLevel).subscribe(
+      this.projectService.get('proyecto_academico_institucion?limit=0&fields=Id,Nombre,NivelFormacionId').subscribe(
         response => {
-          this.projects = <any[]>response
+          this.projects = <any[]>response.filter(proyecto => this.filtrarProyecto(proyecto));
           this.loading = false;
           this.validateProject();
         },
