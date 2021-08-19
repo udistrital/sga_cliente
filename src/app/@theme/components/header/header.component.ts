@@ -44,24 +44,22 @@ export class HeaderComponent {
     this.notificacionService.arrayMessages$
       .subscribe((notification: any) => {
         const temp = notification.map((notify: any) => {
-          return { title: notify.Content.Message, icon: 'fa fa-commenting-o'}
+          return { title: notify.Content.Message, icon: 'fa fa-commenting-o' }
         });
         this.userMenu = [...temp.slice(0, 7), ...[{ title: 'ver todas', icon: 'fa fa-list' }]];
       });
-    this.liveToken();
+    this.autenticacion.user$.subscribe((data: any) => {
+      const { user, userService } = data;
+      console.log({ user, userService });
+      this.username = typeof user.email !== 'undefined' ? user.email : typeof userService.email !== 'undefined' ? userService.email : '';
+      this.liveTokenValue = this.username !== '';
+    })
   }
 
   useLanguage(language: string) {
     this.translate.use(language);
   }
 
-  liveToken() {
-    if (this.autenticacion.live()) {
-      this.liveTokenValue = this.autenticacion.live();
-      this.username = (this.autenticacion.getPayload()).sub;
-    }
-    return this.autenticacion.live();
-  }
 
   onContecxtItemSelection(title) {
     if (title === 'ver todas') {
@@ -75,7 +73,7 @@ export class HeaderComponent {
 
   logout() {
     this.autenticacion.logout('from header');
-   // this.liveTokenValue = auth.live(true);
+    // this.liveTokenValue = auth.live(true);
   }
 
   toggleSidebar(): boolean {

@@ -21,9 +21,6 @@ export class LoginComponent implements OnInit {
   }
   ngOnInit(): void {
 
-    this.autenticacion.user$.subscribe((data) => {
-      console.log(data);
-    })
   }
 
 }

@@ -70,72 +70,76 @@ export class PagesComponent implements OnInit {
       return trans;
   }
 
+  getMenu(roles){
+    this.roles = roles
+    const homeOption =  {
+      title: 'dashboard',
+      icon: 'nb-home',
+      url: '#/pages/dashboard',
+      home: true,
+      key: 'dashboard',
+    }
+    this.menu = [homeOption]
+
+    if (this.roles.length === 0){
+      this.roles = 'ASPIRANTE';
+    }
+
+    this.menuws.get(this.roles + '/SGA').subscribe(
+      data => {
+        this.dataMenu = <any>data;
+        this.menu = this.translateTree(this.dataMenu)
+        this.menu.unshift(homeOption);
+        this.translateMenu();
+      },
+      (error: HttpErrorResponse) => {
+
+        if (this.dataMenu === undefined) {
+          Swal.fire({
+            icon: 'info',
+            title: this.translate.instant('ERROR.rol_insuficiente_titulo'),
+            text: this.translate.instant('ERROR.rol_insuficiente'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            onAfterClose: () => {
+              window.location.href =
+                environment.TOKEN.SIGN_OUT_URL +
+                '?id_token_hint=' +
+                window.localStorage.getItem('id_token') +
+                '&post_logout_redirect_uri=' +
+                environment.TOKEN.SIGN_OUT_REDIRECT_URL +
+                '&state=' +
+                window.localStorage.getItem('state');
+            },
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.menu'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        }
+
+        //this.menu = MENU_ITEMS;
+        this.translateMenu();
+      });
+  this.translateMenu();
+  this.translate.onLangChange.subscribe((event: LangChangeEvent) => { // Live reload
+    this.translateMenu();
+  });
+  }
+
 
   ngOnInit() {
-    if (this.autenticacion.live()) {
-      this.roles = (JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).role).filter((data: any) => (data.indexOf('/') === -1));
-      const homeOption =  {
-        title: 'dashboard',
-        icon: 'nb-home',
-        url: '#/pages/dashboard',
-        home: true,
-        key: 'dashboard',
-      }
-      this.menu = [homeOption]
-
-      if (this.roles.length === 0){
-        this.roles = 'ASPIRANTE';
-      }
-
-      this.menuws.get(this.roles + '/SGA').subscribe(
-        data => {
-          this.dataMenu = <any>data;
-          this.menu = this.translateTree(this.dataMenu)
-          this.menu.unshift(homeOption);
-          this.translateMenu();
-        },
-        (error: HttpErrorResponse) => {
-
-          if (this.dataMenu === undefined) {
-            Swal.fire({
-              icon: 'info',
-              title: this.translate.instant('ERROR.rol_insuficiente_titulo'),
-              text: this.translate.instant('ERROR.rol_insuficiente'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              onAfterClose: () => {
-                window.location.href =
-                  environment.TOKEN.SIGN_OUT_URL +
-                  '?id_token_hint=' +
-                  window.localStorage.getItem('id_token') +
-                  '&post_logout_redirect_uri=' +
-                  environment.TOKEN.SIGN_OUT_REDIRECT_URL +
-                  '&state=' +
-                  window.localStorage.getItem('state');
-              },
-            });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.menu'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-          }
-
-          //this.menu = MENU_ITEMS;
-          this.translateMenu();
-        });
-    } else {
-      this.rol = 'PUBLICO';
-      //this.menu = MENU_ITEMS;
-      this.translateMenu();
-    }
-    this.translateMenu();
-    this.translate.onLangChange.subscribe((event: LangChangeEvent) => { // Live reload
-      this.translateMenu();
-    });
+    this.autenticacion.user$.subscribe((data: any)=> {
+      const { user, userService } = data;
+      const roleUser = typeof user.role !== 'undefined' ? user.role: [];
+      const roleUserService = typeof userService.role !== 'undefined' ? userService.role: [];
+      const roles = (roleUser.concat(roleUserService)).filter((data: any) => (data.indexOf('/') === -1))
+      this.getMenu(roles);
+    })
   }
 
   private translateMenu(): void {
