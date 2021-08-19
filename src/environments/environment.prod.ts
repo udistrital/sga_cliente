@@ -24,6 +24,7 @@ export const environment = {
     REDIRECT_URL: 'https://sga.portaloas.udistrital.edu.co',
     SIGN_OUT_URL: 'https://autenticacion.portaloas.udistrital.edu.co/oidc/logout',
     SIGN_OUT_REDIRECT_URL: 'https://sga.portaloas.udistrital.edu.co',
+    AUTENTICACION_MID: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/autenticacion_mid/v1/token/userRol',
   },
   TERCEROS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_crud/v1/',
   PERSONA_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/personas_crud/v1/',
