@@ -25,11 +25,23 @@ export class AsignarCalendarioProyectoComponent implements OnInit {
     this.dialogRef.backdropClick().subscribe(() => this.dialogRef.close());
   }
 
+  filtrarProyecto(proyecto) {
+    if (this.dat.data.Dependencia === proyecto['NivelFormacionId']['Nombre']) {
+      return true
+    }
+    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
+      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Nombre'] === this.dat.data.Dependencia) {
+        return true
+      }
+    } else {
+      return false
+    }
+  }
   ngOnInit() {
     this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
       response => {
         this.projects = (<any[]>response).filter(
-          project => this.dat.data.Dependencia === project['NivelFormacionId']['Descripcion'],
+          proyecto => this.filtrarProyecto(proyecto),
         );
         if (this.dat.calendar.DependenciaId !== '{}') {
           const deps = JSON.parse(this.dat.calendar.DependenciaId);
