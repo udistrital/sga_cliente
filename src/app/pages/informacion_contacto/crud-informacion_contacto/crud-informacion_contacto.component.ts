@@ -102,7 +102,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoResidencia: Array<any> = [];
     if (paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + paisSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId.Id:' + paisSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -171,7 +171,6 @@ export class CrudInformacionContactoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadInformacionContacto();
   }
 
   loadInformacionContacto() {
@@ -179,7 +178,7 @@ export class CrudInformacionContactoComponent implements OnInit {
       this.sgaMidService.get('inscripciones/info_complementaria_tercero/' + this.persona_id)
       .subscribe(res => {
         if (res !== null) {
-          this.info_informacion_contacto = <any>res;
+          this.info_informacion_contacto = <InformacionContacto>res;
           if (this.info_informacion_contacto.PaisResidencia !== null && this.info_informacion_contacto.DepartamentoResidencia !== null
             && this.info_informacion_contacto.CiudadResidencia != null) {
             this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = [this.info_informacion_contacto.PaisResidencia];

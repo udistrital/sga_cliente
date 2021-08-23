@@ -114,6 +114,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
   async loadData() {
     this.loading = true;
     this.soporteDocumento = [];
+    this.percentage = 0;
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
       this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
         (response: any[]) => {
@@ -174,8 +175,8 @@ export class ListDocumentoProgramaComponent implements OnInit {
   ngOnInit() {
     this.uid = 0;
     this.soporteDocumento = [];
-    this.inscripcion = parseInt(sessionStorage.getItem('IdInscripcion'));
-    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'))
+    this.inscripcion = parseInt(sessionStorage.getItem('IdInscripcion'), 10);
+    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
       this.loadData();

@@ -142,11 +142,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   async loadData() {
     this.inscripcion = new Inscripcion();
-    this.inscripcion.Id = parseInt(sessionStorage.getItem('IdInscripcion'));
+    this.inscripcion.Id = parseInt(sessionStorage.getItem('IdInscripcion'), 10);
     this.inscripcion.ProgramaAcademicoId = sessionStorage.getItem('ProgramaAcademico');
-    const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'));
-    const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'))
-    const IdPrograma = parseInt(sessionStorage.getItem('ProgramaAcademicoId'))
+    const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10);
+    const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10)
+    const IdPrograma = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
     // Se carga el nombre del periodo al que se inscribió
     this.loadPeriodo(IdPeriodo);
     // Se carga el tipo de inscripción
@@ -158,16 +158,16 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   loadProject() {
     this.loading = true;
     this.posgrados = new Array;
-    const IdNivel = parseInt(sessionStorage.getItem('IdNivel'));
+    const IdNivel = parseInt(sessionStorage.getItem('IdNivel'), 10);
     this.loading = true;
     this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + IdNivel).subscribe(
       response => {
         const r = <any>response;
         this.loading = false;
-        if (response !== null && response !== '{}' && r.Type !== 'error' && r.length != 0) {
+        if (response !== null && response !== '{}' && r.Type !== 'error' && r.length !== 0) {
           const inscripcionP = <Array<any>>response;
           this.posgrados = inscripcionP;
-          this.selectedValue = parseInt(sessionStorage.getItem('ProgramaAcademicoId'));
+          this.selectedValue = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
         } else {
           this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_inscripcion'));
         }
@@ -309,10 +309,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   setPercentage_total() {
-    this.percentage_total = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info)) / 4;
-    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4;
-    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_docu)) / 4;
-    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_expe)) / 4;
+    this.percentage_total = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info)) / 4;  // Información básica
+    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4; // Formación académica
+    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_docu)) / 4; // Documentos solicitados
+    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_expe)) / 4; // Experiencia laboral
     if (sessionStorage.EstadoInscripcion) {
       if (this.percentage_total >= 100) {
         this.total = false;
@@ -464,7 +464,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.loading = true;
     return new Promise((resolve, reject) => {
       this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
-        this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId)).subscribe(
+        this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10)).subscribe(
           (res: any[]) => {
             if (res !== null && JSON.stringify(res[0]) !== '{}') {
               this.percentage_docu = 0;
@@ -543,7 +543,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId)).subscribe(
+    this.inscripcionService.get('documento_programa?query=ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10)).subscribe(
       response => {
         this.tipo_documentos = <any[]>response;
       },
@@ -598,11 +598,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   realizarInscripcion() {
     this.loading = true;
-    this.inscripcionService.get('inscripcion/' + parseInt(sessionStorage.IdInscripcion)).subscribe(
+    this.inscripcionService.get('inscripcion/' + parseInt(sessionStorage.IdInscripcion, 10)).subscribe(
       (response: any) => {
         this.loading = false;
         const inscripcionPut: any = response;
-        inscripcionPut.ProgramaAcademicoId = parseInt(sessionStorage.ProgramaAcademicoId);
+        inscripcionPut.ProgramaAcademicoId = parseInt(sessionStorage.ProgramaAcademicoId, 10);
 
         this.loading = true;
         this.inscripcionService.get('estado_inscripcion?query=Nombre:INSCRITO').subscribe(
@@ -1008,7 +1008,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     } else {
       this.selectedTipo = 'Posgrado'
     }
-    if (this.selectedValue != undefined) {
+    if (this.selectedValue !== undefined) {
       sessionStorage.setItem('ProgramaAcademicoId', this.selectedValue);
     }
     switch (this.selectedTipo) {
