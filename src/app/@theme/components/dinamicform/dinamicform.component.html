@@ -456,7 +456,7 @@
                                     <label for="{{c.nombre}}" class="upload-file">
                                         {{c.requerido?'* '+c.label:c.label}}
                                     </label>
-                                    <input type="file" id="{{c.nombre}}" (change)="onChange($event,c)" />
+                                    <input #documento type="file" id="{{c.nombre}}" (change)="onChange($event,c)" />
                                     <br>
                                     <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
 

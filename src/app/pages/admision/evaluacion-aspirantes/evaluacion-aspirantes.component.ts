@@ -305,10 +305,12 @@ export class EvaluacionAspirantesComponent implements OnInit {
       let numero = false;
       const regex = /^[0-9]*$/;
       for (let i = 0; i < aux.length; i++) {
-        if (aux[i]["Asistencia"] == "s" || aux[i]["Asistencia"] == "si" || aux[i]["Asistencia"] == "sí" || aux[i]["Asistencia"] == "S" || aux[i]["Asistencia"] == "SI" || aux[i]["Asistencia"] == "SÍ" || aux[i]["Asistencia"] == "true" || aux[i]["Asistencia"] == "True" || aux[i]["Asistencia"] == "TRUE") {
-          aux[i]["Asistencia"] = true;
+        if (aux[i]['Asistencia'] === 's' || aux[i]['Asistencia'] === 'si' || aux[i]['Asistencia'] === 'sí' ||
+          aux[i]['Asistencia'] === 'S' || aux[i]['Asistencia'] === 'SI' || aux[i]['Asistencia'] === 'SÍ' ||
+          aux[i]['Asistencia'] === 'true' || aux[i]['Asistencia'] === 'True' || aux[i]['Asistencia'] === 'TRUE') {
+          aux[i]['Asistencia'] = true;
         } else {
-          aux[i]["Asistencia"] = ''
+          aux[i]['Asistencia'] = ''
         }
         for (let j = 0; j < this.columnas.length; j++) {
           if (aux[i][this.columnas[j]] === undefined || aux[i][this.columnas[j]] === '') {
@@ -476,7 +478,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
                 await this.dataSource.getElements().then(datos => {
                   datos.forEach(aspirante => {
                     if (asistente.Aspirantes === aspirante.Aspirantes) {
-                      for (let columna in asistente) {
+                      for (const columna in asistente) {
                         aspirante[columna] = asistente[columna]
                       }
                     }
