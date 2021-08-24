@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, ElementRef } from '@angular/core';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
@@ -25,6 +25,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
   data: any;
   searchTerm$ = new Subject<any>();
   @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
+  @ViewChild('documento') DocumentoInputVariable: ElementRef;
   init: boolean;
   constructor(
     private sanitization: DomSanitizer,
@@ -284,6 +285,13 @@ export class DinamicformComponent implements OnInit, OnChanges {
   clearForm() {
     this.normalform.campos.forEach(d => {
       d.valor = null;
+      if (d.etiqueta === 'file') {
+        this.DocumentoInputVariable.nativeElement.value = '';
+        d.File = null
+        d.url = null
+        d.urlTemp = undefined
+        d.valor = { nombre: undefined }
+      }
     });
   }
 
