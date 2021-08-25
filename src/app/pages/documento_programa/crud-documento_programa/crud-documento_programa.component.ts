@@ -49,7 +49,6 @@ export class CrudDocumentoProgramaComponent implements OnInit {
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
-  @Output('result') result: EventEmitter<any> = new EventEmitter();
 
   tipo_documentos: any[];
   info_documento_programa: any;
@@ -79,8 +78,8 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId')) // this.userService.getPrograma();
-    this.periodo = parseInt(sessionStorage.getItem('IdPeriodo')) // this.userService.getPeriodo();
+    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10) // this.userService.getPrograma();
+    this.periodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10) // this.userService.getPeriodo();
     this.loadLists();
   }
 
@@ -170,7 +169,6 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                 this.info_documento_programa = undefined;
                 this.clean = !this.clean;
                 this.eventChange.emit(true);
-                this.setPercentage(1 / this.tipo_documentos.length)
               },
               error => {
                 this.popUpManager.showErrorToast(this.translate.instant('documento_programa.documento_programa_no_registrado'));
@@ -247,13 +245,6 @@ export class CrudDocumentoProgramaComponent implements OnInit {
           reject(error);
         });
     });
-  }
-
-  setPercentage(event) {
-    if (event !== 1 && this.tipo_documentos.length !== 1) {
-      this.percentage += event.toFixed(2);
-    }
-    this.result.emit(this.percentage);
   }
 
 }

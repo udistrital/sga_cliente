@@ -456,7 +456,7 @@
                                     <label for="{{c.nombre}}" class="upload-file">
                                         {{c.requerido?'* '+c.label:c.label}}
                                     </label>
-                                    <input type="file" id="{{c.nombre}}" (change)="onChange($event,c)" />
+                                    <input #documento type="file" id="{{c.nombre}}" (change)="onChange($event,c)" />
                                     <br>
                                     <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
 
@@ -478,12 +478,12 @@
 
                         <!--buttton -->
                         <div *ngSwitchCase="'button'" class="row">
-                            <div class="{{c.claseGrid}}">
-                                <button mat-button class="{{c.claseBoton}}" (click)="auxButton(c)">
-                                    <i class="{{c.icono}}"></i>
-                                    {{ c.label }}
-                                </button>
-                            </div>
+                          <div class="{{c.claseGrid}}" >
+                              <button mat-button id="{{c.id}}" (click)="auxButton(c)" >
+                                  <i class="{{c.icono}}"></i>
+                                  {{ c.label }}
+                              </button>
+                          </div>
                         </div>
 
                         <!--label-->

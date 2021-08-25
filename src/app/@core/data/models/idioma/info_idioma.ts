@@ -4,7 +4,7 @@ import { NivelIdioma } from './nivel_idioma';
 
 export class InfoIdioma {
   Id: number;
-  TerceroId: number;
+  TercerosId: number;
   IdiomaId: Idioma;
   Nativo: boolean;
   SeleccionExamen: boolean;

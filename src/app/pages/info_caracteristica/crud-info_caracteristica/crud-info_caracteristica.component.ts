@@ -70,6 +70,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     this.listService.findTipoDiscapacidad();
     this.listService.findFactorRh();
     this.listService.findGrupoSanguineo();
+    this.loadLists();
     this.loadInfoCaracteristica();
   }
 
@@ -190,9 +191,14 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.info_info_caracteristica.TipoRelacionUbicacionEnte = 1;
             this.info_info_caracteristica.IdLugarEnte = this.datosGet.Lugar.Id;
             this.info_info_caracteristica.PaisNacimiento = this.datosGet.Lugar.Lugar.PAIS;
-            this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.DEPARTAMENTO;
-            this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.CIUDAD;
-            this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = [this.info_info_caracteristica.PaisNacimiento];
+            if (this.datosGet.Lugar.Lugar.DEPARTAMENTO === undefined) {
+              this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.CIUDAD;
+              this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.LOCALIDAD;
+            } else {
+              this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.DEPARTAMENTO;
+              this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.CIUDAD;
+            }
+
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = [this.info_info_caracteristica.DepartamentoNacimiento];
             this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = [this.info_info_caracteristica.Lugar];
             this.loading = false;
@@ -306,7 +312,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.loadInfoCaracteristica();
   }
 
   validarForm(event) {

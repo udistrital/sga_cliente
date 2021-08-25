@@ -14,6 +14,7 @@ export class InfoCaracteristicaGet {
     Lugar: {
       CIUDAD: Lugar;
       DEPARTAMENTO: Lugar;
+      LOCALIDAD: Lugar;
       PAIS: Lugar;
     };
     TipoRelacionUbicacionEnte: {

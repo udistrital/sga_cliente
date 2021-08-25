@@ -144,7 +144,7 @@ export class CrudIdiomasComponent implements OnInit {
         if (this.info_idioma.SeleccionExamen != true) {
           this.info_idioma.SeleccionExamen = false
         }
-        this.info_idioma.TerceroId = this.persona_id || 1;
+        this.info_idioma.TercerosId = this.persona_id || 1;
         if (this.info_idioma.Nativo === true && this.info_idioma.Nativo === this.info_idioma.SeleccionExamen) {
           this.popUpManager.showErrorAlert(this.translate.instant('idiomas.error_nativo_examen'));
         } else if (this.info_idioma.SeleccionExamen === true && this.idioma_examen !== undefined) {
