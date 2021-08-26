@@ -19,7 +19,7 @@
                        style="padding: 0px;">
       </ngx-dinamicform>
 
-      <div *ngIsGranted="['ADMIN_SGA', 'ASISTENTE_ADMISIONES']">
+      <div>
         <ngx-dinamicform [normalform]="respuestaSolicitudForm"
                          [modeloData]="solicitudRespuesta"
                          (result)="enviarRespuesta($event)"

@@ -254,6 +254,8 @@ export class ViewSolicitudesComponent implements OnInit {
   }
 
   activateTab() {
+    this.nuevaSolicitud = undefined;
+    this.solicitudSeleccionada = undefined
     this.showTable = true;
     this.showSolicitudID = false;
     this.showSolicitudNombre = false;
