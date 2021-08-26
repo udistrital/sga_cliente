@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { ActualizacionDatos } from '../../../@core/data/models/solicitudes/actualizacion-datos';
 import { RespuestaSolicitud } from '../../../@core/data/models/solicitudes/respuesta-solicitud';
@@ -37,9 +37,9 @@ export class ActualizacionDatosComponent implements OnInit {
         this.solicitudForm.campos[this.getIndexForm('Documento')].valor = '';
         this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
         this.solicitudForm.btn = 'Enviar'
+        this.Admin = false;
 
         if (this.rol[i] === 'ESTUDIANTE') {
-          this.Admin = false;
           this.loadInfo();
           this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = false;
           this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = false;
@@ -75,59 +75,65 @@ export class ActualizacionDatosComponent implements OnInit {
     this.solicitudRespuesta.SolicitudId = 0;
     this.respuestaSolicitudForm.campos[1].valor = false;
 
-    this.solicitudRespuesta.Observacion = dataSolicitud.Observacion
-    if (dataSolicitud.Estado === 'Acta aprobada') {
-      this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-      this.respuestaSolicitudForm.campos[1].valor = true;
-      this.respuestaSolicitudForm.btn = '';
-      this.Admin = true;
-      this.respuestaSolicitudForm.campos.forEach(campo => {
-        campo.deshabilitar = true;
-      });
-    }
+    if (dataSolicitud !== undefined) {
+      this.solicitudRespuesta.Observacion = dataSolicitud.Observacion
+      if (dataSolicitud.Estado === 'Acta aprobada') {
+        this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+        this.respuestaSolicitudForm.campos[1].valor = true;
+        this.respuestaSolicitudForm.btn = '';
+        this.Admin = true;
+        this.respuestaSolicitudForm.campos.forEach(campo => {
+          campo.deshabilitar = true;
+        });
+      }
 
-    if (dataSolicitud.Estado === 'Rectificar') {
-      this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-      for (let i = 0; i < this.rol.length; i++) {
-        if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
-          this.respuestaSolicitudForm.campos.forEach(campo => {
-            campo.deshabilitar = false;
-          });
-          this.respuestaSolicitudForm.btn = 'Enviar';
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+      if (dataSolicitud.Estado === 'Rectificar') {
+        this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+        for (let i = 0; i < this.rol.length; i++) {
+          if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
+            this.respuestaSolicitudForm.campos.forEach(campo => {
+              campo.deshabilitar = false;
+            });
+            this.respuestaSolicitudForm.btn = 'Enviar';
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+          }
         }
       }
-    }
 
-    if (dataSolicitud.Estado === 'Radicada') {
-      for (let i = 0; i < this.rol.length; i++) {
-        if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
-          this.respuestaSolicitudForm.campos.forEach(campo => {
-            campo.deshabilitar = false;
-          });
-          this.respuestaSolicitudForm.btn = 'Enviar';
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
-        } if (this.rol[i] === 'ESTUDIANTE') {
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+      if (dataSolicitud.Estado === 'Radicada') {
+        for (let i = 0; i < this.rol.length; i++) {
+          if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
+            this.respuestaSolicitudForm.campos.forEach(campo => {
+              campo.deshabilitar = false;
+            });
+            this.respuestaSolicitudForm.btn = 'Enviar';
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+          } if (this.rol[i] === 'ESTUDIANTE') {
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+          }
         }
       }
-    }
 
-    if (dataSolicitud.Estado === 'Rechazada') {
-      this.respuestaSolicitudForm.btn = '';
-      this.Admin = true;
-      this.respuestaSolicitudForm.campos.forEach(campo => {
-        campo.deshabilitar = true;
-      });
-      for (let i = 0; i < this.rol.length; i++) {
-        if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-        } if (this.rol[i] === 'ESTUDIANTE') {
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+      if (dataSolicitud.Estado === 'Rechazada') {
+        this.respuestaSolicitudForm.btn = '';
+        this.Admin = true;
+        this.respuestaSolicitudForm.campos.forEach(campo => {
+          campo.deshabilitar = true;
+        });
+        for (let i = 0; i < this.rol.length; i++) {
+          if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+          } if (this.rol[i] === 'ESTUDIANTE') {
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+          }
         }
       }
+    } else {
+      this.Admin = false;
     }
   }
+
+  @Output() solicitudEnviada: EventEmitter<boolean> = new EventEmitter();
 
   solicitante: Solicitante;
   solicitudForm: any;
@@ -281,7 +287,16 @@ export class ActualizacionDatosComponent implements OnInit {
         if (response.Response.Code === '200') {
           this.loading = false;
           this.loadInfoById();
-          this.popUpManager.showSuccessAlert(this.translate.instant('solicitudes.respuesta'));
+          Swal.fire({
+            icon: 'success',
+            title: this.translate.instant('GLOBAL.operacion_exitosa'),
+            text: this.translate.instant('solicitudes.respuesta'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          }).then((willDelete) => {
+            if (willDelete.value) {
+              this.solicitudEnviada.emit(true);
+            }
+          });
         } else if (response.Response.Code === '400') {
           this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant('solicitudes.error'));
@@ -361,6 +376,7 @@ export class ActualizacionDatosComponent implements OnInit {
             this.solicitudForm.campos[this.getIndexForm('TipoDocumentoActual')].valor = response[0]['TipoDocumentoId'];
             this.solicitudForm.campos[this.getIndexForm('NumeroActual')].valor = response[0]['Numero'];
             if (response[0]['FechaExpedicion'] !== null) {
+              response[0]['FechaExpedicion'] = response[0]['FechaExpedicion'].slice(0, response[0]['FechaExpedicion'].indexOf('T'))
               this.solicitudForm.campos[this.getIndexForm('FechaExpedicionActual')].valor =
                 momentTimezone.tz(response[0]['FechaExpedicion'], 'America/Bogota').format('DD/MM/YYYY');
             }
@@ -446,7 +462,7 @@ export class ActualizacionDatosComponent implements OnInit {
                   }
                 }
                 this.solicitudDatos.FechaExpedicionActual = momentTimezone.tz(
-                  this.solicitudDatos.FechaExpedicionActual, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+                  this.solicitudDatos.FechaExpedicionActual, 'DD/MM/YYYY', 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
                 this.solicitudDatos.FechaExpedicionActual = this.solicitudDatos.FechaExpedicionActual + ' +0000 +0000';
                 this.solicitudDatos.FechaExpedicionNuevo = momentTimezone.tz(
                   this.solicitudDatos.FechaExpedicionNuevo, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
@@ -465,7 +481,16 @@ export class ActualizacionDatosComponent implements OnInit {
                   (res: any) => {
                     if (res.Response.Code === '200') {
                       this.loading = false;
-                      this.popUpManager.showSuccessAlert(this.translate.instant('solicitudes.crear_exito'));
+                      Swal.fire({
+                        icon: 'success',
+                        title: this.translate.instant('GLOBAL.operacion_exitosa'),
+                        text: this.translate.instant('solicitudes.crear_exito'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      }).then((willDelete) => {
+                        if (willDelete.value) {
+                          this.solicitudEnviada.emit(true);
+                        }
+                      });
                     } else {
                       this.loading = false;
                       this.popUpManager.showErrorToast(this.translate.instant('solicitudes.crear_error'));
