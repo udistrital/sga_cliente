@@ -119,6 +119,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.showInfo = false;
     this.showNew = false;
     this.showInscription = true;
+    this.cargarPeriodo();
     this.nivel_load();
     this.dataSource = new LocalDataSource();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
