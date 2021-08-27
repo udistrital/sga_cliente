@@ -486,11 +486,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
           if (response.Response.Code === '200') {
             const data = <Array<any>>response.Response.Body[0].areas;
             if (data !== undefined) {
+              
               await data.forEach(async asistente => {
-                if (asistente['Asistencia'] === '') {
-                  asistente['Asistencia'] = false
-                }
-                await data.forEach(async asistente => {
                 if (asistente['Asistencia'] === '') {
                   asistente['Asistencia'] = false
                 }
