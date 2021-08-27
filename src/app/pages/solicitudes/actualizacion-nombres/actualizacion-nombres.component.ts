@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { ActualizacionNombre } from '../../../@core/data/models/solicitudes/actualizacion-nombre';
 import { RespuestaSolicitud } from '../../../@core/data/models/solicitudes/respuesta-solicitud';
@@ -37,9 +37,9 @@ export class ActualizacionNombresComponent implements OnInit {
         this.solicitudForm.campos[this.getIndexForm('Documento')].valor = '';
         this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
         this.solicitudForm.btn = 'Enviar'
+        this.Admin = false;
 
         if (this.rol[i] === 'ESTUDIANTE') {
-          this.Admin = false;
           this.loadInfo();
           this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
           this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false;
@@ -75,59 +75,65 @@ export class ActualizacionNombresComponent implements OnInit {
     this.solicitudRespuesta.SolicitudId = 0;
     this.respuestaSolicitudForm.campos[1].valor = false;
 
-    this.solicitudRespuesta.Observacion = dataSolicitud.Observacion
-    if (dataSolicitud.Estado === 'Acta aprobada') {
-      this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-      this.respuestaSolicitudForm.campos[1].valor = true;
-      this.respuestaSolicitudForm.btn = '';
-      this.Admin = true;
-      this.respuestaSolicitudForm.campos.forEach(campo => {
-        campo.deshabilitar = true;
-      });
-    }
+    if (dataSolicitud !== undefined) {
+      this.solicitudRespuesta.Observacion = dataSolicitud.Observacion
+      if (dataSolicitud.Estado === 'Acta aprobada') {
+        this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+        this.respuestaSolicitudForm.campos[1].valor = true;
+        this.respuestaSolicitudForm.btn = '';
+        this.Admin = true;
+        this.respuestaSolicitudForm.campos.forEach(campo => {
+          campo.deshabilitar = true;
+        });
+      }
 
-    if (dataSolicitud.Estado === 'Rectificar') {
-      this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-      for (let i = 0; i < this.rol.length; i++) {
-        if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
-          this.respuestaSolicitudForm.campos.forEach(campo => {
-            campo.deshabilitar = false;
-          });
-          this.respuestaSolicitudForm.btn = 'Enviar';
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+      if (dataSolicitud.Estado === 'Rectificar') {
+        this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+        for (let i = 0; i < this.rol.length; i++) {
+          if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
+            this.respuestaSolicitudForm.campos.forEach(campo => {
+              campo.deshabilitar = false;
+            });
+            this.respuestaSolicitudForm.btn = 'Enviar';
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+          }
         }
       }
-    }
 
-    if (dataSolicitud.Estado === 'Radicada') {
-      for (let i = 0; i < this.rol.length; i++) {
-        if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
-          this.respuestaSolicitudForm.campos.forEach(campo => {
-            campo.deshabilitar = false;
-          });
-          this.respuestaSolicitudForm.btn = 'Enviar';
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
-        } if (this.rol[i] === 'ESTUDIANTE') {
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+      if (dataSolicitud.Estado === 'Radicada') {
+        for (let i = 0; i < this.rol.length; i++) {
+          if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
+            this.respuestaSolicitudForm.campos.forEach(campo => {
+              campo.deshabilitar = false;
+            });
+            this.respuestaSolicitudForm.btn = 'Enviar';
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+          } if (this.rol[i] === 'ESTUDIANTE') {
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+          }
         }
       }
-    }
 
-    if (dataSolicitud.Estado === 'Rechazada') {
-      this.respuestaSolicitudForm.btn = '';
-      this.Admin = true;
-      this.respuestaSolicitudForm.campos.forEach(campo => {
-        campo.deshabilitar = true;
-      });
-      for (let i = 0; i < this.rol.length; i++) {
-        if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-        } if (this.rol[i] === 'ESTUDIANTE') {
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+      if (dataSolicitud.Estado === 'Rechazada') {
+        this.respuestaSolicitudForm.btn = '';
+        this.Admin = true;
+        this.respuestaSolicitudForm.campos.forEach(campo => {
+          campo.deshabilitar = true;
+        });
+        for (let i = 0; i < this.rol.length; i++) {
+          if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+          } if (this.rol[i] === 'ESTUDIANTE') {
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+          }
         }
       }
+    } else {
+      this.Admin = false;
     }
   }
+
+  @Output() solicitudEnviada: EventEmitter<boolean> = new EventEmitter();
 
   solicitante: Solicitante;
   solicitudForm: any;
@@ -266,7 +272,16 @@ export class ActualizacionNombresComponent implements OnInit {
         if (response.Response.Code === '200') {
           this.loading = false;
           this.loadInfoById();
-          this.popUpManager.showSuccessAlert(this.translate.instant('solicitudes.respuesta'));
+          Swal.fire({
+            icon: 'success',
+            title: this.translate.instant('GLOBAL.operacion_exitosa'),
+            text: this.translate.instant('solicitudes.respuesta'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          }).then((willDelete) => {
+            if (willDelete.value) {
+              this.solicitudEnviada.emit(true);
+            }
+          });
         } else if (response.Response.Code === '400') {
           this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant('solicitudes.error'));
@@ -474,9 +489,17 @@ export class ActualizacionNombresComponent implements OnInit {
                 this.sgaMidService.post('solicitud_evaluacion/registrar_solicitud', Solicitud).subscribe(
                   (res: any) => {
                     if (res.Response.Code === '200') {
-                      // Funcion get
                       this.loading = false;
-                      this.popUpManager.showSuccessAlert(this.translate.instant('solicitudes.crear_exito'));
+                      Swal.fire({
+                        icon: 'success',
+                        title: this.translate.instant('GLOBAL.operacion_exitosa'),
+                        text: this.translate.instant('solicitudes.crear_exito'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      }).then((willDelete) => {
+                        if (willDelete.value) {
+                          this.solicitudEnviada.emit(true);
+                        }
+                      });
                     } else {
                       this.loading = false;
                       this.popUpManager.showErrorToast(this.translate.instant('solicitudes.crear_error'));

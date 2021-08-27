@@ -451,9 +451,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
         .subscribe((res: any) => {
           if (res !== null) {
             this.info_produccion_academica = <ProduccionAcademicaPost>res;
-            this.showToast('success', this.translate.instant('GLOBAL.actualizar'),
-            this.translate.instant('produccion_academica.produccion_actualizada'));
-            this.popUpManager.showSuccessAlert(this.translate.instant('produccion_academica.produccion_actualizada'));
+            // this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('produccion_academica.produccion_actualizada'));
+            this.popUpManager.showInfoToast(this.translate.instant('produccion_academica.produccion_actualizada'));
             this.updateList.emit();
           } else {
             this.showToast('error', this.translate.instant('GLOBAL.error'),
@@ -481,9 +480,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
         .subscribe((res: any) => {
           if (res !== null) {
             this.info_produccion_academica = <ProduccionAcademicaPost>res;
-            this.showToast('success', this.translate.instant('GLOBAL.crear'),
-            this.translate.instant('produccion_academica.produccion_creada'));
-            this.popUpManager.showSuccessAlert(this.translate.instant('produccion_academica.produccion_creada'));
+            //this.showToast('info', this.translate.instant('GLOBAL.crear'), this.translate.instant('produccion_academica.produccion_creada'));
+            this.popUpManager.showInfoToast(this.translate.instant('produccion_academica.produccion_creada'));
             this.updateList.emit();
           } else {
             this.showToast('error', this.translate.instant('GLOBAL.error'),
