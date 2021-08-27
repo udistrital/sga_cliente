@@ -180,7 +180,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   nivel_load() {
     this.projectService.get('nivel_formacion?limit=0').subscribe(
       (response: NivelFormacion[]) => {
-        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null && nivel.Nombre == 'Posgrado')
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null && nivel.Nombre === 'Posgrado')
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -215,16 +215,29 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.mostrartabla();
   }
 
+  filtrarProyecto(proyecto) {
+    if (this.selectednivel === proyecto['NivelFormacionId']['Id']) {
+      return true
+    }
+    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
+      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Id'] === this.selectednivel) {
+        return true
+      }
+    } else {
+      return false
+    }
+  }
+
   loadProyectos() {
     this.show_listado = false;
     this.selectprograma = false;
     this.proyectos = [];
     if (this.selectednivel !== NaN && this.selectednivel !== undefined) {
-      this.projectService.get('proyecto_academico_institucion?query=NivelFormacionId:' + Number(this.selectednivel) + '&limit=0').subscribe(
+      this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
-          if (response !== null || response !== undefined) {
-            this.proyectos = <any>response;
-          }
+          this.proyectos = <any[]>response.filter(
+            proyecto => this.filtrarProyecto(proyecto),
+          );
         },
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));

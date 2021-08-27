@@ -116,15 +116,28 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     );
   }
 
+  filtrarProyecto(proyecto) {
+    if (this.selectednivel === proyecto['NivelFormacionId']['Id']) {
+      return true
+    }
+    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
+      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Id'] === this.selectednivel) {
+        return true
+      }
+    } else {
+      return false
+    }
+  }
+
   loadProyectos() {
     this.dataSource.load([]);
     this.Aspirantes = [];
     if (this.selectednivel !== NaN) {
-      this.projectService.get('proyecto_academico_institucion?query=NivelFormacionId:' + Number(this.selectednivel) + '&limit=0').subscribe(
+      this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
-          if (response !== null || response !== undefined) {
-            this.proyectos = <any>response;
-          }
+          this.proyectos = <any[]>response.filter(
+            proyecto => this.filtrarProyecto(proyecto),
+          );
         },
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -143,7 +156,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
         if (response !== '[{}]') {
           const data = <Array<any>>response;
           data.forEach(element => {
-            if (element.PersonaId != undefined) {
+            if (element.PersonaId !== undefined) {
               this.tercerosService.get('datos_identificacion?query=TerceroId:' + element.PersonaId).subscribe(
                 (res: any) => {
                   const aspiranteAux = {
