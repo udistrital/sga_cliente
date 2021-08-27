@@ -85,7 +85,11 @@
         </div>
 
         <div *ngIf="!showTab">
-          <nb-card style="margin: 0px;">
+          <nb-card [nbSpinner]="loading"
+                   nbSpinnerStatus="success"
+                   nbSpinnerSize="xxlarge"
+                   nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}"
+                   style="margin: 0px;">
             <nb-card-header>
               <div class="col-12">
                 {{ 'admision.criterio' | translate }}: {{ tipo_criterio.Nombre }}

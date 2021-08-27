@@ -576,7 +576,8 @@
         "clasificacion": "Type",
         "tooltip_ver_registro": "View",
         "tooltip_editar_registro": "Edit",
-        "tooltip_descargar": "Download"
+        "tooltip_descargar": "Download",
+        "experiencia_laboral": "Work experience"
     },
 
     "ERROR": {
