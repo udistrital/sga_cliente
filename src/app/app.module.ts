@@ -79,7 +79,6 @@ import { ParametrosService } from './@core/data/parametros.service';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
-
 @NgModule({
   exports: [
     // CDK
@@ -141,9 +140,15 @@ export function HttpLoaderFactory(http: HttpClient) {
 })
 export class MaterialModule { }
 
+import { LoginComponent } from './login/login.component';
+import { LoadComponent } from './load/load.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,     
+    LoginComponent,
+    LoadComponent,
+  ],
   imports: [
     StoreModule.forRoot(rootReducer),
     CdkTableModule,
@@ -170,7 +175,8 @@ export class MaterialModule { }
     }),
   ],
   bootstrap: [AppComponent],
-  providers: [ImplicitAutenticationService,
+  providers: [
+    ImplicitAutenticationService,
     ListService,
     PersonaService,
     ParametrosService,
