@@ -65,7 +65,8 @@
 
     <nb-card-body *ngIf="showSolicitudID">
       <ngx-actualizacion-datos [nuevaSolicitud]="nuevaSolicitud"
-                               [dataSolicitud]="solicitudSeleccionada">
+                               [dataSolicitud]="solicitudSeleccionada"
+                               (solicitudEnviada)="activateTab()">
       </ngx-actualizacion-datos>
       <button (click)="activateTab()" class="btn btn-info btn-sm">
         <i class="nb-arrow-dropleft"></i> {{ "GLOBAL.regresar" | translate }}
@@ -74,7 +75,8 @@
 
     <nb-card-body *ngIf="showSolicitudNombre">
       <actualizacion-nombres [nuevaSolicitud]="nuevaSolicitud"
-                             [dataSolicitud]="solicitudSeleccionada">
+                             [dataSolicitud]="solicitudSeleccionada"
+                             (solicitudEnviada)="activateTab()">
       </actualizacion-nombres>
 
       <button (click)="activateTab()" class="btn btn-info btn-sm">

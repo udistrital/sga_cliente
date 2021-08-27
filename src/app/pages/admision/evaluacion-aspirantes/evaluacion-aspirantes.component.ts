@@ -16,8 +16,6 @@ import Swal from 'sweetalert2';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { CheckboxAssistanceComponent } from '../../../@theme/components/checkbox-assistance/checkbox-assistance.component';
-import { async } from '@angular/core/testing';
-import { resolve } from 'url';
 
 @Component({
   selector: 'evaluacion-aspirantes',
@@ -248,36 +246,35 @@ export class EvaluacionAspirantesComponent implements OnInit {
     );
   }
 
-  async createTable() {
-    let data: any;
-    const IdCriterio = sessionStorage.getItem('tipo_criterio');
-    await this.loadColumn(IdCriterio).then(response => {
-      data = response;
-    },
-    )
-    this.settings = {
-      columns: data,
-      actions: {
-        edit: true,
-        add: false,
-        delete: false,
-        position: 'right',
-        columnTitle: this.translate.instant('GLOBAL.acciones'),
-        width: '5%',
-      },
-      edit: {
-        editButtonContent:
-          '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') +
-          '"></i>',
-        saveButtonContent:
-          '<i class="nb-checkmark-circle" title="' + this.translate.instant('admision.tooltip_guargar') +
-          '"></i>',
-        cancelButtonContent:
-          '<i class="nb-close-circled" title="' + this.translate.instant('admision.tooltip_cancelar') +
-          '"></i>',
-        confirmSave: true,
-      },
-    };
+  createTable() {
+    return new Promise(async (resolve, reject) => {
+      const IdCriterio = sessionStorage.getItem('tipo_criterio');
+      const data = await this.loadColumn(IdCriterio)
+      this.settings = {
+        columns: data,
+        actions: {
+          edit: true,
+          add: false,
+          delete: false,
+          position: 'right',
+          columnTitle: this.translate.instant('GLOBAL.acciones'),
+          width: '5%',
+        },
+        edit: {
+          editButtonContent:
+            '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') +
+            '"></i>',
+          saveButtonContent:
+            '<i class="nb-checkmark-circle" title="' + this.translate.instant('admision.tooltip_guargar') +
+            '"></i>',
+          cancelButtonContent:
+            '<i class="nb-close-circled" title="' + this.translate.instant('admision.tooltip_cancelar') +
+            '"></i>',
+          confirmSave: true,
+        },
+      };
+      resolve(this.settings)
+    })
   }
 
   useLanguage(language: string) {
@@ -405,6 +402,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   }
 
   async perfil_editar(event) {
+    this.loading = true;
     this.save = true;
     this.tipo_criterio = new TipoCriterio();
     this.tipo_criterio.Periodo = this.periodo.Nombre;
@@ -418,38 +416,42 @@ export class EvaluacionAspirantesComponent implements OnInit {
     this.tipo_criterio.Nombre = event.Nombre;
     sessionStorage.setItem('tipo_criterio', String(event.Id));
     await this.ngOnChanges();
-    await this.loadAspirantes();
-    await this.loadInfo(event.Id);
-    await this.createTable();
+    await this.createTable()
     this.showTab = false;
+    await this.loadAspirantes()
+    await this.loadInfo(event.Id)
+    this.loading = false
   }
 
   async loadAspirantes() {
     return new Promise((resolve, reject) => {
       this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
         this.proyectos_selected + ',PeriodoId:' + this.periodo.Id + '&sortby=Id&order=asc').subscribe(
-          async (response: any) => {
+          (response: any) => {
             if (response !== '[{}]') {
-              const data = <Array<any>>response;
-              data.forEach(element => {
-                if (element.PersonaId !== undefined) {
-                  this.tercerosService.get('tercero/' + element.PersonaId).subscribe(
-                    async (res: any) => {
-                      const aspiranteAux = {
-                        Id: res.Id,
-                        Aspirantes: res.NombreCompleto,
-                      };
-                      this.Aspirantes.push(aspiranteAux);
-                      await this.dataSource.load(this.Aspirantes);
-                    },
-                    error => {
-                      this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+              const data = <Array<any>>response.filter((inscripcion) => (inscripcion.PersonaId !== undefined));
 
-                    },
-                  );
-                }
+              data.forEach(element => {
+                this.tercerosService.get('tercero/' + element.PersonaId).subscribe(
+                  async (res: any) => {
+                    const aspiranteAux = {
+                      Id: res.Id,
+                      Aspirantes: res.NombreCompleto,
+                    };
+                    this.Aspirantes.push(aspiranteAux);
+
+                    if (data.length === this.Aspirantes.length) {
+                      this.dataSource.load(this.Aspirantes);
+                      resolve(this.Aspirantes);
+                    }
+                  },
+                  error => {
+                    this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+
+                  },
+                );
               });
-              await resolve(this.Aspirantes);
+
             } else {
               reject('Error');
               this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
@@ -471,19 +473,19 @@ export class EvaluacionAspirantesComponent implements OnInit {
           if (response.Response.Code === '200') {
             const data = <Array<any>>response.Response.Body[0].areas;
             if (data !== undefined) {
-              data.forEach(async asistente => {
+              await data.forEach(async asistente => {
                 if (asistente['Asistencia'] === '') {
                   asistente['Asistencia'] = false
                 }
-                await this.dataSource.getElements().then(datos => {
-                  datos.forEach(aspirante => {
-                    if (asistente.Aspirantes === aspirante.Aspirantes) {
-                      for (const columna in asistente) {
-                        aspirante[columna] = asistente[columna]
-                      }
+
+                this.Aspirantes.forEach(aspirante => {
+                  if (asistente.Aspirantes === aspirante.Aspirantes) {
+                    for (const columna in asistente) {
+                      aspirante[columna] = asistente[columna]
                     }
-                  });
-                });
+                  }
+                })
+                this, this.dataSource.load(this.Aspirantes)
               })
               // this.dataSource.load(data);
               // await this.dataSource.getElements().then(datos => console.log('despues', datos))
@@ -569,11 +571,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
               }
 
               if (response.length > 1) {
-                await this.getPercentageSub(IdCriterio).then(
-                  res => {
-                    porcentaje = res;
-                  },
-                )
+                porcentaje = await this.getPercentageSub(IdCriterio)
 
                 for (const key in porcentaje.areas) {
                   if (porcentaje.areas[key]['Porcentaje'] === 0) {
@@ -668,9 +666,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
     } else {
       this.notas = true;
       this.verificarEvaluacion()
-      for (let i = 0; i < this.criterio_selected.length; i++) {
-        await this.loadInfo(this.criterio_selected[i].Id)
-      }
     }
   }
 
