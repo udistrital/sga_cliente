@@ -161,6 +161,7 @@ export class CrudInfoPersonaComponent implements OnInit {
             const r = <any>res
             if (r !== null && r.Type !== 'error') {
               window.localStorage.setItem('ente', r.Id);
+              window.localStorage.setItem('persona_id', r.Id);
               this.info_persona_id = r.Id;
               sessionStorage.setItem('IdTercero', String(this.info_persona_id));
               this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.persona_creado'));
