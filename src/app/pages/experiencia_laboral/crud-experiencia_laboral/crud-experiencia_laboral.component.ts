@@ -230,6 +230,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     const icorreo = this.getIndexForm('Correo');
     const ipais = this.getIndexForm('Pais');
     const regex = /^[0-9]*$/;
+    data.data.Nit = data.data.Nit.trim()
     const nit = typeof data === 'string' ? data : data.data.Nit;
 
     if (regex.test(nit) === true) {
@@ -261,7 +262,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   loadListEmpresa(nombre: string): void {
     let consultaEmpresa: Array<any> = [];
     const empresa: Array<any> = [];
-    this.sgaMidService.get('formacion_academica/info_universidad_nombre?nombre=' + nombre)
+    this.sgaMidService.get('experiencia_laboral/informacion_empresa?nombre=' + nombre)
       .subscribe(res => {
         if (res !== null) {
           consultaEmpresa = <Array<InfoPersona>>res;
@@ -276,9 +277,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
           icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
-          footer: this.translate.instant('GLOBAL.cargar') + '-' +
-            this.translate.instant('GLOBAL.info_caracteristica') + '|' +
-            this.translate.instant('GLOBAL.ciudad_nacimiento'),
+          footer: this.translate.instant('experiencia_laboral.error_cargar_empresa'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       });
@@ -286,6 +285,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
 
   searchOrganizacion(nit: string): void {
     this.loading = true;
+    nit = nit.trim();
     const init = this.getIndexForm('Nit');
     const inombre = this.getIndexForm('NombreEmpresa');
     const itipo = this.getIndexForm('TipoOrganizacion');
