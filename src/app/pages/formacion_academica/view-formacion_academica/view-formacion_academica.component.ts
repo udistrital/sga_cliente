@@ -46,7 +46,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
+    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'), 10);
     this.loadData();
   }
 
@@ -65,22 +65,22 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   loadData(): void {
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
     .subscribe(response => {
-      if(response !== null && response.Response.Code === "200"){
+      if (response !== null && response.Response.Code === '200') {
         const data = <Array<any>>response.Response.Body[0];
         const dataInfo = <Array<any>>[];
         data.forEach(element => {
           const FechaI = element.FechaInicio;
           const FechaF = element.FechaFinalizacion;
-          element.FechaInicio = FechaI.substring(0,2) + "/" + FechaI.substring(2,4) + "/" + FechaI.substring(4,8);
-          element.FechaFinalizacion = FechaF.substring(0,2) + "/" + FechaF.substring(2,4) + "/" + FechaF.substring(4,8);
+          element.FechaInicio = FechaI.substring(0, 2) + '/' + FechaI.substring(2, 4) + '/' + FechaI.substring(4, 8);
+          element.FechaFinalizacion = FechaF.substring(0, 2) + '/' + FechaF.substring(2, 4) + '/' + FechaF.substring(4, 8);
           dataInfo.push(element);
         })
         this.info_formacion_academica = data;
-      } 
+      }
     },
     (error: HttpErrorResponse) => {
       Swal.fire({
-        icon:'error',
+        icon: 'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -125,7 +125,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({
-                  icon:'error',
+                  icon: 'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -138,7 +138,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
       },
         (error: HttpErrorResponse) => {
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
