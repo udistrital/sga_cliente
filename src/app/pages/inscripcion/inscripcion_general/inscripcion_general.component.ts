@@ -181,9 +181,14 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   loadNivel(IdPrograma: number) {
     this.loading = true;
-    this.programaService.get('proyecto_academico_institucion/' + IdPrograma).subscribe(
+    this.programaService.get('proyecto_academico_institucion/?query=Id:' + IdPrograma).subscribe(
       (response: any) => {
-        const IdNivel = response.NivelFormacionId.Id;
+        let IdNivel;
+        if (response[0].NivelFormacionId.NivelFormacionPadreId !== null) {
+          IdNivel = response[0].NivelFormacionId.NivelFormacionPadreId.Id;
+        } else {
+          IdNivel = response[0].NivelFormacionId.Id;
+        }
         this.programaService.get('nivel_formacion/' + IdNivel).subscribe(
           (res: any) => {
             this.loading = false;

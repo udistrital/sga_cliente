@@ -129,12 +129,15 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
   searchNit(nit: string) {
     this.loading = true;
+    nit = nit.trim();
     const init = this.getIndexForm('Nit');
     const inombre = this.getIndexForm('NombreUniversidad');
     const idir = this.getIndexForm('Direccion');
     const itel = this.getIndexForm('Telefono');
     const icorreo = this.getIndexForm('Correo');
     const iPais = this.getIndexForm('Pais');
+    this.formInfoFormacionAcademica.campos[init].valor = nit;
+
     this.sgaMidService.get('formacion_academica/info_universidad?Id=' + nit)
       .subscribe((res: any) => {
         this.universidadConsultada = res;
@@ -164,7 +167,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
             this.formInfoFormacionAcademica.campos[iPais],
             this.formInfoFormacionAcademica.campos[itel]]
               .forEach(element => {
-                element.deshabilitar = false;
+                element.deshabilitar = true;
+                element.valor = '';
               });
           }
           Swal.fire({
@@ -186,14 +190,15 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     const icorreo = this.getIndexForm('Correo');
     const iPais = this.getIndexForm('Pais');
     const regex = /^[0-9]*$/;
+    data.data.Nit = data.data.Nit.trim()
     const nit = typeof data === 'string' ? data : data.data.Nit;
-    var IdUniversidad;
-
+    let IdUniversidad;
     if (regex.test(nit) === true) {
       this.loading = false;
       this.searchNit(nit);
     } else {
-      if (Object.entries(this.formInfoFormacionAcademica.campos[inombre].valor).length != 0 && this.formInfoFormacionAcademica.campos[inombre].valor != null) {
+      if (Object.entries(this.formInfoFormacionAcademica.campos[inombre].valor).length !== 0 &&
+        this.formInfoFormacionAcademica.campos[inombre].valor !== null) {
         IdUniversidad = this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].valor.Id;
         this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdUniversidad).subscribe(
           (res: any) => {
@@ -223,6 +228,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
   loadListUniversidades(nombre: string): void {
     this.loading = true;
+    nombre = nombre.trim();
     let consultaUniversidades: Array<any> = [];
     const universidad: Array<any> = [];
     this.sgaMidService.get('formacion_academica/info_universidad_nombre?nombre=' + nombre)
@@ -242,9 +248,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
             icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.info_caracteristica') + '|' +
-              this.translate.instant('GLOBAL.ciudad_nacimiento'),
+            footer: this.translate.instant('informacion_academica.error_cargar_universidad'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });
@@ -253,7 +257,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   public loadInfoFormacionAcademica(): void {
     this.loading = true;
     if ((this.info_formacion_academica_id !== 0 && this.info_proyecto_id !== 0 && this.persona_id !== 0)
-      && (this.info_formacion_academica_id !== undefined && this.info_proyecto_id !== undefined && this.persona_id != undefined)
+      && (this.info_formacion_academica_id !== undefined && this.info_proyecto_id !== undefined && this.persona_id !== undefined)
       && this.edit_status === true) {
       this.temp_info_academica = {};
       this.SoporteDocumento = [];
