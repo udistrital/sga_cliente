@@ -18,6 +18,7 @@ import { GoogleService } from '../../../@core/data/google.service';
 import { Invitacion } from '../../../@core/data/models/correo/invitacion';
 import { InvitacionTemplate } from '../../../@core/data/models/correo/invitacionTemplate';
 import Swal from 'sweetalert2';
+import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 
 @Component({
@@ -57,6 +58,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     private documentoService: DocumentoService,
     private dialog: MatDialog,
     private googleMidService: GoogleService,
+    private pivotDocument: PivotDocument
   ) {
     this.invitacion = new Invitacion();
     this.invitacionTemplate = new InvitacionTemplate();
@@ -70,6 +72,11 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.pivotDocument.document$.subscribe((document: any )=> {
+      if(document) {
+        this.revisarDocumento(document)
+      }
+    })
   }
 
   async loadData() {
