@@ -90,11 +90,11 @@
         <nb-card-header>{{ 'cupos.cupos_proyecto' | translate }}: {{cuposProyecto}}</nb-card-header>
 </nb-card>
 
-<nb-card [hidden]="!show_listado" accent="info">
+<nb-card *ngIf="show_listado" accent="info">
         <nb-card-body>
             <div class="row">
                 <div class="col-12">
-                    <ng2-smart-table [settings]="settings_emphasys" [(source)]="source_emphasys">
+                    <ng2-smart-table [settings]="settings_emphasys" [(source)]="source_emphasys" (editConfirm)="onSaveConfirm($event)">
                     </ng2-smart-table>
                 </div>
             </div>

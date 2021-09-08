@@ -373,9 +373,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         title: this.translate.instant('GLOBAL.info'),
         text: this.translate.instant('inscripcion.alerta_posgrado'),
       })
-
-              ,
-
       this.projectService.get('proyecto_academico_institucion?limit=0&fields=Id,Nombre,NivelFormacionId').subscribe(
         response => {
           this.projects = <any[]>response.filter(proyecto => this.filtrarProyecto(proyecto));

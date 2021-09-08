@@ -18,6 +18,8 @@ import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/ni
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
+import { AnyService } from '../../../@core/data/any.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -28,7 +30,6 @@ import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_ins
 export class ListadoAspiranteComponent implements OnInit, OnChanges {
 
   config: ToasterConfig;
-
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
@@ -66,6 +67,17 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   Aspirantes = [];
   cuposProyecto: number;
 
+  estados = [
+    {
+      value: 5,
+      title: "INSCRITO",
+    },
+    {
+      value: 1,
+      title: "Inscripción solicitada",
+    }
+  ]
+
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
@@ -80,7 +92,31 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     private inscripcionService: InscripcionService,
     private tercerosService: TercerosService,
     private toasterService: ToasterService,
+    private anyService: AnyService,
     private evaluacionService: EvaluacionInscripcionService) {
+
+
+    this.translate = translate;
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+
+    });
+    this.cargarPeriodo();
+    this.nivel_load();
+    this.show_listado = false;
+    this.inscripcionService.get('estado_inscripcion')
+    .subscribe((state)=>{
+      this.estados = state.map((e)=>{
+        return {
+          value: e.Id,
+          title: e.Nombre
+        }
+      })
+      console.log(this.estados);
+      this.createTable()
+    })
+  }
+
+  createTable(){
     this.settings_emphasys = {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -88,11 +124,11 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       },
       actions: {
         delete: false,
-        edit: false,
+        edit: true,
         add: false,
         position: 'right',
       },
-      mode: 'external',
+      mode: 'internal',
       columns: {
         // TipoDocumento: {
         //   title: this.translate.instant('GLOBAL.Tipo'),
@@ -103,6 +139,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         //   width: '2%',
         // },
         NumeroDocumento: {
+          editable: false,
           title: this.translate.instant('GLOBAL.Documento'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
@@ -111,6 +148,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           width: '10%',
         },
         NombreAspirante: {
+          editable: false,
           title: this.translate.instant('GLOBAL.Nombre'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
@@ -119,6 +157,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           width: '50%',
         },
         NotaFinal: {
+          editable: false,
           title: this.translate.instant('GLOBAL.Puntaje'),
           sort: true,
           sortDirection: 'desc',
@@ -129,6 +168,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           width: '5%',
         },
         TipoInscripcionId: {
+          editable: false,
           title: this.translate.instant('GLOBAL.TipoInscripcion'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
@@ -138,21 +178,29 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         },
         EstadoInscripcionId: {
           title: this.translate.instant('GLOBAL.Estado'),
-          // type: 'string;',
-          valuePrepareFunction: (value) => {
-            return value.Nombre;
+          valuePrepareFunction: (cell, row, test) => {
+            var t = test.column.editor.config.list.find(x => x.value === cell.Id)
+            if (t)
+              return t.title
           },
-          width: '10%',
+          filter: false,
+          width: '250px',
+          type: 'html',
+          editor: {
+            type: 'list',
+            config: {
+              list: this.estados
+            },
+          }
         },
       },
+      edit: {
+        confirmSave: true,
+        editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('experiencia_laboral.tooltip_editar') + '"></i>',
+        saveButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
+      },
     };
-
-    this.translate = translate;
-    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-    });
-    this.cargarPeriodo();
-    this.nivel_load();
-    this.show_listado = false;
   }
 
 
@@ -228,6 +276,23 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     }
   }
 
+  onSaveConfirm(event) {
+    if (window.confirm('Are you sure you want to save?')) {
+      const updateState = {
+        ...event.newData.Inscripcion,
+        ...{ EstadoInscripcionId: { Id: parseInt(event.newData.EstadoInscripcionId, 10) } }
+      }
+      this.inscripcionService.put('inscripcion', updateState)
+        .subscribe((response) => {
+          console.log(response);
+          this.mostrartabla()
+          event.confirm.resolve(event.newData);
+        })
+    } else {
+      event.confirm.reject();
+    }
+  }
+
   loadProyectos() {
     this.show_listado = false;
     this.selectprograma = false;
@@ -297,6 +362,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                 this.tercerosService.get('tercero/' + element.PersonaId).subscribe(
                   (res: any) => {
                     let aspiranteAux = {
+                      Inscripcion: element,
                       NumeroDocumento: res.Id,
                       NombreAspirante: res.NombreCompleto,
                       NotaFinal: element.NotaFinal,
