@@ -43,7 +43,22 @@ import { DocumentoProgramaModule } from '../documento_programa/documento_program
 import { DescuentoAcademicoModule } from '../descuento_academico/descuento_academico.module';
 import { PropuestaGradoModule } from '../propuesta_grado/propuesta_grado.module';
 import { ProduccionAcademicaModule } from '../produccion_academica/produccion_academica.module';
+import { NbDialogService } from '@nebular/theme';
 import { InscripcionModule } from '../inscripcion/inscripcion.module';
+import { ListDocumentoProyectoComponent } from '../documento_proyecto/list-documento-proyecto/list-documento-proyecto.component';
+import { CrudDocumentoProyectoComponent } from '../documento_proyecto/crud-documento-proyecto/crud-documento-proyecto.component';
+import { SelectDocumentoProyectoComponent } from '../documento_proyecto/select-documento-proyecto/select-documento-proyecto.component';
+
+import { ListDescuentoProyectoComponent } from '../descuento_proyecto/list-descuento-proyecto/list-descuento-proyecto.component';
+import { CrudDescuentoProyectoComponent } from '../descuento_proyecto/crud-descuento-proyecto/crud-descuento-proyecto.component';
+import { SelectDescuentoProyectoComponent } from '../descuento_proyecto/select-descuento-proyecto/select-descuento-proyecto.component';
+
+import { DocumentoProyectoModule } from '../documento_proyecto/documento-proyecto.module';
+import { DescuentoProyectoModule } from '../descuento_proyecto/descuento-proyecto.module';
+import { DocumentoProgramaService } from '../../@core/data/documento_programa.service';
+import { AsignarDocumentosDescuentosComponent } from './asignar_documentos_descuentos/asignar_documentos_descuentos.component';
+import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
+
 
 @NgModule({
   imports: [
@@ -70,6 +85,8 @@ import { InscripcionModule } from '../inscripcion/inscripcion.module';
     DocumentoProgramaModule,
     DescuentoAcademicoModule,
     PropuestaGradoModule,
+    DocumentoProyectoModule,
+    DescuentoProyectoModule,
   ],
   declarations: [
     ...routedComponents,
@@ -86,14 +103,23 @@ import { InscripcionModule } from '../inscripcion/inscripcion.module';
     InscripcionService,
     TercerosService,
     SgaMidService,
+    DocumentoProgramaService,
+    NbDialogService,
+    ListEnfasisService,
   ],
-   entryComponents: [
+  entryComponents: [
     CrudCriterioIcfesComponent,
     CrudAsignacionCupoComponent,
     DialogoCriteriosComponent,
     CheckboxAssistanceComponent,
     DialogoDocumentosComponent,
-   ],
+    ListDocumentoProyectoComponent,
+    SelectDocumentoProyectoComponent,
+    CrudDocumentoProyectoComponent,
+    ListDescuentoProyectoComponent,
+    SelectDescuentoProyectoComponent,
+    CrudDescuentoProyectoComponent,
+  ],
   exports: [
     CriterioAdmisionComponent,
     AsignacionCuposComponent,
@@ -103,6 +129,7 @@ import { InscripcionModule } from '../inscripcion/inscripcion.module';
     DialogoCriteriosComponent,
     EvaluacionAspirantesComponent,
     EvaluacionDocumentosInscritosComponent,
+    AsignarDocumentosDescuentosComponent,
   ],
 })
 export class AdmisionModule { }
