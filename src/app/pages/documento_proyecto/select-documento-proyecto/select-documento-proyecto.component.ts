@@ -181,7 +181,6 @@ export class SelectDocumentoProyectoComponent implements OnInit {
   }
 
   onDeleteDocument(event: any) {
-    console.log(event)
     const documento = <TipoDocumentoPrograma>event.data;
     const opt: any = {
       title: this.translate.instant('GLOBAL.eliminar'),
@@ -212,7 +211,6 @@ export class SelectDocumentoProyectoComponent implements OnInit {
           documentoModificado.PeriodoId = parseInt(sessionStorage.getItem('PeriodoId'), 10);
           documentoModificado.ProgramaId = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
 
-          console.log(documentoModificado)
           this.inscripcionService.put('documento_programa', documentoModificado).subscribe(res => {
             Swal.close()
             if (res.Type !== 'error') {

@@ -548,7 +548,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10)).subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10)).subscribe(
       response => {
         this.tipo_documentos = <any[]>response;
       },
