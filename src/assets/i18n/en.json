@@ -1186,7 +1186,9 @@
         "imprimir_comprobante": "Print and keep this voucher",
         "comprobante_inscripcion": "Inscription Voucher",
         "info_comprobante": "Fulfilling this form means the candidate has known the official admissions manual for the ACTUAL PERIOD and according with the 1571 law from 2012 authorizes expressly and unequivocally the data management according to the proper functions of the University in his condition of High Education Institution.",
-        "warning_info":"Dear user, remember that you can only generate up to 3 receipts in pending payment status. If you want to generate another pre-registration to another project, you must pay at least one of the generated receipts."
+        "warning_info":"Dear user, remember that you can only generate up to 3 receipts in pending payment status. If you want to generate another pre-registration to another project, you must pay at least one of the generated receipts.",
+        "alerta_posgrado":"Dear applicant, keep in mind that in order to enroll in a graduate program, you must have a completed and graduated undergraduate degree, with their respective documentary supports."
+
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",

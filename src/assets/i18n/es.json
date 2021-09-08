@@ -1217,7 +1217,8 @@
         "imprimir_comprobante": "Imprima y conserve este comprobante",
         "comprobante_inscripcion": "Comprobante de Inscripción",
         "info_comprobante": "El diligenciamiento del presente formulario indica que el aspirante ha conocido el instructivo oficial de admisiones del PERIODO ACADÉMICO en curso, y acorde con la ley 1581 de 2012, autoriza de manera expresa e inequívoca, que sus datos personales sean tratados conforme a las funciones propias de la Universidad, en su condición de Institución de Educación Superior.",
-        "warning_info":"Señor usuario, recuerde que solo podra generar hasta 3 recibos en estado pendiente de pago, si desea generar otra preinscripción a otro proyecto deberá pagar al menos uno de los recibos generados."
+        "warning_info":"Señor usuario, recuerde que solo podra generar hasta 3 recibos en estado pendiente de pago, si desea generar otra preinscripción a otro proyecto deberá pagar al menos uno de los recibos generados.",
+        "alerta_posgrado":"Estimado aspirante, tenga en cuenta que para poder inscribirse en un programa de posgrado, usted debe contar con un grado de pregrado culminado y graduado, con sus respectivos soportes documentales."
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

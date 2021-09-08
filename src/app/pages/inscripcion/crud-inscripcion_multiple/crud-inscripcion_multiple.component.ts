@@ -368,6 +368,14 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.popUpManager.showInfoToast(this.translate.instant('inscripcion.erro_selec_nivel'))
       this.loading = false;
     } else {
+      Swal.fire({
+        icon: 'info',
+        title: this.translate.instant('GLOBAL.info'),
+        text: this.translate.instant('inscripcion.alerta_posgrado'),
+      })
+
+              ,
+
       this.projectService.get('proyecto_academico_institucion?limit=0&fields=Id,Nombre,NivelFormacionId').subscribe(
         response => {
           this.projects = <any[]>response.filter(proyecto => this.filtrarProyecto(proyecto));
