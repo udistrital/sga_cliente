@@ -3,11 +3,13 @@
               [nbSpinner]="loading" nbSpinnerStatus="success"
               nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
         <nb-card>
+            <nb-card-header>
+                {{ 'inscripcion.listado' | translate }}
+            </nb-card-header>
             <nb-card-body *ngIf="showInscription">
-                <nb-card-header>
-                    {{ 'inscripcion.listado' | translate }}
-                </nb-card-header>
-                <hr width="0%">
+                <div class="preinscription-alert">
+                    {{ 'inscripcion.warning_info' | translate }}
+                </div>
                 <fieldset [ngClass]="{'fieldseter':true} ">
                     <legend> {{ 'inscripcion.recibos_generados' | translate }} </legend>
                     <ng2-smart-table [settings]="settings"

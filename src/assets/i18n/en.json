@@ -1185,7 +1185,8 @@
         "error_update_programa_seleccionado": "There is already a registration process with the selected program",
         "imprimir_comprobante": "Print and keep this voucher",
         "comprobante_inscripcion": "Inscription Voucher",
-        "info_comprobante": "Fulfilling this form means the candidate has known the official admissions manual for the ACTUAL PERIOD and according with the 1571 law from 2012 authorizes expressly and unequivocally the data management according to the proper functions of the University in his condition of High Education Institution."
+        "info_comprobante": "Fulfilling this form means the candidate has known the official admissions manual for the ACTUAL PERIOD and according with the 1571 law from 2012 authorizes expressly and unequivocally the data management according to the proper functions of the University in his condition of High Education Institution.",
+        "warning_info":"Dear user, remember that you can only generate up to 3 receipts in pending payment status. If you want to generate another pre-registration to another project, you must pay at least one of the generated receipts."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
