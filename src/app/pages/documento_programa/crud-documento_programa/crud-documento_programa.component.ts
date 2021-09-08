@@ -84,7 +84,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=ProgramaId:' + this.programa).subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + this.programa).subscribe(
       response => {
         this.tipo_documentos = <any[]>response;
         this.eventChange.emit(this.tipo_documentos.length);
