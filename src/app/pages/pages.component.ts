@@ -69,13 +69,13 @@ export class PagesComponent implements OnInit {
       if (n.hasOwnProperty('Opciones')) {
         if (n.Opciones !== null) {
           const children = this.translateTree(n.Opciones);
-          node = { ...node, ...{ children: children }, ...{ icon: 'nb-compose' } };
+            node = { ...node, ...{ children: children }, ...{ icon: 'nb-compose' } };
+          }
+          return node;
+        } else {
+          return node;
         }
-        return node;
-      } else {
-        return node;
-      }
-    });
+      });
     return trans;
   }
 
@@ -94,7 +94,7 @@ export class PagesComponent implements OnInit {
       this.roles = 'ASPIRANTE';
     }
 
-    /*this.menuws.get(this.roles + '/SGA').subscribe(
+    this.menuws.get(this.roles + '/SGA').subscribe(
       data => {
         this.dataMenu = <any>data;
         this.menu = this.translateTree(this.dataMenu)
@@ -133,9 +133,7 @@ export class PagesComponent implements OnInit {
 
         //this.menu = MENU_ITEMS;
         this.translateMenu();
-      }); */
-    this.menu = MENU_ITEMS;
-
+      });
     this.translateMenu();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => { // Live reload
       this.translateMenu();
@@ -162,10 +160,10 @@ export class PagesComponent implements OnInit {
   }
 
   /**
-  * Translates one root menu item and every nested children
-  * @param menuItem
-  * @param prefix
-  */
+   * Translates one root menu item and every nested children
+   * @param menuItem
+   * @param prefix
+   */
   private translateMenuTitle(menuItem: MenuItem, prefix: string = ''): void {
     let key = '';
     try {
