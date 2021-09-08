@@ -108,6 +108,7 @@ export class ListDocumentoProyectoComponent implements OnInit {
   }
 
   loadData(): void {
+    this.documentos = []
     this.loading = true;
     this.inscripcionService.get('tipo_documento_programa?limit=0').subscribe(
       response => {
@@ -136,6 +137,10 @@ export class ListDocumentoProyectoComponent implements OnInit {
     this.activetab();
   }
 
+  onDelete(event): void {
+    console.log(event.data)
+  }
+
   onCreate(event): void {
     this.uid = 0;
     this.activetab();
@@ -161,7 +166,7 @@ export class ListDocumentoProyectoComponent implements OnInit {
   onChange(event) {
     if (event) {
       this.loadData();
-      this.cambiotab = !this.cambiotab;
+      this.activetab();
     }
   }
 
