@@ -32,7 +32,7 @@ export class SelectDocumentoProyectoComponent implements OnInit {
   subscription: Subscription;
   documento_proyecto = [];
 
-  constructor(private translate: TranslateService, private proyectoAcademicoService: ProyectoAcademicoService,
+  constructor(private translate: TranslateService,
     private inscripcionService: InscripcionService,
     private dialogRef: NbDialogRef<SelectDocumentoProyectoComponent>,
     private popUpManager: PopUpManager,
@@ -121,11 +121,11 @@ export class SelectDocumentoProyectoComponent implements OnInit {
               },
             });
 
-            let content = Swal.getHtmlContainer()
+            let content = Swal.getHtmlContainer();
             if (content) {
               const b: any = content.querySelector('b');
               if (b) {
-                b.textContent = this.translate.instant('GLOBAL.carga_recolectando')
+                b.textContent = this.translate.instant('GLOBAL.carga_recolectando');
               }
             }
 
@@ -206,7 +206,7 @@ export class SelectDocumentoProyectoComponent implements OnInit {
           const documentoModificado: DocumentoPrograma = new DocumentoPrograma();
           documentoModificado.TipoDocumentoProgramaId = documento;
           documentoModificado.Activo = false;
-          documentoModificado.FechaCreacion = event.data.FechaPrograma
+          documentoModificado.FechaCreacion = event.data.FechaPrograma;
           documentoModificado.Id = event.data.IdDocPrograma;
           documentoModificado.PeriodoId = parseInt(sessionStorage.getItem('PeriodoId'), 10);
           documentoModificado.ProgramaId = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
@@ -247,10 +247,12 @@ export class SelectDocumentoProyectoComponent implements OnInit {
 
   retorno(event) {
     this.boton_retornar = event;
+    this.loadData();
   }
 
   loadData() {
     this.loading = true;
+    this.documentos = [];
     this.inscripcionService.get('tipo_documento_programa?limit=0&query=Activo:true').subscribe(
       response => {
         response.forEach(documento => {
@@ -266,7 +268,7 @@ export class SelectDocumentoProyectoComponent implements OnInit {
 
   loadDataProyecto() {
     this.loading = true;
-    this.documento_proyecto = []
+    this.documento_proyecto = [];
     this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + sessionStorage.getItem('ProgramaAcademicoId')).subscribe(
       response => {
         response.forEach(documento => {
