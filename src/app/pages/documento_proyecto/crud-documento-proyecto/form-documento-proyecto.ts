@@ -49,7 +49,6 @@ export let FORM_DOCUMENTO_PROYECTO = {
       nombre: 'Activo',
       label_i18n: 'activo',
       placeholder_i18n: 'activo',
-      requerido: true,
       valor: false,
     },
   ],
