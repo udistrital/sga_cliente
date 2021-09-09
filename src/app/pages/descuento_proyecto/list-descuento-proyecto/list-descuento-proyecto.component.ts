@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, Injectable } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { DocumentoProgramaService } from '../../../@core/data/documento_programa.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbDialogRef } from '@nebular/theme';
 import { DescuentoAcademicoService } from '../../../@core/data/descuento_academico.service';
+import { TipoDescuento } from '../../../@core/data/models/descuento/tipo_descuento';
 
 @Component({
   selector: 'ngx-list-descuento-proyecto',
@@ -19,16 +20,16 @@ export class ListDescuentoProyectoComponent implements OnInit {
   config: ToasterConfig;
   settings: any;
   loading: boolean;
+  info_desc_programa: TipoDescuento;
 
   descuentos = [];
-  administrar_documentos: boolean = true;
+  administrar_descuentos: boolean = true;
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private translate: TranslateService,
     private descuentoService: DescuentoAcademicoService,
     private dialogRef: NbDialogRef<ListDescuentoProyectoComponent>,
     private popUpManager: PopUpManager,
-    private DocumentoProgramaService: DocumentoProgramaService,
     private toasterService: ToasterService) {
     this.loading = true;
     this.cargarCampos();
@@ -43,7 +44,6 @@ export class ListDescuentoProyectoComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  // @Input() administrar_documentos: boolean;
   @Output() retorno = new EventEmitter<boolean>();
 
   cargarCampos() {
@@ -122,6 +122,7 @@ export class ListDescuentoProyectoComponent implements OnInit {
   }
 
   loadData(): void {
+    this.descuentos = [];
     this.loading = true;
     this.descuentoService.get('tipo_descuento?limit=0').subscribe(
       response => {
@@ -150,6 +151,52 @@ export class ListDescuentoProyectoComponent implements OnInit {
     this.activetab();
   }
 
+  onDelete(event): void {
+
+    const opt: any = {
+      title: this.translate.instant('GLOBAL.eliminar'),
+      text: this.translate.instant('descuento_academico.seguro_continuar_eliminar_descuento'),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true,
+    };
+    Swal.fire(opt)
+      .then((willDelete) => {
+        if (willDelete.value) {
+          this.info_desc_programa = <TipoDescuento>event.data;
+          this.info_desc_programa.Activo = false;
+
+          this.descuentoService.put('tipo_descuento/', this.info_desc_programa)
+            .subscribe((res: any) => {
+              if (res.Type !== 'error') {
+
+                const opt1: any = {
+                  title: this.translate.instant('GLOBAL.eliminar'),
+                  text: this.translate.instant('descuento_academico.descuento_eliminado'),
+                  icon: 'success',
+                  buttons: true,
+                  dangerMode: true,
+                  showCancelButton: true,
+                };
+
+                Swal.fire(opt1).then((willCreate) => {
+                  if (willCreate.value) {
+                    this.loadData();
+                    this.activetabFather();
+                  }
+                });
+
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('descuento_academico.descuento_no_eliminado'));
+              }
+            }, () => {
+              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('descuento_academico.descuento_no_eliminado'));
+            });
+        }
+      });
+  }
+
   onCreate(event): void {
     this.uid = 0;
     this.activetab();
@@ -157,7 +204,7 @@ export class ListDescuentoProyectoComponent implements OnInit {
 
   activetab(): void {
     this.cambiotab = !this.cambiotab;
-    this.activetabFather()
+    this.activetabFather();
   }
 
   activetabFather(): void {
@@ -175,7 +222,7 @@ export class ListDescuentoProyectoComponent implements OnInit {
   onChange(event) {
     if (event) {
       this.loadData();
-      this.cambiotab = !this.cambiotab;
+      this.activetab();
     }
   }
 

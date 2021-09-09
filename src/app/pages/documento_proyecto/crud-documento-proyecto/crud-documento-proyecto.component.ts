@@ -1,5 +1,3 @@
-import { Aplicacion } from '../../../@core/data/models/aplicacion';
-
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { FORM_DOCUMENTO_PROYECTO } from './form-documento-proyecto'
@@ -60,7 +58,7 @@ export class CrudDocumentoProyectoComponent implements OnInit {
     for (let index = 0; index < this.formDocumentoProyecto.campos.length; index++) {
       const element = this.formDocumentoProyecto.campos[index];
       if (element.nombre === nombre) {
-        return index
+        return index;
       }
     }
     return 0;
@@ -99,18 +97,22 @@ export class CrudDocumentoProyectoComponent implements OnInit {
       .then((willDelete) => {
         if (willDelete.value) {
           this.info_doc_programa = <TipoDocumentoPrograma>documentoProyecto;
-          // this.proyectoAcademicoService.put('enfasis', this.info_doc_programa)
-          //   .subscribe((res: any) => {
-          //     if (res.Type !== 'error') {
-          //       this.loadDocumentoProyecto();
-          //       this.eventChange.emit(true);
-          //       this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('documento_proyecto.documento_actualizado'));
-          //     } else {
-          //       this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_actualizado'));
-          //     }
-          //   }, () => {
-          //     this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_actualizado'));
-          //   });
+          if (documentoProyecto.Activo == "") {
+            this.info_doc_programa.Activo = false;
+          }
+
+          this.inscripcionService.put('tipo_documento_programa/', this.info_doc_programa)
+            .subscribe((res: any) => {
+              if (res.Type !== 'error') {
+                this.loadDocumentoProyecto();
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('documento_proyecto.documento_actualizado'));
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_actualizado'));
+              }
+            }, () => {
+              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_actualizado'));
+            });
         }
       });
   }
@@ -128,18 +130,22 @@ export class CrudDocumentoProyectoComponent implements OnInit {
       .then((willDelete) => {
         if (willDelete.value) {
           this.info_doc_programa = <TipoDocumentoPrograma>documentoProyecto;
-          // this.proyectoAcademicoService.post('enfasis', this.info_doc_programa)
-          //   .subscribe((res: any) => {
-          //     if (res.Type !== 'error') {
-          //       this.info_doc_programa = <DocumentoPrograma><unknown>res;
-          //       this.eventChange.emit(true);
-          //       this.showToast('info', this.translate.instant('GLOBAL.registrar'), this.translate.instant('documento_proyecto.documento_creado'));
-          //     } else {
-          //       this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_creado'));
-          //     }
-          //   }, () => {
-          //     this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_creado'));
-          //   });
+          if (documentoProyecto.Activo == "") {
+            this.info_doc_programa.Activo = false;
+          }
+
+          this.inscripcionService.post('tipo_documento_programa/', this.info_doc_programa)
+            .subscribe((res: any) => {
+              if (res.Type !== 'error') {
+                this.info_doc_programa = <TipoDocumentoPrograma>res;
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.registrar'), this.translate.instant('documento_proyecto.documento_creado'));
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_creado'));
+              }
+            }, () => {
+              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_creado'));
+            });
         }
       });
   }
@@ -151,9 +157,9 @@ export class CrudDocumentoProyectoComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       if (this.info_doc_programa === undefined) {
-        this.createDocumentoProyecto(event.data.documentoProyecto);
+        this.createDocumentoProyecto(event.data.TipoDocumentoPrograma);
       } else {
-        this.updateDocumentoProyecto(event.data.documentoProyecto);
+        this.updateDocumentoProyecto(event.data.TipoDocumentoPrograma);
       }
     }
   }
