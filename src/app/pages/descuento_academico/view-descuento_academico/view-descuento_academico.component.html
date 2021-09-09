@@ -11,10 +11,11 @@
                 </thead>
                 <tbody *ngIf="info_descuento">
                     <tr *ngFor="let descuento of info_descuento">
-                        <td> {{descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre}} </td>
-                        <td *ngIf="descuento.DocumentoId !== undefined">
-                          <a [href]=descuento.Soporte download="{{descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre}}.pdf">
-                                <i class="nb-search" title={{variable}}></i></a>
+                        <td> {{descuento.DescuentosDependenciaId?descuento.DescuentosDependenciaId.TipoDescuentoId?descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre:'':''}} </td>
+                        <td *ngIf="descuento.Soporte !== undefined">
+                            <button mat-button type="button" (click)="pivotDocument.updateDocument(descuento.Soporte )">
+                                <i class="nb-search" title={{variable}}></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

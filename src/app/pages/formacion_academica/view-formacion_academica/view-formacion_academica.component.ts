@@ -9,6 +9,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserService } from '../../../@core/data/users.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-formacion-academica',
@@ -43,10 +44,15 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
+    private pivotDocument:PivotDocument,
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'), 10);
+    this.pivotDocument.info$.subscribe((data)=> {
+      if(data){
+        this.persona_id = data.TerceroId;
+      }
+    })
     this.loadData();
   }
 
@@ -95,15 +101,16 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
       .subscribe(res => {
         if (res !== null) {
+          console.log(res);
           const temp_info_academica = <any>res[0];
           const files = []
           if (temp_info_academica.Documento + '' !== '0') {
             files.push({ Id: temp_info_academica.Documento, key: 'Documento' });
           }
-          this.nuxeoService.getDocumentoById$(files, this.documentoService)
+          this.nuxeoService.getFilesNew(files)
             .subscribe(response => {
+              console.log(response);
               const filesResponse = <any>response;
-              if (Object.keys(filesResponse).length === files.length) {
                 this.info_formacion_academica = [
                     {
                       Nit: temp_info_academica.Institucion.Nit,
@@ -118,10 +125,9 @@ export class ViewFormacionAcademicaComponent implements OnInit {
                       TituloTrabajoGrado: temp_info_academica.TituloTrabajoGrado,
                       DescripcionTrabajoGrado: temp_info_academica.DescripcionTrabajoGrado,
                       Titulacion: temp_info_academica.Titulacion,
-                      Documento: filesResponse['Documento'] + '',
+                      Documento: filesResponse[0],
                   },
                 ]
-              }
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({
@@ -235,5 +241,9 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  abrirDocumento(document){
+    this.pivotDocument.updateDocument(document);
   }
 }

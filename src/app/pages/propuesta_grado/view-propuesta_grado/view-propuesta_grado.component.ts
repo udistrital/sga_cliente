@@ -9,6 +9,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { CIDCService } from '../../../@core/data/cidc.service';
+import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-propuesta-grado',
@@ -49,6 +50,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
+    private pivotDocument: PivotDocument,
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -91,7 +93,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
                             temp.LineaInvestigacion = <any>linea;
                             // temp.LineaInvestigacion.name = temp.LineaInvestigacion.LineaInvestigacion.name;
                             // this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones.push(temp.LineaInvestigacion);
-                          //  temp.TipoProyecto = temp.TipoProyectoId;
+                            //  temp.TipoProyecto = temp.TipoProyectoId;
                             this.info_propuesta_grado = temp;
                           }
                         },
@@ -248,7 +250,10 @@ export class ViewPropuestaGradoComponent implements OnInit {
               const filesResponse_2 = <any>response_2;
               if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2['FormatoProyecto'] !== undefined)) {
                 temp.FormatoProyecto = filesResponse_2['FormatoProyecto'] + '';
-                temp.Soporte = this.cleanURL(filesResponse_2['FormatoProyecto'] + '');
+                temp.Soporte = {
+                  ...temp,
+                  ...{ Documento: this.cleanURL(filesResponse_2['FormatoProyecto'] + '') },
+                }
                 this.FormatoProyecto = temp.DocumentoId;
                 this.cidcService.get('research_units/' + temp.GrupoInvestigacionId)
                   .subscribe(grupo => {
@@ -260,7 +265,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
                             temp.LineaInvestigacion = <any>linea;
                             // temp.LineaInvestigacion.name = temp.LineaInvestigacion.LineaInvestigacion.name;
                             // this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones.push(temp.LineaInvestigacion);
-                          //  temp.TipoProyecto = temp.TipoProyectoId;
+                            //  temp.TipoProyecto = temp.TipoProyectoId;
                             this.info_propuesta_grado = temp;
                             this.listo.emit(true);
                           }
@@ -320,6 +325,10 @@ export class ViewPropuestaGradoComponent implements OnInit {
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });
+  }
+
+  verPropuesta(document) {
+    this.pivotDocument.updateDocument(document);
   }
 
   ngOnInit() {
