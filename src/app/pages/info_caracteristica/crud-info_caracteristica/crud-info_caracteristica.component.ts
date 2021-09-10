@@ -28,13 +28,13 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   info_caracteristica_id: number;
 
   @Input('info_caracteristica_id')
-    set name(info_caracteristica_id: number) {
-      this.info_caracteristica_id = info_caracteristica_id;
-      if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
-       this.info_caracteristica_id.toString() !== '') {
-        // this.loadInfoCaracteristica();
-      }
+  set name(info_caracteristica_id: number) {
+    this.info_caracteristica_id = info_caracteristica_id;
+    if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
+      this.info_caracteristica_id.toString() !== '') {
+      // this.loadInfoCaracteristica();
     }
+  }
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
@@ -98,8 +98,8 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       this.departamentoSeleccionado = event.valor;
       this.loadOptionsCiudadNacimiento();
     } else if (event.nombre === 'TipoDiscapacidad') {
-        this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar = 
-        !((event.valor.filter(data=>data.Nombre !== 'NO APLICA')).length > 0);
+      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar =
+        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
     }
   }
 
@@ -110,8 +110,8 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     if (this.paisSeleccionado) {
       this.ubicacionesService.get('relacion_lugares?query=LugarPadreId__Id:' + this.paisSeleccionado.Id +
         ',LugarHijoId__Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre').subscribe(
-        res => {
-           if (res !== null) {
+          res => {
+            if (res !== null) {
               consultaHijos = <Array<Lugar>>res;
               for (let i = 0; i < consultaHijos.length; i++) {
                 departamentoNacimiento.push(consultaHijos[i].LugarHijoId);
@@ -119,19 +119,19 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             }
             this.loading = false;
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = departamentoNacimiento;
-        },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-            this.translate.instant('GLOBAL.info_caracteristica') + '|' +
-            this.translate.instant('GLOBAL.departamento_nacimiento'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          },
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica') + '|' +
+                this.translate.instant('GLOBAL.departamento_nacimiento'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
-        });
     } else {
       this.loading = false;
     }
@@ -154,18 +154,18 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           this.loading = false;
           this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = ciudadNacimiento;
         },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-            this.translate.instant('GLOBAL.info_caracteristica') + '|' +
-            this.translate.instant('GLOBAL.ciudad_nacimiento'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica') + '|' +
+                this.translate.instant('GLOBAL.ciudad_nacimiento'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
-        });
     } else {
       this.loading = false;
     }
@@ -213,10 +213,10 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           }
         },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
-         });
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
+          });
     } else {
       this.info_info_caracteristica = undefined;
       this.clean = !this.clean;
@@ -246,23 +246,23 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             .subscribe(res => {
               this.loading = false;
               this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
-              this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
-              this.translate.instant('GLOBAL.confirmarActualizar'));
+                this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
+                this.translate.instant('GLOBAL.confirmarActualizar'));
               this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
               this.loadInfoCaracteristica();
               this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab'));
             },
-            (error: HttpErrorResponse) => {
-              this.loading = false;
-              Swal.fire({
-                icon: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-                this.translate.instant('GLOBAL.info_caracteristica'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                    this.translate.instant('GLOBAL.info_caracteristica'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
               });
-            });
         } else {
           this.loading = false;
         }
@@ -302,18 +302,18 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               }
               this.loading = false;
             },
-            (error: HttpErrorResponse) => {
-              this.loading = false;
-              Swal.fire({
-                icon: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-              });
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                });
               });
         } else {
           this.loading = false;
         }
-    });
+      });
   }
 
   ngOnInit() {
@@ -321,10 +321,28 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
-      if (this.info_info_caracteristica === undefined && !this.denied_acces) {
-        this.createInfoCaracteristica(event.data.InfoCaracteristica);
+      debugger;
+      if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad !== "undefined") {
+        const file = [{
+          file: event.data.InfoCaracteristica.ComprobanteDiscapacidad,
+          IdDocumento: 42,
+          nombre: 'ComprobanteDiscapacidad'
+        }]
+        this.nuxeo.saveFilesNew(file)
+          .subscribe((file) => {
+            console.log(file);
+            if (this.info_info_caracteristica === undefined && !this.denied_acces) {
+              this.createInfoCaracteristica(event.data.InfoCaracteristica);
+            } else {
+              this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+            }
+          })
       } else {
-        this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+        if (this.info_info_caracteristica === undefined && !this.denied_acces) {
+          this.createInfoCaracteristica(event.data.InfoCaracteristica);
+        } else {
+          this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+        }
       }
     }
   }
@@ -357,15 +375,15 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   public loadLists() {
-   this.store.select((state) => state).subscribe(
-    (list) => {
-      this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
-      this.formInfoCaracteristica.campos[this.getIndexForm('GrupoEtnico')].opciones = list.listGrupoEtnico[0];
-      this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].opciones = list.listTipoDiscapacidad[0];
-      this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSanguineo')].opciones = list.listGrupoSanguineo[0];
-      this.formInfoCaracteristica.campos[this.getIndexForm('Rh')].opciones = list.listFactorRh[0];
-    },
-   );
+    this.store.select((state) => state).subscribe(
+      (list) => {
+        this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('GrupoEtnico')].opciones = list.listGrupoEtnico[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].opciones = list.listTipoDiscapacidad[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSanguineo')].opciones = list.listGrupoSanguineo[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('Rh')].opciones = list.listFactorRh[0];
+      },
+    );
   }
 
 }
