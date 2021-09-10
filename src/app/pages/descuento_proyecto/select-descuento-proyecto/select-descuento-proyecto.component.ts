@@ -260,6 +260,10 @@ export class SelectDescuentoProyectoComponent implements OnInit {
     this.boton_retornar = event;
   }
 
+  close() {
+    this.dialogRef.close();
+  }
+
   loadData() {
     this.loading = true;
     this.descuentoService.get('tipo_descuento?limit=0&query=Activo:true').subscribe(

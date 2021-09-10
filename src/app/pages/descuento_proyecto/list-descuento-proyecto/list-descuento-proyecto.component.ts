@@ -127,6 +127,19 @@ export class ListDescuentoProyectoComponent implements OnInit {
       response => {
         response.forEach(descuento => {
           this.loading = true;
+
+          if (descuento.Activo) {
+            descuento.Activo = 'Sí'
+          } else {
+            descuento.Activo = 'No'
+          }
+
+          if (descuento.General) {
+            descuento.General = 'Sí'
+          } else {
+            descuento.General = 'No'
+          }
+
           this.descuentos.push(descuento);
           this.source.load(this.descuentos);
           this.loading = false;
@@ -158,6 +171,10 @@ export class ListDescuentoProyectoComponent implements OnInit {
   activetab(): void {
     this.cambiotab = !this.cambiotab;
     this.activetabFather()
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 
   activetabFather(): void {

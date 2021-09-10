@@ -1,7 +1,12 @@
 <fieldset *ngIf="!cambiotab" [ngClass]="{'fieldseter': true}">
-  <legend>
-    <small>  &nbsp; {{ 'descuento_academico.descuento' | translate }}</small>
+
+  <legend style="display: flex;justify-content: space-between;">
+    <small>  &nbsp; {{ 'documento_proyecto.documento' | translate }}</small>
+      <button class="btn btn-danger btn-icon input-group-text btn-tn"
+              (click)="close();">X
+      </button>
   </legend>
+
   <nb-card style="width: 70vw; display: grid;">
     <toaster-container [toasterconfig]="config"></toaster-container>
 
@@ -9,7 +14,7 @@
                      (delete)="onDelete($event)" (rowSelect)="itemselec($event)"
                      (edit)="onEdit($event)" (create)="onCreate($event)">
     </ng2-smart-table>
-    
+
     <br *ngIf="asDialog">
     <button style="margin-top: 10px;" *ngIf="asDialog" (click)="dismissDialog();" class="btn btn-info btn-sm">
       <i class="nb-arrow-dropleft"></i>  {{ 'GLOBAL.cerrar' | translate }}
@@ -22,9 +27,16 @@
 </ngx-crud-descuento-proyecto>
 
 
-<button *ngIf="cambiotab" (click)="activetab()" class="btn btn-info btn-sm">
-  <i class="nb-arrow-dropleft"></i>  {{ 'GLOBAL.regresar' | translate }}
-</button>
+<div style="display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;">
+  <button *ngIf="cambiotab" (click)="activetab()" class="btn btn-info btn-sm">
+    <i class="nb-arrow-dropleft"></i>  {{ 'GLOBAL.regresar' | translate }}
+  </button>
 
+  <button *ngIf="cambiotab" (click)="close()" class="btn btn-info btn-sm">
+    {{ 'GLOBAL.cerrar' | translate }} <i class="nb-arrow-dropright"></i>
+  </button>
+</div>
 
 <br/>

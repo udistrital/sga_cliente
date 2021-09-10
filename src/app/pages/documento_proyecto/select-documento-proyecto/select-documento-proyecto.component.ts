@@ -249,6 +249,10 @@ export class SelectDocumentoProyectoComponent implements OnInit {
     this.boton_retornar = event;
   }
 
+  close() {
+    this.dialogRef.close();
+  }
+
   loadData() {
     this.loading = true;
     this.inscripcionService.get('tipo_documento_programa?limit=0&query=Activo:true').subscribe(
