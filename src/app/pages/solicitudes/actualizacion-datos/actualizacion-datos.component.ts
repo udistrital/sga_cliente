@@ -370,7 +370,7 @@ export class ActualizacionDatosComponent implements OnInit {
     if (TerceroId !== undefined) {
       const hoy = new Date();
       this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor = hoy.getFullYear() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getDate();
-      this.tercerosService.get('datos_identificacion?query=TerceroId:' + TerceroId).subscribe(
+      this.tercerosService.get('datos_identificacion?query=TerceroId:' + TerceroId + ',Activo:true').subscribe(
         (response: any) => {
           if (response[0] !== undefined && response[0] !== '') {
             this.solicitudForm.campos[this.getIndexForm('TipoDocumentoActual')].valor = response[0]['TipoDocumentoId'];

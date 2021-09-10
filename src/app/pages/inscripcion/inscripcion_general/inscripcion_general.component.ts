@@ -12,7 +12,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import Swal from 'sweetalert2';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
-import { FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
@@ -548,7 +548,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10)).subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10)).subscribe(
       response => {
         this.tipo_documentos = <any[]>response;
       },

@@ -10,6 +10,7 @@ import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { ExperienciaService } from '../../../@core/data/experiencia.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../../@core/data/users.service';
+import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-experiencia-laboral',
@@ -46,6 +47,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
+    private pivotDocument:PivotDocument,
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -76,17 +78,18 @@ export class ViewExperienciaLaboralComponent implements OnInit {
           this.info_experiencia_laboral = this.data;
           for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
             if (this.info_experiencia_laboral[i].Soporte + '' !== '0') {
-              soportes.push({ Id: this.info_experiencia_laboral[i].Soporte, key: 'DocumentoExp' + i });
+              soportes.push({ Id: this.info_experiencia_laboral[i].Soporte, key: 'DocumentoExp' + this.info_experiencia_laboral[i].Soporte });
             }
           }
-          this.nuxeoService.getDocumentoById$(soportes, this.documentoService)
-            .subscribe(response => {
-              this.documentosSoporte = <Array<any>>response;
-              if (Object.values(this.documentosSoporte).length === this.info_experiencia_laboral.length) {
-                for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
-                  this.info_experiencia_laboral[i].Soporte = this.cleanURL(this.documentosSoporte['DocumentoExp' + i]);
+          this.nuxeoService.getFilesNew(soportes)
+          .subscribe(response => {
+                this.documentosSoporte = <Array<any>>response;
+                console.log(this.documentosSoporte);
+                if (Object.values(this.documentosSoporte).length === this.info_experiencia_laboral.length) {
+                  for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
+                    this.info_experiencia_laboral[i].Soporte = this.documentosSoporte[i];
+                  }
                 }
-              }
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({
@@ -117,6 +120,10 @@ export class ViewExperienciaLaboralComponent implements OnInit {
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       });
+  }
+
+  verDocumento(document) {
+    this.pivotDocument.updateDocument(document);
   }
 
   ngOnInit() {

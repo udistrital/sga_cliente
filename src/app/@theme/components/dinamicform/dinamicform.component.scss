@@ -50,7 +50,12 @@
   .dinamic-form {
     background-color: nb-theme(color-bg);
     color: nb-theme(card-fg-heading);
-    padding: 1rem;
+    &.padding-custom-1 {
+      padding: 1rem;
+    }
+    &.padding-custom-0 {
+      padding: 0;
+    }
   }
 
   .demo-checkboxes {

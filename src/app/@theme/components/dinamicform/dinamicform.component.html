@@ -1,4 +1,5 @@
-<div class="dinamic-form" [ngSwitch]="normalform.tipo_formulario">
+<div [ngSwitch]="normalform.tipo_formulario"
+      class="{{normalform.customPadding?'dinamic-form padding-custom-' + normalform.customPadding: 'dinamic-form padding-custom-1'}}">
 
     <!-- Form  basic -->
     <form class="form-horizontal" *ngSwitchCase="'basic'">

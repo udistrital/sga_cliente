@@ -11,6 +11,7 @@ import { DialogoCriteriosComponent } from './dialogo-criterios/dialogo-criterios
 import { EvaluacionAspirantesComponent } from './evaluacion-aspirantes/evaluacion-aspirantes.component';
 import { DialogoDocumentosComponent } from './dialogo-documentos/dialogo-documentos.component';
 import { EvaluacionDocumentosInscritosComponent } from './evaluacion-documentos-inscritos/evaluacion-documentos-inscritos.component';
+import { AsignarDocumentosDescuentosComponent } from './asignar_documentos_descuentos/asignar_documentos_descuentos.component';
 
 const routes: Routes = [{
   path: '',
@@ -19,6 +20,10 @@ const routes: Routes = [{
     {
       path: 'criterio_admision',
       component: CriterioAdmisionComponent,
+    },
+    {
+      path: 'asignar_documentos_descuentos',
+      component: AsignarDocumentosDescuentosComponent,
     },
     {
       path: 'asignacion_cupos',
@@ -69,4 +74,5 @@ export const routedComponents = [
   EvaluacionAspirantesComponent,
   DialogoDocumentosComponent,
   EvaluacionDocumentosInscritosComponent,
+  AsignarDocumentosDescuentosComponent,
 ];

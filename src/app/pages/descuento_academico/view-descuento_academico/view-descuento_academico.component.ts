@@ -9,6 +9,7 @@ import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-descuento-academico',
@@ -23,6 +24,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   programa: number;
   info_descuento: any;
   info_temp: any;
+  dataInfo:any;
   dataDes: Array<any>;
   solicituddescuento: SolicitudDescuento;
   docDesSoporte = [];
@@ -37,7 +39,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   set info2(info2: number) {
     this.inscripcion = info2;
     if (this.inscripcion !== undefined && this.inscripcion !== 0 && this.inscripcion.toString() !== '') {
-      this.loadData();
+      //this.loadData();
     }
   }
 
@@ -50,10 +52,17 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
     private inscripcionService: InscripcionService,
+    public pivotDocument : PivotDocument, 
     private sgaMidService: SgaMidService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.loadData();
+    this.pivotDocument.info$.subscribe((data)=> {
+      if(data){
+        this.dataInfo = data;
+        this.loadData(this.dataInfo);
+      }
+    })
+    this.pivotDocument.updateDocument
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -68,31 +77,31 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     this.url_editar.emit(true);
   }
 
-  loadData(): void {
+  loadData(dataInfo): void {
     this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' +
-      'PersonaId=' + Number(window.sessionStorage.getItem('TerceroId')) + '&DependenciaId=' +
-      Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
+      'PersonaId=' + dataInfo.TerceroId + '&DependenciaId=' +
+      dataInfo.ProgramaAcademicoId+ '&PeriodoId=' + dataInfo.IdPeriodo)
       .subscribe((result: any) => {
         const r = <any>result.Data.Body[1];
         if (result !== null && result.Data.Code == '200') {
           const data = <Array<SolicitudDescuento>>r;
           const soportes = [];
           this.info_descuento = data;
-
+          console.log('info_descuento', this.info_descuento)
           for (let i = 0; i < this.info_descuento.length; i++) {
             if (this.info_descuento[i].DocumentoId + '' !== '0') {
-              soportes.push({ Id: this.info_descuento[i].DocumentoId, key: 'DocumentoDes' + i });
+              soportes.push({ Id: this.info_descuento[i].DocumentoId, key: i });
             }
           }
+          console.log(soportes);
 
-          this.nuxeoService.getDocumentoById$(soportes, this.documentoService)
+          this.nuxeoService.getFilesNew(soportes)
             .subscribe(response => {
               this.docDesSoporte = <Array<any>>response;
-              if (Object.values(this.docDesSoporte).length === this.info_descuento.length) {
-                for (let i = 0; i < this.info_descuento.length; i++) {
-                  this.info_descuento[i].Soporte = this.cleanURL(this.docDesSoporte['DocumentoDes' + i]);
+              console.log(this.docDesSoporte);
+                for (let i = 0; i < this.docDesSoporte.length; i++) {
+                  (this.info_descuento[this.docDesSoporte[i]['key']]).Soporte = this.docDesSoporte[i];
                 }
-              }
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({
