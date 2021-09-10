@@ -5,10 +5,17 @@ import { Observable } from 'rxjs/Observable';
 import { Documento } from './../data/models/documento/documento'
 import { TipoDocumento } from './../data/models/documento/tipo_documento'
 import { Subject } from 'rxjs/Subject';
+import { DocumentoService } from '../data/documento.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
-@Injectable()
+
+@Injectable({
+    providedIn: 'root',
+})
 export class NuxeoService {
-    static nuxeo: Nuxeo
+    static nuxeo: Nuxeo;
+
+    private nuxeo2 = Nuxeo;
 
     private documentos$ = new Subject<Documento[]>();
     private documentos: object;
@@ -19,7 +26,10 @@ export class NuxeoService {
     private updateDoc$ = new Subject<[object]>();
     private updateDoc: object
 
-    constructor() {
+    constructor(
+        private documentService: DocumentoService,
+        private sanitization: DomSanitizer,
+    ) {
         this.documentos = {};
         this.blobDocument = {};
         this.updateDoc = {};
@@ -27,6 +37,15 @@ export class NuxeoService {
         // console.info(this.updateDoc);
 
         NuxeoService.nuxeo = new Nuxeo({
+            baseURL: environment.NUXEO.PATH,
+            auth: {
+                method: 'basic',
+                username: environment.NUXEO.CREDENTIALS.USERNAME,
+                password: environment.NUXEO.CREDENTIALS.PASS,
+            },
+        });
+
+        this.nuxeo2 = new Nuxeo({
             baseURL: environment.NUXEO.PATH,
             auth: {
                 method: 'basic',
@@ -182,5 +201,51 @@ export class NuxeoService {
                     }
                 });
         });
+    }
+
+    getFilesNew(files) {
+        const documentsSubject = new Subject<Documento[]>();
+        const documents$ = documentsSubject.asObservable();
+
+        const filesData = [];
+
+        files.forEach((file, index) => {
+            this.documentService.get('documento/' + file.Id)
+                .subscribe(res => {
+                    if (res !== null) {
+                        if (res.Enlace != null) {
+                            this.nuxeo2.header('X-NXDocumentProperties', '*');
+                            this.nuxeo2.request('/id/' + res.Enlace)
+                                .get()
+                                .then((response) => {
+                                    response.fetchBlob()
+                                        .then((blob) => {
+                                            blob.blob()
+                                                .then((responseblob) => {
+                                                    const url = URL.createObjectURL(responseblob)
+                                                    const objectNext = {
+                                                        ...res,
+                                                        ...{ documentId: res.Id },
+                                                        ...{ key: file.key },
+                                                        ...{ urlUnsafe: url },
+                                                        ...{ safeUrl: this.sanitization.bypassSecurityTrustUrl(url) },
+                                                        ...{ Documento: this.sanitization.bypassSecurityTrustUrl(url) }
+                                                    }
+                                                    filesData.push(objectNext);
+                                                    if ((index + 1) === files.length) {
+                                                        documentsSubject.next(filesData);
+                                                    }
+                                                });
+                                        })
+                                        .catch(function (response2) {
+                                        });
+                                })
+                                .catch(function (response) {
+                                });
+                        }
+                    }
+                });
+        });
+        return documents$;
     }
 }

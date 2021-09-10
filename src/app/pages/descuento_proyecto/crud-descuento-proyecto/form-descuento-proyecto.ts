@@ -1,6 +1,6 @@
 
 export let FORM_DESCUENTO_PROYECTO = {
-  titulo: 'Documento',
+  titulo: 'Descuento',
   tipo_formulario: 'mini',
   btn: 'Guardar',
   customPadding: '0',
@@ -58,7 +58,6 @@ export let FORM_DESCUENTO_PROYECTO = {
       nombre: 'Activo',
       label_i18n: 'activo',
       placeholder_i18n: 'activo',
-      requerido: true,
       valor: false,
     },
     {
@@ -67,7 +66,6 @@ export let FORM_DESCUENTO_PROYECTO = {
       nombre: 'General',
       label_i18n: 'general',
       placeholder_i18n: 'general',
-      requerido: true,
       valor: false,
     },
   ],

@@ -18,6 +18,7 @@ import { GoogleService } from '../../../@core/data/google.service';
 import { Invitacion } from '../../../@core/data/models/correo/invitacion';
 import { InvitacionTemplate } from '../../../@core/data/models/correo/invitacionTemplate';
 import Swal from 'sweetalert2';
+import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 
 @Component({
@@ -57,6 +58,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     private documentoService: DocumentoService,
     private dialog: MatDialog,
     private googleMidService: GoogleService,
+    private pivotDocument: PivotDocument
   ) {
     this.invitacion = new Invitacion();
     this.invitacionTemplate = new InvitacionTemplate();
@@ -67,9 +69,14 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
-   }
+  }
 
   ngOnInit() {
+    this.pivotDocument.document$.subscribe((document: any) => {
+      if (document) {
+        this.revisarDocumento(document)
+      }
+    })
   }
 
   async loadData() {
@@ -150,39 +157,39 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     this.dataSource.load([]);
     this.Aspirantes = [];
     this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
-                                this.proyectos_selected + ',PeriodoId:' + this.periodo.Id +
-                                '&sortby=Id&order=asc').subscribe(
-      (response: any) => {
-        if (response !== '[{}]') {
-          const data = <Array<any>>response;
-          data.forEach(element => {
-            if (element.PersonaId !== undefined) {
-              this.tercerosService.get('datos_identificacion?query=TerceroId:' + element.PersonaId).subscribe(
-                (res: any) => {
-                  const aspiranteAux = {
-                    Credencial: element.Id,
-                    Identificacion: res[0].Numero,
-                    Nombre: res[0].TerceroId.NombreCompleto,
-                    Estado: element.EstadoInscripcionId.Nombre,
-                  }
-                  this.Aspirantes.push(aspiranteAux);
-                  this.dataSource.load(this.Aspirantes);
-                },
-                error => {
-                  this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+      this.proyectos_selected + ',PeriodoId:' + this.periodo.Id +
+      '&sortby=Id&order=asc').subscribe(
+        (response: any) => {
+          if (response !== '[{}]') {
+            const data = <Array<any>>response;
+            data.forEach(element => {
+              if (element.PersonaId !== undefined) {
+                this.tercerosService.get('datos_identificacion?query=TerceroId:' + element.PersonaId).subscribe(
+                  (res: any) => {
+                    const aspiranteAux = {
+                      Credencial: element.Id,
+                      Identificacion: res[0].Numero,
+                      Nombre: res[0].TerceroId.NombreCompleto,
+                      Estado: element.EstadoInscripcionId.Nombre,
+                    }
+                    this.Aspirantes.push(aspiranteAux);
+                    this.dataSource.load(this.Aspirantes);
+                  },
+                  error => {
+                    this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
 
-                },
-              );
-            }
-          });
-        } else {
-          this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
-        }
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-      },
-    );
+                  },
+                );
+              }
+            });
+          } else {
+            this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
+          }
+        },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+        },
+      );
   }
 
   activateTab() {
@@ -196,6 +203,13 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
           (res: any) => {
             this.info_persona_id = response[0].TerceroId.Id;
             this.inscripcion_id = event.data['Credencial'];
+            this.pivotDocument.updateInfo({
+              TerceroId: response[0].TerceroId.Id,
+              IdInscripcion: event.data['Credencial'],
+              ProgramaAcademicoId: this.proyectos_selected.toString(),
+              ProgramaAcademico: res.Nombre,
+              IdPeriodo: this.periodo.Id
+            })
             sessionStorage.setItem('TerceroId', response[0].TerceroId.Id);
             sessionStorage.setItem('IdInscripcion', event.data['Credencial']);
             sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
@@ -263,7 +277,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     const assignConfig = new MatDialogConfig();
     assignConfig.width = '1300px';
     assignConfig.height = '750px';
-    assignConfig.data = {documento: doc}
+    assignConfig.data = { documento: doc }
     const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
     dialogo.afterClosed().subscribe(data => {
       if (data) {
@@ -310,11 +324,11 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   sendCorreo() {
     this.googleMidService.post('notificacion', this.invitacion)
       .subscribe((res: any) => {
-          Swal.fire({
-            title: `Éxito al enviar observación.`,
-          });
-          this.invitacion.to = [];
-          this.invitacion.templateData = null;
+        Swal.fire({
+          title: `Éxito al enviar observación.`,
+        });
+        this.invitacion.to = [];
+        this.invitacion.templateData = null;
       });
   }
 

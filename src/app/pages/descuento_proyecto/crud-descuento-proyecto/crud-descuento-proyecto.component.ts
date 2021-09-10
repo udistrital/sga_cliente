@@ -1,7 +1,4 @@
-import { Aplicacion } from '../../../@core/data/models/aplicacion';
-
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { FORM_DESCUENTO_PROYECTO } from './form-descuento-proyecto'
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -43,7 +40,7 @@ export class CrudDescuentoProyectoComponent implements OnInit {
   }
 
   construirForm() {
-    this.formDescuentoProyecto.titulo = this.translate.instant('documento_proyecto.documento');
+    this.formDescuentoProyecto.titulo = this.translate.instant('descuento_academico.descuento');
     this.formDescuentoProyecto.btn = this.translate.instant('GLOBAL.guardar');
     for (let i = 0; i < this.formDescuentoProyecto.campos.length; i++) {
       this.formDescuentoProyecto.campos[i].label = this.translate.instant('GLOBAL.' + this.formDescuentoProyecto.campos[i].label_i18n);
@@ -59,7 +56,7 @@ export class CrudDescuentoProyectoComponent implements OnInit {
     for (let index = 0; index < this.formDescuentoProyecto.campos.length; index++) {
       const element = this.formDescuentoProyecto.campos[index];
       if (element.nombre === nombre) {
-        return index
+        return index;
       }
     }
     return 0;
@@ -84,11 +81,11 @@ export class CrudDescuentoProyectoComponent implements OnInit {
     }
   }
 
-  updateDocumentoProyecto(documentoProyecto: any): void {
+  updateDescuentoProyecto(descuentoProyecto: any): void {
 
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
-      text: this.translate.instant('documento_proyecto.seguro_continuar_actualizar_documento'),
+      text: this.translate.instant('descuento_academico.seguro_continuar_actualizar_descuento'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -97,27 +94,34 @@ export class CrudDescuentoProyectoComponent implements OnInit {
     Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
-          this.info_desc_programa = <TipoDescuento>documentoProyecto;
-          // this.proyectoAcademicoService.put('enfasis', this.info_doc_programa)
-          //   .subscribe((res: any) => {
-          //     if (res.Type !== 'error') {
-          //       this.loadDocumentoProyecto();
-          //       this.eventChange.emit(true);
-          //       this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('documento_proyecto.documento_actualizado'));
-          //     } else {
-          //       this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_actualizado'));
-          //     }
-          //   }, () => {
-          //     this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_actualizado'));
-          //   });
+          this.info_desc_programa = <TipoDescuento>descuentoProyecto;
+          if (descuentoProyecto.Activo == "") {
+            this.info_desc_programa.Activo = false;
+          }
+          if (descuentoProyecto.General == "") {
+            this.info_desc_programa.General = false;
+          }
+
+          this.descuentoService.put('tipo_descuento/', this.info_desc_programa)
+            .subscribe((res: any) => {
+              if (res.Type !== 'error') {
+                this.loadDescuentoProyecto();
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('descuento_academico.descuento_actualizado'));
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('descuento_academico.descuento_no_actualizado'));
+              }
+            }, () => {
+              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('descuento_academico.descuento_no_actualizado'));
+            });
         }
       });
   }
 
-  createDocumentoProyecto(documentoProyecto: any): void {
+  createDescuentoProyecto(descuentoProyecto: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.registrar'),
-      text: this.translate.instant('documento_proyecto.seguro_continuar_registrar_documento'),
+      text: this.translate.instant('descuento_academico.seguro_continuar_registrar_descuento'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -126,19 +130,27 @@ export class CrudDescuentoProyectoComponent implements OnInit {
     Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
-          this.info_desc_programa = <TipoDescuento>documentoProyecto;
-          // this.proyectoAcademicoService.post('enfasis', this.info_doc_programa)
-          //   .subscribe((res: any) => {
-          //     if (res.Type !== 'error') {
-          //       this.info_doc_programa = <DocumentoPrograma><unknown>res;
-          //       this.eventChange.emit(true);
-          //       this.showToast('info', this.translate.instant('GLOBAL.registrar'), this.translate.instant('documento_proyecto.documento_creado'));
-          //     } else {
-          //       this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_creado'));
-          //     }
-          //   }, () => {
-          //     this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('documento_proyecto.documento_no_creado'));
-          //   });
+          this.info_desc_programa = <TipoDescuento>descuentoProyecto;
+          if (descuentoProyecto.Activo == "") {
+            this.info_desc_programa.Activo = false;
+          }
+          if (descuentoProyecto.General == "") {
+            this.info_desc_programa.General = false;
+          }
+          console.log(this.info_desc_programa)
+
+          this.descuentoService.post('tipo_descuento/', this.info_desc_programa)
+            .subscribe((res: any) => {
+              if (res.Type !== 'error') {
+                this.info_desc_programa = <TipoDescuento>res;
+                this.eventChange.emit(true);
+                this.showToast('info', this.translate.instant('GLOBAL.registrar'), this.translate.instant('descuento_academico.descuento_creado'));
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('descuento_academico.descuento_no_creado'));
+              }
+            }, () => {
+              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('descuento_academico.descuento_no_creado'));
+            });
         }
       });
   }
@@ -150,9 +162,9 @@ export class CrudDescuentoProyectoComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       if (this.info_desc_programa === undefined) {
-        this.createDocumentoProyecto(event.data.documentoProyecto);
+        this.createDescuentoProyecto(event.data.TipoDescuento);
       } else {
-        this.updateDocumentoProyecto(event.data.documentoProyecto);
+        this.updateDescuentoProyecto(event.data.TipoDescuento);
       }
     }
   }

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
@@ -33,7 +32,7 @@ export class SelectDescuentoProyectoComponent implements OnInit {
   subscription: Subscription;
   descuento_proyecto = [];
 
-  constructor(private translate: TranslateService, private proyectoAcademicoService: ProyectoAcademicoService,
+  constructor(private translate: TranslateService,
     private descuentoService: DescuentoAcademicoService,
     private dialogRef: NbDialogRef<SelectDescuentoProyectoComponent>,
     private popUpManager: PopUpManager,
@@ -48,6 +47,7 @@ export class SelectDescuentoProyectoComponent implements OnInit {
   }
 
   @Input() asDialog: boolean;
+
   dismissDialog() {
     this.dialogRef.close();
   }
@@ -104,7 +104,7 @@ export class SelectDescuentoProyectoComponent implements OnInit {
     }
   }
 
-  onCreateDocument(event: any) {
+  onCreateDescuento(event: any) {
     const descuento = <TipoDescuento>event.value;
     if (!this.descuento_proyecto.find((descuento_registrado: any) => descuento_registrado.Id === descuento.Id) && descuento.Id) {
 
@@ -190,7 +190,7 @@ export class SelectDescuentoProyectoComponent implements OnInit {
     }
   }
 
-  onDeleteDocument(event: any) {
+  onDeleteDescuento(event: any) {
     const descuento = <TipoDescuento>event.data;
 
     const opt: any = {
@@ -258,6 +258,7 @@ export class SelectDescuentoProyectoComponent implements OnInit {
 
   retorno(event) {
     this.boton_retornar = event;
+    this.loadData();
   }
 
   close() {
@@ -269,7 +270,7 @@ export class SelectDescuentoProyectoComponent implements OnInit {
     this.descuentoService.get('tipo_descuento?limit=0&query=Activo:true').subscribe(
       response => {
         response.forEach(descuento => {
-          this.descuentos.push(descuento)
+          this.descuentos.push(descuento);
           this.loading = false;
         });
       },
@@ -306,7 +307,7 @@ export class SelectDescuentoProyectoComponent implements OnInit {
         descuentoProyecto => {
           const r = <any>descuentoProyecto;
           r[0].IdDescPrograma = descuento.Id
-          r[0].PorcentajeDescuento = descuento.PorcentajeDescuento
+          r[0].PorcentajeDescuento = descuento.PorcentajeDescuento;
           resolve(r);
         },
         (error: HttpErrorResponse) => {
