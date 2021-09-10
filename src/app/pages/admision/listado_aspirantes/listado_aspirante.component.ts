@@ -67,16 +67,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   Aspirantes = [];
   cuposProyecto: number;
 
-  estados = [
-    {
-      value: 5,
-      title: "INSCRITO",
-    },
-    {
-      value: 1,
-      title: "Inscripción solicitada",
-    }
-  ]
+  estados = [];
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -104,19 +95,19 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.nivel_load();
     this.show_listado = false;
     this.inscripcionService.get('estado_inscripcion')
-    .subscribe((state)=>{
-      this.estados = state.map((e)=>{
-        return {
-          value: e.Id,
-          title: e.Nombre
-        }
+      .subscribe((state) => {
+        this.estados = state.map((e) => {
+          return {
+            value: e.Id,
+            title: e.Nombre
+          }
+        })
+        console.log(this.estados);
+        this.createTable()
       })
-      console.log(this.estados);
-      this.createTable()
-    })
   }
 
-  createTable(){
+  createTable() {
     this.settings_emphasys = {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -277,20 +268,35 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   }
 
   onSaveConfirm(event) {
-    if (window.confirm('Are you sure you want to save?')) {
-      const updateState = {
-        ...event.newData.Inscripcion,
-        ...{ EstadoInscripcionId: { Id: parseInt(event.newData.EstadoInscripcionId, 10) } }
+    const newState = this.estados.filter((data) => (data.value === parseInt(event.newData.EstadoInscripcionId, 10)))[0];
+    Swal.fire({
+      title: this.translate.instant('GLOBAL.' + 'confirmar_actualizar'),
+      text: newState.title,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.' + 'actualizar')
+    }).then((result) => {
+      if (result.value) {
+        const updateState = {
+          ...event.newData.Inscripcion,
+          ...{ EstadoInscripcionId: { Id: newState.value } }
+        }
+        this.inscripcionService.put('inscripcion', updateState)
+          .subscribe((response) => {
+            console.log(response);
+            Swal.fire(
+              this.translate.instant('GLOBAL.' + 'operacion_exitosa'),
+              '',
+              'success'
+            )
+            this.mostrartabla()
+            event.confirm.resolve(event.newData);
+          })
+
+      } else {
+        event.confirm.reject();
       }
-      this.inscripcionService.put('inscripcion', updateState)
-        .subscribe((response) => {
-          console.log(response);
-          this.mostrartabla()
-          event.confirm.resolve(event.newData);
-        })
-    } else {
-      event.confirm.reject();
-    }
+    });
   }
 
   loadProyectos() {
@@ -398,7 +404,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         });
       });
   }
-
 
 
   ngOnInit() {
