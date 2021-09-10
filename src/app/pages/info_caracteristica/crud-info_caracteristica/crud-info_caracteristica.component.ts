@@ -16,6 +16,7 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../../@core/store/app.state';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 
 @Component({
   selector: 'ngx-crud-info-caracteristica',
@@ -59,6 +60,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     private ubicacionesService: UbicacionService,
     private store: Store<IAppState>,
     private listService: ListService,
+    private nuxeo: NuxeoService,
     private toasterService: ToasterService) {
     this.formInfoCaracteristica = FORM_INFO_CARACTERISTICA;
     this.construirForm();
@@ -95,6 +97,9 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     } else if (event.nombre === 'DepartamentoNacimiento') {
       this.departamentoSeleccionado = event.valor;
       this.loadOptionsCiudadNacimiento();
+    } else if (event.nombre === 'TipoDiscapacidad') {
+        this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar = 
+        !((event.valor.filter(data=>data.Nombre !== 'NO APLICA')).length > 0);
     }
   }
 

@@ -46,7 +46,7 @@ export let FORM_INFO_CARACTERISTICA = {
             nombre: 'PaisNacimiento',
             label_i18n: 'pais_nacimiento',
             placeholder_i18n: 'pais_nacimiento',
-            requerido: true,
+            requerido: false, //Temporalmente mientras el servicio funciona
             tipo: 'Lugar',
             key: 'Nombre',
             opciones: [],
@@ -85,6 +85,22 @@ export let FORM_INFO_CARACTERISTICA = {
             tipo: 'TipoDiscapacidad',
             key: 'Nombre',
             opciones: [],
+            entrelazado: true,
         },
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
+            clase: 'form-control',
+            nombre: 'ComprobanteDiscapacidad',
+            label_i18n: 'comprobante_discapacidad',
+            placeholder_i18n: 'comprobante_discapacidad',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 8,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+            ocultar:true
+          },
     ],
 }

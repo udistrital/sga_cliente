@@ -577,7 +577,8 @@
         "tooltip_ver_registro": "View",
         "tooltip_editar_registro": "Edit",
         "tooltip_descargar": "Download",
-        "experiencia_laboral": "Work experience"
+        "experiencia_laboral": "Work experience",
+        "comprobante_discapacidad":"Proof of disability"
     },
 
     "ERROR": {

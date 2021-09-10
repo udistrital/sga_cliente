@@ -594,7 +594,8 @@
         "tooltip_ver_registro": "Ver",
         "tooltip_editar_registro": "Editar",
         "tooltip_descargar": "Descargar",
-        "experiencia_laboral": "Experiencia laboral"
+        "experiencia_laboral": "Experiencia laboral",
+        "comprobante_discapacidad":"Comprobante de discapacidad"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
