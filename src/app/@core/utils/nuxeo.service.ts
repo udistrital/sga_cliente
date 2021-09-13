@@ -248,4 +248,68 @@ export class NuxeoService {
         });
         return documents$;
     }
+
+    saveFilesNew(files) {
+        const documentsSubject = new Subject<Documento[]>();
+        const documents$ = documentsSubject.asObservable();
+
+        const documentos = [];
+        this.nuxeo2.connect()
+            .then((client) => {
+                files.forEach((file, index) => {
+                    this.documentService.get('tipo_documento/' + file.IdDocumento)
+                        .subscribe(res => {
+                            if (res !== null) {
+                                const tipoDocumento = <TipoDocumento>res;
+                                this.nuxeo2.operation('Document.Create')
+                                    .params({
+                                        type: tipoDocumento.TipoDocumentoNuxeo,
+                                        name: file.nombre,
+                                        properties: 'dc:title=' + file.nombre,
+                                    })
+                                    .input(tipoDocumento.Workspace)
+                                    .execute()
+                                    .then((doc) => {
+                                        const nuxeoBlob = new Nuxeo.Blob({ content: file.file });
+                                        this.nuxeo2.batchUpload()
+                                            .upload(nuxeoBlob)
+                                            .then((response) => {
+                                                file.uid = doc.uid
+                                                this.nuxeo2.operation('Blob.AttachOnDocument')
+                                                    .param('document', doc.uid)
+                                                    .input(response.blob)
+                                                    .execute()
+                                                    .then((respuesta) => {
+                                                        const documentoPost = new Documento;
+                                                        documentoPost.Enlace = file.uid;
+                                                        documentoPost.Nombre = file.nombre;
+                                                        documentoPost.TipoDocumento = tipoDocumento;
+                                                        documentoPost.Activo = true;
+                                                        documentoPost.Metadatos = file.Metadatos;
+                                                        this.documentService.post('documento', documentoPost)
+                                                            .subscribe(resuestaPost => {
+                                                                documentos.push(resuestaPost)
+                                                                // nuxeoservice.documentos[file.key] = resuestaPost.Body;
+                                                                if ((index + 1) === files.length) {
+                                                                    documentsSubject.next(documentos);
+                                                                }
+                                                            })
+
+                                                    });
+                                            })
+                                            .catch(function (error) {
+                                                console.error(error);
+                                                return error;
+                                            });
+                                    })
+                                    .catch(function (error) {
+                                        console.error(error);
+                                        return error;
+                                    })
+                            }
+                        });
+                });
+            });
+        return documents$;
+    }
 }

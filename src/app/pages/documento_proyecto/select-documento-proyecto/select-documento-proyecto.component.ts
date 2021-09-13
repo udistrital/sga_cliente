@@ -250,6 +250,10 @@ export class SelectDocumentoProyectoComponent implements OnInit {
     this.loadData();
   }
 
+  close() {
+    this.dialogRef.close();
+  }
+
   loadData() {
     this.loading = true;
     this.documentos = [];

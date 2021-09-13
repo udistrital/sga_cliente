@@ -1,16 +1,20 @@
-<div class="col-md-12 col-lg-12"
-    >
+<div class="col-md-12 col-lg-12">
   <nb-card style="overflow: hidden scroll;
                   max-width: 95vw; display: block;
                   max-height: 80vh;" >
+
     <fieldset *ngIf="!administrar_documentos"
               [ngClass]="{'fieldseter': true}"
               [nbSpinner]="loading"
               nbSpinnerStatus="success"
               nbSpinnerSize="xxlarge"
               nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-      <legend>
+
+      <legend style="display: flex;justify-content: space-between;">
           <small>  &nbsp; {{ 'documento_proyecto.documento' | translate }}</small>
+            <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                    (click)="close();">X
+            </button>
       </legend>
 
       <nb-card style="width: 70vw; display: grid;">
@@ -52,7 +56,7 @@
       </nb-card>
     </fieldset>
 
-<ngx-list-documento-proyecto *ngIf="administrar_documentos"
+  <ngx-list-documento-proyecto *ngIf="administrar_documentos"
                                (retorno)="retorno($event)">
   </ngx-list-documento-proyecto>
 

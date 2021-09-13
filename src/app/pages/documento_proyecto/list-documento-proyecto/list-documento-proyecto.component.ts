@@ -114,6 +114,11 @@ export class ListDocumentoProyectoComponent implements OnInit {
       response => {
         response.forEach(documento => {
           this.loading = true;
+          if (documento.Activo) {
+            documento.Activo = 'Sí'
+          } else {
+            documento.Activo = 'No'
+          }
           this.documentos.push(documento);
           this.source.load(this.documentos);
           this.loading = false;
@@ -191,6 +196,10 @@ export class ListDocumentoProyectoComponent implements OnInit {
   activetab(): void {
     this.cambiotab = !this.cambiotab;
     this.activetabFather();
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 
   activetabFather(): void {
