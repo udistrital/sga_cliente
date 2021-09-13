@@ -1,16 +1,20 @@
-<div class="col-md-12 col-lg-12"
-    >
+<div class="col-md-12 col-lg-12">
   <nb-card style="overflow: hidden scroll;
                   max-width: 95vw; display: block;
                   max-height: 80vh;" >
+
     <fieldset *ngIf="!administrar_descuentos"
               [ngClass]="{'fieldseter': true}"
               [nbSpinner]="loading"
               nbSpinnerStatus="success"
               nbSpinnerSize="xxlarge"
               nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-      <legend>
-          <small>  &nbsp; {{ 'descuento_academico.descuento' | translate }}</small>
+
+      <legend style="display: flex;justify-content: space-between;">
+          <small>  &nbsp; {{ 'documento_proyecto.documento' | translate }}</small>
+            <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                    (click)="close();">X
+            </button>
       </legend>
 
       <nb-card style="width: 70vw; display: grid;">

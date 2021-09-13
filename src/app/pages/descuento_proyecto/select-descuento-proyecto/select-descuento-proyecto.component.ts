@@ -261,6 +261,10 @@ export class SelectDescuentoProyectoComponent implements OnInit {
     this.loadData();
   }
 
+  close() {
+    this.dialogRef.close();
+  }
+
   loadData() {
     this.loading = true;
     this.descuentoService.get('tipo_descuento?limit=0&query=Activo:true').subscribe(
