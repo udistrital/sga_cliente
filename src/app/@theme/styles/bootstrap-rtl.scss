@@ -35,18 +35,18 @@
   // holiii
    .btn-success {
   color: #fff;
- background-color: #4fb9ff!important;
-border-color: #4fb9ff;
-box-shadow: 0 2px 12px 0 #4fb9ff;
+ background-color: var(--primary)!important;
+border-color: var(--primary);
+box-shadow: 0 2px 12px 0 var(--primary);
 }
 .nb-theme-default [nbButton].btn-success {
  color: #fff;
- background-color: #4fb9ff;
- border-color: #4fb9ff;
+ background-color: var(--primary);
+ border-color: var(--primary);
 }
 
 a {
- color: #4fb9ff;
+ color: var(--primary);
 }
 
 
