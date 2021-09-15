@@ -44,12 +44,12 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
-    private pivotDocument:PivotDocument,
+    private pivotDocument: PivotDocument,
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.pivotDocument.info$.subscribe((data)=> {
-      if(data){
+    this.pivotDocument.info$.subscribe((data) => {
+      if (data) {
         this.persona_id = data.TerceroId;
       }
     })
@@ -70,31 +70,58 @@ export class ViewFormacionAcademicaComponent implements OnInit {
 
   loadData(): void {
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
-    .subscribe(response => {
-      if (response !== null && response.Response.Code === '200') {
-        const data = <Array<any>>response.Response.Body[0];
-        const dataInfo = <Array<any>>[];
-        data.forEach(element => {
-          const FechaI = element.FechaInicio;
-          const FechaF = element.FechaFinalizacion;
-          element.FechaInicio = FechaI.substring(0, 2) + '/' + FechaI.substring(2, 4) + '/' + FechaI.substring(4, 8);
-          element.FechaFinalizacion = FechaF.substring(0, 2) + '/' + FechaF.substring(2, 4) + '/' + FechaF.substring(4, 8);
-          dataInfo.push(element);
-        })
-        this.info_formacion_academica = data;
-      }
-    },
-    (error: HttpErrorResponse) => {
-      Swal.fire({
-        icon: 'error',
-        title: error.status + '',
-        text: this.translate.instant('ERROR.' + error.status),
-        footer: this.translate.instant('GLOBAL.cargar') + '-' +
-          this.translate.instant('GLOBAL.formacion_academica') + '|' +
-          this.translate.instant('GLOBAL.soporte_documento'),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    });
+      .subscribe(response => {
+        const soportes = [];
+        if (response !== null && response.Response.Code === '200') {
+          const data = <Array<any>>response.Response.Body[0];
+          const dataInfo = <Array<any>>[];
+          data.forEach(element => {
+            const FechaI = element.FechaInicio;
+            const FechaF = element.FechaFinalizacion;
+            element.FechaInicio = FechaI.substring(0, 2) + '/' + FechaI.substring(2, 4) + '/' + FechaI.substring(4, 8);
+            element.FechaFinalizacion = FechaF.substring(0, 2) + '/' + FechaF.substring(2, 4) + '/' + FechaF.substring(4, 8);
+            dataInfo.push(element);
+
+            if (element.Documento + '' !== '0') {
+              soportes.push({ Id: element.Documento, key: 'DocumentoAcad' + element.Documento });
+            }
+            this.nuxeoService.getFilesNew(soportes)
+              .subscribe(response => {
+                this.documentosSoporte = <Array<any>>response;
+                if (Object.values(this.documentosSoporte).length === data.length) {
+                  for (let i = 0; i < data.length; i++) {
+                    data[i].Documento = this.documentosSoporte[i];
+                  }
+                }
+              },
+                (error: HttpErrorResponse) => {
+                  Swal.fire({
+                    icon: 'error',
+                    title: error.status + '',
+                    text: this.translate.instant('ERROR.' + error.status),
+                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                      this.translate.instant('GLOBAL.formacion_academica') + '|' +
+                      this.translate.instant('GLOBAL.soporte_documento'),
+                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                  });
+                });
+
+
+          })
+          this.info_formacion_academica = data;
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.formacion_academica') + '|' +
+              this.translate.instant('GLOBAL.soporte_documento'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
   }
 
   loadDataOld(): void {
@@ -111,23 +138,23 @@ export class ViewFormacionAcademicaComponent implements OnInit {
             .subscribe(response => {
               console.log(response);
               const filesResponse = <any>response;
-                this.info_formacion_academica = [
-                    {
-                      Nit: temp_info_academica.Institucion.Nit,
-                      NombreUniversidad: temp_info_academica.Institucion.NombreUniversidad,
-                      Pais: temp_info_academica.Institucion.Pais,
-                      Direccion: temp_info_academica.Institucion.Direccion,
-                      Correo: temp_info_academica.Institucion.Correo,
-                      Telefono: temp_info_academica.Institucion.Telefono,
-                      ProgramaAcademico: temp_info_academica.Titulacion,
-                      FechaInicio: temp_info_academica.FechaInicio,
-                      FechaFinalizacion: temp_info_academica.FechaFinalizacion,
-                      TituloTrabajoGrado: temp_info_academica.TituloTrabajoGrado,
-                      DescripcionTrabajoGrado: temp_info_academica.DescripcionTrabajoGrado,
-                      Titulacion: temp_info_academica.Titulacion,
-                      Documento: filesResponse[0],
-                  },
-                ]
+              this.info_formacion_academica = [
+                {
+                  Nit: temp_info_academica.Institucion.Nit,
+                  NombreUniversidad: temp_info_academica.Institucion.NombreUniversidad,
+                  Pais: temp_info_academica.Institucion.Pais,
+                  Direccion: temp_info_academica.Institucion.Direccion,
+                  Correo: temp_info_academica.Institucion.Correo,
+                  Telefono: temp_info_academica.Institucion.Telefono,
+                  ProgramaAcademico: temp_info_academica.Titulacion,
+                  FechaInicio: temp_info_academica.FechaInicio,
+                  FechaFinalizacion: temp_info_academica.FechaFinalizacion,
+                  TituloTrabajoGrado: temp_info_academica.TituloTrabajoGrado,
+                  DescripcionTrabajoGrado: temp_info_academica.DescripcionTrabajoGrado,
+                  Titulacion: temp_info_academica.Titulacion,
+                  Documento: filesResponse[0],
+                },
+              ]
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({
@@ -243,7 +270,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   ngOnInit() {
   }
 
-  abrirDocumento(document){
+  abrirDocumento(document) {
     this.pivotDocument.updateDocument(document);
   }
 }
