@@ -7,6 +7,7 @@ import { DefinirConceptosComponent } from './definir-conceptos/definir-conceptos
 import { DerechosPecuniariosComponent } from './derechos-pecuniarios.component';
 import { DialogoConceptosComponent } from './dialogo-conceptos/dialogo-conceptos.component';
 import { ListDerechosPecuniariosComponent } from './list-derechos-pecuniarios/list-derechos-pecuniarios.component';
+import { GeneracionRecibosDerechosPecuniarios } from './generacion-recibos-derechos-pecuniarios/generacion-recibos-derechos-pecuniarios.component';
 
 const routes: Routes = [{
     path: '',
@@ -32,6 +33,10 @@ const routes: Routes = [{
             path: 'consultar-conceptos',
             component: ConsultarConceptosComponent,
         },
+        {
+            path: 'generacion-recibos-derechos-pecuniarios',
+            component: GeneracionRecibosDerechosPecuniarios,
+        },
     ],
 }];
 
@@ -54,4 +59,5 @@ export const routedComponents = [
     DefinirConceptosComponent,
     DialogoConceptosComponent,
     ConsultarConceptosComponent,
+    GeneracionRecibosDerechosPecuniarios,
 ]

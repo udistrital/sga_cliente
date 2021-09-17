@@ -40,7 +40,8 @@
             "derechos_pecuniarios": "Derechos Pecuniarios",
             "definir_conceptos": "Definir Conceptos",
             "asignar_valores": "Asignar Valores",
-            "consultar_conceptos": "Consultar Conceptos"
+            "consultar_conceptos": "Consultar Conceptos",
+            "recibos_derechos_pecuniarios":"Generación de recibos de pago"
         },
         "archivo_icfes": {
             "archivo_icfes": "Archivo Icfes",
@@ -1557,8 +1558,9 @@
         "tooltip_crear": "Crear derecho pecunario",
         "tooltip_editar": "Editar derecho pecunario",
         "tooltip_cancelar": "Cancelar",
-        "tooltip_guargar": "Guardar"
-
+        "tooltip_guargar": "Guardar",
+        "nuevo_recibo_derecho_pecuniario":"Nuevo Recibo de derecho pecuniario",
+        "generacion_recibo_derecho_pecuniario":"Generación de recibos de pago de derechos pecuniarios"
     },
     "tipo_inscripcion": {
         "titulo": "Tipos de Inscripción",
@@ -1674,4 +1676,5 @@
         "adicionar": "Adicionar",
         "periodo_formacion": "Periodo de Formación"
     }
+
 }
