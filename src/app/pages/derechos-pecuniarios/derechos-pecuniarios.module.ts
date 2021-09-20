@@ -4,6 +4,7 @@ import { DerechosPecuniariosComponent } from './derechos-pecuniarios.component';
 import { DerechosPecuniariosRoutingComponent, routedComponents } from './derechos-pecuniarios-routing.module';
 import { CrudDerechosPecuniariosComponent } from './crud-derechos-pecuniarios/crud-derechos-pecuniarios.component';
 import { ListDerechosPecuniariosComponent } from './list-derechos-pecuniarios/list-derechos-pecuniarios.component'
+import { GeneracionRecibosDerechosPecuniarios } from './generacion-recibos-derechos-pecuniarios/generacion-recibos-derechos-pecuniarios.component';
 import { CopiarConceptosComponent } from './copiar-conceptos/copiar-conceptos.component';
 import { PopUpManager } from '../../managers/popUpManager';
 import { SharedModule } from '../../shared/shared.module';
@@ -14,6 +15,8 @@ import { DefinirConceptosComponent } from './definir-conceptos/definir-conceptos
 import { DialogoConceptosComponent } from './dialogo-conceptos/dialogo-conceptos.component';
 import { ParametrosService } from '../../@core/data/parametros.service';
 import { ConsultarConceptosComponent } from './consultar-conceptos/consultar-conceptos.component';
+import { ButtonPaymentComponent } from '../../@theme/components/button-payment/button-payment.component';
+import { LinkDownloadComponent } from '../../@theme/components/link-download/link-download.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +38,7 @@ import { ConsultarConceptosComponent } from './consultar-conceptos/consultar-con
     CopiarConceptosComponent,
     DefinirConceptosComponent,
     ConsultarConceptosComponent,
+    GeneracionRecibosDerechosPecuniarios,
   ],
   providers: [
     PopUpManager,
@@ -42,6 +46,8 @@ import { ConsultarConceptosComponent } from './consultar-conceptos/consultar-con
   ],
   entryComponents: [
     DialogoConceptosComponent,
+    ButtonPaymentComponent,
+    LinkDownloadComponent,
   ],
 })
 export class DerechosPecuniariosModule { }
