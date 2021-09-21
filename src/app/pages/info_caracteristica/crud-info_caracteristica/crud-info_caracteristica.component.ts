@@ -322,7 +322,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       debugger;
-      if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad !== "undefined") {
+      if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad !== undefined) {
         const file = [{
           file: event.data.InfoCaracteristica.ComprobanteDiscapacidad,
           IdDocumento: 42,
