@@ -478,8 +478,8 @@
                         </div>
 
                         <!--buttton -->
-                        <div *ngSwitchCase="'button'" class="row">
-                          <div class="{{c.claseGrid}}" >
+                        <div *ngSwitchCase="'button'" class="row {{c.ocultar?'no-mostrar':''}}">
+                          <div class="{{c.claseGrid }}" >
                               <button mat-button id="{{c.id}}" (click)="auxButton(c)" >
                                   <i class="{{c.icono}}"></i>
                                   {{ c.label }}
