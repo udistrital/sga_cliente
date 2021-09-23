@@ -603,8 +603,9 @@
         "carga_guardando": "Guardando información...",
         "general": "General",
         "concepto_academico_id": "Concepto académico",
-        "placeholder_concepto_academico_id": "Ej. 1"
-
+        "placeholder_concepto_academico_id": "Ej. 1",
+        "agregar_universidad":"Universidad",
+        "agregar_empresa":"Empresa"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
