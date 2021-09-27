@@ -1622,7 +1622,19 @@
         "tooltip_cancelar": "Cancelar",
         "tooltip_guargar": "Guardar",
         "nuevo_recibo_derecho_pecuniario":"Nuevo Recibo de derecho pecuniario",
-        "generacion_recibo_derecho_pecuniario":"Generación de recibos de pago de derechos pecuniarios"
+        "generar_recibo": "Generar recibo",
+        "recibos_generados": "Recibos generados (PIN)",
+        "error": "Ha ocurrido un error inesperado al cargar de los recibos",
+        "generacion_recibo_derecho_pecuniario":"Generación de recibos de pago de derechos pecuniarios",
+        "no_recibo": "No existe ninguna información de recibos pecuniarios registrados",
+        "numero_recibo": "# Recibo",
+        "valor": "Valor",
+        "derecho_pecuniario": "Derechos pecuniarios",
+        "fecha_generacion": "Fecha generación",
+        "estado": "Estado",
+        "descargar": "Descargar",
+        "opcion": "Opción",
+        "seguro_nuevo_recibo": "¿Está seguro de generar el nuevo recibo con el derecho pecunario seleccionada?"
     },
     "tipo_inscripcion": {
         "titulo": "Tipos de Inscripción",
