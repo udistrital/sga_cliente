@@ -40,7 +40,8 @@
             "derechos_pecuniarios": "Financial entitlements",
             "definir_conceptos": "Define Concepts",
             "asignar_valores": "Assign Values",
-            "consultar_conceptos": "Consult concepts"
+            "consultar_conceptos": "Consult concepts",
+            "recibos_derechos_pecuniarios":"Generation of payment \nreceipts"
         },
         "archivo_icfes": {
             "archivo_icfes": "Icfes file",
@@ -1587,7 +1588,21 @@
         "tooltip_crear": "Create concept",
         "tooltip_editar": "Edit concept",
         "tooltip_cancelar": "Cancel",
-        "tooltip_guargar": "Save"
+        "tooltip_guargar": "Save",
+        "nuevo_recibo_derecho_pecuniario":"New Receipt of concept",
+        "generar_recibo": "Generate receipt",
+        "recibos_generados": "Receipts generated (PIN)",
+        "error": "An unexpected error occurred while uploading receipts",
+        "generacion_recibo_derecho_pecuniario":"Generation of receipts for payment of concepts",
+        "no_recibo": "There is no information on registered concept receipts",
+        "numero_recibo": "# Receipt",
+        "valor": "Value",
+        "derecho_pecuniario": "Concepts",
+        "fecha_generacion": "Generation date",
+        "estado": "State",
+        "descargar": "Download",
+        "opcion": "Option",
+        "seguro_nuevo_recibo": "Are you sure to generate the new receipt with the selected concept?"
     },
     "tipo_inscripcion": {
         "titulo": "Inscriptions Type",
