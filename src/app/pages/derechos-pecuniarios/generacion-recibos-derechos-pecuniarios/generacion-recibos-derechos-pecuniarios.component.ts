@@ -1,21 +1,17 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatSelect } from '@angular/material';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import momentTimezone from 'moment-timezone';
 import { LocalDataSource } from 'ng2-smart-table';
 import Swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment';
-import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { Concepto } from '../../../@core/data/models/derechos-pecuniarios/concepto';
 import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
-import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import { ReciboPago } from '../../../@core/data/models/derechos-pecuniarios/recibo_pago';
 import { Periodo } from '../../../@core/data/models/periodo/periodo';
 import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academico/institucion_enfasis';
-import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
@@ -36,7 +32,7 @@ export class GeneracionRecibosDerechosPecuniarios {
   dataSource: LocalDataSource;
   data: any[] = [];
   settings: any;
-  vigencias: any;
+  vigencias: any = [];
   vigenciaActual: any;
   datosCargados: any[];
 
@@ -44,33 +40,14 @@ export class GeneracionRecibosDerechosPecuniarios {
   new_pecuniario = false;
   info_info_persona: InfoPersona;
   recibo_pago: ReciboPago;
-  regInfoPersona: any;
-  info_inscripcion: any;
   clean: boolean;
   loading: boolean;
-  percentage: number;
-  aceptaTerminos: boolean;
-  showProyectoCurricular: boolean;
-  showTipoInscripcion: boolean;
-  showInfo: boolean;
-  showNew: boolean;
-  showInscription: boolean;
   programa: number;
   estudiante: number;
   periodo: Periodo;
   periodos = [];
-  selectednivel: any;
-  tipo_inscripciones = [];
-  proyectos_preinscripcion: any[];
-  proyectos_preinscripcion_post: any;
-  niveles: NivelFormacion[];
-  selectedLevel: any;
   selectedProject: any;
-  tipo_inscripcion_selected: any;
-  projects: any[];
-  countInscripcion: number = 0;
-  cont: number = 0;
-  inscripcionProjects: any[];
+  tipo_derecho_selected: any;
   calendarioId: string = '0';
   projectId: number = 0;
   parametro: string;
@@ -93,14 +70,7 @@ export class GeneracionRecibosDerechosPecuniarios {
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private userService: UserService,
-    private parametrosService: ParametrosService,
-    private inscripcionService: InscripcionService) {
-    this.showProyectoCurricular = false;
-    this.showTipoInscripcion = false;
-    this.showInfo = false;
-    this.showNew = false;
-    this.showInscription = true;
-    this.cargarPeriodo();
+    private parametrosService: ParametrosService) {
     this.dataSource = new LocalDataSource();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
@@ -109,26 +79,24 @@ export class GeneracionRecibosDerechosPecuniarios {
     this.info_persona_id = this.userService.getPersonaId();
     this.loadInfoPersona();
     this.createTable();
-    this.loading = false;
-
   }
 
   return() {
-    this.showInscription = true;
     sessionStorage.setItem('EstadoRecibo', 'false');
   }
 
-  public loadInfoPersona(): void {
+  public async loadInfoPersona(): Promise<void> {
     this.loading = true;
     this.info_persona_id = this.userService.getPersonaId();
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0') {
-      this.sgaMidService.get('persona/consultar_persona/' + this.info_persona_id).subscribe((res: any) => {
+      this.sgaMidService.get('persona/consultar_persona/' + this.info_persona_id).subscribe(async (res: any) => {
         if (res !== null) {
           const temp = <InfoPersona>res;
           this.info_info_persona = temp;
           const files = []
         }
+        await this.cargarPeriodo()
         this.loadInfoRecibos();
         this.loading = false;
       },
@@ -217,7 +185,7 @@ export class GeneracionRecibosDerechosPecuniarios {
               if (data.estado === false || data.estado === 'false') {
                 this.abrirPago(data.data);
               } else if (data.estado === true || data.estado === 'true') {
-                this.itemSelect({ data: data.data });
+                // this.itemSelect({ data: data.data });
               }
             });
           },
@@ -225,32 +193,6 @@ export class GeneracionRecibosDerechosPecuniarios {
       },
       mode: 'external',
     }
-  }
-
-  loadInscriptionModule() {
-    this.recibo_id = parseInt(sessionStorage.getItem('IdInscripcion'), 10);
-    this.showInscription = false;
-  }
-
-  itemSelect(event): void {
-    this.loading = true;
-    sessionStorage.setItem('IdInscripcion', event.data.Id);
-    sessionStorage.setItem('ProgramaAcademico', event.data.ProgramaAcademicoId);
-    this.inscripcionService.get('inscripcion/' + event.data.Id).subscribe(
-      (response: any) => {
-        sessionStorage.setItem('IdPeriodo', response.PeriodoId);
-        sessionStorage.setItem('IdTipoInscripcion', response.TipoInscripcionId.Id);
-        sessionStorage.setItem('ProgramaAcademicoId', response.ProgramaAcademicoId);
-        const EstadoIns = sessionStorage.getItem('EstadoRecibo');
-        if (EstadoIns === 'true') {
-          this.loadInscriptionModule();
-        }
-        this.loading = false;
-      },
-      error => {
-        this.loading = false;
-      },
-    );
   }
 
   useLanguage(language: string) {
@@ -266,37 +208,32 @@ export class GeneracionRecibosDerechosPecuniarios {
     };
 
     this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
-    this.parametrosService.get('periodo?query=CodigoAbreviacion:VG&limit=0&sortby=Id&order=desc').subscribe(
-      response => {
-        this.vigencias = response['Data'];
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      },
-    );
   }
 
   async loadInfoRecibos() {
     this.loading = true;
     // Función del MID que retorna el estado del recibo
-    await this.cargarPeriodo()
     const PeriodoActual = localStorage.getItem('IdPeriodo')
     if (this.info_persona_id != null && PeriodoActual != null) {
       await this.sgaMidService.get('derechos_pecuniarios/estado_recibos/' + this.info_persona_id + '/' + PeriodoActual).subscribe(
         (response: any) => {
           if (response !== null && response.Status === '400') {
             this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error'));
-          } else if (response != null && response.Status === '404') {
+            this.dataSource.load([]);
+          } else if (response != null && response.Status === '404' || response.Data[0] === null) {
             this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('derechos_pecuniarios.no_recibo'));
+            this.dataSource.load([]);
           } else {
             const data = <Array<any>>response.Data;
             const dataInfo = <Array<any>>[];
             this.recibos_pendientes = 0;
             data.forEach(element => {
+
               const auxRecibo = element.ReciboInscripcion;
               const NumRecibo = auxRecibo.split('/', 1);
               element.Recibo = NumRecibo;
               element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
+              sessionStorage.setItem('ProgramaAcademicoId', element.ProgramaAcademicoId);
 
               if (element.Estado === 'Pendiente pago') {
                 this.recibos_pendientes++;
@@ -307,6 +244,7 @@ export class GeneracionRecibosDerechosPecuniarios {
               this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
 
               this.loading = false;
+
             })
           }
         }, error => {
@@ -362,28 +300,24 @@ export class GeneracionRecibosDerechosPecuniarios {
 
   generar_solicitud_derecho() {
     return new Promise((resolve, reject) => {
-      const inscripcion = {
+      const recibo = {
         Id: this.info_info_persona.Id,
         Nombre: `${this.info_info_persona.PrimerNombre} ${this.info_info_persona.SegundoNombre}`,
         Apellido: `${this.info_info_persona.PrimerApellido} ${this.info_info_persona.SegundoApellido}`,
         Correo: JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).email,
         ProgramaAcademicoId: parseInt(this.selectedProject, 10),
-        DerechoPecuniarioId: parseInt(this.tipo_inscripcion_selected, 10),
-        Year: this.periodo.Year,
-        Periodo: parseInt(this.periodo.Ciclo, 10),
+        DerechoPecuniarioId: parseInt(this.tipo_derecho_selected, 10),
+        Year: this.periodo['Year'],
+        Periodo: this.periodo['Id'],
         FechaPago: '',
       };
       this.loading = true;
       const fecha = new Date();
       fecha.setDate(fecha.getDate() + 90);
-      inscripcion.FechaPago = moment(`${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`, 'YYYY-MM-DD').format('DD/MM/YYYY');
-      this.sgaMidService.post('derechos_pecuniarios/generar_derecho', inscripcion).subscribe(
+      recibo.FechaPago = moment(`${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      this.sgaMidService.post('derechos_pecuniarios/generar_derecho', recibo).subscribe(
         (response: any) => {
           if (response.Code === '200') {
-            this.showProyectoCurricular = false;
-            this.showTipoInscripcion = false;
-            this.showInfo = false;
-            this.showNew = false;
             this.loadInfoRecibos();
             resolve(response);
             this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
@@ -406,10 +340,6 @@ export class GeneracionRecibosDerechosPecuniarios {
   }
 
   descargarReciboPago(data) {
-    this.itemSelect({ data: data })
-    if (this.selectedLevel === undefined) {
-      this.selectedLevel = parseInt(sessionStorage.getItem('nivel'), 10);
-    }
     if (this.info_info_persona != null) {
       this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
       this.recibo_pago = new ReciboPago();
@@ -469,52 +399,31 @@ export class GeneracionRecibosDerechosPecuniarios {
     }, 5000);
   }
 
-  loadTipoInscripcion() {
-    this.loading = true;
-    this.tipo_inscripciones = new Array;
-    window.localStorage.setItem('IdNivel', String(this.selectedLevel));
-    this.inscripcionService.get('tipo_inscripcion?query=NivelId:' + Number(this.selectedLevel) + ',Activo:true&sortby=NumeroOrden&order=asc')
-      .subscribe(res => {
-        this.loading = false;
-        const r = <any>res;
-        if (res !== null && r.Type !== 'error') {
-          const tiposInscripciones = <Array<any>>res;
-          this.tipo_inscripciones = tiposInscripciones;
-          // this.cargaproyectosacademicos();
-          if (this.tipo_inscripciones.length === 0) {
-            this.popUpManager.showAlert('', this.translate.instant('calendario.sin_tipo_inscripcion'));
-            this.showTipoInscripcion = false;
-            this.showProyectoCurricular = false;
-            this.showInfo = false;
-          } else {
-            this.showTipoInscripcion = true;
-          }
-        }
-      },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' + this.translate.instant('GLOBAL.programa_academico'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
-  }
-
   cargarPeriodo() {
     this.loading = true;
+
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
+      this.parametrosService.get('periodo?query=CodigoAbreviacion:VG&sortby=Id&order=desc&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {
-            this.periodo = <any>res['Data'][0]['Id'];
-            window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
-            resolve(this.periodo);
             const periodos = <any[]>res['Data'];
             periodos.forEach(element => {
+              if (element['Activo'] === true && window.localStorage.getItem('IdPeriodo') != null) {
+                this.periodo = element;
+                window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
+                this.cargarDatos({ 'value': this.periodo });
+                resolve(this.periodo);
+              }
+
+              // BORRAR CUANDO EL PERIODO ESTE ACTUALIZADO
+              else if (element['Year'] === 2020) {
+                this.periodo = element;
+                window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
+                resolve(this.periodo);
+              }
+              // BORRAR CUANDO EL PERIODO ESTE ACTUALIZADO
+
               this.vigencias.push(element);
             });
           }
@@ -527,45 +436,16 @@ export class GeneracionRecibosDerechosPecuniarios {
     });
   }
 
-  public loadRecibo(): void {
-    this.loading = true;
-    if (this.recibo_id !== undefined && this.recibo_id !== 0 && this.recibo_id.toString() !== ''
-      && this.recibo_id.toString() !== '0') {
-      this.inscripcionService.get('inscripcion/' + this.recibo_id)
-        .subscribe(res => {
-          this.loading = false;
-          if (res !== null) {
-            this.info_inscripcion = <Inscripcion>res;
-            this.aceptaTerminos = true;
-          }
-        },
-          (error: HttpErrorResponse) => {
-            this.loading = false;
-            Swal.fire({
-              icon: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.info_persona') + '|' +
-                this.translate.instant('GLOBAL.admision'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-          });
-    }
-    this.loading = false;
-  }
-
   loadConcepto(event) {
-    this.tipo_inscripcion_selected = event.value;
+    this.tipo_derecho_selected = event.value;
     this.gen_recibo = true;
   }
 
-  ocultarBarraExterna(event: boolean) {
-  }
-
   cargarDatos(event) {
-    this.vigenciaActual = event.value;
+    window.localStorage.setItem('IdPeriodo', event.value.Id);
+    this.vigenciaActual = event.value.Id;
     this.datosCargados = [];
+    this.loadInfoRecibos();
     this.sgaMidService.get('derechos_pecuniarios/' + this.vigenciaActual).subscribe(
       response => {
         const data: any[] = response['Data'];
