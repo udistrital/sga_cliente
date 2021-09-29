@@ -33,7 +33,7 @@ export class NewTercero implements OnInit {
     console.log(this.info_tercero);
     this.formInfoNuevoTercero.campos[this.getIndexFormNew('Nit')].valor = nit;
   }
-
+  terceroData = null;
   info_tercero: any;
   formInfoNuevoTercero: any;
   regInfoFormacionAcademica: any;
