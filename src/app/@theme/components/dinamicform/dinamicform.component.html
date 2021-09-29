@@ -392,8 +392,8 @@
                                 [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" [disabled]="c.deshabilitar">
                                 <mat-option>--Seleccionar--</mat-option>
-                                <mat-option *ngFor="let item of c.opciones" [value]="item">
-                                    {{c.key?item[c.key]:item | json}}
+                                <mat-option *ngFor="let item of c.opciones" [value]="item?item:''">
+                                    {{c.key? item[c.key] ? item[c.key]: (item | json) : (item | json)}}
                                 </mat-option>
                             </mat-select>
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
@@ -495,7 +495,7 @@
             <div align="right" class="form-group">
                 <button class="btn btn-primary btn-sm" (click)="clearForm()"
                     [hidden]="!normalform.btnLimpiar">{{normalform.btnLimpiar}}</button>
-                <button class="btn btn-success btn-sm" (click)="validForm()"
+                <button class="btn btn-success btn-sm ml-2" (click)="validForm()"
                     [hidden]="!normalform.btn">{{normalform.btn}}</button>
             </div>
 

@@ -125,6 +125,7 @@ import {
   ThemeSwitcherListComponent,
   LoadingComponent,
   ListadoComponent,
+  NewTercero,
 } from './components';
 
 import { CapitalizePipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -144,6 +145,7 @@ import { ConfiguracionService } from '../@core/data/configuracion.service';
 import { ButtonPaymentComponent } from './components/button-payment/button-payment.component';
 import { LinkDownloadComponent } from './components/link-download/link-download.component';
 import { CheckboxAssistanceComponent } from './components/checkbox-assistance/checkbox-assistance.component';
+import { SgaMidService } from '../@core/data/sga_mid.service';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -182,6 +184,7 @@ const COMPONENTS = [
   SelectComponent,
   LoadingComponent,
   ListadoComponent,
+  NewTercero,
 ];
 
 const ENTRY_COMPONENTS = [
