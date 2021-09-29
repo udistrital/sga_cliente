@@ -30,7 +30,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
   constructor(
     private sanitization: DomSanitizer,
     private anyService: AnyService,
-      ) {
+  ) {
     this.data = {
       valid: true,
       data: {},
@@ -50,18 +50,18 @@ export class DinamicformComponent implements OnInit, OnChanges {
       });
   }
 
-  displayWithFn(field){
+  displayWithFn(field) {
     return field ? field.Nombre : '';
   }
 
-  setNewValue({element, field}){
+  setNewValue({ element, field }) {
     field.valor = element.option.value;
     this.validCampo(field);
   }
 
-  searchEntries(text, path, query, keyToFilter, field){
+  searchEntries(text, path, query, keyToFilter, field) {
 
-    const channelOptions = new BehaviorSubject<any>({field: field});
+    const channelOptions = new BehaviorSubject<any>({ field: field });
     const options$ = channelOptions.asObservable();
     const queryOptions$ = this.anyService.get(path, query.replace(keyToFilter, text))
     return combineLatest([options$, queryOptions$]).pipe(
@@ -213,7 +213,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
   }
 
   validCampo(c): boolean {
-    if (c.etiqueta === 'file') {
+    if (c.etiqueta === 'file' && !!c.ocultar) {
+      return true;
       // console.info((c.etiqueta === 'file' && (c.valor)?true:c.valor.name === undefined));
     }
     if (c.requerido && ((c.valor === '' && c.etiqueta !== 'file') || c.valor === null || c.valor === undefined ||
@@ -257,7 +258,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
         return false;
       }
     }
-    if (c.etiqueta === 'file' && c.valor !== null && c.valor !== undefined && c.valor !== '') {
+    if (c.etiqueta === 'file' && c.valor !== null && c.valor !== undefined && c.valor !== '' && !c.ocultar) {
       if (c.valor.size > c.tamanoMaximo * 1024000) {
         c.clase = 'form-control form-control-danger';
         c.alerta = 'El tamaño del archivo es superior a : ' + c.tamanoMaximo + 'MB. ';
@@ -305,9 +306,9 @@ export class DinamicformComponent implements OnInit, OnChanges {
     this.data.valid = true;
 
     this.normalform.campos.forEach(d => {
-      requeridos = d.requerido ? requeridos + 1 : requeridos;
+      requeridos = d.requerido && !d.ocultar ? requeridos + 1 : requeridos;
       if (this.validCampo(d)) {
-        if (d.etiqueta === 'file') {
+        if (d.etiqueta === 'file' && !d.ocultar) {
           result[d.nombre] = { nombre: d.nombre, file: d.File, url: d.url, IdDocumento: d.tipoDocumento };
           // result[d.nombre].push({ nombre: d.name, file: d.valor });
         } else if (d.etiqueta === 'select') {
@@ -364,7 +365,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     let requeridos = 0;
     let resueltos = 0;
     this.normalform.campos.forEach(form_element => {
-      if (form_element.requerido) {
+      if (form_element.requerido && !form_element.ocultar) {
         requeridos = requeridos + 1;
         resueltos = form_element.valor ? resueltos + 1 : resueltos;
       }
