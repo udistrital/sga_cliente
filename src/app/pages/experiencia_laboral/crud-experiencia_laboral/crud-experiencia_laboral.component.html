@@ -3,7 +3,7 @@
          nbSpinnerSize="xxlarge"
          nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <toaster-container [toasterconfig]="config"></toaster-container>
-    <ngx-dinamicform [normalform]="formInfoExperienciaLaboral"
+    <ngx-dinamicform *ngIf="!nuevoTercero" [normalform]="formInfoExperienciaLaboral"
                      [modeloData]="info_experiencia_laboral"
                      (result)="validarForm($event)"
                      (resultAux)="searchNit($event)"
@@ -11,4 +11,11 @@
                      (interlaced)="getSeleccion($event)"
                      (percentage)="setPercentage($event)">
     </ngx-dinamicform>
+
+    <ngx-new-tercero *ngIf="nuevoTercero"
+        [nit]="nit"
+        (result)="NuevoTercero($event)">
+    </ngx-new-tercero>
+
+    <button *ngIf="nuevoTercero" align="center" class="btn btn-info btn-sm" (click)="nuevoTercero=false">{{ 'GLOBAL.cancelar' | translate }}</button>
 </nb-card>

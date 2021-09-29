@@ -21,6 +21,7 @@ import { InfoPersona } from '../../../@core/data/models/informacion/info_persona
 import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { combineAll } from 'rxjs/operators';
+import { Lugar } from "./../../../@core/data/models/lugar/lugar"
 
 @Component({
   selector: 'ngx-crud-formacion-academica',
@@ -38,6 +39,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   SoporteDocumento: any;
   filesUp: any;
   loading: boolean = false;
+  listaPaises: Lugar[];
+  nit: any;
 
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
@@ -142,6 +145,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   searchNit(nit: string) {
     this.loading = true;
     nit = nit.trim();
+    this.nit = nit.trim();
     const init = this.getIndexForm('Nit');
     const inombre = this.getIndexForm('NombreUniversidad');
     const idir = this.getIndexForm('Direccion');
@@ -186,15 +190,28 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                 element.valor = '';
               });
           }
-          Swal.fire({
-            icon: 'info',
-            title: error.status + '',
-            text: "El nit no ha sido encontrado, puede ingresar los datos",
-            footer: this.translate.instant('informacion_academica.error_cargar_universidad'),
+          const opt: any = {
+            title: `El Nit. ${nit} no ha sido encontrado`,
+            text: "Desea crear una nueva institución?",
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-
+            cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+          };
+          Swal.fire(opt)
+            .then((action) => {
+              if (action.value) {
+                console.log('Se creará próximamente un nuevo tercero')
+                this.nuevoTercero = true;
+              }
+            });
         });
+  }
+
+  NuevoTercero(event){
+    this.nuevoTercero = false;
   }
 
   searchDoc(data) {
@@ -237,6 +254,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               element.deshabilitar = false;
             });
           this.loadListUniversidades(nit);
+          this.nit = nit;
           this.formInfoFormacionAcademica.campos[inombre].valor = nit;
         }
 
@@ -557,6 +575,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       }
     }
   }
+
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({

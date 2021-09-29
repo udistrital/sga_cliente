@@ -24,15 +24,6 @@ export let FORM_FORMACION_ACADEMICA = {
       label_i18n: 'buscar',
     },
     {
-      etiqueta: 'button',
-      claseGrid: 'col-lg-2 col-md-3 col-sm-4 col-xs-4',
-      nombre: 'Nuevo',
-      claseBoton: 'btn btn-primary btn-tiny',
-      icono: 'fa fa-plus',
-      label_i18n: 'agregar_universidad',
-      ocultar:true,
-    },
-    {
       etiqueta: 'select',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'NombreUniversidad',
