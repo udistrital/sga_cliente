@@ -10,6 +10,7 @@ import { CampusMidService } from '../@core/data/campus_mid.service';
 import { SgaMidService } from '../@core/data/sga_mid.service';
 import { DocumentoService } from '../@core/data/documento.service';
 import { MatDialogModule } from '@angular/material';
+import { NewTercero } from '../@theme/components/new-tercero/new-tercero.component';
 
 
 
@@ -37,6 +38,8 @@ const PAGES_COMPONENTS = [
     SgaMidService,
     DocumentoService,
   ],
+  exports: [
+  ]
 })
 export class PagesModule {
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FORM_FORMACION_ACADEMICA } from './form-formacion_academica';
+import { FORM_FORMACION_ACADEMICA, NUEVO_TERCERO } from './form-formacion_academica';
 import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -21,6 +21,7 @@ import { InfoPersona } from '../../../@core/data/models/informacion/info_persona
 import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { combineAll } from 'rxjs/operators';
+import { Lugar } from "./../../../@core/data/models/lugar/lugar"
 
 @Component({
   selector: 'ngx-crud-formacion-academica',
@@ -34,9 +35,12 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   edit_status: boolean;
   organizacion: any;
   persona_id: number;
+  nuevoTercero: boolean = false;
   SoporteDocumento: any;
   filesUp: any;
   loading: boolean = false;
+  listaPaises: Lugar[];
+  nit: any;
 
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
@@ -66,6 +70,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
   info_formacion_academica: any;
   formInfoFormacionAcademica: any;
+  formInfoNuevoTercero: any;
   regInfoFormacionAcademica: any;
   temp_info_academica: any;
   clean: boolean;
@@ -89,6 +94,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     private listService: ListService,
     private toasterService: ToasterService) {
     this.formInfoFormacionAcademica = FORM_FORMACION_ACADEMICA;
+    this.formInfoNuevoTercero = NUEVO_TERCERO;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
@@ -108,6 +114,15 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       this.formInfoFormacionAcademica.campos[i].label = this.translate.instant('GLOBAL.' + this.formInfoFormacionAcademica.campos[i].label_i18n);
       this.formInfoFormacionAcademica.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +
         this.formInfoFormacionAcademica.campos[i].label_i18n);
+    }
+
+    // this.formInfoFormacionAcademica.titulo = this.translate.instant('GLOBAL.formacion_academica');
+    this.formInfoNuevoTercero.btn = this.translate.instant('GLOBAL.guardar');
+    this.formInfoNuevoTercero.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
+    for (let i = 0; i < this.formInfoNuevoTercero.campos.length; i++) {
+      this.formInfoNuevoTercero.campos[i].label = this.translate.instant('GLOBAL.' + this.formInfoNuevoTercero.campos[i].label_i18n);
+      this.formInfoNuevoTercero.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +
+        this.formInfoNuevoTercero.campos[i].label_i18n);
     }
   }
 
@@ -130,6 +145,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   searchNit(nit: string) {
     this.loading = true;
     nit = nit.trim();
+    this.nit = nit.trim();
     const init = this.getIndexForm('Nit');
     const inombre = this.getIndexForm('NombreUniversidad');
     const idir = this.getIndexForm('Direccion');
@@ -174,19 +190,32 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                 element.valor = '';
               });
           }
-          Swal.fire({
-            icon: 'info',
-            title: error.status + '',
-            text: "El nit no ha sido encontrado, puede ingresar los datos",
-            footer: this.translate.instant('informacion_academica.error_cargar_universidad'),
+          const opt: any = {
+            title: `El Nit. ${nit} no ha sido encontrado`,
+            text: "Desea crear una nueva institución?",
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-
+            cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+          };
+          Swal.fire(opt)
+            .then((action) => {
+              if (action.value) {
+                console.log('Se creará próximamente un nuevo tercero')
+                this.nuevoTercero = true;
+              }
+            });
         });
   }
 
+  NuevoTercero(event){
+    this.nuevoTercero = false;
+  }
+
   searchDoc(data) {
-    if(data.button === 'BusquedaBoton') {
+    if (data.button === 'BusquedaBoton') {
       this.loading = true;
       const init = this.getIndexForm('Nit');
       const inombre = this.getIndexForm('NombreUniversidad');
@@ -225,12 +254,14 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               element.deshabilitar = false;
             });
           this.loadListUniversidades(nit);
+          this.nit = nit;
           this.formInfoFormacionAcademica.campos[inombre].valor = nit;
         }
 
       }
-    }else if (data.button  === 'Nuevo'){
+    } else if (data.button === 'Nuevo') {
       console.log('Se creará próximamente un nuevo tercero')
+      this.nuevoTercero = true;
     }
   }
 
@@ -545,6 +576,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     }
   }
 
+
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({
       // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
@@ -570,6 +602,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     this.store.select((state) => state).subscribe(
       (list) => {
         this.formInfoFormacionAcademica.campos[this.getIndexForm('Pais')].opciones = list.listPais[0];
+        this.formInfoNuevoTercero.campos[this.getIndexForm('Pais')].opciones = list.listPais[0];
         this.formInfoFormacionAcademica.campos[this.getIndexForm('ProgramaAcademico')].opciones = list.listProgramaAcademico[0];
       },
     );
