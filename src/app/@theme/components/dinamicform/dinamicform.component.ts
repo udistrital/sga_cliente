@@ -188,6 +188,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     }
   }
   ngOnInit() {
+    console.log(this.normalform);
     this.init = true;
     if (!this.normalform.tipo_formulario) {
       this.normalform.tipo_formulario = 'grid';

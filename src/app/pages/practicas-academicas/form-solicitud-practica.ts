@@ -116,6 +116,16 @@ export const FORM_SOLICITUD_PRACTICAS = {
             key: 'Nombre',
             deshabilitar: false,
         },
+    ]
+}
+
+
+export const FORM_SOPORTES_DOCUMENTALES = {
+    tipo_formulario: 'mini',
+    alertas: true,
+    btn: 'Enviar',
+    modelo: 'documental',
+    campos: [
         {
             etiqueta: 'file',
             claseGrid: 'col-12 col-md-6 mb-5',
@@ -128,7 +138,6 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
-            deshabilitar: false,
         },
         {
             etiqueta: 'file',
@@ -142,7 +151,6 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
-            deshabilitar: false,
         },
         {
             etiqueta: 'file',
@@ -156,7 +164,6 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
-            deshabilitar: false,
         },
         {
             etiqueta: 'file',
@@ -170,7 +177,34 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
-            deshabilitar: false,
+        },        
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-6 mb-5',
+            clase: 'form-control',
+            nombre: 'GuiaPractica',
+            label_i18n: 'guia_practica',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        },
+              
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-6 mb-5',
+            clase: 'form-control',
+            nombre: 'ListaPersonalApoyo',
+            label_i18n: 'lista_personal_apoyo',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
         },
     ]
 }
+

@@ -11,6 +11,7 @@ export class ListPracticasAcademicasComponent implements OnInit {
 
   tablaPracticas: any;
   datosPracticas: any
+  process: any;
 
   constructor(
     private translate: TranslateService,
@@ -72,12 +73,31 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.datosPracticas = [{
-      Numero: 123,
-      FechaSolicitud: '05/03/2021',
-      TipoSolicitud: 'Prácticas académicas',
-      EstadoSolicitud: 'Radicada',
-    }]
+    this.route.queryParams.subscribe(params => {
+      this.process = params['process'];
+      this.datosPracticas = [{
+        Numero: 123,
+        FechaSolicitud: '05/03/2021',
+        TipoSolicitud: 'Prácticas académicas 1',
+        EstadoSolicitud: 'Radicada',
+      },{
+        Numero: 456,
+        FechaSolicitud: '05/03/2021',
+        TipoSolicitud: 'Prácticas académicas 2',
+        EstadoSolicitud: 'Aprobada',
+      },{
+        Numero: 789,
+        FechaSolicitud: '05/03/2021',
+        TipoSolicitud: 'Prácticas académicas 3',
+        EstadoSolicitud: 'Rechazada',
+      },{
+        Numero: 101,
+        FechaSolicitud: '05/03/2021',
+        TipoSolicitud: 'Prácticas académicas 4',
+        EstadoSolicitud: 'Devuelta',
+      }]
+    });
+
   }
 
   verPractica(event) {
