@@ -48,6 +48,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   regInfoCaracteristica: any;
   paisSeleccionado: any;
   departamentoSeleccionado: any;
+  mensaje_discapcidades: boolean = false;
   clean: boolean;
   denied_acces: boolean = false;
   loading: boolean;
@@ -100,6 +101,12 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     } else if (event.nombre === 'TipoDiscapacidad') {
       this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar =
         !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
+
+      if (event.valor.length > 1) {
+        this.mensaje_discapcidades = true;
+      } else {
+        this.mensaje_discapcidades = false;
+      }
     }
   }
 
@@ -321,16 +328,16 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
-      debugger;
-      if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad !== "undefined") {
+      if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad !== 'undefined') {
         const file = [{
           file: event.data.InfoCaracteristica.ComprobanteDiscapacidad,
           IdDocumento: 42,
-          nombre: 'ComprobanteDiscapacidad'
+          nombre: 'ComprobanteDiscapacidad',
         }]
         this.nuxeo.saveFilesNew(file)
           .subscribe((file) => {
-            console.log(file);
+            event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = file[0].Id;
+
             if (this.info_info_caracteristica === undefined && !this.denied_acces) {
               this.createInfoCaracteristica(event.data.InfoCaracteristica);
             } else {

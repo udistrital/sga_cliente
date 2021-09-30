@@ -4,6 +4,7 @@
          nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <div *ngIf="!denied_acces">
         <toaster-container [toasterconfig]="config"></toaster-container>
+
         <ngx-dinamicform [normalform]="formInfoCaracteristica"
                          [modeloData]="info_info_caracteristica"
                          (result)="validarForm($event)"
@@ -11,5 +12,10 @@
                          (interlaced)="getSeleccion($event)"
                          (percentage)="setPercentage($event)">
         </ngx-dinamicform>
+
+        <div class="preinscription-alert" *ngIf="mensaje_discapcidades">
+          {{ 'inscripcion.alerta_discapacidades' | translate }}
+        </div>
+
     </div>
 </nb-card>
