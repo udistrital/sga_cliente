@@ -357,7 +357,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     if (event.valid) {
       if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad !== 'undefined') {
         const file = [{
-          file: event.data.InfoCaracteristica.ComprobanteDiscapacidad,
+          file: event.data.InfoCaracteristica.ComprobanteDiscapacidad.file,
           IdDocumento: 42,
           nombre: 'ComprobanteDiscapacidad',
         }]
