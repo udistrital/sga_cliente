@@ -323,7 +323,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
       }
     });
 
-    if (this.data.valid && (resueltos / requeridos) === 1) {
+    if (this.data.valid && (resueltos / requeridos) >= 1) {
       if (this.normalform.modelo) {
         this.data.data[this.normalform.modelo] = result;
       } else {

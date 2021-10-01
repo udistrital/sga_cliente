@@ -406,7 +406,7 @@
                                 [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" [disabled]="c.deshabilitar" multiple>
                                 <mat-option *ngFor="let item of c.opciones" [value]="item">
-                                    {{c.key?item[c.key]:item | json}}
+                                    {{c.key?item[c.key]?item[c.key]:(item | json):(item | json)}}
                                 </mat-option>
                             </mat-select>
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
