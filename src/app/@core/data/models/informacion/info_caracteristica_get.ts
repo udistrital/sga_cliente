@@ -23,4 +23,5 @@ export class InfoCaracteristicaGet {
   };
   Ente: number;
   Tercero: number;
+  IdDocumento: number;
 }
