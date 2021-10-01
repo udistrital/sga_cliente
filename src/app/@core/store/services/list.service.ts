@@ -355,7 +355,7 @@ export class ListService {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:1')
             .subscribe(
               (result: any[]) => {
-                this.addList(REDUCER_LIST.TipoDiscapacidad, result);
+                this.addList(REDUCER_LIST.TipoDiscapacidad, result.filter(data => data.Nombre !== 'DOCUMENTO_SOPORTE'));
               },
               error => {
                 this.addList(REDUCER_LIST.TipoDiscapacidad, []);
