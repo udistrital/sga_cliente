@@ -15,7 +15,7 @@ const routes: Routes = [{
             component: NuevaSolicitudComponent,
         },
         {
-            path: 'lista-practicas',
+            path: 'lista-practicas/:process',
             component: ListPracticasAcademicasComponent,
         },
         {
