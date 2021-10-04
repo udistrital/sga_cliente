@@ -23,9 +23,9 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     private translate: TranslateService
   ) {
     this.formDocente = this.builder.group({
-      NombreDocente: [{value: '', disabled: true}],
-      NumeroDocumento: [{value: '', disabled: true}],
-      EstadoDocente: [{value: '', disabled: true}],
+      NombreDocente: [{ value: '', disabled: true }],
+      NumeroDocumento: [{ value: '', disabled: true }],
+      EstadoDocente: [{ value: '', disabled: true }],
     });
     this.FormPracticasAcademicas = FORM_SOLICITUD_PRACTICAS;
     this.inicializiarDatos();
@@ -44,19 +44,27 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   }
 
   inicializiarDatos() {
-    this.periodos = [{Nombre: '2021-1', Id: 1}];
-    this.proyectos = [{Nombre: 'Ingeniería Industrial', Id: 1}];
-    this.espaciosAcademicos = [{Nombre: '123 - Calculo Integral', Id: 1}];
+    const files = [
+      { id: 1, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
+      { id: 2, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
+      { id: 3, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
+      { id: 4, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
+      { id: 5, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
+      { id: 6, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
+    ]
+    this.periodos = [{ Nombre: '2021-1', Id: 1 }];
+    this.proyectos = [{ Nombre: 'Ingeniería Industrial', Id: 1 }];
+    this.espaciosAcademicos = [{ Nombre: '123 - Calculo Integral', Id: 1 }];
     this.tiposVehiculo = [
-      {Nombre: 'Colectivo', Id: 1},
-      {Nombre: 'Buseta', Id: 2},
-      {Nombre: 'Bus', Id: 3},
-      {Nombre: 'Otro', Id: 4},
+      { Nombre: 'Colectivo', Id: 1 },
+      { Nombre: 'Buseta', Id: 2 },
+      { Nombre: 'Bus', Id: 3 },
+      { Nombre: 'Otro', Id: 4 },
     ]
     this.InfoPracticasAcademicas = {
-      Periodo: {Id: 1},
-      Proyecto: {Id: 1},
-      EspacioAcademico: {Id: 1},
+      Periodo: { Id: 1 },
+      Proyecto: { Id: 1 },
+      EspacioAcademico: { Id: 1 },
       Semestre: 2,
       NumeroEstudiantes: 40,
       NumeroGrupos: 2,
@@ -64,7 +72,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       FechaHoraRegreso: '',
       Duracion: 2,
       NumeroVehiculos: 1,
-      TipoVehiculo: {Id: 1}
+      TipoVehiculo: { Id: 1 }
     }
   }
 

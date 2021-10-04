@@ -1,5 +1,5 @@
-<div [ngSwitch]="normalform.tipo_formulario"
-      class="{{normalform.customPadding?'dinamic-form padding-custom-' + normalform.customPadding: 'dinamic-form padding-custom-1'}}">
+<div [ngSwitch]="normalform?normalform.tipo_formulario?normalform.tipo_formulario:'':''"
+      class="{{normalform?normalform.customPadding?'dinamic-form padding-custom-' + normalform.customPadding: 'dinamic-form padding-custom-1': 'dinamic-form padding-custom-1'}}">
 
     <!-- Form  basic -->
     <form class="form-horizontal" *ngSwitchCase="'basic'">
@@ -388,7 +388,7 @@
                         <mat-form-field *ngSwitchCase="'select'" style="width: 100%;" floatLabel="always"
                             [hidden]="c.ocultar">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
-                            <mat-select [placeholder]="c.valor?(c.key?c.valor[c.key]:c.valor|json):c.placeholder"
+                            <mat-select [placeholder]="c.valor?c.key?c.valor[c.key]?c.valor[c.key]:(c.valor|json):c.placeholder:c.placeholder"
                                 [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" [disabled]="c.deshabilitar">
                                 <mat-option>--Seleccionar--</mat-option>
@@ -402,11 +402,11 @@
                         <!-- select multiple -->
                         <mat-form-field *ngSwitchCase="'selectmultiple'" style="width: 100%;" floatLabel="always">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
-                            <mat-select [placeholder]="c.valor?(c.key?c.valor[c.key]:c.valor|json):c.placeholder"
+                            <mat-select [placeholder]="c.valor?c.key?c.valor[c.key]?c.valor[c.key]:(c.valor|json):c.placeholder:c.placeholder"
                                 [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" [disabled]="c.deshabilitar" multiple>
                                 <mat-option *ngFor="let item of c.opciones" [value]="item">
-                                    {{c.key?item[c.key]:item | json}}
+                                    {{c.key?item[c.key]?item[c.key]:(item | json):(item | json)}}
                                 </mat-option>
                             </mat-select>
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
@@ -417,7 +417,7 @@
                             class="example-full-width">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <input matInput type="text"
-                                [placeholder]="c.valor?(c.key?c.valor[c.key]:c.valor|json):c.placeholder"
+                                [placeholder]="c.valor?c.key?c.valor[c.key]?c.valor[c.key]:(c.valor|json):c.placeholder:c.placeholder"
                                 aria-label="Number" [matAutocomplete]="auto"
                                 (keyup)="searchTerm$.next({text: $event.target.value, path: c.path, query: c.query, field: c, keyToFilter: c.keyToFilter})">
                             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"

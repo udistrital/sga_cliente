@@ -210,7 +210,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         });
   }
 
-  NuevoTercero(event){
+  NuevoTercero(event) {
     this.nuevoTercero = false;
   }
 
@@ -492,6 +492,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               if (Object.keys(response).length === files.length) {
                 this.filesUp = <any>response;
                 if (this.filesUp['Documento'] !== undefined) {
+                  debugger;
                   this.info_formacion_academica.DocumentoId = this.filesUp['Documento'].Id;
                 }
                 this.sgaMidService.post('formacion_academica/', this.info_formacion_academica)
@@ -565,7 +566,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         DocumentoId: formData.Documento,
         NitUniversidad: formData.Nit,
       };
-      if ((this.info_formacion_academica === null && this.info_proyecto_id === null)
+      if ( !this.info_formacion_academica ||(this.info_formacion_academica === null && this.info_proyecto_id === null)
         || (this.info_formacion_academica_id === undefined && this.info_proyecto_id === undefined)) {
         this.createInfoFormacionAcademica(InfoFormacionAcademica);
         this.result.emit(event);
