@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import Swal from 'sweetalert2';
+import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
 import { FORM_SOLICITUD_PRACTICAS } from '../form-solicitud-practica';
 
 @Component({
@@ -17,10 +20,17 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   proyectos: any[];
   espaciosAcademicos: any;
   tiposVehiculo: any;
+  process: string;
+  idSolicitud: string;
+  estadosSolicitud: any;
+  sub: any;
+  tablaEstados: { columns: { EstadoSolicitud: { title: any; width: string; editable: boolean; }; FechaSolicitud: { title: any; width: string; editable: boolean; }; TipoSolicitud: { title: any; width: string; editable: boolean; }; }; mode: string; hideSubHeader: boolean; actions: { add: boolean; edit: boolean; delete: boolean; position: string; columnTitle: any; custom: { name: string; title: string; }[]; }; noDataMessage: any; };
 
   constructor(
     private builder: FormBuilder,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private practicasService: PracticasAcademicasService,
+    private _Activatedroute: ActivatedRoute,
   ) {
     this.formDocente = this.builder.group({
       NombreDocente: [{ value: '', disabled: true }],
@@ -29,8 +39,10 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     });
     this.FormPracticasAcademicas = FORM_SOLICITUD_PRACTICAS;
     this.inicializiarDatos();
+    this.crearTabla();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
+      this.crearTabla();
     });
   }
 
@@ -41,6 +53,19 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       EstadoDocente: 'Autor principal',
     });
     this.construirForm();
+
+
+    this.sub = this._Activatedroute.paramMap.subscribe((params: any) => {
+      const { process, id } = params.params;
+      console.log({ process, id });
+      this.process = atob(process);
+      this.estadosSolicitud = this.practicasService.getPracticas(id, null)[0].estados
+      console.log(this.estadosSolicitud);
+    });
+    
+  }
+  ngOnDestroy(){
+    this.sub.unsubscribe();
   }
 
   inicializiarDatos() {
@@ -99,6 +124,66 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       campo.label = this.translate.instant('practicas_academicas.' + campo.label_i18n);
       campo.deshabilitar = true;
     });
+  }
+
+  verEstado(event){
+    console.log(event);
+    const opt: any = {
+          title: this.translate.instant("GLOBAL.estado"),
+          html: `<span>${event.data.EstadoSolicitud}</span><br>
+                <span>${event.data.FechaSolicitud}</span><br>
+                <span>${event.data.observaciones}</span><br>`,
+          icon: "info",
+          buttons: true,
+          dangerMode: true,
+          showCancelButton: true
+        };
+        Swal.fire(opt)
+
+
+  }
+
+  crearTabla() {
+    this.tablaEstados = {
+      columns: {
+        EstadoSolicitud: {
+          title: this.translate.instant('solicitudes.estado'),
+          width: '20%',
+          editable: false,
+        },
+        FechaSolicitud: {
+          title: this.translate.instant('solicitudes.fecha'),
+          width: '20%',
+          editable: false,
+        },
+        TipoSolicitud: {
+          title: this.translate.instant('solicitudes.tipo'),
+          width: '20%',
+          editable: false,
+        },
+      },
+      mode: 'external',
+      hideSubHeader: true,
+      actions: {
+        add: false,
+        edit: false,
+        delete: false,
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+        custom: [
+          {
+            name: 'view',
+            title:
+              '<i class="nb-search" title="' +
+              this.translate.instant(
+                'practicas_academicas.tooltip_ver_registro',
+              ) +
+              '"></i>',
+          },
+        ],
+      },
+      noDataMessage: this.translate.instant('practicas_academicas.no_data'),
+    };
   }
 
 }
