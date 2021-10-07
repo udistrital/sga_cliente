@@ -38,5 +38,6 @@ export const REDUCER_LIST = {
     DocumentoPrograma: 'ListDocumentoPrograma',
     DescuentoDependencia: 'ListDescuentoDependencia',
     TipoParametro: 'listReducerTipoParametro',
+  TipoTercero: 'listTipoTercero',
     // TipoPublicacionLibro: 'listReducerTipoPublicacionLibro',
 };

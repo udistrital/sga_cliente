@@ -292,6 +292,15 @@ export class ListReducer {
     }
   }
 
+  static ListReducerTipoTercero(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.TipoTercero:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
   static ListReducerTipoDedicacion(state: Array<any> = new Array, action) {
     switch (action.type) {
       case REDUCER_LIST.TipoDedicacion:

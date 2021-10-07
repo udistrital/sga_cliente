@@ -645,6 +645,24 @@ public findTipoParametro() {
     );
   }
 
+  public findTipoTercero() {
+    this.store.select(REDUCER_LIST.TipoTercero).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('tipo_tercero?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoTercero, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoTercero, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   public findTipoDedicacion() {
     this.store.select(REDUCER_LIST.TipoDedicacion).subscribe(
       (list: any) => {
