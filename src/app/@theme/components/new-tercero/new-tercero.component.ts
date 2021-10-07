@@ -107,6 +107,13 @@ export class NewTercero implements OnInit {
   ngOnInit() {
   }
 
+  setPercentage(event) {
+    setTimeout(() => {
+      this.percentage = event;
+      // this.result.emit(this.percentage);
+    });
+  }
+
   validarFormNuevoTercero(event) {
     if (event.valid) {
       const formData = event.data.Tercero;
