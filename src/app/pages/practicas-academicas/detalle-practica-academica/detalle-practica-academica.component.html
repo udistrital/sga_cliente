@@ -33,10 +33,10 @@
       </form>
 
       <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas"></ngx-dinamicform>
-      
-            <div class="files-container">
-      
-            </div>
+
+      <div class="files-container" *ngFor="let file of files">
+        <ngx-download-file-nuxeo [idDoc]="file.id" [label]="file.label"></ngx-download-file-nuxeo> 
+      </div>
 
       <mat-accordion *ngIf="['news', 'process'].includes(process)" >
         <mat-expansion-panel>

@@ -44,7 +44,7 @@ export class ListPracticasAcademicasComponent implements OnInit {
       },
       {
         etiqueta: 'button',
-        claseGrid: 'col-lg-2 col-md-24',
+        claseGrid: 'col-lg-2 col-md-2',
         nombre: 'Filter',
         claseBoton: 'btn btn-primary btn-sm',
         icono: 'fa fa-search',
@@ -150,7 +150,7 @@ export class ListPracticasAcademicasComponent implements OnInit {
 
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sub.unsubscribe();
   }
 

@@ -25,6 +25,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   estadosSolicitud: any;
   sub: any;
   tablaEstados: { columns: { EstadoSolicitud: { title: any; width: string; editable: boolean; }; FechaSolicitud: { title: any; width: string; editable: boolean; }; TipoSolicitud: { title: any; width: string; editable: boolean; }; }; mode: string; hideSubHeader: boolean; actions: { add: boolean; edit: boolean; delete: boolean; position: string; columnTitle: any; custom: { name: string; title: string; }[]; }; noDataMessage: any; };
+  files:any = [];
 
   constructor(
     private builder: FormBuilder,
@@ -69,13 +70,13 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   }
 
   inicializiarDatos() {
-    const files = [
-      { id: 1, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
-      { id: 2, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
-      { id: 3, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
-      { id: 4, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
-      { id: 5, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
-      { id: 6, path: "assets/pdf7politicasUD.pdf", name: "name file1" },
+    this.files = [
+      { id: 140089, label: 'Documento1' },
+      { id: 140089, label: 'Documento2' },
+      { id: 140089, label: 'Documento3' },
+      { id: 140089, label: 'Documento4' },
+      { id: 140089, label: 'Documento5' },
+      { id: 140089, label: 'Documento6' },
     ]
     this.periodos = [{ Nombre: '2021-1', Id: 1 }];
     this.proyectos = [{ Nombre: 'Ingeniería Industrial', Id: 1 }];

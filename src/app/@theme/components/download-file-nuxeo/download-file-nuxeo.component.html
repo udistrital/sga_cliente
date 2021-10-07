@@ -1,0 +1,5 @@
+<div *ngIf="!!documentoData">
+    <span>{{label}}</span><br>
+    {{documentoFile | json}}
+    <button (click)="openFile()">Abrir documento</button>
+</div>documentoFile
