@@ -586,7 +586,9 @@
         "carga_guardando": "Saving data...",
         "general": "General",
         "concepto_academico_id": "Academic concept",
-        "placeholder_concepto_academico_id": "Ej. 1"
+        "placeholder_concepto_academico_id": "Ej. 1",
+        "tipo_tercero": "Entity type",
+        "placeholder_tipo_tercero": "Ej. University"
     },
 
     "ERROR": {
@@ -1234,7 +1236,10 @@
         "informacion_academica_registrada": "Academic information registered",
         "documento_informacion_academica_no_registrado": "Error uploading support document",
         "seguro_continuar_registrar": "Are you sure you want to register this academic information?",
-        "error_cargar_universidad": "An error happened loading the university information"
+        "error_cargar_universidad": "An error happened loading the university information",
+        "crear_entidad": "Do you want to create a new institution?",
+        "titulo2_crear_entidad": "not found",
+        "titulo1_crear_entidad": "The Nit. "
     },
     "experiencia_laboral": {
         "experiencia_laboral_no_registrada": "Work experience not registered",
@@ -1248,7 +1253,10 @@
         "error": "An unexpected error occurred while loading the information",
         "tooltip_editar": "Edit work experience",
         "tooltip_eliminar": "Remove work experience",
-        "tooltip_crear": "Create work experience"
+        "tooltip_crear": "Create work experience",
+        "crear_entidad": "Do you want to create a new entity?",
+        "titulo2_crear_entidad": "not found",
+        "titulo1_crear_entidad": "The Nit. "
     },
     "documento_programa": {
         "descuento_academico_no_registrado": "Academic discount not registered",

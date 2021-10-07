@@ -605,7 +605,9 @@
         "concepto_academico_id": "Concepto académico",
         "placeholder_concepto_academico_id": "Ej. 1",
         "agregar_universidad":"Universidad",
-        "agregar_empresa":"Empresa"
+        "agregar_empresa":"Empresa",
+        "tipo_tercero": "Tipo de entidad",
+        "placeholder_tipo_tercero": "Ej. Universidad"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1267,7 +1269,10 @@
         "informacion_academica_registrada": "La información académica ha sido registrada",
         "documento_informacion_academica_no_registrado": "Error subiendo el documento de soporte",
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información académica?",
-        "error_cargar_universidad": "Ocurrió un error al cargar la información de la universidad"
+        "error_cargar_universidad": "Ocurrió un error al cargar la información de la universidad",
+        "crear_entidad": "¿Desea crear una nueva institución?",
+        "titulo2_crear_entidad": "no ha sido encontrado",
+        "titulo1_crear_entidad": "El Nit. "
     },
     "experiencia_laboral": {
         "experiencia_laboral_no_registrada": "Experiencia laboral no actualizada",
@@ -1281,7 +1286,11 @@
         "error": "Ha ocurrido un error inesperado al cargar la información",
         "tooltip_editar": "Editar experiencia laboral",
         "tooltip_eliminar": "Eliminar experiencia laboral",
-        "tooltip_crear": "Crear experiencia laboral"
+        "tooltip_crear": "Crear experiencia laboral",
+        "crear_entidad": "¿Desea crear una nueva entidad?",
+        "titulo2_crear_entidad": "no ha sido encontrado",
+        "titulo1_crear_entidad": "El Nit. "
+
     },
     "documento_programa": {
         "documento_programa_no_registrado": "Documento no registrado",
