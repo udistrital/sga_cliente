@@ -24,7 +24,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   idSolicitud: string;
   estadosSolicitud: any;
   sub: any;
-  tablaEstados: { columns: { EstadoSolicitud: { title: any; width: string; editable: boolean; }; FechaSolicitud: { title: any; width: string; editable: boolean; }; TipoSolicitud: { title: any; width: string; editable: boolean; }; }; mode: string; hideSubHeader: boolean; actions: { add: boolean; edit: boolean; delete: boolean; position: string; columnTitle: any; custom: { name: string; title: string; }[]; }; noDataMessage: any; };
+  tablaEstados:any;
   files:any = [];
 
   constructor(
@@ -131,15 +131,20 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     console.log(event);
     const opt: any = {
           title: this.translate.instant("GLOBAL.estado"),
-          html: `<span>${event.data.EstadoSolicitud}</span><br>
-                <span>${event.data.FechaSolicitud}</span><br>
-                <span>${event.data.observaciones}</span><br>`,
+          html: `<span>${event.data.FechaSolicitud}</span><br>
+                <span>${event.data.EstadoSolicitud}</span><br>
+                <span class="form-control">${event.data.Observaciones}</span><br>`,
           icon: "info",
           buttons: true,
           dangerMode: true,
           showCancelButton: true
         };
         Swal.fire(opt)
+        .then((result)=>{
+          if (result) {
+            console.log(result)
+          }
+        })
   }
 
   enviarInvitacion(event){
@@ -168,8 +173,8 @@ export class DetallePracticaAcademicaComponent implements OnInit {
           width: '20%',
           editable: false,
         },
-        TipoSolicitud: {
-          title: this.translate.instant('solicitudes.tipo'),
+        Observaciones: {
+          title: this.translate.instant('solicitudes.Observaciones'),
           width: '20%',
           editable: false,
         },

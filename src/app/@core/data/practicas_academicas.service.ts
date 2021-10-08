@@ -23,19 +23,19 @@ export class PracticasAcademicasService {
         EstadoSolicitud: 'Radicada',
         estados: [{
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 1',
+            Observaciones: 'Prácticas académicas 1',
             EstadoSolicitud: 'Radicada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 2',
+            Observaciones: 'Prácticas académicas 2',
             EstadoSolicitud: 'Aprobada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 3',
+            Observaciones: 'Prácticas académicas 3',
             EstadoSolicitud: 'Rechazada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 4',
+            Observaciones: 'Prácticas académicas 4',
             EstadoSolicitud: 'Devuelta',
         }]
 
@@ -46,19 +46,19 @@ export class PracticasAcademicasService {
         EstadoSolicitud: 'Aprobada',
         estados: [{
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 1',
+            Observaciones: 'Prácticas académicas 1',
             EstadoSolicitud: 'Radicada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 2',
+            Observaciones: 'Prácticas académicas 2',
             EstadoSolicitud: 'Aprobada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 3',
+            Observaciones: 'Prácticas académicas 3',
             EstadoSolicitud: 'Rechazada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 4',
+            Observaciones: 'Prácticas académicas 4',
             EstadoSolicitud: 'Devuelta',
         }]
     }, {
@@ -68,19 +68,19 @@ export class PracticasAcademicasService {
         EstadoSolicitud: 'Rechazada',
         estados: [{
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 1',
+            Observaciones: 'Prácticas académicas 1',
             EstadoSolicitud: 'Radicada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 2',
+            Observaciones: 'Prácticas académicas 2',
             EstadoSolicitud: 'Aprobada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 3',
+            Observaciones: 'Prácticas académicas 3',
             EstadoSolicitud: 'Rechazada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 4',
+            Observaciones: 'Prácticas académicas 4',
             EstadoSolicitud: 'Devuelta',
         }]
     }, {
@@ -90,19 +90,19 @@ export class PracticasAcademicasService {
         EstadoSolicitud: 'Devuelta',
         estados: [{
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 1',
+            Observaciones: 'Prácticas académicas 1',
             EstadoSolicitud: 'Radicada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 2',
+            Observaciones: 'Prácticas académicas 2',
             EstadoSolicitud: 'Aprobada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 3',
+            Observaciones: 'Prácticas académicas 3',
             EstadoSolicitud: 'Rechazada',
         }, {
             FechaSolicitud: '05/03/2021',
-            observaciones: 'Prácticas académicas 4',
+            Observaciones: 'Prácticas académicas 4',
             EstadoSolicitud: 'Devuelta',
         }]
     }]

@@ -131,6 +131,7 @@
             "practicas_academicas": "Prácticas académicas",
             "crear_nueva_practica": "Nueva solicitud",
             "ver_nuevas_solicitudes": "Nuevas solicitudes",
+            "listado_practicas": "Listado de prácticas\nacadémicas",
             "en_proceso": "Solicitudes en proceso",
             "invitacion": "Invitación a prácticas\nacadémicas"
         },
@@ -140,6 +141,7 @@
         }
     },
     "GLOBAL": {
+        "soporte_documental":"Soporte documental",
         "numero": "Número",
         "fecha": "Fecha",
         "detalle": "Detalle",

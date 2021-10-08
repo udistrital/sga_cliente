@@ -39,6 +39,25 @@
         </ngx-download-file-nuxeo>
       </div>
 
+      <div class="row col-12" *ngIf="['news', 'process'].includes(process)">
+        <div class="row col-6">
+          <div class="col-6">
+            <label>Fecha de radicación</label>
+          </div>
+          <div class="col-6">
+            <span class="form-control">12/10/2021</span>
+          </div>
+        </div>
+        <div class="row col-6">
+          <div class="col-6">
+            <label>Estado actual de la solicitud</label>
+          </div>
+          <div class="col-6">
+            <span class="form-control">*Estado*</span>
+          </div>
+        </div>
+      </div>
+      <br>
       <mat-accordion *ngIf="['news', 'process'].includes(process)">
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -49,7 +68,6 @@
               Ver listado de estados
             </mat-panel-description>
           </mat-expansion-panel-header>
-
           <ng2-smart-table [settings]="tablaEstados" [source]="estadosSolicitud" (custom)="verEstado($event)">
           </ng2-smart-table>
 
