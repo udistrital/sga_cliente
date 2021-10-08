@@ -34,11 +34,12 @@
 
       <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas"></ngx-dinamicform>
 
-      <div class="files-container" *ngFor="let file of files">
-        <ngx-download-file-nuxeo [idDoc]="file.id" [label]="file.label"></ngx-download-file-nuxeo> 
+      <div class="files-container">
+        <ngx-download-file-nuxeo *ngFor="let file of files" [idDoc]="file.id" [label]="file.label">
+        </ngx-download-file-nuxeo>
       </div>
 
-      <mat-accordion *ngIf="['news', 'process'].includes(process)" >
+      <mat-accordion *ngIf="['news', 'process'].includes(process)">
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -49,16 +50,18 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <ng2-smart-table [settings]="tablaEstados" [source]="estadosSolicitud" (custom)="verEstado($event)" ></ng2-smart-table>
+          <ng2-smart-table [settings]="tablaEstados" [source]="estadosSolicitud" (custom)="verEstado($event)">
+          </ng2-smart-table>
 
         </mat-expansion-panel>
 
       </mat-accordion>
 
-      <mat-accordion *ngIf="['invitation'].includes(process)" >
-        <button>Enviar Invitación</button>
-
-      </mat-accordion>
+      <div class="send-invitation" *ngIf="['invitation'].includes(process)">
+        <button class="btn btn-success" (click)="enviarInvitacion()">
+          Enviar Invitación
+        </button>
+      </div>
 
       <div class="row">
         <div class="col-12">

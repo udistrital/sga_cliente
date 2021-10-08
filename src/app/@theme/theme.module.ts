@@ -7,6 +7,8 @@ import { SharedModule } from '../shared/shared.module';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { MomentModule } from 'ngx-moment';
+import { NbSpinnerModule } from '@nebular/theme';
+
 import { NgIsGrantedDirective } from './directives/ng-is-granted.directive';
 import {
   MatAutocompleteModule,
@@ -152,6 +154,7 @@ import { DocumentoService } from '../@core/data/documento.service';
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
 const NB_MODULES = [
+  NbSpinnerModule,
   NbCardModule,
   NbLayoutModule,
   NbTabsetModule,

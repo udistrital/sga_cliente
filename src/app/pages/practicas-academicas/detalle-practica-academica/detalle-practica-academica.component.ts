@@ -9,7 +9,7 @@ import { FORM_SOLICITUD_PRACTICAS } from '../form-solicitud-practica';
 @Component({
   selector: 'ngx-detalle-practica-academica',
   templateUrl: './detalle-practica-academica.component.html',
-  styleUrls: ['../practicas-academicas.component.scss'],
+  styleUrls: ['./detalle-practica-academica.component.scss'],
 })
 export class DetallePracticaAcademicaComponent implements OnInit {
 
@@ -140,8 +140,19 @@ export class DetallePracticaAcademicaComponent implements OnInit {
           showCancelButton: true
         };
         Swal.fire(opt)
+  }
 
-
+  enviarInvitacion(event){
+    console.log(event);
+    const opt: any = {
+          title: this.translate.instant("GLOBAL.invitacion"),
+          html: `Próximamente envío de invitación aquí`,
+          icon: "info",
+          buttons: true,
+          dangerMode: true,
+          showCancelButton: true
+        };
+        Swal.fire(opt)
   }
 
   crearTabla() {
