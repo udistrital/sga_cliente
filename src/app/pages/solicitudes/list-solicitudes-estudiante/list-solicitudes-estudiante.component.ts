@@ -35,21 +35,23 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
     this.solicitudes = new LocalDataSource();
     this.loading = true;
 
-    this.rol = this.autenticationService.getPayload().role;
-    for (let i = 0; i < this.rol.length; i++) {
-      if (
-        this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES'
-      ) {
-        this.loadList();
-        break;
-      } else if (this.rol[i] === 'ESTUDIANTE') {
-        this.loadSolicitud();
-        break;
+    this.autenticationService.getRole().then((rol)=> {
+      this.rol = rol;
+      for (let i = 0; i < this.rol.length; i++) {
+        if (
+          this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES'
+        ) {
+          this.loadList();
+          break;
+        } else if (this.rol[i] === 'ESTUDIANTE') {
+          this.loadSolicitud();
+          break;
+        }
       }
-    }
-    this.construirTabla();
-    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirTabla();
+      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+        this.construirTabla();
+      });
     });
   }
 

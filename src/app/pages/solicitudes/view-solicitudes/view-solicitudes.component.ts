@@ -38,21 +38,23 @@ export class ViewSolicitudesComponent implements OnInit {
     this.solicitudes = new LocalDataSource();
     this.loading = true;
 
-    this.rol = this.autenticationService.getPayload().role;
+     this.autenticationService.getRole().then((rol)=> {
+       this.rol = rol;
+       for (let i = 0; i < this.rol.length; i++) {
+         if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
+           this.loadList();
+           break;
+         } else if (this.rol[i] === 'ESTUDIANTE') {
+           this.loadSolicitud();
+           break;
+         }
+       }
+       this.construirTabla();
+       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+         this.construirTabla();
+       });
+      })
 
-    for (let i = 0; i < this.rol.length; i++) {
-      if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
-        this.loadList();
-        break;
-      } else if (this.rol[i] === 'ESTUDIANTE') {
-        this.loadSolicitud();
-        break;
-      }
-    }
-    this.construirTabla();
-    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.construirTabla();
-    });
   }
 
   ngOnInit() { }
@@ -237,9 +239,9 @@ export class ViewSolicitudesComponent implements OnInit {
 
   consultarSolicitudes() {
     this.showTable = false;
-    this.solicitudes.empty().then(e => {
+    this.solicitudes.empty().then(async e => {
       this.listaDatos = []
-      this.rol = this.autenticationService.getPayload().role;
+      this.rol = await  this.autenticationService.getRole();
       for (let i = 0; i < this.rol.length; i++) {
         if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
           this.loadList();

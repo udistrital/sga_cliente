@@ -28,43 +28,45 @@ export class ActualizacionNombresComponent implements OnInit {
   @Input()
   set nuevaSolicitud(nuevaSolicitud: boolean) {
     this.solicitudNueva = nuevaSolicitud;
-    this.rol = this.autenticationService.getPayload().role;
-    for (let i = 0; i < this.rol.length; i++) {
-      if (nuevaSolicitud) {
-        this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].valor = '';
-        this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].valor = '';
-        this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = '';
-        this.solicitudForm.campos[this.getIndexForm('Documento')].valor = '';
-        this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-        this.solicitudForm.btn = 'Enviar'
-        this.Admin = false;
-
-        if (this.rol[i] === 'ESTUDIANTE') {
-          this.loadInfo();
-          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
-          this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false;
-          this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].deshabilitar = false;
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].deshabilitar = false;
-          this.respuestaSolicitudForm.campos.forEach(campo => {
-            campo.deshabilitar = true;
-          });
-          this.loading = false;
-          break;
-        }
-      } else {
-        this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
-        if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
+    this.autenticationService.getRole().then((rol)=> {
+      this.rol = rol
+      for (let i = 0; i < this.rol.length; i++) {
+        if (nuevaSolicitud) {
+          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].valor = '';
+          this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].valor = '';
+          this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = '';
+          this.solicitudForm.campos[this.getIndexForm('Documento')].valor = '';
+          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+          this.solicitudForm.btn = 'Enviar'
           this.Admin = false;
-          this.loadInfoById();
-          break;
-        } else if (this.rol[i] === 'ESTUDIANTE') {
-          this.Admin = false;
-          this.loadInfo();
-          this.loadInfoById();
-          break;
+  
+          if (this.rol[i] === 'ESTUDIANTE') {
+            this.loadInfo();
+            this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
+            this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false;
+            this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].deshabilitar = false;
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].deshabilitar = false;
+            this.respuestaSolicitudForm.campos.forEach(campo => {
+              campo.deshabilitar = true;
+            });
+            this.loading = false;
+            break;
+          }
+        } else {
+          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+          if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
+            this.Admin = false;
+            this.loadInfoById();
+            break;
+          } else if (this.rol[i] === 'ESTUDIANTE') {
+            this.Admin = false;
+            this.loadInfo();
+            this.loadInfoById();
+            break;
+          }
         }
       }
-    }
+    })
   }
 
   @Input()
@@ -159,12 +161,14 @@ export class ActualizacionNombresComponent implements OnInit {
     private dialogo: MatDialog) {
     this.solicitudForm = ACTUALIZAR_NOMBRE;
     this.respuestaSolicitudForm = RESPUESTA_SOLICITUD;
-    this.rol = this.autenticationService.getPayload().role;
-    this.construirForm();
-    this.loading = true;
-
-    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+    this.autenticationService.getRole().then((rol)=> {
+      this.rol = rol
       this.construirForm();
+      this.loading = true;
+  
+      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+        this.construirForm();
+      });
     });
   }
 

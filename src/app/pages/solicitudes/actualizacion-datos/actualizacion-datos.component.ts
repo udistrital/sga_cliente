@@ -24,9 +24,10 @@ import Swal from 'sweetalert2';
 export class ActualizacionDatosComponent implements OnInit {
 
   @Input()
-  set nuevaSolicitud(nuevaSolicitud: boolean) {
+  set  nuevaSolicitud(nuevaSolicitud: boolean) {
     this.solicitudNueva = nuevaSolicitud;
-    this.rol = this.autenticationService.getPayload().role;
+    this.autenticationService.getRole().then((rol)=> {
+    this.rol
     for (let i = 0; i < this.rol.length; i++) {
       if (nuevaSolicitud) {
         this.solicitudDatos = new ActualizacionDatos();
@@ -65,6 +66,7 @@ export class ActualizacionDatosComponent implements OnInit {
         }
       }
     }
+  })
   }
 
   @Input()
@@ -441,7 +443,7 @@ export class ActualizacionDatosComponent implements OnInit {
         cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
       };
       Swal.fire(opt)
-        .then((willDelete) => {
+        .then(async (willDelete) => {
           this.loading = true;
           if (willDelete.value) {
             const files = [];
@@ -449,7 +451,7 @@ export class ActualizacionDatosComponent implements OnInit {
             this.solicitudDatos = event.data.solicitudDatos;
             if (this.solicitudDatos['Documento'].file !== undefined) {
               files.push({
-                nombre: this.autenticationService.getPayload().sub, key: 'Documento',
+                nombre: await this.autenticationService.getMail(), key: 'Documento',
                 file: this.solicitudDatos['Documento'].file, IdDocumento: 25,
               });
             }
