@@ -55,7 +55,7 @@ export class ActualizacionDatosComponent implements OnInit {
         if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
           this.Admin = false;
           this.loadInfoById();
-        } else if (this.rol.includes('ESTUDIANTE')) {
+        } if (this.rol.includes('ESTUDIANTE')) {
           this.Admin = false;
           this.loadInfo();
           this.loadInfoById();
@@ -105,7 +105,7 @@ export class ActualizacionDatosComponent implements OnInit {
             });
             this.respuestaSolicitudForm.btn = 'Enviar';
             this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
-          } else if (this.rol.includes('ESTUDIANTE')) {
+          } if (this.rol.includes('ESTUDIANTE')) {
             this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
           }
         }
@@ -118,7 +118,7 @@ export class ActualizacionDatosComponent implements OnInit {
           });
           if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
             this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-          } else if (this.rol.includes('ESTUDIANTE')) {
+          } if (this.rol.includes('ESTUDIANTE')) {
             this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
           }
         }
@@ -407,7 +407,7 @@ export class ActualizacionDatosComponent implements OnInit {
       if (campo.etiqueta === 'button') {
         if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
           campo.label = this.translate.instant('solicitudes.' + campo.label_i18n)
-        } else if (this.rol.includes('ESTUDIANTE')) {
+        } if (this.rol.includes('ESTUDIANTE')) {
           campo.label_i18n = campo.label_i18n_estudiante;
         }
       }
@@ -520,7 +520,7 @@ export class ActualizacionDatosComponent implements OnInit {
     if (event.button === 'ButonEditar') {
       if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
         this.Admin = true;
-      } else if (this.rol.includes('ESTUDIANTE')) {
+      } if (this.rol.includes('ESTUDIANTE')) {
         this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = false;
         this.solicitudForm.campos[this.getIndexForm('TipoDocumentoNuevo')].deshabilitar = false;
         this.solicitudForm.campos[this.getIndexForm('NumeroNuevo')].deshabilitar = false;

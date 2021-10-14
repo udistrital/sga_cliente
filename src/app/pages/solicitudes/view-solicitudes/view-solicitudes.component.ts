@@ -51,7 +51,7 @@ export class ViewSolicitudesComponent implements OnInit {
   loadListByRol(){
     if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
       this.loadList();
-    } else if (this.rol.includes('ESTUDIANTE')) {
+    } if (this.rol.includes('ESTUDIANTE')) {
       this.loadSolicitud();
     }
   }
