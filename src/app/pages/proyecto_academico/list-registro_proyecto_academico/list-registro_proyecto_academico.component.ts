@@ -1,25 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
-import { UserService } from '../../../@core/data/users.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 // import { UserService } from '../../../@core/data/users.service';
-import { ProduccionAcademicaPost } from '../../../@core/data/models/produccion_academica/produccion_academica';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import * as momentTimezone from 'moment-timezone';
-import { MatTableDataSource } from '@angular/material';
 import { Inject } from '@angular/core';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
-import { delay } from 'rxjs/operators';
-import { InformacionBasica } from '../../../@core/data/models/proyecto_academico/informacion_basica';
-import { ModificarProyectoAcademicoComponent } from '../modificar-proyecto_academico/modificar-proyecto_academico.component';
-import { PersonaService } from '../../../@core/data/persona.service';
-import { Persona } from '../../../@core/data/models/persona';
 import { ConsultaProyectoAcademicoComponent } from '../consulta-proyecto_academico/consulta-proyecto_academico.component';
 import { RegistroProyectoAcademicoComponent } from '../registro-proyecto_academico/registro-proyecto_academico.component';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
@@ -45,14 +36,12 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
 
   constructor(private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private proyectoacademicoService: ProyectoAcademicoService,
     public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
     private sgamidService: SgaMidService,
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
     public dialog: MatDialog,
     private toasterService: ToasterService) {
-    this.loadregistro();
     this.loadData();
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -211,39 +200,6 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
     this.idproyecto = row.data.ProyectoAcademicoInstitucionId.Id;
   }
 
-  loadregistro() {
-    const opt1: any = {
-      title: this.translate.instant('GLOBAL.atencion'),
-      text: this.translate.instant('oferta.evento'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-    }
-    console.log(this.data.Id)
-    this.sgamidService.get('consulta_proyecto_academico/get_registro/' + this.data.Id)
-      .subscribe(res => {
-        if (res !== null && res[0] !== 'error') {
-          this.dataSource = new MatTableDataSource();
-          this.dataSource = res
-        } else {
-          Swal.fire(opt1)
-            .then((willDelete) => {
-              if (willDelete.value) {
-              }
-            });
-        }
-      },
-        (error: HttpErrorResponse) => {
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
-  }
-
   OpenRegistroCalificado(): void {
     const dialogRef = this.dialog.open(RegistroProyectoAcademicoComponent, {
       width: '550px',
@@ -252,7 +208,7 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.loadregistro();
+      this.loadData();
     });
   }
 
@@ -264,7 +220,7 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.loadregistro();
+      this.loadData();
     });
   }
 
