@@ -29,14 +29,15 @@ export class UserService {
       // this.http.get(path + 'persona/?query=Usuario:' + payload.sub, httpOptions)
       this.autenticationService.getDocument().then((document: string)=> {
         if (document) {
+          console.log("getUser", document);
           this.http.get(path + 'datos_identificacion?query=Numero:' + document, httpOptions)
             .subscribe(res => {
               if (res !== null) {
-                this.user = res[0];
+                this.user = res[0].TerceroId;
                 if (Object.keys(this.user).length !== 0) {
                   this.user$.next(this.user);
                   // window.localStorage.setItem('ente', res[0].Ente);
-                  window.localStorage.setItem('persona_id', res[0].Id);
+                  window.localStorage.setItem('persona_id', this.user.Id);
                 } else {
                   //this.user$.next(this.user);
                   window.localStorage.setItem('persona_id', '0');
