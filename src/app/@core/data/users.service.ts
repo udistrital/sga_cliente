@@ -3,15 +3,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from './../../../environments/environment';
 import { ImplicitAutenticationService } from '../utils/implicit_autentication.service';
+import { AnyService } from './any.service';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Accept': 'application/json',
-    'authorization': 'Bearer ' + window.localStorage.getItem('access_token'),
-  }),
-}
-
-// const path = environment.PERSONA_SERVICE;
 const path = environment.TERCEROS_SERVICE;
 
 @Injectable({
@@ -22,15 +15,14 @@ export class UserService {
   private user$ = new Subject<[object]>();
   public user: any;
 
-  constructor(private http: HttpClient, private autenticationService: ImplicitAutenticationService) {
+  constructor(private anyService: AnyService, private autenticationService: ImplicitAutenticationService) {
     if (window.localStorage.getItem('id_token') !== null && window.localStorage.getItem('id_token') !== undefined) {
       const id_token = window.localStorage.getItem('id_token').split('.');
       const payload = JSON.parse(atob(id_token[1]));
-      // this.http.get(path + 'persona/?query=Usuario:' + payload.sub, httpOptions)
       this.autenticationService.getDocument().then((document: string)=> {
         if (document) {
           console.log("getUser", document);
-          this.http.get(path + 'datos_identificacion?query=Numero:' + document, httpOptions)
+          this.anyService.get(path, 'datos_identificacion?query=Numero:' + document)
             .subscribe(res => {
               if (res !== null) {
                 this.user = res[0].TerceroId;
