@@ -149,6 +149,38 @@ export class ImplicitAutenticationService {
         return payload;
     }
 
+    public getRole() {
+        const rolePromise = new Promise((resolve, reject) => {
+            this.user$.subscribe((data: any) => {
+                const { user, userService } = data;
+                const roleUser = typeof user.role !== 'undefined' ? user.role : [];
+                const roleUserService = typeof userService.role !== 'undefined' ? userService.role : [];
+                const roles = (roleUser.concat(roleUserService)).filter((data: any) => (data.indexOf('/') === -1));
+                resolve(roles);
+            });
+        });
+        return rolePromise;
+    }
+
+    public getMail() {
+        const rolePromise = new Promise((resolve, reject) => {
+            this.user$.subscribe((data: any) => {
+                const { userService } = data;
+                resolve(userService.email);
+            });
+        });
+        return rolePromise;
+    }
+
+    public getDocument() {
+        const rolePromise = new Promise((resolve, reject) => {
+            this.user$.subscribe((data: any) => {
+                const { userService } = data;
+                resolve(userService.documento);
+            });
+        });
+        return rolePromise;
+    }
 
     public logoutValid() {
         var state;
