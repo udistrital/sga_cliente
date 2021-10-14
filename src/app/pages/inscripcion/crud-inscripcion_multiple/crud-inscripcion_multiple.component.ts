@@ -132,7 +132,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     }
     this.createTable();
     this.loading = false;
-   
   }
 
   return() {

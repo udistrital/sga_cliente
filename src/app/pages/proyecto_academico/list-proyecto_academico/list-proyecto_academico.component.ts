@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
-import { UserService } from '../../../@core/data/users.service';
 import {
   ToasterService,
   ToasterConfig,
@@ -9,14 +7,8 @@ import {
   BodyOutputType,
 } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-// import { UserService } from '../../../@core/data/users.service';
-import { ProduccionAcademicaPost } from '../../../@core/data/models/produccion_academica/produccion_academica';
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import * as momentTimezone from 'moment-timezone';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
@@ -25,8 +17,6 @@ import { MatSort } from '@angular/material/sort';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ConsultaProyectoAcademicoComponent } from '../consulta-proyecto_academico/consulta-proyecto_academico.component';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
-import { delay } from 'rxjs/operators';
-import { InformacionBasica } from '../../../@core/data/models/proyecto_academico/informacion_basica';
 import { ModificarProyectoAcademicoComponent } from '../modificar-proyecto_academico/modificar-proyecto_academico.component';
 import { ProyectoAcademicoInstitucion } from '../../../@core/data/models/proyecto_academico/proyecto_academico_institucion';
 
@@ -766,6 +756,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
             (res: any) => {
               if (res.Type !== 'error') {
                 this.loadproyectos();
+                this.loadData();
                 this.showToast('info', inhabilitar_title, inhabilitar_ok);
               } else {
                 this.showToast(
