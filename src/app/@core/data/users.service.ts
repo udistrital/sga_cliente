@@ -26,11 +26,11 @@ export class UserService {
     if (window.localStorage.getItem('id_token') !== null && window.localStorage.getItem('id_token') !== undefined) {
       const id_token = window.localStorage.getItem('id_token').split('.');
       const payload = JSON.parse(atob(id_token[1]));
-      window.localStorage.setItem('usuario', payload.sub);
       // this.http.get(path + 'persona/?query=Usuario:' + payload.sub, httpOptions)
-      this.autenticationService.getMail().then((email)=> {
+      this.autenticationService.getMail().then((email: string)=> {
         if (email) {
-          this.http.get(path + 'tercero/?query=UsuarioWSO2:' + payload.sub, httpOptions)
+          window.localStorage.setItem('usuario', email);
+          this.http.get(path + 'tercero/?query=UsuarioWSO2:' + email, httpOptions)
             .subscribe(res => {
               if (res !== null) {
                 this.user = res[0];
