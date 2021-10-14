@@ -37,16 +37,10 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
 
     this.autenticationService.getRole().then((rol)=> {
       this.rol = rol;
-      for (let i = 0; i < this.rol.length; i++) {
-        if (
-          this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES'
-        ) {
-          this.loadList();
-          break;
-        } else if (this.rol[i] === 'ESTUDIANTE') {
-          this.loadSolicitud();
-          break;
-        }
+      if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
+        this.loadList();
+      } else if (this.rol.includes('ESTUDIANTE')) {
+        this.loadSolicitud();
       }
       this.construirTabla();
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -58,6 +52,7 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
   ngOnInit() {}
 
   onclick(event) {
+    console.log(event.data);
     sessionStorage.setItem('TerceroSolitud', event.data.TerceroId);
     sessionStorage.setItem('Solicitud', event.data.Numero);
     if (event.data.Tipo === 'Actualización de identificación') {

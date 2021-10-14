@@ -38,24 +38,24 @@ export class ViewSolicitudesComponent implements OnInit {
     this.solicitudes = new LocalDataSource();
     this.loading = true;
 
-     this.autenticationService.getRole().then((rol)=> {
-       this.rol = rol;
-       for (let i = 0; i < this.rol.length; i++) {
-         if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
-           this.loadList();
-           break;
-         } else if (this.rol[i] === 'ESTUDIANTE') {
-           this.loadSolicitud();
-           break;
-         }
-       }
-       this.construirTabla();
-       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-         this.construirTabla();
-       });
-      })
-
+    this.autenticationService.getRole().then((rol) => {
+      this.rol = rol;
+      this.loadListByRol();
+      this.construirTabla();
+      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+        this.construirTabla();
+      });
+    })
   }
+
+  loadListByRol(){
+    if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
+      this.loadList();
+    } else if (this.rol.includes('ESTUDIANTE')) {
+      this.loadSolicitud();
+    }
+  }
+
 
   ngOnInit() { }
 
@@ -241,16 +241,8 @@ export class ViewSolicitudesComponent implements OnInit {
     this.showTable = false;
     this.solicitudes.empty().then(async e => {
       this.listaDatos = []
-      this.rol = await  this.autenticationService.getRole();
-      for (let i = 0; i < this.rol.length; i++) {
-        if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
-          this.loadList();
-          break;
-        } else if (this.rol[i] === 'ESTUDIANTE') {
-          this.loadSolicitud();
-          break;
-        }
-      }
+      this.rol = this.rol?this.rol: await this.autenticationService.getRole();
+      this.loadListByRol();
     },
     )
   }
@@ -263,16 +255,7 @@ export class ViewSolicitudesComponent implements OnInit {
     this.showSolicitudNombre = false;
     this.nuevaSolicitud = false;
     this.loading = true;
-
-    for (let i = 0; i < this.rol.length; i++) {
-      if (this.rol[i] === 'ADMIN_SGA' || this.rol[i] === 'ASISTENTE_ADMISIONES') {
-        this.loadList();
-        break;
-      } else if (this.rol[i] === 'ESTUDIANTE') {
-        this.loadSolicitud();
-        break;
-      }
-    }
+    this.loadListByRol();
 
   }
 
