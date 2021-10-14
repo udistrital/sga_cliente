@@ -172,6 +172,16 @@ export class ImplicitAutenticationService {
         return rolePromise;
     }
 
+    public getDocument() {
+        const rolePromise = new Promise((resolve, reject) => {
+            this.user$.subscribe((data: any) => {
+                const { userService } = data;
+                resolve(userService.documento);
+            });
+        });
+        return rolePromise;
+    }
+
     public logoutValid() {
         var state;
         var valid = true;
