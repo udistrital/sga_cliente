@@ -55,7 +55,7 @@ export class ActualizacionNombresComponent implements OnInit {
           if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
             this.Admin = false;
             this.loadInfoById();
-          } else if (this.rol.includes('ESTUDIANTE')) {
+          } if (this.rol.includes('ESTUDIANTE')) {
             this.Admin = false;
             this.loadInfo();
             this.loadInfoById();
@@ -424,7 +424,7 @@ export class ActualizacionNombresComponent implements OnInit {
           if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
             campo.label = this.translate.instant('solicitudes.' + campo.label_i18n)
             break;
-          } else if (this.rol.includes('ESTUDIANTE')) {
+          } if (this.rol.includes('ESTUDIANTE')) {
             campo.label_i18n = campo.label_i18n_estudiante
             break;
           }
@@ -533,7 +533,7 @@ export class ActualizacionNombresComponent implements OnInit {
       if (event.button === 'ButonEditar') {
         if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
           this.Admin = true;
-        } else if (this.rol.includes('ESTUDIANTE')) {
+        } if (this.rol.includes('ESTUDIANTE')) {
           this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
           this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false;
           this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].deshabilitar = false;
