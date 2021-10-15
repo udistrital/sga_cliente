@@ -431,9 +431,9 @@ export class EvaluacionAspirantesComponent implements OnInit {
     await this.ngOnChanges();
     await this.createTable()
     this.showTab = false;
-    await this.loadAspirantes()
-    await this.loadInfo(event.Id)
-    this.loading = false
+    await this.loadAspirantes().catch(e => this.loading = false);
+    await this.loadInfo(event.Id);
+    this.loading = false;
   }
 
   async loadAspirantes() {
@@ -441,7 +441,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
       this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
         this.proyectos_selected + ',PeriodoId:' + this.periodo.Id + '&sortby=Id&order=asc').subscribe(
           (response: any) => {
-            if (response !== '[{}]') {
+            if (Object.keys(response[0]).length !== 0) {
               const data = <Array<any>>response.filter((inscripcion) => (inscripcion.PersonaId !== undefined));
 
               data.forEach(element => {
@@ -467,7 +467,12 @@ export class EvaluacionAspirantesComponent implements OnInit {
 
             } else {
               reject('Error');
-              this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
+              Swal.fire({
+                icon: 'warning',
+                title: this.translate.instant('admision.titulo_no_aspirantes'),
+                text: this.translate.instant('admision.error_no_aspirantes'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
             }
           },
           error => {
@@ -486,7 +491,6 @@ export class EvaluacionAspirantesComponent implements OnInit {
           if (response.Response.Code === '200') {
             const data = <Array<any>>response.Response.Body[0].areas;
             if (data !== undefined) {
-              
               await data.forEach(async asistente => {
                 if (asistente['Asistencia'] === '') {
                   asistente['Asistencia'] = false

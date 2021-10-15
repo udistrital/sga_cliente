@@ -586,7 +586,9 @@
         "carga_guardando": "Saving data...",
         "general": "General",
         "concepto_academico_id": "Academic concept",
-        "placeholder_concepto_academico_id": "Ej. 1"
+        "placeholder_concepto_academico_id": "Ej. 1",
+        "tipo_tercero": "Entity type",
+        "placeholder_tipo_tercero": "Ej. University"
     },
 
     "ERROR": {
@@ -1196,8 +1198,8 @@
         "comprobante_inscripcion": "Inscription Voucher",
         "info_comprobante": "Fulfilling this form means the candidate has known the official admissions manual for the ACTUAL PERIOD and according with the 1571 law from 2012 authorizes expressly and unequivocally the data management according to the proper functions of the University in his condition of High Education Institution.",
         "warning_info":"Dear user, remember that you can only generate up to 3 receipts in pending payment status. If you want to generate another pre-registration to another project, you must pay at least one of the generated receipts.",
-        "alerta_posgrado":"Dear applicant, keep in mind that in order to enroll in a graduate program, you must have a completed and graduated undergraduate degree, with their respective documentary supports."
-
+        "alerta_posgrado":"Dear applicant, keep in mind that in order to enroll in a graduate program, you must have a completed and graduated undergraduate degree, with their respective documentary supports.",
+        "alerta_discapacidades": "Dear user, If you have more than one disabling condition, please upload a single document in pdf format with all the necessary certifications."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
@@ -1234,7 +1236,10 @@
         "informacion_academica_registrada": "Academic information registered",
         "documento_informacion_academica_no_registrado": "Error uploading support document",
         "seguro_continuar_registrar": "Are you sure you want to register this academic information?",
-        "error_cargar_universidad": "An error happened loading the university information"
+        "error_cargar_universidad": "An error happened loading the university information",
+        "crear_entidad": "Do you want to create a new institution?",
+        "titulo2_crear_entidad": "not found",
+        "titulo1_crear_entidad": "The Nit. "
     },
     "experiencia_laboral": {
         "experiencia_laboral_no_registrada": "Work experience not registered",
@@ -1248,7 +1253,10 @@
         "error": "An unexpected error occurred while loading the information",
         "tooltip_editar": "Edit work experience",
         "tooltip_eliminar": "Remove work experience",
-        "tooltip_crear": "Create work experience"
+        "tooltip_crear": "Create work experience",
+        "crear_entidad": "Do you want to create a new entity?",
+        "titulo2_crear_entidad": "not found",
+        "titulo1_crear_entidad": "The Nit. "
     },
     "documento_programa": {
         "descuento_academico_no_registrado": "Academic discount not registered",
@@ -1426,7 +1434,9 @@
         "criterios_proyectos": "Criteria by academic project",
         "evaluacion_aspirantes": "Applicant evaluation",
         "listar_aspirantes": "List applicants",
-        "cupos_proyectos": "Allocation of quotas per academic project"
+        "cupos_proyectos": "Allocation of quotas per academic project",
+        "error_no_aspirantes": "There are no applicants to evaluate for the selected period and project",
+        "titulo_no_aspirantes": "There are no applicants to evaluate"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",

@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { CoreService } from '../../../@core/data/core.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
-import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import {FormBuilder, Validators, FormControl} from '@angular/forms';
-import {ProyectoAcademicoPost} from '../../../@core/data/models/proyecto_academico/proyecto_academico_post'
+import { TranslateService } from '@ngx-translate/core';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { ProyectoAcademicoPost } from '../../../@core/data/models/proyecto_academico/proyecto_academico_post'
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -25,27 +25,23 @@ import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
 import { TrDependenciaPadre } from '../../../@core/data/models/oikos/tr_dependencia_padre';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as moment from 'moment';
-import {MatDialogRef} from '@angular/material/dialog';
-import { NbDialogService, NbDialogRef } from '@nebular/theme';
-// import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
+import { NbDialogService } from '@nebular/theme';
 import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
 import { ListEnfasisService } from '../../../@core/data/list_enfasis.service';
 import { Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
-import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import * as momentTimezone from 'moment-timezone';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
-import { type } from 'os';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
   templateUrl: './crud-proyecto_academico.component.html',
   styleUrls: ['./crud-proyecto_academico.component.scss'],
 })
+
 export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   isLinear = true;
   checkregistro = false;
@@ -68,7 +64,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   checkciclos: boolean = false;
   checkofrece: boolean = false;
   nucleo = [];
-  unidad= [];
+  unidad = [];
   enfasis = [];
   nivel = [];
   metodo = [];
@@ -104,7 +100,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
-  Campo3Control = new FormControl('' , [Validators.required]);
+  Campo3Control = new FormControl('', [Validators.required]);
   Campo4Control = new FormControl('', [Validators.required]);
   Campo5Control = new FormControl('', [Validators.required]);
   Campo6Control = new FormControl('', [Validators.required]);
@@ -151,45 +147,45 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private listEnfasisService: ListEnfasisService,
     private formBuilder: FormBuilder) {
 
-      this.dpDayPickerConfig = {
-        locale: 'es',
-        format: 'YYYY-MM-DD HH:mm',
-        showTwentyFourHours: false,
-        showSeconds: false,
-        returnedValueicon: 'String',
-      }
-      this.basicform = formBuilder.group({
-        codigo_snies: ['', Validators.required],
-        nombre_proyecto: ['', Validators.required],
-        abreviacion_proyecto: ['', Validators.required],
-        correo_proyecto: ['', [Validators.required, Validators.email]],
-        numero_proyecto: ['', Validators.required],
-        creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
-        duracion_proyecto: ['', Validators.required],
-        selector: [''],
-     })
-     this.resoluform = formBuilder.group({
+    this.dpDayPickerConfig = {
+      locale: 'es',
+      format: 'YYYY-MM-DD HH:mm',
+      showTwentyFourHours: false,
+      showSeconds: false,
+      returnedValueicon: 'String',
+    }
+    this.basicform = formBuilder.group({
+      codigo_snies: ['', Validators.required],
+      nombre_proyecto: ['', Validators.required],
+      abreviacion_proyecto: ['', Validators.required],
+      correo_proyecto: ['', [Validators.required, Validators.email]],
+      numero_proyecto: ['', Validators.required],
+      creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
+      duracion_proyecto: ['', Validators.required],
+      selector: [''],
+    })
+    this.resoluform = formBuilder.group({
       resolucion: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]],
       ano_resolucion: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]],
       fecha_creacion: ['', Validators.required],
       mes_vigencia: ['', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(12)]],
       ano_vigencia: ['', [Validators.required, Validators.maxLength(1), Validators.pattern('^[0-9]*$')]],
       documento: ['', Validators.required],
-      Campo4Control: [{value: '', disabled: true}, Validators.required],
-     })
-     this.actoform = formBuilder.group({
+      Campo4Control: [{ value: '', disabled: true }, Validators.required],
+    })
+    this.actoform = formBuilder.group({
       acto: ['', Validators.required],
       ano_acto: ['', [Validators.required, Validators.maxLength(4)]],
       documento: ['', Validators.required],
-     })
-     this.compleform = formBuilder.group({
-       titulacion_snies: ['', Validators.required],
-       titulacion_mujer: ['', Validators.required],
-       titulacion_hombre: ['', Validators.required],
-       competencias: ['', Validators.required],
-     });
+    })
+    this.compleform = formBuilder.group({
+      titulacion_snies: ['', Validators.required],
+      titulacion_mujer: ['', Validators.required],
+      titulacion_hombre: ['', Validators.required],
+      competencias: ['', Validators.required],
+    });
 
-     this.subscription = this.listEnfasisService.getListEnfasis().subscribe(listEnfasis => {
+    this.subscription = this.listEnfasisService.getListEnfasis().subscribe(listEnfasis => {
       if (listEnfasis) {
         this.enfasis = listEnfasis;
       } else {
@@ -197,6 +193,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         // do not do anything on error
       }
     });
+
     this.settings_emphasys = {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -223,7 +220,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
 
   onCreateEmphasys(event: any) {
     const emphasys = event.value;
-    if (!this.arr_enfasis_proyecto.find((enfasis: any) => emphasys.Id === enfasis.Id ) && emphasys.Id) {
+    if (!this.arr_enfasis_proyecto.find((enfasis: any) => emphasys.Id === enfasis.Id) && emphasys.Id) {
       this.arr_enfasis_proyecto.push(emphasys);
       this.source_emphasys.load(this.arr_enfasis_proyecto);
       const matSelect: MatSelect = event.source;
@@ -242,7 +239,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     const findInArray = (value, array, attr) => {
       for (let i = 0; i < array.length; i += 1) {
         if (array[i][attr] === value) {
-            return i;
+          return i;
         }
       }
       return -1;
@@ -251,17 +248,16 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.source_emphasys.load(this.arr_enfasis_proyecto);
   }
 
+  mostrarfecha() {
+    this.calculateEndDateMostrar(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
+    this.fecha_calculada_vencimiento = this.fecha_vencimiento_mostrar
+  }
 
-    mostrarfecha() {
-      this.calculateEndDateMostrar(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
-      this.fecha_calculada_vencimiento = this.fecha_vencimiento_mostrar
-     }
-
-     calculateEndDateMostrar (date: Date, years: number, months: number, days: number): Date {
-      const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DD');
-      this.fecha_vencimiento_mostrar = convertDate
-      return new Date(convertDate);
-    }
+  calculateEndDateMostrar(date: Date, years: number, months: number, days: number): Date {
+    const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DD');
+    this.fecha_vencimiento_mostrar = convertDate
+    return new Date(convertDate);
+  }
 
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
@@ -276,10 +272,10 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     });
   }
 
-
   useLanguage(language: string) {
     this.translate.use(language);
   }
+
   ngOnInit() {
     this.loadfacultad();
     this.loadarea();
@@ -304,71 +300,54 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
 
   loadCloneData(id: any): void {
     this.Campo2Control.setValidators([Validators.nullValidator]);
-    this.sgamidService.get('consulta_proyecto_academico/' + id )
-    .subscribe((res: any) => {
-      if (res.Type !== 'error' && res[0].ProyectoAcademico.Id) {
-        const proyecto_a_clonar = res[0];
-        this.proyecto_padre_id = proyecto_a_clonar.ProyectoAcademico;
-        // enfasis
-        this.arr_enfasis_proyecto = proyecto_a_clonar.Enfasis.map((enfasis: any) => enfasis.EnfasisId);
-        this.source_emphasys.load(this.arr_enfasis_proyecto);
-        // checks
-        this.checkciclos =  proyecto_a_clonar.ProyectoAcademico.CiclosPropedeuticos;
-        this.checkofrece =  proyecto_a_clonar.ProyectoAcademico.Oferta;
-        // selects
-        // unidad de tiempo
-        this.opcionSeleccionadoUnidad = this.unidad.find((unidad_temp: any) => unidad_temp.Id === proyecto_a_clonar.ProyectoAcademico.UnidadTiempoId);
-        this.opcionSeleccionadoNivel = this.nivel.find((nivel_temp: any) => nivel_temp.Id === proyecto_a_clonar.ProyectoAcademico.NivelFormacionId.Id);
-        this.opcionSeleccionadoMeto = this.metodo.find((metodologia_temp: any) => metodologia_temp.Id === proyecto_a_clonar.ProyectoAcademico.MetodologiaId.Id);
-        this.opcionSeleccionadoFacultad = this.facultad.find((facultad_temp: any) => facultad_temp.Id === proyecto_a_clonar.IdDependenciaFacultad);
-        this.opcionSeleccionadoArea = this.area.find((area_temp: any) => area_temp.Id === proyecto_a_clonar.ProyectoAcademico.AreaConocimientoId);
-        this.opcionSeleccionadoNucleo = this.nucleo.find((nucleo_temp: any) => nucleo_temp.Id === proyecto_a_clonar.ProyectoAcademico.NucleoBaseId);
-        // info basica
-        this.basicform = this.formBuilder.group({
-          // codigo_snies: [proyecto_a_clonar.ProyectoAcademico.CodigoSnies, Validators.required],
-          codigo_snies: ['', Validators.required],
-          // nombre_proyecto: [proyecto_a_clonar.ProyectoAcademico.Nombre, Validators.required],
-          nombre_proyecto: ['', Validators.required],
-          abreviacion_proyecto: [proyecto_a_clonar.ProyectoAcademico.CodigoAbreviacion, Validators.required],
-          correo_proyecto: [proyecto_a_clonar.ProyectoAcademico.CorreoElectronico, [Validators.required, Validators.email]],
-          numero_proyecto: [proyecto_a_clonar.TelefonoDependencia, Validators.required],
-          creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4)]],
-          duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, Validators.required],
-        })
-        // resolucion
-        /*
-        const resolucion = proyecto_a_clonar.Registro.sort((a, b) => a.Id - b.Id).find((registro_temp: any) => registro_temp.TipoRegistroId.Id === 1);
-        this.resoluform = this.formBuilder.group({
-          resolucion: [resolucion.NumeroActoAdministrativo  , Validators.required],
-          ano_resolucion: [resolucion.AnoActoAdministrativoId, [Validators.required, Validators.maxLength(4)]],
-          fecha_creacion: [momentTimezone.tz(resolucion.FechaCreacionActoAdministrativo, 'America/Bogota').format('YYYY-MM-DDTHH:mm'), Validators.required],
-          mes_vigencia: [resolucion.VigenciaActoAdministrativo.split('Años:')[0].split(':')[1], [Validators.required, Validators.maxLength(2)]],
-          ano_vigencia: [resolucion.VigenciaActoAdministrativo.split('Años:')[1], [Validators.required, Validators.maxLength(1)]],
-        })
-        */
-        this.actoform = this.formBuilder.group({
-          // acto: [proyecto_a_clonar.ProyectoAcademico.NumeroActoAdministrativo, Validators.required],
-          // ano_acto: [proyecto_a_clonar.ProyectoAcademico.AnoActoAdministrativo, [Validators.required, Validators.maxLength(4)]],
-          acto: ['', Validators.required],
-          ano_acto: ['', [Validators.required, Validators.maxLength(4)]],
-        })
-        this.compleform = this.formBuilder.group({
-          titulacion_snies: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 1).Nombre, Validators.required],
-          titulacion_mujer: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 3).Nombre, Validators.required],
-          titulacion_hombre: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 2).Nombre, Validators.required],
-          competencias: [proyecto_a_clonar.ProyectoAcademico.Competencias, Validators.required],
-        });
-        // fecha de vencimiento
-        /*
-        this.calculateEndDateMostrar(resolucion.FechaCreacionActoAdministrativo, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0);
-        this.fecha_calculada_vencimiento = this.fecha_vencimiento_mostrar;
-        */
-      } else {
+    this.sgamidService.get('consulta_proyecto_academico/' + id)
+      .subscribe((res: any) => {
+        if (res.Type !== 'error' && res[0].ProyectoAcademico.Id) {
+          const proyecto_a_clonar = res[0];
+          this.proyecto_padre_id = proyecto_a_clonar.ProyectoAcademico;
+          // enfasis
+          this.arr_enfasis_proyecto = proyecto_a_clonar.Enfasis.map((enfasis: any) => enfasis.EnfasisId);
+          this.source_emphasys.load(this.arr_enfasis_proyecto);
+          // checks
+          this.checkciclos = proyecto_a_clonar.ProyectoAcademico.CiclosPropedeuticos;
+          this.checkofrece = proyecto_a_clonar.ProyectoAcademico.Oferta;
+          // selects
+          // unidad de tiempo
+          this.opcionSeleccionadoUnidad = this.unidad.find((unidad_temp: any) => unidad_temp.Id === proyecto_a_clonar.ProyectoAcademico.UnidadTiempoId);
+          this.opcionSeleccionadoNivel = this.nivel.find((nivel_temp: any) => nivel_temp.Id === proyecto_a_clonar.ProyectoAcademico.NivelFormacionId.Id);
+          this.opcionSeleccionadoMeto = this.metodo.find((metodologia_temp: any) => metodologia_temp.Id === proyecto_a_clonar.ProyectoAcademico.MetodologiaId.Id);
+          this.opcionSeleccionadoFacultad = this.facultad.find((facultad_temp: any) => facultad_temp.Id === proyecto_a_clonar.IdDependenciaFacultad);
+          this.opcionSeleccionadoArea = this.area.find((area_temp: any) => area_temp.Id === proyecto_a_clonar.ProyectoAcademico.AreaConocimientoId);
+          this.opcionSeleccionadoNucleo = this.nucleo.find((nucleo_temp: any) => nucleo_temp.Id === proyecto_a_clonar.ProyectoAcademico.NucleoBaseId);
+          // info basica
+          this.basicform = this.formBuilder.group({
+            codigo_snies: ['', Validators.required],
+            nombre_proyecto: ['', Validators.required],
+            abreviacion_proyecto: [proyecto_a_clonar.ProyectoAcademico.CodigoAbreviacion, Validators.required],
+            correo_proyecto: [proyecto_a_clonar.ProyectoAcademico.CorreoElectronico, [Validators.required, Validators.email]],
+            numero_proyecto: [proyecto_a_clonar.TelefonoDependencia, Validators.required],
+            creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4)]],
+            duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, Validators.required],
+          })
+          // acto administrativo
+          this.actoform = this.formBuilder.group({
+            acto: ['', Validators.required],
+            ano_acto: ['', [Validators.required, Validators.maxLength(4)]],
+            documento: ['', Validators.required],
+          })
+
+          this.compleform = this.formBuilder.group({
+            titulacion_snies: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 1).Nombre, Validators.required],
+            titulacion_mujer: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 3).Nombre, Validators.required],
+            titulacion_hombre: [proyecto_a_clonar.Titulaciones.find((titulacion: any) => titulacion.TipoTitulacionId.Id === 2).Nombre, Validators.required],
+            competencias: [proyecto_a_clonar.ProyectoAcademico.Competencias, Validators.required],
+          });
+        } else {
+          this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
+        }
+      }, () => {
         this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
-      }
-    }, () => {
-      this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.proyecto_no_cargado'));
-    });
+      });
   }
 
   cleanURL(oldURL: string): SafeResourceUrl {
@@ -409,15 +388,14 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     return new Promise((resolve, reject) => {
       files.forEach((file) => {
         file.Id = file.nombre,
-        file.nombre = 'soporte_' + file.IdDocumento + '_creacion_proyecto_curricular_'
+          file.nombre = 'soporte_' + file.IdDocumento + '_creacion_proyecto_curricular_'
           + this.basicform.value.codigo_snies + '_' + this.basicform.value.nombre_proyecto;
         // file.key = file.Id;
         file.key = 'soporte_' + file.IdDocumento;
-       });
+      });
       this.nuxeoService.getDocumentos$(files, this.documentoService)
         .subscribe(response => {
           if (Object.keys(response).length === files.length) {
-            // console.log("response", response);
             files.forEach((file) => {
               if (file.IdDocumento === 9) {
                 this.uidResolucion = file.uid;
@@ -437,359 +415,349 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
 
   loadfacultad() {
     this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2')
-    .subscribe((res: any) => {
-      const r = <any>res;
-      if (res !== null && r.Type !== 'error') {
-        this.facultad = res.map((data: any) => (data.DependenciaId));
-      }
-    },
-    (error: HttpErrorResponse) => {
-      Swal.fire({
-        icon: 'error',
-        title: error.status + '',
-        text: this.translate.instant('ERROR.' + error.status),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    });
+      .subscribe((res: any) => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.facultad = res.map((data: any) => (data.DependenciaId));
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
   }
+
   loadarea() {
     this.coreService.get('area_conocimiento')
-    .subscribe(res => {
-      const r = <any>res;
-      if (res !== null && r.Type !== 'error') {
-        this.area = <any>res;
-      }
-    },
-    (error: HttpErrorResponse) => {
-      Swal.fire({
-        icon: 'error',
-        title: error.status + '',
-        text: this.translate.instant('ERROR.' + error.status),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    });
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.area = <any>res;
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
   }
   loadnucleo() {
     this.coreService.get('nucleo_basico_conocimiento')
-    .subscribe(res => {
-      const r = <any>res;
-      if (res !== null && r.Type !== 'error') {
-        this.nucleo = <any>res;
-      }
-    },
-    (error: HttpErrorResponse) => {
-      Swal.fire({
-        icon: 'error',
-        title: error.status + '',
-        text: this.translate.instant('ERROR.' + error.status),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    });
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.nucleo = <any>res;
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
   }
+
   loadunidadtiempo() {
     this.coreService.get('unidad_tiempo')
-    .subscribe(res => {
-      const r = <any>res;
-      if (res !== null && r.Type !== 'error') {
-        this.unidad = <any>res;
-      }
-    },
-    (error: HttpErrorResponse) => {
-      Swal.fire({
-        icon: 'error',
-        title: error.status + '',
-        text: this.translate.instant('ERROR.' + error.status),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    });
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.unidad = <any>res;
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
   }
+
   loadenfasis() {
     this.proyectoacademicoService.get('enfasis')
-    .subscribe(res => {
-      const r = <any>res;
-      if (res !== null && r.Type !== 'error') {
-        this.enfasis = <any>res;
-      }
-    },
-    (error: HttpErrorResponse) => {
-      Swal.fire({
-        icon: 'error',
-        title: error.status + '',
-        text: this.translate.instant('ERROR.' + error.status),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    });
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.enfasis = <any>res;
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
   }
+
   loadnivel() {
     this.proyectoacademicoService.get('nivel_formacion')
-    .subscribe(res => {
-      const r = <any>res;
-      if (res !== null && r.Type !== 'error') {
-        this.nivel = <any>res;
-      }
-    },
-    (error: HttpErrorResponse) => {
-      Swal.fire({
-        icon: 'error',
-        title: error.status + '',
-        text: this.translate.instant('ERROR.' + error.status),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    });
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.nivel = <any>res;
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
   }
+
   loadmetodologia() {
     this.proyectoacademicoService.get('metodologia')
-    .subscribe(res => {
-      const r = <any>res;
-      if (res !== null && r.Type !== 'error') {
-        this.metodo = <any>res;
-      }
-    },
-    (error: HttpErrorResponse) => {
-      Swal.fire({
-        icon: 'error',
-        title: error.status + '',
-        text: this.translate.instant('ERROR.' + error.status),
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      });
-    });
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.metodo = <any>res;
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
   }
-  calculateEndDate (date: Date, years: number, months: number, days: number): Date {
+
+  calculateEndDate(date: Date, years: number, months: number, days: number): Date {
     const convertDate = moment(date).add(years, 'year').add(months, 'month').add(days, 'day').format('YYYY-MM-DDTHH:mm:ss');
     this.fecha_vencimiento = convertDate
     return new Date(convertDate);
   }
 
-  openlist( ): void {
+  openlist(): void {
     this.routerService.navigateByUrl(`pages/proyecto_academico/list-proyecto_academico`);
   }
 
   registroproyecto() {
     try {
       if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0
-          && this.fileActoAdministrativo && this.fileActoAdministrativo) {
-      this.metodologia = {
-        Id: this.opcionSeleccionadoMeto['Id'],
-      }
-      this.nivel_formacion = <NivelFormacion>{
-        Id: this.opcionSeleccionadoNivel['Id'],
-      }
-      this.proyecto_academico = {
-        Id : 0,
-        Codigo : '0',
-        Nombre : this.basicform.value.nombre_proyecto,
-        CodigoSnies: this.basicform.value.codigo_snies,
-        Duracion: Number(this.basicform.value.duracion_proyecto),
-        NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
-        CorreoElectronico: this.basicform.value.correo_proyecto,
-        CiclosPropedeuticos: this.checkciclos,
-        NumeroActoAdministrativo: Number(this.actoform.value.acto),
-        EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
-        // EnlaceActoAdministrativo: this.idDocumentoAdministrativo + '',
-        Competencias: this.compleform.value.competencias,
-        CodigoAbreviacion: this.basicform.value.abreviacion_proyecto,
-        Activo: true,
-        Oferta: this.checkofrece,
-        UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
-        AnoActoAdministrativoId: this.actoform.value.ano_acto,
-        // DependenciaId: this.opcionSeleccionadoFacultad['Id'],
-        DependenciaId: 0,
-        FacultadId: this.opcionSeleccionadoFacultad['Id'],
-        AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
-        NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
-        MetodologiaId: this.metodologia,
-        NivelFormacionId: this.nivel_formacion,
-        AnoActoAdministrativo: this.actoform.value.ano_acto,
-        ProyectoPadreId: this.proyecto_padre_id,
-      }
-      this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
-      this.registro_califacado_acreditacion = {
-        Id: 0,
-        AnoActoAdministrativoId: this.resoluform.value.ano_resolucion,
-        NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
-        // FechaCreacionActoAdministrativo: this.fecha_creacion + ':00Z',
-        FechaCreacionActoAdministrativo: moment(this.fecha_creacion).format('YYYY-MM-DDTHH:mm') + ':00',
-        VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
-        VencimientoActoAdministrativo: this.fecha_vencimiento + '',
-        EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
-        // EnlaceActo: this.idDocumentoResolucion + '',
-        Activo: true,
-        ProyectoAcademicoInstitucionId: this.proyecto_academico,
-        TipoRegistroId: this.tipo_registro = {
-          Id: 1,
-        },
-      }
-      // Cambio d edata para enviar array
-      /*
-      this.enfasis_proyecto = {
-        Activo: true,
-        ProyectoAcademicoInstitucionId: this.proyecto_academico,
-        EnfasisId: this.enfasis_basico = {
-          Id: +this.opcionSeleccionadoEnfasis['Id'],
-        },
-      }
-      */
-    this.enfasis_proyecto = [];
-    this.arr_enfasis_proyecto.forEach( enfasis => {
-        this.enfasis_proyecto.push({
+        && this.fileActoAdministrativo) {
+        this.metodologia = {
+          Id: this.opcionSeleccionadoMeto['Id'],
+        }
+        this.nivel_formacion = <NivelFormacion>{
+          Id: this.opcionSeleccionadoNivel['Id'],
+        }
+        this.proyecto_academico = {
+          Id: 0,
+          Codigo: '0',
+          Nombre: this.basicform.value.nombre_proyecto,
+          CodigoSnies: this.basicform.value.codigo_snies,
+          Duracion: Number(this.basicform.value.duracion_proyecto),
+          NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
+          CorreoElectronico: this.basicform.value.correo_proyecto,
+          CiclosPropedeuticos: this.checkciclos,
+          NumeroActoAdministrativo: Number(this.actoform.value.acto),
+          EnlaceActoAdministrativo: 'Pruebalinkdocumento.udistrital.edu.co',
+          Competencias: this.compleform.value.competencias,
+          CodigoAbreviacion: this.basicform.value.abreviacion_proyecto,
+          Activo: true,
+          Oferta: this.checkofrece,
+          UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
+          AnoActoAdministrativoId: this.actoform.value.ano_acto,
+          DependenciaId: 0,
+          FacultadId: this.opcionSeleccionadoFacultad['Id'],
+          AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
+          NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
+          MetodologiaId: this.metodologia,
+          NivelFormacionId: this.nivel_formacion,
+          AnoActoAdministrativo: this.actoform.value.ano_acto,
+          ProyectoPadreId: this.proyecto_padre_id,
+        }
+
+        this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
+        this.registro_califacado_acreditacion = {
+          Id: 0,
+          AnoActoAdministrativoId: this.resoluform.value.ano_resolucion,
+          NumeroActoAdministrativo: Number(this.resoluform.value.resolucion),
+          FechaCreacionActoAdministrativo: moment(this.fecha_creacion).format('YYYY-MM-DDTHH:mm') + ':00',
+          VigenciaActoAdministrativo: 'Meses:' + this.resoluform.value.mes_vigencia + 'Años:' + this.resoluform.value.ano_vigencia,
+          VencimientoActoAdministrativo: this.fecha_vencimiento + '',
+          EnlaceActo: 'Ejemploenalce.udistrital.edu.co',
           Activo: true,
           ProyectoAcademicoInstitucionId: this.proyecto_academico,
-          EnfasisId: {
-            Id: enfasis['Id'],
+          TipoRegistroId: this.tipo_registro = {
+            Id: 1,
           },
-        });
-    });
+        }
 
-      this.titulacion_proyecto_snies = {
-        Id: 0,
-        Nombre: this.compleform.value.titulacion_snies,
-        Activo: true,
-        TipoTitulacionId: this.tipo_titulacion = {
-          Id: 1,
-        },
-        ProyectoAcademicoInstitucionId: this.proyecto_academico,
-      }
-      this.titulacion_proyecto_mujer = {
-        Id: 0,
-        Nombre: this.compleform.value.titulacion_mujer,
-        Activo: true,
-        TipoTitulacionId: this.tipo_titulacion = {
-          Id: 3,
-        },
-        ProyectoAcademicoInstitucionId: this.proyecto_academico,
-      }
-      this.titulacion_proyecto_hombre = {
-        Id: 0,
-        Nombre: this.compleform.value.titulacion_hombre,
-        Activo: true,
-        TipoTitulacionId: this.tipo_titulacion = {
-          Id: 2,
-        },
-        ProyectoAcademicoInstitucionId: this.proyecto_academico,
-      }
-      this.tipo_dependencia = {
-        Id: 2,
-      }
-      this.dependencia_tipo_dependencia = {
-        Id: 0,
-        TipoDependenciaId: this.tipo_dependencia,
-      }
-      this.dependencia = {
-        Id: 0,
-        Nombre: this.basicform.value.nombre_proyecto,
-        TelefonoDependencia: this.basicform.value.numero_proyecto,
-        CorreoElectronico: this.basicform.value.correo_proyecto,
-        DependenciaTipoDependencia: [this.dependencia_tipo_dependencia],
-      }
-      const tr_dependencia_padre_post: TrDependenciaPadre = {
-        PadreId: {
-          Id: this.opcionSeleccionadoFacultad['Id'],
-          Nombre: undefined,
-          TelefonoDependencia: undefined,
-          CorreoElectronico: undefined,
-          DependenciaTipoDependencia: undefined,
-        },
-        HijaId: this.dependencia,
-      }
-      this.proyecto_academicoPost = {
-        ProyectoAcademicoInstitucion: this.proyecto_academico,
-        Registro: [this.registro_califacado_acreditacion],
-        Enfasis: this.enfasis_proyecto,
-        Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
-        Oikos: tr_dependencia_padre_post,
-        // Oikos: this.dependencia,
-      }
-      const opt: any = {
-        title: this.translate.instant('GLOBAL.registrar'),
-        text: this.translate.instant('proyecto.seguro_continuar_registrar_proyecto'),
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        showCancelButton: true,
-      };
-      Swal.fire(opt)
-      .then(async (willCreate) => {
-        if (willCreate.value) {
-          // Subir archivos
-          Swal.fire({
-            title: 'Creando proyecto académico ...',
-            html: `<b></b>`,
-            timerProgressBar: true,
-            onOpen: () => {
-              Swal.showLoading();
+        this.enfasis_proyecto = [];
+        this.arr_enfasis_proyecto.forEach(enfasis => {
+          this.enfasis_proyecto.push({
+            Activo: true,
+            ProyectoAcademicoInstitucionId: this.proyecto_academico,
+            EnfasisId: {
+              Id: enfasis['Id'],
             },
           });
-          let content = Swal.getHtmlContainer()
-          if (content) {
-            const b: any = content.querySelector('b')
-            if (b) {
-              b.textContent = 'Subiendo Documentos ...'
-            }
-          }
-          await this.uploadFilesCreacionProyecto([this.fileResolucion, this.fileActoAdministrativo]);
-          content = Swal.getHtmlContainer()
-          if (content) {
-            const b: any = content.querySelector('b')
-            if (b) {
-              b.textContent = 'Almacenando información ...'
-            }
-          }
-          // console.log("subio archivo");
-          // console.log("idDocumentoResolucion", this.idDocumentoResolucion);
-          // console.log("idDocumentoAdministrativo", this.idDocumentoAdministrativo);
-          this.registro_califacado_acreditacion.EnlaceActo = this.idDocumentoResolucion + '';
-          this.proyecto_academico.EnlaceActoAdministrativo = this.idDocumentoAdministrativo + '';
-          this.sgamidService.post('proyecto_academico', this.proyecto_academicoPost)
-          .subscribe((res: any) => {
-            if (res.Type === 'error') {
-              Swal.fire({
-                icon: 'error',
-                title: res.Code,
-                text: this.translate.instant('ERROR.' + res.Code),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              });
-              this.showToast('error', 'error', this.translate.instant('proyecto.proyecto_no_creado'));
-              Swal.close();
-            } else {
-              Swal.close();
-              const opt1: any = {
-                title: this.translate.instant('proyecto.creado'),
-                text: this.translate.instant('proyecto.proyecto_creado'),
-                icon: 'success',
-                buttons: true,
-                dangerMode: true,
-                showCancelButton: true,
-              }; Swal.fire(opt1)
-              .then((willDelete) => {
-                if (willDelete.value) {
-                  this.checkregistro = true;
-                  this.openlist();
-                }
-              });
-            }
-          }, (error) => {
-            Swal.close();
-            console.log(error)
-          });
-        }
-      });
-    } else {
-      const opt1: any = {
-        title: this.translate.instant('GLOBAL.atencion'),
-        text: this.translate.instant('proyecto.error_datos'),
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        showCancelButton: true,
-      }; Swal.fire(opt1)
-      .then((willDelete) => {
-        if (willDelete.value) {
+        });
 
+        this.titulacion_proyecto_snies = {
+          Id: 0,
+          Nombre: this.compleform.value.titulacion_snies,
+          Activo: true,
+          TipoTitulacionId: this.tipo_titulacion = {
+            Id: 1,
+          },
+          ProyectoAcademicoInstitucionId: this.proyecto_academico,
         }
-      });
-    }
-  } catch (err) {
-      // console.log('Error: ', err.message);
+        this.titulacion_proyecto_mujer = {
+          Id: 0,
+          Nombre: this.compleform.value.titulacion_mujer,
+          Activo: true,
+          TipoTitulacionId: this.tipo_titulacion = {
+            Id: 3,
+          },
+          ProyectoAcademicoInstitucionId: this.proyecto_academico,
+        }
+        this.titulacion_proyecto_hombre = {
+          Id: 0,
+          Nombre: this.compleform.value.titulacion_hombre,
+          Activo: true,
+          TipoTitulacionId: this.tipo_titulacion = {
+            Id: 2,
+          },
+          ProyectoAcademicoInstitucionId: this.proyecto_academico,
+        }
+        this.tipo_dependencia = {
+          Id: 2,
+        }
+        this.dependencia_tipo_dependencia = {
+          Id: 0,
+          TipoDependenciaId: this.tipo_dependencia,
+        }
+        this.dependencia = {
+          Id: 0,
+          Nombre: this.basicform.value.nombre_proyecto,
+          TelefonoDependencia: this.basicform.value.numero_proyecto,
+          CorreoElectronico: this.basicform.value.correo_proyecto,
+          DependenciaTipoDependencia: [this.dependencia_tipo_dependencia],
+        }
+        const tr_dependencia_padre_post: TrDependenciaPadre = {
+          PadreId: {
+            Id: this.opcionSeleccionadoFacultad['Id'],
+            Nombre: undefined,
+            TelefonoDependencia: undefined,
+            CorreoElectronico: undefined,
+            DependenciaTipoDependencia: undefined,
+          },
+          HijaId: this.dependencia,
+        }
+        this.proyecto_academicoPost = {
+          ProyectoAcademicoInstitucion: this.proyecto_academico,
+          Registro: [this.registro_califacado_acreditacion],
+          Enfasis: this.enfasis_proyecto,
+          Titulaciones: [this.titulacion_proyecto_snies, this.titulacion_proyecto_mujer, this.titulacion_proyecto_hombre],
+          Oikos: tr_dependencia_padre_post,
+          // Oikos: this.dependencia,
+        }
+        const opt: any = {
+          title: this.translate.instant('GLOBAL.registrar'),
+          text: this.translate.instant('proyecto.seguro_continuar_registrar_proyecto'),
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true,
+          showCancelButton: true,
+        };
+        Swal.fire(opt)
+          .then(async (willCreate) => {
+            if (willCreate.value) {
+              // Subir archivos
+              Swal.fire({
+                title: 'Creando proyecto académico ...',
+                html: `<b></b>`,
+                timerProgressBar: true,
+                onOpen: () => {
+                  Swal.showLoading();
+                },
+              });
+              let content = Swal.getHtmlContainer()
+              if (content) {
+                const b: any = content.querySelector('b')
+                if (b) {
+                  b.textContent = 'Subiendo Documentos ...'
+                }
+              }
+              await this.uploadFilesCreacionProyecto([this.fileResolucion, this.fileActoAdministrativo]);
+              content = Swal.getHtmlContainer()
+              if (content) {
+                const b: any = content.querySelector('b')
+                if (b) {
+                  b.textContent = 'Almacenando información ...'
+                }
+              }
+
+              this.registro_califacado_acreditacion.EnlaceActo = this.idDocumentoResolucion + '';
+              this.proyecto_academico.EnlaceActoAdministrativo = this.idDocumentoAdministrativo + '';
+              this.sgamidService.post('proyecto_academico', this.proyecto_academicoPost)
+                .subscribe((res: any) => {
+                  if (res.Type === 'error') {
+                    Swal.fire({
+                      icon: 'error',
+                      title: res.Code,
+                      text: this.translate.instant('ERROR.' + res.Code),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                    this.showToast('error', 'error', this.translate.instant('proyecto.proyecto_no_creado'));
+                    Swal.close();
+                  } else {
+                    Swal.close();
+                    const opt1: any = {
+                      title: this.translate.instant('proyecto.creado'),
+                      text: this.translate.instant('proyecto.proyecto_creado'),
+                      icon: 'success',
+                      buttons: true,
+                      dangerMode: true,
+                      showCancelButton: true,
+                    }; Swal.fire(opt1)
+                      .then((willDelete) => {
+                        if (willDelete.value) {
+                          this.checkregistro = true;
+                          this.openlist();
+                        }
+                      });
+                  }
+                }, (error) => {
+                  Swal.close();
+                });
+            }
+          });
+      } else {
+        const opt1: any = {
+          title: this.translate.instant('GLOBAL.atencion'),
+          text: this.translate.instant('proyecto.error_datos'),
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true,
+          showCancelButton: true,
+        }; Swal.fire(opt1)
+          .then((willDelete) => {
+            if (willDelete.value) {
+
+            }
+          });
+      }
+    } catch (err) {
       const opt2: any = {
         title: this.translate.instant('GLOBAL.error'),
         text: this.translate.instant('ERROR.error_subir_documento'),
@@ -798,8 +766,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         dangerMode: true,
         showCancelButton: true,
       }; Swal.fire(opt2)
+    }
   }
-}
+
   private showToast(icon: string, title: string, body: string) {
     this.config = new ToasterConfig({
       // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'

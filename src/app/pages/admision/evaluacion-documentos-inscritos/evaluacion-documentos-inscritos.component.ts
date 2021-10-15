@@ -160,7 +160,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
       this.proyectos_selected + ',PeriodoId:' + this.periodo.Id +
       '&sortby=Id&order=asc').subscribe(
         (response: any) => {
-          if (response !== '[{}]') {
+          if (Object.keys(response[0]).length !== 0) {
             const data = <Array<any>>response;
             data.forEach(element => {
               if (element.PersonaId !== undefined) {
@@ -183,7 +183,12 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
               }
             });
           } else {
-            this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
+            Swal.fire({
+              icon: 'warning',
+              title: this.translate.instant('admision.titulo_no_aspirantes'),
+              text: this.translate.instant('admision.error_no_aspirantes'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           }
         },
         error => {

@@ -1,8 +1,10 @@
+@import '../../../@theme/styles/themes';
 :host /deep/ .nb-theme-default ng2-smart-table table tr td {
   font-size: 0.85rem;
 }
 
 .mat-button {
+  background-color: nb-theme(color-primary);
   color: #fff;
 }
 
