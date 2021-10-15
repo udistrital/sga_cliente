@@ -33,6 +33,7 @@
       </form>
 
       <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas"></ngx-dinamicform>
+      <ngx-dinamicform *ngIf="['process'].includes(process)" [normalform]="formDocumentosAdicionales" ></ngx-dinamicform>
 
       <div class="files-container">
         <ngx-download-file-nuxeo *ngFor="let file of files" [idDoc]="file.id" [label]="file.label">

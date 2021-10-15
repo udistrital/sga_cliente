@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
-import { FORM_SOLICITUD_PRACTICAS } from '../form-solicitud-practica';
+import { FORM_SOLICITUD_PRACTICAS, FORM_DOCUMENTOS_ADICIONALES } from '../form-solicitud-practica';
 
 @Component({
   selector: 'ngx-detalle-practica-academica',
@@ -24,8 +24,9 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   idSolicitud: string;
   estadosSolicitud: any;
   sub: any;
-  tablaEstados:any;
-  files:any = [];
+  tablaEstados: any;
+  files: any = [];
+  formDocumentosAdicionales: any;
 
   constructor(
     private builder: FormBuilder,
@@ -39,12 +40,15 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       EstadoDocente: [{ value: '', disabled: true }],
     });
     this.FormPracticasAcademicas = FORM_SOLICITUD_PRACTICAS;
+    this.formDocumentosAdicionales = FORM_DOCUMENTOS_ADICIONALES;
     this.inicializiarDatos();
     this.crearTabla();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.inicializiarDatos();
       this.construirForm();
       this.crearTabla();
     });
+
   }
 
   ngOnInit() {
@@ -62,22 +66,35 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       this.process = atob(process);
       this.estadosSolicitud = this.practicasService.getPracticas(id, null)[0].estados
       console.log(this.estadosSolicitud);
+      if (['invitation'].includes(this.process)) {
+        this.files = [
+          { id: 140089, label: this.translate.instant('practicas_academicas.' + 'cronograma_practica') },
+          { id: 140089, label: this.translate.instant('practicas_academicas.' + 'presupuesto_practica') },
+          { id: 140089, label: this.translate.instant('practicas_academicas.' + 'presentacion_practica') },
+          { id: 140089, label: this.translate.instant('practicas_academicas.' + 'lista_estudiantes') },
+          { id: 140089, label: this.translate.instant('practicas_academicas.' + 'guia_practica') },
+          { id: 140089, label: this.translate.instant('practicas_academicas.' + 'lista_personal_apoyo') },
+          { id: 140089, label: this.translate.instant('practicas_academicas.' + 'acta_compromiso') },
+          { id: 140089, label: this.translate.instant('practicas_academicas.' + 'info_asistencia_practica') },
+        ]
+      }
     });
-    
+
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
   inicializiarDatos() {
     this.files = [
-      { id: 140089, label: 'Documento1' },
-      { id: 140089, label: 'Documento2' },
-      { id: 140089, label: 'Documento3' },
-      { id: 140089, label: 'Documento4' },
-      { id: 140089, label: 'Documento5' },
-      { id: 140089, label: 'Documento6' },
+      { id: 140089, label: this.translate.instant('practicas_academicas.' + 'cronograma_practica') },
+      { id: 140089, label: this.translate.instant('practicas_academicas.' + 'presupuesto_practica') },
+      { id: 140089, label: this.translate.instant('practicas_academicas.' + 'presentacion_practica') },
+      { id: 140089, label: this.translate.instant('practicas_academicas.' + 'lista_estudiantes') },
+      { id: 140089, label: this.translate.instant('practicas_academicas.' + 'guia_practica') },
+      { id: 140089, label: this.translate.instant('practicas_academicas.' + 'lista_personal_apoyo') },
     ]
+    console.log(this.process);
     this.periodos = [{ Nombre: '2021-1', Id: 1 }];
     this.proyectos = [{ Nombre: 'Ingeniería Industrial', Id: 1 }];
     this.espaciosAcademicos = [{ Nombre: '123 - Calculo Integral', Id: 1 }];
@@ -125,39 +142,43 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       campo.label = this.translate.instant('practicas_academicas.' + campo.label_i18n);
       campo.deshabilitar = true;
     });
+
+    this.formDocumentosAdicionales.campos.forEach(element => {
+      element.label = this.translate.instant('practicas_academicas.' + element.label_i18n);
+    });
   }
 
-  verEstado(event){
+  verEstado(event) {
     console.log(event);
     const opt: any = {
-          title: this.translate.instant("GLOBAL.estado"),
-          html: `<span>${event.data.FechaSolicitud}</span><br>
+      title: this.translate.instant("GLOBAL.estado"),
+      html: `<span>${event.data.FechaSolicitud}</span><br>
                 <span>${event.data.EstadoSolicitud}</span><br>
                 <span class="form-control">${event.data.Observaciones}</span><br>`,
-          icon: "info",
-          buttons: true,
-          dangerMode: true,
-          showCancelButton: true
-        };
-        Swal.fire(opt)
-        .then((result)=>{
-          if (result) {
-            console.log(result)
-          }
-        })
+      icon: "info",
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true
+    };
+    Swal.fire(opt)
+      .then((result) => {
+        if (result) {
+          console.log(result)
+        }
+      })
   }
 
-  enviarInvitacion(event){
+  enviarInvitacion(event) {
     console.log(event);
     const opt: any = {
-          title: this.translate.instant("GLOBAL.invitacion"),
-          html: `Próximamente envío de invitación aquí`,
-          icon: "info",
-          buttons: true,
-          dangerMode: true,
-          showCancelButton: true
-        };
-        Swal.fire(opt)
+      title: this.translate.instant("GLOBAL.invitacion"),
+      html: `Próximamente envío de invitación aquí`,
+      icon: "info",
+      buttons: true,
+      dangerMode: true,
+      showCancelButton: true
+    };
+    Swal.fire(opt)
   }
 
   crearTabla() {
