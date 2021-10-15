@@ -1759,7 +1759,11 @@
         "guia_practica": "Guia para el desarrollo de la práctica",
         "lista_personal_apoyo": "Lista personal de apoyo",
         "acta_compromiso": "Acta de compromiso de la práctica",
-        "info_asistencia_practica": "Información de asistente a la práctica"
+        "info_asistencia_practica": "Información de asistente a la práctica",
+        "fecha_respuesta":"Fecha",
+        "nombre_usuario":"Nombre del usuario",
+        "estado":"Estado",
+        "comentario":"Comentario"
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Preinscripción de Espacios académicos",

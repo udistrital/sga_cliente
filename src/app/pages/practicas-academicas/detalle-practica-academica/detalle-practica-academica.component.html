@@ -82,14 +82,10 @@
         </button>
       </div>
 
-      <div class="row">
-        <div class="col-12">
-          <!-- 
-            Aqui se manejaria la opcion de historico y opciones de aprobacion e informe dependiendo del estado de la solicitud
-            Se sugiere usar un ngSwitch para mostrar diferentes opciones segun el estado
-          -->
-        </div>
-      </div>
+      <ngx-dinamicform  [normalform]="formRespuestaSolicitud"  [modeloData]="InfoPersona">
+      </ngx-dinamicform>
+
+
     </nb-card-body>
   </nb-card>
 </div>
