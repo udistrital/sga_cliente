@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from './../../../environments/environment';
@@ -13,6 +13,8 @@ const path = environment.TERCEROS_SERVICE;
 export class UserService {
 
   private user$ = new Subject<[object]>();
+  private userSubject = new BehaviorSubject(null);
+  public tercero$ = this.userSubject.asObservable();
   public user: any;
 
   constructor(private anyService: AnyService, private autenticationService: ImplicitAutenticationService) {
@@ -28,7 +30,7 @@ export class UserService {
                 this.user = res[0].TerceroId;
                 if (Object.keys(this.user).length !== 0) {
                   this.user$.next(this.user);
-                  // window.localStorage.setItem('ente', res[0].Ente);
+                  this.userSubject.next(this.user);              // window.localStorage.setItem('ente', res[0].Ente);
                   window.localStorage.setItem('persona_id', this.user.Id);
                 } else {
                   //this.user$.next(this.user);

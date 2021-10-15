@@ -4,7 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
-import { FORM_SOLICITUD_PRACTICAS, FORM_DOCUMENTOS_ADICIONALES } from '../form-solicitud-practica';
+import { UserService } from '../../../@core/data/users.service';
+import { FORM_SOLICITUD_PRACTICAS, FORM_DOCUMENTOS_ADICIONALES, FORM_RESPUESTA_SOLICITUD } from '../form-solicitud-practica';
 
 @Component({
   selector: 'ngx-detalle-practica-academica',
@@ -27,12 +28,15 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   tablaEstados: any;
   files: any = [];
   formDocumentosAdicionales: any;
-
+  formRespuestaSolicitud: any;
+  estadosList: any = [];
+  InfoPersona: any = {}
   constructor(
     private builder: FormBuilder,
     private translate: TranslateService,
     private practicasService: PracticasAcademicasService,
     private _Activatedroute: ActivatedRoute,
+    private userService: UserService,
   ) {
     this.formDocente = this.builder.group({
       NombreDocente: [{ value: '', disabled: true }],
@@ -41,6 +45,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     });
     this.FormPracticasAcademicas = FORM_SOLICITUD_PRACTICAS;
     this.formDocumentosAdicionales = FORM_DOCUMENTOS_ADICIONALES;
+    this.formRespuestaSolicitud = FORM_RESPUESTA_SOLICITUD;
     this.inicializiarDatos();
     this.crearTabla();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -62,10 +67,8 @@ export class DetallePracticaAcademicaComponent implements OnInit {
 
     this.sub = this._Activatedroute.paramMap.subscribe((params: any) => {
       const { process, id } = params.params;
-      console.log({ process, id });
       this.process = atob(process);
       this.estadosSolicitud = this.practicasService.getPracticas(id, null)[0].estados
-      console.log(this.estadosSolicitud);
       if (['invitation'].includes(this.process)) {
         this.files = [
           { id: 140089, label: this.translate.instant('practicas_academicas.' + 'cronograma_practica') },
@@ -94,7 +97,6 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       { id: 140089, label: this.translate.instant('practicas_academicas.' + 'guia_practica') },
       { id: 140089, label: this.translate.instant('practicas_academicas.' + 'lista_personal_apoyo') },
     ]
-    console.log(this.process);
     this.periodos = [{ Nombre: '2021-1', Id: 1 }];
     this.proyectos = [{ Nombre: 'Ingeniería Industrial', Id: 1 }];
     this.espaciosAcademicos = [{ Nombre: '123 - Calculo Integral', Id: 1 }];
@@ -103,6 +105,11 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       { Nombre: 'Buseta', Id: 2 },
       { Nombre: 'Bus', Id: 3 },
       { Nombre: 'Otro', Id: 4 },
+    ];
+    this.estadosList = [
+      { Nombre: 'Verificada', Id: 1 },
+      { Nombre: 'Devuelta', Id: 2 },
+      { Nombre: 'Rechazada', Id: 3 },
     ]
     this.InfoPracticasAcademicas = {
       Periodo: { Id: 1 },
@@ -117,6 +124,10 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       NumeroVehiculos: 1,
       TipoVehiculo: { Id: 1 }
     }
+
+    this.userService.tercero$.subscribe((user: any) => {;
+      this.InfoPersona = { Nombre: user.NombreCompleto, FechaRespuesta: new Date()}
+    })
   }
 
   construirForm() {
@@ -146,10 +157,21 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     this.formDocumentosAdicionales.campos.forEach(element => {
       element.label = this.translate.instant('practicas_academicas.' + element.label_i18n);
     });
+
+    this.formRespuestaSolicitud.campos.forEach(element => {
+      element.label = this.translate.instant('practicas_academicas.' + element.label_i18n);
+      if (element.etiqueta === 'select') {
+        switch (element.nombre) {
+          case 'Estado':
+            element.opciones = this.estadosList;
+            break;
+        }
+      }
+    });
+
   }
 
   verEstado(event) {
-    console.log(event);
     const opt: any = {
       title: this.translate.instant("GLOBAL.estado"),
       html: `<span>${event.data.FechaSolicitud}</span><br>
@@ -163,13 +185,11 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     Swal.fire(opt)
       .then((result) => {
         if (result) {
-          console.log(result)
         }
       })
   }
 
   enviarInvitacion(event) {
-    console.log(event);
     const opt: any = {
       title: this.translate.instant("GLOBAL.invitacion"),
       html: `Próximamente envío de invitación aquí`,
