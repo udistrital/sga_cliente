@@ -82,7 +82,7 @@
         </button>
       </div>
 
-      <ngx-dinamicform  [normalform]="formRespuestaSolicitud"  [modeloData]="InfoPersona">
+      <ngx-dinamicform *ngIsGranted="['COORDINADOR', 'COORDINADOR_PREGADO', 'COORDINADOR_POSGRADO']" [normalform]="formRespuestaSolicitud"  [modeloData]="InfoPersona">
       </ngx-dinamicform>
 
 
