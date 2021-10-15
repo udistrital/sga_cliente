@@ -19,7 +19,7 @@ const routes: Routes = [{
             component: ListPracticasAcademicasComponent,
         },
         {
-            path: 'detalle-practica-academica',
+            path: 'detalle-practica-academica/:id/:process',
             component: DetallePracticaAcademicaComponent,
         }
     ]

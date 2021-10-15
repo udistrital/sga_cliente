@@ -208,3 +208,38 @@ export const FORM_SOPORTES_DOCUMENTALES = {
     ]
 }
 
+
+export const FORM_DOCUMENTOS_ADICIONALES = {
+    tipo_formulario: 'mini',
+    alertas: true,
+    btn: 'Enviar',
+    modelo: 'documental',
+    campos: [
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-6 mb-5',
+            clase: 'form-control',
+            nombre: 'ActaCompromiso',
+            label_i18n: 'acta_compromiso',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        },
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-6 mb-5',
+            clase: 'form-control',
+            nombre: 'InformacionAsistente',
+            label_i18n: 'info_asistencia_practica',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        }
+    ]
+}

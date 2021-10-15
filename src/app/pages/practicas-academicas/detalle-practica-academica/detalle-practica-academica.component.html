@@ -4,7 +4,7 @@
       {{ 'practicas_academicas.titulo' | translate }}
     </nb-card-header>
     <nb-card-body>
-      <form class="dinamic-form" novalidate [formGroup]="formDocente" >
+      <form class="dinamic-form" novalidate [formGroup]="formDocente">
         <fieldset [ngClass]="{'fieldseter':true} ">
           <legend>
             {{ 'practicas_academicas.solicitante' | translate }}
@@ -12,29 +12,76 @@
           <div class="row">
             <div class="col-12 col-md-4">
               <mat-form-field style="width: 100%;">
-                <input matInput type="text" formControlName="NombreDocente" placeholder="{{ 'practicas_academicas.nombre' | translate}}" />
+                <input matInput type="text" formControlName="NombreDocente"
+                  placeholder="{{ 'practicas_academicas.nombre' | translate}}" />
               </mat-form-field>
             </div>
             <div class="col-12 col-md-4">
               <mat-form-field style="width: 100%;">
-                <input matInput type="text" formControlName="NumeroDocumento" placeholder="{{ 'GLOBAL.numero_documento' | translate}}" />
+                <input matInput type="text" formControlName="NumeroDocumento"
+                  placeholder="{{ 'GLOBAL.numero_documento' | translate}}" />
               </mat-form-field>
             </div>
             <div class="col-12 col-md-4">
               <mat-form-field style="width: 100%;">
-                <input matInput type="text" formControlName="EstadoDocente" placeholder="{{ 'practicas_academicas.estado_docente' | translate}}" />
+                <input matInput type="text" formControlName="EstadoDocente"
+                  placeholder="{{ 'practicas_academicas.estado_docente' | translate}}" />
               </mat-form-field>
             </div>
           </div>
         </fieldset>
       </form>
-      
-      <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas" ></ngx-dinamicform>
+
+      <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas"></ngx-dinamicform>
+      <ngx-dinamicform *ngIf="['process'].includes(process)" [normalform]="formDocumentosAdicionales" ></ngx-dinamicform>
 
       <div class="files-container">
-        
+        <ngx-download-file-nuxeo *ngFor="let file of files" [idDoc]="file.id" [label]="file.label">
+        </ngx-download-file-nuxeo>
       </div>
-      
+
+      <div class="row col-12" *ngIf="['news', 'process'].includes(process)">
+        <div class="row col-6">
+          <div class="col-6">
+            <label>Fecha de radicación</label>
+          </div>
+          <div class="col-6">
+            <span class="form-control">12/10/2021</span>
+          </div>
+        </div>
+        <div class="row col-6">
+          <div class="col-6">
+            <label>Estado actual de la solicitud</label>
+          </div>
+          <div class="col-6">
+            <span class="form-control">*Estado*</span>
+          </div>
+        </div>
+      </div>
+      <br>
+      <mat-accordion *ngIf="['news', 'process'].includes(process)">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Estados
+            </mat-panel-title>
+            <mat-panel-description>
+              Ver listado de estados
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <ng2-smart-table [settings]="tablaEstados" [source]="estadosSolicitud" (custom)="verEstado($event)">
+          </ng2-smart-table>
+
+        </mat-expansion-panel>
+
+      </mat-accordion>
+
+      <div class="send-invitation" *ngIf="['invitation'].includes(process)">
+        <button class="btn btn-success" (click)="enviarInvitacion()">
+          Enviar Invitación
+        </button>
+      </div>
+
       <div class="row">
         <div class="col-12">
           <!-- 

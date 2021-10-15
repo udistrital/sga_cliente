@@ -7,6 +7,8 @@ import { SharedModule } from '../shared/shared.module';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { MomentModule } from 'ngx-moment';
+import { NbSpinnerModule } from '@nebular/theme';
+
 import { NgIsGrantedDirective } from './directives/ng-is-granted.directive';
 import {
   MatAutocompleteModule,
@@ -126,6 +128,7 @@ import {
   LoadingComponent,
   ListadoComponent,
   NewTercero,
+  DownloadFileNuxeo,
 } from './components';
 
 import { CapitalizePipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -146,10 +149,12 @@ import { ButtonPaymentComponent } from './components/button-payment/button-payme
 import { LinkDownloadComponent } from './components/link-download/link-download.component';
 import { CheckboxAssistanceComponent } from './components/checkbox-assistance/checkbox-assistance.component';
 import { SgaMidService } from '../@core/data/sga_mid.service';
+import { DocumentoService } from '../@core/data/documento.service';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
 const NB_MODULES = [
+  NbSpinnerModule,
   NbCardModule,
   NbLayoutModule,
   NbTabsetModule,
@@ -185,6 +190,7 @@ const COMPONENTS = [
   LoadingComponent,
   ListadoComponent,
   NewTercero,
+  DownloadFileNuxeo,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -226,7 +232,7 @@ export class ThemeModule {
     return <ModuleWithProviders>{
       ngModule: ThemeModule,
       providers: [...NB_THEME_PROVIDERS,
-        ConfiguracionService],
+        ConfiguracionService, DocumentoService],
     };
   }
 }

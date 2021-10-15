@@ -4,6 +4,7 @@
       {{ 'practicas_academicas.lista_titulo' | translate }}
     </nb-card-header>
     <nb-card-body>
+      <ngx-dinamicform *ngIf="process === 'list'" [normalform]="filterListado" [modeloData]="InfoPracticasAcademicas" (resultAux)="filterPracticas($event)"></ngx-dinamicform>
       <ng2-smart-table [settings]="tablaPracticas" [source]="datosPracticas" (custom)="verPractica($event)" ></ng2-smart-table>
     </nb-card-body>
   </nb-card>

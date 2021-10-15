@@ -249,6 +249,39 @@ export class NuxeoService {
         return documents$;
     }
 
+    getDocByInfo(info) {
+        const documentsSubject = new Subject<Documento[]>();
+        const documents$ = documentsSubject.asObservable();
+        if (info.Enlace != null) {
+            this.nuxeo2.header('X-NXDocumentProperties', '*');
+            this.nuxeo2.request('/id/' + info.Enlace)
+                .get()
+                .then((response) => {
+                    response.fetchBlob()
+                        .then((blob) => {
+                            blob.blob()
+                                .then((responseblob) => {
+                                    const url = URL.createObjectURL(responseblob)
+                                    const objectNext = {
+                                        ...info,
+                                        ...{ documentId: info.Id },
+                                        ...{ key: info.key },
+                                        ...{ urlUnsafe: url },
+                                        ...{ safeUrl: this.sanitization.bypassSecurityTrustUrl(url) },
+                                        ...{ Documento: this.sanitization.bypassSecurityTrustUrl(url) }
+                                    }
+                                    documentsSubject.next(objectNext);
+                                });
+                        })
+                        .catch(function (response2) {
+                        });
+                })
+                .catch(function (response) {
+                });
+        }
+        return documents$;
+    }
+
     saveFilesNew(files) {
         const documentsSubject = new Subject<Documento[]>();
         const documents$ = documentsSubject.asObservable();
