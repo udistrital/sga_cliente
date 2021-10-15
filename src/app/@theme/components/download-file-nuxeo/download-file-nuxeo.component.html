@@ -1,0 +1,14 @@
+<div *ngIf="!!documentoData" class="element-nuxeo">
+    <span>{{label}}</span>
+    <span class="form-control">    
+        {{documentoData?documentoData.Nombre?documentoData.Nombre:'':''}}
+    </span>
+    <button 
+    [nbSpinner]="loading"
+    nbSpinnerStatus="success"
+    nbSpinnerSize="small"
+    nbSpinnerMessage="cargando"
+    class="btn btn-success" (click)="openFile()">
+      Abrir
+    </button>
+</div>

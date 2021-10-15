@@ -2,6 +2,7 @@ import { Directive, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@ang
 import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject, Subject } from 'rxjs';
 import * as _ from 'lodash';
+import { ImplicitAutenticationService } from '../../@core/utils/implicit_autentication.service';
 
 
 /* use directive: 
@@ -13,21 +14,23 @@ export class NgIsGrantedDirective implements OnDestroy {
     private destroy$ = new Subject<void>();
     private hasView = false;
     constructor(private templateRef: TemplateRef<any>,
-        private viewContainer: ViewContainerRef,) {
+        private viewContainer: ViewContainerRef,
+        private autenticationService: ImplicitAutenticationService) {
     }
 
     isGrantedRole(role) {
         const accessChecker = new BehaviorSubject(false);
         const accessChecker$ = accessChecker.asObservable();
-        const payload = JSON.parse(atob((localStorage.getItem('id_token').split('.'))[1]));
-        if(typeof payload.role !== 'undefined' && payload.role !== null) {
-           const intersection =  _.intersection(role, payload.role);
-           if(intersection.length > 0 ) {
-               accessChecker.next(true)
-           } else {
-            accessChecker.next(false)
-           }
-        }
+        this.autenticationService.getRole().then((roleSystem)=> {
+            if(typeof roleSystem !== 'undefined' && roleSystem !== null) {
+               const intersection =  _.intersection(role, roleSystem);
+               if(intersection.length > 0 ) {
+                   accessChecker.next(true)
+               } else {
+                accessChecker.next(false)
+               }
+            }
+        })
         return accessChecker$
     }
 
