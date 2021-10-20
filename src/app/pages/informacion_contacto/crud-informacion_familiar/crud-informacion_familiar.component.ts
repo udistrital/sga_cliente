@@ -337,7 +337,7 @@ export class CrudInformacionFamiliarComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.loading = true;
@@ -361,8 +361,8 @@ export class CrudInformacionFamiliarComponent implements OnInit {
             },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -380,8 +380,8 @@ export class CrudInformacionFamiliarComponent implements OnInit {
     this.sgaMidService.post('inscripciones/post_informacion_familiar', info_familiar)
       .subscribe((res: any) => {
         if (res.Type === 'error') {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: res.Code,
             text: this.translate.instant('ERROR.' + res.Code),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

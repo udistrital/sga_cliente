@@ -28,8 +28,8 @@ export class CrudDocumentoProgramaComponent implements OnInit {
     this.documento_programa_id = documento_programa_id;
     if (this.documento_programa_id !== undefined && this.documento_programa_id !== null &&
       this.documento_programa_id !== 0 && this.documento_programa_id.toString() !== '') {
-        this.loadDocumentoPrograma();
-      }
+      this.loadDocumentoPrograma();
+    }
   }
 
   @Input('persona_id')
@@ -49,7 +49,6 @@ export class CrudDocumentoProgramaComponent implements OnInit {
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
-  @Output('result') result: EventEmitter<any> = new EventEmitter();
 
   tipo_documentos: any[];
   info_documento_programa: any;
@@ -79,13 +78,13 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId')) // this.userService.getPrograma();
-    this.periodo = parseInt(sessionStorage.getItem('IdPeriodo')) // this.userService.getPeriodo();
+    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10) // this.userService.getPrograma();
+    this.periodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10) // this.userService.getPeriodo();
     this.loadLists();
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=ProgramaId:'+this.programa).subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + this.programa).subscribe(
       response => {
         this.tipo_documentos = <any[]>response;
         this.eventChange.emit(this.tipo_documentos.length);
@@ -134,14 +133,14 @@ export class CrudDocumentoProgramaComponent implements OnInit {
     this.info_documento_programa.DocumentoProgramaId = { Id: this.documento_programa_id }
     this.popUpManager.showAlert(
       this.translate.instant('GLOBAL.info'),
-      this.translate.instant('documento_programa.documento_cambiar')
+      this.translate.instant('documento_programa.documento_cambiar'),
     );
   }
 
   createDocumentoPrograma(documentoPrograma: any): void {
     this.popUpManager.showConfirmAlert(
       this.translate.instant('documento_programa.seguro_continuar_registrar'),
-      this.translate.instant('GLOBAL.crear')
+      this.translate.instant('GLOBAL.crear'),
     ).then((ok) => {
       if (ok.value) {
         this.loading = true;
@@ -149,7 +148,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
         this.info_documento_programa.PersonaId = Number(this.persona) || 1;
         this.info_documento_programa.DocumentoProgramaId = this.info_documento_programa.DocumentoProgramaId;
         const file = {
-          file: this.info_documento_programa.Documento.file, 
+          file: this.info_documento_programa.Documento.file,
           IdDocumento: 6,
         }
         this.uploadFile(file).then(
@@ -158,10 +157,10 @@ export class CrudDocumentoProgramaComponent implements OnInit {
             soporteDocumentoPrograma.DocumentoId = fileId;
             soporteDocumentoPrograma.DocumentoProgramaId = {
               Id: this.tipo_documentos.filter(
-                obj => obj.TipoDocumentoProgramaId.Id === this.info_documento_programa.DocumentoProgramaId.Id
+                obj => obj.TipoDocumentoProgramaId.Id === this.info_documento_programa.DocumentoProgramaId.Id,
               )[0].Id,
             };
-            soporteDocumentoPrograma.InscripcionId = {Id: Number(this.inscripcion)};
+            soporteDocumentoPrograma.InscripcionId = { Id: Number(this.inscripcion) };
             this.inscripcionService.post('soporte_documento_programa', soporteDocumentoPrograma).subscribe(
               response => {
                 this.loading = false;
@@ -170,19 +169,18 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                 this.info_documento_programa = undefined;
                 this.clean = !this.clean;
                 this.eventChange.emit(true);
-                this.setPercentage(1 / this.tipo_documentos.length)
               },
               error => {
                 this.popUpManager.showErrorToast(this.translate.instant('documento_programa.documento_programa_no_registrado'));
                 this.loading = false;
-              }
+              },
             )
-          }
+          },
         ).catch(
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
             this.loading = false;
-          }
+          },
         );
       }
     });
@@ -191,7 +189,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   updateDocumentoPrograma(documentoPrograma: any) {
     this.popUpManager.showConfirmAlert(
       this.translate.instant('documento_programa.seguro_continuar_registrar'),
-      this.translate.instant('GLOBAL.actualizar')
+      this.translate.instant('GLOBAL.actualizar'),
     ).then((ok) => {
       if (ok.value) {
         this.loading = true;
@@ -201,14 +199,14 @@ export class CrudDocumentoProgramaComponent implements OnInit {
             this.info_documento_programa = <SoporteDocumentoPrograma>documentoPrograma;
             this.info_documento_programa.PersonaId = Number(this.persona) || 1;
             const file = {
-              file: this.info_documento_programa.Documento.file, 
+              file: this.info_documento_programa.Documento.file,
               IdDocumento: 6,
             }
             this.uploadFile(file).then(
               fileId => {
                 soporte.DocumentoId = fileId;
                 this.inscripcionService.put('soporte_documento_programa', soporte).subscribe(
-                  response => {
+                  (response: any) => {
                     this.loading = false;
                     this.popUpManager.showSuccessAlert(this.translate.instant('documento_programa.documento_programa_registrado'));
                     this.documento_programa_id = 0;
@@ -219,20 +217,20 @@ export class CrudDocumentoProgramaComponent implements OnInit {
                   error => {
                     this.popUpManager.showErrorToast(this.translate.instant('documento_programa.documento_programa_no_registrado'));
                     this.loading = false;
-                  }
+                  },
                 )
-              }
+              },
             ).catch(
               error => {
                 this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
                 this.loading = false;
-              }
+              },
             );
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_subir_documento'));
             this.loading = false;
-          }
+          },
         );
       }
     });
@@ -247,11 +245,6 @@ export class CrudDocumentoProgramaComponent implements OnInit {
           reject(error);
         });
     });
-  }
-
-  setPercentage(event) {
-    this.percentage += event;
-    this.result.emit(this.percentage);
   }
 
 }

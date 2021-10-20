@@ -190,7 +190,7 @@ export class ListService {
       (list: any) => {
         if (!list || list.length === 0) {
           // this.coreService.get('linea_investigacion/?query=Activo:true&limit=0')
-          this.cidcService.get('research_focus')
+          this.cidcService.get('subtypes/by-type/53')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.LineaInvestigacion, result);
@@ -208,7 +208,7 @@ export class ListService {
     this.store.select(REDUCER_LIST.Pais).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.ubicacionService.get('lugar?query=TipoLugar__Nombre:PAIS,Activo:true&limit=0') // TODO: filtrar pais
+          this.ubicacionService.get('lugar?query=TipoLugarId__Nombre:PAIS,Activo:true&limit=0') // TODO: filtrar pais
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.Pais, result);
@@ -355,7 +355,7 @@ export class ListService {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:1')
             .subscribe(
               (result: any[]) => {
-                this.addList(REDUCER_LIST.TipoDiscapacidad, result);
+                this.addList(REDUCER_LIST.TipoDiscapacidad, result.filter(data => data.Nombre !== 'DOCUMENTO_SOPORTE'));
               },
               error => {
                 this.addList(REDUCER_LIST.TipoDiscapacidad, []);
@@ -386,8 +386,6 @@ export class ListService {
       },
     );
   }
-
-
 
   public findTipoICFES() {
     this.store.select(REDUCER_LIST.ICFES).subscribe(
@@ -505,7 +503,7 @@ public findTipoParametro() {
       async (list: any) => {
         if (!list || list.length === 0) {
           // this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
-          this.cidcService.get('research_group/?query=Activo:true&limit=0')
+          this.cidcService.get('research_units/?query=Activo:true&limit=0')
             .subscribe(
               async (result: any) => {
                 const r = <any>result.data;
@@ -543,7 +541,7 @@ public findTipoParametro() {
     this.store.select(REDUCER_LIST.LocalidadesBogota).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.ubicacionService.get('lugar?limit=0&query=TipoLugar__Id:3')
+          this.ubicacionService.get('lugar?limit=0&query=TipoLugarId__Id:3')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.LocalidadesBogota, result);
@@ -647,6 +645,24 @@ public findTipoParametro() {
     );
   }
 
+  public findTipoTercero() {
+    this.store.select(REDUCER_LIST.TipoTercero).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('tipo_tercero?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoTercero, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoTercero, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   public findTipoDedicacion() {
     this.store.select(REDUCER_LIST.TipoDedicacion).subscribe(
       (list: any) => {
@@ -705,7 +721,7 @@ public findTipoParametro() {
     this.store.select(REDUCER_LIST.Cargo).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.experienciaService.get('cargo/?limit=0&query=Activo:true')
+          this.experienciaService.get('cargo/?limit=0&query=Activo:true&order=asc&sortby=Nombre')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.Cargo, result);

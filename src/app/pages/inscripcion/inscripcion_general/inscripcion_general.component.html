@@ -1,30 +1,49 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <nb-card [hidden]="show_profile || show_info_pregrado || show_acad_pregrado || show_expe ||
-    show_proy || show_prod || show_desc || show_docu ||show_info || show_acad || show_info_interna ||show_info_reingreso || show_info_externa || show_acad_externa" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-
+    <nb-card [hidden]="show_profile ||
+             show_info_pregrado ||
+             show_acad_pregrado ||
+             show_expe || show_proy ||
+             show_prod || show_desc ||
+             show_docu ||show_info ||
+             show_acad || show_info_interna ||
+             show_info_reingreso || show_info_externa ||
+             show_acad_externa"
+             [nbSpinner]="loading"
+             nbSpinnerStatus="success"
+             nbSpinnerSize="xxlarge"
+             nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
         <nb-card-header>
 
             <div class="col-12">
-                {{ 'inscripcion.periodo' | translate }}: {{ inscripcion.PeriodoId }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ 'inscripcion.nivel' | translate }}: {{ inscripcion.Nivel }}
+                {{ 'inscripcion.periodo' | translate }}: {{ this.inscripcion.PeriodoId }}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ 'inscripcion.nivel' | translate }}: {{ this.inscripcion.Nivel }}
             </div>
             <br/>
             <div class="col-12">
-                {{ 'inscripcion.tipo' | translate }}: {{ inscripcion.TipoInscripcion }}
+                {{ 'inscripcion.tipo' | translate }}: {{ this.inscripcion.TipoInscripcion }}
             </div>
             <br/>
 
-
             <mat-form-field style="width: 100%;">
-                <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedValue" placeholder="{{ 'inscripcion.aviso_programa' | translate }}" (ngModelChange)="tipo_inscripcion()">
+                <mat-select [formControl]="Campo1Control"
+                            [(ngModel)]="selectedValue"
+                            placeholder="{{ 'inscripcion.aviso_programa' | translate }}"
+                            (ngModelChange)="tipo_inscripcion()">
                     <mat-option>--Seleccionar--</mat-option>
-                    <mat-option *ngFor="let item of posgrados" [value]="item.ProyectoId">{{ item.NombreProyecto }}</mat-option>
+                    <mat-option *ngFor="let item of posgrados" [value]="item.ProyectoId">
+                      {{ item.NombreProyecto }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
 
             <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
             <div class="row">
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado'|| selectTipo=='Transferencia interna'|| selectTipo=='Reingreso' || selectTipo=='Transferencia externa'|| selectTipo=='Transferencia externa'">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center"
+                     id="info_basica" *ngIf="selectTipo=='Pregrado' && selectedValue ||
+                     selectTipo=='Posgrado'|| selectTipo=='Transferencia interna'||
+                     selectTipo=='Reingreso' || selectTipo=='Transferencia externa'||
+                     selectTipo=='Transferencia externa'">
                     <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
                         <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -34,7 +53,10 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipo=='Pregrado' && selectedValue || selectTipo=='Posgrado' || selectTipo=='Transferencia externa'">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center"
+                     id="formacion_academica" *ngIf="selectTipo=='Pregrado' &&
+                     selectedValue || selectTipo=='Posgrado' ||
+                     selectTipo=='Transferencia externa'">
                     <nb-card class="exp-card" (click)="perfil_editar('formacion_academica')">
                         <nb-card-header>{{ 'inscripcion.formacion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -44,7 +66,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="experiencia_laboral" *ngIf="selectTipo=='Posgrado' && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center"
+                     id="experiencia_laboral" *ngIf="selectTipo=='Posgrado' && selectedValue">
                     <nb-card class="exp-card" (click)="perfil_editar('experiencia_laboral')">
                         <nb-card-header>{{ 'inscripcion.experiencia_laboral' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -54,7 +77,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue" id="produccion_academica">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center"
+                     *ngIf="selectTipo=='Posgrado' && selectedValue" id="produccion_academica">
                     <nb-card class="exp-card" (click)="perfil_editar('produccion_academica')">
                         <nb-card-header>{{ 'inscripcion.produccion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -64,7 +88,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue" id="documento_programa">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center"
+                     *ngIf="selectTipo=='Posgrado' && selectedValue" id="documento_programa">
                     <nb-card class="exp-card" (click)="perfil_editar('documento_programa')">
                         <nb-card-header>{{ 'inscripcion.documento_programa' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -74,7 +99,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue" id="descuento_matricula">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center"
+                     *ngIf="selectTipo=='Posgrado' && selectedValue" id="descuento_matricula">
                     <nb-card class="exp-card" (click)="perfil_editar('descuento_matricula')">
                         <nb-card-header>{{ 'inscripcion.descuento_matricula' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -84,7 +110,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue" id="propuesta_grado">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center"
+                     *ngIf="selectTipo=='Posgrado' && selectedValue" id="propuesta_grado">
                     <nb-card class="exp-card" (click)="perfil_editar('propuesta_grado')">
                         <nb-card-header>{{ 'inscripcion.propuesta_grado' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -94,7 +121,8 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center"
+                     *ngIf="selectTipo=='Posgrado' && selectedValue">
                     <nb-card class="exp-card" (click)="perfil_editar('perfil')">
                         <nb-card-header>{{ 'inscripcion.perfil' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -107,12 +135,19 @@
 
         <nb-card-body class="example-items-rows trans text-center">
             <div class="col-md-12">
-                <ngb-progressbar showValue="true" type="success" [value]="percentage_total" [animated]="true" [height]="'15px'">
+                <ngb-progressbar showValue="true" type="success"
+                                 [value]="percentage_total"
+                                 [animated]="true"
+                                 [height]="'15px'">
                 </ngb-progressbar>
                 <blockquote class="blockquote">
                     <li>{{ 'inscripcion.aviso_progreso' | translate}}</li>
                 </blockquote>
-                <button mat-button class="item1" [disabled]="total" (click)="realizarInscripcion()">{{ 'inscripcion.inscribirse' | translate }} </button>
+                <button mat-button class="item1"
+                        [disabled]="total"
+                        (click)="realizarInscripcion()">
+                        {{ 'inscripcion.inscribirse' | translate }}
+                </button>
             </div>
         </nb-card-body>
     </nb-card>
@@ -159,12 +194,19 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success"
+                                     [value]="percentage_info"
+                                     [animated]="true"
+                                     [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_externa=false;
-            show_desc=false; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info_pregrado=false;
+                            show_acad=false; show_expe=false; show_proy=false;
+                            show_prod=false; show_docu=false; show_info_externa=false;
+                            show_desc=false; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -173,15 +215,20 @@
                     </ngx-crud-info-persona>
                 </nb-tab> -->
                 <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}">
-                    <ngx-crud-info-caracteristica_pregrado info_caracteristica_id={{this.info_ente_id}} (eventChange)="perfil_editar('info_contacto')" (result)="setPercentage_info($event,1)">
+                    <ngx-crud-info-caracteristica_pregrado info_caracteristica_id={{this.info_ente_id}}
+                                                           (eventChange)="perfil_editar('info_contacto')"
+                                                           (result)="setPercentage_info($event,1)">
                     </ngx-crud-info-caracteristica_pregrado>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.informacion_contacto' | translate }}">
-                    <ngx-crud-informacion-contacto_externa informacion_contacto_id={{this.info_ente_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    <ngx-crud-informacion-contacto_externa informacion_contacto_id={{this.info_ente_id}}
+                                                           (eventChange)="perfil_editar('default')"
+                                                           (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-contacto_externa>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}">
-                    <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,3)">
+                    <ngx-crud-informacion-familiar (eventChange)="perfil_editar('default')"
+                                                   (result)="setPercentage_info($event,3)">
                     </ngx-crud-informacion-familiar>
                 </nb-tab>
             </nb-tabset>
@@ -193,12 +240,17 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success"
+                                     [value]="percentage_info"
+                                     [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info=false; show_acad=false;
+                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -207,11 +259,15 @@
                     </ngx-crud-info-persona>
                 </nb-tab> -->
                 <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}">
-                    <ngx-crud-info-caracteristica info_caracteristica_id={{this.info_ente_id}} (eventChange)="perfil_editar('info_contacto')" (result)="setPercentage_info($event,1)">
+                    <ngx-crud-info-caracteristica info_caracteristica_id={{this.info_ente_id}}
+                                                  (eventChange)="perfil_editar('info_contacto')"
+                                                  (result)="setPercentage_info($event,1)">
                     </ngx-crud-info-caracteristica>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.informacion_contacto' | translate }}">
-                    <ngx-crud-informacion-contacto informacion_contacto_id={{this.info_ente_id}} (eventChange)="perfil_editar('default')" (result)="setPercentage_info($event,2)">
+                    <ngx-crud-informacion-contacto informacion_contacto_id={{this.info_ente_id}}
+                                                   (eventChange)="perfil_editar('default')"
+                                                   (result)="setPercentage_info($event,2)">
                     </ngx-crud-informacion-contacto>
                 </nb-tab>
                 <!--nb-tab tabTitle="{{ 'inscripcion.informacion_familiar' | translate }}">
@@ -228,12 +284,16 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info"
+                                     [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_reingreso=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info=false; show_acad=false; show_expe=false;
+                            show_proy=false; show_prod=false; show_docu=false; show_info_reingreso=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -250,12 +310,16 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_info"
+                                     [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_interna=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info=false; show_acad=false;
+                            show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_info_interna=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
             <nb-tabset fullWidth>
@@ -274,12 +338,16 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_acad" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success"
+                                     [value]="percentage_acad" [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
+                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
 
@@ -300,12 +368,16 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_acad" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_acad"
+                                     [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false; show_acad_externa=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
+                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_acad_externa=false; show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -326,12 +398,16 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_acad" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_acad"
+                                     [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info=false; show_acad=false;
+                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
 
@@ -341,7 +417,10 @@
                     <ngx-list-formacion-academica (result)="setPercentage_acad($event,0)"></ngx-list-formacion-academica>
                 </nb-tab>
                 <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}">
-                    <ngx-list-idiomas (result)="setPercentage_acad($event,1)" (bridge_create_inscripcion)="create_inscription($event)" inscripcion_id="{{inscripcion_id}}"></ngx-list-idiomas>
+                    <ngx-list-idiomas (result)="setPercentage_acad($event,1)"
+                                      (bridge_create_inscripcion)="create_inscription($event)"
+                                      inscripcion_id="{{this.inscripcion_id}}">
+                    </ngx-list-idiomas>
                 </nb-tab>
             </nb-tabset>
         </nb-card-body>
@@ -353,17 +432,21 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_expe" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_expe"
+                                     [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info=false; show_acad=false;
+                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
             <nb-tabset fullWidth>
                 <nb-tab tabTitle="{{ 'inscripcion.experiencia_laboral' | translate }}" [active]=true>
-                    <ngx-list-experiencia-laboral ente_id="{{info_ente_id}}" (result)="setPercentage_expe($event,0)">
+                    <ngx-list-experiencia-laboral ente_id="{{this.info_ente_id}}" (result)="setPercentage_expe($event,0)">
                     </ngx-list-experiencia-laboral>
                 </nb-tab>
             </nb-tabset>
@@ -375,12 +458,16 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_prod" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_prod"
+                                     [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info=false; show_acad=false;
+                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
@@ -397,17 +484,23 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_docu" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_docu"
+                                     [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info=false; show_acad=false;
+                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.documento_programa' | translate }}">
-                    <ngx-list-documento-programa (result)="setPercentage_docu($event,0)" persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}">
+                    <ngx-list-documento-programa (result)="setPercentage_docu($event,0)"
+                                                 persona_id="{{this.info_persona_id}}"
+                                                 inscripcion_id="{{this.inscripcion_id}}">
                     </ngx-list-documento-programa>
                 </nb-tab>
             </nb-tabset>
@@ -419,17 +512,23 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_desc" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_desc"
+                                     [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info=false; show_acad=false;
+                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.descuento_matricula' | translate }}">
-                    <ngx-list-descuento-academico (result)="setPercentage_desc($event,0)" persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}">
+                    <ngx-list-descuento-academico (result)="setPercentage_desc($event,0)"
+                                                  persona_id="{{this.info_persona_id}}"
+                                                  inscripcion_id="{{this.inscripcion_id}}">
                     </ngx-list-descuento-academico>
                 </nb-tab>
             </nb-tabset>
@@ -441,17 +540,24 @@
         <nb-card-body>
             <div class="row">
                 <div class="col-md-11">
-                    <ngb-progressbar showValue="true" type="success" [value]="percentage_proy" [animated]="true" [height]="'15px'"></ngb-progressbar>
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_proy"
+                                     [animated]="true" [height]="'15px'">
+                    </ngb-progressbar>
                 </div>
                 <div class="col-md-1" align="right">
-                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-            show_desc=false; showRegreso=true; mostrarBarraExterna();">X</button>
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn"
+                            (click)="show_profile=false; show_info=false; show_acad=false;
+                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
                 </div>
             </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.propuesta_grado' | translate }}">
-                    <ngx-crud-propuesta-grado (result)="setPercentage_proy($event,0)" persona_id="{{info_ente_id}}" inscripcion_id="{{inscripcion_id}}" (crear_inscripcion)="create_inscription($event)">
+                    <ngx-crud-propuesta-grado (result)="setPercentage_proy($event,0)"
+                                              persona_id="{{this.info_ente_id}}"
+                                              inscripcion_id="{{this.inscripcion_id}}"
+                                              (crear_inscripcion)="create_inscription($event)">
                     </ngx-crud-propuesta-grado>
                 </nb-tab>
             </nb-tabset>
@@ -462,9 +568,15 @@
 
     <!-- <div [hidden]="!show_profile"> -->
     <div *ngIf="show_profile">
-        <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}" imprimir="{{imprimir}}"></ngx-perfil>
+        <ngx-perfil (url_editar)="perfil_editar($event)"
+                    info_persona_id="{{this.info_persona_id}}"
+                    inscripcion_id="{{this.inscripcion_id}}"
+                    imprimir="{{this.imprimir}}">
+        </ngx-perfil>
     </div>
     <div *ngIf="showRegreso">
-        <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
+        <button (click)="activateTab()" class="btn btn-info btn-sm">
+          <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}
+      </button>
     </div>
 </div>

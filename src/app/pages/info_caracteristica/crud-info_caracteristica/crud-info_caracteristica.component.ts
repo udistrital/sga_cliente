@@ -13,9 +13,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { ListService } from '../../../@core/store/services/list.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../../@core/store/app.state';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 
 @Component({
   selector: 'ngx-crud-info-caracteristica',
@@ -27,13 +29,13 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   info_caracteristica_id: number;
 
   @Input('info_caracteristica_id')
-    set name(info_caracteristica_id: number) {
-      this.info_caracteristica_id = info_caracteristica_id;
-      if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
-       this.info_caracteristica_id.toString() !== '') {
-        //this.loadInfoCaracteristica();
-      }
+  set name(info_caracteristica_id: number) {
+    this.info_caracteristica_id = info_caracteristica_id;
+    if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
+      this.info_caracteristica_id.toString() !== '') {
+      // this.loadInfoCaracteristica();
     }
+  }
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
@@ -47,18 +49,21 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   regInfoCaracteristica: any;
   paisSeleccionado: any;
   departamentoSeleccionado: any;
+  mensaje_discapcidades: boolean = false;
   clean: boolean;
   denied_acces: boolean = false;
-  loading: boolean = true;
+  loading: boolean;
 
   constructor(
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private sgamidService: SgaMidService,
     private userService: UserService,
+    private documentoService: DocumentoService,
     private ubicacionesService: UbicacionService,
     private store: Store<IAppState>,
     private listService: ListService,
+    private nuxeo: NuxeoService,
     private toasterService: ToasterService) {
     this.formInfoCaracteristica = FORM_INFO_CARACTERISTICA;
     this.construirForm();
@@ -70,11 +75,12 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     this.listService.findTipoDiscapacidad();
     this.listService.findFactorRh();
     this.listService.findGrupoSanguineo();
+    this.loadLists();
     this.loadInfoCaracteristica();
   }
 
   construirForm() {
-    //this.formInfoCaracteristica.titulo = this.translate.instant('GLOBAL.info_caracteristica');
+    // this.formInfoCaracteristica.titulo = this.translate.instant('GLOBAL.info_caracteristica');
     this.info_persona_id = this.userService.getPersonaId();
     this.formInfoCaracteristica.btn = this.translate.instant('GLOBAL.guardar');
     for (let i = 0; i < this.formInfoCaracteristica.campos.length; i++) {
@@ -94,6 +100,15 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     } else if (event.nombre === 'DepartamentoNacimiento') {
       this.departamentoSeleccionado = event.valor;
       this.loadOptionsCiudadNacimiento();
+    } else if (event.nombre === 'TipoDiscapacidad') {
+      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar =
+        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
+
+      if (event.valor.length > 1) {
+        this.mensaje_discapcidades = true;
+      } else {
+        this.mensaje_discapcidades = false;
+      }
     }
   }
 
@@ -102,30 +117,31 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoNacimiento: Array<any> = [];
     if (this.paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares?query=LugarPadre__Id:' + this.paisSeleccionado.Id + ',LugarHijo__Activo:true&limit=0').subscribe(
-        res => {
-           if (res !== null) {
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId__Id:' + this.paisSeleccionado.Id +
+        ',LugarHijoId__Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre').subscribe(
+          res => {
+            if (res !== null) {
               consultaHijos = <Array<Lugar>>res;
               for (let i = 0; i < consultaHijos.length; i++) {
-                departamentoNacimiento.push(consultaHijos[i].LugarHijo);
+                departamentoNacimiento.push(consultaHijos[i].LugarHijoId);
               }
             }
             this.loading = false;
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = departamentoNacimiento;
-        },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-            this.translate.instant('GLOBAL.info_caracteristica') + '|' +
-            this.translate.instant('GLOBAL.departamento_nacimiento'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          },
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica') + '|' +
+                this.translate.instant('GLOBAL.departamento_nacimiento'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
-        });
-    } else{
+    } else {
       this.loading = false;
     }
   }
@@ -135,29 +151,30 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const ciudadNacimiento: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares?query=LugarPadre__Id:' + this.departamentoSeleccionado.Id + ',LugarHijo__Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId__Id:' + this.departamentoSeleccionado.Id
+        + ',LugarHijoId__Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
-              ciudadNacimiento.push(consultaHijos[i].LugarHijo);
+              ciudadNacimiento.push(consultaHijos[i].LugarHijoId);
             }
           }
           this.loading = false;
           this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = ciudadNacimiento;
         },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          Swal({
-            type: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-            this.translate.instant('GLOBAL.info_caracteristica') + '|' +
-            this.translate.instant('GLOBAL.ciudad_nacimiento'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.info_caracteristica') + '|' +
+                this.translate.instant('GLOBAL.ciudad_nacimiento'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
-        });
     } else {
       this.loading = false;
     }
@@ -173,7 +190,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     return 0;
   }
 
-   public loadInfoCaracteristica(): void {
+  public loadInfoCaracteristica(): void {
     this.loadLists();
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
@@ -182,28 +199,58 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       this.sgamidService.get('persona/consultar_complementarios/' + this.info_persona_id)
         .subscribe(res => {
           if (res !== null) {
-            this.datosGet = <InfoCaracteristicaGet>res;
-            this.info_info_caracteristica = <InfoCaracteristica>res;
+            this.datosGet = <InfoCaracteristicaGet>res.Response.Body[0].Data;
+            this.info_info_caracteristica = <InfoCaracteristica>res.Response.Body[0].Data;
             this.info_info_caracteristica.Ente = (1 * this.info_caracteristica_id);
             this.info_info_caracteristica.TipoRelacionUbicacionEnte = 1;
             this.info_info_caracteristica.IdLugarEnte = this.datosGet.Lugar.Id;
             this.info_info_caracteristica.PaisNacimiento = this.datosGet.Lugar.Lugar.PAIS;
-            this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.DEPARTAMENTO;
-            this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.CIUDAD;
-            this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = [this.info_info_caracteristica.PaisNacimiento];
+            if (this.datosGet.Lugar.Lugar.DEPARTAMENTO === undefined) {
+              this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.CIUDAD;
+              this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.LOCALIDAD;
+            } else {
+              this.info_info_caracteristica.DepartamentoNacimiento = this.datosGet.Lugar.Lugar.DEPARTAMENTO;
+              this.info_info_caracteristica.Lugar = this.datosGet.Lugar.Lugar.CIUDAD;
+            }
+
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = [this.info_info_caracteristica.DepartamentoNacimiento];
             this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = [this.info_info_caracteristica.Lugar];
+
+            this.formInfoCaracteristica.ComprobanteDiscapacidad = this.datosGet.IdDocumento;
+            const files = []
+            if (this.formInfoCaracteristica.ComprobanteDiscapacidad + '' !== '0') {
+              files.push({ Id: this.formInfoCaracteristica.ComprobanteDiscapacidad, key: 'Documento' });
+            }
+            if (this.formInfoCaracteristica.ComprobanteDiscapacidad !== undefined &&
+              this.formInfoCaracteristica.ComprobanteDiscapacidad !== null &&
+              this.formInfoCaracteristica.ComprobanteDiscapacidad !== 0) {
+              this.nuxeo.getDocumentoById$(files, this.documentoService)
+                .subscribe(res => {
+                  const filesResponse = <any>res;
+                  if (Object.keys(filesResponse).length === files.length) {
+                    this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = filesResponse['Documento'] + '';
+                    this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = filesResponse['Documento'] + '';
+                  }
+                  this.loading = false;
+                },
+                  (error: HttpErrorResponse) => {
+                    this.loading = false;
+                    this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+                  },
+                );
+            }
+
             this.loading = false;
             this.result.emit(1);
-          } else{
+          } else {
             this.loading = false;
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
           }
         },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
-         });
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
+          });
     } else {
       this.info_info_caracteristica = undefined;
       this.clean = !this.clean;
@@ -223,7 +270,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.loading = true;
@@ -233,23 +280,23 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             .subscribe(res => {
               this.loading = false;
               this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
-              this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
-              this.translate.instant('GLOBAL.confirmarActualizar'));
+                this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
+                this.translate.instant('GLOBAL.confirmarActualizar'));
               this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
               this.loadInfoCaracteristica();
               this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab'));
             },
-            (error: HttpErrorResponse) => {
-              this.loading = false;
-              Swal({
-                type: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-                this.translate.instant('GLOBAL.info_caracteristica'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                    this.translate.instant('GLOBAL.info_caracteristica'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
               });
-            });
         } else {
           this.loading = false;
         }
@@ -267,7 +314,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.loading = true;
@@ -289,36 +336,53 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               }
               this.loading = false;
             },
-            (error: HttpErrorResponse) => {
-              this.loading = false;
-              Swal({
-                type: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                });
               });
-            });
-        } else{
+        } else {
           this.loading = false;
         }
-    });
+      });
   }
 
   ngOnInit() {
-    //this.loadInfoCaracteristica();
   }
 
   validarForm(event) {
     if (event.valid) {
-      if (this.info_info_caracteristica === undefined && !this.denied_acces) {
-        this.createInfoCaracteristica(event.data.InfoCaracteristica);
+      if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad !== 'undefined') {
+        const file = [{
+          file: event.data.InfoCaracteristica.ComprobanteDiscapacidad.file,
+          IdDocumento: 42,
+          nombre: 'ComprobanteDiscapacidad',
+        }]
+        this.nuxeo.saveFilesNew(file)
+          .subscribe((file) => {
+            event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = file[0].Id;
+
+            if (this.info_info_caracteristica === undefined && !this.denied_acces) {
+              this.createInfoCaracteristica(event.data.InfoCaracteristica);
+            } else {
+              this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+            }
+          })
       } else {
-        this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+        if (this.info_info_caracteristica === undefined && !this.denied_acces) {
+          this.createInfoCaracteristica(event.data.InfoCaracteristica);
+        } else {
+          this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+        }
       }
     }
   }
 
   setPercentage(event) {
-    setTimeout(()=>{
+    setTimeout(() => {
       this.result.emit(event);
     });
   }
@@ -345,15 +409,15 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   public loadLists() {
-   this.store.select((state) => state).subscribe(
-    (list) => {
-      this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
-      this.formInfoCaracteristica.campos[this.getIndexForm('GrupoEtnico')].opciones = list.listGrupoEtnico[0];
-      this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].opciones = list.listTipoDiscapacidad[0];
-      this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSanguineo')].opciones = list.listGrupoSanguineo[0];
-      this.formInfoCaracteristica.campos[this.getIndexForm('Rh')].opciones = list.listFactorRh[0];
-    },
-   );
+    this.store.select((state) => state).subscribe(
+      (list) => {
+        this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('GrupoEtnico')].opciones = list.listGrupoEtnico[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].opciones = list.listTipoDiscapacidad[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSanguineo')].opciones = list.listGrupoSanguineo[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('Rh')].opciones = list.listFactorRh[0];
+      },
+    );
   }
 
 }

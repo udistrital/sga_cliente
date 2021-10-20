@@ -148,8 +148,8 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
     let consultaHijos: Array<any> = [];
     const departamentoResidencia: Array<any> = [];
     if (this.paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.paisSeleccionado.Id +
-      ',LugarHijo.TipoLugar.CodigoAbreviacion:D,LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + this.paisSeleccionado.Id +
+      ',LugarHijoId.TipoLugarId.CodigoAbreviacion:D,LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -162,8 +162,8 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -180,7 +180,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
     let consultaHijos: Array<any> = [];
     const ciudadResidencia: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.departamentoSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + this.departamentoSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -193,8 +193,8 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -211,7 +211,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
     let consultaHijos: Array<any> = [];
     const localidadResidencia: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.ciudadSeleccionada.Id + ',LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + this.ciudadSeleccionada.Id + ',LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -224,8 +224,8 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -317,8 +317,8 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
           (error: HttpErrorResponse) => {
             this.loading = false;
             if (error.status.toString() !== '200') {
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon:'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -346,7 +346,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
   //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
   //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
   //   };
-  //   Swal(opt)
+  //   Swal.fire(opt)
   //     .then((willDelete) => {
   //       if (willDelete.value) {info_tercero_id
   //         this.loading = true;
@@ -411,8 +411,8 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
   //           },
   //             (error: HttpErrorResponse) => {
   //               this.loading = false;
-  //               Swal({
-  //                 type: 'error',
+  //               Swal.fire({
+  //                 icon:'error',
   //                 title: error.status + '',
   //                 text: this.translate.instant('ERROR.' + error.status),
   //                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -436,7 +436,7 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
        cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
      };
-     Swal(opt)
+     Swal.fire(opt)
        .then((willDelete) => {
          this.loading = true;
          if (willDelete.value) {
@@ -482,8 +482,8 @@ export class CrudInformacionContactoPregradoComponent implements AfterViewInit, 
              },
                (error: HttpErrorResponse) => {
                 this.loading = false;
-                 Swal({
-                   type: 'error',
+                 Swal.fire({
+                   icon:'error',
                    title: error.status + '',
                    text: this.translate.instant('ERROR.' + error.status),
                    footer: this.translate.instant('GLOBAL.crear') + '-' +

@@ -27,7 +27,10 @@
           <!-- Proyecto académico -->
           <mat-form-field style="width: 75%;">
             <mat-label>{{ 'admision.proyecto' | translate }}:</mat-label>
-            <mat-select [formControl]="Campo1Control" [(ngModel)]="proyectos_selected" (selectionChange)="loadInscritos()" [disabled]='selectprograma'>
+            <mat-select [formControl]="Campo1Control"
+                        [(ngModel)]="proyectos_selected"
+                        (selectionChange)="loadInscritos()"
+                        [disabled]='selectprograma'>
               <mat-option *ngFor="let item of proyectos" [value]="item.Id">{{item.Nombre}}</mat-option>
             </mat-select>
             <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'admision.error_proyecto' | translate }}</mat-error>
@@ -36,7 +39,12 @@
 
             <!--Tabla-->
             <nb-card-body>
-              <ng2-smart-table [settings]="settings" [source]="dataSource" (custom)="loadPerfil($event)"></ng2-smart-table>
+              <div style="overflow: auto;">
+              <ng2-smart-table [settings]="settings"
+                               [source]="dataSource"
+                               (custom)="loadPerfil($event)">
+              </ng2-smart-table>
+              </div>
             </nb-card-body>
         </div>
 
@@ -45,7 +53,7 @@
             <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
           </div>
           <div class="text-center">
-            <ngx-perfil (revisar_doc)="revisarDocumento($event)" [en_revision]="true" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}" ></ngx-perfil>
+            <ngx-perfil [en_revision]="true" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}" ></ngx-perfil>
           </div>
         </div>
       </fieldset>

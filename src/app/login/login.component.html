@@ -1,0 +1,19 @@
+<div class="login-container">
+    <div class="login-header">
+        <img src="{{basePathAssets + 'logotipos_aplicativos_svg/ud.svg'}}" class="header-login" alt="logo-udistrital">
+    </div>
+
+    <div class="login">
+        <img src="{{appname?basePathAssets + 'logotipos_aplicativos_svg/' + appname + '.svg':''}}" class="logotipo"
+            alt="{{'logotipo aplicación ' + appname}}" srcset="">
+        <button *ngIf="!isloading" class="button" (click)="login()">Iniciar Sesión </button>
+        <ng-uui-load *ngIf="isloading"></ng-uui-load>
+    </div>
+    <div class="footer-login">
+        <div class="credit">
+            <p>Desarrollado por </p>
+            <p>Oficina Asesora de Sistemas OAS</p>
+        </div>
+    </div>
+
+</div>

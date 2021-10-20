@@ -42,7 +42,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   responsable: string;
 
   @Input()
-  calendarForProject: string = "0";
+  calendarForProject: string = '0';
   @Input()
   projectId: number = 0;
 
@@ -92,7 +92,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
                   this.route.paramMap.subscribe(params => {
                     if (params.get('Id') !== null) {
                       if (Object.keys(element).length !== 0 && element['EventoPadreId'] == null) {
-                        let loadedActivity: Actividad = new Actividad();
+                        const loadedActivity: Actividad = new Actividad();
                         loadedActivity.actividadId = element['actividadId'];
                         loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
                         loadedActivity.Nombre = element['Nombre'];
@@ -106,9 +106,9 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
                         loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
                         loadedProcess.actividades.push(loadedActivity);
                       }
-                    }else{
+                    }else {
                       if (Object.keys(element).length !== 0) {
-                        let loadedActivity: Actividad = new Actividad();
+                        const loadedActivity: Actividad = new Actividad();
                         loadedActivity.actividadId = element['actividadId'];
                         loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
                         loadedActivity.Nombre = element['Nombre'];
@@ -124,8 +124,8 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
                       }
                     }
                   });
-                  
-                  
+
+
                 });
                 this.processes.push(loadedProcess);
               }
@@ -137,7 +137,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.loading = false;
-      }
+      },
     );
   }
 
@@ -152,7 +152,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.calendarForProject != "0") {
+    if (this.calendarForProject != '0') {
       this.loadSelects(this.calendarForProject);
     }
   }
@@ -181,31 +181,34 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           witdh: '20%',
           editable: false,
           filter: false,
-          //valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
+          // valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
         },
         FechaFin: {
           title: this.translate.instant('calendario.fecha_fin'),
           witdh: '20%',
           editable: false,
           filter: false,
-          //valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
+          // valuePrepareFunction: (value) => value = moment(value).format('YYYY-MM-DD'),
         },
         responsables: {
           title: this.translate.instant('calendario.responsable'),
           witdh: '20%',
           editable: false,
           filter: false,
-          valuePrepareFunction: (value) => {
-            if(value != null){
-              this.responsable = "";
+          valuePrepareFunction: value => {
+            if (value != null) {
+              this.responsable = '';
               for (let i = 0; i < value.length; i++) {
-                this.responsable = value[i]['Nombre'] + ", " + this.responsable; 
+                this.responsable = value[i]['Nombre'] + ', ' + this.responsable;
               }
-              if (this.responsable != "") {
-                this.responsable = this.responsable.substring(0,this.responsable.length-2);
+              if (this.responsable != '') {
+                this.responsable = this.responsable.substring(
+                  0,
+                  this.responsable.length - 2,
+                );
               }
               return this.responsable;
-            }else{
+            } else {
               return value;
             }
           },
@@ -215,7 +218,10 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           witdh: '20%',
           editable: false,
           filter: false,
-          valuePrepareFunction: (value: boolean) => value ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo'),
+          valuePrepareFunction: (value: boolean) =>
+            value
+              ? this.translate.instant('GLOBAL.activo')
+              : this.translate.instant('GLOBAL.inactivo'),
         },
       },
       mode: 'external',
@@ -227,20 +233,24 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
         columnTitle: this.translate.instant('GLOBAL.acciones'),
         custom: [
           {
-            name: 'assign',
-            title: '<i class="nb-compose"></i>',
+            name: 'clone',
+            title: '<i class="nb-plus-circled" title="' +
+                this.translate.instant('calendario.tooltip_clonar_actividad') +
+                '"></i>',
           },
           {
             name: 'edit',
-            title: '<i class="nb-edit"></i>',
+            title: '<i class="nb-edit" title="' + this.translate.instant('calendario.tooltip_editar_actividad') + '"></i>',
           },
         ],
       },
       add: {
-        addButtonContent: '<i class="nb-plus"></i>',
+        addButtonContent: '<i class="nb-plus" title="' +
+        this.translate.instant('calendario.tooltip_crear_actividad') +
+        '"></i>',
       },
       noDataMessage: this.translate.instant('calendario.sin_actividades'),
-    }
+    };
   }
 
   onActionActivity(event, process: Proceso) {
@@ -308,7 +318,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
     //   this.calendarActivity.Estado = 'Inactivo'
     // }
     this.calendarioEvento.Id = 0
-    this.calendarioEvento.Nombre = "-" + event.data.Nombre;
+    this.calendarioEvento.Nombre = '-' + event.data.Nombre;
     this.calendarioEvento.Descripcion = event.data.Descripcion;
     // this.calendarioEvento.FechaCreacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
     // this.calendarioEvento.FechaModificacion = moment().format('YYYY-MM-DDTHH:mm') + ':00Z';
@@ -321,14 +331,14 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
 
     this.eventoService.post('calendario_evento', this.calendarioEvento).subscribe(
       response => {
-        if(this.calendarForProject != '0'){
+        if (this.calendarForProject != '0') {
           this.loadSelects(this.calendarForProject);
-        }else{
+        }else {
           this.loadSelects(this.idDetalle);
         }
         this.createActivitiesTable();
         this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_hija_exito'));
-        this.loading = false; 
+        this.loading = false;
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));

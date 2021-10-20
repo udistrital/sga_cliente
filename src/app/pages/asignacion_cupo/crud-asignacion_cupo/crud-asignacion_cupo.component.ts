@@ -207,7 +207,6 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
     this.translate.use(language);
   }
 
-
   getIndexFormPregrado(nombre: String): number {
     for (let index = 0; index < this.formAsigancionCupoPregrado.campos.length; index++) {
       const element = this.formAsigancionCupoPregrado.campos[index];
@@ -236,14 +235,15 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
       const matSelect: MatSelect = event.source;
       matSelect.writeValue(null);
     } else {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: 'ERROR',
         text: this.translate.instant('inscripcion.error_proyecto_ya_existe'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
     }
   }
+
   onDeleteEmphasys(event: any) {
     const findInArray = (value, array, attr) => {
       for (let i = 0; i < array.length; i += 1) {
@@ -256,15 +256,15 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
     this.arr_cupos.splice(findInArray(event.data.Id, this.arr_cupos, 'Id'), 1);
     this.source_emphasys.load(this.arr_cupos);
   }
-  createCupos() {
 
+  createCupos() {
     this.showListadoAspirantes = false;
     this.show_listado = false;
     const opt: any = {
       // title: this.translate.instant('GLOBAL.crear'),
       // text: this.translate.instant('GLOBAL.crear') + '?',
       title: this.translate.instant('GLOBAL.actualizar'),
-      text: this.translate.instant('GLOBAL.actualizar') + '?',
+      text: this.translate.instant('GLOBAL.confirmar_actualizar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -272,7 +272,7 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
@@ -296,8 +296,8 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
               }
             },
               (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
+                Swal.fire({
+                  icon: 'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -413,8 +413,8 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
   //       }
   //     },
   //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
+  //         Swal.fire({
+  //           icon:'error',
   //           title: error.status + '',
   //           text: this.translate.instant('ERROR.' + error.status),
   //           footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -446,8 +446,8 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
                       },
                         (error: HttpErrorResponse) => {
                           this.loading = false;
-                          Swal({
-                            type: 'error',
+                          Swal.fire({
+                            icon:'error',
                             title: error.status + '',
                             text: this.translate.instant('ERROR.' + error.status),
                             footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -463,8 +463,8 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
                       },
                         (error: HttpErrorResponse) => {
                           this.loading = false;
-                          Swal({
-                            type: 'error',
+                          Swal.fire({
+                            icon:'error',
                             title: error.status + '',
                             text: this.translate.instant('ERROR.' + error.status),
                             footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -485,8 +485,8 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -518,8 +518,8 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.actualizar') + '-' +

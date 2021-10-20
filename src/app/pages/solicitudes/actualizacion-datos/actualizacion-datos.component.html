@@ -1,13 +1,30 @@
 <div class="col-12">
-  <nb-card>
+  <nb-card style="margin: 0px; padding: 0px;">
     <nb-card-header>
       {{ 'solicitudes.solicitud_datos' | translate }}
     </nb-card-header>
-    <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-      <ngx-datos-solicitante [solicitante]="solicitante" ></ngx-datos-solicitante>
-      <ngx-dinamicform [normalform]="solicitudForm" [modeloData]="solicitudDatos" (result)="enviarSolicitud($event)"></ngx-dinamicform>
-      <div *ngIf="Admin">
-        <ngx-dinamicform [normalform]="respuestaSolicitudForm" [modeloData]="solicitudRespuesta" (result)="enviarRespuesta($event)"></ngx-dinamicform>
+    <nb-card-body [nbSpinner]="loading"
+                  nbSpinnerStatus="success"
+                  nbSpinnerSize="xxlarge"
+                  nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}"
+                  style="padding: 0px;">
+      <ngx-datos-solicitante [solicitante]="solicitante" style="padding: 0px;"
+                             (cargado)="cargoDatos($event)">
+      </ngx-datos-solicitante>
+
+      <ngx-dinamicform [normalform]="solicitudForm"
+                       [modeloData]="solicitudDatos"
+                       (result)="enviarSolicitud($event)"
+                       (resultAux)="habilitarRevision($event)"
+                       style="padding: 0px;">
+      </ngx-dinamicform>
+
+      <div>
+        <ngx-dinamicform [normalform]="respuestaSolicitudForm"
+                         [modeloData]="solicitudRespuesta"
+                         (result)="enviarRespuesta($event)"
+                         *ngIf="Admin">
+        </ngx-dinamicform>
       </div>
     </nb-card-body>
   </nb-card>

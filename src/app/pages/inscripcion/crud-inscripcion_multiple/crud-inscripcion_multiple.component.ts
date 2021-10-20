@@ -51,7 +51,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   @Input('info_persona_id')
   set persona(info_persona_id: number) {
-    //this.info_persona_id = info_persona_id;
+    // this.info_persona_id = info_persona_id;
     this.info_persona_id = this.userService.getPersonaId()
     this.loadInfoPersona();
   }
@@ -126,42 +126,44 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.createTable();
     });
     sessionStorage.setItem('EstadoInscripcion', 'false');
-    this.persona_id = this.userService.getPersonaId();
-    this.loadInfoInscripcion();
+    this.info_persona_id = this.userService.getPersonaId();
+    if (localStorage.getItem('IdPeriodo') === undefined) {
+      this.loadInfoPersona();
+    }
     this.createTable();
     this.loading = false;
-
   }
 
-  return(){
+  return() {
     this.showInscription = true;
     sessionStorage.setItem('EstadoInscripcion', 'false');
   }
 
   public loadInfoPersona(): void {
     this.loading = true;
+    this.info_persona_id = this.userService.getPersonaId();
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0') {
-      this.sgaMidService.get('persona/consultar_persona/' + this.info_persona_id)
-        .subscribe(res => {
-          if (res !== null) {
-            const temp = <InfoPersona>res;
-            this.info_info_persona = temp;
-            const files = []
-          }
+      this.sgaMidService.get('persona/consultar_persona/' + this.info_persona_id).subscribe((res: any) => {
+        if (res !== null) {
+          const temp = <InfoPersona>res;
+          this.info_info_persona = temp;
+          const files = []
+        }
+        this.loadInfoInscripcion();
+        this.loading = false;
+      },
+        (error: HttpErrorResponse) => {
           this.loading = false;
-        },
-          (error: HttpErrorResponse) => {
-            this.loading = false;
-            Swal({
-              type: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                this.translate.instant('GLOBAL.info_persona'),
-              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.info_persona'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
+        });
     } else {
       this.info_info_persona = undefined
       this.clean = !this.clean;
@@ -214,7 +216,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           type: 'custom',
           onComponentInitFunction: (instance) => {
             instance.save.subscribe((data) => this.descargarReciboPago(data))
-          }
+          },
         },
         Opcion: {
           title: this.translate.instant('inscripcion.opcion'),
@@ -231,17 +233,18 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               if (data.estado === false || data.estado === 'false') {
                 this.abrirPago(data.data);
               } else if (data.estado === true || data.estado === 'true') {
-                this.itemSelect({data: data.data});
+                this.itemSelect({ data: data.data });
               }
             });
-          }
+          },
         },
       },
       mode: 'external',
     }
   }
 
-  loadInscriptionModule(){
+  loadInscriptionModule() {
+    this.inscripcion_id = parseInt(sessionStorage.getItem('IdInscripcion'), 10)
     this.showInscription = false;
   }
 
@@ -249,23 +252,22 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.loading = true;
     sessionStorage.setItem('IdInscripcion', event.data.Id);
     sessionStorage.setItem('ProgramaAcademico', event.data.ProgramaAcademicoId);
-    this.inscripcionService.get('inscripcion/'+event.data.Id).subscribe(
+    this.inscripcionService.get('inscripcion/' + event.data.Id).subscribe(
       (response: any) => {
         sessionStorage.setItem('IdPeriodo', response.PeriodoId);
         sessionStorage.setItem('IdTipoInscripcion', response.TipoInscripcionId.Id);
         sessionStorage.setItem('ProgramaAcademicoId', response.ProgramaAcademicoId);
         const EstadoIns = sessionStorage.getItem('EstadoInscripcion');
-        if (EstadoIns === 'true'){
+        if (EstadoIns === 'true') {
           this.loadInscriptionModule();
         }
         this.loading = false;
       },
       error => {
         this.loading = false;
-      }
+      },
     );
   }
-
 
   useLanguage(language: string) {
     this.translate.use(language);
@@ -281,86 +283,110 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   nivel_load() {
-    //Solo se cargan el nivel de posgrado
+    // Solo se cargan el nivel de posgrado
     this.projectService.get('nivel_formacion?query=Id:2').subscribe(
       (response: NivelFormacion[]) => {
-        this.niveles = response//.filter(nivel => nivel.NivelFormacionPadreId === null)
+        this.niveles = response// .filter(nivel => nivel.NivelFormacionPadreId === null)
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      }
+      },
     );
   }
 
-  loadInfoInscripcion() {
+  async loadInfoInscripcion() {
     this.loading = true;
-    //Función del MID que retorna el estado del recibo
-    var PeriodoActual = localStorage.getItem('IdPeriodo')
-    if (this.persona_id != null && PeriodoActual != null){
-      //if (this.persona_id != null){
-        this.sgaMidService.get('inscripciones/estado_recibos/'+this.persona_id+'/'+PeriodoActual).subscribe(
-          (response: any) => {
-            if (response !== null && response.Response.Code === '400'){
-              this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));
-            } else if (response != null && response.Response.Code === '404'){
-              this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
-            } else {
-              const data = <Array<any>>response.Response.Body[1].Inscripciones;
-              const dataInfo = <Array<any>>[];
-              this.recibos_pendientes = 0;
-              data.forEach(element => {
-                this.projectService.get('proyecto_academico_institucion/'+element.ProgramaAcademicoId).subscribe(
-                  res => {
-                    var auxRecibo = element.ReciboInscripcion;
-                    var NumRecibo =  auxRecibo.split("/",1);
-                    element.ReciboInscripcion = NumRecibo;
-                    element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
-                    element.ProgramaAcademicoId = res.Nombre;
-                    if (element.Estado === 'Pendiente pago') {
-                      this.recibos_pendientes++;
-                    }
-                    this.result.emit(1);
-                    dataInfo.push(element);
-                    this.loading = false;
-                    this.dataSource.load(dataInfo);
-                    this.dataSource.setSort([{field: 'Id', direction: 'desc'}]);
-                    //this.selectedLevel = res.NivelFormacionId.Id
-                    sessionStorage.setItem('nivel', res.NivelFormacionId.Id.toString())
-                    this.loading = false;
-                  },
-                  error => {
-                    this.loading = false;
-                    this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                  },
-                );
+    // Función del MID que retorna el estado del recibo
+    await this.cargarPeriodo()
+    const PeriodoActual = localStorage.getItem('IdPeriodo')
+    if (this.info_persona_id != null && PeriodoActual != null) {
+      // if (this.persona_id != null){
+      await this.sgaMidService.get('inscripciones/estado_recibos/' + this.info_persona_id + '/' + PeriodoActual).subscribe(
+        (response: any) => {
+          if (response !== null && response.Response.Code === '400') {
+            this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));
+          } else if (response != null && response.Response.Code === '404') {
+            this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
+          } else {
+            const data = <Array<any>>response.Response.Body[1].Inscripciones;
+            const dataInfo = <Array<any>>[];
+            this.recibos_pendientes = 0;
+            data.forEach(element => {
+              this.projectService.get('proyecto_academico_institucion/' + element.ProgramaAcademicoId).subscribe(
+                res => {
+                  const auxRecibo = element.ReciboInscripcion;
+                  const NumRecibo = auxRecibo.split('/', 1);
+                  element.ReciboInscripcion = NumRecibo;
+                  element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
+                  element.ProgramaAcademicoId = res.Nombre;
+                  if (element.Estado === 'Pendiente pago') {
+                    this.recibos_pendientes++;
+                  }
+                  this.result.emit(1);
+                  dataInfo.push(element);
+                  this.loading = false;
+                  this.dataSource.load(dataInfo);
+                  this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
+                  // this.selectedLevel = res.NivelFormacionId.Id
+                  sessionStorage.setItem('nivel', res.NivelFormacionId.Id.toString())
+                  this.loading = false;
+                },
+                error => {
+                  this.loading = false;
+                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                },
+              );
             })
-            }
-          }, error => {
-            this.loading = false;
-            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          },
-        );
-      //}
+          }
+        }, error => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        },
+      );
+      // }
     }
     this.loading = false;
   }
 
-  onSelectLevel() {
-    this.loading = true;
-    this.projectService.get('proyecto_academico_institucion?limit=0&fields=Id,Nombre&query=NivelFormacionId.Id:' + this.selectedLevel).subscribe(
-      response => {
-        this.projects = <any[]>response
-        this.loading = false;
-        this.validateProject();
-      },
-      error => {
-        this.loading = false;
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      },
-    );
+  filtrarProyecto(proyecto) {
+    if (this.selectedLevel === proyecto['NivelFormacionId']['Id']) {
+      return true
+    }
+    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
+      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Id'] === this.selectedLevel) {
+        return true
+      }
+    } else {
+      return false
+    }
   }
 
-  nuevaPreinscripcion(){
+  onSelectLevel() {
+    this.loading = true;
+    if (this.selectedLevel === undefined) {
+      this.popUpManager.showInfoToast(this.translate.instant('inscripcion.erro_selec_nivel'))
+      this.loading = false;
+    } else {
+      Swal.fire({
+        icon: 'info',
+        title: this.translate.instant('GLOBAL.info'),
+        text: this.translate.instant('inscripcion.alerta_posgrado'),
+      })
+      this.projectService.get('proyecto_academico_institucion?limit=0&fields=Id,Nombre,NivelFormacionId').subscribe(
+        response => {
+          this.projects = <any[]>response.filter(proyecto => this.filtrarProyecto(proyecto));
+          this.loading = false;
+          this.validateProject();
+        },
+        error => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        },
+      );
+    }
+  }
+
+  nuevaPreinscripcion() {
     this.showNew = true;
   }
 
@@ -384,7 +410,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       response => {
         this.loading = false;
         const r = <any>response;
-        if (response !== null && response !== "{}" && r.Type !== 'error' && r.length != 0) {
+        if (response !== null && response !== '{}' && r.Type !== 'error' && r.length !== 0) {
           const inscripcionP = <Array<any>>response;
           this.inscripcionProjects = inscripcionP;
           this.showProyectoCurricular = true;
@@ -410,42 +436,43 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     } else {
       this.popUpManager.showConfirmAlert(this.translate.instant('inscripcion.seguro_inscribirse')).then(
         async ok => {
-          if(ok.value) {
+          if (ok.value) {
             this.loading = true;
-            if(this.info_info_persona === undefined){
+            if (this.info_info_persona === undefined) {
+              this.info_persona_id = this.userService.getPersonaId();
               this.sgaMidService.get('persona/consultar_persona/' + this.info_persona_id)
-              .subscribe(async res => {
-                if (res !== null) {
-                  const temp = <InfoPersona>res;
-                  this.info_info_persona = temp;
-                  const files = [];
-                  await this.generar_inscripcion();
-                }
-                this.loading = false;
-              },
-                (error: HttpErrorResponse) => {
+                .subscribe(async res => {
+                  if (res !== null) {
+                    const temp = <InfoPersona>res;
+                    this.info_info_persona = temp;
+                    const files = [];
+                    await this.generar_inscripcion();
+                  }
                   this.loading = false;
-                  Swal({
-                    type: 'error',
-                    title: error.status + '',
-                    text: this.translate.instant('ERROR.' + error.status),
-                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                      this.translate.instant('GLOBAL.info_persona'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                },
+                  (error: HttpErrorResponse) => {
+                    this.loading = false;
+                    Swal.fire({
+                      icon: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                        this.translate.instant('GLOBAL.info_persona'),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
                   });
-                });
-            } else{
+            } else {
               await this.generar_inscripcion();
               this.loading = false;
             }
-            
+
           }
-        }
+        },
       );
     }
   }
 
-  generar_inscripcion(){
+  generar_inscripcion() {
     return new Promise((resolve, reject) => {
       const inscripcion = {
         Id: parseInt(this.info_info_persona.NumeroIdentificacion, 10),
@@ -491,9 +518,9 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   (error: HttpErrorResponse) => {
                     this.loading = false;
                     this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
-                  }
+                  },
                 );
-              } 
+              }
             });
             this.loading = false;
           }
@@ -501,20 +528,21 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         error => {
           this.loading = false;
           this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('calendario.sin_proyecto_curricular'));
-        }
+        },
       );
     });
   }
 
   descargarReciboPago(data) {
-    this.itemSelect({data: data})
+    this.itemSelect({ data: data })
     if (this.selectedLevel === undefined) {
-      this.selectedLevel = parseInt(sessionStorage.getItem('nivel'));
+      this.selectedLevel = parseInt(sessionStorage.getItem('nivel'), 10);
     }
     if (this.info_info_persona != null) {
-      this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'))
+      this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
       this.recibo_pago = new ReciboPago();
-      this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + " " + this.info_info_persona.SegundoNombre + " " + this.info_info_persona.PrimerApellido + " " + this.info_info_persona.SegundoApellido;
+      this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + ' ' +
+        this.info_info_persona.SegundoNombre + ' ' + this.info_info_persona.PrimerApellido + ' ' + this.info_info_persona.SegundoApellido;
       this.recibo_pago.DocumentoDelAspirante = this.info_info_persona.NumeroIdentificacion;
       this.recibo_pago.Periodo = this.periodo.Nombre;
       this.recibo_pago.ProyectoAspirante = data['ProgramaAcademicoId']
@@ -536,37 +564,38 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               }
             });
             this.loading = true;
-            this.parametrosService.get('parametro_periodo?query=ParametroId.TipoParametroId.Id:2,ParametroId.CodigoAbreviacion:'+ this.parametro +',PeriodoId.Id:3').subscribe(
-              response => {
-                this.loading = false;
-                const parametro = <any>response['Data'][0];
-                this.recibo_pago.Descripcion = parametro['ParametroId']['Nombre'];
-                var valor = JSON.parse(parametro['Valor']);
-                this.recibo_pago.ValorDerecho = valor['Costo']
-                this.sgaMidService.post('generar_recibo', this.recibo_pago).subscribe(
-                  response => {
-                    this.loading = false;
-                    const reciboData = new Uint8Array(atob(response['Data']).split('').map(char => char.charCodeAt(0)));
-                    this.recibo_generado = window.URL.createObjectURL(new Blob([reciboData], {type: 'application/pdf'}));
-                    window.open(this.recibo_generado);
-                  },
-                  error => {
-                    this.loading = false;
-                    this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
-                  }
-                );
-              },
-              error => {
-                this.loading = false;
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-              },
-            );
+            this.parametrosService.get('parametro_periodo?query=ParametroId.TipoParametroId.Id:2,' +
+              'ParametroId.CodigoAbreviacion:' + this.parametro + ',PeriodoId.Id:3').subscribe(
+                response => {
+                  this.loading = false;
+                  const parametro = <any>response['Data'][0];
+                  this.recibo_pago.Descripcion = parametro['ParametroId']['Nombre'];
+                  const valor = JSON.parse(parametro['Valor']);
+                  this.recibo_pago.ValorDerecho = valor['Costo']
+                  this.sgaMidService.post('generar_recibo', this.recibo_pago).subscribe(
+                    response => {
+                      this.loading = false;
+                      const reciboData = new Uint8Array(atob(response['Data']).split('').map(char => char.charCodeAt(0)));
+                      this.recibo_generado = window.URL.createObjectURL(new Blob([reciboData], { type: 'application/pdf' }));
+                      window.open(this.recibo_generado);
+                    },
+                    error => {
+                      this.loading = false;
+                      this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+                    },
+                  );
+                },
+                error => {
+                  this.loading = false;
+                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                },
+              );
           }
         },
         error => {
           this.loading = false;
           this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('calendario.sin_proyecto_curricular'));
-        }
+        },
       );
     }
   }
@@ -579,7 +608,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     const ventanaPSE = window.open(environment.PSE_SERVICE + url, 'PagosPSE', 'width=600,height=800,resizable,scrollbars,status');
     ventanaPSE.focus();
     const timer = window.setInterval(() => {
-      if(ventanaPSE.closed) {
+      if (ventanaPSE.closed) {
         window.clearInterval(timer);
         this.loadInfoInscripcion();
       }
@@ -598,7 +627,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           const tiposInscripciones = <Array<any>>res;
           this.tipo_inscripciones = tiposInscripciones;
           // this.cargaproyectosacademicos();
-          if (this.tipo_inscripciones.length == 0) {
+          if (this.tipo_inscripciones.length === 0) {
             this.popUpManager.showAlert('', this.translate.instant('calendario.sin_tipo_inscripcion'));
             this.showTipoInscripcion = false;
             this.showProyectoCurricular = false;
@@ -610,12 +639,11 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       },
         (error: HttpErrorResponse) => {
           this.loading = false;
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.programa_academico'),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' + this.translate.instant('GLOBAL.programa_academico'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });
@@ -659,8 +687,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon: 'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -683,7 +711,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-    }; Swal(opt)
+    }; Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         this.sgaMidService.post('inscripciones/post_preinscripcion', this.proyectos_preinscripcion_post)
@@ -692,8 +720,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             this.info_inscripcion = <Inscripcion><unknown>res;
             this.inscripcion_id = this.info_inscripcion.Id;
             this.eventChange.emit(true);
-            Swal({
-              type: 'info',
+            Swal.fire({
+              icon: 'info',
               title: this.translate.instant('GLOBAL.crear'),
               text: this.translate.instant('GLOBAL.inscrito') + ' ' + this.periodo.Nombre,
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -702,8 +730,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -724,14 +752,15 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       const matSelect: MatSelect = event.source;
       matSelect.writeValue(null);
     } else {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon: 'error',
         title: 'ERROR',
         text: this.translate.instant('inscripcion.error_proyecto_ya_existe'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
     }
   }
+
   onDeleteEmphasys(event: any) {
     const findInArray = (value, array, attr) => {
       for (let i = 0; i < array.length; i += 1) {
@@ -767,8 +796,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       }
       this.createInscripcion(5);
     } else {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon: 'error',
         title: 'ERROR',
         text: this.translate.instant('inscripcion.erro_selec'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -776,7 +805,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     }
   }
   // termina
-
 
   setPercentage(event) {
     this.percentage = event;

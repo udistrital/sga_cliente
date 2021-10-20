@@ -4,15 +4,18 @@
             <table class="table-responsive">
                 <thead>
                     <tr><th colspan="2">{{"inscripcion.descuento_matricula" | translate}}</th></tr>
+                    <tr class="subheader">
+                      <th>{{ 'GLOBAL.soporte_documento' | translate }}</th>
+                      <th>{{ 'solicitudes.soporte' | translate }} </th>
+                    </tr>
                 </thead>
                 <tbody *ngIf="info_descuento">
                     <tr *ngFor="let descuento of info_descuento">
-                        <td>
-                            <p>{{descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre}}</p>
-                        </td>
-                        <td *ngIf="descuento.DocumentoId !== undefined">
-                            <p><a [href]=descuento.Soporte download="{{descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre}}.pdf">
-                                <i class="fa fa-eye fa-2x"></i></a></p>
+                        <td> {{descuento.DescuentosDependenciaId?descuento.DescuentosDependenciaId.TipoDescuentoId?descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre:'':''}} </td>
+                        <td *ngIf="descuento.Soporte !== undefined">
+                            <button mat-button type="button" (click)="pivotDocument.updateDocument(descuento.Soporte )">
+                                <i class="nb-search" title={{variable}}></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

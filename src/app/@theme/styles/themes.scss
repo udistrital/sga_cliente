@@ -205,15 +205,15 @@ $nb-themes: nb-register-theme((
   color-fg-text: #000000,
   color-fg-highlight: #7ac273,
   color-white: #ffffff,
-  color-primary: rgb(73, 153, 26),
-  color-success: #64d9ff,
-  color-info: #a83121,
-  color-warning: #ba4a3a,
-  color-danger: rgb(180, 56, 39),
+  color-primary: #03678F,
+  color-success: #03678F,
+  color-info: #86B0D2,
+  color-warning: #E6D877,
+  color-danger: #C86885,
 
   // btn
 
-  btn-success-bg: #64d9ff,
+  btn-success-bg: #03678F,
   // Card
  card-text-color: #23d123,
  card-fg: #ffffff,
@@ -234,7 +234,7 @@ $nb-themes: nb-register-theme((
 
   
   // footer
-  footer-fg: #64c9ff,
+  footer-fg: var(--primary),
   footer-bg: #ffffff,
   footer-height: auto,
  // app wise variables for each theme
@@ -272,7 +272,7 @@ $nb-themes: nb-register-theme((
   margin: 1rem,
   layout-padding: 2rem 0.2rem 3rem,
 
-  sidebar-bg:  #4fb9ff,//#ffffff,
+  sidebar-bg:  var(--primary),//#ffffff,
   sidebar-fg: #000000,
   sidebar-shadow: none,
   sidebar-padding: 0.3rem,
@@ -283,14 +283,14 @@ $nb-themes: nb-register-theme((
   menu-icon-color: #ffffff,
  
 
-  menu-bg:  #4fb9ff,
+  menu-bg:  var(--primary),
   menu-fg: #ffffff,
-  menu-active-bg: #4fb9ff,
+  menu-active-bg: var(--primary),
   menu-active-fg: #ffffff,
   menu-font-size:0.975rem,
-  menu-item-separator: #4fb9ff,
+  menu-item-separator: var(--primary),
 
-  menu-submenu-bg: #4fb9ff,
+  menu-submenu-bg: var(--primary),
   menu-submenu-fg: #ffffff,
   menu-submenu-active-bg:  #ffffff,
   menu-submenu-active-fg: #000000,

@@ -11,4 +11,6 @@ export * from './layout-direction-switcher/layout-direction-switcher.component'
 export * from './theme-switcher/themes-switcher-list/themes-switcher-list.component'
 export * from './loading/loading.component';
 export * from './listado/listado.component';
+export * from './new-tercero/new-tercero.component';
+export * from './download-file-nuxeo/download-file-nuxeo.component';
 

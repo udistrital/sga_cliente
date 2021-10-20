@@ -101,7 +101,7 @@ export class CrudCriterioIcfesComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
@@ -133,8 +133,8 @@ export class CrudCriterioIcfesComponent implements OnInit {
                     }
                   },
                     (error: HttpErrorResponse) => {
-                      Swal({
-                        type: 'error',
+                      Swal.fire({
+                        icon:'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
                         footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -164,8 +164,8 @@ export class CrudCriterioIcfesComponent implements OnInit {
     this.info_criterio_icfes.Area4 + this.info_criterio_icfes.Area5
     console.info(this.porcentaje_subcriterio_total)
     if (this.porcentaje_subcriterio_total >= 101 || this.porcentaje_subcriterio_total < 100) {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         text: this.translate.instant('GLOBAL.error_porcentaje_total'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });

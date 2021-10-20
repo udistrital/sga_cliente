@@ -135,8 +135,8 @@ export class ListEventoComponent implements OnInit {
     this.loadData();
   },
     (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -161,8 +161,8 @@ export class ListEventoComponent implements OnInit {
           this.info_evento = <any>res;
           this.source.load(data);
         } else {
-           Swal({
-            type: 'error',
+           Swal.fire({
+            icon:'error',
             title: '404',
             text: this.translate.instant('ERROR.404'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -170,8 +170,8 @@ export class ListEventoComponent implements OnInit {
         }
       }
     }, (error: HttpErrorResponse) => {
-      Swal({
-        type: 'error',
+      Swal.fire({
+        icon:'error',
         title: error.status + '',
         text: this.translate.instant('ERROR.' + error.status),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -207,7 +207,7 @@ export class ListEventoComponent implements OnInit {
         dangerMode: true,
         showCancelButton: true,
       };
-      Swal(opt)
+      Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.sgaMidService.delete('evento', event.data.CalendarioEvento).subscribe((res: any) => {
@@ -221,8 +221,8 @@ export class ListEventoComponent implements OnInit {
               }
             }
            }, (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -238,7 +238,7 @@ export class ListEventoComponent implements OnInit {
         icon: 'warning',
         buttons: false,
       };
-      Swal(opt);
+      Swal.fire(opt);
     }
     /*
     else {

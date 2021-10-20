@@ -1,3 +1,5 @@
+import { environment } from "../../../../environments/environment"
+
 export let FORM_EXPERIENCIA_LABORAL = {
   tipo_formulario: 'mini',
   alertas: true,
@@ -7,7 +9,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
   campos: [
     {
       etiqueta: 'input',
-      claseGrid: 'col-lg-11 col-md-11 col-sm-11 col-xs-11',
+      claseGrid: 'col-lg-10 col-md-10 col-sm-9 col-xs-8',
       nombre: 'Nit',
       label_i18n: 'nit',
       placeholder_i18n: 'nit',
@@ -16,10 +18,11 @@ export let FORM_EXPERIENCIA_LABORAL = {
     },
     {
       etiqueta: 'button',
-      claseGrid: 'col-lg-1 col-md-1 col-sm-1 col-xs-1',
+      claseGrid: 'col-lg-2 col-md-2 col-sm-3 col-xs-4',
       nombre: 'BusquedaBoton',
       claseBoton: 'btn btn-primary btn-sm',
       icono: 'fa fa-search',
+      label_i18n: 'buscar',
     },
     {
       etiqueta: 'select',
@@ -128,11 +131,14 @@ export let FORM_EXPERIENCIA_LABORAL = {
       opciones: [],
     },
     {
-      etiqueta: 'select',
+      etiqueta: 'autocomplete',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'Cargo',
       label_i18n: 'cargo',
       placeholder_i18n: 'cargo',
+      path: environment.EXPERIENCIA_SERVICE,
+      query: "cargo/?limit=0&query=Activo:true,Nombre__icontains:ROLE_TEXT_HERE&order=asc&sortby=Nombre&fields=Id,Nombre",
+      keyToFilter: 'ROLE_TEXT_HERE',
       requerido: true,
       tipo: 'text',
       key: 'Nombre',

@@ -63,27 +63,6 @@ export class ListFormacionAcademicaComponent implements OnInit {
 
   cargarCampos() {
     this.settings = {
-      add: {
-        addButtonContent: '<i class="nb-plus"></i>',
-        createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
-        saveButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
-        confirmDelete: true,
-      },
-      actions: {
-        columnTitle: '',
-        add: false,
-        edit: true,
-        delete: true,
-      },
-      mode: 'external',
       columns: {
         Nit: {
           title: this.translate.instant('GLOBAL.nit'),
@@ -128,6 +107,23 @@ export class ListFormacionAcademicaComponent implements OnInit {
           },
         },
       },
+      mode: 'external',
+      actions: {
+        add: false,
+        edit: true,
+        delete: true,
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+      },
+      edit: {
+        editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('formacion_academica.tooltip_editar') + '"></i>',
+        saveButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash" title="' + this.translate.instant('formacion_academica.tooltip_eliminar') + '"></i>',
+        confirmDelete: true,
+      },
     };
   }
 
@@ -139,23 +135,23 @@ export class ListFormacionAcademicaComponent implements OnInit {
     this.loading = true;
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
     .subscribe(response => {
-      if(response !== null && response.Response.Code === '404'){
+      if (response !== null && response.Response.Code === '404') {
         this.loading = false;
         this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-      } else if(response !== null && response.Response.Code === '200'){
+      } else if (response !== null && response.Response.Code === '200') {
         const data = <Array<any>>response.Response.Body[0];
         const dataInfo = <Array<any>>[];
         data.forEach(element => {
           const FechaI = element.FechaInicio;
           const FechaF = element.FechaFinalizacion;
-          element.FechaInicio = FechaI.substring(0,2) + "-" + FechaI.substring(2,4) + "-" + FechaI.substring(4,8);
-          element.FechaFinalizacion = FechaF.substring(0,2) + "-" + FechaF.substring(2,4) + "-" + FechaF.substring(4,8);
+          element.FechaInicio = FechaI.substring(0, 2) + '-' + FechaI.substring(2, 4) + '-' + FechaI.substring(4, 8);
+          element.FechaFinalizacion = FechaF.substring(0, 2) + '-' + FechaF.substring(2, 4) + '-' + FechaF.substring(4, 8);
           dataInfo.push(element);
           this.getPercentage(1);
           this.source.load(dataInfo);
         });
         this.loading = false;
-      } else{
+      } else {
         this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
       }
@@ -182,7 +178,6 @@ export class ListFormacionAcademicaComponent implements OnInit {
 
   onCreate(event): void {
     this.uid = 0;
-
   }
 
   selectTab(event): void {
@@ -212,7 +207,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
@@ -227,8 +222,8 @@ export class ListFormacionAcademicaComponent implements OnInit {
           },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.eliminar') + '-' +

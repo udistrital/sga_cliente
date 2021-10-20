@@ -17,6 +17,7 @@ import { Genero } from '../data/models/informacion/genero';
 import { Titulacion } from '../data/models/inscripcion/titulacion';
 import { TipoIdentificacion } from '../data/models/informacion/tipo_identificacion';
 import { TipoProyecto } from '../data/models/investigacion/tipo_proyecto';
+import { TipoTercero } from '../data/models/terceros/tipo_tercero';
 import { GrupoInvestigacion } from '../data/models/investigacion_cidc/grupo_investigacion';
 import { PeriodoAcademico } from '../data/models/periodo/periodo_academico';
 import { InfoComplementaria } from '../data/models/terceros/info_complementaria';
@@ -58,6 +59,7 @@ export interface IAppState {
   listTipoInscripcionUniversidad: InfoComplementaria[],
   listTipoDedicacion: InfoComplementaria[],
   listTipoVinculacion: InfoComplementaria[],
+  listTipoTercero: TipoTercero[],
   listCargo: InfoComplementaria[],
   listTipoOrganizacion: InfoComplementaria[],
   listDocumentoPrograma: any[],

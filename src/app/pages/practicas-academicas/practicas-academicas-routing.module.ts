@@ -15,11 +15,11 @@ const routes: Routes = [{
             component: NuevaSolicitudComponent,
         },
         {
-            path: 'lista-practicas',
+            path: 'lista-practicas/:process',
             component: ListPracticasAcademicasComponent,
         },
         {
-            path: 'detalle-practica-academica',
+            path: 'detalle-practica-academica/:id/:process',
             component: DetallePracticaAcademicaComponent,
         }
     ]

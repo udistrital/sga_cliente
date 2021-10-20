@@ -10,6 +10,7 @@ import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { ExperienciaService } from '../../../@core/data/experiencia.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../../@core/data/users.service';
+import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-experiencia-laboral',
@@ -35,6 +36,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   organizacion: any;
   soporte: any;
   documentosSoporte = [];
+  variable = this.translate.instant('solicitudes.tooltip_ver_registro')
 
   constructor(
     private translate: TranslateService,
@@ -45,12 +47,13 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
+    private pivotDocument:PivotDocument,
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     //this.persona_id = this.users.getPersonaId();
-    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
-    this.loadData();
+  //  this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
+  //  this.loadData();
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -60,7 +63,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   useLanguage(language: string) {
     this.translate.use(language);
   }
-  
+
   public editar(): void {
     this.url_editar.emit(true);
   }
@@ -75,21 +78,22 @@ export class ViewExperienciaLaboralComponent implements OnInit {
           this.info_experiencia_laboral = this.data;
           for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
             if (this.info_experiencia_laboral[i].Soporte + '' !== '0') {
-              soportes.push({ Id: this.info_experiencia_laboral[i].Soporte, key: 'DocumentoExp' + i });
+              soportes.push({ Id: this.info_experiencia_laboral[i].Soporte, key: 'DocumentoExp' + this.info_experiencia_laboral[i].Soporte });
             }
           }
-          this.nuxeoService.getDocumentoById$(soportes, this.documentoService)
-            .subscribe(response => {
-              this.documentosSoporte = <Array<any>>response;
-              if (Object.values(this.documentosSoporte).length === this.info_experiencia_laboral.length) {
-                for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
-                  this.info_experiencia_laboral[i].Soporte = this.cleanURL(this.documentosSoporte['DocumentoExp' + i]);
+          this.nuxeoService.getFilesNew(soportes)
+          .subscribe(response => {
+                this.documentosSoporte = <Array<any>>response;
+                console.log(this.documentosSoporte);
+                if (Object.values(this.documentosSoporte).length === this.info_experiencia_laboral.length) {
+                  for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
+                    this.info_experiencia_laboral[i].Soporte = this.documentosSoporte[i];
+                  }
                 }
-              }
             },
               (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
+                Swal.fire({
+                  icon:'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -99,8 +103,8 @@ export class ViewExperienciaLaboralComponent implements OnInit {
                 });
               });
         } if (response.Data.Code === "400") {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             text: this.translate.instant('ERROR 400'),
             footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -108,14 +112,18 @@ export class ViewExperienciaLaboralComponent implements OnInit {
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon:'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       });
+  }
+
+  verDocumento(document) {
+    this.pivotDocument.updateDocument(document);
   }
 
   ngOnInit() {

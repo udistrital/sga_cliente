@@ -813,7 +813,7 @@ Sbi.sdk.apply(Sbi.sdk.services, {
         }
         
         if(this.services[serviceName] === undefined) {
-            swal("", 'ERROR: Service [' + + '] does not exist', 'error');
+            Swal.fire("", 'ERROR: Service [' + + '] does not exist', 'error');
         } else {
             urlStr = '';
             urlStr = this.baseUrl.protocol + '://' + this.baseUrl.host + ":" + this.baseUrl.port + '/' + this.baseUrl.contextPath + '/' + this.baseUrl.controllerPath;
@@ -869,7 +869,7 @@ Sbi.sdk.apply(Sbi.sdk.api, {
 		var documentUrl = null;
 		
 		if(config.documentId === undefined && config.documentLabel === undefined) {
-			swal("",'ERRORE: at least one beetween documentId and documentLabel attributes must be specifyed','error');
+			Swal.fire("",'ERRORE: at least one beetween documentId and documentLabel attributes must be specifyed','error');
 			return null;
 		}
 		

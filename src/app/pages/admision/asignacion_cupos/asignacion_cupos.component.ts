@@ -152,46 +152,35 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   nivel_load() {
     this.projectService.get('nivel_formacion?limit=0').subscribe(
       (response: NivelFormacion[]) => {
-        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null && nivel.Nombre == 'Posgrado')
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null && nivel.Nombre === 'Posgrado')
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      }
+      },
     );
   }
 
-  // loadProyectos() {
-  //   // window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
-  //   this.selectprograma = false;
-  //   this.oikosService.get('dependencia?query=DependenciaTipoDependencia.TipoDependenciaId.Id:' + Number(this.selectednivel) +
-  //   ',Activo:true&limit=0')
-  //     .subscribe(res => {
-  //       const r = <any>res;
-  //       if (res !== null && r.Type !== 'error') {
-  //         const ProyectosConsultados = <Array<any>>res;
-  //           this.proyectos = ProyectosConsultados;
-  //       }
-  //     },
-  //       (error: HttpErrorResponse) => {
-  //         Swal({
-  //           type: 'error',
-  //           title: error.status + '',
-  //           text: this.translate.instant('ERROR.' + error.status),
-  //           footer: this.translate.instant('GLOBAL.cargar') + '-' +
-  //             this.translate.instant('GLOBAL.programa_academico'),
-  //           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-  //         });
-  //       });
-  // }
+  filtrarProyecto(proyecto) {
+    if (this.selectednivel === proyecto['NivelFormacionId']['Id']) {
+      return true
+    }
+    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
+      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Id'] === this.selectednivel) {
+        return true
+      }
+    } else {
+      return false
+    }
+  }
 
   loadProyectos() {
     this.selectprograma = false;
-    if (this.selectednivel !== NaN){
-      this.projectService.get('proyecto_academico_institucion?query=NivelFormacionId:'+Number(this.selectednivel)+'&limit=0').subscribe(
+    if (this.selectednivel !== NaN) {
+      this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
-          if (response !== null || response !== undefined){
-            this.proyectos = <any>response;
-          }
+          this.proyectos = <any[]>response.filter(
+            proyecto => this.filtrarProyecto(proyecto),
+          );
         },
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -205,7 +194,7 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   }
 
   perfil_editar(event): void {
-    console.info(event)
+    // console.info(event)
     switch (event) {
       case 'info_cupos':
         this.show_cupos = true;
@@ -217,18 +206,18 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
     }
   }
 
-  validarNvel(){
+  validarNvel() {
     this.esPosgrado = false;
-    this.projectService.get('nivel_formacion?query=Id:'+Number(this.selectednivel)).subscribe(
+    this.projectService.get('nivel_formacion?query=Id:' + Number(this.selectednivel)).subscribe(
       (response: NivelFormacion[]) => {
         this.nivelSelect = response.filter(nivel => nivel.NivelFormacionPadreId === null)
-        if(this.nivelSelect[0].Nombre == 'Posgrado'){
+        if (this.nivelSelect[0].Nombre === 'Posgrado') {
           this.esPosgrado = true;
         }
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      }
+      },
     );
   }
 

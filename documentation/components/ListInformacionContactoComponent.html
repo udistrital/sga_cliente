@@ -2664,7 +2664,7 @@ export class ListInformacionContactoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
 
       if (willDelete.value) {

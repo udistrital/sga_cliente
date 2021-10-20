@@ -2550,7 +2550,7 @@ export class CrudTipoDiscapacidadComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
       if (willDelete.value) {
         this.info_tipo_discapacidad &#x3D; &lt;TipoDiscapacidad&gt;tipoDiscapacidad;
@@ -2573,7 +2573,7 @@ export class CrudTipoDiscapacidadComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
     .then((willDelete) &#x3D;&gt; {
       if (willDelete.value) {
         this.info_tipo_discapacidad &#x3D; &lt;TipoDiscapacidad&gt;tipoDiscapacidad;

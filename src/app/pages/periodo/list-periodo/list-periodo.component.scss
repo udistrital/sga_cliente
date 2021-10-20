@@ -1,9 +1,10 @@
+@import '../../../@theme/styles/themes';
 :host /deep/ .nb-theme-default ng2-smart-table table tr td {
   font-size: 0.85rem;
 }
 
 .mat-button {
-  background-color:#00a2ff;
+  background-color: nb-theme(color-primary);
   color: #fff;
 }
 
@@ -12,6 +13,6 @@
   color: #fff;
 }
 
-.item1 {
-  margin:  20px;
+.mat-form-field {
+  display: contents;
 }

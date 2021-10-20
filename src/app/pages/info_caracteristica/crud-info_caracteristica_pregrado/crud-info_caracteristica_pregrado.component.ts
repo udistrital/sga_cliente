@@ -100,8 +100,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoNacimiento: Array<any> = [];
     if (this.paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.paisSeleccionado.Id +
-      ',LugarHijo.TipoLugar.CodigoAbreviacion:D,LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + this.paisSeleccionado.Id +
+      ',LugarHijoId.TipoLugarId.CodigoAbreviacion:D,LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -114,8 +114,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -132,7 +132,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const ciudadNacimiento: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadre.Id:' + this.departamentoSeleccionado.Id + ',LugarHijo.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + this.departamentoSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -145,8 +145,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -200,8 +200,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon:'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -228,7 +228,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   //     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
   //     cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
   //   };
-  //   Swal(opt)
+  //   Swal.fire(opt)
   //     .then((willDelete) => {
   //       if (willDelete.value) {
   //         this.loading = true;
@@ -244,8 +244,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   //           },
   //             (error: HttpErrorResponse) => {
   //               this.loading = false;
-  //               Swal({
-  //                 type: 'error',
+  //               Swal.fire({
+  //                 icon:'error',
   //                 title: error.status + '',
   //                 text: this.translate.instant('ERROR.' + error.status),
   //                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -268,7 +268,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
@@ -289,8 +289,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
             },
               (error: HttpErrorResponse) => {
                 this.loading = false;
-                Swal({
-                  type: 'error',
+                Swal.fire({
+                  icon:'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.crear') + '-' +

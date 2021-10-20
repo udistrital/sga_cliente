@@ -7,6 +7,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { Documento } from '../../../@core/data/models/documento/documento';
+import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-documento-programa',
@@ -23,6 +24,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   programaDocumento: any;
   dataSop: Array<any>;
   docSoporte = [];
+  variable = this.translate.instant('GLOBAL.tooltip_ver_registro')
 
   @Input('persona_id')
   set info(info: number) {
@@ -47,6 +49,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
     private popUpManager: PopUpManager,
+    private pivotDocument: PivotDocument,
     private userService: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -66,46 +69,49 @@ export class ViewDocumentoProgramaComponent implements OnInit {
 
   loadData(): void {
     this.info_documento_programa = <any>[];
-    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId:' + this.inscripcion_id + ',DocumentoProgramaId.ProgramaId:' + this.programa_id).subscribe(
-      (response: any[]) => {
-        if (response !== null && Object.keys(response[0]).length > 0 && response[0] != '{}') {
-          this.info_documento_programa = response;
-          this.info_documento_programa.forEach(doc => {
-            this.docSoporte.push({ Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId })
+    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId:' +
+      this.inscripcion_id + ',DocumentoProgramaId.ProgramaId:' + this.programa_id).subscribe(
+        (response: any[]) => {
+          if (response !== null && Object.keys(response[0]).length > 0 && response[0] != '{}') {
+            this.info_documento_programa = response;
+            this.info_documento_programa.forEach(doc => {
+              this.docSoporte.push({ Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId })
 
-            this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
-              (documento: Documento) => {
-                let metadatos = JSON.parse(documento.Metadatos);
-                doc.aprobado = metadatos.aprobado;
-                if (metadatos.aprobado){
-                  doc.estadoObservacion = 'Aprobado';
-                  doc.observacion = '';
-                }else{
-                  doc.estadoObservacion = 'No Aprobado';
-                  doc.observacion = metadatos.observacion;
-                }
-              });
-
-          });
-          this.nuxeoService.getDocumentoById$(this.docSoporte, this.documentoService).subscribe(
-            (res: any) => {
-              if (Object.keys(res).length > 0) {
-                this.info_documento_programa.forEach(doc => {
-                  doc.Documento = this.cleanURL(res['DocumentoPrograma' + doc.DocumentoId]);
+              this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
+                (documento: Documento) => {
+                  if (documento.Metadatos !== '') {
+                    let metadatos = JSON.parse(documento.Metadatos);
+                    doc.aprobado = metadatos.aprobado;
+                    if (metadatos.aprobado) {
+                      doc.estadoObservacion = 'Aprobado';
+                      doc.observacion = metadatos.observacion;
+                    } else {
+                      doc.estadoObservacion = 'No Aprobado';
+                      doc.observacion = metadatos.observacion;
+                    }
+                  }
                 });
-              }
-            },
-            error => {
-              this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
-            }
-          );
-        } else {
-          this.info_documento_programa = null
-        }
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
-      }
+
+            });
+            this.nuxeoService.getDocumentoById$(this.docSoporte, this.documentoService).subscribe(
+              (res: any) => {
+                if (Object.keys(res).length > 0) {
+                  this.info_documento_programa.forEach(doc => {
+                    doc.Documento = this.cleanURL(res['DocumentoPrograma' + doc.DocumentoId]);
+                  });
+                }
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
+              },
+            );
+          } else {
+            this.info_documento_programa = null
+          }
+        },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
+        },
     );
   }
 
@@ -117,6 +123,6 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   }
 
   abrirDocumento(documento: any) {
-    this.revisar_doc.emit(documento)
+    this.pivotDocument.updateDocument(documento);
   }
 }

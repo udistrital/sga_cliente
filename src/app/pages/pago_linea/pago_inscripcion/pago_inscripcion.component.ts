@@ -116,7 +116,7 @@ export class PagoInscripcionComponent implements OnInit {
                     .subscribe(enlace => {
                       const enlace_pago = <any>enlace
                       enlace_pago.crypto = enlace_pago.crypto.replace(/\\/g, '');
-                      Swal({
+                      Swal.fire({
                         showConfirmButton: false,
                         width: 850,
                         html: '<object type="text/html" data=' + enlace_pago.crypto + ''
@@ -159,8 +159,8 @@ export class PagoInscripcionComponent implements OnInit {
                                                   }
                                                 },
                                                   (error: HttpErrorResponse) => {
-                                                    Swal({
-                                                      type: 'error',
+                                                    Swal.fire({
+                                                      icon:'error',
                                                       title: error.status + '',
                                                       text: this.translate.instant('ERROR.' + error.status),
                                                       footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -171,8 +171,8 @@ export class PagoInscripcionComponent implements OnInit {
                                             }
                                           },
                                             (error: HttpErrorResponse) => {
-                                              Swal({
-                                                type: 'error',
+                                              Swal.fire({
+                                                icon:'error',
                                                 title: error.status + '',
                                                 text: this.translate.instant('ERROR.' + error.status),
                                                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -183,8 +183,8 @@ export class PagoInscripcionComponent implements OnInit {
                                         }
                                       },
                                         (error: HttpErrorResponse) => {
-                                          Swal({
-                                            type: 'error',
+                                          Swal.fire({
+                                            icon:'error',
                                             title: error.status + '',
                                             text: this.translate.instant('ERROR.' + error.status),
                                             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -195,8 +195,8 @@ export class PagoInscripcionComponent implements OnInit {
                                     }
                                   },
                                     (error: HttpErrorResponse) => {
-                                      Swal({
-                                        type: 'error',
+                                      Swal.fire({
+                                        icon:'error',
                                         title: error.status + '',
                                         text: this.translate.instant('ERROR.' + error.status),
                                         footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -206,8 +206,8 @@ export class PagoInscripcionComponent implements OnInit {
                                     });
                               } else {
                                 if (consulta_dato.estado !== 'NO PAGO') {
-                                  Swal({
-                                    type: 'error',
+                                  Swal.fire({
+                                    icon:'error',
                                     title: this.translate.instant('GLOBAL.error'),
                                     text: this.translate.instant('ERROR.' + consulta_dato.estado),
                                     footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -218,8 +218,8 @@ export class PagoInscripcionComponent implements OnInit {
                               }
                             },
                               (error: HttpErrorResponse) => {
-                                Swal({
-                                  type: 'error',
+                                Swal.fire({
+                                  icon:'error',
                                   title: error.status + '',
                                   text: this.translate.instant('ERROR.' + error.status),
                                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -231,8 +231,8 @@ export class PagoInscripcionComponent implements OnInit {
                       });
                     },
                       (error: HttpErrorResponse) => {
-                        Swal({
-                          type: 'error',
+                        Swal.fire({
+                          icon:'error',
                           title: error.status + '',
                           text: this.translate.instant('ERROR.' + error.status),
                           footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -243,8 +243,8 @@ export class PagoInscripcionComponent implements OnInit {
                 }
               },
                 (error: HttpErrorResponse) => {
-                  Swal({
-                    type: 'error',
+                  Swal.fire({
+                    icon:'error',
                     title: error.status + '',
                     text: this.translate.instant('ERROR.' + error.status),
                     footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -255,8 +255,8 @@ export class PagoInscripcionComponent implements OnInit {
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -323,8 +323,8 @@ export class PagoInscripcionComponent implements OnInit {
                                 }
                               },
                                 (error: HttpErrorResponse) => {
-                                  Swal({
-                                    type: 'error',
+                                  Swal.fire({
+                                    icon:'error',
                                     title: error.status + '',
                                     text: this.translate.instant('ERROR.' + error.status),
                                     footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -335,8 +335,8 @@ export class PagoInscripcionComponent implements OnInit {
                           }
                         },
                           (error: HttpErrorResponse) => {
-                            Swal({
-                              type: 'error',
+                            Swal.fire({
+                              icon:'error',
                               title: error.status + '',
                               text: this.translate.instant('ERROR.' + error.status),
                               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -347,8 +347,8 @@ export class PagoInscripcionComponent implements OnInit {
                     }
                   },
                     (error: HttpErrorResponse) => {
-                      Swal({
-                        type: 'error',
+                      Swal.fire({
+                        icon:'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
                         footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -359,8 +359,8 @@ export class PagoInscripcionComponent implements OnInit {
               }
             },
               (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
+                Swal.fire({
+                  icon:'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -371,8 +371,8 @@ export class PagoInscripcionComponent implements OnInit {
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -472,8 +472,8 @@ export class PagoInscripcionComponent implements OnInit {
                                                                   }
                                                                 },
                                                                   (error: HttpErrorResponse) => {
-                                                                    Swal({
-                                                                      type: 'error',
+                                                                    Swal.fire({
+                                                                      icon:'error',
                                                                       title: error.status + '',
                                                                       text: this.translate.instant('ERROR.' + error.status),
                                                                       footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -484,8 +484,8 @@ export class PagoInscripcionComponent implements OnInit {
                                                             }
                                                           },
                                                             (error: HttpErrorResponse) => {
-                                                              Swal({
-                                                                type: 'error',
+                                                              Swal.fire({
+                                                                icon:'error',
                                                                 title: error.status + '',
                                                                 text: this.translate.instant('ERROR.' + error.status),
                                                                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -496,8 +496,8 @@ export class PagoInscripcionComponent implements OnInit {
                                                         }
                                                       },
                                                         (error: HttpErrorResponse) => {
-                                                          Swal({
-                                                            type: 'error',
+                                                          Swal.fire({
+                                                            icon:'error',
                                                             title: error.status + '',
                                                             text: this.translate.instant('ERROR.' + error.status),
                                                             footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -533,8 +533,8 @@ export class PagoInscripcionComponent implements OnInit {
                                                       Secuencia: info_recibo.Referencia,
                                                     };
                                                   } else {
-                                                    Swal({
-                                                      type: 'error',
+                                                    Swal.fire({
+                                                      icon:'error',
                                                       title: this.translate.instant('GLOBAL.error'),
                                                       text: this.translate.instant('ERROR.' + consulta_dato.estado),
                                                       footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -544,8 +544,8 @@ export class PagoInscripcionComponent implements OnInit {
                                                   }
                                                 },
                                                   (error: HttpErrorResponse) => {
-                                                    Swal({
-                                                      type: 'error',
+                                                    Swal.fire({
+                                                      icon:'error',
                                                       title: error.status + '',
                                                       text: this.translate.instant('ERROR.' + error.status),
                                                       footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -556,8 +556,8 @@ export class PagoInscripcionComponent implements OnInit {
                                             }
                                           },
                                             (error: HttpErrorResponse) => {
-                                              Swal({
-                                                type: 'error',
+                                              Swal.fire({
+                                                icon:'error',
                                                 title: error.status + '',
                                                 text: this.translate.instant('ERROR.' + error.status),
                                                 footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -568,8 +568,8 @@ export class PagoInscripcionComponent implements OnInit {
                                       }
                                     },
                                       (error: HttpErrorResponse) => {
-                                        Swal({
-                                          type: 'error',
+                                        Swal.fire({
+                                          icon:'error',
                                           title: error.status + '',
                                           text: this.translate.instant('ERROR.' + error.status),
                                           footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -580,8 +580,8 @@ export class PagoInscripcionComponent implements OnInit {
                                 }
                               },
                                 (error: HttpErrorResponse) => {
-                                  Swal({
-                                    type: 'error',
+                                  Swal.fire({
+                                    icon:'error',
                                     title: error.status + '',
                                     text: this.translate.instant('ERROR.' + error.status),
                                     footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -592,8 +592,8 @@ export class PagoInscripcionComponent implements OnInit {
                           }
                         },
                           (error: HttpErrorResponse) => {
-                            Swal({
-                              type: 'error',
+                            Swal.fire({
+                              icon:'error',
                               title: error.status + '',
                               text: this.translate.instant('ERROR.' + error.status),
                               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -604,8 +604,8 @@ export class PagoInscripcionComponent implements OnInit {
                     }
                   },
                     (error: HttpErrorResponse) => {
-                      Swal({
-                        type: 'error',
+                      Swal.fire({
+                        icon:'error',
                         title: error.status + '',
                         text: this.translate.instant('ERROR.' + error.status),
                         footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -616,8 +616,8 @@ export class PagoInscripcionComponent implements OnInit {
               }
             },
               (error: HttpErrorResponse) => {
-                Swal({
-                  type: 'error',
+                Swal.fire({
+                  icon:'error',
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -630,8 +630,8 @@ export class PagoInscripcionComponent implements OnInit {
         }
       },
         (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon:'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -653,7 +653,7 @@ export class PagoInscripcionComponent implements OnInit {
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
       };
-      Swal(opt)
+      Swal.fire(opt)
         .then((willDelete) => {
           this.loading = true;
           if (willDelete.value) {
@@ -712,8 +712,8 @@ export class PagoInscripcionComponent implements OnInit {
                                                 }
                                               },
                                                 (error: HttpErrorResponse) => {
-                                                  Swal({
-                                                    type: 'error',
+                                                  Swal.fire({
+                                                    icon:'error',
                                                     title: error.status + '',
                                                     text: this.translate.instant('ERROR.' + error.status),
                                                     footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -724,8 +724,8 @@ export class PagoInscripcionComponent implements OnInit {
                                           }
                                         },
                                           (error: HttpErrorResponse) => {
-                                            Swal({
-                                              type: 'error',
+                                            Swal.fire({
+                                              icon:'error',
                                               title: error.status + '',
                                               text: this.translate.instant('ERROR.' + error.status),
                                               footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -734,8 +734,8 @@ export class PagoInscripcionComponent implements OnInit {
                                             });
                                           });
                                       } else {
-                                        Swal({
-                                          type: 'error',
+                                        Swal.fire({
+                                          icon:'error',
                                           title: this.translate.instant('GLOBAL.error'),
                                           text: this.translate.instant('ERROR.' + pago_dato.estado),
                                           footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -745,8 +745,8 @@ export class PagoInscripcionComponent implements OnInit {
                                       }
                                     },
                                       (error: HttpErrorResponse) => {
-                                        Swal({
-                                          type: 'error',
+                                        Swal.fire({
+                                          icon:'error',
                                           title: error.status + '',
                                           text: this.translate.instant('ERROR.' + error.status),
                                           footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -757,8 +757,8 @@ export class PagoInscripcionComponent implements OnInit {
                                   }
                                 },
                                   (error: HttpErrorResponse) => {
-                                    Swal({
-                                      type: 'error',
+                                    Swal.fire({
+                                      icon:'error',
                                       title: error.status + '',
                                       text: this.translate.instant('ERROR.' + error.status),
                                       footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -769,8 +769,8 @@ export class PagoInscripcionComponent implements OnInit {
                             }
                           },
                             (error: HttpErrorResponse) => {
-                              Swal({
-                                type: 'error',
+                              Swal.fire({
+                                icon:'error',
                                 title: error.status + '',
                                 text: this.translate.instant('ERROR.' + error.status),
                                 footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -781,8 +781,8 @@ export class PagoInscripcionComponent implements OnInit {
                       }
                     },
                       (error: HttpErrorResponse) => {
-                        Swal({
-                          type: 'error',
+                        Swal.fire({
+                          icon:'error',
                           title: error.status + '',
                           text: this.translate.instant('ERROR.' + error.status),
                           footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -793,8 +793,8 @@ export class PagoInscripcionComponent implements OnInit {
                 }
               },
                 (error: HttpErrorResponse) => {
-                  Swal({
-                    type: 'error',
+                  Swal.fire({
+                    icon:'error',
                     title: error.status + '',
                     text: this.translate.instant('ERROR.' + error.status),
                     footer: this.translate.instant('GLOBAL.cargar') + '-' +

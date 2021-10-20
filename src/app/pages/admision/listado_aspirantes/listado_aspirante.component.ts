@@ -18,6 +18,8 @@ import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/ni
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
+import { AnyService } from '../../../@core/data/any.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -28,7 +30,6 @@ import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_ins
 export class ListadoAspiranteComponent implements OnInit, OnChanges {
 
   config: ToasterConfig;
-
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
@@ -66,6 +67,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   Aspirantes = [];
   cuposProyecto: number;
 
+  estados = [];
+
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
@@ -80,7 +83,31 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     private inscripcionService: InscripcionService,
     private tercerosService: TercerosService,
     private toasterService: ToasterService,
-    private evaluacionService: EvaluacionInscripcionService,) {
+    private anyService: AnyService,
+    private evaluacionService: EvaluacionInscripcionService) {
+
+
+    this.translate = translate;
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+
+    });
+    this.cargarPeriodo();
+    this.nivel_load();
+    this.show_listado = false;
+    this.inscripcionService.get('estado_inscripcion')
+      .subscribe((state) => {
+        this.estados = state.map((e) => {
+          return {
+            value: e.Id,
+            title: e.Nombre
+          }
+        })
+        console.log(this.estados);
+        this.createTable()
+      })
+  }
+
+  createTable() {
     this.settings_emphasys = {
       delete: {
         deleteButtonContent: '<i class="nb-trash"></i>',
@@ -88,11 +115,11 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       },
       actions: {
         delete: false,
-        edit: false,
+        edit: true,
         add: false,
         position: 'right',
       },
-      mode: 'external',
+      mode: 'internal',
       columns: {
         // TipoDocumento: {
         //   title: this.translate.instant('GLOBAL.Tipo'),
@@ -103,6 +130,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         //   width: '2%',
         // },
         NumeroDocumento: {
+          editable: false,
           title: this.translate.instant('GLOBAL.Documento'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
@@ -111,6 +139,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           width: '10%',
         },
         NombreAspirante: {
+          editable: false,
           title: this.translate.instant('GLOBAL.Nombre'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
@@ -119,7 +148,10 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           width: '50%',
         },
         NotaFinal: {
+          editable: false,
           title: this.translate.instant('GLOBAL.Puntaje'),
+          sort: true,
+          sortDirection: 'desc',
           // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
@@ -127,6 +159,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           width: '5%',
         },
         TipoInscripcionId: {
+          editable: false,
           title: this.translate.instant('GLOBAL.TipoInscripcion'),
           // type: 'string;',
           valuePrepareFunction: (value) => {
@@ -136,21 +169,29 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         },
         EstadoInscripcionId: {
           title: this.translate.instant('GLOBAL.Estado'),
-          // type: 'string;',
-          valuePrepareFunction: (value) => {
-            return value.Nombre;
+          valuePrepareFunction: (cell, row, test) => {
+            var t = test.column.editor.config.list.find(x => x.value === cell.Id)
+            if (t)
+              return t.title
           },
-          width: '10%',
+          filter: false,
+          width: '250px',
+          type: 'html',
+          editor: {
+            type: 'list',
+            config: {
+              list: this.estados
+            },
+          }
         },
       },
+      edit: {
+        confirmSave: true,
+        editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('experiencia_laboral.tooltip_editar') + '"></i>',
+        saveButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
+      },
     };
-
-    this.translate = translate;
-    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-    });
-    this.cargarPeriodo();
-    this.nivel_load();
-    this.show_listado = false;
   }
 
 
@@ -178,11 +219,11 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   nivel_load() {
     this.projectService.get('nivel_formacion?limit=0').subscribe(
       (response: NivelFormacion[]) => {
-        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null && nivel.Nombre == 'Posgrado')
+        this.niveles = response.filter(nivel => nivel.NivelFormacionPadreId === null && nivel.Nombre === 'Posgrado')
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      }
+      },
     );
   }
 
@@ -213,16 +254,61 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.mostrartabla();
   }
 
+  filtrarProyecto(proyecto) {
+    if (this.selectednivel === proyecto['NivelFormacionId']['Id']) {
+      return true
+    }
+    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
+      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Id'] === this.selectednivel) {
+        return true
+      }
+    } else {
+      return false
+    }
+  }
+
+  onSaveConfirm(event) {
+    const newState = this.estados.filter((data) => (data.value === parseInt(event.newData.EstadoInscripcionId, 10)))[0];
+    Swal.fire({
+      title: this.translate.instant('GLOBAL.' + 'confirmar_actualizar'),
+      text: newState.title,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: this.translate.instant('GLOBAL.' + 'actualizar')
+    }).then((result) => {
+      if (result.value) {
+        const updateState = {
+          ...event.newData.Inscripcion,
+          ...{ EstadoInscripcionId: { Id: newState.value } }
+        }
+        this.inscripcionService.put('inscripcion', updateState)
+          .subscribe((response) => {
+            console.log(response);
+            Swal.fire(
+              this.translate.instant('GLOBAL.' + 'operacion_exitosa'),
+              '',
+              'success'
+            )
+            this.mostrartabla()
+            event.confirm.resolve(event.newData);
+          })
+
+      } else {
+        event.confirm.reject();
+      }
+    });
+  }
+
   loadProyectos() {
     this.show_listado = false;
     this.selectprograma = false;
     this.proyectos = [];
     if (this.selectednivel !== NaN && this.selectednivel !== undefined) {
-      this.projectService.get('proyecto_academico_institucion?query=NivelFormacionId:' + Number(this.selectednivel) + '&limit=0').subscribe(
+      this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
-          if (response !== null || response !== undefined) {
-            this.proyectos = <any>response;
-          }
+          this.proyectos = <any[]>response.filter(
+            proyecto => this.filtrarProyecto(proyecto),
+          );
         },
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -253,8 +339,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   //             }
   //           },
   //             (error: HttpErrorResponse) => {
-  //               Swal({
-  //                 type: 'error',
+  //               Swal.fire({
+  //                 icon:'error',
   //                 title: error.status + '',
   //                 text: this.translate.instant('ERROR.' + error.status),
   //                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -269,33 +355,32 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.source_emphasys = new LocalDataSource();
     this.Aspirantes = [];
 
-    this.inscripcionService.get('inscripcion?query=ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=Id&order=asc').subscribe(
+    this.inscripcionService.get('inscripcion?query=ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=NotaFinal&order=desc').subscribe(
       (res: any) => {
         const r = <any>res
         if (res !== '[{}]') {
           if (r !== null && r.Type !== 'error') {
             this.loading = false;
-            r.sort((puntaje_mayor, puntaje_menor) => puntaje_menor.NotaFinal - puntaje_mayor.NotaFinal)
             const data = <Array<any>>r;
             // this.source_emphasys.load(data);
             data.forEach(element => {
               if (element.PersonaId != undefined) {
                 this.tercerosService.get('tercero/' + element.PersonaId).subscribe(
                   (res: any) => {
-                    var aspiranteAux = {
+                    let aspiranteAux = {
+                      Inscripcion: element,
                       NumeroDocumento: res.Id,
                       NombreAspirante: res.NombreCompleto,
                       NotaFinal: element.NotaFinal,
                       TipoInscripcionId: element.TipoInscripcionId,
-                      EstadoInscripcionId: element.EstadoInscripcionId
+                      EstadoInscripcionId: element.EstadoInscripcionId,
                     }
                     this.Aspirantes.push(aspiranteAux);
                     this.source_emphasys.load(this.Aspirantes);
                   },
                   error => {
                     this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-
-                  }
+                  },
                 );
               }
             });
@@ -309,8 +394,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         }
       },
       (error: HttpErrorResponse) => {
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -319,7 +404,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         });
       });
   }
-
 
 
   ngOnInit() {

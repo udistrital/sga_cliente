@@ -72,7 +72,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
     this.popUpManager.showConfirmAlert(
       this.data.editActivity === undefined ?
       this.translate.instant('calendario.seguro_registrar_actividad') :
-      this.translate.instant('calendario.seguro_modificar_actividad')
+      this.translate.instant('calendario.seguro_modificar_actividad'),
     ).then((ok) => {
       if (ok.value) {
         this.activity = this.activityForm.value;
@@ -160,10 +160,13 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
         edit: false,
       },
       delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
+        deleteButtonContent:
+          '<i class="nb-trash" title="' +
+          this.translate.instant('calendario.tooltip_eliminar') +
+          '" ></i>',
       },
       hideSubHeader: true,
-    }
+    };
   }
 
   deletePublic(event: any) {
@@ -219,7 +222,7 @@ export class ActividadCalendarioAcademicoComponent implements OnInit {
             },
           );
         }
-      }
+      },
     );
   }
 

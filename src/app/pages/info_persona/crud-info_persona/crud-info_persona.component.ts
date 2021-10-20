@@ -100,22 +100,26 @@ export class CrudInfoPersonaComponent implements OnInit {
     return 0;
   }
 
-  public loadInfoPersona(): void {
-    if (this.info_persona_id !== undefined && this.info_persona_id !== 0 && this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0'){
-      this.sgamidService.get('persona/consultar_persona/' + this.info_persona_id)
+  public async loadInfoPersona() {
+    if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
+      this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0') {
+      await this.sgamidService.get('persona/consultar_persona/' + this.info_persona_id)
         .subscribe(res => {
-          if (res !== null && res.Id != undefined) {
+          if (res !== null && res.Id !== undefined) {
             const temp = <InfoPersona>res;
             this.info_info_persona = temp;
             const files = []
-            this.formInfoPersona.btn = "";
+            this.formInfoPersona.btn = '';
+            this.formInfoPersona.campos[this.getIndexForm('Genero')].valor = temp.Genero;
+            this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].valor = temp.EstadoCivil;
+            this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].valor = temp.TipoIdentificacion;
           }
           this.loading = false;
         },
         (error: HttpErrorResponse) => {
           this.loading = false;
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -142,7 +146,7 @@ export class CrudInfoPersonaComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         if (willDelete.value) {
           this.loading = true;
@@ -157,6 +161,7 @@ export class CrudInfoPersonaComponent implements OnInit {
             const r = <any>res
             if (r !== null && r.Type !== 'error') {
               window.localStorage.setItem('ente', r.Id);
+              window.localStorage.setItem('persona_id', r.Id);
               this.info_persona_id = r.Id;
               sessionStorage.setItem('IdTercero', String(this.info_persona_id));
               this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.persona_creado'));
@@ -168,8 +173,8 @@ export class CrudInfoPersonaComponent implements OnInit {
           },
           (error: HttpErrorResponse) => {
             this.loading = false;
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon: 'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('GLOBAL.crear') + '-' +
@@ -193,14 +198,14 @@ export class CrudInfoPersonaComponent implements OnInit {
         if (this.info_inscripcion.AceptaTerminos !== true) {
          this.validarTerminos(event);
         } else {
-          this.formInfoPersona.btn = "";
+          this.formInfoPersona.btn = '';
         }
       }
     }
   }
 
   validarTerminos(event) {
-    Swal({
+    Swal.fire({
       title: this.translate.instant('GLOBAL.terminos_datos'),
       width: 800,
       allowOutsideClick: true,
@@ -215,11 +220,11 @@ export class CrudInfoPersonaComponent implements OnInit {
           if (this.info_info_persona === undefined) {
             this.createInfoPersona(event.data.InfoPersona);
           } else {
-            this.formInfoPersona.btn = "";
+            this.formInfoPersona.btn = '';
           }
         } else if (result.value === 0) {
-          Swal({
-            type: 'error',
+          Swal.fire({
+            icon: 'error',
             text: this.translate.instant('GLOBAL.rechazo_terminos'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });

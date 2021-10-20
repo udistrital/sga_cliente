@@ -68,27 +68,6 @@ export class ListDescuentoAcademicoComponent implements OnInit {
 
   cargarCampos() {
     this.settings = {
-      actions: {
-        columnTitle: '',
-        add: false,
-        edit: true,
-        delete: false,
-      },
-      add: {
-        addButtonContent: '<i class="nb-plus"></i>',
-        createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
-        saveButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
-        confirmDelete: true,
-      },
-      mode: 'external',
       columns: {
         DescuentosDependenciaId: {
           title: this.translate.instant('GLOBAL.tipo_descuento_matricula'),
@@ -97,6 +76,17 @@ export class ListDescuentoAcademicoComponent implements OnInit {
             return value.TipoDescuentoId.Nombre;
           },
         },
+      },
+      mode: 'external',
+      actions: {
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+        add: false,
+        edit: true,
+        delete: false,
+      },
+      edit: {
+        editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
       },
     };
   }
@@ -114,7 +104,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     //     this.programa = 16;
     this.loading = true;
         this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' +
-          'PersonaId='+Number(window.localStorage.getItem('persona_id'))+'&DependenciaId='+Number(window.sessionStorage.getItem('ProgramaAcademicoId'))+'&PeriodoId='+Number(window.sessionStorage.getItem('IdPeriodo')))
+          'PersonaId=' + Number(window.localStorage.getItem('persona_id')) + '&DependenciaId=' +
+          Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
           .subscribe((result: any) => {
             const r = <any>result.Data.Body[1];
                 if (result !== null && result.Data.Code == '404') {
@@ -128,8 +119,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
           },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -161,8 +152,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         //                   }
         //                 },
         //                   (error: HttpErrorResponse) => {
-        //                     Swal({
-        //                       type: 'error',
+        //                     Swal.fire({
+        //                       icon:'error',
         //                       title: error.status + '',
         //                       text: this.translate.instant('ERROR.' + error.status),
         //                       footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -175,8 +166,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         //           }
         //         },
         //           (error: HttpErrorResponse) => {
-        //             Swal({
-        //               type: 'error',
+        //             Swal.fire({
+        //               icon:'error',
         //               title: error.status + '',
         //               text: this.translate.instant('ERROR.' + error.status),
         //               footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -188,8 +179,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         //     });
         //   },
         //     (error: HttpErrorResponse) => {
-        //       Swal({
-        //         type: 'error',
+        //       Swal.fire({
+        //         icon:'error',
         //         title: error.status + '',
         //         text: this.translate.instant('ERROR.' + error.status),
         //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -200,8 +191,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         //     });
       // },
       //   (error: HttpErrorResponse) => {
-      //     Swal({
-      //       type: 'error',
+      //     Swal.fire({
+      //       icon:'error',
       //       title: error.status + '',
       //       text: this.translate.instant('ERROR.' + error.status),
       //       footer: this.translate.instant('GLOBAL.cargar') + '-' +
@@ -234,7 +225,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
@@ -249,8 +240,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
           },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.eliminar') + '-' +

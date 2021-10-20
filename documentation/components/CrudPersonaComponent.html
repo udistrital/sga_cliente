@@ -2743,7 +2743,7 @@ export class CrudPersonaComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) &#x3D;&gt; {
         if (willDelete.value) {
           this.info_persona &#x3D; &lt;Persona&gt;persona;
@@ -2766,7 +2766,7 @@ export class CrudPersonaComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) &#x3D;&gt; {
         if (willDelete.value) {
           this.info_persona &#x3D; &lt;Persona&gt;persona;

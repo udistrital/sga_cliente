@@ -4,13 +4,13 @@ import { NivelIdioma } from './nivel_idioma';
 
 export class InfoIdioma {
   Id: number;
-  Persona: number;
-  Idioma: Idioma;
+  TercerosId: number;
+  IdiomaId: Idioma;
   Nativo: boolean;
   SeleccionExamen: boolean;
-  NivelEscribe: NivelIdioma;
-  NivelEscucha: NivelIdioma;
-  NivelHabla: NivelIdioma;
-  NivelLee: NivelIdioma;
-  ClasificacionNivelIdioma: ClasificacionNivelIdioma;
+  NivelEscribeId: NivelIdioma;
+  NivelEscuchaId: NivelIdioma;
+  NivelHablaId: NivelIdioma;
+  NivelLeeId: NivelIdioma;
+  NivelId: ClasificacionNivelIdioma;
 }

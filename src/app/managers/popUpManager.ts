@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
+import { NbToastrConfig } from '@nebular/theme/components/toastr/toastr-config';
+import { NbToastStatus } from '@nebular/theme/components/toastr/model';
 
 
 @Injectable({
@@ -20,8 +22,12 @@ export class PopUpManager {
     }
 
     public showErrorToast(message: string) {
-        const status: any = 'danger';
-        this.toast.show(message, this.translate.instant('GLOBAL.error'), { status });
+        let status: any = 'danger';
+        if (message === 'ERROR.200') {
+            this.toast.show('', this.translate.instant('GLOBAL.no_informacion_registrada'),{status: NbToastStatus.WARNING});
+        } else {
+            this.toast.show(message, this.translate.instant('GLOBAL.error'), { status });
+        }
     }
 
     public showInfoToast(message: string) {
@@ -31,8 +37,8 @@ export class PopUpManager {
     }
 
     public showAlert(status, text) {
-        Swal({
-            type: 'info',
+        Swal.fire({
+            icon: 'info',
             title: status,
             text: text,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -40,8 +46,8 @@ export class PopUpManager {
     }
 
     public showSuccessAlert(text) {
-        Swal({
-            type: 'success',
+        Swal.fire({
+            icon: 'success',
             title: this.translate.instant('GLOBAL.operacion_exitosa'),
             text: text,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -49,15 +55,15 @@ export class PopUpManager {
     }
 
     public showErrorAlert(text) {
-        Swal({
-            type: 'error',
+        Swal.fire({
+            icon: 'error',
             title: this.translate.instant('GLOBAL.error'),
             text: text,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
     }
 
-    public showConfirmAlert(text, title=this.translate.instant('GLOBAL.atencion')): Promise<any> {
+    public showConfirmAlert(text, title = this.translate.instant('GLOBAL.atencion')): Promise<any> {
         const options: any = {
             title: title,
             text: text,
@@ -66,6 +72,6 @@ export class PopUpManager {
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
         };
-        return Swal(options);
+        return Swal.fire(options);
     }
 }

@@ -74,7 +74,7 @@ export class CrudIdiomasComponent implements OnInit {
     this.listService.findNivelIdioma();
     this.listService.findClasificacionNivelIdioma();
     this.loadLists();
-    
+
     this.persona_id = this.users.getPersonaId();
   }
 
@@ -120,8 +120,8 @@ export class CrudIdiomasComponent implements OnInit {
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon: 'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('idiomas.error_cargar_informacion_idiomas'),
@@ -131,66 +131,72 @@ export class CrudIdiomasComponent implements OnInit {
     }
   }
 
-  createInfoIdioma(infoIdioma: any) {
+  createInfoIdioma(infoIdioma: any): void {
     this.popUpManager.showConfirmAlert(
-      this.translate.instant('idiomas.seguro_continuar_registrar'), 
-      this.translate.instant('GLOBAL.crear')
+      this.translate.instant('idiomas.seguro_continuar_registrar'),
+      this.translate.instant('GLOBAL.crear'),
     ).then((willDelete) => {
-        if (willDelete.value) {
-          this.info_idioma = <InfoIdioma>infoIdioma;
-          this.info_idioma.Persona = this.persona_id || 1;
-          if (this.info_idioma.Nativo === true && this.info_idioma.Nativo === this.info_idioma.SeleccionExamen) {
-            this.popUpManager.showErrorAlert(this.translate.instant('idiomas.error_nativo_examen'));
-          } else if (this.info_idioma.SeleccionExamen === true && this.idioma_examen !== undefined) {
-            // this.info_idioma.Idioma.Id !== this.idioma_examen) {
-            this.popUpManager.showErrorAlert(this.translate.instant('idiomas.doble_examen'))
-          } else {
-            this.idiomaService.post('conocimiento_idioma', this.info_idioma)
-              .subscribe(res => {
-                const r = <any>res;
-                if (r !== null && r.Type !== 'error') {
-                  if (this.info_idioma.SeleccionExamen === true) {
-                    const examen = {
-                      Idioma: this.info_idioma.Idioma.Id,
-                      Activo: true,
-                      InscripcionId: {Id: Number(this.inscripcion_id)},
-                    };
-                    this.inscripcionService.post('inscripcion_posgrado/', examen)
-                      .subscribe(resexamen => {
-                        const rex = <any>resexamen;
-                        if (rex !== null && rex.Type !== 'error') {
-                          this.idioma_examen = this.info_idioma.Idioma.Id;
-                          this.eventChange.emit(true);
-                          this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_registrada'));
-                          this.info_idioma_id = 0;
-                          this.info_idioma = undefined;
-                          this.clean = !this.clean;
-                        }
-                      },
+      if (willDelete.value) {
+        this.info_idioma = <InfoIdioma>infoIdioma;
+        if (this.info_idioma.Nativo != true) {
+          this.info_idioma.Nativo = false
+        }
+        if (this.info_idioma.SeleccionExamen != true) {
+          this.info_idioma.SeleccionExamen = false
+        }
+        this.info_idioma.TercerosId = this.persona_id || 1;
+        if (this.info_idioma.Nativo === true && this.info_idioma.Nativo === this.info_idioma.SeleccionExamen) {
+          this.popUpManager.showErrorAlert(this.translate.instant('idiomas.error_nativo_examen'));
+        } else if (this.info_idioma.SeleccionExamen === true && this.idioma_examen !== undefined) {
+          // this.info_idioma.Idioma.Id !== this.idioma_examen) {
+          this.popUpManager.showErrorAlert(this.translate.instant('idiomas.doble_examen'))
+        } else {
+          this.idiomaService.post('conocimiento_idioma', this.info_idioma)
+            .subscribe(res => {
+              const r = <any>res;
+              if (r !== null && r.Type !== 'error') {
+                if (this.info_idioma.SeleccionExamen === true) {
+                  const examen = {
+                    Idioma: this.info_idioma.IdiomaId.Id,
+                    Activo: true,
+                    InscripcionId: { Id: Number(this.inscripcion_id) },
+                  };
+                  this.inscripcionService.post('inscripcion_posgrado/', examen)
+                    .subscribe(resexamen => {
+                      const rex = <any>resexamen;
+                      if (rex !== null && rex.Type !== 'error') {
+                        this.idioma_examen = this.info_idioma.IdiomaId.Id;
+                        this.eventChange.emit(true);
+                        this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_registrada'));
+                        this.info_idioma_id = 0;
+                        this.info_idioma = undefined;
+                        this.clean = !this.clean;
+                      }
+                    },
                       (error: HttpErrorResponse) => {
-                        Swal({
-                          type: 'error',
+                        Swal.fire({
+                          icon: 'error',
                           title: error.status + '',
                           text: this.translate.instant('ERROR.' + error.status),
                           footer: this.translate.instant('idiomas.informacion_idioma_no_registrada'),
                           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                         });
                       });
-                  } else {
-                    this.eventChange.emit(true);
-                    this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_registrada'));
-                    this.info_idioma_id = 0;
-                    this.info_idioma = undefined;
-                    this.clean = !this.clean;
-                  }
+                } else {
+                  this.eventChange.emit(true);
+                  this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_registrada'));
+                  this.info_idioma_id = 0;
+                  this.info_idioma = undefined;
+                  this.clean = !this.clean;
                 }
-              },
+              }
+            },
               (error: HttpErrorResponse) => {
                 this.popUpManager.showErrorAlert(this.translate.instant('idiomas.informacion_idioma_no_registrada'))
               });
-          }
         }
-      });
+      }
+    });
   }
 
   public loadInfoIdioma(): void {
@@ -200,12 +206,12 @@ export class CrudIdiomasComponent implements OnInit {
         .subscribe(res => {
           if (res !== null) {
             this.info_idioma = <InfoIdioma>res[0];
-            this.idioma = this.info_idioma.Idioma.Id;
+            this.idioma = this.info_idioma.IdiomaId.Id;
           }
         },
           (error: HttpErrorResponse) => {
-            Swal({
-              type: 'error',
+            Swal.fire({
+              icon: 'error',
               title: error.status + '',
               text: this.translate.instant('ERROR.' + error.status),
               footer: this.translate.instant('idiomas.error_cargar_informacion_idiomas'),
@@ -222,7 +228,7 @@ export class CrudIdiomasComponent implements OnInit {
   updateInfoIdioma(infoIdioma: InfoIdioma) {
     this.popUpManager.showConfirmAlert(
       this.translate.instant('idiomas.seguro_actualizar_idioma'),
-      this.translate.instant('GLOBAL.actualizar')
+      this.translate.instant('GLOBAL.actualizar'),
     ).then(willUpdate => {
       if (willUpdate.value) {
         this.info_idioma = infoIdioma;
@@ -256,10 +262,10 @@ export class CrudIdiomasComponent implements OnInit {
       } else {
         if (this.info_idioma_id !== undefined && this.info_idioma_id !== 0 &&
           this.info_idioma_id.toString() !== '') {
-            this.updateInfoIdioma(this.formData)
-          } else {
-            this.createInfoIdioma(this.formData);
-          }
+          this.updateInfoIdioma(this.formData)
+        } else {
+          this.createInfoIdioma(this.formData);
+        }
       }
       this.result.emit(event);
     }
@@ -268,14 +274,14 @@ export class CrudIdiomasComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
-       this.formInfoIdioma.campos[this.getIndexForm('Idioma')].opciones = list.listIdioma[0];
-       this.formInfoIdioma.campos[this.getIndexForm('NivelEscribe')].opciones = list.listNivelIdioma[0];
-       this.formInfoIdioma.campos[this.getIndexForm('NivelEscucha')].opciones = list.listNivelIdioma[0];
-       this.formInfoIdioma.campos[this.getIndexForm('NivelHabla')].opciones = list.listNivelIdioma[0];
-       this.formInfoIdioma.campos[this.getIndexForm('NivelLee')].opciones = list.listNivelIdioma[0];
-       this.formInfoIdioma.campos[this.getIndexForm('ClasificacionNivelIdioma')].opciones = list.listClasificacionNivelIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('IdiomaId')].opciones = list.listIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('NivelEscribeId')].opciones = list.listNivelIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('NivelEscuchaId')].opciones = list.listNivelIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('NivelHablaId')].opciones = list.listNivelIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('NivelLeeId')].opciones = list.listNivelIdioma[0];
+        this.formInfoIdioma.campos[this.getIndexForm('NivelId')].opciones = list.listClasificacionNivelIdioma[0];
       },
-   );
- }
+    );
+  }
 
 }

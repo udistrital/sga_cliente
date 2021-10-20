@@ -8,6 +8,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { ImplicitAutenticationService } from './../@core/utils/implicit_autentication.service';
+import { environment } from '../../environments/environment';
+import { NbSidebarService } from '@nebular/theme';
+import { RouteConfigLoadStart, Router } from '@angular/router';
 
 
 @Component({
@@ -23,131 +26,131 @@ import { ImplicitAutenticationService } from './../@core/utils/implicit_autentic
 export class PagesComponent implements OnInit {
 
   public menu = [];
-  public results = [];
-  object: MenuItem;
   hijo: MenuItem;
   hijo2: MenuItem;
   rol: String;
   dataMenu: any;
   roles: any;
-  private autenticacion= new ImplicitAutenticationService;
 
   constructor(
     public menuws: MenuService,
-    private translate: TranslateService) { 
+    private autenticacion: ImplicitAutenticationService,
+    protected sidebarService: NbSidebarService,
+    private router: Router,
+    private translate: TranslateService) {
+    router.events.subscribe((event) => {
+      if (event instanceof RouteConfigLoadStart) {
+        this.sidebarService.collapse('menu-sidebar');
+      }
+    });
+  }
+
+  translateTree(tree: any) {
+    const trans = tree.map((n: any) => {
+      let node = {};
+      if (!n.Url.indexOf('http')) {
+        node = {
+          title: n.Nombre,
+          icon: 'nb-list',
+          url: n.Url,
+          home: false,
+          key: n.Nombre,
+          children: [],
+        };
+      } else {
+        node = {
+          title: n.Nombre,
+          icon: 'nb-list',
+          link: n.Url,
+          home: false,
+          key: n.Nombre,
+        };
+      }
+      if (n.hasOwnProperty('Opciones')) {
+        if (n.Opciones !== null) {
+          const children = this.translateTree(n.Opciones);
+            node = { ...node, ...{ children: children }, ...{ icon: 'nb-compose' } };
+          }
+          return node;
+        } else {
+          return node;
+        }
+      });
+    return trans;
+  }
+
+  getMenu(roles) {
+    this.roles = roles
+    const homeOption = {
+      title: 'dashboard',
+      icon: 'nb-home',
+      url: '#/pages/dashboard',
+      home: true,
+      key: 'dashboard',
+    }
+    this.menu = [homeOption]
+
+    if (this.roles.length === 0) {
+      this.roles = 'ASPIRANTE';
     }
 
-  ngOnInit() {
-    if (this.autenticacion.live()) {
-      this.roles = (JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).role).filter((data: any) => (data.indexOf('/') === -1));
-      this.object = {
-        title: 'dashboard',
-        icon: 'nb-home',
-        url: '#/pages/dashboard',
-        home: true,
-        key: 'dashboard',
-      };
-      this.results.push(this.object);
+    this.menuws.get(this.roles + '/SGA').subscribe(
+      data => {
+        this.dataMenu = <any>data;
+        this.menu = this.translateTree(this.dataMenu)
+        this.menu.unshift(homeOption);
+        this.translateMenu();
+      },
+      (error: HttpErrorResponse) => {
 
-      if (this.roles.length === 0){
-        this.roles = "ASPIRANTE";
-      }
-      
-      this.menuws.get(this.roles + '/SGA').subscribe(
-        data => {
-          this.dataMenu = <any>data;
-          for (let i = 0; i < this.dataMenu.length; i++) {
-            if (this.dataMenu[i].TipoOpcion === 'Menú') {
-              if (!this.dataMenu[i].Opciones) {
-                if (!this.dataMenu[i].Url.indexOf('http')) {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    url: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                  };
-                } else {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    link: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                  };
-                }
-              } else {
-                if (!this.dataMenu[i].Url.indexOf('http')) {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    url: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                    children: [],
-                  };
-                } else {
-                  this.object = {
-                    title: this.dataMenu[i].Nombre,
-                    icon: 'nb-compose',
-                    link: this.dataMenu[i].Url,
-                    home: false,
-                    key: this.dataMenu[i].Nombre,
-                    children: [],
-                  };
-                }
-                for (let j = 0; j < this.dataMenu[i].Opciones.length; j++) {
-                  if (this.dataMenu[i].TipoOpcion === 'Menú') {
-                    if (!this.dataMenu[i].Opciones[j].Opciones) {
-                      if (!this.dataMenu[i].Opciones[j].Url.indexOf('http')) {
-                        this.hijo = {
-                          title: this.dataMenu[i].Opciones[j].Nombre,
-                          icon: 'nb-list',
-                          url: this.dataMenu[i].Opciones[j].Url,
-                          home: false,
-                          key: this.dataMenu[i].Opciones[j].Nombre,
-                        };
-                      } else {
-                        this.hijo = {
-                          title: this.dataMenu[i].Opciones[j].Nombre,
-                          icon: 'nb-list',
-                          link: this.dataMenu[i].Opciones[j].Url,
-                          home: false,
-                          key: this.dataMenu[i].Opciones[j].Nombre,
-                        };
-                      }
-                    }
-                    this.object.children.push(this.hijo);
-                  }
-                }
-              }
-              this.results.push(this.object);
-            }
-          }
-          this.menu = this.results;
-          this.translateMenu();
-        },
-        (error: HttpErrorResponse) => {
-          Swal({
-            type: 'error',
+        if (this.dataMenu === undefined) {
+          Swal.fire({
+            icon: 'info',
+            title: this.translate.instant('ERROR.rol_insuficiente_titulo'),
+            text: this.translate.instant('ERROR.rol_insuficiente'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            onAfterClose: () => {
+              window.location.href =
+                environment.TOKEN.SIGN_OUT_URL +
+                '?id_token_hint=' +
+                window.localStorage.getItem('id_token') +
+                '&post_logout_redirect_uri=' +
+                environment.TOKEN.SIGN_OUT_REDIRECT_URL +
+                '&state=' +
+                window.localStorage.getItem('state');
+            },
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
               this.translate.instant('GLOBAL.menu'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
-          //this.menu = MENU_ITEMS;
-          this.translateMenu();
-        });
-    } else {
-      this.rol = 'PUBLICO';
-      //this.menu = MENU_ITEMS;
-      this.translateMenu();
-    }
+        }
+
+        //this.menu = MENU_ITEMS;
+        this.translateMenu();
+      });
     this.translateMenu();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => { // Live reload
       this.translateMenu();
     });
+  }
+
+
+  ngOnInit() {
+    this.autenticacion.user$.subscribe((data: any) => {
+      const { user, userService } = data;
+      const roleUser = typeof user.role !== 'undefined' ? user.role : [];
+      const roleUserService = typeof userService.role !== 'undefined' ? userService.role : [];
+      const roles = (roleUser.concat(roleUserService)).filter((data: any) => (data.indexOf('/') === -1))
+      this.getMenu(roles);
+    })
+
+
   }
 
   private translateMenu(): void {

@@ -68,27 +68,6 @@ export class ListExperienciaLaboralComponent implements OnInit {
 
   cargarCampos() {
     this.settings = {
-      actions: {
-        columnTitle: '',
-        add: false,
-        edit: true,
-        delete: false,
-      },
-      add: {
-        addButtonContent: '<i class="nb-plus"></i>',
-        createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
-        saveButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
-        confirmDelete: true,
-      },
-      mode: 'external',
       columns: {
         NombreEmpresa: {
           title: this.translate.instant('GLOBAL.nombre_empresa'),
@@ -119,6 +98,28 @@ export class ListExperienciaLaboralComponent implements OnInit {
           },
         },
       },
+      mode: 'external',
+      actions: {
+        add: false,
+        edit: true,
+        delete: false,
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+      },
+      add: {
+        addButtonContent: '<i class="nb-plus" title="' + this.translate.instant('experiencia_laboral.tooltip_crear') + '"></i>',
+        createButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
+      },
+      edit: {
+        editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('experiencia_laboral.tooltip_editar') + '"></i>',
+        saveButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash" title="' + this.translate.instant('experiencia_laboral.tooltip_eliminar') + '"></i>',
+        confirmDelete: true,
+      },
     };
   }
 
@@ -135,7 +136,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
           this.loading = false;
           this.getPercentage(1);
           this.source.load(this.data);
-        } else if(response !== null && response.Data.Code === '404'){
+        } else if (response !== null && response.Data.Code === '404') {
           this.popUpManager.showToast('info', this.translate.instant('experiencia_laboral.no_data'));
         } else {
           this.showToast('error', this.translate.instant('GLOBAL.error'),
@@ -145,8 +146,8 @@ export class ListExperienciaLaboralComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         this.loading = false;
-        Swal({
-          type: 'error',
+        Swal.fire({
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),
@@ -212,7 +213,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
     };
-    Swal(opt)
+    Swal.fire(opt)
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
@@ -227,8 +228,8 @@ export class ListExperienciaLaboralComponent implements OnInit {
           },
             (error: HttpErrorResponse) => {
               this.loading = false;
-              Swal({
-                type: 'error',
+              Swal.fire({
+                icon: 'error',
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.eliminar') + '-' +

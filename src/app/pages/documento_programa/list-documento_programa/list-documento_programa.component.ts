@@ -23,6 +23,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
   cambiotab: boolean = false;
   contador: number;
   settings: any;
+  tipo_documentos: any[];
   data: any;
   info_data: any;
   programaDocumento: any;
@@ -66,6 +67,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
       this.cargarCampos();
     });
     this.loading = false;
+    this.percentage = 0;
   }
 
   cargarCampos() {
@@ -98,13 +100,13 @@ export class ListDocumentoProgramaComponent implements OnInit {
         custom: [
           {
             name: 'open',
-            title: '<i class="nb-compose"></i>'
+            title: '<i class="nb-compose" title="' + this.translate.instant('GLOBAL.tooltip_ver_registro') + '"></i>',
           },
           {
             name: 'edit',
-            title: '<i class="nb-edit"></i>'
-          }
-        ]
+            title: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
+          },
+        ],
       },
     };
   }
@@ -112,33 +114,37 @@ export class ListDocumentoProgramaComponent implements OnInit {
   async loadData() {
     this.loading = true;
     this.soporteDocumento = [];
-    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' + this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
-      (response: any[]) => {
-        console.info(Object.keys(response[0]).length)
-        if (Object.keys(response[0]).length > 0) {
-          response.forEach(async soporte => {
-            const documento: SoporteDocumentoAux = new SoporteDocumentoAux();
-            documento.TipoDocumentoId = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Id'];
-            documento.TipoDocumento = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Nombre'];
-            documento.DocumentoId = soporte['DocumentoId'];
-            documento.SoporteDocumentoId = soporte['Id'];
-            await this.cargarEstadoDocumento(documento);
-            documento.EstadoObservacion = this.estadoObservacion;
-            documento.Observacion = this.observacion;
-            this.soporteDocumento.push(documento);
-            this.source.load(this.soporteDocumento);
-            this.getPercentage(1);
-          });
-        } else {
-          this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('documento_programa.no_documentos'));
-        }
-        this.loading = false;
-      },
-      (error: HttpErrorResponse) => {
-        this.loading = false;
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
-      },
-    );
+    this.percentage = 0;
+    this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
+      this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
+        (response: any[]) => {
+          console.info(Object.keys(response[0]).length)
+          if (Object.keys(response[0]).length > 0) {
+            response.forEach(async soporte => {
+              const documento: SoporteDocumentoAux = new SoporteDocumentoAux();
+              documento.TipoDocumentoId = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Id'];
+              documento.TipoDocumento = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Nombre'];
+              documento.DocumentoId = soporte['DocumentoId'];
+              documento.SoporteDocumentoId = soporte['Id'];
+              await this.cargarEstadoDocumento(documento);
+              documento.EstadoObservacion = this.estadoObservacion;
+              documento.Observacion = this.observacion;
+              this.soporteDocumento.push(documento);
+              this.source.load(this.soporteDocumento);
+              if (documento.EstadoObservacion !== 'No aprobado') {
+                this.getPercentage(1 / this.tipo_documentos.length);
+              }
+            });
+          } else {
+            this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('documento_programa.no_documentos'));
+          }
+          this.loading = false;
+        },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
+        },
+      );
   }
 
   cargarEstadoDocumento(documento: SoporteDocumentoAux) {
@@ -149,13 +155,15 @@ export class ListDocumentoProgramaComponent implements OnInit {
             this.estadoObservacion = '';
             this.observacion = '';
           } else {
-            let metadatos = JSON.parse(doc.Metadatos);
-            if (metadatos.aprobado) {
-              this.estadoObservacion = 'Aprobado';
-              this.observacion = '';
-            } else {
-              this.estadoObservacion = 'No Aprobado';
-              this.observacion = metadatos.observacion;
+            if (doc.Metadatos !== '') {
+              const metadatos = JSON.parse(doc.Metadatos);
+              if (metadatos.aprobado) {
+                this.estadoObservacion = 'Aprobado';
+                this.observacion = '';
+              } else {
+                this.estadoObservacion = 'No aprobado';
+                this.observacion = metadatos.observacion;
+              }
             }
           }
           resolve(this.estadoObservacion)
@@ -167,12 +175,24 @@ export class ListDocumentoProgramaComponent implements OnInit {
   ngOnInit() {
     this.uid = 0;
     this.soporteDocumento = [];
-    this.inscripcion = parseInt(sessionStorage.getItem('IdInscripcion'));
-    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'))
+    this.inscripcion = parseInt(sessionStorage.getItem('IdInscripcion'), 10);
+    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
       this.loadData();
     }
+    this.loadLists();
+  }
+
+  public loadLists() {
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + this.programa).subscribe(
+      response => {
+        this.tipo_documentos = <any[]>response;
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
   }
 
   onOpen(event) {
@@ -225,7 +245,9 @@ export class ListDocumentoProgramaComponent implements OnInit {
   }
 
   getPercentage(event) {
-    this.percentage = event;
+    if (event !== undefined) {
+      this.percentage += event;
+    }
     this.result.emit(this.percentage);
   }
 

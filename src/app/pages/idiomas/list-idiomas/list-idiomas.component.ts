@@ -54,63 +54,59 @@ export class ListIdiomasComponent implements OnInit {
 
   cargarCampos() {
     this.settings = {
-      actions: {
-        columnTitle: '',
-        add: false,
-        edit: true,
-        delete: true,
-      },
-      add: {
-        addButtonContent: '<i class="nb-plus"></i>',
-        createButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      edit: {
-        editButtonContent: '<i class="nb-edit"></i>',
-        saveButtonContent: '<i class="nb-checkmark"></i>',
-        cancelButtonContent: '<i class="nb-close"></i>',
-      },
-      delete: {
-        deleteButtonContent: '<i class="nb-trash"></i>',
-        confirmDelete: true,
-      },
-      mode: 'external',
       columns: {
-        Idioma: {
+        IdiomaId: {
           title: this.translate.instant('GLOBAL.idioma'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        NivelEscribe: {
+        NivelEscribeId: {
           title: this.translate.instant('GLOBAL.nivel_escribe'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        NivelEscucha: {
+        NivelEscuchaId: {
           title: this.translate.instant('GLOBAL.nivel_escucha'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        NivelHabla: {
+        NivelHablaId: {
           title: this.translate.instant('GLOBAL.nivel_habla'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
-        NivelLee: {
+        NivelLeeId: {
           title: this.translate.instant('GLOBAL.nivel_lee'),
           width: '20%',
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
         },
+      },
+      mode: 'external',
+      actions: {
+        add: false,
+        edit: true,
+        delete: true,
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+      },
+      edit: {
+        editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('idiomas.tooltip_editar') + '"></i>',
+        saveButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
+      },
+      delete: {
+        deleteButtonContent: '<i class="nb-trash" title="' + this.translate.instant('idiomas.tooltip_eliminar') + '"></i>',
+        confirmDelete: true,
       },
     };
   }
@@ -152,15 +148,15 @@ export class ListIdiomasComponent implements OnInit {
   }
 
   onDelete(event): void {
-    this.loading = true;
-    this.popUpManager.showConfirmAlert(this.translate.instant('GLOBAL.eliminar') + '?')
+    this.popUpManager.showConfirmAlert(this.translate.instant('idiomas.eliminar'))
       .then((willDelete) => {
+        this.loading = true;
         if (willDelete.value) {
           this.idiomaService.delete('conocimiento_idioma', event.data).subscribe(res => {
             if (res !== null) {
               this.loadData();
               this.popUpManager.showInfoToast(
-                this.translate.instant('GLOBAL.idioma') + ' ' + this.translate.instant('GLOBAL.confirmarEliminar')
+                this.translate.instant('GLOBAL.idioma') + ' ' + this.translate.instant('GLOBAL.confirmarEliminar'),
               );
             }
             this.loading = false;

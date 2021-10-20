@@ -1,5 +1,12 @@
-<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-    <ngx-dinamicform [normalform]="formInfoPersona" [modeloData]="info_info_persona" (result)="validarForm($event)" [clean]="clean" (percentage)="setPercentage($event)">
+<nb-card [nbSpinner]="loading"
+         nbSpinnerStatus="success"
+         nbSpinnerSize="xxlarge"
+         nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <ngx-dinamicform [normalform]="formInfoPersona"
+                     [modeloData]="info_info_persona"
+                     (result)="validarForm($event)"
+                     [clean]="clean"
+                     (percentage)="setPercentage($event)">
     </ngx-dinamicform>
 </nb-card>
 <!--ngx-loading [hidden]="!loading"></ngx-loading-->

@@ -1,14 +1,14 @@
 export let FORM_IDIOMAS = {
   // titulo: 'Idiomas',
   tipo_formulario: 'mini',
-  alertas: true,
   btn: 'Guardar',
+  alertas: true,
   modelo: 'InfoIdioma',
   campos: [
     {
       etiqueta: 'select',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
-      nombre: 'Idioma',
+      nombre: 'IdiomaId',
       label_i18n: 'idioma',
       placeholder_i18n: 'idioma',
       requerido: true,
@@ -22,7 +22,6 @@ export let FORM_IDIOMAS = {
       nombre: 'Nativo',
       label_i18n: 'idioma_nativo_pregunta',
       placeholder_i18n: 'nativo',
-      requerido: true,
       valor: false,
       tipo: 'checkbox',
     },
@@ -33,13 +32,12 @@ export let FORM_IDIOMAS = {
       label_i18n: 'idioma_examen_pregunta',
       placeholder_i18n: 'idioma_examen',
       valor: false,
-      requerido: true,
       tipo: 'checkbox',
     },
     {
       etiqueta: 'select',
       claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
-      nombre: 'NivelEscribe',
+      nombre: 'NivelEscribeId',
       label_i18n: 'nivel_escribe',
       placeholder_i18n: 'nivel_escribe',
       requerido: true,
@@ -50,7 +48,7 @@ export let FORM_IDIOMAS = {
     {
       etiqueta: 'select',
       claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
-      nombre: 'NivelEscucha',
+      nombre: 'NivelEscuchaId',
       label_i18n: 'nivel_escucha',
       placeholder_i18n: 'nivel_escucha',
       requerido: true,
@@ -61,7 +59,7 @@ export let FORM_IDIOMAS = {
     {
       etiqueta: 'select',
       claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
-      nombre: 'NivelHabla',
+      nombre: 'NivelHablaId',
       label_i18n: 'nivel_habla',
       placeholder_i18n: 'nivel_habla',
       requerido: true,
@@ -72,7 +70,7 @@ export let FORM_IDIOMAS = {
     {
       etiqueta: 'select',
       claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
-      nombre: 'NivelLee',
+      nombre: 'NivelLeeId',
       label_i18n: 'nivel_lee',
       placeholder_i18n: 'nivel_lee',
       requerido: true,
@@ -83,7 +81,7 @@ export let FORM_IDIOMAS = {
     {
       etiqueta: 'select',
       claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
-      nombre: 'ClasificacionNivelIdioma',
+      nombre: 'NivelId',
       label_i18n: 'clasificacion_nivel_idioma',
       placeholder_i18n: 'clasificacion_nivel_idioma',
       requerido: true,
