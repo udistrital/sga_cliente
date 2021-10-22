@@ -141,6 +141,13 @@
         }
     },
     "GLOBAL": {
+        "admitir":"Admitir", 
+        "admitiendo_aspirantes":"Admitiendo aspirantes", 
+        "aspirantes_correctamente": "aspirantes correctamente",
+        "aspirantes_inscritos":"aspirantes inscritos", 
+        "aspirantes_admitidos":"aspirantes admitidos", 
+        "se_admitiran":"Se admitirán",
+        "se_admitieron":"Se admitieron",
         "soporte_documental":"Soporte documental",
         "numero": "Número",
         "fecha": "Fecha",
