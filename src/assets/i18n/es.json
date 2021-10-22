@@ -1606,7 +1606,8 @@
         "tooltip_crear_proceso": "Crear proceso",
         "sin_calendarios": "No existen calendarios.",
         "subir_resolucion": "Subir resolución",
-        "descargar_resolucion": "Descargar resolución"
+        "descargar_resolucion": "Descargar resolución",
+        "crear_actividad_proceso":"por favor a continuación añada la primer actividad del proceso"
     },
     "derechos_pecuniarios": {
         "titulo": "Derechos Pecuniarios",
