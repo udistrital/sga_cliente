@@ -1,4 +1,4 @@
-<div class="dinamic-form" *ngIf="!editando">
+<div class="dinamic-form" *ngIf="!editando && !nuevoAutor">
     <form class="form-horizontal">
         <fieldset [ngClass]="{'fieldseter':true}">
             <legend align="left">
@@ -36,7 +36,7 @@
         </fieldset>
     </form>
 </div>
-<div class="dinamic-form" *ngIf="formConstruido">
+<div class="dinamic-form" *ngIf="formConstruido && !nuevoAutor">
     <form class="form-horizontal">
         <fieldset [ngClass]="{'fieldseter':true}">
             <legend align="left">
@@ -71,14 +71,15 @@
         </fieldset>
     </form>
 </div>
-<div class="dinamic-form" *ngIf="formConstruido">
+<div class="dinamic-form" *ngIf="formConstruido && !nuevoAutor">
     <form class="form-horizontal">
         <fieldset [ngClass]="{'fieldseter':true}">
             <legend align="left">
                 <small>{{'produccion_academica.autores' | translate}}</small>
             </legend>
+
             <div class="row" *ngIf="creandoAutor">
-                <div class="col-10">
+                <div class="col-8">
                     <mat-form-field style="width: 100%;" floatLabel="always">
                         <mat-label>*{{'produccion_academica.agregar_autor' | translate}}:</mat-label>
                         <mat-select [placeholder]="translate.instant('produccion_academica.placeholder_agregar_autor')" [(ngModel)]="autorSeleccionado" [ngModelOptions]="{standalone: true}">
@@ -93,22 +94,40 @@
                 <div class="col-2" align="center">
                     <button class="btn btn-success btn-sm" (click)="agregarAutor(true,3)">{{'produccion_academica.agregar_autor' | translate}}</button>
                 </div>
+                <div class="col-2" align="center">                    
+                    <button class="btn btn-success btn-sm" (click)="NuevoAutor()">{{'produccion_academica.nuevo_autor' | translate}}</button>
+                </div>
                 <br>
             </div>
+
             <div class="row">
                 <div class="col-12">
-                        <ng2-smart-table [settings]="settings_authors" [(source)]="source" (delete)="onDeleteAuthor($event)" (create)="onCreateAuthor($event)">
-                            </ng2-smart-table>
+                        <ng2-smart-table [settings]="settings_authors" [(source)]="source"
+                                         (delete)="onDeleteAuthor($event)" (create)="onCreateAuthor($event)">
+                        </ng2-smart-table>
                 </div>
             </div>
         </fieldset>
     </form>
 </div>
-<div [hidden]="!formConstruido">
+<div [hidden]="!formConstruido || nuevoAutor">
     <toaster-container [toasterconfig]="config"></toaster-container>
-    <ngx-dinamicform [normalform]="formProduccionAcademica" [modeloData]="DatosAdicionales" (result)="validarForm($event)" [clean]="clean" (percentage)="setPercentage($event)">
+    <ngx-dinamicform [normalform]="formProduccionAcademica" [modeloData]="DatosAdicionales"
+                     (result)="validarForm($event)" [clean]="clean" (percentage)="setPercentage($event)">
     </ngx-dinamicform>
 </div>
+
+<div *ngIf="nuevoAutor" style="display: grid;">
+    <ngx-dinamicform [normalform]="formInfoNuevoAutor" [modeloData]="terceroData"
+                     (result)="validarFormNuevoAutor($event)" [clean]="clean"
+                     (percentage)="setPercentage($event)">
+    </ngx-dinamicform>
+
+    <button *ngIf="nuevoAutor" align="center" class="btn btn-info btn-sm" (click)="nuevoAutor=false">{{ 'GLOBAL.cancelar' | translate }}</button>
+</div>
+
+<br>
+<br>
 
 <!-- Navegación por tabs -->
 <!--div class="col-md-12 col-lg-12 ">

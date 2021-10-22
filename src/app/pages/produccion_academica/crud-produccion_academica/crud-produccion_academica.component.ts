@@ -14,14 +14,19 @@ import { FORM_produccion_academica } from './form-produccion_academica';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
+import { Store } from '@ngrx/store';
+import { IAppState } from '../../../@core/store/app.state';
+import { NUEVO_AUTOR } from './form_new_autor';
+import { TipoContribuyente } from '../../../@core/data/models/terceros/tipo_contribuyente';
+import { TipoDocumento } from '../../../@core/data/models/documento/tipo_documento'
+import { ListService } from '../../../@core/store/services/list.service';
+
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MetadatoSubtipoProduccion } from '../../../@core/data/models/produccion_academica/metadato_subtipo_produccion';
 import { Tercero } from '../../../@core/data/models/terceros/tercero';
-// import { p } from '@angular/core/src/render3';
 import { LocalDataSource } from 'ng2-smart-table';
-import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 
 @Component({
   selector: 'ngx-crud-produccion-academica',
@@ -33,6 +38,9 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   produccion_academica_selected: ProduccionAcademicaPost;
   tipoProduccionAcademica: TipoProduccionAcademica;
   SubtipoProduccionId: SubTipoProduccionAcademica;
+
+  listaTipoContibuyente: TipoContribuyente[];
+  listaTipoDocumento: TipoDocumento[];
 
   @Input('produccion_academica_selected')
   set name(produccion_academica_selected: ProduccionAcademicaPost) {
@@ -57,6 +65,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   personas: Array<Tercero>;
   source_authors: Array<any> = [];
   userData: Tercero;
+  nuevoAutor: boolean = false;
+  formInfoNuevoAutor: any;
   autorSeleccionado: Tercero;
   formProduccionAcademica: any;
   regProduccionAcademica: any;
@@ -78,9 +88,12 @@ export class CrudProduccionAcademicaComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
     private tercerosService: TercerosService,
+    private listService: ListService,
+    private store: Store<IAppState>,
     private toasterService: ToasterService,
     private sgaMidService: SgaMidService) {
     this.formProduccionAcademica = JSON.parse(JSON.stringify(FORM_produccion_academica));
+    this.formInfoNuevoAutor = NUEVO_AUTOR;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
@@ -120,6 +133,9 @@ export class CrudProduccionAcademicaComponent implements OnInit {
         },
       },
     };
+    this.listService.findTipoDocumento();
+    this.listService.findTipoContribuyente();
+    this.loadLists();
   }
 
   construirForm() {
@@ -129,6 +145,14 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       this.formProduccionAcademica.campos[i].label = this.translate.instant('produccion_academica.' + this.formProduccionAcademica.campos[i].label_i18n);
       this.formProduccionAcademica.campos[i].placeholder =
         this.translate.instant('produccion_academica.placeholder_' + this.formProduccionAcademica.campos[i].label_i18n);
+    }
+
+    this.formInfoNuevoAutor.btn = this.translate.instant('GLOBAL.guardar');
+    this.formInfoNuevoAutor.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
+    for (let i = 0; i < this.formInfoNuevoAutor.campos.length; i++) {
+      this.formInfoNuevoAutor.campos[i].label = this.translate.instant('GLOBAL.' + this.formInfoNuevoAutor.campos[i].label_i18n);
+      this.formInfoNuevoAutor.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +
+        this.formInfoNuevoAutor.campos[i].placeholder_i18n);
     }
   }
 
@@ -145,47 +169,47 @@ export class CrudProduccionAcademicaComponent implements OnInit {
 
   loadOptions(): void {
     this.loadEstadosAutor()
-    .then(() => {
-      Promise.all([
-        // this.loadEstadosAutor(),
-        this.loadOptionsTipoProduccionAcademica(),
-        this.loadOptionsSubTipoProduccionAcademica(),
-        this.loadAutores(),
-        this.loadUserData(),
-      ]).
-        then(() => {
+      .then(() => {
+        Promise.all([
+          // this.loadEstadosAutor(),
+          this.loadOptionsTipoProduccionAcademica(),
+          this.loadOptionsSubTipoProduccionAcademica(),
+          this.loadAutores(),
+          this.loadUserData(),
+        ]).
+          then(() => {
 
-        })
-        .catch(error => {
-          if (!error.status) {
-            error.status = 409;
-          }
-          Swal.fire({
-            icon: 'error',
-             title: error.status + '',
-             text: this.translate.instant('ERROR.' + error.status),
-             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-           });
+          })
+          .catch(error => {
+            if (!error.status) {
+              error.status = 409;
+            }
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          });
+      })
+      .catch(error => {
+        if (!error.status) {
+          error.status = 409;
+        }
+        Swal.fire({
+          icon: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
-    })
-    .catch(error => {
-      if (!error.status) {
-        error.status = 409;
-      }
-      Swal.fire({
-        icon: 'error',
-         title: error.status + '',
-         text: this.translate.instant('ERROR.' + error.status),
-         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-       });
-    });
+      });
   }
 
   loadUserData(): Promise<any> {
     this.source_authors = [];
     this.source.load(this.source_authors);
     return new Promise((resolve, reject) => {
-        this.tercerosService.get('tercero?query=Id:' + (this.user.getPersonaId() || 1))
+      this.tercerosService.get('tercero?query=Id:' + (this.user.getPersonaId() || 1))
         .subscribe(res => {
           // if (res !== null) {
           if (Object.keys(res[0]).length > 0) {
@@ -206,7 +230,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
             resolve(true);
           } else {
             this.tiposProduccionAcademica = [];
-            reject({status: 404});
+            reject({ status: 404 });
           }
         }, (error: HttpErrorResponse) => {
           reject(error);
@@ -225,7 +249,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           // if (res !== null) {
           if (Object.keys(res[0]).length > 0) {
             this.personas = <Array<Tercero>>res;
-            this.personas.forEach( (persona: Tercero) => {
+            this.personas.forEach((persona: Tercero) => {
               // persona['Nombre'] = this.getFullAuthorName(persona);
               persona['Nombre'] = persona.NombreCompleto;
               persona['PersonaId'] = persona.Id;
@@ -233,7 +257,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
             resolve(true);
           } else {
             this.personas = [];
-            reject({status: 404});
+            reject({ status: 404 });
           }
         }, (error: HttpErrorResponse) => {
           reject(error);
@@ -251,7 +275,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
             resolve(true);
           } else {
             this.estadosAutor = [];
-            reject({status: 404});
+            reject({ status: 404 });
           }
         }, (error: HttpErrorResponse) => {
           reject(error);
@@ -269,7 +293,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
             resolve(true);
           } else {
             this.tiposProduccionAcademica = [];
-            reject({status: 404});
+            reject({ status: 404 });
           }
         }, (error: HttpErrorResponse) => {
           reject(error);
@@ -280,13 +304,13 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   loadOptionsSubTipoProduccionAcademica(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.produccionAcademicaService.get('subtipo_produccion/?limit=0')
-        .subscribe (res => {
+        .subscribe(res => {
           if (res !== null) {
             this.subtiposProduccionAcademica = <Array<SubTipoProduccionAcademica>>res;
             resolve(true);
           } else {
             this.subtiposProduccionAcademica = [];
-            reject({status: 404});
+            reject({ status: 404 });
           }
         }, (error: HttpErrorResponse) => {
           reject(error);
@@ -306,29 +330,29 @@ export class CrudProduccionAcademicaComponent implements OnInit {
     this.formConstruido = false;
     const query = `query=SubtipoProduccionId:${subtipoProduccionAcademica.Id}`;
     this.produccionAcademicaService.get(`metadato_subtipo_produccion/?limit=0&${query}`)
-        .subscribe(res => {
-          if (res !== null) {
-            (<Array<MetadatoSubtipoProduccion>>res).forEach(metadato => {
-              if (Object.keys(metadato).length > 0) {
-                const field = JSON.parse(metadato.TipoMetadatoId.FormDefinition);
-                field.nombre = metadato.Id;
-                this.formProduccionAcademica.campos.push(field);
-              }
-            });
-            if (callback !== undefined) {
-              callback(this.formProduccionAcademica.campos, this.info_produccion_academica.Metadatos, this.nuxeoService, this.documentoService);
+      .subscribe(res => {
+        if (res !== null) {
+          (<Array<MetadatoSubtipoProduccion>>res).forEach(metadato => {
+            if (Object.keys(metadato).length > 0) {
+              const field = JSON.parse(metadato.TipoMetadatoId.FormDefinition);
+              field.nombre = metadato.Id;
+              this.formProduccionAcademica.campos.push(field);
             }
-            this.construirForm();
-            this.formConstruido = true;
-          }
-        }, (error: HttpErrorResponse) => {
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
+          if (callback !== undefined) {
+            callback(this.formProduccionAcademica.campos, this.info_produccion_academica.Metadatos, this.nuxeoService, this.documentoService);
+          }
+          this.construirForm();
+          this.formConstruido = true;
+        }
+      }, (error: HttpErrorResponse) => {
+        Swal.fire({
+          icon: 'error',
+          title: error.status + '',
+          text: this.translate.instant('ERROR.' + error.status),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+      });
   }
 
   /*
@@ -365,7 +389,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   */
 
   public loadProduccionAcademica(): void {
-    if (this.produccion_academica_selected !== undefined ) {
+    if (this.produccion_academica_selected !== undefined) {
 
       /*this.produccionAcademicaService.get('produccion_academica?query=id:' + this.produccion_academica_id)
         .subscribe(res => {
@@ -379,22 +403,22 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       this.source.load(this.source_authors);
       this.Metadatos = [];
       // this.formProduccionAcademica = JSON.parse(JSON.stringify(FORM_produccion_academica));
-      const fillForm = function(campos, Metadatos, nuxeoService, documentoService){
+      const fillForm = function (campos, Metadatos, nuxeoService, documentoService) {
         const filesToGet = [];
         campos.forEach(campo => {
-          Metadatos.forEach( metadato => {
-              // const field = JSON.parse(datoAdicional.DatoAdicionalSubtipoProduccion.TipoDatoAdicional.FormDefiniton);
-              if (campo.nombre === metadato.MetadatoSubtipoProduccionId.Id) {
-                campo.valor = metadato.Valor;
-                if (metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.Id === 39 || metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.Id === 45) {
-                  const seleccion = metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.FormDefinition
-                  campo.valor = JSON.parse(seleccion).opciones[parseInt(metadato.Valor) - 1]
-                }
-                if (campo.etiqueta === 'file') {
-                  campo.idFile = parseInt(metadato.Valor, 10);
-                  filesToGet.push({Id: campo.idFile, key: campo.nombre});
-                }
-              };
+          Metadatos.forEach(metadato => {
+            // const field = JSON.parse(datoAdicional.DatoAdicionalSubtipoProduccion.TipoDatoAdicional.FormDefiniton);
+            if (campo.nombre === metadato.MetadatoSubtipoProduccionId.Id) {
+              campo.valor = metadato.Valor;
+              if (metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.Id === 39 || metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.Id === 45) {
+                const seleccion = metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.FormDefinition
+                campo.valor = JSON.parse(seleccion).opciones[parseInt(metadato.Valor) - 1]
+              }
+              if (campo.etiqueta === 'file') {
+                campo.idFile = parseInt(metadato.Valor, 10);
+                filesToGet.push({ Id: campo.idFile, key: campo.nombre });
+              }
+            };
           });
         });
         if (filesToGet.length !== 0) {
@@ -410,21 +434,21 @@ export class CrudProduccionAcademicaComponent implements OnInit {
                 });
               }
             },
-            (error: HttpErrorResponse) => {
-              Swal.fire({
-                icon: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              (error: HttpErrorResponse) => {
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
               });
-            });
         }
       }
       this.loadSubTipoFormFields(this.info_produccion_academica.SubtipoProduccionId, fillForm);
       this.construirForm();
       this.formConstruido = true;
       this.editando = true;
-    } else  {
+    } else {
       this.info_produccion_academica = new ProduccionAcademicaPost();
       this.clean = !this.clean;
       this.editando = false;
@@ -444,23 +468,23 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       showCancelButton: true,
     };
     Swal.fire(opt)
-    .then((willDelete) => {
-      if (willDelete.value) {
-        this.info_produccion_academica = <ProduccionAcademicaPost>ProduccionAcademica;
-        this.sgaMidService.put('produccion_academica', this.info_produccion_academica)
-        .subscribe((res: any) => {
-          if (res !== null) {
-            this.info_produccion_academica = <ProduccionAcademicaPost>res;
-            // this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('produccion_academica.produccion_actualizada'));
-            this.popUpManager.showInfoToast(this.translate.instant('produccion_academica.produccion_actualizada'));
-            this.updateList.emit();
-          } else {
-            this.showToast('error', this.translate.instant('GLOBAL.error'),
-            this.translate.instant('produccion_academica.produccion_no_actualizada'));
-          }
-        });
-      }
-    });
+      .then((willDelete) => {
+        if (willDelete.value) {
+          this.info_produccion_academica = <ProduccionAcademicaPost>ProduccionAcademica;
+          this.sgaMidService.put('produccion_academica', this.info_produccion_academica)
+            .subscribe((res: any) => {
+              if (res !== null) {
+                this.info_produccion_academica = <ProduccionAcademicaPost>res;
+                // this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('produccion_academica.produccion_actualizada'));
+                this.popUpManager.showInfoToast(this.translate.instant('produccion_academica.produccion_actualizada'));
+                this.updateList.emit();
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('produccion_academica.produccion_no_actualizada'));
+              }
+            });
+        }
+      });
   }
 
   createProduccionAcademica(ProduccionAcademica: any): void {
@@ -473,36 +497,36 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       showCancelButton: true,
     };
     Swal.fire(opt)
-    .then((willCreate) => {
-      if (willCreate.value) {
-        this.info_produccion_academica = <ProduccionAcademicaPost>ProduccionAcademica;
-        this.sgaMidService.post('produccion_academica', this.info_produccion_academica)
-        .subscribe((res: any) => {
-          if (res !== null) {
-            this.info_produccion_academica = <ProduccionAcademicaPost>res;
-            //this.showToast('info', this.translate.instant('GLOBAL.crear'), this.translate.instant('produccion_academica.produccion_creada'));
-            this.popUpManager.showInfoToast(this.translate.instant('produccion_academica.produccion_creada'));
-            this.updateList.emit();
-          } else {
-            this.showToast('error', this.translate.instant('GLOBAL.error'),
-            this.translate.instant('produccion_academica.produccion_no_creada'));
-          }
-        },
-        (error: HttpErrorResponse) => {
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('informacion_academica.informacion_academica_no_registrada'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
-      }
-    });
+      .then((willCreate) => {
+        if (willCreate.value) {
+          this.info_produccion_academica = <ProduccionAcademicaPost>ProduccionAcademica;
+          this.sgaMidService.post('produccion_academica', this.info_produccion_academica)
+            .subscribe((res: any) => {
+              if (res !== null) {
+                this.info_produccion_academica = <ProduccionAcademicaPost>res;
+                //this.showToast('info', this.translate.instant('GLOBAL.crear'), this.translate.instant('produccion_academica.produccion_creada'));
+                this.popUpManager.showInfoToast(this.translate.instant('produccion_academica.produccion_creada'));
+                this.updateList.emit();
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('produccion_academica.produccion_no_creada'));
+              }
+            },
+              (error: HttpErrorResponse) => {
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('informacion_academica.informacion_academica_no_registrada'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
+        }
+      });
   }
 
   agregarAutor(mostrarError: boolean, estadoAutor: number): void {
-    if (this.source_authors.find( author => author.PersonaId === this.autorSeleccionado.Id) ) {
+    if (this.source_authors.find(author => author.PersonaId === this.autorSeleccionado.Id)) {
       if (mostrarError) {
         Swal.fire({
           icon: 'error',
@@ -513,6 +537,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       }
     } else {
       if (this.estadosAutor != undefined) {
+        console.log(this.autorSeleccionado, this.estadosAutor)
         this.source_authors.push({
           // Nombre: this.getFullAuthorName(this.autorSeleccionado),
           Nombre: this.autorSeleccionado.NombreCompleto,
@@ -551,9 +576,9 @@ export class CrudProduccionAcademicaComponent implements OnInit {
     return new Promise((resolve, reject) => {
       files.forEach((file) => {
         file.Id = file.nombre,
-        file.nombre = 'soporte_' + file.Id + '_prod_' + this.userData.Id;
+          file.nombre = 'soporte_' + file.Id + '_prod_' + this.userData.Id;
         file.key = file.Id;
-       });
+      });
       this.nuxeoService.getDocumentos$(files, this.documentoService)
         .subscribe(response => {
           if (Object.keys(response).length === files.length) {
@@ -574,8 +599,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       if (this.info_produccion_academica.Titulo === undefined ||
-      this.info_produccion_academica.Fecha === undefined ||
-      this.info_produccion_academica.Resumen === undefined) {
+        this.info_produccion_academica.Fecha === undefined ||
+        this.info_produccion_academica.Resumen === undefined) {
         Swal.fire({
           icon: 'warning',
           title: 'ERROR',
@@ -617,7 +642,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           .then(() => {
             // console.log("promesas cumplidas subir produccion");
             // console.log("metadatos", this.info_produccion_academica.Metadatos);
-            if ( this.produccion_academica_selected === undefined ) {
+            if (this.produccion_academica_selected === undefined) {
               this.createProduccionAcademica(this.info_produccion_academica);
               this.result.emit(event);
             } else {
@@ -640,6 +665,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
 
   onCreateAuthor(event): void {
     if (!this.editando) {
+      this.loadAutores();
       this.creandoAutor = !this.creandoAutor;
     } else {
       Swal.fire({
@@ -649,6 +675,80 @@ export class CrudProduccionAcademicaComponent implements OnInit {
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
     }
+  }
+
+  getIndexFormNew(nombre: String): number {
+    for (let index = 0; index < this.formInfoNuevoAutor.campos.length; index++) {
+      const element = this.formInfoNuevoAutor.campos[index];
+      if (element.nombre === nombre) {
+        return index;
+      }
+    }
+    return 0;
+  }
+
+  NuevoAutor() {
+    this.nuevoAutor = !this.nuevoAutor;
+  }
+
+  createInfoAutor(infoTercero: any) {
+    return new Promise((resolve, reject) => {
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.crear'),
+        text: this.translate.instant('produccion_academica.seguro_continuar_registrar'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+      };
+      Swal.fire(opt)
+        .then((willMake) => {
+          if (willMake.value) {
+            infoTercero.Activo = false;
+            console.log(infoTercero);
+
+            this.sgaMidService.post("persona/guardar_autor", infoTercero).subscribe((res) => {
+              if (res.Type !== 'error') {
+                this.showToast('info', this.translate.instant('GLOBAL.registrar'), this.translate.instant('produccion_academia.autor_creado'))
+                resolve(res);
+              } else {
+                this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('produccion_academia.autor_no_creado'));
+                reject();
+              }
+            }, () => {
+              this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('produccion_academia.autor_no_creado'));
+              reject();
+            });
+          }
+        });
+    });
+  }
+
+  validarFormNuevoAutor(event) {
+    if (event.valid) {
+      const formData = event.data.Autor;
+      this.createInfoAutor(formData).then(newAutor => {
+        console.log(newAutor)
+        let d: any = newAutor
+        this.autorSeleccionado = d;
+        this.agregarAutor(true, 3);
+        this.NuevoAutor()
+      });
+    }
+  }
+
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+        this.listaTipoContibuyente = list.listTipoContribuyente;
+        this.formInfoNuevoAutor.campos[this.getIndexFormNew('TipoContribuyenteId')].opciones = this.listaTipoContibuyente[0];
+
+        this.listaTipoDocumento = list.listTipoDocumento;
+        this.formInfoNuevoAutor.campos[this.getIndexFormNew('TipoDocumentoId')].opciones = this.listaTipoDocumento[0];
+      },
+    );
   }
 
   private showToast(type: string, title: string, body: string) {
