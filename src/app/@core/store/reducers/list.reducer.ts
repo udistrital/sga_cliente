@@ -166,6 +166,24 @@ export class ListReducer {
     }
   }
 
+  static listTipoContribuyente(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.TipoContribuyente:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static listTipoDocumento(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.TipoDocumento:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
   static ListReducerTipoContacto(state: Array<any> = new Array, action) {
     switch (action.type) {
       case REDUCER_LIST.TipoContacto:

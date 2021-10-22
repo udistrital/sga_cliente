@@ -21,6 +21,8 @@ export const REDUCER_LIST = {
     TipoDiscapacidad: 'listTipoDiscapacidad',
     TipoLugar: 'listTipoLugar',
     Titulacion: 'listTitulacion',
+    TipoContribuyente: 'listTipoContribuyente',
+    TipoDocumento: 'listTipoDocumento',
     TipoIdentificacion: 'listTipoIdentificacion',
     TipoProyecto: 'listReducerTipoProyecto',
     GrupoInvestigacion: 'listReducerGrupoInvestigacion',

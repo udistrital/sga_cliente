@@ -588,9 +588,13 @@
         "concepto_academico_id": "Academic concept",
         "placeholder_concepto_academico_id": "Ej. 1",
         "tipo_tercero": "Entity type",
-        "placeholder_tipo_tercero": "Ej. University"
+        "placeholder_tipo_tercero": "Ej. University",
+        "tipo_contribuyente": "Types of taxpayers",
+        "placeholder_tipo_contribuyente": "Ej. Individual",
+        "documento": "Document number",
+        "nombre_autor": "Name",
+        "placeholder_nombre_autor": "Ej: Pedro Perez"
     },
-
     "ERROR": {
         "general": "The request could not be satisfied",
         "400": "The request contains incorrect syntax",
@@ -661,6 +665,7 @@
         "placeholder_titulo_produccion_academica": "e.g.: IOT system for get data",
         "abstract": "Abstract",
         "placeholder_abstract": "e.g.: This is an abstract",
+        "nuevo_autor": "New author",
         "agregar_autor": "Add author",
         "placeholder_agregar_autor": "e.g.: Pedro Perez",
         "alerta_agregar_autor": "You must select an author",
@@ -853,7 +858,10 @@
         "placeholder_puntaje": "E.g.: 25",
         "tooltip_editar": "Edit academic production",
         "tooltip_eliminar": "Remove academic production",
-        "tooltip_crear": "Create academic production"
+        "tooltip_crear": "Create academic production",
+        "seguro_continuar_registrar": "Are you sure you want to register this new author?",
+        "autor_creado": "Author successfully created",
+        "autor_no_creado": "The new author could not be created"
     },
     "archivo_icfes": {
         "archivo_icfes": "Icfes file",

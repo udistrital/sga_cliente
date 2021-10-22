@@ -34,6 +34,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
+  inscritos: any = [];
   datos_persona: any;
   inscripcion: Inscripcion;
   preinscripcion: boolean;
@@ -66,7 +67,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   niveles: NivelFormacion[];
   Aspirantes = [];
   cuposProyecto: number;
-
+  estadoAdmitido = null;
   estados = [];
 
   CampoControl = new FormControl('', [Validators.required]);
@@ -97,6 +98,9 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.inscripcionService.get('estado_inscripcion')
       .subscribe((state) => {
         this.estados = state.map((e) => {
+          if (e.Nombre === 'ADMITIDO') {
+            this.estadoAdmitido = e;
+          }
           return {
             value: e.Id,
             title: e.Nombre
@@ -354,6 +358,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.show_listado = true
     this.source_emphasys = new LocalDataSource();
     this.Aspirantes = [];
+    this.inscritos = [];
 
     this.inscripcionService.get('inscripcion?query=ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=NotaFinal&order=desc').subscribe(
       (res: any) => {
@@ -376,6 +381,9 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                       EstadoInscripcionId: element.EstadoInscripcionId,
                     }
                     this.Aspirantes.push(aspiranteAux);
+                    if (aspiranteAux.EstadoInscripcionId.Nombre === 'INSCRITO') {
+                      this.inscritos.push(aspiranteAux.Inscripcion);
+                    }
                     this.source_emphasys.load(this.Aspirantes);
                   },
                   error => {
@@ -414,7 +422,64 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
 
   }
 
+  admitir(inscrito) {
+    const promiseInscrito =  new Promise((resolve, reject) => {
+      this.inscripcionService.put('inscripcion', inscrito)
+            .subscribe((response) => {
+              resolve(response);
+            })
+    });
+    return promiseInscrito;
+  }
 
+  async admitirInscritos() {
+
+    const numero_inscritos = this.inscritos.length < this.cuposProyecto ? this.inscritos.length : this.cuposProyecto;
+    Swal.fire({
+      title: `${this.translate.instant('GLOBAL.admitir')} ${numero_inscritos} ${this.translate.instant('GLOBAL.aspirantes_inscritos')}`,
+      html: `${this.translate.instant('GLOBAL.se_admitiran')} ${numero_inscritos} ${this.translate.instant('GLOBAL.aspirantes_inscritos')}`,
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+      confirmButtonText: this.translate.instant('GLOBAL.admitir')
+    })
+      .then(async (result) => {
+        if (result.value) {
+          Swal.fire({
+            title: `${this.translate.instant('GLOBAL.admitiendo_aspirantes')} ...`,
+            html: `<b></b> de ${numero_inscritos} ${this.translate.instant('GLOBAL.aspirantes_admitidos')}`,
+            timerProgressBar: true,
+            onBeforeOpen: () => {
+              Swal.showLoading()
+            }
+          });
+          for (let i = 0; i < numero_inscritos; i++) {
+            const updateState = {
+              ...this.inscritos[i],
+              ...{ EstadoInscripcionId: { Id: this.estadoAdmitido.Id } }
+            }
+            const content = Swal.getContent();
+            if (content) {
+              const b = content.querySelector('b')
+              if (b) {
+                b.textContent = i + 1 + '';
+              }
+            }
+            await this.admitir(updateState);
+            if ((i + 1) === this.inscritos.length) {
+              Swal.close();
+              Swal.fire({
+                title: `Reubicación correcta`,
+                text: `${this.translate.instant('GLOBAL.se_admitieron')}  ${this.inscritos.length} ${this.translate.instant('GLOBAL.aspirantes_correctamente')} `,
+                icon: 'success'
+              })
+              this.mostrartabla();
+            }
+          }
+
+        }
+      })
+  }
 
 
   private showToast(type: string, title: string, body: string) {

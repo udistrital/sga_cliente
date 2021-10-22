@@ -87,7 +87,14 @@
 </nb-card>
 
 <nb-card [hidden]="!show_listado" accent="info">
-        <nb-card-header>{{ 'cupos.cupos_proyecto' | translate }}: {{cuposProyecto}}</nb-card-header>
+        <nb-card-header class="d-flex justify-content-around">
+          {{ 'cupos.cupos_proyecto' | translate }}: {{cuposProyecto}}
+          <button class="btn btn-primary" (click)="admitirInscritos()">
+            {{ 'GLOBAL.admitir' | translate }} 
+            {{inscritos.length < cuposProyecto? inscritos.length: cuposProyecto }} 
+            {{ 'GLOBAL.aspirantes_inscritos' | translate }}
+          </button>
+        </nb-card-header>
 </nb-card>
 
 <nb-card *ngIf="show_listado" accent="info">
