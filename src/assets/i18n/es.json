@@ -611,7 +611,12 @@
         "agregar_universidad": "Universidad",
         "agregar_empresa":"Empresa",
         "tipo_tercero": "Tipo de entidad",
-        "placeholder_tipo_tercero": "Ej. Universidad"
+        "placeholder_tipo_tercero": "Ej. Universidad",
+        "tipo_contribuyente": "Tipo contribuyente",
+        "placeholder_tipo_contribuyente": "Ej. Persona natural",
+        "documento": "Número de documento",
+        "nombre_autor": "Nombre",
+        "placeholder_nombre_autor": "Ej: Pedro Perez"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -681,6 +686,7 @@
         "placeholder_titulo_produccion_academica": "Ej: Diseño rueda dentada helicoidal",
         "abstract": "Abstract",
         "placeholder_abstract": "Ej: This is an abstract",
+        "nuevo_autor": "Nuevo autor",
         "agregar_autor": "Agregar autor",
         "placeholder_agregar_autor": "Ej: Pedro Perez",
         "alerta_agregar_autor": "Debe seleccionar un autor",
@@ -874,7 +880,10 @@
         "placeholder_puntaje": "Ej: 25",
         "tooltip_editar": "Editar producción académica",
         "tooltip_eliminar": "Eliminar producción académica",
-        "tooltip_crear": "Crear producción académica"
+        "tooltip_crear": "Crear producción académica",
+        "seguro_continuar_registrar": "¿Está seguro de registrar al nuevo autor?",
+        "autor_creado": "Autor creado exitosamente",
+        "autor_no_creado": "No fue posible crear el nuevo autor"
     },
     "archivo_icfes": {
         "archivo_icfes": "Archivo de registros del icfes",
@@ -1598,7 +1607,8 @@
         "tooltip_crear_proceso": "Crear proceso",
         "sin_calendarios": "No existen calendarios.",
         "subir_resolucion": "Subir resolución",
-        "descargar_resolucion": "Descargar resolución"
+        "descargar_resolucion": "Descargar resolución",
+        "crear_actividad_proceso":"por favor a continuación añada la primer actividad del proceso"
     },
     "derechos_pecuniarios": {
         "titulo": "Derechos Pecuniarios",
