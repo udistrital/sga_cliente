@@ -20,6 +20,7 @@ import { TercerosService } from '../../../@core/data/terceros.service';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { AnyService } from '../../../@core/data/any.service';
 import { environment } from '../../../../environments/environment';
+import * as _ from 'lodash';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -35,6 +36,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
   inscritos: any = [];
+  admitidos: any[];
   datos_persona: any;
   inscripcion: Inscripcion;
   preinscripcion: boolean;
@@ -73,6 +75,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
+  cuposAsignados: number = 0;
   constructor(
     private translate: TranslateService,
     private sgamidService: SgaMidService,
@@ -359,6 +362,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.source_emphasys = new LocalDataSource();
     this.Aspirantes = [];
     this.inscritos = [];
+    this.admitidos = [];
 
     this.inscripcionService.get('inscripcion?query=ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=NotaFinal&order=desc').subscribe(
       (res: any) => {
@@ -367,6 +371,10 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           if (r !== null && r.Type !== 'error') {
             this.loading = false;
             const data = <Array<any>>r;
+            this.admitidos = data.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'ADMITIDO'));
+            this.inscritos = data.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'INSCRITO'));
+            console.log(data)
+            this.cuposAsignados = this.admitidos.length;
             // this.source_emphasys.load(data);
             data.forEach(element => {
               if (element.PersonaId != undefined) {
@@ -382,6 +390,9 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                     }
                     this.Aspirantes.push(aspiranteAux);
                     if (aspiranteAux.EstadoInscripcionId.Nombre === 'INSCRITO') {
+                      this.inscritos.push(aspiranteAux.Inscripcion);
+                    }
+                    if (aspiranteAux.EstadoInscripcionId.Nombre === 'ADMITIDO') {
                       this.inscritos.push(aspiranteAux.Inscripcion);
                     }
                     this.source_emphasys.load(this.Aspirantes);
@@ -423,18 +434,20 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   }
 
   admitir(inscrito) {
-    const promiseInscrito =  new Promise((resolve, reject) => {
+    const promiseInscrito = new Promise((resolve, reject) => {
       this.inscripcionService.put('inscripcion', inscrito)
-            .subscribe((response) => {
-              resolve(response);
-            })
+        .subscribe((response) => {
+          resolve(response);
+        })
     });
     return promiseInscrito;
   }
 
   async admitirInscritos() {
+    const cuposTotales = Math.abs(this.cuposProyecto - this.admitidos.length);
+    const numero_inscritos = this.inscritos.length < cuposTotales ? this.inscritos.length : cuposTotales;
+    const inscritosOrdenados = _.orderBy(this.inscritos, [(i: any) => (i.NotaFinal)], ['asc']);
 
-    const numero_inscritos = this.inscritos.length < this.cuposProyecto ? this.inscritos.length : this.cuposProyecto;
     Swal.fire({
       title: `${this.translate.instant('GLOBAL.admitir')} ${numero_inscritos} ${this.translate.instant('GLOBAL.aspirantes_inscritos')}`,
       html: `${this.translate.instant('GLOBAL.se_admitiran')} ${numero_inscritos} ${this.translate.instant('GLOBAL.aspirantes_inscritos')}`,
@@ -455,7 +468,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           });
           for (let i = 0; i < numero_inscritos; i++) {
             const updateState = {
-              ...this.inscritos[i],
+              ...inscritosOrdenados[i],
               ...{ EstadoInscripcionId: { Id: this.estadoAdmitido.Id } }
             }
             const content = Swal.getContent();
@@ -466,11 +479,11 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
               }
             }
             await this.admitir(updateState);
-            if ((i + 1) === this.inscritos.length) {
+            if ((i + 1) === numero_inscritos) {
               Swal.close();
               Swal.fire({
-                title: `Reubicación correcta`,
-                text: `${this.translate.instant('GLOBAL.se_admitieron')}  ${this.inscritos.length} ${this.translate.instant('GLOBAL.aspirantes_correctamente')} `,
+                title: this.translate.instant('GLOBAL.proceso_admision_exitoso'),
+                text: `${this.translate.instant('GLOBAL.se_admitieron')}  ${numero_inscritos} ${this.translate.instant('GLOBAL.aspirantes_correctamente')} `,
                 icon: 'success'
               })
               this.mostrartabla();
