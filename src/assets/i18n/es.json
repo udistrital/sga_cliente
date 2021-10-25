@@ -41,7 +41,7 @@
             "definir_conceptos": "Definir Conceptos",
             "asignar_valores": "Asignar Valores",
             "consultar_conceptos": "Consultar Conceptos",
-            "recibos_derechos_pecuniarios":"Generación de recibos \nde pago"
+            "recibos_derechos_pecuniarios": "Generación de recibos \nde pago"
         },
         "archivo_icfes": {
             "archivo_icfes": "Archivo Icfes",
@@ -125,12 +125,13 @@
             "solicitud": "Actualización de datos",
             "actualizacion_datos": "Solicitud de actualización\nde identificación",
             "actualizacion_nombres": "Solicitud de actualización\nde nombres",
-            "actualizacion" : "Solicitudes de actualización\nde datos"
+            "actualizacion": "Solicitudes de actualización\nde datos"
         },
         "practicas_academicas": {
             "practicas_academicas": "Prácticas académicas",
             "crear_nueva_practica": "Nueva solicitud",
             "ver_nuevas_solicitudes": "Nuevas solicitudes",
+            "listado_practicas": "Listado de prácticas\nacadémicas",
             "en_proceso": "Solicitudes en proceso",
             "invitacion": "Invitación a prácticas\nacadémicas"
         },
@@ -140,10 +141,21 @@
         }
     },
     "GLOBAL": {
+        "admitir":"Admitir", 
+        "proceso_admision_exitoso":"Proceso de admisión exitoso", 
+        "admitiendo_aspirantes":"Admitiendo aspirantes", 
+        "aspirantes_correctamente": "aspirantes correctamente",
+        "aspirantes_inscritos":"aspirantes inscritos", 
+        "aspirantes_admitidos":"aspirantes admitidos", 
+        "se_admitiran":"Se admitirán",
+        "se_admitieron":"Se admitieron",
+        "soporte_documental":"Soporte documental",
+        "numero": "Número",
+        "fecha": "Fecha",
         "detalle": "Detalle",
         "cargando": "Cargando...",
         "buscar": "Buscar",
-        "no_informacion_registrada":"No hay información registrada",
+        "no_informacion_registrada": "No hay información registrada",
         "info": "¡Atención!",
         "preinscripcion": "Preinscripcion",
         "preinscripcion_2": "Desea realizar preinscripcion",
@@ -598,14 +610,21 @@
         "tooltip_editar_registro": "Editar",
         "tooltip_descargar": "Descargar",
         "experiencia_laboral": "Experiencia laboral",
-        "comprobante_discapacidad":"Comprobante de discapacidad",
+        "comprobante_discapacidad": "Comprobante de discapacidad",
         "carga_recolectando": "Recolectando información...",
         "carga_guardando": "Guardando información...",
         "general": "General",
         "concepto_academico_id": "Concepto académico",
         "placeholder_concepto_academico_id": "Ej. 1",
-        "agregar_universidad":"Universidad",
-        "agregar_empresa":"Empresa"
+        "agregar_universidad": "Universidad",
+        "agregar_empresa":"Empresa",
+        "tipo_tercero": "Tipo de entidad",
+        "placeholder_tipo_tercero": "Ej. Universidad",
+        "tipo_contribuyente": "Tipo contribuyente",
+        "placeholder_tipo_contribuyente": "Ej. Persona natural",
+        "documento": "Número de documento",
+        "nombre_autor": "Nombre",
+        "placeholder_nombre_autor": "Ej: Pedro Perez"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -632,7 +651,7 @@
         "maximo_recibos": "Ya genero el maximo de recibos permitidos"
     },
     "produccion_academica": {
-        "titulo_revista":"Titulo de revista",
+        "titulo_revista": "Titulo de revista",
         "tipo_disciplina": "Tipos de disciplina",
         "placeholder_tipo_disciplina": "Ej: Artes plásticas y visuales",
         "idioma_traducido": "Idioma traducido",
@@ -675,6 +694,7 @@
         "placeholder_titulo_produccion_academica": "Ej: Diseño rueda dentada helicoidal",
         "abstract": "Abstract",
         "placeholder_abstract": "Ej: This is an abstract",
+        "nuevo_autor": "Nuevo autor",
         "agregar_autor": "Agregar autor",
         "placeholder_agregar_autor": "Ej: Pedro Perez",
         "alerta_agregar_autor": "Debe seleccionar un autor",
@@ -709,7 +729,7 @@
         "titulo_libro": "Título del libro",
         "URL": "URL",
         "DOI": "DOI",
-        "idioma_traduccion":"Idioma de traducción",
+        "idioma_traduccion": "Idioma de traducción",
         "disciplina": "Disciplina",
         "institucion": "Institución o entidad",
         "lugar": "Lugar",
@@ -793,9 +813,9 @@
         "placeholder_serie": "Ej: 3",
         "placeholder_URL": "Ej: https://udistrital.edu.co",
         "placeholder_DOI": "Ej: http://doi.org/10.25145/j.taba.2019",
-        "placeholder_idioma_traduccion":"Ej: Español",
+        "placeholder_idioma_traduccion": "Ej: Español",
         "placeholder_disciplina": "Ej: Artes plásticas y visuales",
-        "placeholder_soporte_documento":"Soporte de documento",
+        "placeholder_soporte_documento": "Soporte de documento",
         "placeholder_institucion": "Ej: Universidad Distrital",
         "placeholder_lugar": "Ej: Nombre de pais, ciudad, locación",
         "placeholder_numero_resolucion": "XX - XX (Opcional)",
@@ -868,7 +888,10 @@
         "placeholder_puntaje": "Ej: 25",
         "tooltip_editar": "Editar producción académica",
         "tooltip_eliminar": "Eliminar producción académica",
-        "tooltip_crear": "Crear producción académica"
+        "tooltip_crear": "Crear producción académica",
+        "seguro_continuar_registrar": "¿Está seguro de registrar al nuevo autor?",
+        "autor_creado": "Autor creado exitosamente",
+        "autor_no_creado": "No fue posible crear el nuevo autor"
     },
     "archivo_icfes": {
         "archivo_icfes": "Archivo de registros del icfes",
@@ -966,7 +989,7 @@
         "tooltip_detalle": "Ver periodo",
         "tooltip_editar": "Editar periodo",
         "tooltip_eliminar": "Eliminar periodo",
-        "tooltip_crear":"Crear periodo",
+        "tooltip_crear": "Crear periodo",
         "tooltip_cancelar": "Cancelar",
         "tooltip_guargar": "Guardar"
     },
@@ -1126,7 +1149,6 @@
         "coordinador_asignado": "Coordinador asignado Correctamente!",
         "seguro_continuar_asignar": "¿Está seguro de asignar este coordinador a este proyecto académico?",
         "tag_asigcoordinador": "Asignación de coordinador"
-
     },
     "enfasis": {
         "enfasis": "Enfásis",
@@ -1228,9 +1250,10 @@
         "imprimir_comprobante": "Imprima y conserve este comprobante",
         "comprobante_inscripcion": "Comprobante de Inscripción",
         "info_comprobante": "El diligenciamiento del presente formulario indica que el aspirante ha conocido el instructivo oficial de admisiones del PERIODO ACADÉMICO en curso, y acorde con la ley 1581 de 2012, autoriza de manera expresa e inequívoca, que sus datos personales sean tratados conforme a las funciones propias de la Universidad, en su condición de Institución de Educación Superior.",
-        "warning_info":"Señor usuario, recuerde que solo podra generar hasta 3 recibos en estado pendiente de pago, si desea generar otra preinscripción a otro proyecto deberá pagar al menos uno de los recibos generados.",
-        "alerta_posgrado":"Estimado aspirante, tenga en cuenta que para poder inscribirse en un programa de posgrado, usted debe contar con un grado de pregrado culminado y graduado, con sus respectivos soportes documentales.",
-        "alerta_discapacidades": "Señor usuario, si usted tiene más de una condición de discapacidad, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias."
+        "warning_info":"Aspirante, recuerde que solo podra generar hasta 3 recibos en estado pendiente de pago, si desea generar otra preinscripción a otro proyecto deberá pagar al menos uno de los recibos generados.",
+        "alerta_posgrado":"Aspirante, tenga en cuenta que para poder inscribirse en un programa de posgrado, usted debe contar con un grado de pregrado culminado y graduado, con sus respectivos soportes documentales.",
+        "alerta_veracidad_informacion":"Aspirante, tenga en cuenta que la información que diligenciará a continuación debe ser verídica para poder continuar con el proceso de inscripción.",
+        "alerta_discapacidades": "Aspirante, si usted tiene más de una condición de discapacidad, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias."
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -1267,7 +1290,10 @@
         "informacion_academica_registrada": "La información académica ha sido registrada",
         "documento_informacion_academica_no_registrado": "Error subiendo el documento de soporte",
         "seguro_continuar_registrar": "¿Está seguro de registrar esta información académica?",
-        "error_cargar_universidad": "Ocurrió un error al cargar la información de la universidad"
+        "error_cargar_universidad": "Ocurrió un error al cargar la información de la universidad",
+        "crear_entidad": "¿Desea crear una nueva institución?",
+        "titulo2_crear_entidad": "no ha sido encontrado",
+        "titulo1_crear_entidad": "El Nit. "
     },
     "experiencia_laboral": {
         "experiencia_laboral_no_registrada": "Experiencia laboral no actualizada",
@@ -1281,7 +1307,11 @@
         "error": "Ha ocurrido un error inesperado al cargar la información",
         "tooltip_editar": "Editar experiencia laboral",
         "tooltip_eliminar": "Eliminar experiencia laboral",
-        "tooltip_crear": "Crear experiencia laboral"
+        "tooltip_crear": "Crear experiencia laboral",
+        "crear_entidad": "¿Desea crear una nueva entidad?",
+        "titulo2_crear_entidad": "no ha sido encontrado",
+        "titulo1_crear_entidad": "El Nit. "
+
     },
     "documento_programa": {
         "documento_programa_no_registrado": "Documento no registrado",
@@ -1292,75 +1322,74 @@
         "documento_cambiar": "Seleccione el reemplazo para el tipo de documento elegido."
     },
     "documento_proyecto": {
-      "documento": "Documento proyecto",
-      "seguro_continuar_registrar_documento": "¿Está seguro de registrar este documento para el proyecto?",
-      "documento_creado": "Documento creado",
-      "documento_no_creado": "Documento no creado",
-      "seguro_continuar_eliminar_documento": "¿Está seguro de eliminar este documento para el proyecto?",
-      "seguro_continuar_actualizar_documento": "¿Está seguro de actualizar este documento para el proyecto?",
-      "documento_actualizado": "Documento actualizado",
-      "documento_no_actualizado": "Documento no actualizado",
-      "documento_eliminado": "Documento eliminado",
-      "documento_no_eliminado": "Documento no eliminado",
-      "administrar_documento": "Administrar documentos",
-      "error_documento_ya_existe": "El documento ya fue agregado",
-      "documento_proyecto": "Nombre del documento:",
-      "aviso_periodo": "Periodo en el cual se define los documentos y descuentos de admisión",
-      "aviso_nivel": "Seleccione el nivel al que desea definir los documentos y descuentos de admisión",
-      "erro_selec_nivel": "Por favor, seleccione el nivel",
-      "aviso_proyecto": "Seleccione el proyecto académico que desea definir los documentos y descuentos de admisión",
-      "erro_selec_proyecto": "Por favor, seleccione al menos un proyecto",
-      "erro_selec_documento": "Por favor, seleccione un documento",
-      "titulo": "Asignación de documentos y descuentos por proyecto",
-      "documentos": "Documentos",
-      "descuentos": "Descuentos",
-      "seleccione_documentos": "Seleccione los documentos que desea asignar al programa:",
-      "documentos_seleccionados": "Documentos asignados:",
-      "carga_nuevo_documento": "Asignando nuevo documento...",
-      "carga_eliminando_documento": "Eliminando documento del proyecto..."
+        "documento": "Documento proyecto",
+        "seguro_continuar_registrar_documento": "¿Está seguro de registrar este documento para el proyecto?",
+        "documento_creado": "Documento creado",
+        "documento_no_creado": "Documento no creado",
+        "seguro_continuar_eliminar_documento": "¿Está seguro de eliminar este documento para el proyecto?",
+        "seguro_continuar_actualizar_documento": "¿Está seguro de actualizar este documento para el proyecto?",
+        "documento_actualizado": "Documento actualizado",
+        "documento_no_actualizado": "Documento no actualizado",
+        "documento_eliminado": "Documento eliminado",
+        "documento_no_eliminado": "Documento no eliminado",
+        "administrar_documento": "Administrar documentos",
+        "error_documento_ya_existe": "El documento ya fue agregado",
+        "documento_proyecto": "Nombre del documento:",
+        "aviso_periodo": "Periodo en el cual se define los documentos y descuentos de admisión",
+        "aviso_nivel": "Seleccione el nivel al que desea definir los documentos y descuentos de admisión",
+        "erro_selec_nivel": "Por favor, seleccione el nivel",
+        "aviso_proyecto": "Seleccione el proyecto académico que desea definir los documentos y descuentos de admisión",
+        "erro_selec_proyecto": "Por favor, seleccione al menos un proyecto",
+        "erro_selec_documento": "Por favor, seleccione un documento",
+        "titulo": "Asignación de documentos y descuentos por proyecto",
+        "documentos": "Documentos",
+        "descuentos": "Descuentos",
+        "seleccione_documentos": "Seleccione los documentos que desea asignar al programa:",
+        "documentos_seleccionados": "Documentos asignados:",
+        "carga_nuevo_documento": "Asignando nuevo documento...",
+        "carga_eliminando_documento": "Eliminando documento del proyecto..."
     },
     "descuento_academico": {
-      "descuento_academico_no_registrado": "Descuento académico no registrado",
-      "descuento_academico_registrado": "Descuento académico registrado",
-      "descuento_descuento_academico_no_registrado": "Error subiendo el descuento académico",
-      "descuento": "Descuento proyecto",
-      "seguro_continuar_registrar_descuento": "¿Está seguro de registrar este descuento para el proyecto?",
-      "descuento_creado": "Descuento creado",
-      "descuento_no_creado": "Descuento no creado",
-
-      "seguro_continuar_eliminar_descuento": "¿Está seguro de eliminar este descuento para el proyecto?",
-      "seguro_continuar_actualizar_descuento": "¿Está seguro de actualizar este descuento para el proyecto?",
-      "descuento_actualizado": "Descuento actualizado",
-      "descuento_no_actualizado": "Descuento no actualizado",
-      "descuento_eliminado": "Descuento eliminado",
-      "descuento_no_eliminado": "Descuento no eliminado",
-      "administrar_descuento": "Administrar descuentos",
-      "error_descuento_ya_existe": "El descuentos ya fue agregado",
-      "descuento_proyecto": "Nombre del descuento:",
-      "erro_selec_nivel": "Por favor, seleccione el nivel",
-      "aviso_proyecto": "Seleccione el proyecto académico que desea definir los documentos y descuentos de admisión",
-      "erro_selec_proyecto": "Por favor, seleccione al menos un proyecto",
-      "erro_selec_descuento": "Por favor, seleccione un documento",
-      "titulo": "Asignación de documentos y descuentos por proyecto",
-      "descuentos": "Descuentos",
-      "seleccione_descuentos": "Seleccione los descuentos que desea asignar al programa:",
-      "descuentos_seleccionados": "Descuentos asignados:",
-      "carga_nuevo_descuento": "Asignando nuevo descuento...",
-      "carga_eliminando_descuento": "Eliminando descuento del proyecto..."
+        "descuento_academico_no_registrado": "Descuento académico no registrado",
+        "descuento_academico_registrado": "Descuento académico registrado",
+        "descuento_descuento_academico_no_registrado": "Error subiendo el descuento académico",
+        "descuento": "Descuento proyecto",
+        "seguro_continuar_registrar_descuento": "¿Está seguro de registrar este descuento para el proyecto?",
+        "descuento_creado": "Descuento creado",
+        "descuento_no_creado": "Descuento no creado",
+        "seguro_continuar_eliminar_descuento": "¿Está seguro de eliminar este descuento para el proyecto?",
+        "seguro_continuar_actualizar_descuento": "¿Está seguro de actualizar este descuento para el proyecto?",
+        "descuento_actualizado": "Descuento actualizado",
+        "descuento_no_actualizado": "Descuento no actualizado",
+        "descuento_eliminado": "Descuento eliminado",
+        "descuento_no_eliminado": "Descuento no eliminado",
+        "administrar_descuento": "Administrar descuentos",
+        "error_descuento_ya_existe": "El descuentos ya fue agregado",
+        "descuento_proyecto": "Nombre del descuento:",
+        "erro_selec_nivel": "Por favor, seleccione el nivel",
+        "aviso_proyecto": "Seleccione el proyecto académico que desea definir los documentos y descuentos de admisión",
+        "erro_selec_proyecto": "Por favor, seleccione al menos un proyecto",
+        "erro_selec_descuento": "Por favor, seleccione un documento",
+        "titulo": "Asignación de documentos y descuentos por proyecto",
+        "descuentos": "Descuentos",
+        "seleccione_descuentos": "Seleccione los descuentos que desea asignar al programa:",
+        "descuentos_seleccionados": "Descuentos asignados:",
+        "carga_nuevo_descuento": "Asignando nuevo descuento...",
+        "carga_eliminando_descuento": "Eliminando descuento del proyecto..."
     },
     "idiomas": {
-      "error_cargar_informacion_idiomas": "Ocurrió un error al cargar la información de los idiomas",
-      "error_nativo_examen": "No puede solicitar un exámen con su idioma nativo",
-      "error_doble_examen": "Ya tiene registrado un idioma con exámen",
-      "informacion_idioma_no_registrada": "Información de idioma no registrada",
-      "informacion_idioma_registrada": "Información de idioma registrada",
-      "informacion_idioma_actualizada": "Información de idioma actualizada",
-      "seguro_continuar_registrar": "¿Está seguro de registrar esta información de idioma?",
-      "seguro_actualizar_idioma": "¿Está seguro de guardar los cambios en la información de este idioma?",
-      "eliminar": "¿Desea eliminar el idioma?",
-      "tooltip_editar": "Editar idioma",
-      "tooltip_eliminar": "Eliminar idioma",
-      "tooltip_crear": "Crear idioma"
+        "error_cargar_informacion_idiomas": "Ocurrió un error al cargar la información de los idiomas",
+        "error_nativo_examen": "No puede solicitar un exámen con su idioma nativo",
+        "error_doble_examen": "Ya tiene registrado un idioma con exámen",
+        "informacion_idioma_no_registrada": "Información de idioma no registrada",
+        "informacion_idioma_registrada": "Información de idioma registrada",
+        "informacion_idioma_actualizada": "Información de idioma actualizada",
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta información de idioma?",
+        "seguro_actualizar_idioma": "¿Está seguro de guardar los cambios en la información de este idioma?",
+        "eliminar": "¿Desea eliminar el idioma?",
+        "tooltip_editar": "Editar idioma",
+        "tooltip_eliminar": "Eliminar idioma",
+        "tooltip_crear": "Crear idioma"
     },
     "propuesta_grado": {
         "error_cargar_lineas_investigacion": "Ocurrió un error al cargar la información de las líneas de investigación",
@@ -1457,7 +1486,9 @@
         "criterios_proyectos": "Criterios por proyecto académico",
         "evaluacion_aspirantes": "Evaluación de aspirantes",
         "listar_aspirantes": "Listar aspirantes",
-        "cupos_proyectos": "Asignación de cupos por proyecto académico"
+        "cupos_proyectos": "Asignación de cupos por proyecto académico",
+        "error_no_aspirantes": "No existen aspirantes por evaluar para el periodo y proyecto seleccionado",
+        "titulo_no_aspirantes": "No hay aspirantes por evaluar"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",
@@ -1475,7 +1506,8 @@
         "asignar": "Asignar cupos",
         "seleccionar_admitidos": "Seleccionar admitidos",
         "ver_listado_aspirantes": "Ver listado de aspirantes",
-        "cupos_proyecto": "Cantidad de cupos asignados"
+        "cupos_proyecto": "Cantidad de cupos asignados",
+        "cupos_disponibles": "Cantidad de cupos disponibles:"
     },
     "calendario": {
         "seguro_continuar_inhabilitar_calendario": "¿Esta seguro de inhabilitar este calendario?",
@@ -1584,7 +1616,8 @@
         "tooltip_crear_proceso": "Crear proceso",
         "sin_calendarios": "No existen calendarios.",
         "subir_resolucion": "Subir resolución",
-        "descargar_resolucion": "Descargar resolución"
+        "descargar_resolucion": "Descargar resolución",
+        "crear_actividad_proceso":"por favor a continuación añada la primer actividad del proceso"
     },
     "derechos_pecuniarios": {
         "titulo": "Derechos Pecuniarios",
@@ -1623,11 +1656,11 @@
         "tooltip_editar": "Editar derecho pecunario",
         "tooltip_cancelar": "Cancelar",
         "tooltip_guargar": "Guardar",
-        "nuevo_recibo_derecho_pecuniario":"Nuevo Recibo de derecho pecuniario",
+        "nuevo_recibo_derecho_pecuniario": "Nuevo Recibo de derecho pecuniario",
         "generar_recibo": "Generar recibo",
         "recibos_generados": "Recibos generados (PIN)",
         "error": "Ha ocurrido un error inesperado al cargar de los recibos",
-        "generacion_recibo_derecho_pecuniario":"Generación de recibos de pago de derechos pecuniarios",
+        "generacion_recibo_derecho_pecuniario": "Generación de recibos de pago de derechos pecuniarios",
         "no_recibo": "No existe ninguna información de recibos pecuniarios registrados",
         "numero_recibo": "# Recibo",
         "valor": "Valor",
@@ -1742,7 +1775,15 @@
         "solicitante": "Solicitante",
         "no_data": "No hay prácticas académicas registradas",
         "estado_docente": "Estatus del autor",
-        "tooltip_ver_registro": "Ver"
+        "tooltip_ver_registro": "Ver",
+        "guia_practica": "Guia para el desarrollo de la práctica",
+        "lista_personal_apoyo": "Lista personal de apoyo",
+        "acta_compromiso": "Acta de compromiso de la práctica",
+        "info_asistencia_practica": "Información de asistente a la práctica",
+        "fecha_respuesta":"Fecha",
+        "nombre_usuario":"Nombre del usuario",
+        "estado":"Estado",
+        "comentario":"Comentario"
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Preinscripción de Espacios académicos",
@@ -1752,5 +1793,4 @@
         "adicionar": "Adicionar",
         "periodo_formacion": "Periodo de Formación"
     }
-
 }

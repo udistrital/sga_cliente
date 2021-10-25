@@ -37,6 +37,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   nuevoForm: boolean = false;
   nuevoTercero: boolean = false;
   nit: any;
+
   @Input('info_experiencia_laboral_id')
   set name(info_experiencia_laboral_id: number) {
     this.info_experiencia_laboral_id = info_experiencia_laboral_id;
@@ -78,13 +79,9 @@ export class CrudExperienciaLaboralComponent implements OnInit {
 
   constructor(
     private autenticationService: ImplicitAutenticationService,
-    private popUpManager: PopUpManager,
     private translate: TranslateService,
     private toasterService: ToasterService,
-    private organizacionService: OrganizacionService,
     private sgaMidService: SgaMidService,
-    private ubicacionesService: UbicacionService,
-    private experienciaService: ExperienciaService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private store: Store<IAppState>,
@@ -97,11 +94,11 @@ export class CrudExperienciaLaboralComponent implements OnInit {
       this.construirForm();
     });
     this.persona_id = this.users.getPersonaId();
+    this.loadLists();
     this.listService.findPais();
     this.listService.findTipoDedicacion();
     this.listService.findTipoVinculacion();
-    //this.listService.findCargo();
-    this.loadLists();
+    this.listService.findTipoTercero();
   }
 
   public loadLists() {
@@ -340,8 +337,9 @@ export class CrudExperienciaLaboralComponent implements OnInit {
           }
           this.loading = false;
           const opt: any = {
-            title: `El Nit. ${nit} no ha sido encontrado`,
-            text: "Desea crear una nueva institución?",
+            title: this.translate.instant('experiencia_laboral.titulo1_crear_entidad') + ` ${nit} ` +
+              this.translate.instant('experiencia_laboral.titulo2_crear_entidad'),
+            text: this.translate.instant('experiencia_laboral.crear_entidad'),
             icon: 'warning',
             buttons: true,
             dangerMode: true,
@@ -352,7 +350,6 @@ export class CrudExperienciaLaboralComponent implements OnInit {
           Swal.fire(opt)
             .then((action) => {
               if (action.value) {
-                console.log('Se creará próximamente un nuevo tercero')
                 this.nuevoTercero = true;
               }
             });

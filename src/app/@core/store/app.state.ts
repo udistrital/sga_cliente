@@ -17,9 +17,12 @@ import { Genero } from '../data/models/informacion/genero';
 import { Titulacion } from '../data/models/inscripcion/titulacion';
 import { TipoIdentificacion } from '../data/models/informacion/tipo_identificacion';
 import { TipoProyecto } from '../data/models/investigacion/tipo_proyecto';
+import { TipoTercero } from '../data/models/terceros/tipo_tercero';
 import { GrupoInvestigacion } from '../data/models/investigacion_cidc/grupo_investigacion';
 import { PeriodoAcademico } from '../data/models/periodo/periodo_academico';
 import { InfoComplementaria } from '../data/models/terceros/info_complementaria';
+import { TipoDocumento } from '../data/models/documento/tipo_documento'
+import { TipoContribuyente } from '../data/models/terceros/tipo_contribuyente';
 // import { TipoPublicacionLibro } from '../data/models/tipo_publicacion_libro';
 
 export interface IAppState {
@@ -42,6 +45,8 @@ export interface IAppState {
   listNivelFormacion: NivelFormacion[],
   listNivelIdioma: NivelIdioma[],
   listProgramaAcademico: ProgramaAcademico[],
+  listTipoContribuyente: TipoContribuyente[],
+  listTipoDocumento: TipoDocumento[],
   listTipoContacto: TipoContacto[],
   listTipoDiscapacidad: TipoDiscapacidad[],
   listTipoLugar: TipoLugar[],
@@ -58,6 +63,7 @@ export interface IAppState {
   listTipoInscripcionUniversidad: InfoComplementaria[],
   listTipoDedicacion: InfoComplementaria[],
   listTipoVinculacion: InfoComplementaria[],
+  listTipoTercero: TipoTercero[],
   listCargo: InfoComplementaria[],
   listTipoOrganizacion: InfoComplementaria[],
   listDocumentoPrograma: any[],

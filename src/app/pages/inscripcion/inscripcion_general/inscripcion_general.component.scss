@@ -26,5 +26,11 @@
 }
 
 .mat-button {
+    background-color: rgb(0, 162, 255);
+    color: #fff;
+}
+
+.mat-button:disabled {
+    background-color: #fff;
     color: #fff;
 }

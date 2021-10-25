@@ -116,6 +116,16 @@ export const FORM_SOLICITUD_PRACTICAS = {
             key: 'Nombre',
             deshabilitar: false,
         },
+    ]
+}
+
+
+export const FORM_SOPORTES_DOCUMENTALES = {
+    tipo_formulario: 'mini',
+    alertas: true,
+    btn: 'Enviar',
+    modelo: 'documental',
+    campos: [
         {
             etiqueta: 'file',
             claseGrid: 'col-12 col-md-6 mb-5',
@@ -128,7 +138,6 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
-            deshabilitar: false,
         },
         {
             etiqueta: 'file',
@@ -142,7 +151,6 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
-            deshabilitar: false,
         },
         {
             etiqueta: 'file',
@@ -156,7 +164,6 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
-            deshabilitar: false,
         },
         {
             etiqueta: 'file',
@@ -170,7 +177,121 @@ export const FORM_SOLICITUD_PRACTICAS = {
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
+        },        
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-6 mb-5',
+            clase: 'form-control',
+            nombre: 'GuiaPractica',
+            label_i18n: 'guia_practica',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        },
+              
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-6 mb-5',
+            clase: 'form-control',
+            nombre: 'ListaPersonalApoyo',
+            label_i18n: 'lista_personal_apoyo',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        },
+    ]
+}
+
+
+export const FORM_DOCUMENTOS_ADICIONALES = {
+    tipo_formulario: 'mini',
+    alertas: true,
+    btn: 'Enviar',
+    modelo: 'documental',
+    campos: [
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-6 mb-5',
+            clase: 'form-control',
+            nombre: 'ActaCompromiso',
+            label_i18n: 'acta_compromiso',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        },
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-6 mb-5',
+            clase: 'form-control',
+            nombre: 'InformacionAsistente',
+            label_i18n: 'info_asistencia_practica',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        }
+    ]
+}
+
+export const FORM_RESPUESTA_SOLICITUD = {
+    tipo_formulario: 'mini',
+    alertas: true,
+    btn: 'Dar respuesta',
+    modelo: 'documental',
+    campos: [
+        {
+            etiqueta: 'mat-date',
+            tipo: 'datetime-local',
+            nombre: 'FechaRespuesta',
+            claseGrid: 'col-12 col-sm-6',
+            label_i18n: 'fecha_respuesta',
+            requerido: true,
+            deshabilitar: true,
+        },
+        {
+            etiqueta: 'input',
+            tipo: 'text',
+            nombre: 'Nombre',
+            claseGrid: 'col-12 col-sm-6',
+            label_i18n: 'nombre_usuario',
+            requerido: true,
+            minimo: 0,
+            deshabilitar: true,
+        },
+        {
+            etiqueta: 'select',
+            tipo: 'text',
+            claseGrid: "col-12 col-md-6",
+            nombre: 'Estado',
+            label_i18n: 'estado',
+            requerido: true,
+            opciones: [],
+            key: 'Nombre',
             deshabilitar: false,
         },
+        {
+            etiqueta: 'textarea',
+            tipo: 'text',
+            nombre: 'Comentario',
+            claseGrid: 'col-12 col-sm-6',
+            label_i18n: 'comentario',
+            requerido: true,
+            minimo: 0,
+            deshabilitar: false,
+        },
+
+        
+
     ]
 }

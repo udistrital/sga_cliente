@@ -188,6 +188,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     }
   }
   ngOnInit() {
+    console.log(this.normalform);
     this.init = true;
     if (!this.normalform.tipo_formulario) {
       this.normalform.tipo_formulario = 'grid';
@@ -273,11 +274,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
       }
 
     }
-    /*  if (!this.normalform.btn) {
-          if (this.validForm().valid) {
-            this.resultSmart.emit(this.validForm());
-          }
-        } */
+    // if (!this.normalform.btn) {
+    //   if (this.validForm().valid) {
+    //     this.resultSmart.emit(this.validForm());
+    //   }
+    // }
     c.clase = 'form-control form-control-success';
     c.alerta = '';
     return true;
@@ -322,7 +323,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
       }
     });
 
-    if (this.data.valid && (resueltos / requeridos) === 1) {
+    if (this.data.valid && (resueltos / requeridos) >= 1) {
       if (this.normalform.modelo) {
         this.data.data[this.normalform.modelo] = result;
       } else {

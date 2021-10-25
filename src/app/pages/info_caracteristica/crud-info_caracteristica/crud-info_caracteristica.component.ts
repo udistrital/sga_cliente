@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { ListService } from '../../../@core/store/services/list.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../../@core/store/app.state';
 import { PopUpManager } from '../../../managers/popUpManager';
@@ -58,6 +59,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     private translate: TranslateService,
     private sgamidService: SgaMidService,
     private userService: UserService,
+    private documentoService: DocumentoService,
     private ubicacionesService: UbicacionService,
     private store: Store<IAppState>,
     private listService: ListService,
@@ -197,8 +199,8 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       this.sgamidService.get('persona/consultar_complementarios/' + this.info_persona_id)
         .subscribe(res => {
           if (res !== null) {
-            this.datosGet = <InfoCaracteristicaGet>res;
-            this.info_info_caracteristica = <InfoCaracteristica>res;
+            this.datosGet = <InfoCaracteristicaGet>res.Response.Body[0].Data;
+            this.info_info_caracteristica = <InfoCaracteristica>res.Response.Body[0].Data;
             this.info_info_caracteristica.Ente = (1 * this.info_caracteristica_id);
             this.info_info_caracteristica.TipoRelacionUbicacionEnte = 1;
             this.info_info_caracteristica.IdLugarEnte = this.datosGet.Lugar.Id;
@@ -213,6 +215,31 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
 
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = [this.info_info_caracteristica.DepartamentoNacimiento];
             this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = [this.info_info_caracteristica.Lugar];
+
+            this.formInfoCaracteristica.ComprobanteDiscapacidad = this.datosGet.IdDocumento;
+            const files = []
+            if (this.formInfoCaracteristica.ComprobanteDiscapacidad + '' !== '0') {
+              files.push({ Id: this.formInfoCaracteristica.ComprobanteDiscapacidad, key: 'Documento' });
+            }
+            if (this.formInfoCaracteristica.ComprobanteDiscapacidad !== undefined &&
+              this.formInfoCaracteristica.ComprobanteDiscapacidad !== null &&
+              this.formInfoCaracteristica.ComprobanteDiscapacidad !== 0) {
+              this.nuxeo.getDocumentoById$(files, this.documentoService)
+                .subscribe(res => {
+                  const filesResponse = <any>res;
+                  if (Object.keys(filesResponse).length === files.length) {
+                    this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = filesResponse['Documento'] + '';
+                    this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = filesResponse['Documento'] + '';
+                  }
+                  this.loading = false;
+                },
+                  (error: HttpErrorResponse) => {
+                    this.loading = false;
+                    this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+                  },
+                );
+            }
+
             this.loading = false;
             this.result.emit(1);
           } else {
@@ -330,7 +357,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     if (event.valid) {
       if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad !== 'undefined') {
         const file = [{
-          file: event.data.InfoCaracteristica.ComprobanteDiscapacidad,
+          file: event.data.InfoCaracteristica.ComprobanteDiscapacidad.file,
           IdDocumento: 42,
           nombre: 'ComprobanteDiscapacidad',
         }]

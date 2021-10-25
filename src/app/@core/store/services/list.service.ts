@@ -330,6 +330,42 @@ export class ListService {
     );
   }
 
+  public findTipoContribuyente() {
+    this.store.select(REDUCER_LIST.TipoContribuyente).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('tipo_contribuyente/?query=Activo:true&limit=0')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoContribuyente, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoContribuyente, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findTipoDocumento() {
+    this.store.select(REDUCER_LIST.TipoDocumento).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('tipo_documento/?query=Activo:true&limit=0')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoDocumento, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoDocumento, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
   public findTipoContacto() {
     this.store.select(REDUCER_LIST.TipoContacto).subscribe(
       (list: any) => {
@@ -355,7 +391,7 @@ export class ListService {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:1')
             .subscribe(
               (result: any[]) => {
-                this.addList(REDUCER_LIST.TipoDiscapacidad, result);
+                this.addList(REDUCER_LIST.TipoDiscapacidad, result.filter(data => data.Nombre !== 'DOCUMENTO_SOPORTE'));
               },
               error => {
                 this.addList(REDUCER_LIST.TipoDiscapacidad, []);
@@ -638,6 +674,24 @@ public findTipoParametro() {
               },
               error => {
                 this.addList(REDUCER_LIST.TipoInscripcionUniversidad, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findTipoTercero() {
+    this.store.select(REDUCER_LIST.TipoTercero).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('tipo_tercero?limit=0&query=Activo:true')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.TipoTercero, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.TipoTercero, []);
               },
             );
         }

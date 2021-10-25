@@ -1,15 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NUEVO_TERCERO } from './form_new_tercero';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
+import { ToasterConfig } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
-import * as momentTimezone from 'moment-timezone';
-import { Lugar } from "../../../@core/data/models/lugar/lugar"
+import { Lugar } from '../../../@core/data/models/lugar/lugar'
+import { TipoTercero } from '../../../@core/data/models/terceros/tipo_tercero'
 
 @Component({
   selector: 'ngx-new-tercero',
@@ -20,6 +19,7 @@ export class NewTercero implements OnInit {
   config: ToasterConfig;
   nuevoTercero: boolean = false;
   listaPaises: Lugar[];
+  listaTipoTercero: TipoTercero[];
 
   @Output() eventChange = new EventEmitter();
   @Output('result')
@@ -30,7 +30,6 @@ export class NewTercero implements OnInit {
     this.info_tercero = {
       Nit: nit,
     }
-    console.log(this.info_tercero);
     this.formInfoNuevoTercero.campos[this.getIndexFormNew('Nit')].valor = nit;
   }
   terceroData = null;
@@ -47,8 +46,7 @@ export class NewTercero implements OnInit {
   constructor(
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
-    private store: Store<IAppState>,
-    private toasterService: ToasterService) {
+    private store: Store<IAppState>) {
     this.formInfoNuevoTercero = NUEVO_TERCERO;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -58,7 +56,6 @@ export class NewTercero implements OnInit {
   }
 
   construirForm() {
-    // this.formInfoFormacionAcademica.titulo = this.translate.instant('GLOBAL.formacion_academica');
     this.formInfoNuevoTercero.btn = this.translate.instant('GLOBAL.guardar');
     this.formInfoNuevoTercero.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
     for (let i = 0; i < this.formInfoNuevoTercero.campos.length; i++) {
@@ -72,8 +69,6 @@ export class NewTercero implements OnInit {
     this.translate.use(language);
   }
 
-  getPais(event) { }
-
   getIndexFormNew(nombre: String): number {
     for (let index = 0; index < this.formInfoNuevoTercero.campos.length; index++) {
       const element = this.formInfoNuevoTercero.campos[index];
@@ -82,9 +77,6 @@ export class NewTercero implements OnInit {
       }
     }
     return 0;
-  }
-
-  searchDoc(data) {
   }
 
   createInfoTercero(infoTercero: any): void {
@@ -105,15 +97,23 @@ export class NewTercero implements OnInit {
             .subscribe((data) => {
               this.result.emit({
                 infoPost: infoTercero,
-                infoReturn: data
+                infoReturn: data,
               });
-              console.log(data)
             });
         }
       });
   }
 
   ngOnInit() {
+      const opt2: any = {
+        title: this.translate.instant('GLOBAL.info'),
+        text: this.translate.instant('inscripcion.alerta_veracidad_informacion'),
+        icon: 'warning',
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      };
+      Swal.fire(opt2)
+      .then((action2) => {
+      });
   }
 
   setPercentage(event) {
@@ -125,38 +125,22 @@ export class NewTercero implements OnInit {
 
   validarFormNuevoTercero(event) {
     if (event.valid) {
-      console.log(event.data.Tercero);
       const formData = event.data.Tercero;
       this.createInfoTercero(formData)
     }
   }
 
-
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
-  }
-
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
+        this.listaTipoTercero = list.listTipoTercero;
+        this.formInfoNuevoTercero.campos[this.getIndexFormNew('TipoTrecero')].opciones = this.listaTipoTercero[0];
+
+        // Ajuste de nombre
+        this.formInfoNuevoTercero.campos[this.getIndexFormNew('TipoTrecero')].opciones.forEach(tipo => {
+          tipo.Nombre = tipo.Nombre.charAt(0) + tipo.Nombre.slice(1).toLowerCase().replaceAll('_', ' ');
+        });
+
         this.listaPaises = list.listPais;
         this.formInfoNuevoTercero.campos[this.getIndexFormNew('Pais')].opciones = list.listPais[0];
       },

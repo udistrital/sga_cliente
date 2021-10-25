@@ -21,6 +21,8 @@ export const rootReducer: ActionReducerMap<IAppState> = {
   listNivelFormacion: ListReducer.ListReducerNivelFormacion,
   listNivelIdioma: ListReducer.ListReducerNivelIdioma,
   listProgramaAcademico: ListReducer.ListReducerProgramaAcademico,
+  listTipoContribuyente: ListReducer.listTipoContribuyente,
+  listTipoDocumento: ListReducer.listTipoDocumento,
   listTipoContacto: ListReducer.ListReducerTipoContacto,
   listTipoDiscapacidad: ListReducer.ListReducerTipoDiscapacidad,
   listTipoLugar: ListReducer.ListReducerTipoLugar,
@@ -42,5 +44,6 @@ export const rootReducer: ActionReducerMap<IAppState> = {
   listDocumentoPrograma: ListReducer.ListReducerDocumentoPrograma,
   listDescuentoDependencia: ListReducer.ListReducerDescuentoDependencia,
   listTipoParametro: ListReducer.listReducerTipoParametro,
+  listTipoTercero: ListReducer.ListReducerTipoTercero,
   // listTipoPublicacionLibro: ListReducer.listReducerTipoPublicacionLibro,
 }

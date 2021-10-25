@@ -126,6 +126,10 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   ngOnChanges() {
+    this.loadCalendar();
+  }
+
+  loadCalendar(){
     this.processes = [];
     this.processTable.load(this.processes);
     if (this.calendarForNew === true) {
@@ -534,12 +538,15 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     newProcess.afterClosed().subscribe((process: Proceso) => {
       if (process !== undefined) {
         this.eventoService.post('tipo_evento', process).subscribe(
-          response => {
+          async (response) => {
             process.procesoId = response['Id'];
             process.actividades = [];
             this.processes.push(process);
+            this.addActivity(null, process);
             this.processTable.load(this.processes);
-            this.popUpManager.showSuccessAlert(this.translate.instant('calendario.proceso_exito'));
+            await this.popUpManager.showSuccessAlert(this.translate.instant('calendario.proceso_exito'))
+            await this.popUpManager.showAlert(this.translate.instant('calendario.tooltip_crear_actividad'), 
+            this.translate.instant('calendario.crear_actividad_proceso'))
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_proceso'));
@@ -625,7 +632,12 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             actividad.FechaInicio = moment(actividad.FechaInicio, 'YYYY-MM-DD').format('DD-MM-YYYY');
             actividad.FechaFin = moment(actividad.FechaFin, 'YYYY-MM-DD').format('DD-MM-YYYY');
             this.processes.filter((proc: Proceso) => proc.procesoId === process.procesoId)[0].actividades.push(actividad);
-            event.source.load(process.actividades);
+            if(event){
+              event.source.load(process.actividades);
+            }else {
+              console.log('Esperemos haber cómo lo resolvemos ! ');
+              this.loadCalendar();
+            }
             this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_exito'));
           },
           error => {

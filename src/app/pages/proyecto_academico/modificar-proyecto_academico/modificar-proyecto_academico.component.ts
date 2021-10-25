@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { OikosService } from "../../../@core/data/oikos.service";
 import { CoreService } from "../../../@core/data/core.service";
 import {
@@ -7,7 +7,7 @@ import {
   Toast,
   BodyOutputType
 } from "angular2-toaster";
-import { TranslateService, LangChangeEvent } from "@ngx-translate/core";
+import { TranslateService } from "@ngx-translate/core";
 import { FormBuilder, Validators, FormControl } from "@angular/forms";
 import { ProyectoAcademicoPost } from "../../../@core/data/models/proyecto_academico/proyecto_academico_post";
 import Swal from "sweetalert2";
@@ -130,17 +130,20 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     Validators.required,
     Validators.maxLength(4)
   ]);
+
   Campo12Control = new FormControl("", [Validators.required]);
   Campo13Control = new FormControl("", [
     Validators.required,
     Validators.maxLength(4)
   ]);
+
   Campo14Control = new FormControl("", [Validators.required]);
   Campo16Control = new FormControl("", [Validators.required]);
   Campo17Control = new FormControl("", [
     Validators.required,
     Validators.maxLength(4)
   ]);
+
   Campo18Control = new FormControl("", [Validators.required]);
   Campo19Control = new FormControl("", [Validators.required]);
   Campo20Control = new FormControl("", [Validators.required]);
@@ -149,35 +152,43 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     Validators.required,
     Validators.maxLength(2)
   ]);
+
   Campo23Control = new FormControl("", [
     Validators.required,
     Validators.maxLength(1)
   ]);
+
   CampoCorreoControl = new FormControl("", [
     Validators.required,
     Validators.email
   ]);
+
   CampoCreditosControl = new FormControl("", [
     Validators.required,
     Validators.maxLength(4)
   ]);
+
   Campo24Control = new FormControl("", [
     Validators.required,
     Validators.maxLength(4)
   ]);
+
   Campo25Control = new FormControl("", [
     Validators.required,
     Validators.maxLength(4)
   ]);
+
   Campo26Control = new FormControl("", [Validators.required]);
   Campo28Control = new FormControl("", [
     Validators.required,
     Validators.maxLength(1)
   ]);
+
   Campo27Control = new FormControl("", [
     Validators.required,
     Validators.maxLength(2)
   ]);
+
   Campo29Control = new FormControl("", [Validators.required]);
   selectFormControl = new FormControl("", Validators.required);
   @Output() eventChange = new EventEmitter();
@@ -197,7 +208,6 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     showTwentyFourHours: false,
     showSeconds: false,
     returnedValueType: "String"
-    // appendTo: document.body,
   };
 
   constructor(
@@ -257,6 +267,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       mes_vigencia: ["", [Validators.required, Validators.maxLength(2)]],
       ano_vigencia: ["", [Validators.required, Validators.maxLength(1)]]
     });
+
     this.resolualtaform = formBuilder.group({
       resolucion: ["", Validators.required],
       ano_resolucion: ["", [Validators.required, Validators.maxLength(4)]],
@@ -264,19 +275,23 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       mes_vigencia: ["", [Validators.required, Validators.maxLength(2)]],
       ano_vigencia: ["", [Validators.required, Validators.maxLength(1)]]
     });
+
     this.actoform = formBuilder.group({
       acto: ["", Validators.required],
       ano_acto: ["", [Validators.required, Validators.maxLength(4)]]
     });
+
     this.compleform = formBuilder.group({
       titulacion_snies: ["", Validators.required],
       titulacion_mujer: ["", Validators.required],
       titulacion_hombre: ["", Validators.required],
       competencias: ["", Validators.required]
     });
+
     this.coordinador = formBuilder.group({
       fecha_creacion_coordinador: ["", Validators.required]
     });
+
     this.loadfacultad();
     this.loadnivel();
     this.loadmetodologia();
@@ -433,7 +448,6 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         response => {
           const filesResponse = <any>response;
           if (Object.keys(filesResponse).length === filesToGet.length) {
-            // console.log("files", filesResponse);
             filesToGet.forEach((file: any) => {
               const url = filesResponse[file.Id];
               window.open(url);
@@ -534,7 +548,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   loadterceros(): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -596,6 +610,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     this.fecha_vencimiento_alta = convertDate;
     return new Date(convertDate);
   }
+
   loadfacultad() {
     this.oikosService
       .get("dependencia_tipo_dependencia/?query=TipoDependenciaId:2")
@@ -645,6 +660,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }
     );
   }
+
   loadmetodologia() {
     this.proyectoacademicoService.get("metodologia").subscribe(
       res => {
@@ -668,6 +684,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }
     );
   }
+
   loadunidadtiempo() {
     this.coreService.get("unidad_tiempo").subscribe(
       res => {
@@ -691,6 +708,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       }
     );
   }
+
   loadarea() {
     this.coreService.get("area_conocimiento").subscribe(
       res => {
@@ -750,13 +768,11 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             this.basicform.value.codigo_snies +
             "_" +
             this.basicform.value.nombre_proyecto);
-        // file.key = file.Id;
         file.key = "soporte_" + file.IdDocumento;
       });
       this.nuxeoService.getDocumentos$(files, this.documentoService).subscribe(
         response => {
           if (Object.keys(response).length === files.length) {
-            // console.log("response", response);
             files.forEach(file => {
               // Se restringe carga a un archivo
               resolve(response[file.key].Id);
@@ -815,6 +831,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         },
         ProyectoAcademicoInstitucionId: this.proyecto_academico
       };
+
       this.titulacion_proyecto_mujer = {
         Id: 0,
         Nombre: String(this.compleform.value.titulacion_mujer),
@@ -824,6 +841,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         },
         ProyectoAcademicoInstitucionId: this.proyecto_academico
       };
+
       this.titulacion_proyecto_hombre = {
         Id: 0,
         Nombre: String(this.compleform.value.titulacion_hombre),
@@ -833,6 +851,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         },
         ProyectoAcademicoInstitucionId: this.proyecto_academico
       };
+
       const informacion_basicaPut = {
         ProyectoAcademicoInstitucion: this.proyecto_academico,
         Titulaciones: [
@@ -842,6 +861,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         ],
         Enfasis: this.arr_enfasis_proyecto
       };
+
       const opt: any = {
         title: this.translate.instant("GLOBAL.actualizar"),
         text: this.translate.instant(
@@ -852,6 +872,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         dangerMode: true,
         showCancelButton: true
       };
+
       Swal.fire(opt).then(async willCreate => {
         if (willCreate.value) {
           // Si se actualiza el acto administrativo
@@ -866,7 +887,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           this.proyectoacademicoService
             .put(
               "tr_proyecto_academico/informacion_basica/" +
-                Number(this.data.idproyecto),
+              Number(this.data.idproyecto),
               informacion_basicaPut
             )
             .subscribe((res: any) => {
@@ -922,6 +943,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       });
     }
   }
+
   putinformacionregistro() {
     if (this.checkalta === true) {
       if (this.resolualtaform.valid) {
@@ -958,12 +980,14 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           AnoActoAdministrativo: String(this.actoform.value.ano_acto),
           ProyectoPadreId: this.data.proyecto_padre_id
         };
+
         this.calculateEndDate(
           this.data.fecha_creacion_registro[0],
           this.resoluform.value.ano_vigencia,
           this.resoluform.value.mes_vigencia,
           0
         );
+
         this.registro_califacado_acreditacion = {
           Id: 0,
           AnoActoAdministrativoId: String(this.resoluform.value.ano_resolucion),
@@ -986,12 +1010,14 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             Id: 1
           }
         };
+
         this.calculateEndDateAlta(
           this.fecha_creacion_alta,
           this.resolualtaform.value.ano_vigencia,
           this.resolualtaform.value.mes_vigencia,
           0
         );
+
         this.registro_califacado_alta_calidad = {
           Id: 0,
           AnoActoAdministrativoId: String(
@@ -1018,6 +1044,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             Id: 2
           }
         };
+
         const registro_put = {
           ProyectoAcademicoInstitucion: this.proyecto_academico,
           Registro: [
@@ -1025,6 +1052,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             this.registro_califacado_alta_calidad
           ]
         };
+
         const opt: any = {
           title: this.translate.instant("GLOBAL.actualizar"),
           text: this.translate.instant(
@@ -1035,6 +1063,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           dangerMode: true,
           showCancelButton: true
         };
+
         Swal.fire(opt).then(async willCreate => {
           if (willCreate.value) {
             if (this.fileRegistroCalificado) {
@@ -1051,11 +1080,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
               registro_put.Registro[1].EnlaceActo = idFileRegistroAlta + "";
             }
             this.proyectoacademicoService
-              .put(
-                "tr_proyecto_academico/registro/" +
-                  Number(this.data.idproyecto),
-                registro_put
-              )
+              .put("tr_proyecto_academico/registro/" + Number(this.data.idproyecto), registro_put)
               .subscribe((res: any) => {
                 if (res.Type === "error") {
                   Swal.fire({
@@ -1064,6 +1089,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
                     text: this.translate.instant("ERROR." + res.Code),
                     confirmButtonText: this.translate.instant("GLOBAL.aceptar")
                   });
+
                   this.showToast(
                     "error",
                     "error",
@@ -1147,6 +1173,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           this.resoluform.value.mes_vigencia,
           0
         );
+
         this.registro_califacado_acreditacion = {
           Id: 0,
           AnoActoAdministrativoId: String(this.resoluform.value.ano_resolucion),
@@ -1168,10 +1195,12 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             Id: 1
           }
         };
+
         const registro_put = {
           ProyectoAcademicoInstitucion: this.proyecto_academico,
           Registro: [this.registro_califacado_acreditacion]
         };
+
         const opt: any = {
           title: this.translate.instant("GLOBAL.actualizar"),
           text: this.translate.instant(
@@ -1182,6 +1211,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           dangerMode: true,
           showCancelButton: true
         };
+
         Swal.fire(opt).then(async willCreate => {
           if (willCreate.value) {
             if (this.fileRegistroCalificado) {
@@ -1192,9 +1222,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
                 idFileRegistroCalificado + "";
             }
             this.proyectoacademicoService
-              .put(
-                "tr_proyecto_academico/registro/" +
-                  Number(this.data.idproyecto),
+              .put("tr_proyecto_academico/registro/" +
+                Number(this.data.idproyecto),
                 registro_put
               )
               .subscribe((res: any) => {
@@ -1277,9 +1306,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         ResolucionAsignacionId: this.data.id_documento_registro_coordinador,
         // FechaInicio: this.coordinador.value.fecha_creacion_coordinador + ':00Z',
         FechaInicio:
-          moment(this.coordinador.value.fecha_creacion_coordinador).format(
-            "YYYY-MM-DDTHH:mm"
-          ) + ":00Z",
+          moment(this.coordinador.value.fecha_creacion_coordinador).format("YYYY-MM-DDTHH:mm") + ":00Z",
         ProyectoAcademicoInstitucionId: {
           Id: Number(this.data.idproyecto)
         }
@@ -1304,8 +1331,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           }
 
           this.sgamidService
-            .post(
-              "proyecto_academico/coordinador/" + String(this.data.Id),
+            .post("proyecto_academico/coordinador/" +
+              String(this.data.Id),
               this.coordinador_data
             )
             .subscribe((res: any) => {

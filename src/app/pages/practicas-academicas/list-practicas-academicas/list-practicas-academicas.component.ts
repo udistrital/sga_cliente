@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
 
 @Component({
   selector: 'ngx-list-practicas-academicas',
@@ -11,8 +12,54 @@ export class ListPracticasAcademicasComponent implements OnInit {
 
   tablaPracticas: any;
   datosPracticas: any
+  process: string;
+  sub: any;
+  InfoPracticasAcademicas: any = {};
+  filterListado = {
+    tipo_formulario: 'mini',
+    alertas: true,
+    hidefield: true,
+    btn: false,
+    btnLimpiar: false,
+    modelo: 'InfoPracticasAcademicas',
+    campos: [
+      {
+        etiqueta: 'input',
+        tipo: 'number',
+        nombre: 'Numero',
+        claseGrid: 'col-12 col-sm-5',
+        label: this.translate.instant('GLOBAL.numero'),
+        requerido: false,
+        minimo: 0,
+        deshabilitar: false,
+      },
+      {
+        etiqueta: 'input',
+        tipo: 'datetime-local',
+        nombre: 'FechaSolicitud',
+        claseGrid: 'col-12 col-sm-5',
+        label: this.translate.instant('GLOBAL.fecha'),
+        requerido: false,
+        deshabilitar: false,
+      },
+      {
+        etiqueta: 'button',
+        claseGrid: 'col-lg-2 col-md-2',
+        nombre: 'Filter',
+        claseBoton: 'btn btn-primary btn-sm',
+        icono: 'fa fa-search',
+        label_i18n: 'buscar',
+      },
+    ]
+  }
+  formFilter: boolean = false;
+  processEncript: any;
+
+
 
   constructor(
+    private practicasService: PracticasAcademicasService,
+    private _Activatedroute: ActivatedRoute,
     private translate: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
@@ -21,6 +68,12 @@ export class ListPracticasAcademicasComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.crearTabla();
     });
+  }
+
+  filterPracticas(event) {
+    console.log(event);
+    this.InfoPracticasAcademicas = { FechaSolicitud: '', Numero: '' };
+    this.datosPracticas = this.practicasService.getPracticas(event.data.Numero ? event.data.Numero : null, null)
   }
 
   crearTabla() {
@@ -71,17 +124,39 @@ export class ListPracticasAcademicasComponent implements OnInit {
     };
   }
 
+  getPracticasAcademicas(param) {
+    if (param === 'news') {
+      return this.practicasService.getPracticas(null, ['Radicada']);
+    }
+    if (param === 'process') {
+      return this.practicasService.getPracticas(null, ['Aprobada', 'Rechazada', 'Devuelta']);
+    }
+    if (param === 'invitation') {
+      return this.practicasService.getPracticas(null, ['Aprobada']);
+    }
+    if (param === 'list') {
+      return this.practicasService.getPracticas(null, null);
+    }
+
+  }
+
   ngOnInit() {
-    this.datosPracticas = [{
-      Numero: 123,
-      FechaSolicitud: '05/03/2021',
-      TipoSolicitud: 'Prácticas académicas',
-      EstadoSolicitud: 'Radicada',
-    }]
+    this.sub = this._Activatedroute.paramMap.subscribe((params: any) => {
+      const { process } = params.params;
+      this.process = atob(process);
+      this.processEncript = process;
+      this.datosPracticas = this.getPracticasAcademicas(this.process)
+    });
+
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   verPractica(event) {
-    this.router.navigate(['../detalle-practica-academica', {Id: event.data['Numero']}], { relativeTo: this.route })
+    console.log(`pages/practicas-academicas/detalle-practica-academica/${event.data['Numero']}/${this.processEncript}`)
+    this.router.navigate([`pages/practicas-academicas/detalle-practica-academica/${event.data['Numero']}/${this.processEncript}`])
   }
 
 }
