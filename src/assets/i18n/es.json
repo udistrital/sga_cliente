@@ -141,6 +141,14 @@
         }
     },
     "GLOBAL": {
+        "admitir":"Admitir", 
+        "proceso_admision_exitoso":"Proceso de admisión exitoso", 
+        "admitiendo_aspirantes":"Admitiendo aspirantes", 
+        "aspirantes_correctamente": "aspirantes correctamente",
+        "aspirantes_inscritos":"aspirantes inscritos", 
+        "aspirantes_admitidos":"aspirantes admitidos", 
+        "se_admitiran":"Se admitirán",
+        "se_admitieron":"Se admitieron",
         "soporte_documental":"Soporte documental",
         "numero": "Número",
         "fecha": "Fecha",
@@ -611,7 +619,12 @@
         "agregar_universidad": "Universidad",
         "agregar_empresa":"Empresa",
         "tipo_tercero": "Tipo de entidad",
-        "placeholder_tipo_tercero": "Ej. Universidad"
+        "placeholder_tipo_tercero": "Ej. Universidad",
+        "tipo_contribuyente": "Tipo contribuyente",
+        "placeholder_tipo_contribuyente": "Ej. Persona natural",
+        "documento": "Número de documento",
+        "nombre_autor": "Nombre",
+        "placeholder_nombre_autor": "Ej: Pedro Perez"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -681,6 +694,7 @@
         "placeholder_titulo_produccion_academica": "Ej: Diseño rueda dentada helicoidal",
         "abstract": "Abstract",
         "placeholder_abstract": "Ej: This is an abstract",
+        "nuevo_autor": "Nuevo autor",
         "agregar_autor": "Agregar autor",
         "placeholder_agregar_autor": "Ej: Pedro Perez",
         "alerta_agregar_autor": "Debe seleccionar un autor",
@@ -874,7 +888,10 @@
         "placeholder_puntaje": "Ej: 25",
         "tooltip_editar": "Editar producción académica",
         "tooltip_eliminar": "Eliminar producción académica",
-        "tooltip_crear": "Crear producción académica"
+        "tooltip_crear": "Crear producción académica",
+        "seguro_continuar_registrar": "¿Está seguro de registrar al nuevo autor?",
+        "autor_creado": "Autor creado exitosamente",
+        "autor_no_creado": "No fue posible crear el nuevo autor"
     },
     "archivo_icfes": {
         "archivo_icfes": "Archivo de registros del icfes",
@@ -1233,9 +1250,10 @@
         "imprimir_comprobante": "Imprima y conserve este comprobante",
         "comprobante_inscripcion": "Comprobante de Inscripción",
         "info_comprobante": "El diligenciamiento del presente formulario indica que el aspirante ha conocido el instructivo oficial de admisiones del PERIODO ACADÉMICO en curso, y acorde con la ley 1581 de 2012, autoriza de manera expresa e inequívoca, que sus datos personales sean tratados conforme a las funciones propias de la Universidad, en su condición de Institución de Educación Superior.",
-        "warning_info":"Señor usuario, recuerde que solo podra generar hasta 3 recibos en estado pendiente de pago, si desea generar otra preinscripción a otro proyecto deberá pagar al menos uno de los recibos generados.",
-        "alerta_posgrado":"Estimado aspirante, tenga en cuenta que para poder inscribirse en un programa de posgrado, usted debe contar con un grado de pregrado culminado y graduado, con sus respectivos soportes documentales.",
-        "alerta_discapacidades": "Señor usuario, si usted tiene más de una condición de discapacidad, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias."
+        "warning_info":"Aspirante, recuerde que solo podra generar hasta 3 recibos en estado pendiente de pago, si desea generar otra preinscripción a otro proyecto deberá pagar al menos uno de los recibos generados.",
+        "alerta_posgrado":"Aspirante, tenga en cuenta que para poder inscribirse en un programa de posgrado, usted debe contar con un grado de pregrado culminado y graduado, con sus respectivos soportes documentales.",
+        "alerta_veracidad_informacion":"Aspirante, tenga en cuenta que la información que diligenciará a continuación debe ser verídica para poder continuar con el proceso de inscripción.",
+        "alerta_discapacidades": "Aspirante, si usted tiene más de una condición de discapacidad, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias."
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -1488,7 +1506,8 @@
         "asignar": "Asignar cupos",
         "seleccionar_admitidos": "Seleccionar admitidos",
         "ver_listado_aspirantes": "Ver listado de aspirantes",
-        "cupos_proyecto": "Cantidad de cupos asignados"
+        "cupos_proyecto": "Cantidad de cupos asignados",
+        "cupos_disponibles": "Cantidad de cupos disponibles:"
     },
     "calendario": {
         "seguro_continuar_inhabilitar_calendario": "¿Esta seguro de inhabilitar este calendario?",
@@ -1597,7 +1616,8 @@
         "tooltip_crear_proceso": "Crear proceso",
         "sin_calendarios": "No existen calendarios.",
         "subir_resolucion": "Subir resolución",
-        "descargar_resolucion": "Descargar resolución"
+        "descargar_resolucion": "Descargar resolución",
+        "crear_actividad_proceso":"por favor a continuación añada la primer actividad del proceso"
     },
     "derechos_pecuniarios": {
         "titulo": "Derechos Pecuniarios",

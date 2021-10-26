@@ -21,6 +21,8 @@ import { TipoTercero } from '../data/models/terceros/tipo_tercero';
 import { GrupoInvestigacion } from '../data/models/investigacion_cidc/grupo_investigacion';
 import { PeriodoAcademico } from '../data/models/periodo/periodo_academico';
 import { InfoComplementaria } from '../data/models/terceros/info_complementaria';
+import { TipoDocumento } from '../data/models/documento/tipo_documento'
+import { TipoContribuyente } from '../data/models/terceros/tipo_contribuyente';
 // import { TipoPublicacionLibro } from '../data/models/tipo_publicacion_libro';
 
 export interface IAppState {
@@ -43,6 +45,8 @@ export interface IAppState {
   listNivelFormacion: NivelFormacion[],
   listNivelIdioma: NivelIdioma[],
   listProgramaAcademico: ProgramaAcademico[],
+  listTipoContribuyente: TipoContribuyente[],
+  listTipoDocumento: TipoDocumento[],
   listTipoContacto: TipoContacto[],
   listTipoDiscapacidad: TipoDiscapacidad[],
   listTipoLugar: TipoLugar[],
