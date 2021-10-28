@@ -389,12 +389,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                       EstadoInscripcionId: element.EstadoInscripcionId,
                     }
                     this.Aspirantes.push(aspiranteAux);
-                    if (aspiranteAux.EstadoInscripcionId.Nombre === 'INSCRITO') {
-                      this.inscritos.push(aspiranteAux.Inscripcion);
-                    }
-                    if (aspiranteAux.EstadoInscripcionId.Nombre === 'ADMITIDO') {
-                      this.inscritos.push(aspiranteAux.Inscripcion);
-                    }
                     this.source_emphasys.load(this.Aspirantes);
                   },
                   error => {
@@ -446,7 +440,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   async admitirInscritos() {
     const cuposTotales = Math.abs(this.cuposProyecto - this.admitidos.length);
     const numero_inscritos = this.inscritos.length < cuposTotales ? this.inscritos.length : cuposTotales;
-    const inscritosOrdenados = _.orderBy(this.inscritos, [(i: any) => (i.NotaFinal)], ['asc']);
+    const inscritosOrdenados = _.orderBy(this.inscritos, [(i: any) => (i.NotaFinal)], ['desc']);
+    console.log('inscritos ordenados', inscritosOrdenados);
 
     Swal.fire({
       title: `${this.translate.instant('GLOBAL.admitir')} ${numero_inscritos} ${this.translate.instant('GLOBAL.aspirantes_inscritos')}`,
@@ -478,6 +473,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                 b.textContent = i + 1 + '';
               }
             }
+            console.log('inscritos ordenados', inscritosOrdenados);
+
             await this.admitir(updateState);
             if ((i + 1) === numero_inscritos) {
               Swal.close();
