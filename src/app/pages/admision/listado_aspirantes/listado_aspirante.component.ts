@@ -441,7 +441,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     const cuposTotales = Math.abs(this.cuposProyecto - this.admitidos.length);
     const numero_inscritos = this.inscritos.length < cuposTotales ? this.inscritos.length : cuposTotales;
     const inscritosOrdenados = _.orderBy(this.inscritos, [(i: any) => (i.NotaFinal)], ['desc']);
-    console.log('inscritos ordenados', inscritosOrdenados);
 
     Swal.fire({
       title: `${this.translate.instant('GLOBAL.admitir')} ${numero_inscritos} ${this.translate.instant('GLOBAL.aspirantes_inscritos')}`,
@@ -473,7 +472,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                 b.textContent = i + 1 + '';
               }
             }
-            console.log('inscritos ordenados', inscritosOrdenados);
 
             await this.admitir(updateState);
             if ((i + 1) === numero_inscritos) {
