@@ -39,7 +39,7 @@
             <mat-form-field style="width: 100%;" *ngIf="tieneEnfasis">
                 <mat-select [formControl]="enfasisControl"
                             [(ngModel)]="enfasisSelected"
-                            placeholder="Seleccione el enfasis"
+                            placeholder="{{ 'enfasis.select_enfasis' | translate }}"
                             (ngModelChange)="tipo_inscripcion()">
                     <mat-option>--Seleccionar--</mat-option>
                     <mat-option *ngFor="let item of enfasis" [value]="item.Id">

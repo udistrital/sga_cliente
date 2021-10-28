@@ -20,9 +20,9 @@
         "administracion": {
             "administracion": "Administración",
             "enfasis": {
-                "enfasis": "Enfásis",
-                "list_enfasis": "Listar enfásis",
-                "crud_enfasis": "Crear enfásis"
+                "enfasis": "Énfasis",
+                "list_enfasis": "Listar énfasis",
+                "crud_enfasis": "Crear énfasis"
             },
             "tipo_inscripcion": "Tipo Inscripción"
         },
@@ -1151,18 +1151,19 @@
         "tag_asigcoordinador": "Asignación de coordinador"
     },
     "enfasis": {
-        "enfasis": "Enfásis",
-        "seguro_continuar_registrar_enfasis": "¿Está seguro de registrar este enfásis?",
-        "enfasis_creado": "Enfásis creado",
-        "enfasis_no_creado": "Enfásis no creado",
-        "seguro_continuar_eliminar_enfasis": "¿Está seguro de eliminar este enfásis?",
-        "enfasis_eliminado": "Enfásis eliminado",
-        "enfasis_no_eliminado": "Enfásis no eliminado",
-        "seguro_continuar_actualizar_enfasis": "¿Está seguro de actualizar este enfásis?",
-        "enfasis_actualizado": "Enfásis actualizado",
-        "enfasis_no_actualizado": "Enfásis no actualizado",
-        "administrar_enfasis": "Administrar enfásis",
-        "error_enfasis_ya_existe": "El enfásis ya fue agregado"
+        "enfasis": "Énfasis",
+        "seguro_continuar_registrar_enfasis": "¿Está seguro de registrar este énfasis?",
+        "enfasis_creado": "Énfasis creado",
+        "enfasis_no_creado": "Énfasis no creado",
+        "seguro_continuar_eliminar_enfasis": "¿Está seguro de eliminar este énfasis?",
+        "enfasis_eliminado": "Énfasis eliminado",
+        "enfasis_no_eliminado": "Énfasis no eliminado",
+        "seguro_continuar_actualizar_enfasis": "¿Está seguro de actualizar este énfasis?",
+        "enfasis_actualizado": "Énfasis actualizado",
+        "enfasis_no_actualizado": "Énfasis no actualizado",
+        "administrar_enfasis": "Administrar énfasis",
+        "error_enfasis_ya_existe": "El énfasis ya fue agregado",
+        "select_enfasis":"Seleccione el énfasis"
     },
     "historial_registro": {
         "titulo": "Histórico de registros de acreditación y alta calidad del Proyecto Académico",
