@@ -2,18 +2,12 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
-import { FormacionAcademicaService } from '../../../@core/data/formacion_academica.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
-import { UbicacionService } from '../../../@core/data/ubicacion.service';
-import { formatDate } from '@angular/common';
 import { PopUpManager } from '../../../managers/popUpManager';
-import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-list-formacion-academica',
@@ -22,6 +16,7 @@ import * as moment from 'moment';
 })
 export class ListFormacionAcademicaComponent implements OnInit {
   uid: number;
+  id: number;
   pid: number;
   UpdateInfo: boolean = false;
   cambiotab: boolean = false;
@@ -42,11 +37,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
     private popUpManager: PopUpManager,
     private toasterService: ToasterService,
     private userService: UserService,
-    private campusMidService: CampusMidService,
-    private sgaMidService: SgaMidService,
-    private formacionService: FormacionAcademicaService,
-    private ubicacionService: UbicacionService,
-    private proyectoAcademicoService: ProyectoAcademicoService) {
+    private sgaMidService: SgaMidService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
     });
@@ -163,6 +154,10 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.id = undefined;
+    this.uid = 0;
+    this.pid = undefined;
+    this.UpdateInfo = false;
     this.loadData();
   }
 
@@ -171,6 +166,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   onEdit(event): void {
+    this.id = event.data.Id;
     this.uid = event.data.Nit;
     this.pid = event.data.ProgramaAcademico.Id;
     this.UpdateInfo = true;
@@ -192,6 +188,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   itemselec(event): void {
+    this.id = event.data.Id;
     this.uid = event.data.Nit;
     this.pid = event.data.ProgramaAcademico.Id;
   }
@@ -199,7 +196,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
   onDelete(event): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.eliminar'),
-      text: this.translate.instant('GLOBAL.eliminar') + '?',
+      text: this.translate.instant('formacion_academica.eliminar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -211,7 +208,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
-          this.campusMidService.delete('formacionacademica', event.data).subscribe(res => {
+          this.sgaMidService.delete('formacion_academica', event.data).subscribe(res => {
             if (res !== null) {
               this.loadData();
               this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
@@ -237,16 +234,16 @@ export class ListFormacionAcademicaComponent implements OnInit {
   }
 
   private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
+    // this.config = new ToasterConfig({
+    //   // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
+    //   positionClass: 'toast-top-center',
+    //   timeout: 5000,  // ms
+    //   newestOnTop: true,
+    //   tapToDismiss: false, // hide on click
+    //   preventDuplicates: true,
+    //   animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
+    //   limit: 5,
+    // });
     const toast: Toast = {
       type: type, // 'default', 'info', 'success', 'warning', 'error'
       title: title,

@@ -7,11 +7,8 @@ import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-t
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
-import { OrganizacionService } from '../../../@core/data/organizacion.service';
-import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
-import { ExperienciaService } from '../../../@core/data/experiencia.service';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -19,7 +16,6 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
-import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-crud-experiencia-laboral',
@@ -29,6 +25,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 export class CrudExperienciaLaboralComponent implements OnInit {
   config: ToasterConfig;
   info_experiencia_laboral_id: number;
+  info_id_experiencia: number;
   organizacion: Organizacion;
   ente_id: number;
   soporte: any;
@@ -49,6 +46,10 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     this.ente_id = Number(ente_id);
   }
 
+  @Input('info_id_experiencia')
+  set name_id(info_id_experiencia: number) {
+    this.info_id_experiencia = Number(info_id_experiencia);
+  }
 
   @Input('index_select')
   set index_select(index_select: any) {
@@ -62,7 +63,6 @@ export class CrudExperienciaLaboralComponent implements OnInit {
       this.loadInfoExperienciaLaboral();
     }
   }
-
 
   @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
@@ -136,7 +136,6 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     this.searchOrganizacion(event['infoPost'].Nit);
   }
 
-
   getIndexForm(nombre: String): number {
     for (let index = 0; index < this.formInfoExperienciaLaboral.campos.length; index++) {
       const element = this.formInfoExperienciaLaboral.campos[index];
@@ -183,64 +182,57 @@ export class CrudExperienciaLaboralComponent implements OnInit {
       this.detalleExp.Cargo.Id) ? this.detalleExp.Cargo : { Id: 0, Nombre: 'No registrado' };
     this.formInfoExperienciaLaboral.campos[iactividades].valor = (this.detalleExp.Actividades);
     // this.formInfoExperienciaLaboral.campos[init].deshabilitar = true;
-    const files = [
-      {
-        Id: this.detalleExp.Soporte,
-        key: this.detalleExp.Soporte,
-      },
-    ];
-    this.nuxeoService.getDocumentoById$(files, this.documentoService)
-      .subscribe(response => {
-        const filesResponse = <any>response;
-        if (Object.keys(filesResponse).length === files.length) {
-          files.forEach((file: any) => {
-            const url = filesResponse[file.Id];
-            this.formInfoExperienciaLaboral.campos[isoporte].urlTemp = url
-            // this.formInfoExperienciaLaboral.campos[isoporte].url = url
-            this.formInfoExperienciaLaboral.campos[isoporte].valor = 'pdf'
-          });
-          // this.formInfoExperienciaLaboral.campos[isoporte].valor = filesResponse['Soporte'] + '';
-          [
-            this.formInfoExperienciaLaboral.campos[ifechaInicio],
-            this.formInfoExperienciaLaboral.campos[ifechaFin],
-            this.formInfoExperienciaLaboral.campos[itipoDedicacion],
-            this.formInfoExperienciaLaboral.campos[itipoVinculacion],
-            this.formInfoExperienciaLaboral.campos[icargo],
-            this.formInfoExperienciaLaboral.campos[iactividades],
-            this.formInfoExperienciaLaboral.campos[isoporte]]
-            .forEach(element => {
-              element.deshabilitar = false
+
+    const files = []
+    if (this.detalleExp.Soporte + '' !== '0') {
+      files.push({ Id: this.detalleExp.Soporte, key: 'Documento' });
+    }
+
+    if (this.detalleExp.Soporte !== undefined && this.detalleExp.Soporte !== null && this.detalleExp.Soporte !== 0) {
+      this.nuxeoService.getFilesNew(files)
+        .subscribe(response => {
+          const filesResponse = <Array<any>>response;
+          if (Object.keys(filesResponse).length === files.length) {
+            this.formInfoExperienciaLaboral.campos[isoporte].urlTemp = filesResponse[0]['urlUnsafe'] + '';
+            this.formInfoExperienciaLaboral.campos[isoporte].valor = filesResponse[0]['urlUnsafe'] + '';
+
+            [
+              this.formInfoExperienciaLaboral.campos[ifechaInicio],
+              this.formInfoExperienciaLaboral.campos[ifechaFin],
+              this.formInfoExperienciaLaboral.campos[itipoDedicacion],
+              this.formInfoExperienciaLaboral.campos[itipoVinculacion],
+              this.formInfoExperienciaLaboral.campos[icargo],
+              this.formInfoExperienciaLaboral.campos[iactividades],
+              this.formInfoExperienciaLaboral.campos[isoporte]]
+              .forEach(element => {
+                element.deshabilitar = false
+              });
+          }
+        },
+          (error: HttpErrorResponse) => {
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+                this.translate.instant('GLOBAL.soporte_documento'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
-        }
-      },
-        (error: HttpErrorResponse) => {
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-              this.translate.instant('GLOBAL.soporte_documento'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
-        });
+    }
   }
 
   searchNit(data) {
-    const init = this.getIndexForm('Nit');
     const inombre = this.getIndexForm('NombreEmpresa');
-    const itipo = this.getIndexForm('TipoOrganizacion');
-    const idir = this.getIndexForm('Direccion');
-    const itel = this.getIndexForm('Telefono');
-    const icorreo = this.getIndexForm('Correo');
-    const ipais = this.getIndexForm('Pais');
     const regex = /^[0-9]*$/;
-    data.data.Nit = data.data.Nit.trim()
+    data.data.Nit = data.data.Nit.trim();
     const nit = typeof data === 'string' ? data : data.data.Nit;
 
     if (regex.test(nit) === true) {
-      // this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = true;
       this.searchOrganizacion(nit);
+      this.indexSelect = null;
+      this.detalleExp = null;
     } else {
       this.clean = !this.clean;
       this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
@@ -417,37 +409,50 @@ export class CrudExperienciaLaboralComponent implements OnInit {
 
   uploadResolutionFile(file) {
     return new Promise((resolve, reject) => {
-      this.nuxeoService.getDocumentos$(file, this.documentoService)
-        .subscribe(response => {
-          // resolve(response['undefined'].Id); // desempacar el response, puede dejar de llamarse 'undefined'
-          if (Object.keys(response).length === file.length) {
-            const filesUp = <any>response;
-            if (filesUp['Documento'] !== undefined) {
-              this.info_experiencia_laboral.Experiencia.DocumentoId = filesUp['Documento'].Id;
-              this.info_experiencia_laboral.Experiencia.EnlaceDocumento = filesUp['Documento'].Enlace;
-              if (this.detalleExp != null && this.indexSelect != null && !Number.isNaN(this.indexSelect)) {
-                this.info_experiencia_laboral.indexSelect = this.indexSelect;
-                this.info_experiencia_laboral.terceroID = this.persona_id;
-                this.putExperianciaLaboral();
+      if (file.length !== 0 && this.info_experiencia_laboral.Experiencia.Soporte.file !== undefined && this.info_experiencia_laboral.Experiencia.Soporte.file !== null) {
+        this.nuxeoService.getDocumentos$(file, this.documentoService)
+          .subscribe(response => {
+            if (Object.keys(response).length === file.length) {
+              const filesUp = <any>response;
+              if (filesUp['Documento'] !== undefined) {
+                this.info_experiencia_laboral.Experiencia.DocumentoId = filesUp['Documento'].Id;
+                this.info_experiencia_laboral.Experiencia.EnlaceDocumento = filesUp['Documento'].Enlace;
+                if (this.detalleExp != null && this.indexSelect != null && !Number.isNaN(this.indexSelect)) {
+                  this.info_experiencia_laboral.indexSelect = this.indexSelect;
+                  this.info_experiencia_laboral.Id = this.info_id_experiencia;
+                  this.info_experiencia_laboral.terceroID = this.persona_id;
+                  this.putExperianciaLaboral();
+                } else {
+                  this.postExperianciaLaboral();
+                }
               } else {
-                this.postExperianciaLaboral();
+                this.loading = false;
               }
             } else {
               this.loading = false;
             }
-          } else {
+          }, error => {
             this.loading = false;
-          }
-        }, error => {
-          this.loading = false;
-          reject(error);
-        });
+            reject(error);
+          });
+      } else {
+        if (this.detalleExp != null && this.indexSelect != null && !Number.isNaN(this.indexSelect)) {
+          this.info_experiencia_laboral.indexSelect = this.indexSelect;
+          this.info_experiencia_laboral.Id = this.info_id_experiencia;
+          this.info_experiencia_laboral.terceroID = this.persona_id;
+          this.info_experiencia_laboral.Experiencia.DocumentoId = this.detalleExp.Soporte;
+          this.putExperianciaLaboral();
+        } else {
+          this.postExperianciaLaboral();
+        }
+      }
+      this.loading = false;
     });
   }
 
   putExperianciaLaboral() {
     this.loading = true;
-    this.sgaMidService.put('experiencia_laboral/', this.info_experiencia_laboral)
+    this.sgaMidService.put('experiencia_laboral', this.info_experiencia_laboral)
       .subscribe(res => {
         const r = <any>res;
         if (r !== null && r.Type !== 'error') {
@@ -565,16 +570,16 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   }
 
   private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
+    // this.config = new ToasterConfig({
+    //   // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
+    //   positionClass: 'toast-top-center',
+    //   timeout: 5000,  // ms
+    //   newestOnTop: true,
+    //   tapToDismiss: false, // hide on click
+    //   preventDuplicates: true,
+    //   animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
+    //   limit: 5,
+    // });
     const toast: Toast = {
       type: type, // 'default', 'info', 'success', 'warning', 'error'
       title: title,

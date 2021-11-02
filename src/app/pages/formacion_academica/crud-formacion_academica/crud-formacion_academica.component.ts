@@ -29,6 +29,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   config: ToasterConfig;
   info_formacion_academica_id: number;
   info_proyecto_id: number;
+  info_id_formacion: number;
   edit_status: boolean;
   organizacion: any;
   persona_id: number;
@@ -42,7 +43,11 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
     this.info_formacion_academica_id = info_formacion_academica_id;
-    this.loadInfoFormacionAcademica();
+  }
+
+  @Input('info_id_formacion')
+  set name_id(info_id_formacion: number) {
+    this.info_id_formacion = info_id_formacion;
   }
 
   @Input('info_proyecto_id')
@@ -63,7 +68,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   @Output('result')
   result: EventEmitter<any> = new EventEmitter();
   @Output()
-  updateFormacion = new EventEmitter<void>();
+  updateFormacion: EventEmitter<void> = new EventEmitter();
 
   info_formacion_academica: any;
   formInfoFormacionAcademica: any;
@@ -222,6 +227,10 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     let IdUniversidad;
     if (regex.test(nit) === true) {
       this.searchNit(nit);
+
+      this.info_formacion_academica = undefined;
+      this.info_formacion_academica_id = 0;
+      this.edit_status = false;
       this.loading = false;
     } else {
       if (Object.entries(this.formInfoFormacionAcademica.campos[inombre].valor).length !== 0 &&
@@ -230,6 +239,10 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdUniversidad).subscribe(
           (res: any) => {
             this.searchNit(res[0]['Numero']);
+
+            this.info_formacion_academica = undefined;
+            this.info_formacion_academica_id = 0;
+            this.edit_status = false;
             this.loading = false;
           },
           (error: HttpErrorResponse) => {
@@ -283,13 +296,12 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
   public loadInfoFormacionAcademica(): void {
     this.loading = true;
-    if ((this.info_formacion_academica_id !== 0 && this.info_proyecto_id !== 0 && this.persona_id !== 0)
-      && (this.info_formacion_academica_id !== undefined && this.info_proyecto_id !== undefined && this.persona_id !== undefined)
+    if ((this.info_formacion_academica_id !== 0 && this.info_proyecto_id !== 0 && this.persona_id !== 0 && this.info_id_formacion !== 0)
+      && (this.info_formacion_academica_id !== undefined && this.info_proyecto_id !== undefined && this.persona_id !== undefined && this.info_id_formacion !== undefined)
       && this.edit_status === true) {
       this.temp_info_academica = {};
       this.SoporteDocumento = [];
-      this.sgaMidService.get('formacion_academica/info_complementaria?IdTercero=' + this.persona_id +
-        '&IdProyecto=' + this.info_proyecto_id + '&Nit=' + this.info_formacion_academica_id)
+      this.sgaMidService.get('formacion_academica/info_complementaria?Id=' + this.info_id_formacion)
         .subscribe((response: any) => {
           this.temp_info_academica = <any>response;
           if (response !== null && response !== undefined) {
@@ -299,11 +311,11 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               files.push({ Id: this.temp_info_academica.Documento, key: 'Documento' });
             }
             if (this.temp_info_academica.Documento !== undefined && this.temp_info_academica.Documento !== null && this.temp_info_academica.Documento !== 0) {
-              this.nuxeoService.getDocumentoById$(files, this.documentoService)
-                .subscribe(res => {
-                  const filesResponse = <any>res;
+              this.nuxeoService.getFilesNew(files)
+                .subscribe(response => {
+                  const filesResponse = <Array<any>>response;
                   if (Object.keys(filesResponse).length === files.length) {
-                    this.loading = false;
+                    this.loading = true;
                     this.SoporteDocumento = this.temp_info_academica.Documento;
                     const FechaI = moment(this.temp_info_academica.FechaInicio, 'DD-MM-YYYY').toDate();
                     const FechaF = moment(this.temp_info_academica.FechaFinalizacion, 'DD-MM-YYYY').toDate();
@@ -317,11 +329,9 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                       DescripcionTrabajoGrado: this.temp_info_academica.DescripcionTrabajoGrado,
                     }
                     this.formInfoFormacionAcademica.campos[init].valor = this.info_formacion_academica.Nit;
-                    this.searchNit(this.temp_info_academica.Nit)
-                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
-                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
-                  } else {
-                    this.loading = false;
+                    this.searchNit(this.temp_info_academica.Nit);
+                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse[0]['urlUnsafe'] + '';
+                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].valor = filesResponse[0]['urlUnsafe'] + '';
                   }
                 },
                   (error: HttpErrorResponse) => {
@@ -351,8 +361,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
   updateInfoFormacionAcademica(infoFormacionAcademica: any): void {
     const opt: any = {
-      title: this.translate.instant('GLOBAL.actualizar'),
-      text: this.translate.instant('GLOBAL.actualizar') + '?',
+      title: this.translate.instant('GLOBAL.confirmar_actualizar'),
+      text: this.translate.instant('formacion_academica.actualizar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -371,14 +381,13 @@ export class CrudFormacionAcademicaComponent implements OnInit {
               file: this.info_formacion_academica.DocumentoId.file, documento: this.SoporteDocumento, key: 'Documento', Id: 16,
             });
           }
-          if (files.length !== 0) {
+          if (files.length !== 0 && this.info_formacion_academica.DocumentoId.file !== null) {
             this.nuxeoService.updateDocument$(files, this.documentoService)
               .subscribe(response => {
                 if (Object.keys(response).length === files.length) {
                   const documentos_actualizados = <any>response;
                   this.info_formacion_academica.DocumentoId = this.SoporteDocumento;
-                  this.sgaMidService.put('formacion_academica?Nit=' + this.info_formacion_academica_id +
-                    '&IdProyecto=' + this.info_proyecto_id, this.info_formacion_academica)
+                  this.sgaMidService.put('formacion_academica?Id=' + this.info_id_formacion, this.info_formacion_academica)
                     .subscribe(res => {
                       if (documentos_actualizados['Documento'] !== undefined) {
                         this.info_formacion_academica.DocumentoId = documentos_actualizados['Documento'].url + '';
@@ -389,7 +398,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                       this.clean = !this.clean;
                       this.info_formacion_academica = undefined;
                       this.info_formacion_academica_id = 0;
-                      this.loadInfoFormacionAcademica();
+                      this.edit_status = false;
                       this.updateFormacion.emit();
                       this.loading = false;
                       this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab2'));
@@ -424,8 +433,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           } else {
             this.loading = true;
             this.info_formacion_academica.DocumentoId = this.SoporteDocumento;
-            this.sgaMidService.put('formacion_academica?Nit=' + this.info_formacion_academica_id + '&IdProyecto=' +
-              this.info_proyecto_id, this.info_formacion_academica)
+            this.sgaMidService.put('formacion_academica?Id=' + this.info_id_formacion, this.info_formacion_academica)
               .subscribe(res => {
                 this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                   this.translate.instant('GLOBAL.formacion_academica') + ' ' +
@@ -433,7 +441,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                 this.clean = !this.clean;
                 this.info_formacion_academica = undefined;
                 this.info_formacion_academica_id = 0;
-                this.loadInfoFormacionAcademica();
+                this.updateFormacion.emit();
                 this.loading = false;
               },
                 (error: HttpErrorResponse) => {
@@ -564,18 +572,17 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     }
   }
 
-
   private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
+    // this.config = new ToasterConfig({
+    //   // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
+    //   positionClass: 'toast-top-center',
+    //   timeout: 5000,  // ms
+    //   newestOnTop: true,
+    //   tapToDismiss: false, // hide on click
+    //   preventDuplicates: true,
+    //   animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
+    //   limit: 5,
+    // });
     const toast: Toast = {
       type: type, // 'default', 'info', 'success', 'warning', 'error'
       title: title,
