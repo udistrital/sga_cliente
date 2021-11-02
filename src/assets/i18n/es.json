@@ -1284,7 +1284,7 @@
     "informacion_contacto_posgrado": {
         "informacion_contacto_no_registrada": "Información de contacto no actualizada",
         "informacion_contacto_registrada": "Información de contacto actualizada",
-        "seguro_continuar_registrar": "¿Está seguto de registrar esta información de contacto?"
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta información de contacto?"
     },
     "informacion_academica": {
         "informacion_academica_no_registrada": "Información académica no actualizada",
@@ -1300,7 +1300,7 @@
         "experiencia_laboral_no_registrada": "Experiencia laboral no actualizada",
         "experiencia_laboral_registrada": "Experiencia laboral actualizada",
         "documento_experiencia_laboral_no_registrado": "Error subiendo el documento de soporte",
-        "seguro_continuar_registrar": "¿Está seguto de registrar esta experiencia laboral?",
+        "seguro_continuar_registrar": "¿Está seguro de registrar esta experiencia laboral?",
         "cargar_experiencia": "Ocurruió un error al cargar la información de la experiencia laboral",
         "error_cargar_empresa": "Ocurruió un error al cargar la información de la empresa",
         "empresa_no_encontrada": "No existe información con los datos ingresados",
@@ -1311,8 +1311,8 @@
         "tooltip_crear": "Crear experiencia laboral",
         "crear_entidad": "¿Desea crear una nueva entidad?",
         "titulo2_crear_entidad": "no ha sido encontrado",
-        "titulo1_crear_entidad": "El Nit. "
-
+        "titulo1_crear_entidad": "El Nit. ",
+        "eliminar":"¿Desea eliminar el registro de experiencia laboral?"
     },
     "documento_programa": {
         "documento_programa_no_registrado": "Documento no registrado",
@@ -1697,7 +1697,9 @@
         "no_data": "No existen datos registrados de la formación académica",
         "tooltip_editar": "Editar formación",
         "tooltip_eliminar": "Eliminar formación",
-        "tooltip_crear": "Crear formación"
+        "tooltip_crear": "Crear formación",
+        "actualizar":"¿Desea actualizar el registro de formación académica?",
+        "eliminar":"¿Desea eliminar el registro de formación académica?"
     },
     "solicitudes": {
         "respuesta": "La respuesta a esta solicitud ha sido registrada correctamente",
