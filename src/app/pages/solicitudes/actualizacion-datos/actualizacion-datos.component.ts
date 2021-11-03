@@ -15,6 +15,7 @@ import { ImplicitAutenticationService } from '../../../@core/utils/implicit_aute
 import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import Swal from 'sweetalert2';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-actualizacion-datos',
@@ -54,12 +55,11 @@ export class ActualizacionDatosComponent implements OnInit {
         this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
         if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
           this.Admin = false;
-          this.loadInfoById();
         } if (this.rol.includes('ESTUDIANTE')) {
           this.Admin = false;
           this.loadInfo();
-          this.loadInfoById();
         }
+        this.loadInfoById();
       }
     })
   }
@@ -151,6 +151,7 @@ export class ActualizacionDatosComponent implements OnInit {
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private sgaMidService: SgaMidService,
+    private newNuxeoService: NewNuxeoService,
     private popUpManager: PopUpManager) {
     this.solicitudForm = ACTUALIZAR_DATOS;
     this.respuestaSolicitudForm = RESPUESTA_SOLICITUD;
@@ -234,21 +235,18 @@ export class ActualizacionDatosComponent implements OnInit {
               files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
             }
             if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0) {
-              this.nuxeoService.getDocumentoById$(files, this.documentoService)
-                .subscribe(res => {
-                  const filesResponse = <any>res;
-                  if (Object.keys(filesResponse).length === files.length) {
-                    this.SoporteDocumento = this.solicitudForm.Documento;
-                    this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
-                    this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
-                  }
+              this.newNuxeoService.get(files)
+                .subscribe((document: any) => {
+                  this.SoporteDocumento = this.solicitudForm.Documento;
+                  this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = document[0].url;
+                  this.solicitudForm.campos[this.getIndexForm('Documento')].valor = document[0].url;
                   this.loading = false;
                 },
                   (error: HttpErrorResponse) => {
                     this.loading = false;
                     this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                   },
-                );
+                )
             }
             this.loading = false;
           } else if (response.Response.Code === '404') {
@@ -327,21 +325,18 @@ export class ActualizacionDatosComponent implements OnInit {
             files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
           }
           if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0) {
-            this.nuxeoService.getDocumentoById$(files, this.documentoService)
-              .subscribe(res => {
-                const filesResponse = <any>res;
-                if (Object.keys(filesResponse).length === files.length) {
-                  this.SoporteDocumento = this.solicitudForm.Documento;
-                  this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
-                  this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
-                  this.loading = false;
-                }
+            this.newNuxeoService.get(files)
+              .subscribe((document: any) => {
+                this.SoporteDocumento = this.solicitudForm.Documento;
+                this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = document[0].url;
+                this.solicitudForm.campos[this.getIndexForm('Documento')].valor = document[0].url;
+                this.loading = false;
               },
                 (error: HttpErrorResponse) => {
                   this.loading = false;
                   this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                 },
-              );
+              )
           }
         } else if (response.Response.Code === '404') {
           this.solicitudForm.campos[this.getIndexForm('FechaExpedicionNuevo')].deshabilitar = false;
@@ -443,16 +438,14 @@ export class ActualizacionDatosComponent implements OnInit {
             if (this.solicitudDatos['Documento'].file !== undefined) {
               files.push({
                 nombre: await this.autenticationService.getMail(), key: 'Documento',
-                file: this.solicitudDatos['Documento'].file, IdDocumento: 25,
+                file: this.solicitudDatos['Documento'].file,
+                IdDocumento: 25,
               });
             }
-            this.nuxeoService.getDocumentos$(files, this.documentoService)
-              .subscribe(response => {
-                if (Object.keys(response).length === files.length) {
-                  this.filesUp = <any>response;
-                  if (this.filesUp['Documento'] !== undefined) {
-                    this.solicitudDatos['Documento'] = this.filesUp['Documento'].Id;
-                  }
+            this.newNuxeoService.uploadFiles(files)
+              .subscribe((data: any) => {
+                if (data[0].Status === "200") {
+                  this.solicitudDatos['Documento'] = data[0].res.Id
                 }
                 this.solicitudDatos.FechaExpedicionActual = momentTimezone.tz(
                   this.solicitudDatos.FechaExpedicionActual, 'DD/MM/YYYY', 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
