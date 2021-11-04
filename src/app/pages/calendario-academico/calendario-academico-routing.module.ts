@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ThemeModule } from '../../@theme/theme.module';
+
 import { CalendarioAcademicoComponent } from './calendario-academico.component';
 import { DefCalendarioAcademicoComponent } from './def-calendario-academico/def-calendario-academico.component';
 import { ListCalendarioAcademicoComponent } from './list-calendario-academico/list-calendario-academico.component';
@@ -46,6 +48,7 @@ const routes: Routes = [{
 
 @NgModule({
     imports: [
+        ThemeModule,
         RouterModule.forChild(routes),
     ],
     exports: [

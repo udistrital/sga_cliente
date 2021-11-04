@@ -250,6 +250,68 @@
     </div>
   </mat-tab>
 
+  <mat-tab label="{{ 'editarproyecto.tag_acta' | translate }}">
+    <div class="inner col-md-8 col-lg-8">
+      <div class="centre row-sm-6">
+        <nb-card class="m-8" accent="info" align="center">
+          <nb-card-header>{{ "proyecto.acto" | translate }}</nb-card-header>
+          <nb-card-body>
+            <form id="actoForm" [formGroup]="actoform">
+              <mat-form-field>
+                <input matInput placeholder="{{ 'proyecto.acto_proyecto' | translate }}"
+                       formControlName="acto" class="form-control"
+                       name="acto_proyecto" [(ngModel)]="data.numero_acto" />
+                <mat-error *ngIf="Campo16Control.hasError('required')"> {{ "proyecto.erro_acto" | translate }}</mat-error >
+              </mat-form-field>
+              <br />
+
+              <mat-form-field>
+                <input matInput placeholder="{{ 'proyecto.ano_acto_proyecto' | translate }}"
+                       formControlName="ano_acto" class="form-control"
+                       name="ano_acto_proyecto" [(ngModel)]="data.ano_acto" />
+                <mat-error *ngIf="Campo17Control.hasError('required')"> {{ "proyecto.erro_ano_acto" | translate }}</mat-error >
+              </mat-form-field>
+              <br />
+
+              <label class="label col-sm-8 col-form-label">{{ "proyecto.text_document_acto" | translate }}</label>
+              
+              <button mat-button type="button" (click)="fileInputActoAdministrativo.click()" >
+                <mat-icon>attach_file</mat-icon>
+                <input #fileInputActoAdministrativo type="file" (change)="onInputActoAdministrativo($event)"
+                       style="display:none;" accept="application/pdf" data-max-size="5120" />
+              </button>
+
+              <button mat-button type="button" (click)="downloadFile(data.id_documento_acto)" >
+                <mat-icon>cloud_download</mat-icon>
+              </button>
+
+              <label *ngIf="fileActoAdministrativo" >{{ "GLOBAL.archivo_seleccionado" | translate }}:
+                {{ fileActoAdministrativo.name }}</label>
+            </form>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+    
+    <div class="box">
+      <div class="item1">
+        <button mat-button (click)="onclick()">
+          {{ "GLOBAL.cancelar" | translate }}
+        </button>
+      </div>
+      <div class="item2">
+        <button mat-button (click)="cloneProject(data)">
+          {{ "editarproyecto.botum_apartir" | translate }}
+        </button>
+      </div>
+      <div class="item3">
+        <button mat-button (click)="putinformacionbasica()">
+          {{ "editarproyecto.cambios" | translate }}
+        </button>
+      </div>
+    </div>
+  </mat-tab>
+
   <mat-tab label="{{ 'editarproyecto.tag_asigcoordinador' | translate }}">
     <div class="inner col-md-8 col-lg-8">
       <div class="centre row-sm-6">
@@ -529,65 +591,4 @@
     </div>
   </mat-tab>
 
-  <mat-tab label="{{ 'editarproyecto.tag_acta' | translate }}">
-    <div class="inner col-md-8 col-lg-8">
-      <div class="centre row-sm-6">
-        <nb-card class="m-8" accent="info" align="center">
-          <nb-card-header>{{ "proyecto.acto" | translate }}</nb-card-header>
-          <nb-card-body>
-            <form id="actoForm" [formGroup]="actoform">
-              <mat-form-field>
-                <input matInput placeholder="{{ 'proyecto.acto_proyecto' | translate }}"
-                       formControlName="acto" class="form-control"
-                       name="acto_proyecto" [(ngModel)]="data.numero_acto" />
-                <mat-error *ngIf="Campo16Control.hasError('required')"> {{ "proyecto.erro_acto" | translate }}</mat-error >
-              </mat-form-field>
-              <br />
-
-              <mat-form-field>
-                <input matInput placeholder="{{ 'proyecto.ano_acto_proyecto' | translate }}"
-                       formControlName="ano_acto" class="form-control"
-                       name="ano_acto_proyecto" [(ngModel)]="data.ano_acto" />
-                <mat-error *ngIf="Campo17Control.hasError('required')"> {{ "proyecto.erro_ano_acto" | translate }}</mat-error >
-              </mat-form-field>
-              <br />
-
-              <label class="label col-sm-8 col-form-label">{{ "proyecto.text_document_acto" | translate }}</label>
-              
-              <button mat-button type="button" (click)="fileInputActoAdministrativo.click()" >
-                <mat-icon>attach_file</mat-icon>
-                <input #fileInputActoAdministrativo type="file" (change)="onInputActoAdministrativo($event)"
-                       style="display:none;" accept="application/pdf" data-max-size="5120" />
-              </button>
-
-              <button mat-button type="button" (click)="downloadFile(data.id_documento_acto)" >
-                <mat-icon>cloud_download</mat-icon>
-              </button>
-
-              <label *ngIf="fileActoAdministrativo" >{{ "GLOBAL.archivo_seleccionado" | translate }}:
-                {{ fileActoAdministrativo.name }}</label>
-            </form>
-          </nb-card-body>
-        </nb-card>
-      </div>
-    </div>
-    
-    <div class="box">
-      <div class="item1">
-        <button mat-button (click)="onclick()">
-          {{ "GLOBAL.cancelar" | translate }}
-        </button>
-      </div>
-      <div class="item2">
-        <button mat-button (click)="cloneProject(data)">
-          {{ "editarproyecto.botum_apartir" | translate }}
-        </button>
-      </div>
-      <div class="item3">
-        <button mat-button (click)="putinformacionbasica()">
-          {{ "editarproyecto.cambios" | translate }}
-        </button>
-      </div>
-    </div>
-  </mat-tab>
 </mat-tab-group>
