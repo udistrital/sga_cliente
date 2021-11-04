@@ -145,6 +145,12 @@ export let FORM_EXPERIENCIA_LABORAL = {
       opciones: [],
     },
     {
+      etiqueta: 'label',
+      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
+      label_i18n: "placeholder_cargo_mensaje",
+      tipo: 'text',
+    },
+    {
       etiqueta: 'textarea',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'Actividades',

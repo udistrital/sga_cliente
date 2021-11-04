@@ -593,7 +593,8 @@
         "placeholder_tipo_contribuyente": "Ej. Individual",
         "documento": "Document number",
         "nombre_autor": "Name",
-        "placeholder_nombre_autor": "Ej: Pedro Perez"
+        "placeholder_nombre_autor": "Ej: Pedro Perez",
+        "placeholder_cargo_mensaje": "You must enter at least 3 characters in the field to search for the corresponding role."
     },
     "ERROR": {
         "general": "The request could not be satisfied",

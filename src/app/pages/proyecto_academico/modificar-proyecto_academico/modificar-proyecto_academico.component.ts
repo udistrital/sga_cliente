@@ -497,6 +497,13 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       enfasis_temporal.EnfasisId = emphasys;
       enfasis_temporal.ProyectoAcademicoInstitucionId = this.data.proyectoJson;
       enfasis_temporal.esNuevo = true;
+      enfasis_temporal.FechaCreacion = new Date(
+        momentTimezone.tz("America/Bogota").format("YYYY-MM-DDTHH:mm")
+      );;
+      enfasis_temporal.FechaModificacion = new Date(
+        momentTimezone.tz("America/Bogota").format("YYYY-MM-DDTHH:mm")
+      );;
+      console.log(enfasis_temporal)
       this.arr_enfasis_proyecto.push(enfasis_temporal);
       this.source_emphasys.load(this.arr_enfasis_proyecto);
     } else {
