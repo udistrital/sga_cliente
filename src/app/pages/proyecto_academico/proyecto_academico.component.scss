@@ -1,4 +1,5 @@
 @import '../../@theme/styles/themes';
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @include nb-install-component() {
     ::ng-deep .mat-input-element::placeholder {
         color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
