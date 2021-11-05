@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col">
-      <mat-card [nbSpinner]="loading"
+      <nb-card [nbSpinner]="loading"
                 nbSpinnerStatus="success"
                 nbSpinnerSize="xxlarge"
                 nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
@@ -8,7 +8,7 @@
           <legend>
             {{ "calendario.buscar_calendario" | translate }}
           </legend>
-          <mat-card-content>
+          <nb-card-body>
             <div class="row">
               <div class="col-12">
 
@@ -33,8 +33,8 @@
                     </nb-card>
                 </div>
             </div>
-          </mat-card-content>
+          </nb-card-body>
         </fieldset>
-      </mat-card>
+      </nb-card>
     </div>
 </div>
