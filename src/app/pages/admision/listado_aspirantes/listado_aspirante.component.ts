@@ -21,6 +21,8 @@ import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_ins
 import { AnyService } from '../../../@core/data/any.service';
 import { environment } from '../../../../environments/environment';
 import * as _ from 'lodash';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -88,6 +90,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     private tercerosService: TercerosService,
     private toasterService: ToasterService,
     private anyService: AnyService,
+    private proyectoAcademicoService: ProyectoAcademicoService,
     private evaluacionService: EvaluacionInscripcionService) {
 
 
@@ -169,6 +172,21 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           editable: false,
           title: this.translate.instant('GLOBAL.TipoInscripcion'),
           // type: 'string;',
+          valuePrepareFunction: (value) => {
+            return value.Nombre;
+          },
+          width: '25%',
+        },
+        EnfasisId: {
+          editable: false,
+          title: this.translate.instant('enfasis.enfasis'),
+          // type: 'string;',
+          filterFunction: (cell?: any, search?: string) => {
+            // cell? is the value of the cell, in this case is a timeStamp
+            if (search.length > 0) {
+              return cell.Nombre.match(search);
+            }
+          },
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
@@ -378,29 +396,33 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             // this.source_emphasys.load(data);
             data.forEach(element => {
               if (element.PersonaId != undefined) {
-                this.tercerosService.get('tercero/' + element.PersonaId).subscribe(
-                  (res: any) => {
-                    let aspiranteAux = {
-                      Inscripcion: element,
-                      NumeroDocumento: res.Id,
-                      NombreAspirante: res.NombreCompleto,
-                      NotaFinal: element.NotaFinal,
-                      TipoInscripcionId: element.TipoInscripcionId,
-                      EstadoInscripcionId: element.EstadoInscripcionId,
-                    }
-                    this.Aspirantes.push(aspiranteAux);
-                    if (aspiranteAux.EstadoInscripcionId.Nombre === 'INSCRITO') {
-                      this.inscritos.push(aspiranteAux.Inscripcion);
-                    }
-                    if (aspiranteAux.EstadoInscripcionId.Nombre === 'ADMITIDO') {
-                      this.inscritos.push(aspiranteAux.Inscripcion);
-                    }
-                    this.source_emphasys.load(this.Aspirantes);
-                  },
-                  error => {
-                    this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-                  },
-                );
+                combineLatest([
+                  this.tercerosService.get('tercero/' + element.PersonaId),
+                  this.proyectoAcademicoService.get('enfasis/' + element.EnfasisId)
+                ]).pipe(
+                  map(([tercero$, enfasis$]) => ({
+                    tercero: tercero$,
+                    enfasis: enfasis$
+                  }))
+                )
+                  .subscribe(
+                    (res: any) => {
+                      let aspiranteAux = {
+                        Inscripcion: element,
+                        NumeroDocumento: res.tercero.Id,
+                        NombreAspirante: res.tercero.NombreCompleto,
+                        NotaFinal: element.NotaFinal,
+                        TipoInscripcionId: element.TipoInscripcionId,
+                        EstadoInscripcionId: element.EstadoInscripcionId,
+                        EnfasisId: res.enfasis
+                      }
+                      this.Aspirantes.push(aspiranteAux);
+                      this.source_emphasys.load(this.Aspirantes);
+                    },
+                    error => {
+                      this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+                    },
+                  );
               }
             });
 
@@ -446,7 +468,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   async admitirInscritos() {
     const cuposTotales = Math.abs(this.cuposProyecto - this.admitidos.length);
     const numero_inscritos = this.inscritos.length < cuposTotales ? this.inscritos.length : cuposTotales;
-    const inscritosOrdenados = _.orderBy(this.inscritos, [(i: any) => (i.NotaFinal)], ['asc']);
+    const inscritosOrdenados = _.orderBy(this.inscritos, [(i: any) => (i.NotaFinal)], ['desc']);
 
     Swal.fire({
       title: `${this.translate.instant('GLOBAL.admitir')} ${numero_inscritos} ${this.translate.instant('GLOBAL.aspirantes_inscritos')}`,
@@ -478,6 +500,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                 b.textContent = i + 1 + '';
               }
             }
+
             await this.admitir(updateState);
             if ((i + 1) === numero_inscritos) {
               Swal.close();

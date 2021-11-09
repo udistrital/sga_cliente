@@ -19,6 +19,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 })
 export class ListExperienciaLaboralComponent implements OnInit {
   uid: number;
+  id: number;
   eid: number;
   cambiotab: boolean = false;
   config: ToasterConfig;
@@ -102,7 +103,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
       actions: {
         add: false,
         edit: true,
-        delete: false,
+        delete: true,
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
       },
@@ -163,6 +164,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
   }
 
   onEdit(event): void {
+    this.id = event.data.Id;
     this.uid = event.data.Id;
     this.indexSelect = event.index;
     this.detalleExp = this.data[event.index];
@@ -200,12 +202,13 @@ export class ListExperienciaLaboralComponent implements OnInit {
   }
 
   itemselec(event): void {
+    this.id = event.data.Id;
   }
 
   onDelete(event): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.eliminar'),
-      text: this.translate.instant('GLOBAL.eliminar') + '?',
+      text: this.translate.instant('experiencia_laboral.eliminar'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -217,9 +220,9 @@ export class ListExperienciaLaboralComponent implements OnInit {
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
-          this.experienciaService.delete('experiencia_laboral', event.data).subscribe(res => {
+          this.sgaMidService.delete('experiencia_laboral', event.data).subscribe(res => {
             if (res !== null) {
-              // this.loadData();
+              this.loadData();
               this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
                 this.translate.instant('GLOBAL.experiencia_laboral') + ' ' +
                 this.translate.instant('GLOBAL.confirmarEliminar'));
@@ -243,16 +246,16 @@ export class ListExperienciaLaboralComponent implements OnInit {
   }
 
   private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
+    // this.config = new ToasterConfig({
+    //   // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
+    //   positionClass: 'toast-top-center',
+    //   timeout: 5000,  // ms
+    //   newestOnTop: true,
+    //   tapToDismiss: false, // hide on click
+    //   preventDuplicates: true,
+    //   animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
+    //   limit: 5,
+    // });
     const toast: Toast = {
       type: type, // 'default', 'info', 'success', 'warning', 'error'
       title: title,

@@ -24,6 +24,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 export class InscripcionGeneralComponent implements OnInit, OnChanges {
   toasterService: any;
 
+
   @Input('inscripcion_id')
   set name(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
@@ -33,7 +34,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     }
     if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
       && this.inscripcion_id.toString() !== '0') {
-      // this.getInfoInscripcion();
+      this.getInfoInscripcion();
     }
   }
 
@@ -52,10 +53,12 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   datos_persona: any;
   inscripcion: Inscripcion;
   step = 0;
+  enfasisSelected: any = null;
   cambioTab = 0;
   nForms: number;
   SelectedTipoBool: boolean = true;
   Campo1Control = new FormControl('', [Validators.required]);
+  enfasisControl = new FormControl('', [Validators.required]);
 
   percentage_info: number = 0;
   percentage_acad: number = 0;
@@ -115,6 +118,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   periodo: any;
   imprimir: boolean = false;
 
+  tieneEnfasis: boolean = false;
+  enfasis: any = [];
+
   constructor(
     private popUpManager: PopUpManager,
     private translate: TranslateService,
@@ -138,6 +144,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   activateTab() {
     // No se muestra la vista de inscripción sino la de preinscripción
     this.changeTab.emit(false);
+  }
+
+  getInfoInscripcion() {
+    this.inscripcionService.get('inscripcion/' + this.inscripcion_id).subscribe(
+      (response: any) => {
+        this.enfasisSelected = response.EnfasisId ? response.EnfasisId : null;
+      });
   }
 
   async loadData() {
@@ -608,6 +621,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.loading = false;
         const inscripcionPut: any = response;
         inscripcionPut.ProgramaAcademicoId = parseInt(sessionStorage.ProgramaAcademicoId, 10);
+        if (this.tieneEnfasis) {
+          if (this.enfasisSelected) {
+            inscripcionPut.EnfasisId = this.enfasisSelected ? parseInt(this.enfasisSelected, 10) : 0;
+          } else {
+
+          }
+        }
 
         this.loading = true;
         this.inscripcionService.get('estado_inscripcion?query=Nombre:INSCRITO').subscribe(
@@ -1015,6 +1035,14 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     }
     if (this.selectedValue !== undefined) {
       sessionStorage.setItem('ProgramaAcademicoId', this.selectedValue);
+      this.programaService.get('proyecto_academico_enfasis/?query=ProyectoAcademicoInstitucionId.Id:' + this.selectedValue)
+        .subscribe((enfasis: any) => {
+          this.enfasis = enfasis.map((e) => (e.EnfasisId)).filter((e) => (e.CodigoAbreviacion !== 'NA'));
+          this.tieneEnfasis = this.enfasis.length > 0
+        })
+    } else {
+      this.tieneEnfasis = false;
+      this.enfasis = [];
     }
     switch (this.selectedTipo) {
       case ('Pregrado'):
@@ -1050,6 +1078,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.selectprograma = true;
         break;
     }
+
+
   }
 
   mostrarBarraExterna() {

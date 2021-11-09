@@ -1,33 +1,40 @@
-<div class="col-12">
-    <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-        <div class="row">
-            <div class="col-12">
-                <nb-card>
-                    <nb-card-header>
-                        {{ 'calendario.buscar_calendario' | translate }}
-                    </nb-card-header>
-                    <nb-card-body>
-                        <mat-form-field style="width: 100%;">
-                            <mat-select [formControl]="selectedLevel" placeholder="{{ 'calendario.para' | translate }}" (selectionChange)="onSelectLevel()">
-                                <mat-option *ngFor="let nivel of niveles" [value]="nivel.Id">{{ nivel.Nombre }}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field style="width: 100%;">
-                            <mat-select [formControl]="selectedProject" placeholder="{{ 'oferta.proyecto' | translate }}" (selectionChange)="onSelectProject()">
-                                <mat-option *ngFor="let project of projects" [value]="project.Id">{{ project.Nombre }}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </nb-card-body>
-                </nb-card>
-            </div>
-        </div>
+<div class="row">
+    <div class="col">
+      <nb-card [nbSpinner]="loading"
+                nbSpinnerStatus="success"
+                nbSpinnerSize="xxlarge"
+                nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+        <fieldset [ngClass]="{'fieldseter':true} ">
+          <legend>
+            {{ "calendario.buscar_calendario" | translate }}
+          </legend>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-12">
 
-        <div class="row" *ngIf="showCalendar">
-            <div class="col-12">
-                <nb-card>
-                    <ngx-detalle-calendario [calendarForProject]="calendarioId" [projectId]="projectId"></ngx-detalle-calendario>
-                </nb-card>
+                <mat-form-field style="width: 100%;">
+                    <mat-select [formControl]="selectedLevel" placeholder="{{ 'calendario.para' | translate }}" (selectionChange)="onSelectLevel()">
+                        <mat-option *ngFor="let nivel of niveles" [value]="nivel.Id">{{ nivel.Nombre }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field style="width: 100%;">
+                    <mat-select [formControl]="selectedProject" placeholder="{{ 'oferta.proyecto' | translate }}" (selectionChange)="onSelectProject()">
+                        <mat-option *ngFor="let project of projects" [value]="project.Id">{{ project.Nombre }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                
+              </div>
             </div>
-        </div>
-    </nb-card>
+
+            <div class="row" *ngIf="showCalendar">
+                <div class="col-12">
+                    <nb-card>
+                        <ngx-detalle-calendario [calendarForProject]="calendarioId" [projectId]="projectId"></ngx-detalle-calendario>
+                    </nb-card>
+                </div>
+            </div>
+          </nb-card-body>
+        </fieldset>
+      </nb-card>
+    </div>
 </div>

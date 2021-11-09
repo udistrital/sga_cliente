@@ -31,7 +31,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
   dataSource: any;
   index: any;
   idproyecto: any;
- // datosbasico: InformacionBasica;
   codigosnies: Number;
   facultad: string;
   nombre: String;
@@ -73,31 +72,13 @@ export class ListProyectoAcademicoComponent implements OnInit {
   fecha_inicio_coordinador: Date;
   vigencia_resolucion_meses: string;
   vigencia_resolucion_anos: string;
- // primer_nombre: string;
- // segundo_nombre: string;
- // primer_apellido: string;
   id_coordinador: any;
- // segundo_apellido: string;
- // nombre_completo: string;
   proyectoJson: any;
   id_documento_acto: string;
   id_documento_registor_calificado: string;
   id_documento_alta_calidad: string;
   id_documento_registro_coordinador: number;
   proyecto_padre_id: ProyectoAcademicoInstitucion;
- /* displayedColumns = [
-    'Id',
-    'NombreFacultad',
-    'proyecto',
-    'Nivel Proyecto',
-    'codigo',
-    'OfertaLetra',
-    'FechaVenimientoAcreditacion',
-    'FechaVenimientoCalidad',
-    'Consulta',
-    'editar',
-    'inhabilitar',
-  ];*/
 
   listaDatos = []
   source: LocalDataSource;
@@ -336,32 +317,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
     return data.indexOf(filter) >= 0;
   }
 
-/*  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
-    /*
-    this.proyectoacademicoService.get('registro_calificado_acreditacion/' )
-      .subscribe(res => {
-        const r = <any>res;
-        if (res !== null && r.Type !== 'error') {
-          this.dataSource = new MatTableDataSource();
-          this.dataSource = res;
-          this.dataSource = this.dataSource.filter((row: any) => (((row.ProyectoAcademicoInstitucionId.Nombre )
-          .toLowerCase()).indexOf(filterValue.toLowerCase())) !== -1)
-        }
-      },
-      (error: HttpErrorResponse) => {
-        Swal.fire({
-          icon:'error',
-          title: error.status + '',
-          text: this.translate.instant('ERROR.' + error.status),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        });
-      });
-    */
- // }*/
-
   useLanguage(language: string) {
     this.translate.use(language);
   }
@@ -417,7 +372,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
-    console.log(this.idproyecto)
     this.sgamidService
       .get('consulta_proyecto_academico/' + this.idproyecto)
       .subscribe(
@@ -428,7 +382,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
               (data: any) => data.ProyectoAcademico.CodigoSnies,
             );
             this.nombre = res.map((data: any) => data.ProyectoAcademico.Nombre);
-            // this.facultad = res.map((data: any) => (data.NombreDependencia));
             this.facultad = res.map((data: any) => data.NombreFacultad);
             this.nivel = res.map(
               (data: any) => data.ProyectoAcademico.NivelFormacionId.Nombre,
@@ -496,7 +449,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
               (data: any) => data.ProyectoAcademico.CodigoSnies,
             );
             this.nombre = res.map((data: any) => data.ProyectoAcademico.Nombre);
-            // this.facultad = res.map((data: any) => (data.NombreDependencia));
             this.facultad = res.map((data: any) => data.NombreFacultad);
             this.nivel = res.map(
               (data: any) => data.ProyectoAcademico.NivelFormacionId.Nombre,
@@ -520,7 +472,6 @@ export class ListProyectoAcademicoComponent implements OnInit {
             this.ciclos = res.map((data: any) => data.CiclosLetra);
             this.oferta = res.map((data: any) => data.OfertaLetra);
             this.enfasis = res.map((data: any) => data.Enfasis)[0];
-            // this.idfacultad = res.map((data: any) => (data.ProyectoAcademico.DependenciaId));
             this.idfacultad = res.map(
               (data: any) => data.ProyectoAcademico.FacultadId,
             );

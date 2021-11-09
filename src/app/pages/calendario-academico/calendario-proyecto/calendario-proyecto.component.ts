@@ -51,7 +51,11 @@ export class CalendarioProyectoComponent {
     this.showCalendar = false;
     this.projectService.get('proyecto_academico_institucion?limit=0&fields=Id,Nombre,NivelFormacionId').subscribe(
       response => {
-        this.projects = <any[]>response.filter(proyecto => this.filtrarProyecto(proyecto));
+        if (response[0].Id !== undefined) {
+          this.projects = <any[]>response.filter(proyecto => this.filtrarProyecto(proyecto));
+        } else {
+          this.popUpManager.showErrorAlert(this.translate.instant('calendario.sin_calendarios'));
+        }
         this.loading = false;
       },
       error => {

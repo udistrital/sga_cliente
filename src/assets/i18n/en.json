@@ -593,7 +593,8 @@
         "placeholder_tipo_contribuyente": "Ej. Individual",
         "documento": "Document number",
         "nombre_autor": "Name",
-        "placeholder_nombre_autor": "Ej: Pedro Perez"
+        "placeholder_nombre_autor": "Ej: Pedro Perez",
+        "placeholder_cargo_mensaje": "You must enter at least 3 characters in the field to search for the corresponding role."
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1264,7 +1265,8 @@
         "tooltip_crear": "Create work experience",
         "crear_entidad": "Do you want to create a new entity?",
         "titulo2_crear_entidad": "not found",
-        "titulo1_crear_entidad": "The Nit. "
+        "titulo1_crear_entidad": "The Nit. ",
+        "eliminar":"Do you wish to remove the work experience record?"
     },
     "documento_programa": {
         "descuento_academico_no_registrado": "Academic discount not registered",
@@ -1647,7 +1649,9 @@
       "no_data": "There are no registered data on academic training",
       "tooltip_editar": "Edit academic training",
       "tooltip_eliminar": "Remove academic training",
-      "tooltip_crear": "Create academic training"
+      "tooltip_crear": "Create academic training",
+      "actualizar":"Do you wish to update your academic training?",
+      "eliminar":"Do you wish to remove your academic training?"
     },
     "solicitudes": {
         "respuesta": "The response to this request has been successfully recorded",
