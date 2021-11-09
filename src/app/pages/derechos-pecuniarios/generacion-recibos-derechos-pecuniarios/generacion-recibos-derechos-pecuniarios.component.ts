@@ -19,6 +19,7 @@ import { UserService } from '../../../@core/data/users.service';
 import { ButtonPaymentComponent } from '../../../@theme/components/button-payment/button-payment.component';
 import { LinkDownloadComponent } from '../../../@theme/components/link-download/link-download.component';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { DownloadFileNuxeo } from '../../../@theme/components/download-file-nuxeo/download-file-nuxeo.component';
 
 @Component({
   selector: 'generacion-recibos-derechos-pecuniarios',
@@ -123,10 +124,22 @@ export class GeneracionRecibosDerechosPecuniarios {
     this.settings = {
       actions: false,
       columns: {
-        Recibo: {
-          title: this.translate.instant('derechos_pecuniarios.numero_recibo'),
+        Periodo: {
+          title: this.translate.instant('derechos_pecuniarios.periodo'),
           editable: false,
           width: '10%',
+          filter: false,
+        },
+        Id: {
+          title: this.translate.instant('derechos_pecuniarios.id'),
+          editable: false,
+          width: '5%',
+          filter: false,
+        },
+        FechaCreacion: {
+          title: this.translate.instant('derechos_pecuniarios.fecha_generacion'),
+          width: '10%',
+          editable: false,
           filter: false,
         },
         Valor: {
@@ -135,20 +148,32 @@ export class GeneracionRecibosDerechosPecuniarios {
           width: '10%',
           filter: false,
         },
-        Codigo: {
-          title: this.translate.instant('derechos_pecuniarios.codigo'),
+        Concepto: {
+          title: this.translate.instant('derechos_pecuniarios.concepto'),
+          width: '15%',
           editable: false,
+          filter: false,
+        },
+        FechaOrdinaria: {
+          title: this.translate.instant('derechos_pecuniarios.fecha_ordinaria'),
           width: '10%',
-          filter: false,
-        },
-        Nombre: {
-          title: this.translate.instant('derechos_pecuniarios.derecho_pecuniario'),
-          width: '25%',
           editable: false,
           filter: false,
         },
-        FechaCreacion: {
-          title: this.translate.instant('derechos_pecuniarios.fecha_generacion'),
+        Pago: {
+          title: this.translate.instant('derechos_pecuniarios.pago'),
+          width: '10%',
+          editable: false,
+          filter: false,
+        },
+        ValorPagado: {
+          title: this.translate.instant('derechos_pecuniarios.valor_pagado'),
+          width: '15%',
+          editable: false,
+          filter: false,
+        },
+        FechaPago: {
+          title: this.translate.instant('derechos_pecuniarios.fecha_pago'),
           width: '15%',
           editable: false,
           filter: false,
@@ -160,9 +185,9 @@ export class GeneracionRecibosDerechosPecuniarios {
           filter: false,
           position: 'center',
         },
-        Descarga: {
-          title: this.translate.instant('derechos_pecuniarios.descargar'),
-          width: '12%',
+        VerRecibo: {
+          title: this.translate.instant('derechos_pecuniarios.ver_recibo'),
+          width: '5%',
           editable: false,
           filter: false,
           renderComponent: LinkDownloadComponent,
@@ -171,9 +196,9 @@ export class GeneracionRecibosDerechosPecuniarios {
             instance.save.subscribe((data) => this.descargarReciboPago(data))
           },
         },
-        Opcion: {
-          title: this.translate.instant('derechos_pecuniarios.opcion'),
-          width: '13%',
+        Pagar: {
+          title: this.translate.instant('derechos_pecuniarios.pagar'),
+          width: '5%',
           editable: false,
           filter: false,
           type: 'custom',
@@ -188,6 +213,28 @@ export class GeneracionRecibosDerechosPecuniarios {
                 // this.itemSelect({ data: data.data });
               }
             });
+          },
+        },
+        AdjuntarPago: {
+          title: this.translate.instant('derechos_pecuniarios.adjuntar_pago'),
+          width: '5%',
+          editable: false,
+          filter: false,
+          renderComponent: LinkDownloadComponent,
+          type: 'custom',
+          onComponentInitFunction: (instance) => {
+            instance.save.subscribe((data) => this.descargarReciboPago(data))
+          },
+        },
+        Solicitar: {
+          title: this.translate.instant('derechos_pecuniarios.solicitar'),
+          width: '5%',
+          editable: false,
+          filter: false,
+          renderComponent: LinkDownloadComponent,
+          type: 'custom',
+          onComponentInitFunction: (instance) => {
+            instance.save.subscribe((data) => this.descargarReciboPago(data))
           },
         },
       },
@@ -211,6 +258,19 @@ export class GeneracionRecibosDerechosPecuniarios {
   }
 
   async loadInfoRecibos() {
+    this.dataSource.load([{
+      Periodo:10,
+      Id:12,
+      FechaCreacion: '12-01-01',
+      Valor: "$ 1.500",
+      Concepto: 'Certificado de notas',
+      FechaOrdinaria: '12-10-01',
+      Pago: '18',
+      ValorPagado: "$1.500",
+      FechaPago:'12-09-01',
+      Estado: 'Pendiente pago',
+      VerRecibo: 140632
+    }]);
     this.loading = true;
     // Función del MID que retorna el estado del recibo
     const PeriodoActual = localStorage.getItem('IdPeriodo')
@@ -219,10 +279,10 @@ export class GeneracionRecibosDerechosPecuniarios {
         (response: any) => {
           if (response !== null && response.Status === '400') {
             this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error'));
-            this.dataSource.load([]);
+            // this.dataSource.load([]);
           } else if (response != null && response.Status === '404' || response.Data[0] === null) {
             this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('derechos_pecuniarios.no_recibo'));
-            this.dataSource.load([]);
+            // this.dataSource.load([]);
           } else {
             const data = <Array<any>>response.Data;
             const dataInfo = <Array<any>>[];
