@@ -154,3 +154,12 @@ nb-menu {
   justify-content: center;
   margin: 1rem 0 1rem 0;
 }
+
+.preinscription-alert {
+  background-color: var(--warning-main);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 2rem;
+  border-radius: 0.4rem;
+  margin-bottom: 1rem;
+}

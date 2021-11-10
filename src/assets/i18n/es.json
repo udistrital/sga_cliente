@@ -1253,6 +1253,7 @@
         "comprobante_inscripcion": "Comprobante de Inscripción",
         "info_comprobante": "El diligenciamiento del presente formulario indica que el aspirante ha conocido el instructivo oficial de admisiones del PERIODO ACADÉMICO en curso, y acorde con la ley 1581 de 2012, autoriza de manera expresa e inequívoca, que sus datos personales sean tratados conforme a las funciones propias de la Universidad, en su condición de Institución de Educación Superior.",
         "warning_info":"Aspirante, recuerde que solo podra generar hasta 3 recibos en estado pendiente de pago, si desea generar otra preinscripción a otro proyecto deberá pagar al menos uno de los recibos generados.",
+        "alerta_preinscripcion":"Aspirante, para poder realizar el proceso de inscripción debe llenar en un 100% los apartados de Información básica, Formación académica, Experiencia laboral y Documentos solicitados",
         "alerta_posgrado":"Aspirante, tenga en cuenta que para poder inscribirse en un programa de posgrado, usted debe contar con un grado de pregrado culminado y graduado, con sus respectivos soportes documentales.",
         "alerta_veracidad_informacion":"Aspirante, tenga en cuenta que la información que diligenciará a continuación debe ser verídica para poder continuar con el proceso de inscripción.",
         "alerta_discapacidades": "Aspirante, si usted tiene más de una condición de discapacidad, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias."
