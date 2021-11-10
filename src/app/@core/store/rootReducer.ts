@@ -11,7 +11,7 @@ export const rootReducer: ActionReducerMap<IAppState> = {
   listClasificacionNivelIdioma: ListReducer.ListReducerClasificacionNivelIdioma,
   listEstadoInscripcion: ListReducer.ListReducerEstadoInscripcion,
   listEstadoCivil: ListReducer.ListReducerEstadoCivil,
-  listGrupoEtnico: ListReducer.ListReducerGrupoEtnico,
+  listTipoPoblacion: ListReducer.ListReducerTipoPoblacion,
   listIdioma: ListReducer.ListReducerIdioma,
   listLineaInvestigacion: ListReducer.ListReducerLineaInvestigacion,
   listPais: ListReducer.ListReducerPais,

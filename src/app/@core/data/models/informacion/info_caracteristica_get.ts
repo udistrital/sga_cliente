@@ -1,4 +1,4 @@
-import { GrupoEtnico } from './grupo_etnico';
+import { TipoPoblacion } from './tipo_poblacion';
 import { TipoDiscapacidad } from './tipo_discapacidad';
 import { GrupoSanguineo } from './grupo_sanguineo';
 import { Rh } from './rh_tercero';
@@ -7,7 +7,7 @@ import { Lugar } from './lugar';
 export class InfoCaracteristicaGet {
   GrupoSanguineo: GrupoSanguineo;
   Rh: Rh;
-  GrupoEtnico: GrupoEtnico;
+  TipoPoblacion: TipoPoblacion;
   TipoDiscapacidad: Array<TipoDiscapacidad>;
   Lugar: {
     Id: number;
@@ -23,5 +23,6 @@ export class InfoCaracteristicaGet {
   };
   Ente: number;
   Tercero: number;
-  IdDocumento: number;
+  IdDocumentoDiscapacidad: number;
+  IdDocumentoPoblacion: number;
 }

@@ -9,7 +9,7 @@ import { Lugar } from '../data/models/lugar/lugar';
 import { LineaInvestigacion } from '../data/models/investigacion/linea_investigacion';
 import { TipoParametro } from '../data/models/parametro/tipo_parametro';
 import { Idioma } from '../data/models/idioma/idioma';
-import { GrupoEtnico } from '../data/models/informacion/grupo_etnico';
+import { TipoPoblacion } from '../data/models/informacion/tipo_poblacion';
 import { EstadoCivil } from '../data/models/informacion/estado_civil';
 import { EstadoInscripcion } from '../data/models/inscripcion/estado_inscripcion';
 import { ClasificacionNivelIdioma } from '../data/models/idioma/clasificacion_idioma';
@@ -34,7 +34,7 @@ export interface IAppState {
   listFactorRh: Genero [],
   listICFES: Genero [],
   listEPS: Genero [],
-  listGrupoEtnico: GrupoEtnico[],
+  listTipoPoblacion: TipoPoblacion[],
   listIdioma: Idioma[],
   listLineaInvestigacion: LineaInvestigacion[],
   listTipoParametro: TipoParametro[],

@@ -65,7 +65,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     this.listService.findGrupoSanguineo();
     this.listService.findFactorRh();
     this.listService.findPais();
-    this.listService.findGrupoEtnico();
+    this.listService.findTipoPoblacion();
     this.listService.findTipoDiscapacidad();
     this.listService.findEPS();
     this.loadLists();
@@ -345,7 +345,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
      this.store.select((state) => state).subscribe(
        (list) => {
         this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
-        this.formInfoCaracteristica.campos[this.getIndexForm('GrupoEtnico')].opciones = list.listGrupoEtnico[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('TipoPoblacion')].opciones = list.listTipoPoblacion[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].opciones = list.listTipoDiscapacidad[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSanguineo')].opciones = list.listGrupoSanguineo[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('Rh')].opciones = list.listFactorRh[0];
