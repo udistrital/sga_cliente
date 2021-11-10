@@ -254,8 +254,8 @@
         "placeholder_grupo_sanguineo": "E.g: AB",
         "rh": "RH",
         "placeholder_rh": "E.g: + (Positive)",
-        "grupo_etnico": "Ethnic group",
-        "placeholder_grupo_etnico": "E.g: Ethnic group",
+        "tipo_poclacion": "Population type",
+        "placeholder_tipo_poclacion": "E.g: Population type",
         "lugar_nacimiento": "Place of birth",
         "placeholder_lugar_nacimiento": "E.g: Place of birth",
         "pais_nacimiento": "Country of birth",
@@ -582,6 +582,7 @@
         "tooltip_descargar": "Download",
         "experiencia_laboral": "Work experience",
         "comprobante_discapacidad":"Proof of disability",
+        "comprobante_poblacion": "Proof of population",
         "carga_recolectando": "Collecting information...",
         "carga_guardando": "Saving data...",
         "general": "General",
@@ -594,7 +595,8 @@
         "documento": "Document number",
         "nombre_autor": "Name",
         "placeholder_nombre_autor": "Ej: Pedro Perez",
-        "placeholder_cargo_mensaje": "You must enter at least 3 characters in the field to search for the corresponding role."
+        "placeholder_cargo_mensaje": "You must enter at least 3 characters in the field to search for the corresponding role.",
+        "placeholder_vacio": " "
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1208,7 +1210,9 @@
         "info_comprobante": "Fulfilling this form means the candidate has known the official admissions manual for the ACTUAL PERIOD and according with the 1571 law from 2012 authorizes expressly and unequivocally the data management according to the proper functions of the University in his condition of High Education Institution.",
         "warning_info":"Dear user, remember that you can only generate up to 3 receipts in pending payment status. If you want to generate another pre-registration to another project, you must pay at least one of the generated receipts.",
         "alerta_posgrado":"Dear applicant, keep in mind that in order to enroll in a graduate program, you must have a completed and graduated undergraduate degree, with their respective documentary supports.",
-        "alerta_discapacidades": "Dear user, If you have more than one disabling condition, please upload a single document in pdf format with all the necessary certifications."
+        "alerta_discapacidades": "Dear applicant, please note that the disability must be contained in the statutory law 1618 of 2013, with their respective documentary support, if you have more than one disability condition, please upload a single document in pdf format with all the necessary certifications.",
+        "alerta_poblacion": "Applicant, if you belong to more than one population, please upload a single document in pdf format with all the necessary certifications.",
+        "alerta_poblacion_discapacidades": "Applicant, please note that the disability must be contained in the statutory law 1618 of 2013, with its respective documentary support. If you have more than one disability condition or if you belong to more than one population, please upload a single document in pdf format with all the necessary certifications in the corresponding category."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
