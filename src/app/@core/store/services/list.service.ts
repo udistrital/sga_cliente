@@ -149,17 +149,17 @@ export class ListService {
     );
   }
 
-  public findGrupoEtnico() {
-    this.store.select(REDUCER_LIST.GrupoEtnico).subscribe(
+  public findTipoPoblacion() {
+    this.store.select(REDUCER_LIST.TipoPoblacion).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:3')
             .subscribe(
               (result: any[]) => {
-                this.addList(REDUCER_LIST.GrupoEtnico, result);
+                this.addList(REDUCER_LIST.TipoPoblacion, result.filter(data => data.Nombre !== 'DOCUMENTO_SOPORTE_POBLACION'));
               },
               error => {
-                this.addList(REDUCER_LIST.GrupoEtnico, []);
+                this.addList(REDUCER_LIST.TipoPoblacion, []);
               },
             );
         }
@@ -391,7 +391,7 @@ export class ListService {
           this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:1')
             .subscribe(
               (result: any[]) => {
-                this.addList(REDUCER_LIST.TipoDiscapacidad, result.filter(data => data.Nombre !== 'DOCUMENTO_SOPORTE'));
+                this.addList(REDUCER_LIST.TipoDiscapacidad, result.filter(data => data.Nombre !== 'DOCUMENTO_SOPORTE_DISCAPACIDAD'));
               },
               error => {
                 this.addList(REDUCER_LIST.TipoDiscapacidad, []);

@@ -7,7 +7,7 @@ export const REDUCER_LIST = {
     ClasificacionNivelIdioma: 'listClasificacionNivelIdioma',
     EstadoInscripcion: 'listEstadoInscripcion',
     EstadoCivil: 'listEstadoCivil',
-    GrupoEtnico: 'listGrupoEtnico',
+    TipoPoblacion: 'listTipoPoblacion',
     Idioma: 'listIdioma',
     LineaInvestigacion: 'listLineaInvestigacion',
     Pais: 'listPais',

@@ -60,8 +60,8 @@ export class ListInfoCaracteristicaComponent implements OnInit {
             return value;
           },
         },
-        GrupoEtnico: {
-          title: this.translate.instant('GLOBAL.grupo_etnico'),
+        TipoPoblacion: {
+          title: this.translate.instant('GLOBAL.tipo_poclacion'),
           // type: 'grupo_etnico;',
           valuePrepareFunction: (value) => {
             return value;
