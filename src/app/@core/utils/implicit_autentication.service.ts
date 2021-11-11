@@ -292,20 +292,13 @@ export class ImplicitAutenticationService {
         return (new Date(window.localStorage.getItem('expires_at')) < new Date());
     }
 
-    public live(){
+    public live() {
         return this.isLogin;
     }
 
     public clearStorage() {
         this.isLogin = false;
-        window.localStorage.removeItem('access_token');
-        window.localStorage.removeItem('id_token');
-        window.localStorage.removeItem('expires_in');
-        window.localStorage.removeItem('state');
-        window.localStorage.removeItem('expires_at');
-        window.localStorage.removeItem('menu');
-        window.localStorage.removeItem('user');
-        window.localStorage.removeItem('apps_menu');
-
+        window.localStorage.clear();
+        window.sessionStorage.clear();
     }
 }
