@@ -36,11 +36,11 @@ export class NotificacionesService {
     ) {
         this.listMessage = [];
         this.notificacion_estado_usuario = []
-        this.connect();
-        if (this.autenticacion.live()) {
-            this.payload = this.autenticacion.getPayload();
-            this.queryNotification();
-        }
+        //this.connect();
+        // if (this.autenticacion.live()) {
+        //     this.payload = this.autenticacion.getPayload();
+        //     this.queryNotification();
+        // }
     }
 
     getNotificaciones() {

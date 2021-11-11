@@ -40,7 +40,7 @@ steps:
 #     - push
 
 # - name: prueba_unitarias
-#   image: node:12.22.1
+#   image: node:12.22.7
 #   commands:
 #   - npm i
 #   - npm run test
@@ -49,7 +49,7 @@ steps:
 #     - unitest
 #
 # - name:  pruebas_linter
-#   image: node:12.22.1
+#   image: node:12.22.7
 #   commands:
 #   - npm i
 #   - npm run lint
@@ -75,7 +75,7 @@ steps:
     - push
 
 - name: nodejs_release
-  image: node:12.22.1
+  image: node:12.22.7
   commands:
   - node --version
   - npm i
@@ -87,7 +87,7 @@ steps:
     - push
 
 - name: nodejs_master
-  image: node:12.22.1
+  image: node:12.22.7
   commands:
   - node --version
   - npm i
