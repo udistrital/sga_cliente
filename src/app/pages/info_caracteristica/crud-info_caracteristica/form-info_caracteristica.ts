@@ -47,7 +47,7 @@ export let FORM_INFO_CARACTERISTICA = {
       nombre: 'PaisNacimiento',
       label_i18n: 'pais_nacimiento',
       placeholder_i18n: 'pais_nacimiento',
-      requerido: false, //Temporalmente mientras el servicio funciona
+      requerido: true,
       tipo: 'Lugar',
       key: 'Nombre',
       opciones: [],
