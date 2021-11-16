@@ -29,10 +29,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   @Input('info_caracteristica_id')
   set name(info_caracteristica_id: number) {
     this.info_caracteristica_id = info_caracteristica_id;
-    if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
-      this.info_caracteristica_id.toString() !== '') {
-      // this.loadInfoCaracteristica();
-    }
   }
 
   @Output() eventChange = new EventEmitter();
@@ -69,6 +65,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+    this.loading = true;
     this.listService.findPais();
     this.listService.findTipoPoblacion();
     this.listService.findTipoDiscapacidad();
@@ -149,7 +146,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                 departamentoNacimiento.push(consultaHijos[i].LugarHijoId);
               }
             }
-            this.loading = false;
+            // this.loading = false;
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = departamentoNacimiento;
           },
           (error: HttpErrorResponse) => {
@@ -183,7 +180,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               ciudadNacimiento.push(consultaHijos[i].LugarHijoId);
             }
           }
-          this.loading = false;
+          // this.loading = false;
           this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = ciudadNacimiento;
         },
           (error: HttpErrorResponse) => {
@@ -260,6 +257,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
 
             this.nuxeo.getFilesNew(files)
               .subscribe(response => {
+                this.loading = true;
                 const filesResponse = <Array<any>>response;
                 if (Object.keys(filesResponse).length === files.length) {
                   filesResponse.forEach(file => {
@@ -271,6 +269,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                       this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = file['urlUnsafe'] + '';
                     }
                   })
+                  this.loading = false;
                 }
               },
                 (error: HttpErrorResponse) => {
@@ -285,7 +284,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                   });
                 });
 
-            this.loading = false;
             this.result.emit(1);
           } else {
             this.loading = false;
@@ -305,6 +303,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   updateInfoCaracteristica(infoCaracteristica: any): void {
+    this.loading = false;
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
       text: this.translate.instant('inscripcion.update'),
@@ -323,7 +322,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           this.info_info_caracteristica.Ente = this.info_persona_id;
           this.sgamidService.put('persona/actualizar_complementarios', this.info_info_caracteristica)
             .subscribe(res => {
-              this.loading = false;
               this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                 this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
                 this.translate.instant('GLOBAL.confirmarActualizar'));
@@ -349,6 +347,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   createInfoCaracteristica(infoCaracteristica: any): void {
+    this.loading = false;
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
       text: this.translate.instant('inscripcion.crear'),
