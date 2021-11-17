@@ -59,9 +59,9 @@ export class NewNuxeoService {
                 IdTipoDocumento: file.IdDocumento,
                 nombre: file.nombre,
                 metadatos: {
-                    NombreArchivo:file.nombre,
-                    Tipo:"Archivo",
-                    Observaciones:file.nombre,
+                    NombreArchivo: file.nombre,
+                    Tipo: "Archivo",
+                    Observaciones: file.nombre,
                     "dc:title": file.nombre,
                 },
                 descripcion: file.nombre,
@@ -94,12 +94,27 @@ export class NewNuxeoService {
                 )
                 .subscribe(async (f: any) => {
                     const url = await this.getUrlFile(f.file, f['file:content']['mime-type']);
-                    documentos[index] = {...documentos[index], ...{url: url}}
+                    documentos[index] = { ...documentos[index], ...{ url: url } }
                     if (documentos.length === files.length) {
                         documentsSubject.next(documentos);
                     }
                 })
         });
+        return documents$;
+    }
+
+    getByUUID(uuid) {
+        const documentsSubject = new Subject<Documento[]>();
+        const documents$ = documentsSubject.asObservable();
+        let documento = null;
+        this.anyService.get(environment.NUXEO_SERVICE, '/document/' + uuid)
+            .subscribe(async (f: any) => {
+                const url = await this.getUrlFile(f.file, f['file:content']['mime-type']);
+                documento = url
+                documentsSubject.next(documento);
+            }, (error) => {
+                documentsSubject.next(error);
+            })
         return documents$;
     }
 }
