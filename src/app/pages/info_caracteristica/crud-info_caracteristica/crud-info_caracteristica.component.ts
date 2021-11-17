@@ -146,7 +146,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                 departamentoNacimiento.push(consultaHijos[i].LugarHijoId);
               }
             }
-            // this.loading = false;
+            this.loading = false;
             this.formInfoCaracteristica.campos[this.getIndexForm('DepartamentoNacimiento')].opciones = departamentoNacimiento;
           },
           (error: HttpErrorResponse) => {
@@ -180,7 +180,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               ciudadNacimiento.push(consultaHijos[i].LugarHijoId);
             }
           }
-          // this.loading = false;
+          this.loading = false;
           this.formInfoCaracteristica.campos[this.getIndexForm('Lugar')].opciones = ciudadNacimiento;
         },
           (error: HttpErrorResponse) => {
@@ -212,6 +212,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
 
   cargarDocs(files) {
     return new Promise((resolve, reject) => {
+      this.loading = true;
       files.forEach((file) => {
         const filesll = []
         filesll.push(file)

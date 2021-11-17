@@ -11,6 +11,7 @@ import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion'
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import Swal from 'sweetalert2';
+import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
@@ -122,6 +123,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   enfasis: any = [];
 
   constructor(
+    private listService: ListService,
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private inscripcionService: InscripcionService,
@@ -138,6 +140,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => { });
     this.total = true;
     this.loading = true;
+    this.listService.findPais();
     this.loadData();
   }
 
