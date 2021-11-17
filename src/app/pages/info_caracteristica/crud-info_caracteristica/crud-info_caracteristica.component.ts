@@ -210,14 +210,52 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     return 0;
   }
 
+  cargarDocs(files) {
+    return new Promise((resolve, reject) => {
+      files.forEach((file) => {
+        const filesll = []
+        filesll.push(file)
+        this.nuxeo.getFilesNew(filesll)
+          .subscribe(response => {
+            const filesResponse = <Array<any>>response;
+            if (Object.keys(filesResponse).length === filesll.length) {
+              filesResponse.forEach(fileR => {
+                if (fileR['Id'] === this.formInfoCaracteristica.ComprobantePoblacion) {
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].urlTemp = fileR['urlUnsafe'] + '';
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].valor = fileR['urlUnsafe'] + '';
+                } else if (fileR['Id'] === this.formInfoCaracteristica.ComprobanteDiscapacidad) {
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = fileR['urlUnsafe'] + '';
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = fileR['urlUnsafe'] + '';
+                }
+              })
+              this.loading = false;
+            }
+          },
+            (error: HttpErrorResponse) => {
+              reject(error);
+              Swal.fire({
+                icon: 'error',
+                title: error.status + '',
+                text: this.translate.instant('ERROR.' + error.status),
+                footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                  this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
+                  this.translate.instant('GLOBAL.soporte_documento'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+            });
+      });
+      resolve(true);
+    });
+  }
+
   public loadInfoCaracteristica(): void {
-    this.loadLists();
+    // this.loadLists();
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '') {
       this.denied_acces = false;
       this.sgamidService.get('persona/consultar_complementarios/' + this.info_persona_id)
-        .subscribe(res => {
+        .subscribe(async res => {
           if (res !== null) {
             this.datosGet = <InfoCaracteristicaGet>res.Response.Body[0].Data;
             this.info_info_caracteristica = <InfoCaracteristica>res.Response.Body[0].Data;
@@ -255,36 +293,9 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               files.push({ Id: this.formInfoCaracteristica.ComprobanteDiscapacidad, key: 'Documento' });
             }
 
-            this.nuxeo.getFilesNew(files)
-              .subscribe(response => {
-                this.loading = true;
-                const filesResponse = <Array<any>>response;
-                if (Object.keys(filesResponse).length === files.length) {
-                  filesResponse.forEach(file => {
-                    if (file['Id'] === this.formInfoCaracteristica.ComprobantePoblacion) {
-                      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].urlTemp = file['urlUnsafe'] + '';
-                      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].valor = file['urlUnsafe'] + '';
-                    } else if (file['Id'] === this.formInfoCaracteristica.ComprobanteDiscapacidad) {
-                      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = file['urlUnsafe'] + '';
-                      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = file['urlUnsafe'] + '';
-                    }
-                  })
-                  this.loading = false;
-                }
-              },
-                (error: HttpErrorResponse) => {
-                  Swal.fire({
-                    icon: 'error',
-                    title: error.status + '',
-                    text: this.translate.instant('ERROR.' + error.status),
-                    footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                      this.translate.instant('GLOBAL.experiencia_laboral') + '|' +
-                      this.translate.instant('GLOBAL.soporte_documento'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  });
-                });
+            await this.cargarDocs(files);
 
-            this.result.emit(1);
+
           } else {
             this.loading = false;
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
