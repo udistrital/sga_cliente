@@ -2,7 +2,7 @@
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~@nebular/theme/styles/global/breakpoints';
 @include nb-install-component() {
-  :host /deep/ .nb-theme-default ng2-smart-table table tr td {
+  :host ::ng-deep .nb-theme-default ng2-smart-table table tr td {
     font-size: 0.85rem;
   }
 

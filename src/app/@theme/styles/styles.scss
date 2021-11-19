@@ -63,35 +63,35 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
 
 // install the framework and custom global styles
 @include nb-install() {
-  /deep/ .mat-input-element::placeholder {
+  ::ng-deep .mat-input-element::placeholder {
     color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
   }
 
-  /deep/ .mat-input-placeholder {
+  ::ng-deep .mat-input-placeholder {
     color: nb-theme(color-fg-text);
   }
 
-  /deep/ .mat-select-value {
+  ::ng-deep .mat-select-value {
     color: nb-theme(color-fg-text);
   }
 
-  /deep/ .mat-select-placeholder {
+  ::ng-deep .mat-select-placeholder {
     color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
   }
 
-  /deep/ .mat-form-field-underline {
+  ::ng-deep .mat-form-field-underline {
     background-color: nb-theme(form-control-border-color);
   }
 
-  /deep/ .mat-form-field-label {
+  ::ng-deep .mat-form-field-label {
     color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
   }
 
-  /deep/ .progress {
+  ::ng-deep .progress {
     background-color: nb-theme(layout-bg) !important;
   }
 
-  /deep/ .progress-bar {
+  ::ng-deep .progress-bar {
     color: nb-theme(color-fg-text) !important;
   }
 

@@ -2,19 +2,19 @@
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~@nebular/theme/styles/global/breakpoints';
 @include nb-install-component() {
-    /deep/ .mat-input-element::placeholder {
+    ::ng-deep .mat-input-element::placeholder {
         color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
     }
-    /deep/ .mat-input-placeholder {
+    ::ng-deep .mat-input-placeholder {
         color: nb-theme(color-fg-text);
     }
-    /deep/ .mat-select-value {
+    ::ng-deep .mat-select-value {
         color: nb-theme(color-fg-text);
     }
-    /deep/ .mat-select-placeholder {
+    ::ng-deep .mat-select-placeholder {
         color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
     }
-    /deep/ .mat-form-field-underline {
+    ::ng-deep .mat-form-field-underline {
         background-color: nb-theme(form-control-border-color);
     }
     nb-card-body {
@@ -166,27 +166,27 @@
     color: #4fb9ff !important
 }
 
-:host /deep/ ng2-st-tbody-edit-delete {
+:host ::ng-deep ng2-st-tbody-edit-delete {
     display: flex !important;
     height: 0 !important;
 }
 
-:host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
+:host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
     display: inline-block;
     width: 50px;
     text-align: center;
     font-size: 1.1em;
 }
 
-:host /deep/ ng2-st-tbody-custom {
+:host ::ng-deep ng2-st-tbody-custom {
     display: flex;
     justify-content: space-around;
 }
 
-:host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+:host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
     color: #5dcfe3;
 }
 
-:host /deep/ .nb-theme-default ng2-smart-table table tr td {
+:host ::ng-deep .nb-theme-default ng2-smart-table table tr td {
     font-size: 0.95rem;
 }
