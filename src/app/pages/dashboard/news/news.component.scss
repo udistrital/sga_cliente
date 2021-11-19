@@ -10,7 +10,7 @@
     padding: 1.25rem 1.25rem 0;
 
     .title {
-      font-family: nb-theme(font-secondary);
+      font-family: nb-theme(font-family-secondary);
       font-weight: nb-theme(font-weight-bold);
       color: nb-theme(color-fg-heading);
       font-size: 1.5rem;
@@ -22,7 +22,7 @@
 
     .description {
       text-align: justify;
-      color: nb-theme(color-fg-text);
+      color: nb-theme(text-basic-color);
       font-weight: nb-theme(font-weight-light);
 
       overflow: hidden;

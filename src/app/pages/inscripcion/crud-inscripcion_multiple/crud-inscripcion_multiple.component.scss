@@ -7,11 +7,11 @@
   }
 
   ::ng-deep .mat-input-placeholder {
-    color: nb-theme(color-fg-text);
+    color: nb-theme(text-basic-color);
   }
 
   ::ng-deep .mat-select-value {
-    color: nb-theme(color-fg-text);
+    color: nb-theme(text-basic-color);
   }
   
   .mat-button, .mat-raised-button {
@@ -109,7 +109,7 @@
   .rating-header {
     line-height: 2rem;
     font-size: 1.25rem;
-    font-family: nb-theme(font-secondary);
+    font-family: nb-theme(font-family-secondary);
     font-weight: nb-theme(font-weight-bolder);
     color: nb-theme(color-fg-heading);
   }
