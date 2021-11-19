@@ -102,7 +102,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
   }
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   cargarCampos() {
     this.settings = {

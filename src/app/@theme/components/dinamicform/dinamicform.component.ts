@@ -24,8 +24,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() percentage: EventEmitter<any> = new EventEmitter();
   data: any;
   searchTerm$ = new Subject<any>();
-  @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
-  @ViewChild('documento') DocumentoInputVariable: ElementRef;
+  @ViewChild(MatDatepicker, {static: true}) datepicker: MatDatepicker<Date>;
+  @ViewChild('documento', {static: true}) DocumentoInputVariable: ElementRef;
   init: boolean;
   constructor(
     private sanitization: DomSanitizer,
