@@ -1,5 +1,4 @@
 import { async } from '@angular/core/testing';
-import { load } from '@angular/core/src/render3';
 import { Criterio } from './../../../@core/data/models/admision/criterio';
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';

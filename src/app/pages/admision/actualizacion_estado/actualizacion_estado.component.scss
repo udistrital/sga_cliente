@@ -1,7 +1,7 @@
 @import '../../../@theme/styles/themes';
 @include nb-install-component() {
   ::ng-deep .mat-input-element::placeholder {
-    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+    color: var(--primary)
   }
 
   ::ng-deep .mat-input-placeholder {
@@ -19,7 +19,7 @@
 
 
   ::ng-deep .mat-select-placeholder {
-    color: transparentize($color: nb-theme(color-fg-text), $amount: 0.6);
+    color: var(--primary)
   }
 
   ::ng-deep .mat-form-field-underline {

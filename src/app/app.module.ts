@@ -160,7 +160,7 @@ import { LoadComponent } from './load/load.component';
     MaterialModule,
     ToasterModule.forRoot(),
     NbToastrModule.forRoot(),
-    NgbModule.forRoot(),
+    NgbModule,
     NbDialogModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),

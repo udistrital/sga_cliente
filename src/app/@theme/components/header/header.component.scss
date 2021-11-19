@@ -142,7 +142,7 @@
     line-height: 1;
 
     i {
-      color: nb-theme(color-fg-highlight);
+      color: var(--primary);
       font-size: 2.25rem;
       border-radius: 50%;
       position: relative;
@@ -173,13 +173,13 @@
 
   @include keyframes(pulse) {
     0% {
-      box-shadow: 0 0 1px 0 rgba(nb-theme(color-fg-highlight), 0);
+      box-shadow: 0 0 1px 0 rgba(var(--primary), 0);
     }
     20% {
-      box-shadow: 0 0 3px 10px rgba(nb-theme(color-fg-highlight), 0.4);
+      box-shadow: 0 0 3px 10px rgba(var(--primary), 0.4);
     }
     100% {
-      box-shadow: 0 0 5px 20px rgba(nb-theme(color-fg-highlight), 0);
+      box-shadow: 0 0 5px 20px rgba(var(--primary), 0);
     }
   }
 

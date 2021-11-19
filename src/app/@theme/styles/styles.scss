@@ -64,7 +64,7 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
 // install the framework and custom global styles
 @include nb-install() {
   ::ng-deep .mat-input-element::placeholder {
-    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+    color: var(--primary)
   }
 
   ::ng-deep .mat-input-placeholder {
@@ -76,7 +76,7 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
   }
 
   ::ng-deep .mat-select-placeholder {
-    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+    color: var(--primary)
   }
 
   ::ng-deep .mat-form-field-underline {
@@ -84,7 +84,7 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
   }
 
   ::ng-deep .mat-form-field-label {
-    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+    color: var(--primary)
   }
 
   ::ng-deep .progress {
