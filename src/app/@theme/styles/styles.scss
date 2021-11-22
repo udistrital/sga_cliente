@@ -64,7 +64,7 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
 // install the framework and custom global styles
 @include nb-install() {
   ::ng-deep .mat-input-element::placeholder {
-    color: var(--primary)
+    color: var(--primary);
   }
 
   ::ng-deep .mat-input-placeholder {
@@ -76,7 +76,7 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
   }
 
   ::ng-deep .mat-select-placeholder {
-    color: var(--primary)
+    color: var(--primary);
   }
 
   ::ng-deep .mat-form-field-underline {
@@ -84,7 +84,7 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
   }
 
   ::ng-deep .mat-form-field-label {
-    color: var(--primary)
+    color: var(--primary);
   }
 
   ::ng-deep .progress {
@@ -115,10 +115,7 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
   @include ngx-pace-theme();
 
   nb-sidebar {
-    @include nb-for-theme(default) {
-      margin-top: nb-theme(sidebar-margin-top) !important;
-      background: nb-theme(sidebar-bg) !important;
-    }
+    background: var(--primary)!important;
   }
 
   ngx-header i {
@@ -133,7 +130,7 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
 }
 
 nb-menu {
-  .menu-item  {
+  .menu-item {
     padding-left: 0;
     font-weight: 600;
   }
@@ -162,4 +159,44 @@ nb-menu {
   padding: 2rem;
   border-radius: 0.4rem;
   margin-bottom: 1rem;
+}
+
+legend {
+  color: var(--primary);
+}
+
+.fieldseter {
+  display: flow-root;
+  -moz-padding-start: 1rem;
+  -moz-padding-end: 1rem;
+  -moz-padding-after: 1rem;
+
+  -webkit-margin-start: 1rem;
+  -webkit-margin-end: 1rem;
+  -webkit-padding-before: 1rem;
+  -webkit-padding-start: 1rem;
+  -webkit-padding-end: 1rem;
+  -webkit-padding-after: 1rem;
+
+  min-width: -moz-min-content;
+  border-width: 2px;
+  border-radius: 0.4rem;
+  border-style: groove;
+  border-color: var(--primary);
+}
+
+
+.mat-expansion-panel-body{
+  overflow: auto;
+}
+
+.nb-theme-ud nb-card.status-success nb-card-header {
+  background-color: var(--primary);
+  border-bottom-width: 0;
+  border-bottom-color: var(--primary);
+  color: #ffffff;
+}
+
+.nb-theme-ud nb-card {
+  color: #101426;
 }

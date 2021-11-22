@@ -98,14 +98,14 @@
     font-size: 1.25rem;
     font-family: nb-theme(font-family-secondary);
     font-weight: nb-theme(font-weight-bolder);
-    color: nb-theme(color-fg-heading);
+    color: var(--primary);
   }
 
   .current-rate {
     font-size: 1.5rem;
     @include nb-ltr(padding-left, 1rem);
     @include nb-rtl(padding-right, 1rem);
-    color: nb-theme(color-fg-heading);
+    color: var(--primary);
   }
 
   .full-name-inputs {
@@ -166,7 +166,7 @@
     border-width: 2px;
     border-radius: 0.4rem;
     border-style: groove;
-    border-color: nb-theme(color-success);
+    border-color: var(--primary);
     @include nb-for-theme(cosmic) {
       border-color: nb-theme(color-primary);
     }
@@ -181,7 +181,7 @@
   }
 
   ngb-rating i {
-    color: nb-theme(color-success);
+    color: var(--primary);
     @include nb-for-theme(cosmic) {
       color: nb-theme(color-primary);
     }

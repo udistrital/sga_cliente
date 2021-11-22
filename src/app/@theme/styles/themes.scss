@@ -1,116 +1,228 @@
 // @nebular theming framework
-@import '~@nebular/theme/styles/theming';
+@import "~@nebular/theme/styles/theming";
 // @nebular out of the box themes
-@import '~@nebular/theme/styles/themes';
+@import "~@nebular/theme/styles/themes";
 
 $nb-enabled-themes: (default, cosmic, corporate, ud);
 
-$nb-themes: nb-register-theme((
-  layout-padding-top: 2.25rem,
+$nb-themes: nb-register-theme(
+  (
+    layout-padding-top: 2.25rem,
+    menu-item-icon-margin: 0 0.5rem 0 0,
+    card-height-tiny: 13.5rem,
+    card-height-small: 21.1875rem,
+    card-height-medium: 28.875rem,
+    card-height-large: 36.5625rem,
+    card-height-giant: 44.25rem,
+    card-margin-bottom: 1.875rem,
+    card-header-with-select-padding-top: 0.5rem,
+    card-header-with-select-padding-bottom: 0.5rem,
+    select-min-width: 6rem,
+    slide-out-background: #f7f9fc,
+    slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
+    slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+  ),
+  default,
+  default
+);
 
-  menu-item-icon-margin: 0 0.5rem 0 0,
+$nb-themes: nb-register-theme(
+  (
+    layout-padding-top: 2.25rem,
+    menu-item-icon-margin: 0 0.5rem 0 0,
+    card-height-tiny: 13.5rem,
+    card-height-small: 21.1875rem,
+    card-height-medium: 28.875rem,
+    card-height-large: 36.5625rem,
+    card-height-giant: 44.25rem,
+    card-margin-bottom: 1.875rem,
+    card-header-with-select-padding-top: 0.5rem,
+    card-header-with-select-padding-bottom: 0.5rem,
+    select-min-width: 6rem,
+    slide-out-background: #252547,
+    slide-out-shadow-color: 2px 0 3px #29157a,
+    slide-out-shadow-color-rtl: -2px 0 3px #29157a,
+  ),
+  cosmic,
+  cosmic
+);
 
-  card-height-tiny: 13.5rem,
-  card-height-small: 21.1875rem,
-  card-height-medium: 28.875rem,
-  card-height-large: 36.5625rem,
-  card-height-giant: 44.25rem,
-  card-margin-bottom: 1.875rem,
-  card-header-with-select-padding-top: 0.5rem,
-  card-header-with-select-padding-bottom: 0.5rem,
+$nb-themes: nb-register-theme(
+  (
+    layout-padding-top: 2.25rem,
+    menu-item-icon-margin: 0 0.5rem 0 0,
+    card-height-tiny: 13.5rem,
+    card-height-small: 21.1875rem,
+    card-height-medium: 28.875rem,
+    card-height-large: 36.5625rem,
+    card-height-giant: 44.25rem,
+    card-margin-bottom: 1.875rem,
+    card-header-with-select-padding-top: 0.5rem,
+    card-header-with-select-padding-bottom: 0.5rem,
+    select-min-width: 6rem,
+    slide-out-background: linear-gradient(270deg, #edf1f7 0%, #e4e9f2 100%),
+    slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
+    slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+  ),
+  corporate,
+  corporate
+);
 
-  select-min-width: 6rem,
+$nb-themes: nb-register-theme(
+  (
+    layout-padding-top: 2.25rem,
+    menu-item-icon-margin: 0 0.5rem 0 0,
+    card-height-tiny: 13.5rem,
+    card-height-small: 21.1875rem,
+    card-height-medium: 28.875rem,
+    card-height-large: 36.5625rem,
+    card-height-giant: 44.25rem,
+    card-margin-bottom: 1.875rem,
+    card-header-with-select-padding-top: 0.5rem,
+    card-header-with-select-padding-bottom: 0.5rem,
+    select-min-width: 6rem,
+    slide-out-background: linear-gradient(270deg, #222b45 0%, #151a30 100%),
+    slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
+    slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+  ),
+  dark,
+  dark
+);
 
-  slide-out-background: #f7f9fc,
-  slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
-  slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
-), default, default);
-
-$nb-themes: nb-register-theme((
-  layout-padding-top: 2.25rem,
-
-  menu-item-icon-margin: 0 0.5rem 0 0,
-
-  card-height-tiny: 13.5rem,
-  card-height-small: 21.1875rem,
-  card-height-medium: 28.875rem,
-  card-height-large: 36.5625rem,
-  card-height-giant: 44.25rem,
-  card-margin-bottom: 1.875rem,
-  card-header-with-select-padding-top: 0.5rem,
-  card-header-with-select-padding-bottom: 0.5rem,
-
-  select-min-width: 6rem,
-
-  slide-out-background: #252547,
-  slide-out-shadow-color: 2px 0 3px #29157a,
-  slide-out-shadow-color-rtl: -2px 0 3px #29157a,
-), cosmic, cosmic);
-
-$nb-themes: nb-register-theme((
-  layout-padding-top: 2.25rem,
-
-  menu-item-icon-margin: 0 0.5rem 0 0,
-
-  card-height-tiny: 13.5rem,
-  card-height-small: 21.1875rem,
-  card-height-medium: 28.875rem,
-  card-height-large: 36.5625rem,
-  card-height-giant: 44.25rem,
-  card-margin-bottom: 1.875rem,
-  card-header-with-select-padding-top: 0.5rem,
-  card-header-with-select-padding-bottom: 0.5rem,
-
-  select-min-width: 6rem,
-
-  slide-out-background: linear-gradient(270deg, #edf1f7 0%, #e4e9f2 100%),
-  slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
-  slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
-), corporate, corporate);
-
-$nb-themes: nb-register-theme((
-  layout-padding-top: 2.25rem,
-
-  menu-item-icon-margin: 0 0.5rem 0 0,
-
-  card-height-tiny: 13.5rem,
-  card-height-small: 21.1875rem,
-  card-height-medium: 28.875rem,
-  card-height-large: 36.5625rem,
-  card-height-giant: 44.25rem,
-  card-margin-bottom: 1.875rem,
-  card-header-with-select-padding-top: 0.5rem,
-  card-header-with-select-padding-bottom: 0.5rem,
-
-  select-min-width: 6rem,
-
-  slide-out-background: linear-gradient(270deg, #222b45 0%, #151a30 100%),
-  slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
-  slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
-), dark, dark);
-
-$nb-themes: nb-register-theme((
-  color-primary-100: var(--color100), // <- new primary color
-  color-primary-200: var(--color200),
-  color-primary-300: var(--color300),
-  color-primary-400: var(--color400),
-  color-primary-500: var(--color500),
-  color-primary-600: var(--color600),
-  color-primary-700: var(--color700),
-  color-primary-800: var(--color800),
-  color-primary-900: var(--color900),
-  color-gray-500: #7f7f7f,
-  color-green-ok: #42a948,
-  color-green-ok-title: #28a745,
-  color-red-invalid: #a94442,
-  menu-background-color: var(--primary),
-  sidebar-background-color: var(--primary),
-  menu-item-hover-background-color: var(--primary),
-  menu-text-color: #ffff,
-  //background-basic-color-1: #dd9900,
-  context-menu-border-color: #0000,
-  text-basic-color: 	#101426,
-  text-disabled-color: #8f9bb3,
-  actions-icon-color: var(--primary),
-  border-radius: radius,
-), ud, default);
+$nb-themes: nb-register-theme(
+  (
+    color-primary-100: var(--color100),
+    // <- new primary color
+    color-primary-200: var(--color200),
+    color-primary-300: var(--color500),
+    color-primary-400: var(--color500),
+    color-primary-500: var(--color700),
+    color-primary-600: var(--color700),
+    color-primary-700: var(--color700),
+    color-primary-800: var(--color800),
+    color-primary-900: var(--color900),
+    color-gray-500: #7f7f7f,
+    color-green-ok: #42a948,
+    color-green-ok-title: #28a745,
+    color-red-invalid: #a94442,
+    menu-background-color: var(--primary),
+    sidebar-background-color: var(--primary),
+    menu-item-hover-background-color: var(--primary),
+    menu-text-color: #ffff,
+    //background-basic-color-1: #dd9900,
+    context-menu-border-color: #0000,
+    color-fg-text: #101426,
+    text-disabled-color: #8f9bb3,
+    actions-icon-color: var(--primary),
+    border-radius: radius,
+    color-success: var(--color200),
+    font-main: sans-serif,
+    color-bg: #ffffff,
+    color-fg-heading: #000000,
+    color-fg-heading-font-size: 2.5rem,
+    color-fg-highlight: #7ac273,
+    color-white: #ffffff,
+    color-primary: #03678f,
+    color-info: #86b0d2,
+    color-warning: #e6d877,
+    color-danger: #c86885,
+    // btn
+    btn-success-bg: #03678f,
+    // Card
+    card-text-color: #23d123,
+    card-fg: #ffffff,
+    card-fg-text: #000000,
+    // texto interno largo
+    card-header-font-family: Exo,
+    card-header-font-size: 1.5rem,
+    // tamaño subtitulos card
+    card-fg-heading: #000000,
+    card-bg: #ffffff,
+    card-header-fg: #000000,
+    //
+    card-separator: #ffffff73,
+    card-header-fg-heading: #000000,
+    //  Color subtitulos card
+    card-header-active-bg: rgb(7, 3, 58),
+    card-header-success-bg: rgba(82, 162, 241, 0.2),
+    card-header-info-bg: #c0e7ff,
+    card-shadow: white,
+    // footer
+    footer-fg: var(--primary),
+    footer-bg: #ffffff,
+    footer-height: auto,
+    // app wise variables for each theme
+    sidebar-header-gap: 2rem,
+    sidebar-header-height: initial,
+    layout-content-width: 1400px,
+    font-secondary: Exo,
+    //smart-table
+    smart-table-border-radius: 0.1rem,
+    smart-table-header-font-size: 0.8rem,
+    smart-table-font-size: 0.75rem,
+    smart-table-font-weight: 400,
+    smart-table-padding: 0.275rem 0.725rem,
+    smart-table-paging-border-width: 0.5,
+    smart-table-filter-padding: 0.1rem 0.1rem,
+    //form-control
+    form-control-placeholder-font-size: 0.8rem,
+    form-control-font-size: 0.8rem,
+    form-control-border-width: 1px,
+    form-control-text-primary-color: rgba(2, 2, 2, 0.333),
+    form-control-placeholder-color: #0000,
+    form-control-bg: #0000,
+    form-control-border-radius: 0.1rem,
+    //fonts
+    font-weight-thin: 100,
+    font-weight-light: 200,
+    font-weight-normal: 300,
+    font-weight-bolder: 400,
+    font-weight-bold: 500,
+    font-weight-ultra-bold: 600,
+    //general
+    padding: 1rem,
+    font-size: 0.9rem,
+    margin: 1rem,
+    layout-padding: 2rem 0.2rem 3rem,
+    sidebar-bg: var(--primary),
+    //#ffffff,
+    sidebar-fg: #000000,
+    sidebar-shadow: none,
+    sidebar-padding: 0.3rem,
+    sidebar-margin-top: 0,
+    tabs-fg: #000000,
+    menu-icon-color: #ffffff,
+    menu-bg: var(--primary),
+    menu-fg: #ffffff,
+    menu-active-bg: var(--primary),
+    menu-active-fg: #ffffff,
+    menu-font-size: 0.975rem,
+    menu-item-separator: var(--primary),
+    menu-submenu-bg: var(--primary),
+    menu-submenu-fg: #ffffff,
+    menu-submenu-active-bg: #ffffff,
+    menu-submenu-active-fg: #000000,
+    menu-submenu-item-border-width: 0,
+    menu-submenu-item-padding: none,
+    menu-submenu-item-container-padding: none,
+    menu-submenu-padding: none,
+    menu-submenu-item-border-radius: 0,
+    menu-icon-font-size: 1.5rem,
+    scrollbar-fg: #ffffff,
+    scrollbar-bg: transparent,
+    //header
+    header-font-family: "sans-serif",
+    header-font-size: 0.7rem,
+    header-height: 5.5rem,
+    header-padding: none,
+    header-fg: #000000,
+    header-bg: #ffffff,
+    header-shadow: none,
+    footer-shadow: none,
+    switcher-background: #ffffff,
+    switcher-background-percentage: 14%,
+    drops-icon-line-gadient: -webkit-linear-gradient(#db3401, #bb0b0b),
+  ),
+  ud,
+  default
+);

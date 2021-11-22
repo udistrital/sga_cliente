@@ -76,7 +76,7 @@ $icon-top-color-ud: #bb0b0b;
         font-weight: 300;
         vertical-align: super;
         padding-left: 1rem;
-        color: nb-theme(color-fg-heading);
+        color: var(--primary);
       }
     }
   }

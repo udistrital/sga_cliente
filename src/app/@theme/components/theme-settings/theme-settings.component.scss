@@ -22,7 +22,7 @@
       color: nb-theme(color-fg);
 
       &.selected {
-        color: nb-theme(color-success);
+        color: var(--primary);
       }
 
       @include nb-for-theme(cosmic) {

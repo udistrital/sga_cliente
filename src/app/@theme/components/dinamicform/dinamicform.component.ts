@@ -292,7 +292,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
     this.normalform.campos.forEach(d => {
       d.valor = null;
       if (d.etiqueta === 'file') {
-        this.DocumentoInputVariable.nativeElement.value = '';
+        const nativeElement = this.DocumentoInputVariable?this.DocumentoInputVariable.nativeElement?this.DocumentoInputVariable.nativeElement:null:null;
+        nativeElement?nativeElement.value = '': '';
         d.File = null
         d.url = null
         d.urlTemp = undefined
