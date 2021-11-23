@@ -91,6 +91,16 @@ $nb-themes: nb-register-theme(
 
 $nb-themes: nb-register-theme(
   (
+    //fonts
+    text-heading-1-font-weight:700,
+    text-heading-2-font-weight:600,
+    text-heading-3-font-weight:500,
+    text-heading-4-font-weight:400,
+    text-heading-5-font-weight:300,
+    text-heading-6-font-weight:300,
+    text-paragraph-2-font-weight:200,
+    text-paragraph-font-weight:200,
+    font-family-primary: 'Roboto',
     color-primary-100: var(--color100),
     // <- new primary color
     color-primary-200: var(--color200),
@@ -152,7 +162,6 @@ $nb-themes: nb-register-theme(
     footer-bg: #ffffff,
     footer-height: auto,
     // app wise variables for each theme
-    sidebar-header-gap: 2rem,
     sidebar-header-height: initial,
     layout-content-width: 1400px,
     font-secondary: Exo,
@@ -167,18 +176,9 @@ $nb-themes: nb-register-theme(
     //form-control
     form-control-placeholder-font-size: 0.8rem,
     form-control-font-size: 0.8rem,
-    form-control-border-width: 1px,
     form-control-text-primary-color: rgba(2, 2, 2, 0.333),
     form-control-placeholder-color: #0000,
     form-control-bg: #0000,
-    form-control-border-radius: 0.1rem,
-    //fonts
-    font-weight-thin: 100,
-    font-weight-light: 200,
-    font-weight-normal: 300,
-    font-weight-bolder: 400,
-    font-weight-bold: 500,
-    font-weight-ultra-bold: 600,
     //general
     padding: 1rem,
     font-size: 0.9rem,

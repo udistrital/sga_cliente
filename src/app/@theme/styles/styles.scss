@@ -17,6 +17,9 @@
 // Import library functions for theme creation.
 @import "~@angular/material/theming";
 
+@import './../components/dinamicform/dinamicform.component';
+
+
 // Include non-theme styles for core.
 @include mat-core();
 
@@ -80,7 +83,7 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
   }
 
   ::ng-deep .mat-form-field-underline {
-    background-color: nb-theme(form-control-border-color);
+    background-color: 1px;
   }
 
   ::ng-deep .mat-form-field-label {
@@ -88,7 +91,7 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
   }
 
   ::ng-deep .progress {
-    background-color: nb-theme(layout-bg) !important;
+    background-color: var(--primary) !important;
   }
 
   ::ng-deep .progress-bar {
@@ -97,9 +100,9 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
 
   .link {
     cursor: pointer;
-    color: nb-theme(link-color);
+    color: var(--primary) !important;
     &:hover {
-      color: nb-theme(link-color-hover);
+      color: var(--primary) !important;
       @include nb-for-theme(default) {
         color: var(--primary) !important;
       }
@@ -182,7 +185,7 @@ legend {
   border-width: 2px;
   border-radius: 0.4rem;
   border-style: groove;
-  border-color: var(--primary);
+  border-color: var(--color400);
 }
 
 

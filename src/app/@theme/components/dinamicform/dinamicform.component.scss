@@ -117,7 +117,7 @@
     line-height: 2rem;
     font-size: 1.25rem;
     font-family: nb-theme(font-family-secondary);
-    font-weight: nb-theme(font-weight-bolder);
+    font-weight: nb-theme(text-heading-1-font-weight);
     color: var(--primary);
   }
 
@@ -169,28 +169,7 @@
     padding: 1rem;
   }
 
-  .fieldseter {
-    display: flow-root;
-    -moz-padding-start: 1rem;
-    -moz-padding-end: 1rem;
-    -moz-padding-after: 1rem;
 
-    -webkit-margin-start: 1rem;
-    -webkit-margin-end: 1rem;
-    -webkit-padding-before: 1rem;
-    -webkit-padding-start: 1rem;
-    -webkit-padding-end: 1rem;
-    -webkit-padding-after: 1rem;
-
-    min-width: -moz-min-content;
-    border-width: 2px;
-    border-radius: 0.4rem;
-    border-style: groove;
-    border-color: var(--primary);
-    @include nb-for-theme(cosmic) {
-      border-color: nb-theme(color-primary);
-    }
-  }
 
   img {
     cursor: pointer;

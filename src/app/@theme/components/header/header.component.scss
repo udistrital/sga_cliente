@@ -40,8 +40,8 @@
     width: auto;
 
     .navigation {
-      @include nb-ltr(padding-right, nb-theme(padding));
-      @include nb-rtl(padding-left, nb-theme(padding));
+      @include nb-ltr(padding-right, 1rem);
+      @include nb-rtl(padding-left, 1rem);
       font-size: 2.5rem;
       text-decoration: none;
 
@@ -51,11 +51,11 @@
     }
 
     .logo {
-      padding: 0 nb-theme(padding);
+      padding: 0 1rem;
       font-size: 1.75rem;
-      font-weight: nb-theme(font-weight-bolder);
-      @include nb-ltr(border-left, 1px solid nb-theme(separator));
-      @include nb-rtl(border-right, 1px solid nb-theme(separator));
+      font-weight: nb-theme(text-heading-1-font-weight);
+      @include nb-ltr(border-left, 1px solid nb-theme(divider-width));
+      @include nb-rtl(border-right, 1px solid nb-theme(divider-width));
       white-space: nowrap;
 
       img {
