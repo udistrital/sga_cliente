@@ -20,9 +20,8 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { ButtonPaymentComponent } from '../../../@theme/components/button-payment/button-payment.component';
 import { LinkDownloadComponent } from '../../../@theme/components/link-download/link-download.component';
 import { from } from 'rxjs';
-import moment from 'moment';
+import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
-import { load } from '@angular/core/src/render3';
 import { environment } from '../../../../environments/environment';
 import { Periodo } from '../../../@core/data/models/periodo/periodo';
 

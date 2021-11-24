@@ -22,13 +22,7 @@
       color: nb-theme(color-fg);
 
       &.selected {
-        color: nb-theme(color-success);
-      }
-
-      @include nb-for-theme(cosmic) {
-        &.selected {
-          color: nb-theme(link-color);
-        }
+        color: var(--primary);
       }
     }
   }
@@ -40,7 +34,7 @@
   .switcher {
     margin-bottom: 1rem;
 
-    /deep/ ngx-switcher {
+    ::ng-deep ngx-switcher {
       .switch-label span {
         font-size: 1em;
         font-weight: normal;
@@ -63,7 +57,7 @@
 
       @include nb-for-theme(cosmic) {
         .switch .slider {
-          background-color: nb-theme(color-bg);
+          background-color: #fff;
         }
       }
     }

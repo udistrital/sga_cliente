@@ -25,7 +25,7 @@ export class CrudArchivoIcfesComponent implements OnInit {
     this.perfil_id = perfil_id;
   }
 
-  @ViewChild('ArchivoIcfesInput') ArchivoIcfesInputVariable: ElementRef;
+  @ViewChild('ArchivoIcfesInput', {static: true}) ArchivoIcfesInputVariable: ElementRef;
 
   @Output() eventChange = new EventEmitter();
 

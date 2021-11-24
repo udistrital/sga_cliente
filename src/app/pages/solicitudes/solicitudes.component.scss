@@ -1,49 +1,20 @@
-@import '../../@theme/styles/themes';
-@include nb-install-component() {
-    nb-card {
-        padding: 1rem;
-    }
-    .fieldseter {
-        display: flow-root;
-        -moz-padding-start: 1rem;
-        -moz-padding-end: 1rem;
-        -moz-padding-after: 1rem;
-        -webkit-margin-start: 1rem;
-        -webkit-margin-end: 1rem;
-        -webkit-padding-before: 1rem;
-        -webkit-padding-start: 1rem;
-        -webkit-padding-end: 1rem;
-        -webkit-padding-after: 1rem;
-        min-width: -moz-min-content;
-        overflow: auto;
-        border-width: 2px;
-        border-radius: 0.4rem;
-        border-style: groove;
-        border-color: nb-theme(color-success);
-        @include nb-for-theme(cosmic) {
-            border-color: nb-theme(color-primary);
-        }
-    }
-}
-
-
-:host /deep/ ng2-st-tbody-edit-delete {
+:host ::ng-deep ng2-st-tbody-edit-delete {
     display: flex !important;
     height: 0 !important;
 }
 
-:host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
+:host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
     display: inline-block;
     width: 50px;
     text-align: center;
     font-size: 1.1em;
 }
 
-:host /deep/ ng2-st-tbody-custom {
+:host ::ng-deep ng2-st-tbody-custom {
     display: flex;
     justify-content: space-around;
 }
 
-:host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+:host ::ng-deep ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
     color: #5dcfe3;
 }
