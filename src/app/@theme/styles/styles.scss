@@ -136,11 +136,13 @@ nb-menu {
     padding-left: 0;
     font-weight: 600;
     font-size: 1rem;
+    border-bottom: 1px solid var(--primary) !important;
   }
 }
 .menu-item {
   .menu-items {
     .menu-item {
+      border-bottom: 1px solid var(--primary);
       padding-left: 1rem;
       font-weight: 400;
       font-size: 1rem;
@@ -163,9 +165,8 @@ nb-menu {
   padding: 2rem;
   border-radius: 0.4rem;
   margin-bottom: 1rem;
-}.btn-info
-
-legend {
+}
+.btn-info legend {
   color: var(--primary);
   font-size: 1.8rem;
   font-weight: 400;
@@ -238,9 +239,18 @@ legend {
   background-color: var(--primary) !important;
 }
 
-
 .btn-info {
   background-color: var(--primary);
   border-color: var(--primary);
+}
 
+.nb-theme-ud nb-card nb-card-body img {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  -o-object-fit: cover;
+  -o-object-position: center;
+  object-position: center;
 }
