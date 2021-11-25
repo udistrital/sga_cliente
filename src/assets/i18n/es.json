@@ -141,6 +141,7 @@
         }
     },
     "GLOBAL": {
+        "click_aqui": "Click aquí",
         "admitir":"Admitir", 
         "proceso_admision_exitoso":"Proceso de admisión exitoso", 
         "admitiendo_aspirantes":"Admitiendo aspirantes", 

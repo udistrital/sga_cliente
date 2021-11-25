@@ -453,7 +453,7 @@
                         <!-- input-file -->
                         <div *ngSwitchCase="'file'" class="{{c.clase}} {{c.ocultar?'no-mostrar':''}}">
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-9">
                                     <label for="{{c.nombre}}" class="upload-file">
                                         {{c.requerido?'* '+c.label:c.label}}
                                     </label>
@@ -462,17 +462,11 @@
                                     <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
 
                                 </div>
-                                <div class="col-4">
-                                    <nb-card-body class="col-4" *ngIf="c.tipo == 'image'">
-                                        <img id="{{c.nombre}}" class="carousel-image" [src]="c.url"
-                                            (click)="download(c.urlTemp,c.nombre,300,300)" class="img-thumbnail"
-                                            alt="Foto" width="50px" height="50px">
-                                    </nb-card-body>
-                                    <nb-card-body class="col-4" *ngIf="!(c.tipo == 'image')">
-                                        <img class="carousel-image" [src]="'assets/images/file.png'"
-                                            (click)="download(c.urlTemp,c.nombre,500,500)" class="img-thumbnail"
-                                            alt="Foto" width="50px" height="50px">
-                                    </nb-card-body>
+                                <div class="col-3" *ngIf="c.urlTemp">
+                                    <div class="ver-documento" (click)="download(c.urlTemp,c.nombre,500,500)">
+                                        <i class="fa fa-cloud-download fa-2x" aria-hidden="true"></i>
+                                        <span>{{'GLOBAL.click_aqui' | translate}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

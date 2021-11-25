@@ -136,13 +136,13 @@ nb-menu {
     padding-left: 0;
     font-weight: 600;
     font-size: 1rem;
-    border-bottom: 1px solid var(--primary) !important;
+    border-bottom: 1px solid transparent !important;
   }
 }
 .menu-item {
   .menu-items {
     .menu-item {
-      border-bottom: 1px solid var(--primary);
+      border-bottom: 1px solid transparent;
       padding-left: 1rem;
       font-weight: 400;
       font-size: 1rem;
@@ -253,4 +253,15 @@ nb-menu {
   -o-object-fit: cover;
   -o-object-position: center;
   object-position: center;
+}
+
+.mat-button {
+  background-color:var(--primary);
+  color: #fff;
+}
+
+.mat-button:disabled,
+.mat-button[disabled] {
+  background-color: var(--color300) !important;
+  color: #ddd !important;
 }

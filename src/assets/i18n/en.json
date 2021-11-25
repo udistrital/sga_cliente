@@ -140,6 +140,7 @@
         }
     },
     "GLOBAL": {
+        "click_aqui": "Click here",
         "detalle": "Detail",
         "cargando": "Loading...",
         "buscar": "Search",
