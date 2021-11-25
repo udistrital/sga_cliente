@@ -10,7 +10,7 @@ const routes: Routes = [{
   children: [
     {
       path: 'archivo_icfes',
-      loadChildren: './archivo_icfes/archivo_icfes.module#ArchivoIcfesModule',
+      loadChildren: () => import ('./archivo_icfes/archivo_icfes.module').then(m => m.ArchivoIcfesModule),
     },
     {
         path: 'dashboard',
@@ -18,75 +18,75 @@ const routes: Routes = [{
     },
     {
       path: 'solicitudes',
-      loadChildren: './solicitudes/solicitudes.module#SolicitudesModule'
+      loadChildren: () => import ('./solicitudes/solicitudes.module').then(m => m.SolicitudesModule)
     },
     {
       path: 'solicitud',
-      loadChildren: './solicitudes/solicitudes.module#SolicitudesModule'
+      loadChildren: () => import ('./solicitudes/solicitudes.module').then(m => m.SolicitudesModule)
     },
     {
       path: 'practicas-academicas',
-      loadChildren: './practicas-academicas/practicas-academicas.module#PracticasAcademicasModule'
+      loadChildren: () => import ('./practicas-academicas/practicas-academicas.module').then(m => m.PracticasAcademicasModule)
     },
     {
       path: 'espacios-academicos',
-      loadChildren: './espacios-academicos/espacios-academicos.module#EspaciosAcademicosModule'
+      loadChildren: () => import ('./espacios-academicos/espacios-academicos.module').then(m => m.EspaciosAcademicosModule)
     },
     {
       path: 'inscripcion',
-      loadChildren: './inscripcion/inscripcion.module#InscripcionModule',
+      loadChildren: () => import ('./inscripcion/inscripcion.module').then(m => m.InscripcionModule),
     },
     {
       path: 'admision',
-      loadChildren: './admision/admision.module#AdmisionModule',
+      loadChildren: () => import ('./admision/admision.module').then(m => m.AdmisionModule),
     },
     {
       path: 'evento',
-      loadChildren: './evento/evento.module#EventoModule',
+      loadChildren: () => import ('./evento/evento.module').then(m => m.EventoModule),
     },
     {
       path: 'calendario-academico',
-      loadChildren: './calendario-academico/calendario-academico.module#CalendarioAcademicoModule',
+      loadChildren: () => import ('./calendario-academico/calendario-academico.module').then(m => m.CalendarioAcademicoModule),
     },
     {
       path: 'derechos-pecuniarios',
-      loadChildren: './derechos-pecuniarios/derechos-pecuniarios.module#DerechosPecuniariosModule',
+      loadChildren: () => import ('./derechos-pecuniarios/derechos-pecuniarios.module').then(m => m.DerechosPecuniariosModule),
     },
     {
         path: 'perfil',
-        loadChildren: './perfil/perfil.module#PerfilModule',
+        loadChildren: () => import ('./perfil/perfil.module').then(m => m.PerfilModule),
     },
     {
       path: 'produccion_academica',
-      loadChildren: './produccion_academica/produccion_academica.module#ProduccionAcademicaModule',
+      loadChildren: () => import ('./produccion_academica/produccion_academica.module').then(m => m.ProduccionAcademicaModule),
     },
     {
       path: 'reportes',
-      loadChildren: './reportes/reportes.module#ReportesModule',
+      loadChildren: () => import ('./reportes/reportes.module').then(m => m.ReportesModule),
     },
     {
       path: 'tipo_periodo',
-      loadChildren: './tipo_periodo/tipo_periodo.module#TipoPeriodoModule',
+      loadChildren: () => import ('./tipo_periodo/tipo_periodo.module').then(m => m.TipoPeriodoModule),
     },
     {
       path: 'periodo',
-      loadChildren: './periodo/periodo.module#PeriodoModule',
+      loadChildren: () => import ('./periodo/periodo.module').then(m => m.PeriodoModule),
     },
     {
       path: 'calendarioevento',
-      loadChildren: './calendarioevento/calendarioevento.module#CalendarioeventoModule',
+      loadChildren: () => import ('./calendarioevento/calendarioevento.module').then(m => m.CalendarioeventoModule),
     },
     {
       path: 'proyecto_academico',
-      loadChildren: './proyecto_academico/proyecto_academico.module#ProyectoAcademicoModule',
+      loadChildren: () => import ('./proyecto_academico/proyecto_academico.module').then(m => m.ProyectoAcademicoModule),
     },
     {
       path: 'enfasis',
-      loadChildren: './enfasis/enfasis.module#EnfasisModule',
+      loadChildren: () => import ('./enfasis/enfasis.module').then(m => m.EnfasisModule),
     },
     {
       path: 'tipo_inscripcion',
-      loadChildren: './tipo_inscripcion/tipo_inscripcion.module#TipoInscripcionModule',
+      loadChildren: () => import ('./tipo_inscripcion/tipo_inscripcion.module').then(m => m.TipoInscripcionModule),
     },
     {
         path: '',

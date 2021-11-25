@@ -24,8 +24,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() percentage: EventEmitter<any> = new EventEmitter();
   data: any;
   searchTerm$ = new Subject<any>();
-  @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
-  @ViewChild('documento') DocumentoInputVariable: ElementRef;
+  @ViewChild(MatDatepicker, {static: true}) datepicker: MatDatepicker<Date>;
+  @ViewChild('documento', {static: true}) DocumentoInputVariable: ElementRef;
   init: boolean;
   constructor(
     private sanitization: DomSanitizer,
@@ -292,7 +292,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
     this.normalform.campos.forEach(d => {
       d.valor = null;
       if (d.etiqueta === 'file') {
-        this.DocumentoInputVariable.nativeElement.value = '';
+        const nativeElement = this.DocumentoInputVariable?this.DocumentoInputVariable.nativeElement?this.DocumentoInputVariable.nativeElement:null:null;
+        nativeElement?nativeElement.value = '': '';
         d.File = null
         d.url = null
         d.urlTemp = undefined

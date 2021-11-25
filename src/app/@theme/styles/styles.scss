@@ -17,6 +17,8 @@
 // Import library functions for theme creation.
 @import "~@angular/material/theming";
 
+@import "./../components/dinamicform/dinamicform.component";
+
 // Include non-theme styles for core.
 @include mat-core();
 
@@ -63,43 +65,43 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
 
 // install the framework and custom global styles
 @include nb-install() {
-  /deep/ .mat-input-element::placeholder {
-    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+  ::ng-deep .mat-input-element::placeholder {
+    color: var(--primary);
   }
 
-  /deep/ .mat-input-placeholder {
-    color: nb-theme(color-fg-text);
+  ::ng-deep .mat-input-placeholder {
+    color: nb-theme(text-basic-color);
   }
 
-  /deep/ .mat-select-value {
-    color: nb-theme(color-fg-text);
+  ::ng-deep .mat-select-value {
+    color: nb-theme(text-basic-color);
   }
 
-  /deep/ .mat-select-placeholder {
-    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+  ::ng-deep .mat-select-placeholder {
+    color: var(--primary);
   }
 
-  /deep/ .mat-form-field-underline {
-    background-color: nb-theme(form-control-border-color);
+  ::ng-deep .mat-form-field-underline {
+    background-color: 1px;
   }
 
-  /deep/ .mat-form-field-label {
-    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+  ::ng-deep .mat-form-field-label {
+    color: var(--primary);
   }
 
-  /deep/ .progress {
-    background-color: nb-theme(layout-bg) !important;
+  ::ng-deep .progress {
+    background-color: var(--primary) !important;
   }
 
-  /deep/ .progress-bar {
-    color: nb-theme(color-fg-text) !important;
+  ::ng-deep .progress-bar {
+    color: nb-theme(text-basic-color) !important;
   }
 
   .link {
     cursor: pointer;
-    color: nb-theme(link-color);
+    color: var(--primary) !important;
     &:hover {
-      color: nb-theme(link-color-hover);
+      color: var(--primary) !important;
       @include nb-for-theme(default) {
         color: var(--primary) !important;
       }
@@ -115,14 +117,11 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
   @include ngx-pace-theme();
 
   nb-sidebar {
-    @include nb-for-theme(default) {
-      margin-top: nb-theme(sidebar-margin-top) !important;
-      background: nb-theme(sidebar-bg) !important;
-    }
+    background: var(--primary) !important;
   }
 
   ngx-header i {
-    color: nb-theme(header-fg) !important;
+    color: #000 !important;
   }
 
   // fixed in rc.9 and can be removed after upgrade
@@ -133,16 +132,20 @@ $mat-mytheme: mat-light-theme($mat-mytheme-primary, $mat-mytheme-accent);
 }
 
 nb-menu {
-  .menu-item  {
+  .menu-item {
     padding-left: 0;
     font-weight: 600;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--primary) !important;
   }
 }
 .menu-item {
   .menu-items {
     .menu-item {
-      padding-left: 1.5rem;
+      border-bottom: 1px solid var(--primary);
+      padding-left: 1rem;
       font-weight: 400;
+      font-size: 1rem;
     }
   }
 }
@@ -162,4 +165,92 @@ nb-menu {
   padding: 2rem;
   border-radius: 0.4rem;
   margin-bottom: 1rem;
+}
+.btn-info legend {
+  color: var(--primary);
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.fieldseter {
+  display: flow-root;
+  -moz-padding-start: 1rem;
+  -moz-padding-end: 1rem;
+  -moz-padding-after: 1rem;
+
+  -webkit-margin-start: 1rem;
+  -webkit-margin-end: 1rem;
+  -webkit-padding-before: 1rem;
+  -webkit-padding-start: 1rem;
+  -webkit-padding-end: 1rem;
+  -webkit-padding-after: 1rem;
+
+  min-width: -moz-min-content;
+  border-width: 2px;
+  border-radius: 0.4rem;
+  border-style: groove;
+  border-color: var(--color400);
+}
+
+.mat-expansion-panel-body {
+  overflow: auto;
+}
+
+.nb-theme-ud nb-card.status-success nb-card-header {
+  background-color: var(--primary);
+  border-bottom-width: 0;
+  border-bottom-color: var(--primary);
+  color: #ffffff;
+}
+
+.nb-theme-ud nb-card {
+  color: #101426;
+  margin: 0.5rem;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+.nb-theme-ud nb-tabset .tab-link {
+  font-size: 1rem;
+  color: #555;
+}
+
+.nb-theme-ud nb-menu .menu-item .menu-icon {
+  color: var(--color100);
+  font-size: 1.5rem;
+  margin: 0 0.5rem 0 0;
+  width: 1em;
+  text-align: center;
+}
+
+.nb-theme-ud nb-spinner.status-success {
+  .spin-circle {
+    border-top-color: var(--primary);
+    border-right-color: transparent;
+    border-bottom-color: var(--primary);
+    border-left-color: var(--primary);
+  }
+  background-color: #ffffff80;
+  font-size: 5rem;
+  color: var(--primary);
+}
+
+.bg-success {
+  background-color: var(--primary) !important;
+}
+
+.btn-info {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.nb-theme-ud nb-card nb-card-body img {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  -o-object-fit: cover;
+  -o-object-position: center;
+  object-position: center;
 }

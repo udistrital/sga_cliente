@@ -51,7 +51,7 @@ export class PagesComponent implements OnInit {
       if (!n.Url.indexOf('http')) {
         node = {
           title: n.Nombre,
-          icon: 'nb-list',
+          icon: 'list',
           url: n.Url,
           home: false,
           key: n.Nombre,
@@ -60,7 +60,7 @@ export class PagesComponent implements OnInit {
       } else {
         node = {
           title: n.Nombre,
-          icon: 'nb-list',
+          icon: 'list',
           link: n.Url,
           home: false,
           key: n.Nombre,
@@ -69,7 +69,7 @@ export class PagesComponent implements OnInit {
       if (n.hasOwnProperty('Opciones')) {
         if (n.Opciones !== null) {
           const children = this.translateTree(n.Opciones);
-            node = { ...node, ...{ children: children }, ...{ icon: 'nb-compose' } };
+            node = { ...node, ...{ children: children }, ...{ icon: 'menu-outline' } };
           }
           return node;
         } else {
@@ -83,7 +83,7 @@ export class PagesComponent implements OnInit {
     this.roles = roles
     const homeOption = {
       title: 'dashboard',
-      icon: 'nb-home',
+      icon: 'home',
       url: '#/pages/dashboard',
       home: true,
       key: 'dashboard',
