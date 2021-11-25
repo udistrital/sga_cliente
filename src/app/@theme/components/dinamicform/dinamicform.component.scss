@@ -1,9 +1,19 @@
-@import '../../../@theme/styles/themes';
-@import '~bootstrap/scss/mixins/breakpoints';
-@import '~@nebular/theme/styles/global/breakpoints';
+@import "../../../@theme/styles/themes";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
 @include nb-install-component() {
+  .ver-documento {
+    cursor: pointer;
+    color: var(--primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    span:hover {
+      text-decoration: underline;
+    }
+  }
   ::ng-deep .mat-input-element::placeholder {
-    color: var(--primary)
+    color: nb-theme(text-basic-color);
   }
 
   ::ng-deep .mat-input-placeholder {
@@ -15,7 +25,7 @@
   }
 
   ::ng-deep .mat-select-placeholder {
-    color: var(--primary)
+    color: nb-theme(text-basic-color);
   }
 
   ::ng-deep .mat-form-field-underline {
@@ -38,8 +48,8 @@
     display: flex;
     justify-content: space-between;
 
-  .custom-control {
-    margin-left: 1rem;
+    .custom-control {
+      margin-left: 1rem;
     }
   }
 
@@ -99,8 +109,8 @@
 
   .mat-button:disabled,
   .mat-button[disabled] {
-      background-color: rgb(0, 123, 194) !important;
-      color: #ddd !important;
+    background-color: rgb(0, 123, 194) !important;
+    color: #ddd !important;
   }
 
   .star {
@@ -136,13 +146,12 @@
     position: relative;
 
     .form-control {
-
       padding-left: 3rem;
     }
 
     &::before {
-      content: '\F47D';
-      font-family: 'Ionicons';
+      content: "\F47D";
+      font-family: "Ionicons";
       font-size: 2rem;
       position: absolute;
       z-index: 100;
@@ -169,11 +178,9 @@
     padding: 1rem;
   }
 
-
-
   img {
     cursor: pointer;
-    }
+  }
 
   ngb-rating {
     outline: none;
@@ -197,4 +204,3 @@
 .no-mostrar {
   display: none;
 }
-
