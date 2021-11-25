@@ -48,8 +48,8 @@
   }
 
   .dinamic-form {
-    background-color: nb-theme(color-bg);
-    color: nb-theme(card-fg-heading);
+    background-color: #fff;
+    color: #000;
     &.padding-custom-1 {
       padding: 1rem;
     }
@@ -93,7 +93,7 @@
   }
 
   .mat-button {
-    background-color: rgb(0, 162, 255);
+    background-color: var(--primary);
     color: #fff;
   }
 
@@ -105,11 +105,11 @@
 
   .star {
     font-size: 1.5rem;
-    color: nb-theme(color-fg);
+    color: #000;
   }
 
   .filled {
-    color: nb-theme(color-fg);
+    color: #000;
   }
   // TODO: Replace with the card header styles mixin
 
