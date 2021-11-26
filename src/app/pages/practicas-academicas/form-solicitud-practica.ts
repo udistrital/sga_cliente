@@ -1,7 +1,8 @@
 export const FORM_SOLICITUD_PRACTICAS = {
     tipo_formulario: 'mini',
     alertas: true,
-    btn: 'Enviar',
+    nombre: "SOLICITUD_PRACTICAS",
+    btn: 'Siguiente',
     modelo: 'InfoPracticasAcademicas',
     campos: [
         {
@@ -13,10 +14,11 @@ export const FORM_SOLICITUD_PRACTICAS = {
             requerido: true,
             opciones: [],
             key: 'Nombre',
-            deshabilitar: false,
+            deshabilitar: true,
         },
         {
             etiqueta: 'select',
+            entrelazado: true,
             tipo: 'text',
             claseGrid: "col-12 col-md-6",
             nombre: 'Proyecto',
@@ -68,7 +70,7 @@ export const FORM_SOLICITUD_PRACTICAS = {
             deshabilitar: false,
         },
         {
-            etiqueta: 'mat-date',
+            etiqueta: 'input',
             tipo: 'datetime-local',
             nombre: 'FechaHoraSalida',
             claseGrid: 'col-12 col-sm-6 col-md-4',
@@ -123,6 +125,7 @@ export const FORM_SOLICITUD_PRACTICAS = {
 export const FORM_SOPORTES_DOCUMENTALES = {
     tipo_formulario: 'mini',
     alertas: true,
+    nombre: "SOPORTES_DOCUMENTALES",
     btn: 'Enviar',
     modelo: 'documental',
     campos: [
@@ -134,7 +137,7 @@ export const FORM_SOPORTES_DOCUMENTALES = {
             label_i18n: 'cronograma_practica',
             requerido: true,
             tipo: 'pdf',
-            tipoDocumento: 25,
+            tipoDocumento: 47,
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
@@ -147,7 +150,7 @@ export const FORM_SOPORTES_DOCUMENTALES = {
             label_i18n: 'presupuesto_practica',
             requerido: true,
             tipo: 'pdf',
-            tipoDocumento: 25,
+            tipoDocumento: 48,
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
@@ -160,7 +163,7 @@ export const FORM_SOPORTES_DOCUMENTALES = {
             label_i18n: 'presentacion_practica',
             requerido: true,
             tipo: 'pdf',
-            tipoDocumento: 25,
+            tipoDocumento: 49,
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
@@ -173,11 +176,11 @@ export const FORM_SOPORTES_DOCUMENTALES = {
             label_i18n: 'lista_estudiantes',
             requerido: true,
             tipo: 'pdf',
-            tipoDocumento: 25,
+            tipoDocumento: 50,
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
-        },        
+        },
         {
             etiqueta: 'file',
             claseGrid: 'col-12 col-md-6 mb-5',
@@ -186,12 +189,11 @@ export const FORM_SOPORTES_DOCUMENTALES = {
             label_i18n: 'guia_practica',
             requerido: true,
             tipo: 'pdf',
-            tipoDocumento: 25,
+            tipoDocumento: 51,
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
         },
-              
         {
             etiqueta: 'file',
             claseGrid: 'col-12 col-md-6 mb-5',
@@ -200,7 +202,7 @@ export const FORM_SOPORTES_DOCUMENTALES = {
             label_i18n: 'lista_personal_apoyo',
             requerido: true,
             tipo: 'pdf',
-            tipoDocumento: 25,
+            tipoDocumento: 52,
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
@@ -212,6 +214,7 @@ export const FORM_SOPORTES_DOCUMENTALES = {
 export const FORM_DOCUMENTOS_ADICIONALES = {
     tipo_formulario: 'mini',
     alertas: true,
+    nombre: "DOCUMENTOS_ADICIONALES",
     btn: 'Enviar',
     modelo: 'documental',
     campos: [
@@ -247,6 +250,7 @@ export const FORM_DOCUMENTOS_ADICIONALES = {
 export const FORM_RESPUESTA_SOLICITUD = {
     tipo_formulario: 'mini',
     alertas: true,
+    nombre: "RESPUESTA_SOLICITUD",
     btn: 'Dar respuesta',
     modelo: 'documental',
     campos: [
@@ -290,8 +294,5 @@ export const FORM_RESPUESTA_SOLICITUD = {
             minimo: 0,
             deshabilitar: false,
         },
-
-        
-
     ]
 }
