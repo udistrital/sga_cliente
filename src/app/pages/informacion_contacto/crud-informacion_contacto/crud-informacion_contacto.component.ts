@@ -79,34 +79,32 @@ export class CrudInformacionContactoComponent implements OnInit {
 
   getSeleccion(event) {
     if (event.nombre === 'PaisResidencia') {
-      if (this.paisSeleccionado !== event.valor) {
-        this.paisSeleccionado = event.valor;
-        this.loadOptionsDepartamentoResidencia(event.valor);
-      }
+      this.paisSeleccionado = event.valor;
+      this.loadOptionsDepartamentoResidencia();
     } else if (event.nombre === 'DepartamentoResidencia') {
-      if (this.departamentoSeleccionado !== event.valor) {
-        this.departamentoSeleccionado = event.valor;
-        this.loadOptionsCiudadResidencia();
-      }
+      this.departamentoSeleccionado = event.valor;
+      this.loadOptionsCiudadResidencia();
     }
   }
 
-  loadOptionsDepartamentoResidencia(paisSeleccionado): void {
+  loadOptionsDepartamentoResidencia(): void {
     this.loading = true;
     let consultaHijos: Array<any> = [];
     const departamentoResidencia: Array<any> = [];
-    if (paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId.Id:' + paisSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre')
-        .subscribe(res => {
-          if (res !== null) {
-            consultaHijos = <Array<Lugar>>res;
-            for (let i = 0; i < consultaHijos.length; i++) {
-              departamentoResidencia.push(consultaHijos[i].LugarHijoId);
+    if (this.paisSeleccionado) {
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId__Id:' + this.paisSeleccionado.Id +
+        ',LugarHijoId__Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre')
+        .subscribe(
+          res => {
+            if (res !== null) {
+              consultaHijos = <Array<Lugar>>res;
+              for (let i = 0; i < consultaHijos.length; i++) {
+                departamentoResidencia.push(consultaHijos[i].LugarHijoId);
+              }
             }
-          }
-          this.loading = false;
-          this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = departamentoResidencia;
-        },
+            this.loading = false;
+            this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = departamentoResidencia;
+          },
           (error: HttpErrorResponse) => {
             this.loading = false;
             Swal.fire({
@@ -119,6 +117,8 @@ export class CrudInformacionContactoComponent implements OnInit {
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
           });
+    } else {
+      this.loading = false;
     }
   }
 
@@ -127,16 +127,17 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const ciudadResidencia: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + this.departamentoSeleccionado.Id +
-        ',LugarHijoId.Activo:true,TipoRelacionLugarId.Id:2&limit=0')
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId__Id:' + this.departamentoSeleccionado.Id +
+        ',LugarHijoId__Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre')
         .subscribe(res => {
-          if (res !== null && res[0].id) {
+          if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
             for (let i = 0; i < consultaHijos.length; i++) {
               ciudadResidencia.push(consultaHijos[i].LugarHijoId);
             }
           }
           this.loading = false;
+
           this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = ciudadResidencia;
         },
           (error: HttpErrorResponse) => {
@@ -151,6 +152,8 @@ export class CrudInformacionContactoComponent implements OnInit {
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
           });
+    } else {
+      this.loading = false;
     }
   }
 
@@ -176,7 +179,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             this.info_informacion_contacto = <InformacionContacto>res;
             if (this.info_informacion_contacto.PaisResidencia !== null && this.info_informacion_contacto.DepartamentoResidencia !== null
               && this.info_informacion_contacto.CiudadResidencia != null) {
-              this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = [this.info_informacion_contacto.PaisResidencia];
+              // this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = [this.info_informacion_contacto.PaisResidencia];
               this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = [this.info_informacion_contacto.DepartamentoResidencia];
               this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = [this.info_informacion_contacto.CiudadResidencia];
             }

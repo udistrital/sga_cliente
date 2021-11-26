@@ -218,6 +218,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
         filesll.push(file)
         this.nuxeo.getFilesNew(filesll)
           .subscribe(response => {
+            this.loading = true;
             const filesResponse = <Array<any>>response;
             if (Object.keys(filesResponse).length === filesll.length) {
               filesResponse.forEach(fileR => {
@@ -294,8 +295,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               files.push({ Id: this.formInfoCaracteristica.ComprobanteDiscapacidad, key: 'Documento' });
             }
 
-            await this.cargarDocs(files);
-
+            let carega = await this.cargarDocs(files);
 
           } else {
             this.loading = false;

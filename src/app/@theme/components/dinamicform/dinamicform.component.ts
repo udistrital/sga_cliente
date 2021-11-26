@@ -343,6 +343,12 @@ export class DinamicformComponent implements OnInit, OnChanges {
       }
     }
 
+    if (this.normalform) {
+      if (this.normalform.nombre) {
+        this.data.nombre = this.normalform.nombre;
+      }
+    }
+
     this.result.emit(this.data);
     if (this.data.valid)
       this.percentage.emit(this.data.percentage);
@@ -364,7 +370,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
       data: result,
       button: c.nombre,
     }
-    this.resultAux.emit(dataTemp);
+    if (c.resultado) {
+      this.result.emit(dataTemp)
+    } else {
+      this.resultAux.emit(dataTemp);
+    }
   }
 
   setPercentage(): void {
