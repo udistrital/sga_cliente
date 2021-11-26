@@ -1,1 +1,21 @@
-<ngx-dinamicform [normalform]="docenteSolicitante" [modeloData]="DocentePractica" (resultAux)="agregarDocente()"></ngx-dinamicform>
+<div class="dinamic-form" style="padding: 1rem;">
+    <form class="form-horizontal">
+        <fieldset [ngClass]="{'fieldseter':true}">
+            <legend>
+                &nbsp; <small>{{'practicas_academicas.solicitante' | translate}}</small>
+            </legend>
+            <ng2-smart-table [settings]="settings_authors"
+                             [(source)]="source"
+                             (delete)="onDeleteColaborador($event)"
+                             (create)="onCreateColaborador($event)">
+            </ng2-smart-table>
+        </fieldset>
+    </form>
+</div>
+
+<ngx-dinamicform [normalform]="docenteSolicitante"
+                 [modeloData]="docenteColaborador"
+                 (resultAux)="buscarColaborador($event)"
+                 (result)="agregarColaborador($event)"
+                 *ngIf="nuevoColaborador">
+</ngx-dinamicform>
