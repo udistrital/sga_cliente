@@ -13,7 +13,7 @@ export class AdmisionProyectoComponent implements OnInit {
 
   config: ToasterConfig;
 
-  @ViewChild('spagoBIDocumentArea') spagoBIDocumentArea: ElementRef;
+  @ViewChild('spagoBIDocumentArea', {static: true}) spagoBIDocumentArea: ElementRef;
   @Input() reportConfig: any;
 
   constructor(private translate: TranslateService, private toasterService: ToasterService) {

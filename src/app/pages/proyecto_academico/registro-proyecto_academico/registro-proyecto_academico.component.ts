@@ -30,7 +30,6 @@ import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.co
 import { ListEnfasisService } from '../../../@core/data/list_enfasis.service';
 import { Subscription } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
-import { AnimationGroupPlayer } from '@angular/animations/src/players/animation_group_player';
 import { ActivatedRoute } from '@angular/router';
 import * as momentTimezone from 'moment-timezone';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';

@@ -21,7 +21,7 @@ export class UserService {
     if (window.localStorage.getItem('id_token') !== null && window.localStorage.getItem('id_token') !== undefined) {
       const id_token = window.localStorage.getItem('id_token').split('.');
       const payload = JSON.parse(atob(id_token[1]));
-      this.autenticationService.getDocument().then((document: string)=> {
+      this.autenticationService.getDocument().then((document: string) => {
         if (document) {
           console.log("getUser", document);
           this.anyService.get(path, 'datos_identificacion?query=Numero:' + document)
@@ -38,6 +38,20 @@ export class UserService {
                 }
               }
             });
+        } else if (payload.sub) {
+          this.anyService.get(path, 'tercero?query=UsuarioWSO2:' + payload.sub)
+            .subscribe(res => {
+              if (res !== null) {
+                this.user = res[0];
+                this.user$.next(this.user);
+                this.userSubject.next(this.user);
+                window.localStorage.setItem('persona_id', this.user.Id);
+              }
+              else {
+                //this.user$.next(this.user);
+                window.localStorage.setItem('persona_id', '0');
+              }
+            })
         }
       })
     }
@@ -52,7 +66,7 @@ export class UserService {
   }
 
   public getUsuario(): string {
-    return window.localStorage.getItem('usuario').toString() ;
+    return window.localStorage.getItem('usuario').toString();
   }
 
   public getPersonaId(): number {

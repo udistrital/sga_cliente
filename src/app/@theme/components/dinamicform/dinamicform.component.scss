@@ -1,24 +1,34 @@
-@import '../../../@theme/styles/themes';
-@import '~bootstrap/scss/mixins/breakpoints';
-@import '~@nebular/theme/styles/global/breakpoints';
+@import "../../../@theme/styles/themes";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
 @include nb-install-component() {
-  /deep/ .mat-input-element::placeholder {
-    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+  .ver-documento {
+    cursor: pointer;
+    color: var(--primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    span:hover {
+      text-decoration: underline;
+    }
+  }
+  ::ng-deep .mat-input-element::placeholder {
+    color: nb-theme(text-basic-color);
   }
 
-  /deep/ .mat-input-placeholder {
-    color: nb-theme(color-fg-text);
+  ::ng-deep .mat-input-placeholder {
+    color: nb-theme(text-basic-color);
   }
 
-  /deep/ .mat-select-value {
-    color: nb-theme(color-fg-text);
+  ::ng-deep .mat-select-value {
+    color: nb-theme(text-basic-color);
   }
 
-  /deep/ .mat-select-placeholder {
-    color: transparentize($color: nb-theme(color-fg-heading), $amount: 0.6);
+  ::ng-deep .mat-select-placeholder {
+    color: nb-theme(text-basic-color);
   }
 
-  /deep/ .mat-form-field-underline {
+  ::ng-deep .mat-form-field-underline {
     background-color: nb-theme(form-control-border-color);
   }
 
@@ -38,8 +48,8 @@
     display: flex;
     justify-content: space-between;
 
-  .custom-control {
-    margin-left: 1rem;
+    .custom-control {
+      margin-left: 1rem;
     }
   }
 
@@ -48,8 +58,8 @@
   }
 
   .dinamic-form {
-    background-color: nb-theme(color-bg);
-    color: nb-theme(card-fg-heading);
+    background-color: #fff;
+    color: #000;
     &.padding-custom-1 {
       padding: 1rem;
     }
@@ -93,39 +103,39 @@
   }
 
   .mat-button {
-    background-color: rgb(0, 162, 255);
+    background-color: var(--primary);
     color: #fff;
   }
 
   .mat-button:disabled,
   .mat-button[disabled] {
-      background-color: rgb(0, 123, 194) !important;
-      color: #ddd !important;
+    background-color: rgb(0, 123, 194) !important;
+    color: #ddd !important;
   }
 
   .star {
     font-size: 1.5rem;
-    color: nb-theme(color-fg);
+    color: #000;
   }
 
   .filled {
-    color: nb-theme(color-fg);
+    color: #000;
   }
   // TODO: Replace with the card header styles mixin
 
   .rating-header {
     line-height: 2rem;
     font-size: 1.25rem;
-    font-family: nb-theme(font-secondary);
-    font-weight: nb-theme(font-weight-bolder);
-    color: nb-theme(color-fg-heading);
+    font-family: nb-theme(font-family-secondary);
+    font-weight: nb-theme(text-heading-1-font-weight);
+    color: var(--primary);
   }
 
   .current-rate {
     font-size: 1.5rem;
     @include nb-ltr(padding-left, 1rem);
     @include nb-rtl(padding-right, 1rem);
-    color: nb-theme(color-fg-heading);
+    color: var(--primary);
   }
 
   .full-name-inputs {
@@ -136,13 +146,12 @@
     position: relative;
 
     .form-control {
-
       padding-left: 3rem;
     }
 
     &::before {
-      content: '\F47D';
-      font-family: 'Ionicons';
+      content: "\F47D";
+      font-family: "Ionicons";
       font-size: 2rem;
       position: absolute;
       z-index: 100;
@@ -169,39 +178,16 @@
     padding: 1rem;
   }
 
-  .fieldseter {
-    display: flow-root;
-    -moz-padding-start: 1rem;
-    -moz-padding-end: 1rem;
-    -moz-padding-after: 1rem;
-
-    -webkit-margin-start: 1rem;
-    -webkit-margin-end: 1rem;
-    -webkit-padding-before: 1rem;
-    -webkit-padding-start: 1rem;
-    -webkit-padding-end: 1rem;
-    -webkit-padding-after: 1rem;
-
-    min-width: -moz-min-content;
-    border-width: 2px;
-    border-radius: 0.4rem;
-    border-style: groove;
-    border-color: nb-theme(color-success);
-    @include nb-for-theme(cosmic) {
-      border-color: nb-theme(color-primary);
-    }
-  }
-
   img {
     cursor: pointer;
-    }
+  }
 
   ngb-rating {
     outline: none;
   }
 
   ngb-rating i {
-    color: nb-theme(color-success);
+    color: var(--primary);
     @include nb-for-theme(cosmic) {
       color: nb-theme(color-primary);
     }
@@ -218,4 +204,3 @@
 .no-mostrar {
   display: none;
 }
-

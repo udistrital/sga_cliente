@@ -38,7 +38,7 @@ export class PerfilComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild('comprobante') comprobante: ElementRef;
+  @ViewChild('comprobante', {static: true}) comprobante: ElementRef;
 
   constructor(private translate: TranslateService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {

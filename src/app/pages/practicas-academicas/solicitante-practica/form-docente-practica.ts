@@ -5,10 +5,28 @@ export const DOCENTE_PRACTICA = {
     campos: [
         {
             etiqueta: 'input',
+            claseGrid: 'col-lg-10 col-md-10 col-sm-9 col-xs-8',
+            nombre: 'docDocente',
+            label_i18n: 'docDocente',
+            placeholder_i18n: 'docDocente',
+            requerido: true,
+            tipo: 'text',
+        },
+        {
+            etiqueta: 'button',
+            claseGrid: 'col-lg-2 col-md-2 col-sm-3 col-xs-4',
+            nombre: 'BusquedaBoton',
+            claseBoton: 'btn btn-primary btn-sm',
+            icono: 'fa fa-search',
+            label_i18n: 'buscar',
+        },
+        {
+            etiqueta: 'input',
             tipo: 'text',
             nombre: 'Nombre',
             claseGrid: 'col-12 col-sm-6 col-md-3',
             label_i18n: 'nombre',
+            placeholder_i18n: 'nombre',
             deshabilitar: true,
         },
         {
@@ -17,6 +35,7 @@ export const DOCENTE_PRACTICA = {
             nombre: 'Vinculacion',
             claseGrid: 'col-12 col-sm-6 col-md-3',
             label_i18n: 'vinculacion',
+            placeholder_i18n: 'vinculacion',
             deshabilitar: true,
         },
         {
@@ -25,6 +44,7 @@ export const DOCENTE_PRACTICA = {
             nombre: 'Correo',
             claseGrid: 'col-12 col-sm-6 col-md-3',
             label_i18n: 'correo',
+            placeholder_i18n: 'correo',
             deshabilitar: true,
         },
         {
@@ -33,6 +53,7 @@ export const DOCENTE_PRACTICA = {
             nombre: 'Telefono',
             claseGrid: 'col-12 col-sm-6 col-md-3',
             label_i18n: 'telefono',
+            placeholder_i18n: 'telefono',
             deshabilitar: true,
         },
         {
@@ -40,8 +61,9 @@ export const DOCENTE_PRACTICA = {
             tipo: 'button',
             nombre: 'AgregarDocente',
             claseGrid: 'col-12 text-center',
-            claseBoton: 'mat-button',
+            claseBoton: 'btn btn-success btn-sm',
             label_i18n: 'agregar_docente',
+            resultado: true,
             requerido: true,
         },
     ]

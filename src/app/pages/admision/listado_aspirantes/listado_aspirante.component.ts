@@ -21,6 +21,8 @@ import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_ins
 import { AnyService } from '../../../@core/data/any.service';
 import { environment } from '../../../../environments/environment';
 import * as _ from 'lodash';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -88,6 +90,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     private tercerosService: TercerosService,
     private toasterService: ToasterService,
     private anyService: AnyService,
+    private proyectoAcademicoService: ProyectoAcademicoService,
     private evaluacionService: EvaluacionInscripcionService) {
 
 
@@ -169,6 +172,21 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           editable: false,
           title: this.translate.instant('GLOBAL.TipoInscripcion'),
           // type: 'string;',
+          valuePrepareFunction: (value) => {
+            return value.Nombre;
+          },
+          width: '25%',
+        },
+        EnfasisId: {
+          editable: false,
+          title: this.translate.instant('enfasis.enfasis'),
+          // type: 'string;',
+          filterFunction: (cell?: any, search?: string) => {
+            // cell? is the value of the cell, in this case is a timeStamp
+            if (search.length > 0) {
+              return cell.Nombre.match(search);
+            }
+          },
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
@@ -378,23 +396,33 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             // this.source_emphasys.load(data);
             data.forEach(element => {
               if (element.PersonaId != undefined) {
-                this.tercerosService.get('tercero/' + element.PersonaId).subscribe(
-                  (res: any) => {
-                    let aspiranteAux = {
-                      Inscripcion: element,
-                      NumeroDocumento: res.Id,
-                      NombreAspirante: res.NombreCompleto,
-                      NotaFinal: element.NotaFinal,
-                      TipoInscripcionId: element.TipoInscripcionId,
-                      EstadoInscripcionId: element.EstadoInscripcionId,
-                    }
-                    this.Aspirantes.push(aspiranteAux);
-                    this.source_emphasys.load(this.Aspirantes);
-                  },
-                  error => {
-                    this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-                  },
-                );
+                combineLatest([
+                  this.tercerosService.get('tercero/' + element.PersonaId),
+                  this.proyectoAcademicoService.get('enfasis/' + element.EnfasisId)
+                ]).pipe(
+                  map(([tercero$, enfasis$]) => ({
+                    tercero: tercero$,
+                    enfasis: enfasis$
+                  }))
+                )
+                  .subscribe(
+                    (res: any) => {
+                      let aspiranteAux = {
+                        Inscripcion: element,
+                        NumeroDocumento: res.tercero.Id,
+                        NombreAspirante: res.tercero.NombreCompleto,
+                        NotaFinal: element.NotaFinal,
+                        TipoInscripcionId: element.TipoInscripcionId,
+                        EstadoInscripcionId: element.EstadoInscripcionId,
+                        EnfasisId: res.enfasis
+                      }
+                      this.Aspirantes.push(aspiranteAux);
+                      this.source_emphasys.load(this.Aspirantes);
+                    },
+                    error => {
+                      this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+                    },
+                  );
               }
             });
 
