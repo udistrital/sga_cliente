@@ -179,7 +179,6 @@ export class CrudInformacionContactoComponent implements OnInit {
             this.info_informacion_contacto = <InformacionContacto>res;
             if (this.info_informacion_contacto.PaisResidencia !== null && this.info_informacion_contacto.DepartamentoResidencia !== null
               && this.info_informacion_contacto.CiudadResidencia != null) {
-              // this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = [this.info_informacion_contacto.PaisResidencia];
               this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = [this.info_informacion_contacto.DepartamentoResidencia];
               this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = [this.info_informacion_contacto.CiudadResidencia];
             }
