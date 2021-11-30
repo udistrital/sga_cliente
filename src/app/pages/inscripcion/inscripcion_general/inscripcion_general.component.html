@@ -276,6 +276,7 @@
                 </nb-tab> -->
                 <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}">
                     <ngx-crud-info-caracteristica info_caracteristica_id={{this.info_ente_id}}
+                                                  porcentaje={{this.percentage_tab_info[1]}}
                                                   (eventChange)="perfil_editar('info_contacto')"
                                                   (result)="setPercentage_info($event,1)">
                     </ngx-crud-info-caracteristica>
