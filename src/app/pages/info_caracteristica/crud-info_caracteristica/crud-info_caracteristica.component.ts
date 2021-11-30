@@ -25,10 +25,16 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 export class CrudInfoCaracteristicaComponent implements OnInit {
   config: ToasterConfig;
   info_caracteristica_id: number;
+  porcentaje: number;
 
   @Input('info_caracteristica_id')
   set name(info_caracteristica_id: number) {
     this.info_caracteristica_id = info_caracteristica_id;
+  }
+
+  @Input('porcentaje')
+  set valPorcentaje(porcentaje: number) {
+    this.porcentaje = porcentaje;
   }
 
   @Output() eventChange = new EventEmitter();
@@ -251,7 +257,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   public loadInfoCaracteristica(): void {
-    // this.loadLists();
     this.loading = true;
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '') {
@@ -295,7 +300,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               files.push({ Id: this.formInfoCaracteristica.ComprobanteDiscapacidad, key: 'Documento' });
             }
 
-            let carega = await this.cargarDocs(files);
+            let carga = await this.cargarDocs(files);
 
           } else {
             this.loading = false;
@@ -491,6 +496,10 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       setTimeout(() => {
         this.result.emit(1);
       });
+    } else if (event < this.porcentaje) {
+      setTimeout(() => {
+        this.result.emit(this.porcentaje);
+      });
     } else {
       setTimeout(() => {
         this.result.emit(event);
@@ -522,11 +531,11 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
-        this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('TipoPoblacion')].opciones = list.listTipoPoblacion[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].opciones = list.listTipoDiscapacidad[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSanguineo')].opciones = list.listGrupoSanguineo[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('Rh')].opciones = list.listFactorRh[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
       },
     );
   }
