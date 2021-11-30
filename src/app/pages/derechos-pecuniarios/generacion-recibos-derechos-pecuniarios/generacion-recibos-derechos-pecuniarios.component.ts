@@ -57,6 +57,7 @@ export class GeneracionRecibosDerechosPecuniarios {
   recibo_generado: any;
   recibos_pendientes: number;
   parametros_pago: any;
+  userData: any = null;
 
   arr_proyecto: InstitucionEnfasis[] = [];
   source_emphasys: LocalDataSource = new LocalDataSource();
@@ -66,7 +67,7 @@ export class GeneracionRecibosDerechosPecuniarios {
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
   gen_recibo: boolean;
-
+  generacion_recibo = null;
   constructor(
     private projectService: ProyectoAcademicoService,
     private popUpManager: PopUpManager,
@@ -78,8 +79,20 @@ export class GeneracionRecibosDerechosPecuniarios {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
+    this.generacion_recibo = {
+      code: '*Códígo seleccionado',
+      documentId: 'Documento de identificacion',
+      username: 'Nombre de estudiante',
+      curricularProgram: 'Programa curricular',
+      concept: 'Concepto pecuiario elegido',
+      value: '* value'
+    }
 
     this.info_persona_id = this.userService.getPersonaId();
+    this.userService.tercero$.subscribe((user) => {
+      console.log(user);
+      this.userData = user;
+    })
     this.loadInfoPersona();
     this.createTable();
   }
