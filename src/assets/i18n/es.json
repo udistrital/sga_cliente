@@ -1691,7 +1691,14 @@
         "descargar": "Descargar",
         "opcion": "Opción",
         "verificar_datos": "Verificar datos para la generación de recibo",
-        "seguro_nuevo_recibo": "¿Está seguro de generar el nuevo recibo con el derecho pecuniario seleccionada?"
+        "seguro_nuevo_recibo": "¿Está seguro de generar el nuevo recibo con el derecho pecuniario seleccionada?",
+        "concepto_recibo":"Concepto recibo",
+        "proyecto_curricular":"Proyecto curricular",
+        "codigos_relacionados": "Códigos relacionados al número de identificación",
+        "placeholder_codigos_relacionados": "Seleccione el código de interés para continuar",
+        "placeholder_derecho_pecuniario": "Seleccione el derecho pecuniario de interés"
+
+
     },
     "tipo_inscripcion": {
         "titulo": "Tipos de Inscripción",
