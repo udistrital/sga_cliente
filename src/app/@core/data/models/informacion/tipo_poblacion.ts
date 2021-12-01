@@ -1,4 +1,4 @@
-export class GrupoEtnico {
+export class TipoPoblacion {
     Id: number;
     Nombre: string;
     Descripcion: string;

@@ -150,6 +150,7 @@ import { LinkDownloadComponent } from './components/link-download/link-download.
 import { CheckboxAssistanceComponent } from './components/checkbox-assistance/checkbox-assistance.component';
 import { SgaMidService } from '../@core/data/sga_mid.service';
 import { DocumentoService } from '../@core/data/documento.service';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -222,7 +223,7 @@ const NB_THEME_PROVIDERS = [
 
 
 @NgModule({
-  imports: [...BASE_MODULES, ...NB_MODULES, SharedModule, ...MAT_MODULES, MomentModule],
+  imports: [...BASE_MODULES, ...NB_MODULES, SharedModule, ...MAT_MODULES, MomentModule,   NbEvaIconsModule,  ],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES, ...MAT_MODULES, ...DIRECTIVES],
   declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective],
   entryComponents: [...ENTRY_COMPONENTS],

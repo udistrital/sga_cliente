@@ -25,6 +25,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { PlatformModule } from '@angular/cdk/platform';
 import { PortalModule } from '@angular/cdk/portal';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { NbToastrModule } from '@nebular/theme';
@@ -150,6 +151,7 @@ import { LoadComponent } from './load/load.component';
     LoadComponent,
   ],
   imports: [
+    NbEvaIconsModule,
     StoreModule.forRoot(rootReducer),
     CdkTableModule,
     MatSelectModule,
@@ -160,7 +162,7 @@ import { LoadComponent } from './load/load.component';
     MaterialModule,
     ToasterModule.forRoot(),
     NbToastrModule.forRoot(),
-    NgbModule.forRoot(),
+    NgbModule,
     NbDialogModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),

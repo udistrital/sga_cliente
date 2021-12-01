@@ -76,9 +76,9 @@ export class ListReducer {
     }
   }
 
-  static ListReducerGrupoEtnico(state: Array<any> = new Array, action) {
+  static ListReducerTipoPoblacion(state: Array<any> = new Array, action) {
     switch (action.type) {
-      case REDUCER_LIST.GrupoEtnico:
+      case REDUCER_LIST.TipoPoblacion:
         return [...state, action.payload];
       default:
         return state;

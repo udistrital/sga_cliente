@@ -14,6 +14,10 @@
              nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
         <nb-card-header>
 
+            <div class="preinscription-alert">
+                {{ 'inscripcion.alerta_preinscripcion' | translate }}
+            </div>
+
             <div class="col-12">
                 {{ 'inscripcion.periodo' | translate }}: {{ this.inscripcion.PeriodoId }}
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ 'inscripcion.nivel' | translate }}: {{ this.inscripcion.Nivel }}
@@ -272,6 +276,7 @@
                 </nb-tab> -->
                 <nb-tab tabTitle="{{ 'inscripcion.info_caracteristica' | translate }}">
                     <ngx-crud-info-caracteristica info_caracteristica_id={{this.info_ente_id}}
+                                                  porcentaje={{this.percentage_tab_info[1]}}
                                                   (eventChange)="perfil_editar('info_contacto')"
                                                   (result)="setPercentage_info($event,1)">
                     </ngx-crud-info-caracteristica>

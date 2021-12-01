@@ -14,8 +14,6 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { Store } from '@ngrx/store';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { InfoContactoGet } from '../../../@core/data/models/ente/info_contacto_get';
-import { InfoPersona } from './../../../@core/data/models/informacion/info_persona';
 
 @Component({
   selector: 'ngx-crud-informacion-contacto',
@@ -31,10 +29,6 @@ export class CrudInformacionContactoComponent implements OnInit {
   @Input('informacion_contacto_id')
   set name(informacion_contacto_id: number) {
     this.informacion_contacto_id = informacion_contacto_id;
-    if (this.informacion_contacto_id !== undefined && this.informacion_contacto_id !== 0 &&
-      this.informacion_contacto_id.toString() !== '') {
-      // this.loadInformacionContacto();
-    }
   }
 
   @Output() eventChange = new EventEmitter();
@@ -63,6 +57,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
+    this.loading = true;
     this.listService.findPais();
     this.loadLists();
     this.persona_id = this.userService.getPersonaId();
@@ -70,7 +65,6 @@ export class CrudInformacionContactoComponent implements OnInit {
   }
 
   construirForm() {
-    // this.formInformacionContacto.titulo = this.translate.instant('GLOBAL.informacion_contacto');
     this.info_persona_id = this.userService.getPersonaId();
     this.formInformacionContacto.btn = this.translate.instant('GLOBAL.guardar');
     for (let i = 0; i < this.formInformacionContacto.campos.length; i++) {
@@ -85,34 +79,32 @@ export class CrudInformacionContactoComponent implements OnInit {
 
   getSeleccion(event) {
     if (event.nombre === 'PaisResidencia') {
-      if (this.paisSeleccionado !== event.valor) {
-        this.paisSeleccionado = event.valor;
-        this.loadOptionsDepartamentoResidencia(event.valor);
-      }
+      this.paisSeleccionado = event.valor;
+      this.loadOptionsDepartamentoResidencia();
     } else if (event.nombre === 'DepartamentoResidencia') {
-      if (this.departamentoSeleccionado !== event.valor) {
-        this.departamentoSeleccionado = event.valor;
-        this.loadOptionsCiudadResidencia();
-      }
+      this.departamentoSeleccionado = event.valor;
+      this.loadOptionsCiudadResidencia();
     }
   }
 
-  loadOptionsDepartamentoResidencia(paisSeleccionado): void {
+  loadOptionsDepartamentoResidencia(): void {
     this.loading = true;
     let consultaHijos: Array<any> = [];
     const departamentoResidencia: Array<any> = [];
-    if (paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId.Id:' + paisSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre')
-        .subscribe(res => {
-          if (res !== null) {
-            consultaHijos = <Array<Lugar>>res;
-            for (let i = 0; i < consultaHijos.length; i++) {
-              departamentoResidencia.push(consultaHijos[i].LugarHijoId);
+    if (this.paisSeleccionado) {
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId__Id:' + this.paisSeleccionado.Id +
+        ',LugarHijoId__Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre')
+        .subscribe(
+          res => {
+            if (res !== null) {
+              consultaHijos = <Array<Lugar>>res;
+              for (let i = 0; i < consultaHijos.length; i++) {
+                departamentoResidencia.push(consultaHijos[i].LugarHijoId);
+              }
             }
-          }
-          this.loading = false;
-          this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = departamentoResidencia;
-        },
+            this.loading = false;
+            this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = departamentoResidencia;
+          },
           (error: HttpErrorResponse) => {
             this.loading = false;
             Swal.fire({
@@ -125,6 +117,8 @@ export class CrudInformacionContactoComponent implements OnInit {
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             });
           });
+    } else {
+      this.loading = false;
     }
   }
 
@@ -133,8 +127,8 @@ export class CrudInformacionContactoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const ciudadResidencia: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + this.departamentoSeleccionado.Id +
-        ',LugarHijoId.Activo:true,TipoRelacionLugarId.Id:2&limit=0')
+      this.ubicacionesService.get('relacion_lugares?query=LugarPadreId__Id:' + this.departamentoSeleccionado.Id +
+        ',LugarHijoId__Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -143,20 +137,23 @@ export class CrudInformacionContactoComponent implements OnInit {
             }
           }
           this.loading = false;
+
           this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = ciudadResidencia;
         },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.informacion_contacto') + '|' +
-              this.translate.instant('GLOBAL.ciudad_residencia'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.informacion_contacto') + '|' +
+                this.translate.instant('GLOBAL.ciudad_residencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
-        });
+    } else {
+      this.loading = false;
     }
   }
 
@@ -171,31 +168,31 @@ export class CrudInformacionContactoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
   }
 
   loadInformacionContacto() {
     if (this.persona_id) {
       this.sgaMidService.get('inscripciones/info_complementaria_tercero/' + this.persona_id)
-      .subscribe(res => {
-        if (res !== null) {
-          this.info_informacion_contacto = <InformacionContacto>res;
-          if (this.info_informacion_contacto.PaisResidencia !== null && this.info_informacion_contacto.DepartamentoResidencia !== null
-            && this.info_informacion_contacto.CiudadResidencia != null) {
-            this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = [this.info_informacion_contacto.PaisResidencia];
-            this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = [this.info_informacion_contacto.DepartamentoResidencia];
-            this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = [this.info_informacion_contacto.CiudadResidencia];
+        .subscribe(res => {
+          if (res !== null) {
+            this.info_informacion_contacto = <InformacionContacto>res;
+            if (this.info_informacion_contacto.PaisResidencia !== null && this.info_informacion_contacto.DepartamentoResidencia !== null
+              && this.info_informacion_contacto.CiudadResidencia != null) {
+              this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = [this.info_informacion_contacto.DepartamentoResidencia];
+              this.formInformacionContacto.campos[this.getIndexForm('CiudadResidencia')].opciones = [this.info_informacion_contacto.CiudadResidencia];
+            }
+          } else {
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
+            this.loading = false;
           }
-          this.loading = false;
-        } else {
-          this.loading = false;
-          this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
-        }
-      },
-        (error: HttpErrorResponse) => {
-          this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
-          this.info_informacion_contacto = undefined;
-          this.loading = false;
-        });
+        },
+          (error: HttpErrorResponse) => {
+            this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
+            this.info_informacion_contacto = undefined;
+            this.loading = false;
+          });
+      this.loading = false;
     }
   }
 
@@ -203,7 +200,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     if (event.valid) {
       const formData = event.data.InfoInformacionContacto;
       const tercero = {
-        Id: this.persona_id  || 1, // se debe cambiar solo por persona id
+        Id: this.persona_id || 1, // se debe cambiar solo por persona id
       }
       const dataInfoContacto = {
         InfoComplementariaTercero: [
@@ -214,7 +211,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             InfoComplementariaId: {
               Id: 41,
             },
-            Dato: JSON.stringify({value: formData.EstratoResidencia}),
+            Dato: JSON.stringify({ value: formData.EstratoResidencia }),
             Activo: true,
           },
           {
@@ -224,7 +221,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             InfoComplementariaId: {
               Id: 55,
             },
-            Dato: JSON.stringify({value: formData.CodigoPostal}),
+            Dato: JSON.stringify({ value: formData.CodigoPostal }),
             Activo: true,
           },
           {
@@ -290,8 +287,8 @@ export class CrudInformacionContactoComponent implements OnInit {
                 this.popUpManager.showAlert('', this.translate.instant('inscripcion.error_update'));
               } else if (res !== null && res.Response.Code == '200') {
                 this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
-                this.translate.instant('GLOBAL.info_contacto') + ' ' +
-                this.translate.instant('GLOBAL.confirmarActualizar'));
+                  this.translate.instant('GLOBAL.info_contacto') + ' ' +
+                  this.translate.instant('GLOBAL.confirmarActualizar'));
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
                 this.loadInformacionContacto();
               }
@@ -304,7 +301,7 @@ export class CrudInformacionContactoComponent implements OnInit {
                 title: error.status + '',
                 text: this.translate.instant('ERROR.' + error.status),
                 footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-                this.translate.instant('GLOBAL.info_caracteristica'),
+                  this.translate.instant('GLOBAL.info_caracteristica'),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
               });
             },
@@ -337,26 +334,26 @@ export class CrudInformacionContactoComponent implements OnInit {
               if (r !== null && r.Type !== 'error') {
                 this.popUpManager.showSuccessAlert(this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
                 this.showToast('info', this.translate.instant('GLOBAL.registrar'),
-                this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
+                  this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
                 this.clean = !this.clean;
               } else {
                 this.showToast('error', this.translate.instant('GLOBAL.error'),
-                this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'));
+                  this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'));
               }
               this.loading = false;
             },
-            (error: HttpErrorResponse) => {
-              this.loading = false;
-              Swal.fire({
-                icon: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+                this.showToast('error', this.translate.instant('GLOBAL.error'),
+                  this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'));
               });
-              this.showToast('error', this.translate.instant('GLOBAL.error'),
-                this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'));
-            });
         }
       });
   }

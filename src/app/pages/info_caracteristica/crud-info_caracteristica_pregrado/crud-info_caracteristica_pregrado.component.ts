@@ -65,7 +65,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     this.listService.findGrupoSanguineo();
     this.listService.findFactorRh();
     this.listService.findPais();
-    this.listService.findGrupoEtnico();
+    this.listService.findTipoPoblacion();
     this.listService.findTipoDiscapacidad();
     this.listService.findEPS();
     this.loadLists();
@@ -100,8 +100,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const departamentoNacimiento: Array<any> = [];
     if (this.paisSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + this.paisSeleccionado.Id +
-      ',LugarHijoId.TipoLugarId.CodigoAbreviacion:D,LugarHijoId.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId__Id:' + this.paisSeleccionado.Id +
+        ',LugarHijoId__Activo:true&limit=0&order=asc&sortby=LugarHijoId__Nombre')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -132,7 +132,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     let consultaHijos: Array<any> = [];
     const ciudadNacimiento: Array<any> = [];
     if (this.departamentoSeleccionado) {
-      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId.Id:' + this.departamentoSeleccionado.Id + ',LugarHijoId.Activo:true&limit=0')
+      this.ubicacionesService.get('relacion_lugares/?query=LugarPadreId__Id:' + this.departamentoSeleccionado.Id + ',LugarHijoId__Activo:true&limit=0')
         .subscribe(res => {
           if (res !== null) {
             consultaHijos = <Array<Lugar>>res;
@@ -345,7 +345,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
      this.store.select((state) => state).subscribe(
        (list) => {
         this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
-        this.formInfoCaracteristica.campos[this.getIndexForm('GrupoEtnico')].opciones = list.listGrupoEtnico[0];
+        this.formInfoCaracteristica.campos[this.getIndexForm('TipoPoblacion')].opciones = list.listTipoPoblacion[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].opciones = list.listTipoDiscapacidad[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSanguineo')].opciones = list.listGrupoSanguineo[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('Rh')].opciones = list.listFactorRh[0];

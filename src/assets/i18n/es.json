@@ -141,6 +141,7 @@
         }
     },
     "GLOBAL": {
+        "click_aqui": "Click aquí",
         "admitir":"Admitir", 
         "proceso_admision_exitoso":"Proceso de admisión exitoso", 
         "admitiendo_aspirantes":"Admitiendo aspirantes", 
@@ -267,8 +268,8 @@
         "placeholder_grupo_sanguineo": "Ej: AB",
         "rh": "RH",
         "placeholder_rh": "Ej: + (Positivo)",
-        "grupo_etnico": "Grupo étnico",
-        "placeholder_grupo_etnico": "Ej: Grupo étnico",
+        "tipo_poclacion": "Tipo de población",
+        "placeholder_tipo_poclacion": "Ej: Tipo de población",
         "lugar_nacimiento": "Lugar de nacimiento",
         "placeholder_lugar_nacimiento": "Ej: Lugar de nacimiento",
         "pais_nacimiento": "País de nacimiento",
@@ -611,6 +612,7 @@
         "tooltip_descargar": "Descargar",
         "experiencia_laboral": "Experiencia laboral",
         "comprobante_discapacidad": "Comprobante de discapacidad",
+        "comprobante_poblacion": "Comprobante poblacional",
         "carga_recolectando": "Recolectando información...",
         "carga_guardando": "Guardando información...",
         "general": "General",
@@ -625,7 +627,10 @@
         "documento": "Número de documento",
         "nombre_autor": "Nombre",
         "placeholder_nombre_autor": "Ej: Pedro Perez",
-        "placeholder_cargo_mensaje": "Debe ingreso al menos 3 caracteres en el campo para buscar el cargo correspondiente."
+        "placeholder_cargo_mensaje": "Debe ingreso al menos 3 caracteres en el campo para buscar el cargo correspondiente.",
+        "placeholder_vacio": " ",
+        "info_practicas_academicas": "Solicitud de prácticas académicas",
+        "error_practicas_academicas": "No fue posible registrar la práctica académica"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1253,9 +1258,14 @@
         "comprobante_inscripcion": "Comprobante de Inscripción",
         "info_comprobante": "El diligenciamiento del presente formulario indica que el aspirante ha conocido el instructivo oficial de admisiones del PERIODO ACADÉMICO en curso, y acorde con la ley 1581 de 2012, autoriza de manera expresa e inequívoca, que sus datos personales sean tratados conforme a las funciones propias de la Universidad, en su condición de Institución de Educación Superior.",
         "warning_info":"Aspirante, recuerde que solo podra generar hasta 3 recibos en estado pendiente de pago, si desea generar otra preinscripción a otro proyecto deberá pagar al menos uno de los recibos generados.",
+        "alerta_preinscripcion":"Aspirante, para poder realizar el proceso de inscripción debe llenar en un 100% los apartados de Información básica, Formación académica, Experiencia laboral y Documentos solicitados",
         "alerta_posgrado":"Aspirante, tenga en cuenta que para poder inscribirse en un programa de posgrado, usted debe contar con un grado de pregrado culminado y graduado, con sus respectivos soportes documentales.",
         "alerta_veracidad_informacion":"Aspirante, tenga en cuenta que la información que diligenciará a continuación debe ser verídica para poder continuar con el proceso de inscripción.",
-        "alerta_discapacidades": "Aspirante, si usted tiene más de una condición de discapacidad, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias."
+        "alerta_discapacidades": "Aspirante, tenga en cuenta que la discapacidad debe estar contenida en la ley estatutaria 1618 de 2013, con su respectivo soporte documental, si usted tiene más de una condición de discapacidad, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias.",
+        "alerta_poblacion": "Aspirante, si usted pertenece a un tipo de población especifica tener en cuenta que debe adjuntar su respectivo soporte documental de acuerdo a la Ley 1448 de 2001 (registro único de victimas), y la Resolución 0762 de 2020 del Ministerio del Interior (certificado de autorreconocimiento), por favor subir un solo documento en formato pdf con todas las certificaciones necesarias.",
+        "alerta_poblacion_discapacidades": "Aspirante, tenga en cuenta que la discapacidad debe estar contenida en la ley estatutaria 1618 de 2013, con su respectivo soporte documental, además si usted pertenece a un tipo de población especifica tenga en cuenta que debe adjuntar su respectivo soporte documental de acuerdo a la Ley 1448 de 2001 (registro único de victimas), y la Resolución 0762 de 2020 del Ministerio del Interior (certificado de autorreconocimiento). Si usted tiene más de una condición de discapacidad o si pertenece a más de una población, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias en la categoría correspondiente."
+
+
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -1780,14 +1790,40 @@
         "no_data": "No hay prácticas académicas registradas",
         "estado_docente": "Estatus del autor",
         "tooltip_ver_registro": "Ver",
-        "guia_practica": "Guia para el desarrollo de la práctica",
+        "guia_practica": "Guía para el desarrollo de la práctica",
         "lista_personal_apoyo": "Lista personal de apoyo",
         "acta_compromiso": "Acta de compromiso de la práctica",
         "info_asistencia_practica": "Información de asistente a la práctica",
         "fecha_respuesta":"Fecha",
         "nombre_usuario":"Nombre del usuario",
         "estado":"Estado",
-        "comentario":"Comentario"
+        "comentario":"Comentario",
+        "colaborador": "Colaborador",
+        "actions": "Agregar/Remover",
+        "placeholder_docDocente": "Ej: 777777777",
+        "placeholder_nombre": "Ej: Pedro Perez",
+        "placeholder_vinculacion": "Ej: Docente de planta",
+        "placeholder_correo": "Ej: pedro@correo.com",
+        "placeholder_telefono": "Ej: 55555555",
+        "placeholder_proyecto": "Ej: Ingeniería eléctrica",
+        "placeholder_espacio_academico" : "123 - Calculo Integral",
+        "placeholder_semestre": "Ej: 1, 2, 3...",
+        "placeholder_numero_estudiantes": "Ej: 1, 2, 3...",
+        "placeholder_num_grupos": "Ej: 1, 2, 3...",
+        "placeholder_fecha_salida": "Ej: 24/08/2018",
+        "placeholder_duracion": "Ej: 1, 2, 3...",
+        "placeholder_numero_vehiculos": "Ej: 1, 2, 3...",
+        "placeholder_tipo_vehiculo": "Ej: Bus, Buseta...",
+        "docDocente": "Cédula del docente colaborador",
+        "error_docente_borrar": "El docente solicitante no se puede borrar",
+        "error_docente_no_existe": "No se han encontrado docentes registrados con el número de cédula ",
+        "error_docente_ya_registrado": "El docente ya está agregado.",
+        "buscar": "Buscar",
+        "alerta_llenar_campo": "Debe llenar el campo de la cédula del docente colaborador.",
+        "tooltip_remover": "Remover docente",
+        "tooltip_agregar": "Agregar docente",
+        "docente_encontrado": "Se encontró con éxito al docente.",
+        "placeholder_periodo": "Ej: 2022-1"
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Preinscripción de Espacios académicos",

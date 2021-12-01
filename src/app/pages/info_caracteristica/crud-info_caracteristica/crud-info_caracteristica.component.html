@@ -13,8 +13,14 @@
                          (percentage)="setPercentage($event)">
         </ngx-dinamicform>
 
-        <div class="preinscription-alert" *ngIf="mensaje_discapcidades">
+        <div class="preinscription-alert" *ngIf="mensaje_discapcidades && !mensaje_poblacion_discapcidades">
           {{ 'inscripcion.alerta_discapacidades' | translate }}
+        </div>
+        <div class="preinscription-alert" *ngIf="mensaje_poblacion && !mensaje_poblacion_discapcidades">
+          {{ 'inscripcion.alerta_poblacion' | translate }}
+        </div>
+        <div class="preinscription-alert" *ngIf="mensaje_poblacion_discapcidades">
+          {{ 'inscripcion.alerta_poblacion_discapacidades' | translate }}
         </div>
 
     </div>

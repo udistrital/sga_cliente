@@ -24,8 +24,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() percentage: EventEmitter<any> = new EventEmitter();
   data: any;
   searchTerm$ = new Subject<any>();
-  @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
-  @ViewChild('documento') DocumentoInputVariable: ElementRef;
+  @ViewChild(MatDatepicker, {static: true}) datepicker: MatDatepicker<Date>;
+  @ViewChild('documento', {static: true}) DocumentoInputVariable: ElementRef;
   init: boolean;
   constructor(
     private sanitization: DomSanitizer,
@@ -222,6 +222,10 @@ export class DinamicformComponent implements OnInit, OnChanges {
       (JSON.stringify(c.valor) === '{}' && c.etiqueta !== 'file') || JSON.stringify(c.valor) === '[]')
       || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && (c.urlTemp === undefined || c.urlTemp === '')))
       || ((c.etiqueta === 'file' && c.valor.name === null) && (c.etiqueta === 'file' && (c.urlTemp === null || c.urlTemp === '')))) {
+      if (c.entrelazado) {
+        this.interlaced.emit(c);
+        return true;
+      }
       c.alerta = '** Debe llenar este campo';
       c.clase = 'form-control form-control-danger';
       return false;
@@ -288,7 +292,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
     this.normalform.campos.forEach(d => {
       d.valor = null;
       if (d.etiqueta === 'file') {
-        this.DocumentoInputVariable.nativeElement.value = '';
+        const nativeElement = this.DocumentoInputVariable?this.DocumentoInputVariable.nativeElement?this.DocumentoInputVariable.nativeElement:null:null;
+        nativeElement?nativeElement.value = '': '';
         d.File = null
         d.url = null
         d.urlTemp = undefined
@@ -338,6 +343,12 @@ export class DinamicformComponent implements OnInit, OnChanges {
       }
     }
 
+    if (this.normalform) {
+      if (this.normalform.nombre) {
+        this.data.nombre = this.normalform.nombre;
+      }
+    }
+
     this.result.emit(this.data);
     if (this.data.valid)
       this.percentage.emit(this.data.percentage);
@@ -359,7 +370,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
       data: result,
       button: c.nombre,
     }
-    this.resultAux.emit(dataTemp);
+    if (c.resultado) {
+      this.result.emit(dataTemp)
+    } else {
+      this.resultAux.emit(dataTemp);
+    }
   }
 
   setPercentage(): void {

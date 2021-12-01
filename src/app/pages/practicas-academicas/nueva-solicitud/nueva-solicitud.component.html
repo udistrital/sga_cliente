@@ -1,15 +1,30 @@
 <div class="col-12">
-  <nb-card>
+  <nb-card [nbSpinner]="loading"
+           nbSpinnerStatus="success"
+           nbSpinnerSize="xxlarge"
+           nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    
     <nb-card-header>
       {{ 'practicas_academicas.titulo' | translate }}
     </nb-card-header>
+
     <nb-card-body>
-      <ngx-solicitante-practica></ngx-solicitante-practica>
-      <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas" [clean]="limpiar" (result)="enviarSolicitud($event)">
+      <ngx-solicitante-practica (loading)="changeLoading($event)"
+                                (docentes)="loadDocentes($event)">
+      </ngx-solicitante-practica>
 
+      <ngx-dinamicform [normalform]="FormPracticasAcademicas"
+                       [modeloData]="InfoPracticasAcademicas"
+                       (result)="enviarSolicitud($event)"
+                       [clean]="limpiar" 
+                       (interlaced)="getSeleccion($event)" >
       </ngx-dinamicform>
-      <ngx-dinamicform [normalform]="FormSoporteDocumentales" [modeloData]="InfoPracticasAcademicas" [clean]="limpiar" (result)="enviarSolicitud($event)">
 
+      <ngx-dinamicform [normalform]="FormSoporteDocumentales"
+                       [modeloData]="InfoDocumentos"
+                       [clean]="limpiar"
+                       (result)="enviarSolicitud($event)"
+                       *ngIf="llenarDocumentos">
       </ngx-dinamicform>
     </nb-card-body>
   </nb-card>
