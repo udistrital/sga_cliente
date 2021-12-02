@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from './../../../environments/environment';
+import { RequestManager } from '../../managers/requestManager';
 import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -16,118 +16,53 @@ const httpOptions = {
 })
 
 export class PracticasAcademicasService {
-    practicas = [{
-        Numero: 123,
-        FechaSolicitud: '05/03/2021',
-        TipoSolicitud: 'Prácticas académicas 1',
-        EstadoSolicitud: 'Radicada',
-        estados: [{
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 1',
-            EstadoSolicitud: 'Radicada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 2',
-            EstadoSolicitud: 'Aprobada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 3',
-            EstadoSolicitud: 'Rechazada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 4',
-            EstadoSolicitud: 'Devuelta',
-        }]
 
-    }, {
-        Numero: 456,
-        FechaSolicitud: '05/03/2021',
-        TipoSolicitud: 'Prácticas académicas 2',
-        EstadoSolicitud: 'Aprobada',
-        estados: [{
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 1',
-            EstadoSolicitud: 'Radicada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 2',
-            EstadoSolicitud: 'Aprobada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 3',
-            EstadoSolicitud: 'Rechazada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 4',
-            EstadoSolicitud: 'Devuelta',
-        }]
-    }, {
-        Numero: 789,
-        FechaSolicitud: '05/03/2021',
-        TipoSolicitud: 'Prácticas académicas 3',
-        EstadoSolicitud: 'Rechazada',
-        estados: [{
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 1',
-            EstadoSolicitud: 'Radicada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 2',
-            EstadoSolicitud: 'Aprobada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 3',
-            EstadoSolicitud: 'Rechazada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 4',
-            EstadoSolicitud: 'Devuelta',
-        }]
-    }, {
-        Numero: 101,
-        FechaSolicitud: '05/03/2021',
-        TipoSolicitud: 'Prácticas académicas 4',
-        EstadoSolicitud: 'Devuelta',
-        estados: [{
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 1',
-            EstadoSolicitud: 'Radicada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 2',
-            EstadoSolicitud: 'Aprobada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 3',
-            EstadoSolicitud: 'Rechazada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 4',
-            EstadoSolicitud: 'Devuelta',
-        }]
-    }]
-
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,
+        private requestManager: RequestManager) {
+        this.requestManager.setPath('SGA_MID_SERVICE');
     }
 
-    getPracticas(id = null, stateFilter = null) {
+    getPracticas(endpoint, id = null, stateFilter = null) {
         if (id) {
-            return this.practicas.filter((practicas) => (id == practicas.Numero))
-        }
-        if (stateFilter) {
-            return this.practicas.filter((practicas) => (stateFilter.includes(practicas.EstadoSolicitud)))
-        }
-        return this.practicas;
-    }
+            return this.requestManager.get(endpoint).pipe(map((practica: any) => {
+                return practica.Data.map((p: any) => {
+                    return {
+                        ...p,
+                        ...{
+                            TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
+                            EstadoId: p.EstadoTipoSolicitudId.EstadoId
+                        }
+                    }
+                }).filter((practicas: any) => (id == practicas.Id))
 
-    getEstados(id = null, stateFilter = null) {
-        if (id) {
-            return this.practicas.filter((practicas) => (id === practicas.Numero))
+            }))
         }
+
         if (stateFilter) {
-            return this.practicas.filter((practicas) => (stateFilter.includes(practicas.EstadoSolicitud)))
+            return this.requestManager.get(endpoint).pipe(map((practica: any) => {
+                return practica.Data.map((p: any) => {
+                    return {
+                        ...p,
+                        ...{
+                            TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
+                            EstadoId: p.EstadoTipoSolicitudId.EstadoId
+                        }
+                    }
+                }).filter((practicas: any) => {
+                    return (stateFilter.includes(practicas.EstadoId.Nombre))
+                })
+            }))
         }
-        return this.practicas;
+
+        return this.requestManager.get(endpoint).pipe(map((practica: any) => {
+            return {
+                ...practica.Data,
+                ...{
+                    TipoSolicitud: practica.Data.EstadoTipoSolicitudId.TipoSolicitud,
+                    EstadoId: practica.Data.EstadoTipoSolicitudId.EstadoId
+                }
+            }
+        }))
     }
 
     get(path, endpoint) {

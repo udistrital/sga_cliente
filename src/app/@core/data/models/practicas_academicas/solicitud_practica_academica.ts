@@ -25,6 +25,7 @@ export class SolicitudPracticaAcademica {
     FechaRadicacion: string;
     NumeroVehiculos: number;
     TipoVehoculo: TipoParametro;
+    DocenteSolicitante: Docente;
     DocentesInvitados: Docente[];
     Documentos: any[];
 }

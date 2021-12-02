@@ -10,7 +10,8 @@
 
     <nb-card-body>
       <ngx-solicitante-practica (loading)="changeLoading($event)"
-                                (docentes)="loadDocentes($event)">
+                                (docentes)="loadDocentes($event)"
+                                [docentesSolicitud]="[]">
       </ngx-solicitante-practica>
 
       <ngx-dinamicform [normalform]="FormPracticasAcademicas"
