@@ -1681,6 +1681,7 @@
         "solicitante": "Petitioner",
         "nombre": "Student name",
         "codigo": "Code",
+        "observaciones": "Observations",
         "carrera": "Career",
         "telefono": "Telephone number",
         "correo_inst": "Institutional email",
@@ -1769,7 +1770,12 @@
         "tooltip_remover": "Remove teacher",
         "tooltip_agregar": "Add teacher",
         "docente_encontrado": "The teacher was successfully found.",
-        "placeholder_periodo": "Ej: 2022-1"
+        "placeholder_periodo": "Ej: 2022-1",
+        "enviar_invitacion": "Send Invitation",
+        "ver_listado_estados": "View state list",
+        "estados": "States",
+        "fecha_radicacion": "Filing date",
+        "estado_actual": "Current status of the request"
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Academic spaces Pre-registration",

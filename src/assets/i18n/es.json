@@ -1729,6 +1729,7 @@
         "numero": "Número",
         "fecha": "Fecha de solicitud",
         "tipo": "Tipo de solicitud",
+        "observaciones": "Observaciones",
         "estado": "Estado de la solicitud",
         "solicitante": "Solicitante",
         "nombre": "Nombre del Estudiante",
@@ -1823,7 +1824,12 @@
         "tooltip_remover": "Remover docente",
         "tooltip_agregar": "Agregar docente",
         "docente_encontrado": "Se encontró con éxito al docente.",
-        "placeholder_periodo": "Ej: 2022-1"
+        "placeholder_periodo": "Ej: 2022-1",
+        "enviar_invitacion": "Enviar Invitación",
+        "ver_listado_estados": "Ver listado de estados",
+        "estados": "Estados",
+        "fecha_radicacion": "Fecha de radicación",
+        "estado_actual": "Estado actual de la solicitud"
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Preinscripción de Espacios académicos",

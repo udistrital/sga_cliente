@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-list-practicas-academicas',
@@ -54,16 +55,15 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
   formFilter: boolean = false;
   processEncript: any;
-
-
+  loading: boolean;
 
   constructor(
     private practicasService: PracticasAcademicasService,
     private _Activatedroute: ActivatedRoute,
     private translate: TranslateService,
     private router: Router,
-    private route: ActivatedRoute,
   ) {
+    this.loading = true;
     this.crearTabla();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.crearTabla();
@@ -71,32 +71,40 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
 
   filterPracticas(event) {
-    console.log(event);
-    this.InfoPracticasAcademicas = { FechaSolicitud: '', Numero: '' };
-    this.datosPracticas = this.practicasService.getPracticas(event.data.Numero ? event.data.Numero : null, null)
+    this.InfoPracticasAcademicas = { FechaRadicacion: '', Id: '' };
+    this.datosPracticas = this.practicasService.getPracticas(event.data.Id ? event.data.Id : null, null)
   }
 
   crearTabla() {
     this.tablaPracticas = {
       columns: {
-        Numero: {
+        Id: {
           title: this.translate.instant('solicitudes.numero'),
           width: '20%',
           editable: false,
         },
-        FechaSolicitud: {
+        FechaRadicacion: {
           title: this.translate.instant('solicitudes.fecha'),
           width: '20%',
+          valuePrepareFunction: (value) => {
+            return moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY')
+          },
           editable: false,
         },
         TipoSolicitud: {
           title: this.translate.instant('solicitudes.tipo'),
           width: '20%',
+          valuePrepareFunction: (value) => {
+            return value.Nombre;
+          },
           editable: false,
         },
-        EstadoSolicitud: {
+        EstadoId: {
           title: this.translate.instant('solicitudes.estado'),
           width: '20%',
+          valuePrepareFunction: (value) => {
+            return value.Nombre;
+          },
           editable: false,
         },
       },
@@ -125,17 +133,18 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
 
   getPracticasAcademicas(param) {
+    const endpoint = 'practicas_academicas?query=EstadoTipoSolicitudId.Id:34&fields=Id,FechaRadicacion,EstadoTipoSolicitudId';
     if (param === 'news') {
-      return this.practicasService.getPracticas(null, ['Radicada']);
+      return this.practicasService.getPracticas(endpoint, null, ['Radicada']);
     }
     if (param === 'process') {
-      return this.practicasService.getPracticas(null, ['Aprobada', 'Rechazada', 'Devuelta']);
+      return this.practicasService.getPracticas(endpoint, null, ['Aprobada', 'Rechazada', 'Devuelta']);
     }
     if (param === 'invitation') {
-      return this.practicasService.getPracticas(null, ['Aprobada']);
+      return this.practicasService.getPracticas(endpoint, null, ['Aprobada']);
     }
     if (param === 'list') {
-      return this.practicasService.getPracticas(null, null);
+      return this.practicasService.getPracticas(endpoint, null, null);
     }
 
   }
@@ -145,7 +154,10 @@ export class ListPracticasAcademicasComponent implements OnInit {
       const { process } = params.params;
       this.process = atob(process);
       this.processEncript = process;
-      this.datosPracticas = this.getPracticasAcademicas(this.process)
+      this.getPracticasAcademicas(this.process).subscribe(practicas => {
+        this.datosPracticas = practicas;
+        this.loading = false;
+      })
     });
 
   }
@@ -155,8 +167,7 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
 
   verPractica(event) {
-    console.log(`pages/practicas-academicas/detalle-practica-academica/${event.data['Numero']}/${this.processEncript}`)
-    this.router.navigate([`pages/practicas-academicas/detalle-practica-academica/${event.data['Numero']}/${this.processEncript}`])
+    this.router.navigate([`pages/practicas-academicas/detalle-practica-academica/${event.data['Id']}/${this.processEncript}`])
   }
 
 }

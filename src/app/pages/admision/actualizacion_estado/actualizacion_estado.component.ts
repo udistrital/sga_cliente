@@ -89,7 +89,6 @@ export class ActualizacionEstadoComponent implements OnInit, OnChanges {
     });
   }
 
-
   loadProyectos() {
     // window.localStorage.setItem('IdNivel', String(this.selectednivel.id));
     this.selectprograma = false;
@@ -122,6 +121,7 @@ export class ActualizacionEstadoComponent implements OnInit, OnChanges {
     this.buttoncambio = false
 
   }
+
   cambiarestados() {
     const opt: any = {
       title: this.translate.instant('GLOBAL.actualizar'),
@@ -169,8 +169,6 @@ export class ActualizacionEstadoComponent implements OnInit, OnChanges {
       });
   }
 
-
-
   ngOnInit() {
 
     }
@@ -178,9 +176,6 @@ export class ActualizacionEstadoComponent implements OnInit, OnChanges {
   ngOnChanges() {
 
   }
-
-
-
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({
