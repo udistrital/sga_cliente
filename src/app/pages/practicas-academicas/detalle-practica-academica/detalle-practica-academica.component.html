@@ -1,60 +1,38 @@
 <div class="col-12">
-  <nb-card>
+  <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+
     <nb-card-header>
       {{ 'practicas_academicas.titulo' | translate }}
     </nb-card-header>
-    <nb-card-body>
-      <form class="dinamic-form" novalidate [formGroup]="formDocente">
-        <fieldset [ngClass]="{'fieldseter':true} ">
-          <legend>
-            {{ 'practicas_academicas.solicitante' | translate }}
-          </legend>
-          <div class="row">
-            <div class="col-12 col-md-4">
-              <mat-form-field style="width: 100%;">
-                <input matInput type="text" formControlName="NombreDocente"
-                  placeholder="{{ 'practicas_academicas.nombre' | translate}}" />
-              </mat-form-field>
-            </div>
-            <div class="col-12 col-md-4">
-              <mat-form-field style="width: 100%;">
-                <input matInput type="text" formControlName="NumeroDocumento"
-                  placeholder="{{ 'GLOBAL.numero_documento' | translate}}" />
-              </mat-form-field>
-            </div>
-            <div class="col-12 col-md-4">
-              <mat-form-field style="width: 100%;">
-                <input matInput type="text" formControlName="EstadoDocente"
-                  placeholder="{{ 'practicas_academicas.estado_docente' | translate}}" />
-              </mat-form-field>
-            </div>
-          </div>
-        </fieldset>
-      </form>
 
+    <nb-card-body>
+      <ngx-solicitante-practica (loading)="changeLoading($event)" [docentesSolicitud]="InfoDocentes">
+      </ngx-solicitante-practica>
       <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas"></ngx-dinamicform>
-      <ngx-dinamicform *ngIf="['process'].includes(process)" [normalform]="formDocumentosAdicionales" ></ngx-dinamicform>
+      <ngx-dinamicform *ngIf="['process'].includes(process)" [normalform]="formDocumentosAdicionales"></ngx-dinamicform>
 
       <div class="files-container">
-        <ngx-download-file-nuxeo *ngFor="let file of files" [idDoc]="file.id" [label]="file.label">
+        <ngx-download-file-nuxeo (loading)="changeLoading($event)" *ngFor="let file of files" [idDoc]="file.id"
+          [label]="file.label">
         </ngx-download-file-nuxeo>
       </div>
 
       <div class="row col-12" *ngIf="['news', 'process'].includes(process)">
         <div class="row col-6">
           <div class="col-6">
-            <label>Fecha de radicación</label>
+            <label>{{ 'practicas_academicas.fecha_radicacion' | translate }}</label>
           </div>
           <div class="col-6">
-            <span class="form-control">12/10/2021</span>
+            <span class="form-control"> {{fechaRadicado}} </span>
           </div>
         </div>
         <div class="row col-6">
           <div class="col-6">
-            <label>Estado actual de la solicitud</label>
+            <label>{{ 'practicas_academicas.estado_actual' | translate }}</label>
           </div>
           <div class="col-6">
-            <span class="form-control">*Estado*</span>
+            <span class="form-control"> {{estado}} </span>
           </div>
         </div>
       </div>
@@ -63,10 +41,10 @@
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Estados
+              {{ 'practicas_academicas.estados' | translate }}
             </mat-panel-title>
             <mat-panel-description>
-              Ver listado de estados
+              {{ 'practicas_academicas.ver_listado_estados' | translate }}
             </mat-panel-description>
           </mat-expansion-panel-header>
           <ng2-smart-table [settings]="tablaEstados" [source]="estadosSolicitud" (custom)="verEstado($event)">
@@ -78,11 +56,12 @@
 
       <div class="send-invitation" *ngIf="['invitation'].includes(process)">
         <button class="btn btn-success" (click)="enviarInvitacion()">
-          Enviar Invitación
+          {{ 'practicas_academicas.enviar_invitacion' | translate }}
         </button>
       </div>
 
-      <ngx-dinamicform *ngIsGranted="['COORDINADOR', 'COORDINADOR_PREGADO', 'COORDINADOR_POSGRADO']" [normalform]="formRespuestaSolicitud"  [modeloData]="InfoPersona">
+      <ngx-dinamicform *ngIsGranted="['COORDINADOR', 'COORDINADOR_PREGADO', 'COORDINADOR_POSGRADO']"
+        [normalform]="formRespuestaSolicitud" [modeloData]="InfoPersona">
       </ngx-dinamicform>
 
 

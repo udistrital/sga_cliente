@@ -52,8 +52,8 @@ export class NuevaSolicitudComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.construirForm();
-    this.changeLoading(true);
   }
 
   getIndexForm(nombre: String): number {
@@ -81,7 +81,6 @@ export class NuevaSolicitudComponent implements OnInit {
 
           this.FormPracticasAcademicas.campos[this.getIndexForm('Proyecto')].opciones = this.proyectos;
           this.FormPracticasAcademicas.campos[this.getIndexForm('TipoVehiculo')].opciones = this.tiposVehiculo;
-          this.changeLoading(false);
         }
       }
     },
@@ -130,6 +129,7 @@ export class NuevaSolicitudComponent implements OnInit {
             docenteAux.push(docente);
           } else {
             this.NuevaSolicitud.SolicitanteId = docente.Id;
+            this.NuevaSolicitud.DocenteSolicitante = docente;
           }
         });
 

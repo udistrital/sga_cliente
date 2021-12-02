@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -23,12 +23,26 @@ export class SolicitantePracticaComponent {
   info_persona_id: number;
   settings_authors: any;
   nuevoColaborador: boolean;
+  nuevaSolicitud: boolean;
+  docentesSolicitud: any;
 
   @Output('loading')
   loading: EventEmitter<any> = new EventEmitter();
 
   @Output('docentes')
   docentes: EventEmitter<any> = new EventEmitter();
+
+  @Input('docentesSolicitud')
+  set info(info: any) {
+    if (info.length !== 0 && info.toString() !== '') {
+      this.docentesSolicitud = info;
+      this.nuevaSolicitud = false;
+      this.loadData();
+    } else {
+      this.nuevaSolicitud = true;
+      this.loadData();
+    }
+  }
 
   constructor(
     private translate: TranslateService,
@@ -43,7 +57,6 @@ export class SolicitantePracticaComponent {
     });
     this.construirTabla();
     this.nuevoColaborador = false;
-    this.loadData();
   }
 
   construirForm() {
@@ -106,41 +119,46 @@ export class SolicitantePracticaComponent {
   }
 
   loadData(): void {
-    this.loading.emit(true);
-    this.sgamidService.get('practicas_academicas/consultar_solicitante/' + this.info_persona_id).subscribe(res => {
-      const r = <any>res;
-      if (res !== null && r.Success !== 'false') {
-        if (r.Status === '200' && res['Data'] !== null) {
-          if (res['Data']['Correo'] === undefined) {
-            if (res['Data']['CorreoInstitucional'] !== undefined) {
-              res['Data']['Correo'] = res['Data']['CorreoInstitucional']
-            } else if (res['Data']['CorreoPersonal'] !== undefined) {
-              res['Data']['Correo'] = res['Data']['CorreoPersonal']
+    this.source.load([]);
+    if (this.nuevaSolicitud && this.docentesSolicitud === undefined) {
+      this.sgamidService.get('practicas_academicas/consultar_solicitante/' + this.info_persona_id).subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Success !== 'false') {
+          if (r.Status === '200' && res['Data'] !== null) {
+            if (res['Data']['Correo'] === undefined) {
+              if (res['Data']['CorreoInstitucional'] !== undefined) {
+                res['Data']['Correo'] = res['Data']['CorreoInstitucional']
+              } else if (res['Data']['CorreoPersonal'] !== undefined) {
+                res['Data']['Correo'] = res['Data']['CorreoPersonal']
+              }
             }
-          }
 
-          if (res['Data']['Telefono'] === undefined) {
-            if (res['Data']['Celular'] !== undefined) {
-              res['Data']['Telefono'] = res['Data']['Celular']
+            if (res['Data']['Telefono'] === undefined) {
+              if (res['Data']['Celular'] !== undefined) {
+                res['Data']['Telefono'] = res['Data']['Celular']
+              }
             }
+
+            this.DocentePractica.push(res['Data']);
+            this.source.load(this.DocentePractica);
+            this.docentes.emit(this.DocentePractica);
           }
-
-          this.DocentePractica.push(res['Data']);
-          this.source.load(this.DocentePractica);
-          this.docentes.emit(this.DocentePractica);
-
         }
-      }
-      this.loading.emit(false);
-    },
-      (error: HttpErrorResponse) => {
-        Swal.fire({
-          icon: 'error',
-          title: error.status + '',
-          text: this.translate.instant('ERROR.' + error.status),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        this.loading.emit(false);
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
         });
-      });
+    } else {
+      this.source.load(this.docentesSolicitud);
+      this.settings_authors.actions.add = false;
+      this.settings_authors.actions.delete = false;
+    }
   }
 
   agregarColaborador(event) {
