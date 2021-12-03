@@ -381,6 +381,9 @@ export class GeneracionRecibosDerechosPecuniarios {
 
   cargarPeriodo() {
     this.loading = true;
+    this.vigencias = [
+      
+    ]
 
     return new Promise((resolve, reject) => {
       this.parametrosService.get('periodo?query=CodigoAbreviacion:VG&sortby=Id&order=desc&limit=0')
