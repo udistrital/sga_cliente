@@ -34,7 +34,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
 
   @Input('porcentaje')
   set valPorcentaje(porcentaje: number) {
-    this.porcentaje = porcentaje;
+    this.porcentaje = porcentaje / 100 * 2;
   }
 
   @Output() eventChange = new EventEmitter();
@@ -78,7 +78,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     this.listService.findFactorRh();
     this.listService.findGrupoSanguineo();
     this.loadLists();
-    this.loadInfoCaracteristica();
+    // this.loadInfoCaracteristica();
   }
 
   construirForm() {
@@ -412,6 +412,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadInfoCaracteristica();
   }
 
   validarForm(event) {
@@ -492,7 +493,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   }
 
   setPercentage(event) {
-    if (event > 1) {
+    if (event > 1 || this.porcentaje > 1) {
       setTimeout(() => {
         this.result.emit(1);
       });
@@ -531,11 +532,11 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
+        this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('TipoPoblacion')].opciones = list.listTipoPoblacion[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].opciones = list.listTipoDiscapacidad[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSanguineo')].opciones = list.listGrupoSanguineo[0];
         this.formInfoCaracteristica.campos[this.getIndexForm('Rh')].opciones = list.listFactorRh[0];
-        this.formInfoCaracteristica.campos[this.getIndexForm('PaisNacimiento')].opciones = list.listPais[0];
       },
     );
   }
