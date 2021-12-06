@@ -41,7 +41,8 @@
             "definir_conceptos": "Definir Conceptos",
             "asignar_valores": "Asignar Valores",
             "consultar_conceptos": "Consultar Conceptos",
-            "recibos_derechos_pecuniarios": "Generación de recibos \nde pago"
+            "recibos_derechos_pecuniarios": "Generación de recibos \nde pago",
+            "consultar_solicitudes": "Consultar\nsolicitudes"
         },
         "archivo_icfes": {
             "archivo_icfes": "Archivo ICFES",
@@ -142,15 +143,15 @@
     },
     "GLOBAL": {
         "click_aqui": "Click aquí",
-        "admitir":"Admitir", 
-        "proceso_admision_exitoso":"Proceso de admisión exitoso", 
-        "admitiendo_aspirantes":"Admitiendo aspirantes", 
+        "admitir": "Admitir",
+        "proceso_admision_exitoso": "Proceso de admisión exitoso",
+        "admitiendo_aspirantes": "Admitiendo aspirantes",
         "aspirantes_correctamente": "aspirantes correctamente",
-        "aspirantes_inscritos":"aspirantes inscritos", 
-        "aspirantes_admitidos":"aspirantes admitidos", 
-        "se_admitiran":"Se admitirán",
-        "se_admitieron":"Se admitieron",
-        "soporte_documental":"Soporte documental",
+        "aspirantes_inscritos": "aspirantes inscritos",
+        "aspirantes_admitidos": "aspirantes admitidos",
+        "se_admitiran": "Se admitirán",
+        "se_admitieron": "Se admitieron",
+        "soporte_documental": "Soporte documental",
         "numero": "Número",
         "fecha": "Fecha",
         "detalle": "Detalle",
@@ -619,7 +620,7 @@
         "concepto_academico_id": "Concepto académico",
         "placeholder_concepto_academico_id": "Ej. 1",
         "agregar_universidad": "Universidad",
-        "agregar_empresa":"Empresa",
+        "agregar_empresa": "Empresa",
         "tipo_tercero": "Tipo de entidad",
         "placeholder_tipo_tercero": "Ej. Universidad",
         "tipo_contribuyente": "Tipo contribuyente",
@@ -1169,7 +1170,7 @@
         "enfasis_no_actualizado": "Énfasis no actualizado",
         "administrar_enfasis": "Administrar énfasis",
         "error_enfasis_ya_existe": "El énfasis ya fue agregado",
-        "select_enfasis":"Seleccione el énfasis"
+        "select_enfasis": "Seleccione el énfasis"
     },
     "historial_registro": {
         "titulo": "Histórico de registros de acreditación y alta calidad del proyecto curricular",
@@ -1257,15 +1258,13 @@
         "imprimir_comprobante": "Imprima y conserve este comprobante",
         "comprobante_inscripcion": "Comprobante de Inscripción",
         "info_comprobante": "El diligenciamiento del presente formulario indica que el aspirante ha conocido el instructivo oficial de admisiones del PERIODO ACADÉMICO en curso, y acorde con la ley 1581 de 2012, autoriza de manera expresa e inequívoca, que sus datos personales sean tratados conforme a las funciones propias de la Universidad, en su condición de Institución de Educación Superior.",
-        "warning_info":"Aspirante, recuerde que solo podra generar hasta 3 recibos en estado pendiente de pago, si desea generar otra preinscripción a otro proyecto deberá pagar al menos uno de los recibos generados.",
-        "alerta_preinscripcion":"Aspirante, para poder realizar el proceso de inscripción debe llenar en un 100% los apartados de Información básica, Formación académica, Experiencia laboral y Documentos solicitados",
-        "alerta_posgrado":"Aspirante, tenga en cuenta que para poder inscribirse en un programa de posgrado, usted debe contar con un grado de pregrado culminado y graduado, con sus respectivos soportes documentales.",
-        "alerta_veracidad_informacion":"Aspirante, tenga en cuenta que la información que diligenciará a continuación debe ser verídica para poder continuar con el proceso de inscripción.",
+        "warning_info": "Aspirante, recuerde que solo podra generar hasta 3 recibos en estado pendiente de pago, si desea generar otra preinscripción a otro proyecto deberá pagar al menos uno de los recibos generados.",
+        "alerta_preinscripcion": "Aspirante, para poder realizar el proceso de inscripción debe llenar en un 100% los apartados de Información básica, Formación académica, Experiencia laboral y Documentos solicitados",
+        "alerta_posgrado": "Aspirante, tenga en cuenta que para poder inscribirse en un programa de posgrado, usted debe contar con un grado de pregrado culminado y graduado, con sus respectivos soportes documentales.",
+        "alerta_veracidad_informacion": "Aspirante, tenga en cuenta que la información que diligenciará a continuación debe ser verídica para poder continuar con el proceso de inscripción.",
         "alerta_discapacidades": "Aspirante, tenga en cuenta que la discapacidad debe estar contenida en la ley estatutaria 1618 de 2013, con su respectivo soporte documental, si usted tiene más de una condición de discapacidad, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias.",
         "alerta_poblacion": "Aspirante, si usted pertenece a un tipo de población especifica tener en cuenta que debe adjuntar su respectivo soporte documental de acuerdo a la Ley 1448 de 2001 (registro único de victimas), y la Resolución 0762 de 2020 del Ministerio del Interior (certificado de autorreconocimiento), por favor subir un solo documento en formato pdf con todas las certificaciones necesarias.",
         "alerta_poblacion_discapacidades": "Aspirante, tenga en cuenta que la discapacidad debe estar contenida en la ley estatutaria 1618 de 2013, con su respectivo soporte documental, además si usted pertenece a un tipo de población especifica tenga en cuenta que debe adjuntar su respectivo soporte documental de acuerdo a la Ley 1448 de 2001 (registro único de victimas), y la Resolución 0762 de 2020 del Ministerio del Interior (certificado de autorreconocimiento). Si usted tiene más de una condición de discapacidad o si pertenece a más de una población, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias en la categoría correspondiente."
-
-
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -1323,7 +1322,7 @@
         "crear_entidad": "¿Desea crear una nueva entidad?",
         "titulo2_crear_entidad": "no ha sido encontrado",
         "titulo1_crear_entidad": "El Nit. ",
-        "eliminar":"¿Desea eliminar el registro de experiencia laboral?"
+        "eliminar": "¿Desea eliminar el registro de experiencia laboral?"
     },
     "documento_programa": {
         "documento_programa_no_registrado": "Documento no registrado",
@@ -1629,10 +1628,21 @@
         "sin_calendarios": "No existen calendarios.",
         "subir_resolucion": "Subir resolución",
         "descargar_resolucion": "Descargar resolución",
-        "crear_actividad_proceso":"por favor a continuación añada la primer actividad del proceso"
+        "crear_actividad_proceso": "por favor a continuación añada la primer actividad del proceso"
     },
     "derechos_pecuniarios": {
-        "titulo": "Derechos Pecuniarios",
+        "titulo": "Derechos pecuniarios",
+        "periodo": "Periodo",
+        "id": "Id",
+        "concepto": "Conpcepto",
+        "pago": "Pago",
+        "fecha_generacion": "Fecha\ngeneración",
+        "fecha_ordinaria": "Fecha\nordinaria",
+        "fecha_pago": "Fecha de\npago",
+        "valor_pagado": "Valor\npago",
+        "pagar": "Pagar en línea",
+        "adjuntar_pago": "Adjungar pago",
+        "solicitar": "Solicitar",
         "forma": "Seleccione la forma en la que desea definir los conceptos de los derechos pecuniarios",
         "copiar": "Copiar los conceptos de una vigencia anterior",
         "definir": "Definir los conceptos",
@@ -1677,11 +1687,24 @@
         "numero_recibo": "# Recibo",
         "valor": "Valor",
         "derecho_pecuniario": "Derechos pecuniarios",
-        "fecha_generacion": "Fecha generación",
-        "estado": "Estado",
+        "estado": "Estado\nsolicitud",
+        "ver_recibo": "Ver\nrecibo",
+        "ver_soporte": "Ver soporte\nde pago",
+        "descripcion_solicitud":"Descripción de la solicitud",
+        "lista_solicitudes_derechos_pecuniarios":"Lista de solicitudes de derechos pecuniarios",
+        "resumen_solicitudes":"Resúmen solicitudes",
+        "gestionar": "Gestionar",
         "descargar": "Descargar",
         "opcion": "Opción",
-        "seguro_nuevo_recibo": "¿Está seguro de generar el nuevo recibo con el derecho pecuniario seleccionada?"
+        "verificar_datos": "Verificar datos para la generación de recibo",
+        "seguro_nuevo_recibo": "¿Está seguro de generar el nuevo recibo con el derecho pecuniario seleccionada?",
+        "concepto_recibo": "Concepto recibo",
+        "proyecto_curricular": "Proyecto curricular",
+        "codigos_relacionados": "Códigos relacionados al número de identificación",
+        "placeholder_codigos_relacionados": "Seleccione el código de interés para continuar",
+        "placeholder_derecho_pecuniario": "Seleccione el derecho pecuniario de interés",
+        "nombre": "Nombre",
+        "identificacion": "Identificación"
     },
     "tipo_inscripcion": {
         "titulo": "Tipos de Inscripción",
@@ -1709,8 +1732,8 @@
         "tooltip_editar": "Editar formación",
         "tooltip_eliminar": "Eliminar formación",
         "tooltip_crear": "Crear formación",
-        "actualizar":"¿Desea actualizar el registro de formación académica?",
-        "eliminar":"¿Desea eliminar el registro de formación académica?"
+        "actualizar": "¿Desea actualizar el registro de formación académica?",
+        "eliminar": "¿Desea eliminar el registro de formación académica?"
     },
     "solicitudes": {
         "respuesta": "La respuesta a esta solicitud ha sido registrada correctamente",
@@ -1795,10 +1818,10 @@
         "lista_personal_apoyo": "Lista personal de apoyo",
         "acta_compromiso": "Acta de compromiso de la práctica",
         "info_asistencia_practica": "Información de asistente a la práctica",
-        "fecha_respuesta":"Fecha",
-        "nombre_usuario":"Nombre del usuario",
-        "estado":"Estado",
-        "comentario":"Comentario",
+        "fecha_respuesta": "Fecha",
+        "nombre_usuario": "Nombre del usuario",
+        "estado": "Estado",
+        "comentario": "Comentario",
         "colaborador": "Colaborador",
         "actions": "Agregar/Remover",
         "placeholder_docDocente": "Ej: 777777777",
@@ -1807,7 +1830,7 @@
         "placeholder_correo": "Ej: pedro@correo.com",
         "placeholder_telefono": "Ej: 55555555",
         "placeholder_proyecto": "Ej: Ingeniería eléctrica",
-        "placeholder_espacio_academico" : "123 - Calculo Integral",
+        "placeholder_espacio_academico": "123 - Calculo Integral",
         "placeholder_semestre": "Ej: 1, 2, 3...",
         "placeholder_numero_estudiantes": "Ej: 1, 2, 3...",
         "placeholder_num_grupos": "Ej: 1, 2, 3...",
