@@ -51,7 +51,7 @@ export class PagesComponent implements OnInit {
       if (!n.Url.indexOf('http')) {
         node = {
           title: n.Nombre,
-          icon: 'list',
+          icon: 'file-outline',
           url: n.Url,
           home: false,
           key: n.Nombre,
@@ -60,7 +60,7 @@ export class PagesComponent implements OnInit {
       } else {
         node = {
           title: n.Nombre,
-          icon: 'list',
+          icon: 'file-outline',
           link: n.Url,
           home: false,
           key: n.Nombre,
@@ -69,13 +69,13 @@ export class PagesComponent implements OnInit {
       if (n.hasOwnProperty('Opciones')) {
         if (n.Opciones !== null) {
           const children = this.translateTree(n.Opciones);
-            node = { ...node, ...{ children: children }, ...{ icon: 'menu-outline' } };
-          }
-          return node;
-        } else {
-          return node;
+          node = { ...node, ...{ children: children }, ...{ icon: 'folder-outline' } };
         }
-      });
+        return node;
+      } else {
+        return node;
+      }
+    });
     return trans;
   }
 
@@ -93,48 +93,55 @@ export class PagesComponent implements OnInit {
     if (this.roles.length === 0) {
       this.roles = 'ASPIRANTE';
     }
+    const menuStorage = localStorage.getItem('menu');
+    if (menuStorage) {
+      this.dataMenu = JSON.parse(atob(menuStorage));
+      this.menu = this.translateTree(this.dataMenu)
+      this.menu.unshift(homeOption);
+      this.translateMenu();
+    } else {
+      this.menuws.get(this.roles + '/SGA').subscribe(
+        data => {
+          this.dataMenu = <any>data;
+          localStorage.setItem('menu', btoa(JSON.stringify(data)));
+          this.menu = this.translateTree(this.dataMenu)
+          this.menu.unshift(homeOption);
+          this.translateMenu();
+        },
+        (error: HttpErrorResponse) => {
 
-    this.menuws.get(this.roles + '/SGA').subscribe(
-      data => {
-        this.dataMenu = <any>data;
-        this.menu = this.translateTree(this.dataMenu)
-        this.menu.unshift(homeOption);
-        this.translateMenu();
-      },
-      (error: HttpErrorResponse) => {
+          if (this.dataMenu === undefined) {
+            Swal.fire({
+              icon: 'info',
+              title: this.translate.instant('ERROR.rol_insuficiente_titulo'),
+              text: this.translate.instant('ERROR.rol_insuficiente'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              onAfterClose: () => {
+                window.location.href =
+                  environment.TOKEN.SIGN_OUT_URL +
+                  '?id_token_hint=' +
+                  window.localStorage.getItem('id_token') +
+                  '&post_logout_redirect_uri=' +
+                  environment.TOKEN.SIGN_OUT_REDIRECT_URL +
+                  '&state=' +
+                  window.localStorage.getItem('state');
+              },
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.menu'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          }
 
-        if (this.dataMenu === undefined) {
-          Swal.fire({
-            icon: 'info',
-            title: this.translate.instant('ERROR.rol_insuficiente_titulo'),
-            text: this.translate.instant('ERROR.rol_insuficiente'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            onAfterClose: () => {
-              window.location.href =
-                environment.TOKEN.SIGN_OUT_URL +
-                '?id_token_hint=' +
-                window.localStorage.getItem('id_token') +
-                '&post_logout_redirect_uri=' +
-                environment.TOKEN.SIGN_OUT_REDIRECT_URL +
-                '&state=' +
-                window.localStorage.getItem('state');
-            },
-          });
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.menu'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        }
-
-        //this.menu = MENU_ITEMS;
-        this.translateMenu();
-      });
-    this.translateMenu();
+          //this.menu = MENU_ITEMS;
+          this.translateMenu();
+        });
+    }
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => { // Live reload
       this.translateMenu();
     });
