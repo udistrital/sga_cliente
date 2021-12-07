@@ -14,7 +14,7 @@ export class LinkDownloadNuxeoComponent implements ViewCell, AfterViewInit {
   @Output() event: EventEmitter<any> = new EventEmitter();
   documentoData: any = null;
   documentoFile: any;
-  @Input() value: string | number;
+  @Input() value: any;
   @Input() rowData: any;
   errorDocument: boolean = false;
 

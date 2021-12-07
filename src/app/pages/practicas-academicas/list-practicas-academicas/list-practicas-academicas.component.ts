@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
 import * as moment from 'moment';
 
 @Component({
@@ -157,7 +159,18 @@ export class ListPracticasAcademicasComponent implements OnInit {
       this.getPracticasAcademicas(this.process).subscribe(practicas => {
         this.datosPracticas = practicas;
         this.loading = false;
-      })
+      },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          Swal.fire({
+            icon: 'error',
+            title: '404',
+            text: this.translate.instant('ERROR.404'),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.practicas_academicas'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        })
     });
 
   }

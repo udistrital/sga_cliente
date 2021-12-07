@@ -6,8 +6,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import Swal from 'sweetalert2';
 import { Docente } from '../../../@core/data/models/practicas_academicas/docente';
+import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
+import { PopUpManager } from '../../../managers/popUpManager';
 import { FORM_SOLICITUD_PRACTICAS, FORM_DOCUMENTOS_ADICIONALES, FORM_RESPUESTA_SOLICITUD } from '../form-solicitud-practica';
+import { UserService } from '../../../@core/data/users.service';
 
 @Component({
   selector: 'ngx-detalle-practica-academica',
@@ -17,29 +20,34 @@ import { FORM_SOLICITUD_PRACTICAS, FORM_DOCUMENTOS_ADICIONALES, FORM_RESPUESTA_S
 export class DetallePracticaAcademicaComponent implements OnInit {
 
   InfoDocentes: Array<Docente> = [];
-  formDocente: FormGroup;
   InfoPracticasAcademicas: any;
-  fechaRadicado: any;
-  estado: any;
+  InfoPersona: any = {}
+  InfoRespuesta: any;
+  formDocente: FormGroup;
   FormPracticasAcademicas: any;
+  formDocumentosAdicionales: any;
+  formRespuestaSolicitud: any;
   periodos: any[];
+  files: any = [];
   proyectos: any[];
+  estadosList: any = [];
+  estado: any;
+  idPractica: any;
+  fechaRadicado: any;
   espaciosAcademicos: any;
   tiposVehiculo: any;
   process: string;
   estadosSolicitud: any;
   sub: any;
   tablaEstados: any;
-  files: any = [];
-  formDocumentosAdicionales: any;
-  formRespuestaSolicitud: any;
-  estadosList: any = [];
   loading: boolean;
 
   constructor(
     private builder: FormBuilder,
     private translate: TranslateService,
     private sgamidService: SgaMidService,
+    private popUpManager: PopUpManager,
+    private userService: UserService,
     private _Activatedroute: ActivatedRoute) {
 
     this.loading = true;
@@ -55,14 +63,14 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     }]
 
     this.FormPracticasAcademicas = FORM_SOLICITUD_PRACTICAS;
-    this.formDocumentosAdicionales = FORM_DOCUMENTOS_ADICIONALES;
+    // this.formDocumentosAdicionales = FORM_DOCUMENTOS_ADICIONALES;
     this.formRespuestaSolicitud = FORM_RESPUESTA_SOLICITUD;
     this.construirForm();
     this.crearTabla();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.construirForm();
-      this.crearTabla();
       this.inicializiarDatos();
+      this.crearTabla();
+      this.construirForm();
     });
   }
 
@@ -71,39 +79,66 @@ export class DetallePracticaAcademicaComponent implements OnInit {
 
       this.sub = this._Activatedroute.paramMap.subscribe((params: any) => {
         const { process, id } = params.params;
+        this.idPractica = id;
 
         this.sgamidService.get('practicas_academicas/' + id).subscribe(practica => {
-          this.InfoPracticasAcademicas = practica["Data"];
-          this.InfoPracticasAcademicas.FechaHoraRegreso = this.InfoPracticasAcademicas.FechaHoraRegreso.slice(0, -4);
-          this.InfoPracticasAcademicas.FechaHoraSalida = this.InfoPracticasAcademicas.FechaHoraSalida.slice(0, -4);
+          const r = <any>practica;
+          if (practica !== null && r.Type !== 'error') {
+            if (r.Status === '200' && practica['Data'] !== null) {
+              this.InfoPracticasAcademicas = practica["Data"];
+              this.InfoPracticasAcademicas.FechaHoraRegreso = this.InfoPracticasAcademicas.FechaHoraRegreso.slice(0, -4);
+              this.InfoPracticasAcademicas.FechaHoraSalida = this.InfoPracticasAcademicas.FechaHoraSalida.slice(0, -4);
 
-          this.fechaRadicado = moment(this.InfoPracticasAcademicas.FechaRadicado, 'YYYY-MM-DD').format('DD/MM/YYYY');
-          this.estado = this.InfoPracticasAcademicas.EstadoTipoSolicitudId.EstadoId.Nombre
+              this.fechaRadicado = moment(this.InfoPracticasAcademicas.FechaRadicado, 'YYYY-MM-DD').format('DD/MM/YYYY');
+              this.estado = this.InfoPracticasAcademicas.EstadoTipoSolicitudId.EstadoId.Nombre;
 
-          let aux = [];
-          aux.push(this.InfoPracticasAcademicas.DocenteSolicitante);
-          this.InfoPracticasAcademicas.DocentesInvitados.forEach(docente => {
-            aux.push(docente);
-          });
-          this.InfoDocentes = aux;
-          this.estadosSolicitud = practica["Data"].Estados;
-          this.inicializiarDatos();
-          this.loading = false;
+              let aux = [];
+              aux.push(this.InfoPracticasAcademicas.DocenteSolicitante);
+              this.InfoPracticasAcademicas.DocentesInvitados.forEach(docente => {
+                aux.push(docente);
+              });
+              this.InfoDocentes = aux;
+              this.estadosSolicitud = practica["Data"].Estados;
+              this.inicializiarDatos();
+              this.loading = false;
+            }
+          }
         });
 
         this.process = atob(process);
 
         if (['invitation'].includes(this.process)) {
-          this.files = [
-            { id: 140089, label: this.translate.instant('practicas_academicas.' + 'cronograma_practica') },
-            { id: 140089, label: this.translate.instant('practicas_academicas.' + 'presupuesto_practica') },
-            { id: 140089, label: this.translate.instant('practicas_academicas.' + 'presentacion_practica') },
-            { id: 140089, label: this.translate.instant('practicas_academicas.' + 'lista_estudiantes') },
-            { id: 140089, label: this.translate.instant('practicas_academicas.' + 'guia_practica') },
-            { id: 140089, label: this.translate.instant('practicas_academicas.' + 'lista_personal_apoyo') },
-            { id: 140089, label: this.translate.instant('practicas_academicas.' + 'acta_compromiso') },
-            { id: 140089, label: this.translate.instant('practicas_academicas.' + 'info_asistencia_practica') },
-          ];
+          this.files = [];
+          this.InfoPracticasAcademicas.Documentos.forEach(documento => {
+            documento.id = documento.Id;
+            switch (documento.Nombre) {
+              case "Cronograma":
+                documento.label = this.translate.instant('practicas_academicas.' + 'cronograma_practica');
+                break;
+              case "Presupuesto":
+                documento.label = this.translate.instant('practicas_academicas.' + 'presupuesto_practica');
+                break;
+              case "Presentacion":
+                documento.label = this.translate.instant('practicas_academicas.' + 'presentacion_practica');
+                break;
+              case "ListaEstudiantes":
+                documento.label = this.translate.instant('practicas_academicas.' + 'lista_estudiantes');
+                break;
+              case "GuiaPractica":
+                documento.label = this.translate.instant('practicas_academicas.' + 'guia_practica');
+                break;
+              case "ListaPersonalApoyo":
+                documento.label = this.translate.instant('practicas_academicas.' + 'lista_personal_apoyo');
+                break;
+              case "ActaCompromiso":
+                documento.label = this.translate.instant('practicas_academicas.' + 'acta_compromiso');
+                break;
+              case "InfoAsistenciaPractica":
+                documento.label = this.translate.instant('practicas_academicas.' + 'info_asistencia_practica');
+                break;
+            }
+            this.files.push(documento);
+          });
         }
       });
     });
@@ -134,6 +169,11 @@ export class DetallePracticaAcademicaComponent implements OnInit {
               this.proyectos = res['Data']['proyectos'];
               this.tiposVehiculo = res['Data']['vehiculos'];
               this.espaciosAcademicos = [{ Nombre: '123 - Calculo Integral', Id: 1 }];
+              res['Data']['estados'].forEach(estado => {
+                if (estado['Nombre'] !== 'Radicada' && estado['Nombre'] !== 'Ejecutada') {
+                  this.estadosList.push(estado);
+                }
+              });
 
               this.FormPracticasAcademicas.campos[this.getIndexForm('Periodo')].opciones = this.periodos;
               this.FormPracticasAcademicas.campos[this.getIndexForm('Periodo')].valor = this.periodos[0];
@@ -188,11 +228,9 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       this.files.push(documento);
     });
 
-    this.estadosList = [
-      { Nombre: 'Verificada', Id: 1 },
-      { Nombre: 'Devuelta', Id: 2 },
-      { Nombre: 'Rechazada', Id: 3 },
-    ];
+    this.userService.tercero$.subscribe((user: any) => {
+      this.InfoPersona = { Nombre: user.NombreCompleto, FechaRespuesta: new Date(), IdTercero: user.Id };
+    })
   }
 
   construirForm() {
@@ -219,9 +257,9 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       campo.deshabilitar = true;
     });
 
-    this.formDocumentosAdicionales.campos.forEach(element => {
-      element.label = this.translate.instant('practicas_academicas.' + element.label_i18n);
-    });
+    // this.formDocumentosAdicionales.campos.forEach(element => {
+    //   element.label = this.translate.instant('practicas_academicas.' + element.label_i18n);
+    // });
 
     this.formRespuestaSolicitud.campos.forEach(element => {
       element.label = this.translate.instant('practicas_academicas.' + element.label_i18n);
@@ -237,11 +275,12 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   }
 
   verEstado(event) {
+    console.log(event.data)
     const opt: any = {
       title: this.translate.instant("GLOBAL.estado"),
-      html: `<span>${event.data.FechaSolicitud}</span><br>
-                <span>${event.data.EstadoSolicitud}</span><br>
-                <span class="form-control">${event.data.Observaciones}</span><br>`,
+      html: `<span>${moment(event.data.FechaCreacion, 'YYYY-MM-DD').format('DD/MM/YYYY')}</span><br>
+                <span>${this.InfoPracticasAcademicas.EstadoTipoSolicitudId.EstadoId.Nombre}</span><br>
+                <span class="form-control">${event.data.Comentario}</span><br>`,
       icon: "info",
       buttons: true,
       dangerMode: true,
@@ -266,6 +305,47 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     Swal.fire(opt);
   }
 
+  async enviarSolicitud(event) {
+    if (event.valid) {
+      if (event.nombre === "RESPUESTA_SOLICITUD") {
+        this.InfoRespuesta = event.data.documental;
+        this.InfoRespuesta.FechaRespuesta = momentTimezone.tz(event.data.documental.FechaRespuesta, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
+        this.InfoRespuesta.EstadoTipoSolicitudIdAnterior = this.InfoPracticasAcademicas.EstadoTipoSolicitudId;
+        this.loading = true;
+        this.sgamidService.put('practicas_academicas/' + this.idPractica, this.InfoRespuesta).subscribe(res => {
+          const r = <any>res["Response"]['Body'][0];
+          console.log(r !== null, r.Type !== 'error')
+          console.log(r.Status === '200', r["Data"] !== null)
+          if (r !== null && r.Type !== 'error') {
+            if (r.Status === '200' && r["Data"] !== null) {
+              this.ngOnInit();
+              this.formRespuestaSolicitud.campos.forEach(campo => {
+                campo.deshabilitar = true;
+              });
+              this.loading = false;
+              this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
+                this.translate.instant('GLOBAL.confirmarActualizar'));
+            }
+          } else {
+            this.loading = false;
+            this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.error_practicas_academicas'));
+          }
+        }, (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.crear') + '-' +
+              this.translate.instant('GLOBAL.info_practicas_academicas'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+
+      }
+    }
+  }
+
+
   crearTabla() {
     this.tablaEstados = {
       columns: {
@@ -285,7 +365,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
           },
           editable: false,
         },
-        Observaciones: {
+        Comentario: {
           title: this.translate.instant('solicitudes.observaciones'),
           width: '20%',
           editable: false,
