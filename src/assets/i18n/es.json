@@ -143,6 +143,7 @@
     },
     "GLOBAL": {
         "click_aqui": "Click aquí",
+        "cargar": "Cargar",
         "admitir": "Admitir",
         "proceso_admision_exitoso": "Proceso de admisión exitoso",
         "admitiendo_aspirantes": "Admitiendo aspirantes",
@@ -631,7 +632,8 @@
         "placeholder_cargo_mensaje": "Debe ingreso al menos 3 caracteres en el campo para buscar el cargo correspondiente.",
         "placeholder_vacio": " ",
         "info_practicas_academicas": "Solicitud de prácticas académicas",
-        "error_practicas_academicas": "No fue posible registrar la práctica académica"
+        "error_practicas_academicas": "No fue posible registrar la práctica académica",
+        "practicas_academicas": "Prácticas académicas"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
