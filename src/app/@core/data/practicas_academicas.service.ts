@@ -23,8 +23,9 @@ export class PracticasAcademicasService {
     }
 
     getPracticas(endpoint, id = null, stateFilter = null) {
+        let res: any;
         if (id) {
-            return this.requestManager.get(endpoint).pipe(map((practica: any) => {
+            res = this.requestManager.get(endpoint).pipe(map((practica: any) => {
                 return practica.Data.map((p: any) => {
                     return {
                         ...p,
@@ -35,11 +36,12 @@ export class PracticasAcademicasService {
                     }
                 }).filter((practicas: any) => (id == practicas.Id))
 
-            }))
-        }
-
-        if (stateFilter) {
-            return this.requestManager.get(endpoint).pipe(map((practica: any) => {
+            }),
+                catchError(error => {
+                    return error
+                }))
+        } else if (stateFilter) {
+            res = this.requestManager.get(endpoint).pipe(map((practica: any) => {
                 return practica.Data.map((p: any) => {
                     return {
                         ...p,
@@ -51,18 +53,25 @@ export class PracticasAcademicasService {
                 }).filter((practicas: any) => {
                     return (stateFilter.includes(practicas.EstadoId.Nombre))
                 })
-            }))
-        }
-
-        return this.requestManager.get(endpoint).pipe(map((practica: any) => {
-            return {
-                ...practica.Data,
-                ...{
-                    TipoSolicitud: practica.Data.EstadoTipoSolicitudId.TipoSolicitud,
-                    EstadoId: practica.Data.EstadoTipoSolicitudId.EstadoId
+            }),
+                catchError(error => {
+                    return error
+                }))
+        } else {
+            res = this.requestManager.get(endpoint).pipe(map((practica: any) => {
+                return {
+                    ...practica.Data,
+                    ...{
+                        TipoSolicitud: practica.Data.EstadoTipoSolicitudId.TipoSolicitud,
+                        EstadoId: practica.Data.EstadoTipoSolicitudId.EstadoId
+                    }
                 }
-            }
-        }))
+            }),
+                catchError(error => {
+                    return error
+                }))
+        }
+        return res;
     }
 
     get(path, endpoint) {

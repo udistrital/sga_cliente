@@ -10,7 +10,7 @@
       <ngx-solicitante-practica (loading)="changeLoading($event)" [docentesSolicitud]="InfoDocentes">
       </ngx-solicitante-practica>
       <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas"></ngx-dinamicform>
-      <ngx-dinamicform *ngIf="['process'].includes(process)" [normalform]="formDocumentosAdicionales"></ngx-dinamicform>
+      <!-- <ngx-dinamicform *ngIf="['process'].includes(process)" [normalform]="formDocumentosAdicionales"></ngx-dinamicform> -->
 
       <div class="files-container">
         <ngx-download-file-nuxeo (loading)="changeLoading($event)" *ngFor="let file of files" [idDoc]="file.id"
@@ -61,7 +61,7 @@
       </div>
 
       <ngx-dinamicform *ngIsGranted="['COORDINADOR', 'COORDINADOR_PREGADO', 'COORDINADOR_POSGRADO']"
-        [normalform]="formRespuestaSolicitud" [modeloData]="InfoPersona">
+        [normalform]="formRespuestaSolicitud" [modeloData]="InfoPersona" (result)="enviarSolicitud($event)">
       </ngx-dinamicform>
 
 

@@ -142,6 +142,7 @@
     "GLOBAL": {
         "click_aqui": "Click here",
         "detalle": "Detail",
+        "cargar": "Upload",
         "cargando": "Loading...",
         "buscar": "Search",
         "info": "Warning!",
@@ -599,7 +600,8 @@
         "placeholder_cargo_mensaje": "You must enter at least 3 characters in the field to search for the corresponding role.",
         "placeholder_vacio": " ",
         "info_practicas_academicas": "Academic Practice Request",
-        "error_practicas_academicas": "It was not possible to record the academic practice"
+        "error_practicas_academicas": "It was not possible to record the academic practice",
+        "practicas_academicas": "Academic Practice"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
