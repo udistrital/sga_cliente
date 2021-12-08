@@ -77,6 +77,9 @@
                     </span>
                 </div>
             </div>
+            <ngx-dinamicform [normalform]="formularioSolicitud"
+                (result)="enviarSolicitud($event)" >
+            </ngx-dinamicform>
         </fieldset>
         <br>
 

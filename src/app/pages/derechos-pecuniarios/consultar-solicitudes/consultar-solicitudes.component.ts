@@ -19,6 +19,33 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   data: any[] = [];
   solicitudData: any = null;
 
+  formularioSolicitud  = {
+      tipo_formulario: 'mini',
+      btn: 'Enviar respuesta',
+      alertas: true,
+      modelo: 'data',
+      campos: [
+      {
+          etiqueta: 'textarea',
+          claseGrid: 'col-12',
+          nombre: 'Observaciones',
+          label_i18n: 'observaciones',
+          placeholder_i18n: 'observaciones',
+          requerido: true,
+          tipo: 'text',
+      },
+      {
+          etiqueta: 'file',
+          claseGrid: 'col-12',
+          nombre: 'File',
+          label_i18n: 'adjuntar',
+          placeholder_i18n: 'adjuntar',
+          requerido: true,
+          tipo: 'text',
+      }
+    ]
+  }
+
   arr_proyecto: InstitucionEnfasis[] = [];
   source_emphasys: LocalDataSource = new LocalDataSource();
   proyectos = [];
@@ -27,12 +54,14 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
   settings: any;
+  
 
   constructor(
     private translate: TranslateService,) {
     this.dataSource = new LocalDataSource();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
+      this.updateLanguage();
     });
     this.loadInfoPersona();
     this.createTable();
@@ -44,6 +73,13 @@ export class ConsultarSolicitudesDerechosPecuniarios {
 
   public async loadInfoPersona(): Promise<void> {
 
+  }
+
+  updateLanguage(){
+    this.formularioSolicitud.campos.forEach((field: any)=> {
+      field.label = this.translate.instant('GLOBAL.' + field.label_i18n);
+      field.placeholder = this.translate.instant('GLOBAL.' + field.placeholder_i18n);
+    })
   }
 
   createTable() {
@@ -125,6 +161,7 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   }
 
   ngOnInit() {
+    this.updateLanguage();
   }
 
   async loadInfoRecibos() {
@@ -146,28 +183,8 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   }
 
 
-  generar_recibo() {
-  }
-
-  generar_solicitud_derecho() {
-  }
-
-  descargarReciboPago(data) {
-
-  }
-
-  abrirPago(data) {
-  }
-
-  cargarPeriodo() {
-
-  }
-
-  loadConcepto(event) {
-  }
-
-  cargarDatos(event) {
-
+  enviarSolicitud(event) {
+    console.log(event);
   }
 
 
