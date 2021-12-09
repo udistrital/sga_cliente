@@ -77,10 +77,36 @@
                     </span>
                 </div>
             </div>
-            <ngx-dinamicform [normalform]="formularioSolicitud"
-                (result)="enviarSolicitud($event)" >
-            </ngx-dinamicform>
         </fieldset>
+        <br>
+        <fieldset [ngClass]="{'fieldseter':true} " *ngIf="gestion">
+            <legend> {{ 'derechos_pecuniarios.respuesta_dada_por' | translate }} </legend>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">{{'GLOBAL.nombre' | translate}}</label>
+                </div>
+                <div class="col-9">
+                    <span class="form-control">
+                        {{userResponse.Nombre}}
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">{{'GLOBAL.rol' | translate}}</label>
+                </div>
+                <div class="col-9">
+                    <span class="form-control">
+                        {{userResponse.Rol}}
+                    </span>
+                </div>
+            </div>
+            <br>
+        </fieldset>
+        <br>
+        <ngx-dinamicform [normalform]="formularioSolicitud" (result)="enviarSolicitud($event)" *ngIf="gestion">
+        </ngx-dinamicform>
         <br>
 
     </nb-card-body>

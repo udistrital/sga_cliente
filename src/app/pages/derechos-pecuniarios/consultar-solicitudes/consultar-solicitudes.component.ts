@@ -18,12 +18,17 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   dataSource: LocalDataSource;
   data: any[] = [];
   solicitudData: any = null;
+  userResponse = {
+    Nombre: 'Maria Casquito',
+    Rol: 'Coordinador'
+  }
 
   formularioSolicitud  = {
       tipo_formulario: 'mini',
       btn: 'Enviar respuesta',
       alertas: true,
       modelo: 'data',
+      customPadding: '0' ,
       campos: [
       {
           etiqueta: 'textarea',

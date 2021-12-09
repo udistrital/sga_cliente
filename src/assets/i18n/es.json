@@ -142,11 +142,12 @@
         }
     },
     "GLOBAL": {
+        "rol":"Rol",
         "click_aqui": "Click aquí",
         "cargar": "Cargar",
         "admitir": "Admitir",
-        "adjuntar":"Adjuntar",
-        "observaciones":"Observaciones",
+        "adjuntar": "Adjuntar",
+        "observaciones": "Observaciones",
         "proceso_admision_exitoso": "Proceso de admisión exitoso",
         "admitiendo_aspirantes": "Admitiendo aspirantes",
         "aspirantes_correctamente": "aspirantes correctamente",
@@ -1694,9 +1695,9 @@
         "estado": "Estado\nsolicitud",
         "ver_recibo": "Ver\nrecibo",
         "ver_soporte": "Ver soporte\nde pago",
-        "descripcion_solicitud":"Descripción de la solicitud",
-        "lista_solicitudes_derechos_pecuniarios":"Lista de solicitudes de derechos pecuniarios",
-        "resumen_solicitudes":"Resúmen solicitudes",
+        "descripcion_solicitud": "Descripción de la solicitud",
+        "lista_solicitudes_derechos_pecuniarios": "Lista de solicitudes de derechos pecuniarios",
+        "resumen_solicitudes": "Resúmen solicitudes",
         "gestionar": "Gestionar",
         "descargar": "Descargar",
         "opcion": "Opción",
@@ -1708,7 +1709,8 @@
         "placeholder_codigos_relacionados": "Seleccione el código de interés para continuar",
         "placeholder_derecho_pecuniario": "Seleccione el derecho pecuniario de interés",
         "nombre": "Nombre",
-        "identificacion": "Identificación"
+        "identificacion": "Identificación",
+        "respuesta_dada_por": "Respuesta dada por"
     },
     "tipo_inscripcion": {
         "titulo": "Tipos de Inscripción",
