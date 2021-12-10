@@ -142,6 +142,8 @@
     "GLOBAL": {
         "click_aqui": "Click here",
         "detalle": "Detail",
+        "adjuntar":"Attach",
+        "observaciones":"Observations",
         "cargar": "Upload",
         "cargando": "Loading...",
         "buscar": "Search",

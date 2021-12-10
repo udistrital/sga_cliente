@@ -204,3 +204,11 @@
 .no-mostrar {
   display: none;
 }
+
+
+.buttons-container {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  margin-top: 2rem;
+}
