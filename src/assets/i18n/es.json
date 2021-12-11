@@ -1710,7 +1710,8 @@
         "placeholder_derecho_pecuniario": "Seleccione el derecho pecuniario de interés",
         "nombre": "Nombre",
         "identificacion": "Identificación",
-        "respuesta_dada_por": "Respuesta dada por"
+        "respuesta_dada_por": "Respuesta dada por",
+        "ver_respuesta":"Respuesta"
     },
     "tipo_inscripcion": {
         "titulo": "Tipos de Inscripción",

@@ -258,6 +258,17 @@ export class GeneracionRecibosDerechosPecuniarios {
             instance.save.subscribe((data) => console.log(data))
           },
         },
+        VerRespuesta: {
+          title: this.translate.instant('derechos_pecuniarios.ver_respuesta'),
+          width: '5%',
+          editable: false,
+          filter: false,
+          renderComponent: LinkDownloadNuxeoComponent,
+          type: 'custom',
+          // onComponentInitFunction: (instance) => {
+          //   instance.save.subscribe((data) => this.descargarReciboPago(data))
+          // },
+        },
       },
       mode: 'external',
     }
@@ -306,7 +317,8 @@ export class GeneracionRecibosDerechosPecuniarios {
         icon: 'fa fa-paper-plane fa-2x',
         label: 'Solicitar',
         class: "btn btn-primary"
-      }
+      },
+      VerRespuesta: 140837,
     }]);
     this.loading = true;
     // Función del MID que retorna el estado del recibo
