@@ -135,6 +135,7 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
 
   getPracticasAcademicas(param) {
+    console.log(param);
     const endpoint = 'practicas_academicas?query=EstadoTipoSolicitudId.Id:34&fields=Id,FechaRadicacion,EstadoTipoSolicitudId';
     if (param === 'news') {
       return this.practicasService.getPracticas(endpoint, null, ['Radicada']);
@@ -143,6 +144,9 @@ export class ListPracticasAcademicasComponent implements OnInit {
       return this.practicasService.getPracticas(endpoint, null, ['Aprobada', 'Rechazada', 'Devuelta']);
     }
     if (param === 'invitation') {
+      return this.practicasService.getPracticas(endpoint, null, ['Aprobada']);
+    }
+    if (param === 'report') {
       return this.practicasService.getPracticas(endpoint, null, ['Aprobada']);
     }
     if (param === 'list') {
