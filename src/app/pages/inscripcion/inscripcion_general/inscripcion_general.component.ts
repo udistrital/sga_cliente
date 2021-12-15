@@ -356,7 +356,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
       this.sgaMidService.get('persona/consultar_complementarios/' + this.info_persona_id)
         .subscribe(res => {
-          if (res !== null && JSON.stringify(res[0]) !== '{}') {
+          if (res !== null && JSON.stringify(res[0]) !== '{}' && res.Response.Code !== '404') {
             this.percentage_info = this.percentage_info + 50;
             this.percentage_tab_info[1] = 50;
           } else {
@@ -378,7 +378,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
       this.sgaMidService.get('inscripciones/info_complementaria_tercero/' + this.info_persona_id)
         .subscribe(res => {
-          if (res !== null && JSON.stringify(res[0]) !== '{}') {
+          if (res !== null && JSON.stringify(res[0]) !== '{}' && res.Response.Code !== '404') {
             this.percentage_info = this.percentage_info + 50;
             this.percentage_tab_info[2] = 50;
           } else {

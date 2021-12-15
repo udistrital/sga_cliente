@@ -34,19 +34,19 @@ export class ListIdiomasComponent implements OnInit {
   percentage: number;
   persona_id: number;
 
-  constructor (
+  constructor(
     private translate: TranslateService,
     private idiomaService: IdiomaService,
     private userService: UserService,
     private popUpManager: PopUpManager,
   ) {
-      this.loadData();
+    this.loadData();
+    this.cargarCampos();
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
-      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-        this.cargarCampos();
-      });
-      this.loading = false;
-    }
+    });
+    this.loading = false;
+  }
 
   crear_inscripcion(data) {
     this.bridge_create_inscripcion.emit(data);
@@ -123,16 +123,18 @@ export class ListIdiomasComponent implements OnInit {
       .subscribe(res => {
         if (res !== null && JSON.stringify(res[0]) !== '{}') {
           const data = <Array<any>>res;
-            this.loading = false;
-            this.getPercentage(1);
-            this.source.load(data);
+          this.getPercentage(1);
+          this.source.load(data);
+        } else {
+          this.getPercentage(0);
+          this.source.load([])
         }
         this.loading = false;
       },
-      (error: HttpErrorResponse) => {
-        this.loading = true;
-        this.popUpManager.showErrorAlert(this.translate.instant('ERROR.' + error.status));
-      });
+        (error: HttpErrorResponse) => {
+          this.loading = true;
+          this.popUpManager.showErrorAlert(this.translate.instant('ERROR.' + error.status));
+        });
   }
 
   onChange(event) {
@@ -156,7 +158,7 @@ export class ListIdiomasComponent implements OnInit {
             if (res !== null) {
               this.loadData();
               this.popUpManager.showInfoToast(
-                this.translate.instant('GLOBAL.idioma') + ' ' + this.translate.instant('GLOBAL.confirmarEliminar'),
+                this.translate.instant('GLOBAL.idioma') + ' ' + this.translate.instant('GLOBAL.confirmarEliminar'), 5000
               );
             }
             this.loading = false;
