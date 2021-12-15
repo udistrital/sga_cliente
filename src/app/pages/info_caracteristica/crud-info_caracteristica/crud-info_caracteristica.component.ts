@@ -263,7 +263,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       this.denied_acces = false;
       this.sgamidService.get('persona/consultar_complementarios/' + this.info_persona_id)
         .subscribe(async res => {
-          if (res !== null) {
+          if (res !== null && res.Response.Code !== '404') {
             this.datosGet = <InfoCaracteristicaGet>res.Response.Body[0].Data;
             this.info_info_caracteristica = <InfoCaracteristica>res.Response.Body[0].Data;
             this.info_info_caracteristica.Ente = (1 * this.info_caracteristica_id);

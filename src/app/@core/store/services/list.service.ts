@@ -1,5 +1,3 @@
-import { async } from '@angular/core/testing';
-import { PersonaService } from '../../data/persona.service';
 import { Injectable } from '@angular/core';
 import { IAppState } from '../app.state';
 import { Store } from '@ngrx/store';
@@ -21,7 +19,6 @@ import { ParametrosService } from '../../data/parametros.service';
 export class ListService {
 
   constructor(
-    private personaService: PersonaService,
     private inscripcionService: InscripcionService,
     private idiomaService: IdiomaService,
     private coreService: CoreService,
