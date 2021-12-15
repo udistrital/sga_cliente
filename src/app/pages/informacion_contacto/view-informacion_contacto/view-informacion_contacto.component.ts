@@ -54,7 +54,7 @@ export class ViewInformacionContactoComponent implements OnInit {
         this.sgaMidService.get(`inscripciones/info_complementaria_tercero/${this.persona_id}`)
           .subscribe(res => {
             if (res !== null) {
-              this.info_informacion_contacto = <any>res;
+              this.info_informacion_contacto = <any>res.Response.Body[0];
             }
           },
             (error: HttpErrorResponse) => {
