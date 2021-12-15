@@ -175,7 +175,7 @@ export class CrudInformacionContactoComponent implements OnInit {
     if (this.persona_id) {
       this.sgaMidService.get('inscripciones/info_complementaria_tercero/' + this.persona_id)
         .subscribe(res => {
-          if (res !== null) {
+          if (res !== null && res.Response.Code !== '404') {
             this.info_informacion_contacto = <InformacionContacto>res;
             if (this.info_informacion_contacto.PaisResidencia !== null && this.info_informacion_contacto.DepartamentoResidencia !== null
               && this.info_informacion_contacto.CiudadResidencia != null) {

@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
-import { DescuentoAcademicoService } from '../../../@core/data/descuento_academico.service';
-import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { SolicitudDescuento } from '../../../@core/data/models/descuento/solicitud_descuento';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -53,8 +51,6 @@ export class ListDescuentoAcademicoComponent implements OnInit {
 
   constructor(private translate: TranslateService,
     private mid: CampusMidService,
-    private descuentoService: DescuentoAcademicoService,
-    private inscripcionService: InscripcionService,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
     private toasterService: ToasterService) {
@@ -110,6 +106,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
             const r = <any>result.Data.Body[1];
                 if (result !== null && result.Data.Code == '404') {
                   this.popUpManager.showAlert('', this.translate.instant('inscripcion.sin_descuento'));
+                  this.getPercentage(0);
                 }else {
                   this.data = <Array<SolicitudDescuento>>r;
                   this.getPercentage(1);
