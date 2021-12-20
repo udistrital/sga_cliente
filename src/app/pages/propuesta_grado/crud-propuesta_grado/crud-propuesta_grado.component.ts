@@ -90,6 +90,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
     this.loading = true;
     this.cargarValores().then(aux => {
       this.loadLists();
+      this.loadPropuestaGrado();
     });
   }
 
@@ -372,7 +373,6 @@ export class CrudPropuestaGradoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadPropuestaGrado();
   }
 
   validarForm(event) {

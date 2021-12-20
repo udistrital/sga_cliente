@@ -7,6 +7,8 @@ import { AuthGuard } from '../../@core/_guards/auth.guard';
 import { PreinscripcionComponent } from './preinscripcion/preinscripcion.component';
 import { CrudInscripcionMultipleComponent } from './crud-inscripcion_multiple/crud-inscripcion_multiple.component';
 import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.component';
+import { TransferenciaComponent } from './transferencia/transferencia.component';
+import { SolicitudTransferenciaComponent } from './solicitud-transferencia/solicitud-transferencia.component';
 
 const routes: Routes = [{
   path: '',
@@ -14,7 +16,16 @@ const routes: Routes = [{
   children: [{
     path: 'preinscripcion',
     component: PreinscripcionComponent,
-  }],
+  }, {
+    path: 'transferencia',
+    component: TransferenciaComponent,
+  },
+  {
+    path: 'solicitud-transferencia',
+    component: SolicitudTransferenciaComponent,
+  },
+
+  ],
 }];
 
 @NgModule({
@@ -35,4 +46,6 @@ export const routedComponents = [
   PreinscripcionComponent,
   CrudInscripcionMultipleComponent,
   ViewInscripcionComponent,
+  TransferenciaComponent,
+  SolicitudTransferenciaComponent,
 ];

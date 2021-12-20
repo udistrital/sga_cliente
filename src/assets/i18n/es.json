@@ -101,7 +101,8 @@
         "inscripcion": {
             "inscripcion": "Inscripción",
             "inscripcion_general": "Inscripción a un \nproyecto curricular",
-            "preinscripcion": "Preinscripción a \nproyectos curriculares"
+            "preinscripcion": "Preinscripción a \nproyectos curriculares",
+            "transferencia":"Transferencia"
         },
         "admision": {
             "evaluacion_documentos": "Evaluación de documentos \nde inscritos",
@@ -134,7 +135,8 @@
             "ver_nuevas_solicitudes": "Nuevas solicitudes",
             "listado_practicas": "Listado de prácticas\nacadémicas",
             "en_proceso": "Solicitudes en proceso",
-            "invitacion": "Invitación a prácticas\nacadémicas"
+            "invitacion": "Invitación a prácticas\nacadémicas",
+            "informe_practica": "Informe práctica"
         },
         "espacios_academicos": {
             "espacios_academicos": "Espacios Académicos",
@@ -1209,6 +1211,7 @@
         "estado": "Estado",
         "nueva": "Realizar nueva preinscripción",
         "listado": "Listado de preinscripciones",
+        "listado_solicitudes":"Listado de solicitudes",
         "aviso_programa": "Seleccione el programa al que desea inscribirse",
         "aviso_nivel": "Seleccione el nivel al que desea inscribirse",
         "info_basica": "Información básica",
@@ -1269,7 +1272,21 @@
         "alerta_veracidad_informacion": "Aspirante, tenga en cuenta que la información que diligenciará a continuación debe ser verídica para poder continuar con el proceso de inscripción.",
         "alerta_discapacidades": "Aspirante, tenga en cuenta que la discapacidad debe estar contenida en la ley estatutaria 1618 de 2013, con su respectivo soporte documental, si usted tiene más de una condición de discapacidad, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias.",
         "alerta_poblacion": "Aspirante, si usted pertenece a un tipo de población especifica tener en cuenta que debe adjuntar su respectivo soporte documental de acuerdo a la Ley 1448 de 2001 (registro único de victimas), y la Resolución 0762 de 2020 del Ministerio del Interior (certificado de autorreconocimiento), por favor subir un solo documento en formato pdf con todas las certificaciones necesarias.",
-        "alerta_poblacion_discapacidades": "Aspirante, tenga en cuenta que la discapacidad debe estar contenida en la ley estatutaria 1618 de 2013, con su respectivo soporte documental, además si usted pertenece a un tipo de población especifica tenga en cuenta que debe adjuntar su respectivo soporte documental de acuerdo a la Ley 1448 de 2001 (registro único de victimas), y la Resolución 0762 de 2020 del Ministerio del Interior (certificado de autorreconocimiento). Si usted tiene más de una condición de discapacidad o si pertenece a más de una población, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias en la categoría correspondiente."
+        "alerta_poblacion_discapacidades": "Aspirante, tenga en cuenta que la discapacidad debe estar contenida en la ley estatutaria 1618 de 2013, con su respectivo soporte documental, además si usted pertenece a un tipo de población especifica tenga en cuenta que debe adjuntar su respectivo soporte documental de acuerdo a la Ley 1448 de 2001 (registro único de victimas), y la Resolución 0762 de 2020 del Ministerio del Interior (certificado de autorreconocimiento). Si usted tiene más de una condición de discapacidad o si pertenece a más de una población, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias en la categoría correspondiente.",
+        "alerta_transferencia":"Aspirante, recuerde que para realizar este tipo de trámite debe estar dentro de las fechas estipuladas en el programa curricular de interés.",
+        "solicitud_transferencia":"Solicitud de transferencia",
+        "btn_nueva_solicitud":"Realizar nueva solicitud",
+        "btn_descargar_normativa":"Descargar normativa relacionada",
+        "recibo":"# Recibo",
+        "concepto":"Concepto",
+        "estad":"Estado",
+        "tipo_inscripcion":"Seleccione el tipo de inscripción que desea realizar",
+        "codigo_estudiante":"Código del estudiante",
+        "proyecto_curricular":"Proyecto curricular",
+        "periodo_preinscripcion": "Periodo al cual se va a preinscribir",
+        "calendario_academico":"Calendario académico para:"
+
+
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -1710,7 +1727,8 @@
         "placeholder_derecho_pecuniario": "Seleccione el derecho pecuniario de interés",
         "nombre": "Nombre",
         "identificacion": "Identificación",
-        "respuesta_dada_por": "Respuesta dada por"
+        "respuesta_dada_por": "Respuesta dada por",
+        "ver_respuesta":"Respuesta"
     },
     "tipo_inscripcion": {
         "titulo": "Tipos de Inscripción",
@@ -1858,7 +1876,9 @@
         "ver_listado_estados": "Ver listado de estados",
         "estados": "Estados",
         "fecha_radicacion": "Fecha de radicación",
-        "estado_actual": "Estado actual de la solicitud"
+        "estado_actual": "Estado actual de la solicitud",
+        "informe_practica":"Informe de la práctica",
+        "cumplido_practica":"Cumplido de la práctica"
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Preinscripción de Espacios académicos",

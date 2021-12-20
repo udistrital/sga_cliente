@@ -9,7 +9,7 @@ import { Docente } from '../../../@core/data/models/practicas_academicas/docente
 import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { FORM_SOLICITUD_PRACTICAS, FORM_RESPUESTA_SOLICITUD } from '../form-solicitud-practica';
+import { FORM_SOLICITUD_PRACTICAS, FORM_RESPUESTA_SOLICITUD, FORM_DOCUMENTOS_ADICIONALES_LEGALIZACION } from '../form-solicitud-practica';
 import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
 import { UserService } from '../../../@core/data/users.service';
 
@@ -26,7 +26,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   InfoRespuesta: any;
   formDocente: FormGroup;
   FormPracticasAcademicas: any;
-  formDocumentosAdicionales: any;
+  formDocumentosAdicionalesLegalizacion: any;
   formRespuestaSolicitud: any;
   periodos: any[];
   files: any = [];
@@ -65,7 +65,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     }]
 
     this.FormPracticasAcademicas = FORM_SOLICITUD_PRACTICAS;
-    // this.formDocumentosAdicionales = FORM_DOCUMENTOS_ADICIONALES;
+    this.formDocumentosAdicionalesLegalizacion = FORM_DOCUMENTOS_ADICIONALES_LEGALIZACION;
     this.formRespuestaSolicitud = FORM_RESPUESTA_SOLICITUD;
     this.construirForm();
     this.crearTabla();
@@ -259,9 +259,10 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       campo.deshabilitar = true;
     });
 
-    // this.formDocumentosAdicionales.campos.forEach(element => {
-    //   element.label = this.translate.instant('practicas_academicas.' + element.label_i18n);
-    // });
+    this.formDocumentosAdicionalesLegalizacion.campos.forEach(element => {
+      element.label = this.translate.instant('practicas_academicas.' + element.label_i18n);
+      element.placeholder = this.translate.instant('practicas_academicas.' + element.placeholder_i18n);
+    });
 
     this.formRespuestaSolicitud.campos.forEach(element => {
       element.label = this.translate.instant('practicas_academicas.' + element.label_i18n);
@@ -398,6 +399,11 @@ export class DetallePracticaAcademicaComponent implements OnInit {
 
   changeLoading(event) {
     this.loading = event;
+  }
+
+  enviarLegalizacion(event){
+    console.log(event);
+
   }
 
 }
