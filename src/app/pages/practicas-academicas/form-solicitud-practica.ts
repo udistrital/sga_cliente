@@ -273,6 +273,43 @@ export const FORM_DOCUMENTOS_ADICIONALES = {
     ]
 }
 
+
+export const FORM_DOCUMENTOS_ADICIONALES_LEGALIZACION = {
+    tipo_formulario: 'mini',
+    alertas: true,
+    nombre: "Documentos adicionales",
+    btn: 'Enviar',
+    modelo: 'documental',
+    campos: [
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-12',
+            clase: 'form-control',
+            nombre: 'InformePractica',
+            label_i18n: 'informe_practica',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        },
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-12',
+            clase: 'form-control',
+            nombre: 'CumplidoPractica',
+            label_i18n: 'cumplido_practica',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        }
+    ]
+}
+
 export const FORM_RESPUESTA_SOLICITUD = {
     tipo_formulario: 'mini',
     alertas: true,

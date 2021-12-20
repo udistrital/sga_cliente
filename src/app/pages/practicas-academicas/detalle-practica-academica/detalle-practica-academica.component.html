@@ -60,9 +60,14 @@
         </button>
       </div>
 
+
       <ngx-dinamicform *ngIsGranted="['COORDINADOR', 'COORDINADOR_PREGADO', 'COORDINADOR_POSGRADO']"
         [normalform]="formRespuestaSolicitud" [modeloData]="InfoPersona" (result)="enviarSolicitud($event)">
       </ngx-dinamicform>
+
+      <ngx-dinamicform *ngIsGranted="['DOCENTE']"
+      [normalform]="formDocumentosAdicionalesLegalizacion" [modeloData]="Legalizacion" (result)="enviarLegalizacion($event)">
+    </ngx-dinamicform>
 
 
     </nb-card-body>
