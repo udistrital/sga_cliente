@@ -9,7 +9,8 @@ import { Docente } from '../../../@core/data/models/practicas_academicas/docente
 import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { FORM_SOLICITUD_PRACTICAS, FORM_DOCUMENTOS_ADICIONALES, FORM_RESPUESTA_SOLICITUD } from '../form-solicitud-practica';
+import { FORM_SOLICITUD_PRACTICAS, FORM_RESPUESTA_SOLICITUD } from '../form-solicitud-practica';
+import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
 import { UserService } from '../../../@core/data/users.service';
 
 @Component({
@@ -48,6 +49,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     private sgamidService: SgaMidService,
     private popUpManager: PopUpManager,
     private userService: UserService,
+    private practicasService: PracticasAcademicasService,
     private _Activatedroute: ActivatedRoute) {
 
     this.loading = true;
@@ -322,6 +324,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
               this.formRespuestaSolicitud.campos.forEach(campo => {
                 campo.deshabilitar = true;
               });
+              this.practicasService.clearCache();
               this.loading = false;
               this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
                 this.translate.instant('GLOBAL.confirmarActualizar'));

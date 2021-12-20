@@ -183,22 +183,26 @@ export class ListService {
   }
 
   public findLineaInvestigacion() {
-    this.store.select(<any>REDUCER_LIST.LineaInvestigacion).subscribe(
-      (list: any) => {
-        if (!list || list.length === 0) {
-          // this.coreService.get('linea_investigacion/?query=Activo:true&limit=0')
-          this.cidcService.get('subtypes/by-type/53')
-            .subscribe(
-              (result: any[]) => {
-                this.addList(REDUCER_LIST.LineaInvestigacion, result);
-              },
-              error => {
-                this.addList(REDUCER_LIST.LineaInvestigacion, []);
-              },
-            );
-        }
-      },
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.store.select(<any>REDUCER_LIST.LineaInvestigacion).subscribe(
+        (list: any) => {
+          if (!list || list.length === 0) {
+            // this.coreService.get('linea_investigacion/?query=Activo:true&limit=0')
+            this.cidcService.get('subtypes/by-type/53')
+              .subscribe(
+                (result: any[]) => {
+                  this.addList(REDUCER_LIST.LineaInvestigacion, result);
+                  resolve();
+                },
+                error => {
+                  this.addList(REDUCER_LIST.LineaInvestigacion, []);
+                  reject();
+                },
+              );
+          }
+        },
+      );
+    })
   }
 
   public findPais() {
@@ -493,16 +497,40 @@ export class ListService {
   }
 
   public findTipoProyecto() {
-    this.store.select(<any>REDUCER_LIST.TipoProyecto).subscribe(
+    return new Promise<void>((resolve, reject) => {
+      this.store.select(<any>REDUCER_LIST.TipoProyecto).subscribe(
+        (list: any) => {
+          if (!list || list.length === 0) {
+            this.inscripcionService.get('tipo_proyecto/?query=Activo:true&limit=0')
+              .subscribe(
+                (result: any[]) => {
+                  this.addList(REDUCER_LIST.TipoProyecto, result);
+                  resolve();
+                },
+                error => {
+                  this.addList(REDUCER_LIST.TipoProyecto, []);
+                  reject();
+                },
+              );
+          }
+        },
+      );
+    })
+  }
+
+
+  public findTipoParametro() {
+    this.store.select(<any>REDUCER_LIST.TipoParametro).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.inscripcionService.get('tipo_proyecto/?query=Activo:true&limit=0')
+          this.parametrosService.get('parametro?query=TipoParametroId:13')
             .subscribe(
-              (result: any[]) => {
-                this.addList(REDUCER_LIST.TipoProyecto, result);
+              (result: any) => {
+                const r = <any>result.Data;
+                this.addList(REDUCER_LIST.TipoParametro, r);
               },
               error => {
-                this.addList(REDUCER_LIST.TipoProyecto, []);
+                this.addList(REDUCER_LIST.TipoParametro, []);
               },
             );
         }
@@ -510,46 +538,29 @@ export class ListService {
     );
   }
 
-
-public findTipoParametro() {
-  this.store.select(<any>REDUCER_LIST.TipoParametro).subscribe(
-    (list: any) => {
-      if (!list || list.length === 0) {
-        this.parametrosService.get('parametro?query=TipoParametroId:13')
-          .subscribe(
-            (result: any) => {
-              const r = <any>result.Data;
-              this.addList(REDUCER_LIST.TipoParametro, r);
-            },
-            error => {
-              this.addList(REDUCER_LIST.TipoParametro, []);
-            },
-          );
-      }
-    },
-  );
-}
-
-  public async findGrupoInvestigacion() {
-    this.loading = true;
-    this.store.select(<any>REDUCER_LIST.GrupoInvestigacion).subscribe(
-      async (list: any) => {
-        if (!list || list.length === 0) {
-          // this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
-          this.cidcService.get('research_units/?query=Activo:true&limit=0')
-            .subscribe(
-              async (result: any) => {
-                const r = <any>result.data;
-                this.addList(REDUCER_LIST.GrupoInvestigacion, r);
-              },
-              error => {
-                this.addList(REDUCER_LIST.GrupoInvestigacion, []);
-              },
-            );
-        }
-        this.loading = false;
-      },
-    );
+  public findGrupoInvestigacion() {
+    return new Promise<void>((resolve, reject) => {
+      this.store.select(<any>REDUCER_LIST.GrupoInvestigacion).subscribe(
+        (list: any) => {
+          if (!list || list.length === 0) {
+            // this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
+            this.cidcService.get('research_units/?query=Activo:true&limit=0')
+              .subscribe(
+                (result: any) => {
+                  const r = <any>result.data;
+                  this.addList(REDUCER_LIST.GrupoInvestigacion, r);
+                  resolve();
+                },
+                error => {
+                  this.addList(REDUCER_LIST.GrupoInvestigacion, []);
+                  reject();
+                },
+              );
+          }
+          // this.loading = false;
+        },
+      );
+    })
   }
 
   public findPeriodoAcademico() {
