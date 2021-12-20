@@ -333,6 +333,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
   }
 
   verPropuesta(document) {
+    document.Id = document.DocumentoId;
     this.pivotDocument.updateDocument(document);
   }
 

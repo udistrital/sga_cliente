@@ -123,6 +123,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   }
 
   abrirDocumento(documento: any) {
+    documento.Id = documento.DocumentoId;
     this.pivotDocument.updateDocument(documento);
   }
 }

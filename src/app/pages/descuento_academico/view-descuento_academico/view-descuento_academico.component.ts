@@ -105,8 +105,6 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
-
-
         }
       },
         (error: HttpErrorResponse) => {
