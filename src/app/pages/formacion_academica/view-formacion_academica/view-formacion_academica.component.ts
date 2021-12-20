@@ -1,12 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { UbicacionService } from '../../../@core/data/ubicacion.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
-import { DocumentoService } from '../../../@core/data/documento.service';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { SgaMidService } from './../../../@core/data/sga_mid.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { UserService } from '../../../@core/data/users.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { PivotDocument } from '../../../@core/utils/pivot_document.service';
@@ -38,14 +34,10 @@ export class ViewFormacionAcademicaComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
-    private ubicacionesService: UbicacionService,
-    private campusMidService: CampusMidService,
     private sgaMidService: SgaMidService,
-    private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
-    private pivotDocument: PivotDocument,
-    private users: UserService) {
+    private pivotDocument: PivotDocument) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.pivotDocument.info$.subscribe((data) => {

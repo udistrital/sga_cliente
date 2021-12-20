@@ -10,7 +10,6 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { combineAll } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoDocumentosComponent } from '../dialogo-documentos/dialogo-documentos.component';
 import { Documento } from '../../../@core/data/models/documento/documento';
