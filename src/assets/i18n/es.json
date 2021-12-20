@@ -1876,7 +1876,9 @@
         "ver_listado_estados": "Ver listado de estados",
         "estados": "Estados",
         "fecha_radicacion": "Fecha de radicación",
-        "estado_actual": "Estado actual de la solicitud"
+        "estado_actual": "Estado actual de la solicitud",
+        "informe_practica":"Informe de la práctica",
+        "cumplido_practica":"Cumplido de la práctica"
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Preinscripción de Espacios académicos",

@@ -146,7 +146,7 @@ export class ListPracticasAcademicasComponent implements OnInit {
       return this.practicasService.getPracticas(endpoint, null, ['Acta aprobada']);
     }
     if (param === 'report') {
-      return this.practicasService.getPracticas(endpoint, null, ['Aprobada']);
+      return this.practicasService.getPracticas(endpoint, null, ['Acta aprobada']);
     }
     if (param === 'list') {
       return this.practicasService.getPracticas(endpoint, null, null);

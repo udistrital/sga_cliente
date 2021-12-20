@@ -277,13 +277,13 @@ export const FORM_DOCUMENTOS_ADICIONALES = {
 export const FORM_DOCUMENTOS_ADICIONALES_LEGALIZACION = {
     tipo_formulario: 'mini',
     alertas: true,
-    nombre: "DOCUMENTOS_ADICIONALES",
+    nombre: "Documentos adicionales",
     btn: 'Enviar',
     modelo: 'documental',
     campos: [
         {
             etiqueta: 'file',
-            claseGrid: 'col-12 col-md-6 mb-5',
+            claseGrid: 'col-12 col-md-12',
             clase: 'form-control',
             nombre: 'InformePractica',
             label_i18n: 'informe_practica',
@@ -296,7 +296,7 @@ export const FORM_DOCUMENTOS_ADICIONALES_LEGALIZACION = {
         },
         {
             etiqueta: 'file',
-            claseGrid: 'col-12 col-md-6 mb-5',
+            claseGrid: 'col-12 col-md-12',
             clase: 'form-control',
             nombre: 'CumplidoPractica',
             label_i18n: 'cumplido_practica',
