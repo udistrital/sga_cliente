@@ -9,7 +9,7 @@ import { Docente } from '../../../@core/data/models/practicas_academicas/docente
 import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { FORM_SOLICITUD_PRACTICAS, FORM_DOCUMENTOS_ADICIONALES, FORM_RESPUESTA_SOLICITUD } from '../form-solicitud-practica';
+import { FORM_SOLICITUD_PRACTICAS, FORM_DOCUMENTOS_ADICIONALES, FORM_RESPUESTA_SOLICITUD, FORM_DOCUMENTOS_ADICIONALES_LEGALIZACION } from '../form-solicitud-practica';
 import { UserService } from '../../../@core/data/users.service';
 
 @Component({
