@@ -6,13 +6,10 @@ import { Solicitante } from '../../../@core/data/models/solicitudes/solicitante'
 import { ACTUALIZAR_DATOS } from './form-actualizacion-datos';
 import { RESPUESTA_SOLICITUD } from './form-respuesta-solicitud';
 import { TercerosService } from '../../../@core/data/terceros.service';
-import { NuxeoService } from '../../../@core/utils/nuxeo.service';
-import { DocumentoService } from '../../../@core/data/documento.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
-import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import Swal from 'sweetalert2';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
@@ -148,8 +145,6 @@ export class ActualizacionDatosComponent implements OnInit {
     private translate: TranslateService,
     private autenticationService: ImplicitAutenticationService,
     private tercerosService: TercerosService,
-    private documentoService: DocumentoService,
-    private nuxeoService: NuxeoService,
     private sgaMidService: SgaMidService,
     private newNuxeoService: NewNuxeoService,
     private popUpManager: PopUpManager) {

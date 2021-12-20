@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import pdfMake from 'pdfmake/build/pdfmake';
+import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 import html2canvas from 'html2canvas';
-import { BehaviorSubject, interval, Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { interval, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-perfil',
@@ -40,7 +40,8 @@ export class PerfilComponent implements OnInit {
 
   @ViewChild('comprobante', {static: true}) comprobante: ElementRef;
 
-  constructor(private translate: TranslateService) {
+  constructor(private translate: TranslateService,
+    public pivotDocument: PivotDocument) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.loading = true;
