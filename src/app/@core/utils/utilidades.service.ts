@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import 'rxjs/add/observable/of';
 
 
@@ -10,7 +11,9 @@ export class UtilidadesService {
     static userArray: any[];
     static jsonArray: any[];
 
-    constructor() {
+    constructor(
+        private translate: TranslateService,
+    ) {
     }
 
     static getSumArray(array): any {
@@ -40,5 +43,20 @@ export class UtilidadesService {
         });
         return trans;
     }
+
+
+  translateFields(form, prefix, prefix_placeholder) {
+    form.campos = form.campos.map((field: any) => {
+      return {
+        ...field,
+        ...{
+          label: this.translate.instant(prefix + field.label_i18n),
+          placeholder: this.translate.instant(prefix + field.label_i18n)
+        }
+      }
+
+    });
+    console.log(form);
+  }
 
 }
