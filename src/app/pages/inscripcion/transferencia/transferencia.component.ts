@@ -4,7 +4,9 @@ import Swal from 'sweetalert2';
 import { LocalDataSource } from 'ng2-smart-table';
 import { CustomizeButtonComponent } from '../../../@theme/components/customize-button/customize-button.component';
 import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
-import { FORM_TRANSFERENCIA_INTERNA } from './forms-transferencia';
+import { FORM_TRANSFERENCIA_INTERNA } from '../forms-transferencia';
+import { Router } from "@angular/router";
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'transferencia',
@@ -13,37 +15,26 @@ import { FORM_TRANSFERENCIA_INTERNA } from './forms-transferencia';
 })
 export class TransferenciaComponent implements OnInit {
 
-  formTransferencia : any = null;
+  formTransferencia: any = null;
   listadoSolicitudes: boolean = true;
   settings: any = null;
   uid = null;
   dataSource: LocalDataSource;
   constructor(
     private translate: TranslateService,
+    private utilidades: UtilidadesService,
+    private router: Router,
   ) {
+
     this.formTransferencia = FORM_TRANSFERENCIA_INTERNA;
     this.dataSource = new LocalDataSource();
     this.uid = localStorage.getItem('persona_id');
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.translateFields(this.formTransferencia, 'inscripcion.');
+      this.utilidades.translateFields(this.formTransferencia, 'inscripcion.', 'inscripcion.');
     });
-    this.translateFields(this.formTransferencia, 'inscripcion.');
+    this.utilidades.translateFields(this.formTransferencia, 'inscripcion.', 'inscripcion.');
     this.createTable();
 
-  }
-
-  translateFields(form, prefix) {
-    form.campos = form.campos.map((field: any) => {
-      return {
-        ...field,
-        ...{
-          label: this.translate.instant(prefix + field.label_i18n),
-          placeholder: this.translate.instant(prefix + field.label_i18n)
-        }
-      }
-
-    });
-    console.log(form);
   }
 
   ngOnInit() {
@@ -108,30 +99,48 @@ export class TransferenciaComponent implements OnInit {
           renderComponent: CustomizeButtonComponent,
           type: 'custom',
           onComponentInitFunction: (instance) => {
-            instance.save.subscribe((data) => console.log("implement here!", data))
+            instance.save.subscribe((data) => {
+              const dataType = btoa(data['tipoTransferencia']);
+              this.router.navigate([`pages/inscripcion/solicitud-transferencia/${dataType}`])
+            })
           },
         },
       },
       mode: 'external',
     }
   }
-  generarRecibo(){
+  generarRecibo() {
 
   }
 
-  loadData(){
+  loadData() {
     this.dataSource.load([{
       Recibo: 99999,
-      Concepto:"Transferencia",
-      Programa:"Maestría ingeniería industrial",
+      Concepto: "Transferencia",
+      Programa: "Maestría ingeniería industrial",
       FechaGeneracion: '12-01-01',
-      Estado:"Pagado",
+      Estado: "Pagado",
       Descargar: 140837,
       Opcion: {
         icon: 'fa fa-pencil fa-2x',
         label: 'Inscribirme',
         class: "btn btn-primary"
       },
+      tipoTransferencia: 'interna'
+    },
+    {
+      Recibo: 99998,
+      Concepto: "Transferencia2",
+      Programa: "Maestría en Ciencias de la información y las comunicaciones",
+      FechaGeneracion: '12-01-01',
+      Estado: "Pagado",
+      Descargar: 140837,
+      Opcion: {
+        icon: 'fa fa-pencil fa-2x',
+        label: 'Inscribirme',
+        class: "btn btn-primary"
+      },
+      tipoTransferencia: 'externa'
     }]);
   }
 
