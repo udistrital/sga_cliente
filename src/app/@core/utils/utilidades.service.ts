@@ -54,9 +54,7 @@ export class UtilidadesService {
           placeholder: this.translate.instant(prefix + field.label_i18n)
         }
       }
-
     });
-    console.log(form);
   }
 
 }

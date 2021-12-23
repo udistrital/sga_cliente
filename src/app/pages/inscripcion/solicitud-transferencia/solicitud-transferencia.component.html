@@ -3,7 +3,23 @@
         {{ 'inscripcion.solicitud_transferencia' | translate }}
     </nb-card-header>
     <nb-card-body>
+        <fieldset>
+            <div class="col-12">
+                <b>{{ 'inscripcion.periodo' | translate }}</b>: {{ this.periodo }}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ 'inscripcion.nivel' | translate }}:</b> {{ nivel }}
+            </div>
+            <br />
+            <div class="col-12">
+                <b>{{ 'inscripcion.tipo' | translate }}:</b> {{ tipo }}
+            </div>
+        </fieldset>
+        <br>
         <ngx-dinamicform [normalform]="formTransferencia" (result)="validarForm($event)"></ngx-dinamicform>
+        <fieldset *ngIf="tipo === 'externa'">
+            <ngx-inscripcion_general [inscriptionSettings]="inscriptionSettings"></ngx-inscripcion_general>
+        </fieldset>
+
+
     </nb-card-body>
     <nb-card-footer>
         <div class="text-center">

@@ -21,7 +21,7 @@ const routes: Routes = [{
     component: TransferenciaComponent,
   },
   {
-    path: 'solicitud-transferencia/:type',
+    path: 'solicitud-transferencia/:type/:level',
     component: SolicitudTransferenciaComponent,
   },
 

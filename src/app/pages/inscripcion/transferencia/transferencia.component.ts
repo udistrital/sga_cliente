@@ -101,7 +101,8 @@ export class TransferenciaComponent implements OnInit {
           onComponentInitFunction: (instance) => {
             instance.save.subscribe((data) => {
               const dataType = btoa(data['tipoTransferencia']);
-              this.router.navigate([`pages/inscripcion/solicitud-transferencia/${dataType}`])
+              const level = btoa(data['nivel']);
+              this.router.navigate([`pages/inscripcion/solicitud-transferencia/${dataType}/${level}`])
             })
           },
         },
@@ -126,9 +127,9 @@ export class TransferenciaComponent implements OnInit {
         label: 'Inscribirme',
         class: "btn btn-primary"
       },
-      tipoTransferencia: 'interna'
-    },
-    {
+      tipoTransferencia: 'interna',
+      nivel: 'Pregrado'
+    }, {
       Recibo: 99998,
       Concepto: "Transferencia2",
       Programa: "Maestría en Ciencias de la información y las comunicaciones",
@@ -140,8 +141,38 @@ export class TransferenciaComponent implements OnInit {
         label: 'Inscribirme',
         class: "btn btn-primary"
       },
-      tipoTransferencia: 'externa'
-    }]);
+      tipoTransferencia: 'externa',
+      nivel: 'Pregrado'
+    }, {
+      Recibo: 99998,
+      Concepto: "Transferencia2",
+      Programa: "Maestría en Ciencias de la información y las comunicaciones",
+      FechaGeneracion: '12-01-01',
+      Estado: "Pagado",
+      Descargar: 140837,
+      Opcion: {
+        icon: 'fa fa-pencil fa-2x',
+        label: 'Inscribirme',
+        class: "btn btn-primary"
+      },
+      tipoTransferencia: 'interna',
+      nivel: 'Posgrado'
+    }, {
+      Recibo: 99998,
+      Concepto: "Transferencia2",
+      Programa: "Maestría en Ciencias de la información y las comunicaciones",
+      FechaGeneracion: '12-01-01',
+      Estado: "Pagado",
+      Descargar: 140837,
+      Opcion: {
+        icon: 'fa fa-pencil fa-2x',
+        label: 'Inscribirme',
+        class: "btn btn-primary"
+      },
+      tipoTransferencia: 'externa',
+      nivel: 'Posgrado'
+    }
+    ]);
   }
 
   descargarNormativa() {
