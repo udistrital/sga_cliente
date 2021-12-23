@@ -1779,7 +1779,9 @@
         "ver_listado_estados": "View state list",
         "estados": "States",
         "fecha_radicacion": "Filing date",
-        "estado_actual": "Current status of the request"
+        "estado_actual": "Current status of the request",
+        "invitaciones_no_enviadas": "Invitations could not be sent",
+        "invitaciones_enviadas": "Invitations were sent"
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Academic spaces Pre-registration",
