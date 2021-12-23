@@ -65,9 +65,12 @@
         [normalform]="formRespuestaSolicitud" [modeloData]="InfoPersona" (result)="enviarSolicitud($event)">
       </ngx-dinamicform>
 
-      <ngx-dinamicform *ngIsGranted="['DOCENTE']"
-      [normalform]="formDocumentosAdicionalesLegalizacion" [modeloData]="Legalizacion" (result)="enviarLegalizacion($event)">
-    </ngx-dinamicform>
+      <div *ngIf="estado=='Acta aprobada'">
+        <ngx-dinamicform *ngIsGranted="['DOCENTE']" [normalform]="formDocumentosAdicionalesLegalizacion"
+          [modeloData]="Legalizacion" (result)="enviarLegalizacion($event)">
+        </ngx-dinamicform>
+      </div>
+
 
 
     </nb-card-body>
