@@ -171,7 +171,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
               this.tiposVehiculo = res['Data']['vehiculos'];
               this.espaciosAcademicos = [{ Nombre: '123 - Calculo Integral', Id: 1 }];
               res['Data']['estados'].forEach(estado => {
-                if (estado['Nombre'] !== 'Radicada' && estado['Nombre'] !== 'Ejecutada') {
+                if (estado['Nombre'] !== 'Radicada' && estado['Nombre'] !== 'Ejecutada' && estado['Nombre'] !== 'Rectificar') {
                   this.estadosList.push(estado);
                 }
               });
