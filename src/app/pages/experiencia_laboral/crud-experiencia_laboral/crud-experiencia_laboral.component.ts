@@ -225,7 +225,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
 
   searchNit(data) {
     const inombre = this.getIndexForm('NombreEmpresa');
-    const regex = /^[0-9]*$/;
+    const regex = /^[0-9]+(?:-[0-9]+)*$/;
     data.data.Nit = data.data.Nit.trim();
     const nit = typeof data === 'string' ? data : data.data.Nit;
 

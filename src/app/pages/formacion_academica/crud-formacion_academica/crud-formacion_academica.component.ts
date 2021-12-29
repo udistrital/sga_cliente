@@ -221,7 +221,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     const itel = this.getIndexForm('Telefono');
     const icorreo = this.getIndexForm('Correo');
     const iPais = this.getIndexForm('Pais');
-    const regex = /^[0-9]*$/;
+    const regex = /^[0-9]+(?:-[0-9]+)*$/;
     data.data.Nit = data.data.Nit.trim()
     const nit = typeof data === 'string' ? data : data.data.Nit;
     let IdUniversidad;

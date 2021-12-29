@@ -106,7 +106,6 @@ export class DetallePracticaAcademicaComponent implements OnInit {
             }
           }
         });
-
         this.process = atob(process);
 
         if (['invitation'].includes(this.process)) {
@@ -297,15 +296,30 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   }
 
   enviarInvitacion(event) {
-    const opt: any = {
-      title: this.translate.instant("GLOBAL.invitacion"),
-      html: `Próximamente envío de invitación aquí`,
-      icon: "info",
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true
-    };
-    Swal.fire(opt);
+    this.loading = true;
+
+    this.sgamidService.post('practicas_academicas/enviar_invitacion/', this.InfoPracticasAcademicas).subscribe(res => {
+      const r = <any>res["Response"];
+      if (r !== null && r.Type !== 'error') {
+        if (r.Code === '200' && r["Data"] !== null) {
+          this.loading = false;
+          this.popUpManager.showSuccessAlert(this.translate.instant('practicas_academicas.invitaciones_enviadas'));
+        }
+      } else {
+        this.loading = false;
+        this.popUpManager.showErrorAlert(this.translate.instant('practicas_academicas.invitaciones_no_enviadas'));
+      }
+    }, (error: HttpErrorResponse) => {
+      this.loading = false;
+      Swal.fire({
+        icon: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        footer: this.translate.instant('practicas_academicas.enviar_invitacion') + '-' +
+          this.translate.instant('GLOBAL.invitaciones_no_enviadas'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
   }
 
   async enviarSolicitud(event) {
@@ -401,9 +415,8 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     this.loading = event;
   }
 
-  enviarLegalizacion(event){
+  enviarLegalizacion(event) {
     console.log(event);
-
   }
 
 }
