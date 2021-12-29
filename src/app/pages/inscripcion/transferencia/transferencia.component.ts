@@ -5,7 +5,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { CustomizeButtonComponent } from '../../../@theme/components/customize-button/customize-button.component';
 import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
 import { FORM_TRANSFERENCIA_INTERNA } from '../forms-transferencia';
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
@@ -17,13 +17,18 @@ export class TransferenciaComponent implements OnInit {
 
   formTransferencia: any = null;
   listadoSolicitudes: boolean = true;
+  actions: boolean = true;
   settings: any = null;
   uid = null;
   dataSource: LocalDataSource;
+  sub: any;
+  process: string = '';
   constructor(
     private translate: TranslateService,
     private utilidades: UtilidadesService,
     private router: Router,
+    private _Activatedroute: ActivatedRoute
+
   ) {
 
     this.formTransferencia = FORM_TRANSFERENCIA_INTERNA;
@@ -33,20 +38,26 @@ export class TransferenciaComponent implements OnInit {
       this.utilidades.translateFields(this.formTransferencia, 'inscripcion.', 'inscripcion.');
     });
     this.utilidades.translateFields(this.formTransferencia, 'inscripcion.', 'inscripcion.');
-    this.createTable();
 
   }
 
   ngOnInit() {
+    this.sub = this._Activatedroute.paramMap.subscribe((params: any) => {
+      const { process } = params.params;
+      this.process = atob(process);
+      console.log(this.process);
+      this.actions = (this.process === 'my');
+      this.createTable(this.process);
+      this.loadData(this.process)
+    })
     Swal.fire({
       icon: 'warning',
       text: this.translate.instant('inscripcion.alerta_transferencia'),
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
     })
-    this.loadData()
   }
 
-  createTable() {
+  createTable(process) {
     this.settings = {
       actions: false,
       columns: {
@@ -80,17 +91,19 @@ export class TransferenciaComponent implements OnInit {
           editable: false,
           filter: false,
         },
-        Descargar: {
-          title: this.translate.instant('derechos_pecuniarios.ver_respuesta'),
-          width: '5%',
-          editable: false,
-          filter: false,
-          renderComponent: LinkDownloadNuxeoComponent,
-          type: 'custom',
-          // onComponentInitFunction: (instance) => {
-          //   instance.save.subscribe((data) => this.descargarReciboPago(data))
-          // },
-        },
+        ...process === 'my' ? {
+          Descargar: {
+            title: this.translate.instant('derechos_pecuniarios.ver_respuesta'),
+            width: '5%',
+            editable: false,
+            filter: false,
+            renderComponent: LinkDownloadNuxeoComponent,
+            type: 'custom',
+            // onComponentInitFunction: (instance) => {
+            //   instance.save.subscribe((data) => this.descargarReciboPago(data))
+            // },
+          }
+        } : {},
         Opcion: {
           title: this.translate.instant('derechos_pecuniarios.solicitar'),
           width: '5%',
@@ -102,7 +115,7 @@ export class TransferenciaComponent implements OnInit {
             instance.save.subscribe((data) => {
               const dataType = btoa(data['tipoTransferencia']);
               const level = btoa(data['nivel']);
-              this.router.navigate([`pages/inscripcion/solicitud-transferencia/${dataType}/${level}`])
+              this.router.navigate([`pages/inscripcion/solicitud-transferencia/${dataType}/${level}/${btoa(process)}`])
             })
           },
         },
@@ -114,8 +127,8 @@ export class TransferenciaComponent implements OnInit {
 
   }
 
-  loadData() {
-    this.dataSource.load([{
+  loadData(process) {
+    const data = [{
       Recibo: 99999,
       Concepto: "Transferencia",
       Programa: "Maestría ingeniería industrial",
@@ -172,7 +185,26 @@ export class TransferenciaComponent implements OnInit {
       tipoTransferencia: 'externa',
       nivel: 'Posgrado'
     }
-    ]);
+    ]
+    this.dataSource.load(data.map((e) => {
+      return {
+        ...e,
+        ...process === 'my' ? {
+          Opcion: {
+            icon: 'fa fa-pencil fa-2x',
+            label: 'Inscribirme',
+            class: "btn btn-primary"
+          }
+        } :
+          {
+            Opcion: {
+              icon: 'fa fa-search fa-2x',
+              label: 'Detalle',
+              class: "btn btn-primary"
+            }
+          }
+      }
+    }));
   }
 
   descargarNormativa() {

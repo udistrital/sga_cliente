@@ -113,7 +113,8 @@
             "actualizacion_estado": "Asignación de cupos \npor proyecto",
             "listado_aspirante": "Listar aspirantes",
             "administrar_criterios": "Administrar criterios\nde admisión",
-            "documentos_descuentos": "Asignación de documentos\ny descuentos por proyecto"
+            "documentos_descuentos": "Asignación de documentos\ny descuentos por proyecto",
+            "solicitud_transferencias":"Solicitud de transferencias"
         },
         "solicitudes": {
             "solicitudes": "Datos básicos",
