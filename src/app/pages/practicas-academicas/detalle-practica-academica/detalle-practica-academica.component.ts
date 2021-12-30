@@ -12,6 +12,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { FORM_SOLICITUD_PRACTICAS, FORM_RESPUESTA_SOLICITUD, FORM_DOCUMENTOS_ADICIONALES_LEGALIZACION } from '../form-solicitud-practica';
 import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
 import { UserService } from '../../../@core/data/users.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-detalle-practica-academica',
@@ -37,6 +38,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   fechaRadicado: any;
   espaciosAcademicos: any;
   tiposVehiculo: any;
+  Legalizacion: any;
   process: string;
   estadosSolicitud: any;
   sub: any;
@@ -48,6 +50,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     private translate: TranslateService,
     private sgamidService: SgaMidService,
     private popUpManager: PopUpManager,
+    private nuxeo: NewNuxeoService,
     private userService: UserService,
     private practicasService: PracticasAcademicasService,
     private _Activatedroute: ActivatedRoute) {
@@ -59,10 +62,6 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       NumeroDocumento: [{ value: '', disabled: true }],
       EstadoDocente: [{ value: '', disabled: true }],
     });
-
-    this.InfoDocentes = [{
-      Id: 0, Nombre: '', TipoVinculacionId: { Nombre: '', Activo: false, CodigoAbreviacion: '', Descripcion: '', Id: 0, NumeroOrden: 0, ParametroPadreId: null, TipoParametroId: null }, Correo: '', CorreoInstitucional: '', Celular: '', Telefono: '',
-    }]
 
     this.FormPracticasAcademicas = FORM_SOLICITUD_PRACTICAS;
     this.formDocumentosAdicionalesLegalizacion = FORM_DOCUMENTOS_ADICIONALES_LEGALIZACION;
@@ -225,6 +224,18 @@ export class DetallePracticaAcademicaComponent implements OnInit {
         case "ListaPersonalApoyo":
           documento.label = this.translate.instant('practicas_academicas.' + 'lista_personal_apoyo');
           break;
+        case "InformacionAsistente":
+          documento.label = this.translate.instant('practicas_academicas.' + 'info_asistencia_practica');
+          break;
+        case "ActaCompromiso":
+          documento.label = this.translate.instant('practicas_academicas.' + 'acta_compromiso');
+          break;
+        case "InformePractica":
+          documento.label = this.translate.instant('practicas_academicas.' + 'informe_practica');
+          break;
+        case "CumplidoPractica":
+          documento.label = this.translate.instant('practicas_academicas.' + 'cumplido_practica');
+          break;
       }
       this.files.push(documento);
     });
@@ -277,7 +288,6 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   }
 
   verEstado(event) {
-    console.log(event.data)
     const opt: any = {
       title: this.translate.instant("GLOBAL.estado"),
       html: `<span>${moment(event.data.FechaCreacion, 'YYYY-MM-DD').format('DD/MM/YYYY')}</span><br>
@@ -331,8 +341,6 @@ export class DetallePracticaAcademicaComponent implements OnInit {
         this.loading = true;
         this.sgamidService.put('practicas_academicas/' + this.idPractica, this.InfoRespuesta).subscribe(res => {
           const r = <any>res["Response"]['Body'][0];
-          console.log(r !== null, r.Type !== 'error')
-          console.log(r.Status === '200', r["Data"] !== null)
           if (r !== null && r.Type !== 'error') {
             if (r.Status === '200' && r["Data"] !== null) {
               this.ngOnInit();
@@ -362,7 +370,6 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       }
     }
   }
-
 
   crearTabla() {
     this.tablaEstados = {
@@ -415,8 +422,78 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     this.loading = event;
   }
 
-  enviarLegalizacion(event) {
-    console.log(event);
+  async enviarLegalizacion(event) {
+    let files: Array<any> = [];
+    this.Legalizacion = event.data.documental;
+    for (const key in this.Legalizacion) {
+      if (Object.prototype.hasOwnProperty.call(this.Legalizacion, key)) {
+        const element = this.Legalizacion[key];
+        if (typeof element.file !== 'undefined' && element.file !== null) {
+          this.loading = true;
+          const file = {
+            file: await this.nuxeo.fileToBase64(element.file),
+            IdTipoDocumento: element.IdDocumento,
+            metadatos: {
+              NombreArchivo: element.nombre,
+              Tipo: "Archivo",
+              Observaciones: element.nombre,
+              "dc:title": element.nombre,
+            },
+            descripcion: element.nombre,
+            nombre: element.nombre,
+            key: 'Documento',
+          }
+          files.push(file);
+        }
+      }
+    }
+    // console.log(files, this.InfoPracticasAcademicas)
+    this.InfoPracticasAcademicas.Documentos = files
+
+    this.InfoPracticasAcademicas.FechaHoraRegreso = momentTimezone.tz(this.InfoPracticasAcademicas.FechaHoraRegreso, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
+    this.InfoPracticasAcademicas.FechaHoraSalida = momentTimezone.tz(this.InfoPracticasAcademicas.FechaHoraSalida, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
+    const hoy = new Date();
+    this.InfoPracticasAcademicas.FechaRadicacion = momentTimezone.tz(hoy.getFullYear() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getDate(),
+      'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+    this.InfoPracticasAcademicas.FechaRadicacion = this.InfoPracticasAcademicas.FechaRadicacion + ' +0000 +0000';
+
+    this.InfoPracticasAcademicas.EstadoTipoSolicitudIdAnterior = this.InfoPracticasAcademicas.EstadoTipoSolicitudId;
+    this.InfoPracticasAcademicas.Estado = { Id: 23 };
+    this.InfoPracticasAcademicas.IdTercero = this.InfoPersona.IdTercero;
+    this.InfoPracticasAcademicas.FechaRespuesta = momentTimezone.tz(event.data.documental.FechaRespuesta, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
+    this.InfoPracticasAcademicas.Comentario = '';
+    this.InfoPracticasAcademicas.Estados = [];
+
+    this.sgamidService.put('practicas_academicas', this.InfoPracticasAcademicas).subscribe(res => {
+      const r = <any>res["Response"]['Body'][0];
+      if (r !== null && r.Type !== 'error') {
+        if (r.Status === '200' && r["Data"] !== null) {
+          this.ngOnInit();
+          this.FormPracticasAcademicas.campos.forEach(campo => {
+            campo.deshabilitar = true;
+          });
+          this.formDocumentosAdicionalesLegalizacion.campos.forEach(campo => {
+            campo.deshabilitar = true;
+          });
+          this.practicasService.clearCache();
+          this.loading = false;
+          this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
+            this.translate.instant('GLOBAL.confirmarActualizar'));
+        }
+      } else {
+        this.loading = false;
+        this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.error_practicas_academicas'));
+      }
+    }, (error: HttpErrorResponse) => {
+      Swal.fire({
+        icon: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        footer: this.translate.instant('GLOBAL.crear') + '-' +
+          this.translate.instant('GLOBAL.info_practicas_academicas'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    });
   }
 
 }
