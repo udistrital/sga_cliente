@@ -60,10 +60,6 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       EstadoDocente: [{ value: '', disabled: true }],
     });
 
-    this.InfoDocentes = [{
-      Id: 0, Nombre: '', TipoVinculacionId: { Nombre: '', Activo: false, CodigoAbreviacion: '', Descripcion: '', Id: 0, NumeroOrden: 0, ParametroPadreId: null, TipoParametroId: null }, Correo: '', CorreoInstitucional: '', Celular: '', Telefono: '',
-    }]
-
     this.FormPracticasAcademicas = FORM_SOLICITUD_PRACTICAS;
     this.formDocumentosAdicionalesLegalizacion = FORM_DOCUMENTOS_ADICIONALES_LEGALIZACION;
     this.formRespuestaSolicitud = FORM_RESPUESTA_SOLICITUD;
@@ -225,6 +221,12 @@ export class DetallePracticaAcademicaComponent implements OnInit {
         case "ListaPersonalApoyo":
           documento.label = this.translate.instant('practicas_academicas.' + 'lista_personal_apoyo');
           break;
+        case "InformacionAsistente":
+          documento.label = this.translate.instant('practicas_academicas.' + 'info_asistencia_practica');
+          break;
+        case "ActaCompromiso":
+          documento.label = this.translate.instant('practicas_academicas.' + 'acta_compromiso');
+          break;
       }
       this.files.push(documento);
     });
@@ -277,7 +279,6 @@ export class DetallePracticaAcademicaComponent implements OnInit {
   }
 
   verEstado(event) {
-    console.log(event.data)
     const opt: any = {
       title: this.translate.instant("GLOBAL.estado"),
       html: `<span>${moment(event.data.FechaCreacion, 'YYYY-MM-DD').format('DD/MM/YYYY')}</span><br>
@@ -331,8 +332,6 @@ export class DetallePracticaAcademicaComponent implements OnInit {
         this.loading = true;
         this.sgamidService.put('practicas_academicas/' + this.idPractica, this.InfoRespuesta).subscribe(res => {
           const r = <any>res["Response"]['Body'][0];
-          console.log(r !== null, r.Type !== 'error')
-          console.log(r.Status === '200', r["Data"] !== null)
           if (r !== null && r.Type !== 'error') {
             if (r.Status === '200' && r["Data"] !== null) {
               this.ngOnInit();
@@ -362,7 +361,6 @@ export class DetallePracticaAcademicaComponent implements OnInit {
       }
     }
   }
-
 
   crearTabla() {
     this.tablaEstados = {

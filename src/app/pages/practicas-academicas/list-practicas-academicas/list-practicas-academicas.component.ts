@@ -189,7 +189,11 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
 
   verPractica(event) {
-    this.router.navigate([`pages/practicas-academicas/detalle-practica-academica/${event.data['Id']}/${this.processEncript}`])
+    if (event.data.EstadoId.Nombre == 'Requiere modificación' && this.process == 'process') {
+      this.router.navigate([`pages/practicas-academicas/nueva-solicitud/${event.data['Id']}/${this.processEncript}`])
+    } else {
+      this.router.navigate([`pages/practicas-academicas/detalle-practica-academica/${event.data['Id']}/${this.processEncript}`])
+    }
   }
 
 }
