@@ -34,13 +34,15 @@ export class SolicitantePracticaComponent {
 
   @Input('docentesSolicitud')
   set info(info: any) {
-    if (info.length !== 0 && info.toString() !== '') {
-      this.docentesSolicitud = info;
-      this.nuevaSolicitud = false;
-      this.loadData();
-    } else {
-      this.nuevaSolicitud = true;
-      this.loadData();
+    if (info) {
+      if (info.length !== 0 && info.toString() !== '') {
+        this.docentesSolicitud = info;
+        this.nuevaSolicitud = false;
+        this.loadData();
+      } else {
+        this.nuevaSolicitud = true;
+        this.loadData();
+      }
     }
   }
 
