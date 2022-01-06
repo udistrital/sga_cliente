@@ -128,3 +128,61 @@ export const FORM_SOLICITUD_TRANSFERENCIA = {
         },
     ]
 }
+
+
+export const FORM_RESPUESTA_SOLICITUD = {
+    tipo_formulario: 'mini',
+    alertas: true,
+    titulo:"Información de solicitud",
+    btn: 'Responder',
+    modelo: 'InfoPersona',
+    campos: [
+        {
+            etiqueta: 'select',
+            claseGrid: 'col-sm-12 col-xs-12',
+            nombre: 'Respuesta',
+            label_i18n: 'respuesta_solicitud',
+            placeholder_i18n: 'respuesta_solicitud',
+            requerido: true,
+            entrelazado:true,
+            tipo: 'RespuestaSolicitud',
+            key: 'Nombre',
+            opciones: [],
+        },
+        {
+            etiqueta: 'mat-date',
+            claseGrid: 'col-sm-12 col-xs-12',
+            nombre: 'FechaEspecifica',
+            label_i18n: 'fecha_especifica',
+            placeholder_i18n: 'fecha_especifica',
+            requerido: false,
+            tipo: 'number',
+            key: 'Nombre',
+            opciones: [],
+        },
+        {
+            etiqueta: 'textarea',
+            claseGrid: 'col-sm-12 col-xs-12',
+            nombre: 'Comentario',
+            label_i18n: 'comentarios',
+            placeholder_i18n: 'comentarios',
+            requerido: true,
+            tipo: 'MotivoCambio',
+            key: 'Nombre',
+            opciones: [],
+        },
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-12',
+            clase: 'form-control',
+            nombre: 'SoporteRespuesta',
+            label_i18n: 'soporte_respuesta',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        },
+    ]
+}

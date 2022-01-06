@@ -148,6 +148,7 @@
         "rol":"Rol",
         "click_aqui": "Click aquí",
         "cargar": "Cargar",
+        "codigo":"Código",
         "admitir": "Admitir",
         "adjuntar": "Adjuntar",
         "observaciones": "Observaciones",
@@ -1295,8 +1296,14 @@
         "placeholder_programa_destino":"Seleccione el programa a transferir",
         "motivo_cambio":"Motivos del cambio",
         "placeholder_motivo_cambio":"Describa los motivos para la solicitud del cambio",
-        "soportes_documentos":"Adjuntar soportes y documentos relacionados"
-
+        "soportes_documentos":"Adjuntar soportes y documentos relacionados",
+        "respuesta_solicitud":"Respuesta a la solicitud",
+        "placeholder_respuesta_solicitud":"Seleccione la respuesta a la solicitud",
+        "comentarios": "Comentarios",
+        "comentarios_pĺaceholder":"Escriba los comentarios de la respuesta",
+        "fecha_especifica":"Fecha de prueba específica",
+        "placeholder_fecha_especifica":"Programe la fecha de prueba específica",
+        "soporte_respuesta":"Adjunte soporte de la respuesta"
 
     },
     "reingreso": {

@@ -1,9 +1,9 @@
-<nb-card>
+<nb-card *ngIf="process === 'my'">
     <nb-card-header>
         {{ 'inscripcion.solicitud_transferencia' | translate }}
     </nb-card-header>
     <nb-card-body>
-        <fieldset>
+        <fieldset class="fieldseter">
             <div class="col-12">
                 <b>{{ 'inscripcion.periodo' | translate }}</b>: {{ this.periodo }}
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ 'inscripcion.nivel' | translate }}:</b> {{ nivel }}
@@ -15,7 +15,7 @@
         </fieldset>
         <br>
         <ngx-dinamicform [normalform]="formTransferencia" (result)="validarForm($event)"></ngx-dinamicform>
-        <fieldset *ngIf="tipo === 'externa'">
+        <fieldset class="fieldseter" *ngIf="tipo === 'externa'">
             <ngx-inscripcion_general [inscriptionSettings]="inscriptionSettings"></ngx-inscripcion_general>
         </fieldset>
 
@@ -28,6 +28,58 @@
             </button>
             <button mat-button type="button" (click)="send()">
                 {{ 'GLOBAL.enviar' | translate }}
+            </button>
+        </div>
+    </nb-card-footer>
+</nb-card>
+
+<nb-card *ngIf="process === 'all'">
+    <nb-card-header>
+        {{ 'inscripcion.solicitud_transferencia' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+        <fieldset class="fieldseter m-4">
+            <legend>Información general</legend>
+            <div class="col-12">
+                <b>{{ 'GLOBAL.nombre' | translate }}</b>: {{ general.nombre }}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ 'GLOBAL.codigo' | translate }}:</b> {{ general.codigo }}
+            </div>
+            <br />
+            <div class="col-12">
+                <b>{{ 'GLOBAL.documento' | translate }}:</b> {{ general.documento }}
+            </div>
+        </fieldset>
+        <fieldset class="fieldseter m-4">
+            <legend>Información de la solicitud</legend>
+            <div class="col-12">
+                <b>{{ 'inscripcion.periodo' | translate }}</b>: {{ this.periodo }}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ 'inscripcion.nivel' | translate }}:</b> {{ nivel }}
+            </div>
+            <br />
+            <div class="col-12">
+                <b>{{ 'inscripcion.tipo' | translate }}:</b> {{ tipo }}
+            </div>
+        </fieldset>
+        <ngx-dinamicform [normalform]="formTransferencia">
+            <ngx-download-file-nuxeo (loading)="changeLoading($event)" [idDoc]="file.id" [label]="file.label">
+            </ngx-download-file-nuxeo>
+        </ngx-dinamicform>
+        <ngx-dinamicform [normalform]="formRespuesta" (interlaced)="respuestaForm($event)" (result)="validarFormRespuesta($event)">
+            <div clas="row">
+                <div class="col-6">
+                    <b>{{ 'GLOBAL.nombre' | translate }}</b>: {{ responde.nombre }}
+                </div>
+                <div class="col-6">
+                    <b>{{ 'GLOBAL.rol' | translate }}:</b> {{ responde.rol }}
+                </div>
+            </div>
+        </ngx-dinamicform>
+
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="text-center">
+            <button mat-button type="button" (click)="goback()">
+                {{ 'GLOBAL.cancelar' | translate }}
             </button>
         </div>
     </nb-card-footer>
