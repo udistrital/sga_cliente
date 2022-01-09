@@ -84,7 +84,7 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
 
   crearTabla() {
-    this.tablaPracticas = { 
+    this.tablaPracticas = {
       columns: {
         Id: {
           title: this.translate.instant('solicitudes.numero'),

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { UserService } from '../../../@core/data/users.service';
@@ -51,6 +51,7 @@ export class NuevaSolicitudComponent implements OnInit {
     private nuxeo: NewNuxeoService,
     private practicasService: PracticasAcademicasService,
     private _Activatedroute: ActivatedRoute,
+    private router: Router,
     private sgamidService: SgaMidService,
   ) {
     this.FormSoporteDocumentales = FORM_SOPORTES_DOCUMENTALES;
@@ -368,6 +369,7 @@ export class NuevaSolicitudComponent implements OnInit {
               this.loading = false;
               this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
                 this.translate.instant('GLOBAL.confirmarActualizar'));
+              this.router.navigate([`pages/practicas-academicas/lista-practicas/${btoa('process')}`])
             }
           } else {
             this.loading = false;
@@ -390,6 +392,7 @@ export class NuevaSolicitudComponent implements OnInit {
             this.loading = false;
             this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
               this.translate.instant('GLOBAL.confirmarCrear'));
+            this.router.navigate([`pages/practicas-academicas/lista-practicas/${btoa('process')}`])
           } else {
             this.loading = false;
             this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.error_practicas_academicas'));
@@ -408,6 +411,23 @@ export class NuevaSolicitudComponent implements OnInit {
     }
   }
 
+  verEstado(event) {
+    const opt: any = {
+      title: this.translate.instant("GLOBAL.estado"),
+      html: `<span>${moment(event.data.FechaCreacion, 'YYYY-MM-DD').format('DD/MM/YYYY')}</span><br>
+                <span>${this.InfoPracticasAcademicas.EstadoTipoSolicitudId.EstadoId.Nombre}</span><br>
+                <span class="form-control">${event.data.Comentario}</span><br>`,
+      icon: "info",
+      // buttons: true,
+      // dangerMode: true,
+      showCancelButton: true
+    };
+    Swal.fire(opt)
+      .then((result) => {
+        if (result) {
+        }
+      })
+  }
 
   getSeleccion(event) {
     this.changeLoading(true);
