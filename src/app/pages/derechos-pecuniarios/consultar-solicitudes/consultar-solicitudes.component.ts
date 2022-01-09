@@ -1,8 +1,8 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { LocalDataSource } from 'ng2-smart-table';
+import { UserService } from '../../../@core/data/users.service';
 import Swal from 'sweetalert2';
 import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academico/institucion_enfasis';
 import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
@@ -18,10 +18,7 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   dataSource: LocalDataSource;
   data: any[] = [];
   solicitudData: any = null;
-  userResponse = {
-    Nombre: 'Maria Casquito',
-    Rol: 'Coordinador'
-  }
+  userResponse: any;
 
   formularioSolicitud  = {
       tipo_formulario: 'mini',
@@ -59,15 +56,22 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
   settings: any;
-  
 
   constructor(
+    private userService: UserService,
     private translate: TranslateService,) {
     this.dataSource = new LocalDataSource();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
       this.updateLanguage();
     });
+
+    this.userService.tercero$.subscribe((user) => {
+      this.userResponse = user;
+      this.userResponse.Rol = 'Coordinador'
+      console.log(this.userResponse)
+    })
+
     this.loadInfoPersona();
     this.createTable();
   }

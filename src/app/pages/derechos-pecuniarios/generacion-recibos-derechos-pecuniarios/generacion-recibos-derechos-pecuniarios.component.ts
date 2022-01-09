@@ -2,10 +2,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
-import * as momentTimezone from 'moment-timezone';
 import { LocalDataSource } from 'ng2-smart-table';
 import Swal from 'sweetalert2';
+import * as moment from 'moment';
 import { environment } from '../../../../environments/environment';
 import { Concepto } from '../../../@core/data/models/derechos-pecuniarios/concepto';
 import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
@@ -13,13 +12,9 @@ import { ReciboPago } from '../../../@core/data/models/derechos-pecuniarios/reci
 import { Periodo } from '../../../@core/data/models/periodo/periodo';
 import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academico/institucion_enfasis';
 import { ParametrosService } from '../../../@core/data/parametros.service';
-import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
-import { ButtonPaymentComponent } from '../../../@theme/components/button-payment/button-payment.component';
-import { LinkDownloadComponent } from '../../../@theme/components/link-download/link-download.component';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { DownloadFileNuxeo } from '../../../@theme/components/download-file-nuxeo/download-file-nuxeo.component';
 import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
 import { CustomizeButtonComponent } from '../../../@theme/components';
 
@@ -37,22 +32,20 @@ export class GeneracionRecibosDerechosPecuniarios {
   settings: any;
   vigencias: any = [];
   vigenciaActual: any;
-  datosCargados: any[];
+  conceptos: any[];
 
 
   new_pecuniario = false;
-  info_info_persona: InfoPersona;
+  info_info_persona: any;
   recibo_pago: ReciboPago;
   clean: boolean;
   loading: boolean;
-  programa: number;
   estudiante: number;
   periodo: Periodo;
   periodos = [];
   selectedProject: any;
   tipo_derecho_selected: any;
   calendarioId: string = '0';
-  projectId: number = 0;
   parametro: string;
   recibo_generado: any;
   recibos_pendientes: number;
@@ -68,30 +61,33 @@ export class GeneracionRecibosDerechosPecuniarios {
   Campo2Control = new FormControl('', [Validators.required]);
   gen_recibo: boolean;
   generacion_recibo = null;
+
   constructor(
-    private projectService: ProyectoAcademicoService,
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private userService: UserService,
     private parametrosService: ParametrosService) {
     this.dataSource = new LocalDataSource();
+
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.createTable();
     });
+
     this.generacion_recibo = {
-      code: '*Códígo seleccionado',
-      documentId: 'Documento de identificacion',
-      username: 'Nombre de estudiante',
-      curricularProgram: 'Programa curricular',
-      concept: 'Concepto pecuiario elegido',
-      value: '* value'
+      code: '* Códígo seleccionado',
+      documentId: '* Documento de identificacion',
+      username: '* Nombre de estudiante',
+      curricularProgram: '* Programa curricular',
+      concept: '* Concepto del derecho pecuniario elegido',
+      value: '* Valor del derecho elegido'
     }
 
     this.info_persona_id = this.userService.getPersonaId();
     this.userService.tercero$.subscribe((user) => {
-      console.log(user);
       this.userData = user;
+      this.generacion_recibo.username = this.userData.NombreCompleto;
+      this.generacion_recibo.documentId = this.userData.Documento;
     })
     this.loadInfoPersona();
     this.createTable();
@@ -106,15 +102,15 @@ export class GeneracionRecibosDerechosPecuniarios {
     this.info_persona_id = this.userService.getPersonaId();
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0') {
-      this.sgaMidService.get('persona/consultar_persona/' + this.info_persona_id).subscribe(async (res: any) => {
+      this.sgaMidService.get('derechos_pecuniarios/consultar_persona/' + this.info_persona_id).subscribe(async (res: any) => {
         if (res !== null) {
           const temp = <InfoPersona>res;
           this.info_info_persona = temp;
-          const files = []
+          const files = [];
         }
-        await this.cargarPeriodo()
+        await this.cargarPeriodo();
         this.loadInfoRecibos();
-        this.loading = false;
+        // this.loading = false;
       },
         (error: HttpErrorResponse) => {
           this.loading = false;
@@ -290,6 +286,7 @@ export class GeneracionRecibosDerechosPecuniarios {
   }
 
   async loadInfoRecibos() {
+    this.loading = true;
     this.dataSource.load([{
       Periodo: 10,
       Id: 12,
@@ -320,9 +317,13 @@ export class GeneracionRecibosDerechosPecuniarios {
       },
       VerRespuesta: 140837,
     }]);
-    this.loading = true;
     // Función del MID que retorna el estado del recibo
     const PeriodoActual = localStorage.getItem('IdPeriodo')
+
+    // // // // // // // // // // // // //
+    //  comentado hasta tener servicio  //
+    // // // // // // // // // // // // //
+    /*
     if (this.info_persona_id != null && PeriodoActual != null) {
       await this.sgaMidService.get('derechos_pecuniarios/estado_recibos/' + this.info_persona_id + '/' + PeriodoActual).subscribe(
         (response: any) => {
@@ -341,10 +342,9 @@ export class GeneracionRecibosDerechosPecuniarios {
               const auxRecibo = element.ReciboInscripcion;
               const NumRecibo = auxRecibo.split('/', 1);
               element.Recibo = NumRecibo;
-              element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
-              sessionStorage.setItem('ProgramaAcademicoId', element.ProgramaAcademicoId);
-
-              if (element.Estado === 'Pendiente pago') {
+              element.FechaCreacion = momentTimezone.tz(eleme    // // // // // // // // // // // // //
+    //  comentado hasta tener servicio  //
+    // // // // // // // // // // // // //
                 this.recibos_pendientes++;
               }
               dataInfo.push(element);
@@ -362,11 +362,61 @@ export class GeneracionRecibosDerechosPecuniarios {
         },
       );
     }
+    */
     this.loading = false;
   }
 
 
   generar_recibo() {
+    if (this.recibos_pendientes >= 3) {
+      this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
+    } else {
+      this.popUpManager.showConfirmAlert(this.translate.instant('derechos_pecuniarios.seguro_nuevo_recibo')).then(
+        async ok => {
+          if (ok.value) {
+            this.loading = true;
+            const recibo = {
+              Id: this.info_info_persona.Id,
+              Nombre: `${this.info_info_persona.PrimerNombre}${this.info_info_persona.SegundoNombre}`,
+              Apellido: `${this.info_info_persona.PrimerApellido}${this.info_info_persona.SegundoApellido}`,
+              Correo: JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).email,
+              ProgramaAcademicoId: this.generacion_recibo["IdProyecto"],
+              DerechoPecuniarioId: this.generacion_recibo.DerechoPecuniarioId,
+              Year: this.periodo['Year'],
+              Periodo: this.periodo['Id'],
+              FechaPago: '',
+            };
+            const fecha = new Date();
+            fecha.setDate(fecha.getDate() + 90);
+            recibo.FechaPago = moment(`${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`, 'YYYY-MM-DD').format('DD/MM/YYYY');
+
+                // // // // // // // // // // // // //
+                //  comentado hasta tener servicio  //
+                // // // // // // // // // // // // //
+                /*
+            this.sgaMidService.post('derechos_pecuniarios/generar_derecho', recibo).subscribe(
+              (response: any) => {
+                if (response.Code === '200') {
+                  this.loadInfoRecibos();
+                  console.log("-->", response);
+                  this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
+                } else if (response.Code === '204') {
+                  this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.recibo_duplicado'));
+                } else if (response.Code === '400') {
+                  this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+                }
+                this.loading = false;
+              },
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
+              },
+            );
+            */
+            this.loading = false;
+          }
+        });
+    }
   }
 
   generar_solicitud_derecho() {
@@ -393,32 +443,20 @@ export class GeneracionRecibosDerechosPecuniarios {
 
   cargarPeriodo() {
     this.loading = true;
-    this.vigencias = [
-      
-    ]
+    this.vigencias = []
 
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo?query=CodigoAbreviacion:VG&sortby=Id&order=desc&limit=0')
+      this.parametrosService.get('periodo?query=Activo:true,CodigoAbreviacion:VG&sortby=Id&order=desc&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {
             const periodos = <any[]>res['Data'];
             periodos.forEach(element => {
-              if (element['Activo'] === true && window.localStorage.getItem('IdPeriodo') != null) {
-                this.periodo = element;
-                window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
-                this.cargarDatos({ 'value': this.periodo });
-                resolve(this.periodo);
-              }
+              this.periodo = element;
+              window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
+              this.vigenciaActual = this.periodo.Id;
 
-              // BORRAR CUANDO EL PERIODO ESTE ACTUALIZADO
-              else if (element['Year'] === 2020) {
-                this.periodo = element;
-                window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
-                resolve(this.periodo);
-              }
-              // BORRAR CUANDO EL PERIODO ESTE ACTUALIZADO
-
+              resolve(this.periodo);
               this.vigencias.push(element);
             });
           }
@@ -431,32 +469,38 @@ export class GeneracionRecibosDerechosPecuniarios {
     });
   }
 
-  loadConcepto(event) {
-    this.tipo_derecho_selected = event.value;
-    this.gen_recibo = true;
+  cargarDatos(event) {
+    this.loading = true;
+    this.generacion_recibo["curricularProgram"] = event.value.Proyecto.slice(28);
+    this.generacion_recibo["code"] = event.value.Dato;
+    this.generacion_recibo["IdProyecto"] = event.value.IdProyecto;
+    this.cargarConceptos(!event.value.Activo);
   }
 
-  cargarDatos(event) {
-    window.localStorage.setItem('IdPeriodo', event.value.Id);
-    this.vigenciaActual = event.value.Id;
-    this.datosCargados = [];
-    this.loadInfoRecibos();
+  cargarConceptos(egresado: boolean) {
+    this.conceptos = [];
     this.sgaMidService.get('derechos_pecuniarios/' + this.vigenciaActual).subscribe(
       response => {
         const data: any[] = response['Data'];
         if (Object.keys(data).length > 0 && Object.keys(data[0]).length > 0) {
           data.forEach(obj => {
-            const concepto = new Concepto();
-            concepto.Id = obj.ParametroId.Id;
-            concepto.Codigo = obj.ParametroId.CodigoAbreviacion;
-            concepto.Nombre = obj.ParametroId.Nombre;
-            concepto.FactorId = obj.Id
-            concepto.Factor = JSON.parse(obj.Valor).NumFactor;
-            if (JSON.parse(obj.Valor).Costo !== undefined) {
-              concepto.Costo = JSON.parse(obj.Valor).Costo;
+            // 40 -> CERTIFICADO DE NOTAS
+            // 49 -> COPIAS DE ACTAS DE GRADO
+            // 51 -> DUPLICADO DE DIPLOMAS
+            if (!egresado || (egresado && ["40", "49", "51"].includes(obj.ParametroId.CodigoAbreviacion))) {
+              const concepto = new Concepto();
+              concepto.Id = obj.ParametroId.Id;
+              concepto.Codigo = obj.ParametroId.CodigoAbreviacion;
+              concepto.Nombre = obj.ParametroId.Nombre;
+              concepto.FactorId = obj.Id
+              concepto.Factor = JSON.parse(obj.Valor).NumFactor;
+              if (JSON.parse(obj.Valor).Costo !== undefined) {
+                concepto.Costo = JSON.parse(obj.Valor).Costo;
+              }
+              this.conceptos.push(concepto);
             }
-            this.datosCargados.push(concepto);
           });
+          this.loading = false;
         } else {
           this.popUpManager.showAlert('info', this.translate.instant('derechos_pecuniarios.no_conceptos'));
         }
@@ -468,5 +512,13 @@ export class GeneracionRecibosDerechosPecuniarios {
 
   }
 
+  loadConcepto(event) {
+    this.tipo_derecho_selected = event.value;
+    this.generacion_recibo.code = event.value.Codigo;
+    this.generacion_recibo.concept = event.value.Nombre;
+    this.generacion_recibo.value = event.value.Costo;
+    this.generacion_recibo.DerechoPecuniarioId = event.value.Id;
+    this.gen_recibo = true;
+  }
 
 }

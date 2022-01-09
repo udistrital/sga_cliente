@@ -100,46 +100,18 @@ export class DetallePracticaAcademicaComponent implements OnInit {
               });
               this.InfoDocentes = aux;
               this.estadosSolicitud = practica["Data"].Estados;
+              // this.estadosSolicitud.forEach(estado => {
+              //   if (estado.Activo) {
+              //     this.InfoPersona = { ...this.InfoPersona, Comentario: estado.Comentario, Estado: estado.EstadoTipoSolicitudId.EstadoId };
+              //   }
+              // });
+
               this.inicializiarDatos();
               this.loading = false;
             }
           }
         });
         this.process = atob(process);
-
-        if (['invitation'].includes(this.process)) {
-          this.files = [];
-          this.InfoPracticasAcademicas.Documentos.forEach(documento => {
-            documento.id = documento.Id;
-            switch (documento.Nombre) {
-              case "Cronograma":
-                documento.label = this.translate.instant('practicas_academicas.' + 'cronograma_practica');
-                break;
-              case "Presupuesto":
-                documento.label = this.translate.instant('practicas_academicas.' + 'presupuesto_practica');
-                break;
-              case "Presentacion":
-                documento.label = this.translate.instant('practicas_academicas.' + 'presentacion_practica');
-                break;
-              case "ListaEstudiantes":
-                documento.label = this.translate.instant('practicas_academicas.' + 'lista_estudiantes');
-                break;
-              case "GuiaPractica":
-                documento.label = this.translate.instant('practicas_academicas.' + 'guia_practica');
-                break;
-              case "ListaPersonalApoyo":
-                documento.label = this.translate.instant('practicas_academicas.' + 'lista_personal_apoyo');
-                break;
-              case "ActaCompromiso":
-                documento.label = this.translate.instant('practicas_academicas.' + 'acta_compromiso');
-                break;
-              case "InfoAsistenciaPractica":
-                documento.label = this.translate.instant('practicas_academicas.' + 'info_asistencia_practica');
-                break;
-            }
-            this.files.push(documento);
-          });
-        }
       });
     });
   }
@@ -241,7 +213,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     });
 
     this.userService.tercero$.subscribe((user: any) => {
-      this.InfoPersona = { Nombre: user.NombreCompleto, FechaRespuesta: new Date(), IdTercero: user.Id };
+      this.InfoPersona = { ...this.InfoPersona, Nombre: user.NombreCompleto, FechaRespuesta: new Date(), IdTercero: user.Id };
     })
   }
 
@@ -294,8 +266,8 @@ export class DetallePracticaAcademicaComponent implements OnInit {
                 <span>${this.InfoPracticasAcademicas.EstadoTipoSolicitudId.EstadoId.Nombre}</span><br>
                 <span class="form-control">${event.data.Comentario}</span><br>`,
       icon: "info",
-      buttons: true,
-      dangerMode: true,
+      // buttons: true,
+      // dangerMode: true,
       showCancelButton: true
     };
     Swal.fire(opt)
