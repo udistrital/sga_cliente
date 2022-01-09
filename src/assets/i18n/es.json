@@ -1868,6 +1868,7 @@
         "error_docente_ya_registrado": "El docente ya está agregado.",
         "buscar": "Buscar",
         "alerta_llenar_campo": "Debe llenar el campo de la cédula del docente colaborador.",
+        "alerta_llenar_campo_numeros": "Debe llenar el campo de la cédula del docente colaborador con números.",
         "tooltip_remover": "Remover docente",
         "tooltip_agregar": "Agregar docente",
         "docente_encontrado": "Se encontró con éxito al docente.",

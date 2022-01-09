@@ -1799,6 +1799,7 @@
         "error_docente_ya_registrado": "The teacher has been added.",
         "buscar": "Search",
         "alerta_llenar_campo": "You must fill in the field of the collaborating teacher's ID.",
+        "alerta_llenar_campo_numeros": "You must fill in the field of the collaborating teacher's ID with numbers.",
         "tooltip_remover": "Remove teacher",
         "tooltip_agregar": "Add teacher",
         "docente_encontrado": "The teacher was successfully found.",
