@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
     this.loginEvent.next('clicked');
     this.autenticacion.login(false);
   }
+  
   ngOnInit(): void {
 
   }

@@ -113,7 +113,8 @@
             "actualizacion_estado": "Asignación de cupos \npor proyecto",
             "listado_aspirante": "Listar aspirantes",
             "administrar_criterios": "Administrar criterios\nde admisión",
-            "documentos_descuentos": "Asignación de documentos\ny descuentos por proyecto"
+            "documentos_descuentos": "Asignación de documentos\ny descuentos por proyecto",
+            "solicitud_transferencias":"Solicitud de transferencias"
         },
         "solicitudes": {
             "solicitudes": "Datos básicos",
@@ -147,6 +148,7 @@
         "rol":"Rol",
         "click_aqui": "Click aquí",
         "cargar": "Cargar",
+        "codigo":"Código",
         "admitir": "Admitir",
         "adjuntar": "Adjuntar",
         "observaciones": "Observaciones",
@@ -638,7 +640,8 @@
         "placeholder_vacio": " ",
         "info_practicas_academicas": "Solicitud de prácticas académicas",
         "error_practicas_academicas": "No fue posible registrar la práctica académica",
-        "practicas_academicas": "Prácticas académicas"
+        "practicas_academicas": "Prácticas académicas",
+        "enviar":"Enviar"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1284,8 +1287,23 @@
         "codigo_estudiante":"Código del estudiante",
         "proyecto_curricular":"Proyecto curricular",
         "periodo_preinscripcion": "Periodo al cual se va a preinscribir",
-        "calendario_academico":"Calendario académico para:"
-
+        "calendario_academico":"Calendario académico para:",
+        "programa_origen":"Programa origen",
+        "placeholder_programa_origen":"Seleccione el programa",
+        "cantidad_creditos_aprobados":"Cantidad de créditos aprobados y certificados",
+        "placeholder_cantidad_creditos_aprobados":"Digite el respectivo valor en número",
+        "programa_destino":"Programa destino",
+        "placeholder_programa_destino":"Seleccione el programa a transferir",
+        "motivo_cambio":"Motivos del cambio",
+        "placeholder_motivo_cambio":"Describa los motivos para la solicitud del cambio",
+        "soportes_documentos":"Adjuntar soportes y documentos relacionados",
+        "respuesta_solicitud":"Respuesta a la solicitud",
+        "placeholder_respuesta_solicitud":"Seleccione la respuesta a la solicitud",
+        "comentarios": "Comentarios",
+        "comentarios_pĺaceholder":"Escriba los comentarios de la respuesta",
+        "fecha_especifica":"Fecha de prueba específica",
+        "placeholder_fecha_especifica":"Programe la fecha de prueba específica",
+        "soporte_respuesta":"Adjunte soporte de la respuesta"
 
     },
     "reingreso": {

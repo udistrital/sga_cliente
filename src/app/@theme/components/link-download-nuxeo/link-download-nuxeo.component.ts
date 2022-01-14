@@ -24,12 +24,9 @@ export class LinkDownloadNuxeoComponent implements ViewCell, AfterViewInit {
   ) { }
 
   ngAfterViewInit(): void {
-    console.log(this.value);
-
     this.documentoService.get('documento/' + this.value)
       .subscribe((data) => {
         this.documentoData = data;
-        console.log(this.documentoData);
       }, (error) => {
         this.errorDocument = true;
         this.label = 'No encontrado'
@@ -55,8 +52,6 @@ export class LinkDownloadNuxeoComponent implements ViewCell, AfterViewInit {
               this.errorDocument = true;
             }else {              
               this.documentoFile = docFile;
-              console.log('doc', docFile)
-
               this.open();
             }
           })
