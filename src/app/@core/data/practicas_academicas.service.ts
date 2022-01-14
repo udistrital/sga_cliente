@@ -5,6 +5,7 @@ import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import * as moment from 'moment';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -26,28 +27,30 @@ export class PracticasAcademicasService {
 
     }
 
-    getPracticas(endpoint, id = null, stateFilter = null) {
+    getPracticas(endpoint, filter = null, stateFilter = null) {
         this.requestManager.setPath('SGA_MID_SERVICE');
         let res: any;
         if (!this.practicas) {
-            if (id) {
-                res = this.requestManager.get(endpoint).pipe(map((practica: any) => {
-                    this.practicasSubject.next(practica);
-                    this.practicas = practica;
-                    return practica.Data.map((p: any) => {
-                        return {
-                            ...p,
-                            ...{
-                                TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
-                                EstadoId: p.EstadoTipoSolicitudId.EstadoId
+            if (filter) {
+                if (filter.Id || filter.FechaRadicacion) {
+                    res = this.requestManager.get(endpoint).pipe(map((practica: any) => {
+                        this.practicasSubject.next(practica);
+                        this.practicas = practica;
+                        return practica.Data.map((p: any) => {
+                            return {
+                                ...p,
+                                ...{
+                                    TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
+                                    EstadoId: p.EstadoTipoSolicitudId.EstadoId
+                                }
                             }
-                        }
-                    }).filter((practicas: any) => (id == practicas.Id))
+                        }).filter((practicas: any) => (filter.Id == practicas.Id || filter.FechaRadicacion == moment(practicas.FechaRadicacion, 'YYYY-MM-DD').format('DD/MM/YYYY')))
 
-                }),
-                    catchError(error => {
-                        return error
-                    }))
+                    }),
+                        catchError(error => {
+                            return error
+                        }))
+                }
             } else if (stateFilter) {
                 res = this.requestManager.get(endpoint).pipe(map((practica: any) => {
                     this.practicasSubject.next(practica);
@@ -87,22 +90,24 @@ export class PracticasAcademicasService {
 
             }
         } else {
-            if (id) {
-                res = this.practicas$.pipe(map((practica: any) => {
-                    return practica.Data.map((p: any) => {
-                        return {
-                            ...p,
-                            ...{
-                                TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
-                                EstadoId: p.EstadoTipoSolicitudId.EstadoId
+            if (filter) {
+                if (filter.Id || filter.FechaRadicacion) {
+                    res = this.practicas$.pipe(map((practica: any) => {
+                        return practica.Data.map((p: any) => {
+                            return {
+                                ...p,
+                                ...{
+                                    TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
+                                    EstadoId: p.EstadoTipoSolicitudId.EstadoId
+                                }
                             }
-                        }
-                    }).filter((practicas: any) => (id == practicas.Id))
+                        }).filter((practicas: any) => (filter.Id == practicas.Id || filter.FechaRadicacion == moment(practicas.FechaRadicacion, 'YYYY-MM-DD').format('DD/MM/YYYY')))
 
-                }),
-                    catchError(error => {
-                        return error
-                    }))
+                    }),
+                        catchError(error => {
+                            return error
+                        }))
+                }
             } else if (stateFilter) {
                 res = this.practicas$.pipe(map((practica: any) => {
                     return practica.Data.map((p: any) => {

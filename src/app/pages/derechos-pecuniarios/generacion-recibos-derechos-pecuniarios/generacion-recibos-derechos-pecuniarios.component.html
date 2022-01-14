@@ -1,9 +1,11 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <nb-card-header>
         {{ 'derechos_pecuniarios.generacion_recibo_derecho_pecuniario' | translate }}
     </nb-card-header>
     <nb-card-body>
         <hr width="0%">
+
         <fieldset [ngClass]="{'fieldseter':true} ">
             <div class="row">
                 <div class="col-3">
@@ -23,11 +25,12 @@
                 </div>
                 <div class="col-9">
                     <span class="form-control">
-                        {{123456789}}
+                        {{userData?userData.Documento?userData.Documento: '': ''}}
                     </span>
                 </div>
             </div>
         </fieldset>
+
         <br>
         <fieldset [ngClass]="{'fieldseter':true} " *ngIf="!new_pecuniario">
             <legend> {{ 'derechos_pecuniarios.recibos_generados' | translate }} </legend>
@@ -40,20 +43,24 @@
                 </button>
             </div>
         </fieldset>
+
         <br>
         <fieldset [ngClass]="{'fieldseter':true} " *ngIf="new_pecuniario">
             <legend> {{ 'derechos_pecuniarios.codigos_relacionados' | translate }} </legend>
-            <div class="col-12 row">
-                <mat-form-field style="width: 100%;">
-                    <mat-select [(ngModel)]="periodo" [disabled]='false'
-                        placeholder="{{ 'derechos_pecuniarios.placeholder_codigos_relacionados' | translate }}"
-                        (selectionChange)="cargarDatos($event)">
-                        <mat-option *ngFor="let vigencia of vigencias" [value]="vigencia">{{
-                            vigencia.Nombre }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
+            <div class="row">
+                <div class="col-12">
+                    <mat-form-field style="width: 100%;">
+                        <mat-select placeholder="{{ 'derechos_pecuniarios.placeholder_codigos_relacionados' | translate }}"
+                            (selectionChange)="cargarDatos($event)">
+                            <mat-option *ngFor="let codigo of info_info_persona.Codigos" [value]="codigo">
+                                <b>{{ codigo.Proyecto.slice(0,11) }}</b>{{ codigo.Proyecto.slice(11) }}
+                            </mat-option>
+                            </mat-select>
+                            </mat-form-field>
+                            </div>
             </div>
         </fieldset>
+
         <br>
         <fieldset [ngClass]="{'fieldseter':true} " *ngIf="new_pecuniario">
             <legend> {{ 'derechos_pecuniarios.derecho_pecuniario' | translate }} </legend>
@@ -62,13 +69,14 @@
                     <mat-form-field style="width: 100%;">
                         <mat-select placeholder="{{ 'derechos_pecuniarios.placeholder_derecho_pecuniario' | translate }}"
                             (selectionChange)="loadConcepto($event)">
-                            <mat-option *ngFor="let conceptos of datosCargados" [value]="conceptos.Id">{{
-                                conceptos.Nombre }}</mat-option>
+                            <mat-option *ngFor="let concepto of conceptos" [value]="concepto">{{
+                                concepto.Nombre }}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
             </div>
         </fieldset>
+
         <br>
         <fieldset [ngClass]="{'fieldseter':true} " *ngIf="new_pecuniario">
             <legend> {{ 'derechos_pecuniarios.verificar_datos' | translate }} </legend>
@@ -132,16 +140,15 @@
                     <label for="">{{'derechos_pecuniarios.valor' | translate}}</label>
                 </div>
                 <div class="col-9">
-                    <span class="form-control">
-                        {{generacion_recibo.value}}
+                    <span *ngIf="generacion_recibo.value && generacion_recibo.value.toLowerCase" class="form-control">
+                        {{ generacion_recibo.value }}
+                    </span>
+                    <span *ngIf="generacion_recibo.value && generacion_recibo.value.toExponential" class="form-control">
+                        {{ generacion_recibo.value | currency:'':true:'0.0'}}
                     </span>
                 </div>
             </div>
         </fieldset>
-
-
-
-
 
         <nb-card *ngIf="gen_recibo" class="exp-card text-center">
             <nb-card-header>{{ 'derechos_pecuniarios.generar_recibo' | translate }}</nb-card-header>
@@ -149,6 +156,7 @@
                 <button class="fa fa-barcode fa-5x" (click)="generar_recibo()"></button>
             </nb-card-body>
         </nb-card>
+
         <br><br>
         <div class="text-center" *ngIf="new_pecuniario">
             <button mat-button type="button" (click)="new_pecuniario = false; gen_recibo = false">

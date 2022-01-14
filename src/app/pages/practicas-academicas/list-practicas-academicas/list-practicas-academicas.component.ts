@@ -37,7 +37,7 @@ export class ListPracticasAcademicasComponent implements OnInit {
         deshabilitar: false,
       },
       {
-        etiqueta: 'input',
+        etiqueta: 'mat-date',
         tipo: 'datetime-local',
         nombre: 'FechaSolicitud',
         claseGrid: 'col-12 col-sm-5',
@@ -73,8 +73,14 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
 
   filterPracticas(event) {
-    this.InfoPracticasAcademicas = { FechaRadicacion: '', Id: '' };
-    this.datosPracticas = this.practicasService.getPracticas(event.data.Id ? event.data.Id : null, null)
+    this.InfoPracticasAcademicas = { FechaRadicacion: event.data.FechaSolicitud ? moment(event.data.FechaSolicitud, 'YYYY-MM-DD').format('DD/MM/YYYY') : null, Id: event.data.Numero ? event.data.Numero : null };
+    if (this.InfoPracticasAcademicas.Id === null && this.InfoPracticasAcademicas.FechaRadicacion === null) {
+      this.InfoPracticasAcademicas = null;
+    }
+    const endpoint = 'practicas_academicas?query=EstadoTipoSolicitudId.TipoSolicitud.Id:23&fields=Id,FechaRadicacion,EstadoTipoSolicitudId';
+    this.practicasService.getPracticas(endpoint, this.InfoPracticasAcademicas, null).subscribe(practicas => {
+      this.datosPracticas = practicas;
+    });
   }
 
   crearTabla() {
@@ -183,7 +189,11 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
 
   verPractica(event) {
-    this.router.navigate([`pages/practicas-academicas/detalle-practica-academica/${event.data['Id']}/${this.processEncript}`])
+    if (event.data.EstadoId.Nombre == 'Requiere modificación' && this.process == 'process') {
+      this.router.navigate([`pages/practicas-academicas/nueva-solicitud/${event.data['Id']}/${this.processEncript}`])
+    } else {
+      this.router.navigate([`pages/practicas-academicas/detalle-practica-academica/${event.data['Id']}/${this.processEncript}`])
+    }
   }
 
 }

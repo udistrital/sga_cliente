@@ -7,7 +7,7 @@
     </nb-card-header>
 
     <nb-card-body>
-      <ngx-solicitante-practica (loading)="changeLoading($event)" [docentesSolicitud]="InfoDocentes">
+      <ngx-solicitante-practica (loading)="changeLoading($event)" [docentesSolicitud]="InfoDocentes" [process]="false">
       </ngx-solicitante-practica>
       <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas"></ngx-dinamicform>
       <!-- <ngx-dinamicform *ngIf="['process'].includes(process)" [normalform]="formDocumentosAdicionales"></ngx-dinamicform> -->
@@ -60,10 +60,11 @@
         </button>
       </div>
 
-
-      <ngx-dinamicform *ngIsGranted="['COORDINADOR', 'COORDINADOR_PREGADO', 'COORDINADOR_POSGRADO']"
-        [normalform]="formRespuestaSolicitud" [modeloData]="InfoPersona" (result)="enviarSolicitud($event)">
-      </ngx-dinamicform>
+      <div *ngIf="estado!='Ejecutada'">
+        <ngx-dinamicform *ngIsGranted="['COORDINADOR', 'COORDINADOR_PREGADO', 'COORDINADOR_POSGRADO']"
+          [normalform]="formRespuestaSolicitud" [modeloData]="InfoPersona" (result)="enviarSolicitud($event)">
+        </ngx-dinamicform>
+      </div>
 
       <div *ngIf="estado=='Acta aprobada'">
         <ngx-dinamicform *ngIsGranted="['DOCENTE']" [normalform]="formDocumentosAdicionalesLegalizacion"

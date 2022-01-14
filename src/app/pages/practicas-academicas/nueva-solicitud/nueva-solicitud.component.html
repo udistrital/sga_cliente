@@ -1,32 +1,58 @@
 <div class="col-12">
-  <nb-card [nbSpinner]="loading"
-           nbSpinnerStatus="success"
-           nbSpinnerSize="xxlarge"
-           nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-    
+  <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+
     <nb-card-header>
       {{ 'practicas_academicas.titulo' | translate }}
     </nb-card-header>
 
     <nb-card-body>
-      <ngx-solicitante-practica (loading)="changeLoading($event)"
-                                (docentes)="loadDocentes($event)"
-                                [docentesSolicitud]="[]">
+      <ngx-solicitante-practica (loading)="changeLoading($event)" (docentes)="loadDocentes($event)"
+        [docentesSolicitud]="[]" [process]="true">
       </ngx-solicitante-practica>
 
-      <ngx-dinamicform [normalform]="FormPracticasAcademicas"
-                       [modeloData]="InfoPracticasAcademicas"
-                       (result)="enviarSolicitud($event)"
-                       [clean]="limpiar" 
-                       (interlaced)="getSeleccion($event)" >
+      <ngx-dinamicform [normalform]="FormPracticasAcademicas" [modeloData]="InfoPracticasAcademicas"
+        (result)="enviarSolicitud($event)" [clean]="limpiar" (interlaced)="getSeleccion($event)">
       </ngx-dinamicform>
 
-      <ngx-dinamicform [normalform]="FormSoporteDocumentales"
-                       [modeloData]="InfoDocumentos"
-                       [clean]="limpiar"
-                       (result)="enviarSolicitud($event)"
-                       *ngIf="llenarDocumentos">
+      <ngx-dinamicform [normalform]="FormSoporteDocumentales" [modeloData]="InfoDocumentos" [clean]="limpiar"
+        (result)="enviarSolicitud($event)" *ngIf="llenarDocumentos">
       </ngx-dinamicform>
+      <div class="row col-12" *ngIf="['news', 'process'].includes(process)">
+        <div class="row col-6">
+          <div class="col-6">
+            <label>{{ 'practicas_academicas.fecha_radicacion' | translate }}</label>
+          </div>
+          <div class="col-6">
+            <span class="form-control"> {{fechaRadicado}} </span>
+          </div>
+        </div>
+        <div class="row col-6">
+          <div class="col-6">
+            <label>{{ 'practicas_academicas.estado_actual' | translate }}</label>
+          </div>
+          <div class="col-6">
+            <span class="form-control"> {{estado}} </span>
+          </div>
+        </div>
+      </div>
+      <br>
+      <mat-accordion *ngIf="['news', 'process'].includes(process)">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ 'practicas_academicas.estados' | translate }}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ 'practicas_academicas.ver_listado_estados' | translate }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <ng2-smart-table [settings]="tablaEstados" [source]="estadosSolicitud" (custom)="verEstado($event)">
+          </ng2-smart-table>
+      
+        </mat-expansion-panel>
+      
+      </mat-accordion>
     </nb-card-body>
   </nb-card>
 </div>
