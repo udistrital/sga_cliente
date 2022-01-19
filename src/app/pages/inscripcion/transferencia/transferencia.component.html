@@ -8,7 +8,7 @@
             <ng2-smart-table *ngIf="listadoSolicitudes" [settings]="settings" [source]="dataSource">
             </ng2-smart-table>
             <hr width="0%">
-            <div class="text-center">
+            <div class="text-center" *ngIf="actions">
                 <button *ngIf="listadoSolicitudes" mat-button type="button" (click)="descargarNormativa">
                     {{ 'inscripcion.btn_descargar_normativa' | translate }}
                 </button>
@@ -21,7 +21,6 @@
         </ngx-crud-info-persona>
         <ngx-dinamicform *ngIf="!listadoSolicitudes" [normalform]="formTransferencia" (result)="validarForm($event)">
         </ngx-dinamicform>
-
         <div class="container-button-column" *ngIf="!listadoSolicitudes">
             <button mat-button type="button" (click)="listadoSolicitudes = true">
                 {{ 'GLOBAL.cancelar' | translate }}

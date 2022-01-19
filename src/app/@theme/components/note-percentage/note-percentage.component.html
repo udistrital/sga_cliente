@@ -1,0 +1,19 @@
+
+<div class="container-form">
+    <h5> {{name?name:''}} </h5>
+    <form [formGroup]="form" class="container-percentage">
+        <div formArrayName="percentages" *ngFor="let per of percentageField.controls; let i = index">
+            <div [formGroupName]="i" >
+                <mat-form-field>
+                    <mat-label for="i">{{settingFields[i].label}}</mat-label>
+                    <input id="i" placeholder="{{settingFields[i].placeholder}}" formControlName="field" matInput type="number">
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+    <div *ngIf="form.errors">
+        <mat-error *ngIf="form.hasError('invalid_percentage')">
+            La suma de los porcentajes \n debe ser igual a {{maxPercentageField.value}}
+        </mat-error>
+    </div>
+</div>

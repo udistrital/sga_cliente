@@ -1,5 +1,5 @@
 <div [ngSwitch]="normalform?normalform.tipo_formulario?normalform.tipo_formulario:'':''"
-      class="{{normalform?normalform.customPadding?'dinamic-form padding-custom-' + normalform.customPadding: 'dinamic-form padding-custom-1': 'dinamic-form padding-custom-1'}}">
+    class="{{normalform?normalform.customPadding?'dinamic-form padding-custom-' + normalform.customPadding: 'dinamic-form padding-custom-1': 'dinamic-form padding-custom-1'}}">
 
     <!-- Form  basic -->
     <form class="form-horizontal" *ngSwitchCase="'basic'">
@@ -388,7 +388,8 @@
                         <mat-form-field *ngSwitchCase="'select'" style="width: 100%;" floatLabel="always"
                             [hidden]="c.ocultar">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
-                            <mat-select [placeholder]="c.valor?c.key?c.valor[c.key]?c.valor[c.key]:(c.valor|json):c.placeholder:c.placeholder"
+                            <mat-select
+                                [placeholder]="c.valor?c.key?c.valor[c.key]?c.valor[c.key]:(c.valor|json):c.placeholder:c.placeholder"
                                 [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" [disabled]="c.deshabilitar">
                                 <mat-option>--Seleccionar--</mat-option>
@@ -402,7 +403,8 @@
                         <!-- select multiple -->
                         <mat-form-field *ngSwitchCase="'selectmultiple'" style="width: 100%;" floatLabel="always">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
-                            <mat-select [placeholder]="c.valor?c.key?c.valor[c.key]?c.valor[c.key]:(c.valor|json):c.placeholder:c.placeholder"
+                            <mat-select
+                                [placeholder]="c.valor?c.key?c.valor[c.key]?c.valor[c.key]:(c.valor|json):c.placeholder:c.placeholder"
                                 [(ngModel)]="c.valor" (ngModelChange)="validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" [disabled]="c.deshabilitar" multiple>
                                 <mat-option *ngFor="let item of c.opciones" [value]="item">
@@ -418,7 +420,7 @@
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <input matInput type="text"
                                 [placeholder]="c.valor?c.key?c.valor[c.key]?c.valor[c.key]:(c.valor|json):c.placeholder:c.placeholder"
-                                aria-label="Number" [matAutocomplete]="auto"
+                                aria-label="Number" [matAutocomplete]="auto" [disabled]="c.deshabilitar"
                                 (keyup)="searchTerm$.next({text: $event.target.value, path: c.path, query: c.query, field: c, keyToFilter: c.keyToFilter})">
                             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                                 [displayWith]="displayWithFn"
@@ -457,7 +459,8 @@
                                     <label for="{{c.nombre}}" class="upload-file">
                                         {{c.requerido?'* '+c.label:c.label}}
                                     </label>
-                                    <input #documento type="file" id="{{c.nombre}}" (change)="onChange($event,c)" />
+                                    <input #documento [disabled]="c.deshabilitar" type="file" id="{{c.nombre}}"
+                                        (change)="onChange($event,c)" />
                                     <br>
                                     <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
 
@@ -473,12 +476,12 @@
 
                         <!--buttton -->
                         <div *ngSwitchCase="'button'" class="row {{c.ocultar?'no-mostrar':''}}">
-                          <div class="{{c.claseGrid }}" >
-                              <button mat-button id="{{c.id}}" (click)="auxButton(c)" >
-                                  <i class="{{c.icono}}"></i>
-                                  {{ c.label }}
-                              </button>
-                          </div>
+                            <div class="{{c.claseGrid }}">
+                                <button mat-button id="{{c.id}}" (click)="auxButton(c)">
+                                    <i class="{{c.icono}}"></i>
+                                    {{ c.label }}
+                                </button>
+                            </div>
                         </div>
 
                         <!--label-->
@@ -486,12 +489,14 @@
                     </div>
                 </div>
             </div>
+            <ng-content></ng-content>
             <div class="buttons-container">
                 <button class="btn btn-primary btn-sm" (click)="clearForm()"
                     [hidden]="!normalform.btnLimpiar">{{normalform.btnLimpiar}}</button>
                 <button class="btn btn-success btn-sm ml-2" (click)="validForm()"
                     [hidden]="!normalform.btn">{{normalform.btn}}</button>
             </div>
+
 
         </fieldset>
         <!-- Botones de form con acción de botones -->

@@ -17,11 +17,11 @@ const routes: Routes = [{
     path: 'preinscripcion',
     component: PreinscripcionComponent,
   }, {
-    path: 'transferencia',
+    path: 'transferencia/:process',
     component: TransferenciaComponent,
   },
   {
-    path: 'solicitud-transferencia',
+    path: 'solicitud-transferencia/:type/:level/:process',
     component: SolicitudTransferenciaComponent,
   },
 

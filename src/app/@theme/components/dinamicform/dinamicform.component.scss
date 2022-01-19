@@ -2,16 +2,7 @@
 @import "~bootstrap/scss/mixins/breakpoints";
 @import "~@nebular/theme/styles/global/breakpoints";
 @include nb-install-component() {
-  .ver-documento {
-    cursor: pointer;
-    color: var(--primary);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    span:hover {
-      text-decoration: underline;
-    }
-  }
+
   ::ng-deep .mat-input-element::placeholder {
     color: nb-theme(text-basic-color);
   }
