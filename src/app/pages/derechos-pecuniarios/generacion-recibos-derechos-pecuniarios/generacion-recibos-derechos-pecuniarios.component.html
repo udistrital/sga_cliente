@@ -55,9 +55,9 @@
                             <mat-option *ngFor="let codigo of info_info_persona.Codigos" [value]="codigo">
                                 <b>{{ codigo.Proyecto.slice(0,11) }}</b>{{ codigo.Proyecto.slice(11) }}
                             </mat-option>
-                            </mat-select>
-                            </mat-form-field>
-                            </div>
+                        </mat-select>
+                        </mat-form-field>
+                        </div>
             </div>
         </fieldset>
 
@@ -144,7 +144,7 @@
                         {{ generacion_recibo.value }}
                     </span>
                     <span *ngIf="generacion_recibo.value && generacion_recibo.value.toExponential" class="form-control">
-                        {{ generacion_recibo.value | currency:'':true:'0.0'}}
+                        {{ formatterPeso.format(generacion_recibo.value)}}
                     </span>
                 </div>
             </div>

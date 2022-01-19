@@ -1662,7 +1662,10 @@
         "nombre": "Name",
         "identificacion": "Identification",
         "respuesta_dada_por": "Response by",
-        "ver_respuesta":"Response"
+        "ver_respuesta":"Response",
+        "pago_ya_adjuntado": "Payment was previously enclosed.",
+        "solicitud_generada": "The request has been generated successfully.",
+        "error_solicitud_generada": "Request could not be generated."
     },
     "tipo_inscripcion": {
         "titulo": "Inscriptions Type",

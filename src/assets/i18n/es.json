@@ -1681,7 +1681,7 @@
         "fecha_pago": "Fecha de\npago",
         "valor_pagado": "Valor\npago",
         "pagar": "Pagar en línea",
-        "adjuntar_pago": "Adjungar pago",
+        "adjuntar_pago": "Adjuntar pago",
         "solicitar": "Solicitar",
         "forma": "Seleccione la forma en la que desea definir los conceptos de los derechos pecuniarios",
         "copiar": "Copiar los conceptos de una vigencia anterior",
@@ -1746,7 +1746,10 @@
         "nombre": "Nombre",
         "identificacion": "Identificación",
         "respuesta_dada_por": "Respuesta dada por",
-        "ver_respuesta":"Respuesta"
+        "ver_respuesta": "Respuesta",
+        "pago_ya_adjuntado": "El pago fue adjuntado con anterioridad.",
+        "solicitud_generada": "La solicitud se ha generado con éxito.",
+        "error_solicitud_generada": "La solicitud no pudo ser generada."
     },
     "tipo_inscripcion": {
         "titulo": "Tipos de Inscripción",
