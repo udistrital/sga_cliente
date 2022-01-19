@@ -204,7 +204,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
           if (willSave.value) {
             this.loading = true;
             this.sgaMidService
-              .post('derechos_pecuniarios/ActualizarValor/', this.datosCargados)
+              .post('derechos_pecuniarios/actualizar_valor/', this.datosCargados)
               .subscribe(
                 response => {
                   this.guardable = false;
