@@ -36,6 +36,10 @@
             "list_evento": "Lista eventos",
             "crud_evento": "Crud eventos"
         },
+        "notas": {
+            "notas":"Notas",
+            "registro_notas":"Registro de notas"
+        },
         "derechos_pecuniarios": {
             "derechos_pecuniarios": "Derechos Pecuniarios",
             "definir_conceptos": "Definir Conceptos",
@@ -1911,5 +1915,10 @@
         "seleccionar": "Seleccione los espacios académicos a preinscribir",
         "adicionar": "Adicionar",
         "periodo_formacion": "Periodo de Formación"
+    },
+    "notas": {
+        "captura_notas_parciales":"Captura de notas parciales",
+        "captura_notas":"Captura de notas",
+        "captura_porcentajes":"Captura de porcentajes"
     }
 }
