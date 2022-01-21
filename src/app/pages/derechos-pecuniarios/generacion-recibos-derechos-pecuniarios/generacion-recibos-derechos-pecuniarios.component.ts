@@ -18,6 +18,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
 import { CustomizeButtonComponent } from '../../../@theme/components';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import * as momentTimezone from 'moment-timezone';
 
 @Component({
   selector: 'generacion-recibos-derechos-pecuniarios',
@@ -34,7 +35,6 @@ export class GeneracionRecibosDerechosPecuniarios {
   vigencias: any = [];
   vigenciaActual: any;
   conceptos: any[];
-
 
   new_pecuniario = false;
   info_info_persona: any;
@@ -248,8 +248,12 @@ export class GeneracionRecibosDerechosPecuniarios {
                 })
                 if (comprobanteRecibo) {
                   let files: Array<any> = [];
-
                   this.loading = true;
+
+                  let dataAux = data;
+                  delete data.Solicitar.disabled;
+                  this.dataSource.update(dataAux, data)
+
                   const file = {
                     file: await this.nuxeo.fileToBase64(comprobanteRecibo),
                     IdTipoDocumento: 58,
@@ -336,52 +340,9 @@ export class GeneracionRecibosDerechosPecuniarios {
 
   async loadInfoRecibos() {
     this.loading = true;
-    this.dataSource.load([{
-      Codigo: "40",
-      ProgramaAcademicoId: "195",
-      ProgramaAcademico: "Maestria en ingenieria civil",
-      Cedula_estudiante: "123456789",
-      Codigo_estudiante: "20182195002",
-
-      Periodo: 2021,
-      Id: "8803",
-      FechaCreacion: '2021-12-14',
-      Valor: 1500,
-      Concepto: 'Certificado de notas',
-      FechaOrdinaria: '2021-12-14',
-      Estado: 'Pendiente pago',
-      //VerRecibo: 23
-      ValorPagado: 1500,
-      VerRespuesta: 140837,
-      FechaPago: '2021-12-15',
-      VerRecibo: {
-        icon: 'fa fa-download fa-2x',
-        label: 'Visualizar recibo',
-        class: 'btn btn-primary'
-      },
-      Pagar: {
-        icon: 'fa fa-credit-card fa-2x',
-        label: 'Pago en línea',
-        class: "btn btn-primary"
-      },
-      AdjuntarPago: {
-        icon: 'fa fa-upload fa-2x',
-        label: 'Adjuntar',
-        class: "btn btn-primary"
-      },
-      Solicitar: {
-        icon: 'fa fa-paper-plane fa-2x',
-        label: 'Solicitar',
-        class: "btn btn-primary"
-      },
-    }]);
     // Función del MID que retorna el estado del recibo
     const PeriodoActual = localStorage.getItem('IdPeriodo')
 
-    // // // // // // // // // // // // //
-    //  comentado hasta tener servicio  //
-    // // // // // // // // // // // // //
-    /*
     if (this.info_persona_id != null && PeriodoActual != null) {
       await this.sgaMidService.get('derechos_pecuniarios/estado_recibos/' + this.info_persona_id + '/' + PeriodoActual).subscribe(
         (response: any) => {
@@ -412,8 +373,7 @@ export class GeneracionRecibosDerechosPecuniarios {
               element.AdjuntarPago = {
                 icon: 'fa fa-upload fa-2x',
                 label: 'Adjuntar',
-                class: "btn btn-primary",
-                disabled: true
+                class: "btn btn-primary"
               };
 
               element.Solicitar = {
@@ -435,6 +395,7 @@ export class GeneracionRecibosDerechosPecuniarios {
                   element.AdjuntarPago.disabled = true;
                   break;
                 case 'Solicitado':
+                  element.AdjuntarPago.disabled = true;
                   element.Solicitar.disabled = true;
                   element.Pagar.disabled = true;
                   break;
@@ -443,14 +404,17 @@ export class GeneracionRecibosDerechosPecuniarios {
                   element.Pagar.disabled = true;
                   break;
               }
-
+              element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('YYYY-MM-DD');
+              element.FechaOrdinaria = momentTimezone.tz(element.FechaOrdinaria, 'America/Bogota').format('YYYY-MM-DD');
+              if (element.FechaPago) {
+                element.FechaPago = momentTimezone.tz(element.FechaPago, 'America/Bogota').format('YYYY-MM-DD');
+              }
               dataInfo.push(element);
-              this.loading = false;
+
               this.dataSource.load(dataInfo);
               this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
 
               this.loading = false;
-
             })
           }
         }, error => {
@@ -459,8 +423,6 @@ export class GeneracionRecibosDerechosPecuniarios {
         },
       );
     }
-    */
-    this.loading = false;
   }
 
 
@@ -487,31 +449,26 @@ export class GeneracionRecibosDerechosPecuniarios {
             const fecha = new Date();
             fecha.setDate(fecha.getDate() + 90);
             recibo.FechaPago = moment(`${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`, 'YYYY-MM-DD').format('DD/MM/YYYY');
-            // // // // // // // // // // // // //
-            //  comentado hasta tener servicio  //
-            // // // // // // // // // // // // //
-            /*
-        this.sgaMidService.post('derechos_pecuniarios/generar_derecho', recibo).subscribe(
-          (response: any) => {
-            if (response.Code === '200') {
-              this.loadInfoRecibos();
-              this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
-              new_pecuniario = false;
-              gen_recibo = false
-            } else if (response.Code === '204') {
-              this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.recibo_duplicado'));
-            } else if (response.Code === '400') {
-              this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
-            }
-            this.loading = false;
-          },
-          (error: HttpErrorResponse) => {
-            this.loading = false;
-            this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
-          },
-        );
-        */
-            this.loading = false;
+
+            this.sgaMidService.post('derechos_pecuniarios/generar_derecho', recibo).subscribe(
+              (response: any) => {
+                if (response.Code === '200') {
+                  this.loadInfoRecibos();
+                  this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
+                  this.new_pecuniario = false;
+                  this.gen_recibo = false
+                } else if (response.Code === '204') {
+                  this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.recibo_duplicado'));
+                } else if (response.Code === '400') {
+                  this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+                }
+                this.loading = false;
+              },
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
+              },
+            );
           }
         });
     }
