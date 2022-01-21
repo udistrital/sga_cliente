@@ -17,6 +17,8 @@ import { UserService } from '../../../@core/data/users.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
 import { CustomizeButtonComponent } from '../../../@theme/components';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import * as momentTimezone from 'moment-timezone';
 
 @Component({
   selector: 'generacion-recibos-derechos-pecuniarios',
@@ -33,7 +35,6 @@ export class GeneracionRecibosDerechosPecuniarios {
   vigencias: any = [];
   vigenciaActual: any;
   conceptos: any[];
-
 
   new_pecuniario = false;
   info_info_persona: any;
@@ -61,11 +62,17 @@ export class GeneracionRecibosDerechosPecuniarios {
   Campo2Control = new FormControl('', [Validators.required]);
   gen_recibo: boolean;
   generacion_recibo = null;
+  formatterPeso = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0
+  })
 
   constructor(
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
+    private nuxeo: NewNuxeoService,
     private userService: UserService,
     private parametrosService: ParametrosService) {
     this.dataSource = new LocalDataSource();
@@ -110,7 +117,6 @@ export class GeneracionRecibosDerechosPecuniarios {
         }
         await this.cargarPeriodo();
         this.loadInfoRecibos();
-        // this.loading = false;
       },
         (error: HttpErrorResponse) => {
           this.loading = false;
@@ -158,6 +164,9 @@ export class GeneracionRecibosDerechosPecuniarios {
           editable: false,
           width: '10%',
           filter: false,
+          valuePrepareFunction: (value) => {
+            return this.formatterPeso.format(value);
+          },
         },
         Concepto: {
           title: this.translate.instant('derechos_pecuniarios.concepto'),
@@ -171,17 +180,14 @@ export class GeneracionRecibosDerechosPecuniarios {
           editable: false,
           filter: false,
         },
-        Pago: {
-          title: this.translate.instant('derechos_pecuniarios.pago'),
-          width: '10%',
-          editable: false,
-          filter: false,
-        },
         ValorPagado: {
           title: this.translate.instant('derechos_pecuniarios.valor_pagado'),
           width: '15%',
           editable: false,
           filter: false,
+          valuePrepareFunction: (value) => {
+            return this.formatterPeso.format(value);
+          },
         },
         FechaPago: {
           title: this.translate.instant('derechos_pecuniarios.fecha_pago'),
@@ -201,11 +207,11 @@ export class GeneracionRecibosDerechosPecuniarios {
           width: '5%',
           editable: false,
           filter: false,
-          renderComponent: LinkDownloadNuxeoComponent,
+          renderComponent: CustomizeButtonComponent,
           type: 'custom',
-          // onComponentInitFunction: (instance) => {
-          //   instance.save.subscribe((data) => this.descargarReciboPago(data))
-          // },
+          onComponentInitFunction: (instance) => {
+            instance.save.subscribe((data) => this.descargarReciboPago(data))
+          },
         },
         Pagar: {
           title: this.translate.instant('derechos_pecuniarios.pagar'),
@@ -216,7 +222,9 @@ export class GeneracionRecibosDerechosPecuniarios {
           renderComponent: CustomizeButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.save.subscribe(data => {
-              console.log(data);
+              if (data.Estado === 'Pendiente pago') {
+                this.abrirPago(data);
+              }
             });
           },
         },
@@ -229,16 +237,43 @@ export class GeneracionRecibosDerechosPecuniarios {
           type: 'custom',
           onComponentInitFunction: (instance) => {
             instance.save.subscribe(async (data) => {
-              const { value: file } = await Swal.fire({
-                title: 'Adjunte recibo',
-                input: 'file',
-                inputAttributes: {
-                  'accept': 'pdf/*',
-                  'aria-label': 'Upload your profile picture'
+              if (data.Estado === 'Pendiente pago') {
+                const { value: comprobanteRecibo } = await Swal.fire({
+                  title: 'Adjunte recibo',
+                  input: 'file',
+                  inputAttributes: {
+                    'accept': 'pdf/*',
+                    'aria-label': 'Upload your profile picture'
+                  }
+                })
+                if (comprobanteRecibo) {
+                  let files: Array<any> = [];
+                  this.loading = true;
+
+                  let dataAux = data;
+                  delete data.Solicitar.disabled;
+                  this.dataSource.update(dataAux, data)
+
+                  const file = {
+                    file: await this.nuxeo.fileToBase64(comprobanteRecibo),
+                    IdTipoDocumento: 58,
+                    metadatos: {
+                      NombreArchivo: comprobanteRecibo.name,
+                      Tipo: "Archivo",
+                      Observaciones: "Comprobante de pago de derecho pecuniario",
+                      "dc:title": comprobanteRecibo.name,
+                    },
+                    descripcion: comprobanteRecibo.name,
+                    nombre: comprobanteRecibo.name,
+                    key: 'Documento',
+                  }
+                  files.push(file);
+                  data.comprobanteRecibo = file
+                  data.SolicitanteId = this.info_persona_id
+                  this.loading = false;
                 }
-              })
-              if (file) {
-                console.log(file);
+              } else {
+                this.popUpManager.showAlert(this.translate.instant('derechos_pecuniarios.adjuntar_pago'), this.translate.instant('derechos_pecuniarios.pago_ya_adjuntado'));
               }
             })
           },
@@ -251,7 +286,25 @@ export class GeneracionRecibosDerechosPecuniarios {
           renderComponent: CustomizeButtonComponent,
           type: 'custom',
           onComponentInitFunction: (instance) => {
-            instance.save.subscribe((data) => console.log(data))
+            instance.save.subscribe((data) => {
+              if (data.comprobanteRecibo) {
+                this.sgaMidService.post('derechos_pecuniarios/solicitud', data).subscribe(
+                  (response: any) => {
+                    if (response.Code === '200') {
+                      this.loadInfoRecibos();
+                      this.popUpManager.showSuccessAlert(this.translate.instant('recderechos_pecuniariosibo_pago.solicitud_generada'));
+                    } else if (response.Code === '400') {
+                      this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error_solicitud_generada'));
+                    }
+                    this.loading = false;
+                  },
+                  (error: HttpErrorResponse) => {
+                    this.loading = false;
+                    this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
+                  },
+                );
+              }
+            })
           },
         },
         VerRespuesta: {
@@ -287,73 +340,81 @@ export class GeneracionRecibosDerechosPecuniarios {
 
   async loadInfoRecibos() {
     this.loading = true;
-    this.dataSource.load([{
-      Periodo: 10,
-      Id: 12,
-      FechaCreacion: '12-01-01',
-      Valor: "$ 1.500",
-      Concepto: 'Certificado de notas',
-      FechaOrdinaria: '12-10-01',
-      Pago: '18',
-      ValorPagado: "$1.500",
-      FechaPago: '12-09-01',
-      Estado: 'Pendiente pago',
-      //VerRecibo: 23
-      VerRecibo: 140837,
-      Pagar: {
-        icon: 'fa fa-credit-card fa-2x',
-        label: 'Pago en línea',
-        class: "btn btn-primary"
-      },
-      AdjuntarPago: {
-        icon: 'fa fa-upload fa-2x',
-        label: 'Adjuntar',
-        class: "btn btn-primary"
-      },
-      Solicitar: {
-        icon: 'fa fa-paper-plane fa-2x',
-        label: 'Solicitar',
-        class: "btn btn-primary"
-      },
-      VerRespuesta: 140837,
-    }]);
     // Función del MID que retorna el estado del recibo
     const PeriodoActual = localStorage.getItem('IdPeriodo')
 
-    // // // // // // // // // // // // //
-    //  comentado hasta tener servicio  //
-    // // // // // // // // // // // // //
-    /*
     if (this.info_persona_id != null && PeriodoActual != null) {
       await this.sgaMidService.get('derechos_pecuniarios/estado_recibos/' + this.info_persona_id + '/' + PeriodoActual).subscribe(
         (response: any) => {
           if (response !== null && response.Status === '400') {
             this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error'));
-            // this.dataSource.load([]);
+            this.dataSource.load([]);
           } else if (response != null && response.Status === '404' || response.Data[0] === null) {
             this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('derechos_pecuniarios.no_recibo'));
-            // this.dataSource.load([]);
+            this.dataSource.load([]);
           } else {
             const data = <Array<any>>response.Data;
             const dataInfo = <Array<any>>[];
             this.recibos_pendientes = 0;
             data.forEach(element => {
 
-              const auxRecibo = element.ReciboInscripcion;
-              const NumRecibo = auxRecibo.split('/', 1);
-              element.Recibo = NumRecibo;
-              element.FechaCreacion = momentTimezone.tz(eleme    // // // // // // // // // // // // //
-    //  comentado hasta tener servicio  //
-    // // // // // // // // // // // // //
-                this.recibos_pendientes++;
+              element.VerRecibo = {
+                icon: 'fa fa-download fa-2x',
+                label: 'Visualizar recibo',
+                class: 'btn btn-primary'
+              };
+
+              element.Pagar = {
+                icon: 'fa fa-credit-card fa-2x',
+                label: 'Pago en línea',
+                class: "btn btn-primary"
+              };
+
+              element.AdjuntarPago = {
+                icon: 'fa fa-upload fa-2x',
+                label: 'Adjuntar',
+                class: "btn btn-primary"
+              };
+
+              element.Solicitar = {
+                icon: 'fa fa-paper-plane fa-2x',
+                label: 'Solicitar',
+                class: "btn btn-primary"
+              };
+
+              switch (element.Estado) {
+                case 'Pago':
+                  element.AdjuntarPago.disabled = true;
+                  element.Pagar.disabled = true;
+                  break;
+                case 'Pendiente pago':
+                  element.Solicitar.disabled = true;
+                  break;
+                case 'Vencido':
+                  element.Solicitar.disabled = true;
+                  element.AdjuntarPago.disabled = true;
+                  break;
+                case 'Solicitado':
+                  element.AdjuntarPago.disabled = true;
+                  element.Solicitar.disabled = true;
+                  element.Pagar.disabled = true;
+                  break;
+                case 'Ejecutada':
+                  element.Solicitar.disabled = true;
+                  element.Pagar.disabled = true;
+                  break;
+              }
+              element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('YYYY-MM-DD');
+              element.FechaOrdinaria = momentTimezone.tz(element.FechaOrdinaria, 'America/Bogota').format('YYYY-MM-DD');
+              if (element.FechaPago) {
+                element.FechaPago = momentTimezone.tz(element.FechaPago, 'America/Bogota').format('YYYY-MM-DD');
               }
               dataInfo.push(element);
-              this.loading = false;
+
               this.dataSource.load(dataInfo);
               this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
 
               this.loading = false;
-
             })
           }
         }, error => {
@@ -362,8 +423,6 @@ export class GeneracionRecibosDerechosPecuniarios {
         },
       );
     }
-    */
-    this.loading = false;
   }
 
 
@@ -380,26 +439,24 @@ export class GeneracionRecibosDerechosPecuniarios {
               Nombre: `${this.info_info_persona.PrimerNombre}${this.info_info_persona.SegundoNombre}`,
               Apellido: `${this.info_info_persona.PrimerApellido}${this.info_info_persona.SegundoApellido}`,
               Correo: JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).email,
-              ProgramaAcademicoId: this.generacion_recibo["IdProyecto"],
+              ProgramaAcademicoId: this.generacion_recibo.IdProyecto,
               DerechoPecuniarioId: this.generacion_recibo.DerechoPecuniarioId,
-              Year: this.periodo['Year'],
-              Periodo: this.periodo['Id'],
+              CodigoEstudiante: this.generacion_recibo.CodigoEstudiante,
+              Year: this.periodo.Year,
+              Periodo: this.periodo.Id,
               FechaPago: '',
             };
             const fecha = new Date();
             fecha.setDate(fecha.getDate() + 90);
             recibo.FechaPago = moment(`${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`, 'YYYY-MM-DD').format('DD/MM/YYYY');
 
-                // // // // // // // // // // // // //
-                //  comentado hasta tener servicio  //
-                // // // // // // // // // // // // //
-                /*
             this.sgaMidService.post('derechos_pecuniarios/generar_derecho', recibo).subscribe(
               (response: any) => {
                 if (response.Code === '200') {
                   this.loadInfoRecibos();
-                  console.log("-->", response);
                   this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
+                  this.new_pecuniario = false;
+                  this.gen_recibo = false
                 } else if (response.Code === '204') {
                   this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.recibo_duplicado'));
                 } else if (response.Code === '400') {
@@ -412,18 +469,41 @@ export class GeneracionRecibosDerechosPecuniarios {
                 this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
               },
             );
-            */
-            this.loading = false;
           }
         });
     }
   }
-
-  generar_solicitud_derecho() {
-  }
-
   descargarReciboPago(data) {
+    if (this.info_info_persona != null) {
+      this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
+      this.recibo_pago = new ReciboPago();
+      this.recibo_pago.NombreDelEstudiante = this.info_info_persona.PrimerNombre + ' ' +
+        this.info_info_persona.SegundoNombre + ' ' + this.info_info_persona.PrimerApellido + ' ' + this.info_info_persona.SegundoApellido;
+      this.recibo_pago.Periodo = this.periodo.Nombre;
+      this.recibo_pago.Comprobante = data.Id;
 
+      this.recibo_pago.ProyectoEstudiante = data.ProgramaAcademico;
+      this.recibo_pago.Descripcion = data.Concepto;
+      this.recibo_pago.DocumentoDelEstudiante = data.Cedula_estudiante;
+
+      this.recibo_pago.Codigo = data.Codigo;
+      this.recibo_pago.CodigoDelEstudiante = data.Codigo_estudiante;
+      this.recibo_pago.ValorDerecho = data.Valor;
+      this.recibo_pago.Fecha_pago = moment(data.FechaOrdinaria, 'YYYY-MM-DD').format('DD/MM/YYYY');
+
+      this.sgaMidService.post('generar_recibo/recibo_estudiante/', this.recibo_pago).subscribe(
+        response => {
+          this.loading = false;
+          const reciboData = new Uint8Array(atob(response['Data']).split('').map(char => char.charCodeAt(0)));
+          this.recibo_generado = window.URL.createObjectURL(new Blob([reciboData], { type: 'application/pdf' }));
+          window.open(this.recibo_generado);
+        },
+        error => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+        },
+      );
+    }
   }
 
   abrirPago(data) {
@@ -471,9 +551,14 @@ export class GeneracionRecibosDerechosPecuniarios {
 
   cargarDatos(event) {
     this.loading = true;
-    this.generacion_recibo["curricularProgram"] = event.value.Proyecto.slice(28);
-    this.generacion_recibo["code"] = event.value.Dato;
-    this.generacion_recibo["IdProyecto"] = event.value.IdProyecto;
+    this.generacion_recibo.curricularProgram = event.value.Proyecto.slice(28);
+    this.generacion_recibo.CodigoEstudiante = event.value.Dato;
+    this.generacion_recibo.IdProyecto = event.value.IdProyecto;
+    this.generacion_recibo.code = '* Códígo seleccionado';
+    this.generacion_recibo.concept = '* Concepto del derecho pecuniario elegido';
+    this.generacion_recibo.value = '* Valor del derecho elegido';
+    this.generacion_recibo.DerechoPecuniarioId = "";
+    this.gen_recibo = false;
     this.cargarConceptos(!event.value.Activo);
   }
 
@@ -487,7 +572,7 @@ export class GeneracionRecibosDerechosPecuniarios {
             // 40 -> CERTIFICADO DE NOTAS
             // 49 -> COPIAS DE ACTAS DE GRADO
             // 51 -> DUPLICADO DE DIPLOMAS
-            if (!egresado || (egresado && ["40", "49", "51"].includes(obj.ParametroId.CodigoAbreviacion))) {
+            if ((!egresado && ["31", "40", "41", "42", "44", "50"].includes(obj.ParametroId.CodigoAbreviacion)) || (egresado && ["40", "49", "51"].includes(obj.ParametroId.CodigoAbreviacion))) {
               const concepto = new Concepto();
               concepto.Id = obj.ParametroId.Id;
               concepto.Codigo = obj.ParametroId.CodigoAbreviacion;
