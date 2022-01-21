@@ -58,9 +58,8 @@ export class CrudNotasComponent implements OnInit {
   formSettings1(form: FormGroup) {
     console.log(form.valid)
     form.valueChanges.subscribe((data) => {
-      this.parcialPercentage[0] = data
       if (form.valid) {
-        console.log(data);
+        this.updateSumPercentage(0, data)
       }
     })
   }
@@ -68,7 +67,8 @@ export class CrudNotasComponent implements OnInit {
   formSettings2(form: FormGroup) {
     form.valueChanges.subscribe((data) => {
       if (form.valid) {
-        console.log(data);
+        this.updateSumPercentage(1, data)
+
       }
     })
   }
@@ -76,7 +76,7 @@ export class CrudNotasComponent implements OnInit {
   formSettings3(form: FormGroup) {
     form.valueChanges.subscribe((data) => {
       if (form.valid) {
-        console.log(data);
+        this.updateSumPercentage(2, data)
       }
     })
   }
@@ -87,5 +87,11 @@ export class CrudNotasComponent implements OnInit {
         console.log(data);
       }
     })
+  }
+
+  updateSumPercentage(index, value) {
+    const { percentages } = value;
+    this.parcialPercentage[index] = percentages.map(a => a.field).reduce((a, b) => a + b);
+    this.totalPercentage = this.parcialPercentage.reduce((a, b) => a + b)
   }
 }

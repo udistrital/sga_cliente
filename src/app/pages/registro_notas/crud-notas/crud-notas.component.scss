@@ -1,7 +1,15 @@
-
-
 .container-notes {
-    display: flex;
-    justify-content: space-around;
-  }
-  
+  display: flex;
+  justify-content: space-around;
+}
+
+.container-form {
+  padding: 1rem;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  background-color: white;
+  max-width: 17rem;
+  box-shadow: 1px 1px 3px 0px #888888;
+}
