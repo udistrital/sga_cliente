@@ -87,6 +87,10 @@ const routes: Routes = [{
     {
       path: 'tipo_inscripcion',
       loadChildren: () => import ('./tipo_inscripcion/tipo_inscripcion.module').then(m => m.TipoInscripcionModule),
+    },    
+    {
+      path: 'notas',
+      loadChildren: () => import ('./registro_notas/registro_notas.module').then(m => m.RegistroNotasModule),
     },
     {
         path: '',

@@ -1,0 +1,44 @@
+<nb-card>
+    <nb-card-header>
+        {{ 'notas.captura_notas_parciales' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+        <fieldset [ngClass]="{'fieldseter':true} ">
+            <legend> {{ 'notas.carga_academica' | translate }} </legend>
+            <div class="container-notes">
+                <ngx-note-percentage (formObservable)="formSettings1($event)" [settings]="settings1">
+                </ngx-note-percentage>
+                <ngx-note-percentage (formObservable)="formSettings2($event)" [settings]="settings2">
+                </ngx-note-percentage>
+                <ngx-note-percentage (formObservable)="formSettings3($event)" [settings]="settings3">
+                </ngx-note-percentage>
+                <ngx-note-percentage (formObservable)="formSettings4($event)" [settings]="settings4">
+                </ngx-note-percentage>
+                <div class="container-form">
+                    <h5> Total </h5>
+                    {{totalPercentage}}
+                </div>
+            </div>
+        </fieldset>
+        <br><br>
+        <fieldset [ngClass]="{'fieldseter':true} ">
+            <legend> {{ 'notas.notas' | translate }} </legend>
+            <div>
+                <div class="notes-container" *ngFor="let student of students">
+                    <span>{{student.code}}</span>
+                    <span>{{student.name}}</span>
+                    <span>{{student.lastname}}</span>
+                    <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="notes1">
+                    </ngx-note-percentage>
+                    <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="notes2">
+                    </ngx-note-percentage>
+                    <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="notes3">
+                    </ngx-note-percentage>
+                    <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="notes4">
+                    </ngx-note-percentage>
+
+                </div>
+            </div>
+        </fieldset>
+    </nb-card-body>
+</nb-card>
