@@ -1,4 +1,5 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <nb-card-header>
         {{ 'derechos_pecuniarios.lista_solicitudes_derechos_pecuniarios' | translate }}
     </nb-card-header>
@@ -62,7 +63,7 @@
                 </div>
                 <div class="col-9">
                     <span class="form-control">
-                        {{solicitudData.concept}}
+                        {{solicitudData.Concepto}}
                     </span>
                 </div>
             </div>
@@ -73,7 +74,7 @@
                 </div>
                 <div class="col-9">
                     <span class="form-control">
-                        {{solicitudData.value}}
+                        {{formatterPeso.format(solicitudData.Valor)}}
                     </span>
                 </div>
             </div>

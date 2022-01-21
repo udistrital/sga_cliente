@@ -3,7 +3,10 @@ import { FormControl, Validators } from '@angular/forms';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { UserService } from '../../../@core/data/users.service';
-import Swal from 'sweetalert2';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { PopUpManager } from '../../../managers/popUpManager';
+import * as momentTimezone from 'moment-timezone';
+import { FORMULARIO_SOLICITUD } from "./form-solicitud";
 import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academico/institucion_enfasis';
 import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
 import { CustomizeButtonComponent } from '../../../@theme/components';
@@ -19,34 +22,9 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   data: any[] = [];
   solicitudData: any = null;
   userResponse: any;
+  loading: boolean;
 
-  formularioSolicitud  = {
-      tipo_formulario: 'mini',
-      btn: 'Enviar respuesta',
-      alertas: true,
-      modelo: 'data',
-      customPadding: '0' ,
-      campos: [
-      {
-          etiqueta: 'textarea',
-          claseGrid: 'col-12',
-          nombre: 'Observaciones',
-          label_i18n: 'observaciones',
-          placeholder_i18n: 'observaciones',
-          requerido: true,
-          tipo: 'text',
-      },
-      {
-          etiqueta: 'file',
-          claseGrid: 'col-12',
-          nombre: 'File',
-          label_i18n: 'adjuntar',
-          placeholder_i18n: 'adjuntar',
-          requerido: true,
-          tipo: 'text',
-      }
-    ]
-  }
+  formularioSolicitud = FORMULARIO_SOLICITUD
 
   arr_proyecto: InstitucionEnfasis[] = [];
   source_emphasys: LocalDataSource = new LocalDataSource();
@@ -57,8 +35,16 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   Campo2Control = new FormControl('', [Validators.required]);
   settings: any;
 
+  formatterPeso = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0
+  })
+
   constructor(
     private userService: UserService,
+    private popUpManager: PopUpManager,
+    private sgaMidService: SgaMidService,
     private translate: TranslateService,) {
     this.dataSource = new LocalDataSource();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -69,7 +55,6 @@ export class ConsultarSolicitudesDerechosPecuniarios {
     this.userService.tercero$.subscribe((user) => {
       this.userResponse = user;
       this.userResponse.Rol = 'Coordinador'
-      console.log(this.userResponse)
     })
 
     this.loadInfoPersona();
@@ -84,8 +69,8 @@ export class ConsultarSolicitudesDerechosPecuniarios {
 
   }
 
-  updateLanguage(){
-    this.formularioSolicitud.campos.forEach((field: any)=> {
+  updateLanguage() {
+    this.formularioSolicitud.campos.forEach((field: any) => {
       field.label = this.translate.instant('GLOBAL.' + field.label_i18n);
       field.placeholder = this.translate.instant('GLOBAL.' + field.placeholder_i18n);
     })
@@ -139,9 +124,6 @@ export class ConsultarSolicitudesDerechosPecuniarios {
           filter: false,
           renderComponent: LinkDownloadNuxeoComponent,
           type: 'custom',
-          // onComponentInitFunction: (instance) => {
-          //   instance.save.subscribe((data) => this.descargarReciboPago(data))
-          // },
         },
         Gestionar: {
           title: this.translate.instant('derechos_pecuniarios.gestionar'),
@@ -152,7 +134,6 @@ export class ConsultarSolicitudesDerechosPecuniarios {
           type: 'custom',
           onComponentInitFunction: (instance) => {
             instance.save.subscribe((data) => {
-              console.log(data);
               this.solicitudData = data;
               this.gestion = true;
 
@@ -174,21 +155,40 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   }
 
   async loadInfoRecibos() {
-    this.dataSource.load([{
-      Periodo: 10,
-      Id: 12,
-      FechaCreacion: '12-01-01',
-      Codigo: "XXXXXX",
-      Nombre: 'Nombre y apellidos',
-      Identificacion: "CC, TI, CE",
-      Estado: 'Pendiente pago',
-      VerSoporte: 140837,
-      Gestionar: {
-        icon: 'fa fa-pencil fa-2x',
-        label: 'Gestionar',
-        class: "btn btn-primary"
-      }
-    }]);
+    this.loading = true;
+    this.sgaMidService.get('derechos_pecuniarios/solicitudes').subscribe(
+      (response: any) => {
+        if (response !== null && response.Code === '400') {
+          this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error'));
+          this.dataSource.load([]);
+        } else if (response != null && response.Code === '404' || response.Data[0] === null) {
+          this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('derechos_pecuniarios.no_recibo'));
+          this.dataSource.load([]);
+        } else {
+          const data = <Array<any>>response.Data;
+          const dataInfo = <Array<any>>[];
+          data.forEach(element => {
+            element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('YYYY-MM-DD');
+
+            element.Gestionar = {
+              icon: 'fa fa-pencil fa-2x',
+              label: 'Gestionar',
+              class: "btn btn-primary"
+            }
+
+            dataInfo.push(element);
+
+            this.dataSource.load(dataInfo);
+            this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
+
+            this.loading = false;
+          })
+        }
+      }, error => {
+        this.loading = false;
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
   }
 
 
