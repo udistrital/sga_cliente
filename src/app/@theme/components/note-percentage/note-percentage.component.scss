@@ -26,3 +26,7 @@
     max-width: 17rem;
     box-shadow: 1px 1px 3px 0px #888888;
 }
+
+input::after {
+    content: '%';
+}

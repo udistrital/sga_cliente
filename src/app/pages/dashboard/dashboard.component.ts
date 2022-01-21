@@ -17,44 +17,6 @@ export class DashboardComponent implements OnDestroy {
 
   private alive = true;
 
-  settings = {
-    name:'Corte 1',
-    percentage: 30,
-    fields: [
-      {placeholder: '% P1', label:'P1', name: 'p1'},
-      {placeholder: '% P2', label:'P2', name: 'p2'},
-      {placeholder: '% P3', label:'P3', name: 'p3'},
-      {placeholder: '% LAB', label:'LAB', name: 'lab'},
-    ]
-  }
-
-
-  settings2 = {
-    name:'Corte 2',
-    percentage: 35,
-    fields: [
-      {placeholder: '% P1', label:'P1', name: 'p1'},
-      {placeholder: '% P2', label:'P2', name: 'p2'},
-      {placeholder: '% P3', label:'P3', name: 'p3'},
-    ]
-  }
-
-  settings3 = {
-    name:'Examen',
-    percentage: 30,
-    fields: [
-      {placeholder: '% P1', label:'P1', name: 'p1', value: 30},
-    ]
-  }
-
-  settings4 = {
-    name:'Habilitación',
-    percentage: 70,
-    fields: [
-      {placeholder: '% P1', label:'P1', name: 'p1', value: 70},
-    ]
-  }
-
   lightCard: CardSettings = {
     title: 'Light',
     iconClass: 'nb-lightbulb',

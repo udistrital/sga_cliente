@@ -1,0 +1,12 @@
+<nb-card>
+    <nb-card-header>
+        {{ 'notas.captura_notas' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+        <fieldset [ngClass]="{'fieldseter':true} ">
+            <legend> {{ 'notas.carga_academica' | translate }} </legend>
+            <ng2-smart-table [settings]="settings" [source]="dataSource">
+            </ng2-smart-table>
+        </fieldset>
+    </nb-card-body>
+</nb-card>
