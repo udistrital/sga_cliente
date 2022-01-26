@@ -2,13 +2,13 @@ export const FORMULARIO_SOLICITUD = {
     tipo_formulario: 'mini',
     btn: 'Enviar respuesta',
     alertas: true,
-    modelo: 'data',
+    modelo: 'RespuestaSolicitudDerechos',
     customPadding: '0',
     campos: [
         {
             etiqueta: 'textarea',
             claseGrid: 'col-12',
-            nombre: 'Observaciones',
+            nombre: 'Observacion',
             label_i18n: 'observaciones',
             placeholder_i18n: 'observaciones',
             requerido: true,
@@ -17,11 +17,15 @@ export const FORMULARIO_SOLICITUD = {
         {
             etiqueta: 'file',
             claseGrid: 'col-12',
-            nombre: 'File',
+            clase: 'form-control',
+            nombre: 'DocRespuesta',
             label_i18n: 'adjuntar',
-            placeholder_i18n: 'adjuntar',
             requerido: true,
-            tipo: 'text',
+            tipo: 'pdf',
+            tipoDocumento: 25,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
         }
     ]
 }

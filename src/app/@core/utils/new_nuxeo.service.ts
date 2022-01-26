@@ -5,6 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import { DocumentoService } from '../data/documento.service';
 import { AnyService } from '../data/any.service';
 import { mergeMap } from 'rxjs/operators';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Injectable({
@@ -14,13 +15,14 @@ export class NewNuxeoService {
 
     constructor(
         private anyService: AnyService,
+        private sanitization: DomSanitizer,
         private documentService: DocumentoService,
     ) {
 
     }
 
     getUrlFile(base64, minetype) {
-        return new Promise((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
             const url = `data:${minetype};base64,${base64}`;
             fetch(url)
                 .then(res => res.blob())
@@ -94,7 +96,7 @@ export class NewNuxeoService {
                 )
                 .subscribe(async (f: any) => {
                     const url = await this.getUrlFile(f.file, f['file:content']['mime-type']);
-                    documentos[index] = { ...documentos[index], ...{ url: url } }
+                    documentos[index] = { ...documentos[index], ...{ url: url }, ...{ Documento: this.sanitization.bypassSecurityTrustUrl(url) } }
                     if (documentos.length === files.length) {
                         documentsSubject.next(documentos);
                     }

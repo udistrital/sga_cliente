@@ -1665,7 +1665,8 @@
         "ver_respuesta":"Response",
         "pago_ya_adjuntado": "Payment was previously enclosed.",
         "solicitud_generada": "The request has been generated successfully.",
-        "error_solicitud_generada": "Request could not be generated."
+        "error_solicitud_generada": "Request could not be generated.",
+        "error_respuesta_solicitud": "It was not possible to respond to the request."
     },
     "tipo_inscripcion": {
         "titulo": "Inscriptions Type",

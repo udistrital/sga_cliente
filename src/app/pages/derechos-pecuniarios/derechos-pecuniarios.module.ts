@@ -18,6 +18,7 @@ import { ConsultarConceptosComponent } from './consultar-conceptos/consultar-con
 import { ButtonPaymentComponent } from '../../@theme/components/button-payment/button-payment.component';
 import { LinkDownloadComponent } from '../../@theme/components/link-download/link-download.component';
 import { ConsultarSolicitudesDerechosPecuniarios } from './consultar-solicitudes/consultar-solicitudes.component';
+import { AdmisionModule } from '../admision/admision.module';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { ConsultarSolicitudesDerechosPecuniarios } from './consultar-solicitudes
     Ng2SmartTableModule,
     FormsModule,
     ReactiveFormsModule,
+    AdmisionModule,
     DerechosPecuniariosRoutingComponent,
   ],
   exports: [

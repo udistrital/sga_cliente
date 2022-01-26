@@ -13,7 +13,7 @@
                     <tr *ngFor="let descuento of info_descuento">
                         <td> {{descuento.DescuentosDependenciaId?descuento.DescuentosDependenciaId.TipoDescuentoId?descuento.DescuentosDependenciaId.TipoDescuentoId.Nombre:'':''}} </td>
                         <td *ngIf="descuento.Soporte !== undefined">
-                            <button mat-button type="button" (click)="pivotDocument.updateDocument(descuento.Soporte )">
+                            <button mat-button type="button" (click)="this.revisar_doc.emit(descuento.Soporte)">
                                 <i class="nb-search" title={{variable}}></i>
                             </button>
                         </td>

@@ -5,7 +5,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
-import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-experiencia-laboral',
@@ -28,6 +27,9 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
+  // tslint:disable-next-line: no-output-rename
+  @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
+
   organizacion: any;
   soporte: any;
   documentosSoporte = [];
@@ -37,8 +39,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private nuxeoService: NuxeoService,
-    private sanitization: DomSanitizer,
-    private pivotDocument: PivotDocument) {
+    private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
   }
@@ -110,7 +111,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   }
 
   verDocumento(document) {
-    this.pivotDocument.updateDocument(document);
+    this.revisar_doc.emit(document);
   }
 
   ngOnInit() {
