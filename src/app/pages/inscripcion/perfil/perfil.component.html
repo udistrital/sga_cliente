@@ -42,6 +42,7 @@
           (url_editar)="editar($event,'info_contacto')"
           persona_id="{{info_persona_id}}" class="col-md-6"></ngx-view-informacion-contacto>-->
         <ngx-view-formacion-academica (url_editar)="editar($event,'default')"
+                                      (revisar_doc)="abrirDocumento($event)"
                                       persona_id="{{info_persona_id}}"
                                       class="col-md-12">
         </ngx-view-formacion-academica>
@@ -51,6 +52,7 @@
                           class="col-md-12">
         </ngx-view-idiomas>
         <ngx-view-experiencia-laboral (url_editar)="editar($event,'default')"
+                                      (revisar_doc)="abrirDocumento($event)"
                                       persona_id="{{info_persona_id}}"
                                       class="col-md-12">
         </ngx-view-experiencia-laboral>
@@ -73,12 +75,14 @@
                                        class="col-md-12">
         </ngx-view-produccion-academica>
         <ngx-view-descuento-academico (url_editar)="editar($event,'default')"
+                                      (revisar_doc)="abrirDocumento($event)"
                                       inscripcion_id="{{info_inscripcion_id}}"
                                       persona_id="{{info_persona_id}}"
                                       class="col-md-12">
         </ngx-view-descuento-academico>
         <ngx-view-propuesta-grado (url_editar)="editar($event,'default')"
                                   (listo)="activarImprimir($event)"
+                                  (revisar_doc)="abrirDocumento($event)"
                                   inscripcion_id="{{info_inscripcion_id}}"
                                   persona_id="{{info_persona_id}}"
                                   class="col-md-12">

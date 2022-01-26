@@ -8,7 +8,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { CIDCService } from '../../../@core/data/cidc.service';
-import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-propuesta-grado',
@@ -41,6 +40,9 @@ export class ViewPropuestaGradoComponent implements OnInit {
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
   // tslint:disable-next-line: no-output-rename
+  @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
+
+  // tslint:disable-next-line: no-output-rename
   @Output('listo') listo: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private translate: TranslateService,
@@ -48,8 +50,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
     private cidcService: CIDCService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
-    private sanitization: DomSanitizer,
-    private pivotDocument: PivotDocument) {
+    private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     //this.persona_id = this.users.getPersonaId();
@@ -334,7 +335,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
 
   verPropuesta(document) {
     document.Id = document.DocumentoId;
-    this.pivotDocument.updateDocument(document);
+    this.revisar_doc.emit(document);
   }
 
   ngOnInit() {

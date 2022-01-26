@@ -131,7 +131,7 @@ export class PerfilComponent implements OnInit {
     if (this.en_revision) {
       this.revisar_doc.emit(documento)
     } else {
-      window.open(documento)
+      window.open(documento.Documento.changingThisBreaksApplicationSecurity)
     }
   }
 

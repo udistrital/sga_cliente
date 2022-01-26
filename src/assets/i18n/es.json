@@ -1753,7 +1753,8 @@
         "ver_respuesta": "Respuesta",
         "pago_ya_adjuntado": "El pago fue adjuntado con anterioridad.",
         "solicitud_generada": "La solicitud se ha generado con éxito.",
-        "error_solicitud_generada": "La solicitud no pudo ser generada."
+        "error_solicitud_generada": "La solicitud no pudo ser generada.",
+        "error_respuesta_solicitud": "No fue posible dar respuesta a la solicitud."
     },
     "tipo_inscripcion": {
         "titulo": "Tipos de Inscripción",

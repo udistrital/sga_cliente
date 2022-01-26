@@ -15,10 +15,11 @@ import { ParametrosService } from '../../../@core/data/parametros.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
 import { CustomizeButtonComponent } from '../../../@theme/components';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import * as momentTimezone from 'moment-timezone';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogoDocumentosComponent } from '../../admision/dialogo-documentos/dialogo-documentos.component';
 
 @Component({
   selector: 'generacion-recibos-derechos-pecuniarios',
@@ -73,6 +74,7 @@ export class GeneracionRecibosDerechosPecuniarios {
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private nuxeo: NewNuxeoService,
+    private dialog: MatDialog,
     private userService: UserService,
     private parametrosService: ParametrosService) {
     this.dataSource = new LocalDataSource();
@@ -312,11 +314,23 @@ export class GeneracionRecibosDerechosPecuniarios {
           width: '5%',
           editable: false,
           filter: false,
-          renderComponent: LinkDownloadNuxeoComponent,
+          renderComponent: CustomizeButtonComponent,
           type: 'custom',
-          // onComponentInitFunction: (instance) => {
-          //   instance.save.subscribe((data) => this.descargarReciboPago(data))
-          // },
+          onComponentInitFunction: (instance) => {
+            instance.save.subscribe((data) => {
+              this.nuxeo.get([data.VerRespuesta.documento.DocRespuesta[0]]).subscribe(
+                (documentos) => {
+                  const assignConfig = new MatDialogConfig();
+                  assignConfig.width = '1300px';
+                  assignConfig.height = '800px';
+                  const aux = { ...documentos[0], observacion: data.VerRespuesta.documento.Observacion, aprobado: false }
+                  console.log(aux)
+                  assignConfig.data = { documento: aux, observando: true }
+                  const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
+                }
+              );
+            })
+          }
         },
       },
       mode: 'external',
@@ -343,6 +357,7 @@ export class GeneracionRecibosDerechosPecuniarios {
     // Función del MID que retorna el estado del recibo
     const PeriodoActual = localStorage.getItem('IdPeriodo')
 
+    this.dataSource.load([]);
     if (this.info_persona_id != null && PeriodoActual != null) {
       await this.sgaMidService.get('derechos_pecuniarios/estado_recibos/' + this.info_persona_id + '/' + PeriodoActual).subscribe(
         (response: any) => {
@@ -357,6 +372,7 @@ export class GeneracionRecibosDerechosPecuniarios {
             const dataInfo = <Array<any>>[];
             this.recibos_pendientes = 0;
             data.forEach(element => {
+              const docRespuesta = element.VerRespuesta;
 
               element.VerRecibo = {
                 icon: 'fa fa-download fa-2x',
@@ -367,55 +383,58 @@ export class GeneracionRecibosDerechosPecuniarios {
               element.Pagar = {
                 icon: 'fa fa-credit-card fa-2x',
                 label: 'Pago en línea',
-                class: "btn btn-primary"
+                class: 'btn btn-primary'
               };
 
               element.AdjuntarPago = {
                 icon: 'fa fa-upload fa-2x',
                 label: 'Adjuntar',
-                class: "btn btn-primary"
+                class: 'btn btn-primary'
               };
 
               element.Solicitar = {
                 icon: 'fa fa-paper-plane fa-2x',
                 label: 'Solicitar',
-                class: "btn btn-primary"
+                class: 'btn btn-primary'
               };
+
+              element.VerRespuesta = {
+                icon: 'fa fa-download fa-2x',
+                label: 'Descargar',
+                class: 'btn btn-primary',
+                documento: docRespuesta
+              }
+
+              element.Pagar.disabled = true;
+              element.AdjuntarPago.disabled = true;
+              element.Solicitar.disabled = true;
+              element.VerRespuesta.disabled = true;
 
               switch (element.Estado) {
                 case 'Pago':
-                  element.AdjuntarPago.disabled = true;
-                  element.Pagar.disabled = true;
+                  delete element.Solicitar.disabled;
                   break;
                 case 'Pendiente pago':
-                  element.Solicitar.disabled = true;
-                  break;
-                case 'Vencido':
-                  element.Solicitar.disabled = true;
-                  element.AdjuntarPago.disabled = true;
-                  break;
-                case 'Solicitado':
-                  element.AdjuntarPago.disabled = true;
-                  element.Solicitar.disabled = true;
-                  element.Pagar.disabled = true;
+                  delete element.Pagar.disabled;
+                  delete element.AdjuntarPago.disabled;
                   break;
                 case 'Ejecutada':
-                  element.Solicitar.disabled = true;
-                  element.Pagar.disabled = true;
+                  delete element.VerRespuesta.disabled;
                   break;
               }
+
               element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('YYYY-MM-DD');
               element.FechaOrdinaria = momentTimezone.tz(element.FechaOrdinaria, 'America/Bogota').format('YYYY-MM-DD');
               if (element.FechaPago) {
                 element.FechaPago = momentTimezone.tz(element.FechaPago, 'America/Bogota').format('YYYY-MM-DD');
               }
+
               dataInfo.push(element);
-
-              this.dataSource.load(dataInfo);
-              this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
-
-              this.loading = false;
             })
+            this.dataSource.load(dataInfo);
+            this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
+
+            this.loading = false;
           }
         }, error => {
           this.loading = false;

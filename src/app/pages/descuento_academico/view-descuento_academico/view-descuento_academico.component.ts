@@ -9,7 +9,6 @@ import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-descuento-academico',
@@ -24,7 +23,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   programa: number;
   info_descuento: any;
   info_temp: any;
-  dataInfo:any;
+  dataInfo: any;
   dataDes: Array<any>;
   solicituddescuento: SolicitudDescuento;
   docDesSoporte = [];
@@ -46,17 +45,18 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
+  // tslint:disable-next-line: no-output-rename
+  @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
+
   constructor(private translate: TranslateService,
     private mid: CampusMidService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
     private inscripcionService: InscripcionService,
-    public pivotDocument : PivotDocument, 
     private sgaMidService: SgaMidService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.pivotDocument.updateDocument
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -90,9 +90,9 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
           this.nuxeoService.getFilesNew(soportes)
             .subscribe(response => {
               this.docDesSoporte = <Array<any>>response;
-                for (let i = 0; i < this.docDesSoporte.length; i++) {
-                  (this.info_descuento[this.docDesSoporte[i]['key']]).Soporte = this.docDesSoporte[i];
-                }
+              for (let i = 0; i < this.docDesSoporte.length; i++) {
+                (this.info_descuento[this.docDesSoporte[i]['key']]).Soporte = this.docDesSoporte[i];
+              }
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({

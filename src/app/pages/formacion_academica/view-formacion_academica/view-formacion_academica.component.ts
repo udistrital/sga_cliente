@@ -5,7 +5,6 @@ import { SgaMidService } from './../../../@core/data/sga_mid.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-formacion-academica',
@@ -28,6 +27,9 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
+  // tslint:disable-next-line: no-output-rename
+  @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
+
   info_formacion_academica: any;
   soporte: any;
   documentosSoporte = [];
@@ -36,15 +38,9 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private nuxeoService: NuxeoService,
-    private sanitization: DomSanitizer,
-    private pivotDocument: PivotDocument) {
+    private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.pivotDocument.info$.subscribe((data) => {
-      if (data) {
-        this.persona_id = data.TerceroId;
-      }
-    })
     this.loadData();
   }
 
@@ -120,7 +116,6 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
       .subscribe(res => {
         if (res !== null) {
-          console.log(res);
           const temp_info_academica = <any>res[0];
           const files = []
           if (temp_info_academica.Documento + '' !== '0') {
@@ -128,7 +123,6 @@ export class ViewFormacionAcademicaComponent implements OnInit {
           }
           this.nuxeoService.getFilesNew(files)
             .subscribe(response => {
-              console.log(response);
               const filesResponse = <any>response;
               this.info_formacion_academica = [
                 {
@@ -263,6 +257,6 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   }
 
   abrirDocumento(document) {
-    this.pivotDocument.updateDocument(document);
+    this.revisar_doc.emit(document);
   }
 }
