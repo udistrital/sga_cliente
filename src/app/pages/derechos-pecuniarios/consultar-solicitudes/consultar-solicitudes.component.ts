@@ -10,6 +10,7 @@ import { FORMULARIO_SOLICITUD } from "./form-solicitud";
 import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academico/institucion_enfasis';
 import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
 import { CustomizeButtonComponent } from '../../../@theme/components';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'consultar-solicitudes',
@@ -26,6 +27,7 @@ export class ConsultarSolicitudesDerechosPecuniarios {
 
   formularioSolicitud = FORMULARIO_SOLICITUD
 
+  InfoDocumentos: any;
   arr_proyecto: InstitucionEnfasis[] = [];
   source_emphasys: LocalDataSource = new LocalDataSource();
   proyectos = [];
@@ -34,6 +36,7 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
   settings: any;
+  Respuesta: any;
 
   formatterPeso = new Intl.NumberFormat('es-CO', {
     style: 'currency',
@@ -44,6 +47,7 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   constructor(
     private userService: UserService,
     private popUpManager: PopUpManager,
+    private nuxeo: NewNuxeoService,
     private sgaMidService: SgaMidService,
     private translate: TranslateService,) {
     this.dataSource = new LocalDataSource();
@@ -136,7 +140,6 @@ export class ConsultarSolicitudesDerechosPecuniarios {
             instance.save.subscribe((data) => {
               this.solicitudData = data;
               this.gestion = true;
-
             })
           },
         },
@@ -177,12 +180,12 @@ export class ConsultarSolicitudesDerechosPecuniarios {
             }
 
             dataInfo.push(element);
-
-            this.dataSource.load(dataInfo);
-            this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
-
-            this.loading = false;
           })
+
+          this.dataSource.load(dataInfo);
+          this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
+
+          this.loading = false;
         }
       }, error => {
         this.loading = false;
@@ -191,10 +194,51 @@ export class ConsultarSolicitudesDerechosPecuniarios {
     );
   }
 
+  async enviarSolicitud(event) {
+    if (event.valid) {
+      let files: Array<any> = [];
+      const element = event.data.RespuestaSolicitudDerechos.DocRespuesta;
+      if (typeof element.file !== 'undefined' && element.file !== null) {
+        this.loading = true;
+        const file = {
+          file: await this.nuxeo.fileToBase64(element.file),
+          IdTipoDocumento: element.IdDocumento,
+          metadatos: {
+            NombreArchivo: element.nombre,
+            Tipo: "Archivo",
+            Observaciones: element.nombre,
+            "dc:title": element.nombre,
+          },
+          descripcion: element.nombre,
+          nombre: element.nombre,
+          key: 'Documento',
+        }
+        files.push(file);
+      }
+      this.Respuesta = event.data.RespuestaSolicitudDerechos;
 
-  enviarSolicitud(event) {
-    console.log(event);
+      this.Respuesta.DocRespuesta = files
+      const hoy = new Date();
+      this.Respuesta.FechaRespuesta = momentTimezone.tz(hoy.getFullYear() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getDate(), 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+
+      this.Respuesta.TerceroResponasble = { Id: this.userResponse.Id };
+      this.sgaMidService.post('derechos_pecuniarios/respuesta_solicitud/' + this.solicitudData.Id, this.Respuesta).subscribe(
+        (res: any) => {
+          if (res !== null && res.Response.Code === '200') {
+            this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
+              this.translate.instant('GLOBAL.operacion_exitosa'));
+            this.loading = false;
+            this.gestion = false;
+          } else {
+            this.loading = false;
+            this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.error_practicas_academicas'));
+          }
+        }, error => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        },
+      );
+    }
   }
-
 
 }
