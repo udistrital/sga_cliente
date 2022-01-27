@@ -1,9 +1,9 @@
 export const FORMULARIO_SOLICITUD = {
     tipo_formulario: 'mini',
-    btn: 'Enviar respuesta',
     alertas: true,
+    nombre: "FORMULARIO_SOLICITUD",
+    btn: 'Enviar respuesta',
     modelo: 'RespuestaSolicitudDerechos',
-    customPadding: '0',
     campos: [
         {
             etiqueta: 'textarea',

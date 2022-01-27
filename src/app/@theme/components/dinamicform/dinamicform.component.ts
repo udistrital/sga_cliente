@@ -279,6 +279,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
         return false;
       }
       if (c.valor.type) {
+        console.log(c.valor)
         if (c.formatos.indexOf(c.valor.type.split('/')[1]) === -1) {
           c.clase = 'form-control form-control-danger';
           c.alerta = 'Solo se admiten los siguientes formatos: ' + c.formatos;
