@@ -14,6 +14,7 @@ export class DialogoDocumentosComponent implements OnInit {
   revisionForm: FormGroup;
   documento: any;
   loading: boolean;
+  observando: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<DialogoDocumentosComponent>,
@@ -29,6 +30,7 @@ export class DialogoDocumentosComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.documento = this.data.documento.Documento['changingThisBreaksApplicationSecurity'];
+    this.observando = this.data.observando;
     this.revisionForm.setValue({
       observacion: this.data.documento.observacion,
       aprobado: this.data.documento.aprobado,

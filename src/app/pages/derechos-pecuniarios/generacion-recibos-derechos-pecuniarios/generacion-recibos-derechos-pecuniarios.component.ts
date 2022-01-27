@@ -292,10 +292,10 @@ export class GeneracionRecibosDerechosPecuniarios {
               if (data.comprobanteRecibo) {
                 this.sgaMidService.post('derechos_pecuniarios/solicitud', data).subscribe(
                   (response: any) => {
-                    if (response.Code === '200') {
+                    if (response.Response.Code === '200') {
                       this.loadInfoRecibos();
-                      this.popUpManager.showSuccessAlert(this.translate.instant('recderechos_pecuniariosibo_pago.solicitud_generada'));
-                    } else if (response.Code === '400') {
+                      this.popUpManager.showSuccessAlert(this.translate.instant('derechos_pecuniarios.solicitud_generada'));
+                    } else if (response.Response.Code === '400') {
                       this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error_solicitud_generada'));
                     }
                     this.loading = false;

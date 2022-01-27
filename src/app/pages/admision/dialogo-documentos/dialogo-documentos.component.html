@@ -11,7 +11,7 @@
           </ngx-extended-pdf-viewer>
         </div>
         <div class="col-6 d-flex align-items-start flex-column">
-          <div class="row mb-auto" style="width: 100%;" *ngIf="!data.observando">
+          <div class="row mb-auto" style="width: 100%;" *ngIf="!observando">
             <div class="col-4">
               <mat-label>{{ 'admision.doc_valido' | translate }}*: </mat-label>
             </div>
@@ -24,14 +24,14 @@
               <mat-label>{{ 'GLOBAL.observacion' | translate }}: </mat-label>
             </div>
             <div class="col-9">
-              <mat-form-field style="width: 100%;" *ngIf="!data.observando">
+              <mat-form-field style="width: 100%;" *ngIf="!observando">
                 <textarea class="observacion" matInput formControlName="observacion" rows="10"></textarea>
               </mat-form-field>
                 <textarea class="observacion" formControlName="observacion" rows="10" disabled style="width: 100%;"
-                  *ngIf="data.observando"></textarea>
+                  *ngIf="observando"></textarea>
             </div>
           </div>
-          <div class="row mt-auto ml-auto" style="width: 100%;" *ngIf="!data.observando">
+          <div class="row mt-auto ml-auto" style="width: 100%;" *ngIf="!observando">
             <div class="col-12">
               <button class="float-right" mat-button type="submit" [disabled]="revisionForm.invalid">{{ 'GLOBAL.guardar'
                 | translate }} </button>
