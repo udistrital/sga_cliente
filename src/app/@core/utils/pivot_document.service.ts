@@ -26,8 +26,6 @@ export class PivotDocument {
             response => {
                 const filesResponse = <any>response;
                 const url = filesResponse[0].url;
-                console.log(filesResponse)
-                console.log(url)
                 window.open(url);
             }
         );
