@@ -1,11 +1,11 @@
 <div class="container-form">
     <h5> {{name?name:''}} </h5>
     <form [formGroup]="form" class="container-percentage">
-        <div formArrayName="percentages" *ngFor="let per of percentageField.controls; let i = index">
+        <div formArrayName="fields" *ngFor="let per of fields.controls; let i = index">
             <div [formGroupName]="i">
                 <mat-form-field>
                     <mat-label for="i">{{settingFields[i].label}}</mat-label>
-                    <input id="i" placeholder="{{settingFields[i].placeholder}}" formControlName="field" matInput
+                    <input id="i" placeholder="{{settingFields[i].placeholder}}" formControlName="{{settingFields[i].name?settingFields[i].name:field}}" matInput
                         type="number">
                 </mat-form-field>
             </div>
