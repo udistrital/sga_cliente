@@ -37,8 +37,8 @@
             "crud_evento": "Crud eventos"
         },
         "notas": {
-            "notas":"Notas",
-            "registro_notas":"Registro de notas"
+            "notas": "Notas",
+            "registro_notas": "Registro de notas"
         },
         "derechos_pecuniarios": {
             "derechos_pecuniarios": "Derechos Pecuniarios",
@@ -106,7 +106,7 @@
             "inscripcion": "Inscripción",
             "inscripcion_general": "Inscripción a un \nproyecto curricular",
             "preinscripcion": "Preinscripción a \nproyectos curriculares",
-            "transferencia":"Transferencia"
+            "transferencia": "Transferencia"
         },
         "admision": {
             "evaluacion_documentos": "Evaluación de documentos \nde inscritos",
@@ -118,7 +118,7 @@
             "listado_aspirante": "Listar aspirantes",
             "administrar_criterios": "Administrar criterios\nde admisión",
             "documentos_descuentos": "Asignación de documentos\ny descuentos por proyecto",
-            "solicitud_transferencias":"Solicitud de transferencias"
+            "solicitud_transferencias": "Solicitud de transferencias"
         },
         "solicitudes": {
             "solicitudes": "Datos básicos",
@@ -149,10 +149,10 @@
         }
     },
     "GLOBAL": {
-        "rol":"Rol",
+        "rol": "Rol",
         "click_aqui": "Click aquí",
         "cargar": "Cargar",
-        "codigo":"Código",
+        "codigo": "Código",
         "admitir": "Admitir",
         "adjuntar": "Adjuntar",
         "observaciones": "Observaciones",
@@ -645,7 +645,7 @@
         "info_practicas_academicas": "Solicitud de prácticas académicas",
         "error_practicas_academicas": "No fue posible registrar la práctica académica",
         "practicas_academicas": "Prácticas académicas",
-        "enviar":"Enviar"
+        "enviar": "Enviar"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1218,7 +1218,7 @@
         "estado": "Estado",
         "nueva": "Realizar nueva preinscripción",
         "listado": "Listado de preinscripciones",
-        "listado_solicitudes":"Listado de solicitudes",
+        "listado_solicitudes": "Listado de solicitudes",
         "aviso_programa": "Seleccione el programa al que desea inscribirse",
         "aviso_nivel": "Seleccione el nivel al que desea inscribirse",
         "info_basica": "Información básica",
@@ -1280,35 +1280,34 @@
         "alerta_discapacidades": "Aspirante, tenga en cuenta que la discapacidad debe estar contenida en la ley estatutaria 1618 de 2013, con su respectivo soporte documental, si usted tiene más de una condición de discapacidad, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias.",
         "alerta_poblacion": "Aspirante, si usted pertenece a un tipo de población especifica tener en cuenta que debe adjuntar su respectivo soporte documental de acuerdo a la Ley 1448 de 2001 (registro único de victimas), y la Resolución 0762 de 2020 del Ministerio del Interior (certificado de autorreconocimiento), por favor subir un solo documento en formato pdf con todas las certificaciones necesarias.",
         "alerta_poblacion_discapacidades": "Aspirante, tenga en cuenta que la discapacidad debe estar contenida en la ley estatutaria 1618 de 2013, con su respectivo soporte documental, además si usted pertenece a un tipo de población especifica tenga en cuenta que debe adjuntar su respectivo soporte documental de acuerdo a la Ley 1448 de 2001 (registro único de victimas), y la Resolución 0762 de 2020 del Ministerio del Interior (certificado de autorreconocimiento). Si usted tiene más de una condición de discapacidad o si pertenece a más de una población, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias en la categoría correspondiente.",
-        "alerta_transferencia":"Aspirante, recuerde que para realizar este tipo de trámite debe estar dentro de las fechas estipuladas en el programa curricular de interés.",
-        "solicitud_transferencia":"Solicitud de transferencia",
-        "btn_nueva_solicitud":"Realizar nueva solicitud",
-        "btn_descargar_normativa":"Descargar normativa relacionada",
-        "recibo":"# Recibo",
-        "concepto":"Concepto",
-        "estad":"Estado",
-        "tipo_inscripcion":"Seleccione el tipo de inscripción que desea realizar",
-        "codigo_estudiante":"Código del estudiante",
-        "proyecto_curricular":"Proyecto curricular",
+        "alerta_transferencia": "Aspirante, recuerde que para realizar este tipo de trámite debe estar dentro de las fechas estipuladas en el programa curricular de interés.",
+        "solicitud_transferencia": "Solicitud de transferencia",
+        "btn_nueva_solicitud": "Realizar nueva solicitud",
+        "btn_descargar_normativa": "Descargar normativa relacionada",
+        "recibo": "# Recibo",
+        "concepto": "Concepto",
+        "estad": "Estado",
+        "tipo_inscripcion": "Seleccione el tipo de inscripción que desea realizar",
+        "codigo_estudiante": "Código del estudiante",
+        "proyecto_curricular": "Proyecto curricular",
         "periodo_preinscripcion": "Periodo al cual se va a preinscribir",
-        "calendario_academico":"Calendario académico para:",
-        "programa_origen":"Programa origen",
-        "placeholder_programa_origen":"Seleccione el programa",
-        "cantidad_creditos_aprobados":"Cantidad de créditos aprobados y certificados",
-        "placeholder_cantidad_creditos_aprobados":"Digite el respectivo valor en número",
-        "programa_destino":"Programa destino",
-        "placeholder_programa_destino":"Seleccione el programa a transferir",
-        "motivo_cambio":"Motivos del cambio",
-        "placeholder_motivo_cambio":"Describa los motivos para la solicitud del cambio",
-        "soportes_documentos":"Adjuntar soportes y documentos relacionados",
-        "respuesta_solicitud":"Respuesta a la solicitud",
-        "placeholder_respuesta_solicitud":"Seleccione la respuesta a la solicitud",
+        "calendario_academico": "Calendario académico para:",
+        "programa_origen": "Programa origen",
+        "placeholder_programa_origen": "Seleccione el programa",
+        "cantidad_creditos_aprobados": "Cantidad de créditos aprobados y certificados",
+        "placeholder_cantidad_creditos_aprobados": "Digite el respectivo valor en número",
+        "programa_destino": "Programa destino",
+        "placeholder_programa_destino": "Seleccione el programa a transferir",
+        "motivo_cambio": "Motivos del cambio",
+        "placeholder_motivo_cambio": "Describa los motivos para la solicitud del cambio",
+        "soportes_documentos": "Adjuntar soportes y documentos relacionados",
+        "respuesta_solicitud": "Respuesta a la solicitud",
+        "placeholder_respuesta_solicitud": "Seleccione la respuesta a la solicitud",
         "comentarios": "Comentarios",
-        "comentarios_pĺaceholder":"Escriba los comentarios de la respuesta",
-        "fecha_especifica":"Fecha de prueba específica",
-        "placeholder_fecha_especifica":"Programe la fecha de prueba específica",
-        "soporte_respuesta":"Adjunte soporte de la respuesta"
-
+        "comentarios_pĺaceholder": "Escriba los comentarios de la respuesta",
+        "fecha_especifica": "Fecha de prueba específica",
+        "placeholder_fecha_especifica": "Programe la fecha de prueba específica",
+        "soporte_respuesta": "Adjunte soporte de la respuesta"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -1904,8 +1903,8 @@
         "estados": "Estados",
         "fecha_radicacion": "Fecha de radicación",
         "estado_actual": "Estado actual de la solicitud",
-        "informe_practica":"Informe de la práctica",
-        "cumplido_practica":"Cumplido de la práctica",
+        "informe_practica": "Informe de la práctica",
+        "cumplido_practica": "Cumplido de la práctica",
         "invitaciones_no_enviadas": "Las invitaciones no pudieron enviarse",
         "invitaciones_enviadas": "Las invitaciones fueron enviadas"
     },
@@ -1918,8 +1917,19 @@
         "periodo_formacion": "Periodo de Formación"
     },
     "notas": {
-        "captura_notas_parciales":"Captura de notas parciales",
-        "captura_notas":"Captura de notas",
-        "captura_porcentajes":"Captura de porcentajes"
+        "captura_notas_parciales": "Captura de notas parciales",
+        "captura_notas": "Captura de notas",
+        "captura_porcentajes": "Captura de porcentajes",
+        "estudiante": "Estudiante",
+        "primer_corte": "Primer corte",
+        "segundo_corte": "Segundo corte",
+        "examen_final": "Examen final",
+        "habilitacion": "Habilitación",
+        "acumulado": "Acumulado",
+        "fallas": "Fallas",
+        "observaciones": "Observaciones",
+        "total_definitivo": "Total definitivo",
+        "nombre":"Nombre",
+        "codigo":"Código"
     }
 }

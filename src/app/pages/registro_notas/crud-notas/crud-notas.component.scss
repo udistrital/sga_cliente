@@ -10,7 +10,7 @@
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-around;
-  min-width: 10rem;
+ // min-width: 10rem;
   font-size: larger;
   flex-wrap: wrap;
   background-color: white;
@@ -18,9 +18,25 @@
   box-shadow: 1px 1px 3px 0px #888888;
 }
 
-.notes-container {
+.header-item {
+  font-style: bold;
+  border: 2px solid var(--color4);
+  height: 2rem;
+  text-align: center;
+}
+
+.note-container {
+  width: 100%;
+}
+
+.container-name {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-around;
+  flex-direction: column;
+  align-items: flex-start;
+  & label {
+    font-size: 0.7rem;
+  }
+  & span {
+    padding-left: 1rem;
+  }
 }
