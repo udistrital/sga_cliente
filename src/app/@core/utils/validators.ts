@@ -3,9 +3,15 @@ import { AbstractControl } from "@angular/forms";
 export class MyValidators {
 
     static isPercentageValid(control: AbstractControl) {
-        const { percentages, maxPercentage } = control.value;
-        if (percentages && maxPercentage) {
-            if (percentages.map(p => p.field?p.field:0).reduce((a, b) => a + b, 0) !== maxPercentage) {
+        const { fields, maxPercentage } = control.value;
+        if (fields && maxPercentage) {
+            if ((fields.map((f) => {
+                let data = 0;
+                for (let key in f) {
+                    data = f[key];
+                }
+                return data
+            }).reduce((a, b) => a + b, 0)) !== maxPercentage) {
                 return { 'invalid_percentage': true }
             }
         }

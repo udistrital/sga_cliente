@@ -1,9 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MyValidators } from './../../../@core/utils/validators'
-import { LocalDataSource } from 'ng2-smart-table';
+import { MyValidators } from './../../../@core/utils/validators';
 
 @Component({
   selector: 'ngx-note-percentage',
@@ -18,6 +16,7 @@ export class NotePercentageComponent implements OnInit, AfterViewInit {
   percentage: number = 0;
   currentValue = [];
   type: any = '';
+  importantValue: any = null;
   @Output() formObservable: EventEmitter<any> = new EventEmitter();
 
   constructor(private formBuilder: FormBuilder) {
@@ -28,23 +27,27 @@ export class NotePercentageComponent implements OnInit, AfterViewInit {
 
   @Input('settings')
   set settings(settings: any) {
-    this.name = settings.name;
-    this.settingFields = settings.fields;
-    this.percentage = settings.percentage;
-    this.type = settings.type;
-    this.buildForm(settings.type);
-    this.maxPercentageField.setValue(settings.percentage);
+    if (settings) {
+      this.name = settings.name;
+      this.settingFields = settings.fields;
+      this.percentage = settings.percentage;
+      this.type = settings.type;
+      this.importantValue = settings.importantValue;
+      this.buildForm(settings.type);
+      settings.percentage ? this.maxPercentageField.setValue(settings.percentage) : null;
+      settings.importantValue ? this.importantValueField.setValue(settings.importantValue) : null;
+    }
   }
 
-  private createPercentageField(defaultValue, type) {
+  private createPercentageField(defaultValue, type, name) {
     if (type === 'percentage') {
       console.log(type)
       return this.formBuilder.group({
-        field: [defaultValue, [Validators.min(0), Validators.max(100)]]
+        [name]: [defaultValue, [Validators.min(0), Validators.max(100)]]
       })
     } else {
       return this.formBuilder.group({
-        field: [defaultValue, [Validators.min(0), Validators.max(5)]]
+        [name]: [defaultValue, [Validators.min(0), Validators.max(5)]]
       })
     }
   }
@@ -52,7 +55,7 @@ export class NotePercentageComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     if (this.settingFields && this.type) {
       this.settingFields.forEach((field) => {
-        this.percentageField.push(this.createPercentageField(field.value ? field.value : 0, this.type));
+        this.fields.push(this.createPercentageField(field.value ? field.value : 0, this.type, field.name?field.name:'field'));
       });
 
     }
@@ -61,30 +64,36 @@ export class NotePercentageComponent implements OnInit, AfterViewInit {
   private buildForm(type) {
     if (type === 'percentage') {
       this.form = this.formBuilder.group({
-        percentages: this.formBuilder.array([]),
-        maxPercentage: new FormControl('')
+        fields: this.formBuilder.array([]),
+        maxPercentage: new FormControl(''),
+        importantValue: new FormControl(''),
       }, {
         validators: MyValidators.isPercentageValid
       })
     } else {
       this.form = this.formBuilder.group({
-        percentages: this.formBuilder.array([]),
-        maxPercentage: new FormControl('')
+        fields: this.formBuilder.array([]),
+        maxPercentage: new FormControl(''),
+        importantValue: new FormControl(''),
       })
     }
     this.formObservable.emit(this.form);
   }
 
-  get percentageField() {
-    return this.form.get('percentages') as FormArray
+  get fields() {
+    return this.form.get('fields') as FormArray
   }
 
   get maxPercentageField() {
     return this.form.get('maxPercentage') as FormControl
   }
 
+  get importantValueField() {
+    return this.form.get('importantValue') as FormControl
+  }
+
   get sumPercentages$() {
-    return this.form.get('percentages').valueChanges
+    return this.form.get('fields').valueChanges
       .pipe(
         map((f: any) => {
           return f.map(p => p.field).reduce((a, b) => a + b, 0)
@@ -93,7 +102,7 @@ export class NotePercentageComponent implements OnInit, AfterViewInit {
   }
 
   get allPercentage$() {
-    return this.form.get('percentages').valueChanges
+    return this.form.get('fields').valueChanges
   }
 
 
