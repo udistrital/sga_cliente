@@ -227,6 +227,7 @@ export class ConsultarSolicitudesDerechosPecuniarios {
           if (res !== null && res.Response.Code === '200') {
             this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
               this.translate.instant('GLOBAL.operacion_exitosa'));
+            this.loadInfoRecibos();
             this.loading = false;
             this.gestion = false;
           } else {

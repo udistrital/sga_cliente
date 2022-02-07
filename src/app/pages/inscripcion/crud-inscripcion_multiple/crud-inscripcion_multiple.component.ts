@@ -622,7 +622,14 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         this.loading = false;
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
-          const tiposInscripciones = <Array<any>>res;
+          let tiposInscripciones = <Array<any>>res;
+
+          tiposInscripciones = tiposInscripciones.filter(function (e) {
+            if (e["Nombre"] === "Transferencia interna" || e["Nombre"] === "Transferencia externa" || e["Nombre"] === "Reingreso")
+              return false;
+            return true;
+          });
+
           this.tipo_inscripciones = tiposInscripciones;
           // this.cargaproyectosacademicos();
           if (this.tipo_inscripciones.length === 0) {

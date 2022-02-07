@@ -222,7 +222,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     c.valor = event.value;
   }
 
-  validCampo(c): boolean {
+  validCampo(c, emit = true): boolean {
     if (c.etiqueta === 'file' && !!c.ocultar) {
       return true;
       // console.info((c.etiqueta === 'file' && (c.valor)?true:c.valor.name === undefined));
@@ -262,7 +262,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
         return false;
       }
     }
-    if (c.entrelazado) {
+    if (c.entrelazado && emit) {
       this.interlaced.emit(c);
     }
     if (c.etiqueta === 'select') {
@@ -322,7 +322,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
 
     this.normalform.campos.forEach(d => {
       requeridos = d.requerido && !d.ocultar ? requeridos + 1 : requeridos;
-      if (this.validCampo(d)) {
+      if (this.validCampo(d, false)) {
         if (d.etiqueta === 'file' && !d.ocultar) {
           result[d.nombre] = { nombre: d.nombre, file: d.File, url: d.url, IdDocumento: d.tipoDocumento };
           // result[d.nombre].push({ nombre: d.name, file: d.valor });

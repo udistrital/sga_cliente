@@ -51,7 +51,7 @@ export class UtilidadesService {
         ...field,
         ...{
           label: this.translate.instant(prefix + field.label_i18n),
-          placeholder: this.translate.instant(prefix + field.label_i18n)
+            placeholder: this.translate.instant(prefix + field.placeholder_i18n)
         }
       }
     });

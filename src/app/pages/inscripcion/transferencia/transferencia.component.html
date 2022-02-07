@@ -1,8 +1,10 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <nb-card-header>
         {{ 'inscripcion.solicitud_transferencia' | translate }}
     </nb-card-header>
     <nb-card-body>
+
         <fieldset [ngClass]="{'fieldseter':true} " *ngIf="listadoSolicitudes">
             <legend> {{ 'inscripcion.listado_solicitudes' | translate }} </legend>
             <ng2-smart-table *ngIf="listadoSolicitudes" [settings]="settings" [source]="dataSource">
@@ -12,21 +14,24 @@
                 <button *ngIf="listadoSolicitudes" mat-button type="button" (click)="descargarNormativa">
                     {{ 'inscripcion.btn_descargar_normativa' | translate }}
                 </button>
-                <button *ngIf="listadoSolicitudes" mat-button type="button" (click)="listadoSolicitudes = false">
+                <button *ngIf="listadoSolicitudes" mat-button type="button" (click)="nuevaSolicitud()">
                     {{ 'inscripcion.btn_nueva_solicitud' | translate }}
                 </button>
             </div>
         </fieldset>
+
         <ngx-crud-info-persona *ngIf="!listadoSolicitudes" [info_persona_id]="uid" (eventChange)="onChange($event)">
         </ngx-crud-info-persona>
-        <ngx-dinamicform *ngIf="!listadoSolicitudes" [normalform]="formTransferencia" (result)="validarForm($event)">
+        <ngx-dinamicform *ngIf="!listadoSolicitudes" [modeloData]="dataTransferencia" [normalform]="formTransferencia"
+            (interlaced)="seleccion($event)" (result)="validarForm($event)">
         </ngx-dinamicform>
+
         <div class="container-button-column" *ngIf="!listadoSolicitudes">
-            <button mat-button type="button" (click)="listadoSolicitudes = true">
+            <button mat-button type="button" (click)="clean(); listadoSolicitudes = true">
                 {{ 'GLOBAL.cancelar' | translate }}
             </button>
             <br><br><br>
-            <button class="btn-barcode btn btn-light" (click)="generarRecibo()">
+            <button class="btn-barcode btn btn-light" (click)="generarRecibo()" *ngIf="recibo">
                 {{ 'derechos_pecuniarios.generar_recibo' | translate }}
                 <i class="fa fa-barcode fa-5x"></i>
             </button>
