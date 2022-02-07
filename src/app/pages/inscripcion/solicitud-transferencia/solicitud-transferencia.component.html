@@ -18,9 +18,8 @@
         <fieldset class="fieldseter" *ngIf="tipo === 'externa'">
             <ngx-inscripcion_general [inscriptionSettings]="inscriptionSettings"></ngx-inscripcion_general>
         </fieldset>
-
-
     </nb-card-body>
+
     <nb-card-footer>
         <div class="text-center">
             <button mat-button type="button" (click)="goback()">
@@ -49,6 +48,7 @@
                 <b>{{ 'GLOBAL.documento' | translate }}:</b> {{ general.documento }}
             </div>
         </fieldset>
+
         <fieldset class="fieldseter m-4">
             <legend>Información de la solicitud</legend>
             <div class="col-12">
@@ -60,11 +60,13 @@
                 <b>{{ 'inscripcion.tipo' | translate }}:</b> {{ tipo }}
             </div>
         </fieldset>
+
         <ngx-dinamicform [normalform]="formTransferencia">
             <ngx-download-file-nuxeo (loading)="changeLoading($event)" [idDoc]="file.id" [label]="file.label">
             </ngx-download-file-nuxeo>
         </ngx-dinamicform>
-        <ngx-dinamicform [normalform]="formRespuesta" (interlaced)="respuestaForm($event)" (result)="validarFormRespuesta($event)">
+<ngx-dinamicform [normalform]="formRespuesta" (interlaced)="respuestaForm($event)"
+    (result)="validarFormRespuesta($event)">
             <div clas="row">
                 <div class="col-6">
                     <b>{{ 'GLOBAL.nombre' | translate }}</b>: {{ responde.nombre }}
@@ -76,6 +78,7 @@
         </ngx-dinamicform>
 
     </nb-card-body>
+
     <nb-card-footer>
         <div class="text-center">
             <button mat-button type="button" (click)="goback()">
