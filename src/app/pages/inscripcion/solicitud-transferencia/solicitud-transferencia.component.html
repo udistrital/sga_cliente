@@ -1,23 +1,36 @@
-<nb-card *ngIf="process === 'my'">
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" *ngIf="process === 'my'">
     <nb-card-header>
         {{ 'inscripcion.solicitud_transferencia' | translate }}
     </nb-card-header>
     <nb-card-body>
-        <fieldset class="fieldseter">
-            <div class="col-12">
-                <b>{{ 'inscripcion.periodo' | translate }}</b>: {{ this.periodo }}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ 'inscripcion.nivel' | translate }}:</b> {{ nivel }}
-            </div>
-            <br />
-            <div class="col-12">
-                <b>{{ 'inscripcion.tipo' | translate }}:</b> {{ tipo }}
-            </div>
-        </fieldset>
-        <br>
-        <ngx-dinamicform [normalform]="formTransferencia" (result)="validarForm($event)"></ngx-dinamicform>
+        <div style="padding: 1rem;">
+            <fieldset class="fieldseter">
+                <legend><small>
+                        Información general
+                    </small></legend>
+                <div style="display: -webkit-box; text-align-last: left;">
+                    <div class="col-4">
+                        <b>{{ 'inscripcion.periodo' | translate }}</b>: {{ periodo }}
+                    </div>
+                    <div class="col-4">
+                        <b>{{ 'inscripcion.nivel' | translate }}:</b> {{ nivelNombre }}
+                    </div>
+                    
+                    <div class="col-4">
+                        <b>{{ 'inscripcion.tipo' | translate }}:</b> {{ tipo }}
+                    </div>
+                </div>
+                <br />
+            </fieldset>
+        </div>
+        <!-- <br> -->
+        <ngx-dinamicform [normalform]="formTransferencia" [modeloData]="dataTransferencia" (result)="validarForm($event)">
+        </ngx-dinamicform>
         <fieldset class="fieldseter" *ngIf="tipo === 'externa'">
             <ngx-inscripcion_general [inscriptionSettings]="inscriptionSettings"></ngx-inscripcion_general>
         </fieldset>
+        
     </nb-card-body>
 
     <nb-card-footer>
@@ -32,28 +45,34 @@
     </nb-card-footer>
 </nb-card>
 
-<nb-card *ngIf="process === 'all'">
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" *ngIf="process === 'all'">
     <nb-card-header>
         {{ 'inscripcion.solicitud_transferencia' | translate }}
     </nb-card-header>
     <nb-card-body>
         <fieldset class="fieldseter m-4">
             <legend>Información general</legend>
-            <div class="col-12">
-                <b>{{ 'GLOBAL.nombre' | translate }}</b>: {{ general.nombre }}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ 'GLOBAL.codigo' | translate }}:</b> {{ general.codigo }}
+            <div style="display: -webkit-box; text-align-last: left;">
+                <div class="col-4">
+                    <b>{{ 'GLOBAL.nombre' | translate }}</b>: {{ general.nombre }}
+                </div>
+                <div class="col-4">
+                    <b>{{ 'GLOBAL.codigo' | translate }}:</b> {{ general.codigo }}
+                </div>
+                
+                <div class="col-4">
+                    <b>{{ 'GLOBAL.documento' | translate }}:</b> {{ general.documento }}
+                </div>
             </div>
-            <br />
-            <div class="col-12">
-                <b>{{ 'GLOBAL.documento' | translate }}:</b> {{ general.documento }}
-            </div>
+
         </fieldset>
 
         <fieldset class="fieldseter m-4">
             <legend>Información de la solicitud</legend>
             <div class="col-12">
                 <b>{{ 'inscripcion.periodo' | translate }}</b>: {{ this.periodo }}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ 'inscripcion.nivel' | translate }}:</b> {{ nivel }}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ 'inscripcion.nivel' | translate }}:</b> {{ nivelNombre }}
             </div>
             <br />
             <div class="col-12">
@@ -65,8 +84,8 @@
             <ngx-download-file-nuxeo (loading)="changeLoading($event)" [idDoc]="file.id" [label]="file.label">
             </ngx-download-file-nuxeo>
         </ngx-dinamicform>
-<ngx-dinamicform [normalform]="formRespuesta" (interlaced)="respuestaForm($event)"
-    (result)="validarFormRespuesta($event)">
+        <ngx-dinamicform [normalform]="formRespuesta" (interlaced)="respuestaForm($event)"
+            (result)="validarFormRespuesta($event)">
             <div clas="row">
                 <div class="col-6">
                     <b>{{ 'GLOBAL.nombre' | translate }}</b>: {{ responde.nombre }}

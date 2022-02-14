@@ -12,3 +12,8 @@
     flex-direction: column;
     align-items: center;
 }
+
+:host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
+    display: inline-block;
+    text-align: center;
+  }
