@@ -12,7 +12,13 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { TransferenciaInterna } from '../../../@core/data/models/inscripcion/transferencia_interna';
 import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
 import { HttpErrorResponse } from '@angular/common/http';
+import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
+import { environment } from '../../../../environments/environment';
+import { UserService } from '../../../@core/data/users.service';
+import { ParametrosService } from '../../../@core/data/parametros.service';
+import { Periodo } from '../../../@core/data/models/periodo/periodo';
+import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 
 @Component({
   selector: 'transferencia',
@@ -35,6 +41,9 @@ export class TransferenciaComponent implements OnInit {
   inscripcionProjects: any[];
   proyectosCurriculares: any[];
   codigosEstudiante: any[];
+  parametros_pago: any;
+  periodo: Periodo;
+  periodos = [];
 
   dataTransferencia: TransferenciaInterna = {
     Periodo: null,
@@ -47,14 +56,17 @@ export class TransferenciaComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     private utilidades: UtilidadesService,
+    private parametrosService: ParametrosService,
+    private projectService: ProyectoAcademicoService,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
+    private userService: UserService,
     private router: Router,
     private _Activatedroute: ActivatedRoute
   ) {
     this.formTransferencia = FORM_TRANSFERENCIA_INTERNA;
     this.dataSource = new LocalDataSource();
-    this.uid = localStorage.getItem('persona_id');
+    this.loadInfoPersona();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
@@ -82,18 +94,64 @@ export class TransferenciaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sub = this._Activatedroute.paramMap.subscribe((params: any) => {
+    this.parametros_pago = {
+      recibo: '',
+      REFERENCIA: '',
+      NUM_DOC_IDEN: '',
+      TIPO_DOC_IDEN: '',
+    };
+
+
+    this.sub = this._Activatedroute.paramMap.subscribe(async (params: any) => {
       const { process } = params.params;
       this.process = atob(process);
       this.actions = (this.process === 'my');
+      this.loading = true;
       this.createTable(this.process);
-      this.loadData(this.process)
-    })
-    Swal.fire({
-      icon: 'warning',
-      text: this.translate.instant('inscripcion.alerta_transferencia'),
-      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-    })
+      await this.loadData(this.process).then(e => {
+
+        this.loading = false;
+
+        Swal.fire({
+          icon: 'warning',
+          text: this.translate.instant('inscripcion.alerta_transferencia'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        })
+      })
+    });
+
+
+  }
+
+  public loadInfoPersona(): void {
+    this.loading = true;
+    this.uid = this.userService.getPersonaId();
+    if (this.uid !== undefined && this.uid !== 0 &&
+      this.uid.toString() !== '' && this.uid.toString() !== '0') {
+      this.sgaMidService.get('persona/consultar_persona/' + this.uid).subscribe((res: any) => {
+        if (res !== null) {
+          const temp = <InfoPersona>res;
+          this.info_info_persona = temp;
+          const files = []
+        }
+        this.loading = false;
+      },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.info_persona'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+    } else {
+      this.info_info_persona = undefined
+      this.loading = false;
+      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('GLOBAL.no_info_persona'));
+    }
   }
 
   createTable(process) {
@@ -109,12 +167,12 @@ export class TransferenciaComponent implements OnInit {
         Concepto: {
           title: this.translate.instant('inscripcion.concepto'),
           editable: false,
-          width: '30%',
+          width: '10%',
           filter: false,
         },
         Programa: {
           title: this.translate.instant('inscripcion.programa'),
-          width: '10%',
+          width: '30%',
           editable: false,
           filter: false,
         },
@@ -148,13 +206,17 @@ export class TransferenciaComponent implements OnInit {
           width: '5%',
           editable: false,
           filter: false,
-          renderComponent: CustomizeButtonComponent,
           type: 'custom',
+          // renderComponent: ButtonPaymentComponent,
+          renderComponent: CustomizeButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.save.subscribe((data) => {
-              const dataType = btoa(data['tipoTransferencia']);
-              const level = btoa(data['nivel']);
-              this.router.navigate([`pages/inscripcion/solicitud-transferencia/${dataType}/${level}/${btoa(process)}`])
+              if (data.Estado == 'Pago') {
+                const idInscripcion = btoa(data['Id']);
+                this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
+              } else if (data.Estado == 'Pendiente pago') {
+                this.abrirPago(data)
+              }
             })
           },
         },
@@ -163,88 +225,104 @@ export class TransferenciaComponent implements OnInit {
     }
   }
 
-  loadData(process) {
+  async loadData(process) {
+    await this.cargarPeriodo();
     this.loading = true;
 
-    const data = [{
-      Recibo: 99999,
-      Concepto: "Transferencia",
-      Programa: "Maestría ingeniería industrial",
-      FechaGeneracion: '12-01-01',
-      Estado: "Pagado",
-      Descargar: 140837,
-      Opcion: {
-        icon: 'fa fa-pencil fa-2x',
-        label: 'Inscribirme',
-        class: "btn btn-primary"
-      },
-      tipoTransferencia: 'interna',
-      nivel: 'Pregrado'
-    }, {
-      Recibo: 99998,
-      Concepto: "Transferencia2",
-      Programa: "Maestría en Ciencias de la información y las comunicaciones",
-      FechaGeneracion: '12-01-01',
-      Estado: "Pagado",
-      Descargar: 140837,
-      Opcion: {
-        icon: 'fa fa-pencil fa-2x',
-        label: 'Inscribirme',
-        class: "btn btn-primary"
-      },
-      tipoTransferencia: 'externa',
-      nivel: 'Pregrado'
-    }, {
-      Recibo: 99998,
-      Concepto: "Transferencia2",
-      Programa: "Maestría en Ciencias de la información y las comunicaciones",
-      FechaGeneracion: '12-01-01',
-      Estado: "Pagado",
-      Descargar: 140837,
-      Opcion: {
-        icon: 'fa fa-pencil fa-2x',
-        label: 'Inscribirme',
-        class: "btn btn-primary"
-      },
-      tipoTransferencia: 'interna',
-      nivel: 'Posgrado'
-    }, {
-      Recibo: 99998,
-      Concepto: "Transferencia2",
-      Programa: "Maestría en Ciencias de la información y las comunicaciones",
-      FechaGeneracion: '12-01-01',
-      Estado: "Pagado",
-      Descargar: 140837,
-      Opcion: {
-        icon: 'fa fa-pencil fa-2x',
-        label: 'Inscribirme',
-        class: "btn btn-primary"
-      },
-      tipoTransferencia: 'externa',
-      nivel: 'Posgrado'
-    }
-    ]
-    this.dataSource.load(data.map((e) => {
-      return {
-        ...e,
-        ...process === 'my' ? {
+    /*{
+          Recibo: 99998,
+          Concepto: "Transferencia2",
+          Programa: "Maestría en Ciencias de la información y las comunicaciones",
+          FechaGeneracion: '12-01-01',
+          Estado: "Pagado",
+          Descargar: 140837,
           Opcion: {
             icon: 'fa fa-pencil fa-2x',
             label: 'Inscribirme',
             class: "btn btn-primary"
-          }
-        } :
-          {
-            Opcion: {
-              icon: 'fa fa-search fa-2x',
-              label: 'Detalle',
-              class: "btn btn-primary"
-            }
-          }
-      }
-    }));
+          },
+          tipoTransferencia: 'externa',
+          nivel: 'Pregrado'
+        }
+    */
 
-    this.loading = false;
+    this.sgaMidService.get('transferencia/estado_recibos/' + this.uid + '/' + this.periodo.Id)
+      .subscribe(response => {
+        if (response !== null && response.Response.Code === '400') {
+          this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));
+        } else if (response != null && response.Response.Code === '404') {
+          this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
+        } else {
+          const inscripciones = <Array<any>>response.Response.Body;
+          const dataInfo = <Array<any>>[];
+          inscripciones.forEach(element => {
+            this.projectService.get('proyecto_academico_institucion/' + element.Programa).subscribe(
+              res => {
+                const auxRecibo = element.Recibo;
+                const NumRecibo = auxRecibo.split('/', 1);
+                element.Recibo = NumRecibo[0];
+                element.FechaGeneracion = momentTimezone.tz(element.FechaGeneracion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
+                element.IdPrograma = element.Programa;
+                element.Programa = res.Nombre;
+
+                dataInfo.push(element);
+
+                this.dataSource.load(dataInfo.map((e) => {
+                  if (e.Estado === 'Pendiente pago') {
+                    return {
+                      ...e,
+                      ...process === 'my' ? {
+                        Opcion: {
+                          icon: 'fa fa-arrow-circle-right fa-2x',
+                          label: 'Pagar',
+                          class: "btn btn-primary"
+                        }
+                      } :
+                        {
+                          Opcion: {
+                            icon: 'fa fa-search fa-2x',
+                            label: 'Detalle',
+                            class: "btn btn-primary"
+                          }
+                        }
+                    }
+                  } else {
+                    return {
+                      ...e,
+                      ...process === 'my' ? {
+                        Opcion: {
+                          icon: 'fa fa-pencil fa-2x',
+                          label: 'Inscribirme',
+                          class: "btn btn-primary"
+                        }
+                      } :
+                        {
+                          Opcion: {
+                            icon: 'fa fa-search fa-2x',
+                            label: 'Detalle',
+                            class: "btn btn-primary"
+                          }
+                        }
+                    }
+                  }
+                }));
+
+                this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
+
+                this.loading = false;
+              },
+              error => {
+                this.loading = false;
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+              },
+            );
+          });
+        }
+      },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
+        });
   }
 
   descargarNormativa() {
@@ -255,6 +333,30 @@ export class TransferenciaComponent implements OnInit {
     this.listadoSolicitudes = false;
     await this.loadPeriodo().catch(e => this.loading = false);
     this.construirForm();
+  }
+
+  cargarPeriodo() {
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.parametrosService.get('periodo?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
+        .subscribe(res => {
+          const r = <any>res;
+          if (res !== null && r.Status === '200') {
+            this.periodo = <any>res['Data'][0];
+            window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
+            resolve(this.periodo);
+            const periodos = <any[]>res['Data'];
+            periodos.forEach(element => {
+              this.periodos.push(element);
+            });
+          }
+          this.loading = false;
+        },
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            reject([]);
+          });
+    });
   }
 
   loadPeriodo() {
@@ -496,16 +598,18 @@ export class TransferenciaComponent implements OnInit {
     });
   }
 
-  // filtrarProyecto(proyecto) {
-  //   if (this.dat.data.Dependencia === proyecto['NivelFormacionId']['Id']) {
-  //     return true
-  //   }
-  //   if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
-  //     if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Nombre'] === this.dat.data.Dependencia) {
-  //       return true
-  //     }
-  //   } else {
-  //     return false
-  //   }
-  // }
+  abrirPago(data) {
+    this.parametros_pago.NUM_DOC_IDEN = this.info_info_persona.NumeroIdentificacion;
+    this.parametros_pago.REFERENCIA = data['Recibo'];
+    this.parametros_pago.TIPO_DOC_IDEN = this.info_info_persona.TipoIdentificacion.CodigoAbreviacion;
+    const url = new URLSearchParams(this.parametros_pago).toString();
+    const ventanaPSE = window.open(environment.PSE_SERVICE + url, 'PagosPSE', 'width=600,height=800,resizable,scrollbars,status');
+    ventanaPSE.focus();
+    const timer = window.setInterval(() => {
+      if (ventanaPSE.closed) {
+        window.clearInterval(timer);
+        this.loadData(this.process);
+      }
+    }, 5000);
+  }
 }
