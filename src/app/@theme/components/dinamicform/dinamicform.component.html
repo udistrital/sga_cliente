@@ -385,7 +385,7 @@
                         </mat-form-field>
 
                         <!-- select -->
-                        <mat-form-field *ngSwitchCase="'select'" style="width: 100%;" floatLabel="always"
+                        <mat-form-field *ngSwitchCase="'select'" style="width: 100%;" class="form-group" floatLabel="always"
                             [hidden]="c.ocultar">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
                             <mat-select
