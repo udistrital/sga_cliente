@@ -1296,6 +1296,12 @@
         "placeholder_periodo_preinscripcion": "Ej: 2022-3",
         "calendario_academico": "Calendario académico para:",
         "placeholder_calendario_academico":"Seleccione el calendario esperado",
+        "ultimo_semestre": "Último semestre cursado",
+        "placeholder_ultimo_semestre": "Digite el respectivo valor en número",
+        "acuerdo": "Estudiante, al continuar usted acepta que se regirá bajo los lineamientos del actual acuerdo de reingreso vigente",
+        "cancelo": "¿Cancelo el semestre?",
+        "universidad_origen": "Universidad origen",
+        "placeholder_universidad_origen": "Escriba el nombre de la universidad origen",
         "programa_origen": "Programa origen",
         "placeholder_programa_origen": "Seleccione el programa",
         "cantidad_creditos_aprobados": "Cantidad de créditos aprobados y certificados",
@@ -1311,7 +1317,9 @@
         "comentarios_pĺaceholder": "Escriba los comentarios de la respuesta",
         "fecha_especifica": "Fecha de prueba específica",
         "placeholder_fecha_especifica": "Programe la fecha de prueba específica",
-        "soporte_respuesta": "Adjunte soporte de la respuesta"
+        "soporte_respuesta": "Adjunte soporte de la respuesta",
+        "error_solicitud": "Ocurrió un error inesperado al crear la solicitud",
+        "solicitud_generada": "La solicitud fue generada exitosamente"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
