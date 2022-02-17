@@ -337,7 +337,7 @@
                         </mat-form-field>
 
                         <!-- checkbox -->
-                        <div *ngSwitchCase="'checkbox'" class="form-group validation-checkboxes">
+                        <div *ngSwitchCase="'checkbox'" class="form-group validation-checkboxes" [hidden]="c.ocultar">
                             <mat-checkbox type="checkbox" class="customised-control-input" [disabled]="c.deshabilitar"
                                 color="primary" [(checked)]="c.valor" (change)="c.valor = !c.valor; c.alerta = '';">
                                 {{c.requerido?'* '+c.label:c.label}}</mat-checkbox>
