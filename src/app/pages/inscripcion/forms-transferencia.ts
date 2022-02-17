@@ -65,6 +65,16 @@ export const FORM_SOLICITUD_TRANSFERENCIA = {
     modelo: 'InfoPersona',
     campos: [
         {
+            etiqueta: 'input',
+            claseGrid: 'col-sm-12 col-xs-12',
+            nombre: 'UniversidadOrigen',
+            label_i18n: 'universidad_origen',
+            placeholder_i18n: 'placeholder_universidad_origen',
+            requerido: true,
+            ocultar: false,
+            tipo: 'text',
+        },
+        {
             etiqueta: 'select',
             claseGrid: 'col-sm-12 col-xs-12',
             nombre: 'ProgramaOrigen',
@@ -110,14 +120,30 @@ export const FORM_SOLICITUD_TRANSFERENCIA = {
         },
         {
             etiqueta: 'input',
-            claseGrid: 'col-sm-12 col-xs-12',
+            claseGrid: 'col-sm-6 col-xs-6',
             nombre: 'CantidadCreditos',
             label_i18n: 'cantidad_creditos_aprobados',
             placeholder_i18n: 'placeholder_cantidad_creditos_aprobados',
             requerido: true,
             tipo: 'number',
-            key: 'Nombre',
-            opciones: [],
+        },
+        {
+            etiqueta: 'input',
+            claseGrid: 'col-sm-6 col-xs-6',
+            nombre: 'UltimoSemestre',
+            label_i18n: 'ultimo_semestre',
+            placeholder_i18n: 'placeholder_ultimo_semestre',
+            requerido: true,
+            tipo: 'number',
+        },
+        {
+            etiqueta: 'checkbox',
+            claseGrid: 'col-sm-2 col-xs-2',
+            nombre: 'Cancelo',
+            label_i18n: 'cancelo',
+            requerido: false,
+            tipo: 'checkbox',
+            valor: false,
         },
         {
             etiqueta: 'select',
@@ -151,18 +177,27 @@ export const FORM_SOLICITUD_TRANSFERENCIA = {
             placeholder_i18n: 'placeholder_soportes_documentos',
             requerido: true,
             tipo: 'pdf',
-            tipoDocumento: 25,
+            tipoDocumento: 62,
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
         },
+        {
+            etiqueta: 'checkbox',
+            claseGrid: 'col-sm-12 col-xs-12',
+            nombre: 'Acuerdo',
+            label_i18n: 'acuerdo',
+            requerido: false,
+            tipo: 'checkbox',
+            valor: false,
+        }
     ]
 }
 
 export const FORM_RESPUESTA_SOLICITUD = {
     tipo_formulario: 'mini',
     alertas: true,
-    titulo:"Información de solicitud",
+    titulo: "Información de solicitud",
     btn: 'Responder',
     modelo: 'InfoPersona',
     campos: [
@@ -173,7 +208,7 @@ export const FORM_RESPUESTA_SOLICITUD = {
             label_i18n: 'respuesta_solicitud',
             placeholder_i18n: 'placeholder_respuesta_solicitud',
             requerido: true,
-            entrelazado:true,
+            entrelazado: true,
             tipo: 'RespuestaSolicitud',
             key: 'Nombre',
             opciones: [],
@@ -209,7 +244,7 @@ export const FORM_RESPUESTA_SOLICITUD = {
             placeholder_i18n: 'placeholder_soporte_respuesta',
             requerido: true,
             tipo: 'pdf',
-            tipoDocumento: 25,
+            tipoDocumento: 62,
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,

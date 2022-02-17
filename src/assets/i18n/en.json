@@ -1254,6 +1254,12 @@
         "placeholder_periodo_preinscripcion": "E.g: 2022-3",
         "calendario_academico": "Academic calendar for:",
         "placeholder_calendario_academico":"Select the expected calendar",
+        "ultimo_semestre": "Last semester completed",
+        "placeholder_ultimo_semestre": "Enter the respective value in number",
+        "acuerdo": "Student, by continuing you agree that you will be governed under the guidelines of the current reentry agreement in effect.",
+        "cancelo": "Did you cancel the semester?",
+        "universidad_origen": "University of origin",
+        "placeholder_universidad_origen": "Enter the name of the university of origin",
         "programa_origen": "Origin program",
         "placeholder_programa_origen": "Select the program",
         "cantidad_creditos_aprobados": "Number of credits approved and certified",
@@ -1269,7 +1275,9 @@
         "comentarios_pĺaceholder": "Write comments on the answer",
         "fecha_especifica": "Specific test date",
         "placeholder_fecha_especifica": "Schedule specific test date",
-        "soporte_respuesta": "Attach support of the answer"
+        "soporte_respuesta": "Attach support of the answer",
+        "error_solicitud": "An unexpected error occurred when creating the application",
+        "solicitud_generada": "The request was successfully generated"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
