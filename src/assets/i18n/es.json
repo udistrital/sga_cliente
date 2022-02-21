@@ -1942,35 +1942,6 @@
         "observaciones": "Observaciones",
         "total_definitivo": "Total definitivo",
         "nombre":"Nombre",
-        "codigo":"Código",
-        "identificacion": "Identificacion",
-        "docente": "Docente",
-        "asignatura": "Asignatura",
-        "nivel": "Nivel",
-        "grupo": "Grupo",
-        "inscritos": "Inscritos",
-        "carrera": "Carrera",
-        "estado": "Estado",
-        "no_datos_captura_notas": "No se encuentran datos para el periodo o busqueda realizada.",
-        "listado_docentes": "Listado de docentes",
-        "periodo": "Periodo",
-        "placeholder_periodo": "Seleccionar periodo",
-        "hint_periodo": "Seleccionar periodo",
-        "buscar": "Buscar",
-        "placeholder_buscar": "Buscar por nombre, iden, ..",
-        "hint_buscar": "Buscar por nombre, iden, ..",
-        "definicion_cortes": "Definición de cortes",
-        "definicion_fechas": "Definición de fechas",
-        "corte1": "Corte 1",
-        "corte2": "Corte 2",
-        "habilitaciones": "habilitaciones",
-        "guardar": "GUARDAR",
-        "regresar": "REGRESAR",
-        "desde": "DESDE",
-        "hasta": "HASTA",
-        "elije_fecha_inicio": "Elige fecha inicio",
-        "elije_fecha_fin": "Elige fecha fin"
-        
-
+        "codigo":"Código"
     }
 }
