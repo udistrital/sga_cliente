@@ -1878,7 +1878,7 @@
         "estado_actual": "Current status of the request",
         "invitaciones_no_enviadas": "Invitations could not be sent",
         "invitaciones_enviadas": "Invitations were sent",
-        "solicitud_creada": "The request was successfully created. <br>Request ID: "
+        "solicitud_creada": "The request was successfully created. Request ID: "
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Academic spaces Pre-registration",
