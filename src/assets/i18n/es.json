@@ -1918,7 +1918,8 @@
         "informe_practica": "Informe de la práctica",
         "cumplido_practica": "Cumplido de la práctica",
         "invitaciones_no_enviadas": "Las invitaciones no pudieron enviarse",
-        "invitaciones_enviadas": "Las invitaciones fueron enviadas"
+        "invitaciones_enviadas": "Las invitaciones fueron enviadas",
+        "solicitud_creada": "La solicitud fue creada con éxito. <br>Id solicitud: "
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Preinscripción de Espacios académicos",

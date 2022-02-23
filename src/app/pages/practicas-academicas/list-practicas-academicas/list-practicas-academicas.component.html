@@ -1,5 +1,6 @@
 <div class="col-12">
-  <nb-card>
+  <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <nb-card-header>
       {{ 'practicas_academicas.lista_titulo' | translate }}
     </nb-card-header>

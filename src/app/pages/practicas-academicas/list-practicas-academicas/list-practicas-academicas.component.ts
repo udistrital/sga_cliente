@@ -5,6 +5,8 @@ import { PracticasAcademicasService } from '../../../@core/data/practicas_academ
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
+import { UserService } from '../../../@core/data/users.service';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   selector: 'ngx-list-practicas-academicas',
@@ -62,6 +64,8 @@ export class ListPracticasAcademicasComponent implements OnInit {
   constructor(
     private practicasService: PracticasAcademicasService,
     private _Activatedroute: ActivatedRoute,
+    private autenticationService: ImplicitAutenticationService,
+    private userService: UserService,
     private translate: TranslateService,
     private router: Router,
   ) {
@@ -140,13 +144,12 @@ export class ListPracticasAcademicasComponent implements OnInit {
     };
   }
 
-  getPracticasAcademicas(param) {
-    const endpoint = 'practicas_academicas?query=EstadoTipoSolicitudId.TipoSolicitud.Id:23&fields=Id,FechaRadicacion,EstadoTipoSolicitudId';
+  getPracticasAcademicas(param, endpoint) {
     if (param === 'news') {
       return this.practicasService.getPracticas(endpoint, null, ['Radicada']);
     }
     if (param === 'process') {
-      return this.practicasService.getPracticas(endpoint, null, ['Acta aprobada', 'Rechazada', 'Requiere modificación']);
+      return this.practicasService.getPracticas(endpoint, null, ['Radicada', 'Acta aprobada', 'Rechazada', 'Requiere modificación']);
     }
     if (param === 'invitation') {
       return this.practicasService.getPracticas(endpoint, null, ['Acta aprobada']);
@@ -161,25 +164,36 @@ export class ListPracticasAcademicasComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.sub = this._Activatedroute.paramMap.subscribe((params: any) => {
       const { process } = params.params;
       this.process = atob(process);
       this.processEncript = process;
-      this.getPracticasAcademicas(this.process).subscribe(practicas => {
-        this.datosPracticas = practicas;
-        this.loading = false;
-      },
-        (error: HttpErrorResponse) => {
+
+      this.autenticationService.getRole().then((rol: Array<String>) => {
+        let endpoint;
+        if (rol.includes('COORDINADOR') || rol.includes('COORDINADOR_PREGADO') || rol.includes('COORDINADOR_POSGRADO')) {
+          endpoint = 'practicas_academicas?query=SolicitudId.EstadoTipoSolicitudId.TipoSolicitud.Id:23';
+        } else {
+          endpoint = 'practicas_academicas?query=SolicitudId.EstadoTipoSolicitudId.TipoSolicitud.Id:23,TerceroId:' + this.userService.getPersonaId();
+        }
+
+        this.getPracticasAcademicas(this.process, endpoint).subscribe(practicas => {
+          this.datosPracticas = practicas;
           this.loading = false;
-          Swal.fire({
-            icon: 'error',
-            title: '404',
-            text: this.translate.instant('ERROR.404'),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.practicas_academicas'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        })
+        },
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            Swal.fire({
+              icon: 'error',
+              title: '404',
+              text: this.translate.instant('ERROR.404'),
+              footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                this.translate.instant('GLOBAL.practicas_academicas'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+          })
+      })
     });
 
   }

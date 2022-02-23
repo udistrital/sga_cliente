@@ -1871,7 +1871,8 @@
         "fecha_radicacion": "Filing date",
         "estado_actual": "Current status of the request",
         "invitaciones_no_enviadas": "Invitations could not be sent",
-        "invitaciones_enviadas": "Invitations were sent"
+        "invitaciones_enviadas": "Invitations were sent",
+        "solicitud_creada": "The request was successfully created. <br>Request ID: "
     },
     "espacios_academicos": {
         "preinscripcion_titulo": "Academic spaces Pre-registration",

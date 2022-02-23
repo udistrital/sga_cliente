@@ -13,6 +13,7 @@ import { FORM_SOLICITUD_PRACTICAS, FORM_RESPUESTA_SOLICITUD, FORM_DOCUMENTOS_ADI
 import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
 import { UserService } from '../../../@core/data/users.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'ngx-detalle-practica-academica',
@@ -50,6 +51,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     private translate: TranslateService,
     private sgamidService: SgaMidService,
     private popUpManager: PopUpManager,
+    private location: Location,
     private nuxeo: NewNuxeoService,
     private userService: UserService,
     private practicasService: PracticasAcademicasService,
@@ -316,9 +318,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
           if (r !== null && r.Type !== 'error') {
             if (r.Status === '200' && r["Data"] !== null) {
               this.ngOnInit();
-              this.formRespuestaSolicitud.campos.forEach(campo => {
-                campo.deshabilitar = true;
-              });
+
               this.practicasService.clearCache();
               this.loading = false;
               this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
@@ -419,7 +419,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
         }
       }
     }
-    // console.log(files, this.InfoPracticasAcademicas)
+
     this.InfoPracticasAcademicas.Documentos = files
 
     this.InfoPracticasAcademicas.FechaHoraRegreso = momentTimezone.tz(this.InfoPracticasAcademicas.FechaHoraRegreso, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
@@ -468,4 +468,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
     });
   }
 
+  goback() {
+    this.location.back();
+  }
 }

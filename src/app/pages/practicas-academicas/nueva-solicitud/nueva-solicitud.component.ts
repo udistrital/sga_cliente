@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { PracticasAcademicasService } from '../../../@core/data/practicas_academicas.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -51,6 +52,7 @@ export class NuevaSolicitudComponent implements OnInit {
     private nuxeo: NewNuxeoService,
     private practicasService: PracticasAcademicasService,
     private _Activatedroute: ActivatedRoute,
+    private location: Location,
     private router: Router,
     private sgamidService: SgaMidService,
   ) {
@@ -291,7 +293,7 @@ export class NuevaSolicitudComponent implements OnInit {
   }
 
   async enviarSolicitud(event) {
-    this.InfoPracticasAcademicas = event.data.InfoPracticasAcademicas
+    this.InfoPracticasAcademicas = event.data.InfoPracticasAcademicas;
     if (event.valid) {
       if (event.nombre === "SOLICITUD_PRACTICAS") {
         this.NuevaSolicitud = <SolicitudPracticaAcademica>event.data.InfoPracticasAcademicas;
@@ -309,104 +311,104 @@ export class NuevaSolicitudComponent implements OnInit {
         this.FormPracticasAcademicas.btn = null;
         this.llenarDocumentos = true;
       }
-    }
 
-    if (event.nombre === "SOPORTES_DOCUMENTALES") {
+      if (event.nombre === "SOPORTES_DOCUMENTALES") {
 
-      let files: Array<any> = [];
-      this.InfoDocumentos = event.data.documental;
-      for (const key in this.InfoDocumentos) {
-        if (Object.prototype.hasOwnProperty.call(this.InfoDocumentos, key)) {
-          const element = this.InfoDocumentos[key];
-          if (typeof element.file !== 'undefined' && element.file !== null) {
-            this.loading = true;
-            const file = {
-              file: await this.nuxeo.fileToBase64(element.file),
-              IdTipoDocumento: element.IdDocumento,
-              metadatos: {
-                NombreArchivo: element.nombre,
-                Tipo: "Archivo",
-                Observaciones: element.nombre,
-                "dc:title": element.nombre,
-              },
-              descripcion: element.nombre,
-              nombre: element.nombre,
-              key: 'Documento',
+        let files: Array<any> = [];
+        this.InfoDocumentos = event.data.documental;
+        for (const key in this.InfoDocumentos) {
+          if (Object.prototype.hasOwnProperty.call(this.InfoDocumentos, key)) {
+            const element = this.InfoDocumentos[key];
+            if (typeof element.file !== 'undefined' && element.file !== null) {
+              this.loading = true;
+              const file = {
+                file: await this.nuxeo.fileToBase64(element.file),
+                IdTipoDocumento: element.IdDocumento,
+                metadatos: {
+                  NombreArchivo: element.nombre,
+                  Tipo: "Archivo",
+                  Observaciones: element.nombre,
+                  "dc:title": element.nombre,
+                },
+                descripcion: element.nombre,
+                nombre: element.nombre,
+                key: 'Documento',
+              }
+              files.push(file);
             }
-            files.push(file);
           }
         }
-      }
-      this.NuevaSolicitud.Documentos = files
+        this.NuevaSolicitud.Documentos = files
 
-      this.NuevaSolicitud.FechaHoraRegreso = momentTimezone.tz(this.NuevaSolicitud.FechaHoraRegreso, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
-      this.NuevaSolicitud.FechaHoraSalida = momentTimezone.tz(this.NuevaSolicitud.FechaHoraSalida, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
-      const hoy = new Date();
-      this.NuevaSolicitud.FechaRadicacion = momentTimezone.tz(hoy.getFullYear() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getDate(),
-        'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
-      this.NuevaSolicitud.FechaRadicacion = this.NuevaSolicitud.FechaRadicacion + ' +0000 +0000';
+        this.NuevaSolicitud.FechaHoraRegreso = momentTimezone.tz(this.NuevaSolicitud.FechaHoraRegreso, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
+        this.NuevaSolicitud.FechaHoraSalida = momentTimezone.tz(this.NuevaSolicitud.FechaHoraSalida, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
 
-      if (this.idPractica) {
-        this.NuevaSolicitud.EstadoTipoSolicitudIdAnterior = { Id: 35 };
-        this.NuevaSolicitud.Estado = { Id: 17 };
-        this.NuevaSolicitud.IdTercero = this.NuevaSolicitud.DocenteSolicitante.Id;
-        this.NuevaSolicitud.FechaRespuesta = momentTimezone.tz(event.data.documental.FechaRespuesta, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
-        this.NuevaSolicitud.Comentario = '';
-        this.NuevaSolicitud.Estados = [];
+        const fecha = new Date();
+        this.NuevaSolicitud.FechaRadicacion = moment(`${fecha.getFullYear()}-${fecha.getMonth()}-${fecha.getDate()}`, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
 
-        this.sgamidService.put('practicas_academicas', this.NuevaSolicitud).subscribe(res => {
-          const r = <any>res["Response"]['Body'][0];
-          if (r !== null && r.Type !== 'error') {
-            if (r.Status === '200' && r["Data"] !== null) {
-              this.ngOnInit();
-              this.FormPracticasAcademicas.campos.forEach(campo => {
-                campo.deshabilitar = true;
-              });
-              this.FormSoporteDocumentales.campos.forEach(campo => {
-                campo.deshabilitar = true;
-              });
-              this.practicasService.clearCache();
+        if (this.idPractica) {
+          this.NuevaSolicitud.EstadoTipoSolicitudIdAnterior = { Id: 35 };
+          this.NuevaSolicitud.Estado = { Id: 17 };
+          this.NuevaSolicitud.IdTercero = this.NuevaSolicitud.DocenteSolicitante.Id;
+          this.NuevaSolicitud.FechaRespuesta = momentTimezone.tz(event.data.documental.FechaRespuesta, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
+          this.NuevaSolicitud.Comentario = '';
+          this.NuevaSolicitud.Estados = [];
+
+          this.sgamidService.put('practicas_academicas', this.NuevaSolicitud).subscribe(res => {
+            const r = <any>res["Response"]['Body'][0];
+            if (r !== null && r.Type !== 'error') {
+              if (r.Status === '200' && r["Data"] !== null) {
+                this.ngOnInit();
+                this.FormPracticasAcademicas.campos.forEach(campo => {
+                  campo.deshabilitar = true;
+                });
+                this.FormSoporteDocumentales.campos.forEach(campo => {
+                  campo.deshabilitar = true;
+                });
+                this.practicasService.clearCache();
+                this.loading = false;
+                this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
+                  this.translate.instant('GLOBAL.confirmarActualizar'));
+                this.router.navigate([`pages/practicas-academicas/lista-practicas/${btoa('process')}`]);
+              }
+            } else {
               this.loading = false;
-              this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
-                this.translate.instant('GLOBAL.confirmarActualizar'));
-              this.router.navigate([`pages/practicas-academicas/lista-practicas/${btoa('process')}`])
+              this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.error_practicas_academicas'));
             }
-          } else {
-            this.loading = false;
-            this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.error_practicas_academicas'));
-          }
-        }, (error: HttpErrorResponse) => {
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.crear') + '-' +
-              this.translate.instant('GLOBAL.info_practicas_academicas'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          }, (error: HttpErrorResponse) => {
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.crear') + '-' +
+                this.translate.instant('GLOBAL.info_practicas_academicas'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
-        });
-      } else {
-        this.sgamidService.post('practicas_academicas/', this.NuevaSolicitud).subscribe(res => {
-          const r = <any>res
-          if (r !== null && r.Response.Type !== 'error') {
-            this.loading = false;
-            this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
-              this.translate.instant('GLOBAL.confirmarCrear'));
-            this.router.navigate([`pages/practicas-academicas/lista-practicas/${btoa('process')}`])
-          } else {
-            this.loading = false;
-            this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.error_practicas_academicas'));
-          }
-        }, (error: HttpErrorResponse) => {
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.crear') + '-' +
-              this.translate.instant('GLOBAL.info_practicas_academicas'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        } else {
+          this.sgamidService.post('practicas_academicas/', this.NuevaSolicitud).subscribe(res => {
+            const r = <any>res
+            if (r !== null && r.Response.Type !== 'error') {
+              this.loading = false;
+              this.practicasService.clearCache();
+              this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
+                this.translate.instant('practicas_academicas.solicitud_creada') + res.Response.Body[0].Solicitud.Id);
+              this.router.navigate([`pages/practicas-academicas/lista-practicas/${btoa('process')}`]);
+            } else {
+              this.loading = false;
+              this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.error_practicas_academicas'));
+            }
+          }, (error: HttpErrorResponse) => {
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              footer: this.translate.instant('GLOBAL.crear') + '-' +
+                this.translate.instant('GLOBAL.info_practicas_academicas'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
-        });
+        }
       }
     }
   }
@@ -466,5 +468,9 @@ export class NuevaSolicitudComponent implements OnInit {
 
   loadDocentes(event) {
     this.InfoDocentes = event;
+  }
+
+  goback() {
+    this.location.back();
   }
 }
