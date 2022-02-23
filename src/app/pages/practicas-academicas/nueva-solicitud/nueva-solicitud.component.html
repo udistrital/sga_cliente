@@ -49,10 +49,17 @@
           </mat-expansion-panel-header>
           <ng2-smart-table [settings]="tablaEstados" [source]="estadosSolicitud" (custom)="verEstado($event)">
           </ng2-smart-table>
-      
+
         </mat-expansion-panel>
-      
+
       </mat-accordion>
     </nb-card-body>
+    <nb-card-footer>
+      <div class="text-center">
+        <button mat-button type="button" (click)="goback()">
+          {{ 'GLOBAL.regresar' | translate }}
+        </button>
+      </div>
+    </nb-card-footer>
   </nb-card>
 </div>

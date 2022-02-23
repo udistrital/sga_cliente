@@ -71,9 +71,13 @@
           [modeloData]="Legalizacion" (result)="enviarLegalizacion($event)">
         </ngx-dinamicform>
       </div>
-
-
-
     </nb-card-body>
+    <nb-card-footer>
+      <div class="text-center">
+        <button mat-button type="button" (click)="goback()">
+          {{ 'GLOBAL.regresar' | translate }}
+        </button>
+      </div>
+    </nb-card-footer>
   </nb-card>
 </div>
