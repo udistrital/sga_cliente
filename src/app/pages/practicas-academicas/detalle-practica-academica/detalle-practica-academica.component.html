@@ -66,7 +66,7 @@
         </ngx-dinamicform>
       </div>
 
-      <div *ngIf="estado=='Acta aprobada'">
+      <div *ngIf="estado=='Acta aprobada' && !['invitation'].includes(process)">
         <ngx-dinamicform *ngIsGranted="['DOCENTE']" [normalform]="formDocumentosAdicionalesLegalizacion"
           [modeloData]="Legalizacion" (result)="enviarLegalizacion($event)">
         </ngx-dinamicform>

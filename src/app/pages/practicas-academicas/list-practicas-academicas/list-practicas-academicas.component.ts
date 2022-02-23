@@ -149,7 +149,7 @@ export class ListPracticasAcademicasComponent implements OnInit {
       return this.practicasService.getPracticas(endpoint, null, ['Radicada']);
     }
     if (param === 'process') {
-      return this.practicasService.getPracticas(endpoint, null, ['Radicada', 'Acta aprobada', 'Rechazada', 'Requiere modificación']);
+      return this.practicasService.getPracticas(endpoint, null, ['Radicada', 'Rectificar', 'En consejo curricular', 'Acta aprobada', 'Rechazada', 'Requiere modificación']);
     }
     if (param === 'invitation') {
       return this.practicasService.getPracticas(endpoint, null, ['Acta aprobada']);
