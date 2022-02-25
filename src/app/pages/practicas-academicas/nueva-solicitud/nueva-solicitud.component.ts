@@ -63,7 +63,7 @@ export class NuevaSolicitudComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
-    // this.loadData();
+
   }
 
   ngOnInit() {
@@ -76,8 +76,6 @@ export class NuevaSolicitudComponent implements OnInit {
         this.idPractica = id;
 
         if (id) {
-          // this.llenarDocumentos = true;
-          // this.FormPracticasAcademicas.btn = null;
 
           this.process = atob(process);
           if (this.process == 'process') {
@@ -100,7 +98,6 @@ export class NuevaSolicitudComponent implements OnInit {
                   this.InfoDocentes = aux;
                   this.estadosSolicitud = practica["Data"].Estados;
                   let docs = await this.cargarDocs(this.InfoPracticasAcademicas.Documentos);
-                  // this.loading = false;
                 }
               }
             });
@@ -163,8 +160,8 @@ export class NuevaSolicitudComponent implements OnInit {
 
   cargarDocs(files) {
     return new Promise((resolve, reject) => {
-
       this.loading = true;
+
       files.forEach(documento => {
         this.nuxeo.getByUUID(documento.Enlace).subscribe(res => {
           switch (documento.Nombre) {
@@ -240,14 +237,12 @@ export class NuevaSolicitudComponent implements OnInit {
               this.periodos = res['Data']['periodos'];
               this.proyectos = res['Data']['proyectos'];
               this.tiposVehiculo = res['Data']['vehiculos'];
-              this.espaciosAcademicos = [{ Nombre: '123 - Calculo Integral', Id: 1 }];
 
               this.FormPracticasAcademicas.campos[this.getIndexForm('Periodo')].opciones = this.periodos;
               this.FormPracticasAcademicas.campos[this.getIndexForm('Periodo')].valor = this.periodos[0];
               this.FormPracticasAcademicas.campos[this.getIndexForm('Periodo')].deshabilitar = true;
 
-              this.FormPracticasAcademicas.campos[this.getIndexForm('EspacioAcademico')].opciones = this.espaciosAcademicos;
-              this.FormPracticasAcademicas.campos[this.getIndexForm('EspacioAcademico')].valor = this.espaciosAcademicos[0];
+              this.FormPracticasAcademicas.campos[this.getIndexForm('Duracion')].deshabilitar = true;
 
               this.FormPracticasAcademicas.campos[this.getIndexForm('Proyecto')].opciones = this.proyectos;
               this.FormPracticasAcademicas.campos[this.getIndexForm('TipoVehiculo')].opciones = this.tiposVehiculo;
@@ -420,8 +415,6 @@ export class NuevaSolicitudComponent implements OnInit {
                 <span>${this.InfoPracticasAcademicas.EstadoTipoSolicitudId.EstadoId.Nombre}</span><br>
                 <span class="form-control">${event.data.Comentario}</span><br>`,
       icon: "info",
-      // buttons: true,
-      // dangerMode: true,
       showCancelButton: true
     };
     Swal.fire(opt)
@@ -434,29 +427,50 @@ export class NuevaSolicitudComponent implements OnInit {
   getSeleccion(event) {
     this.changeLoading(true);
     if (event.nombre === 'Proyecto') {
+      this.sgamidService.get('practicas_academicas/consultar_espacios_academicos/' + this.info_persona_id).subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          if (r.Status === '200' && res['Data'] !== null) {
+            this.espaciosAcademicos = res['Data'];
 
-      // this.sgamidService.get('practicas_academicas/consultar_espacios_academicos/' + this.info_persona_id).subscribe(res => {
-      //   const r = <any>res;
-      //   if (res !== null && r.Type !== 'error') {
-      //     if (r.Status === '200' && res['Data'] !== null) {
-      //       this.espaciosAcademicos = res['Data'];
+            this.FormPracticasAcademicas.campos[this.getIndexForm('EspacioAcademico')].opciones = this.espaciosAcademicos;
+          }
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+    } else if (event.nombre === 'FechaHoraRegreso' || event.nombre === 'FechaHoraSalida') {
+      const campoRegreso = this.FormPracticasAcademicas.campos[this.getIndexForm('FechaHoraRegreso')];
+      const fechaRegreso = new Date(campoRegreso.valor);
 
-      //       this.FormPracticasAcademicas.campos[this.getIndexForm('EspacioAcademico')].opciones = this.espaciosAcademicos;
-      //     }
-      //   }
-      // },
-      //   (error: HttpErrorResponse) => {
-      //     Swal.fire({
-      //       icon: 'error',
-      //       title: error.status + '',
-      //       text: this.translate.instant('ERROR.' + error.status),
-      //       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      //     });
-      //   });
+      const campoSalida = this.FormPracticasAcademicas.campos[this.getIndexForm('FechaHoraSalida')];
+      const fechaSalida = new Date(campoSalida.valor);
 
-      this.espaciosAcademicos = [{ Nombre: '123 - Calculo Integral', Id: 1 }];
-      this.FormPracticasAcademicas.campos[this.getIndexForm('EspacioAcademico')].opciones = this.espaciosAcademicos;
+      campoSalida.max = campoRegreso.valor;
+      campoRegreso.min = campoSalida.valor;
 
+      const dias = (fechaRegreso.getTime() - fechaSalida.getTime())
+      this.FormPracticasAcademicas.campos[this.getIndexForm('Duracion')].valor = Math.abs(Math.round(dias / (1000 * 60 * 60 * 24)));
+
+      // if (fechaSalida.getTime() > fechaRegreso.getTime()) {
+      //   campoRegreso.clase = 'form-control form-control-danger';
+      //   campoRegreso.alerta = 'La fecha no es posible';
+
+      //   campoSalida.clase = 'form-control form-control-danger';
+      //   campoSalida.alerta = 'fecha menor';
+      // } else {
+      //   campoRegreso.clase = 'form-control form-control-success';
+      //   campoRegreso.alerta = '';
+
+      //   campoSalida.clase = 'form-control form-control-success';
+      //   campoSalida.alerta = '';
+      // }
     }
 
     this.changeLoading(false);
