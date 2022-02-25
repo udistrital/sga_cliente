@@ -231,7 +231,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
       (JSON.stringify(c.valor) === '{}' && c.etiqueta !== 'file') || JSON.stringify(c.valor) === '[]')
       || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && (c.urlTemp === undefined || c.urlTemp === '')))
       || ((c.etiqueta === 'file' && c.valor.name === null) && (c.etiqueta === 'file' && (c.urlTemp === null || c.urlTemp === '')))) {
-      if (c.entrelazado) {
+      if (c.entrelazado && emit) {
         this.interlaced.emit(c);
         return true;
       }
@@ -262,9 +262,6 @@ export class DinamicformComponent implements OnInit, OnChanges {
         return false;
       }
     }
-    if (c.entrelazado && emit) {
-      this.interlaced.emit(c);
-    }
     if (c.etiqueta === 'select') {
       if (c.valor == null) {
         c.clase = 'form-control form-control-danger';
@@ -285,7 +282,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
           return false;
         }
       }
-
+    }
+    if (c.entrelazado && emit) {
+      if (c.valor) {
+        this.interlaced.emit(c);
+      }
     }
     // if (!this.normalform.btn) {
     //   if (this.validForm().valid) {
