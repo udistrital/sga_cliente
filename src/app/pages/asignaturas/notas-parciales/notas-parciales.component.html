@@ -1,0 +1,107 @@
+<nb-card>
+    <nb-card-header>
+        <div class="row" align="center">
+            <div class="col">
+                {{ 'asignaturas.notas_parciales' | translate }}
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <fieldset [ngClass]="{'fieldseter':true}">
+            <legend> {{ 'asignaturas.info_estudiante' | translate }} </legend>
+            <div class="container-estudiante">
+            <div class="row d-flex align-items-end">
+                <div class="col-lg-4">
+                    <div class="row d-flex align-items-end">
+                        <div class="col-sm-auto">
+                            <label>{{ 'asignaturas.nombre' | translate }}: </label>
+                        </div>
+                        <div class="col-sm">
+                            <label class="underline">{{info_est.nombre}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="row d-flex align-items-end">
+                        <div class="col-sm-auto">
+                            <label>{{ 'asignaturas.codigo_programa' | translate }}: </label>
+                        </div>
+                        <div class="col-sm">
+                            <label class="underline">{{info_est.codigo_programa}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-flex align-items-end">
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-sm-auto">
+                            <label>{{ 'asignaturas.identificacion' | translate }}: </label>
+                        </div>
+                        <div class="col-sm">
+                            <label class="underline">{{info_est.identificacion}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="row">
+                        <div class="col-sm-auto">
+                            <label>{{ 'asignaturas.nombre_programa' | translate }}: </label>
+                        </div>
+                        <div class="col-sm">
+                            <label class="underline">{{info_est.nombre_programa}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-flex align-items-end">
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-sm-auto">
+                            <label>{{ 'asignaturas.codigo' | translate }}: </label>
+                        </div>
+                        <div class="col-sm">
+                            <label class="underline">{{info_est.codigo}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="row">
+                        <div class="col-sm-auto">
+                            <label>{{ 'asignaturas.promedio' | translate }}: </label>
+                        </div>
+                        <div class="col-sm">
+                            <label class="underline">{{info_est.promedio}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="row">
+                        <div class="col-sm-auto">
+                            <label>{{ 'asignaturas.periodo_academico' | translate }}: </label>
+                        </div>
+                        <div class="col-sm">
+                            <label class="underline">{{info_est.periodo_academico}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </fieldset>
+    </nb-card-body>
+    <nb-card-body>
+        <fieldset [ngClass]="{'fieldseter':true}">
+            <legend> {{ 'asignaturas.list_notas_parciales' | translate }} </legend>
+            <div class="container-estudiante">
+            <ng2-smart-table [settings]="settings" [source]="dataSource">
+            </ng2-smart-table>
+            </div>
+            <div class="row d-flex align-items-center">
+                <div class="col-md" align="center">
+                    <button mat-flat-button color="primary">{{ 'asignaturas.imprimir' | translate }}</button>
+                </div>
+            </div>
+        </fieldset>
+    </nb-card-body>
+    <nb-card-footer></nb-card-footer>
+</nb-card>
