@@ -42,6 +42,10 @@
             "captura_notas": "Grades' register state",
             "definicion_cortes": "Set dates of ?cortes"
         },
+        "asignaturas": {
+            "asignaturas": "Subjects",
+            "notas_parciales": "Partial grades"
+        },
         "derechos_pecuniarios": {
             "derechos_pecuniarios": "Financial entitlements",
             "definir_conceptos": "Define Concepts",
@@ -1930,5 +1934,24 @@
         "hasta": "TO",
         "elije_fecha_inicio": "Choose start date",
         "elije_fecha_fin": "Choose end date"
+    },
+    "asignaturas": {
+        "notas_parciales": "Partial grades",
+        "info_estudiante": "Student information",
+        "nombre": "Full name",
+        "codigo_programa": "Program code",
+        "identificacion": "Identification",
+        "nombre_programa": "Program name",
+        "codigo": "Code",
+        "promedio": "Grade point average",
+        "periodo_academico": "Academic period",
+        "list_notas_parciales": "List of partial grades",
+        "grupo": "Group",
+        "asignatura": "Subject",
+        "creditos": "Credits",
+        "corte1": "?Corte 1",
+        "corte2":"?Corte 2",
+        "imprimir": "PRINT PARTIAL GRADES",
+        "no_datos_notas_parciales": "No data were found for the period or search performed."
     }
 }
