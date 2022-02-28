@@ -132,6 +132,7 @@ import {
   LinkDownloadNuxeoComponent,
   CustomizeButtonComponent,
   NotePercentageComponent,
+  RenderDataComponent,
 } from './components';
 
 import { CapitalizePipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -198,12 +199,14 @@ const COMPONENTS = [
   LinkDownloadNuxeoComponent,
   CustomizeButtonComponent,
   NotePercentageComponent,
+  RenderDataComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   ThemeSwitcherListComponent,
   LinkDownloadNuxeoComponent,
   CustomizeButtonComponent,
+  RenderDataComponent,
 ];
 
 const PIPES = [

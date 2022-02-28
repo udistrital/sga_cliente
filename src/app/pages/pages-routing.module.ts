@@ -93,6 +93,10 @@ const routes: Routes = [{
       loadChildren: () => import ('./registro_notas/registro_notas.module').then(m => m.RegistroNotasModule),
     },
     {
+      path: 'asignaturas',
+      loadChildren: () => import ('./asignaturas/asignaturas.module').then(m => m.AsignaturasModule),
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

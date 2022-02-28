@@ -1,0 +1,18 @@
+label.underline {
+	border-bottom: 1px solid black;
+	display: block;
+}
+
+:host /deep/ ng2-smart-table thead th{
+	text-align: center;
+  }
+
+.container-estudiante {
+	margin: 10px;
+	padding: 5px;
+}
+
+.container-notas {
+	margin: 10px;
+	padding: 5px;
+}
