@@ -44,7 +44,7 @@
         },
         "asignaturas": {
             "asignaturas": "Subjects",
-            "notas_parciales": "Partial grades"
+            "notas-parciales": "Partial grades"
         },
         "derechos_pecuniarios": {
             "derechos_pecuniarios": "Financial entitlements",

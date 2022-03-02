@@ -30,25 +30,25 @@ export class NotasParcialesComponent implements OnInit {
         Grupo: {
           title: this.translate.instant('asignaturas.grupo'),
           editable: false,
-          width: 'auto',
+          width: '5%',
           filter: false,
         },
         Asignatura: {
           title: this.translate.instant('asignaturas.asignatura'),
           editable: false,
-          width: 'auto',
+          width: '10%',
           filter: false,
         },
         Creditos: {
           title: this.translate.instant('asignaturas.creditos'),
           editable: false,
-          width: 'auto',
+          width: '5%',
           filter: false,
         },
         Corte1: {
           title: this.translate.instant('asignaturas.corte1'),
           editable: false,
-          width: 'auto',
+          width: '20%',
           filter: false,
           type: 'custom',
           renderComponent: RenderDataComponent,
@@ -56,7 +56,7 @@ export class NotasParcialesComponent implements OnInit {
         Corte2: {
           title: this.translate.instant('asignaturas.corte2'),
           editable: false,
-          width: 'auto',
+          width: '20%',
           filter: false,
           type: 'custom',
           renderComponent: RenderDataComponent,
@@ -64,7 +64,7 @@ export class NotasParcialesComponent implements OnInit {
         LabExamHab: {
           title: "",
           editable: false,
-          width: 'auto',
+          width: '20%',
           filter: false,
           type: 'custom',
           renderComponent: RenderDataComponent,
@@ -72,7 +72,7 @@ export class NotasParcialesComponent implements OnInit {
         AcuFallasObsDef: {
           title: "",
           editable: false,
-          width: 'auto',
+          width: '20%',
           filter: false,
           type: 'custom',
           renderComponent: RenderDataComponent,
