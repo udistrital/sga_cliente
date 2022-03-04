@@ -129,6 +129,10 @@ import {
   ListadoComponent,
   NewTercero,
   DownloadFileNuxeo,
+  LinkDownloadNuxeoComponent,
+  CustomizeButtonComponent,
+  NotePercentageComponent,
+  RenderDataComponent,
 } from './components';
 
 import { CapitalizePipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -192,10 +196,17 @@ const COMPONENTS = [
   ListadoComponent,
   NewTercero,
   DownloadFileNuxeo,
+  LinkDownloadNuxeoComponent,
+  CustomizeButtonComponent,
+  NotePercentageComponent,
+  RenderDataComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   ThemeSwitcherListComponent,
+  LinkDownloadNuxeoComponent,
+  CustomizeButtonComponent,
+  RenderDataComponent,
 ];
 
 const PIPES = [
@@ -225,7 +236,7 @@ const NB_THEME_PROVIDERS = [
 @NgModule({
   imports: [...BASE_MODULES, ...NB_MODULES, SharedModule, ...MAT_MODULES, MomentModule,   NbEvaIconsModule,  ],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES, ...MAT_MODULES, ...DIRECTIVES],
-  declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective],
+  declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective, NotePercentageComponent],
   entryComponents: [...ENTRY_COMPONENTS],
 })
 export class ThemeModule {

@@ -93,6 +93,12 @@ export class NewTercero implements OnInit {
     Swal.fire(opt)
       .then((willMake) => {
         if (willMake.value) {
+          if (infoTercero.Nit.includes('-')) {
+            let nitAux = infoTercero.Nit.split('-');
+            infoTercero.Nit = nitAux[0];
+            infoTercero.Verificacion = nitAux[1];
+          }
+
           this.sgaMidService.post('formacion_academica/post_tercero', infoTercero)
             .subscribe((data) => {
               this.result.emit({
@@ -105,13 +111,13 @@ export class NewTercero implements OnInit {
   }
 
   ngOnInit() {
-      const opt2: any = {
-        title: this.translate.instant('GLOBAL.info'),
-        text: this.translate.instant('inscripcion.alerta_veracidad_informacion'),
-        icon: 'warning',
-        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      };
-      Swal.fire(opt2)
+    const opt2: any = {
+      title: this.translate.instant('GLOBAL.info'),
+      text: this.translate.instant('inscripcion.alerta_veracidad_informacion'),
+      icon: 'warning',
+      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    };
+    Swal.fire(opt2)
       .then((action2) => {
       });
   }

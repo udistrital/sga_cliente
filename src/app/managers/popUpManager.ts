@@ -29,9 +29,8 @@ export class PopUpManager {
         }
     }
 
-    public showInfoToast(message: string) {
+    public showInfoToast(message: string, duration: number = 0) {
         const status: any = 'info';
-        const duration: any = 0
         this.toast.show(message, this.translate.instant('GLOBAL.info'), { status, duration });
     }
 

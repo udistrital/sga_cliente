@@ -17,5 +17,5 @@
                  [modeloData]="docenteColaborador"
                  (resultAux)="buscarColaborador($event)"
                  (result)="agregarColaborador($event)"
-                 *ngIf="nuevoColaborador">
+                 *ngIf="nuevoColaborador && nuevaSolicitud">
 </ngx-dinamicform>

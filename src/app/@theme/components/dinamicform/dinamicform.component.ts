@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
@@ -10,7 +10,6 @@ import { AnyService } from '../../../@core/data/any.service';
   templateUrl: './dinamicform.component.html',
   styleUrls: ['./dinamicform.component.scss'],
 })
-
 
 export class DinamicformComponent implements OnInit, OnChanges {
 
@@ -24,9 +23,12 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() percentage: EventEmitter<any> = new EventEmitter();
   data: any;
   searchTerm$ = new Subject<any>();
-  @ViewChild(MatDatepicker, {static: true}) datepicker: MatDatepicker<Date>;
-  @ViewChild('documento', {static: true}) DocumentoInputVariable: ElementRef;
+  @ViewChild(MatDatepicker, { static: true }) datepicker: MatDatepicker<Date>;
+  @ViewChildren("documento") fileInputs: QueryList<ElementRef>;
+
+  DocumentoInputVariable: ElementRef;
   init: boolean;
+
   constructor(
     private sanitization: DomSanitizer,
     private anyService: AnyService,
@@ -71,7 +73,6 @@ export class DinamicformComponent implements OnInit, OnChanges {
       })),
     );
   }
-
 
   ngOnChanges(changes) {
     if (changes.normalform !== undefined) {
@@ -136,7 +137,13 @@ export class DinamicformComponent implements OnInit, OnChanges {
     }
   }
 
-
+  ngAfterViewInit() {
+    this.fileInputs.changes.subscribe(x => {
+      if (x.length) {
+        this.DocumentoInputVariable = x.first;
+      }
+    })
+  }
 
   download(url, title, w, h) {
     const left = (screen.width / 2) - (w / 2);
@@ -168,11 +175,13 @@ export class DinamicformComponent implements OnInit, OnChanges {
   cleanURL(oldURL: string): SafeResourceUrl {
     return this.sanitization.bypassSecurityTrustUrl(oldURL);
   }
+
   validlog1(event) {
     const camposLog1 = this.normalform.campos.filter((campo: any) => (campo.etiqueta === 'inputConfirmacion'));
     // if (camposLog1[0].valor> )
 
   }
+
   confirmacion(event) {
     const camposAValidar = this.normalform.campos.filter((campo: any) => (campo.etiqueta === 'inputConfirmacion'));
     if (!(camposAValidar[0].valor === camposAValidar[1].valor)) {
@@ -187,8 +196,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
       camposAValidar[1].alerta = '';
     }
   }
+
   ngOnInit() {
-    console.log(this.normalform);
     this.init = true;
     if (!this.normalform.tipo_formulario) {
       this.normalform.tipo_formulario = 'grid';
@@ -213,7 +222,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     c.valor = event.value;
   }
 
-  validCampo(c): boolean {
+  validCampo(c, emit = true): boolean {
     if (c.etiqueta === 'file' && !!c.ocultar) {
       return true;
       // console.info((c.etiqueta === 'file' && (c.valor)?true:c.valor.name === undefined));
@@ -222,7 +231,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
       (JSON.stringify(c.valor) === '{}' && c.etiqueta !== 'file') || JSON.stringify(c.valor) === '[]')
       || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && (c.urlTemp === undefined || c.urlTemp === '')))
       || ((c.etiqueta === 'file' && c.valor.name === null) && (c.etiqueta === 'file' && (c.urlTemp === null || c.urlTemp === '')))) {
-      if (c.entrelazado) {
+      if (c.entrelazado && emit) {
         this.interlaced.emit(c);
         return true;
       }
@@ -253,9 +262,6 @@ export class DinamicformComponent implements OnInit, OnChanges {
         return false;
       }
     }
-    if (c.entrelazado) {
-      this.interlaced.emit(c);
-    }
     if (c.etiqueta === 'select') {
       if (c.valor == null) {
         c.clase = 'form-control form-control-danger';
@@ -276,7 +282,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
           return false;
         }
       }
-
+    }
+    if (c.entrelazado && emit) {
+      if (c.valor) {
+        this.interlaced.emit(c);
+      }
     }
     // if (!this.normalform.btn) {
     //   if (this.validForm().valid) {
@@ -292,12 +302,12 @@ export class DinamicformComponent implements OnInit, OnChanges {
     this.normalform.campos.forEach(d => {
       d.valor = null;
       if (d.etiqueta === 'file') {
-        const nativeElement = this.DocumentoInputVariable?this.DocumentoInputVariable.nativeElement?this.DocumentoInputVariable.nativeElement:null:null;
-        nativeElement?nativeElement.value = '': '';
-        d.File = null
-        d.url = null
-        d.urlTemp = undefined
-        d.valor = { nombre: undefined }
+        const nativeElement = this.DocumentoInputVariable ? this.DocumentoInputVariable.nativeElement ? this.DocumentoInputVariable.nativeElement : null : null;
+        nativeElement ? nativeElement.value = '' : '';
+        d.File = undefined;
+        d.url = "";
+        d.urlTemp = "";
+        d.valor = "";
       }
     });
   }
@@ -313,7 +323,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
 
     this.normalform.campos.forEach(d => {
       requeridos = d.requerido && !d.ocultar ? requeridos + 1 : requeridos;
-      if (this.validCampo(d)) {
+      if (this.validCampo(d, false)) {
         if (d.etiqueta === 'file' && !d.ocultar) {
           result[d.nombre] = { nombre: d.nombre, file: d.File, url: d.url, IdDocumento: d.tipoDocumento };
           // result[d.nombre].push({ nombre: d.name, file: d.valor });

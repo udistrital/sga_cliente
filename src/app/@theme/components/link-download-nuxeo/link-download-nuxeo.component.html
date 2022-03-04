@@ -1,0 +1,10 @@
+<button *ngIf="!errorDocument" class="btn btn-primary" (click)="openFile()">
+  <i class="fa fa-download fa-2x"></i> Descargar
+</button>
+<span *ngIf="errorDocument">{{label}}</span>
+
+
+<!-- <button class="{{value.class}}" (click)="clickEvent()">
+  <i class="{{value.icon}}"></i>
+  <span>{{value.label}}</span>
+</button> -->

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from './../../../environments/environment';
+import { RequestManager } from '../../managers/requestManager';
 import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import * as moment from 'moment';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -16,118 +18,132 @@ const httpOptions = {
 })
 
 export class PracticasAcademicasService {
-    practicas = [{
-        Numero: 123,
-        FechaSolicitud: '05/03/2021',
-        TipoSolicitud: 'Prácticas académicas 1',
-        EstadoSolicitud: 'Radicada',
-        estados: [{
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 1',
-            EstadoSolicitud: 'Radicada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 2',
-            EstadoSolicitud: 'Aprobada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 3',
-            EstadoSolicitud: 'Rechazada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 4',
-            EstadoSolicitud: 'Devuelta',
-        }]
+    private practicasSubject = new BehaviorSubject(null);
+    public practicas$ = this.practicasSubject.asObservable();
+    private practicas = null;
 
-    }, {
-        Numero: 456,
-        FechaSolicitud: '05/03/2021',
-        TipoSolicitud: 'Prácticas académicas 2',
-        EstadoSolicitud: 'Aprobada',
-        estados: [{
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 1',
-            EstadoSolicitud: 'Radicada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 2',
-            EstadoSolicitud: 'Aprobada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 3',
-            EstadoSolicitud: 'Rechazada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 4',
-            EstadoSolicitud: 'Devuelta',
-        }]
-    }, {
-        Numero: 789,
-        FechaSolicitud: '05/03/2021',
-        TipoSolicitud: 'Prácticas académicas 3',
-        EstadoSolicitud: 'Rechazada',
-        estados: [{
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 1',
-            EstadoSolicitud: 'Radicada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 2',
-            EstadoSolicitud: 'Aprobada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 3',
-            EstadoSolicitud: 'Rechazada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 4',
-            EstadoSolicitud: 'Devuelta',
-        }]
-    }, {
-        Numero: 101,
-        FechaSolicitud: '05/03/2021',
-        TipoSolicitud: 'Prácticas académicas 4',
-        EstadoSolicitud: 'Devuelta',
-        estados: [{
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 1',
-            EstadoSolicitud: 'Radicada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 2',
-            EstadoSolicitud: 'Aprobada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 3',
-            EstadoSolicitud: 'Rechazada',
-        }, {
-            FechaSolicitud: '05/03/2021',
-            Observaciones: 'Prácticas académicas 4',
-            EstadoSolicitud: 'Devuelta',
-        }]
-    }]
+    constructor(private http: HttpClient,
+        private requestManager: RequestManager) {
 
-    constructor(private http: HttpClient) {
     }
 
-    getPracticas(id = null, stateFilter = null) {
-        if (id) {
-            return this.practicas.filter((practicas) => (id == practicas.Numero))
-        }
-        if (stateFilter) {
-            return this.practicas.filter((practicas) => (stateFilter.includes(practicas.EstadoSolicitud)))
-        }
-        return this.practicas;
-    }
+    getPracticas(endpoint, filter = null, stateFilter = null) {
+        this.requestManager.setPath('SGA_MID_SERVICE');
+        let res: any;
+        if (!this.practicas) {
+            if (filter) {
+                if (filter.Id || filter.FechaRadicacion) {
+                    res = this.requestManager.get(endpoint).pipe(map((practica: any) => {
+                        this.practicasSubject.next(practica);
+                        this.practicas = practica;
+                        return practica.Data.map((p: any) => {
+                            return {
+                                ...p,
+                                ...{
+                                    TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
+                                    EstadoId: p.EstadoTipoSolicitudId.EstadoId
+                                }
+                            }
+                        }).filter((practicas: any) => (filter.Id == practicas.Id || filter.FechaRadicacion == moment(practicas.FechaRadicacion, 'YYYY-MM-DD').format('DD/MM/YYYY')))
 
-    getEstados(id = null, stateFilter = null) {
-        if (id) {
-            return this.practicas.filter((practicas) => (id === practicas.Numero))
+                    }),
+                        catchError(error => {
+                            return error
+                        }))
+                }
+            } else if (stateFilter) {
+                res = this.requestManager.get(endpoint).pipe(map((practica: any) => {
+                    this.practicasSubject.next(practica);
+                    this.practicas = practica;
+                    return practica.Data.map((p: any) => {
+                        return {
+                            ...p,
+                            ...{
+                                TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
+                                EstadoId: p.EstadoTipoSolicitudId.EstadoId
+                            }
+                        }
+                    }).filter((practicas: any) => {
+                        return (stateFilter.includes(practicas.EstadoId.Nombre))
+                    })
+                }),
+                    catchError(error => {
+                        return error
+                    }))
+            } else {
+                res = this.requestManager.get(endpoint).pipe(map((practica: any) => {
+                    this.practicasSubject.next(practica);
+                    this.practicas = practica;
+                    return practica.Data.map((p: any) => {
+                        return {
+                            ...p,
+                            ...{
+                                TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
+                                EstadoId: p.EstadoTipoSolicitudId.EstadoId
+                            }
+                        }
+                    })
+                }),
+                    catchError(error => {
+                        return error
+                    }))
+
+            }
+        } else {
+            if (filter) {
+                if (filter.Id || filter.FechaRadicacion) {
+                    res = this.practicas$.pipe(map((practica: any) => {
+                        return practica.Data.map((p: any) => {
+                            return {
+                                ...p,
+                                ...{
+                                    TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
+                                    EstadoId: p.EstadoTipoSolicitudId.EstadoId
+                                }
+                            }
+                        }).filter((practicas: any) => (filter.Id == practicas.Id || filter.FechaRadicacion == moment(practicas.FechaRadicacion, 'YYYY-MM-DD').format('DD/MM/YYYY')))
+
+                    }),
+                        catchError(error => {
+                            return error
+                        }))
+                }
+            } else if (stateFilter) {
+                res = this.practicas$.pipe(map((practica: any) => {
+                    return practica.Data.map((p: any) => {
+                        return {
+                            ...p,
+                            ...{
+                                TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
+                                EstadoId: p.EstadoTipoSolicitudId.EstadoId
+                            }
+                        }
+                    }).filter((practicas: any) => {
+                        return (stateFilter.includes(practicas.EstadoId.Nombre))
+                    })
+                }),
+                    catchError(error => {
+                        return error
+                    }))
+            } else {
+                res = this.practicas$.pipe(map((practica: any) => {
+                    return practica.Data.map((p: any) => {
+                        return {
+                            ...p,
+                            ...{
+                                TipoSolicitud: p.EstadoTipoSolicitudId.TipoSolicitud,
+                                EstadoId: p.EstadoTipoSolicitudId.EstadoId
+                            }
+                        }
+                    })
+                }),
+                    catchError(error => {
+                        return error
+                    }))
+
+            }
         }
-        if (stateFilter) {
-            return this.practicas.filter((practicas) => (stateFilter.includes(practicas.EstadoSolicitud)))
-        }
-        return this.practicas;
+        return res;
     }
 
     get(path, endpoint) {
@@ -157,6 +173,10 @@ export class PracticasAcademicasService {
         return this.http.delete(path + endpoint + '/' + element.Id, httpOptions).pipe(
             catchError(this.handleError),
         );
+    }
+
+    clearCache() {
+        this.practicas = null;
     }
 
     private handleError(error: HttpErrorResponse) {

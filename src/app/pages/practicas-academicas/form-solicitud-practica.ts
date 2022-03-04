@@ -75,6 +75,7 @@ export const FORM_SOLICITUD_PRACTICAS = {
             nombre: 'FechaHoraSalida',
             claseGrid: 'col-12 col-sm-6 col-md-4',
             label_i18n: 'fecha_salida',
+            entrelazado: true,
             requerido: true,
             deshabilitar: false,
         },
@@ -84,6 +85,7 @@ export const FORM_SOLICITUD_PRACTICAS = {
             nombre: 'FechaHoraRegreso',
             claseGrid: 'col-12 col-sm-6 col-md-4',
             label_i18n: 'fecha_regreso',
+            entrelazado: true,
             requerido: true,
             deshabilitar: false,
         },
@@ -95,7 +97,7 @@ export const FORM_SOLICITUD_PRACTICAS = {
             label_i18n: 'duracion',
             requerido: true,
             minimo: 0,
-            deshabilitar: false,
+            deshabilitar: true,
         },
         {
             etiqueta: 'input',
@@ -207,6 +209,32 @@ export const FORM_SOPORTES_DOCUMENTALES = {
             url: '',
             tamanoMaximo: 2,
         },
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-6 mb-5',
+            clase: 'form-control',
+            nombre: 'ActaCompromiso',
+            label_i18n: 'acta_compromiso',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 54,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        },
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-6 mb-5',
+            clase: 'form-control',
+            nombre: 'InformacionAsistente',
+            label_i18n: 'info_asistencia_practica',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 55,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        }
     ]
 }
 
@@ -226,7 +254,7 @@ export const FORM_DOCUMENTOS_ADICIONALES = {
             label_i18n: 'acta_compromiso',
             requerido: true,
             tipo: 'pdf',
-            tipoDocumento: 25,
+            tipoDocumento: 54,
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,
@@ -239,7 +267,44 @@ export const FORM_DOCUMENTOS_ADICIONALES = {
             label_i18n: 'info_asistencia_practica',
             requerido: true,
             tipo: 'pdf',
-            tipoDocumento: 25,
+            tipoDocumento: 55,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        }
+    ]
+}
+
+
+export const FORM_DOCUMENTOS_ADICIONALES_LEGALIZACION = {
+    tipo_formulario: 'mini',
+    alertas: true,
+    nombre: "Documentos adicionales",
+    btn: 'Enviar',
+    modelo: 'documental',
+    campos: [
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-12',
+            clase: 'form-control',
+            nombre: 'InformePractica',
+            label_i18n: 'informe_practica',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 56,
+            formatos: 'pdf',
+            url: '',
+            tamanoMaximo: 2,
+        },
+        {
+            etiqueta: 'file',
+            claseGrid: 'col-12 col-md-12',
+            clase: 'form-control',
+            nombre: 'CumplidoPractica',
+            label_i18n: 'cumplido_practica',
+            requerido: true,
+            tipo: 'pdf',
+            tipoDocumento: 57,
             formatos: 'pdf',
             url: '',
             tamanoMaximo: 2,

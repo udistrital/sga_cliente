@@ -17,6 +17,8 @@ import { ParametrosService } from '../../@core/data/parametros.service';
 import { ConsultarConceptosComponent } from './consultar-conceptos/consultar-conceptos.component';
 import { ButtonPaymentComponent } from '../../@theme/components/button-payment/button-payment.component';
 import { LinkDownloadComponent } from '../../@theme/components/link-download/link-download.component';
+import { ConsultarSolicitudesDerechosPecuniarios } from './consultar-solicitudes/consultar-solicitudes.component';
+import { AdmisionModule } from '../admision/admision.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { LinkDownloadComponent } from '../../@theme/components/link-download/lin
     Ng2SmartTableModule,
     FormsModule,
     ReactiveFormsModule,
+    AdmisionModule,
     DerechosPecuniariosRoutingComponent,
   ],
   exports: [
@@ -39,6 +42,7 @@ import { LinkDownloadComponent } from '../../@theme/components/link-download/lin
     DefinirConceptosComponent,
     ConsultarConceptosComponent,
     GeneracionRecibosDerechosPecuniarios,
+    ConsultarSolicitudesDerechosPecuniarios,
   ],
   providers: [
     PopUpManager,

@@ -13,4 +13,5 @@ export class Calendario {
     anno: number; 
     calendarioId: number;
     ListaCalendario: any[];
+    Id: number;
 }

@@ -13,4 +13,8 @@ export * from './loading/loading.component';
 export * from './listado/listado.component';
 export * from './new-tercero/new-tercero.component';
 export * from './download-file-nuxeo/download-file-nuxeo.component';
+export * from './link-download-nuxeo/link-download-nuxeo.component';
+export * from './customize-button/customize-button.component';
+export * from './note-percentage/note-percentage.component';
+export * from './render-data/render-data.component';
 

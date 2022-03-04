@@ -28,6 +28,7 @@ export class UserService {
             .subscribe(res => {
               if (res !== null) {
                 this.user = res[0].TerceroId;
+                this.user['Documento'] = document;
                 if (Object.keys(this.user).length !== 0) {
                   this.user$.next(this.user);
                   this.userSubject.next(this.user);              // window.localStorage.setItem('ente', res[0].Ente);

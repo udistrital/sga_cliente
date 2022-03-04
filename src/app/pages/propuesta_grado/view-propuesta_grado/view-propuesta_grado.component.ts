@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { UserService } from '../../../@core/data/users.service';
 import { PropuestaGrado } from './../../../@core/data/models/inscripcion/propuesta_grado';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
@@ -9,7 +8,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { CIDCService } from '../../../@core/data/cidc.service';
-import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-propuesta-grado',
@@ -42,6 +40,9 @@ export class ViewPropuestaGradoComponent implements OnInit {
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
   // tslint:disable-next-line: no-output-rename
+  @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
+
+  // tslint:disable-next-line: no-output-rename
   @Output('listo') listo: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private translate: TranslateService,
@@ -49,9 +50,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
     private cidcService: CIDCService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
-    private sanitization: DomSanitizer,
-    private pivotDocument: PivotDocument,
-    private users: UserService) {
+    private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     //this.persona_id = this.users.getPersonaId();
@@ -255,36 +254,17 @@ export class ViewPropuestaGradoComponent implements OnInit {
                   ...{ Documento: this.cleanURL(filesResponse_2['FormatoProyecto'] + '') },
                 }
                 this.FormatoProyecto = temp.DocumentoId;
-                this.cidcService.get('research_units/' + temp.GrupoInvestigacionId)
-                  .subscribe(grupo => {
-                    if (grupo !== null) {
-                      temp.GrupoInvestigacion = <any>grupo;
-                      this.cidcService.get('subtypes/' + temp.LineaInvestigacionId)
-                        .subscribe(linea => {
-                          if (linea !== null) {
-                            temp.LineaInvestigacion = <any>linea;
-                            // temp.LineaInvestigacion.name = temp.LineaInvestigacion.LineaInvestigacion.name;
-                            // this.formPropuestaGrado.campos[this.getIndexForm('LineaInvestigacion')].opciones.push(temp.LineaInvestigacion);
-                            //  temp.TipoProyecto = temp.TipoProyectoId;
-                            this.info_propuesta_grado = temp;
-                            this.listo.emit(true);
-                          }
-                        },
-                          (error: HttpErrorResponse) => {
-                            this.listo.emit(false);
-                            Swal.fire({
-                              icon: 'error',
-                              title: error.status + '',
-                              text: this.translate.instant('ERROR.' + error.status),
-                              footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                                this.translate.instant('GLOBAL.propuesta_grado') + '|' +
-                                this.translate.instant('GLOBAL.linea_investigacion'),
-                              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                            });
-                          });
-                    }
-                  },
-                    (error: HttpErrorResponse) => {
+                if (temp.GrupoInvestigacionId === 0) {
+                  temp.GrupoInvestigacion = <any>{ name: "No aplica" };
+                  this.info_propuesta_grado = temp;
+                } else {
+                  this.cidcService.get('research_units/' + temp.GrupoInvestigacionId)
+                    .subscribe(grupo => {
+                      if (grupo !== null) {
+                        temp.GrupoInvestigacion = <any>grupo;
+                        this.info_propuesta_grado = temp;
+                      }
+                    }, (error: HttpErrorResponse) => {
                       this.listo.emit(false);
                       Swal.fire({
                         icon: 'error',
@@ -296,6 +276,32 @@ export class ViewPropuestaGradoComponent implements OnInit {
                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                       });
                     });
+                }
+
+                if (temp.LineaInvestigacionId === 0) {
+                  temp.LineaInvestigacion = <any>{ st_name: "No aplica" };
+                  this.info_propuesta_grado = temp;
+                } else {
+                  this.cidcService.get('subtypes/' + temp.LineaInvestigacionId)
+                    .subscribe(linea => {
+                      if (linea !== null) {
+                        temp.LineaInvestigacion = <any>linea;
+                        this.info_propuesta_grado = temp;
+                      }
+                    }, (error: HttpErrorResponse) => {
+                      this.listo.emit(false);
+                      Swal.fire({
+                        icon: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('GLOBAL.cargar') + '-' +
+                          this.translate.instant('GLOBAL.propuesta_grado') + '|' +
+                          this.translate.instant('GLOBAL.linea_investigacion'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      });
+                    });
+                }
+                this.listo.emit(true);
               }
             },
               (error: HttpErrorResponse) => {
@@ -328,7 +334,8 @@ export class ViewPropuestaGradoComponent implements OnInit {
   }
 
   verPropuesta(document) {
-    this.pivotDocument.updateDocument(document);
+    document.Id = document.DocumentoId;
+    this.revisar_doc.emit(document);
   }
 
   ngOnInit() {

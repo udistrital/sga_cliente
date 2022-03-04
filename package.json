@@ -85,7 +85,7 @@
     "ng2-smart-table": "^1.7.2",
     "ngx-dynamic-form": "^1.0.12",
     "ngx-echarts": "^4.2.2",
-    "ngx-export-as": "^1.12.1",
+    "ngx-export-as": "^1.13.0",
     "ngx-extended-pdf-viewer": "^8.1.2",
     "ngx-moment": "^3.5.0",
     "node-sass": "^4.14.1",

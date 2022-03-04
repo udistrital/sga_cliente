@@ -1,0 +1,122 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <nb-card-header>
+        {{ 'derechos_pecuniarios.lista_solicitudes_derechos_pecuniarios' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+        <br>
+        <fieldset [ngClass]="{'fieldseter':true} " *ngIf="!gestion">
+            <legend> {{ 'derechos_pecuniarios.resumen_solicitudes' | translate }} </legend>
+            <ng2-smart-table *ngIf="!new_pecuniario" [settings]="settings" [source]="dataSource">
+            </ng2-smart-table>
+        </fieldset>
+
+        <fieldset [ngClass]="{'fieldseter':true} " *ngIf="gestion">
+            <legend> {{ 'derechos_pecuniarios.descripcion_solicitud' | translate }} </legend>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">{{'derechos_pecuniarios.fecha_generacion' | translate}}</label>
+                </div>
+                <div class="col-9">
+                    <span class="form-control">
+                        {{solicitudData.FechaCreacion}}
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">{{'derechos_pecuniarios.codigo' | translate}}</label>
+                </div>
+                <div class="col-9">
+                    <span class="form-control">
+                        {{solicitudData.Codigo}}
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">{{'GLOBAL.nombre' | translate}}</label>
+                </div>
+                <div class="col-9">
+                    <span class="form-control">
+                        {{solicitudData.Nombre}}
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">{{'derechos_pecuniarios.identificacion' | translate}}</label>
+                </div>
+                <div class="col-9">
+                    <span class="form-control">
+                        {{solicitudData.Identificacion}}
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">{{'derechos_pecuniarios.concepto_recibo' | translate}}</label>
+                </div>
+                <div class="col-9">
+                    <span class="form-control">
+                        {{solicitudData.Concepto}}
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">{{'derechos_pecuniarios.valor' | translate}}</label>
+                </div>
+                <div class="col-9">
+                    <span class="form-control">
+                        {{formatterPeso.format(solicitudData.Valor)}}
+                    </span>
+                </div>
+            </div>
+        </fieldset>
+        <br>
+        <fieldset [ngClass]="{'fieldseter':true} " *ngIf="gestion">
+            <legend> {{ 'derechos_pecuniarios.respuesta_dada_por' | translate }} </legend>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">{{'GLOBAL.nombre' | translate}}</label>
+                </div>
+                <div class="col-9">
+                    <span class="form-control">
+                        {{userResponse.NombreCompleto}}
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">{{'GLOBAL.rol' | translate}}</label>
+                </div>
+                <div class="col-9">
+                    <span class="form-control">
+                        {{userResponse.Rol}}
+                    </span>
+                </div>
+            </div>
+            <br>
+        </fieldset>
+        <br>
+        <ngx-dinamicform [normalform]="formularioSolicitud" (result)="enviarSolicitud($event)" *ngIf="gestion">
+        </ngx-dinamicform>
+        <br>
+
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="text-center" *ngIf="gestion">
+            <button mat-button type="button" (click)="gestion = false">
+                {{ 'GLOBAL.cancelar' | translate }}
+            </button>
+        </div>
+
+    </nb-card-footer>
+</nb-card>

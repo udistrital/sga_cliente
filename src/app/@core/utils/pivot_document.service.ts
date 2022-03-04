@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { NewNuxeoService } from './new_nuxeo.service';
 
 
 @Injectable({
@@ -13,16 +14,22 @@ export class PivotDocument {
     private infoSubject = new BehaviorSubject(null);
     public info$ = this.infoSubject.asObservable();
 
-    constructor() {
+    constructor(private nuxeoService: NewNuxeoService) {
     }
 
-    updateInfo(info){
+    updateInfo(info) {
         this.infoSubject.next(info);
     }
 
     updateDocument(document) {
-        console.log("documento para presentar", document);
-        this.documentSubject.next(document)
+        this.nuxeoService.get([document]).subscribe(
+            response => {
+                const filesResponse = <any>response;
+                const url = filesResponse[0].url;
+                window.open(url);
+            }
+        );
+        this.documentSubject.next(document);
     }
 
 }

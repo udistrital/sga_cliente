@@ -1,16 +1,10 @@
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
-import { DocumentoService } from '../../../@core/data/documento.service';
-import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { SgaMidService } from './../../../@core/data/sga_mid.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
-import { UbicacionService } from '../../../@core/data/ubicacion.service';
-import { ExperienciaService } from '../../../@core/data/experiencia.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { UserService } from '../../../@core/data/users.service';
-import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-experiencia-laboral',
@@ -33,6 +27,9 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
+  // tslint:disable-next-line: no-output-rename
+  @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
+
   organizacion: any;
   soporte: any;
   documentosSoporte = [];
@@ -40,20 +37,11 @@ export class ViewExperienciaLaboralComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
-    private campusMidService: CampusMidService,
     private sgaMidService: SgaMidService,
-    private ubicacionesService: UbicacionService,
-    private experienciaService: ExperienciaService,
-    private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
-    private sanitization: DomSanitizer,
-    private pivotDocument:PivotDocument,
-    private users: UserService) {
+    private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    //this.persona_id = this.users.getPersonaId();
-  //  this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
-  //  this.loadData();
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -123,7 +111,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   }
 
   verDocumento(document) {
-    this.pivotDocument.updateDocument(document);
+    this.revisar_doc.emit(document);
   }
 
   ngOnInit() {

@@ -525,7 +525,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   createDescuentoAcademico(DescuentoAcademico: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('descuento_academico.seguro_continuar_registrar'),
+      text: this.translate.instant('descuento_academico.seguro_continuar_registrar_descuento'),
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -569,6 +569,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                       // this.showToast('info', this.translate.instant('GLOBAL.crear'),
                       // this.translate.instant('descuento_academico.descuento_academico_registrado'));
                       this.popUpManager.showSuccessAlert(this.translate.instant('descuento_academico.descuento_academico_registrado'));
+                      this.setPercentage(1);
                       this.descuento_academico_id = 0;
                       this.info_descuento_academico = undefined;
                       this.clean = !this.clean;
@@ -623,7 +624,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
       //   // this.updateDescuentoAcademico(event.data.SolicitudDescuento);
       // }
       this.createDescuentoAcademico(event.data.SolicitudDescuento);
-      this.result.emit(event);
+      // this.result.emit(event);
     }
   }
 

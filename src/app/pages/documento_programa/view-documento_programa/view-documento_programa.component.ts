@@ -7,7 +7,6 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { Documento } from '../../../@core/data/models/documento/documento';
-import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-documento-programa',
@@ -49,7 +48,6 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
     private popUpManager: PopUpManager,
-    private pivotDocument: PivotDocument,
     private userService: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -123,6 +121,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   }
 
   abrirDocumento(documento: any) {
-    this.pivotDocument.updateDocument(documento);
+    documento.Id = documento.DocumentoId;
+    this.revisar_doc.emit(documento);
   }
 }

@@ -24,7 +24,34 @@ import { PopUpManager } from '../../../managers/popUpManager';
 })
 export class InscripcionGeneralComponent implements OnInit, OnChanges {
   toasterService: any;
-
+  hide_header_labels: boolean;
+  basic_info_button: boolean = false;
+  formacion_academica_button: boolean = false;
+  documentos_programa_button: boolean = false;
+  detalle_inscripcion: boolean = false;
+  experiencia_laboral: boolean = false;
+  produccion_academica: boolean = false;
+  @Input('inscriptionSettings')
+  set nameInscription(inscriptionSettings: any) {
+    const {
+      basic_info_button,
+      hide_header_labels,
+      formacion_academica_button,
+      documentos_programa_button,
+      nivel,
+      detalle_inscripcion,
+      experiencia_laboral,
+      produccion_academica,
+    } = inscriptionSettings;
+    this.selectTipo = nivel;
+    this.hide_header_labels = !!hide_header_labels;
+    this.basic_info_button = basic_info_button;
+    this.formacion_academica_button = formacion_academica_button;
+    this.documentos_programa_button = documentos_programa_button;
+    this.detalle_inscripcion = detalle_inscripcion;
+    this.experiencia_laboral = experiencia_laboral;
+    this.produccion_academica = produccion_academica;
+  }
 
   @Input('inscripcion_id')
   set name(inscripcion_id: number) {
@@ -356,7 +383,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
       this.sgaMidService.get('persona/consultar_complementarios/' + this.info_persona_id)
         .subscribe(res => {
-          if (res !== null && JSON.stringify(res[0]) !== '{}') {
+          if (res !== null && JSON.stringify(res[0]) !== '{}' && res.Response.Code !== '404') {
             this.percentage_info = this.percentage_info + 50;
             this.percentage_tab_info[1] = 50;
           } else {
@@ -378,7 +405,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
       this.sgaMidService.get('inscripciones/info_complementaria_tercero/' + this.info_persona_id)
         .subscribe(res => {
-          if (res !== null && JSON.stringify(res[0]) !== '{}') {
+          if (res !== null && JSON.stringify(res[0]) !== '{}' && res.Response.Code !== '404') {
             this.percentage_info = this.percentage_info + 50;
             this.percentage_tab_info[2] = 50;
           } else {
@@ -494,13 +521,18 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                   response => {
 
                     if (response.Metadatos === '') {
-                      this.percentage_docu += Math.round((1 / this.tipo_documentos.length * 100) * 100) / 100
+                      this.percentage_docu += Math.round((1 / this.tipo_documentos.length * 100) * 100) / 100;
                     } else {
                       if (response.Metadatos !== '') {
                         if (JSON.parse(response.Metadatos).aprobado) {
-                          this.percentage_docu += Math.round((1 / this.tipo_documentos.length * 100) * 100) / 100
+                          this.percentage_docu += Math.round((1 / this.tipo_documentos.length * 100) * 100) / 100;
                         }
                       }
+                    }
+                    this.percentage_docu = Number(this.percentage_docu.toFixed(0));
+
+                    if (this.percentage_docu > 100) {
+                      this.percentage_docu = 100;
                     }
 
                     this.percentage_tab_docu[0] = this.percentage_docu;
@@ -692,6 +724,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   perfil_editar(event): void {
+    console.log(event);
     this.ocultarBarra.emit(true);
     switch (event) {
       case 'info_contacto':
@@ -745,6 +778,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.showRegreso = false;
         break;
       case 'info_persona':
+        debugger;
         if (this.selectTipo === 'Pregrado') {
           this.viewtag = 'Informacion_pregrado'
           this.selecttabview(this.viewtag);

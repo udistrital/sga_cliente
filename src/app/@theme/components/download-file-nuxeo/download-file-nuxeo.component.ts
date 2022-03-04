@@ -18,7 +18,6 @@ export class DownloadFileNuxeo implements  OnInit {
     this.documentoService.get('documento/' + idDoc)
     .subscribe((data)=>{
       this.documentoData = data;
-      console.log(data);
     })
   }
   @Input('label') label: any;

@@ -256,7 +256,7 @@ nb-menu {
 }
 
 .mat-button {
-  background-color:var(--primary);
+  background-color: var(--primary);
   color: #fff;
 }
 
@@ -264,4 +264,18 @@ nb-menu {
 .mat-button[disabled] {
   background-color: var(--color300) !important;
   color: #ddd !important;
+}
+
+.ver-documento {
+  cursor: pointer;
+  color: var(--primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  span:hover {
+    text-decoration: underline;
+  }
+  align-items: center;
+  text-align: center;
+  justify-content: center;
 }

@@ -9,7 +9,6 @@ import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 
 @Component({
   selector: 'ngx-view-descuento-academico',
@@ -24,7 +23,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   programa: number;
   info_descuento: any;
   info_temp: any;
-  dataInfo:any;
+  dataInfo: any;
   dataDes: Array<any>;
   solicituddescuento: SolicitudDescuento;
   docDesSoporte = [];
@@ -39,12 +38,15 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   set info2(info2: number) {
     this.inscripcion = info2;
     if (this.inscripcion !== undefined && this.inscripcion !== 0 && this.inscripcion.toString() !== '') {
-      //this.loadData();
+      this.loadData();
     }
   }
 
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
+
+  // tslint:disable-next-line: no-output-rename
+  @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
 
   constructor(private translate: TranslateService,
     private mid: CampusMidService,
@@ -52,17 +54,9 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
     private inscripcionService: InscripcionService,
-    public pivotDocument : PivotDocument, 
     private sgaMidService: SgaMidService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.pivotDocument.info$.subscribe((data)=> {
-      if(data){
-        this.dataInfo = data;
-        this.loadData(this.dataInfo);
-      }
-    })
-    this.pivotDocument.updateDocument
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -77,31 +71,28 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     this.url_editar.emit(true);
   }
 
-  loadData(dataInfo): void {
+  loadData(): void {
     this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' +
-      'PersonaId=' + dataInfo.TerceroId + '&DependenciaId=' +
-      dataInfo.ProgramaAcademicoId+ '&PeriodoId=' + dataInfo.IdPeriodo)
+      'PersonaId=' + sessionStorage.getItem('TerceroId') + '&DependenciaId=' +
+      sessionStorage.getItem('ProgramaAcademicoId') + '&PeriodoId=' + sessionStorage.getItem('IdPeriodo'))
       .subscribe((result: any) => {
         const r = <any>result.Data.Body[1];
         if (result !== null && result.Data.Code == '200') {
           const data = <Array<SolicitudDescuento>>r;
           const soportes = [];
           this.info_descuento = data;
-          console.log('info_descuento', this.info_descuento)
           for (let i = 0; i < this.info_descuento.length; i++) {
             if (this.info_descuento[i].DocumentoId + '' !== '0') {
               soportes.push({ Id: this.info_descuento[i].DocumentoId, key: i });
             }
           }
-          console.log(soportes);
 
           this.nuxeoService.getFilesNew(soportes)
             .subscribe(response => {
               this.docDesSoporte = <Array<any>>response;
-              console.log(this.docDesSoporte);
-                for (let i = 0; i < this.docDesSoporte.length; i++) {
-                  (this.info_descuento[this.docDesSoporte[i]['key']]).Soporte = this.docDesSoporte[i];
-                }
+              for (let i = 0; i < this.docDesSoporte.length; i++) {
+                (this.info_descuento[this.docDesSoporte[i]['key']]).Soporte = this.docDesSoporte[i];
+              }
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({
@@ -114,8 +105,6 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
-
-
         }
       },
         (error: HttpErrorResponse) => {

@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -23,12 +23,34 @@ export class SolicitantePracticaComponent {
   info_persona_id: number;
   settings_authors: any;
   nuevoColaborador: boolean;
+  nuevaSolicitud: boolean;
+  docentesSolicitud: any;
 
   @Output('loading')
   loading: EventEmitter<any> = new EventEmitter();
 
   @Output('docentes')
   docentes: EventEmitter<any> = new EventEmitter();
+
+  @Input('docentesSolicitud')
+  set info(info: any) {
+    if (info) {
+      if (info.length !== 0 && info.toString() !== '') {
+        this.docentesSolicitud = info;
+        this.nuevaSolicitud = false;
+        this.loadData();
+      } else {
+        this.nuevaSolicitud = true;
+        this.loadData();
+      }
+    }
+  }
+
+  @Input('process')
+  set process(isNew: boolean) {
+    this.settings_authors.actions.add = isNew;
+    this.settings_authors.actions.delete = isNew;
+  }
 
   constructor(
     private translate: TranslateService,
@@ -43,7 +65,6 @@ export class SolicitantePracticaComponent {
     });
     this.construirTabla();
     this.nuevoColaborador = false;
-    this.loadData();
   }
 
   construirForm() {
@@ -106,41 +127,46 @@ export class SolicitantePracticaComponent {
   }
 
   loadData(): void {
-    this.loading.emit(true);
-    this.sgamidService.get('practicas_academicas/consultar_solicitante/' + this.info_persona_id).subscribe(res => {
-      const r = <any>res;
-      if (res !== null && r.Success !== 'false') {
-        if (r.Status === '200' && res['Data'] !== null) {
-          if (res['Data']['Correo'] === undefined) {
-            if (res['Data']['CorreoInstitucional'] !== undefined) {
-              res['Data']['Correo'] = res['Data']['CorreoInstitucional']
-            } else if (res['Data']['CorreoPersonal'] !== undefined) {
-              res['Data']['Correo'] = res['Data']['CorreoPersonal']
+    this.source.load([]);
+    if (this.nuevaSolicitud && this.docentesSolicitud === undefined) {
+      this.sgamidService.get('practicas_academicas/consultar_solicitante/' + this.info_persona_id).subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Success !== 'false') {
+          if (r.Status === '200' && res['Data'] !== null) {
+            if (res['Data']['Correo'] === undefined) {
+              if (res['Data']['CorreoInstitucional'] !== undefined) {
+                res['Data']['Correo'] = res['Data']['CorreoInstitucional']
+              } else if (res['Data']['CorreoPersonal'] !== undefined) {
+                res['Data']['Correo'] = res['Data']['CorreoPersonal']
+              }
             }
-          }
 
-          if (res['Data']['Telefono'] === undefined) {
-            if (res['Data']['Celular'] !== undefined) {
-              res['Data']['Telefono'] = res['Data']['Celular']
+            if (res['Data']['Telefono'] === undefined) {
+              if (res['Data']['Celular'] !== undefined) {
+                res['Data']['Telefono'] = res['Data']['Celular']
+              }
             }
+
+            this.DocentePractica.push(res['Data']);
+            this.source.load(this.DocentePractica);
+            this.docentes.emit(this.DocentePractica);
           }
-
-          this.DocentePractica.push(res['Data']);
-          this.source.load(this.DocentePractica);
-          this.docentes.emit(this.DocentePractica);
-
         }
-      }
-      this.loading.emit(false);
-    },
-      (error: HttpErrorResponse) => {
-        Swal.fire({
-          icon: 'error',
-          title: error.status + '',
-          text: this.translate.instant('ERROR.' + error.status),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        this.loading.emit(false);
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
         });
-      });
+    } else {
+      this.source.load(this.docentesSolicitud);
+      this.settings_authors.actions.add = false;
+      this.settings_authors.actions.delete = false;
+    }
   }
 
   agregarColaborador(event) {
@@ -175,55 +201,78 @@ export class SolicitantePracticaComponent {
 
   buscarColaborador(event) {
     if (event.data.docDocente !== '') {
-      this.loading.emit(true);
-      this.sgamidService.get('practicas_academicas/consultar_colaborador/' + event.data.docDocente).subscribe(res => {
-        const r = <any>res;
-        if (res !== null && r.Success !== false) {
-          if (r.Status === '200' && res['Data'] !== null) {
-            if (res['Data']['Correo'] === undefined) {
-              if (res['Data']['CorreoInstitucional'] !== undefined) {
-                res['Data']['Correo'] = res['Data']['CorreoInstitucional']
-              } else if (res['Data']['CorreoPersonal'] !== undefined) {
-                res['Data']['Correo'] = res['Data']['CorreoPersonal']
+      const regex = /^[0-9]+(?:-[0-9]+)*$/;
+      event.data.docDocente = event.data.docDocente.trim();
+      if (regex.test(event.data.docDocente) === true) {
+        this.loading.emit(true);
+        this.sgamidService.get('practicas_academicas/consultar_colaborador/' + event.data.docDocente).subscribe(res => {
+          const r = <any>res;
+          if (res !== null && r.Success !== false) {
+            if (r.Status === '200' && res['Data'] !== null) {
+              if (res['Data']['Correo'] === undefined) {
+                if (res['Data']['CorreoInstitucional'] !== undefined) {
+                  res['Data']['Correo'] = res['Data']['CorreoInstitucional']
+                } else if (res['Data']['CorreoPersonal'] !== undefined) {
+                  res['Data']['Correo'] = res['Data']['CorreoPersonal']
+                }
               }
-            }
 
-            if (res['Data']['Telefono'] === undefined) {
-              if (res['Data']['Celular'] !== undefined) {
-                res['Data']['Telefono'] = res['Data']['Celular']
+              if (res['Data']['Telefono'] === undefined) {
+                if (res['Data']['Celular'] !== undefined) {
+                  res['Data']['Telefono'] = res['Data']['Celular']
+                }
               }
-            }
 
-            this.docenteColaborador = res['Data'];
-            this.docenteColaborador.Vinculacion = this.docenteColaborador.TipoVinculacionId.Nombre;
-            this.popUpManager.showToast("success", this.translate.instant('practicas_academicas.docente_encontrado'), this.translate.instant('GLOBAL.operacion_exitosa'))
+              this.docenteColaborador = res['Data'];
+              this.docenteColaborador.Vinculacion = this.docenteColaborador.TipoVinculacionId.Nombre;
+              this.popUpManager.showToast("success", this.translate.instant('practicas_academicas.docente_encontrado'), this.translate.instant('GLOBAL.operacion_exitosa'))
+            }
+          } else {
+            this.docenteColaborador = undefined;
+            this.docenteSolicitante.campos.forEach(campo => {
+              if (campo.nombre !== "docDocente") {
+                campo.valor = null;
+              }
+            });
+            Swal.fire({
+              icon: 'error',
+              title: 'ERROR',
+              text: this.translate.instant('practicas_academicas.error_docente_no_existe') + event.data.docDocente + '.',
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+
           }
-        } else {
-          this.docenteColaborador = undefined;
-          this.docenteSolicitante.campos.forEach(campo => {
-            if (campo.nombre !== "docDocente") {
-              campo.valor = null;
-            }
+        },
+          (error: HttpErrorResponse) => {
+            Swal.fire({
+              icon: 'error',
+              title: error.status + '',
+              text: this.translate.instant('ERROR.' + error.status),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           });
-          Swal.fire({
-            icon: 'error',
-            title: 'ERROR',
-            text: this.translate.instant('practicas_academicas.error_docente_no_existe') + event.data.docDocente + '.',
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-
-        }
-      },
-        (error: HttpErrorResponse) => {
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+        this.loading.emit(false);
+      } else {
+        this.docenteColaborador = undefined;
+        this.docenteSolicitante.campos.forEach(campo => {
+          if (campo.nombre !== "docDocente") {
+            campo.valor = null;
+          }
         });
-      this.loading.emit(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'ERROR',
+          text: this.translate.instant('practicas_academicas.alerta_llenar_campo_numeros'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      }
     } else {
+      this.docenteColaborador = undefined;
+      this.docenteSolicitante.campos.forEach(campo => {
+        if (campo.nombre !== "docDocente") {
+          campo.valor = null;
+        }
+      });
       Swal.fire({
         icon: 'error',
         title: 'ERROR',

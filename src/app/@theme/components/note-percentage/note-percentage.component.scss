@@ -1,0 +1,30 @@
+.container-percentage {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    background-color: white;
+    border-radius: 0.5rem;
+    border: 1px var(--primary);
+    width: auto;
+    max-width: 20vw;
+    padding: 1rem;
+    justify-content: space-around;
+    * {
+        width: 3rem;
+    }
+}
+
+.container-form {
+    padding: 1rem;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: white;
+    max-width: 17rem;
+    box-shadow: 1px 1px 3px 0px #888888;
+}
+
+input::after {
+    content: '%';
+}
