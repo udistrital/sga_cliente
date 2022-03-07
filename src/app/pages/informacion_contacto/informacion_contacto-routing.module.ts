@@ -7,7 +7,6 @@ import { ViewInformacionContactoComponent } from './view-informacion_contacto/vi
 import { AuthGuard } from '../../@core/_guards/auth.guard';
 import { CrudInformacionFamiliarComponent } from './crud-informacion_familiar/crud-informacion_familiar.component';
 import { CrudInformacionContactoPregradoComponent } from './crud-informacion_contacto_pregrado/crud-informacion_contacto_pregrado.component';
-import { CrudInformacionContactoExternaComponent } from './crud-informacion_contacto_externa/crud-informacion_contacto_externa.component';
 
 const routes: Routes = [{
   path: '',
@@ -34,20 +33,7 @@ const routes: Routes = [{
        ],
      },
   },
-  {
-    path: 'crud-informacion_contacto_externa',
-    component: CrudInformacionContactoExternaComponent,
-     canActivate: [AuthGuard],
-     data: {
-       roles: [
-         'ADMIN_CAMPUS',
-         'ASPIRANTE',
-         'Internal/selfsignup',
-         'Internal/everyone',
-       ],
-     },
-  },
-  {
+    {
     path: 'crud-informacion_contacto',
     component: CrudInformacionContactoComponent,
      canActivate: [AuthGuard],
@@ -105,6 +91,5 @@ export const routedComponents = [
   CrudInformacionContactoComponent,
   CrudInformacionFamiliarComponent,
   CrudInformacionContactoPregradoComponent,
-  CrudInformacionContactoExternaComponent,
   ViewInformacionContactoComponent,
 ];

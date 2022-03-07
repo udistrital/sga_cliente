@@ -16,7 +16,6 @@ import { CrudPreguntasComponent } from './crud-preguntas/crud-preguntas.componen
 import { CrudTransferenciaInternaComponent } from './crud-transferencia_interna/crud-transferencia_interna.component';
 import { CrudReingresoComponent } from './crud-reingreso/crud-reingreso.component';
 import { CrudIcfesExternoComponent } from './crud-icfes_externo/crud-icfes_externo.component';
-import { CrudExternoComponent } from './crud-externo/crud-externo.component';
 import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
@@ -45,7 +44,6 @@ import { NbSpinnerModule } from '@nebular/theme';
     CrudTransferenciaInternaComponent,
     CrudReingresoComponent,
     CrudIcfesExternoComponent,
-    CrudExternoComponent,
     ViewFormacionAcademicaComponent,
   ],
 })

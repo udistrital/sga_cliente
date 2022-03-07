@@ -19,6 +19,9 @@ import { UserService } from '../../../@core/data/users.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { Periodo } from '../../../@core/data/models/periodo/periodo';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogoDocumentosComponent } from '../../admision/dialogo-documentos/dialogo-documentos.component';
 
 @Component({
   selector: 'transferencia',
@@ -58,6 +61,8 @@ export class TransferenciaComponent implements OnInit {
     private utilidades: UtilidadesService,
     private parametrosService: ParametrosService,
     private projectService: ProyectoAcademicoService,
+    private nuxeo: NewNuxeoService,
+    private dialog: MatDialog,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
     private userService: UserService,
@@ -109,9 +114,6 @@ export class TransferenciaComponent implements OnInit {
       this.loading = true;
       this.createTable(this.process);
       await this.loadData(this.process).then(e => {
-
-        this.loading = false;
-
         Swal.fire({
           icon: 'warning',
           text: this.translate.instant('inscripcion.alerta_transferencia'),
@@ -134,7 +136,6 @@ export class TransferenciaComponent implements OnInit {
           this.info_info_persona = temp;
           const files = []
         }
-        this.loading = false;
       },
         (error: HttpErrorResponse) => {
           this.loading = false;
@@ -194,11 +195,22 @@ export class TransferenciaComponent implements OnInit {
             width: '5%',
             editable: false,
             filter: false,
-            renderComponent: LinkDownloadNuxeoComponent,
+            renderComponent: CustomizeButtonComponent,
             type: 'custom',
-            // onComponentInitFunction: (instance) => {
-            //   instance.save.subscribe((data) => this.descargarReciboPago(data))
-            // },
+            onComponentInitFunction: (instance) => {
+              instance.save.subscribe((data) => {
+                this.nuxeo.get([data.Descargar]).subscribe(
+                  (documentos) => {
+                    const assignConfig = new MatDialogConfig();
+                    assignConfig.width = '1300px';
+                    assignConfig.height = '800px';
+                    const aux = { ...documentos[0], observacion: data.VerRespuesta.documento.Observacion, aprobado: false }
+                    assignConfig.data = { documento: aux, observando: true }
+                    const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
+                  }
+                );
+              })
+            }
           }
         } : {},
         Opcion: {
@@ -206,16 +218,27 @@ export class TransferenciaComponent implements OnInit {
           width: '5%',
           editable: false,
           filter: false,
-          type: 'custom',
-          // renderComponent: ButtonPaymentComponent,
           renderComponent: CustomizeButtonComponent,
+          type: 'custom',
           onComponentInitFunction: (instance) => {
             instance.save.subscribe((data) => {
-              if (data.Estado == 'Pago') {
-                const idInscripcion = btoa(data['Id']);
-                this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
-              } else if (data.Estado == 'Pendiente pago') {
+              if (data.Estado == 'Pendiente pago') {
                 this.abrirPago(data)
+              } else {
+                const idInscripcion = data['Id'];
+
+                sessionStorage.setItem('IdInscripcion', data.Id)
+                sessionStorage.setItem('ProgramaAcademico', data.Programa)
+                sessionStorage.setItem('IdPeriodo', data.Periodo)
+                sessionStorage.setItem('IdTipoInscripcion', data.IdTipoInscripcion)
+                sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
+                sessionStorage.setItem('NivelId', data.Nivel)
+
+                if (data.Estado == 'Pago') {
+                  this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
+                } else if (data.Estado == 'Radicada') {
+                  this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
+                }
               }
             })
           },
@@ -228,23 +251,6 @@ export class TransferenciaComponent implements OnInit {
   async loadData(process) {
     await this.cargarPeriodo();
     this.loading = true;
-
-    /*{
-          Recibo: 99998,
-          Concepto: "Transferencia2",
-          Programa: "Maestría en Ciencias de la información y las comunicaciones",
-          FechaGeneracion: '12-01-01',
-          Estado: "Pagado",
-          Descargar: 140837,
-          Opcion: {
-            icon: 'fa fa-pencil fa-2x',
-            label: 'Inscribirme',
-            class: "btn btn-primary"
-          },
-          tipoTransferencia: 'externa',
-          nivel: 'Pregrado'
-        }
-    */
 
     this.sgaMidService.get('transferencia/estado_recibos/' + this.uid + '/' + this.periodo.Id)
       .subscribe(response => {
@@ -264,8 +270,52 @@ export class TransferenciaComponent implements OnInit {
                 element.FechaGeneracion = momentTimezone.tz(element.FechaGeneracion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                 element.IdPrograma = element.Programa;
                 element.Programa = res.Nombre;
+                element.Periodo = this.periodo.Id;
+
+                element.Descargar = {
+                  icon: 'fa fa-download fa-2x',
+                  label: 'Descargar',
+                  class: 'btn btn-primary',
+                  documento: element.Respuesta
+                }
+
+                element.Descargar.disabled = true;
+                if (element.Estado === 'Pendiente pago') {
+                  if (process === 'my') {
+                    element.Opcion = {
+                      icon: 'fa fa-arrow-circle-right fa-2x',
+                      label: 'Pagar',
+                      class: "btn btn-primary"
+                    }
+                  } else {
+                    element.Opcion = {
+                      icon: 'fa fa-search fa-2x',
+                      label: 'Detalle',
+                      class: "btn btn-primary"
+                    }
+                  }
+                } else {
+                  if (process === 'my') {
+                    element.Opcion = {
+                      icon: 'fa fa-pencil fa-2x',
+                      label: 'Inscribirme',
+                      class: "btn btn-primary"
+                    }
+                  } else {
+                    element.Opcion = {
+                      icon: 'fa fa-search fa-2x',
+                      label: 'Detalle',
+                      class: "btn btn-primary"
+                    }
+                  }
+                }
+
+                if (element.Estado === 'Solicitado' && process === 'my') {
+                  element.Opcion.disabled = true;
+                }
 
                 dataInfo.push(element);
+                this.loading = true;
 
                 this.dataSource.load(dataInfo.map((e) => {
                   if (e.Estado === 'Pendiente pago') {
@@ -344,13 +394,12 @@ export class TransferenciaComponent implements OnInit {
           if (res !== null && r.Status === '200') {
             this.periodo = <any>res['Data'][0];
             window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
-            resolve(this.periodo);
             const periodos = <any[]>res['Data'];
             periodos.forEach(element => {
               this.periodos.push(element);
             });
+            resolve(this.periodo);
           }
-          this.loading = false;
         },
           (error: HttpErrorResponse) => {
             this.loading = false;

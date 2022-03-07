@@ -11,6 +11,7 @@ import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academic
 import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
 import { CustomizeButtonComponent } from '../../../@theme/components';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   selector: 'consultar-solicitudes',
@@ -48,6 +49,7 @@ export class ConsultarSolicitudesDerechosPecuniarios {
     private userService: UserService,
     private popUpManager: PopUpManager,
     private nuxeo: NewNuxeoService,
+    private autenticationService: ImplicitAutenticationService,
     private sgaMidService: SgaMidService,
     private translate: TranslateService,) {
     this.dataSource = new LocalDataSource();
@@ -55,11 +57,6 @@ export class ConsultarSolicitudesDerechosPecuniarios {
       this.createTable();
       this.updateLanguage();
     });
-
-    this.userService.tercero$.subscribe((user) => {
-      this.userResponse = user;
-      this.userResponse.Rol = 'Coordinador'
-    })
 
     this.loadInfoPersona();
     this.createTable();
@@ -70,7 +67,16 @@ export class ConsultarSolicitudesDerechosPecuniarios {
   }
 
   public async loadInfoPersona(): Promise<void> {
+    this.userService.tercero$.subscribe((user) => {
+      this.userResponse = user;
+      // this.userResponse.Rol = 'Coordinador'
+    })
 
+    this.autenticationService.getRole().then((rol: Array<String>) => {
+      if (rol.includes('COORDINADOR') || rol.includes('COORDINADOR_PREGADO') || rol.includes('COORDINADOR_POSGRADO')) {
+        this.userResponse.Rol = 'Coordinador';
+      }
+    })
   }
 
   updateLanguage() {

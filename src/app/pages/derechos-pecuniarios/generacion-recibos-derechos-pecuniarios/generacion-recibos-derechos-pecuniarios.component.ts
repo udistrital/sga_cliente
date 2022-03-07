@@ -324,7 +324,6 @@ export class GeneracionRecibosDerechosPecuniarios {
                   assignConfig.width = '1300px';
                   assignConfig.height = '800px';
                   const aux = { ...documentos[0], observacion: data.VerRespuesta.documento.Observacion, aprobado: false }
-                  console.log(aux)
                   assignConfig.data = { documento: aux, observando: true }
                   const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
                 }

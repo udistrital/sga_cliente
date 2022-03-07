@@ -3,6 +3,7 @@ import { TipoDiscapacidad } from './tipo_discapacidad';
 import { Lugar } from './lugar';
 import { GrupoSanguineo } from './grupo_sanguineo';
 import { Rh } from './rh_tercero';
+import { Tercero } from '../terceros/tercero';
 
 export class InfoCaracteristica {
   GrupoSanguineo: GrupoSanguineo;
@@ -16,4 +17,8 @@ export class InfoCaracteristica {
   TipoRelacionUbicacionEnte: number;
   Ente: number;
   Tercero: number;
+  GrupoSisben: string;
+  EPS: Tercero;
+  FechaVinculacionEPS: Date;
+  HermanosEnLaUniversidad: number;
 }

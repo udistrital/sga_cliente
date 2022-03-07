@@ -10,7 +10,6 @@ import { CrudInformacionContactoComponent } from './crud-informacion_contacto/cr
 import { ViewInformacionContactoComponent } from './view-informacion_contacto/view-informacion_contacto.component';
 import { CrudInformacionFamiliarComponent } from './crud-informacion_familiar/crud-informacion_familiar.component';
 import { CrudInformacionContactoPregradoComponent } from './crud-informacion_contacto_pregrado/crud-informacion_contacto_pregrado.component';
-import { CrudInformacionContactoExternaComponent } from './crud-informacion_contacto_externa/crud-informacion_contacto_externa.component';
 import { NbSpinnerModule } from '@nebular/theme';
 
 @NgModule({
@@ -33,7 +32,6 @@ import { NbSpinnerModule } from '@nebular/theme';
     CrudInformacionContactoComponent,
     CrudInformacionFamiliarComponent,
     CrudInformacionContactoPregradoComponent,
-    CrudInformacionContactoExternaComponent,
     ViewInformacionContactoComponent,
   ],
 })
