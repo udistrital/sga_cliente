@@ -37,7 +37,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     this.porcentaje = porcentaje / 100 * 2;
   }
 
-  @Output() eventChange = new EventEmitter();
   // tslint:disable-next-line: no-output-rename
   @Output('result') result: EventEmitter<any> = new EventEmitter();
 
@@ -381,12 +380,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           this.loading = true;
           const info_info_caracteristica_post = <any>infoCaracteristica;
           info_info_caracteristica_post.TipoRelacionUbicacionEnte = 1;
-          info_info_caracteristica_post.Ente = (1 * this.info_caracteristica_id);
-          info_info_caracteristica_post.Persona = (1 * this.info_caracteristica_id);
-          info_info_caracteristica_post.LugarAnt = info_info_caracteristica_post.Lugar;
-          info_info_caracteristica_post.Lugar = {
-            Lugar: info_info_caracteristica_post.LugarAnt,
-          };
           info_info_caracteristica_post.Tercero = this.info_persona_id;
           this.sgamidService.post('persona/guardar_complementarios', info_info_caracteristica_post)
             .subscribe(res => {
