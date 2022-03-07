@@ -1,4 +1,5 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <nb-card-header>
         {{ 'notas.captura_notas' | translate }}
     </nb-card-header>
