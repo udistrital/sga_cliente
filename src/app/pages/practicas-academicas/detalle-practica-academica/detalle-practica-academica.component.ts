@@ -221,7 +221,7 @@ export class DetallePracticaAcademicaComponent implements OnInit {
 
   construirForm() {
     this.FormPracticasAcademicas.titulo = this.translate.instant('practicas_academicas.datos');
-    this.FormPracticasAcademicas.btn = ''
+    this.FormPracticasAcademicas.btn = '';
     this.FormPracticasAcademicas.campos.forEach(campo => {
       if (campo.etiqueta === 'select') {
         switch (campo.nombre) {

@@ -62,7 +62,7 @@ export const FORM_SOLICITUD_TRANSFERENCIA = {
     alertas: true,
     titulo: "Información de solicitud",
     btn: 'Guardar',
-    modelo: 'InfoPersona',
+    modelo: 'dataTransferencia',
     campos: [
         {
             etiqueta: 'input',

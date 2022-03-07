@@ -16,7 +16,7 @@
                     <div class="col-4">
                         <b>{{ 'inscripcion.nivel' | translate }}:</b> {{ nivelNombre }}
                     </div>
-                    
+
                     <div class="col-4">
                         <b>{{ 'inscripcion.tipo' | translate }}:</b> {{ tipo }}
                     </div>
@@ -26,11 +26,20 @@
         </div>
         <!-- <br> -->
         <ngx-dinamicform [normalform]="formTransferencia" [modeloData]="dataTransferencia" (result)="validarForm($event)">
+            <div *ngIf="solicitudCreada" class="files-container">
+                <ngx-download-file-nuxeo (loading)="changeLoading($event)" [idDoc]="file.id" [label]="file.label">
+                </ngx-download-file-nuxeo>
+            </div>
         </ngx-dinamicform>
-        <fieldset class="fieldseter" *ngIf="tipo === 'externa'">
-            <ngx-inscripcion_general [inscriptionSettings]="inscriptionSettings"></ngx-inscripcion_general>
-        </fieldset>
         
+        <div style="padding: 1rem;">
+            <fieldset class="fieldseter" *ngIf="solicitudCreada">
+                <ngx-inscripcion_general (result)="terminadaInscripcion = $event === 100 ? true : false"
+                    [inscriptionSettings]="inscriptionSettings">
+                </ngx-inscripcion_general>
+            </fieldset>
+        </div>
+
     </nb-card-body>
 
     <nb-card-footer>
@@ -38,7 +47,7 @@
             <button mat-button type="button" (click)="goback()">
                 {{ 'GLOBAL.cancelar' | translate }}
             </button>
-            <button mat-button type="button" (click)="send()">
+            <button [disabled]="!terminadaInscripcion" mat-button type="button" (click)="send()">
                 {{ 'GLOBAL.enviar' | translate }}
             </button>
         </div>
@@ -60,7 +69,7 @@
                 <div class="col-4">
                     <b>{{ 'GLOBAL.codigo' | translate }}:</b> {{ general.codigo }}
                 </div>
-                
+
                 <div class="col-4">
                     <b>{{ 'GLOBAL.documento' | translate }}:</b> {{ general.documento }}
                 </div>

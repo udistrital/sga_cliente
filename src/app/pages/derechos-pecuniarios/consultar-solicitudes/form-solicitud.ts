@@ -2,6 +2,7 @@ export const FORMULARIO_SOLICITUD = {
     tipo_formulario: 'mini',
     alertas: true,
     nombre: "FORMULARIO_SOLICITUD",
+    customPadding: '0',
     btn: 'Enviar respuesta',
     modelo: 'RespuestaSolicitudDerechos',
     campos: [
