@@ -1,7 +1,17 @@
-thead {
-    text-align: center;
-    
-}
-tbody {
-    text-align: right;
+table {
+    thead {
+        td {
+            text-align: center;
+            font-size: 10px;
+            width: auto;
+        }
+        
+    }
+    tbody {
+        td {
+            text-align: right;
+            font-size: 10px;
+            width: fit-content;
+        }
+    }
 }
