@@ -3,7 +3,6 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { LocalDataSource } from 'ng2-smart-table';
 import { CustomizeButtonComponent } from '../../../@theme/components/customize-button/customize-button.component';
-import { LinkDownloadNuxeoComponent } from '../../../@theme/components/link-download-nuxeo/link-download-nuxeo.component';
 import { FORM_TRANSFERENCIA_INTERNA } from '../forms-transferencia';
 import { ActivatedRoute, Router } from "@angular/router";
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
@@ -71,7 +70,6 @@ export class TransferenciaComponent implements OnInit {
   ) {
     this.formTransferencia = FORM_TRANSFERENCIA_INTERNA;
     this.dataSource = new LocalDataSource();
-    this.loadInfoPersona();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.construirForm();
     });
@@ -106,20 +104,25 @@ export class TransferenciaComponent implements OnInit {
       TIPO_DOC_IDEN: '',
     };
 
-
+    this.dataSource.load([]);
     this.sub = this._Activatedroute.paramMap.subscribe(async (params: any) => {
       const { process } = params.params;
       this.process = atob(process);
       this.actions = (this.process === 'my');
       this.loading = true;
+      console.log(this.process)
       this.createTable(this.process);
-      await this.loadData(this.process).then(e => {
-        Swal.fire({
-          icon: 'warning',
-          text: this.translate.instant('inscripcion.alerta_transferencia'),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        })
-      })
+      if (this.process === 'my') {
+        await this.loadDataTercero(this.process).then(e => {
+          Swal.fire({
+            icon: 'warning',
+            text: this.translate.instant('inscripcion.alerta_transferencia'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+      } else {
+        await this.loadDataAll(this.process);
+      }
     });
 
 
@@ -234,11 +237,11 @@ export class TransferenciaComponent implements OnInit {
                 sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
                 sessionStorage.setItem('NivelId', data.Nivel)
 
-                if (data.Estado == 'Pago') {
-                  this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
-                } else if (data.Estado == 'Radicada') {
-                  this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
-                }
+                // if (data.Estado == 'Pago') {
+                this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
+                // } else if (data.Estado == 'Radicada') {
+                //   this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
+                // }
               }
             })
           },
@@ -248,7 +251,72 @@ export class TransferenciaComponent implements OnInit {
     }
   }
 
-  async loadData(process) {
+  async loadDataAll(process) {
+    await this.cargarPeriodo();
+    this.loading = true;
+
+    this.sgaMidService.get('transferencia/solicitudes/')
+      .subscribe(response => {
+        if (response !== null && response.Response.Code === '400') {
+          this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));
+        } else if (response != null && response.Response.Code === '404') {
+          this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
+        } else {
+          let inscripciones = <Array<any>>response.Response.Body;
+          inscripciones = inscripciones.filter(inscripcion => inscripcion.Estado != "Radicada");
+          const dataInfo = <Array<any>>[];
+          inscripciones.forEach(element => {
+            this.projectService.get('proyecto_academico_institucion/' + element.Programa).subscribe(
+              res => {
+                const auxRecibo = element.Recibo;
+                const NumRecibo = auxRecibo.split('/', 1);
+                element.Recibo = NumRecibo[0];
+                element.FechaGeneracion = momentTimezone.tz(element.FechaGeneracion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
+                element.IdPrograma = element.Programa;
+                element.Programa = res.Nombre;
+                element.Periodo = this.periodo.Id;
+
+                element.Descargar = {
+                  icon: 'fa fa-download fa-2x',
+                  label: 'Descargar',
+                  class: 'btn btn-primary',
+                  documento: element.Respuesta
+                }
+
+                element.Descargar.disabled = true;
+
+                element.Opcion = {
+                  icon: 'fa fa-search fa-2x',
+                  label: 'Detalle',
+                  class: "btn btn-primary"
+                }
+
+                this.loading = true;
+
+                dataInfo.push(element);
+
+                this.dataSource.load(dataInfo);
+
+                this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
+
+                this.loading = false;
+              },
+              error => {
+                this.loading = false;
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+              },
+            );
+          });
+        }
+        this.loading = false;
+      },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
+        });
+  }
+
+  async loadDataTercero(process) {
     await this.cargarPeriodo();
     this.loading = true;
 
@@ -256,7 +324,7 @@ export class TransferenciaComponent implements OnInit {
       .subscribe(response => {
         if (response !== null && response.Response.Code === '400') {
           this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));
-        } else if (response != null && response.Response.Code === '404') {
+        } else if ((response != null && response.Response.Code === '404') || response.Response.Body.length == 0) {
           this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
         } else {
           const inscripciones = <Array<any>>response.Response.Body;
@@ -280,82 +348,31 @@ export class TransferenciaComponent implements OnInit {
                 }
 
                 element.Descargar.disabled = true;
+
                 if (element.Estado === 'Pendiente pago') {
-                  if (process === 'my') {
-                    element.Opcion = {
-                      icon: 'fa fa-arrow-circle-right fa-2x',
-                      label: 'Pagar',
-                      class: "btn btn-primary"
-                    }
-                  } else {
-                    element.Opcion = {
-                      icon: 'fa fa-search fa-2x',
-                      label: 'Detalle',
-                      class: "btn btn-primary"
-                    }
+                  element.Opcion = {
+                    icon: 'fa fa-arrow-circle-right fa-2x',
+                    label: 'Pagar',
+                    class: "btn btn-primary"
                   }
                 } else {
-                  if (process === 'my') {
-                    element.Opcion = {
-                      icon: 'fa fa-pencil fa-2x',
-                      label: 'Inscribirme',
-                      class: "btn btn-primary"
-                    }
-                  } else {
-                    element.Opcion = {
-                      icon: 'fa fa-search fa-2x',
-                      label: 'Detalle',
-                      class: "btn btn-primary"
-                    }
+                  element.Opcion = {
+                    icon: 'fa fa-pencil fa-2x',
+                    label: 'Inscribirme',
+                    class: "btn btn-primary"
                   }
+
                 }
 
-                if (element.Estado === 'Solicitado' && process === 'my') {
+                if (element.Estado === 'Solicitado') {
                   element.Opcion.disabled = true;
                 }
 
-                dataInfo.push(element);
-                this.loading = true;
+                // this.loading = true;
 
-                this.dataSource.load(dataInfo.map((e) => {
-                  if (e.Estado === 'Pendiente pago') {
-                    return {
-                      ...e,
-                      ...process === 'my' ? {
-                        Opcion: {
-                          icon: 'fa fa-arrow-circle-right fa-2x',
-                          label: 'Pagar',
-                          class: "btn btn-primary"
-                        }
-                      } :
-                        {
-                          Opcion: {
-                            icon: 'fa fa-search fa-2x',
-                            label: 'Detalle',
-                            class: "btn btn-primary"
-                          }
-                        }
-                    }
-                  } else {
-                    return {
-                      ...e,
-                      ...process === 'my' ? {
-                        Opcion: {
-                          icon: 'fa fa-pencil fa-2x',
-                          label: 'Inscribirme',
-                          class: "btn btn-primary"
-                        }
-                      } :
-                        {
-                          Opcion: {
-                            icon: 'fa fa-search fa-2x',
-                            label: 'Detalle',
-                            class: "btn btn-primary"
-                          }
-                        }
-                    }
-                  }
-                }));
+                dataInfo.push(element);
+
+                this.dataSource.load(dataInfo);
 
                 this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
 
@@ -373,6 +390,7 @@ export class TransferenciaComponent implements OnInit {
           this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
         });
+    this.loading = false;
   }
 
   descargarNormativa() {
@@ -380,6 +398,7 @@ export class TransferenciaComponent implements OnInit {
   }
 
   async nuevaSolicitud() {
+    this.loadInfoPersona();
     this.listadoSolicitudes = false;
     await this.loadPeriodo().catch(e => this.loading = false);
     this.construirForm();
@@ -594,7 +613,7 @@ export class TransferenciaComponent implements OnInit {
 
                       this.clean();
 
-                      this.loadData(this.process);
+                      this.loadDataTercero(this.process);
                       this.loading = false;
 
                       resolve(response);
@@ -657,7 +676,7 @@ export class TransferenciaComponent implements OnInit {
     const timer = window.setInterval(() => {
       if (ventanaPSE.closed) {
         window.clearInterval(timer);
-        this.loadData(this.process);
+        this.loadDataTercero(this.process);
       }
     }, 5000);
   }

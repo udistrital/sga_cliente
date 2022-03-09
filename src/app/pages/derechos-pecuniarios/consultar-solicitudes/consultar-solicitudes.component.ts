@@ -70,13 +70,13 @@ export class ConsultarSolicitudesDerechosPecuniarios {
     this.userService.tercero$.subscribe((user) => {
       this.userResponse = user;
       // this.userResponse.Rol = 'Coordinador'
-    })
+    });
 
     this.autenticationService.getRole().then((rol: Array<String>) => {
       if (rol.includes('COORDINADOR') || rol.includes('COORDINADOR_PREGADO') || rol.includes('COORDINADOR_POSGRADO')) {
         this.userResponse.Rol = 'Coordinador';
       }
-    })
+    });
   }
 
   updateLanguage() {
