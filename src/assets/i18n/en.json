@@ -1287,8 +1287,9 @@
         "fecha_especifica": "Specific test date",
         "placeholder_fecha_especifica": "Schedule specific test date",
         "soporte_respuesta": "Attach support of the answer",
-        "error_solicitud": "An unexpected error occurred when creating the application",
-        "solicitud_generada": "The request was successfully generated"
+        "error_solicitud": "An unexpected error occurred when creating the request",
+        "solicitud_generada": "The request was successfully generated",
+        "placeholder_comentarios": "Comment regarding the request"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
