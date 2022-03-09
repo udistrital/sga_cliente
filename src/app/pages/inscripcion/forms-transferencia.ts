@@ -203,7 +203,7 @@ export const FORM_RESPUESTA_SOLICITUD = {
     campos: [
         {
             etiqueta: 'select',
-            claseGrid: 'col-sm-12 col-xs-12',
+            claseGrid: 'col-sm-6 col-xs-6',
             nombre: 'Respuesta',
             label_i18n: 'respuesta_solicitud',
             placeholder_i18n: 'placeholder_respuesta_solicitud',
@@ -215,7 +215,7 @@ export const FORM_RESPUESTA_SOLICITUD = {
         },
         {
             etiqueta: 'mat-date',
-            claseGrid: 'col-sm-12 col-xs-12',
+            claseGrid: 'col-sm-6 col-xs-6',
             nombre: 'FechaEspecifica',
             label_i18n: 'fecha_especifica',
             placeholder_i18n: 'placeholder_fecha_especifica',
