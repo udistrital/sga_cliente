@@ -156,9 +156,6 @@ export class SolicitudTransferenciaComponent implements OnInit {
           this.nivelNombre = inscripcion['Data']['Nivel']['Nombre'];
           this.nivel = inscripcion['Data']['Nivel']['Id'];
           this.tipo = inscripcion['Data']['TipoInscripcion']['Nombre'];
-          this.nombreEstudiante = inscripcion['Data']['DatosEstudiante']['Nombre'];
-          this.documentoEstudiante = inscripcion['Data']['DatosEstudiante']['Identificacion'];
-          this.codigoEstudiante = inscripcion['Data']['DatosInscripcion']['CodigoEstudiante'];
 
           this.formTransferencia.campos.forEach(campo => {
             delete campo.deshabilitar;
@@ -213,9 +210,6 @@ export class SolicitudTransferenciaComponent implements OnInit {
               this.ocultarCampo(acuerdo, false);
               this.formTransferencia.campos[cancelo].ocultar = false;
 
-              this.formTransferencia.campos[creditos].claseGrid = 'col-sm-5 col-xs-5';
-              this.formTransferencia.campos[ultimo].claseGrid = 'col-sm-5 col-xs-5';
-
               inscripcion['Data']['CodigoEstudiante'].forEach(codigo => {
                 if (codigo.IdProyecto === inscripcion['Data']['ProgramaDestino']['Id']) {
                   this.formTransferencia.campos[estudiante].valor = codigo;
@@ -228,42 +222,48 @@ export class SolicitudTransferenciaComponent implements OnInit {
             }
           }
 
-          let data = {
-            Cancelo: inscripcion['Data']['DatosInscripcion']['CanceloSemestre'],
-            Acuerdo: inscripcion['Data']['DatosInscripcion']['SolicitudAcuerdo'],
-            CantidadCreditos: inscripcion['Data']['DatosInscripcion']['CantidadCreditos'],
-            CodigoEstudiante: inscripcion['Data']['DatosInscripcion']['CodigoEstudiante'],
-            CodigoEstudianteExterno: inscripcion['Data']['DatosInscripcion']['CodigoEstudiante'],
-            SoporteDocumento: inscripcion['Data']['DatosInscripcion']['DocumentoId'],
-            MotivoCambio: inscripcion['Data']['DatosInscripcion']['MotivoRetiro'],
-            UltimoSemestre: inscripcion['Data']['DatosInscripcion']['UltimoSemestreCursado'],
-            ProgramaOrigen: inscripcion['Data']['DatosInscripcion']['ProyectoCurricularProviene'],
-            ProgramaOrigenInput: inscripcion['Data']['DatosInscripcion']['ProyectoCurricularProviene'],
-            UniversidadOrigen: inscripcion['Data']['DatosInscripcion']['UniversidadProviene'],
-            ProgramaDestino: inscripcion['Data']['ProgramaDestino'],
-          }
-          if (!(this.tipo === 'Transferencia externa')) {
-            data.UniversidadOrigen = 'Universidad Distrital Francisco José de Caldas';
-            if (this.tipo === 'Reingreso') {
-              data.ProgramaOrigen = data.ProgramaDestino;
+          if (inscripcion.Data.SolicitudId) {
+            let data = {
+              Cancelo: inscripcion['Data']['DatosInscripcion']['CanceloSemestre'],
+              Acuerdo: inscripcion['Data']['DatosInscripcion']['SolicitudAcuerdo'],
+              CantidadCreditos: inscripcion['Data']['DatosInscripcion']['CantidadCreditos'],
+              CodigoEstudiante: inscripcion['Data']['DatosInscripcion']['CodigoEstudiante'],
+              CodigoEstudianteExterno: inscripcion['Data']['DatosInscripcion']['CodigoEstudiante'],
+              SoporteDocumento: inscripcion['Data']['DatosInscripcion']['DocumentoId'],
+              MotivoCambio: inscripcion['Data']['DatosInscripcion']['MotivoRetiro'],
+              UltimoSemestre: inscripcion['Data']['DatosInscripcion']['UltimoSemestreCursado'],
+              ProgramaOrigen: inscripcion['Data']['DatosInscripcion']['ProyectoCurricularProviene'],
+              ProgramaOrigenInput: inscripcion['Data']['DatosInscripcion']['ProyectoCurricularProviene'],
+              UniversidadOrigen: inscripcion['Data']['DatosInscripcion']['UniversidadProviene'],
+              ProgramaDestino: inscripcion['Data']['ProgramaDestino'],
             }
-          }
-          this.dataTransferencia = data;
+            if (!(this.tipo === 'Transferencia externa')) {
+              data.UniversidadOrigen = 'Universidad Distrital Francisco José de Caldas';
+              if (this.tipo === 'Reingreso') {
+                data.ProgramaOrigen = data.ProgramaDestino;
+              }
+            }
+            this.dataTransferencia = data;
 
-          if (inscripcion.Data.SolicitudId && this.process != 'my') {
-            this.solicitudCreada = true;
+            this.nombreEstudiante = inscripcion['Data']['DatosEstudiante']['Nombre'];
+            this.documentoEstudiante = inscripcion['Data']['DatosEstudiante']['Identificacion'];
+            this.codigoEstudiante = inscripcion['Data']['DatosInscripcion']['CodigoEstudiante'];
             this.solicitudId = inscripcion['Data']['SolicitudId'];
 
-            this.formTransferencia.campos[this.getIndexFormTrans('SoporteDocumento')].ocultar = true;
+            if ((inscripcion['Data']['Estado']['Nombre'] !== 'Requiere modificación' && this.process === 'my') || this.process === 'all') {
+              this.formTransferencia.campos[this.getIndexFormTrans('SoporteDocumento')].ocultar = true;
+              this.solicitudCreada = true;
+              this.formTransferencia.campos.forEach(campo => {
+                campo.deshabilitar = true;
+              });
+              this.formTransferencia.btn = '';
 
-            this.formTransferencia.campos.forEach(campo => {
-              campo.deshabilitar = true;
-            });
-            this.formTransferencia.btn = '';
-
-            this.file = {
-              id: inscripcion['Data']['DatosInscripcion']['DocumentoId'],
-              label: this.translate.instant('inscripcion.' + 'placeholder_soportes_documentos')
+              this.file = {
+                id: inscripcion['Data']['DatosInscripcion']['DocumentoId'],
+                label: this.translate.instant('inscripcion.' + 'placeholder_soportes_documentos')
+              }
+            } else {
+              // To do carga del documento en componente
             }
 
             if (inscripcion.Data.DatosRespuesta) {
