@@ -138,7 +138,7 @@ export const FORM_SOLICITUD_TRANSFERENCIA = {
         },
         {
             etiqueta: 'checkbox',
-            claseGrid: 'col-sm-2 col-xs-2',
+            claseGrid: 'col-sm-12 col-xs-12',
             nombre: 'Cancelo',
             label_i18n: 'cancelo',
             requerido: false,
