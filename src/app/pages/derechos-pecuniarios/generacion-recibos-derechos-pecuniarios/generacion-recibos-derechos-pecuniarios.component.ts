@@ -440,6 +440,7 @@ export class GeneracionRecibosDerechosPecuniarios {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         },
       );
+      this.loading = false;
     }
   }
 
