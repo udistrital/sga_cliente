@@ -1326,8 +1326,11 @@
         "placeholder_fecha_especifica": "Programe la fecha de prueba específica",
         "soporte_respuesta": "Adjunte soporte de la respuesta",
         "error_solicitud": "Ocurrió un error inesperado al crear la solicitud",
+        "error_res_solicitud": "Ocurrió un error inesperado darle respuesta a la solicitud",
         "solicitud_generada": "La solicitud fue generada exitosamente",
-        "placeholder_comentarios": "Comentario respecto a la solicitud"
+        "placeholder_comentarios": "Comentario respecto a la solicitud",
+        "inscripcion_general": "Información general",
+        "generar_matricula": "Generar recibo de matrícula"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

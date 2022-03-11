@@ -55,6 +55,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { NbSpinnerModule } from '@nebular/theme';
+import { AdmisionModule } from '../admision/admision.module';
 
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ import { NbSpinnerModule } from '@nebular/theme';
     DescuentoAcademicoModule,
     PropuestaGradoModule,
     Ng2SmartTableModule,
-    NbSpinnerModule
+    NbSpinnerModule,
+    // AdmisionModule,
   ],
   declarations: [
     ...routedComponents
@@ -95,7 +97,7 @@ import { NbSpinnerModule } from '@nebular/theme';
     ParametrosService,
     EnteService,
   ],
-   entryComponents: [
+  entryComponents: [
     CrudInfoPersonaComponent,
     CrudInscripcionMultipleComponent,
     CrudInfoCaracteristicaComponent,
