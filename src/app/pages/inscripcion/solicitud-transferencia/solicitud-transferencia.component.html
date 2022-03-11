@@ -6,9 +6,9 @@
     <nb-card-body>
         <div style="padding: 1rem;">
             <fieldset class="fieldseter">
-                <legend><small>
-                        Información general
-                    </small></legend>
+                <legend>
+                    <small>&nbsp; {{ 'inscripcion.inscripcion_general'| translate}}</small>
+                </legend>
                 <div style="display: -webkit-box; text-align-last: left;">
                     <div class="col-4">
                         <b>{{ 'inscripcion.periodo' | translate }}</b>: {{ periodo }}
@@ -60,38 +60,36 @@
         {{ 'inscripcion.solicitud_transferencia' | translate }}
     </nb-card-header>
     <nb-card-body>
-        <fieldset class="fieldseter m-4">
-            <legend>Información general</legend>
-            <div style="display: -webkit-box; text-align-last: left;">
-                <div class="col-4">
-                    <b>{{ 'GLOBAL.nombre' | translate }}</b>: {{ nombreEstudiante }}
+        <div style="padding: 1rem;">
+            <fieldset class="fieldseter m-4">
+                <legend>
+                    <small>&nbsp; {{ 'inscripcion.inscripcion_general'| translate}}</small>
+                </legend>
+                <div style="display: -webkit-box; text-align-last: left;">
+                    <div class="col-4">
+                        <b>{{ 'GLOBAL.nombre' | translate }}</b>: {{ nombreEstudiante }}
+                    </div>
+                    <div class="col-4" *ngIf="tipo !== 'Transferencia externa'">
+                        <b>{{ 'GLOBAL.codigo' | translate }}:</b> {{ codigoEstudiante }}
+                    </div>
+                
+                    <div class="col-4">
+                        <b>{{ 'GLOBAL.documento' | translate }}:</b> {{ documentoEstudiante }}
+                    </div>
                 </div>
-                <div class="col-4" *ngIf="tipo !== 'Transferencia externa'">
-                    <b>{{ 'GLOBAL.codigo' | translate }}:</b> {{ codigoEstudiante }}
-                </div>
-
-                <div class="col-4">
-                    <b>{{ 'GLOBAL.documento' | translate }}:</b> {{ documentoEstudiante }}
-                </div>
-            </div>
-
-        </fieldset>
-
-        <fieldset class="fieldseter m-4">
-            <legend>Información de la solicitud</legend>
-            <div style="display: -webkit-box; text-align-last: left;">
-                <div class="col-4">
-                    <b>{{ 'inscripcion.periodo' | translate }}</b>: {{ periodo }}
-                </div>
-                <div class="col-4">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>{{ 'inscripcion.nivel' | translate }}:</b> {{ nivelNombre }}
-                </div>
-                <div class="col-4">
-                    <b>{{ 'inscripcion.tipo' | translate }}:</b> {{ tipo }}
-                </div>
-            </div>
-
-        </fieldset>
+                <div style="display: -webkit-box; text-align-last: left;">
+                    <div class="col-4">
+                        <b>{{ 'inscripcion.periodo' | translate }}</b>: {{ periodo }}
+                    </div>
+                    <div class="col-4">
+                        <b>{{ 'inscripcion.nivel' | translate }}:</b> {{ nivelNombre }}
+                        </div>
+                        <div class="col-4">
+                            <b>{{ 'inscripcion.tipo' | translate }}:</b> {{ tipo }}
+                        </div>
+                        </div>
+            </fieldset>
+        </div>
 
         <ngx-dinamicform [normalform]="formTransferencia" [modeloData]="dataTransferencia">
             <div *ngIf="solicitudCreada" class="files-container">
@@ -100,8 +98,8 @@
             </div>
         </ngx-dinamicform>
 
-        <ngx-dinamicform [normalform]="formRespuesta" (interlaced)="respuestaForm($event)"
-            (result)="validarFormRespuesta($event)">
+        <ngx-dinamicform [normalform]="formRespuesta" (result)="respuestaForm($event)"
+            (interlaced)="validarFormRespuesta($event)">
             <div clas="row">
                 <div class="col-6">
                     <b>{{ 'GLOBAL.nombre' | translate }}</b>: {{ nombreCordinador }}
@@ -118,6 +116,12 @@
         <div class="text-center">
             <button mat-button type="button" (click)="goback()">
                 {{ 'GLOBAL.cancelar' | translate }}
+            </button>
+            <!-- <button [disabled]="!terminadaInscripcion" mat-button type="button" (click)="generarMatricula()">
+                            {{ 'inscripcion.generar_matricula' | translate }}
+                        </button> -->
+            <button mat-button type="button" (click)="generarMatricula()">
+                {{ 'inscripcion.generar_matricula' | translate }}
             </button>
         </div>
     </nb-card-footer>

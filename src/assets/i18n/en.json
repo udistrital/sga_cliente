@@ -1288,8 +1288,11 @@
         "placeholder_fecha_especifica": "Schedule specific test date",
         "soporte_respuesta": "Attach support of the answer",
         "error_solicitud": "An unexpected error occurred when creating the request",
+        "error_res_solicitud": "An unexpected error occurred giving you response to the request",
         "solicitud_generada": "The request was successfully generated",
-        "placeholder_comentarios": "Comment regarding the request"
+        "placeholder_comentarios": "Comment regarding the request",
+        "inscripcion_general": "General information",
+        "generar_matricula": "Generate registration receipt"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
