@@ -103,16 +103,17 @@ export class TransferenciaComponent implements OnInit {
       NUM_DOC_IDEN: '',
       TIPO_DOC_IDEN: '',
     };
+    this.loadInfoPersona();
 
     this.dataSource.load([]);
     this.sub = this._Activatedroute.paramMap.subscribe(async (params: any) => {
       const { process } = params.params;
       this.process = atob(process);
       this.actions = (this.process === 'my');
-      this.loading = true;
-      console.log(this.process)
+
       this.createTable(this.process);
       if (this.process === 'my') {
+        this.loading = true;
         await this.loadDataTercero(this.process).then(e => {
           Swal.fire({
             icon: 'warning',
@@ -121,6 +122,7 @@ export class TransferenciaComponent implements OnInit {
           });
         });
       } else {
+        this.loading = true;
         await this.loadDataAll(this.process);
       }
     });
@@ -202,12 +204,12 @@ export class TransferenciaComponent implements OnInit {
             type: 'custom',
             onComponentInitFunction: (instance) => {
               instance.save.subscribe((data) => {
-                this.nuxeo.get([data.Descargar]).subscribe(
+                this.nuxeo.get([{ 'Id': data.VerRespuesta.DocRespuesta }]).subscribe(
                   (documentos) => {
                     const assignConfig = new MatDialogConfig();
                     assignConfig.width = '1300px';
                     assignConfig.height = '800px';
-                    const aux = { ...documentos[0], observacion: data.VerRespuesta.documento.Observacion, aprobado: false }
+                    const aux = { ...documentos[0], observacion: data.VerRespuesta.Observacion, aprobado: false }
                     assignConfig.data = { documento: aux, observando: true }
                     const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
                   }
@@ -237,11 +239,7 @@ export class TransferenciaComponent implements OnInit {
                 sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
                 sessionStorage.setItem('NivelId', data.Nivel)
 
-                // if (data.Estado == 'Pago') {
                 this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
-                // } else if (data.Estado == 'Radicada') {
-                //   this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
-                // }
               }
             })
           },
@@ -255,7 +253,7 @@ export class TransferenciaComponent implements OnInit {
     await this.cargarPeriodo();
     this.loading = true;
 
-    this.sgaMidService.get('transferencia/solicitudes/')
+    this.sgaMidService.get('transferencia/solicitudes')
       .subscribe(response => {
         if (response !== null && response.Response.Code === '400') {
           this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));
@@ -320,15 +318,18 @@ export class TransferenciaComponent implements OnInit {
     await this.cargarPeriodo();
     this.loading = true;
 
-    this.sgaMidService.get('transferencia/estado_recibos/' + this.uid + '/' + this.periodo.Id)
+    this.sgaMidService.get('transferencia/estado_recibos/' + this.uid)
       .subscribe(response => {
         if (response !== null && response.Response.Code === '400') {
           this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));
+          this.loading = false;
         } else if ((response != null && response.Response.Code === '404') || response.Response.Body.length == 0) {
           this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
+          this.loading = false;
         } else {
           const inscripciones = <Array<any>>response.Response.Body;
           const dataInfo = <Array<any>>[];
+          this.loading = true;
           inscripciones.forEach(element => {
             this.projectService.get('proyecto_academico_institucion/' + element.Programa).subscribe(
               res => {
@@ -344,10 +345,8 @@ export class TransferenciaComponent implements OnInit {
                   icon: 'fa fa-download fa-2x',
                   label: 'Descargar',
                   class: 'btn btn-primary',
-                  documento: element.Respuesta
+                  documento: ''
                 }
-
-                element.Descargar.disabled = true;
 
                 if (element.Estado === 'Pendiente pago') {
                   element.Opcion = {
@@ -368,7 +367,18 @@ export class TransferenciaComponent implements OnInit {
                   element.Opcion.disabled = true;
                 }
 
-                // this.loading = true;
+                if (element.SolicitudFinalizada) {
+                  element.Descargar = {
+                    icon: 'fa fa-download fa-2x',
+                    label: 'Descargar',
+                    class: 'btn btn-primary',
+                    documento: element.VerRespuesta.DocRespuesta
+                  }
+                  delete element.Descargar.disabled;
+                  element.Opcion.disabled = true;
+                } else {
+                  element.Descargar.disabled = true;
+                }
 
                 dataInfo.push(element);
 
@@ -390,7 +400,6 @@ export class TransferenciaComponent implements OnInit {
           this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
         });
-    this.loading = false;
   }
 
   descargarNormativa() {
@@ -398,7 +407,6 @@ export class TransferenciaComponent implements OnInit {
   }
 
   async nuevaSolicitud() {
-    this.loadInfoPersona();
     this.listadoSolicitudes = false;
     await this.loadPeriodo().catch(e => this.loading = false);
     this.construirForm();
