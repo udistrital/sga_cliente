@@ -1,4 +1,5 @@
-<nb-card>
+<nb-card  [nbSpinner]="loading || loadingGlobal" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
   <nb-card-body>
     <div class=col-12>
       <fieldset [ngClass]="{'fieldseter':true}" >
@@ -33,7 +34,7 @@
                   <mat-label>{{ 'documento_proyecto.aviso_proyecto' | translate }}:</mat-label>
                   <mat-select [formControl]="Campo1Control"
                               [(ngModel)]="proyectos_selected"
-                              (selectionChange)="savePrograma()">
+                              (selectionChange)="loadTipoInscripcion()">
                               <!-- (selectionChange)="loadCriterios()" -->
                     <mat-option *ngFor="let item of proyectos" [value]="item.Id">{{item.Nombre}}</mat-option>
                   </mat-select>
@@ -42,8 +43,21 @@
                   </mat-error>
                 </mat-form-field>
 
+                <!-- select tipo_inscripcion -->
+                <mat-form-field style="width: 100%;">
+                  <mat-label>{{ 'documento_proyecto.aviso_tipo_inscripcion' | translate }}:</mat-label>
+                  <mat-select [formControl]="Campo2Control"
+                              [(ngModel)]="tipo_inscripcion_selected"
+                              (selectionChange)="savePrograma()">
+                    <mat-option *ngFor="let item of tipos_inscripcion" [value]="item.Id">{{item.Nombre}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="Campo2Control.hasError('required')">
+                    {{ 'documento_proyecto.error_selec_tipo_inscripcion' | translate }}
+                  </mat-error>
+                </mat-form-field>
+
                 <!-- Tag de criterios -->
-                <div class="row" *ngIf="proyectos_selected" style="justify-content: space-around;">
+                <div class="row" *ngIf="tipo_inscripcion_selected" style="justify-content: space-around;">
 
                   <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica">
 

@@ -7,4 +7,5 @@ export class DocumentoPrograma {
   PeriodoId: number;
   TipoDocumentoProgramaId: TipoDocumentoPrograma;
   FechaCreacion: Date;
+  TipoInscripcionId: number;
 }

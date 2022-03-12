@@ -1415,7 +1415,7 @@
         "aviso_periodo": "Periodo en el cual se define los documentos y descuentos de admisión",
         "aviso_nivel": "Seleccione el nivel al que desea definir los documentos y descuentos de admisión",
         "erro_selec_nivel": "Por favor, seleccione el nivel",
-        "aviso_proyecto": "Seleccione el proyecto curricular que desea definir los documentos y descuentos de admisión",
+        "aviso_proyecto": "Seleccione el proyecto curricular al que desea definir los documentos y descuentos de admisión",
         "erro_selec_proyecto": "Por favor, seleccione al menos un proyecto",
         "erro_selec_documento": "Por favor, seleccione un documento",
         "titulo": "Asignación de documentos y descuentos por proyecto",
@@ -1424,7 +1424,9 @@
         "seleccione_documentos": "Seleccione los documentos que desea asignar al programa:",
         "documentos_seleccionados": "Documentos asignados:",
         "carga_nuevo_documento": "Asignando nuevo documento...",
-        "carga_eliminando_documento": "Eliminando documento del proyecto..."
+        "carga_eliminando_documento": "Eliminando documento del proyecto...",
+        "aviso_tipo_inscripcion": "Seleccione el tipo de inscripción al que desea definir los documentos y descuentos de admisión",
+        "error_selec_tipo_inscripcion": "Por favor, seleccione un tipo de inscripción"
     },
     "descuento_academico": {
         "descuento_academico_no_registrado": "Descuento académico no registrado",
