@@ -20,9 +20,11 @@
       <nb-card style="width: 70vw; display: grid;">
         <toaster-container [toasterconfig]="config"></toaster-container>
 
+        <nb-card style="width: 70vw; display: grid;">
+          <nb-card-header style="width: 70vw; display: grid;">
+
         {{ 'documento_proyecto.seleccione_documentos' | translate }}
 
-        <br>
         <mat-form-field style="width: 50%;justify-self: center;">
           <mat-label>{{ 'documento_proyecto.documento_proyecto' | translate }}</mat-label>
 
@@ -35,7 +37,8 @@
           <mat-error *ngIf="Campo2Control.hasError('required')">{{ 'documento_proyecto.erro_selec_documento' | translate }}</mat-error>
         </mat-form-field>
 
-        <br/>
+        </nb-card-header>
+        <nb-card-body style="width: 70vw; display: grid;">
 
         {{ 'documento_proyecto.documentos_seleccionados' | translate }}
 
@@ -47,12 +50,14 @@
             </ng2-smart-table>
           </div>
         </div>
+        </nb-card-body>
 
-        <br/>
+        <nb-card-footer style="width: 70vw; display: grid;">
         <button mat-button  (click)="openListDocumentoComponent()" type="submit"
                 nbButton status="success">{{ 'documento_proyecto.administrar_documento' | translate }}
         </button>
-
+        </nb-card-footer>
+        </nb-card>
       </nb-card>
     </fieldset>
 
