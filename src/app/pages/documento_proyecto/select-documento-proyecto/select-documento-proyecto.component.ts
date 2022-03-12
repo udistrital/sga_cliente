@@ -134,6 +134,7 @@ export class SelectDocumentoProyectoComponent implements OnInit {
             documentoNuevo.Activo = true;
             documentoNuevo.PeriodoId = parseInt(sessionStorage.getItem('PeriodoId'), 10);
             documentoNuevo.ProgramaId = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
+            documentoNuevo.TipoInscripcionId = parseInt(sessionStorage.getItem('TipoInscripcionId'), 10);
 
             content = Swal.getHtmlContainer();
             if (content) {
@@ -273,14 +274,21 @@ export class SelectDocumentoProyectoComponent implements OnInit {
   loadDataProyecto() {
     this.loading = true;
     this.documento_proyecto = [];
-    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + sessionStorage.getItem('ProgramaAcademicoId')).subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + sessionStorage.getItem('ProgramaAcademicoId') + ',TipoInscripcionId:' + sessionStorage.getItem('TipoInscripcionId') + ',PeriodoId:'+sessionStorage.getItem('PeriodoId') + '&limit=0').subscribe(
       response => {
-        response.forEach(documento => {
-          documento.TipoDocumentoProgramaId.IdDocPrograma = documento.Id;
-          documento.TipoDocumentoProgramaId.FechaPrograma = documento.FechaCreacion;
-          this.documento_proyecto.push(<TipoDocumentoPrograma>documento.TipoDocumentoProgramaId);
-        });
-        this.source.load(this.documento_proyecto);
+        if(response === undefined || response === null){
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        }
+        else if (response.length == 1 && !response[0].hasOwnProperty('TipoDocumentoProgramaId')){
+        }
+        else{
+          response.forEach(documento => {
+            documento.TipoDocumentoProgramaId.IdDocPrograma = documento.Id;
+            documento.TipoDocumentoProgramaId.FechaPrograma = documento.FechaCreacion;
+            this.documento_proyecto.push(<TipoDocumentoPrograma>documento.TipoDocumentoProgramaId);
+          });
+          this.source.load(this.documento_proyecto);
+        }
         this.loading = false;
       },
       error => {

@@ -33,6 +33,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
   estadoObservacion: string = '';
   observacion: string = '';
+  tipoInscripcion: number;
 
   @Input('persona_id')
   set info(info: number) {
@@ -116,7 +117,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.soporteDocumento = [];
     this.percentage = 0;
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
-      this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa).subscribe(
+      this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa + ',DocumentoProgramaId.TipoInscripcionId:' + this.tipoInscripcion + '&limit=0').subscribe(
         (response: any[]) => {
           console.info(Object.keys(response[0]).length)
           if (Object.keys(response[0]).length > 0) {
@@ -136,7 +137,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
               }
             });
           } else {
-            this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('documento_programa.no_documentos'));
+            this.popUpManager.showInfoToast(this.translate.instant('documento_programa.no_documentos'));
           }
           this.loading = false;
         },
@@ -176,7 +177,10 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.uid = 0;
     this.soporteDocumento = [];
     this.inscripcion = parseInt(sessionStorage.getItem('IdInscripcion'), 10);
-    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
+    this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
+    this.periodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10);
+    this.tipoInscripcion = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10);
+    
     if (this.inscripcion !== undefined && this.inscripcion !== null && this.inscripcion !== 0 &&
       this.inscripcion.toString() !== '') {
       this.loadData();
@@ -185,9 +189,16 @@ export class ListDocumentoProgramaComponent implements OnInit {
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + this.programa).subscribe(
-      response => {
-        this.tipo_documentos = <any[]>response;
+    this.inscripcionService.get('documento_programa?query=Activo:true,PeriodoId:' + this.periodo + ',ProgramaId:' + this.programa + ',TipoInscripcionId:' + this.tipoInscripcion + '&limit=0').subscribe(
+      (response: Object[]) => {
+        if(response === undefined || response === null){
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        }
+        else if (response.length == 1 && !response[0].hasOwnProperty('TipoDocumentoProgramaId')){
+        }
+        else{
+          this.tipo_documentos = <any[]>response;
+        }
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));

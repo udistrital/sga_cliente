@@ -10,6 +10,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { SelectDocumentoProyectoComponent } from '../../documento_proyecto/select-documento-proyecto/select-documento-proyecto.component';
 import { SelectDescuentoProyectoComponent } from '../../descuento_proyecto/select-descuento-proyecto/select-descuento-proyecto.component';
 import { NbDialogService } from '@nebular/theme';
+import { InscripcionService } from '../../../@core/data/inscripcion.service';
 
 @Component({
   selector: 'ngx-asignar_documentos_descuentos',
@@ -23,14 +24,20 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
   proyectos = [];
   periodos = [];
 
-  loading: boolean;
+  loading: boolean = false;
   proyectos_selected: any;
   periodo: any;
   nivel_load: any;
   selectednivel: any;
 
+  tipos_inscripcion = [];
+  tipo_inscripcion_selected: any;
+
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
+  Campo2Control = new FormControl('', [Validators.required]);
+
+  loadingGlobal: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -38,7 +45,8 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
     private dialogService: NbDialogService,
     private projectService: ProyectoAcademicoService,
     private sgaMidService: SgaMidService,
-    private popUpManager: PopUpManager) {
+    private popUpManager: PopUpManager,
+    private inscripcionService: InscripcionService) {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => { });
     this.loadData();
@@ -46,8 +54,10 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
 
   async loadData() {
     try {
+      this.loadingGlobal = true;
       await this.cargarPeriodo();
       await this.loadLevel();
+      this.loadingGlobal = false;
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -75,20 +85,24 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
         },
           (error: HttpErrorResponse) => {
             reject(error);
+            this.loadingGlobal = false;
           });
     });
   }
 
   loadLevel() {
+    this.loading = true;
     this.projectService.get('nivel_formacion?limit=2').subscribe(
       (response: any) => {
         if (response !== null || response !== undefined) {
           this.nivel_load = <any>response;
         }
+        this.loading = false;
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         this.loading = false;
+        this.loadingGlobal = false;
       },
     );
   }
@@ -108,18 +122,47 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
 
   loadProyectos() {
     this.proyectos_selected = undefined;
-    sessionStorage.setItem('ProgramaAcademicoId', undefined)
+    sessionStorage.setItem('ProgramaAcademicoId', undefined);
+    this.tipo_inscripcion_selected = undefined;
+    sessionStorage.setItem('TipoInscripcionId', undefined);
     if (this.selectednivel !== NaN) {
+      this.loading = true;
       this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
           this.proyectos = <any[]>response.filter(
             proyecto => this.filtrarProyecto(proyecto),
           );
+          this.loading = false;
         },
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
           this.loading = false;
+          this.loadingGlobal = false;
         },
+      );
+    }
+  }
+
+  filterTipoInscripcion(tipoInscripcion){
+    return ( this.selectednivel === tipoInscripcion.NivelId)
+  }
+
+  loadTipoInscripcion(){
+    this.loading = true;
+    this.tipo_inscripcion_selected = undefined;
+    sessionStorage.setItem('TipoInscripcionId', undefined);
+    if (this.proyectos_selected !== NaN) {
+      this.inscripcionService.get('tipo_inscripcion?query=Activo:true&limit=0').subscribe(
+        (response: any) => {
+          this.tipos_inscripcion = <any[]> response.filter(
+            tipoInscripcion => this.filterTipoInscripcion(tipoInscripcion),
+          );
+          this.loading = false;
+        },
+        error => {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          this.loading = false;
+        }
       );
     }
   }
@@ -137,6 +180,7 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
   savePrograma() {
     sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected)
     sessionStorage.setItem('PeriodoId', this.periodo.Id)
+    sessionStorage.setItem('TipoInscripcionId', this.tipo_inscripcion_selected)
   }
 
   openSelectDocumentoProyectoComponent() {

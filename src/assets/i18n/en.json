@@ -1386,7 +1386,9 @@
       "seleccione_documentos": "Select the documents that you want to assign to the program:",
       "documentos_seleccionados": "Assigned documents:",
       "carga_nuevo_documento": "Assigning new document...",
-      "carga_eliminando_documento": "Removing document from project..."
+      "carga_eliminando_documento": "Removing document from project...",
+      "aviso_tipo_inscripcion": "Select the type of registration for which you want to define the admission documents and discounts",
+      "error_selec_tipo_inscripcion": "Please, select a registration type"
     },
     "descuento_academico": {
       "documento_programa_no_registrado": "Document not registered",

@@ -22,6 +22,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   periodo: number;
   inscripcion: number;
   soporteId: number;
+  tipoInscripcion: number;
 
   @Input('documento_programa_id')
   set name(documento_programa_id: number) {
@@ -62,6 +63,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   loading: boolean;
   valido: boolean;
   percentage: number;
+  sin_docs: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -80,15 +82,30 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   ngOnInit() {
     this.programa = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10) // this.userService.getPrograma();
     this.periodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10) // this.userService.getPeriodo();
+    this.tipoInscripcion = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10);
+    this.sin_docs = false;
     this.loadLists();
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + this.programa).subscribe(
-      response => {
-        this.tipo_documentos = <any[]>response;
-        this.eventChange.emit(this.tipo_documentos.length);
-        this.construirForm();
+    this.tipo_documentos = undefined;
+    this.sin_docs = false;
+    this.inscripcionService.get('documento_programa?query=Activo:true,PeriodoId:' + this.periodo + ',ProgramaId:' + this.programa + ',TipoInscripcionId:' + this.tipoInscripcion + '&limit=0').subscribe(
+      (response: Object[]) => {
+        if(response === undefined || response === null){
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        }
+        else if (response.length == 1 && !response[0].hasOwnProperty('TipoDocumentoProgramaId')){
+          this.popUpManager.showErrorAlert(this.translate.instant('documento_programa.no_documentos'));
+          this.tipo_documentos = [{TipoDocumentoProgramaId: {Id: 1, Nombre: "-"}}];
+          this.sin_docs = true;
+        }
+        else{
+          this.tipo_documentos = <any[]>response;
+          this.sin_docs = false;
+        }
+          this.eventChange.emit(this.tipo_documentos.length);
+          this.construirForm();
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -97,11 +114,18 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   }
 
   construirForm() {
-    this.formDocumentoPrograma.btn = this.translate.instant('GLOBAL.guardar');
-    this.formDocumentoPrograma.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
+    if(this.sin_docs){
+      this.formDocumentoPrograma.btn = false;
+      this.formDocumentoPrograma.btnLimpiar = false;
+    }
+    else{
+      this.formDocumentoPrograma.btn = this.translate.instant('GLOBAL.guardar');
+      this.formDocumentoPrograma.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
+    }
     this.formDocumentoPrograma.campos.forEach(campo => {
       campo.label = this.translate.instant('GLOBAL.' + campo.label_i18n);
       campo.placeholder = this.translate.instant('GLOBAL.placeholder_' + campo.label_i18n);
+      campo.deshabilitar = this.sin_docs;
       if (campo.etiqueta === 'select') {
         campo.opciones = this.tipo_documentos.map(tipo => tipo['TipoDocumentoProgramaId']);
       }

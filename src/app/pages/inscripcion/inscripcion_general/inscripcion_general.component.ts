@@ -574,8 +574,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.loading = true;
     return new Promise((resolve, reject) => {
       this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
-        this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10)).subscribe(
+        this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',DocumentoProgramaId.TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + '&limit=0').subscribe(
           (res: any[]) => {
+            console.log(res)
             if (res !== null && JSON.stringify(res[0]) !== '{}') {
               this.percentage_docu = 0;
               for (let i = 0; i < res.length; i++) {
@@ -658,7 +659,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10)).subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + '&limit=0').subscribe(
       response => {
         this.tipo_documentos = <any[]>response;
       },
