@@ -20,7 +20,7 @@ import { Periodo } from '../../../@core/data/models/periodo/periodo';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DialogoDocumentosComponent } from '../../admision/dialogo-documentos/dialogo-documentos.component';
+import { DialogoDocumentosTransferenciasComponent } from '../dialogo-documentos-transferencias/dialogo-documentos-transferencias.component';
 
 @Component({
   selector: 'transferencia',
@@ -209,9 +209,9 @@ export class TransferenciaComponent implements OnInit {
                     const assignConfig = new MatDialogConfig();
                     assignConfig.width = '1300px';
                     assignConfig.height = '800px';
-                    const aux = { ...documentos[0], observacion: data.VerRespuesta.Observacion, aprobado: false }
+                    let aux = { ...documentos[0], observacion: data.VerRespuesta.Observacion, fecha: data.VerRespuesta.FechaEvaluacion, terceroResponsable: data.VerRespuesta.TerceroResponsable }
                     assignConfig.data = { documento: aux, observando: true }
-                    const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
+                    const dialogo = this.dialog.open(DialogoDocumentosTransferenciasComponent, assignConfig);
                   }
                 );
               })

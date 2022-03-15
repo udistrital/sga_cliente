@@ -39,7 +39,7 @@
       <br>
       <mat-accordion *ngIf="['news', 'process'].includes(process)">
         <mat-expansion-panel>
-          <mat-expansion-panel-header>
+          <mat-expansion-panel-header style="background: gainsboro; border: 1px solid var(--primary);">
             <mat-panel-title>
               {{ 'practicas_academicas.estados' | translate }}
             </mat-panel-title>
@@ -47,6 +47,7 @@
               {{ 'practicas_academicas.ver_listado_estados' | translate }}
             </mat-panel-description>
           </mat-expansion-panel-header>
+          <br>
           <ng2-smart-table [settings]="tablaEstados" [source]="estadosSolicitud" (custom)="verEstado($event)">
           </ng2-smart-table>
 
