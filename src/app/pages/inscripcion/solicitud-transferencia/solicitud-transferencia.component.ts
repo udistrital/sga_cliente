@@ -1,5 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { FORM_SOLICITUD_TRANSFERENCIA, FORM_RESPUESTA_SOLICITUD } from '../forms-transferencia';
@@ -31,20 +30,23 @@ export class SolicitudTransferenciaComponent implements OnInit {
   dataTransferencia: TransferenciaInternaReintegro = null;
   terminadaInscripcion: boolean = false;
   solicitudCreada: boolean = false;
+  mostrarDocumento: boolean = false;
   solicitudId: any;
   inscriptionSettings: any = null;
   process: string;
   loading: boolean;
   file: any;
-  idFileRespuesta: any;
+  idFileDocumento: any;
   proyectosCurriculares: any[];
   codigosEstudiante: any[];
   id: any;
+  estado: any;
   nombreEstudiante: any;
   codigoEstudiante: any;
   documentoEstudiante: any;
   nombreCordinador: any;
   rolCordinador: any;
+  comentario: string;
 
   constructor(
     private translate: TranslateService,
@@ -55,7 +57,6 @@ export class SolicitudTransferenciaComponent implements OnInit {
     private popUpManager: PopUpManager,
     private userService: UserService,
     private router: Router,
-    private location: Location,
     private _Activatedroute: ActivatedRoute
   ) {
     this.formTransferencia = FORM_SOLICITUD_TRANSFERENCIA;
@@ -152,6 +153,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
         if (inscripcion.Success) {
           this.loading = true;
 
+          this.estado = inscripcion['Data']['Estado']['Nombre'];
           this.periodo = inscripcion['Data']['Periodo']['Nombre'];
           this.nivelNombre = inscripcion['Data']['Nivel']['Nombre'];
           this.nivel = inscripcion['Data']['Nivel']['Id'];
@@ -253,6 +255,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
             if ((inscripcion['Data']['Estado']['Nombre'] !== 'Requiere modificación' && this.process === 'my') || this.process === 'all') {
               this.formTransferencia.campos[this.getIndexFormTrans('SoporteDocumento')].ocultar = true;
               this.solicitudCreada = true;
+              this.mostrarDocumento = true;
               this.formTransferencia.campos.forEach(campo => {
                 campo.deshabilitar = true;
               });
@@ -263,7 +266,40 @@ export class SolicitudTransferenciaComponent implements OnInit {
                 label: this.translate.instant('inscripcion.' + 'placeholder_soportes_documentos')
               }
             } else {
-              // To do carga del documento en componente
+              this.solicitudCreada = true;
+              this.mostrarDocumento = false;
+              this.comentario = inscripcion['Data']['DatosRespuesta']['Observacion'];
+
+              this.inscriptionSettings = this.nivelNombre === 'Pregrado' ? {
+                basic_info_button: true,
+                hide_header_labels: true,
+                formacion_academica_button: true,
+                documentos_programa_button: true,
+                select_tipo: this.tipo,
+                nivel: this.nivelNombre,
+                detalle_inscripcion: true,
+                es_transferencia: true,
+              } : {
+                basic_info_button: true,
+                hide_header_labels: true,
+                formacion_academica_button: true,
+                documentos_programa_button: true,
+                select_tipo: this.tipo,
+                nivel: this.nivelNombre,
+                detalle_inscripcion: true,
+                experiencia_laboral: true,
+                produccion_academica: true,
+                es_transferencia: true,
+              }
+
+              const SoporteDocumento = this.getIndexFormTrans('SoporteDocumento');
+
+              this.formTransferencia.campos[SoporteDocumento].ocultar = false;
+              this.idFileDocumento = inscripcion['Data']['DatosInscripcion']['DocumentoId'];
+              this.nuxeo.get([{ 'Id': this.idFileDocumento }]).subscribe(file => {
+                this.formTransferencia.campos[SoporteDocumento].urlTemp = file[0]['url'] + '';
+                this.formTransferencia.campos[SoporteDocumento].valor = file[0]['url'] + '';
+              })
             }
 
             if (inscripcion.Data.DatosRespuesta) {
@@ -275,20 +311,16 @@ export class SolicitudTransferenciaComponent implements OnInit {
               this.formRespuesta.campos[EstadoId].valor = inscripcion.Data.Estado;;
               this.formRespuesta.campos[FechaEspecifica].valor = inscripcion.Data.DatosRespuesta.FechaEvaluacion.slice(0, -4);
               this.formRespuesta.campos[Observacion].valor = inscripcion.Data.DatosRespuesta.Observacion;
-              this.idFileRespuesta = inscripcion.Data.DatosRespuesta.DocRespuesta
-              this.nuxeo.get([{ 'Id': this.idFileRespuesta }]).subscribe(file => {
+              this.idFileDocumento = inscripcion.Data.DatosRespuesta.DocRespuesta
+              this.nuxeo.get([{ 'Id': this.idFileDocumento }]).subscribe(file => {
                 this.formRespuesta.campos[SoporteRespuesta].urlTemp = file[0]['url'] + '';
                 this.formRespuesta.campos[SoporteRespuesta].valor = file[0]['url'] + '';
               })
-
             }
 
           } else {
             this.formTransferencia.campos[this.getIndexFormTrans('SoporteDocumento')].ocultar = false;
           }
-
-          // if (inscripcion['Data']['Estado']['Nombre'] !== 'Requiere modificación') {
-          // }
 
           this.loading = false;
           this.inscriptionSettings = this.nivelNombre === 'Pregrado' ? {
@@ -334,7 +366,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
   }
 
   goback() {
-    this.location.back();
+    this.router.navigate([`pages/inscripcion/transferencia/${btoa(this.process)}`])
   }
 
   generarMatricula() {
@@ -424,6 +456,8 @@ export class SolicitudTransferenciaComponent implements OnInit {
           key: 'Documento',
         }
         files = file;
+      } else if (this.idFileDocumento) {
+        files = this.idFileDocumento;
       }
 
       const data = {
@@ -445,22 +479,42 @@ export class SolicitudTransferenciaComponent implements OnInit {
         'FechaRadicacion': moment().format('YYYY-MM-DD hh:mm:ss'),
       }
 
-      this.sgaMidService.post('transferencia', data).subscribe(
-        res => {
-          const r = <any>res.Response
-          if (r !== null && r.Type !== 'error') {
-            this.loading = false;
-            this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.solicitud_generada')).then(cerrado => {
-              this.ngOnInit();
-            });
-          } else {
-            this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.error_solicitud'));
+      if (this.estado === 'Requiere modificación') {
+        this.sgaMidService.put('transferencia/' + this.solicitudId, data).subscribe(
+          res => {
+            const r = <any>res.Response
+            if (r !== null && r.Type !== 'error') {
+              this.loading = false;
+              this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.solicitud_generada')).then(cerrado => {
+                this.ngOnInit();
+                this.goback();
+              });
+            } else {
+              this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.error_solicitud'));
+              this.loading = false;
+            }
+          }, error => {
             this.loading = false;
           }
-        }, error => {
-          this.loading = false;
-        }
-      )
+        );
+      } else {
+        this.sgaMidService.post('transferencia', data).subscribe(
+          res => {
+            const r = <any>res.Response
+            if (r !== null && r.Type !== 'error') {
+              this.loading = false;
+              this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.solicitud_generada')).then(cerrado => {
+                this.ngOnInit();
+              });
+            } else {
+              this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.error_solicitud'));
+              this.loading = false;
+            }
+          }, error => {
+            this.loading = false;
+          }
+        );
+      }
 
     }
   }
@@ -486,8 +540,8 @@ export class SolicitudTransferenciaComponent implements OnInit {
           key: 'Documento',
         }
         files = file;
-      } else if (this.idFileRespuesta) {
-        files = this.idFileRespuesta;
+      } else if (this.idFileDocumento) {
+        files = this.idFileDocumento;
       }
 
       const hoy = new Date();
