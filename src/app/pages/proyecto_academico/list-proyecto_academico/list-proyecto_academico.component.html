@@ -1,31 +1,33 @@
-<div class="row">
-    <div class="col">
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+  nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+  <nb-card-header>
+    {{ "consultaproyecto.titulo" | translate }}
+  </nb-card-header>
+
+  <nb-card-body>
+    <div class="row">
       <nb-card>
-  
-        <fieldset [ngClass]="{'fieldseter' : true}">
+
+        <fieldset class="fieldseter">
           <legend>
-            {{ "consultaproyecto.titulo" | translate }}
+            <small>&nbsp; {{ "consultaproyecto.titulo" | translate }} </small>
           </legend>
-          
+
           <nb-card style="margin: 0px; padding: 0px;">
-                <nb-card-body class="explicacion">
-                {{ 'consultaproyecto.explicacacion' | translate }}
+            <nb-card-body class="explicacion">
+              {{ 'consultaproyecto.explicacacion' | translate }}
             </nb-card-body>
           </nb-card>
 
           <nb-card>
             <nb-card-body style="padding: 0rem;">
-
-                <ng2-smart-table [settings]="settings"
-                                 [source]="source"
-                                 (rowSelect)="highlight($event)"
-                                 (custom)="onAction($event)">
-                </ng2-smart-table>
-
+              <ng2-smart-table [settings]="settings" [source]="source" (rowSelect)="highlight($event)" (custom)="onAction($event)">
+              </ng2-smart-table>
             </nb-card-body>
-        </nb-card>
+          </nb-card>
 
         </fieldset>
       </nb-card>
     </div>
-</div>
+  </nb-card-body>
+  </nb-card>

@@ -75,9 +75,12 @@
             </nb-card-body>
         </nb-card>
         <div class="row">
-            <div class="col-xs-12 col-sm-4"> <button mat-raised-button  (click)="OpenRegistroCalificado()">{{ 'historial_registro.calificado' | translate }}</button> </div>
-            <div class="col-xs-12 col-sm-4"> <button mat-raised-button  (click)="OpenRegistroAlta()">{{ 'historial_registro.alta' | translate }}</button></div>
-            <div class="col-xs-12 col-sm-4"> <button mat-raised-button  (click)="onclick()">{{ 'GLOBAL.aceptar' | translate }}</button></div>
+            <div class="col-xs-12 col-sm-4"> <button mat-button (click)="OpenRegistroCalificado()">{{
+                    'historial_registro.calificado' | translate }}</button> </div>
+            <div class="col-xs-12 col-sm-4"> <button mat-button (click)="OpenRegistroAlta()">{{ 'historial_registro.alta' |
+                    translate }}</button></div>
+            <div class="col-xs-12 col-sm-4"> <button mat-button (click)="onclick()">{{ 'GLOBAL.aceptar' | translate }}</button>
+            </div>
         </div>
     </nb-card>
 

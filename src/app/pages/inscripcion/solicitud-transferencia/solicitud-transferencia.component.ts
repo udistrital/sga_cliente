@@ -308,7 +308,9 @@ export class SolicitudTransferenciaComponent implements OnInit {
               const Observacion = this.getIndexFormRes('Observacion');
               const SoporteRespuesta = this.getIndexFormRes('SoporteRespuesta');
 
-              this.formRespuesta.campos[EstadoId].valor = inscripcion.Data.Estado;;
+              if (inscripcion.Data.Estado.Nombre != "Pago" || inscripcion.Data.Estado.Nombre != "Solicitado") {
+                this.formRespuesta.campos[EstadoId].valor = inscripcion.Data.Estado;
+              }
               this.formRespuesta.campos[FechaEspecifica].valor = inscripcion.Data.DatosRespuesta.FechaEvaluacion.slice(0, -4);
               this.formRespuesta.campos[Observacion].valor = inscripcion.Data.DatosRespuesta.Observacion;
               this.idFileDocumento = inscripcion.Data.DatosRespuesta.DocRespuesta

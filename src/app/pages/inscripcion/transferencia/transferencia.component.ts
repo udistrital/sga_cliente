@@ -336,7 +336,7 @@ export class TransferenciaComponent implements OnInit {
                 const auxRecibo = element.Recibo;
                 const NumRecibo = auxRecibo.split('/', 1);
                 element.Recibo = NumRecibo[0];
-                element.FechaGeneracion = momentTimezone.tz(element.FechaGeneracion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
+                element.FechaGeneracion = moment(element.FechaGeneracion, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 element.IdPrograma = element.Programa;
                 element.Programa = res.Nombre;
                 element.Periodo = this.periodo.Id;
@@ -403,7 +403,7 @@ export class TransferenciaComponent implements OnInit {
   }
 
   descargarNormativa() {
-    console.log('Descargar normativa! ');
+    window.open('https://www.udistrital.edu.co/admisiones-pregrado', '_blank');
   }
 
   async nuevaSolicitud() {
