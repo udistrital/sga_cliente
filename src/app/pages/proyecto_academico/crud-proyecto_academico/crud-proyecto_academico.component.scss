@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
 .mat-input-placeholder {
     color: nb-theme(color-fg-text);
@@ -13,6 +14,12 @@
     color: #fff;
 }
 
+.mat-form-field {
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    width: 90%;
+}
 
 ::ng-deep .mat-checkbox .mat-checkbox-frame {
     border-color: rgb(3, 90, 143);

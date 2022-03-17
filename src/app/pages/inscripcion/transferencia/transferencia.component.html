@@ -11,7 +11,7 @@
             </ng2-smart-table>
             <hr width="0%">
             <div class="text-center" *ngIf="actions">
-                <button *ngIf="listadoSolicitudes" mat-button type="button" (click)="descargarNormativa">
+                <button *ngIf="listadoSolicitudes" mat-button type="button" (click)="descargarNormativa()">
                     {{ 'inscripcion.btn_descargar_normativa' | translate }}
                 </button>
                 <button *ngIf="listadoSolicitudes" mat-button type="button" (click)="nuevaSolicitud()">

@@ -3,15 +3,18 @@
     <div class="col-md-12 col-lg-12 ">
       <div class="row">
         <div class="col-sm-6">
-          <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-            rel="stylesheet" />
           <nb-card accent="info" align="center" size="4">
-            <nb-card-header>{{ "consultaproyecto.titulo_consulta" | translate }}</nb-card-header>
-            <nb-card>
               <nb-card-header>{{ "proyecto.basica" | translate }}</nb-card-header>
               <nb-card-body>
                 <form id="basicForm" [formGroup]="basicform">
                   <mat-form-field>
+                    <input readonly matInput placeholder="{{ 'proyecto.codigo_interno' | translate }}" formControlName="codigo_interno"
+                      class="form-control" name="codigo_interno" [(ngModel)]="data.codigointerno" />
+                    <mat-error *ngIf="Campo30Control.hasError('required')">
+                      {{ "proyecto.erro_codigo" | translate }}</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <mat-form-field>
                     <input readonly matInput placeholder="{{ 'proyecto.codigo_snies' | translate }}"
                            formControlName="codigo_snies" class="form-control" name="codigo_snies"
                            [(ngModel)]="data.codigosnies" />
@@ -138,7 +141,6 @@
                   {{ "proyecto.ofrece_proyecto" | translate }}
                 </mat-checkbox>
               </nb-card-body>
-            </nb-card>
           </nb-card>
         </div>
 
