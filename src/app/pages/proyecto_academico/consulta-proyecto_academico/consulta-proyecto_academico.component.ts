@@ -1,4 +1,5 @@
-import { Component, OnInit} from '@angular/core';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { TranslateService } from '@ngx-translate/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -11,6 +12,7 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-consulta-proyecto-academico',
@@ -18,8 +20,15 @@ import Swal from 'sweetalert2';
   styleUrls: ['./consulta-proyecto_academico.component.scss'],
   })
 export class ConsultaProyectoAcademicoComponent implements OnInit {
-  basicform: FormGroup;
 
+  @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
+
+  triggerResize() {
+    // Wait for changes to be applied, then trigger textarea resize.
+    this._ngZone.onStable.pipe(take(1)).subscribe(() => this.autosize.resizeToFitContent(true));
+  }
+
+  basicform: FormGroup;
   source_emphasys: LocalDataSource = new LocalDataSource();
   settings_emphasys: any;
 
@@ -27,6 +36,7 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
   constructor(private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialog,
+    private _ngZone: NgZone,
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
     public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
@@ -102,6 +112,7 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
 
   ngOnInit() {
     this.basicform = this.formBuilder.group({
+      codigo_interno: ['', Validators.required],
       codigo_snies: ['', Validators.required],
       facultad: ['', Validators.required],
       nivel_proyecto: ['', Validators.required],

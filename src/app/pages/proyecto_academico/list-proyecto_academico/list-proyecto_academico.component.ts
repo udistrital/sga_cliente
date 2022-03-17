@@ -1,15 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import {
-  ToasterService,
-  ToasterConfig,
-  Toast,
-  BodyOutputType,
-} from 'angular2-toaster';
+import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import * as momentTimezone from 'moment-timezone';
+import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { MatTableDataSource } from '@angular/material';
@@ -32,6 +28,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   index: any;
   idproyecto: any;
   codigosnies: Number;
+  codigo: string;
   facultad: string;
   nombre: String;
   nivel: string;
@@ -54,6 +51,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   coordinador: [];
   oferta_check: boolean = false;
   ciclos_check: boolean = false;
+  loading: boolean = false;
   titulacion_snies: string;
   numero_acto: string;
   ano_acto: string;
@@ -91,8 +89,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     private toasterService: ToasterService,
   ) {
     this.source = new LocalDataSource();
-
-    this.loadproyectos();
+    this.loading = true;
     this.loadData();
     // this.source.load(this.listaDatos)
 
@@ -102,7 +99,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
     });
   }
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   cargarCampos() {
     this.settings = {
@@ -125,6 +122,10 @@ export class ListProyectoAcademicoComponent implements OnInit {
         },
         codigo: {
           title: this.translate.instant('consultaproyecto.codigo'),
+          width: '7%',
+        },
+        codigoSNIES: {
+          title: this.translate.instant('consultaproyecto.codigosnies'),
           width: '7%',
         },
         OfertaLetra: {
@@ -174,22 +175,25 @@ export class ListProyectoAcademicoComponent implements OnInit {
   }
 
   loadData(): void {
+    this.loading = true;
     this.sgamidService.get('consulta_proyecto_academico/').subscribe(res => {
       if (res !== null) {
         const data = <Array<any>>res;
         data.forEach(element => {
           if (element.FechaVenimientoAcreditacion !== null) {
-            element.FechaVenimientoAcreditacion = momentTimezone.tz(element.FechaVenimientoAcreditacion, 'America/Bogota').format('DD-MM-YYYY')
+            element.FechaVenimientoAcreditacion = moment(element.FechaVenimientoAcreditacion, 'YYYY-MM-DD').format('DD-MM-YYYY');
           }
           if (element.FechaVenimientoCalidad !== null) {
-            element.FechaVenimientoCalidad = momentTimezone.tz(element.FechaVenimientoCalidad, 'america/Bogota').format('DD-MM-YYYY')
+            element.FechaVenimientoCalidad = moment(element.FechaVenimientoCalidad, 'YYYY-MM-DD').format('DD-MM-YYYY');
           }
-          element.codigo = element.ProyectoAcademico.CodigoSnies
-          element.NivelProyecto = element.ProyectoAcademico.NivelFormacionId.Nombre
-          element.proyecto = element.ProyectoAcademico.Nombre
-          element.Id = element.ProyectoAcademico.Id
+          element.codigo = element.ProyectoAcademico.Codigo;
+          element.codigoSNIES = element.ProyectoAcademico.CodigoSnies;
+          element.NivelProyecto = element.ProyectoAcademico.NivelFormacionId.Nombre;
+          element.proyecto = element.ProyectoAcademico.Nombre;
+          element.Id = element.ProyectoAcademico.Id;
           this.source.load(data)
         });
+        this.loading = false;
       }
     },
       (error: HttpErrorResponse) => {
@@ -201,6 +205,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
             this.translate.instant('GLOBAL.proyecto_academico'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+        this.loading = false;
       });
   }
 
@@ -221,9 +226,10 @@ export class ListProyectoAcademicoComponent implements OnInit {
 
   openDialogConsulta(): void {
     const dialogRef = this.dialog.open(ConsultaProyectoAcademicoComponent, {
-      width: '650px',
+      width: '1000px',
       height: '750px',
       data: {
+        codigointerno: this.codigo,
         codigosnies: this.codigosnies,
         nombre: this.nombre,
         facultad: this.facultad,
@@ -253,6 +259,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       width: '1000px',
       height: '750px',
       data: {
+        codigointerno: this.codigo,
         codigosnies: this.codigosnies,
         nombre: this.nombre,
         facultad: this.facultad,
@@ -332,6 +339,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
       dangerMode: true,
       showCancelButton: true,
     };
+    this.loading = true;
     this.sgamidService.get('consulta_proyecto_academico/').subscribe(
       (res: any[]) => {
         res.forEach(element => {
@@ -344,10 +352,12 @@ export class ListProyectoAcademicoComponent implements OnInit {
             this.filterPredicate(data.ProyectoAcademico.Nombre, filter);
           this.dataSource.data.forEach(
             (data: any) => (data.proyecto = data.ProyectoAcademico.Nombre),
-          ); // para ordenar por nommbre de proyecto
+          ); // para ordenar por nombre de proyecto
+          this.loading = false;
         } else {
           Swal.fire(opt1).then(willDelete => {
             if (willDelete.value) {
+              this.loading = false;
             }
           });
         }
@@ -359,6 +369,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
           text: this.translate.instant('ERROR.' + error.status),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+        this.loading = false;
       },
     );
   }
@@ -378,6 +389,9 @@ export class ListProyectoAcademicoComponent implements OnInit {
         (res: any) => {
           const r = <any>res;
           if (res !== null && r.Type !== 'error') {
+            this.codigo = res.map(
+              (data: any) => data.ProyectoAcademico.Codigo,
+            );
             this.codigosnies = res.map(
               (data: any) => data.ProyectoAcademico.CodigoSnies,
             );
@@ -445,6 +459,9 @@ export class ListProyectoAcademicoComponent implements OnInit {
         (res: any) => {
           const r = <any>res;
           if (res !== null && r.Type !== 'error') {
+            this.codigo = res.map(
+              (data: any) => data.ProyectoAcademico.Codigo,
+            );
             this.codigosnies = res.map(
               (data: any) => data.ProyectoAcademico.CodigoSnies,
             );
