@@ -1,37 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, Inject } from '@angular/core';
-import { OikosService } from '../../../@core/data/oikos.service';
-import { CoreService } from '../../../@core/data/core.service';
+import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
-import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import {FormBuilder, Validators, FormControl} from '@angular/forms';
-import {ProyectoAcademicoPost} from '../../../@core/data/models/proyecto_academico/proyecto_academico_post'
+import { TranslateService } from '@ngx-translate/core';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
-import { HttpErrorResponse } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
-import { ProyectoAcademicoInstitucion } from '../../../@core/data/models/proyecto_academico/proyecto_academico_institucion';
-import { TipoTitulacion } from '../../../@core/data/models/proyecto_academico/tipo_titulacion';
-import { Metodologia } from '../../../@core/data/models/proyecto_academico/metodologia';
-import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 import { RegistroCalificadoAcreditacion } from '../../../@core/data/models/proyecto_academico/registro_calificado_acreditacion';
 import { TipoRegistro } from '../../../@core/data/models/proyecto_academico/tipo_registro';
-import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academico/institucion_enfasis';
-import { Enfasis } from '../../../@core/data/models/proyecto_academico/enfasis';
-import { Titulacion } from '../../../@core/data/models/proyecto_academico/titulacion';
-import { TipoDependencia } from '../../../@core/data/models/oikos/tipo_dependencia';
-import { DependenciaTipoDependencia } from '../../../@core/data/models/oikos/dependencia_tipo_dependencia';
-import { Dependencia } from '../../../@core/data/models/oikos/dependencia';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as moment from 'moment';
-import { NbDialogService, NbDialogRef } from '@nebular/theme';
-// import { CrudEnfasisComponent } from '../../enfasis/crud-enfasis/crud-enfasis.component';
-import { ListEnfasisComponent } from '../../enfasis/list-enfasis/list-enfasis.component';
-import { ListEnfasisService } from '../../../@core/data/list_enfasis.service';
 import { Subscription } from 'rxjs';
-import { MatSelect } from '@angular/material/select';
-import { ActivatedRoute } from '@angular/router';
-import * as momentTimezone from 'moment-timezone';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { NuevoRegistro } from '../../../@core/data/models/proyecto_academico/nuevo_registro';
 import { ListRegistroProyectoAcademicoComponent } from '../list-registro_proyecto_academico/list-registro_proyecto_academico.component';
@@ -80,12 +59,8 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
   constructor(private translate: TranslateService,
   @Inject(MAT_DIALOG_DATA) public data: any,
     private toasterService: ToasterService,
-    private coreService: CoreService,
-    private proyectoacademicoService: ProyectoAcademicoService,
     public dialogRef: MatDialogRef<ListRegistroProyectoAcademicoComponent>,
     private sgamidService: SgaMidService,
-    private dialogService: NbDialogService,
-    private activatedRoute: ActivatedRoute,
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
     private sanitization: DomSanitizer,
@@ -219,7 +194,7 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
       if (willCreate.value) {
         await this.uploadFilesCreacionRegistro([this.fileDocumento]);
         this.registro_nuevo.EnlaceActo = this.idDocumento + '';
-        this.sgamidService.post('proyecto_academico/' + String(this.data.endpoint + '/' + String(this.data.IdProyecto)), this.registro_nuevo)
+        this.sgamidService.post('proyecto_academico/' + String(this.data.endpoint), this.registro_nuevo)
         .subscribe((res: any) => {
           if (res.Type === 'error') {
             Swal.fire({
@@ -233,7 +208,7 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
             const opt1: any = {
               title: this.translate.instant('historial_registro.creado'),
               text: this.translate.instant('historial_registro.registro_creado'),
-              icon: 'warning',
+              icon: 'success',
               buttons: true,
               dangerMode: true,
               showCancelButton: true,
