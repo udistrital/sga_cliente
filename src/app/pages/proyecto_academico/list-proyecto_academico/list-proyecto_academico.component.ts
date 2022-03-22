@@ -4,7 +4,6 @@ import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-t
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
@@ -531,6 +530,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
             this.resolucion_acreditacion_ano = res.map(
               (data: any) => data.Registro[0].AnoActoAdministrativoId,
             );
+
             this.fecha_creacion_resolucion = res.map(
               (data: any) => data.Registro[0].FechaCreacionActoAdministrativo,
             );

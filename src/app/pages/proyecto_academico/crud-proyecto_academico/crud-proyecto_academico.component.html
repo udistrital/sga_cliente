@@ -62,7 +62,7 @@
                                             <br>
 
                                         </div>
-                                        
+
                                         <div class="columna">
                                             <br>
                                             <mat-form-field>
@@ -110,7 +110,7 @@
                                             <br>
 
                                         </div>
-                                        
+
                                         <div class="columna">
                                             <mat-form-field>
                                                 <input matInput placeholder="{{ 'proyecto.numero_proyecto' | translate }}" formControlName="numero_proyecto"
@@ -124,32 +124,32 @@
                                                     class="form-control" name="creditos_proyecto">
                                                 <mat-error *ngIf="CampoCreditosControl.hasError('required')">{{
                                                     'proyecto.erro_creditos' | translate }}</mat-error>
-                                                </mat-form-field>
-                                                <br>
-                                                <br>
-                                                
-                                                <mat-form-field>
-                                                    <mat-label>{{ 'proyecto.tipo_duracion' | translate }}</mat-label>
-                                                    <mat-select [formControl]="Campo1Control" required [(ngModel)]="opcionSeleccionadoUnidad">
-                                                        <mat-option>--</mat-option>
-                                                        <mat-option *ngFor="let unidadtiempo of unidad" [value]="unidadtiempo">
-                                                            {{unidadtiempo['Nombre']}}
-                                                        </mat-option>
+                                            </mat-form-field>
+                                            <br>
+                                            <br>
+                                            
+                                            <mat-form-field>
+                                                <mat-label>{{ 'proyecto.tipo_duracion' | translate }}</mat-label>
+                                                <mat-select [formControl]="Campo1Control" required [(ngModel)]="opcionSeleccionadoUnidad">
+                                                    <mat-option>--</mat-option>
+                                                    <mat-option *ngFor="let unidadtiempo of unidad" [value]="unidadtiempo">
+                                                        {{unidadtiempo['Nombre']}}
+                                                    </mat-option>
                                                     </mat-select>
                                                 <mat-error *ngIf="Campo1Control.hasError('required')">{{
                                                     'proyecto.erro_unidad' | translate }}</mat-error>
-                                                </mat-form-field>
-                                                <br>
-                                                
-                                                <mat-form-field>
+                                            </mat-form-field>
+                                            <br>
+                                            
+                                            <mat-form-field>
                                                 <input matInput placeholder="{{ 'proyecto.duracion_proyecto' | translate }}" formControlName="duracion_proyecto"
                                                     class="form-control" name="duracion_proyecto">
                                                 <mat-error *ngIf="Campo12Control.hasError('required')">{{
                                                     'proyecto.erro_duracion' | translate }}</mat-error>
-                                                </mat-form-field>
+                                            </mat-form-field>
 
                                         </div>
-                                        
+
                                         <mat-checkbox formControlName="selector" [(ngModel)]="checkciclos">
                                             {{ 'proyecto.ciclo_proyecto' | translate }}
                                         </mat-checkbox>&nbsp;&nbsp;
@@ -387,8 +387,9 @@
                                         <nb-card-body>
                                             <div class="columna1">
                                                 <mat-form-field>
-                                                    <input matInput placeholder="{{ 'proyecto.titulacion_snies' | translate }}" formControlName="titulacion_snies"
-                                                        class="form-control" name="titulacion_snies">
+                                                    <textarea matInput placeholder="{{ 'proyecto.titulacion_snies' | translate }}" formControlName="titulacion_snies"
+                                                        class="form-control" name="titulacion_snies" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                                        cdkAutosizeMinRows="2.25" cdkAutosizeMaxRows="6"> </textarea>
                                                     <mat-error *ngIf="Campo18Control.hasError('required')">{{
                                                         'proyecto.erro_titu_snies' | translate }}</mat-error>
                                                 </mat-form-field>
@@ -396,8 +397,9 @@
                                                 <br>
 
                                                 <mat-form-field>
-                                                    <input matInput placeholder="{{ 'proyecto.titulacion_mujer' | translate }}" formControlName="titulacion_mujer"
-                                                        class="form-control" name="titulacion_mujer">
+                                                    <textarea matInput placeholder="{{ 'proyecto.titulacion_mujer' | translate }}" formControlName="titulacion_mujer"
+                                                        class="form-control" name="titulacion_mujer" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                                        cdkAutosizeMinRows="2.25" cdkAutosizeMaxRows="6"> </textarea>
                                                     <mat-error *ngIf="Campo19Control.hasError('required')">{{
                                                         'proyecto.erro_titu_mujer' | translate }}</mat-error>
                                                 </mat-form-field>
@@ -407,8 +409,9 @@
 
                                             <div class="columna1">
                                                 <mat-form-field>
-                                                    <input matInput placeholder="{{ 'proyecto.titulacion_hombre' | translate }}" formControlName="titulacion_hombre"
-                                                        class="form-control" name="titulacion_hombre">
+                                                    <textarea matInput placeholder="{{ 'proyecto.titulacion_hombre' | translate }}" formControlName="titulacion_hombre"
+                                                        class="form-control" name="titulacion_hombre" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                                        cdkAutosizeMinRows="2.25" cdkAutosizeMaxRows="6"> </textarea>
                                                     <mat-error *ngIf="Campo20Control.hasError('required')">{{
                                                         'proyecto.erro_titu_hombre' | translate }}</mat-error>
                                                 </mat-form-field>
