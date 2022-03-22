@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, ViewChild, NgZone } from '@angular/core';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { CoreService } from '../../../@core/data/core.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
@@ -35,6 +35,8 @@ import { Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -43,6 +45,14 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 })
 
 export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
+
+  @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
+
+  triggerResize() {
+    // Wait for changes to be applied, then trigger textarea resize.
+    this._ngZone.onStable.pipe(take(1)).subscribe(() => this.autosize.resizeToFitContent(true));
+  }
+
   isLinear = true;
   checkregistro = false;
   config: ToasterConfig;
@@ -137,6 +147,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private toasterService: ToasterService,
     private oikosService: OikosService,
     private routerService: Router,
+    private _ngZone: NgZone,
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,

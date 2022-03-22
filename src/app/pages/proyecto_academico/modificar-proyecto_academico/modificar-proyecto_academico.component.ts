@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, ViewChild, NgZone } from "@angular/core";
 import { OikosService } from "../../../@core/data/oikos.service";
 import { CoreService } from "../../../@core/data/core.service";
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from "angular2-toaster";
@@ -260,7 +260,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         .format("YYYY-MM-DDTHH:mm")
     );
     this.checkalta = Boolean(JSON.parse(this.data.tieneregistroaltacalidad));
-    // this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DD HH:mm');
+
     // enfasis
     this.arr_enfasis_proyecto = this.data.enfasis;
     this.source_emphasys.load(this.arr_enfasis_proyecto);
@@ -872,7 +872,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
                   text: this.translate.instant(
                     "editarproyecto.proyecto_actualizado"
                   ),
-                  icon: "warning",
+                  icon: "success",
                   buttons: true,
                   dangerMode: true,
                   showCancelButton: true
@@ -1061,7 +1061,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
                     text: this.translate.instant(
                       "editarproyecto.proyecto_actualizado"
                     ),
-                    icon: "warning",
+                    icon: "success",
                     buttons: true,
                     dangerMode: true,
                     showCancelButton: true
@@ -1205,7 +1205,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
                     text: this.translate.instant(
                       "editarproyecto.proyecto_actualizado"
                     ),
-                    icon: "warning",
+                    icon: "success",
                     buttons: true,
                     dangerMode: true,
                     showCancelButton: true
@@ -1287,11 +1287,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             );
           }
 
-          this.sgamidService
-            .post("proyecto_academico/coordinador/" +
-              String(this.data.Id),
-              this.coordinador_data
-            )
+          this.sgamidService.post("proyecto_academico/coordinador/", this.coordinador_data)
             .subscribe((res: any) => {
               if (res.Type === "error") {
                 Swal.fire({
@@ -1314,7 +1310,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
                   text: this.translate.instant(
                     "editarproyecto.coordinador_asignado"
                   ),
-                  icon: "warning",
+                  icon: "succes",
                   buttons: true,
                   dangerMode: true,
                   showCancelButton: true

@@ -131,9 +131,11 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
    })
 
   }
+
   prueba() {
     this.openDialogRegistro()
   }
+
   openDialogRegistro(): void {
     const dialogRef = this.dialog.open(ListRegistroProyectoAcademicoComponent, {
       width: '1900px',
