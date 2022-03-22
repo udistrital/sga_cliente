@@ -332,8 +332,8 @@
                   <mat-label>* {{ "proyecto.fecha_asignacion" | translate }}:</mat-label>
                   <input matInput [(ngModel)]="fecha_creacion_cordin" [matDatepicker]="picker1"
                     placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion_coordinador">
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
                   <mat-error *ngIf="Campo14Control.hasError('required')">
                     {{ "editarproyecto.erro_fecha_creacion" | translate }}</mat-error>
                 </mat-form-field>
@@ -440,7 +440,7 @@
 
                 <mat-form-field>
                   <mat-label>* {{ "proyecto.fecha_creacion" | translate }}:</mat-label>
-                  <input matInput [(ngModel)]="fecha_creacion_calificado" [matDatepicker]="picker2"
+                  <input matInput [(ngModel)]="fecha_creacion_calificado" [matDatepicker]="picker"
                     placeholder="{{ 'proyecto.fecha_creacion' | translate }}" formControlName="fecha_creacion">
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
