@@ -5,8 +5,26 @@ import * as moment from 'moment';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { UserService } from '../../../@core/data/users.service';
 import { CustomizeButtonComponent } from '../../../@theme/components/customize-button/customize-button.component';
 import { PopUpManager } from '../../../managers/popUpManager';
+
+interface RegistroNotasDocente {
+  Nivel: string;
+  Codigo: number;
+  Asignatura: string,
+  Periodo: string,
+  PeriodoId: number,
+  Grupo: string,
+  Inscritos: number
+  Proyecto_Academico: string,
+  AsignaturaId: string,
+  Opcion: {
+    icon: 'fa fa-pencil fa-2x',
+    label: 'Registrar notas',
+    class: "btn btn-primary"
+  };
+}
 
 @Component({
   selector: 'list-notas',
@@ -39,11 +57,14 @@ export class ListNotasComponent implements OnInit {
     }
   };
 
+  IdAsignatura: string = "";
+
   constructor(
     private router: Router,
     private sgaMidService: SgaMidService,
     private translate: TranslateService,
     private popUpManager: PopUpManager,
+    private userService: UserService,
   ) { 
     this.dataSource = new LocalDataSource();
 
@@ -67,7 +88,7 @@ export class ListNotasComponent implements OnInit {
         Codigo: {
           title: this.translate.instant('GENERAL.codigo'),
           editable: false,
-          width: '30%',
+          width: '7%',
           filter: false,
         },
         Asignatura: {
@@ -84,19 +105,19 @@ export class ListNotasComponent implements OnInit {
         },
         Grupo: {
           title: this.translate.instant('notas.grupo'),
-          width: '15%',
+          width: '10%',
           editable: false,
           filter: false,
         },
         Inscritos: {
           title: this.translate.instant('notas.inscritos'),
-          width: '15%',
+          width: '5%',
           editable: false,
           filter: false,
         },
-        Carrera: {
+        Proyecto_Academico: {
           title: this.translate.instant('notas.carrera'),
-          width: '15%',
+          width: '20%',
           editable: false,
           filter: false,
         },
@@ -108,9 +129,10 @@ export class ListNotasComponent implements OnInit {
           renderComponent: CustomizeButtonComponent,
           type: 'custom',
           onComponentInitFunction: (instance) => {
-            instance.save.subscribe((data) => {
+            instance.save.subscribe((data: RegistroNotasDocente) => {
               //this.router.navigate([`pages/notas/crud-notas/${data.Id}`])
-              this.bringActivities(data.periodoId);
+              console.log([`pages/notas/crud-notas/${data.AsignaturaId}`])
+              this.bringActivities(data.PeriodoId,data.AsignaturaId);
             })
           },
         },
@@ -121,68 +143,419 @@ export class ListNotasComponent implements OnInit {
 
 
   loadData() {
-    const data = [{
-      Nivel: 'Pregrado',
-      Codigo: 1125,
-      Asignatura: "Bases de datos",
-      periodoId: "8",
-      Periodo: "2021-2",
-      Grupo: '1',
-      Inscritos: 15,
-      Carrera: "Ingenieria de sistemas",
-      Opcion: {
-        icon: 'fa fa-pencil fa-2x',
-        label: 'Registrar notas',
-        class: "btn btn-primary"
+
+    var data: RegistroNotasDocente[];
+
+    var docenteId = this.userService.getPersonaId();
+
+    console.log(docenteId)
+
+    this.sgaMidService.get('notas/listaEspaciosAcademicos/' + docenteId).subscribe(
+      (response: any) => {
+        if (response !== null && response.Status == '404') {
+          this.popUpManager.showErrorAlert(this.translate.instant('notas.sin_registros'));
+        } else {
+          data = response.Data;
+          data.forEach(registro => {
+            registro.Opcion = {
+              icon: 'fa fa-pencil fa-2x',
+              label: 'Registrar notas',
+              class: "btn btn-primary"
+            };
+          })
+          console.log(data)
+          this.dataSource.load(data);
+        }
       },
-    },
-    {
-      Nivel: 'Posgrado',
-      Codigo: 1125,
-      Asignatura: "Bases de datos",
-      periodoId: "7",
-      Periodo: "2021-2",
-      Grupo: '1',
-      Inscritos: 15,
-      Carrera: "Ingenieria de sistemas",
-      Opcion: {
-        icon: 'fa fa-pencil fa-2x',
-        label: 'Registrar notas',
-        class: "btn btn-primary"
-      },
-    },
-    {
-      Nivel: 'Posgrado',
-      Codigo: 1125,
-      Asignatura: "Bases de datos",
-      periodoId: "6",
-      Periodo: "2020-3",
-      Grupo: '1',
-      Inscritos: 15,
-      Carrera: "Ingenieria de sistemas",
-      Opcion: {
-        icon: 'fa fa-pencil fa-2x',
-        label: 'Registrar notas',
-        class: "btn btn-primary"
-      },
-    }
-  ]
-    this.dataSource.load(data)
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    )
+
+
+    
+    
   }
 
-  async bringActivities(periodo){
+  async bringActivities(periodo,asignatura){
+    var response: any = [
+      {
+        "Activo": true,
+        "Id": "7",
+        "ListaCalendario": null,
+        "Nivel": 2,
+        "Nombre": "Calendario Académico 2021-2 Posgrado",
+        "PeriodoId": 12,
+        "proceso": [
+          {
+            "Actividades": [
+              {
+                "Activo": true,
+                "Descripcion": "prueba",
+                "EventoPadreId": null,
+                "FechaFin": "2030-06-04T00:00:00Z",
+                "FechaInicio": "2021-12-01T00:00:00Z",
+                "Nombre": "Admisiones ",
+                "Responsable": [
+                  {
+                    "Nombre": "Aspirantes",
+                    "responsableID": 2
+                  }
+                ],
+                "TipoEventoId": {
+                  "Activo": false,
+                  "CalendarioID": {
+                    "Activo": true,
+                    "AplicacionId": 0,
+                    "CalendarioPadreId": null,
+                    "DependenciaId": "{\"proyectos\":[30,29,28,26,25,27,48,32,31,21]}",
+                    "Descripcion": "",
+                    "DocumentoId": 142735,
+                    "FechaCreacion": "2021-12-10 08:38:09.716123 +0000 +0000",
+                    "FechaModificacion": "2022-02-28 08:51:20.798855 +0000 +0000",
+                    "Id": 7,
+                    "Nivel": 2,
+                    "Nombre": "Calendario Académico 2021-2 Posgrado",
+                    "PeriodoId": 12
+                  },
+                  "CodigoAbreviacion": "",
+                  "Descripcion": "Prueba",
+                  "FechaCreacion": "2021-12-10 08:38:27.661288 +0000 +0000",
+                  "FechaModificacion": "2021-12-10 08:38:27.661389 +0000 +0000",
+                  "Id": 9,
+                  "Nombre": "Admisiones ",
+                  "TipoRecurrenciaId": {
+                    "Activo": true,
+                    "CodigoAbreviacion": "SEM",
+                    "Descripcion": "Semestral",
+                    "FechaCreacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "FechaModificacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "Id": 7,
+                    "Nombre": "Semestral"
+                  }
+                },
+                "actividadId": 13
+              },
+              {
+                "Activo": true,
+                "Descripcion": "Pago de aspirantes ",
+                "EventoPadreId": null,
+                "FechaFin": "2030-06-12T00:00:00Z",
+                "FechaInicio": "2021-07-09T00:00:00Z",
+                "Nombre": "PAGO INSCRIPCIÓN  DE ASPIRANTES",
+                "Responsable": [
+                  {
+                    "Nombre": "Aspirantes",
+                    "responsableID": 2
+                  }
+                ],
+                "TipoEventoId": {
+                  "Activo": false,
+                  "CalendarioID": {
+                    "Activo": true,
+                    "AplicacionId": 0,
+                    "CalendarioPadreId": null,
+                    "DependenciaId": "{\"proyectos\":[30,29,28,26,25,27,48,32,31,21]}",
+                    "Descripcion": "",
+                    "DocumentoId": 142735,
+                    "FechaCreacion": "2021-12-10 08:38:09.716123 +0000 +0000",
+                    "FechaModificacion": "2022-02-28 08:51:20.798855 +0000 +0000",
+                    "Id": 7,
+                    "Nivel": 2,
+                    "Nombre": "Calendario Académico 2021-2 Posgrado",
+                    "PeriodoId": 12
+                  },
+                  "CodigoAbreviacion": "",
+                  "Descripcion": "Prueba",
+                  "FechaCreacion": "2021-12-10 08:38:27.661288 +0000 +0000",
+                  "FechaModificacion": "2021-12-10 08:38:27.661389 +0000 +0000",
+                  "Id": 9,
+                  "Nombre": "Admisiones ",
+                  "TipoRecurrenciaId": {
+                    "Activo": true,
+                    "CodigoAbreviacion": "SEM",
+                    "Descripcion": "Semestral",
+                    "FechaCreacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "FechaModificacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "Id": 7,
+                    "Nombre": "Semestral"
+                  }
+                },
+                "actividadId": 12
+              }
+            ],
+            "Proceso": "Admisiones "
+          },
+          {
+            "Actividades": [
+              {
+                "Activo": true,
+                "Descripcion": "Pago de aspirantes ",
+                "EventoPadreId": null,
+                "FechaFin": "2038-07-09T00:00:00Z",
+                "FechaInicio": "2021-11-11T00:00:00Z",
+                "Nombre": "Pago inscripción aspirantes ",
+                "Responsable": [
+                  {
+                    "Nombre": "Aspirantes",
+                    "responsableID": 2
+                  }
+                ],
+                "TipoEventoId": {
+                  "Activo": false,
+                  "CalendarioID": {
+                    "Activo": true,
+                    "AplicacionId": 0,
+                    "CalendarioPadreId": null,
+                    "DependenciaId": "{\"proyectos\":[30,29,28,26,25,27,48,32,31,21]}",
+                    "Descripcion": "",
+                    "DocumentoId": 142735,
+                    "FechaCreacion": "2021-12-10 08:38:09.716123 +0000 +0000",
+                    "FechaModificacion": "2022-02-28 08:51:20.798855 +0000 +0000",
+                    "Id": 7,
+                    "Nivel": 2,
+                    "Nombre": "Calendario Académico 2021-2 Posgrado",
+                    "PeriodoId": 12
+                  },
+                  "CodigoAbreviacion": "",
+                  "Descripcion": "Pago Inscripción de aspirantes",
+                  "FechaCreacion": "2021-12-10 08:39:55.832084 +0000 +0000",
+                  "FechaModificacion": "2021-12-10 08:39:55.832178 +0000 +0000",
+                  "Id": 10,
+                  "Nombre": "Inscripción",
+                  "TipoRecurrenciaId": {
+                    "Activo": true,
+                    "CodigoAbreviacion": "SEM",
+                    "Descripcion": "Semestral",
+                    "FechaCreacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "FechaModificacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "Id": 7,
+                    "Nombre": "Semestral"
+                  }
+                },
+                "actividadId": 14
+              }
+            ],
+            "Proceso": "Inscripción"
+          },
+          {
+            "Actividades": [
+              {
+                "Activo": true,
+                "Descripcion": "Fecha limite para primer corte",
+                "EventoPadreId": null,
+                "FechaFin": "2022-02-25T00:00:00Z",
+                "FechaInicio": "2022-02-05T00:00:00Z",
+                "Nombre": "Fecha limite para primer corte",
+                "Responsable": [
+                  {
+                    "Nombre": "Docentes",
+                    "responsableID": 15
+                  }
+                ],
+                "TipoEventoId": {
+                  "Activo": false,
+                  "CalendarioID": {
+                    "Activo": true,
+                    "AplicacionId": 0,
+                    "CalendarioPadreId": null,
+                    "DependenciaId": "{\"proyectos\":[30,29,28,26,25,27,48,32,31,21]}",
+                    "Descripcion": "",
+                    "DocumentoId": 142735,
+                    "FechaCreacion": "2021-12-10 08:38:09.716123 +0000 +0000",
+                    "FechaModificacion": "2022-02-28 08:51:20.798855 +0000 +0000",
+                    "Id": 7,
+                    "Nivel": 2,
+                    "Nombre": "Calendario Académico 2021-2 Posgrado",
+                    "PeriodoId": 12
+                  },
+                  "CodigoAbreviacion": "",
+                  "Descripcion": "Proceso de Calificaciones",
+                  "FechaCreacion": "2022-02-28 08:54:05.495977 +0000 +0000",
+                  "FechaModificacion": "2022-02-28 08:54:05.496084 +0000 +0000",
+                  "Id": 11,
+                  "Nombre": "Calificaciones",
+                  "TipoRecurrenciaId": {
+                    "Activo": true,
+                    "CodigoAbreviacion": "SEM",
+                    "Descripcion": "Semestral",
+                    "FechaCreacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "FechaModificacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "Id": 7,
+                    "Nombre": "Semestral"
+                  }
+                },
+                "actividadId": 15
+              },
+              {
+                "Activo": true,
+                "Descripcion": "Fecha limite para Habilitaciones ",
+                "EventoPadreId": null,
+                "FechaFin": "2022-06-01T00:00:00Z",
+                "FechaInicio": "2022-05-02T00:00:00Z",
+                "Nombre": "Fecha limite para Habilitaciones ",
+                "Responsable": [
+                  {
+                    "Nombre": "Docentes",
+                    "responsableID": 15
+                  }
+                ],
+                "TipoEventoId": {
+                  "Activo": false,
+                  "CalendarioID": {
+                    "Activo": true,
+                    "AplicacionId": 0,
+                    "CalendarioPadreId": null,
+                    "DependenciaId": "{\"proyectos\":[30,29,28,26,25,27,48,32,31,21]}",
+                    "Descripcion": "",
+                    "DocumentoId": 142735,
+                    "FechaCreacion": "2021-12-10 08:38:09.716123 +0000 +0000",
+                    "FechaModificacion": "2022-02-28 08:51:20.798855 +0000 +0000",
+                    "Id": 7,
+                    "Nivel": 2,
+                    "Nombre": "Calendario Académico 2021-2 Posgrado",
+                    "PeriodoId": 12
+                  },
+                  "CodigoAbreviacion": "",
+                  "Descripcion": "Proceso de Calificaciones",
+                  "FechaCreacion": "2022-02-28 08:54:05.495977 +0000 +0000",
+                  "FechaModificacion": "2022-02-28 08:54:05.496084 +0000 +0000",
+                  "Id": 11,
+                  "Nombre": "Calificaciones",
+                  "TipoRecurrenciaId": {
+                    "Activo": true,
+                    "CodigoAbreviacion": "SEM",
+                    "Descripcion": "Semestral",
+                    "FechaCreacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "FechaModificacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "Id": 7,
+                    "Nombre": "Semestral"
+                  }
+                },
+                "actividadId": 18
+              },
+              {
+                "Activo": true,
+                "Descripcion": "Fecha limite para Ultimo corte",
+                "EventoPadreId": null,
+                "FechaFin": "2022-05-31T00:00:00Z",
+                "FechaInicio": "2022-04-01T00:00:00Z",
+                "Nombre": "Fecha limite para Ultimo corte",
+                "Responsable": [
+                  {
+                    "Nombre": "Docentes",
+                    "responsableID": 15
+                  }
+                ],
+                "TipoEventoId": {
+                  "Activo": false,
+                  "CalendarioID": {
+                    "Activo": true,
+                    "AplicacionId": 0,
+                    "CalendarioPadreId": null,
+                    "DependenciaId": "{\"proyectos\":[30,29,28,26,25,27,48,32,31,21]}",
+                    "Descripcion": "",
+                    "DocumentoId": 142735,
+                    "FechaCreacion": "2021-12-10 08:38:09.716123 +0000 +0000",
+                    "FechaModificacion": "2022-02-28 08:51:20.798855 +0000 +0000",
+                    "Id": 7,
+                    "Nivel": 2,
+                    "Nombre": "Calendario Académico 2021-2 Posgrado",
+                    "PeriodoId": 12
+                  },
+                  "CodigoAbreviacion": "",
+                  "Descripcion": "Proceso de Calificaciones",
+                  "FechaCreacion": "2022-02-28 08:54:05.495977 +0000 +0000",
+                  "FechaModificacion": "2022-02-28 08:54:05.496084 +0000 +0000",
+                  "Id": 11,
+                  "Nombre": "Calificaciones",
+                  "TipoRecurrenciaId": {
+                    "Activo": true,
+                    "CodigoAbreviacion": "SEM",
+                    "Descripcion": "Semestral",
+                    "FechaCreacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "FechaModificacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "Id": 7,
+                    "Nombre": "Semestral"
+                  }
+                },
+                "actividadId": 17
+              },
+              {
+                "Activo": true,
+                "Descripcion": "Fecha limite para segundo corte",
+                "EventoPadreId": null,
+                "FechaFin": "2022-03-31T00:00:00Z",
+                "FechaInicio": "2022-02-28T00:00:00Z",
+                "Nombre": "Fecha limite para segundo corte",
+                "Responsable": [
+                  {
+                    "Nombre": "Docentes",
+                    "responsableID": 15
+                  }
+                ],
+                "TipoEventoId": {
+                  "Activo": false,
+                  "CalendarioID": {
+                    "Activo": true,
+                    "AplicacionId": 0,
+                    "CalendarioPadreId": null,
+                    "DependenciaId": "{\"proyectos\":[30,29,28,26,25,27,48,32,31,21]}",
+                    "Descripcion": "",
+                    "DocumentoId": 142735,
+                    "FechaCreacion": "2021-12-10 08:38:09.716123 +0000 +0000",
+                    "FechaModificacion": "2022-02-28 08:51:20.798855 +0000 +0000",
+                    "Id": 7,
+                    "Nivel": 2,
+                    "Nombre": "Calendario Académico 2021-2 Posgrado",
+                    "PeriodoId": 12
+                  },
+                  "CodigoAbreviacion": "",
+                  "Descripcion": "Proceso de Calificaciones",
+                  "FechaCreacion": "2022-02-28 08:54:05.495977 +0000 +0000",
+                  "FechaModificacion": "2022-02-28 08:54:05.496084 +0000 +0000",
+                  "Id": 11,
+                  "Nombre": "Calificaciones",
+                  "TipoRecurrenciaId": {
+                    "Activo": true,
+                    "CodigoAbreviacion": "SEM",
+                    "Descripcion": "Semestral",
+                    "FechaCreacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "FechaModificacion": "2019-12-18 02:10:05.435446 +0000 +0000",
+                    "Id": 7,
+                    "Nombre": "Semestral"
+                  }
+                },
+                "actividadId": 16
+              }
+            ],
+            "Proceso": "Calificaciones"
+          }
+        ],
+        "resolucion": {
+          "Anno": "2020",
+          "Enlace": "aceada39-f2bb-45e6-8ca9-a2306bfc0736",
+          "Id": 142735,
+          "Nombre": "",
+          "Resolucion": 123
+        }
+      }
+    ];
+    this.proceso = response[0].proceso.filter(proceso => this.existe(proceso.Proceso,["calificaciones"]))[0];
+    this.chechDates(asignatura)
+
     this.loading = true;
       this.proceso = undefined;
       this.sgaMidService.get('consulta_calendario_academico/'+periodo).subscribe(
         (response: any) => {
           if(response === null){
-            this.popUpManager.showErrorAlert(this.translate.instant('notas.sin_calendario'));/* "No se encuentra calendario para periodo" */
+            this.popUpManager.showErrorAlert(this.translate.instant('notas.sin_calendario'));//* "No se encuentra calendario para periodo" 
           }
           else {
             this.proceso = response[0].proceso.filter(proceso => this.existe(proceso.Proceso,["calificaciones"]))[0];
             if( this.proceso === undefined)
             {
-              this.popUpManager.showErrorAlert(this.translate.instant('notas.no_proceso_calificaciones'));/* "No hay proceso de Calificaciones" */
+              this.popUpManager.showErrorAlert(this.translate.instant('notas.no_proceso_calificaciones'));//* "No hay proceso de Calificaciones" 
             }
             else{
               this.chechDates(periodo)
@@ -195,9 +568,11 @@ export class ListNotasComponent implements OnInit {
           this.loading = false;
         }
       );
+
+
   }
 
-  chechDates(periodo){
+  chechDates(asignatura){
 
     this.validado = {
       corte1: {
@@ -255,19 +630,19 @@ export class ListNotasComponent implements OnInit {
     {
       if(this.validado.corte1.enFecha){
         this.popUpManager.showConfirmAlert(this.translate.instant('notas.fecha_corte1')); //"Esta ingresando a fechas 1 corte"
-        this.router.navigate([`pages/notas/crud-notas/${periodo}`])
+        this.router.navigate([`pages/notas/crud-notas/${asignatura}`])
       }
       else if(this.validado.corte2.enFecha){
         this.popUpManager.showConfirmAlert(this.translate.instant('notas.fecha_corte2')); //"Esta ingresando a fechas 2 corte"
-        this.router.navigate([`pages/notas/crud-notas/${periodo}`])
+        this.router.navigate([`pages/notas/crud-notas/${asignatura}`])
       }
       else if(this.validado.examen.enFecha){
         this.popUpManager.showConfirmAlert(this.translate.instant('notas.fecha_examen')); //"Esta ingresando a fechas examen"
-        this.router.navigate([`pages/notas/crud-notas/${periodo}`])
+        this.router.navigate([`pages/notas/crud-notas/${asignatura}`])
       }
       else if(this.validado.habilit.enFecha){
         this.popUpManager.showConfirmAlert(this.translate.instant('notas.fecha_habilit')); //"Esta ingresando a fechas habilit"
-        this.router.navigate([`pages/notas/crud-notas/${periodo}`])
+        this.router.navigate([`pages/notas/crud-notas/${asignatura}`])
       }
       else{
         this.popUpManager.showErrorAlert(this.translate.instant('notas.fuera_fechas')); //"fuera de fechas"
