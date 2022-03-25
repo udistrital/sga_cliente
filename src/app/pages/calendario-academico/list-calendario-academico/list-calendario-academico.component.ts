@@ -53,7 +53,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.data = []
-    this.sgaMidService.get('consulta_calendario_academico?limit=0').subscribe(
+    this.sgaMidService.get('calendario_academico?limit=0').subscribe(
       (response: any ) => {
         const r = <any>response;
         if (response !== null && r.Response.Code == '404') {
@@ -202,7 +202,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
     this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_continuar_inhabilitar_calendario'))
       .then(willDelete => {
         if (willDelete.value) {
-          this.sgaMidService.put('consulta_calendario_academico/inhabilitar_calendario/' + event.data.Id, JSON.stringify({ 'id': event.data.Id })).subscribe(
+          this.sgaMidService.put('calendario_academico/inhabilitar_calendario/' + event.data.Id, JSON.stringify({ 'id': event.data.Id })).subscribe(
             (response: any) => {
               if (JSON.stringify(response) != '200') {
                 this.popUpManager.showErrorAlert(this.translate.instant('calendario.calendario_no_inhabilitado'));

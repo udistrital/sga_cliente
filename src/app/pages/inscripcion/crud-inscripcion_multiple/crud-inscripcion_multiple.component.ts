@@ -706,7 +706,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.loading = false;
   }
 
-  createInscripcion(tercero_id): void {
+  createInscripcion(): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.preinscripcion'),
       text: this.translate.instant('GLOBAL.preinscripcion_2') + '?',
@@ -799,7 +799,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       this.proyectos_preinscripcion_post = {
         DatosPreinscripcion: this.info_inscripcion,
       }
-      this.createInscripcion(5);
+      this.createInscripcion();
     } else {
       Swal.fire({
         icon: 'error',

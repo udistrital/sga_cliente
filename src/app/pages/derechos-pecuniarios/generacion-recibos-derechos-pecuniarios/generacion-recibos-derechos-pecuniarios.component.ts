@@ -95,8 +95,6 @@ export class GeneracionRecibosDerechosPecuniarios {
     this.info_persona_id = this.userService.getPersonaId();
     this.userService.tercero$.subscribe((user) => {
       this.userData = user;
-      this.generacion_recibo.username = this.userData.NombreCompleto;
-      this.generacion_recibo.documentId = this.userData.Documento;
     })
     this.loadInfoPersona();
     this.createTable();
@@ -440,10 +438,8 @@ export class GeneracionRecibosDerechosPecuniarios {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         },
       );
-      this.loading = false;
     }
   }
-
 
   generar_recibo() {
     if (this.recibos_pendientes >= 3) {
@@ -492,6 +488,7 @@ export class GeneracionRecibosDerechosPecuniarios {
         });
     }
   }
+
   descargarReciboPago(data) {
     if (this.info_info_persona != null) {
       this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
@@ -541,7 +538,6 @@ export class GeneracionRecibosDerechosPecuniarios {
   }
 
   cargarPeriodo() {
-    this.loading = true;
     this.vigencias = []
 
     return new Promise((resolve, reject) => {
@@ -559,7 +555,6 @@ export class GeneracionRecibosDerechosPecuniarios {
               this.vigencias.push(element);
             });
           }
-          this.loading = false;
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
@@ -625,4 +620,9 @@ export class GeneracionRecibosDerechosPecuniarios {
     this.gen_recibo = true;
   }
 
+  nuevoDerecho() {
+    this.generacion_recibo.username = this.userData.NombreCompleto;
+    this.generacion_recibo.documentId = this.userData.Documento;
+    this.new_pecuniario = true
+  }
 }
