@@ -3,23 +3,140 @@
         {{ 'notas.captura_notas_parciales' | translate }}
     </nb-card-header>
     <nb-card-body>
+
+        <fieldset [ngClass]="{'fieldseter':true}">
+            <legend> {{ 'notas.registro_notas_parciales' | translate }} </legend>
+            <div class="container-docente">
+                <div class="row d-flex align-items-end fila">
+                    <div class="col-lg-4">
+                        <div class="row d-flex align-items-end">
+                            <div class="col-sm-auto">
+                                <label>{{ 'notas.docente' | translate }}: </label>
+                            </div>
+                            <div class="col-sm">
+                                <label class="underline">{{dataDocente.Docente}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row d-flex align-items-end">
+                            <div class="col-sm-auto">
+                                <label>{{ 'notas.identificacion' | translate }}: </label>
+                            </div>
+                            <div class="col-sm">
+                                <label class="underline">{{dataDocente.Identificacion}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex align-items-end fila">
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-sm-auto">
+                                <label>{{ 'notas.codigo' | translate }}: </label>
+                            </div>
+                            <div class="col-sm">
+                                <label class="underline">{{dataDocente.Codigo}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-sm-auto">
+                                <label>{{ 'notas.asignatura' | translate }}: </label>
+                            </div>
+                            <div class="col-sm">
+                                <label class="underline">{{dataDocente.Asignatura}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-sm-auto">
+                                <label>{{ 'notas.nivel' | translate }}: </label>
+                            </div>
+                            <div class="col-sm">
+                                <label class="underline">{{dataDocente.Nivel}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex align-items-end fila">
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-sm-auto">
+                                <label>{{ 'notas.grupo' | translate }}: </label>
+                            </div>
+                            <div class="col-sm">
+                                <label class="underline">{{dataDocente.Grupo}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="row">
+                            <div class="col-sm-auto">
+                                <label>{{ 'notas.inscritos' | translate }}: </label>
+                            </div>
+                            <div class="col-sm">
+                                <label class="underline">{{dataDocente.Inscritos}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="row">
+                            <div class="col-sm-auto">
+                                <label>{{ 'notas.creditos' | translate }}: </label>
+                            </div>
+                            <div class="col-sm">
+                                <label class="underline">{{dataDocente.Creditos}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-sm-auto">
+                                <label>{{ 'notas.periodo' | translate }}: </label>
+                            </div>
+                            <div class="col-sm">
+                                <label class="underline">{{dataDocente.Periodo}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <br><br>
+
         <fieldset [ngClass]="{'fieldseter':true} ">
             <legend> {{ 'notas.captura_porcentajes' | translate }} </legend>
-            <div class="container-notes">
-                <ngx-note-percentage (formObservable)="formSettings1($event)" [settings]="settings1">
+            <br>
+            <div *ngIf="cajaPorcentajesVer" class="container-notes">
+                
+                <ngx-note-percentage (formObservable)="formSettings1($event)" [settings]="Corte1">
                 </ngx-note-percentage>
-                <ngx-note-percentage (formObservable)="formSettings2($event)" [settings]="settings2">
+                <ngx-note-percentage (formObservable)="formSettings2($event)" [settings]="Corte2">
                 </ngx-note-percentage>
-                <ngx-note-percentage (formObservable)="formSettings3($event)" [settings]="settings3">
+                <ngx-note-percentage (formObservable)="formSettings3($event)" [settings]="Examen">
                 </ngx-note-percentage>
-                <ngx-note-percentage (formObservable)="formSettings4($event)" [settings]="settings4">
+                <ngx-note-percentage (formObservable)="formSettings4($event)" [settings]="Habilit">
                 </ngx-note-percentage>
                 <div class="container-form">
                     <h5> Total </h5>
                     {{totalPercentage}}
                 </div>
             </div>
+            <br><br>
+            <div class="row d-flex align-items-center">
+                <div class="col-md" align="center">
+                    <button [disabled]="!GuardarEstructuraNota" mat-flat-button color="primary" (click)="updateEstructuraNota()">{{ 'notas.guardar' | translate }}</button>
+                </div>
+            </div>
         </fieldset>
+
+        
+
+
         <br><br>
         <fieldset [ngClass]="{'fieldseter':true}" *ngIf="students">
             <legend> {{ 'notas.captura_notas' | translate }} </legend>

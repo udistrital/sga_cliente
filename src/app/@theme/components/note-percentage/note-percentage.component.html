@@ -6,7 +6,7 @@
                 <mat-form-field>
                     <mat-label for="i">{{settingFields[i].label}}</mat-label>
                     <input id="i" placeholder="{{settingFields[i].placeholder}}" formControlName="{{settingFields[i].name?settingFields[i].name:field}}" matInput
-                        type="number">
+                        type="number" min="0" max="100">
                 </mat-form-field>
             </div>
         </div>
