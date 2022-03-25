@@ -380,6 +380,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4; // Formación académica
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_docu)) / 4; // Documentos solicitados
     this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_expe)) / 4; // Experiencia laboral
+    this.result.emit(this.percentage_total);
     if (sessionStorage.EstadoInscripcion) {
       if (this.percentage_total >= 100) {
         this.total = false;
@@ -576,7 +577,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
         this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',DocumentoProgramaId.TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + '&limit=0').subscribe(
           (res: any[]) => {
-            console.log(res)
             if (res !== null && JSON.stringify(res[0]) !== '{}') {
               this.percentage_docu = 0;
               for (let i = 0; i < res.length; i++) {

@@ -30,7 +30,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
   dataTransferencia: TransferenciaInternaReintegro = null;
   terminadaInscripcion: boolean = false;
   solicitudCreada: boolean = false;
-  mostrarDocumento: boolean = false;
+  mostrarDocumento: boolean = true;
   solicitudId: any;
   inscriptionSettings: any = null;
   process: string;
@@ -254,6 +254,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
 
             if ((inscripcion['Data']['Estado']['Nombre'] !== 'Requiere modificación' && this.process === 'my') || this.process === 'all') {
               this.formTransferencia.campos[this.getIndexFormTrans('SoporteDocumento')].ocultar = true;
+              // this.formTransferencia.campos[origenExterno].ocultar = true;
               this.solicitudCreada = true;
               this.mostrarDocumento = true;
               this.formTransferencia.campos.forEach(campo => {
@@ -266,6 +267,8 @@ export class SolicitudTransferenciaComponent implements OnInit {
                 label: this.translate.instant('inscripcion.' + 'placeholder_soportes_documentos')
               }
             } else {
+              this.formTransferencia.campos[origen].deshabilitar = true;
+              this.formTransferencia.campos[origenExterno].deshabilitar = true;
               this.solicitudCreada = true;
               this.mostrarDocumento = false;
               this.comentario = inscripcion['Data']['DatosRespuesta']['Observacion'];
@@ -576,5 +579,9 @@ export class SolicitudTransferenciaComponent implements OnInit {
         },
       );
     }
+  }
+
+  prueba(event) {
+    console.log(event)
   }
 }
