@@ -126,6 +126,7 @@ export const FORM_SOLICITUD_TRANSFERENCIA = {
             placeholder_i18n: 'placeholder_cantidad_creditos_aprobados',
             requerido: true,
             tipo: 'number',
+            minimo: 0,
         },
         {
             etiqueta: 'input',
@@ -135,6 +136,7 @@ export const FORM_SOLICITUD_TRANSFERENCIA = {
             placeholder_i18n: 'placeholder_ultimo_semestre',
             requerido: true,
             tipo: 'number',
+            minimo: 0,
         },
         {
             etiqueta: 'checkbox',

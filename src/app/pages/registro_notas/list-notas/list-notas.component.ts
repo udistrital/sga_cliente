@@ -173,13 +173,13 @@ export class ListNotasComponent implements OnInit {
   async bringActivities(periodo){
     this.loading = true;
       this.proceso = undefined;
-      this.sgaMidService.get('consulta_calendario_academico/'+periodo).subscribe(
+    this.sgaMidService.get('calendario_academico/' + periodo).subscribe(
         (response: any) => {
-          if(response === null){
+        if (response == null || !response.Success) {
             this.popUpManager.showErrorAlert(this.translate.instant('notas.sin_calendario'));/* "No se encuentra calendario para periodo" */
           }
           else {
-            this.proceso = response[0].proceso.filter(proceso => this.existe(proceso.Proceso,["calificaciones"]))[0];
+          this.proceso = response.Data[0].proceso.filter(proceso => this.existe(proceso.Proceso, ["calificaciones"]))[0];
             if( this.proceso === undefined)
             {
               this.popUpManager.showErrorAlert(this.translate.instant('notas.no_proceso_calificaciones'));/* "No hay proceso de Calificaciones" */
