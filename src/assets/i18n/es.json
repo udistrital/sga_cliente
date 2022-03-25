@@ -1987,7 +1987,6 @@
         "hasta": "HASTA",
         "elije_fecha_inicio": "Elige fecha inicio",
         "elije_fecha_fin": "Elige fecha fin",
-        
         "sin_calendario": "No se encuentra calendario para este periodo",
         "no_proceso_calificaciones": "No hay proceso de Calificaciones",
         "fecha_corte1": "Registro de notas para Primer Corte",
@@ -2008,7 +2007,20 @@
         "ajuste_exitoso": "¡Ajuste de fechas exitoso!",
         "select_nivel": "Seleccionar nivel de formación",
         "select_periodo": "Seleccionar periodo",
-        "fecha_invalida": "Fecha inválida"
+        "fecha_invalida": "Fecha inválida",
+
+        "carga_academica": "Carga académica",
+        "opcion": "Opción",
+        "registro_notas_parciales": "Registro de notas parciales",
+        "creditos": "Créditos",
+        "sin_espacios_academicos": "No se encuentran espacios académicos relacionados al docente",
+        "sin_definir_estructuraNota": "Porcentajes sin definir",
+        "peticion_definir_estructura": "Por favor establecer los porcentajes de calificación",
+        "sin_informacion_docente_asignatura": "No se ha encontrado la información relacionada al docente o la asignatura",
+        "sin_info_porcentajes": "No se ha encontrado información relacionada al registro de notas",
+        "nota_definida_ok": "¡Se han definido los porcentajes correctamente!",
+        "fallo_definir_nota": "¡El ajuste de los porcentajes ha fallado!"
+
 
     },
     "asignaturas": {

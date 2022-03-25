@@ -5,7 +5,7 @@
     <nb-card-body>
 
         <fieldset [ngClass]="{'fieldseter':true}">
-            <legend> {{ 'notas.Registro_notas_parciales' | translate }} </legend>
+            <legend> {{ 'notas.registro_notas_parciales' | translate }} </legend>
             <div class="container-docente">
                 <div class="row d-flex align-items-end fila">
                     <div class="col-lg-4">
@@ -110,6 +110,7 @@
 
         <fieldset [ngClass]="{'fieldseter':true} ">
             <legend> {{ 'notas.captura_porcentajes' | translate }} </legend>
+            <br>
             <div *ngIf="cajaPorcentajesVer" class="container-notes">
                 
                 <ngx-note-percentage (formObservable)="formSettings1($event)" [settings]="Corte1">

@@ -1944,7 +1944,6 @@
         "hasta": "TO",
         "elije_fecha_inicio": "Choose start date",
         "elije_fecha_fin": "Choose end date",
-        
         "sin_calendario": "No calendar found for this period ",
         "no_proceso_calificaciones": "There is no Grades process",
         "fecha_corte1": "Grades' register for First cut",
@@ -1965,7 +1964,19 @@
         "ajuste_exitoso": "Successful date setting!",
         "select_nivel": "Select educational level",
         "select_periodo": "Select period",
-        "fecha_invalida": "Invalid date"
+        "fecha_invalida": "Invalid date",
+
+        "carga_academica": "Academic load",
+        "opcion": "Option",
+        "registro_notas_parciales": "Partial grades' register",
+        "creditos": "Credits",
+        "sin_espacios_academicos": "There are no academic spaces related to the teacher",
+        "sin_definir_estructuraNota": "Undefined percentages",
+        "peticion_definir_estructura": "Please, set the grade percentages",
+        "sin_informacion_docente_asignatura": "The information related to the teacher or the subject has not been found",
+        "sin_info_porcentajes": "No information was found related to the grades' record",
+        "nota_definida_ok": "The percentages have been defined correctly!",
+        "fallo_definir_nota": "Percentage adjustment failed!"
     },
     "asignaturas": {
         "notas_parciales": "Partial grades",
@@ -1981,8 +1992,8 @@
         "grupo": "Group",
         "asignatura": "Subject",
         "creditos": "Credits",
-        "corte1": "?Corte 1",
-        "corte2":"?Corte 2",
+        "corte1": "1st Cut",
+        "corte2":"2nd Cut",
         "imprimir": "PRINT PARTIAL GRADES",
         "no_datos_notas_parciales": "No data were found for the period or search performed."
     }

@@ -131,7 +131,7 @@ export class CrudNotasComponent implements OnInit {
     } catch(error) {
       this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
     }
-    
+
     if (this.dataEstructuraNota.Estado == "Definida") {
       this.Corte1 = {
         name: 'Corte 1',
@@ -175,7 +175,7 @@ export class CrudNotasComponent implements OnInit {
       }
         
     } else {
-      this.popUpManager.showAlert(this.translate.instant('notas.sin_definir_estructuraNota'),this.translate.instant('notas.definir_estructuraPlease'));
+      this.popUpManager.showAlert(this.translate.instant('notas.sin_definir_estructuraNota'),this.translate.instant('notas.peticion_definir_estructura'));
       let registroId = this.dataEstructuraNota.RegistroId;
       this.dataEstructuraNota = {
         Estado: "Por Definir",
@@ -208,7 +208,7 @@ export class CrudNotasComponent implements OnInit {
       this.sgaMidService.get('notas/DocenteAsignatura/' + asignaturaId).subscribe(
         (response: any) => {
           if (response !== null && response.Status == '404') {
-            this.popUpManager.showErrorAlert(this.translate.instant('notas.sin_registros'));
+            this.popUpManager.showErrorAlert(this.translate.instant('notas.sin_informacion_docente_asignatura'));
           } else {
             this.dataDocente = response.Data[0]; 
           }
@@ -227,7 +227,7 @@ export class CrudNotasComponent implements OnInit {
       this.sgaMidService.get('notas/PorcentajeAsignatura/' + asignaturaId).subscribe(
         (response: any) => {
           if (response !== null && response.Status == '404') {
-            this.popUpManager.showErrorAlert(this.translate.instant('notas.sin_registros'));
+            this.popUpManager.showErrorAlert(this.translate.instant('notas.sin_info_porcentajes'));
           } else {
             this.dataEstructuraNota = response.Data[0];
           }
@@ -245,10 +245,15 @@ export class CrudNotasComponent implements OnInit {
     var putBody = { estructura_nota: this.dataEstructuraNota.EstructuraNota};
     this.sgaMidService.put('notas/PorcentajeAsignatura/' + this.dataEstructuraNota.RegistroId, putBody).subscribe(
       (response: any) => {
-        console.log(response)
+        if (response !== null && response.Status == '200') {
+          this.popUpManager.showSuccessAlert(this.translate.instant('notas.nota_definida_ok'))
+          this.GuardarEstructuraNota = false;
+        } else {
+          this.popUpManager.showErrorAlert(this.translate.instant('notas.fallo_definir_nota'));
+        }
       },
       error => {
-        console.log(error)
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
     );
   }
