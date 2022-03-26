@@ -10,7 +10,6 @@ import { CrudPreguntasComponent } from './crud-preguntas/crud-preguntas.componen
 import { CrudTransferenciaInternaComponent } from './crud-transferencia_interna/crud-transferencia_interna.component';
 import { CrudReingresoComponent } from './crud-reingreso/crud-reingreso.component';
 import { CrudIcfesExternoComponent } from './crud-icfes_externo/crud-icfes_externo.component';
-import { CrudExternoComponent } from './crud-externo/crud-externo.component';
 
 const routes: Routes = [{
   path: '',
@@ -79,20 +78,7 @@ const routes: Routes = [{
       ],
     },
   },
-  {
-    path: 'crud-externo',
-    component: CrudExternoComponent,
-    canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
-  },
-  {
+    {
     path: 'crud-transferencia_interna',
     component: CrudTransferenciaInternaComponent,
     canActivate: [AuthGuard],
@@ -152,7 +138,6 @@ export const routedComponents = [
   CrudPreguntasComponent,
   CrudTransferenciaInternaComponent,
   CrudIcfesExternoComponent,
-  CrudExternoComponent,
   CrudReingresoComponent,
   ViewFormacionAcademicaComponent,
 ];

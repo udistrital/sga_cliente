@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, ViewChild, NgZone } from '@angular/core';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { CoreService } from '../../../@core/data/core.service';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
@@ -35,6 +35,8 @@ import { Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -43,6 +45,14 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 })
 
 export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
+
+  @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
+
+  triggerResize() {
+    // Wait for changes to be applied, then trigger textarea resize.
+    this._ngZone.onStable.pipe(take(1)).subscribe(() => this.autosize.resizeToFitContent(true));
+  }
+
   isLinear = true;
   checkregistro = false;
   config: ToasterConfig;
@@ -104,7 +114,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   Campo4Control = new FormControl('', [Validators.required]);
   Campo5Control = new FormControl('', [Validators.required]);
   Campo6Control = new FormControl('', [Validators.required]);
-  Campo7Control = new FormControl('', [Validators.required]);
+  Campo7Control = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(3), Validators.pattern('^[0-9]*$')]);
   Campo8Control = new FormControl('', [Validators.required]);
   Campo9Control = new FormControl('', [Validators.required]);
   Campo10Control = new FormControl('', [Validators.required]);
@@ -120,6 +130,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   Campo21Control = new FormControl('', [Validators.required]);
   Campo22Control = new FormControl('', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(12)]);
   Campo23Control = new FormControl('', [Validators.required, Validators.maxLength(1), Validators.pattern('^[0-9]*$')]);
+  Campo24Control = new FormControl('', [Validators.required]);
   CampoCorreoControl = new FormControl('', [Validators.required, Validators.email]);
   CampoCreditosControl = new FormControl('', [Validators.required, Validators.maxLength(4)]);
   selectFormControl = new FormControl('', Validators.required);
@@ -136,6 +147,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private toasterService: ToasterService,
     private oikosService: OikosService,
     private routerService: Router,
+    private _ngZone: NgZone,
     private coreService: CoreService,
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
@@ -156,6 +168,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     }
     this.basicform = formBuilder.group({
       codigo_snies: ['', Validators.required],
+      codigo_interno: ['', Validators.required],
       nombre_proyecto: ['', Validators.required],
       abreviacion_proyecto: ['', Validators.required],
       correo_proyecto: ['', [Validators.required, Validators.email]],
@@ -322,12 +335,14 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           // info basica
           this.basicform = this.formBuilder.group({
             codigo_snies: ['', Validators.required],
+            codigo_interno: ['', Validators.required],
             nombre_proyecto: ['', Validators.required],
             abreviacion_proyecto: [proyecto_a_clonar.ProyectoAcademico.CodigoAbreviacion, Validators.required],
             correo_proyecto: [proyecto_a_clonar.ProyectoAcademico.CorreoElectronico, [Validators.required, Validators.email]],
             numero_proyecto: [proyecto_a_clonar.TelefonoDependencia, Validators.required],
             creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4)]],
             duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, Validators.required],
+            selector: [''],
           })
           // acto administrativo
           this.actoform = this.formBuilder.group({
@@ -448,6 +463,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           });
         });
   }
+
   loadnucleo() {
     this.coreService.get('nucleo_basico_conocimiento')
       .subscribe(res => {
@@ -560,9 +576,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         }
         this.proyecto_academico = {
           Id: 0,
-          Codigo: '0',
           Nombre: this.basicform.value.nombre_proyecto,
           CodigoSnies: this.basicform.value.codigo_snies,
+          Codigo: this.basicform.value.codigo_interno,
           Duracion: Number(this.basicform.value.duracion_proyecto),
           NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
           CorreoElectronico: this.basicform.value.correo_proyecto,

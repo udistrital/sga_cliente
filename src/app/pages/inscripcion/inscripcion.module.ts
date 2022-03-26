@@ -23,7 +23,6 @@ import { CrudInscripcionMultipleComponent} from './crud-inscripcion_multiple/cru
 import { InfoCaracteristicaModule } from '../info_caracteristica/info_caracteristica.module';
 import { CrudInfoCaracteristicaComponent } from '../info_caracteristica/crud-info_caracteristica/crud-info_caracteristica.component';
 import { InformacionContactoModule } from '../informacion_contacto/informacion_contacto.module';
-import { CrudInformacionContactoComponent } from '../informacion_contacto/crud-informacion_contacto/crud-informacion_contacto.component';
 import { FormacionAcademicaModule } from '../formacion_academica/formacion_academica.module';
 import { ListFormacionAcademicaComponent } from '../formacion_academica/list-formacion_academica/list-formacion_academica.component';
 import { CrudFormacionAcademicaComponent } from '../formacion_academica/crud-formacion_academica/crud-formacion_academica.component';
@@ -55,6 +54,8 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { NbSpinnerModule } from '@nebular/theme';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { DialogoDocumentosTransferenciasComponent } from './dialogo-documentos-transferencias/dialogo-documentos-transferencias.component';
 
 @NgModule({
   imports: [
@@ -74,7 +75,9 @@ import { NbSpinnerModule } from '@nebular/theme';
     DescuentoAcademicoModule,
     PropuestaGradoModule,
     Ng2SmartTableModule,
-    NbSpinnerModule
+    NbSpinnerModule,
+    NgxExtendedPdfViewerModule,
+    // AdmisionModule,
   ],
   declarations: [
     ...routedComponents
@@ -95,7 +98,7 @@ import { NbSpinnerModule } from '@nebular/theme';
     ParametrosService,
     EnteService,
   ],
-   entryComponents: [
+  entryComponents: [
     CrudInfoPersonaComponent,
     CrudInscripcionMultipleComponent,
     CrudInfoCaracteristicaComponent,
@@ -115,6 +118,7 @@ import { NbSpinnerModule } from '@nebular/theme';
     CrudPropuestaGradoComponent,
     ButtonPaymentComponent,
     LinkDownloadComponent,
+    DialogoDocumentosTransferenciasComponent,
    ],
   exports: [
     InscripcionGeneralComponent,

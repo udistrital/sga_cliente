@@ -4,12 +4,12 @@
            <ng-container *ngFor="let values of ObjectData">
                <ng-container *ngIf="values.needPercent; then hasPercentH else noPercentH"></ng-container>
                <ng-template #hasPercentH>
-                   <td colspan="2" title="{{values.N}}">
+                   <td colspan="2" style="padding-left: 5px;padding-right: 5px;">
                        {{values.N}}
                    </td>
                </ng-template>
                <ng-template #noPercentH>
-                   <td title="{{values.N}}">
+                   <td style="padding-left: 5px;padding-right: 5px;">
                        {{values.N}}
                    </td>
                </ng-template>
@@ -21,11 +21,17 @@
            <ng-container *ngFor="let values of ObjectData">
                <ng-container *ngIf="values.needPercent; then hasPercentB else noPercentB"></ng-container>
                <ng-template #hasPercentB>
-                   <td>{{values.Perc}}%</td>
-                   <td>{{values.Value}}</td>
+                   <td style="padding-left: 5px;padding-right: 5px;">
+                       {{values.Perc}}%
+                    </td>
+                   <td title="Nota: {{values.N}}" style="padding-left: 5px;padding-right: 5px;">
+                       {{values.Value}}
+                    </td>
                </ng-template>
                <ng-template #noPercentB>
-                   <td>{{values.Value}}</td>
+                   <td title="{{values.N}}" style="padding-left: 5px;padding-right: 5px;">
+                       {{values.Value}}
+                    </td>
                </ng-template>
            </ng-container>
        </tr>

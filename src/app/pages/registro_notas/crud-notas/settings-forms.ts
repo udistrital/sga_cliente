@@ -33,7 +33,7 @@ export const settings2 = {
         { placeholder: '% P4', label: 'P4', name: 'p4' },
         { placeholder: '% P5', label: 'P5', name: 'p5' },
         { placeholder: '% P6', label: 'P6', name: 'p6' },
-        { placeholder: '% LAB', label: 'LAB', name: 'lab' },
+        { placeholder: '% LAB', label: 'LAB', name: 'lab', value: 20 },
     ]
 }
 

@@ -1,12 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, ViewChild, NgZone } from "@angular/core";
 import { OikosService } from "../../../@core/data/oikos.service";
 import { CoreService } from "../../../@core/data/core.service";
-import {
-  ToasterService,
-  ToasterConfig,
-  Toast,
-  BodyOutputType
-} from "angular2-toaster";
+import { ToasterService, ToasterConfig, Toast, BodyOutputType } from "angular2-toaster";
 import { TranslateService } from "@ngx-translate/core";
 import { FormBuilder, Validators, FormControl } from "@angular/forms";
 import { ProyectoAcademicoPost } from "../../../@core/data/models/proyecto_academico/proyecto_academico_post";
@@ -24,11 +19,7 @@ import { ProyectoAcademicoService } from "../../../@core/data/proyecto_academico
 import { InstitucionEnfasis } from "../../../@core/data/models/proyecto_academico/institucion_enfasis";
 import { Enfasis } from "../../../@core/data/models/proyecto_academico/enfasis";
 import { Titulacion } from "../../../@core/data/models/proyecto_academico/titulacion";
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA
-} from "@angular/material/dialog";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { TipoDependencia } from "../../../@core/data/models/oikos/tipo_dependencia";
 import { DependenciaTipoDependencia } from "../../../@core/data/models/oikos/dependencia_tipo_dependencia";
 import { Dependencia } from "../../../@core/data/models/oikos/dependencia";
@@ -126,70 +117,28 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   Campo8Control = new FormControl("", [Validators.required]);
   Campo9Control = new FormControl("", [Validators.required]);
   Campo10Control = new FormControl("", [Validators.required]);
-  Campo11Control = new FormControl("", [
-    Validators.required,
-    Validators.maxLength(4)
-  ]);
-
+  Campo11Control = new FormControl("", [Validators.required, Validators.maxLength(4)]);
   Campo12Control = new FormControl("", [Validators.required]);
-  Campo13Control = new FormControl("", [
-    Validators.required,
-    Validators.maxLength(4)
-  ]);
-
+  Campo13Control = new FormControl("", [Validators.required, Validators.maxLength(4)]);
   Campo14Control = new FormControl("", [Validators.required]);
   Campo16Control = new FormControl("", [Validators.required]);
-  Campo17Control = new FormControl("", [
-    Validators.required,
-    Validators.maxLength(4)
-  ]);
-
+  Campo17Control = new FormControl("", [Validators.required, Validators.maxLength(4)]);
   Campo18Control = new FormControl("", [Validators.required]);
   Campo19Control = new FormControl("", [Validators.required]);
   Campo20Control = new FormControl("", [Validators.required]);
   Campo21Control = new FormControl("", [Validators.required]);
-  Campo22Control = new FormControl("", [
-    Validators.required,
-    Validators.maxLength(2)
-  ]);
-
-  Campo23Control = new FormControl("", [
-    Validators.required,
-    Validators.maxLength(1)
-  ]);
-
-  CampoCorreoControl = new FormControl("", [
-    Validators.required,
-    Validators.email
-  ]);
-
-  CampoCreditosControl = new FormControl("", [
-    Validators.required,
-    Validators.maxLength(4)
-  ]);
-
-  Campo24Control = new FormControl("", [
-    Validators.required,
-    Validators.maxLength(4)
-  ]);
-
-  Campo25Control = new FormControl("", [
-    Validators.required,
-    Validators.maxLength(4)
-  ]);
-
+  Campo22Control = new FormControl("", [Validators.required, Validators.maxLength(2)]);
+  Campo23Control = new FormControl("", [Validators.required, Validators.maxLength(1)]);
+  CampoCorreoControl = new FormControl("", [Validators.required, Validators.email]);
+  CampoCreditosControl = new FormControl("", [Validators.required, Validators.maxLength(4)]);
+  Campo24Control = new FormControl("", [Validators.required, Validators.maxLength(4)]);
+  Campo25Control = new FormControl("", [Validators.required, Validators.maxLength(4)]);
   Campo26Control = new FormControl("", [Validators.required]);
-  Campo28Control = new FormControl("", [
-    Validators.required,
-    Validators.maxLength(1)
-  ]);
-
-  Campo27Control = new FormControl("", [
-    Validators.required,
-    Validators.maxLength(2)
-  ]);
-
+  Campo28Control = new FormControl("", [Validators.required, Validators.maxLength(1)]);
+  Campo27Control = new FormControl("", [Validators.required, Validators.maxLength(2)]);
   Campo29Control = new FormControl("", [Validators.required]);
+  Campo30Control = new FormControl("", [Validators.required]);
+
   selectFormControl = new FormControl("", Validators.required);
   @Output() eventChange = new EventEmitter();
 
@@ -235,6 +184,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       returnedValueType: "String"
     };
     this.basicform = this.formBuilder.group({
+      codigo_interno: ["", Validators.required],
       codigo_snies: ["", Validators.required],
       nombre_proyecto: ["", Validators.required],
       abreviacion_proyecto: [
@@ -310,7 +260,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         .format("YYYY-MM-DDTHH:mm")
     );
     this.checkalta = Boolean(JSON.parse(this.data.tieneregistroaltacalidad));
-    // this.fecha_creacion_alta = momentTimezone.tz(this.data.fecha_creacion_registro_alta[0], 'America/Bogota').format('YYYY-MM-DD HH:mm');
+
     // enfasis
     this.arr_enfasis_proyecto = this.data.enfasis;
     this.source_emphasys.load(this.arr_enfasis_proyecto);
@@ -803,7 +753,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       };
       this.proyecto_academico = {
         Id: Number(this.data.idproyecto),
-        Codigo: "0",
+        Codigo: String(this.basicform.value.codigo_interno),
         Nombre: String(this.basicform.value.nombre_proyecto),
         CodigoSnies: String(this.basicform.value.codigo_snies),
         Duracion: Number(this.basicform.value.duracion_proyecto),
@@ -922,7 +872,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
                   text: this.translate.instant(
                     "editarproyecto.proyecto_actualizado"
                   ),
-                  icon: "warning",
+                  icon: "success",
                   buttons: true,
                   dangerMode: true,
                   showCancelButton: true
@@ -962,7 +912,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         };
         this.proyecto_academico = {
           Id: Number(this.data.idproyecto),
-          Codigo: "0",
+          Codigo: String(this.basicform.value.codigo_interno),
           Nombre: String(this.basicform.value.nombre_proyecto),
           CodigoSnies: String(this.basicform.value.codigo_snies),
           Duracion: Number(this.basicform.value.duracion_proyecto),
@@ -1111,7 +1061,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
                     text: this.translate.instant(
                       "editarproyecto.proyecto_actualizado"
                     ),
-                    icon: "warning",
+                    icon: "success",
                     buttons: true,
                     dangerMode: true,
                     showCancelButton: true
@@ -1148,7 +1098,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         };
         this.proyecto_academico = {
           Id: Number(this.data.idproyecto),
-          Codigo: "0",
+          Codigo: String(this.basicform.value.codigo_interno),
           Nombre: String(this.basicform.value.nombre_proyecto),
           CodigoSnies: String(this.basicform.value.codigo_snies),
           Duracion: Number(this.basicform.value.duracion_proyecto),
@@ -1255,7 +1205,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
                     text: this.translate.instant(
                       "editarproyecto.proyecto_actualizado"
                     ),
-                    icon: "warning",
+                    icon: "success",
                     buttons: true,
                     dangerMode: true,
                     showCancelButton: true
@@ -1337,11 +1287,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             );
           }
 
-          this.sgamidService
-            .post("proyecto_academico/coordinador/" +
-              String(this.data.Id),
-              this.coordinador_data
-            )
+          this.sgamidService.post("proyecto_academico/coordinador/", this.coordinador_data)
             .subscribe((res: any) => {
               if (res.Type === "error") {
                 Swal.fire({
@@ -1364,7 +1310,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
                   text: this.translate.instant(
                     "editarproyecto.coordinador_asignado"
                   ),
-                  icon: "warning",
+                  icon: "succes",
                   buttons: true,
                   dangerMode: true,
                   showCancelButton: true

@@ -13,6 +13,11 @@
 
                             <form id="basicForm" [formGroup]="basicform">
                                 <mat-form-field>
+                                    <input readonly matInput placeholder="{{ 'proyecto.codigo_interno' | translate }}" formControlName="codigo_interno"
+                                        class="form-control" name="codigo_interno" [(ngModel)]="data.codigointerno">
+                                    </mat-form-field>
+                                    <br>
+                                    <mat-form-field>
                                     <input readonly matInput placeholder="{{ 'proyecto.codigo_snies' | translate }}"
                                         formControlName="codigo_snies" class="form-control" name="codigo_snies"
                                         [(ngModel)]="data.codigosnies">
@@ -25,9 +30,9 @@
                                 </mat-form-field>
                                 <br>
                                 <mat-form-field>
-                                    <input readonly matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}"
-                                        id="nombre_proyecto" formControlName="nombre_proyecto" class="form-control"
-                                        name="nombre_proyecto" [(ngModel)]="data.nombre">
+                                    <textarea readonly matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}" id="nombre_proyecto"
+                                        formControlName="nombre_proyecto" class="form-control" name="nombre_proyecto" [(ngModel)]="data.nombre"
+                                        cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2.25" cdkAutosizeMaxRows="10"> </textarea>
                                 </mat-form-field>
                                 <br>
                                 <mat-form-field>
@@ -103,8 +108,8 @@
                             <form id="basicForm" [formGroup]="basicform">
                                 <mat-form-field>
                                     <input readonly matInput placeholder="{{ 'proyecto.proyecto_padre' | translate }}"
-                                        formControlName="proyecto_padre_id" class="form-control" name="proyecto_padre_id"
-                                        [(ngModel)]="data.proyecto_padre_id.Nombre">
+                                        formControlName="proyecto_padre_id" class="form-control"
+                                        name="proyecto_padre_id" [(ngModel)]="data.proyecto_padre_id.Nombre">
                                 </mat-form-field>
                             </form>
                         </div>
@@ -147,13 +152,13 @@
 
 
             <div class="row">
-                <div class="col-xs-12 col-sm-4"> <button mat-button 
-                        (click)="cloneProject(data)">{{ 'consultaproyecto.clonar_proyecto' | translate }}</button>
+                <div class="col-xs-12 col-sm-4"> <button mat-button (click)="cloneProject(data)">{{
+                        'consultaproyecto.clonar_proyecto' | translate }}</button>
                 </div>
-                <div class="col-xs-12 col-sm-4"> <button mat-button 
-                        (click)="prueba()">{{ 'consultaproyecto.historico' | translate }}</button></div>
-                <div class="col-xs-12 col-sm-4"> <button mat-button 
-                        (click)="onclick()">{{ 'GLOBAL.aceptar' | translate }}</button></div>
+                <div class="col-xs-12 col-sm-4"> <button mat-button (click)="prueba()">{{ 'consultaproyecto.historico' |
+                        translate }}</button></div>
+                <div class="col-xs-12 col-sm-4"> <button mat-button (click)="onclick()">{{ 'GLOBAL.aceptar' | translate
+                        }}</button></div>
             </div>
         </nb-card-body>
 

@@ -52,7 +52,6 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
   ngOnInit() {}
 
   onclick(event) {
-    console.log(event.data);
     sessionStorage.setItem('TerceroSolitud', event.data.TerceroId);
     sessionStorage.setItem('Solicitud', event.data.Numero);
     if (event.data.Tipo === 'Actualización de identificación') {

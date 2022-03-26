@@ -93,8 +93,12 @@
         <fieldset [ngClass]="{'fieldseter':true}">
             <legend> {{ 'asignaturas.list_notas_parciales' | translate }} </legend>
             <div class="container-estudiante">
+                <nb-card>
+                    <nb-card-body style="padding: 0rem;">
             <ng2-smart-table [settings]="settings" [source]="dataSource">
             </ng2-smart-table>
+                    </nb-card-body>
+                </nb-card>
             </div>
             <div class="row d-flex align-items-center">
                 <div class="col-md" align="center">

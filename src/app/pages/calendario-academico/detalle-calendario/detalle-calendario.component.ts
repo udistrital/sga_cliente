@@ -63,76 +63,81 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   loadSelects(id: any) {
     this.loading = true;
     this.processes = [];
-    this.sgaMidService.get('consulta_calendario_academico/' + id).subscribe(
-      (response: any[]) => {
-        const calendar = response[0];
-        this.calendar = new Calendario();
-        this.calendar.Nombre = calendar['Nombre'];
-        this.calendar.ListaCalendario = calendar['ListaCalendario'];
-        this.calendar.calendarioId = calendar['Id'];
-        this.calendar.DocumentoId = calendar['resolucion']['Id'];
-        this.calendar.resolucion = calendar['resolucion']['Resolucion'];
-        this.calendar.anno = calendar['resolucion']['Anno'];
-        this.calendar.Nivel = calendar['Nivel'];
-        this.calendar.Activo = calendar['Activo'];
-        this.calendar.PeriodoId = calendar['PeriodoId'];
-        this.fileResolucion = calendar['resolucion']['Nombre'];
-        const processes: any[] = calendar['proceso'];
-        if (processes !== null) {
-          processes.forEach(element => {
-            if (Object.keys(element).length !== 0) {
-              const loadedProcess: Proceso = new Proceso();
-              loadedProcess.Nombre = element['Proceso'];
-              loadedProcess.CalendarioId = { Id: this.calendar.calendarioId};
-              loadedProcess.actividades = [];
-              const activities: any[] = element['Actividades']
-              if (activities !== null) {
-                activities.forEach(element => {
+    this.sgaMidService.get('calendario_academico/' + id).subscribe(
+      (response: any) => {
+        if (response != null && response.Success) {
+          const calendar = response.Data[0];
+          this.calendar = new Calendario();
+          this.calendar.Nombre = calendar['Nombre'];
+          this.calendar.ListaCalendario = calendar['ListaCalendario'];
+          this.calendar.calendarioId = calendar['Id'];
+          this.calendar.DocumentoId = calendar['resolucion']['Id'];
+          this.calendar.resolucion = calendar['resolucion']['Resolucion'];
+          this.calendar.anno = calendar['resolucion']['Anno'];
+          this.calendar.Nivel = calendar['Nivel'];
+          this.calendar.Activo = calendar['Activo'];
+          this.calendar.PeriodoId = calendar['PeriodoId'];
+          this.fileResolucion = calendar['resolucion']['Nombre'];
+          const processes: any[] = calendar['proceso'];
+          if (processes !== null) {
+            processes.forEach(element => {
+              if (Object.keys(element).length !== 0) {
+                const loadedProcess: Proceso = new Proceso();
+                loadedProcess.Nombre = element['Proceso'];
+                loadedProcess.CalendarioId = { Id: this.calendar.calendarioId };
+                loadedProcess.actividades = [];
+                const activities: any[] = element['Actividades']
+                if (activities !== null) {
+                  activities.forEach(element => {
 
-                  this.route.paramMap.subscribe(params => {
-                    if (params.get('Id') !== null) {
-                      if (Object.keys(element).length !== 0 && element['EventoPadreId'] == null) {
-                        const loadedActivity: Actividad = new Actividad();
-                        loadedActivity.actividadId = element['actividadId'];
-                        loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
-                        loadedActivity.Nombre = element['Nombre'];
-                        loadedActivity.Descripcion = element['Descripcion'];
-                        loadedActivity.Activo = element['Activo'];
-                        loadedActivity.FechaInicio = moment(element['FechaInicio'], 'YYYY-MM-DD').format('DD-MM-YYYY');
-                        loadedActivity.FechaFin = moment(element['FechaFin'], 'YYYY-MM-DD').format('DD-MM-YYYY');
-                        loadedActivity.responsables = element['Responsable'];
-                        loadedProcess.procesoId = element['TipoEventoId']['Id'];
-                        loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
-                        loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
-                        loadedProcess.actividades.push(loadedActivity);
+                    this.route.paramMap.subscribe(params => {
+                      if (params.get('Id') !== null) {
+                        if (Object.keys(element).length !== 0 && element['EventoPadreId'] == null) {
+                          const loadedActivity: Actividad = new Actividad();
+                          loadedActivity.actividadId = element['actividadId'];
+                          loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
+                          loadedActivity.Nombre = element['Nombre'];
+                          loadedActivity.Descripcion = element['Descripcion'];
+                          loadedActivity.Activo = element['Activo'];
+                          loadedActivity.FechaInicio = moment(element['FechaInicio'], 'YYYY-MM-DD').format('DD-MM-YYYY');
+                          loadedActivity.FechaFin = moment(element['FechaFin'], 'YYYY-MM-DD').format('DD-MM-YYYY');
+                          loadedActivity.responsables = element['Responsable'];
+                          loadedProcess.procesoId = element['TipoEventoId']['Id'];
+                          loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
+                          loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
+                          loadedProcess.actividades.push(loadedActivity);
+                        }
+                      } else {
+                        if (Object.keys(element).length !== 0) {
+                          const loadedActivity: Actividad = new Actividad();
+                          loadedActivity.actividadId = element['actividadId'];
+                          loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
+                          loadedActivity.Nombre = element['Nombre'];
+                          loadedActivity.Descripcion = element['Descripcion'];
+                          loadedActivity.Activo = element['Activo'];
+                          loadedActivity.FechaInicio = moment(element['FechaInicio']).format('YYYY-MM-DD');
+                          loadedActivity.FechaFin = moment(element['FechaFin']).format('YYYY-MM-DD');
+                          loadedActivity.responsables = element['Responsable'];
+                          loadedProcess.procesoId = element['TipoEventoId']['Id'];
+                          loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
+                          loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
+                          loadedProcess.actividades.push(loadedActivity);
+                        }
                       }
-                    }else {
-                      if (Object.keys(element).length !== 0) {
-                        const loadedActivity: Actividad = new Actividad();
-                        loadedActivity.actividadId = element['actividadId'];
-                        loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
-                        loadedActivity.Nombre = element['Nombre'];
-                        loadedActivity.Descripcion = element['Descripcion'];
-                        loadedActivity.Activo = element['Activo'];
-                        loadedActivity.FechaInicio = moment(element['FechaInicio']).format('YYYY-MM-DD');
-                        loadedActivity.FechaFin = moment(element['FechaFin']).format('YYYY-MM-DD');
-                        loadedActivity.responsables = element['Responsable'];
-                        loadedProcess.procesoId = element['TipoEventoId']['Id'];
-                        loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
-                        loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
-                        loadedProcess.actividades.push(loadedActivity);
-                      }
-                    }
+                    });
+
+
                   });
-
-
-                });
-                this.processes.push(loadedProcess);
+                  this.processes.push(loadedProcess);
+                }
               }
-            }
-          });
+            });
+          }
+          this.loading = false;
+        } else {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          this.loading = false;
         }
-        this.loading = false;
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -235,8 +240,8 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
           {
             name: 'clone',
             title: '<i class="nb-plus-circled" title="' +
-                this.translate.instant('calendario.tooltip_clonar_actividad') +
-                '"></i>',
+              this.translate.instant('calendario.tooltip_clonar_actividad') +
+              '"></i>',
           },
           {
             name: 'edit',
@@ -246,8 +251,8 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
       },
       add: {
         addButtonContent: '<i class="nb-plus" title="' +
-        this.translate.instant('calendario.tooltip_crear_actividad') +
-        '"></i>',
+          this.translate.instant('calendario.tooltip_crear_actividad') +
+          '"></i>',
       },
       noDataMessage: this.translate.instant('calendario.sin_actividades'),
     };
@@ -281,7 +286,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
             activityPut['FechaFin'] = activity.Actividad.FechaFin;
             this.eventoService.put('calendario_evento', activityPut).subscribe(
               response => {
-                this.sgaMidService.put('crear_actividad_calendario/update', {Id: event.data.actividadId, resp: activity.responsable}).subscribe(
+                this.sgaMidService.put('crear_actividad_calendario/update', { Id: event.data.actividadId, resp: activity.responsable }).subscribe(
                   response => {
                     this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
                     this.loadSelects(this.calendar.calendarioId);
@@ -333,7 +338,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
       response => {
         if (this.calendarForProject != '0') {
           this.loadSelects(this.calendarForProject);
-        }else {
+        } else {
           this.loadSelects(this.idDetalle);
         }
         this.createActivitiesTable();

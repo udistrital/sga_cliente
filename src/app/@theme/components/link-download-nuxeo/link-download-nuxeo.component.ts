@@ -24,14 +24,16 @@ export class LinkDownloadNuxeoComponent implements ViewCell, AfterViewInit {
   ) { }
 
   ngAfterViewInit(): void {
-    this.documentoService.get('documento/' + this.value)
-      .subscribe((data) => {
-        this.documentoData = data;
-      }, (error) => {
-        this.errorDocument = true;
-        this.label = 'No encontrado'
-      },
-      )
+    if (this.value) {
+      this.documentoService.get('documento/' + this.value)
+        .subscribe((data) => {
+          this.documentoData = data;
+        }, (error) => {
+          this.errorDocument = true;
+          this.label = 'No encontrado'
+        },
+        )
+    }
   }
 
 
@@ -47,10 +49,10 @@ export class LinkDownloadNuxeoComponent implements ViewCell, AfterViewInit {
       if (this.documentoData) {
         this.nuxeoService.getByUUID(this.documentoData.Enlace)
           .subscribe((docFile: any) => {
-            if(docFile.status){
+            if (docFile.status) {
               this.label = 'No encontrado'
               this.errorDocument = true;
-            }else {              
+            } else {
               this.documentoFile = docFile;
               this.open();
             }

@@ -87,11 +87,6 @@
     }
 }
 
-.mat-button, .mat-raised-button {
-    background-color:rgb(0, 162, 255);
-    color: #fff;
-  }
-
 .mat-success {
     background-color: green;
     color: #fff;
@@ -137,6 +132,6 @@
 font-size: 0.95rem;
 }
 
-:host ::ng-deep .nb-theme-default ng2-smart-table table th {
-padding-right: 0.725rem
-}
+// :host ::ng-deep .nb-theme-default ng2-smart-table table th {
+// padding-right: 0.725rem
+// }
