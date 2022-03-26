@@ -1,14 +1,11 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { OikosService } from '../../../@core/data/oikos.service';
-import { CoreService } from '../../../@core/data/core.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
-import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
@@ -18,8 +15,6 @@ import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/ni
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
-import { AnyService } from '../../../@core/data/any.service';
-import { environment } from '../../../../environments/environment';
 import * as _ from 'lodash';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -48,7 +43,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   SelectedTipoBool: boolean = true;
   info_inscripcion: any;
   infoActulizacion: any;
-
 
   proyectos = [];
   periodos = [];
@@ -80,19 +74,14 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   cuposAsignados: number = 0;
   constructor(
     private translate: TranslateService,
-    private sgamidService: SgaMidService,
-    private oikosService: OikosService,
-    private coreService: CoreService,
     private projectService: ProyectoAcademicoService,
     private parametrosService: ParametrosService,
     private popUpManager: PopUpManager,
     private inscripcionService: InscripcionService,
     private tercerosService: TercerosService,
     private toasterService: ToasterService,
-    private anyService: AnyService,
     private proyectoAcademicoService: ProyectoAcademicoService,
     private evaluacionService: EvaluacionInscripcionService) {
-
 
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -219,7 +208,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     };
   }
 
-
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
       this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
@@ -270,8 +258,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   useLanguage(language: string) {
     this.translate.use(language);
   }
-
-
 
   activar_button() {
     this.buttoncambio = false;
@@ -446,7 +432,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       });
   }
 
-
   ngOnInit() {
 
   }
@@ -516,7 +501,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         }
       })
   }
-
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({

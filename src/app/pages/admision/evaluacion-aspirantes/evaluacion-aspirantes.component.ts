@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { UserService } from '../../../@core/data/users.service';
@@ -385,10 +385,10 @@ export class EvaluacionAspirantesComponent implements OnInit {
     for (let i = 0; i < this.Aspirantes.length; i++) {
       Evaluacion.IdPersona[i] = { 'Id': this.Aspirantes[i].Id };
     }
-    console.info(Evaluacion);
+
     this.sgaMidService.put('admision/calcular_nota', Evaluacion).subscribe(
       (response: any) => {
-        console.info(response);
+
         if (response.Response.Code === '200') {
           this.popUpManager.showSuccessAlert(this.translate.instant('admision.calculo_exito'));
         } else {
@@ -505,8 +505,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
                 })
                 this, this.dataSource.load(this.Aspirantes)
               })
-              // this.dataSource.load(data);
-              // await this.dataSource.getElements().then(datos => console.log('despues', datos))
+
             } else {
               this.btnCalculo = true;
             }
