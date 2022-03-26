@@ -119,9 +119,9 @@ export class CrudInfoPersonaComponent implements OnInit {
         (error: HttpErrorResponse) => {
           this.loading = false;
           Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
+            icon: 'info',
+            title: this.translate.instant('GLOBAL.info_persona'),
+            text: this.translate.instant('GLOBAL.no_info_persona'),
             footer: this.translate.instant('GLOBAL.cargar') + '-' +
               this.translate.instant('GLOBAL.info_persona'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),

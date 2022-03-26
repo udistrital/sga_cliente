@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service'
 import { ParametrosService } from '../../../@core/data/parametros.service';
-import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { FormControl, Validators } from '@angular/forms';
@@ -44,7 +43,6 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
     private parametrosService: ParametrosService,
     private dialogService: NbDialogService,
     private projectService: ProyectoAcademicoService,
-    private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
     private inscripcionService: InscripcionService) {
     this.translate = translate;
