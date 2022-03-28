@@ -3,7 +3,7 @@ table {
         td {
             text-align: center;
             font-size: 10px;
-            width: auto;
+            width: 100px;//auto;
         }
         
     }
@@ -11,7 +11,24 @@ table {
         td {
             text-align: right;
             font-size: 10px;
-            width: fit-content;
+            width: 100px;//fit-content;
         }
     }
 }
+
+mat-form-field {
+    width: 40px;
+}
+
+/*     input.readonly {
+        width: 20px;
+        &::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      
+        &[type=number] {
+          -moz-appearance: textfield;
+        }
+      } */
+
