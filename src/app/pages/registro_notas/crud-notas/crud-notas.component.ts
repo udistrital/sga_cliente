@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalDataSource } from 'ng2-smart-table';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { RenderDataComponent } from '../../../@theme/components';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { settings1, settings2, settings3, settings4, notes1, notes2, notes3, notes4, students } from './settings-forms';
+import { data1, settings1, settings2, settings3, settings4, notes1, notes2, notes3, notes4, students } from './settings-forms';
 
 interface DocenteAsignatura {
   Docente: string;
@@ -83,6 +85,10 @@ export class CrudNotasComponent implements OnInit {
 
   GuardarEstructuraNota: boolean = false;
 
+  settings: Object;
+  dataSource: LocalDataSource;
+  data1 = null;
+
   constructor(
     private route: ActivatedRoute,
     private sgaMidService: SgaMidService,
@@ -119,9 +125,13 @@ export class CrudNotasComponent implements OnInit {
       Periodo: ""
     };
 
+    this.data1 = data1;
+    this.dataSource = new LocalDataSource();
+
   }
 
   async ngOnInit() {
+    this.createTable();
     var asignaturaId = this.route.snapshot.paramMap.get('process');
     try {
       
@@ -201,6 +211,10 @@ export class CrudNotasComponent implements OnInit {
 
     this.cajaPorcentajesVer = true;
     
+
+    
+    this.dataSource.load(this.data1);
+
   }
 
   cargarDocente(asignaturaId){
@@ -336,5 +350,74 @@ export class CrudNotasComponent implements OnInit {
     })
   }
 
+
+  createTable() {
+    this.settings = {
+      columns: {
+        Codigo: {
+          title: "codigo",//this.translate.instant('asignaturas.grupo'),
+          editable: false,
+          width: '5%',
+          filter: false,
+        },
+        Nombre: {
+          title: "Nombre",//this.translate.instant('asignaturas.asignatura'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        Apellido: {
+          title: "Apellido",//this.translate.instant('asignaturas.creditos'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        Corte1: {
+          title: "Corte1",//this.translate.instant('asignaturas.corte1'),
+          editable: false,
+          width: '20%',
+          filter: false,
+          type: 'custom',
+          renderComponent: RenderDataComponent,
+        },
+        Corte2: {
+          title: "Corte2",//this.translate.instant('asignaturas.corte2'),
+          editable: false,
+          width: '20%',
+          filter: false,
+          type: 'custom',
+          renderComponent: RenderDataComponent,
+        },
+        LabExamHabAcu: {
+          title: "",
+          editable: false,
+          width: '20%',
+          filter: false,
+          type: 'custom',
+          renderComponent: RenderDataComponent,
+        },
+        Varios: {
+          title: "Varios",//this.translte...
+          editable: false,
+          width: '20%',
+          filter: false,
+          type: 'custom',
+          renderComponent: RenderDataComponent,
+        },
+        Total: {
+          title: "Total",//this.translate...
+          editable: false,
+          width: '20%',
+          filter: false,
+          type: 'custom',
+          renderComponent: RenderDataComponent,
+        }
+      },
+      hideSubHeader: false,
+      mode: 'external',
+      actions: false,
+      noDataMessage: this.translate.instant('asignaturas.no_datos_notas_parciales')
+    };
+  }
   
 }
