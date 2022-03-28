@@ -280,7 +280,8 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
           this.sgamidService.post('admision/postcupos', this.info_cupos)
             .subscribe(res => {
               const r = <any>res
-              if (r !== null && r.Status !== '200') {
+              console.log(r)
+              if (r !== null && r.Status === '200') {
                 this.loading = false;
                 this.cambiarestados();
                 this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_cupos') + ' ' + this.translate.instant('GLOBAL.confirmarCrear'));
