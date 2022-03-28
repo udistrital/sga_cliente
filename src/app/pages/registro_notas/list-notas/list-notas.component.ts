@@ -183,13 +183,12 @@ export class ListNotasComponent implements OnInit {
   async bringActivities(periodo,asignatura){
     this.loading = true;
     this.proceso = undefined;
-    this.sgaMidService.get('consulta_calendario_academico/'+periodo).subscribe(
+    this.sgaMidService.get('calendario_academico/'+periodo).subscribe(
       (response: any) => {
-        if(response === null){
+        if (response !== null && response.Status == '404') {
           this.popUpManager.showErrorAlert(this.translate.instant('notas.sin_calendario'));
-        }
-        else {
-          this.proceso = response[0].proceso.filter(proceso => this.existe(proceso.Proceso,["calificaciones"]))[0];
+        } else {
+          this.proceso = response.Data[0].proceso.filter(proceso => this.existe(proceso.Proceso,["calificaciones"]))[0];
           if( this.proceso === undefined)
           {
             this.popUpManager.showErrorAlert(this.translate.instant('notas.no_proceso_calificaciones'));

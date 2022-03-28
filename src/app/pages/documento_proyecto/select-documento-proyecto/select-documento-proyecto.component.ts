@@ -279,6 +279,7 @@ export class SelectDocumentoProyectoComponent implements OnInit {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         }
         else if (response.length == 1 && !response[0].hasOwnProperty('TipoDocumentoProgramaId')){
+          this.source.load(this.documento_proyecto);
         }
         else{
           response.forEach(documento => {

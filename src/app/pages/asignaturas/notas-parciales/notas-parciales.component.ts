@@ -52,6 +52,12 @@ export class NotasParcialesComponent implements OnInit {
           filter: false,
           type: 'custom',
           renderComponent: RenderDataComponent,
+         /*  onComponentInitFunction: (instance: any) => {
+            instance.valueEdited.subscribe(data => {
+              console.log(data)
+              //this.dataSource.update(instance.rowData, {"Corte1": data})
+            });
+          } */
         },
         Corte2: {
           title: this.translate.instant('asignaturas.corte2'),
@@ -89,54 +95,39 @@ export class NotasParcialesComponent implements OnInit {
     this.translate.use(language);
   }
 
+  getAll(){
+    this.dataSource.getAll().then(res => {
+      console.log(res)
+    });
+  }
+
   data1 = [{
     Grupo: "0010",
     Asignatura: "Algebra",
     Creditos: "3",
-    Corte1: [
+    Corte1: { needEdit: false, canEdit: false, values: [
       {N: 1, Value: 4.5, Perc: 10},
       {N: 2, Value: 3.5, Perc: 10},
       {N: 3, Value: 4.0, Perc: 10}
-    ],
-    Corte2: [
+    ]},
+    Corte2: { needEdit: false, canEdit: false, values: [
       {N: 4, Value: 4.5, Perc: 10},
       {N: 5, Value: 3.5, Perc: 10},
       {N: 6, Value: 4.0, Perc: 10}
-    ],
-    LabExamHab: [
+    ]},
+    LabExamHab: { needEdit: false, canEdit: false, values: [
       {N: "Lab", Value: 4.5, Perc: 10},
       {N: "Exam", Value: 3.5, Perc: 30},
       {N: "Hab", Value: 0, Perc: 70}
-    ],
-    AcuFallasObsDef: [
+    ]},
+    AcuFallasObsDef: { needEdit: false, canEdit: false, values: [
       {N: "ACU", Value: 3.9},
       {N: "Fallas", Value: 3},
       {N: "OBS", Value: 0},
       {N: "DEF", Value: 4.0},
-    ],
-  },{
-    Grupo: "0001",
-    Asignatura: "Calculo 1",
-    Creditos: "3",
-    Corte1: [
-      {N: 1, Value: 3.5, Perc: 30}
-    ],
-    Corte2: [
-      {N: 4, Value: 4.5, Perc: 15},
-      {N: 5, Value: 3.5, Perc: 15}
-    ],
-    LabExamHab: [
-      {N: "Lab", Value: 4.5, Perc: 10},
-      {N: "Exam", Value: 3.5, Perc: 30},
-      {N: "Hab", Value: 0, Perc: 70}
-    ],
-    AcuFallasObsDef: [
-      {N: "ACU", Value: 3.75},
-      {N: "Fallas", Value: 1},
-      {N: "OBS", Value: 0},
-      {N: "DEF", Value: 3.7}
-    ],
+    ]},
   }
+
 ];
 
   info_est = {

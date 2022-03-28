@@ -140,78 +140,85 @@
         <br><br>
         <fieldset [ngClass]="{'fieldseter':true}" *ngIf="students">
             <legend> {{ 'notas.captura_notas' | translate }} </legend>
-            <table class="note-container ">
-                <thead class="">
-                    <tr>
-                        <th class="header-item">{{ 'notas.estudiante' | translate }}</th>
-                        <th class="header-item">{{ 'notas.primer_corte' | translate }}</th>
-                        <th class="header-item">{{ 'notas.segundo_corte' | translate }}</th>
-                        <th class="header-item">{{ 'notas.examen_final' | translate }}</th>
-                        <th class="header-item">{{ 'notas.habilitacion' | translate }}</th>
-                        <th class="header-item">{{ 'notas.acumulado' | translate }}</th>
-                        <th class="header-item">{{ 'notas.fallas' | translate }}</th>
-                        <th class="header-item">{{ 'notas.observaciones' | translate }}</th>
-                        <th class="header-item">{{ 'notas.total_definitivo' | translate }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let student of students; index as i">
-                        <td>
-                            <div class="container-form container-name">
-                                <label for="">{{ 'notas.codigo' | translate }}:</label>
-                                <span>{{student.code}}</span>
-                                <label for="">{{ 'notas.nombre' | translate }}:</label>
-                                <span>{{student.name}} {{student.lastname}}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes1">
-                            </ngx-note-percentage>
-                        </td>
-                        <td>
-
-                            <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes2">
-                            </ngx-note-percentage>
-                        </td>
-
-                        <td>
-
-                            <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes3">
-                            </ngx-note-percentage>
-                        </td>
-
-                        <td>
-
-                            <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes4">
-                            </ngx-note-percentage>
-                        </td>
-
-                        <td>
-
-                            <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes4">
-                            </ngx-note-percentage>
-                        </td>
-
-                        <td>
-
-                            <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes4">
-                            </ngx-note-percentage>
-                        </td>
-                        <td>
-
-                            <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes4">
-                            </ngx-note-percentage>
-                        </td>
-                        <td>
-
-                            <div class="container-form">
-                                {{student.acum}}
-                            </div>
-                        </td>
-
-                    </tr>
-                </tbody>
-            </table>
+            <nb-card>
+                <nb-card-body style="padding: 0rem;">
+        <ng2-smart-table [settings]="settings" [source]="dataSource">
+        </ng2-smart-table>
+                </nb-card-body>
+            </nb-card>
         </fieldset>
     </nb-card-body>
 </nb-card>
+
+<!-- <table class="note-container ">
+    <thead class="">
+        <tr>
+            <th class="header-item">{{ 'notas.estudiante' | translate }}</th>
+            <th class="header-item">{{ 'notas.primer_corte' | translate }}</th>
+            <th class="header-item">{{ 'notas.segundo_corte' | translate }}</th>
+            <th class="header-item">{{ 'notas.examen_final' | translate }}</th>
+            <th class="header-item">{{ 'notas.habilitacion' | translate }}</th>
+            <th class="header-item">{{ 'notas.acumulado' | translate }}</th>
+            <th class="header-item">{{ 'notas.fallas' | translate }}</th>
+            <th class="header-item">{{ 'notas.observaciones' | translate }}</th>
+            <th class="header-item">{{ 'notas.total_definitivo' | translate }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let student of students; index as i">
+            <td>
+                <div class="container-form container-name">
+                    <label for="">{{ 'notas.codigo' | translate }}:</label>
+                    <span>{{student.code}}</span>
+                    <label for="">{{ 'notas.nombre' | translate }}:</label>
+                    <span>{{student.name}} {{student.lastname}}</span>
+                </div>
+            </td>
+            <td>
+                <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes1">
+                </ngx-note-percentage>
+            </td>
+            <td>
+
+                <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes2">
+                </ngx-note-percentage>
+            </td>
+
+            <td>
+
+                <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes3">
+                </ngx-note-percentage>
+            </td>
+
+            <td>
+
+                <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes4">
+                </ngx-note-percentage>
+            </td>
+
+            <td>
+
+                <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes4">
+                </ngx-note-percentage>
+            </td>
+
+            <td>
+
+                <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes4">
+                </ngx-note-percentage>
+            </td>
+            <td>
+
+                <ngx-note-percentage (formObservable)="formNotes($event)" [settings]="student.notes4">
+                </ngx-note-percentage>
+            </td>
+            <td>
+
+                <div class="container-form">
+                    {{student.acum}}
+                </div>
+            </td>
+
+        </tr>
+    </tbody>
+</table> -->
