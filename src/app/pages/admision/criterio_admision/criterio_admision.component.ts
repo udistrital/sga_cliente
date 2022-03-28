@@ -486,7 +486,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       event.data.Porcentaje == 0;
     }
     this.calcularPorcentaje();
-    debugger
     if (!event.isSelected) {
       this.requisitoId = event.data.Id;
       if (event.data.Subcriterios.length > 0) {
@@ -500,8 +499,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       const subcriterios = event.data.Subcriterios;
       if (subcriterios != undefined && subcriterios.length > 0) {
         this.dataSourceSubcriterio.load(this.dataSubcriterios);
-        // for (let i = 0; i < subcriterios.length; i++) {
-        //   this.dataSourceSubcriterio.load(subcriterios[i]);
+
         this.settingsSubcriterio = {
           columns: {
             Criterio: {
