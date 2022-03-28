@@ -80,3 +80,203 @@ export const notes5 = {
     ],
     type: 'notes',
 }
+
+export const data1 = [
+    {
+        Codigo: "",
+        Nombre: "",
+        Apellido: "",
+        Corte1: { forTitle: true, needEdit: false, canEdit: false, values: [
+          {N: "P1", Value: 0, Perc: 10},
+          {N: "P2", Value: 0, Perc: 10},
+          {N: "P3", Value: 0, Perc: 10}
+        ]},
+        Corte2: { forTitle: true, needEdit: false, canEdit: false, values: [
+          {N: "P4", Value: 0, Perc: 10},
+          {N: "P5", Value: 0, Perc: 10},
+          {N: "P6", Value: 0, Perc: 10}
+        ]},
+        LabExamHabAcu: { forTitle: true, needEdit: false, canEdit: false, values: [
+          {N: "Lab", Value: 0, Perc: 10},
+          {N: "Exam", Value: 0, Perc: 30},
+          {N: "Hab", Value: 0, Perc: 70},
+          {N: "ACU", Value: 0}
+        ]},
+        Varios: { forTitle: true, needEdit: false, canEdit: false, values: [
+          {N: "Fallas", Value: 0},
+          {N: "OBS", Value: 0}
+        ]},
+        Total: { forTitle: true, needEdit: false, canEdit: false, values: [
+          {N: "DEF", Value: 0}
+        ]},
+      },
+    {
+    Codigo: "0010",
+    Nombre: "Neider Fabian",
+    Apellido: "Walteros Pinto",
+    Corte1: { needEdit: true, canEdit: true, values: [
+      {N: "P1", Value: 4.5, Perc: 10},
+      {N: "P2", Value: 3.5, Perc: 10},
+      {N: "P3", Value: 4.0, Perc: 10}
+    ]},
+    Corte2: { needEdit: true, canEdit: true, values: [
+      {N: "P4", Value: 4.5, Perc: 10},
+      {N: "P5", Value: 3.5, Perc: 10},
+      {N: "P6", Value: 4.0, Perc: 10}
+    ]},
+    LabExamHabAcu: { needEdit: true, canEdit: true, values: [
+      {N: "Lab", Value: 4.5, Perc: 10},
+      {N: "Exam", Value: 3.5, Perc: 30},
+      {N: "Hab", Value: 0, Perc: 70},
+      {N: "ACU", Value: 3.9}
+    ]},
+    Varios: { needEdit: true, canEdit: true, values: [
+      {N: "Fallas", Value: 3},
+      {N: "OBS", Value: 0}
+    ]},
+    Total: { needEdit: true, canEdit: true, values: [
+      {N: "DEF", Value: 4.0}
+    ]},
+  },
+  {
+  Codigo: "0010",
+  Nombre: "Neider Fabian",
+  Apellido: "Walteros Pinto",
+  Corte1: { needEdit: true, canEdit: true, values: [
+    {N: "P1", Value: 4.5, Perc: 10},
+    {N: "P2", Value: 3.5, Perc: 10},
+    {N: "P3", Value: 4.0, Perc: 10}
+  ]},
+  Corte2: { needEdit: true, canEdit: true, values: [
+    {N: "P4", Value: 4.5, Perc: 10},
+    {N: "P5", Value: 3.5, Perc: 10},
+    {N: "P6", Value: 4.0, Perc: 10}
+  ]},
+  LabExamHabAcu: { needEdit: true, canEdit: true, values: [
+    {N: "Lab", Value: 4.5, Perc: 10},
+    {N: "Exam", Value: 3.5, Perc: 30},
+    {N: "Hab", Value: 0, Perc: 70},
+    {N: "ACU", Value: 3.9}
+  ]},
+  Varios: { needEdit: true, canEdit: true, values: [
+    {N: "Fallas", Value: 3},
+    {N: "OBS", Value: 0}
+  ]},
+  Total: { needEdit: true, canEdit: true, values: [
+    {N: "DEF", Value: 4.0}
+  ]},
+},
+{
+Codigo: "0010",
+Nombre: "Neider Fabian",
+Apellido: "Walteros Pinto",
+Corte1: { needEdit: true, canEdit: true, values: [
+  {N: "P1", Value: 4.5, Perc: 10},
+  {N: "P2", Value: 3.5, Perc: 10},
+  {N: "P3", Value: 4.0, Perc: 10}
+]},
+Corte2: { needEdit: true, canEdit: true, values: [
+  {N: "P4", Value: 4.5, Perc: 10},
+  {N: "P5", Value: 3.5, Perc: 10},
+  {N: "P6", Value: 4.0, Perc: 10}
+]},
+LabExamHabAcu: { needEdit: true, canEdit: true, values: [
+  {N: "Lab", Value: 4.5, Perc: 10},
+  {N: "Exam", Value: 3.5, Perc: 30},
+  {N: "Hab", Value: 0, Perc: 70},
+  {N: "ACU", Value: 3.9}
+]},
+Varios: { needEdit: true, canEdit: true, values: [
+  {N: "Fallas", Value: 3},
+  {N: "OBS", Value: 0}
+]},
+Total: { needEdit: true, canEdit: true, values: [
+  {N: "DEF", Value: 4.0}
+]},
+},
+{
+Codigo: "0010",
+Nombre: "Neider Fabian",
+Apellido: "Walteros Pinto",
+Corte1: { needEdit: true, canEdit: true, values: [
+  {N: "P1", Value: 4.5, Perc: 10},
+  {N: "P2", Value: 3.5, Perc: 10},
+  {N: "P3", Value: 4.0, Perc: 10}
+]},
+Corte2: { needEdit: true, canEdit: true, values: [
+  {N: "P4", Value: 4.5, Perc: 10},
+  {N: "P5", Value: 3.5, Perc: 10},
+  {N: "P6", Value: 4.0, Perc: 10}
+]},
+LabExamHabAcu: { needEdit: true, canEdit: true, values: [
+  {N: "Lab", Value: 4.5, Perc: 10},
+  {N: "Exam", Value: 3.5, Perc: 30},
+  {N: "Hab", Value: 0, Perc: 70},
+  {N: "ACU", Value: 3.9}
+]},
+Varios: { needEdit: true, canEdit: true, values: [
+  {N: "Fallas", Value: 3},
+  {N: "OBS", Value: 0}
+]},
+Total: { needEdit: true, canEdit: true, values: [
+  {N: "DEF", Value: 4.0}
+]},
+},
+{
+Codigo: "0010",
+Nombre: "Neider Fabian",
+Apellido: "Walteros Pinto",
+Corte1: { needEdit: true, canEdit: true, values: [
+  {N: "P1", Value: 4.5, Perc: 10},
+  {N: "P2", Value: 3.5, Perc: 10},
+  {N: "P3", Value: 4.0, Perc: 10}
+]},
+Corte2: { needEdit: true, canEdit: true, values: [
+  {N: "P4", Value: 4.5, Perc: 10},
+  {N: "P5", Value: 3.5, Perc: 10},
+  {N: "P6", Value: 4.0, Perc: 10}
+]},
+LabExamHabAcu: { needEdit: true, canEdit: true, values: [
+  {N: "Lab", Value: 4.5, Perc: 10},
+  {N: "Exam", Value: 3.5, Perc: 30},
+  {N: "Hab", Value: 0, Perc: 70},
+  {N: "ACU", Value: 3.9}
+]},
+Varios: { needEdit: true, canEdit: true, values: [
+  {N: "Fallas", Value: 3},
+  {N: "OBS", Value: 0}
+]},
+Total: { needEdit: true, canEdit: true, values: [
+  {N: "DEF", Value: 4.0}
+]},
+},
+{
+Codigo: "0010",
+Nombre: "Neider Fabian",
+Apellido: "Walteros Pinto",
+Corte1: { needEdit: true, canEdit: true, values: [
+  {N: "P1", Value: 4.5, Perc: 10},
+  {N: "P2", Value: 3.5, Perc: 10},
+  {N: "P3", Value: 4.0, Perc: 10}
+]},
+Corte2: { needEdit: true, canEdit: true, values: [
+  {N: "P4", Value: 4.5, Perc: 10},
+  {N: "P5", Value: 3.5, Perc: 10},
+  {N: "P6", Value: 4.0, Perc: 10}
+]},
+LabExamHabAcu: { needEdit: true, canEdit: true, values: [
+  {N: "Lab", Value: 4.5, Perc: 10},
+  {N: "Exam", Value: 3.5, Perc: 30},
+  {N: "Hab", Value: 0, Perc: 70},
+  {N: "ACU", Value: 3.9}
+]},
+Varios: { needEdit: true, canEdit: true, values: [
+  {N: "Fallas", Value: 3},
+  {N: "OBS", Value: 0}
+]},
+Total: { needEdit: true, canEdit: true, values: [
+  {N: "DEF", Value: 4.0}
+]},
+}
+
+];
