@@ -1,16 +1,9 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
-import { Input, Output, EventEmitter } from '@angular/core';
-import { Router, ResolveEnd } from '@angular/router';
+import { Output, EventEmitter } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { OikosService } from '../../../@core/data/oikos.service';
-import { UserService } from '../../../@core/data/users.service';
-import { CoreService } from '../../../@core/data/core.service';
-import { TercerosService} from '../../../@core/data/terceros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
-import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
-import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { PopUpManager } from '../../../managers/popUpManager';
@@ -87,13 +80,6 @@ export class AsignacionCuposComponent implements OnInit, OnChanges {
   Campo2Control = new FormControl('', [Validators.required]);
   constructor(
     private translate: TranslateService,
-    private router: Router,
-    private terceroService: TercerosService,
-    private oikosService: OikosService,
-    private userService: UserService,
-    private coreService: CoreService,
-    private evaluacionService: EvaluacionInscripcionService,
-    private sgaMidService: SgaMidService,
     private parametrosService: ParametrosService,
     private popUpManager: PopUpManager,
     private projectService: ProyectoAcademicoService,

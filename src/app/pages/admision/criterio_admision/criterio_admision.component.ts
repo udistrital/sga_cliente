@@ -26,7 +26,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   @Input('criterios_select')
   set name(inscripcion_id: number) {
     this.inscripcion_id = inscripcion_id;
-    console.info('Posgrado ins: ' + this.inscripcion_id)
+
     if (this.inscripcion_id === 0 || this.inscripcion_id.toString() === '0') {
       this.selectedValue = undefined;
       window.localStorage.setItem('programa', this.selectedValue);
@@ -144,8 +144,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   async loadData() {
     try {
       this.info_persona_id = this.userService.getPersonaId();
-      console.info('Carga hecha')
-      console.info(this.info_persona_id)
+
       await this.cargarPeriodo();
     } catch (error) {
       Swal.fire({
@@ -210,7 +209,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   }
 
   setPercentage_info(number, tab) {
-    console.info(number)
     this.percentage_tab_info[tab] = (number * 100) / 2;
     this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
     this.setPercentage_total();
@@ -369,7 +367,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   }
 
   perfil_editar(event): void {
-    console.info(event)
     switch (event) {
       case 'info_icfes':
         this.show_icfes = true;
@@ -394,13 +391,10 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   }
 
   viewtab() {
-    console.info('Tipo criterio')
-    console.info(typeof (this.criterio_selected[0]))
     if (this.criterio_selected === []) {
       this.Campo2Control = new FormControl(this.criterio_selected)
       this.selectTipo = false
     } else {
-      console.info(this.criterio_selected)
       // Porcentaje: element.PorcentajeGeneral,
       this.criterio_selected.forEach(criterio => {
         criterio['Criterio'] = criterio.Nombre
@@ -457,6 +451,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
           editable: true,
           filter: false,
           valuePrepareFunction: (value) => {
+            this.calcularPorcentaje();
             return value;
           },
         },
@@ -483,29 +478,28 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     }
   }
 
-  onEdit($event) {
+  onEdit(event) {
+    console.log(event)
     this.requisitoId = undefined;
     this.mostrarSubcriterio = false;
-    if ($event.data.Porcentaje == '') {
-      $event.data.Porcentaje == 0;
+    if (event.data.Porcentaje == '') {
+      event.data.Porcentaje == 0;
     }
     this.calcularPorcentaje();
-
-    if (!$event.isSelected) {
-      this.requisitoId = $event.data.Id;
-      if ($event.data.Subcriterios.length > 0) {
+    if (!event.isSelected) {
+      this.requisitoId = event.data.Id;
+      if (event.data.Subcriterios.length > 0) {
         this.mostrarSubcriterio = true;
-        this.createSubCriterios($event.data.Subcriterios);
+        this.createSubCriterios(event.data.Subcriterios);
       } else {
         this.dataSubcriterios = [];
         this.dataSubcriterios.push({});
       }
       this.dataSourceSubcriterio = new LocalDataSource();
-      const subcriterios = $event.data.Subcriterios;
+      const subcriterios = event.data.Subcriterios;
       if (subcriterios != undefined && subcriterios.length > 0) {
         this.dataSourceSubcriterio.load(this.dataSubcriterios);
-        // for (let i = 0; i < subcriterios.length; i++) {
-        //   this.dataSourceSubcriterio.load(subcriterios[i]);
+
         this.settingsSubcriterio = {
           columns: {
             Criterio: {
@@ -522,6 +516,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
               editable: true,
               filter: false,
               valuePrepareFunction: (value) => {
+                this.calcularPorcentajeSubcriterio();
                 return value;
               },
             },

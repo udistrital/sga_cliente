@@ -236,7 +236,7 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
       matSelect.writeValue(null);
     } else {
       Swal.fire({
-        icon:'error',
+        icon: 'error',
         title: 'ERROR',
         text: this.translate.instant('inscripcion.error_proyecto_ya_existe'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
@@ -280,18 +280,14 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
           this.sgamidService.post('admision/postcupos', this.info_cupos)
             .subscribe(res => {
               const r = <any>res
-              if (r !== null && r.Type !== 'error') {
+              console.log(r)
+              if (r !== null && r.Status === '200') {
                 this.loading = false;
-                // this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                //   this.translate.instant('GLOBAL.info_cupos') + ' ' +
-                //   this.translate.instant('GLOBAL.confirmarCrear'));
                 this.cambiarestados();
                 this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_cupos') + ' ' + this.translate.instant('GLOBAL.confirmarCrear'));
                 this.showListadoAspirantes = true;
                 this.eventChange.emit(true);
               } else {
-                // this.showToast('error', this.translate.instant('GLOBAL.error'),
-                //   this.translate.instant('GLOBAL.error'));
                 this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
               }
             },
@@ -438,41 +434,41 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
 
             data.forEach((element, index) => {
               if (element.PersonaId != undefined) {
-                  if ((index + 1) <= this.info_cupos.CuposAsignados) {
-                    element.EstadoInscripcionId.Id = 2;
-                    this.inscripcionService.put('inscripcion/', element)
-                      .subscribe(res => {
+                if ((index + 1) <= this.info_cupos.CuposAsignados) {
+                  element.EstadoInscripcionId.Id = 2;
+                  this.inscripcionService.put('inscripcion/', element)
+                    .subscribe(res => {
+                      this.loading = false;
+                    },
+                      (error: HttpErrorResponse) => {
                         this.loading = false;
-                      },
-                        (error: HttpErrorResponse) => {
-                          this.loading = false;
-                          Swal.fire({
-                            icon:'error',
-                            title: error.status + '',
-                            text: this.translate.instant('ERROR.' + error.status),
-                            footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-                              this.translate.instant('GLOBAL.info_estado'),
-                            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                          });
+                        Swal.fire({
+                          icon: 'error',
+                          title: error.status + '',
+                          text: this.translate.instant('ERROR.' + error.status),
+                          footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                            this.translate.instant('GLOBAL.info_estado'),
+                          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                         });
-                  } else {
-                    element.EstadoInscripcionId.Id = 4;
-                    this.inscripcionService.put('inscripcion/', element)
-                      .subscribe(res => {
+                      });
+                } else {
+                  element.EstadoInscripcionId.Id = 4;
+                  this.inscripcionService.put('inscripcion/', element)
+                    .subscribe(res => {
+                      this.loading = false;
+                    },
+                      (error: HttpErrorResponse) => {
                         this.loading = false;
-                      },
-                        (error: HttpErrorResponse) => {
-                          this.loading = false;
-                          Swal.fire({
-                            icon:'error',
-                            title: error.status + '',
-                            text: this.translate.instant('ERROR.' + error.status),
-                            footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-                              this.translate.instant('GLOBAL.info_estado'),
-                            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                          });
+                        Swal.fire({
+                          icon: 'error',
+                          title: error.status + '',
+                          text: this.translate.instant('ERROR.' + error.status),
+                          footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                            this.translate.instant('GLOBAL.info_estado'),
+                          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                         });
-                  }
+                      });
+                }
               }
             });
 
@@ -486,7 +482,7 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
       },
       (error: HttpErrorResponse) => {
         Swal.fire({
-          icon:'error',
+          icon: 'error',
           title: error.status + '',
           text: this.translate.instant('ERROR.' + error.status),
           footer: this.translate.instant('GLOBAL.actualizar') + '-' +
@@ -519,7 +515,7 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
       },
         (error: HttpErrorResponse) => {
           Swal.fire({
-            icon:'error',
+            icon: 'error',
             title: error.status + '',
             text: this.translate.instant('ERROR.' + error.status),
             footer: this.translate.instant('GLOBAL.actualizar') + '-' +
