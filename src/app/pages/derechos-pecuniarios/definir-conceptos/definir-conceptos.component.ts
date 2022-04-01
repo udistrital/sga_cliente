@@ -268,7 +268,7 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
       .get('derechos_pecuniarios/' + this.vigenciaActual.value)
       .subscribe(
         response => {
-          const data: any[] = response['Data'];
+          const data: any[] = response.Data;
           if (Object.keys(data).length > 0 && Object.keys(data[0]).length > 0) {
             data.forEach(obj => {
               const concepto = new Concepto();
@@ -325,8 +325,8 @@ export class DefinirConceptosComponent implements OnInit, OnChanges {
           .post('derechos_pecuniarios', nuevoConcepto)
           .subscribe(
             response => {
-              concepto.Id = response['Concepto']['Id'];
-              concepto.FactorId = response['Factor']['Id'];
+              concepto.Id = response['Data']['Concepto']['Id'];
+              concepto.FactorId = response['Data']['Factor']['Id'];
               this.datosConceptos.append(concepto);
               this.popUpManager.showSuccessAlert(
                 this.translate.instant('derechos_pecuniarios.concepto_exito'),
