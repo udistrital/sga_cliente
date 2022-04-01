@@ -167,10 +167,10 @@ export class ConsultarSolicitudesDerechosPecuniarios {
     this.loading = true;
     this.sgaMidService.get('derechos_pecuniarios/solicitudes').subscribe(
       (response: any) => {
-        if (response !== null && response.Code === '400') {
+        if (response !== null && response.Status === '400') {
           this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error'));
           this.dataSource.load([]);
-        } else if (response != null && response.Code === '404' || response.Data[0] === null) {
+        } else if (response != null && response.Status === '404' || response.Data[0] === null) {
           this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('derechos_pecuniarios.no_recibo'));
           this.dataSource.load([]);
         } else {
@@ -230,7 +230,7 @@ export class ConsultarSolicitudesDerechosPecuniarios {
       this.Respuesta.TerceroResponasble = { Id: this.userResponse.Id };
       this.sgaMidService.post('derechos_pecuniarios/respuesta_solicitud/' + this.solicitudData.Id, this.Respuesta).subscribe(
         (res: any) => {
-          if (res !== null && res.Response.Code === '200') {
+          if (res !== null && res.Status === '200') {
             this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.info_estado') + ' ' +
               this.translate.instant('GLOBAL.operacion_exitosa'));
             this.loadInfoRecibos();
