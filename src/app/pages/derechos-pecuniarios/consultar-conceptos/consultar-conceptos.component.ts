@@ -45,7 +45,7 @@ export class ConsultarConceptosComponent implements OnInit {
     this.datosCargados = [];
     this.sgaMidService.get('derechos_pecuniarios/' + this.vigenciaActual).subscribe(
       response => {
-        var data: any[] = response['Data'];
+        var data: any[] = response.Data;
         if (Object.keys(data).length > 0 && Object.keys(data[0]).length > 0) {
           data.forEach(obj => {
             var concepto = new Concepto();

@@ -122,7 +122,7 @@ export class CopiarConceptosComponent implements OnInit {
       .get('derechos_pecuniarios/' + this.vigenciaElegida.value)
       .subscribe(
         response => {
-          const data: any[] = response['Data'];
+          const data: any[] = response.Data;
           if (Object.keys(data).length > 0 && Object.keys(data[0]).length > 0) {
             data.forEach(obj => {
               const concepto = new Concepto();
