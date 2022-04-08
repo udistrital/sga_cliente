@@ -153,7 +153,6 @@ export class SolicitudTransferenciaComponent implements OnInit {
         if (inscripcion.Success) {
           this.loading = true;
 
-          this.estado = inscripcion['Data']['Estado']['Nombre'];
           this.periodo = inscripcion['Data']['Periodo']['Nombre'];
           this.nivelNombre = inscripcion['Data']['Nivel']['Nombre'];
           this.nivel = inscripcion['Data']['Nivel']['Id'];
@@ -225,6 +224,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
           }
 
           if (inscripcion.Data.SolicitudId) {
+            this.estado = inscripcion['Data']['Estado']['Nombre'];
             let data = {
               Cancelo: inscripcion['Data']['DatosInscripcion']['CanceloSemestre'],
               Acuerdo: inscripcion['Data']['DatosInscripcion']['SolicitudAcuerdo'],
