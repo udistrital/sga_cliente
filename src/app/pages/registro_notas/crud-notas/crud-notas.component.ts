@@ -13,6 +13,10 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { RenderDataComponent } from '../../../@theme/components';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { Router } from '@angular/router';
+import html2canvas from 'html2canvas';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'crud-notas',
@@ -80,6 +84,9 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
 
   //// tiempo muestra modal ////
   timeinfo: number = 10000;
+
+  //// pdf /////
+  @ViewChild('HtmlPdf', {static: true}) HtmlPdf: ElementRef;
 
   //// loading ////
   loading: boolean = false;
@@ -682,6 +689,80 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
         this.fillTable();
         this.dataSource.load(this.calificacionesEstudiantesV2);
       }
+    });
+  }
+
+  async exportar(){
+    this.popUpManager.showConfirmAlert(this.translate.instant('notas.cancelar_cambios_generarPDF'),this.translate.instant('notas.title_cancelar_cambios_generarPDF')).then(accion => {
+      if(accion.value){
+        this.fillTable();
+        this.dataSource.load(this.calificacionesEstudiantesV2);
+        this.loading = true;
+        this.generatePdf("Exportar").then(()=>{
+          this.loading = false;
+        }).catch(()=>{
+          this.loading = false;
+        });
+      }
+    });
+  }
+
+  async imprimir(){
+    this.popUpManager.showConfirmAlert(this.translate.instant('notas.cancelar_cambios_generarPDF'),this.translate.instant('notas.title_cancelar_cambios_generarPDF')).then(accion => {
+      if(accion.value){
+        this.fillTable();
+        this.dataSource.load(this.calificacionesEstudiantesV2);
+        this.loading = true;
+        this.generatePdf("Imprimir").then(()=>{
+          this.loading = false;
+        }).catch(()=>{
+          this.loading = false;
+        });
+      }
+    });
+  }
+
+  generatePdf(accion: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+    console.log("generating file")
+    let date = new Date()
+    let dateinFile = 'Generado por Sistema de Gestión Académica\t\t\t'+date.toLocaleString()+'\n\r'
+    let dateinFileName = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear()
+    let docDefinition;
+    html2canvas(this.HtmlPdf.nativeElement, {scrollX: -window.scrollX}).then(
+      canvas => {
+        docDefinition = {
+          pageSize: 'LETTER',
+          pageOrientation: 'landscape',
+          pageMargins: [ 40, 40, 40, 40 ],
+          content: [
+            {
+              text: dateinFile, fontSize: 8, alignment: 'center', color: 'gray',
+            },
+            {
+              image: canvas.toDataURL('image/png'),
+              width: 700,
+              scale: 5,
+              alignment: 'center',
+            }
+          ],
+        };
+        let namePdf = this.dataDocente.Asignatura+'_'+this.dataDocente.Docente+'_'+dateinFileName+'.pdf';
+        const pdfDoc = pdfMake.createPdf(docDefinition);
+
+        console.log("renderizado ahora: "+accion)
+        
+        if(accion == "Exportar") {
+          pdfDoc.download(namePdf);
+        } else if (accion == "Imprimir"){
+          pdfDoc.print();
+        }
+        resolve(true)
+      }).catch(
+        error => {
+          reject(error)
+        }
+      );
     });
   }
 
