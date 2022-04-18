@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { map } from 'rxjs/operators';
+import { PorcentajesAsignatura } from '../../../@core/data/models/registro-notas/porcentajes-asignatura';
 import { MyValidators } from './../../../@core/utils/validators';
 
 @Component({
@@ -15,8 +16,10 @@ export class NotePercentageComponent implements OnInit, AfterViewInit {
   name: string = '';
   percentage: number = 0;
   currentValue = [];
-  type: any = '';
   importantValue: any = null;
+  isreadonly: boolean = false;
+  editporTiempo: boolean = false;
+  editExtemporaneo: boolean = false;
   @Output() formObservable: EventEmitter<any> = new EventEmitter();
 
   constructor(private formBuilder: FormBuilder) {
@@ -26,43 +29,38 @@ export class NotePercentageComponent implements OnInit, AfterViewInit {
   }
 
   @Input('settings')
-  set settings(settings: any) {
+  set settings(settings: PorcentajesAsignatura | any) {
     if (settings) {
-      this.name = settings.name;
-      this.settingFields = settings.fields;
-      this.percentage = settings.percentage;
-      this.type = settings.type;
+      this.name = settings.fields.name;
+      this.settingFields = settings.fields.field;
+      this.editporTiempo = settings.editporTiempo ? settings.editporTiempo : false;
+      this.editExtemporaneo = settings.editExtemporaneo ? settings.editExtemporaneo : false;
+      this.isreadonly = !((!settings.finalizado && this.editporTiempo) || this.editExtemporaneo);
+
+
       this.importantValue = settings.importantValue;
-      this.buildForm(settings.type);
-      settings.percentage ? this.maxPercentageField.setValue(settings.percentage) : null;
+      this.buildForm();
+      settings.fields.porcentaje ? this.maxPercentageField.setValue(settings.fields.porcentaje) : null;
       settings.importantValue ? this.importantValueField.setValue(settings.importantValue) : null;
     }
   }
 
-  private createPercentageField(defaultValue, type, name) {
-    if (type === 'percentage') {
-      console.log(type)
+  private createPercentageField(defaultValue, name, maxval) {
       return this.formBuilder.group({
-        [name]: [defaultValue, [Validators.min(0), Validators.max(100)]]
+        [name]: [defaultValue, [Validators.min(0), Validators.max(maxval)]]
       })
-    } else {
-      return this.formBuilder.group({
-        [name]: [defaultValue, [Validators.min(0), Validators.max(5)]]
-      })
-    }
   }
 
   ngOnInit() {
-    if (this.settingFields && this.type) {
+    if (this.settingFields) {
       this.settingFields.forEach((field) => {
-        this.fields.push(this.createPercentageField(field.value ? field.value : 0, this.type, field.name?field.name:'field'));
+        this.fields.push(this.createPercentageField(field.perc ? field.perc : 0, field.name ? field.name:'field', field.max ? field.max : 100));
       });
 
     }
   }
 
-  private buildForm(type) {
-    if (type === 'percentage') {
+  private buildForm() {
       this.form = this.formBuilder.group({
         fields: this.formBuilder.array([]),
         maxPercentage: new FormControl(''),
@@ -70,13 +68,7 @@ export class NotePercentageComponent implements OnInit, AfterViewInit {
       }, {
         validators: MyValidators.isPercentageValid
       })
-    } else {
-      this.form = this.formBuilder.group({
-        fields: this.formBuilder.array([]),
-        maxPercentage: new FormControl(''),
-        importantValue: new FormControl(''),
-      })
-    }
+    
     this.formObservable.emit(this.form);
   }
 

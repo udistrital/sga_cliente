@@ -20,6 +20,13 @@ mat-form-field {
     width: 40px;
 }
 
+mat-form-field-wrapper {
+    padding-bottom: 0;
+}
+mat-form-field-subscript-wrapper {
+    display: none;
+}
+
 /*     input.readonly {
         width: 20px;
         &::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
