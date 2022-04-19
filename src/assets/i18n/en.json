@@ -1469,6 +1469,8 @@
         "vacio": "There are empty fields in the table. Please check the information and try again",
         "calcular": "Calculate the final score of the aspirants",
         "error": "An unexpected error has occurred",
+        "error_calendario": "There are currently no transfer or reinstatement registration dates available",
+        "error_nueva_transferencia": "It is not possible to generate a new transfer",
         "registro_error": "An unexpected error occurred while saving information",
         "registro_exito": "The stored information has been saved successfully",
         "no_data": "No information recorded",

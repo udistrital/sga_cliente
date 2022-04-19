@@ -2,18 +2,18 @@
     <table>
         <thead>
             <tr>
-                <ng-container *ngFor="let values of ObjectData">
-                    <ng-container *ngIf="values.needPercent; then hasPercentH else noPercentH"></ng-container>
+                <ng-container *ngFor="let f of fields">
+                    <ng-container *ngIf="f.needPercent; then hasPercentH else noPercentH"></ng-container>
                     <ng-template #hasPercentH>
                         <td style="padding-left: 5px;padding-right: 5px;">
-                            {{values.N}}
+                            {{f.name}}
                             <br>
-                            {{values.Perc}}%
+                            {{f.perc}}%
                         </td>
                     </ng-template>
                     <ng-template #noPercentH>
                         <td style="padding-left: 5px;padding-right: 5px;">
-                            {{values.N}}
+                            {{f.name}}
                         </td>
                     </ng-template>
                 </ng-container>
@@ -22,7 +22,7 @@
     </table>
 </ng-container>
 
-<ng-container *ngIf="!needEdit && !forTitle">
+<!-- <ng-container *ngIf="!needEdit && !forTitle">
     <table>
         <thead>
             <tr>
@@ -62,22 +62,41 @@
             </tr>
         </tbody>
     </table>
-</ng-container>
+</ng-container> -->
 
 <ng-container *ngIf="needEdit && !forTitle">
     <form [formGroup]="form">
     <table>
         <tbody>
             <tr>
-                <ng-container *ngFor="let values of ObjectData">
-                    <td title="Nota: {{values.N}}">
+                <ng-container *ngFor="let f of fields">
+                    <td title="Nota: {{f.name}}" [ngStyle]="{'background-color': (!canEdit && (f.forceEdit ? !f.forceEdit : true)) ? 'white' : 'lightcyan'}">
                         <mat-form-field>
-                            <input matInput [formControlName]="values.N" type="number" step="0.01" min="0" max="5"  [readonly]="!canEdit"> <!-- [value]="values.Value" -->
+                            <input matInput [formControlName]="f.name" type="number" step="0.01" min="0" max="5" value="{{f.value}}"  [readonly]="!canEdit && (f.forceEdit ? !f.forceEdit : true)"> <!-- [value]="values.Value" -->
                         </mat-form-field>
                     </td>
                 </ng-container>
             </tr>
         </tbody>
     </table>
+    <div *ngIf="form.invalid" align="center" style="color: red;">Valores Incorrectos</div>
 </form>
+</ng-container>
+
+<ng-container *ngIf="forClose">
+    <form [formGroup]="form">
+        <table>
+            <thead>
+                <tr>
+                    <td>
+                        <ng-container *ngFor="let f of fields">
+                            <mat-checkbox color="primary" [formControlName]="f.name" [disabled]="!canEdit">
+                                <strong>Cerrar {{f.name}}</strong>
+                            </mat-checkbox>
+                        </ng-container>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+    </form>
 </ng-container>

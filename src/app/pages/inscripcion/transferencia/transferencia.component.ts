@@ -452,6 +452,17 @@ export class TransferenciaComponent implements OnInit {
             });
             this.loading = false;
             resolve(response.Data)
+          } else {
+
+            Swal.fire({
+              icon: 'warning',
+              title: this.translate.instant('GLOBAL.info'),
+              text: this.translate.instant('admision.error_calendario') + '. ' + this.translate.instant('admision.error_nueva_transferencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+
+            this.clean();
+            this.listadoSolicitudes = true;
           }
           reject();
         },

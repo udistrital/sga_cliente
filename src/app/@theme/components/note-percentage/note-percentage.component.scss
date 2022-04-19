@@ -6,23 +6,29 @@
     border-radius: 0.5rem;
     border: 1px var(--primary);
     width: auto;
-    max-width: 20vw;
-    padding: 1rem;
+    min-width: 7rem;
+    max-width: 10rem;//18vw;
+    padding: 0.5rem;
     justify-content: space-around;
     * {
-        width: 3rem;
+        width: 2.5rem;
     }
 }
 
 .container-form {
-    padding: 1rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
     align-items: center;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     background-color: white;
-    max-width: 17rem;
-    box-shadow: 1px 1px 3px 0px #888888;
+    border-radius: 0.5rem;
+    width: auto;
+    min-width: 7.5rem;
+    max-width: 12rem;
+    //box-shadow: 1px 1px 3px 0px #888888;
+    border: 2px solid lightsteelblue;
 }
 
 input::after {
