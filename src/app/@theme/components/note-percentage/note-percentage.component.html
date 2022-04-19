@@ -1,19 +1,20 @@
-<div class="container-form">
-    <h5> {{name?name:''}} </h5>
+<div class="container-form" [ngStyle]="{'background-color': (editporTiempo) ? 'lightsteelblue' : ((editExtemporaneo) ? 'lightcoral' : 'white')}">
+    <strong> {{name?name:''}} </strong>
     <form [formGroup]="form" class="container-percentage">
         <div formArrayName="fields" *ngFor="let per of fields.controls; let i = index">
             <div [formGroupName]="i">
                 <mat-form-field>
-                    <mat-label for="i">{{settingFields[i].label}}</mat-label>
-                    <input id="i" placeholder="{{settingFields[i].placeholder}}" formControlName="{{settingFields[i].name?settingFields[i].name:field}}" matInput
-                        type="number" min="0" max="100">
+                    <mat-label for="i">{{settingFields[i].name}} &nbsp;%</mat-label>
+                    <input id="i" placeholder="% {{settingFields[i].name}}" formControlName="{{settingFields[i].name?settingFields[i].name:field}}" matInput
+                        readonly="{{isreadonly?isreadonly:false}}" type="number" min="{{settingFields[i].fix?settingFields[i].fix:0}}" 
+                        max="{{settingFields[i].max?settingFields[i].max:(settingFields[i].fix?settingFields[i].fix:100)}}">
                 </mat-form-field>
             </div>
         </div>
     </form>
     <div *ngIf="form.errors">
-        <mat-error *ngIf="form.hasError('invalid_percentage')">
-            La suma de los porcentajes debe ser igual a {{maxPercentageField.value}}
+        <mat-error style="text-align: center;" *ngIf="form.hasError('invalid_percentage')">
+            {{ 'notas.error_porcentaje' | translate }} {{maxPercentageField.value}}
         </mat-error>
     </div>
 </div>
