@@ -1571,7 +1571,8 @@
         "listar_aspirantes": "Listar aspirantes",
         "cupos_proyectos": "Asignación de cupos por proyecto curricular",
         "error_no_aspirantes": "No existen aspirantes por evaluar para el periodo y proyecto seleccionado",
-        "titulo_no_aspirantes": "No hay aspirantes por evaluar"
+        "titulo_no_aspirantes": "No hay aspirantes por evaluar",
+        "error_no_proyecto": "No hay proyectos curriculares disponibles"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

@@ -1537,7 +1537,8 @@
         "listar_aspirantes": "List applicants",
         "cupos_proyectos": "Allocation of quotas per academic project",
         "error_no_aspirantes": "There are no applicants to evaluate for the selected period and project",
-        "titulo_no_aspirantes": "There are no applicants to evaluate"
+        "titulo_no_aspirantes": "There are no applicants to evaluate",
+        "error_no_proyecto": "No curriculum projects available"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",
