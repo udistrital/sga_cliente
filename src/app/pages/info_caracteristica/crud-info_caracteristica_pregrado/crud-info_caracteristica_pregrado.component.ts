@@ -110,7 +110,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
       this.loadOptionsCiudadNacimiento();
     } else if (event.nombre === 'TipoDiscapacidad') {
       this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar =
-        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0) || this.primeraCarga;
+        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
 
       if ((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0) {
         this.mensaje_discapcidades = true;
@@ -127,7 +127,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
       }
     } else if (event.nombre === 'TipoPoblacion') {
       this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].ocultar =
-        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0) || this.primeraCarga;
+        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
 
       if ((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0) {
         this.mensaje_poblacion = true;
@@ -273,7 +273,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
       this.denied_acces = false;
       this.sgamidService.get('persona/consultar_complementarios/' + this.info_persona_id)
         .subscribe(async res => {
-          if (res !== null) {
+          if (res.Response.Code !== "404") {
             this.datosGet = <InfoCaracteristicaGet>res.Response.Body[0].Data;
             this.info_info_caracteristica = <InfoCaracteristica>res.Response.Body[0].Data;
             this.info_info_caracteristica.GrupoSanguineo = this.info_info_caracteristica.GrupoSanguineo;
