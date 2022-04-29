@@ -127,6 +127,12 @@ export class CrudDocumentoProgramaComponent implements OnInit {
       campo.placeholder = this.translate.instant('GLOBAL.placeholder_' + campo.label_i18n);
       campo.deshabilitar = this.sin_docs;
       if (campo.etiqueta === 'select') {
+        this.tipo_documentos.map(tipo => {
+          if (<boolean>tipo['Obligatorio'] == true){
+            tipo['TipoDocumentoProgramaId']["Nombre"] = tipo['TipoDocumentoProgramaId']["Nombre"]+" *"
+          }
+        })
+        console.log(this.tipo_documentos)
         campo.opciones = this.tipo_documentos.map(tipo => tipo['TipoDocumentoProgramaId']);
       }
     });
