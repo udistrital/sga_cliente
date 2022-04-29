@@ -117,7 +117,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.soporteDocumento = [];
     this.percentage = 0;
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
-      this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa + ',DocumentoProgramaId.TipoInscripcionId:' + this.tipoInscripcion + '&limit=0').subscribe(
+      this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa + ',DocumentoProgramaId.TipoInscripcionId:' + this.tipoInscripcion + ',DocumentoProgramaId.PeriodoId:' + parseInt(sessionStorage.getItem('IdPeriodo'), 10)  + ',DocumentoProgramaId.Activo:true&limit=0').subscribe(
         (response: any[]) => {
           console.info(Object.keys(response[0]).length)
           if (Object.keys(response[0]).length > 0) {
@@ -132,8 +132,10 @@ export class ListDocumentoProgramaComponent implements OnInit {
               documento.Observacion = this.observacion;
               this.soporteDocumento.push(documento);
               this.source.load(this.soporteDocumento);
-              if (documento.EstadoObservacion !== 'No aprobado') {
-                this.getPercentage(Math.round((1 / this.tipo_documentos.length * 100) * 100) / 100);
+              if (<boolean>soporte['DocumentoProgramaId']['Obligatorio'] == true){
+                if (documento.EstadoObservacion !== 'No aprobado') {
+                  this.getPercentage(Math.round((1 / this.tipo_documentos.length * 100) * 100) / 100);
+                }
               }
             });
           } else {
@@ -189,7 +191,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=Activo:true,PeriodoId:' + this.periodo + ',ProgramaId:' + this.programa + ',TipoInscripcionId:' + this.tipoInscripcion + '&limit=0').subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,PeriodoId:' + this.periodo + ',ProgramaId:' + this.programa + ',TipoInscripcionId:' + this.tipoInscripcion + ',Obligatorio:true&limit=0').subscribe(
       (response: Object[]) => {
         if(response === undefined || response === null){
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));

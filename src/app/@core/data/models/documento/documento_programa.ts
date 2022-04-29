@@ -8,4 +8,5 @@ export class DocumentoPrograma {
   TipoDocumentoProgramaId: TipoDocumentoPrograma;
   FechaCreacion: Date;
   TipoInscripcionId: number;
+  Obligatorio: boolean;
 }

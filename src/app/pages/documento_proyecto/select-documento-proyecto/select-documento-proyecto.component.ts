@@ -11,6 +11,7 @@ import { TipoDocumentoPrograma } from '../../../@core/data/models/inscripcion/ti
 import { PopUpManager } from '../../../managers/popUpManager';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { DocumentoPrograma } from '../../../@core/data/models/documento/documento_programa';
+import { DocProgramaObligatorioComponent } from '../../../@theme/components/doc-programa-obligatorio/doc-programa-obligatorio.component';
 
 @Component({
   selector: 'ngx-select-documento-proyecto',
@@ -71,6 +72,18 @@ export class SelectDocumentoProyectoComponent implements OnInit {
           },
           width: '80%',
         },
+        Obligatorio: {
+          title: this.translate.instant('documento_proyecto.obligatorio'),
+          editable: false,
+          filter: false,
+          type: 'custom',
+          renderComponent: DocProgramaObligatorioComponent,
+          onComponentInitFunction: (instance) => {
+            instance.checkboxVal.subscribe((val) => {
+              this.onUpdate(val)
+            })
+          },
+        }
       },
     };
   }
@@ -134,6 +147,7 @@ export class SelectDocumentoProyectoComponent implements OnInit {
             documentoNuevo.PeriodoId = parseInt(sessionStorage.getItem('PeriodoId'), 10);
             documentoNuevo.ProgramaId = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
             documentoNuevo.TipoInscripcionId = parseInt(sessionStorage.getItem('TipoInscripcionId'), 10);
+            documentoNuevo.Obligatorio = true;
 
             content = Swal.getHtmlContainer();
             if (content) {
@@ -210,6 +224,8 @@ export class SelectDocumentoProyectoComponent implements OnInit {
           documentoModificado.Id = event.data.IdDocPrograma;
           documentoModificado.PeriodoId = parseInt(sessionStorage.getItem('PeriodoId'), 10);
           documentoModificado.ProgramaId = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
+          documentoModificado.TipoInscripcionId = parseInt(sessionStorage.getItem('TipoInscripcionId'), 10);
+          documentoModificado.Obligatorio = event.data.Obligatorio;
 
           this.inscripcionService.put('documento_programa', documentoModificado).subscribe(res => {
             Swal.close()
@@ -238,6 +254,42 @@ export class SelectDocumentoProyectoComponent implements OnInit {
           });
         }
       });
+  }
+
+  onUpdate(documento: any) {
+    var msgpopUp
+    if (documento.value == true){
+      msgpopUp = this.translate.instant('documento_proyecto.poner_obligatorio')
+    } else {
+      msgpopUp = this.translate.instant('documento_proyecto.quitar_obligatorio')
+    }
+    this.popUpManager.showConfirmAlert(msgpopUp,this.translate.instant('documento_proyecto.documento')).then(accion => {
+      if(accion.value){
+        const documentoModificado: DocumentoPrograma = new DocumentoPrograma();
+          documentoModificado.TipoDocumentoProgramaId = documento.Data;
+          documentoModificado.Activo = true;
+          documentoModificado.FechaCreacion = documento.Data.FechaPrograma;
+          documentoModificado.Id = documento.Data.IdDocPrograma;
+          documentoModificado.PeriodoId = parseInt(sessionStorage.getItem('PeriodoId'), 10);
+          documentoModificado.ProgramaId = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
+          documentoModificado.TipoInscripcionId = parseInt(sessionStorage.getItem('TipoInscripcionId'), 10);
+          documentoModificado.Obligatorio = documento.value;
+        this.inscripcionService.put('documento_programa', documentoModificado).subscribe(response => {
+          if (response.Type !== 'error') {
+            this.popUpManager.showSuccessAlert(this.translate.instant('documento_proyecto.ajuste_ok'))
+            this.loadDataProyecto()
+          } else {
+            this.popUpManager.showErrorAlert(this.translate.instant('documento_proyecto.ajuste_fail'))
+            this.source.load(this.documento_proyecto);
+          }
+        }, () => {
+          this.popUpManager.showErrorToast(this.translate.instant('documento_proyecto.ajuste_fail'))
+          this.source.load(this.documento_proyecto);
+        });
+      } else {
+        this.source.load(this.documento_proyecto);
+      }
+    })
   }
 
   openListDocumentoComponent() {
@@ -285,6 +337,7 @@ export class SelectDocumentoProyectoComponent implements OnInit {
           response.forEach(documento => {
             documento.TipoDocumentoProgramaId.IdDocPrograma = documento.Id;
             documento.TipoDocumentoProgramaId.FechaPrograma = documento.FechaCreacion;
+            documento.TipoDocumentoProgramaId.Obligatorio = documento.Obligatorio;
             this.documento_proyecto.push(<TipoDocumentoPrograma>documento.TipoDocumentoProgramaId);
           });
           this.source.load(this.documento_proyecto);
