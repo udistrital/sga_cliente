@@ -17,4 +17,4 @@ export * from './link-download-nuxeo/link-download-nuxeo.component';
 export * from './customize-button/customize-button.component';
 export * from './note-percentage/note-percentage.component';
 export * from './render-data/render-data.component';
-
+export * from './doc-programa-obligatorio/doc-programa-obligatorio.component'

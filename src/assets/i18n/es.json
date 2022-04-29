@@ -1429,7 +1429,12 @@
         "carga_nuevo_documento": "Asignando nuevo documento...",
         "carga_eliminando_documento": "Eliminando documento del proyecto...",
         "aviso_tipo_inscripcion": "Seleccione el tipo de inscripción al que desea definir los documentos y descuentos de admisión",
-        "error_selec_tipo_inscripcion": "Por favor, seleccione un tipo de inscripción"
+        "error_selec_tipo_inscripcion": "Por favor, seleccione un tipo de inscripción",
+        "obligatorio": "Obligatorio",
+        "poner_obligatorio": "¿Establecer documento como obligatorio?",
+        "quitar_obligatorio": "¿Establecer documento como opcional?",
+        "ajuste_ok": "Cambio realizado",
+        "ajuste_fail": "No se pudo realizar el cambio"
     },
     "descuento_academico": {
         "descuento_academico_no_registrado": "Descuento académico no registrado",
@@ -1968,7 +1973,7 @@
         "nivel": "Nivel",
         "grupo": "Grupo",
         "inscritos": "Inscritos",
-        "carrera": "Carrera",
+        "carrera": "Proyecto Académico",
         "estado": "Estado",
         "no_datos_captura_notas": "No se encuentran datos para el periodo o busqueda realizada.",
         "listado_docentes": "Listado de docentes",
@@ -2010,20 +2015,35 @@
         "select_nivel": "Seleccionar nivel de formación",
         "select_periodo": "Seleccionar periodo",
         "fecha_invalida": "Fecha inválida",
-
         "carga_academica": "Carga académica",
         "opcion": "Opción",
         "registro_notas_parciales": "Registro de notas parciales",
         "creditos": "Créditos",
+        "register_grades": "Registrar notas",
+        "apellido": "Apellido",
+        "varios": "Varios",
+        "total": "Total",
+        "reporte_captura_porcentajes": "Reporte de notas parciales",
+        "cancelar": "CANCELAR",
+        "export_Pdf": "Exportar reporte a PDF",
+        "print_pdf": "Imprimir reporte",
+
         "sin_espacios_academicos": "No se encuentran espacios académicos relacionados al docente",
-        "sin_definir_estructuraNota": "Porcentajes sin definir",
-        "peticion_definir_estructura": "Por favor establecer los porcentajes de calificación",
         "sin_informacion_docente_asignatura": "No se ha encontrado la información relacionada al docente o la asignatura",
-        "sin_info_porcentajes": "No se ha encontrado información relacionada al registro de notas",
-        "nota_definida_ok": "¡Se han definido los porcentajes correctamente!",
-        "fallo_definir_nota": "¡El ajuste de los porcentajes ha fallado!"
-
-
+        "sin_info_porcentajes": "No se ha podido obtener la información relacionada a los porcentajes",
+        "porcentajes_creados": "¡El espacio académico no contaba con definición de porcentajes pero ahora han sido creados!",
+        "porcentajes_creados_info": "Los porcentajes asignados son propuestos, estos pueden ser cambiados siempre y cuando se encuentre dentro de las fechas establecidas.",
+        "porcentajes_actualizados": "¡La definición de porcentajes se ha actualizado correctamente!. Por favor guarde nuevamente la tabla de calificaciones para asegurar el cambio de los porcentajes en las notas de los estudiantes",
+        "fallo_porcentajes": "¡No se pudo actualizar los porcentajes!",
+        "guardar_cambios_porcentajes": "Los cambios en los porcentajes van a ser guardados sobreescribiendo los valores anteriores, ¿Está seguro del cambio?",
+        "sin_calificaciones_estudiantes": "No se ha podido obtener información relacionada a las notas de los estudiantes",
+        "notas_estudiantes_creados": "¡El espacio académico no contaba con registro de notas para los estudiantes pero ahora han sido creados!",
+        "notas_estudiantes_actualizado": "¡Las notas de los estudiantes se han modificado correctamente!",
+        "fallo_definir_notas_estudiantes": "¡No se pudo modificar las notas de los estudiantes!",
+        "guardar_cambios_notas": "Los cambios en las notas van a ser guardados sobreescribiendo los valores anteriores, ¿Está seguro del cambio?",
+        "notas_mal_digitadas": "Hay notas mal digitadas, por favor revise y corrija los errores.",
+        "cancelar_cambios": "Los cambios que ha hecho en las notas y que aún no han sido guardados se perderan. ¿Está seguro?",
+        "cancelar_cambios_generarPDF": "Velando por la integridad de los datos, los cambios no guardados se deshacen; para el reporte se toman las últimas notas guardadas, si ha hecho cambios por favor guardelos antes de generar el reporte."
     },
     "asignaturas": {
         "notas_parciales": "Notas parciales",

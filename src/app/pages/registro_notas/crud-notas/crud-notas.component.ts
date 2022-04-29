@@ -428,7 +428,7 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
   }
 
   save_P(){
-    this.popUpManager.showConfirmAlert(this.translate.instant('notas.guardar_cambios_porcentajes'),this.translate.instant('notas.guardar_cambios_porcentajes')).then(accion => {
+    this.popUpManager.showConfirmAlert(this.translate.instant('notas.guardar_cambios_porcentajes'),this.translate.instant('notas.captura_porcentajes')).then(accion => {
       if(accion.value){
         this.putPorcentajes("Guardar");
       }
@@ -661,7 +661,7 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
   }
 
   async save_N() {
-    this.popUpManager.showConfirmAlert(this.translate.instant('notas.guardar_cambios_notas'),this.translate.instant('notas.title_guardar_cambios_notas')).then(async accion => {
+    this.popUpManager.showConfirmAlert(this.translate.instant('notas.guardar_cambios_notas'),this.translate.instant('notas.captura_notas')).then(async accion => {
       if(accion.value){
         let isBad = this.NotasNotValid();
         if (isBad) {
@@ -684,7 +684,7 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
   
   cancel_N() {
 
-    this.popUpManager.showConfirmAlert(this.translate.instant('notas.cancelar_cambios'),this.translate.instant('notas.title_cancelar_cambios')).then(accion => {
+    this.popUpManager.showConfirmAlert(this.translate.instant('notas.cancelar_cambios'),this.translate.instant('notas.captura_notas')).then(accion => {
       if(accion.value){
         this.fillTable();
         this.dataSource.load(this.calificacionesEstudiantesV2);
@@ -693,7 +693,7 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
   }
 
   async exportar(){
-    this.popUpManager.showConfirmAlert(this.translate.instant('notas.cancelar_cambios_generarPDF'),this.translate.instant('notas.title_cancelar_cambios_generarPDF')).then(accion => {
+    this.popUpManager.showConfirmAlert(this.translate.instant('notas.cancelar_cambios_generarPDF'),this.translate.instant('notas.reporte_captura_porcentajes')).then(accion => {
       if(accion.value){
         this.fillTable();
         this.dataSource.load(this.calificacionesEstudiantesV2);
@@ -708,7 +708,7 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
   }
 
   async imprimir(){
-    this.popUpManager.showConfirmAlert(this.translate.instant('notas.cancelar_cambios_generarPDF'),this.translate.instant('notas.title_cancelar_cambios_generarPDF')).then(accion => {
+    this.popUpManager.showConfirmAlert(this.translate.instant('notas.cancelar_cambios_generarPDF'),this.translate.instant('notas.reporte_captura_porcentajes')).then(accion => {
       if(accion.value){
         this.fillTable();
         this.dataSource.load(this.calificacionesEstudiantesV2);
