@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import html2canvas from 'html2canvas';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ParametrosService } from '../../../@core/data/parametros.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -72,15 +73,17 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
   calificacionesGET: EstudiantesNotas[];
   calificacionesEstudiantesV2: EstudiantesNotas[] = [];
 
-  EstadosRegistro = {
-    Corte1: 798,
-    Corte2: 799,
-    Examen: 800,
-    Habilit: 801,
-    Definitiva: 802
-  }
+  EstadosRegistro: any
+
+  ObservacionesNotas: any
 
   needCrearNotasEstudiantes: boolean = false;
+
+  definitiva: boolean = false;
+
+  finalizar: boolean = false;
+
+  finalizado: boolean = false;
 
   //// tiempo muestra modal ////
   timeinfo: number = 10000;
@@ -91,7 +94,10 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
   //// loading ////
   loading: boolean = false;
 
+  errorgen: boolean = false;
+
   constructor(
+    private parametrosService: ParametrosService,
     private sgaMidService: SgaMidService,
     private translate: TranslateService,
     private popUpManager: PopUpManager,
@@ -112,8 +118,11 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
 
     this.dataReceived = this.passDataService.getData();
 
+    this.EstadosRegistro = JSON.parse(sessionStorage.getItem('EstadosRegistro'))
+
     this.createTable();
     try {
+      await this.getObservaciones();
       await this.getDocenteAsignaturaInfo(this.dataReceived.Asignatura_id);
       await this.getPorcentajes(this.dataReceived.Asignatura_id, this.dataReceived.Periodo_id);
       await this.checkingPorcentajes();
@@ -122,6 +131,7 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.log("ngOnInit: ",error)
       this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      this.errorgen = true;
     }
 
   }
@@ -132,25 +142,25 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
         Codigo: {
           title: this.translate.instant('notas.codigo'),
           editable: false,
-          width: '5%',
+          width: '7%',
           filter: false,
         },
         Nombre: {
           title: this.translate.instant('notas.nombre'),
           editable: false,
-          width: '8%',
+          width: '14%',
           filter: false,
         },
         Apellido: {
           title: this.translate.instant('notas.apellido'),
           editable: false,
-          width: '8%',
+          width: '14%',
           filter: false,
         },
         CORTE_1: {
           title: this.translate.instant('notas.corte1'),
           editable: false,
-          width: '18%',
+          width: '15%',
           filter: false,
           type: 'custom',
           renderComponent: RenderDataComponent,
@@ -163,10 +173,18 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
           type: 'custom',
           renderComponent: RenderDataComponent,
         },
-        EXA_HAB_ACU: {
-          title: "",
+        EXAMEN: {
+          title: this.translate.instant('notas.examen'),
           editable: false,
-          width: '18%',
+          width: '5%',
+          filter: false,
+          type: 'custom',
+          renderComponent: RenderDataComponent,
+        },
+        HABILIT: {
+          title: this.translate.instant('notas.habilitacion'),
+          editable: false,
+          width: '5%',
           filter: false,
           type: 'custom',
           renderComponent: RenderDataComponent,
@@ -182,7 +200,7 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
         TOTAL: {
           title: this.translate.instant('notas.total'),
           editable: false,
-          width: '8%',
+          width: '5%',
           filter: false,
           type: 'custom',
           renderComponent: RenderDataComponent,
@@ -208,8 +226,8 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
   updateHeader() {
     this.calificacionesEstudiantesV2[0].CORTE_1.fields = this.Corte1.fields.field;
     this.calificacionesEstudiantesV2[0].CORTE_2.fields = this.Corte2.fields.field;
-    this.calificacionesEstudiantesV2[0].EXA_HAB_ACU.fields[0] = this.Examen.fields.field[0];
-    this.calificacionesEstudiantesV2[0].EXA_HAB_ACU.fields[1] = this.Habilit.fields.field[0];
+    this.calificacionesEstudiantesV2[0].EXAMEN.fields = this.Examen.fields.field;
+    this.calificacionesEstudiantesV2[0].HABILIT.fields = this.Habilit.fields.field;
   }
 
   updatePercentsNotes(){
@@ -230,6 +248,10 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
     this.calificacionesEstudiantesV2[end - 1].CORTE_1.fields[0].value = this.Corte1.finalizado;
     this.calificacionesEstudiantesV2[end - 1].CORTE_2.canEdit = ((this.Corte2.editporTiempo || this.Corte2.editExtemporaneo) && !this.Corte2.finalizado);
     this.calificacionesEstudiantesV2[end - 1].CORTE_2.fields[0].value = this.Corte2.finalizado;
+    this.calificacionesEstudiantesV2[end - 1].EXAMEN.canEdit = ((this.Examen.editporTiempo || this.Examen.editExtemporaneo) && !this.Examen.finalizado);
+    this.calificacionesEstudiantesV2[end - 1].EXAMEN.fields[0].value = this.Examen.finalizado;
+    this.calificacionesEstudiantesV2[end - 1].HABILIT.canEdit = ((this.Habilit.editporTiempo || this.Habilit.editExtemporaneo) && !this.Habilit.finalizado);
+    this.calificacionesEstudiantesV2[end - 1].HABILIT.fields[0].value = this.Habilit.finalizado;
   }
 
   getDocenteAsignaturaInfo(asignaturaId) {
@@ -299,6 +321,12 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
     }
 
     this.needCrearPorcentajes = false;
+
+    if(this.Corte1.finalizado && this.Corte2.finalizado && this.Examen.finalizado && this.Habilit.finalizado && !this.Definitiva.finalizado){
+      this.popUpManager.showAlert(this.translate.instant('notas.title_finalizar'),this.translate.instant('notas.info_finalizar'))
+      this.definitiva = true;
+    }
+    this.finalizado = this.Definitiva.finalizado
 
     this.cajaPorcentajesVer = true;
 
@@ -435,6 +463,23 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
     });
   }
 
+  getObservaciones() {
+    return new Promise((resolve, reject) => {
+      this.parametrosService.get('parametro?query=TipoParametroId.Id:55&fields=Id,CodigoAbreviacion,Nombre&limit=0').subscribe(
+        response => {
+          if (response !== null && response.Status == '200') {
+            this.ObservacionesNotas = response["Data"]
+            sessionStorage.setItem('ObservacionesNotas', JSON.stringify(this.ObservacionesNotas));
+            resolve(this.ObservacionesNotas)
+          }
+        },
+        error => {
+          reject("Fail_OBS")
+        }
+      )
+    });
+  }
+
   getNotasEstudiantes(asignaturaId, periodoId) {
     return new Promise((resolve, reject) => {
       this.sgaMidService.get('notas/CapturaNotas/' + asignaturaId + '/' + periodoId).subscribe(
@@ -504,7 +549,8 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
       if (est.Id > 0) {
         est.CORTE_1 = { fields: [] };
         est.CORTE_2 = { fields: [] };
-        est.EXA_HAB_ACU = { fields: [] };
+        est.EXAMEN = { fields: [] };
+        est.HABILIT = { fields: [] };
         est.VARIOS = { fields: [] };
         est.TOTAL = { fields: [] };
 
@@ -514,19 +560,49 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
         est.CORTE_2.fields = <Fields[]>this.manageEmptyNotaEstudiante(est.Corte2, this.Corte2, false);
         est.CORTE_2.needEdit = true; est.CORTE_2.canEdit = (this.Corte2.editporTiempo || this.Corte2.editExtemporaneo) && !this.Corte2.finalizado;
 
-        est.EXA_HAB_ACU.fields = [
-          <Fields>this.manageEmptyNotaEstudiante(est.Examen, this.Examen, true),
-          <Fields>this.manageEmptyNotaEstudiante(est.Habilit, this.Habilit, true),
-          { name: "ACU", value: 0 }
-        ];
-        est.EXA_HAB_ACU.needEdit = true;
-        est.EXA_HAB_ACU.fields[0].forceEdit = (this.Examen.editporTiempo || this.Examen.editExtemporaneo) && !this.Examen.finalizado;
-        est.EXA_HAB_ACU.fields[1].forceEdit = (this.Habilit.editporTiempo || this.Habilit.editExtemporaneo) && !this.Habilit.finalizado;
+        est.EXAMEN.fields = <Fields[]>this.manageEmptyNotaEstudiante(est.Examen, this.Examen, false);
+        est.EXAMEN.needEdit = true; est.EXAMEN.canEdit = (this.Examen.editporTiempo || this.Examen.editExtemporaneo) && !this.Examen.finalizado;
 
-        est.VARIOS.fields = [{ name: "Fallas", value: 0 }, { name: "OBS", value: 0 }];
-        est.VARIOS.needEdit = true; est.VARIOS.canEdit = true;
+        est.HABILIT.fields = <Fields[]>this.manageEmptyNotaEstudiante(est.Habilit, this.Habilit, false);
+        est.HABILIT.needEdit = true; est.HABILIT.canEdit = (this.Habilit.editporTiempo || this.Habilit.editExtemporaneo) && !this.Habilit.finalizado;
 
-        est.TOTAL.fields = [{ name: "DEF", value: 0 }];
+        var fallasSuma = 0;
+        var fallas = 0;
+        var Observacion = 0;
+
+        if ((this.Corte1.editporTiempo || this.Corte1.editExtemporaneo)) {
+          fallas = est.Corte1.data.fallas;
+          fallasSuma = fallas;
+          Observacion = est.Corte1.data.observacion_nota_id;
+        }
+        if (this.Corte2.editporTiempo || this.Corte2.editExtemporaneo) {
+          fallas = est.Corte2.data.fallas;
+          fallasSuma = est.Corte1.data.fallas + fallas;
+          Observacion = est.Corte2.data.observacion_nota_id;
+        }
+        if (this.Examen.editporTiempo || this.Examen.editExtemporaneo) {
+          fallas = est.Examen.data.fallas;
+          fallasSuma = est.Corte1.data.fallas + est.Corte2.data.fallas + fallas;
+          Observacion = est.Examen.data.observacion_nota_id;
+        }
+        if (this.Habilit.editporTiempo || this.Habilit.editExtemporaneo) {
+          fallas = est.Habilit.data.fallas;
+          fallasSuma = est.Corte1.data.fallas + est.Corte2.data.fallas + est.Examen.data.fallas + fallas;
+          Observacion = est.Habilit.data.observacion_nota_id;
+        }
+
+        var inDef = (this.Corte1.finalizado && this.Corte2.finalizado && this.Examen.finalizado && this.Habilit.finalizado && !this.Definitiva.finalizado)
+
+        if(inDef){
+          fallasSuma = est.Corte1.data.fallas + est.Corte2.data.fallas + est.Examen.data.fallas + est.Habilit.data.fallas;
+          Observacion = est.Definitiva.data.observacion_nota_id;
+        }
+        
+        est.VARIOS.fields = [{ name: "Fallas", value: fallasSuma, forceEdit: !this.Definitiva.finalizado }, { name: "ACU", value: est.Acumulado }, { name: "OBS", value: Observacion, forceEdit: !this.Definitiva.finalizado }];
+        est.VARIOS.needEdit = true; est.VARIOS.canEdit = false;
+        est.VARIOS["fallasPrev"] = <number>fallasSuma-<number>fallas;
+
+        est.TOTAL.fields = est.Definitiva.data.valor_nota
         est.TOTAL.needEdit = true;
 
       }
@@ -553,7 +629,7 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
   prepareNotasEstudiantesforPut(estado_registro: number, accion: string) {
 
     let max = this.calificacionesEstudiantesV2.length;
-    var califEstudiantes = this.calificacionesEstudiantesV2.slice(1, max - 1);
+    var califEstudiantes = JSON.parse(JSON.stringify(this.calificacionesEstudiantesV2.slice(1, max - 1)));
 
     califEstudiantes.forEach((est: EstudiantesNotas) => {
       if (est.Id > 0) {
@@ -563,9 +639,41 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
         est.Corte2.data.valor_nota = est.CORTE_2.fields.map((n: Fields) => {
           return { name: n.name, perc: n.perc, value: n.value }
         });
-        est.Examen.data.valor_nota = [{ name: est.EXA_HAB_ACU.fields[0].name, perc: est.EXA_HAB_ACU.fields[0].perc, value: est.EXA_HAB_ACU.fields[0].value }];
-        est.Habilit.data.valor_nota = [{ name: est.EXA_HAB_ACU.fields[1].name, perc: est.EXA_HAB_ACU.fields[1].perc, value: est.EXA_HAB_ACU.fields[1].value }];
-        est.Definitiva.data.valor_nota = [{ name: "DEF", perc: 100, value: 0 }];
+        est.Examen.data.valor_nota = est.EXAMEN.fields.map((n: Fields) => {
+          return { name: n.name, perc: n.perc, value: n.value }
+        })
+        est.Habilit.data.valor_nota = est.HABILIT.fields.map((n: Fields) => {
+          return { name: n.name, perc: n.perc, value: n.value }
+        })
+
+        let fallas;
+        if(this.Corte1.finalizado && this.Corte2.finalizado && this.Examen.finalizado && this.Habilit.finalizado && !this.Definitiva.finalizado){
+          fallas = est.VARIOS.fields.filter(v => v.name == "Fallas")[0].value;
+        } else {
+          fallas = <number>est.VARIOS.fields.filter(v => v.name == "Fallas")[0].value-<number>est.VARIOS["fallasPrev"]
+        }
+
+        let Obs1 = est.VARIOS.fields.filter(v => v.name == "OBS")[0].value
+        let ObsObj = this.ObservacionesNotas.filter(obs => obs.Id == Obs1)[0]
+        if (ObsObj == undefined){
+          ObsObj = {CodigoAbreviacion: "0"}
+        }
+
+        est["Varios"] = {
+          Fallas: fallas,
+          Observacion: Obs1,
+          ObservacionCod: ObsObj
+        }
+
+        delete est.Codigo;
+        delete est.Nombre;
+        delete est.Apellido;
+        delete est.CORTE_1;
+        delete est.CORTE_2;
+        delete est.EXAMEN;
+        delete est.HABILIT
+        delete est.TOTAL;
+        delete est.VARIOS;
       }
     });
 
@@ -581,6 +689,28 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
     return dataPut
   }
 
+  checkAccionNotas() {
+    let max = this.calificacionesEstudiantesV2.length;
+      var CerrarCorte1 = <boolean>this.calificacionesEstudiantesV2[max - 1].CORTE_1.fields[0].value;
+      var CerrarCorte2 = <boolean>this.calificacionesEstudiantesV2[max - 1].CORTE_2.fields[0].value;
+      var CerrarExamen = <boolean>this.calificacionesEstudiantesV2[max - 1].EXAMEN.fields[0].value;
+      var CerrarHabilit = <boolean>this.calificacionesEstudiantesV2[max - 1].HABILIT.fields[0].value;
+
+      var CerrarDefinitiva = this.finalizar
+
+      var accion = ""
+      if (this.needCrearNotasEstudiantes) {
+        accion = "Crear";
+      } else {
+        if ((CerrarCorte1 && !this.Corte1.finalizado) || (CerrarCorte2 && !this.Corte2.finalizado) || (CerrarExamen && !this.Examen.finalizado) || (CerrarHabilit && !this.Habilit.finalizado) || (CerrarDefinitiva && !this.Definitiva.finalizado)) {
+          accion = "Cerrar";
+        } else {
+          accion = "Guardar";
+        }
+      }
+    return accion
+  }
+
   putNotasEstudiantes() {
     return new Promise((resolve,reject) => {
 
@@ -591,21 +721,12 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
     } else if (this.dataReceived.EstadoRegistro_porExtemporaneo > 0) {
       estado_registro = this.dataReceived.EstadoRegistro_porExtemporaneo;
     }
-      
-      let max = this.calificacionesEstudiantesV2.length;
-      var CerrarCorte1 = <boolean>this.calificacionesEstudiantesV2[max - 1].CORTE_1.fields[0].value;
-      var CerrarCorte2 = <boolean>this.calificacionesEstudiantesV2[max - 1].CORTE_2.fields[0].value;
 
-      var accion = ""
-      if (this.needCrearNotasEstudiantes) {
-        accion = "Crear";
-      } else {
-        if ((CerrarCorte1 && !this.Corte1.finalizado) || (CerrarCorte2 && !this.Corte2.finalizado)) {
-          accion = "Cerrar";
-        } else {
-          accion = "Guardar";
-        }
-      }
+    if(this.Corte1.finalizado && this.Corte2.finalizado && this.Examen.finalizado && this.Habilit.finalizado && !this.Definitiva.finalizado){
+      estado_registro = this.EstadosRegistro.Definitiva
+    }
+      
+      var accion = this.checkAccionNotas();
 
       var dataPut = this.prepareNotasEstudiantesforPut(estado_registro, accion);
 
@@ -641,7 +762,7 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
     let noValido: boolean = false;
 
     let max = this.calificacionesEstudiantesV2.length;
-    var califEstudiantes = this.calificacionesEstudiantesV2.slice(1, max - 1);
+    let califEstudiantes = this.calificacionesEstudiantesV2.slice(1, max - 1);
 
     califEstudiantes.forEach((est: EstudiantesNotas) => {
       if (est.Id > 0) {
@@ -651,7 +772,10 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
         est.CORTE_2.fields.forEach((n: Fields) => { 
           if (n.value > 5 || n.value < 0) { noValido = true; }
         });
-        est.EXA_HAB_ACU.fields.forEach((n: Fields) => { 
+        est.EXAMEN.fields.forEach((n: Fields) => { 
+          if (n.value > 5 || n.value < 0) { noValido = true; }
+        });
+        est.HABILIT.fields.forEach((n: Fields) => {
           if (n.value > 5 || n.value < 0) { noValido = true; }
         });
       }
@@ -660,8 +784,16 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
     return noValido
   }
 
-  async save_N() {
-    this.popUpManager.showConfirmAlert(this.translate.instant('notas.guardar_cambios_notas'),this.translate.instant('notas.captura_notas')).then(async accion => {
+  save_N() {
+    let msg
+    let cerrar = false
+    if(this.checkAccionNotas() == "Cerrar"){
+      msg = 'notas.cerrar_corte_notas';
+      cerrar = true;
+    } else {
+      msg = 'notas.guardar_cambios_notas';
+    }
+    this.popUpManager.showConfirmAlert(this.translate.instant(msg),this.translate.instant('notas.captura_notas')).then(async accion => {
       if(accion.value){
         let isBad = this.NotasNotValid();
         if (isBad) {
@@ -670,6 +802,12 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
           try {
             await this.putNotasEstudiantes();
             await this.getNotasEstudiantes(this.dataReceived.Asignatura_id, this.dataReceived.Periodo_id);
+            if(cerrar){
+              this.cajaPorcentajesVer = false;
+              await this.getPorcentajes(this.dataReceived.Asignatura_id, this.dataReceived.Periodo_id);
+              await this.checkingPorcentajes();
+              this.cajaPorcentajesVer = true;
+            }
       
           } catch (error) {
             console.log("save: ",error)
@@ -678,6 +816,9 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
           this.fillTable();
           this.dataSource.load(this.calificacionesEstudiantesV2); 
         }
+      } else if (cerrar) {
+        this.updateFooter();
+        this.dataSource.load(this.calificacionesEstudiantesV2); 
       }
     });
   }
@@ -690,6 +831,35 @@ export class CrudNotasComponent implements OnInit, OnDestroy {
         this.dataSource.load(this.calificacionesEstudiantesV2);
       }
     });
+  }
+
+  regresar() {
+    this.router.navigate([`pages/notas/list-notas`])
+  }
+
+  terminar() {
+    var cerrar = this.checkAccionNotas() == "Cerrar";
+     if(this.Corte1.finalizado && this.Corte2.finalizado && this.Examen.finalizado && this.Habilit.finalizado && !this.Definitiva.finalizado){
+      this.popUpManager.showConfirmAlert(this.translate.instant('notas.pregunta_finalizar_registros'),this.translate.instant('notas.captura_notas')).then(async accion => {
+        if(accion.value){
+          this.finalizar = true;
+          let isBad = this.NotasNotValid();
+        if (isBad) {
+          this.popUpManager.showErrorAlert(this.translate.instant('notas.notas_mal_digitadas'))
+        } else {
+          try {
+            await this.putNotasEstudiantes();
+            this.router.navigate([`pages/notas/list-notas`])
+          } catch (error) {
+            console.log("save: ",error)
+          }
+        }
+        } else if (cerrar) {
+          this.updateFooter();
+          this.dataSource.load(this.calificacionesEstudiantesV2); 
+        }
+      });
+    }
   }
 
   async exportar(){

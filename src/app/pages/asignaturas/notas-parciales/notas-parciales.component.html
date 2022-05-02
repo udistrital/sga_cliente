@@ -1,4 +1,5 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <nb-card-header>
         <div class="row" align="center">
             <div class="col">
@@ -7,6 +8,7 @@
         </div>
     </nb-card-header>
     <nb-card-body>
+        <div id="HtmlPdf" #HtmlPdf>
         <fieldset [ngClass]="{'fieldseter':true}">
             <legend> {{ 'asignaturas.info_estudiante' | translate }} </legend>
             <div class="container-estudiante">
@@ -17,7 +19,7 @@
                             <label>{{ 'asignaturas.nombre' | translate }}: </label>
                         </div>
                         <div class="col-sm">
-                            <label class="underline">{{info_est.nombre}}</label>
+                            <label class="underline">{{InfoEstudiante.Nombre}}</label>
                         </div>
                     </div>
                 </div>
@@ -27,7 +29,7 @@
                             <label>{{ 'asignaturas.codigo_programa' | translate }}: </label>
                         </div>
                         <div class="col-sm">
-                            <label class="underline">{{info_est.codigo_programa}}</label>
+                            <label class="underline">{{InfoEstudiante.Codigo_programa}}</label>
                         </div>
                     </div>
                 </div>
@@ -39,7 +41,7 @@
                             <label>{{ 'asignaturas.identificacion' | translate }}: </label>
                         </div>
                         <div class="col-sm">
-                            <label class="underline">{{info_est.identificacion}}</label>
+                            <label class="underline">{{InfoEstudiante.Identificacion}}</label>
                         </div>
                     </div>
                 </div>
@@ -49,7 +51,7 @@
                             <label>{{ 'asignaturas.nombre_programa' | translate }}: </label>
                         </div>
                         <div class="col-sm">
-                            <label class="underline">{{info_est.nombre_programa}}</label>
+                            <label class="underline">{{InfoEstudiante.Nombre_programa}}</label>
                         </div>
                     </div>
                 </div>
@@ -61,7 +63,7 @@
                             <label>{{ 'asignaturas.codigo' | translate }}: </label>
                         </div>
                         <div class="col-sm">
-                            <label class="underline">{{info_est.codigo}}</label>
+                            <label class="underline">{{InfoEstudiante.Codigo}}</label>
                         </div>
                     </div>
                 </div>
@@ -71,7 +73,7 @@
                             <label>{{ 'asignaturas.promedio' | translate }}: </label>
                         </div>
                         <div class="col-sm">
-                            <label class="underline">{{info_est.promedio}}</label>
+                            <label class="underline">EN DESARROLLO</label> <!-- {{InfoEstudiante.Promedio}} -->
                         </div>
                     </div>
                 </div>
@@ -81,31 +83,45 @@
                             <label>{{ 'asignaturas.periodo_academico' | translate }}: </label>
                         </div>
                         <div class="col-sm">
-                            <label class="underline">{{info_est.periodo_academico}}</label>
+                            <label class="underline">{{InfoEstudiante.Periodo}}</label>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         </fieldset>
-    </nb-card-body>
-    <nb-card-body>
-        <fieldset [ngClass]="{'fieldseter':true}">
+
+        <br><br>
+
+        <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
             <legend> {{ 'asignaturas.list_notas_parciales' | translate }} </legend>
             <div class="container-estudiante">
-                <nb-card>
-                    <nb-card-body style="padding: 0rem;">
+<!--                 <nb-card>
+                    <nb-card-body style="padding: 0rem;"> -->
             <ng2-smart-table [settings]="settings" [source]="dataSource">
             </ng2-smart-table>
-                    </nb-card-body>
-                </nb-card>
-            </div>
-            <div class="row d-flex align-items-center">
-                <div class="col-md" align="center">
-                    <button mat-flat-button color="primary" (click)="getAll()">{{ 'asignaturas.imprimir' | translate }}</button>
-                </div>
+<!--                     </nb-card-body>
+                </nb-card> -->
             </div>
         </fieldset>
+        </div>
     </nb-card-body>
-    <nb-card-footer></nb-card-footer>
+    
+    <br><br>
+
+    <nb-card-footer>
+        <fieldset [ngClass]="{'fieldseter':true}">
+            <legend> {{ 'notas.reporte_captura_porcentajes' | translate }} </legend>
+            <div class="row d-flex align-items-center" style="padding: 20px;">
+                <div class="col-md-3" align="center"></div>
+                <div class="col-md-3" align="center">
+                    <button mat-flat-button color="primary" (click)='exportar()' [disabled]="deshabilit">{{ 'notas.export_Pdf' | translate }}</button>
+                </div>
+                <div class="col-md-3" align="center">
+                    <button mat-flat-button color="primary" (click)='imprimir()' [disabled]="deshabilit">{{ 'notas.print_pdf' | translate }}</button>
+                </div>
+                <div class="col-md-3" align="center"></div>
+            </div>
+        </fieldset>
+    </nb-card-footer>
 </nb-card>

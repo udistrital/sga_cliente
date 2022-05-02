@@ -13,9 +13,11 @@ export class EstudiantesNotas {
     Definitiva?: RegistroNotaEstado;
     CORTE_1?: FormatForTable;
     CORTE_2?: FormatForTable;
-    EXA_HAB_ACU?: FormatForTable;
+    EXAMEN?: FormatForTable;
+    HABILIT?: FormatForTable;
     VARIOS?: FormatForTable;
     TOTAL?: FormatForTable;
+    Acumulado?: number;
 }
 
 export function setHeader(){
@@ -41,18 +43,24 @@ export function setHeader(){
                 {name: "Lab", value: 0, perc: 0}
             ]
         },
-        EXA_HAB_ACU: {
+        EXAMEN: {
             forTitle: true,
             fields: [
                 {name: "Exam", value: 0, perc: 0},
-                {name: "Hab", value: 0, perc: 0},
-                {name: "ACU", value: 0}
+                {name: "Hab", value: 0, perc: 0}
+            ]
+        },
+        HABILIT: {
+            forTitle: true,
+            fields: [
+                {name: "Hab", value: 0, perc: 0}
             ]
         },
         VARIOS: {
             forTitle: true,
             fields: [
                 {name: "Fallas", value: 0},
+                {name: "ACU", value: 0},
                 {name: "OBS", value: 0}
             ]
         },
@@ -88,7 +96,20 @@ export function setFooter(){
                 {name: "Corte 2", value: false}
             ]
         },
-        EXA_HAB_ACU: {},
+        EXAMEN: {
+            forClose: true,
+            canEdit: true,
+            fields: [
+                {name: "Examen", value: false}
+            ]
+        },
+        HABILIT: {
+            forClose: true,
+            canEdit: true,
+            fields: [
+                {name: "Habilit", value: false}
+            ]
+        },
         VARIOS: {},
         TOTAL: {}
     }

@@ -22,20 +22,22 @@
     </table>
 </ng-container>
 
-<!-- <ng-container *ngIf="!needEdit && !forTitle">
+<ng-container *ngIf="!needEdit && !forTitle && !forClose">
     <table>
         <thead>
             <tr>
-                <ng-container *ngFor="let values of ObjectData">
-                    <ng-container *ngIf="values.needPercent; then hasPercentH else noPercentH"></ng-container>
+                <ng-container *ngFor="let f of fields">
+                    <ng-container *ngIf="f.needPercent; then hasPercentH else noPercentH"></ng-container>
                     <ng-template #hasPercentH>
-                        <td colspan="2" style="padding-left: 5px;padding-right: 5px;">
-                            {{values.N}}
-                        </td>
+                        <ng-container *ngIf="f.perc > 0">
+                            <td colspan="2" style="padding-left: 5px;padding-right: 5px;">
+                                {{f.name}}
+                            </td>
+                        </ng-container>
                     </ng-template>
                     <ng-template #noPercentH>
                         <td style="padding-left: 5px;padding-right: 5px;">
-                            {{values.N}}
+                            {{f.name}}
                         </td>
                     </ng-template>
                 </ng-container>
@@ -43,26 +45,28 @@
         </thead>
         <tbody>
             <tr>
-                <ng-container *ngFor="let values of ObjectData">
-                    <ng-container *ngIf="values.needPercent; then hasPercentB else noPercentB"></ng-container>
+                <ng-container *ngFor="let f of fields">
+                    <ng-container *ngIf="f.needPercent; then hasPercentB else noPercentB"></ng-container>
                     <ng-template #hasPercentB>
-                        <td style="padding-left: 5px;padding-right: 5px;">
-                            {{values.Perc}}%
-                        </td>
-                        <td title="Nota: {{values.N}}" style="padding-left: 5px;padding-right: 5px;">
-                            {{values.Value}}
-                        </td>
+                        <ng-container *ngIf="f.perc > 0">
+                            <td style="padding-left: 5px;padding-right: 5px;">
+                                {{f.perc}}%
+                            </td>
+                            <td title="Nota: {{f.name_alt ? f.name_alt : f.name}}" style="padding-left: 5px;padding-right: 5px;">
+                                {{f.value}}
+                            </td>
+                        </ng-container>
                     </ng-template>
                     <ng-template #noPercentB>
-                        <td title="{{values.N}}" style="padding-left: 5px;padding-right: 5px;">
-                            {{values.Value}}
+                        <td title="{{f.name_alt ? f.name_alt : f.name}}" style="padding-left: 5px;padding-right: 5px;">
+                            {{f.value}}
                         </td>
                     </ng-template>
                 </ng-container>
             </tr>
         </tbody>
     </table>
-</ng-container> -->
+</ng-container>
 
 <ng-container *ngIf="needEdit && !forTitle">
     <form [formGroup]="form">
@@ -72,7 +76,25 @@
                 <ng-container *ngFor="let f of fields">
                     <td title="Nota: {{f.name}}" [ngStyle]="{'background-color': (!canEdit && (f.forceEdit ? !f.forceEdit : true)) ? 'white' : 'lightcyan'}">
                         <mat-form-field>
-                            <input matInput [formControlName]="f.name" type="number" step="0.01" min="0" max="5" value="{{f.value}}"  [readonly]="!canEdit && (f.forceEdit ? !f.forceEdit : true)"> <!-- [value]="values.Value" -->
+
+                            <ng-container *ngIf='f.name != "Fallas" && f.name != "ACU" && f.name != "OBS"'>
+                                <input matInput [formControlName]="f.name" type="number" step="0.01" min="0" max="5" value="{{f.value}}"  [readonly]="!canEdit && (f.forceEdit ? !f.forceEdit : true)"> <!-- [value]="values.Value" -->
+                            </ng-container>
+                            
+                            <ng-container *ngIf='f.name == "Fallas"'>
+                                <input matInput [formControlName]="f.name" type="number" step="1" min="0" max="100" value="{{f.value}}">
+                            </ng-container>
+                            <ng-container *ngIf='f.name == "ACU"'>
+                                <input matInput [formControlName]="f.name" type="number" step="0.01" min="0" max="5" value="{{f.value}}" readonly>
+                            </ng-container>
+                            <ng-container *ngIf='f.name == "OBS"'>
+                                <mat-select [formControlName]="f.name">
+                                    <mat-option *ngFor="let Obs of Observaciones" [value]="Obs.Id">
+                                      <div title="{{Obs.Nombre}}">{{Obs.CodigoAbreviacion}}</div>
+                                    </mat-option>
+                                  </mat-select>
+                            </ng-container>
+
                         </mat-form-field>
                     </td>
                 </ng-container>
@@ -91,7 +113,7 @@
                     <td>
                         <ng-container *ngFor="let f of fields">
                             <mat-checkbox color="primary" [formControlName]="f.name" [disabled]="!canEdit">
-                                <strong>Cerrar {{f.name}}</strong>
+                                <strong>Cerrar</strong>
                             </mat-checkbox>
                         </ng-container>
                     </td>
