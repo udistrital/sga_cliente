@@ -102,7 +102,7 @@ export let FORM_INFO_CARACTERISTICA_PREGRADO = {
         {
             etiqueta: 'mat-date',
             claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
-            nombre: 'FechaVinculacion',
+            nombre: 'FechaVinculacionEPS',
             label_i18n: 'fecha_vinculacion',
             placeholder_i18n: 'fecha_vinculacion',
             requerido: true,
