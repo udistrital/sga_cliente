@@ -2027,6 +2027,9 @@
         "cancelar": "CANCELAR",
         "export_Pdf": "Exportar reporte a PDF",
         "print_pdf": "Imprimir reporte",
+        "examen": "Exámen",
+        "regresar": "Regresar",
+        "finalizar": "FINALIZAR",
 
         "sin_espacios_academicos": "No se encuentran espacios académicos relacionados al docente",
         "sin_informacion_docente_asignatura": "No se ha encontrado la información relacionada al docente o la asignatura",
@@ -2043,7 +2046,12 @@
         "guardar_cambios_notas": "Los cambios en las notas van a ser guardados sobreescribiendo los valores anteriores, ¿Está seguro del cambio?",
         "notas_mal_digitadas": "Hay notas mal digitadas, por favor revise y corrija los errores.",
         "cancelar_cambios": "Los cambios que ha hecho en las notas y que aún no han sido guardados se perderan. ¿Está seguro?",
-        "cancelar_cambios_generarPDF": "Velando por la integridad de los datos, los cambios no guardados se deshacen; para el reporte se toman las últimas notas guardadas, si ha hecho cambios por favor guardelos antes de generar el reporte."
+        "cancelar_cambios_generarPDF": "Velando por la integridad de los datos, los cambios no guardados se deshacen; para el reporte se toman las últimas notas guardadas, si ha hecho cambios por favor guardelos antes de generar el reporte.",
+        "no_datos_estados_registros": "No se encontraron espacios academicos asignados a docentes para este periodo",
+        "cerrar_corte_notas": "¡Se va a cerrar un corte de calificaciones! Tenga presente que una vez cerrado no podrá volver a editar a menos que solicite una modificación extemporanea",
+        "title_finalizar": "Generación de notas definitivas",
+        "info_finalizar": "A punto de finalizar el registro de notas, por favor diligencie campos de fallas y observaciones si aún no lo ha hecho. Lo anterior con el fin de evaluar casos de pérdidas de asignatura por fallas.",
+        "pregunta_finalizar_registros": "¿Desea dar por finalizado el proceso de calificaciones? Puede presionar cancelar para guardar cambios y revisar las notas definitivas, si ya hizo las revisiones pertinentes presione aceptar para concluir el proceso."
     },
     "asignaturas": {
         "notas_parciales": "Notas parciales",
