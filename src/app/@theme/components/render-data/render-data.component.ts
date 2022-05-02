@@ -18,6 +18,8 @@ export class RenderDataComponent implements ViewCell, OnInit, OnDestroy {
   forTitle: boolean = false;
   form: FormGroup;
 
+  Observaciones: any;
+
   forClose: boolean = false;
 
   subs: any; 
@@ -40,18 +42,35 @@ export class RenderDataComponent implements ViewCell, OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.Observaciones = JSON.parse(sessionStorage.getItem('ObservacionesNotas'));
+
     this.getData();
 
     this.form = new FormGroup({});
     
-    this.fields.forEach( (f: Fields) => {
-      if(f.hasOwnProperty("perc")){
+    this.fields.forEach((f: Fields) => {
+      if (f.hasOwnProperty("perc")) {
         f.needPercent = true;
       }
-      else{
+      else {
         f.needPercent = false;
       }
-      this.form.addControl(f.name, new FormControl(f.value ? f.value : 0, [Validators.min(0), Validators.max(5)]))
+      if (f.name == "Fallas") {
+        this.form.addControl(f.name, new FormControl(f.value ? f.value : 0, [Validators.min(<number>f.value), Validators.max(100)]))
+      } else if (f.name == "ACU") {
+        this.form.addControl(f.name, new FormControl(f.value ? f.value : 0, [Validators.min(0), Validators.max(5)]))
+      } else if (f.name == "OBS") {
+        if (!this.needEdit && !this.forTitle && !this.forClose) {
+          let obs = this.Observaciones.filter(obs => obs.Id == f.value)[0]
+          if (obs == undefined) {
+            obs = {Nombre: "Sin Observaciones", CodigoAbreviacion: "0"}
+          }
+          f.name_alt = obs.Nombre; f.value = obs.CodigoAbreviacion;
+        }
+        this.form.addControl(f.name, new FormControl(f.value ? f.value : 0))
+      } else {
+        this.form.addControl(f.name, new FormControl(f.value ? f.value : 0, [Validators.min(0), Validators.max(5)]))
+      }
     });
 
     this.subs = this.form.valueChanges.subscribe(val => {

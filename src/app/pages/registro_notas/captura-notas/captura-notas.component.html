@@ -11,7 +11,7 @@
             <mat-label><strong>{{ 'notas.periodo' | translate }}</strong></mat-label>
             <mat-select #periodo placeholder="{{ 'notas.placeholder_periodo' | translate }}" (selectionChange)="filterPeriodo(periodo.value)">
                 <mat-option value="invalid" disabled>{{ 'notas.hint_periodo' | translate }}</mat-option>
-                <mat-option *ngFor="let periodo of periodos" [value]="periodo.value">{{periodo.viewValue}}</mat-option>
+                <mat-option *ngFor="let periodo of periodos" [value]="periodo.Id">{{periodo.Nombre}}</mat-option>
             </mat-select>
             <mat-hint align="start">{{ 'notas.hint_periodo' | translate }}</mat-hint>
         </mat-form-field>
@@ -19,11 +19,6 @@
     <nb-card-body>
         <fieldset [ngClass]="{'fieldseter':true} ">
             <legend> {{ 'notas.listado_docentes' | translate }} </legend>
-            <mat-form-field class="col-3" style="float: right;">
-                <mat-label><strong>{{ 'notas.buscar' | translate }}</strong></mat-label>
-                <input matInput #search type="text" placeholder="{{ 'notas.placeholder_buscar' | translate }}" (keyup)="onSearch(search.value)">
-                <mat-hint align="start">{{ 'notas.hint_buscar' | translate }}</mat-hint>
-            </mat-form-field>
             <ng2-smart-table [settings]="settings" [source]="dataSource">
             </ng2-smart-table>
         </fieldset>

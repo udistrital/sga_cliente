@@ -1985,6 +1985,9 @@
         "cancelar": "CANCEL",
         "export_Pdf": "Export report to PDF",
         "print_pdf": "Print report",
+        "examen": "Test",
+        "regresar": "Go back",
+        "finalizar": "FINALIZE",
 
         "sin_espacios_academicos": "No academic spaces related to the teacher are found",
         "sin_informacion_docente_asignatura": "The information related to the teacher or the subject has not been found",
@@ -2001,7 +2004,12 @@
         "guardar_cambios_notas": "The changes in the grades will be saved overwriting the previous values, are you sure about the change?",
         "notas_mal_digitadas": "There are badly typed grades, please check them and correct the errors.",
         "cancelar_cambios": "Any changes you have made to the grades that have not yet been saved will be lost. Are you sure?",
-        "cancelar_cambios_generarPDF": "Ensuring the integrity of the data, unsaved changes are undone; The last saved grades are taken for the report, if you have made changes please save them before generating the report." 
+        "cancelar_cambios_generarPDF": "Ensuring the integrity of the data, unsaved changes are undone; The last saved grades are taken for the report, if you have made changes please save them before generating the report." ,
+        "no_datos_estados_registros": "No academic spaces assigned to teachers were found for this period",
+        "cerrar_corte_notas": "A grade cut is going to close! Keep in mind that once closed you will not be able to edit again unless you request an extemporaneous modification.",
+        "title_finalizar": "Generation of final grades",
+        "info_finalizar": "About to finish the registration of grades, please fill in the fields of absences and observations if you haven't already done so. The foregoing in order to evaluate cases of subject losses due to absences.",
+        "pregunta_finalizar_registros": "Do you want to end the qualification process? You can press cancel to save changes and review the final notes, if you have already made the pertinent revisions, press accept to conclude the process."
     },
     "asignaturas": {
         "notas_parciales": "Partial grades",

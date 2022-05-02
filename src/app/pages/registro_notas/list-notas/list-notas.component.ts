@@ -4,6 +4,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { LocalDataSource } from 'ng2-smart-table';
 import { RegistroNotasDocente } from '../../../@core/data/models/registro-notas/registro-notas-docente';
+import { ParametrosService } from '../../../@core/data/parametros.service';
 import { DataAsignatura, RegistroNotasService } from '../../../@core/data/registro_notas.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
@@ -20,13 +21,7 @@ export class ListNotasComponent implements OnInit, OnDestroy {
   //// loading animation ////
   loading: boolean = false;
   
-  EstadosRegistro = {
-    Corte1: 798,
-    Corte2: 799,
-    Examen: 800,
-    Habilit: 801,
-    Definitiva: 802
-  }
+  EstadosRegistro: any
 
   //// ng2-smart-table list asignaturas docente ////
   settings: any;
@@ -63,6 +58,7 @@ export class ListNotasComponent implements OnInit, OnDestroy {
   };
 
   constructor(
+    private parametrosService: ParametrosService,
     private router: Router,
     private sgaMidService: SgaMidService,
     private translate: TranslateService,
@@ -80,9 +76,36 @@ export class ListNotasComponent implements OnInit, OnDestroy {
     this.translate.use(language);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.createTable();
-    this.loadData();
+    try {
+      await this.getEstadosRegistros();
+      this.loadData();
+    } catch (error) {
+      this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+    }
+  }
+
+  getEstadosRegistros(){
+    return new Promise((resolve, reject) => {
+      this.parametrosService.get('parametro?query=TipoParametroId.Id:52&fields=Id,CodigoAbreviacion,Nombre&limit=0').subscribe(
+        response => {
+          if (response !== null && response.Status == '200') {
+            this.EstadosRegistro = { Corte1: 0, Corte2: 0, Examen: 0, Habilit: 0, Definitiva: 0, }
+            this.EstadosRegistro.Corte1 = response["Data"].filter(e => e.Nombre == "PRIMER CORTE")[0].Id
+            this.EstadosRegistro.Corte2 = response["Data"].filter(e => e.Nombre == "SEGUNDO CORTE")[0].Id
+            this.EstadosRegistro.Examen = response["Data"].filter(e => e.Nombre == "EXAMEN FINAL")[0].Id
+            this.EstadosRegistro.Habilit = response["Data"].filter(e => e.Nombre == "HABILITACIONES")[0].Id
+            this.EstadosRegistro.Definitiva = response["Data"].filter(e => e.Nombre == "DEFINITIVA")[0].Id
+            sessionStorage.setItem('EstadosRegistro', JSON.stringify(this.EstadosRegistro));
+            resolve(this.EstadosRegistro)
+          }
+        },
+        error => {
+          reject("Fail_EstReg")
+        }
+      )
+    });
   }
 
   createTable() {
@@ -171,16 +194,13 @@ export class ListNotasComponent implements OnInit, OnDestroy {
 
         this.dataSend.EstadoRegistro_porExtemporaneo = Number(hayExtemporaneo)
         this.router.navigate([`pages/notas/crud-notas`])
-        console.log("hay extemp: ",hayExtemporaneo)
       } else {
         this.dataSend.EstadoRegistro_porExtemporaneo = 0;
         this.bringActivities(periodo);
-        console.log("no hay extemp")
       }
     } catch(error) {
       this.dataSend.EstadoRegistro_porExtemporaneo = 0;
       this.bringActivities(periodo);
-      console.log("no hay estados registro")
     }
   }
 
@@ -191,7 +211,6 @@ export class ListNotasComponent implements OnInit, OnDestroy {
 
     var docenteId = this.userService.getPersonaId();
 
-    console.log(docenteId)
     this.loading = true;
     this.sgaMidService.get('notas/EspaciosAcademicos/' + docenteId).subscribe(
       (response: any) => {
@@ -206,7 +225,6 @@ export class ListNotasComponent implements OnInit, OnDestroy {
               class: "btn btn-primary"
             };
           })
-          console.log(data)
           this.dataSource.load(data);
         }
         this.loading = false;
@@ -298,7 +316,6 @@ export class ListNotasComponent implements OnInit, OnDestroy {
       }
       });
     }
-    console.log(this.validado)
     
     if(this.validado.corte1.existe && this.validado.corte2.existe && this.validado.examen.existe && this.validado.habilit.existe)
     {
