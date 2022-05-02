@@ -61,7 +61,6 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   clean: boolean;
   denied_acces: boolean = false;
   loading: boolean;
-  primeraCarga = true;
 
   constructor(
     private popUpManager: PopUpManager,
@@ -224,8 +223,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
 
   cargarDocs(files) {
     return new Promise((resolve, reject) => {
+      this.loading = true;
       files.forEach((file) => {
-        this.loading = true;
         const filesll = []
         filesll.push(file)
         this.nuxeo.getFilesNew(filesll)
@@ -243,7 +242,6 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
                   this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = fileR['urlUnsafe'] + '';
                   this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar = false;
                 }
-                this.primeraCarga = false;
               })
               this.loading = false;
             }
@@ -261,7 +259,6 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
               });
             });
       });
-      // this.primeraCarga = false
       resolve(true);
     });
   }
@@ -314,7 +311,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
             await this.cargarDocs(files)
 
             this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSisben')].valor = this.datosGet.GrupoSisben;
-            this.formInfoCaracteristica.campos[this.getIndexForm('FechaVinculacion')].valor = momentTimezone.tz(this.datosGet.FechaVinculacionEPS, 'America/Bogota').toDate();
+            this.formInfoCaracteristica.campos[this.getIndexForm('FechaVinculacionEPS')].valor = momentTimezone.tz(this.datosGet.FechaVinculacionEPS, 'America/Bogota').toDate();
 
             this.formInfoCaracteristica.campos[this.getIndexForm('NumeroHermanos')].valor = parseInt(this.datosGet.hermanosUnivesidad);
             this.info_info_caracteristica.HermanosEnLaUniversidad = parseInt(this.datosGet.hermanosUnivesidad);
@@ -387,6 +384,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   }
 
   createInfoCaracteristica(infoCaracteristica: any): void {
+    this.loading = false;
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
       text: this.translate.instant('inscripcion.crear'),
@@ -399,7 +397,6 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     };
     Swal.fire(opt)
       .then((willDelete) => {
-        this.loading = true;
         if (willDelete.value) {
           this.loading = true;
           const info_info_caracteristica_post = <any>infoCaracteristica;
@@ -409,8 +406,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
             .subscribe(res => {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
-                this.loading = false;
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.guardar'));
+                this.loading = false;
               }
             },
               (error: HttpErrorResponse) => {
@@ -424,6 +421,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
+        } else {
+          this.loading = false;
         }
       });
   }
@@ -461,8 +460,12 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
                   }
                 })
             } else {
-              if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
-                event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
+              if (this.datosGet !== undefined) {
+                if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
+                  event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
+                }
+              } else {
+                event.data.InfoCaracteristica.ComprobanteDiscapacidad = { Id: "0" };
               }
 
               if (this.info_info_caracteristica === undefined && !this.denied_acces) {
@@ -474,8 +477,12 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
           });
 
       } else {
-        if (this.datosGet.IdDocumentoPoblacion !== undefined && event.data.InfoCaracteristica.TipoPoblacion[0].Nombre !== 'NO APLICA') {
-          event.data.InfoCaracteristica.ComprobantePoblacion.Id = this.datosGet.IdDocumentoPoblacion;
+        if (this.datosGet !== undefined) {
+          if (this.datosGet.IdDocumentoPoblacion !== undefined && event.data.InfoCaracteristica.TipoPoblacion[0].Nombre !== 'NO APLICA') {
+            event.data.InfoCaracteristica.ComprobantePoblacion.Id = this.datosGet.IdDocumentoPoblacion;
+          }
+        } else {
+          event.data.InfoCaracteristica.ComprobantePoblacion = { Id: "0" };
         }
 
         if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== 'undefined' && event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== null) {
@@ -495,8 +502,12 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
               }
             })
         } else {
-          if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
-            event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
+          if (this.datosGet !== undefined) {
+            if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
+              event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
+            }
+          } else {
+            event.data.InfoCaracteristica.ComprobanteDiscapacidad = { Id: "0" };
           }
 
           if (this.info_info_caracteristica === undefined && !this.denied_acces) {
