@@ -88,7 +88,7 @@
             "crud_tipo_periodo": "Create a period type "
         },
         "periodo": {
-            "periodo": "Enable Period",
+            "periodo": "Manage Period",
             "lista_periodo": "Enable / Disable a period",
             "crud_periodo": "Create a period"
         },

@@ -24,6 +24,7 @@ import { EventoService } from '../../../@core/data/evento.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
+import { EdicionActividadesProgramasComponent } from '../edicion-actividades-programas/edicion-actividades-programas.component';
 
 @Component({
   selector: 'ngx-def-calendario-academico',
@@ -54,6 +55,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   loading: boolean = false;
   editMode: boolean = false;
   uploadMode: boolean = false;
+
+  projects: any;
 
   @Input()
   calendarForEditId: number = 0;
@@ -132,6 +135,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   loadCalendar() {
     this.processes = [];
     this.processTable.load(this.processes);
+    console.log(this.processes)
     if (this.calendarForNew === true) {
       this.activetabs = false;
       this.createdCalendar = false;
@@ -361,8 +365,36 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       },
       mode: 'external',
       actions: {
+        edit: false,
+        delete: false,
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
+        custom: [
+          {
+            name: 'edit',
+            title: '<i class="nb-edit" title="' +
+                this.translate.instant('calendario.tooltip_editar_actividad') +
+                '"></i>',
+          },
+          {
+            name: 'delete',
+            title: '<i class="nb-trash" title="' +
+                this.translate.instant('calendario.tooltip_eliminar_actividad') +
+                '" ></i>',
+          },
+          {
+            name: 'select',
+            title: '<i class="nb-checkmark" title="' +
+                this.translate.instant('calendario.tooltip_seleccionar_proyectos') +
+                '"></i>',
+          },
+          {
+            name: 'view',
+            title: '<i class="nb-search" title="' +
+                this.translate.instant('calendario.tooltip_detalle_actividad') +
+                '"></i>',
+          },
+        ],
       },
       add: {
         addButtonContent:
@@ -370,14 +402,54 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           this.translate.instant('calendario.tooltip_crear_actividad') +
           '"></i>',
       },
-      edit: {
+      /* edit: {
         editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('calendario.tooltip_editar_actividad') + '"></i>',
       },
       delete: {
         deleteButtonContent: '<i class="nb-trash" title="' + this.translate.instant('calendario.tooltip_eliminar_actividad') + '"></i>',
-      },
+      }, */
       noDataMessage: this.translate.instant('calendario.sin_actividades'),
     };
+  }
+
+  onAction(event, process) {
+    console.log(event)
+    switch (event.action) {
+      case 'edit':
+        this.editActivity(event, process);
+        break;
+      case 'delete':
+        this.deleteActivity(event, process);
+        break;
+      case 'select':
+        this.selectDependencias(event, process);
+        break;
+      case 'view':
+        this.viewActivities(event, process)
+        break;
+    }
+  }
+
+  selectDependencias(event, process){
+    const activityConfig = new MatDialogConfig();
+    activityConfig.width = '600px';
+    activityConfig.height = '370px';
+    activityConfig.data = { process: process, calendar: this.calendar, vista: "select" };
+    const newActivity = this.dialog.open(EdicionActividadesProgramasComponent, activityConfig);
+    newActivity.afterClosed().subscribe((activity: any) => {
+
+    });
+  }
+
+  viewActivities(event, process){
+    const activityConfig = new MatDialogConfig();
+    activityConfig.width = '800px';
+    activityConfig.height = '500px';
+    activityConfig.data = { event: event, calendar: this.calendar, vista: "view" };
+    const newActivity = this.dialog.open(EdicionActividadesProgramasComponent, activityConfig);
+    newActivity.afterClosed().subscribe((activity: any) => {
+
+    });
   }
 
   createCalendar(event) {
@@ -778,6 +850,43 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
           this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
         },
       );
+  }
+
+  changeTab(event){
+    if(event.tabTitle == "Extensión Calendario"){
+      this.loadProyectos();
+      this.calendarForm.setValue({
+        resolucion: null,
+        anno: null,});
+    }
+  }
+
+  loadProyectos(){
+    this.proyectoService.get('proyecto_academico_institucion?limit=0').subscribe(
+      response => {
+        this.projects = (<any[]>response).filter(
+          proyecto => this.filtrarProyecto(proyecto),
+        );
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      },
+    );
+  }
+
+  filtrarProyecto(proyecto) {
+    var nivel = this.calendarForm.get('Nivel').value;
+    console.log("filtrarProyecto", nivel)
+    if (nivel === proyecto['NivelFormacionId']['Id']) {
+      return true
+    }
+    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
+      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Id'] === nivel) {
+        return true
+      }
+    } else {
+      return false
+    }
   }
 
 }

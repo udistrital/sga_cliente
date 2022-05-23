@@ -160,11 +160,13 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                 </div>
             </div>
         </fieldset>
+        <br>
 
-     
-    
+        <div class="message-alert" ><!-- style="font-size: 13px;" -->
+            {{ 'notas.info_guardado_necesario' | translate }}
+        </div>
 
-        <br><br>
+        <br>
         <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
             <legend> {{ 'notas.captura_notas' | translate }} </legend>
             <!-- <nb-card>
