@@ -24,6 +24,8 @@ import { DocumentoService } from '../../@core/data/documento.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
 import { PopUpManager } from '../../managers/popUpManager';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/material-moment-adapter';
+import { EdicionActividadesProgramasComponent } from './edicion-actividades-programas/edicion-actividades-programas.component';
+import { AdministracionCalendarioComponent } from './administracion-calendario/administracion-calendario.component';
 
 @NgModule({
   imports: [
@@ -42,6 +44,8 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/m
   ],
   declarations: [
     routedComponents,
+    EdicionActividadesProgramasComponent,
+    AdministracionCalendarioComponent,
   ],
   exports: [
     ListCalendarioAcademicoComponent,
@@ -50,12 +54,15 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/m
     ActividadCalendarioAcademicoComponent,
     DetalleCalendarioComponent,
     CalendarioProyectoComponent,
+    EdicionActividadesProgramasComponent,
+    AdministracionCalendarioComponent
   ],
   entryComponents : [
     ProcesoCalendarioAcademicoComponent,
     ActividadCalendarioAcademicoComponent,
     CrudPeriodoComponent,
     AsignarCalendarioProyectoComponent,
+    EdicionActividadesProgramasComponent,
   ],
   providers: [
     EventoService,

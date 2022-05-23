@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { FormGroup } from '@angular/forms';
@@ -56,6 +57,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
     private dialog: MatDialog,
     private popUpManager: PopUpManager,
     private eventoService: EventoService,
+    private location: Location
   ) {
     this.createActivitiesTable();
   }
@@ -376,7 +378,8 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
   }
 
   activateTab() {
-    this.router.navigate(['../list-calendario-academico'], { relativeTo: this.route });
+    //this.router.navigate(['../list-calendario-academico'], { relativeTo: this.route });
+    this.location.back();
   }
 
 }

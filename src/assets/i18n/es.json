@@ -89,9 +89,9 @@
             "crud_tipo_periodo": "Crear un tipo período"
         },
         "periodo": {
-            "periodo": "Habilitar período",
-            "lista_periodo": "Habilitar/Deshabilitar \nun período",
-            "crud_periodo": "Crear un período"
+            "periodo": "Gestionar periodo",
+            "lista_periodo": "Habilitar/Deshabilitar \nun periodo",
+            "crud_periodo": "Crear un periodo"
         },
         "calendarioevento": {
             "calendarioevento": "Oferta académica",
@@ -1706,7 +1706,32 @@
         "sin_calendarios": "No existen calendarios.",
         "subir_resolucion": "Subir resolución",
         "descargar_resolucion": "Descargar resolución",
-        "crear_actividad_proceso": "por favor a continuación añada la primer actividad del proceso"
+        "crear_actividad_proceso": "por favor a continuación añada la primer actividad del proceso",
+
+        "tooltip_seleccionar_proyectos": "Habilitar edición por programas",
+        "tooltip_detalle_actividad": "Detalle programas asociados",
+        "select_proyectos_actividades": "Selección de edición a proyectos curriculares",
+        "seleccion_proyectos_info": "A continuación usted podrá seleccionar los proyectos curriculares a los cuales habilita la edición de fechas en las respectivas actividades establecidas en el calendario general.",
+        "descripcion_actividad": "Descripción de la actividad",
+        "proyecto_curricular": "Proyecto curricular",
+        "fecha_edicion": "Fecha edición",
+        "sin_proyectos_actividades": "No se encuentran proyectos curriculares con fechas específicas para esta actividad.",
+        "formulario_extension": "Extensión Calendario",
+        "resolucion_extension": "Resolución de extension calendario",
+        "extension_proyectos_info": "Usuario: Tenga en cuenta que la asignación de la extensión del calendario debe realizarse \"uno a uno\" con los programas que están asociados al calendario general, para lo cual deberá repetir el proceso con cada uno de ellos.",
+        "programas_curriculares": "Programas curriculares relacionados",
+        "administración_calendario_proyecto": "Administración calendario académico por proyecto curricular",
+        "informacion_general": "Información general",
+        "tooltip_detalle_proceso": "Detalle proceso",
+        "tooltip_estado_actividad": "Activar/Desactivar actividad",
+        "mensaje_estado_actividad": "¿Seguro de cambiar el estado de la actividad?",
+        "edicion_actividades": "Edición de actividades",
+        "fechas_globales": "Calendario fechas globales",
+        "modificacion_fechas_info": "A continuacion usted podrá modificar las fechas de la actividad correspondiente, teniendo en cuenta que el sistema limita su edición al rango de las fechas globales del calendario general.",
+        "descripcion": "Descripción",
+        "descripcion_proceso": "Descripcion de proceso",
+        "periodicidad_2": "Periodicidad"
+
     },
     "derechos_pecuniarios": {
         "titulo": "Derechos pecuniarios",
@@ -2051,7 +2076,9 @@
         "cerrar_corte_notas": "¡Se va a cerrar un corte de calificaciones! Tenga presente que una vez cerrado no podrá volver a editar a menos que solicite una modificación extemporanea",
         "title_finalizar": "Generación de notas definitivas",
         "info_finalizar": "A punto de finalizar el registro de notas, por favor diligencie campos de fallas y observaciones si aún no lo ha hecho. Lo anterior con el fin de evaluar casos de pérdidas de asignatura por fallas.",
-        "pregunta_finalizar_registros": "¿Desea dar por finalizado el proceso de calificaciones? Puede presionar cancelar para guardar cambios y revisar las notas definitivas, si ya hizo las revisiones pertinentes presione aceptar para concluir el proceso."
+        "pregunta_finalizar_registros": "¿Desea dar por finalizado el proceso de calificaciones? Puede presionar cancelar para guardar cambios y revisar las notas definitivas, si ya hizo las revisiones pertinentes presione aceptar para concluir el proceso.",
+
+        "info_guardado_necesario": "Docente: Cada vez que realice cambios en porcentajes es recomendable que guarde nuevamente la tabla de calificaciones para asegurar el cambio de los porcentajes en las notas de los estudiantes."
     },
     "asignaturas": {
         "notas_parciales": "Notas parciales",
