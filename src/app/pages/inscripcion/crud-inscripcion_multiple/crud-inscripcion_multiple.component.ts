@@ -310,13 +310,18 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             const dataInfo = <Array<any>>[];
             this.recibos_pendientes = 0;
             data.forEach(element => {
-              this.projectService.get('proyecto_academico_institucion/' + element.ProgramaAcademicoId).subscribe(
+              this.projectService.get('proyecto_academico_institucion?query=Id:' + element.ProgramaAcademicoId).subscribe(
                 res => {
                   const auxRecibo = element.ReciboInscripcion;
                   const NumRecibo = auxRecibo.split('/', 1);
                   element.ReciboInscripcion = NumRecibo;
                   element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
-                  element.ProgramaAcademicoId = res.Nombre;
+                  element.ProgramaAcademicoId = res[0].Nombre;
+                  let level = res[0].NivelFormacionId.NivelFormacionPadreId.Id;
+                  if (level == null) {
+                    level = res[0].NivelFormacionId.Id;
+                  }
+                  element.NivelPP = level;
                   if (element.Estado === 'Pendiente pago') {
                     this.recibos_pendientes++;
                   }
@@ -326,7 +331,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   this.dataSource.load(dataInfo);
                   this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
                   // this.selectedLevel = res.NivelFormacionId.Id
-                  sessionStorage.setItem('nivel', res.NivelFormacionId.Id.toString())
+                  //sessionStorage.setItem('nivel', res.NivelFormacionId.Id.toString())
                   this.loading = false;
                 },
                 error => {
@@ -534,7 +539,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   descargarReciboPago(data) {
     this.itemSelect({ data: data })
     if (this.selectedLevel === undefined) {
-      this.selectedLevel = parseInt(sessionStorage.getItem('nivel'), 10);
+      this.selectedLevel = parseInt(data.NivelPP, 10);
     }
     if (this.info_info_persona != null) {
       this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
