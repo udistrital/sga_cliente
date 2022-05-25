@@ -563,7 +563,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             });
             this.loading = true;
             this.parametrosService.get('parametro_periodo?query=ParametroId.TipoParametroId.Id:2,' +
-              'ParametroId.CodigoAbreviacion:' + this.parametro + ',PeriodoId.Id:3').subscribe(
+              'ParametroId.CodigoAbreviacion:' + this.parametro + ',PeriodoId.Year:'+ this.periodo.Year +',PeriodoId.CodigoAbreviacion:VG').subscribe(
                 response => {
                   this.loading = false;
                   const parametro = <any>response['Data'][0];
