@@ -265,6 +265,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       (response: any) => {
         this.loading = false;
         this.inscripcion.TipoInscripcion = response.Nombre;
+        this.loading = false;
       },
       error => {
         this.loading = false;
