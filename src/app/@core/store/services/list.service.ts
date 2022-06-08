@@ -96,7 +96,7 @@ export class ListService {
     this.store.select(<any>REDUCER_LIST.ClasificacionNivelIdioma).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.idiomaService.get('nivel/?query=Activo:true&limit=0')
+          this.idiomaService.get('nivel?query=Activo:true&limit=0')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.ClasificacionNivelIdioma, result);

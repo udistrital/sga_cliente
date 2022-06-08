@@ -171,7 +171,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => { });
     this.total = true;
-    this.loading = true;
+    //this.loading = true;
     this.listService.findPais();
     this.loadData();
   }
@@ -587,6 +587,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
             reject(error);
           });
     });
+    this.loading = false;
   }
 
   loadPercentageDocumentos() {
