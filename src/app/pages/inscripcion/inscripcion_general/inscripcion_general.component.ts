@@ -518,6 +518,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           } else {
             this.percentage_acad = this.percentage_acad + 0;
             this.percentage_tab_acad[1] = 0;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_acad);
