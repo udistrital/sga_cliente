@@ -303,8 +303,10 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         (response: any) => {
           if (response !== null && response.Response.Code === '400') {
             this.popUpManager.showErrorToast(this.translate.instant('inscripcion.error'));
+            this.loading = false;
           } else if (response != null && response.Response.Code === '404') {
             this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('inscripcion.no_inscripcion'));
+            this.loading = false;
           } else {
             const data = <Array<any>>response.Response.Body[1].Inscripciones;
             const dataInfo = <Array<any>>[];
@@ -317,9 +319,11 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   element.ReciboInscripcion = NumRecibo;
                   element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                   element.ProgramaAcademicoId = res[0].Nombre;
-                  let level = res[0].NivelFormacionId.NivelFormacionPadreId.Id;
-                  if (level == null) {
+                  let level = res[0].NivelFormacionId.NivelFormacionPadreId;
+                  if (level == null || level == undefined) {
                     level = res[0].NivelFormacionId.Id;
+                  } else {
+                    level = res[0].NivelFormacionId.NivelFormacionPadreId.Id;
                   }
                   element.NivelPP = level;
                   if (element.Estado === 'Pendiente pago') {
@@ -327,12 +331,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   }
                   this.result.emit(1);
                   dataInfo.push(element);
-                  this.loading = false;
                   this.dataSource.load(dataInfo);
                   this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
-                  // this.selectedLevel = res.NivelFormacionId.Id
-                  //sessionStorage.setItem('nivel', res.NivelFormacionId.Id.toString())
-                  this.loading = false;
                 },
                 error => {
                   this.loading = false;
@@ -340,13 +340,13 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                 },
               );
             })
+            this.loading = false;
           }
         }, error => {
           this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         },
       );
-      // }
     }
     this.loading = false;
   }
