@@ -10,7 +10,7 @@
                 <div class="preinscription-alert">
                     {{ 'inscripcion.warning_info' | translate }}
                 </div>
-                <fieldset [ngClass]="{'fieldseter':true} ">
+                <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
                     <legend> {{ 'inscripcion.recibos_generados' | translate }} </legend>
                     <ng2-smart-table [settings]="settings"
                                      [source]="dataSource"
