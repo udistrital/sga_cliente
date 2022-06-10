@@ -1,5 +1,5 @@
 <nb-tabset fullWidth (changeTab)="changeTab($event)">
-    <nb-tab tabTitle="{{ 'calendario.definicion' | translate }}">
+    <nb-tab tabTitle="{{ 'calendario.definicion' | translate }}" [active]="activetab">
         <div class="dinamic-form">
             <div [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                 
@@ -174,8 +174,11 @@
             </div>
         </div>
     </nb-tab>
-    <nb-tab tabTitle="{{ 'calendario.formulario_extension' | translate }}">
-        <form novalidate [formGroup]="calendarForm" #fform="ngForm" (ngSubmit)="createCalendar($event)" class="form-horizontal">
+
+    <!-- ///////////// No tocar de aqui para arriba ///////////// -->
+
+    <nb-tab tabTitle="{{ 'calendario.formulario_extension' | translate }}" [active]="!activetab">
+        <form novalidate [formGroup]="calendarFormExtend" #fform="ngForm" (ngSubmit)="extendCalendar($event)" class="form-horizontal">
             <div class="row">
                 <div class="col-12">
                     <mat-form-field style="width: 100%;" floatLabel="always">
@@ -186,14 +189,14 @@
                                 {{ nivel.Nombre }}
                             </mat-option>
                         </mat-select>
-                        <mat-error *ngIf="calendarForm.get('Nivel').hasError('required') && calendarForm.get('Nivel').touched">
+                        <mat-error *ngIf="calendarFormExtend.get('Nivel').hasError('required') && calendarFormExtend.get('Nivel').touched">
                             {{ 'calendario.error_select_para' | translate }}
                         </mat-error>
                     </mat-form-field>
                 </div>
             </div>
-            <div class="row my-2">
-                <div class="col-5">
+            <div class="row">
+                <div class="col-12">
                     <mat-form-field style="width: 100%;" floatLabel="always">
                         <mat-label>*{{ 'calendario.periodo' | translate }}: </mat-label>
                         <mat-select formControlName="PeriodoId" placeholder="2020-I, 2020-II, 2020-III" required>
@@ -202,7 +205,7 @@
                                 {{ periodo.Nombre }}
                             </mat-option>
                         </mat-select>
-                        <mat-error *ngIf="calendarForm.get('PeriodoId').hasError('required') && calendarForm.get('PeriodoId').touched">
+                        <mat-error *ngIf="calendarFormExtend.get('PeriodoId').hasError('required') && calendarFormExtend.get('PeriodoId').touched">
                             {{ 'calendario.error_select_periodo' | translate }}
                         </mat-error>
                     </mat-form-field>
@@ -217,7 +220,7 @@
                     <div class="col-3">
                         <mat-form-field>
                             <input matInput type="number" formControlName="resolucion" placeholder="{{ 'calendario.numero_resolucion' | translate }} " required />
-                            <mat-error *ngIf="calendarForm.get('resolucion').hasError('required') && calendarForm.get('resolucion').touched">
+                            <mat-error *ngIf="calendarFormExtend.get('resolucion').hasError('required') && calendarFormExtend.get('resolucion').touched">
                                 {{ 'calendario.error_resolucion' | translate }}
                             </mat-error>
                         </mat-form-field>
@@ -225,7 +228,7 @@
                     <div class="col-3">
                         <mat-form-field>
                             <input matInput type="text" formControlName="anno" minlength="4" maxlength="4" pattern="^[0-9]*$" placeholder="{{ 'calendario.anno_resolucion' | translate }} " required />
-                            <mat-error *ngIf="calendarForm.get('anno').hasError('required') && calendarForm.get('anno').touched && calendarForm.get('anno').hasError('pattern') ">
+                            <mat-error *ngIf="calendarFormExtend.get('anno').hasError('required') && calendarFormExtend.get('anno').touched && calendarForm.get('anno').hasError('pattern') ">
                                 {{ 'calendario.error_anno' | translate }}
                             </mat-error>
                         </mat-form-field>
@@ -233,40 +236,35 @@
                     <div class="col-2">
                         <p>{{ 'calendario.etiqueta_documento' | translate }} </p>
                     </div>
-                    <div class="col-2" *ngIf="!uploadMode">
+                    <div class="col-4" *ngIf="!Extension">
                         <button mat-button type="button" (click)="fileInput.click()" title="{{'calendario.subir_resolucion'|translate}}">
                             <span class="fa fa-paperclip fa-lg"></span>
-                            <input formControlName="fileResolucion" #fileInput type="file" (change)="onInputFileResolucion($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
+                            <input formControlName="fileResolucion" #fileInput type="file" (change)="onInputFileResolucionExt($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
                         </button>
-                        <mat-error *ngIf="!fileResolucion">{{ 'ERROR.no_documento' | translate }}</mat-error>
+                        <mat-error *ngIf="calendarFormExtend.get('fileResolucion').hasError('required')">{{ 'ERROR.no_documento' | translate }}</mat-error>
                         <label *ngIf="fileResolucion">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucion.name}}</label>
                     </div>
-                    <div class="col-2" *ngIf="!editMode">
-                        <button mat-button type="button" (click)="downloadFile(calendar.DocumentoId)" title="{{'calendario.descargar_resolucion'|translate}}">
+                    <div class="col-4" *ngIf="Extension">
+                        <button mat-button type="button" (click)="downloadFileExt(fileExtId)" title="{{'calendario.descargar_resolucion'|translate}}">
                             <span class="fa fa-cloud-download fa-lg"></span>
                         </button>
                     </div>
                 </div>
             </fieldset>
             <br>
-            <div class="row" *ngIf="createdCalendar">
-                <div class="col-12">
-                    <button class="float-right" mat-button type="submit" [disabled]="calendarForm.invalid">{{ 'GLOBAL.guardar' | translate }} </button>
-                </div>
-            </div>
-            <br>
-        </form>
+
         <div class="message-alert" style="padding: 20px;">
             {{ 'calendario.extension_proyectos_info' | translate }}
         </div>
 
         <fieldset [ngClass]="{'fieldseter':true} ">
             <legend>{{ 'calendario.programas_curriculares' | translate }}</legend>
-            <div class="row my-2">
-                <div class="col-5">
+            <div class="row">
+                <div class="col-12">
                     <mat-form-field style="width: 100%;">
-                        <mat-label>{{ 'calendario.seleccione_proyecto' | translate }} </mat-label>
-                        <mat-select [disabled]="calendarForm.invalid">
+                        <mat-label>{{ 'calendario.seleccione_proyecto' | translate }}</mat-label>
+                        <mat-select formControlName="selProyectos" [disabled]="calendarFormExtend.get('fileResolucion').hasError('required') && !Extension" multiple>
+                            <mat-option value="0" disabled>{{ 'calendario.seleccione_proyecto' | translate }}</mat-option>
                             <mat-option *ngFor="let project of projects" [value]="project.Id">{{ project.Nombre }} </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -279,66 +277,7 @@
             <legend>
                 {{ 'calendario.procesos_actividades' | translate }}
             </legend>
-            <div class="calendar-buttons" *ngIf="activebutton">
-                <div class="row">
-                    <div class="col-12">
-                        <p>{{ 'calendario.procesos_descripcion' | translate }} </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-center"><button mat-button type="button" (click)="openTabsClone()">{{ 'calendario.procesos_copiar' | translate }} </button></div>
-                    <div class="col-6 text-center"><button mat-button type="button" (click)="openTabs()">{{ 'calendario.procesos_definir' | translate }} </button></div>
-                </div>
-            </div>
 
-            <form novalidate [formGroup]="calendarFormClone" #fform="ngForm" *ngIf="activetabsClone">
-                <br/>
-                <div class="calendar-content">
-
-                    <div class="row">
-                        <div class="col-12">
-                            <p>{{ 'calendario.clonar_calendario_nombre' | translate }} </p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <mat-form-field style="width: 100%;" floatLabel="always">
-                                <mat-label>*{{ 'calendario.para' | translate }} </mat-label>
-                                <mat-select formControlName="NivelClone" placeholder="Pregrado/Posgrado" required>
-                                    <mat-option>--Seleccionar--</mat-option>
-                                    <mat-option *ngFor="let nivelClone of niveles" [value]="nivelClone.Id">
-                                        {{ nivelClone.Nombre }}
-                                    </mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="calendarFormClone.get('NivelClone').hasError('required') && calendarFormClone.get('NivelClone').touched">
-                                    {{ 'calendario.error_select_para' | translate }}
-                                </mat-error>
-
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col-5">
-                            <mat-form-field style="width: 100%;" floatLabel="always">
-                                <mat-label>*{{ 'calendario.periodo' | translate }}: </mat-label>
-                                <mat-select formControlName="PeriodoIdClone" placeholder="2020-I, 2020-II, 2020-III" required>
-                                    <mat-option>--Seleccionar--</mat-option>
-                                    <mat-option *ngFor="let periodoClone of periodosClone" [value]="periodoClone.Id">
-                                        {{ periodoClone.Nombre }}
-                                    </mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="calendarFormClone.get('PeriodoIdClone').hasError('required') && calendarFormClone.get('PeriodoIdClone').touched">
-                                    {{ 'calendario.error_select_periodo' | translate }}
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-4">
-                            <button mat-button type="button" (click)="clonarCalendario()">{{ 'calendario.clonar_calendario' | translate }} </button>
-                        </div>
-                    </div>
-
-                </div>
-            </form>
             <div class="calendar-content" *ngIf="activetabs">
                 <mat-tab-group>
                     <mat-tab label="{{ 'calendario.procesos' | translate }}">
@@ -359,11 +298,15 @@
                 </mat-tab-group>
             </div>
         </fieldset>
+
         <br><br>
         <div class="row" align="center">
             <div class="col">
-                <button class="float-center" mat-button >{{ 'GLOBAL.guardar' | translate }}</button>
+                <ng-container *ngIf="!Extension">
+                    <button class="float-center" mat-button type="submit" [disabled]="calendarFormExtend.invalid">{{ 'GLOBAL.guardar' | translate }} </button>
+                </ng-container>
             </div>
         </div>
+    </form>
     </nb-tab>
 </nb-tabset>

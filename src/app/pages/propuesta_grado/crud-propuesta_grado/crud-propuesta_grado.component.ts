@@ -95,9 +95,14 @@ export class CrudPropuestaGradoComponent implements OnInit {
   }
 
   async cargarValores() {
-    await this.listService.findGrupoInvestigacion();
-    await this.listService.findLineaInvestigacion();
-    await this.listService.findTipoProyecto();
+    try {
+      await this.listService.findGrupoInvestigacion();
+      await this.listService.findLineaInvestigacion();
+      await this.listService.findTipoProyecto();
+    } catch (error) {
+      this.loading = false;
+      this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+    }
   }
 
   construirForm() {
@@ -172,6 +177,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               })
+        } else {
+          this.loading = false;
         }
       }, (error: HttpErrorResponse) => {
         this.loading = false;
