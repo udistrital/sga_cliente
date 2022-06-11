@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -35,11 +35,14 @@ export class EdicionActividadesProgramasComponent implements OnInit {
   settings2: Object;
   dataSource2: LocalDataSource;
 
+  SelectorDeps: FormGroup;
   ActivityEditor: FormGroup;
+  ActividadEditable: boolean = false;
 
   constructor(
     private projectService: ProyectoAcademicoService,
     private popUpManager: PopUpManager,
+    private builder: FormBuilder,
     private translate: TranslateService,
     public dialogRef: MatDialogRef<EdicionActividadesProgramasComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -79,64 +82,66 @@ export class EdicionActividadesProgramasComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Seleccion de proyectos a editar fechas actividades
     if (this.select_proyectos_act) {
-      this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
-        response => {
-          this.projects = (<any[]>response).filter(
-            proyecto => this.filtrarProyecto(proyecto),
-          );
-          console.log(this.projects)
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-        },
-      );
+      this.SelectorDeps = this.builder.group({
+        Dependencias: ['', Validators.required],
+      });
+      this.projects = this.data.dependencias;
+      console.log(this.data)
+      let dependenciasJSON = this.data.activity.DependenciaId;
+      console.log("deps:", dependenciasJSON.proyectos)
+      this.SelectorDeps.patchValue({
+        Dependencias: dependenciasJSON.proyectos,
+      })
     }
+
     if(this.actividad_detalle_proyectos){
       this.createTable();
-      this.actividad = this.data.event.data.Nombre;
-      this.descripcion_actividad = this.data.event.data.Descripcion;
-      this.dataSource.load([])
+      console.log(this.data)
+      this.actividad = this.data.activity.Nombre;
+      this.descripcion_actividad = this.data.activity.Descripcion;
+      let deps = this.data.activity.DependenciaId;
+      let tablaFechas = [];
+      deps.fechas.forEach(fdep => {
+        tablaFechas.push({
+          ProyectoCurricular: this.data.projects.find(p => p.Id == fdep.Id).Nombre,
+          FechaInicio: fdep.Inicio,
+          FechaFin: fdep.Fin,
+          FechaEdicion: fdep.Modificacion,
+        })
+      })
+      this.dataSource.load(tablaFechas)
     }
     if(this.proceso_detalle){
       console.log(this.data)
-      this.nombre_proceso = this.data.process.data.Nombre;
-      this.descripcion_proceso = this.data.process.data.Descripcion;
-      this.periodicidad_proceso = this.data.process.data.TipoRecurrenciaId.Nombre;
+      this.nombre_proceso = this.data.process.Nombre;
+      this.descripcion_proceso = this.data.process.Descripcion;
+      this.periodicidad_proceso = this.data.process.TipoRecurrenciaId.Nombre;
     }
     if(this.editar_actividad){
+      this.ActividadEditable = this.data.activity.Editable;
       this.ActivityEditor = new FormGroup({
           fecha_inicio_org: new FormControl(''),
           fecha_fin_org: new FormControl(''),
-          fecha_ini_new: new FormControl(''),
+          fecha_inicio_new: new FormControl(''),
           fecha_fin_new: new FormControl(''),
       });
       console.log(this.data)
       this.nombre_proceso = this.data.process.Nombre;
       this.periodo = this.data.periodo;
-      this.actividad = this.data.event.data.Nombre;
-      this.descripcion_actividad = this.data.event.data.Descripcion;
-      this.fecha_inicio_org = this.data.event.data.FechaInicio;
-      this.fecha_fin_org = this.data.event.data.FechaFin;
+      this.actividad = this.data.activity.Nombre;
+      this.descripcion_actividad = this.data.activity.Descripcion;
+      this.fecha_inicio_org = this.data.activity.FechaInicioOrg;
+      this.fecha_fin_org = this.data.activity.FechaFinOrg;
       this.createTable2();
-      this.dataSource2.load(this.data.event.data.responsables);
+      this.dataSource2.load(this.data.activity.responsables);
       this.ActivityEditor.patchValue({
         fecha_inicio_org: moment(this.fecha_inicio_org,"DD-MM-YYYY").toDate(),
         fecha_fin_org: moment(this.fecha_fin_org,"DD-MM-YYYY").toDate(),
+        fecha_inicio_new: moment(this.data.activity.FechaInicio,"DD-MM-YYYY").toDate(),
+        fecha_fin_new: moment(this.data.activity.FechaFin,"DD-MM-YYYY").toDate(),
       });
-    }
-  }
-
-  filtrarProyecto(proyecto) {
-    if (this.data.calendar.Nivel === proyecto['NivelFormacionId']['Id']) {
-      return true
-    }
-    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
-      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Id'] === this.data.calendar.Nivel) {
-        return true
-      }
-    } else {
-      return false
     }
   }
 
@@ -149,7 +154,21 @@ export class EdicionActividadesProgramasComponent implements OnInit {
   }
 
   guardar() {
-    this.regresar();
+    if (this.select_proyectos_act) {
+      let selected_deps = this.SelectorDeps.controls.Dependencias.value;
+      let updated_deps = this.buildJSONdeps(this.data.activity.DependenciaId,selected_deps)
+      this.dialogRef.close({UpdateDependencias: updated_deps})
+    }
+    if(this.editar_actividad){
+      this.data.activity.DependenciaId.fechas.forEach(fd => {
+        if(fd.Id == this.data.dependencia){
+          fd.Inicio = moment(this.ActivityEditor.controls.fecha_inicio_new.value).format('DD-MM-YYYY');
+          fd.Fin = moment(this.ActivityEditor.controls.fecha_fin_new.value).format('DD-MM-YYYY');
+          fd.Modificacion = moment(new Date()).format('DD-MM-YYYY');
+        }
+      });
+      this.dialogRef.close({UpdateDependencias: this.data.activity.DependenciaId})
+    }
   }
 
   createTable() {
@@ -167,7 +186,7 @@ export class EdicionActividadesProgramasComponent implements OnInit {
           width: '20%',
           filter: false,
         },
-        FechaFIn: {
+        FechaFin: {
           title: this.translate.instant('calendario.fecha_fin'),
           editable: false,
           width: '20%',
@@ -201,5 +220,23 @@ export class EdicionActividadesProgramasComponent implements OnInit {
       noDataMessage: this.translate.instant('calendario.sin_responsables')
     };
   }
+
+  
+
+  buildJSONdeps(OrgDeps: any, NewSelect: Number[]) {
+    let output: any[] = [];
+    NewSelect.forEach(sel => {
+      let fe = OrgDeps.fechas.find(f => f.Id == sel)
+      if (fe == undefined) {
+        fe = { Id: sel, Inicio: this.data.activity.FechaInicio, Fin: this.data.activity.FechaFin, Modificacion: "", Activo: true}
+      }
+      output.push(fe)
+    })
+    OrgDeps.proyectos = NewSelect;
+    OrgDeps.fechas = output;
+    return OrgDeps
+  }
+
+
 
 }

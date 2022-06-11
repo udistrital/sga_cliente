@@ -101,7 +101,8 @@
         "calendarioacademico": {
             "calendarioacademico": "Calendario académico",
             "list_calendarioacademico": "Listar calendarios académicos",
-            "buscar_calendario_proyecto": "Buscar calendario \npor proyecto"
+            "buscar_calendario_proyecto": "Buscar calendario \npor proyecto",
+            "administración calendario": "Administración calendario"
         },
         "proyecto_academico": {
             "proyecto_academico": "Proyecto curricular",
