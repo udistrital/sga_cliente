@@ -132,7 +132,7 @@ export class ListIdiomasComponent implements OnInit {
         this.loading = false;
       },
         (error: HttpErrorResponse) => {
-          this.loading = true;
+          this.loading = false;
           this.popUpManager.showErrorAlert(this.translate.instant('ERROR.' + error.status));
         });
   }

@@ -65,6 +65,8 @@ export class NewNuxeoService {
                     Tipo: "Archivo",
                     Observaciones: file.nombre,
                     "dc:title": file.nombre,
+                    Anno: file.anno ? file.anno : "",
+                    Resolucion: file.resolucion ? file.resolucion : "",
                 },
                 descripcion: file.nombre,
                 file: await this.fileToBase64(file.file)

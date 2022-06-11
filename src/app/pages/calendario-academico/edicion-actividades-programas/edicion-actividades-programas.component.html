@@ -3,6 +3,7 @@
         <nb-card-body>
             <fieldset [ngClass]="{'fieldseter':true} ">
                 <legend>{{ 'calendario.select_proyectos_actividades' | translate }}</legend>
+                <form novalidate [formGroup]="SelectorDeps">
                 <div class="message-alert">
                     {{ 'calendario.seleccion_proyectos_info' | translate }}
                 </div>
@@ -10,7 +11,7 @@
                     <div class="col">
                         <mat-form-field style="width: 100%;">
                             <mat-label>{{ 'calendario.seleccione_proyecto' | translate }} </mat-label>
-                            <mat-select multiple>
+                            <mat-select formControlName="Dependencias" multiple>
                                 <mat-option *ngFor="let project of projects" [value]="project.Id">{{ project.Nombre }} </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -21,7 +22,7 @@
                         <button class="float-right" mat-button (click)='guardar()'>{{ 'GLOBAL.guardar' | translate }}</button>
                     </div>
                 </div>
-        
+                </form>
             </fieldset>
         </nb-card-body>
     </nb-card>
@@ -168,6 +169,7 @@
                         </div>
                     </fieldset>
                     <br>
+                    <div *ngIf="ActividadEditable">
                     <div class="message-alert" style="font-size: 13px;">
                         {{ 'calendario.modificacion_fechas_info' | translate }}
                     </div>
@@ -175,7 +177,7 @@
                         <div class="col-6">
                             <mat-form-field style="width: 100%;">
                                 <mat-label>{{ 'calendario.fecha_inicio' | translate }}:</mat-label>
-                                <input matInput [matDatepicker]="f_ini_n" [min]="f_ini._datepickerInput._value" formControlName="fecha_ini_new">
+                                <input matInput [matDatepicker]="f_ini_n" [min]="f_ini._datepickerInput._value" [max]="f_fin._datepickerInput._value" formControlName="fecha_inicio_new">
                                 <mat-datepicker-toggle matSuffix [for]="f_ini_n"></mat-datepicker-toggle>
                                 <mat-datepicker #f_ini_n></mat-datepicker>
                             </mat-form-field>
@@ -183,11 +185,12 @@
                         <div class="col-6">
                             <mat-form-field style="width: 100%;">
                                 <mat-label>{{ 'calendario.fecha_fin' | translate }}:</mat-label>
-                                <input matInput [matDatepicker]="f_fin_n" [max]="f_fin._datepickerInput._value" formControlName="fecha_fin_new">
+                                <input matInput [matDatepicker]="f_fin_n" [min]="f_ini_n._datepickerInput._value" [max]="f_fin._datepickerInput._value" formControlName="fecha_fin_new">
                                 <mat-datepicker-toggle matSuffix [for]="f_fin_n"></mat-datepicker-toggle>
                                 <mat-datepicker #f_fin_n></mat-datepicker>
                             </mat-form-field>
                         </div>
+                    </div>
                     </div>
                 </fieldset>
             </fieldset>
@@ -202,7 +205,12 @@
             <br>
             <div class="row" align="center">
                 <div class="col">
-                    <button class="float-center" mat-button (click)='guardar()'>{{ 'GLOBAL.guardar' | translate }}</button>
+                    <div *ngIf="ActividadEditable">
+                        <button class="float-center" mat-button (click)='guardar()' [disabled]="ActivityEditor.invalid">{{ 'GLOBAL.guardar' | translate }}</button>
+                    </div>
+                    <div *ngIf="!ActividadEditable">
+                        <button class="float-center" mat-button (click)='regresar()'>{{ 'GLOBAL.regresar' | translate }}</button>
+                    </div>
                 </div>
             </div>
         </form>
