@@ -304,6 +304,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           } else {
             this.loading = false;
             this.popUpManager.showAlert('', this.translate.instant('inscripcion.no_info'));
+            this.datosGet = undefined;
           }
         },
           (error: HttpErrorResponse) => {
@@ -437,9 +438,10 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                   }
                 })
             } else {
+              if(this.datosGet !== undefined){
               if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
                 event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
-              }
+              }}
 
               if (this.info_info_caracteristica === undefined && !this.denied_acces) {
                 this.createInfoCaracteristica(event.data.InfoCaracteristica);
@@ -450,9 +452,10 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           });
 
       } else {
+        if(this.datosGet !== undefined){
         if (this.datosGet.IdDocumentoPoblacion !== undefined && event.data.InfoCaracteristica.TipoPoblacion[0].Nombre !== 'NO APLICA') {
           event.data.InfoCaracteristica.ComprobantePoblacion.Id = this.datosGet.IdDocumentoPoblacion;
-        }
+        }}
 
         if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== 'undefined' && event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== null) {
           const file = [{
@@ -471,9 +474,10 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
               }
             })
         } else {
+          if(this.datosGet !== undefined){
           if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
             event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
-          }
+          }}
 
           if (this.info_info_caracteristica === undefined && !this.denied_acces) {
             this.createInfoCaracteristica(event.data.InfoCaracteristica);
