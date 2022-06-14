@@ -104,9 +104,9 @@ export class ListDescuentoAcademicoComponent implements OnInit {
           Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
           .subscribe((result: any) => {
             const r = <any>result.Data.Body[1];
-                if (result !== null && result.Data.Code == '404') {
-                  this.popUpManager.showAlert('', this.translate.instant('inscripcion.sin_descuento'));
-                  this.getPercentage(0);
+                if (result !== null && (result.Data.Code == '400'|| result.Data.Code == '404') ) {
+                    this.popUpManager.showAlert('', this.translate.instant('inscripcion.sin_descuento'));
+                    this.getPercentage(0);
                 }else {
                   this.data = <Array<SolicitudDescuento>>r;
                   this.getPercentage(1);

@@ -133,7 +133,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
               this.soporteDocumento.push(documento);
               this.source.load(this.soporteDocumento);
               if (documento.EstadoObservacion !== 'No aprobado') {
-                this.getPercentage(Math.round((1 / this.tipo_documentos.length * 100) * 100) / 100);
+                this.getPercentage((1 / this.tipo_documentos.length * 100));
               }
             });
           } else {
@@ -258,7 +258,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
   getPercentage(event) {
     if (event !== undefined) {
       this.percentage += event;
-      this.percentage = Number(this.percentage.toFixed(0))
+      //this.percentage = Number(this.percentage.toFixed(0))
     }
 
     if (this.percentage > 100) {
