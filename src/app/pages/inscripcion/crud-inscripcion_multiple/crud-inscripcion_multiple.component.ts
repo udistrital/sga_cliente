@@ -312,6 +312,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             const dataInfo = <Array<any>>[];
             this.recibos_pendientes = 0;
             data.forEach(element => {
+              if(element != null){
               this.projectService.get('proyecto_academico_institucion?query=Id:' + element.ProgramaAcademicoId).subscribe(
                 res => {
                   const auxRecibo = element.ReciboInscripcion;
@@ -339,6 +340,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
                 },
               );
+              }
             })
             this.loading = false;
           }

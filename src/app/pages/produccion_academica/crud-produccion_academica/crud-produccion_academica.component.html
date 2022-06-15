@@ -72,7 +72,7 @@
     </form>
 </div>
 <div class="dinamic-form" *ngIf="formConstruido && !nuevoAutor">
-    <form class="form-horizontal">
+    <form class="form-horizontal" novalidate [formGroup]="formAutor">
         <fieldset [ngClass]="{'fieldseter':true}">
             <legend align="left">
                 <small>{{'produccion_academica.autores' | translate}}</small>
@@ -80,7 +80,7 @@
 
             <div class="row" *ngIf="creandoAutor">
                 <div class="col-8">
-                    <mat-form-field style="width: 100%;" floatLabel="always">
+                    <!-- <mat-form-field style="width: 100%;" floatLabel="always">
                         <mat-label>*{{'produccion_academica.agregar_autor' | translate}}:</mat-label>
                         <mat-select [placeholder]="translate.instant('produccion_academica.placeholder_agregar_autor')" [(ngModel)]="autorSeleccionado" [ngModelOptions]="{standalone: true}">
                             <mat-option>--Seleccionar--</mat-option>
@@ -89,6 +89,17 @@
                             </mat-option>
                         </mat-select>
                         <mat-hint class="text-danger" *ngIf="!autorSeleccionado">{{'produccion_academica.alerta_agregar_autor' | translate}}</mat-hint>
+                    </mat-form-field> -->
+                    <mat-form-field style="width: 100%;" floatLabel="always">
+                        <mat-label>*{{'produccion_academica.agregar_autor' | translate}}:</mat-label>
+                        <input type="text" matInput [placeholder]="translate.instant('produccion_academica.placeholder_agregar_autor')" [(ngModel)]="autorSeleccionadoV2" [matAutocomplete]="auto" formControlName="autorSeleccionadoV2">
+                        <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete" [displayWith]="displayWith" (optionSelected)="onSelected($event)">
+                            <mat-option>--Seleccionar--</mat-option>
+                            <mat-option *ngFor="let persona of personas" [value]="persona">
+                                {{persona.Nombre}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint class="text-danger" *ngIf="!autorSeleccionadoV2">{{'produccion_academica.alerta_agregar_autor' | translate}}</mat-hint>
                     </mat-form-field>
                 </div>
                 <div class="col-2" align="center">
