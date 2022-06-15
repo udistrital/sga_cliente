@@ -23,10 +23,13 @@ import { ListService } from '../../../@core/store/services/list.service';
 
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MetadatoSubtipoProduccion } from '../../../@core/data/models/produccion_academica/metadato_subtipo_produccion';
 import { Tercero } from '../../../@core/data/models/terceros/tercero';
 import { LocalDataSource } from 'ng2-smart-table';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'ngx-crud-produccion-academica',
@@ -79,6 +82,9 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
   Metadatos: any[];
   percentage: number;
+  formAutor = new FormGroup({
+    autorSeleccionadoV2: new FormControl(''),
+  });
 
   constructor(
     private translate: TranslateService,
@@ -91,6 +97,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
     private listService: ListService,
     private store: Store<IAppState>,
     private toasterService: ToasterService,
+    private http: HttpClient,
     private sgaMidService: SgaMidService) {
     this.formProduccionAcademica = JSON.parse(JSON.stringify(FORM_produccion_academica));
     this.formInfoNuevoAutor = NUEVO_AUTOR;
@@ -174,7 +181,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           // this.loadEstadosAutor(),
           this.loadOptionsTipoProduccionAcademica(),
           this.loadOptionsSubTipoProduccionAcademica(),
-          this.loadAutores(),
+          //this.loadAutores(),
           this.loadUserData(),
         ]).
           then(() => {
@@ -556,6 +563,27 @@ export class CrudProduccionAcademicaComponent implements OnInit {
 
   ngOnInit() {
     this.loadProduccionAcademica();
+    this.formAutor.controls.autorSeleccionadoV2.valueChanges
+    .pipe(
+      distinctUntilChanged(),
+      debounceTime(1000),
+      switchMap(value => this.http.get(environment.TERCEROS_SERVICE + 'tercero?query=NombreCompleto__icontains:' + value + ',TipoContribuyenteId.Id:1&fields=Id,NombreCompleto&limit=50'))
+    ).subscribe((data: any) => {
+      console.log(data);
+      this.personas = <Array<Tercero>>data;
+      this.personas.forEach((persona: Tercero) => {
+        persona['Nombre'] = persona.NombreCompleto;
+        persona['PersonaId'] = persona.Id;
+      });
+    });
+  }
+
+  onSelected(event) {
+    console.log("onselect:",event)
+    this.formAutor.patchValue({
+      autorSeleccionadoV2: event.option.value.Nombre,
+    })
+    this.autorSeleccionado = event.option.value;
   }
 
   onDeleteAuthor(event): void {
@@ -665,7 +693,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
 
   onCreateAuthor(event): void {
     if (!this.editando) {
-      this.loadAutores();
+      //this.loadAutores();
       this.creandoAutor = !this.creandoAutor;
     } else {
       Swal.fire({
