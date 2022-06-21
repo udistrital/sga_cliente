@@ -323,6 +323,11 @@ idCalendario: number = 0;
                               });
                               this.processTable.load(this.processes);
                               this.loading = false;
+                            } else {
+                              this.loading = false;
+                            }
+                            if( <boolean>response.Data[0].AplicaExtension ){
+                              this.popUpManager.showAlert(this.translate.instant('calendario.formulario_extension'),this.translate.instant('calendario.calendario_tiene_extension'));
                             }
                           },
                           error => {
@@ -337,7 +342,7 @@ idCalendario: number = 0;
                         this.loading = false;
                         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
                       }
-                    )
+                    );
                   }, error => {
                     console.log("error_calendario_por_dependencia: ", error)
                     this.loading = false;

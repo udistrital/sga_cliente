@@ -1,7 +1,7 @@
+<div [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
 <nb-tabset fullWidth (changeTab)="changeTab($event)">
     <nb-tab tabTitle="{{ 'calendario.definicion' | translate }}" [active]="activetab">
         <div class="dinamic-form">
-            <div [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                 
                 <form novalidate [formGroup]="calendarForm" #fform="ngForm" (ngSubmit)="createCalendar($event)" class="form-horizontal">
                     <div class="row">
@@ -171,13 +171,26 @@
                         </mat-tab-group>
                     </div>
                 </fieldset>
-            </div>
         </div>
     </nb-tab>
 
     <!-- ///////////// No tocar de aqui para arriba ///////////// -->
 
     <nb-tab tabTitle="{{ 'calendario.formulario_extension' | translate }}" [active]="!activetab">
+        <ng-container *ngIf="showList">
+            <div class="row">
+                <div class="col-12">
+                    <mat-form-field style="width: 100%;" floatLabel="always">
+                        <mat-label> {{ 'calendario.seleccione_version_calendario' | translate }} </mat-label>
+                        <mat-select placeholder="{{ 'calendario.seleccione_version_calendario' | translate }}" [(value)]="selCalendar">
+                            <mat-option *ngFor="let Calendar of ExtensionList" (click)="loadExtension(Calendar.Id)" [value]="Calendar.Id" >
+                                {{ Calendar.Nombre }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </ng-container>
         <form novalidate [formGroup]="calendarFormExtend" #fform="ngForm" (ngSubmit)="extendCalendar($event)" class="form-horizontal">
             <div class="row">
                 <div class="col-12">
@@ -279,6 +292,7 @@
             </legend>
 
             <div class="calendar-content" *ngIf="activetabs">
+                <ng-container *ngIf="!Extension && !Ext_Extension">
                 <mat-tab-group>
                     <mat-tab label="{{ 'calendario.procesos' | translate }}">
                         <ng2-smart-table [settings]="processSettings" [source]="processTable" (create)="addProcess($event)" (edit)="editProcess($event)" (delete)="deleteProcess($event)"></ng2-smart-table>
@@ -296,6 +310,28 @@
                         </mat-accordion>
                     </mat-tab>
                 </mat-tab-group>
+                </ng-container>
+
+                <ng-container *ngIf="Extension || Ext_Extension">
+                <mat-tab-group>
+                    <mat-tab label="{{ 'calendario.procesos' | translate }}">
+                        <ng2-smart-table [settings]="processSettings" [source]="processTableExt" (create)="addProcess($event)" (edit)="editProcess($event)" (delete)="deleteProcess($event)"></ng2-smart-table>
+                    </mat-tab>
+                    <mat-tab label="{{ 'calendario.actividades' | translate }}">
+                        <mat-accordion>
+                            <mat-expansion-panel *ngFor="let process of processesExt">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        {{ process.Nombre }}
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <ng2-smart-table [settings]="activitiesSettings" [source]="process.actividades" (create)="addActivity($event, process)" (custom)="onAction($event, process)" ></ng2-smart-table> <!-- (edit)="editActivity($event, process)" (delete)="deleteActivity($event, process)" -->
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </mat-tab>
+                </mat-tab-group>
+                </ng-container>
+
             </div>
         </fieldset>
 
@@ -305,8 +341,12 @@
                 <ng-container *ngIf="!Extension">
                     <button class="float-center" mat-button type="submit" [disabled]="calendarFormExtend.invalid">{{ 'GLOBAL.guardar' | translate }} </button>
                 </ng-container>
+                <ng-container *ngIf="Extension">
+                    <button class="float-center" mat-button type="button" (click)="prepareNewExtension()" > {{ 'calendario.add_extension_extension' | translate }} </button>
+                </ng-container>
             </div>
         </div>
     </form>
     </nb-tab>
 </nb-tabset>
+</div>

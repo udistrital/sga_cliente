@@ -64,11 +64,15 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   calendarFormExtend: FormGroup;
   fileResolucionExt: any;
   ExtensionList: any[];
+  showList: boolean = false;
+  selCalendar: number;
   CalendarIdasfather: number;
   fileExtId: number;
   proyectosParticulares: any;
   processesExt: Proceso[];
   activitiesExt: Actividad[];
+  processTableExt: LocalDataSource;
+  Ext_Extension: boolean = false;
 
   @Input()
   calendarForEditId: number = 0;
@@ -97,6 +101,8 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     this.calendarioEvento = new CalendarioEvento();
     this.processTable = new LocalDataSource();
     this.processes = [];
+    this.processTableExt = new LocalDataSource();
+    this.processesExt = [];
     this.loadSelects()
     this.createCalendarForm();
     this.createCalendarFormClone();
@@ -206,9 +212,12 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
             this.calendar.PeriodoId = calendar['PeriodoId'];
             this.fileResolucion = calendar['resolucion']['Nombre'];
             this.projects = this.proyectos.filter(proyecto => this.filterProject(JSON.parse(calendar['DependenciaId']).proyectos,proyecto.Id));
-            this.Extension = calendar['AplicaExtension'];
+            this.Extension = calendar['ExistenExtensiones'];
             if(this.Extension){
               this.ExtensionList = calendar['ListaExtension'];
+              if (this.ExtensionList.length > 1 ) {
+                this.showList = true;
+              }
             }
             const processes: any[] = calendar['proceso'];
             if (processes !== null) {
@@ -265,72 +274,9 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
               this.activetab = false;
               console.log(this.ExtensionList)
               this.ExtensionList.sort((a,b) => (a.Id < b.Id) ? 1 : -1 )
-              this.sgaMidService.get('calendario_academico/v2/' + this.ExtensionList[0].Id).subscribe(
-                (response: any) => {
-                  if (response != null && response.Success) {
-                    console.log("calendario extension:", response.Data)
-                    this.proyectosParticulares = JSON.parse(response.Data[0].DependenciaParticularId);
-                    this.projects = this.proyectos.filter(proyecto => this.filterProject(this.proyectosParticulares.proyectos,proyecto.Id));
-                    this.calendarFormExtend.patchValue({
-                      Nivel: response.Data[0].Nivel,
-                      PeriodoId: response.Data[0].PeriodoId,
-                      resolucion: response.Data[0].extension.Resolucion,
-                      anno: response.Data[0].extension.Anno,
-                      fileResolucion: "",
-                      selProyectos: this.proyectosParticulares.proyectos,
-                    })
-                    this.fileExtId = response.Data[0].extension.Id;
-
-                    this.processesExt = [];
-                    this.activitiesExt = [];
-                    const calendarExt = response.Data[0];
-                    const processes: any[] = calendarExt['proceso'];
-                    if (processes !== null) {
-                      processes.forEach(element => {
-                        if (Object.keys(element).length !== 0) {
-                          const loadedProcess: Proceso = new Proceso();
-                          loadedProcess.Nombre = element['Proceso'];
-                          loadedProcess.CalendarioId = { Id: parseInt(calendarExt['Id']) };
-                          loadedProcess.actividades = [];
-                          const activities: any[] = element['Actividades']
-                          if (activities !== null) {
-                            activities.forEach(element => {
-                              if (Object.keys(element).length !== 0 && element['EventoPadreId'] == null) {
-                                const loadedActivity: Actividad = new Actividad();
-                                loadedActivity.actividadId = element['actividadId'];
-                                loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
-                                loadedActivity.Nombre = element['Nombre'];
-                                loadedActivity.Descripcion = element['Descripcion'];
-                                loadedActivity.Activo = element['Activo'];
-                                loadedActivity.FechaInicio = moment(element['FechaInicio'], 'YYYY-MM-DD').format('DD-MM-YYYY');
-                                loadedActivity.FechaFin = moment(element['FechaFin'], 'YYYY-MM-DD').format('DD-MM-YYYY');
-                                loadedActivity.responsables = element['Responsable'];
-                                loadedActivity['DependenciaId'] = this.validJSONdeps(element['DependenciaId']);
-                                loadedProcess.procesoId = element['TipoEventoId']['Id'];
-                                loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
-                                loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
-                                loadedProcess.actividades.push(loadedActivity);
-                              }
-                            });
-                            this.processesExt.push(loadedProcess);
-                          }
-                        }
-                      });
-                      this.processTable.load(this.processesExt);
-                    } else {
-                      this.loading = false;
-                    }
-                    this.loading = false;
-                  } else {
-                    this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                    this.loading = false;
-                  }
-                },
-                error => {
-                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                  this.loading = false;
-                },
-              )}
+              this.selCalendar = this.ExtensionList[0].Id;
+              this.loadExtension(this.ExtensionList[0].Id);
+            }
           } else {
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
             this.loading = false;
@@ -342,6 +288,79 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         },
       );
     }
+  }
+
+  loadExtension(IdExt: number) {
+    this.loading = true;
+    this.sgaMidService.get('calendario_academico/v2/' + IdExt).subscribe(
+      (response: any) => {
+        if (response != null && response.Success) {
+          console.log("calendario extension:", response.Data)
+          this.proyectosParticulares = JSON.parse(response.Data[0].DependenciaParticularId);
+          this.projects = this.proyectos.filter(proyecto => this.filterProject(this.proyectosParticulares.proyectos,proyecto.Id));
+          this.calendarFormExtend.patchValue({
+            Nivel: response.Data[0].Nivel,
+            PeriodoId: response.Data[0].PeriodoId,
+            resolucion: response.Data[0].resolucionExt.Resolucion,
+            anno: response.Data[0].resolucionExt.Anno,
+            fileResolucion: "",
+            selProyectos: this.proyectosParticulares.proyectos,
+          })
+          this.fileExtId = response.Data[0].resolucionExt.Id;
+
+          this.processesExt = [];
+          this.activitiesExt = [];
+          const calendarExt = response.Data[0];
+          const processes: any[] = calendarExt['proceso'];
+          if (processes !== null) {
+            processes.forEach(element => {
+              if (Object.keys(element).length !== 0) {
+                const loadedProcess: Proceso = new Proceso();
+                loadedProcess.Nombre = element['Proceso'];
+                loadedProcess.CalendarioId = { Id: parseInt(calendarExt['Id']) };
+                loadedProcess.actividades = [];
+                const activities: any[] = element['Actividades']
+                if (activities !== null) {
+                  activities.forEach(element => {
+                    if (Object.keys(element).length !== 0 && element['EventoPadreId'] == null) {
+                      const loadedActivity: Actividad = new Actividad();
+                      loadedActivity.actividadId = element['actividadId'];
+                      loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
+                      loadedActivity.Nombre = element['Nombre'];
+                      loadedActivity.Descripcion = element['Descripcion'];
+                      loadedActivity.Activo = element['Activo'];
+                      loadedActivity.FechaInicio = moment(element['FechaInicio'], 'YYYY-MM-DD').format('DD-MM-YYYY');
+                      loadedActivity.FechaFin = moment(element['FechaFin'], 'YYYY-MM-DD').format('DD-MM-YYYY');
+                      loadedActivity.responsables = element['Responsable'];
+                      loadedActivity['DependenciaId'] = this.validJSONdeps(element['DependenciaId']);
+                      loadedProcess.procesoId = element['TipoEventoId']['Id'];
+                      loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
+                      loadedProcess.TipoRecurrenciaId = { Id: element['TipoEventoId']['TipoRecurrenciaId']['Id'] };
+                      loadedProcess.actividades.push(loadedActivity);
+                    }
+                  });
+                  this.processesExt.push(loadedProcess);
+                }
+              }
+            });
+            this.processTableExt.load(this.processesExt);
+            if (!<boolean>response.Data[0].Activo) {
+              this.popUpManager.showAlert(this.translate.instant('calendario.formulario_extension'),this.translate.instant('calendario.extension_inactiva'))
+            }
+          } else {
+            this.loading = false;
+          }
+          this.loading = false;
+        } else {
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          this.loading = false;
+        }
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.loading = false;
+      },
+    );
   }
 
   createCalendarForm() {
@@ -616,6 +635,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
                         this.calendar.Nombre = this.translate.instant('calendario.calendario_academico') + ' ';
                         this.calendar.Nombre += this.periodos.filter(periodo => periodo.Id === this.calendar.PeriodoId)[0].Nombre;
                         this.calendar.Nombre += ' ' + this.niveles.filter(nivel => nivel.Id === this.calendar.Nivel)[0].Nombre;
+                        this.calendar['DependenciaParticularId'] = '{}';
                         this.eventoService.post('calendario', this.calendar).subscribe(
                           response => {
                             this.calendar.calendarioId = response['Id'];
@@ -983,7 +1003,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
         }
       },
         error => {
-          this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
         },
       );
   }
@@ -994,33 +1014,6 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     } else {
       this.activetab = true;
     }
-  }
-
-  loadExtension(){
-    this.calendarFormExtend.patchValue({
-      Nivel: this.calendarForm.get("Nivel").value,
-      PeriodoId: this.calendarForm.get("PeriodoId").value,
-    })
-    this.sgaMidService.get('calendario_academico/v2/'+this.calendarForEditId).subscribe(
-      resp => {
-        var DepIds = JSON.parse(resp.Data.Principal.DependenciaId);
-        this.proyectoService.get('proyecto_academico_institucion?fields=Id,Nombre&limit=0').subscribe(
-          response => {
-            this.projects = (<any[]>response).filter(
-              proyecto => this.filterProject(DepIds.proyectos,proyecto.Id)
-            );
-          },
-          error => {
-            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          },
-        );
-        console.log("ext:",resp)
-        this.Extension = <boolean>(resp.Data.Principal.AplicaExtension ? resp.Data.Principal.AplicaExtension : false);
-      },
-      error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      }
-    );
   }
 
   filterProject(DepIds: any, DepInfo: any){
@@ -1049,13 +1042,16 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
       IdDocumento: 14,
     });
     console.log(files)
-    this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_extension'),this.translate.instant('calendario.formulario_extension')).then(accion => {
+    this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_extension'),
+    this.translate.instant('calendario.formulario_extension')).then(accion => {
       if(accion.value){
+        this.loading = true;
         console.log("ok enviar...")
         this.newNuxeoService.uploadFiles(files).subscribe(
           (responseNux: any[]) => {
             console.log("nuxeo resp:", responseNux)
             if(responseNux[0].Status == "200"){
+              this.popUpManager.showInfoToast(this.translate.instant('calendario.archivo_extension_saved'));
               var bodyPost = {
                 CalendarioPadre: this.CalendarIdasfather,
                 DocumentoExtensionId: responseNux[0].res.Id,
@@ -1064,19 +1060,63 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
               this.sgaMidService.post('clonar_calendario/calendario_extension',bodyPost).subscribe(
                 (resp) => {
                   console.log(resp)
+                  if (resp.Status == "200"){
+                    if(this.Ext_Extension){
+                      console.log("deshabilit ext org..")
+                    this.sgaMidService.put('calendario_academico/inhabilitar_calendario/' + this.selCalendar, JSON.stringify({ 'id': this.selCalendar })).subscribe(
+                      (response: any) => {
+                        if (JSON.stringify(response) != '200') {
+                          this.popUpManager.showErrorToast(this.translate.instant('calendario.calendario_no_inhabilitado'));
+                        } else {
+                          this.popUpManager.showInfoToast(this.translate.instant('calendario.calendario_inhabilitado'));
+                        }
+                      },
+                      error => {
+                        this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_calendario'));
+                      },
+                    );
+                    }
+                    this.loading = false;
+                    this.popUpManager.showSuccessAlert(this.translate.instant('calendario.Extension_calendario_ok'));
+                    this.Extension = true;
+                    this.loadCalendar();
+                    /////////////
+                  } else {
+                    this.loading = false;
+                    this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                  }
+
                 }, (error) => {
                   console.log("error clone extend: ", error)
+                  this.loading = false;
+                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
                 }
-              )
+              );
             } else {
               console.log("eeror nuxeo")
+              this.loading = false;
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
             }
           }, (errorNux) => {
             console.log("new nuxeo error:", errorNux)
+            this.loading = false;
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
           }
         );
       }
     });
+  }
+
+  prepareNewExtension(){
+    console.log("this new extension")
+    this.calendarFormExtend.patchValue({
+      resolucion: '',
+      anno: '',
+      fileResolucion: '',
+      selProyectos: [],
+    });
+    this.Extension = false;
+    this.Ext_Extension = true;
   }
 
   async onInputFileResolucionExt(event) {
