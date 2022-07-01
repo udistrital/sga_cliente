@@ -753,72 +753,79 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   realizarInscripcion() {
-    this.loading = true;
-    this.inscripcionService.get('inscripcion/' + parseInt(sessionStorage.IdInscripcion, 10)).subscribe(
-      (response: any) => {
-        this.loading = false;
-        const inscripcionPut: any = response;
-        inscripcionPut.ProgramaAcademicoId = parseInt(sessionStorage.ProgramaAcademicoId, 10);
-        if (this.tieneEnfasis) {
-          if (this.enfasisSelected) {
-            inscripcionPut.EnfasisId = this.enfasisSelected ? parseInt(this.enfasisSelected, 10) : 0;
-          } else {
-
+    if(this.Campo1Control.status == "VALID" && this.enfasisControl.status == "VALID") {
+      
+      this.loading = true;
+      this.inscripcionService.get('inscripcion/' + parseInt(sessionStorage.IdInscripcion, 10)).subscribe(
+        (response: any) => {
+          const inscripcionPut: any = response;
+          inscripcionPut.ProgramaAcademicoId = parseInt(sessionStorage.ProgramaAcademicoId, 10);
+          
+          if (this.tieneEnfasis) {
+            if (this.enfasisSelected) {
+              inscripcionPut.EnfasisId = parseInt(this.enfasisSelected, 10);
+            } else {
+              inscripcionPut.EnfasisId = parseInt(this.enfasisControl.value,10);
+            }
           }
-        }
 
-        this.loading = true;
-        this.inscripcionService.get('estado_inscripcion?query=Nombre:INSCRITO').subscribe(
-          (response: any) => {
-            this.loading = false;
-            const estadoInscripcio: any = response[0];
-            inscripcionPut.EstadoInscripcionId = estadoInscripcio;
+          this.loading = true;
+          this.inscripcionService.get('estado_inscripcion?query=Nombre:INSCRITO').subscribe(
+            (response: any) => {
+              this.loading = false;
+              const estadoInscripcio: any = response[0];
+              inscripcionPut.EstadoInscripcionId = estadoInscripcio;
 
-            this.loading = true;
-            this.inscripcionService.put('inscripcion/', inscripcionPut)
-              .subscribe(res_ins => {
-                this.loading = false;
-                const r_ins = <any>res_ins;
-                if (res_ins !== null && r_ins.Type !== 'error') {
+              this.loading = true;
+              this.inscripcionService.put('inscripcion/', inscripcionPut)
+                .subscribe(res_ins => {
                   this.loading = false;
-                  this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
-                  this.imprimir = true;
-                  this.perfil_editar('perfil');
-                }
-              },
-                (error: any) => {
-                  this.loading = false;
-                  if (error.System.Message.includes('duplicate')) {
-                    Swal.fire({
-                      icon: 'info',
-                      text: this.translate.instant('inscripcion.error_update_programa_seleccionado'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-
-                    });
-                  } else {
+                  const r_ins = <any>res_ins;
+                  if (res_ins !== null && r_ins.Type !== 'error') {
                     this.loading = false;
-                    Swal.fire({
-                      icon: 'error',
-                      title: error.status + '',
-                      text: this.translate.instant('ERROR.' + error.status),
-                      footer: this.translate.instant('GLOBAL.actualizar') + '-' +
-                        this.translate.instant('GLOBAL.admision'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                    });
+                    this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
+                    this.imprimir = true;
+                    this.perfil_editar('perfil');
                   }
-                });
-          },
-          error => {
-            this.loading = false;
-            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          },
-        );
-      },
-      error => {
-        this.loading = false;
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-      },
-    );
+                },
+                  (error: any) => {
+                    this.loading = false;
+                    if (error.System.Message.includes('duplicate')) {
+                      Swal.fire({
+                        icon: 'info',
+                        text: this.translate.instant('inscripcion.error_update_programa_seleccionado'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+
+                      });
+                    } else {
+                      this.loading = false;
+                      Swal.fire({
+                        icon: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('GLOBAL.actualizar') + '-' +
+                          this.translate.instant('GLOBAL.admision'),
+                        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                      });
+                    }
+                  });
+            },
+            error => {
+              this.loading = false;
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            },
+          );
+        },
+        error => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        },
+      );
+    } else {
+      this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'),this.translate.instant('enfasis.select_enfasis'));
+      this.enfasisControl.markAsTouched();
+    }
+    
   }
 
   useLanguage(language: string) {
@@ -1117,8 +1124,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       sessionStorage.setItem('ProgramaAcademicoId', this.selectedValue);
       this.programaService.get('proyecto_academico_enfasis/?query=ProyectoAcademicoInstitucionId.Id:' + this.selectedValue)
         .subscribe((enfasis: any) => {
-          this.enfasis = enfasis.map((e) => (e.EnfasisId)).filter((e) => (e.CodigoAbreviacion !== 'NA'));
-          this.tieneEnfasis = this.enfasis.length > 0
+          this.enfasis = enfasis.map((e) => (e.EnfasisId));
+          this.tieneEnfasis = this.enfasis.length > 0;
         })
     } else {
       this.tieneEnfasis = false;
