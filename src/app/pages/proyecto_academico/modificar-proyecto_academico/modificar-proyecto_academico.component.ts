@@ -38,6 +38,7 @@ import { NuxeoService } from "../../../@core/utils/nuxeo.service";
 import { DocumentoService } from "../../../@core/data/documento.service";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Vinculacion } from "../../../@core/data/models/terceros/vinculacion";
+import { NewNuxeoService } from "../../../@core/utils/new_nuxeo.service";
 
 @Component({
   selector: "ngx-modificar-proyecto-academico",
@@ -174,6 +175,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     private proyectoacademicoService: ProyectoAcademicoService,
     private sgamidService: SgaMidService,
     private routerService: Router,
+    private newNuxeoService: NewNuxeoService,
     private formBuilder: FormBuilder
   ) {
     this.dpDayPickerConfig = {
@@ -392,14 +394,12 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         key: id_documento
       }
     ];
-    this.nuxeoService
-      .getDocumentoById$(filesToGet, this.documentoService)
-      .subscribe(
+    this.newNuxeoService.get(filesToGet).subscribe(
         response => {
           const filesResponse = <any>response;
           if (Object.keys(filesResponse).length === filesToGet.length) {
             filesToGet.forEach((file: any) => {
-              const url = filesResponse[file.Id];
+              const url = filesResponse[0].url;
               window.open(url);
             });
           }
@@ -727,12 +727,13 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
             this.basicform.value.nombre_proyecto);
         file.key = "soporte_" + file.IdDocumento;
       });
-      this.nuxeoService.getDocumentos$(files, this.documentoService).subscribe(
-        response => {
-          if (Object.keys(response).length === files.length) {
+      this.newNuxeoService.uploadFiles(files).subscribe(
+        (responseNux: any[]) => {
+          if (Object.keys(responseNux).length === files.length) {
             files.forEach(file => {
               // Se restringe carga a un archivo
-              resolve(response[file.key].Id);
+              let f = responseNux.find((res) => res.res.Nombre == file.nombre)
+              resolve(f.res.Id);
             });
           }
         },

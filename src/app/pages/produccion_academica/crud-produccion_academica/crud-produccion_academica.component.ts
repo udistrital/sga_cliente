@@ -30,6 +30,8 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { info } from 'console';
 
 @Component({
   selector: 'ngx-crud-produccion-academica',
@@ -98,6 +100,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
     private store: Store<IAppState>,
     private toasterService: ToasterService,
     private http: HttpClient,
+    private newNuxeoService: NewNuxeoService,
     private sgaMidService: SgaMidService) {
     this.formProduccionAcademica = JSON.parse(JSON.stringify(FORM_produccion_academica));
     this.formInfoNuevoAutor = NUEVO_AUTOR;
@@ -347,7 +350,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
             }
           });
           if (callback !== undefined) {
-            callback(this.formProduccionAcademica.campos, this.info_produccion_academica.Metadatos, this.nuxeoService, this.documentoService);
+            callback(this.formProduccionAcademica.campos, this.info_produccion_academica.Metadatos, this.newNuxeoService);
           }
           this.construirForm();
           this.formConstruido = true;
@@ -410,16 +413,19 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       this.source.load(this.source_authors);
       this.Metadatos = [];
       // this.formProduccionAcademica = JSON.parse(JSON.stringify(FORM_produccion_academica));
-      const fillForm = function (campos, Metadatos, nuxeoService, documentoService) {
+      const fillForm = function (campos, Metadatos, newNuxeoService) {
         const filesToGet = [];
         campos.forEach(campo => {
           Metadatos.forEach(metadato => {
             // const field = JSON.parse(datoAdicional.DatoAdicionalSubtipoProduccion.TipoDatoAdicional.FormDefiniton);
             if (campo.nombre === metadato.MetadatoSubtipoProduccionId.Id) {
               campo.valor = metadato.Valor;
-              if (metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.Id === 39 || metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.Id === 45) {
-                const seleccion = metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.FormDefinition
-                campo.valor = JSON.parse(seleccion).opciones[parseInt(metadato.Valor) - 1]
+              let formDef = JSON.parse(metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.FormDefinition);
+              if(formDef.hasOwnProperty('etiqueta')){
+                if(formDef.etiqueta == "select"){
+                  console.log(formDef.etiqueta)
+                  campo.valor = formDef.opciones[parseInt(metadato.Valor)-1];
+                }
               }
               if (campo.etiqueta === 'file') {
                 campo.idFile = parseInt(metadato.Valor, 10);
@@ -429,16 +435,20 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           });
         });
         if (filesToGet.length !== 0) {
-          nuxeoService.getDocumentoById$(filesToGet, documentoService)
-            .subscribe(response => {
+          newNuxeoService.get(filesToGet).subscribe(
+            response => {
+              console.log("response: ", JSON.parse(JSON.stringify(response)))
               const filesResponse = <any>response;
+              console.log("campos BEFORE: ", JSON.parse(JSON.stringify(campos)))
               if (Object.keys(filesResponse).length === filesToGet.length) {
                 campos.forEach(campo => {
                   if (campo.etiqueta === 'file') {
-                    campo.url = filesResponse[campo.nombre] + '';
-                    campo.urlTemp = filesResponse[campo.nombre] + '';
+                    let f = filesResponse.find((res) => res.Id == campo.idFile);
+                    campo.url = f.url;
+                    campo.urlTemp = f.url;
                   }
                 });
+                console.log("campos AFTER: ", JSON.parse(JSON.stringify(campos)))
               }
             },
               (error: HttpErrorResponse) => {
@@ -602,20 +612,26 @@ export class CrudProduccionAcademicaComponent implements OnInit {
 
   uploadFilesToMetadaData(files, metadatos) {
     return new Promise((resolve, reject) => {
+      console.log("uploadFilesToMetadaData: ", JSON.parse(JSON.stringify(files)), "metadatos: ", metadatos);
       files.forEach((file) => {
         file.Id = file.nombre,
-          file.nombre = 'soporte_' + file.Id + '_prod_' + this.userData.Id;
-        file.key = file.Id;
+        file.nombre = 'soporte_' + file.Id + '_prod_' + this.userData.Id,
+        file.key = file.Id,
+        file.IdDocumento = 63
       });
-      this.nuxeoService.getDocumentos$(files, this.documentoService)
-        .subscribe(response => {
-          if (Object.keys(response).length === files.length) {
+      console.log("before foreach: ",JSON.parse(JSON.stringify(files)))
+      this.newNuxeoService.uploadFiles(files).subscribe(
+        (responseNux: any[]) => {
+          console.log("response post: ",responseNux)
+          if (Object.keys(responseNux).length === files.length) {
             files.forEach((file) => {
+              let f = responseNux.find((res) => res.res.Nombre == file.nombre);
               metadatos.push({
                 MetadatoSubtipoProduccionId: file.Id,
-                Valor: response[file.Id].Id + '', // Se castea el valor del string
+                Valor: f.res.Id,
               });
             });
+            console.log("after foreach: ",JSON.parse(JSON.stringify(files)), "metadatos: ", metadatos)
             resolve(true);
           }
         }, error => {
@@ -625,6 +641,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
   }
 
   validarForm(event) {
+    console.log(event);
     if (event.valid) {
       if (this.info_produccion_academica.Titulo === undefined ||
         this.info_produccion_academica.Fecha === undefined ||

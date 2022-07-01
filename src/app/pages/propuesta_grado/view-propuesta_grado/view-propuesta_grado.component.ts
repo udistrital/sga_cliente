@@ -8,6 +8,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { CIDCService } from '../../../@core/data/cidc.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-view-propuesta-grado',
@@ -50,6 +51,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
     private cidcService: CIDCService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
+    private newNuxeoService: NewNuxeoService,
     private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -77,11 +79,12 @@ export class ViewPropuestaGradoComponent implements OnInit {
           if (temp.DocumentoId + '' !== '0') {
             files9.push({ Id: temp.DocumentoId, key: 'FormatoProyecto' });
           }
-          this.nuxeoService.getDocumentoById$(files9, this.documentoService)
-            .subscribe(response_2 => {
+          console.log("this get is for propuesta")
+          this.newNuxeoService.get(files9).subscribe(
+            response_2 => {
               const filesResponse_2 = <any>response_2;
-              if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2['FormatoProyecto'] !== undefined)) {
-                temp.Documento = this.cleanURL(filesResponse_2['FormatoProyecto'] + '');
+              if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2 !== undefined)) {
+                temp.Documento = filesResponse_2[0].url;
                 this.cidcService.get('research_units/' + temp.GrupoInvestigacionId)
                   .subscribe(grupo => {
                     if (grupo !== null) {
@@ -244,16 +247,18 @@ export class ViewPropuestaGradoComponent implements OnInit {
           if (temp.DocumentoId + '' !== '0') {
             files9.push({ Id: temp.DocumentoId, key: 'FormatoProyecto' });
           }
-          this.nuxeoService.getDocumentoById$(files9, this.documentoService)
-            .subscribe(response_2 => {
+          this.newNuxeoService.get(files9).subscribe(
+            response_2 => {
+              console.log("////////// nuxeo get ////////")
               const filesResponse_2 = <any>response_2;
-              if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2['FormatoProyecto'] !== undefined)) {
-                temp.FormatoProyecto = filesResponse_2['FormatoProyecto'] + '';
+              if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2 !== undefined)) {
+                temp.FormatoProyecto = filesResponse_2[0].url;
                 temp.Soporte = {
                   ...temp,
-                  ...{ Documento: this.cleanURL(filesResponse_2['FormatoProyecto'] + '') },
+                  ...{ Documento: filesResponse_2[0].Documento },
                 }
                 this.FormatoProyecto = temp.DocumentoId;
+                console.log("///> ", temp)
                 if (temp.GrupoInvestigacionId === 0) {
                   temp.GrupoInvestigacion = <any>{ name: "No aplica" };
                   this.info_propuesta_grado = temp;

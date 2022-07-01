@@ -5,6 +5,7 @@ import { SgaMidService } from './../../../@core/data/sga_mid.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-view-formacion-academica',
@@ -38,6 +39,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private nuxeoService: NuxeoService,
+    private newNuxeoService: NewNuxeoService,
     private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -59,7 +61,6 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   loadData(): void {
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
       .subscribe(response => {
-        const soportes = [];
         if (response !== null && response.Response.Code === '200') {
           const data = <Array<any>>response.Response.Body[0];
           const dataInfo = <Array<any>>[];
@@ -70,17 +71,19 @@ export class ViewFormacionAcademicaComponent implements OnInit {
             element.FechaFinalizacion = FechaF.substring(0, 2) + '/' + FechaF.substring(2, 4) + '/' + FechaF.substring(4, 8);
             dataInfo.push(element);
 
+            const soportes = [];
             if (element.Documento + '' !== '0') {
               soportes.push({ Id: element.Documento, key: 'DocumentoAcad' + element.Documento });
             }
-            this.nuxeoService.getFilesNew(soportes)
-              .subscribe(response => {
+            console.log("new nux")
+            this.newNuxeoService.get(soportes).subscribe(
+              response => {
                 this.documentosSoporte = <Array<any>>response;
-                if (Object.values(this.documentosSoporte).length === data.length) {
-                  for (let i = 0; i < data.length; i++) {
-                    data[i].Documento = this.documentosSoporte[i];
-                  }
-                }
+                //if (Object.values(this.documentosSoporte).length === data.length) {
+                  //for (let i = 0; i < data.length; i++) {
+                    element.Documento = this.documentosSoporte[0];
+                  //}
+                //}
               },
                 (error: HttpErrorResponse) => {
                   Swal.fire({
@@ -96,6 +99,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
 
 
           })
+          console.log(data);
           this.info_formacion_academica = data;
         }
       },
@@ -121,8 +125,8 @@ export class ViewFormacionAcademicaComponent implements OnInit {
           if (temp_info_academica.Documento + '' !== '0') {
             files.push({ Id: temp_info_academica.Documento, key: 'Documento' });
           }
-          this.nuxeoService.getFilesNew(files)
-            .subscribe(response => {
+          this.newNuxeoService.get(files).subscribe(
+            response => {
               const filesResponse = <any>response;
               this.info_formacion_academica = [
                 {

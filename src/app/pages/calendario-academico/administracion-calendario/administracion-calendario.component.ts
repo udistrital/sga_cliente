@@ -302,8 +302,8 @@ idCalendario: number = 0;
                                           loadedActivity.Activo = element['Activo'];
                                           loadedActivity['Editable'] = false;
                                         } else {
-                                          loadedActivity.FechaInicio = moment(FechasParticulares.Inicio, 'DD-MM-YYYY').format('DD-MM-YYYY');
-                                          loadedActivity.FechaFin = moment(FechasParticulares.Fin, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                                          loadedActivity.FechaInicio = moment(FechasParticulares.Inicio, 'YYYY-MM-DDTHH:mm:ss[Z]').format('DD-MM-YYYY');
+                                          loadedActivity.FechaFin = moment(FechasParticulares.Fin, 'YYYY-MM-DDTHH:mm:ss[Z]').format('DD-MM-YYYY');
                                           loadedActivity.Activo = FechasParticulares.Activo;
                                           loadedActivity['Editable'] = true;
                                         }

@@ -13,6 +13,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { take } from 'rxjs/operators';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-consulta-proyecto-academico',
@@ -41,6 +42,7 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
     private documentoService: DocumentoService,
     public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
     private routerService: Router,
+    private newNuxeoService: NewNuxeoService,
     private formBuilder: FormBuilder) {
       this.source_emphasys.load(data.enfasis);
       this.settings_emphasys = {
@@ -80,13 +82,13 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
         key: project.id_documento_acto,
       },
     ];
-    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
-      .subscribe(response => {
+    this.newNuxeoService.get(filesToGet).subscribe(
+      response => {
         const filesResponse = <any>response;
         if (Object.keys(filesResponse).length === filesToGet.length) {
           // console.log("files", filesResponse);
           filesToGet.forEach((file: any) => {
-            const url = filesResponse[file.Id];
+            const url = filesResponse[0].url;
             window.open(url);
           });
         }

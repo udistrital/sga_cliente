@@ -128,9 +128,11 @@ export class PerfilComponent implements OnInit {
   }
 
   abrirDocumento(documento: any) {
+    console.log("FROM PERFIL: ",documento);
     if (this.en_revision) {
       this.revisar_doc.emit(documento)
     } else {
+      console.log("showing doc..:",documento.Documento.changingThisBreaksApplicationSecurity)
       window.open(documento.Documento.changingThisBreaksApplicationSecurity)
     }
   }

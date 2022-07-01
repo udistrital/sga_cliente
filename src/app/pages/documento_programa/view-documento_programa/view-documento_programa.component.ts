@@ -7,6 +7,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { Documento } from '../../../@core/data/models/documento/documento';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-view-documento-programa',
@@ -50,6 +51,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
     private popUpManager: PopUpManager,
+    private newNuxeoService: NewNuxeoService,
     private userService: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -76,6 +78,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
             this.info_documento_programa = response;
             this.info_documento_programa.forEach(doc => {
               this.docSoporte.push({ Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId })
+              doc.IdDoc = doc.DocumentoId;
 
               this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
                 (documento: Documento) => {
@@ -93,12 +96,20 @@ export class ViewDocumentoProgramaComponent implements OnInit {
                 });
 
             });
-            this.nuxeoService.getDocumentoById$(this.docSoporte, this.documentoService).subscribe(
-              (res: any) => {
-                if (Object.keys(res).length > 0) {
+            console.log("new nux doc prog")
+            console.log(this.docSoporte)
+            this.newNuxeoService.get(this.docSoporte).subscribe(
+              response => {
+                if (Object.keys(response).length > 0) {
                   this.info_documento_programa.forEach(doc => {
-                    doc.Documento = this.cleanURL(res['DocumentoPrograma' + doc.DocumentoId]);
+                    console.log("response:", response)
+                    let f = response.find(file => doc.IdDoc === file.Id);
+                    console.log("f find: ",JSON.parse(JSON.stringify(f)))
+                    if (f !== undefined) {
+                      doc.Documento = f["Documento"];
+                    }
                   });
+                  console.log("resultado: ",this.info_documento_programa)
                 }
               },
               error => {
