@@ -20,6 +20,7 @@ import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { CoreService } from '../../../@core/data/core.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-crud-descuento-academico',
@@ -82,6 +83,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
     private listService: ListService,
     private nuxeoService: NuxeoService,
     private popUpManager: PopUpManager,
+    private newNuxeoService: NewNuxeoService,
     // private user: UserService,
     private toasterService: ToasterService) {
     this.formDescuentoAcademico = FORM_DESCUENTO;
@@ -255,14 +257,14 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
               this.info_descuento_academico = this.temp;
               const files = [];
               if (this.temp.DocumentoId + '' !== '0') {
-                files.push({ Id: this.temp.DocumentoId, key: 'Documento' });
+                files.push({ Id: this.temp.DocumentoId });
               }
-              this.nuxeoService.getDocumentoById$(files, this.documentoService)
-                .subscribe(response => {
+              this.newNuxeoService.get(files).subscribe(
+                response => {
                   const filesResponse = <any>response;
                   if (Object.keys(filesResponse).length === files.length) {
                     this.SoporteDescuento = this.temp.DocumentoId;
-                    this.temp.Documento = filesResponse['Documento'] + '';
+                    this.temp.Documento = filesResponse[0].url;
                     this.info_descuento_academico = this.temp;
                     // this.info_descuento_academico.DescuentoDependencia = this.temp.DescuentosDependenciaId;
                     this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].valor = (this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId && this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Id) ?
@@ -270,7 +272,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                       Nombre: this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Id + '. ' + this.info_descuento_academico.DescuentosDependenciaId.TipoDescuentoId.Nombre} :
                       { Id: 0, Nombre: 'No registrado' };
                     this.info_descuento_academico.Periodo = this.periodo;
-                    this.info_descuento_academico.Documento = filesResponse['Documento'] + '';
+                    this.info_descuento_academico.Documento = filesResponse[0].url;
                   }
                   this.loading = false;
                 },
@@ -549,17 +551,17 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
           this.info_descuento_academico.DescuentosDependenciaId = this.info_descuento_academico.DescuentoDependencia;
           if (this.info_descuento_academico.Documento.file !== undefined) {
             files.push({
-              nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-              file: this.info_descuento_academico.Documento.file, IdDocumento: 16,
+              IdDocumento: 7,
+              nombre: this.autenticationService.getPayload().sub,
+              file: this.info_descuento_academico.Documento.file, 
             });
           }
-          this.nuxeoService.getDocumentos$(files, this.documentoService)
-            .subscribe(response => {
-              if (Object.keys(response).length === files.length) {
-                const filesUp = <any>response;
-                if (filesUp['Documento'] !== undefined) {
-                  this.info_descuento_academico.DocumentoId = filesUp['Documento'].Id;
-                }
+          this.newNuxeoService.uploadFiles(files).subscribe(
+            (responseNux: any[]) => {
+              if (responseNux[0].Status == "200") {
+                
+                  this.info_descuento_academico.DocumentoId = responseNux[0].res.Id;
+                
                 // this.info_descuento_academico.DocumentoId = 1234
                 this.sgaMidService.post('descuento_academico/', this.info_descuento_academico)
                   .subscribe(res => {

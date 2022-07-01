@@ -15,6 +15,7 @@ import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { ListService } from '../../../@core/store/services/list.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-crud-propuesta-grado',
@@ -81,6 +82,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
     private store: Store<IAppState>,
     private listService: ListService,
     private popUpManager: PopUpManager,
+    private newNuxeoService: NewNuxeoService,
     private toasterService: ToasterService) {
     this.formPropuestaGrado = FORM_PROPUESTA_GRADO;
     this.construirForm();
@@ -148,13 +150,13 @@ export class CrudPropuestaGradoComponent implements OnInit {
           const temp = <PropuestaGrado>res[0];
           const files9 = []
           if (temp.DocumentoId + '' !== '0') {
-            files9.push({ Id: temp.DocumentoId, key: 'FormatoProyecto' });
+            files9.push({ Id: temp.DocumentoId });
           }
-          this.nuxeoService.getDocumentoById$(files9, this.documentoService)
-            .subscribe(response_2 => {
+          this.newNuxeoService.get(files9).subscribe(
+            response_2 => {
               const filesResponse_2 = <any>response_2;
-              if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2['FormatoProyecto'] !== undefined)) {
-                temp.FormatoProyecto = filesResponse_2['FormatoProyecto'] + '';
+              if ((Object.keys(filesResponse_2).length !== 0)) {
+                temp.FormatoProyecto = filesResponse_2[0].url;
                 temp.TipoProyecto = temp.TipoProyectoId;
                 this.info_propuesta_grado = { ...this.info_propuesta_grado, ...temp };
                 this.FormatoProyecto = temp.DocumentoId;
@@ -212,8 +214,9 @@ export class CrudPropuestaGradoComponent implements OnInit {
           const files = [];
           if (this.info_propuesta_grado.FormatoProyecto.file !== undefined) {
             files.push({
-              nombre: this.autenticationService.getPayload().sub, key: 'FormatoProyecto',
-              file: this.info_propuesta_grado.FormatoProyecto.file, IdDocumento: 7,
+              IdDocumento: 5,
+              nombre: this.autenticationService.getPayload().sub,
+              file: this.info_propuesta_grado.FormatoProyecto.file, 
             });
           }
           if (this.existePropuesta) {
@@ -228,18 +231,16 @@ export class CrudPropuestaGradoComponent implements OnInit {
   uploadResolutionFile(file) {
     this.loading = true;
     return new Promise((resolve, reject) => {
-      this.nuxeoService.getDocumentos$(file, this.documentoService)
-        .subscribe(response => {
-          if (Object.keys(response).length === file.length) {
-            const filesUp = <any>response;
-            if (filesUp['FormatoProyecto'] !== undefined) {
+      this.newNuxeoService.uploadFiles(file).subscribe(
+        (responseNux: any[]) => {
+            if (responseNux[0].Status == "200") {
               this.info_propuesta_grado_post = new PropuestaPost;
               this.info_propuesta_grado_post.Id = 0;
               this.info_propuesta_grado_post.Activo = true;
               this.info_propuesta_grado_post.Nombre = this.info_propuesta_grado.Nombre;
               this.info_propuesta_grado_post.Resumen = this.info_propuesta_grado.Resumen;
               this.info_propuesta_grado_post.TipoProyectoId = this.info_propuesta_grado.TipoProyectoId;
-              this.info_propuesta_grado_post.DocumentoId = filesUp['FormatoProyecto'].Id;
+              this.info_propuesta_grado_post.DocumentoId = responseNux[0].res.Id;
               this.info_propuesta_grado_post.GrupoInvestigacionId = this.info_propuesta_grado.GrupoInvestigacion.id;
               this.info_propuesta_grado_post.LineaInvestigacionId = this.info_propuesta_grado.LineaInvestigacion.id;
 
@@ -288,7 +289,6 @@ export class CrudPropuestaGradoComponent implements OnInit {
                     });
                   });
             }
-          }
           this.loading = false;
         }, error => {
           this.loading = false;
@@ -300,13 +300,10 @@ export class CrudPropuestaGradoComponent implements OnInit {
   putPropuestaGrado(file) {
     if (file.length > 0) {
       return new Promise((resolve, reject) => {
-        this.nuxeoService.getDocumentos$(file, this.documentoService)
-          .subscribe(response => {
-            if (Object.keys(response).length === file.length) {
-              const filesUp = <any>response;
-              if (filesUp['FormatoProyecto'] !== undefined) {
-                this.actualizar(filesUp['FormatoProyecto'].Id);
-              }
+        this.newNuxeoService.uploadFiles(file).subscribe(
+          (responseNux: any[]) => {
+            if (responseNux[0].Status == "200") {
+                this.actualizar(responseNux[0].res.Id);
             }
           }, error => {
             reject(error);

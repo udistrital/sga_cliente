@@ -9,6 +9,7 @@ import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-view-descuento-academico',
@@ -54,6 +55,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private sanitization: DomSanitizer,
     private inscripcionService: InscripcionService,
+    private newNuxeoService: NewNuxeoService,
     private sgaMidService: SgaMidService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -87,12 +89,13 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
             }
           }
 
-          this.nuxeoService.getFilesNew(soportes)
-            .subscribe(response => {
+          this.newNuxeoService.get(soportes).subscribe(
+            response => {
               this.docDesSoporte = <Array<any>>response;
-              for (let i = 0; i < this.docDesSoporte.length; i++) {
-                (this.info_descuento[this.docDesSoporte[i]['key']]).Soporte = this.docDesSoporte[i];
-              }
+              this.info_descuento.forEach(info => {
+                let doc = this.docDesSoporte.find(doc => doc.Id === info.DocumentoId);
+                info.Soporte = doc;
+              });
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({
@@ -134,14 +137,13 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
               this.info_descuento = <Array<SolicitudDescuento>>res;
 
               this.info_descuento.forEach(descuento => {
-                this.nuxeoService.getDocumentoById$([
-                  { Id: descuento.DocumentoId, key: 'DocumentoPrograma' + descuento.DocumentoId },
-                ], this.documentoService)
-                  .subscribe(response => {
+                let file = { Id: descuento.DocumentoId };
+                this.newNuxeoService.get([file]).subscribe(
+                  response => {
                     const documentosSoporte = <Array<any>>response;
                     // if (Object.values(documentosSoporte).length === data.length) {
                     // for (let i = 0; i < data.length; i++) {
-                    descuento.Documento = this.cleanURL(documentosSoporte['DocumentoPrograma' + descuento.DocumentoId + '']);
+                    descuento.Documento = documentosSoporte[0].url;
                     // }
                     // }
                   },

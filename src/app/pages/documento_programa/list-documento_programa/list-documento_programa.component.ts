@@ -8,6 +8,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { SoporteDocumentoAux } from '../../../@core/data/models/documento/soporte_documento_aux';
 import { Documento } from '../../../@core/data/models/documento/documento';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-list-documento-programa',
@@ -62,6 +63,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     private documentoService: DocumentoService,
     private inscripcionService: InscripcionService,
     private popUpManager: PopUpManager,
+    private newNuxeoService: NewNuxeoService,
   ) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -215,12 +217,13 @@ export class ListDocumentoProgramaComponent implements OnInit {
         key: event.data.DocumentoId,
       },
     ];
-    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
-      .subscribe(response => {
+    console.log("new nux prog")
+    this.newNuxeoService.get(filesToGet).subscribe(
+      response => {
         const filesResponse = <any>response;
         if (Object.keys(filesResponse).length === filesToGet.length) {
           filesToGet.forEach((file: any) => {
-            const url = filesResponse[file.Id];
+            const url = filesResponse[0].url;
             window.open(url);
           });
         }

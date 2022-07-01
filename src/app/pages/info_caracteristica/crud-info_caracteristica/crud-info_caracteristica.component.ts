@@ -16,6 +16,7 @@ import { Store } from '@ngrx/store';
 import { IAppState } from '../../../@core/store/app.state';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-crud-info-caracteristica',
@@ -64,6 +65,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     private store: Store<IAppState>,
     private listService: ListService,
     private nuxeo: NuxeoService,
+    private newNuxeoService: NewNuxeoService,
     private toasterService: ToasterService) {
     this.formInfoCaracteristica = FORM_INFO_CARACTERISTICA;
     this.construirForm();
@@ -221,18 +223,18 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       files.forEach((file) => {
         const filesll = []
         filesll.push(file)
-        this.nuxeo.getFilesNew(filesll)
-          .subscribe(response => {
+        this.newNuxeoService.get(filesll).subscribe(
+          response => {
             this.loading = true;
             const filesResponse = <Array<any>>response;
             if (Object.keys(filesResponse).length === filesll.length) {
               filesResponse.forEach(fileR => {
                 if (fileR['Id'] === this.formInfoCaracteristica.ComprobantePoblacion) {
-                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].urlTemp = fileR['urlUnsafe'] + '';
-                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].valor = fileR['urlUnsafe'] + '';
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].urlTemp = fileR.url;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].valor = fileR.url;
                 } else if (fileR['Id'] === this.formInfoCaracteristica.ComprobanteDiscapacidad) {
-                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = fileR['urlUnsafe'] + '';
-                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = fileR['urlUnsafe'] + '';
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = fileR.url;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = fileR.url;
                 }
               })
               this.loading = false;
@@ -293,10 +295,10 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             this.formInfoCaracteristica.ComprobanteDiscapacidad = this.datosGet.IdDocumentoDiscapacidad;
             const files = []
             if (this.formInfoCaracteristica.ComprobantePoblacion + '' !== '0' && this.formInfoCaracteristica.ComprobantePoblacion !== undefined) {
-              files.push({ Id: this.formInfoCaracteristica.ComprobantePoblacion, key: 'Documento' });
+              files.push({ Id: this.formInfoCaracteristica.ComprobantePoblacion });
             }
             if (this.formInfoCaracteristica.ComprobanteDiscapacidad + '' !== '0' && this.formInfoCaracteristica.ComprobanteDiscapacidad !== undefined) {
-              files.push({ Id: this.formInfoCaracteristica.ComprobanteDiscapacidad, key: 'Documento' });
+              files.push({ Id: this.formInfoCaracteristica.ComprobanteDiscapacidad });
             }
 
             let carga = await this.cargarDocs(files);
@@ -414,39 +416,43 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       if (typeof event.data.InfoCaracteristica.ComprobantePoblacion.file !== 'undefined' && event.data.InfoCaracteristica.ComprobantePoblacion.file !== null) {
         this.loading = true;
         const file = [{
+          IdDocumento: 64,
+          nombre: 'Comprobante_Poblacion',
           file: event.data.InfoCaracteristica.ComprobantePoblacion.file,
-          IdDocumento: 45,
-          nombre: 'ComprobantePoblacion',
         }]
-        this.nuxeo.saveFilesNew(file)
-          .subscribe((file) => {
-            event.data.InfoCaracteristica.ComprobantePoblacion.Id = file[0].Id;
-            if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== 'undefined' && event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== null) {
-              const file = [{
-                file: event.data.InfoCaracteristica.ComprobanteDiscapacidad.file,
-                IdDocumento: 46,
-                nombre: 'ComprobanteDiscapacidad',
-              }]
-              this.nuxeo.saveFilesNew(file)
-                .subscribe((file) => {
-                  event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = file[0].Id;
+        this.newNuxeoService.uploadFiles(file).subscribe(
+          (responseNux: any[]) => {
+            if(responseNux[0].Status == "200"){
 
-                  if (this.info_info_caracteristica === undefined && !this.denied_acces) {
-                    this.createInfoCaracteristica(event.data.InfoCaracteristica);
-                  } else {
-                    this.updateInfoCaracteristica(event.data.InfoCaracteristica);
-                  }
-                })
-            } else {
-              if(this.datosGet !== undefined){
-              if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
-                event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
-              }}
+              event.data.InfoCaracteristica.ComprobantePoblacion.Id = responseNux[0].res.Id;
+              
+              if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== 'undefined' && event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== null) {
+                const file = [{
+                  IdDocumento: 64,
+                  nombre: 'Comprobante_Discapacidad',
+                  file: event.data.InfoCaracteristica.ComprobanteDiscapacidad.file,
+                }]
+                this.newNuxeoService.uploadFiles(file).subscribe(
+                  (responseNux: any[]) => {
+                    event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = responseNux[0].res.Id;
 
-              if (this.info_info_caracteristica === undefined && !this.denied_acces) {
-                this.createInfoCaracteristica(event.data.InfoCaracteristica);
+                    if (this.info_info_caracteristica === undefined && !this.denied_acces) {
+                      this.createInfoCaracteristica(event.data.InfoCaracteristica);
+                    } else {
+                      this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+                    }
+                  })
               } else {
-                this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+                if(this.datosGet !== undefined){
+                if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
+                  event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
+                }}
+
+                if (this.info_info_caracteristica === undefined && !this.denied_acces) {
+                  this.createInfoCaracteristica(event.data.InfoCaracteristica);
+                } else {
+                  this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+                }
               }
             }
           });
@@ -459,18 +465,21 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
 
         if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== 'undefined' && event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== null) {
           const file = [{
+            IdDocumento: 64,
+            nombre: 'Comprobante_Discapacidad',
             file: event.data.InfoCaracteristica.ComprobanteDiscapacidad.file,
-            IdDocumento: 46,
-            nombre: 'ComprobanteDiscapacidad',
           }]
-          this.nuxeo.saveFilesNew(file)
-            .subscribe((file) => {
-              event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = file[0].Id;
+          this.newNuxeoService.uploadFiles(file).subscribe(
+            (responseNux: any[]) => {
+              if(responseNux[0].Status == "200"){
 
-              if (this.info_info_caracteristica === undefined && !this.denied_acces) {
-                this.createInfoCaracteristica(event.data.InfoCaracteristica);
-              } else {
-                this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+                event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = responseNux[0].res.Id;
+
+                if (this.info_info_caracteristica === undefined && !this.denied_acces) {
+                  this.createInfoCaracteristica(event.data.InfoCaracteristica);
+                } else {
+                  this.updateInfoCaracteristica(event.data.InfoCaracteristica);
+                }
               }
             })
         } else {

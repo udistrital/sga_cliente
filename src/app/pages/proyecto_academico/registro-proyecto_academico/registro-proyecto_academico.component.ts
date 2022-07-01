@@ -17,6 +17,7 @@ import { ListRegistroProyectoAcademicoComponent } from '../list-registro_proyect
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-registro-proyecto-academico',
@@ -64,6 +65,7 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
     private sanitization: DomSanitizer,
+    private newNuxeoService: NewNuxeoService,
     private formBuilder: FormBuilder) {
       this.dpDayPickerConfig = {
         locale: 'es',
@@ -135,13 +137,14 @@ export class RegistroProyectoAcademicoComponent implements OnInit {
         // file.key = file.Id;
         file.key = 'soporte_' + file.IdDocumento;
        });
-      this.nuxeoService.getDocumentos$(files, this.documentoService)
-        .subscribe(response => {
-          if (Object.keys(response).length === files.length) {
+       this.newNuxeoService.uploadFiles(files).subscribe(
+        (responseNux: any[]) => {
+          if (Object.keys(responseNux).length === files.length) {
             // console.log("response", response);
             files.forEach((file) => {
               this.uidDocumento = file.uid;
-              this.idDocumento = response[file.key].Id;
+              let f = responseNux.find((res) => res.res.Nombre == file.nombre);
+              this.idDocumento = f.res.Id;
             });
             resolve(true);
           }

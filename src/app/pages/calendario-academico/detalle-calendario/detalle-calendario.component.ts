@@ -17,6 +17,7 @@ import { CalendarioEvento } from '../../../@core/data/models/calendario-academic
 import { PopUpManager } from '../../../managers/popUpManager';
 import * as moment from 'moment';
 import { Actividad } from '../../../@core/data/models/calendario-academico/actividad';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-detalle-calendario',
@@ -57,6 +58,7 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
     private dialog: MatDialog,
     private popUpManager: PopUpManager,
     private eventoService: EventoService,
+    private newNuxeoService: NewNuxeoService,
     private location: Location
   ) {
     this.createActivitiesTable();
@@ -361,12 +363,13 @@ export class DetalleCalendarioComponent implements OnInit, OnChanges {
         key: id_documento,
       },
     ];
-    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService).subscribe(
+    console.log("new nux")
+    this.newNuxeoService.get(filesToGet).subscribe(
       response => {
         const filesResponse = <any>response;
         if (Object.keys(filesResponse).length === filesToGet.length) {
           filesToGet.forEach((file: any) => {
-            const url = filesResponse[file.Id];
+            const url = filesResponse[0].url;
             window.open(url);
           });
         }

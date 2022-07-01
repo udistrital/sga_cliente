@@ -16,6 +16,7 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-crud-experiencia-laboral',
@@ -87,6 +88,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     private store: Store<IAppState>,
     private listService: ListService,
     private tercerosService: TercerosService,
+    private newNuxeoService: NewNuxeoService,
     private users: UserService) {
     this.formInfoExperienciaLaboral = FORM_EXPERIENCIA_LABORAL;
     this.construirForm();
@@ -185,16 +187,16 @@ export class CrudExperienciaLaboralComponent implements OnInit {
 
     const files = []
     if (this.detalleExp.Soporte + '' !== '0') {
-      files.push({ Id: this.detalleExp.Soporte, key: 'Documento' });
+      files.push({ Id: this.detalleExp.Soporte });
     }
 
     if (this.detalleExp.Soporte !== undefined && this.detalleExp.Soporte !== null && this.detalleExp.Soporte !== 0) {
-      this.nuxeoService.getFilesNew(files)
-        .subscribe(response => {
+      this.newNuxeoService.get(files).subscribe(
+        response => {
           const filesResponse = <Array<any>>response;
           if (Object.keys(filesResponse).length === files.length) {
-            this.formInfoExperienciaLaboral.campos[isoporte].urlTemp = filesResponse[0]['urlUnsafe'] + '';
-            this.formInfoExperienciaLaboral.campos[isoporte].valor = filesResponse[0]['urlUnsafe'] + '';
+            this.formInfoExperienciaLaboral.campos[isoporte].urlTemp = filesResponse[0].url;
+            this.formInfoExperienciaLaboral.campos[isoporte].valor = filesResponse[0].url;
 
             [
               this.formInfoExperienciaLaboral.campos[ifechaInicio],
@@ -370,8 +372,9 @@ export class CrudExperienciaLaboralComponent implements OnInit {
             const files = [];
             if (this.info_experiencia_laboral.Experiencia.Soporte.file !== undefined) {
               files.push({
-                nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-                file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 16,
+                IdDocumento: 4,
+                nombre: this.autenticationService.getPayload().sub,
+                file: this.info_experiencia_laboral.Experiencia.Soporte.file, 
               });
             }
             this.uploadResolutionFile(files);
@@ -398,8 +401,9 @@ export class CrudExperienciaLaboralComponent implements OnInit {
           const files = [];
           if (this.info_experiencia_laboral.Experiencia.Soporte.file !== undefined) {
             files.push({
-              nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-              file: this.info_experiencia_laboral.Experiencia.Soporte.file, IdDocumento: 16,
+              IdDocumento: 4,
+              nombre: this.autenticationService.getPayload().sub,
+              file: this.info_experiencia_laboral.Experiencia.Soporte.file, 
             });
           }
           this.uploadResolutionFile(files);
@@ -410,13 +414,11 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   uploadResolutionFile(file) {
     return new Promise((resolve, reject) => {
       if (file.length !== 0 && this.info_experiencia_laboral.Experiencia.Soporte.file !== undefined && this.info_experiencia_laboral.Experiencia.Soporte.file !== null) {
-        this.nuxeoService.getDocumentos$(file, this.documentoService)
-          .subscribe(response => {
-            if (Object.keys(response).length === file.length) {
-              const filesUp = <any>response;
-              if (filesUp['Documento'] !== undefined) {
-                this.info_experiencia_laboral.Experiencia.DocumentoId = filesUp['Documento'].Id;
-                this.info_experiencia_laboral.Experiencia.EnlaceDocumento = filesUp['Documento'].Enlace;
+        this.newNuxeoService.uploadFiles(file).subscribe(
+          (responseNux: any[]) => {
+            if (responseNux[0].Status == "200") {
+                this.info_experiencia_laboral.Experiencia.DocumentoId = responseNux[0].res.Id;
+                this.info_experiencia_laboral.Experiencia.EnlaceDocumento = responseNux[0].res.Enlace;
                 if (this.detalleExp != null && this.indexSelect != null && !Number.isNaN(this.indexSelect)) {
                   this.info_experiencia_laboral.indexSelect = this.indexSelect;
                   this.info_experiencia_laboral.Id = this.info_id_experiencia;
@@ -425,9 +427,6 @@ export class CrudExperienciaLaboralComponent implements OnInit {
                 } else {
                   this.postExperianciaLaboral();
                 }
-              } else {
-                this.loading = false;
-              }
             } else {
               this.loading = false;
             }

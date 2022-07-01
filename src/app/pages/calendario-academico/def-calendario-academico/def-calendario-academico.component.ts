@@ -743,12 +743,17 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
 
   uploadResolutionFile(file) {
     return new Promise((resolve, reject) => {
-      this.nuxeoService.getDocumentos$([file], this.documentoService)
-        .subscribe(response => {
-          resolve(response['undefined'].Id); // desempacar el response, puede dejar de llamarse 'undefined'
-        }, error => {
-          reject(error);
-        });
+        this.newNuxeoService.uploadFiles([file]).subscribe(
+          (responseNux: any[]) => {
+            if(responseNux[0].Status == "200"){
+              resolve(responseNux[0].res.Id)
+            } else {
+              reject();
+            }
+          }, error => {
+            reject(error);
+          }
+        );
     });
   }
 
@@ -966,46 +971,41 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   onInputFileResolucion(event) {
+    this.fileResolucion = null;
     if (this.calendarForm.get('resolucion').valid && this.calendarForm.get('anno').valid) {
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0];
-        if (file.type === 'application/pdf') {
-          file.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
-          file.url = this.cleanURL(file.urlTemp);
-          file.IdDocumento = 14;
-          file.file = event.target.files[0];
-          file.Metadatos = JSON.stringify({ resolucion: this.calendarForm.value.resolucion, anno: this.calendarForm.value.anno });
-          this.fileResolucion = file;
-        } else {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.formato_documento_pdf'));
-        }
+      if (event.target.files.length > 0 && event.target.files[0].type === 'application/pdf') {
+        this.fileResolucion = {
+          IdDocumento: 14,
+          nombre: "Creación_Calendario",
+          metadatos: {
+            resolucion: this.calendarForm.value.resolucion, 
+            anno: this.calendarForm.value.anno,
+          },
+          descripcion: "Creación_Calendario",
+          file: event.target.files[0],
+        };
+      } else {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.formato_documento_pdf'));
+        this.calendarForm.patchValue({
+          fileResolucion: '',
+        })
       }
     } else {
       this.popUpManager.showErrorToast(this.translate.instant('calendario.error_pre_file'));
+      this.calendarForm.patchValue({
+        fileResolucion: '',
+      })
     }
   }
 
   downloadFile(id_documento: any) {
-    const filesToGet = [
-      {
-        Id: id_documento,
-        key: id_documento,
-      },
-    ];
-    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
-      .subscribe(response => {
+    this.newNuxeoService.get([{Id: id_documento}]).subscribe(
+      response => {
         const filesResponse = <any>response;
-        if (Object.keys(filesResponse).length === filesToGet.length) {
-          filesToGet.forEach((file: any) => {
-            const url = filesResponse[file.Id];
-            window.open(url);
-          });
-        }
-      },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
-        },
-      );
+        const url = filesResponse[0].url;
+        window.open(url);
+      }
+    )
   }
 
   changeTab(event){
@@ -1032,15 +1032,7 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
     event.preventDefault();
     console.log("extend calendar")
     console.log(this.calendarFormExtend)
-    var files = [];
-    files.push({
-      nombre: "Extension_Calendario", 
-      key: 'Documento', 
-      resolucion: this.calendarFormExtend.value.resolucion, 
-      anno: this.calendarFormExtend.value.anno,
-      file: this.fileResolucionExt,
-      IdDocumento: 14,
-    });
+    var files = [this.fileResolucionExt];  
     console.log(files)
     this.popUpManager.showConfirmAlert(this.translate.instant('calendario.seguro_extension'),
     this.translate.instant('calendario.formulario_extension')).then(accion => {
@@ -1120,9 +1112,19 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   async onInputFileResolucionExt(event) {
+    this.fileResolucionExt = null;
     if (this.calendarFormExtend.get('resolucion').valid && this.calendarFormExtend.get('anno').valid) {
       if (event.target.files.length > 0 && event.target.files[0].type === 'application/pdf') {
-            this.fileResolucionExt = event.target.files[0];
+        this.fileResolucionExt = {
+          IdDocumento: 14,
+          nombre: "Extension_Calendario",
+          metadatos: {
+            resolucion: this.calendarFormExtend.value.resolucion, 
+            anno: this.calendarFormExtend.value.anno,
+          },
+          descripcion: "Extension_Calendario",
+          file: event.target.files[0],
+        };
       } else {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.formato_documento_pdf'));
         this.calendarFormExtend.patchValue({
@@ -1138,14 +1140,14 @@ export class DefCalendarioAcademicoComponent implements OnChanges {
   }
 
   downloadFileExt(id_documento: any) {
-
     console.log(id_documento)
     this.newNuxeoService.get([{Id: id_documento}]).subscribe(
       response => {
+        console.log(response)
         const filesResponse = <any>response;
         const url = filesResponse[0].url;
         window.open(url);
-    }
+      }
     )
   }
 
