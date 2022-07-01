@@ -70,7 +70,7 @@
                                     <input formControlName="fileResolucion" #fileInput type="file" (change)="onInputFileResolucion($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
                                 </button>
                                 <mat-error *ngIf="!fileResolucion">{{ 'ERROR.no_documento' | translate }}</mat-error>
-                                <label *ngIf="fileResolucion">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucion.name}}</label>
+                                <label *ngIf="fileResolucion">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucion.file.name}}</label>
                             </div>
                             <div class="col-2" *ngIf="editMode">
                                 <button mat-button type="button" (click)="downloadFile(calendar.DocumentoId)" title="{{'calendario.descargar_resolucion'|translate}}">
@@ -255,7 +255,7 @@
                             <input formControlName="fileResolucion" #fileInput type="file" (change)="onInputFileResolucionExt($event)" style="display:none;" accept="application/pdf" data-max-size="5120"/>
                         </button>
                         <mat-error *ngIf="calendarFormExtend.get('fileResolucion').hasError('required')">{{ 'ERROR.no_documento' | translate }}</mat-error>
-                        <label *ngIf="fileResolucion">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucion.name}}</label>
+                        <label *ngIf="fileResolucionExt">{{ 'GLOBAL.archivo_seleccionado' | translate }}: {{fileResolucionExt.file.name}}</label>
                     </div>
                     <div class="col-4" *ngIf="Extension">
                         <button mat-button type="button" (click)="downloadFileExt(fileExtId)" title="{{'calendario.descargar_resolucion'|translate}}">

@@ -6,6 +6,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import * as moment from 'moment';
+import * as momentTimezone from 'moment-timezone';
 
 @Component({
   selector: 'edicion-actividades-programas',
@@ -106,9 +107,9 @@ export class EdicionActividadesProgramasComponent implements OnInit {
       deps.fechas.forEach(fdep => {
         tablaFechas.push({
           ProyectoCurricular: this.data.projects.find(p => p.Id == fdep.Id).Nombre,
-          FechaInicio: fdep.Inicio,
-          FechaFin: fdep.Fin,
-          FechaEdicion: fdep.Modificacion,
+          FechaInicio:  moment(fdep.Inicio,'YYYY-MM-DDTHH:mm:ss[Z]').format('DD-MM-YYYY'),
+          FechaFin: moment(fdep.Fin,'YYYY-MM-DDTHH:mm:ss[Z]').format('DD-MM-YYYY'),
+          FechaEdicion: moment(fdep.Modificacion,'YYYY-MM-DDTHH:mm:ss[Z]').format('DD-MM-YYYY'),
         })
       })
       this.dataSource.load(tablaFechas)
@@ -162,10 +163,11 @@ export class EdicionActividadesProgramasComponent implements OnInit {
     if(this.editar_actividad){
       this.data.activity.DependenciaId.fechas.forEach(fd => {
         if(fd.Id == this.data.dependencia){
-          fd.Inicio = moment(this.ActivityEditor.controls.fecha_inicio_new.value).format('DD-MM-YYYY');
-          fd.Fin = moment(this.ActivityEditor.controls.fecha_fin_new.value).format('DD-MM-YYYY');
-          fd.Modificacion = moment(new Date()).format('DD-MM-YYYY');
+          fd.Inicio = moment(this.ActivityEditor.controls.fecha_inicio_new.value, 'America/Bogota').format('YYYY-MM-DDTHH:mm:ss[Z]');
+          fd.Fin = moment(this.ActivityEditor.controls.fecha_fin_new.value, 'America/Bogota').format('YYYY-MM-DDTHH:mm:ss[Z]');
+          fd.Modificacion = moment(new Date(), 'America/Bogota').format('YYYY-MM-DDTHH:mm:ss[Z]');
         }
+        console.log("ver fechas que quedaron: ", fd)
       });
       this.dialogRef.close({UpdateDependencias: this.data.activity.DependenciaId})
     }
@@ -228,7 +230,13 @@ export class EdicionActividadesProgramasComponent implements OnInit {
     NewSelect.forEach(sel => {
       let fe = OrgDeps.fechas.find(f => f.Id == sel)
       if (fe == undefined) {
-        fe = { Id: sel, Inicio: this.data.activity.FechaInicio, Fin: this.data.activity.FechaFin, Modificacion: "", Activo: true}
+        fe = { 
+          Id: sel, 
+          Inicio: momentTimezone.tz(moment(this.data.activity.FechaInicio,"DD-MM-YYYY").toDate(), 'America/Bogota').format('YYYY-MM-DDTHH:mm:ss[Z]'),
+          Fin: momentTimezone.tz(moment(this.data.activity.FechaFin,"DD-MM-YYYY").toDate(), 'America/Bogota').format('YYYY-MM-DDTHH:mm:ss[Z]'), 
+          Modificacion: momentTimezone.tz(new Date(), 'America/Bogota').format('YYYY-MM-DDTHH:mm:ss[Z]'), 
+          Activo: true
+        }
       }
       output.push(fe)
     })
