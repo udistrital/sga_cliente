@@ -135,9 +135,9 @@ export class ListDocumentoProgramaComponent implements OnInit {
               this.soporteDocumento.push(documento);
               this.source.load(this.soporteDocumento);
               if (<boolean>soporte['DocumentoProgramaId']['Obligatorio'] == true){
-                if (documento.EstadoObservacion !== 'No aprobado') {
+                //if (documento.EstadoObservacion !== 'No aprobado') {
                   this.getPercentage((1 / this.tipo_documentos.length * 100));
-                }
+                //}
               }
             });
           } else {

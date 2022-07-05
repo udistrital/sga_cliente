@@ -502,7 +502,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             this.inscripcionProjects = response;
             this.inscripcionProjects.forEach(proyecto => {
               if (proyecto.ProyectoId === this.selectedProject && proyecto.Evento != null) {
-                inscripcion.FechaPago = moment(proyecto.Evento[0].FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                inscripcion.FechaPago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 this.sgaMidService.post('inscripciones/generar_inscripcion', inscripcion).subscribe(
                   (response: any) => {
                     if (response.Code === '200') {
@@ -527,6 +527,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                     this.popUpManager.showErrorToast(this.translate.instant(`ERROR.${error.status}`));
                   },
                 );
+              } else {
+                this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('inscripcion.no_fechas_inscripcion'))
               }
             });
             this.loading = false;
@@ -568,7 +570,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             this.inscripcionProjects = response;
             this.inscripcionProjects.forEach(proyecto => {
               if (proyecto.ProyectoId === this.selectedProject && proyecto.Evento != null) {
-                this.recibo_pago.Fecha_pago = moment(proyecto.Evento[0].FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                this.recibo_pago.Fecha_pago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
               }
             });
             this.loading = true;
