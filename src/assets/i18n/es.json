@@ -1334,7 +1334,8 @@
         "solicitud_generada": "La solicitud fue generada exitosamente",
         "placeholder_comentarios": "Comentario respecto a la solicitud",
         "inscripcion_general": "Información general",
-        "generar_matricula": "Generar recibo de matrícula"
+        "generar_matricula": "Generar recibo de matrícula",
+        "no_fechas_inscripcion": "El proyecto curricular seleccionado no presenta fechas de inscripcion"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
