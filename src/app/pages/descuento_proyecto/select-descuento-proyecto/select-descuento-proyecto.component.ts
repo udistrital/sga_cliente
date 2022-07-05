@@ -140,7 +140,7 @@ export class SelectDescuentoProyectoComponent implements OnInit {
               const descuentoNuevo: DescuentoDependencia = new DescuentoDependencia();
               descuentoNuevo.DependenciaId = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
               descuentoNuevo.PeriodoId = parseInt(sessionStorage.getItem('PeriodoId'), 10);
-              descuentoNuevo.PorcentajeDescuento = 0; ////////////////////////////
+              descuentoNuevo.PorcentajeDescuento = 0.0; ////////////////////////////
               descuentoNuevo.Activo = true;
               descuentoNuevo.TipoDescuentoId = descuento;
 

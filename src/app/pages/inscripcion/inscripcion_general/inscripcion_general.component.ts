@@ -171,7 +171,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => { });
     this.total = true;
-    this.loading = true;
+    //this.loading = true;
     this.listService.findPais();
     this.loadData();
   }
@@ -235,8 +235,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         let IdNivel;
         if (response[0].NivelFormacionId.NivelFormacionPadreId !== null) {
           IdNivel = response[0].NivelFormacionId.NivelFormacionPadreId.Id;
+          this.loading = false;
         } else {
           IdNivel = response[0].NivelFormacionId.Id;
+          this.loading = false;
         }
         this.programaService.get('nivel_formacion/' + IdNivel).subscribe(
           (res: any) => {
@@ -265,6 +267,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       (response: any) => {
         this.loading = false;
         this.inscripcion.TipoInscripcion = response.Nombre;
+        this.loading = false;
       },
       error => {
         this.loading = false;
@@ -307,6 +310,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.inscripcion_id = r.Id;
+          this.loading = false;
         }
         this.loading = false;
       },
@@ -407,9 +411,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           if (res !== null && JSON.stringify(res[0]) !== '{}' && res.Response.Code !== '404') {
             this.percentage_info = this.percentage_info + Number((100 / factor).toFixed(2));
             this.percentage_tab_info[1] = Number((100 / factor));
+            this.loading = false;
           } else {
             this.percentage_info = this.percentage_info + 0;
             this.percentage_tab_info[1] = 0;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_info);
@@ -429,9 +435,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           if (res !== null && JSON.stringify(res[0]) !== '{}' && res.Response.Code !== '404') {
             this.percentage_info = this.percentage_info + Number((100 / factor).toFixed(2));
             this.percentage_tab_info[2] = Number((100 / factor));
+            this.loading = false;
           } else {
             this.percentage_info = this.percentage_info + 0;
             this.percentage_tab_info[2] = 0;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_info);
@@ -451,9 +459,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           if (res !== null && JSON.stringify(res[0]) !== '{}' && res.Response.Code !== '404') {
             this.percentage_info = this.percentage_info + Number((100 / factor).toFixed(2)) + 0.01;
             this.percentage_tab_info[3] = Number((100 / factor));
+            this.loading = false;
           } else {
             this.percentage_info = this.percentage_info + 0;
             this.percentage_tab_info[3] = 0;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_info);
@@ -473,9 +483,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           if (res.Response.Code === '200') {
             this.percentage_acad = this.percentage_acad + 50;
             this.percentage_tab_acad[0] = 50;
+            this.loading = false;
           } else {
             this.percentage_acad = this.percentage_acad + 0;
             this.percentage_tab_acad[0] = 0;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_acad)
@@ -495,9 +507,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           if (res.Status === '200') {
             this.percentage_acad = this.percentage_acad + (100 / factor);
             this.percentage_tab_acad[0] = (100 / factor);
+            this.loading = false;
           } else {
             this.percentage_acad = this.percentage_acad + 0;
             this.percentage_tab_acad[0] = 0;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_acad)
@@ -516,9 +530,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           if (res !== null && JSON.stringify(res[0]) !== '{}') {
             this.percentage_acad = this.percentage_acad + 50;
             this.percentage_tab_acad[1] = 50;
+            this.loading = false;
           } else {
             this.percentage_acad = this.percentage_acad + 0;
             this.percentage_tab_acad[1] = 0;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_acad);
@@ -538,9 +554,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           if (res.Data.Code === '200') {
             this.percentage_expe = 100;
             this.percentage_tab_expe[0] = 100;
+            this.loading = false;
           } else {
             this.percentage_expe = 0;
             this.percentage_tab_expe[0] = 0;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_expe);
@@ -559,8 +577,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         .subscribe(res => {
           if (res.Response.Code === '200') {
             this.percentage_prod = 100;
+            this.loading = false;
           } else {
             this.percentage_prod = 0;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_prod);
@@ -570,6 +590,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
             reject(error);
           });
     });
+    this.loading = false;
   }
 
   loadPercentageDocumentos() {
@@ -623,8 +644,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         .subscribe((res: any) => {
           if (res.Data.Code === '200') {
             this.percentage_desc = 100;
+            this.loading = false;
           } else {
             this.percentage_desc = 0;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_desc)
@@ -643,6 +666,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         Number(window.sessionStorage.getItem('IdInscripcion'))).subscribe((res: any) => {
           if (res !== null && JSON.stringify(res[0]) !== '{}') {
             this.percentage_proy = 100;
+            this.loading = false;
           }
           this.loading = false;
           resolve(this.percentage_proy)
