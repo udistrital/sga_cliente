@@ -617,7 +617,8 @@ export class TransferenciaComponent implements OnInit {
       };
 
       this.loading = true;
-      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.dataTransferencia.TipoInscripcion.NivelId).subscribe(
+      let periodo = localStorage.getItem('IdPeriodo');
+      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.dataTransferencia.TipoInscripcion.NivelId + '/periodo/' + periodo).subscribe(
         (response: any[]) => {
           if (response !== null && response.length !== 0) {
             this.inscripcionProjects = response;
