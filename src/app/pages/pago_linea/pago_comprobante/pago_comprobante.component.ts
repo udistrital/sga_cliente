@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FORM_COMPROBANTE } from './form-comprobante';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-pago-comprobante',
@@ -50,6 +51,7 @@ export class PagoComprobanteComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private inscripcion: InscripcionService,
     private recibos: ReciboService,
+    private newNuxeoService: NewNuxeoService,
     private toasterService: ToasterService) {
       this.formComprobante = FORM_COMPROBANTE;
       this.construirForm();
@@ -95,14 +97,14 @@ export class PagoComprobanteComponent implements OnInit {
             }
             const files = []
             if (pago.Comprobante + '' !== '0') {
-              files.push({ Id: pago.Comprobante, key: 'SoportePago' });
+              files.push({ Id: pago.Comprobante });
             }
-            this.nuxeoService.getDocumentoById$(files, this.documentoService)
-              .subscribe(response => {
+            this.newNuxeoService.get(files).subscribe(
+              response => {
                 const filesResponse = <any>response;
                 if (Object.keys(filesResponse).length === files.length) {
                   this.SoporteDocumento = pago.Comprobante;
-                  pago.Comprobante = filesResponse['SoportePago'] + '';
+                  pago.Comprobante = filesResponse[0].url;
                   this.info_comprobante = <any>pago;
                   this.loading = false;
                 }
@@ -152,19 +154,16 @@ export class PagoComprobanteComponent implements OnInit {
           this.info_comprobante = <any>infoPago;
           if (this.info_comprobante.Comprobante.file !== undefined) {
             files.push({
+              IdDocumento: 8,
               nombre: this.autenticationService.getPayload().sub,
-              name: this.autenticationService.getPayload().sub,
-              key: 'SoportePago',
-              file: this.info_comprobante.Comprobante.file, IdDocumento: 8,
+              file: this.info_comprobante.Comprobante.file,
             });
           }
-          this.nuxeoService.getDocumentos$(files, this.documentoService)
-            .subscribe(response => {
-              if (Object.keys(response).length === files.length) {
-                this.filesUp = <any>response;
-                if (this.filesUp['SoportePago'] !== undefined) {
-                  this.info_comprobante.Comprobante = this.filesUp['SoportePago'].Id;
-                }
+          this.newNuxeoService.uploadFiles(files).subscribe(
+            (responseNux: any[]) => {
+              if (Object.keys(responseNux).length === files.length) {
+                this.filesUp = <any>responseNux;
+                  this.info_comprobante.Comprobante = this.filesUp[0].res.Id;
                 this.inscripcion.get('inscripcion/' + this.inscripcion_id)
                   .subscribe(res_inscripcion => {
                     const info_inscripcion = <any>res_inscripcion;
@@ -280,19 +279,23 @@ export class PagoComprobanteComponent implements OnInit {
           this.info_comprobante = <any>infoPago;
           const files = [];
           if (this.info_comprobante.Comprobante.file !== undefined) {
-            files.push({ file: this.info_comprobante.Comprobante.file, documento: this.SoporteDocumento, key: 'SoportePago' });
+            files.push({
+              IdDocumento: 8,
+              nombre: this.autenticationService.getPayload().sub,
+              file: this.info_comprobante.Comprobante.file,
+            });
           }
           if (files.length !== 0) {
-            this.nuxeoService.updateDocument$(files, this.documentoService)
-              .subscribe(response => {
-                if (Object.keys(response).length === files.length) {
-                  const documentos_actualizados = <any>response;
-                  this.info_comprobante.Comprobante = this.SoporteDocumento;
+            this.newNuxeoService.uploadFiles(files).subscribe(
+              (responseNux: any[]) => {
+                if (Object.keys(responseNux).length === files.length) {
+                  const documentos_actualizados = <any>responseNux;
+                  this.info_comprobante.Comprobante = documentos_actualizados[0].res.Id;
                   this.info_comprobante.FechaPago = new Date();
                   this.recibos.put('pago_recibo', this.info_comprobante)
                     .subscribe(res => {
-                      if (documentos_actualizados['SoportePago'] !== undefined) {
-                        this.info_comprobante.Comprobante = documentos_actualizados['SoportePago'].url + '';
+                      if (documentos_actualizados[0] !== undefined) {
+                        this.info_comprobante.Comprobante = documentos_actualizados[0].res.Enlace;
                       }
                       this.loading = false;
                       this.eventChange.emit(true);

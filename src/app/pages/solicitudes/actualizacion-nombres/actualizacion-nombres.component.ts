@@ -16,6 +16,7 @@ import { ImplicitAutenticationService } from '../../../@core/utils/implicit_aute
 import Swal from 'sweetalert2';
 import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -149,6 +150,7 @@ export class ActualizacionNombresComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private sgaMidService: SgaMidService,
     private autenticationService: ImplicitAutenticationService,
+    private newNuxeoService: NewNuxeoService,
     private dialogo: MatDialog) {
     this.solicitudForm = ACTUALIZAR_NOMBRE;
     this.respuestaSolicitudForm = RESPUESTA_SOLICITUD;
@@ -216,16 +218,16 @@ export class ActualizacionNombresComponent implements OnInit {
             this.solicitudForm.Documento = response.Response.Body[0].Documento;
             const files = []
             if (this.solicitudForm.Documento + '' !== '0') {
-              files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
+              files.push({ Id: this.solicitudForm.Documento });
             }
             if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0) {
-              this.nuxeoService.getDocumentoById$(files, this.documentoService)
-                .subscribe(res => {
+              this.newNuxeoService.get(files).subscribe(
+                res => {
                   const filesResponse = <any>res;
                   if (Object.keys(filesResponse).length === files.length) {
                     this.SoporteDocumento = this.solicitudForm.Documento;
-                    this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
-                    this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                    this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse[0].url;
+                    this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse[0].url;
                     this.loading = false;
                   }
                 },
@@ -302,17 +304,17 @@ export class ActualizacionNombresComponent implements OnInit {
           this.solicitudForm.Documento = response.Response.Body[0].Documento;
           const files = []
           if (this.solicitudForm.Documento + '' !== '0') {
-            files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
+            files.push({ Id: this.solicitudForm.Documento });
           }
           if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0) {
-            this.nuxeoService.getDocumentoById$(files, this.documentoService)
-              .subscribe(res => {
+            this.newNuxeoService.get(files).subscribe(
+              res => {
                 const filesResponse = <any>res;
                 if (Object.keys(filesResponse).length === files.length) {
                   this.SoporteDocumento = this.solicitudForm.Documento;
                   this.solicitudForm.btn = '';
-                  this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
-                  this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                  this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse[0].url;
+                  this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse[0].url;
                   this.loading = false;
                 }
               },
@@ -333,17 +335,17 @@ export class ActualizacionNombresComponent implements OnInit {
                 this.solicitudForm.Documento = response.Response.Body[0].Documento;
                 const files = []
                 if (this.solicitudForm.Documento + '' !== '0') {
-                  files.push({ Id: this.solicitudForm.Documento, key: 'Documento' });
+                  files.push({ Id: this.solicitudForm.Documento });
                 }
                 if (this.solicitudForm.Documento !== undefined && this.solicitudForm.Documento !== null && this.solicitudForm.Documento !== 0) {
-                  this.nuxeoService.getDocumentoById$(files, this.documentoService)
-                    .subscribe(res => {
+                  this.newNuxeoService.get(files).subscribe(
+                    res => {
                       const filesResponse = <any>res;
                       if (Object.keys(filesResponse).length === files.length) {
                         this.SoporteDocumento = this.solicitudForm.Documento;
                         this.solicitudForm.btn = '';
-                        this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse['Documento'] + '';
-                        this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse['Documento'] + '';
+                        this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = filesResponse[0].url;
+                        this.solicitudForm.campos[this.getIndexForm('Documento')].valor = filesResponse[0].url;
                       }
                       this.loading = false;
                     },
@@ -459,18 +461,17 @@ export class ActualizacionNombresComponent implements OnInit {
             this.solicitudDatos = event.data;
             if (this.solicitudDatos['Documento'].file !== undefined) {
               files.push({
-                nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-                file: this.solicitudDatos['Documento'].file, IdDocumento: 25,
+                IdDocumento: 25,
+                nombre: this.autenticationService.getPayload().sub,
+                file: this.solicitudDatos['Documento'].file,
               });
             }
-            this.nuxeoService.getDocumentos$(files, this.documentoService)
-              .subscribe(response => {
-                if (Object.keys(response).length === files.length) {
-                  this.filesUp = <any>response;
-                  if (this.filesUp['Documento'] !== undefined) {
-                    this.solicitudDatos['Documento'] = this.filesUp['Documento'].Id;
-                  }
-                }
+            this.newNuxeoService.uploadFiles(files).subscribe(
+              (responseNux: any[]) => {
+                if (responseNux[0].Status == "200") {
+
+                    this.solicitudDatos['Documento'] = responseNux[0].res.Id;
+                
                 const hoy = new Date();
                 this.solicitudDatos.FechaSolicitud = momentTimezone.tz(hoy.getFullYear() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getDate(),
                   'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
@@ -511,6 +512,9 @@ export class ActualizacionNombresComponent implements OnInit {
                     });
                   },
                 );
+                } else {
+                  this.loading = false;
+                }
               },
                 (error: HttpErrorResponse) => {
                   this.loading = false;

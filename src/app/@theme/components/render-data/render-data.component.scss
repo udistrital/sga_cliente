@@ -9,7 +9,7 @@ table {
     }
     tbody {
         td {
-            text-align: right;
+            text-align: center;
             font-size: 10px;
             width: 100px;//fit-content;
         }
@@ -17,7 +17,14 @@ table {
 }
 
 mat-form-field {
-    width: 40px;
+    width: 35px;
+}
+
+mat-form-field-wrapper {
+    padding-bottom: 0;
+}
+mat-form-field-subscript-wrapper {
+    display: none;
 }
 
 /*     input.readonly {

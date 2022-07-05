@@ -1,42 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { LocalDataSource } from 'ng2-smart-table';
-import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
+import { RegistroNotasDocente } from '../../../@core/data/models/registro-notas/registro-notas-docente';
+import { ParametrosService } from '../../../@core/data/parametros.service';
+import { DataAsignatura, RegistroNotasService } from '../../../@core/data/registro_notas.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
 import { CustomizeButtonComponent } from '../../../@theme/components/customize-button/customize-button.component';
 import { PopUpManager } from '../../../managers/popUpManager';
-
-interface RegistroNotasDocente {
-  Nivel: string;
-  Codigo: number;
-  Asignatura: string,
-  Periodo: string,
-  PeriodoId: number,
-  Grupo: string,
-  Inscritos: number
-  Proyecto_Academico: string,
-  AsignaturaId: string,
-  Opcion: {
-    icon: 'fa fa-pencil fa-2x',
-    label: 'Registrar notas',
-    class: "btn btn-primary"
-  };
-}
 
 @Component({
   selector: 'list-notas',
   templateUrl: './list-notas.component.html',
   styleUrls: ['./list-notas.component.scss']
 })
-export class ListNotasComponent implements OnInit {
+export class ListNotasComponent implements OnInit, OnDestroy {
+
+  //// loading animation ////
+  loading: boolean = false;
+  
+  EstadosRegistro: any
+
+  //// ng2-smart-table list asignaturas docente ////
   settings: any;
   dataSource: LocalDataSource;
-  niveles: NivelFormacion[];
-
-  loading: boolean = false;
+  
+  //// vars validado de fechas califificaciones periodo ////
   proceso: Object;
   validado = {
     corte1: {
@@ -57,14 +48,23 @@ export class ListNotasComponent implements OnInit {
     }
   };
 
-  IdAsignatura: string = "";
+  //// datos a enviar al siguiente componente crud-notas ////
+  dataSend: DataAsignatura = {
+    Asignatura_id: "",
+    Periodo_id: 0,
+    Nivel_id: 0,
+    EstadoRegistro_porTiempo: 0,
+    EstadoRegistro_porExtemporaneo: 0
+  };
 
   constructor(
+    private parametrosService: ParametrosService,
     private router: Router,
     private sgaMidService: SgaMidService,
     private translate: TranslateService,
     private popUpManager: PopUpManager,
     private userService: UserService,
+    public regNotService: RegistroNotasService
   ) { 
     this.dataSource = new LocalDataSource();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -76,9 +76,36 @@ export class ListNotasComponent implements OnInit {
     this.translate.use(language);
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.createTable();
-    this.loadData();
+    try {
+      await this.getEstadosRegistros();
+      this.loadData();
+    } catch (error) {
+      this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+    }
+  }
+
+  getEstadosRegistros(){
+    return new Promise((resolve, reject) => {
+      this.parametrosService.get('parametro?query=TipoParametroId.Id:52&fields=Id,CodigoAbreviacion,Nombre&limit=0').subscribe(
+        response => {
+          if (response !== null && response.Status == '200') {
+            this.EstadosRegistro = { Corte1: 0, Corte2: 0, Examen: 0, Habilit: 0, Definitiva: 0, }
+            this.EstadosRegistro.Corte1 = response["Data"].filter(e => e.Nombre == "PRIMER CORTE")[0].Id
+            this.EstadosRegistro.Corte2 = response["Data"].filter(e => e.Nombre == "SEGUNDO CORTE")[0].Id
+            this.EstadosRegistro.Examen = response["Data"].filter(e => e.Nombre == "EXAMEN FINAL")[0].Id
+            this.EstadosRegistro.Habilit = response["Data"].filter(e => e.Nombre == "HABILITACIONES")[0].Id
+            this.EstadosRegistro.Definitiva = response["Data"].filter(e => e.Nombre == "DEFINITIVA")[0].Id
+            sessionStorage.setItem('EstadosRegistro', JSON.stringify(this.EstadosRegistro));
+            resolve(this.EstadosRegistro)
+          }
+        },
+        error => {
+          reject("Fail_EstReg")
+        }
+      )
+    });
   }
 
   createTable() {
@@ -136,12 +163,44 @@ export class ListNotasComponent implements OnInit {
           type: 'custom',
           onComponentInitFunction: (instance) => {
             instance.save.subscribe((data: RegistroNotasDocente) => {
-              this.bringActivities(data.PeriodoId,data.AsignaturaId);
+              this.dataSend.Asignatura_id = data.AsignaturaId;
+              this.dataSend.Periodo_id = data.PeriodoId;
+              this.dataSend.Nivel_id = data.Nivel_id;
+              this.validarIngresoaCapturaNotas(data.AsignaturaId,data.PeriodoId)
+              //this.bringActivities(data.PeriodoId);
             })
           },
         },
       },
       mode: 'external',
+    }
+  }
+
+  async validarIngresoaCapturaNotas(asignatura, periodo){
+    try {
+      var hayExtemporaneo = await this.checkModificacionExtemporanea(asignatura);
+      if(hayExtemporaneo > 0){
+        if(hayExtemporaneo == this.EstadosRegistro.Corte1){
+          this.popUpManager.showAlert(this.translate.instant('notas.captura_notas_parciales'), this.translate.instant('notas.modificacion_extemporanea_Corte1')); //"Esta ingresando por extemporaneo corte1"
+        } else if(hayExtemporaneo == this.EstadosRegistro.Corte2){
+          this.popUpManager.showAlert(this.translate.instant('notas.captura_notas_parciales'), this.translate.instant('notas.modificacion_extemporanea_Corte2')); //"Esta ingresando por extemporaneo corte2"
+        } else if(hayExtemporaneo == this.EstadosRegistro.Examen){
+          this.popUpManager.showAlert(this.translate.instant('notas.captura_notas_parciales'), this.translate.instant('notas.modificacion_extemporanea_Examen')); //"Esta ingresando por extemporaneo Examen"
+        } else if(hayExtemporaneo == this.EstadosRegistro.Habilit){
+          this.popUpManager.showAlert(this.translate.instant('notas.captura_notas_parciales'), this.translate.instant('notas.modificacion_extemporanea_Habilit')); //"Esta ingresando por extemporaneo Habilit"
+        } else if(hayExtemporaneo == this.EstadosRegistro.Definitiva){
+          this.popUpManager.showAlert(this.translate.instant('notas.captura_notas_parciales'), this.translate.instant('notas.modificacion_extemporanea_Definitiva')); //"Esta ingresando por extemporaneo Definitiva"
+        }
+
+        this.dataSend.EstadoRegistro_porExtemporaneo = Number(hayExtemporaneo)
+        this.router.navigate([`pages/notas/crud-notas`])
+      } else {
+        this.dataSend.EstadoRegistro_porExtemporaneo = 0;
+        this.bringActivities(periodo);
+      }
+    } catch(error) {
+      this.dataSend.EstadoRegistro_porExtemporaneo = 0;
+      this.bringActivities(periodo);
     }
   }
 
@@ -152,7 +211,6 @@ export class ListNotasComponent implements OnInit {
 
     var docenteId = this.userService.getPersonaId();
 
-    console.log(docenteId)
     this.loading = true;
     this.sgaMidService.get('notas/EspaciosAcademicos/' + docenteId).subscribe(
       (response: any) => {
@@ -163,11 +221,10 @@ export class ListNotasComponent implements OnInit {
           data.forEach(registro => {
             registro.Opcion = {
               icon: 'fa fa-pencil fa-2x',
-              label: 'Registrar notas',
+              label: this.translate.instant('notas.register_grades'),
               class: "btn btn-primary"
             };
           })
-          console.log(data)
           this.dataSource.load(data);
         }
         this.loading = false;
@@ -180,7 +237,7 @@ export class ListNotasComponent implements OnInit {
 
   }
 
-  async bringActivities(periodo,asignatura){
+  bringActivities(periodo){
     this.loading = true;
     this.proceso = undefined;
     this.sgaMidService.get('calendario_academico/'+periodo).subscribe(
@@ -195,7 +252,7 @@ export class ListNotasComponent implements OnInit {
           }
           else{
             this.loading = false;
-            this.chechDates(asignatura)
+            this.chechDates()
           }
         }
         this.loading = false;
@@ -207,7 +264,7 @@ export class ListNotasComponent implements OnInit {
     );
   }
 
-  chechDates(asignatura){
+  chechDates(){
 
     this.validado = {
       corte1: {
@@ -259,25 +316,28 @@ export class ListNotasComponent implements OnInit {
       }
       });
     }
-    console.log(this.validado)
     
     if(this.validado.corte1.existe && this.validado.corte2.existe && this.validado.examen.existe && this.validado.habilit.existe)
     {
       if(this.validado.corte1.enFecha){
-        this.popUpManager.showConfirmAlert(this.translate.instant('notas.fecha_corte1')); //"Esta ingresando a fechas 1 corte"
-        this.router.navigate([`pages/notas/crud-notas/${asignatura}`])
+        this.dataSend.EstadoRegistro_porTiempo = this.EstadosRegistro.Corte1;
+        this.popUpManager.showAlert(this.translate.instant('notas.captura_notas_parciales'), this.translate.instant('notas.fecha_corte1')); //"Esta ingresando a fechas 1 corte"
+        this.router.navigate([`pages/notas/crud-notas`])
       }
       else if(this.validado.corte2.enFecha){
-        this.popUpManager.showConfirmAlert(this.translate.instant('notas.fecha_corte2')); //"Esta ingresando a fechas 2 corte"
-        this.router.navigate([`pages/notas/crud-notas/${asignatura}`])
+        this.dataSend.EstadoRegistro_porTiempo = this.EstadosRegistro.Corte2;
+        this.popUpManager.showAlert(this.translate.instant('notas.captura_notas_parciales'), this.translate.instant('notas.fecha_corte2')); //"Esta ingresando a fechas 2 corte"
+        this.router.navigate([`pages/notas/crud-notas`])
       }
       else if(this.validado.examen.enFecha){
-        this.popUpManager.showConfirmAlert(this.translate.instant('notas.fecha_examen')); //"Esta ingresando a fechas examen"
-        this.router.navigate([`pages/notas/crud-notas/${asignatura}`])
+        this.dataSend.EstadoRegistro_porTiempo = this.EstadosRegistro.Examen;
+        this.popUpManager.showAlert(this.translate.instant('notas.captura_notas_parciales'), this.translate.instant('notas.fecha_examen')); //"Esta ingresando a fechas examen"
+        this.router.navigate([`pages/notas/crud-notas`])
       }
       else if(this.validado.habilit.enFecha){
-        this.popUpManager.showConfirmAlert(this.translate.instant('notas.fecha_habilit')); //"Esta ingresando a fechas habilit"
-        this.router.navigate([`pages/notas/crud-notas/${asignatura}`])
+        this.dataSend.EstadoRegistro_porTiempo = this.EstadosRegistro.Habilit;
+        this.popUpManager.showAlert(this.translate.instant('notas.captura_notas_parciales'), this.translate.instant('notas.fecha_habilit')); //"Esta ingresando a fechas habilit"
+        this.router.navigate([`pages/notas/crud-notas`])
       }
       else{
         this.popUpManager.showErrorAlert(this.translate.instant('notas.fuera_fechas')); //"fuera de fechas"
@@ -291,6 +351,26 @@ export class ListNotasComponent implements OnInit {
 
   }
 
+  checkModificacionExtemporanea(asignatura) {
+    return new Promise((resolve, reject) => {
+      this.sgaMidService.get('notas/ModificacionExtemporanea/' + asignatura).subscribe(
+        (response: any) => {
+          if (response !== null && response.Status == '200') {
+            var estadoRegistro = 0;
+            var i = response.Data.findIndex(estadoRegistro => estadoRegistro.modificacion_extemporanea === true);
+            if (i > -1){
+              estadoRegistro = response.Data[i].estado_registro_id;
+            }
+            resolve(estadoRegistro)
+          }
+        },
+        error => {
+          reject(false)
+        }
+      );
+    });
+  }
+
   existe(variable, textos: string[]) {
     return textos.some( (texto) => variable.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(texto) !== -1 );
   }
@@ -302,5 +382,9 @@ export class ListNotasComponent implements OnInit {
     return (fi <= f) && (ff >= f)
   }
 
+  
+  ngOnDestroy() {
+    this.regNotService.putData(this.dataSend);
+  }
 
 }

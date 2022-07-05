@@ -15,6 +15,7 @@ import { ConsultaProyectoAcademicoComponent } from '../consulta-proyecto_academi
 import { RegistroProyectoAcademicoComponent } from '../registro-proyecto_academico/registro-proyecto_academico.component';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-list-registro-proyecto-academico',
@@ -40,6 +41,7 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
     private sgamidService: SgaMidService,
     private nuxeoService: NuxeoService,
     private documentoService: DocumentoService,
+    private newNuxeoService: NewNuxeoService,
     public dialog: MatDialog,
     private toasterService: ToasterService) {
     this.loadData();
@@ -162,15 +164,15 @@ export class ListRegistroProyectoAcademicoComponent implements OnInit {
         key: id_documento.data.EnlaceActo,
       },
     ];
-    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
-      .subscribe(response => {
+    this.newNuxeoService.get(filesToGet).subscribe(
+      response => {
         console.log(response)
         const filesResponse = <any>response;
         if (Object.keys(filesResponse).length === filesToGet.length) {
           // console.log("files", filesResponse);
           filesToGet.forEach((file: any) => {
             console.log("--", file)
-            const url = filesResponse[file.Id];
+            const url = filesResponse[0].url;
             window.open(url);
           });
         }

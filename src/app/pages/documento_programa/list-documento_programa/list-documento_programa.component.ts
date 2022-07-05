@@ -8,6 +8,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { SoporteDocumentoAux } from '../../../@core/data/models/documento/soporte_documento_aux';
 import { Documento } from '../../../@core/data/models/documento/documento';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-list-documento-programa',
@@ -62,6 +63,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     private documentoService: DocumentoService,
     private inscripcionService: InscripcionService,
     private popUpManager: PopUpManager,
+    private newNuxeoService: NewNuxeoService,
   ) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -117,7 +119,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.soporteDocumento = [];
     this.percentage = 0;
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
-      this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa + ',DocumentoProgramaId.TipoInscripcionId:' + this.tipoInscripcion + '&limit=0').subscribe(
+      this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa + ',DocumentoProgramaId.TipoInscripcionId:' + this.tipoInscripcion + ',DocumentoProgramaId.PeriodoId:' + parseInt(sessionStorage.getItem('IdPeriodo'), 10)  + ',DocumentoProgramaId.Activo:true&limit=0').subscribe(
         (response: any[]) => {
           console.info(Object.keys(response[0]).length)
           if (Object.keys(response[0]).length > 0) {
@@ -132,8 +134,10 @@ export class ListDocumentoProgramaComponent implements OnInit {
               documento.Observacion = this.observacion;
               this.soporteDocumento.push(documento);
               this.source.load(this.soporteDocumento);
-              if (documento.EstadoObservacion !== 'No aprobado') {
-                this.getPercentage((1 / this.tipo_documentos.length * 100));
+              if (<boolean>soporte['DocumentoProgramaId']['Obligatorio'] == true){
+                if (documento.EstadoObservacion !== 'No aprobado') {
+                  this.getPercentage((1 / this.tipo_documentos.length * 100));
+                }
               }
             });
           } else {
@@ -189,7 +193,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=Activo:true,PeriodoId:' + this.periodo + ',ProgramaId:' + this.programa + ',TipoInscripcionId:' + this.tipoInscripcion + '&limit=0').subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,PeriodoId:' + this.periodo + ',ProgramaId:' + this.programa + ',TipoInscripcionId:' + this.tipoInscripcion + ',Obligatorio:true&limit=0').subscribe(
       (response: Object[]) => {
         if(response === undefined || response === null){
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
@@ -213,12 +217,13 @@ export class ListDocumentoProgramaComponent implements OnInit {
         key: event.data.DocumentoId,
       },
     ];
-    this.nuxeoService.getDocumentoById$(filesToGet, this.documentoService)
-      .subscribe(response => {
+    console.log("new nux prog")
+    this.newNuxeoService.get(filesToGet).subscribe(
+      response => {
         const filesResponse = <any>response;
         if (Object.keys(filesResponse).length === filesToGet.length) {
           filesToGet.forEach((file: any) => {
-            const url = filesResponse[file.Id];
+            const url = filesResponse[0].url;
             window.open(url);
           });
         }

@@ -7,6 +7,7 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { UserService } from '../../../@core/data/users.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-crud-documento-programa',
@@ -72,6 +73,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private popUpManager: PopUpManager,
     private userService: UserService,
+    private newNuxeoService: NewNuxeoService,
   ) {
     this.formDocumentoPrograma = FORM_DOCUMENTO_PROGRAMA;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -127,6 +129,12 @@ export class CrudDocumentoProgramaComponent implements OnInit {
       campo.placeholder = this.translate.instant('GLOBAL.placeholder_' + campo.label_i18n);
       campo.deshabilitar = this.sin_docs;
       if (campo.etiqueta === 'select') {
+        this.tipo_documentos.map(tipo => {
+          if (<boolean>tipo['Obligatorio'] == true){
+            tipo['TipoDocumentoProgramaId']["Nombre"] = tipo['TipoDocumentoProgramaId']["Nombre"]+" *"
+          }
+        })
+        console.log(this.tipo_documentos)
         campo.opciones = this.tipo_documentos.map(tipo => tipo['TipoDocumentoProgramaId']);
       }
     });
@@ -172,8 +180,9 @@ export class CrudDocumentoProgramaComponent implements OnInit {
         this.info_documento_programa.PersonaId = Number(this.persona) || 1;
         this.info_documento_programa.DocumentoProgramaId = this.info_documento_programa.DocumentoProgramaId;
         const file = {
-          file: this.info_documento_programa.Documento.file,
           IdDocumento: 6,
+          nombre: "soporte_documento_programa",
+          file: this.info_documento_programa.Documento.file,
         }
         this.uploadFile(file).then(
           fileId => {
@@ -223,8 +232,9 @@ export class CrudDocumentoProgramaComponent implements OnInit {
             this.info_documento_programa = <SoporteDocumentoPrograma>documentoPrograma;
             this.info_documento_programa.PersonaId = Number(this.persona) || 1;
             const file = {
-              file: this.info_documento_programa.Documento.file,
               IdDocumento: 6,
+              nombre: "soporte_documento_programa",
+              file: this.info_documento_programa.Documento.file,
             }
             this.uploadFile(file).then(
               fileId => {
@@ -262,9 +272,13 @@ export class CrudDocumentoProgramaComponent implements OnInit {
 
   uploadFile(file): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.nuxeoService.getDocumentos$([file], this.documentoService)
-        .subscribe(response => {
-          resolve(response['undefined'].Id); // desempacar el response, puede dejar de llamarse 'undefined'
+      this.newNuxeoService.uploadFiles([file]).subscribe(
+        (responseNux: any[]) => {
+          if(responseNux[0].Status == "200"){
+            resolve(responseNux[0].res.Id);
+          } else {
+            reject()
+          }
         }, error => {
           reject(error);
         });

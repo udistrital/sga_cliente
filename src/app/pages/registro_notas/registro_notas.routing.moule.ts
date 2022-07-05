@@ -15,7 +15,7 @@ const routes: Routes = [{
     path: 'list-notas',
     component: ListNotasComponent ,
   }, {
-    path: 'crud-notas/:process',
+    path: 'crud-notas',
     component: CrudNotasComponent,
   }, {
     path: 'captura-notas',

@@ -5,6 +5,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-view-experiencia-laboral',
@@ -39,6 +40,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private nuxeoService: NuxeoService,
+    private newNuxeoService: NewNuxeoService,
     private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -67,17 +69,28 @@ export class ViewExperienciaLaboralComponent implements OnInit {
           for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
             if (this.info_experiencia_laboral[i].Soporte + '' !== '0') {
               soportes.push({ Id: this.info_experiencia_laboral[i].Soporte, key: 'DocumentoExp' + this.info_experiencia_laboral[i].Soporte });
+              this.info_experiencia_laboral[i].IdDoc = parseInt(this.info_experiencia_laboral[i].Soporte,10);
             }
           }
-          this.nuxeoService.getFilesNew(soportes)
-          .subscribe(response => {
+          this.newNuxeoService.get(soportes).subscribe(
+            response => {
                 this.documentosSoporte = <Array<any>>response;
-                console.log(this.documentosSoporte);
+                console.log("sop:",soportes)
+                console.log("new method",JSON.parse(JSON.stringify(this.documentosSoporte)));
                 if (Object.values(this.documentosSoporte).length === this.info_experiencia_laboral.length) {
-                  for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
+                  console.log("si length exp:", JSON.parse(JSON.stringify(this.info_experiencia_laboral)))
+                  this.info_experiencia_laboral.forEach(info => {
+                    let doc = this.documentosSoporte.find(doc => doc.Id === info.IdDoc);
+                    console.log("doc for: ", info.Soporte, " > ", doc)
+                    if (doc !== undefined) {
+                      info.Soporte = doc;
+                    }
+                  });
+                  /* for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
                     this.info_experiencia_laboral[i].Soporte = this.documentosSoporte[i];
-                  }
+                  } */
                 }
+                console.log("exp lab:", this.info_experiencia_laboral)
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({

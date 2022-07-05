@@ -340,7 +340,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
                 },
               );
-            }
+              }
+
             })
             this.loading = false;
           }
@@ -411,7 +412,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     this.showTipoInscripcion = false;
     this.showInfo = false;
     this.loading = true;
-    this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel).subscribe(
+    let periodo = localStorage.getItem('IdPeriodo');
+    this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel + '/periodo/' + periodo).subscribe(
       response => {
         this.loading = false;
         const r = <any>response;
@@ -494,7 +496,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         FechaPago: '',
       };
       this.loading = true;
-      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel).subscribe(
+      let periodo = localStorage.getItem('IdPeriodo');
+      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel + '/periodo/' + periodo).subscribe(
         (response: any[]) => {
           if (response !== null && response.length !== 0) {
             this.inscripcionProjects = response;
@@ -558,7 +561,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         this.parametro = '12';
       }
       this.loading = true;
-      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel).subscribe(
+      let periodo = localStorage.getItem('IdPeriodo');
+      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel + '/periodo/' + periodo).subscribe(
         (response: any[]) => {
           this.loading = false;
           if (response !== null && response.length !== 0) {

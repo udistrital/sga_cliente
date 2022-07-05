@@ -47,7 +47,8 @@ export class ProcesoCalendarioAcademicoComponent {
       if (ok.value) {
         this.process = this.processForm.value;
         this.process.CalendarioId = {Id: this.data.calendar.calendarioId};
-        this.process.TipoRecurrenciaId = {Id: this.processForm.value.TipoRecurrenciaId}
+        this.process.TipoRecurrenciaId = {Id: this.processForm.value.TipoRecurrenciaId};
+        this.process['Activo'] = true;
         this.dialogRef.close(this.process);
       }
     });

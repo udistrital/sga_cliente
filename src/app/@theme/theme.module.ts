@@ -133,6 +133,7 @@ import {
   CustomizeButtonComponent,
   NotePercentageComponent,
   RenderDataComponent,
+  
 } from './components';
 
 import { CapitalizePipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -155,6 +156,7 @@ import { CheckboxAssistanceComponent } from './components/checkbox-assistance/ch
 import { SgaMidService } from '../@core/data/sga_mid.service';
 import { DocumentoService } from '../@core/data/documento.service';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { DocProgramaObligatorioComponent } from './components/doc-programa-obligatorio/doc-programa-obligatorio.component';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -200,6 +202,7 @@ const COMPONENTS = [
   CustomizeButtonComponent,
   NotePercentageComponent,
   RenderDataComponent,
+  DocProgramaObligatorioComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -207,6 +210,7 @@ const ENTRY_COMPONENTS = [
   LinkDownloadNuxeoComponent,
   CustomizeButtonComponent,
   RenderDataComponent,
+  DocProgramaObligatorioComponent,
 ];
 
 const PIPES = [
@@ -236,7 +240,7 @@ const NB_THEME_PROVIDERS = [
 @NgModule({
   imports: [...BASE_MODULES, ...NB_MODULES, SharedModule, ...MAT_MODULES, MomentModule,   NbEvaIconsModule,  ],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES, ...MAT_MODULES, ...DIRECTIVES],
-  declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective, NotePercentageComponent],
+  declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective, NotePercentageComponent, DocProgramaObligatorioComponent],
   entryComponents: [...ENTRY_COMPONENTS],
 })
 export class ThemeModule {

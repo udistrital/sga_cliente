@@ -110,8 +110,8 @@ export class GeneracionRecibosDerechosPecuniarios {
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '' && this.info_persona_id.toString() !== '0') {
       this.sgaMidService.get('derechos_pecuniarios/consultar_persona/' + this.info_persona_id).subscribe(async (res: any) => {
-        if (res !== null) {
-          const temp = <InfoPersona>res;
+        if (res.Success) {
+          const temp = <InfoPersona>res.Data;
           this.info_info_persona = temp;
           const files = [];
         }
@@ -290,10 +290,11 @@ export class GeneracionRecibosDerechosPecuniarios {
               if (data.comprobanteRecibo) {
                 this.sgaMidService.post('derechos_pecuniarios/solicitud', data).subscribe(
                   (response: any) => {
-                    if (response.Response.Code === '200') {
+                    if (response.Status === '200') {
+                      this.loading = true;
                       this.loadInfoRecibos();
                       this.popUpManager.showSuccessAlert(this.translate.instant('derechos_pecuniarios.solicitud_generada'));
-                    } else if (response.Response.Code === '400') {
+                    } else if (response.Status === '400') {
                       this.popUpManager.showErrorToast(this.translate.instant('derechos_pecuniarios.error_solicitud_generada'));
                     }
                     this.loading = false;
@@ -467,14 +468,14 @@ export class GeneracionRecibosDerechosPecuniarios {
 
             this.sgaMidService.post('derechos_pecuniarios/generar_derecho', recibo).subscribe(
               (response: any) => {
-                if (response.Code === '200') {
+                if (response.Status === '200') {
                   this.loadInfoRecibos();
                   this.popUpManager.showSuccessAlert(this.translate.instant('recibo_pago.generado'));
                   this.new_pecuniario = false;
                   this.gen_recibo = false
-                } else if (response.Code === '204') {
+                } else if (response.Status === '204') {
                   this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.recibo_duplicado'));
-                } else if (response.Code === '400') {
+                } else if (response.Status === '400') {
                   this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
                 }
                 this.loading = false;
@@ -580,7 +581,7 @@ export class GeneracionRecibosDerechosPecuniarios {
     this.conceptos = [];
     this.sgaMidService.get('derechos_pecuniarios/' + this.vigenciaActual).subscribe(
       response => {
-        const data: any[] = response['Data'];
+        const data: any[] = response.Data;
         if (Object.keys(data).length > 0 && Object.keys(data[0]).length > 0) {
           data.forEach(obj => {
             // 40 -> CERTIFICADO DE NOTAS

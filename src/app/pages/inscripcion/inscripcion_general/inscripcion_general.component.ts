@@ -207,7 +207,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.loading = true;
     this.posgrados = new Array;
     const IdNivel = parseInt(sessionStorage.getItem('IdNivel'), 10);
-    this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + IdNivel).subscribe(
+    this.loading = true;
+    let periodo = localStorage.getItem('IdPeriodo');
+    this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + IdNivel + '/periodo/' + periodo).subscribe(
       response => {
         const r = <any>response;
         this.loading = false;
@@ -595,30 +597,26 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.loading = true;
     return new Promise((resolve, reject) => {
       this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
-        this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',DocumentoProgramaId.TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + '&limit=0').subscribe(
+        this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',DocumentoProgramaId.TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + ',DocumentoProgramaId.PeriodoId:' + parseInt(sessionStorage.getItem('IdPeriodo'), 10) + ',DocumentoProgramaId.Activo:true,DocumentoProgramaId.Obligatorio:true&limit=0').subscribe(
           (res: any[]) => {
             if (res !== null && JSON.stringify(res[0]) !== '{}') {
-              this.percentage_docu = 0;
+              let percentage_docu = 0;
               for (let i = 0; i < res.length; i++) {
                 this.documentoService.get('documento/' + res[i].DocumentoId).subscribe(
                   response => {
 
                     if (response.Metadatos === '') {
-                      this.percentage_docu += (1 / this.tipo_documentos.length * 100);
+                      percentage_docu += 1;
                     } else {
                       if (response.Metadatos !== '') {
                         if (JSON.parse(response.Metadatos).aprobado) {
-                          this.percentage_docu += (1 / this.tipo_documentos.length * 100);
+                          percentage_docu += 1;
                         }
                       }
                     }
-                    this.percentage_docu = Math.round(this.percentage_docu);
 
-                    if (this.percentage_docu >= 98) {
-                      this.percentage_docu = 100;
-                    }
-
-                    this.percentage_tab_docu[0] = this.percentage_docu;
+                    this.percentage_docu = Math.round((percentage_docu/this.tipo_documentos.length * 100));
+                    this.percentage_tab_docu[0] = Math.round(this.percentage_docu);
                     this.loading = false;
                   })
               };
@@ -682,7 +680,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   public loadLists() {
-    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + '&limit=0').subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + ',PeriodoId:'+sessionStorage.getItem('IdPeriodo') + ',Obligatorio:true&limit=0').subscribe(
       response => {
         this.tipo_documentos = <any[]>response;
       },
@@ -754,10 +752,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   realizarInscripcion() {
     if(this.Campo1Control.status == "VALID" && this.enfasisControl.status == "VALID") {
-      
+
       this.loading = true;
       this.inscripcionService.get('inscripcion/' + parseInt(sessionStorage.IdInscripcion, 10)).subscribe(
         (response: any) => {
+          this.loading = false;
           const inscripcionPut: any = response;
           inscripcionPut.ProgramaAcademicoId = parseInt(sessionStorage.ProgramaAcademicoId, 10);
           
@@ -825,7 +824,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'),this.translate.instant('enfasis.select_enfasis'));
       this.enfasisControl.markAsTouched();
     }
-    
+
   }
 
   useLanguage(language: string) {

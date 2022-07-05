@@ -37,6 +37,7 @@ import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -157,6 +158,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private documentoService: DocumentoService,
     private sanitization: DomSanitizer,
     private listEnfasisService: ListEnfasisService,
+    private newNuxeoService: NewNuxeoService,
     private formBuilder: FormBuilder) {
 
     this.dpDayPickerConfig = {
@@ -408,16 +410,18 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         // file.key = file.Id;
         file.key = 'soporte_' + file.IdDocumento;
       });
-      this.nuxeoService.getDocumentos$(files, this.documentoService)
-        .subscribe(response => {
-          if (Object.keys(response).length === files.length) {
+      this.newNuxeoService.uploadFiles(files).subscribe(
+        (responseNux: any[]) => {
+          if (Object.keys(responseNux).length === files.length) {
             files.forEach((file) => {
               if (file.IdDocumento === 9) {
                 this.uidResolucion = file.uid;
-                this.idDocumentoResolucion = response[file.key].Id;
+                let f = responseNux.find((res) => res.res.Nombre == file.nombre);
+                this.idDocumentoResolucion = f.res.Id;
               } else if (file.IdDocumento === 10) {
                 this.uidActoAdministrativo = file.uid;
-                this.idDocumentoAdministrativo = response[file.key].Id;
+                let f = responseNux.find((res) => res.res.Nombre == file.nombre);
+                this.idDocumentoAdministrativo = f.res.Id;
               }
             });
             resolve(true);

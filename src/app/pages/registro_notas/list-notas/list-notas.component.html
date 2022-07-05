@@ -1,7 +1,11 @@
 <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
 nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
     <nb-card-header>
-        {{ 'notas.captura_notas' | translate }}
+        <div class="row" align="center">
+            <div class="col">
+                {{ 'notas.captura_notas' | translate }}
+            </div>
+        </div>
     </nb-card-header>
     <nb-card-body>
         <fieldset [ngClass]="{'fieldseter':true} ">

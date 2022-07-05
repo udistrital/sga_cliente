@@ -126,12 +126,9 @@ export class TransferenciaComponent implements OnInit {
         await this.loadDataAll(this.process);
       }
     });
-
-
   }
 
   public loadInfoPersona(): void {
-    this.loading = true;
     this.uid = this.userService.getPersonaId();
     if (this.uid !== undefined && this.uid !== 0 &&
       this.uid.toString() !== '' && this.uid.toString() !== '0') {
@@ -139,20 +136,9 @@ export class TransferenciaComponent implements OnInit {
         if (res !== null) {
           const temp = <InfoPersona>res;
           this.info_info_persona = temp;
-          const files = []
+          const files = [];
         }
-      },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          Swal.fire({
-            icon: 'error',
-            title: error.status + '',
-            text: this.translate.instant('ERROR.' + error.status),
-            footer: this.translate.instant('GLOBAL.cargar') + '-' +
-              this.translate.instant('GLOBAL.info_persona'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        });
+      });
     } else {
       this.info_info_persona = undefined
       this.loading = false;
@@ -452,6 +438,17 @@ export class TransferenciaComponent implements OnInit {
             });
             this.loading = false;
             resolve(response.Data)
+          } else {
+
+            Swal.fire({
+              icon: 'warning',
+              title: this.translate.instant('GLOBAL.info'),
+              text: this.translate.instant('admision.error_calendario') + '. ' + this.translate.instant('admision.error_nueva_transferencia'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
+
+            this.clean();
+            this.listadoSolicitudes = true;
           }
           reject();
         },
@@ -475,17 +472,27 @@ export class TransferenciaComponent implements OnInit {
 
       let parametros = await this.loadParams(this.dataTransferencia.CalendarioAcademico.Id).catch(e => this.loading = false);
 
-      this.codigosEstudiante = parametros["Data"]["CodigoEstudiante"];
-      this.proyectosCurriculares = parametros["Data"]["ProyectoCurricular"];
+      if (parametros == false) {
+        this.formTransferencia.campos.forEach(campo => {
+          if (campo.nombre === 'ProyectoCurricular' || campo.nombre === 'TipoInscripcion') {
+            campo.opciones = null;
+            campo.ocultar = true;
+          }
 
-      this.formTransferencia.campos.forEach(campo => {
+        });
+      } else {
+        this.codigosEstudiante = parametros["Data"]["CodigoEstudiante"];
+        this.proyectosCurriculares = parametros["Data"]["ProyectoCurricular"];
 
-        if (campo.nombre === 'ProyectoCurricular' || campo.nombre === 'TipoInscripcion') {
-          campo.opciones = parametros["Data"][campo.nombre];
-          campo.ocultar = false;
-        }
+        this.formTransferencia.campos.forEach(campo => {
 
-      });
+          if (campo.nombre === 'ProyectoCurricular' || campo.nombre === 'TipoInscripcion') {
+            campo.opciones = parametros["Data"][campo.nombre];
+            campo.ocultar = false;
+          }
+
+        });
+      }
     }
 
     if (event.nombre === 'TipoInscripcion' && !this.recibo && event.valor != null) {
@@ -532,7 +539,11 @@ export class TransferenciaComponent implements OnInit {
           if (response.Success) {
             resolve(response);
           } else {
-            this.popUpManager.showErrorToast(this.translate.instant('admision.error'));
+            if (response.Message == 'No se encuentran proyectos') {
+              this.popUpManager.showErrorAlert(this.translate.instant('admision.error_no_proyecto'));
+            } else {
+              this.popUpManager.showErrorToast(this.translate.instant('admision.error'));
+            }
             reject();
           }
         },
@@ -606,7 +617,8 @@ export class TransferenciaComponent implements OnInit {
       };
 
       this.loading = true;
-      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.dataTransferencia.TipoInscripcion.NivelId).subscribe(
+      let periodo = localStorage.getItem('IdPeriodo');
+      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.dataTransferencia.TipoInscripcion.NivelId + '/periodo/' + periodo).subscribe(
         (response: any[]) => {
           if (response !== null && response.length !== 0) {
             this.inscripcionProjects = response;

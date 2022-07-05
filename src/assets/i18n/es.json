@@ -89,9 +89,9 @@
             "crud_tipo_periodo": "Crear un tipo período"
         },
         "periodo": {
-            "periodo": "Habilitar período",
-            "lista_periodo": "Habilitar/Deshabilitar \nun período",
-            "crud_periodo": "Crear un período"
+            "periodo": "Gestionar periodo",
+            "lista_periodo": "Habilitar/Deshabilitar \nun periodo",
+            "crud_periodo": "Crear un periodo"
         },
         "calendarioevento": {
             "calendarioevento": "Oferta académica",
@@ -101,7 +101,8 @@
         "calendarioacademico": {
             "calendarioacademico": "Calendario académico",
             "list_calendarioacademico": "Listar calendarios académicos",
-            "buscar_calendario_proyecto": "Buscar calendario \npor proyecto"
+            "buscar_calendario_proyecto": "Buscar calendario \npor proyecto",
+            "administración calendario": "Administración calendario"
         },
         "proyecto_academico": {
             "proyecto_academico": "Proyecto curricular",
@@ -1429,7 +1430,12 @@
         "carga_nuevo_documento": "Asignando nuevo documento...",
         "carga_eliminando_documento": "Eliminando documento del proyecto...",
         "aviso_tipo_inscripcion": "Seleccione el tipo de inscripción al que desea definir los documentos y descuentos de admisión",
-        "error_selec_tipo_inscripcion": "Por favor, seleccione un tipo de inscripción"
+        "error_selec_tipo_inscripcion": "Por favor, seleccione un tipo de inscripción",
+        "obligatorio": "Obligatorio",
+        "poner_obligatorio": "¿Establecer documento como obligatorio?",
+        "quitar_obligatorio": "¿Establecer documento como opcional?",
+        "ajuste_ok": "Cambio realizado",
+        "ajuste_fail": "No se pudo realizar el cambio"
     },
     "descuento_academico": {
         "descuento_academico_no_registrado": "Descuento académico no registrado",
@@ -1504,7 +1510,8 @@
         "vacio": "Existen campos vacíos en la tabla. Verifique la información e intente nuevamente",
         "calcular": "Calcular el puntaje final de los aspirantes",
         "error": "Ha ocurrido un error inesperado",
-        "registro_error": "Ocurrió un error inesperado al guardar la información",
+        "error_calendario": "Actualmente no se encuentran habilitadas las fechas para inscripción a transferencias o reingreso",
+        "error_nueva_transferencia": "No es posible generar una nueva transferencia",
         "registro_exito": "La información almacenada ha sido guardada con éxito",
         "no_data": "No hay información registrada",
         "guardar": "Guardar",
@@ -1570,7 +1577,8 @@
         "listar_aspirantes": "Listar aspirantes",
         "cupos_proyectos": "Asignación de cupos por proyecto curricular",
         "error_no_aspirantes": "No existen aspirantes por evaluar para el periodo y proyecto seleccionado",
-        "titulo_no_aspirantes": "No hay aspirantes por evaluar"
+        "titulo_no_aspirantes": "No hay aspirantes por evaluar",
+        "error_no_proyecto": "No hay proyectos curriculares disponibles"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",
@@ -1699,7 +1707,40 @@
         "sin_calendarios": "No existen calendarios.",
         "subir_resolucion": "Subir resolución",
         "descargar_resolucion": "Descargar resolución",
-        "crear_actividad_proceso": "por favor a continuación añada la primer actividad del proceso"
+        "crear_actividad_proceso": "por favor a continuación añada la primer actividad del proceso",
+
+        "tooltip_seleccionar_proyectos": "Habilitar edición por programas",
+        "tooltip_detalle_actividad": "Detalle programas asociados",
+        "select_proyectos_actividades": "Selección de edición a proyectos curriculares",
+        "seleccion_proyectos_info": "A continuación usted podrá seleccionar los proyectos curriculares a los cuales habilita la edición de fechas en las respectivas actividades establecidas en el calendario general.",
+        "descripcion_actividad": "Descripción de la actividad",
+        "proyecto_curricular": "Proyecto curricular",
+        "fecha_edicion": "Fecha edición",
+        "sin_proyectos_actividades": "No se encuentran proyectos curriculares con fechas específicas para esta actividad.",
+        "formulario_extension": "Extensión Calendario",
+        "resolucion_extension": "Resolución de extension calendario",
+        "extension_proyectos_info": "Usuario: Tenga en cuenta que la asignación de la extensión del calendario debe realizarse \"uno a uno\" con los programas que están asociados al calendario general, para lo cual deberá repetir el proceso con cada uno de ellos.",
+        "programas_curriculares": "Programas curriculares relacionados",
+        "administración_calendario_proyecto": "Administración calendario académico por proyecto curricular",
+        "informacion_general": "Información general",
+        "tooltip_detalle_proceso": "Detalle proceso",
+        "tooltip_estado_actividad": "Activar/Desactivar actividad",
+        "mensaje_estado_actividad": "¿Seguro de cambiar el estado de la actividad?",
+        "edicion_actividades": "Edición de actividades",
+        "fechas_globales": "Calendario fechas globales",
+        "modificacion_fechas_info": "A continuacion usted podrá modificar las fechas de la actividad correspondiente, teniendo en cuenta que el sistema limita su edición al rango de las fechas globales del calendario general.",
+        "descripcion": "Descripción",
+        "descripcion_proceso": "Descripcion de proceso",
+        "periodicidad_2": "Periodicidad",
+
+        "seguro_extension": "Está a punto de crear una extensión de calendario, ¿Desea continuar?",
+        "Extension_calendario_ok": "¡La extensión del calendario se ha realizado correctamente!",
+        "calendario_tiene_extension": "Este calendario cuenta con extensión.",
+        "extension_inactiva": "Esta extensión de calendario está desctivada.",
+        "seleccione_version_calendario": "Seleccione la versión del calendario",
+        "add_extension_extension": "Agregar otra extension",
+        "sin_permiso_edicion": "No tiene permiso para editar esta actividad"
+
     },
     "derechos_pecuniarios": {
         "titulo": "Derechos pecuniarios",
@@ -1966,7 +2007,7 @@
         "nivel": "Nivel",
         "grupo": "Grupo",
         "inscritos": "Inscritos",
-        "carrera": "Carrera",
+        "carrera": "Proyecto Académico",
         "estado": "Estado",
         "no_datos_captura_notas": "No se encuentran datos para el periodo o busqueda realizada.",
         "listado_docentes": "Listado de docentes",
@@ -2008,20 +2049,45 @@
         "select_nivel": "Seleccionar nivel de formación",
         "select_periodo": "Seleccionar periodo",
         "fecha_invalida": "Fecha inválida",
-
         "carga_academica": "Carga académica",
         "opcion": "Opción",
         "registro_notas_parciales": "Registro de notas parciales",
         "creditos": "Créditos",
+        "register_grades": "Registrar notas",
+        "apellido": "Apellido",
+        "varios": "Varios",
+        "total": "Total",
+        "reporte_captura_porcentajes": "Reporte de notas parciales",
+        "cancelar": "CANCELAR",
+        "export_Pdf": "Exportar reporte a PDF",
+        "print_pdf": "Imprimir reporte",
+        "examen": "Exámen",
+        "regresar": "Regresar",
+        "finalizar": "FINALIZAR",
+
         "sin_espacios_academicos": "No se encuentran espacios académicos relacionados al docente",
-        "sin_definir_estructuraNota": "Porcentajes sin definir",
-        "peticion_definir_estructura": "Por favor establecer los porcentajes de calificación",
         "sin_informacion_docente_asignatura": "No se ha encontrado la información relacionada al docente o la asignatura",
-        "sin_info_porcentajes": "No se ha encontrado información relacionada al registro de notas",
-        "nota_definida_ok": "¡Se han definido los porcentajes correctamente!",
-        "fallo_definir_nota": "¡El ajuste de los porcentajes ha fallado!"
+        "sin_info_porcentajes": "No se ha podido obtener la información relacionada a los porcentajes",
+        "porcentajes_creados": "¡El espacio académico no contaba con definición de porcentajes pero ahora han sido creados!",
+        "porcentajes_creados_info": "Los porcentajes asignados son propuestos, estos pueden ser cambiados siempre y cuando se encuentre dentro de las fechas establecidas.",
+        "porcentajes_actualizados": "¡La definición de porcentajes se ha actualizado correctamente!. Por favor guarde nuevamente la tabla de calificaciones para asegurar el cambio de los porcentajes en las notas de los estudiantes",
+        "fallo_porcentajes": "¡No se pudo actualizar los porcentajes!",
+        "guardar_cambios_porcentajes": "Los cambios en los porcentajes van a ser guardados sobreescribiendo los valores anteriores, ¿Está seguro del cambio?",
+        "sin_calificaciones_estudiantes": "No se ha podido obtener información relacionada a las notas de los estudiantes",
+        "notas_estudiantes_creados": "¡El espacio académico no contaba con registro de notas para los estudiantes pero ahora han sido creados!",
+        "notas_estudiantes_actualizado": "¡Las notas de los estudiantes se han modificado correctamente!",
+        "fallo_definir_notas_estudiantes": "¡No se pudo modificar las notas de los estudiantes!",
+        "guardar_cambios_notas": "Los cambios en las notas van a ser guardados sobreescribiendo los valores anteriores, ¿Está seguro del cambio?",
+        "notas_mal_digitadas": "Hay notas mal digitadas, por favor revise y corrija los errores.",
+        "cancelar_cambios": "Los cambios que ha hecho en las notas y que aún no han sido guardados se perderan. ¿Está seguro?",
+        "cancelar_cambios_generarPDF": "Velando por la integridad de los datos, los cambios no guardados se deshacen; para el reporte se toman las últimas notas guardadas, si ha hecho cambios por favor guardelos antes de generar el reporte.",
+        "no_datos_estados_registros": "No se encontraron espacios academicos asignados a docentes para este periodo",
+        "cerrar_corte_notas": "¡Se va a cerrar un corte de calificaciones! Tenga presente que una vez cerrado no podrá volver a editar a menos que solicite una modificación extemporanea",
+        "title_finalizar": "Generación de notas definitivas",
+        "info_finalizar": "A punto de finalizar el registro de notas, por favor diligencie campos de fallas y observaciones si aún no lo ha hecho. Lo anterior con el fin de evaluar casos de pérdidas de asignatura por fallas.",
+        "pregunta_finalizar_registros": "¿Desea dar por finalizado el proceso de calificaciones? Puede presionar cancelar para guardar cambios y revisar las notas definitivas, si ya hizo las revisiones pertinentes presione aceptar para concluir el proceso.",
 
-
+        "info_guardado_necesario": "Docente: Cada vez que realice cambios en porcentajes es recomendable que guarde nuevamente la tabla de calificaciones para asegurar el cambio de los porcentajes en las notas de los estudiantes."
     },
     "asignaturas": {
         "notas_parciales": "Notas parciales",

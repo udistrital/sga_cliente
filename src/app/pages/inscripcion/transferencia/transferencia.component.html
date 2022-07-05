@@ -20,7 +20,8 @@
             </div>
         </fieldset>
 
-        <ngx-crud-info-persona *ngIf="!listadoSolicitudes" [info_persona_id]="uid" (eventChange)="onChange($event)">
+        <ngx-crud-info-persona *ngIf="!listadoSolicitudes" [info_persona_id]="uid" (eventChange)="onChange($event)"
+            (success)="loadInfoPersona()">
         </ngx-crud-info-persona>
         <ngx-dinamicform *ngIf="!listadoSolicitudes" [modeloData]="dataTransferencia" [normalform]="formTransferencia"
             (interlaced)="seleccion($event)" (result)="validarForm($event)">

@@ -19,6 +19,7 @@ import { InfoPersona } from '../../../@core/data/models/informacion/info_persona
 import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { Lugar } from './../../../@core/data/models/lugar/lugar'
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-crud-formacion-academica',
@@ -92,6 +93,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     private users: UserService,
     private store: Store<IAppState>,
     private listService: ListService,
+    private newNuxeoService: NewNuxeoService,
     private toasterService: ToasterService) {
     this.formInfoFormacionAcademica = FORM_FORMACION_ACADEMICA;
     this.formInfoNuevoTercero = NUEVO_TERCERO;
@@ -308,11 +310,11 @@ export class CrudFormacionAcademicaComponent implements OnInit {
             this.temp_info_academica = <any>response.Response.Body[1];
             const files = []
             if (this.temp_info_academica.Documento + '' !== '0') {
-              files.push({ Id: this.temp_info_academica.Documento, key: 'Documento' });
+              files.push({ Id: this.temp_info_academica.Documento });
             }
             if (this.temp_info_academica.Documento !== undefined && this.temp_info_academica.Documento !== null && this.temp_info_academica.Documento !== 0) {
-              this.nuxeoService.getFilesNew(files)
-                .subscribe(response => {
+              this.newNuxeoService.get(files).subscribe(
+                response => {
                   const filesResponse = <Array<any>>response;
                   if (Object.keys(filesResponse).length === files.length) {
                     this.loading = true;
@@ -330,8 +332,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                     }
                     this.formInfoFormacionAcademica.campos[init].valor = this.info_formacion_academica.Nit;
                     this.searchNit(this.temp_info_academica.Nit);
-                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse[0]['urlUnsafe'] + '';
-                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].valor = filesResponse[0]['urlUnsafe'] + '';
+                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse[0].url;
+                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].valor = filesResponse[0].url;
                   }
                 },
                   (error: HttpErrorResponse) => {
@@ -378,19 +380,21 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           const files = [];
           if (this.info_formacion_academica.DocumentoId.file !== undefined) {
             files.push({
-              file: this.info_formacion_academica.DocumentoId.file, documento: this.SoporteDocumento, key: 'Documento', Id: 16,
+              IdDocumento: 16,
+              nombre: this.autenticationService.getPayload().sub,
+              file: this.info_formacion_academica.DocumentoId.file
             });
           }
           if (files.length !== 0 && this.info_formacion_academica.DocumentoId.file !== null) {
-            this.nuxeoService.updateDocument$(files, this.documentoService)
-              .subscribe(response => {
-                if (Object.keys(response).length === files.length) {
-                  const documentos_actualizados = <any>response;
-                  this.info_formacion_academica.DocumentoId = this.SoporteDocumento;
+            this.newNuxeoService.uploadFiles(files).subscribe(
+              (responseNux: any[]) => {
+                if (Object.keys(responseNux).length === files.length) {
+                  const documentos_actualizados = <any>responseNux;
+                  this.info_formacion_academica.DocumentoId = documentos_actualizados[0].res.Id
                   this.sgaMidService.put('formacion_academica?Id=' + this.info_id_formacion, this.info_formacion_academica)
                     .subscribe(res => {
-                      if (documentos_actualizados['Documento'] !== undefined) {
-                        this.info_formacion_academica.DocumentoId = documentos_actualizados['Documento'].url + '';
+                      if (documentos_actualizados[0] !== undefined) {
+                        this.info_formacion_academica.DocumentoId = documentos_actualizados[0].res.Enlace;
                       }
                       this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                         this.translate.instant('GLOBAL.formacion_academica') + ' ' +
@@ -479,17 +483,17 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           this.info_formacion_academica = <any>infoFormacionAcademica;
           if (this.info_formacion_academica.DocumentoId.file !== undefined) {
             files.push({
-              nombre: this.autenticationService.getPayload().sub, key: 'Documento',
-              file: this.info_formacion_academica.DocumentoId.file, IdDocumento: 16,
+              IdDocumento: 16,
+              nombre: this.autenticationService.getPayload().sub,
+              file: this.info_formacion_academica.DocumentoId.file, 
             });
           }
-          this.nuxeoService.getDocumentos$(files, this.documentoService)
-            .subscribe(response => {
-              if (Object.keys(response).length === files.length) {
-                this.filesUp = <any>response;
-                if (this.filesUp['Documento'] !== undefined) {
-                  this.info_formacion_academica.DocumentoId = this.filesUp['Documento'].Id;
-                }
+          this.newNuxeoService.uploadFiles(files).subscribe(
+            (responseNux: any[]) => {
+              if (responseNux[0].Status == "200") {
+
+                  this.info_formacion_academica.DocumentoId = responseNux[0].res.Id;
+                
                 this.sgaMidService.post('formacion_academica/', this.info_formacion_academica)
                   .subscribe(res => {
                     const r = <any>res;

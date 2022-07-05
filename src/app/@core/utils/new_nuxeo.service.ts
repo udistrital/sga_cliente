@@ -60,13 +60,8 @@ export class NewNuxeoService {
             const sendFileData = [{
                 IdTipoDocumento: file.IdDocumento,
                 nombre: file.nombre,
-                metadatos: {
-                    NombreArchivo: file.nombre,
-                    Tipo: "Archivo",
-                    Observaciones: file.nombre,
-                    "dc:title": file.nombre,
-                },
-                descripcion: file.nombre,
+                metadatos: file.metadatos ? file.metadatos : {},
+                descripcion: file.descripcion ? file.descripcion : "",
                 file: await this.fileToBase64(file.file)
             }]
 

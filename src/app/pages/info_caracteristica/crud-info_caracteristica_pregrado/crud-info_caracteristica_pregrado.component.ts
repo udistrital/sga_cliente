@@ -17,6 +17,7 @@ import { IAppState } from '../../../@core/store/app.state';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import * as momentTimezone from 'moment-timezone';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-crud-info-caracteristica_pregrado',
@@ -61,7 +62,6 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   clean: boolean;
   denied_acces: boolean = false;
   loading: boolean;
-  primeraCarga = true;
 
   constructor(
     private popUpManager: PopUpManager,
@@ -72,6 +72,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     private store: Store<IAppState>,
     private listService: ListService,
     private nuxeo: NuxeoService,
+    private newNuxeoService: NewNuxeoService,
     private toasterService: ToasterService) {
     this.formInfoCaracteristica = FORM_INFO_CARACTERISTICA_PREGRADO;
     this.construirForm();
@@ -110,7 +111,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
       this.loadOptionsCiudadNacimiento();
     } else if (event.nombre === 'TipoDiscapacidad') {
       this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar =
-        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0) || this.primeraCarga;
+        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
 
       if ((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0) {
         this.mensaje_discapcidades = true;
@@ -127,7 +128,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
       }
     } else if (event.nombre === 'TipoPoblacion') {
       this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].ocultar =
-        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0) || this.primeraCarga;
+        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
 
       if ((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0) {
         this.mensaje_poblacion = true;
@@ -224,26 +225,25 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
 
   cargarDocs(files) {
     return new Promise((resolve, reject) => {
+      this.loading = true;
       files.forEach((file) => {
-        this.loading = true;
         const filesll = []
         filesll.push(file)
-        this.nuxeo.getFilesNew(filesll)
-          .subscribe(response => {
+        this.newNuxeoService.get(filesll).subscribe(
+          response => {
             this.loading = true;
             const filesResponse = <Array<any>>response;
             if (Object.keys(filesResponse).length === filesll.length) {
               filesResponse.forEach(fileR => {
                 if (fileR['Id'] === this.formInfoCaracteristica.ComprobantePoblacion) {
-                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].urlTemp = fileR['urlUnsafe'] + '';
-                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].valor = fileR['urlUnsafe'] + '';
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].urlTemp = fileR.url;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].valor = fileR.url;
                   this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].ocultar = false;
                 } else if (fileR['Id'] === this.formInfoCaracteristica.ComprobanteDiscapacidad) {
-                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = fileR['urlUnsafe'] + '';
-                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = fileR['urlUnsafe'] + '';
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = fileR.url;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = fileR.url;
                   this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar = false;
                 }
-                this.primeraCarga = false;
               })
               this.loading = false;
             }
@@ -261,7 +261,6 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
               });
             });
       });
-      // this.primeraCarga = false
       resolve(true);
     });
   }
@@ -273,7 +272,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
       this.denied_acces = false;
       this.sgamidService.get('persona/consultar_complementarios/' + this.info_persona_id)
         .subscribe(async res => {
-          if (res !== null) {
+          if (res.Response.Code !== "404") {
             this.datosGet = <InfoCaracteristicaGet>res.Response.Body[0].Data;
             this.info_info_caracteristica = <InfoCaracteristica>res.Response.Body[0].Data;
             this.info_info_caracteristica.GrupoSanguineo = this.info_info_caracteristica.GrupoSanguineo;
@@ -314,7 +313,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
             await this.cargarDocs(files)
 
             this.formInfoCaracteristica.campos[this.getIndexForm('GrupoSisben')].valor = this.datosGet.GrupoSisben;
-            this.formInfoCaracteristica.campos[this.getIndexForm('FechaVinculacion')].valor = momentTimezone.tz(this.datosGet.FechaVinculacionEPS, 'America/Bogota').toDate();
+            this.formInfoCaracteristica.campos[this.getIndexForm('FechaVinculacionEPS')].valor = momentTimezone.tz(this.datosGet.FechaVinculacionEPS, 'America/Bogota').toDate();
 
             this.formInfoCaracteristica.campos[this.getIndexForm('NumeroHermanos')].valor = parseInt(this.datosGet.hermanosUnivesidad);
             this.info_info_caracteristica.HermanosEnLaUniversidad = parseInt(this.datosGet.hermanosUnivesidad);
@@ -387,6 +386,7 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
   }
 
   createInfoCaracteristica(infoCaracteristica: any): void {
+    this.loading = false;
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
       text: this.translate.instant('inscripcion.crear'),
@@ -399,7 +399,6 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
     };
     Swal.fire(opt)
       .then((willDelete) => {
-        this.loading = true;
         if (willDelete.value) {
           this.loading = true;
           const info_info_caracteristica_post = <any>infoCaracteristica;
@@ -409,8 +408,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
             .subscribe(res => {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
-                this.loading = false;
                 this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.guardar'));
+                this.loading = false;
               }
             },
               (error: HttpErrorResponse) => {
@@ -424,6 +423,8 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
+        } else {
+          this.loading = false;
         }
       });
   }
@@ -438,21 +439,21 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
         this.loading = true;
         const file = [{
           file: event.data.InfoCaracteristica.ComprobantePoblacion.file,
-          IdDocumento: 45,
+          IdDocumento: 64,
           nombre: 'ComprobantePoblacion',
         }]
-        this.nuxeo.saveFilesNew(file)
-          .subscribe((file) => {
-            event.data.InfoCaracteristica.ComprobantePoblacion.Id = file[0].Id;
+        this.newNuxeoService.uploadFiles(file).subscribe(
+          (responseNux: any[]) => {
+            event.data.InfoCaracteristica.ComprobantePoblacion.Id = responseNux[0].res.Id;
             if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== 'undefined' && event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== null) {
               const file = [{
                 file: event.data.InfoCaracteristica.ComprobanteDiscapacidad.file,
-                IdDocumento: 46,
+                IdDocumento: 64,
                 nombre: 'ComprobanteDiscapacidad',
               }]
-              this.nuxeo.saveFilesNew(file)
-                .subscribe((file) => {
-                  event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = file[0].Id;
+              this.newNuxeoService.uploadFiles(file).subscribe(
+                (responseNux: any[]) => {
+                  event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = responseNux[0].res.Id;
 
                   if (this.info_info_caracteristica === undefined && !this.denied_acces) {
                     this.createInfoCaracteristica(event.data.InfoCaracteristica);
@@ -461,8 +462,12 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
                   }
                 })
             } else {
-              if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
-                event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
+              if (this.datosGet !== undefined) {
+                if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
+                  event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
+                }
+              } else {
+                event.data.InfoCaracteristica.ComprobanteDiscapacidad = { Id: "0" };
               }
 
               if (this.info_info_caracteristica === undefined && !this.denied_acces) {
@@ -474,19 +479,23 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
           });
 
       } else {
-        if (this.datosGet.IdDocumentoPoblacion !== undefined && event.data.InfoCaracteristica.TipoPoblacion[0].Nombre !== 'NO APLICA') {
-          event.data.InfoCaracteristica.ComprobantePoblacion.Id = this.datosGet.IdDocumentoPoblacion;
+        if (this.datosGet !== undefined) {
+          if (this.datosGet.IdDocumentoPoblacion !== undefined && event.data.InfoCaracteristica.TipoPoblacion[0].Nombre !== 'NO APLICA') {
+            event.data.InfoCaracteristica.ComprobantePoblacion.Id = this.datosGet.IdDocumentoPoblacion;
+          }
+        } else {
+          event.data.InfoCaracteristica.ComprobantePoblacion = { Id: "0" };
         }
 
         if (typeof event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== 'undefined' && event.data.InfoCaracteristica.ComprobanteDiscapacidad.file !== null) {
           const file = [{
             file: event.data.InfoCaracteristica.ComprobanteDiscapacidad.file,
-            IdDocumento: 46,
+            IdDocumento: 64,
             nombre: 'ComprobanteDiscapacidad',
           }]
-          this.nuxeo.saveFilesNew(file)
-            .subscribe((file) => {
-              event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = file[0].Id;
+          this.newNuxeoService.uploadFiles(file).subscribe(
+            (responseNux: any[]) => {
+              event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = responseNux[0].res.Id;
 
               if (this.info_info_caracteristica === undefined && !this.denied_acces) {
                 this.createInfoCaracteristica(event.data.InfoCaracteristica);
@@ -495,8 +504,12 @@ export class CrudInfoCaracteristicaPregradoComponent implements OnInit {
               }
             })
         } else {
-          if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
-            event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
+          if (this.datosGet !== undefined) {
+            if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {
+              event.data.InfoCaracteristica.ComprobanteDiscapacidad.Id = this.datosGet.IdDocumentoDiscapacidad;
+            }
+          } else {
+            event.data.InfoCaracteristica.ComprobanteDiscapacidad = { Id: "0" };
           }
 
           if (this.info_info_caracteristica === undefined && !this.denied_acces) {
