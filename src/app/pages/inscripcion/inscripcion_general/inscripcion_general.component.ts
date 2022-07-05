@@ -609,13 +609,22 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                       percentage_docu += 1;
                     } else {
                       if (response.Metadatos !== '') {
-                        if (JSON.parse(response.Metadatos).aprobado) {
+                        let metadata = JSON.parse(response.Metadatos);
+                        if (JSON.hasOwnProperty('aprobado')){
+                          if (JSON.parse(response.Metadatos).aprobado) {
+                            percentage_docu += 1;
+                          }
+                        } else {
                           percentage_docu += 1;
                         }
                       }
                     }
 
                     this.percentage_docu = Math.round((percentage_docu/this.tipo_documentos.length * 100));
+                    if(this.percentage_docu >= 100){
+                      this.percentage_docu = 100;
+                    }
+
                     this.percentage_tab_docu[0] = Math.round(this.percentage_docu);
                     this.loading = false;
                   })

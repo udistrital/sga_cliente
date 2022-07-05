@@ -84,13 +84,15 @@ export class ViewDocumentoProgramaComponent implements OnInit {
                 (documento: Documento) => {
                   if (documento.Metadatos !== '') {
                     let metadatos = JSON.parse(documento.Metadatos);
-                    doc.aprobado = metadatos.aprobado;
-                    if (metadatos.aprobado) {
-                      doc.estadoObservacion = 'Aprobado';
-                      doc.observacion = metadatos.observacion;
-                    } else {
-                      doc.estadoObservacion = 'No Aprobado';
-                      doc.observacion = metadatos.observacion;
+                    if (metadatos.hasOwnProperty('aprobado')) {
+                      doc.aprobado = metadatos.aprobado;
+                      if (metadatos.aprobado) {
+                        doc.estadoObservacion = 'Aprobado';
+                        doc.observacion = metadatos.observacion;
+                      } else {
+                        doc.estadoObservacion = 'No Aprobado';
+                        doc.observacion = metadatos.observacion;
+                      }
                     }
                   }
                 });
