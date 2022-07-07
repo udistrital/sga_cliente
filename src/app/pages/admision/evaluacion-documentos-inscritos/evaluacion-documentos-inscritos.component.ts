@@ -205,21 +205,31 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
       (response: any) => {
         this.projectService.get('proyecto_academico_institucion/' + this.proyectos_selected).subscribe(
           (res: any) => {
-            this.info_persona_id = response[0].TerceroId.Id;
             this.inscripcion_id = event.data['Credencial'];
-            this.pivotDocument.updateInfo({
-              TerceroId: response[0].TerceroId.Id,
-              IdInscripcion: event.data['Credencial'],
-              ProgramaAcademicoId: this.proyectos_selected.toString(),
-              ProgramaAcademico: res.Nombre,
-              IdPeriodo: this.periodo.Id
-            })
-            sessionStorage.setItem('TerceroId', response[0].TerceroId.Id);
-            sessionStorage.setItem('IdInscripcion', event.data['Credencial']);
-            sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
-            sessionStorage.setItem('ProgramaAcademico', res.Nombre);
-            sessionStorage.setItem('IdPeriodo', this.periodo.Id);
-            this.showProfile = false;
+            this.inscripcionService.get('inscripcion?query=Id:' + this.inscripcion_id).subscribe(
+              (resp: any[]) => {
+
+                this.info_persona_id = response[0].TerceroId.Id;
+                this.pivotDocument.updateInfo({
+                  TerceroId: response[0].TerceroId.Id,
+                  IdInscripcion: event.data['Credencial'],
+                  ProgramaAcademicoId: this.proyectos_selected.toString(),
+                  ProgramaAcademico: res.Nombre,
+                  IdPeriodo: this.periodo.Id
+                })
+                sessionStorage.setItem('TerceroId', response[0].TerceroId.Id);
+                sessionStorage.setItem('IdInscripcion', event.data['Credencial']);
+                sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
+                sessionStorage.setItem('ProgramaAcademico', res.Nombre);
+                sessionStorage.setItem('IdPeriodo', this.periodo.Id);
+                sessionStorage.setItem('IdTipoInscripcion', resp[0].TipoInscripcionId.Id);
+                this.showProfile = false;
+
+              },
+              error => {
+                this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+              },
+            );
           },
           error => {
             this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
