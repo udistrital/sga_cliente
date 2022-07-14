@@ -164,7 +164,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
               const metadatos = JSON.parse(doc.Metadatos);
               if (metadatos.aprobado) {
                 this.estadoObservacion = 'Aprobado';
-                this.observacion = '';
+                this.observacion = metadatos.observacion;
               } else {
                 this.estadoObservacion = 'No aprobado';
                 this.observacion = metadatos.observacion;

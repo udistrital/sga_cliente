@@ -919,7 +919,10 @@
         "tooltip_crear": "Crear producción académica",
         "seguro_continuar_registrar": "¿Está seguro de registrar al nuevo autor?",
         "autor_creado": "Autor creado exitosamente",
-        "autor_no_creado": "No fue posible crear el nuevo autor"
+        "autor_no_creado": "No fue posible crear el nuevo autor",
+        "ejecutable_programa": "Soporte de archivo ejecutable de aplicación",
+        "codigo_fuente": "Soporte de código fuente del software",
+        "archivo_video": "Soporte de producción audiovisual"
     },
     "archivo_icfes": {
         "archivo_icfes": "Archivo de registros del ICFES",
