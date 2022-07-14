@@ -881,7 +881,10 @@
         "tooltip_crear": "Create academic production",
         "seguro_continuar_registrar": "Are you sure you want to register this new author?",
         "autor_creado": "Author successfully created",
-        "autor_no_creado": "The new author could not be created"
+        "autor_no_creado": "The new author could not be created",
+        "ejecutable_programa": "Application executable file support",
+        "codigo_fuente": "Software source code support",
+        "archivo_video": "Audiovisual production support"
     },
     "archivo_icfes": {
         "archivo_icfes": "Icfes file",
