@@ -11,6 +11,14 @@
           </ngx-extended-pdf-viewer>
         </div>
         <div class="col-6 d-flex align-items-start flex-column">
+          <div class="row mb-auto" style="width: 100%;">
+            <div class="col-4">
+              <mat-label>{{ 'GLOBAL.soporte_documento' | translate }}: </mat-label>
+            </div>
+            <div class="col-8">
+              <mat-label> {{ nombreDocumento }} </mat-label>
+            </div>
+          </div>
           <div class="row mb-auto" style="width: 100%;" *ngIf="!observando">
             <div class="col-4">
               <mat-label>{{ 'admision.doc_valido' | translate }}*: </mat-label>
@@ -19,7 +27,7 @@
               <mat-slide-toggle formControlName="aprobado"></mat-slide-toggle>
             </div>
           </div>
-          <div class="row" style="width: 100%;">
+          <div class="row mb-auto" style="width: 100%;">
             <div class="col-3">
               <mat-label>{{ 'GLOBAL.observacion' | translate }}: </mat-label>
             </div>
