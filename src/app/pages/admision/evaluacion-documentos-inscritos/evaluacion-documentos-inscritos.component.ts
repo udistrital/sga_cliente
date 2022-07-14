@@ -110,7 +110,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   }
 
   loadLevel() {
-    this.projectService.get('nivel_formacion?limit=2').subscribe(
+    this.projectService.get('nivel_formacion?limit=0').subscribe(
       (response: any) => {
         if (response !== null || response !== undefined) {
           this.nivel_load = <any>response;

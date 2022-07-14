@@ -80,22 +80,21 @@ export class NewNuxeoService {
     get(files) {
         const documentsSubject = new Subject<Documento[]>();
         const documents$ = documentsSubject.asObservable();
-        const documentos = [];
-
-        files.map(async (file, index) => {
+        const documentos = files;
+        let i = 0;
+        files.map((file, index) => {
             this.documentService.get('documento/' + file.Id)
-                .pipe(mergeMap((doc) => {
-                    documentos.push(doc);
-                    return this.anyService.get(environment.NUXEO_SERVICE, '/document/' + doc.Enlace)
-                })
-                )
+            .subscribe((doc) => {
+                this.anyService.get(environment.NUXEO_SERVICE, '/document/' + doc.Enlace)
                 .subscribe(async (f: any) => {
-                    const url = await this.getUrlFile(f.file, f['file:content']['mime-type']);
-                    documentos[index] = { ...documentos[index], ...{ url: url }, ...{ Documento: this.sanitization.bypassSecurityTrustUrl(url) } }
-                    if (documentos.length === files.length) {
+                    const url = await this.getUrlFile(f.file, f['file:content']['mime-type'])
+                    documentos[index] = { ...documentos[index], ...{ url: url }, ...{ Documento: this.sanitization.bypassSecurityTrustUrl(url) } }           
+                    i+=1;
+                    if(i === files.length){
                         documentsSubject.next(documentos);
                     }
                 })
+            })
         });
         return documents$;
     }

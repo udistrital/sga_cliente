@@ -13,6 +13,7 @@ export class DialogoDocumentosComponent implements OnInit {
 
   revisionForm: FormGroup;
   documento: any;
+  nombreDocumento: string = "";
   loading: boolean;
   observando: boolean;
 
@@ -29,6 +30,7 @@ export class DialogoDocumentosComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.nombreDocumento = this.data.documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre;
     this.documento = this.data.documento.Documento['changingThisBreaksApplicationSecurity'];
     this.observando = this.data.observando;
     this.revisionForm.setValue({
