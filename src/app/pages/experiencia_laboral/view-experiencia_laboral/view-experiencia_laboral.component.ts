@@ -80,7 +80,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
                 if (Object.values(this.documentosSoporte).length === this.info_experiencia_laboral.length) {
                   console.log("si length exp:", JSON.parse(JSON.stringify(this.info_experiencia_laboral)))
                   this.info_experiencia_laboral.forEach(info => {
-                    let doc = this.documentosSoporte.find(doc => doc.Id === info.IdDoc);
+                    let doc = this.documentosSoporte.find(doc => doc.Id == info.IdDoc);
                     console.log("doc for: ", info.Soporte, " > ", doc)
                     if (doc !== undefined) {
                       info.Soporte = doc;

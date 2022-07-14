@@ -30,7 +30,11 @@ export class DialogoDocumentosComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.nombreDocumento = this.data.documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre;
+    if(this.data.documento.hasOwnProperty('DocumentoProgramaId')){
+      this.nombreDocumento = this.data.documento.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre;
+    } else {
+      this.nombreDocumento = "";
+    }
     this.documento = this.data.documento.Documento['changingThisBreaksApplicationSecurity'];
     this.observando = this.data.observando;
     this.revisionForm.setValue({
