@@ -11,17 +11,23 @@ table.rwd_auto {
   padding: 5px;
   text-align: center;
   border-bottom: black solid 1px;
+  border-top: black solid 1px;
   background-color: rgb(0, 162, 255);
   color: floralwhite;
 }
+.table-responsive .subheader th {
+  border-bottom: black solid 1px;
+  border-top: black solid 1px;
+  background-color: #bdc2c8;
+  font-weight: normal;
+  color: black;
+}
 .table-responsive td,
 .rwd_auto td {
+  border-bottom: black solid 1px;
+  border-top: black solid 1px;
   padding: 5px;
-  padding-left: 40px;
-}
-.table-responsive td:last-child,
-.rwd_auto td:last-child {
-  border-right: black solid 1px;
+  text-align: center;
 }
 .rwd {
   width: 100%;
@@ -90,4 +96,8 @@ table.rwd_auto {
   .fontsize {
     font-size: 10px;
   }
+}
+
+i.nb-search {
+  font-size: 2rem;
 }

@@ -6,13 +6,37 @@
           <tr><th colspan="3">{{ 'inscripcion.info_basica' | translate }}</th></tr>
         </thead>
         <tbody *ngIf="info_info_persona">
-          <tr>
-            <td>{{ 'GLOBAL.documento_identificacion' | translate }} </td>
-            <td>{{info_info_persona.TipoIdentificacion.CodigoAbreviacion}}: {{info_info_persona.NumeroIdentificacion}}</td>
+          <tr class="subheader">
+            <th>{{ 'GLOBAL.nombres' | translate }}</th>
+            <th>{{ 'GLOBAL.apellidos' | translate }}</th>
+            <th>{{ 'GLOBAL.documento_identificacion' | translate }} </th>
           </tr>
           <tr>
-            <td>{{ 'GLOBAL.nombres' | translate }}: {{info_info_persona.PrimerNombre}} {{info_info_persona.SegundoNombre}}</td>
-            <td>{{ 'GLOBAL.apellidos' | translate }}: {{info_info_persona.PrimerApellido}} {{info_info_persona.SegundoApellido}}</td>
+            <td>{{info_info_persona.PrimerNombre}} {{info_info_persona.SegundoNombre}}</td>
+            <td>{{info_info_persona.PrimerApellido}} {{info_info_persona.SegundoApellido}}</td>
+            <td>{{info_info_persona.TipoIdentificacion.CodigoAbreviacion}}: {{info_info_persona.NumeroIdentificacion}}</td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="idSoporteDiscapacidad || idSoportePoblacion">
+          <tr class="subheader">
+            <th colspan="2">{{ 'inscripcion.info_caracteristica' | translate }}</th>
+            <th>{{ 'solicitudes.soporte' | translate }}</th>
+          </tr>
+          <tr *ngIf="idSoporteDiscapacidad">
+            <td>{{ 'GLOBAL.tipo_discapacidad' | translate }}</td>
+            <td>{{ tipoDiscapacidad }}</td>
+            <td>
+              <button mat-button type="button" (click)="verInfoCaracteristca(docDiscapacidad)">
+              <i class="nb-search" title="{{ 'GLOBAL.tooltip_ver_registro' | translate }}"></i></button>
+            </td>
+          </tr>
+          <tr *ngIf="idSoportePoblacion">
+            <td>{{ 'GLOBAL.tipo_poclacion' | translate }}</td>
+            <td>{{ tipoPoblacion }}</td>
+            <td>
+              <button mat-button type="button" (click)="verInfoCaracteristca(docPoblacion)">
+              <i class="nb-search" title="{{ 'GLOBAL.tooltip_ver_registro' | translate }}"></i></button>
+            </td>
           </tr>
         </tbody>
       </table>
