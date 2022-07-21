@@ -32,6 +32,7 @@
       <div class="row">
         <ngx-view-inscripcion class="col-md-12"></ngx-view-inscripcion>
         <ngx-view-info-persona (url_editar)="editar($event,'info_persona')"
+                               (revisar_doc)="abrirDocumento($event)"
                                persona_id="{{info_persona_id}}"
                                class="col-md-12">
         </ngx-view-info-persona>

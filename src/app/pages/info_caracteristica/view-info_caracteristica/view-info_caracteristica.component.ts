@@ -5,6 +5,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   selector: 'ngx-view-info-caracteristica',
@@ -26,7 +27,7 @@ export class ViewInfoCaracteristicaComponent implements OnInit {
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
   constructor(
-    private campusMidService: CampusMidService,
+    private sgaMidService: SgaMidService,
     private translate: TranslateService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
@@ -43,7 +44,7 @@ export class ViewInfoCaracteristicaComponent implements OnInit {
   public loadInfoCaracteristica(): void {
     if (this.info_caracteristica_id !== undefined && this.info_caracteristica_id !== 0 &&
       this.info_caracteristica_id.toString() !== '') {
-      this.campusMidService.get('/persona/consultar_complementarios/' + this.info_caracteristica_id)
+      this.sgaMidService.get('/persona/consultar_complementarios/' + this.info_caracteristica_id)
         .subscribe(res => {
           const r = <any>res;
           if (r !== null && r.Type !== 'error') {
