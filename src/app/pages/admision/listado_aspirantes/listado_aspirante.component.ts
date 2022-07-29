@@ -101,7 +101,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             title: e.Nombre
           }
         })
-        console.log(this.estados);
         this.createTable()
       })
   }
@@ -294,7 +293,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         }
         this.inscripcionService.put('inscripcion', updateState)
           .subscribe((response) => {
-            console.log(response);
             Swal.fire(
               this.translate.instant('GLOBAL.' + 'operacion_exitosa'),
               '',
@@ -377,7 +375,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             const data = <Array<any>>r;
             this.admitidos = data.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'ADMITIDO'));
             this.inscritos = data.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'INSCRITO'));
-            console.log(data)
             this.cuposAsignados = this.admitidos.length;
             // this.source_emphasys.load(data);
             data.forEach(element => {
@@ -387,13 +384,15 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
 
                     let aspiranteAux = {
                       Inscripcion: element,
-                      NumeroDocumento: rTercero.Id,
+                      NumeroDocumento: undefined,
                       NombreAspirante: rTercero.NombreCompleto,
                       NotaFinal: element.NotaFinal,
                       TipoInscripcionId: element.TipoInscripcionId,
                       EstadoInscripcionId: element.EstadoInscripcionId,
                       EnfasisId: undefined
                     }
+
+                    aspiranteAux.NumeroDocumento = await this.documento(element.PersonaId);
 
                     if(element.EnfasisId != 0){
                       aspiranteAux.EnfasisId = await this.enfasis(element.EnfasisId);
@@ -442,6 +441,16 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       })
     });
     return promiseEnfasis;
+  }
+
+  documento(idPersona) {
+    const promiseIdentificacion = new Promise((resolve, reject) => {
+      this.tercerosService.get('datos_identificacion?query=Activo:true,TerceroId:' + idPersona)
+      .subscribe((response: any[]) => {
+        resolve(response[0].Numero);
+      })
+    });
+    return promiseIdentificacion;
   }
 
   ngOnInit() {
