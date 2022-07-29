@@ -366,7 +366,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.inscritos = [];
     this.admitidos = [];
 
-    this.inscripcionService.get('inscripcion?query=ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=NotaFinal&order=desc').subscribe(
+    this.inscripcionService.get('inscripcion?query=Activo:true,ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=NotaFinal&order=desc').subscribe(
       (res: any) => {
         const r = <any>res
         if (res !== '[{}]') {
