@@ -382,33 +382,35 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             // this.source_emphasys.load(data);
             data.forEach(element => {
               if (element.PersonaId != undefined) {
-                combineLatest([
-                  this.tercerosService.get('tercero/' + element.PersonaId),
-                  this.proyectoAcademicoService.get('enfasis/' + element.EnfasisId)
-                ]).pipe(
-                  map(([tercero$, enfasis$]) => ({
-                    tercero: tercero$,
-                    enfasis: enfasis$
-                  }))
-                )
-                  .subscribe(
-                    (res: any) => {
-                      let aspiranteAux = {
-                        Inscripcion: element,
-                        NumeroDocumento: res.tercero.Id,
-                        NombreAspirante: res.tercero.NombreCompleto,
-                        NotaFinal: element.NotaFinal,
-                        TipoInscripcionId: element.TipoInscripcionId,
-                        EstadoInscripcionId: element.EstadoInscripcionId,
-                        EnfasisId: res.enfasis
+                this.tercerosService.get('tercero/' + element.PersonaId).subscribe(
+                  async (rTercero: any) => {
+
+                    let aspiranteAux = {
+                      Inscripcion: element,
+                      NumeroDocumento: rTercero.Id,
+                      NombreAspirante: rTercero.NombreCompleto,
+                      NotaFinal: element.NotaFinal,
+                      TipoInscripcionId: element.TipoInscripcionId,
+                      EstadoInscripcionId: element.EstadoInscripcionId,
+                      EnfasisId: undefined
+                    }
+
+                    if(element.EnfasisId != 0){
+                      aspiranteAux.EnfasisId = await this.enfasis(element.EnfasisId);
+                    } else {
+                      aspiranteAux.EnfasisId = {
+                        Nombre: "Por definir",
                       }
-                      this.Aspirantes.push(aspiranteAux);
-                      this.source_emphasys.load(this.Aspirantes);
-                    },
-                    error => {
-                      this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
-                    },
-                  );
+                    }
+                    
+                    this.Aspirantes.push(aspiranteAux);
+                    this.source_emphasys.load(this.Aspirantes);
+                  },
+                  error => {
+                    this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+                  }
+                )
+
               }
             });
 
@@ -430,6 +432,16 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
       });
+  }
+
+  enfasis(idEnf) {
+    const promiseEnfasis = new Promise((resolve, reject) => {
+      this.proyectoAcademicoService.get('enfasis/' + idEnf)
+      .subscribe((response) => {
+        resolve(response);
+      })
+    });
+    return promiseEnfasis;
   }
 
   ngOnInit() {
