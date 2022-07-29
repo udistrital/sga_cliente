@@ -24,7 +24,7 @@ export class UserService {
       this.autenticationService.getDocument().then((document: string) => {
         if (document) {
           console.log("getUser", document);
-          this.anyService.get(path, 'datos_identificacion?query=Numero:' + document)
+          this.anyService.get(path, 'datos_identificacion?query=Activo:true,Numero:' + document)
             .subscribe(res => {
               if (res !== null) {
                 this.user = res[0].TerceroId;
