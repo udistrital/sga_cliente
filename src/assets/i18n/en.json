@@ -613,7 +613,8 @@
         "placeholder_vacio": " ",
         "info_practicas_academicas": "Academic Practice Request",
         "error_practicas_academicas": "It was not possible to record the academic practice",
-        "practicas_academicas": "Academic Practice"
+        "practicas_academicas": "Academic Practice",
+        "no_vacio": "The field cannot be empty"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
