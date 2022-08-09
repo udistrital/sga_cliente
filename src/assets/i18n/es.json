@@ -652,7 +652,8 @@
         "info_practicas_academicas": "Solicitud de prácticas académicas",
         "error_practicas_academicas": "No fue posible registrar la práctica académica",
         "practicas_academicas": "Prácticas académicas",
-        "enviar": "Enviar"
+        "enviar": "Enviar",
+        "no_vacio": "El campo no puede estar vacío"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",

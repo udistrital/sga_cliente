@@ -17,6 +17,7 @@ import { ImplicitAutenticationService } from '../../../@core/utils/implicit_aute
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-crud-experiencia-laboral',
@@ -89,6 +90,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     private listService: ListService,
     private tercerosService: TercerosService,
     private newNuxeoService: NewNuxeoService,
+    private popUpManager: PopUpManager,
     private users: UserService) {
     this.formInfoExperienciaLaboral = FORM_EXPERIENCIA_LABORAL;
     this.construirForm();
@@ -226,21 +228,26 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   }
 
   searchNit(data) {
-    const inombre = this.getIndexForm('NombreEmpresa');
-    const regex = /^[0-9]+(?:-[0-9]+)*$/;
-    data.data.Nit = data.data.Nit.trim();
-    const nit = typeof data === 'string' ? data : data.data.Nit;
+    if(data.data.Nit){
+      const inombre = this.getIndexForm('NombreEmpresa');
+      const regex = /^[0-9]+(?:-[0-9]+)*$/;
+      data.data.Nit = data.data.Nit.trim();
+      const nit = typeof data === 'string' ? data : data.data.Nit;
 
-    if (regex.test(nit) === true) {
-      this.searchOrganizacion(nit);
-      this.indexSelect = null;
-      this.detalleExp = null;
-    } else {
-      this.clean = !this.clean;
-      this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
-      this.loadListEmpresa(nit);
-      this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
+      if (regex.test(nit) === true) {
+        this.searchOrganizacion(nit);
+        this.indexSelect = null;
+        this.detalleExp = null;
+      } else {
+        this.clean = !this.clean;
+        this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
+        this.loadListEmpresa(nit);
+        this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
+      }
+    }  else {
+      this.popUpManager.showAlert(this.translate.instant('inscripcion.experiencia_laboral'), this.translate.instant('GLOBAL.no_vacio'))
     }
+    
   }
 
   getSeleccion(event) {
@@ -259,7 +266,8 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   }
 
   loadListEmpresa(nombre: string): void {
-    let consultaEmpresa: Array<any> = [];
+    if(nombre){
+      let consultaEmpresa: Array<any> = [];
     const empresa: Array<any> = [];
     this.sgaMidService.get('experiencia_laboral/informacion_empresa?nombre=' + nombre)
       .subscribe(res => {
@@ -280,6 +288,9 @@ export class CrudExperienciaLaboralComponent implements OnInit {
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
           });
         });
+    } else {
+      this.popUpManager.showAlert(this.translate.instant('inscripcion.experiencia_laboral'), this.translate.instant('GLOBAL.no_vacio'))
+    }
   }
 
   searchOrganizacion(nit: string): void {
