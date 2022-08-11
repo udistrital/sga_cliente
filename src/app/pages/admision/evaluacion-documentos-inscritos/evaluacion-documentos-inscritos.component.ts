@@ -201,7 +201,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   }
 
   loadPerfil(event) {
-    this.tercerosService.get('datos_identificacion?query=numero:' + event.data.Identificacion).subscribe(
+    this.tercerosService.get('datos_identificacion?query=Activo:true,numero:' + event.data.Identificacion).subscribe(
       (response: any) => {
         this.projectService.get('proyecto_academico_institucion/' + this.proyectos_selected).subscribe(
           (res: any) => {
