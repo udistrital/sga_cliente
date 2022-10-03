@@ -23,10 +23,14 @@ import { PeriodoAcademico } from '../data/models/periodo/periodo_academico';
 import { InfoComplementaria } from '../data/models/terceros/info_complementaria';
 import { TipoDocumento } from '../data/models/documento/tipo_documento'
 import { TipoContribuyente } from '../data/models/terceros/tipo_contribuyente';
+import { OrientacionSexual } from '../data/models/informacion/orientacion_sexual';
+import { IdentidadGenero } from '../data/models/informacion/identidad_genero';
 // import { TipoPublicacionLibro } from '../data/models/tipo_publicacion_libro';
 
 export interface IAppState {
   listGenero: Genero[],
+  listOrientacionSexual: OrientacionSexual[],
+  listIdentidadGenero: IdentidadGenero[],
   listClasificacionNivelIdioma: ClasificacionNivelIdioma[],
   listEstadoInscripcion: EstadoInscripcion[],
   listEstadoCivil: EstadoCivil[],

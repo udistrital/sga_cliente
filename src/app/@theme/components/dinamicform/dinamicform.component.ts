@@ -35,6 +35,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
   ) {
     this.data = {
       valid: true,
+      confirm: true,
       data: {},
       percentage: 0,
       files: [],
@@ -183,18 +184,39 @@ export class DinamicformComponent implements OnInit, OnChanges {
   }
 
   confirmacion(event) {
-    const camposAValidar = this.normalform.campos.filter((campo: any) => (campo.etiqueta === 'inputConfirmacion'));
-    if (!(camposAValidar[0].valor === camposAValidar[1].valor)) {
-      camposAValidar[0].clase = 'form-control form-control-danger';
-      camposAValidar[1].clase = 'form-control form-control-danger';
-      camposAValidar[0].alerta = camposAValidar[0].mensajeIguales;
-      camposAValidar[1].alerta = camposAValidar[1].mensajeIguales;
-    } else {
-      camposAValidar[0].clase = 'form-control form-control-success';
-      camposAValidar[1].clase = 'form-control form-control-success';
-      camposAValidar[0].alerta = '';
-      camposAValidar[1].alerta = '';
+    this.checkConfirmacion();
+    if(event.entrelazado){
+      this.interlaced.emit(event);
     }
+  }
+
+  checkConfirmacion() {
+    let valido = true;
+
+    const camposAValidar = this.normalform.campos.filter((campo: any) => (campo.etiqueta === 'inputConfirmacion'));
+    let l = camposAValidar.length;
+
+    if (l % 2 == 0) {
+      for (let i = 0; i < l; i+=2) {
+        if (!(camposAValidar[i].valor === camposAValidar[i+1].valor)) {
+          camposAValidar[i].clase = 'form-control form-control-danger';
+          camposAValidar[i+1].clase = 'form-control form-control-danger';
+          camposAValidar[i].alerta = camposAValidar[i].mensajeIguales;
+          camposAValidar[i+1].alerta = camposAValidar[i+1].mensajeIguales;
+          valido = false;
+        } else {
+          camposAValidar[i].clase = 'form-control form-control-success';
+          camposAValidar[i+1].clase = 'form-control form-control-success';
+          camposAValidar[i].alerta = '';
+          camposAValidar[i+1].alerta = '';
+        }
+      }
+    } else {
+      console.log('Error, algún campo de confirmacion no tiene pareja');
+    }
+
+    return valido;
+
   }
 
   ngOnInit() {
@@ -239,7 +261,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
       c.clase = 'form-control form-control-danger';
       return false;
     }
-    if (c.etiqueta === 'input' && c.tipo === 'number') {
+    if ((c.etiqueta === 'input' || c.etiqueta === 'inputConfirmacion') && c.tipo === 'number') {
       c.valor = parseInt(c.valor, 10);
       if (c.valor < c.minimo) {
         c.clase = 'form-control form-control-danger';
@@ -247,7 +269,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
         return false;
       }
     }
-    if (c.etiqueta === 'input' && c.tipo === 'number') {
+    if ((c.etiqueta === 'input' || c.etiqueta === 'inputConfirmacion') && c.tipo === 'number') {
       c.valor = parseInt(c.valor, 10);
       if (c.valor > c.maximolog) {
         c.clase = 'form-control form-control-danger';
@@ -337,6 +359,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
         this.data.valid = false;
       }
     });
+
+    this.data.valid = this.data.valid && this.checkConfirmacion();
 
     if (this.data.valid && (resueltos / requeridos) >= 1) {
       if (this.normalform.modelo) {
