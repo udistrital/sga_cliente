@@ -1,5 +1,7 @@
 export const REDUCER_LIST = {
     Genero: 'listGenero',
+    OrientacionSexual: 'listOrientacionSexual',
+    IdentidadGenero: 'listIdentidadGenero',
     Sanguineo: 'listGrupoSanguineo',
     RH: 'listFactorRh',
     EPS: 'listEPS',

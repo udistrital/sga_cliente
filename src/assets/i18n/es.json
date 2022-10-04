@@ -274,7 +274,7 @@
         "placeholder_numero_documento": "Ej: 55555555",
         "estado_civil": "Estado civil",
         "placeholder_estado_civil": "Ej: Estado civil",
-        "genero": "Género",
+        "genero": "Sexo",
         "placeholder_genero": "Ej: Femenino",
         "fecha_nacimiento": "Fecha de nacimiento",
         "placeholder_fecha_nacimiento": "Ej: 05/05/1995",
@@ -653,7 +653,14 @@
         "error_practicas_academicas": "No fue posible registrar la práctica académica",
         "practicas_academicas": "Prácticas académicas",
         "enviar": "Enviar",
-        "no_vacio": "El campo no puede estar vacío"
+        "no_vacio": "El campo no puede estar vacío",
+        "orientacion_sexual": "Orientación sexual",
+        "placeholder_orientacion_sexual": "Ej: Bisexual",
+        "identidad_genero": "Identidad de genero",
+        "placeholder_identidad_genero": "Ej: Cisgénero",
+        "verificar_numero_documento": "Verificar numero de documento",
+        "placeholder_verificar_numero_documento": "Ej: 55555555",
+        "no_coinciden": "Los datos no coinciden"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",

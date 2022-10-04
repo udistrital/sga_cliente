@@ -4,6 +4,8 @@ import { ListReducer } from './reducers/list.reducer';
 
 export const rootReducer: ActionReducerMap<IAppState> = {
   listGenero: ListReducer.ListReducerGenero,
+  listOrientacionSexual: ListReducer.ListReducerOrientacionSexual,
+  listIdentidadGenero: ListReducer.ListReducerIdentidadGenero,
   listGrupoSanguineo: ListReducer.ListReducerGrupoSanguineo,
   listFactorRh: ListReducer.ListReducerFactorRH,
   listEPS: ListReducer.ListReducerEPS,
@@ -45,5 +47,4 @@ export const rootReducer: ActionReducerMap<IAppState> = {
   listDescuentoDependencia: ListReducer.ListReducerDescuentoDependencia,
   listTipoParametro: ListReducer.listReducerTipoParametro,
   listTipoTercero: ListReducer.ListReducerTipoTercero,
-  // listTipoPublicacionLibro: ListReducer.listReducerTipoPublicacionLibro,
 }

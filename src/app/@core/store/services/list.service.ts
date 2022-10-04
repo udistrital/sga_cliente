@@ -42,13 +42,49 @@ export class ListService {
     this.store.select(<any>REDUCER_LIST.Genero).subscribe(
       (list: any) => {
         if (!list || list.length === 0) {
-          this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:6&sortby=Id&order=asc&limit=2')
+          this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:6,Activo:true&limit=0')
             .subscribe(
               (result: any[]) => {
                 this.addList(REDUCER_LIST.Genero, result);
               },
               error => {
                 this.addList(REDUCER_LIST.Genero, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findOrientacionSexual() {
+    this.store.select(<any>REDUCER_LIST.OrientacionSexual).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:1636,Activo:true&limit=0')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.OrientacionSexual, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.OrientacionSexual, []);
+              },
+            );
+        }
+      },
+    );
+  }
+
+  public findIdentidadGenero() {
+    this.store.select(<any>REDUCER_LIST.IdentidadGenero).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:1637,Activo:true&limit=0')
+            .subscribe(
+              (result: any[]) => {
+                this.addList(REDUCER_LIST.IdentidadGenero, result);
+              },
+              error => {
+                this.addList(REDUCER_LIST.IdentidadGenero, []);
               },
             );
         }
