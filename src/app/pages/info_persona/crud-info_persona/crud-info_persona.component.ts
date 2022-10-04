@@ -71,6 +71,8 @@ export class CrudInfoPersonaComponent implements OnInit {
         this.construirForm();
       });
       this.listService.findGenero();
+      this.listService.findOrientacionSexual();
+      this.listService.findIdentidadGenero();
       this.listService.findEstadoCivil();
       this.listService.findTipoIdentificacion();
       this.loading = true;
@@ -113,6 +115,10 @@ export class CrudInfoPersonaComponent implements OnInit {
             this.formInfoPersona.campos[this.getIndexForm('Genero')].valor = temp.Genero;
             this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].valor = temp.EstadoCivil;
             this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].valor = temp.TipoIdentificacion;
+            this.formInfoPersona.campos.splice(this.getIndexForm('VerificarNumeroIdentificacion'),1);
+            this.formInfoPersona.campos.forEach(campo => {
+              campo.deshabilitar = true;
+            });
           }
           this.loading = false;
         },
@@ -133,6 +139,7 @@ export class CrudInfoPersonaComponent implements OnInit {
       this.loading = false;
       this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('GLOBAL.no_info_persona'));
     }
+    this.formInfoPersona.campos[this.getIndexForm('CorreoElectronico')].valor = this.autenticationService.getPayload().sub;
   }
 
   createInfoPersona(infoPersona: any): void {
@@ -156,7 +163,9 @@ export class CrudInfoPersonaComponent implements OnInit {
           this.info_info_persona.FechaNacimiento = this.info_info_persona.FechaNacimiento + ' +0000 +0000';
           this.info_info_persona.FechaExpedicion = momentTimezone.tz(this.info_info_persona.FechaExpedicion, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
           this.info_info_persona.FechaExpedicion = this.info_info_persona.FechaExpedicion + ' +0000 +0000';
+          this.info_info_persona.NumeroIdentificacion = (this.info_info_persona.NumeroIdentificacion).toString();
           this.info_info_persona.Usuario = this.autenticationService.getPayload().sub;
+          console.log(this.info_info_persona);
           this.sgamidService.post('persona/guardar_persona', this.info_info_persona).subscribe(res => {
             const r = <any>res
             if (r !== null && r.Type !== 'error') {
@@ -187,7 +196,6 @@ export class CrudInfoPersonaComponent implements OnInit {
   }
 
   ngOnInit() {
-
   }
 
   validarForm(event) {
@@ -244,6 +252,8 @@ export class CrudInfoPersonaComponent implements OnInit {
         this.formInfoPersona.campos[this.getIndexForm('Genero')].opciones = list.listGenero[0];
         this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].opciones = list.listEstadoCivil[0];
         this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].opciones = list.listTipoIdentificacion[0];
+        this.formInfoPersona.campos[this.getIndexForm('OrientacionSexual')].opciones = list.listOrientacionSexual[0];
+        this.formInfoPersona.campos[this.getIndexForm('IdentidadGenero')].opciones = list.listIdentidadGenero[0];
       },
     );
   }

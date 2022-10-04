@@ -256,7 +256,7 @@
         "placeholder_numero_documento": "E.g: 55555555",
         "estado_civil": "Civil status",
         "placeholder_estado_civil": "E.g: single",
-        "genero": "Gender",
+        "genero": "Sex",
         "placeholder_genero": "E.g: Female",
         "fecha_nacimiento": "Date of birth",
         "placeholder_fecha_nacimiento": "E.g: 05/05/1995",
@@ -614,7 +614,14 @@
         "info_practicas_academicas": "Academic Practice Request",
         "error_practicas_academicas": "It was not possible to record the academic practice",
         "practicas_academicas": "Academic Practice",
-        "no_vacio": "The field cannot be empty"
+        "no_vacio": "The field cannot be empty",
+        "orientacion_sexual": "Sexual Orientation",
+        "placeholder_orientacion_sexual": "E.g: Bisexual",
+        "identidad_genero": "Gender identity",
+        "placeholder_identidad_genero": "E.g: Cisgender",
+        "verificar_numero_documento": "Check document number",
+        "placeholder_verificar_numero_documento": "E.g: 55555555",
+        "no_coinciden": "The data does not match"
     },
     "ERROR": {
         "general": "The request could not be satisfied",

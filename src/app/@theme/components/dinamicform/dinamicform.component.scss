@@ -207,3 +207,11 @@
 .input-file {
   margin: 1rem 0;
 }
+
+.multiline-mat-option.mat-option {
+  white-space: normal;
+  line-height: normal;
+  height: unset;
+  padding-top: 0.9em;
+  padding-bottom: 0.9em;
+} 
