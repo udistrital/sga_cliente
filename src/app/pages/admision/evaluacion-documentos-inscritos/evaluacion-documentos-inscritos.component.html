@@ -10,7 +10,7 @@
           <!--Periodo académico-->
           <mat-form-field style="width: 35%;">
             <mat-label>{{ 'admision.periodo_' | translate }}:</mat-label>
-            <mat-select [(ngModel)]="periodo" [disabled]='true'>
+            <mat-select [(ngModel)]="periodo" [disabled]='false' (selectionChange)="changePeriodo()">
               <mat-option *ngFor="let item of periodos" [value]="item"> {{item.Nombre}} </mat-option>
             </mat-select>
           </mat-form-field>

@@ -209,7 +209,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
+      this.parametrosService.get('periodo/?query=CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {
@@ -226,6 +226,11 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             reject(error);
           });
     });
+  }
+
+  changePeriodo() {
+    this.CampoControl.setValue('');
+    this.Campo1Control.setValue('');
   }
 
   nivel_load() {

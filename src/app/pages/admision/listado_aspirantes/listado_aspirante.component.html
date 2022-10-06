@@ -45,8 +45,7 @@
             <!-- select periodo -->
             <mat-form-field style="width: 40%;">
               <mat-label>{{ 'calendario.periodo' | translate }}:</mat-label>
-              <mat-select [(ngModel)]="periodo" [disabled]='true'>
-                <mat-option>--Seleccionar--</mat-option>
+              <mat-select [(ngModel)]="periodo" [disabled]='false' (selectionChange)="changePeriodo()">
                 <mat-option *ngFor="let item of periodos" [value]="item">
                   {{item.Nombre}}
                 </mat-option>
