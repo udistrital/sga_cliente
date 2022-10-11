@@ -660,7 +660,9 @@
         "placeholder_identidad_genero": "Ej: Cisgénero",
         "verificar_numero_documento": "Verificar numero de documento",
         "placeholder_verificar_numero_documento": "Ej: 55555555",
-        "no_coinciden": "Los datos no coinciden"
+        "no_coinciden": "Los datos no coinciden",
+        "persona_actualizado": "¡Su información personal ha sido actualizada correctamente!",
+        "error_actualizar_persona": "No se ha podido actualizar su información personal"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1346,7 +1348,9 @@
         "placeholder_comentarios": "Comentario respecto a la solicitud",
         "inscripcion_general": "Información general",
         "generar_matricula": "Generar recibo de matrícula",
-        "no_fechas_inscripcion": "El proyecto curricular seleccionado no presenta fechas de inscripcion"
+        "no_fechas_inscripcion": "El proyecto curricular seleccionado no presenta fechas de inscripcion",
+        "persona_ya_existe": "¡El sistema SGA ha encontrado información personal relacionada con el numero de documento diligenciado!",
+        "info_persona_ya_existe": "Con el fin de evitar duplicado de información se utilizarán los datos encontrados para continuar el proceso de inscripción.\nSi considera que los datos presentados no coinciden debe realizar una solicitud formal a la Oficina Asesora de Sistemas quien revisará la veracidad de los datos."
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

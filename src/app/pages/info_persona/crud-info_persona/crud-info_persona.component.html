@@ -6,7 +6,8 @@
                      [modeloData]="info_info_persona"
                      (result)="validarForm($event)"
                      [clean]="clean"
-                     (percentage)="setPercentage($event)">
+                     (percentage)="setPercentage($event)"
+                     (interlaced)="checkExistePersona($event)">
     </ngx-dinamicform>
 </nb-card>
 <!--ngx-loading [hidden]="!loading"></ngx-loading-->
