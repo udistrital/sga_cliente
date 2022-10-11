@@ -621,7 +621,9 @@
         "placeholder_identidad_genero": "E.g: Cisgender",
         "verificar_numero_documento": "Check document number",
         "placeholder_verificar_numero_documento": "E.g: 55555555",
-        "no_coinciden": "The data does not match"
+        "no_coinciden": "The data does not match",
+        "persona_actualizado": "Your personal information has been successfully updated!",
+        "error_actualizar_persona": "Unable to update your personal information"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1306,7 +1308,9 @@
         "solicitud_generada": "The request was successfully generated",
         "placeholder_comentarios": "Comment regarding the request",
         "inscripcion_general": "General information",
-        "generar_matricula": "Generate registration receipt"
+        "generar_matricula": "Generate registration receipt",
+        "persona_ya_existe": "The SGA system has found personal information related to the document number filled out!",
+        "info_persona_ya_existe": "In order to avoid duplication of information, the data found will be used to continue the registration process.\nIf you consider that the data presented does not coincide, you must make a formal request to the Systems Advisory Office, which will review the veracity of the data."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",

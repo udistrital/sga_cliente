@@ -72,4 +72,16 @@ export class PopUpManager {
         };
         return Swal.fire(options);
     }
+
+    public showPopUpGeneric(title, text, type, cancelar): Promise<any> {
+        const opt: any = {
+            title: title,
+            text: text,
+            icon: type,
+            showCancelButton: cancelar,
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+        };
+        return Swal.fire(opt);
+    }
 }
