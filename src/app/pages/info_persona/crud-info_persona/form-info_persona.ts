@@ -62,6 +62,7 @@ export let FORM_INFO_PERSONA = {
             mensajeIguales: 'Los datos no coinciden',
             tipo: 'number',
             minimo: 0,
+            entrelazado: true,
         },
         {
             etiqueta: 'inputConfirmacion',
@@ -73,6 +74,7 @@ export let FORM_INFO_PERSONA = {
             tipo: 'number',
             minimo: 0,
             mensajeIguales: 'Los datos no coinciden',
+            entrelazado: true,
         },
         {
             etiqueta: 'mat-date',
@@ -145,15 +147,6 @@ export let FORM_INFO_PERSONA = {
             requerido: true,
             tipo: 'text',
             deshabilitar: true,
-        },
-        {
-            etiqueta: 'input',
-            claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
-            nombre: 'CorreoElectronicoAlterno',
-            label_i18n: 'correo_alterno',
-            placeholder_i18n: 'correo__alterno',
-            requerido: true,
-            tipo: 'text',
-        },
+        }
     ],
 }
