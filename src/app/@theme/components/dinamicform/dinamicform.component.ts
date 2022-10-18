@@ -277,6 +277,15 @@ export class DinamicformComponent implements OnInit, OnChanges {
         return false;
       }
     }
+    if ((c.etiqueta === 'input' || c.etiqueta === 'inputConfirmacion') && c.tipo === 'email') {
+      const pattern: RegExp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+      let esValido: boolean = c.valor.match(pattern) ? true : false;
+      if(!esValido) {
+        c.clase = 'form-control form-control-danger';
+        c.alerta = 'No es un correo válido';
+        return false;
+      }
+    }
     if (c.etiqueta === 'radio') {
       if (c.valor.Id === undefined) {
         c.clase = 'form-control form-control-danger';

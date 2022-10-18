@@ -25,7 +25,7 @@
                     </tr>
                 </tbody>
             </table>
-            <span *ngIf="url_editar" (click)="editar()" class="link">
+            <span *ngIf="url_editar && gotoEdit" (click)="editar()" class="link">
         <i class="ion-edit"></i>{{ 'GLOBAL.actualizar' | translate}}</span>
         </div>
     </nb-card-body>

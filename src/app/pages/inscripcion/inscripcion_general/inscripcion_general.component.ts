@@ -15,6 +15,7 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
+import * as moment from 'moment';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -154,6 +155,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   tieneEnfasis: boolean = false;
   enfasis: any = [];
 
+  puedeInscribirse: boolean = false;
+  soloPuedeVer: boolean = false;
+
   constructor(
     private listService: ListService,
     private popUpManager: PopUpManager,
@@ -259,6 +263,38 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       },
     );
+  }
+
+  checkEventoInscripcion() {
+    if(this.selectedValue) {
+      let EventosPrograma = this.posgrados.find((EventsProgram) => EventsProgram.ProyectoId == this.selectedValue);
+      if (EventosPrograma) {
+        if (EventosPrograma.EventoInscripcion) {
+          let fechafin = moment(EventosPrograma.EventoInscripcion.FechaFinEvento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+          fechafin.setDate(fechafin.getDate() + 1);
+
+          let ahora = moment().tz("America/Bogota").toDate();
+          
+          if(fechafin > ahora) {
+            console.log("aún puede matricular");
+            this.puedeInscribirse = true;
+          } else {
+            this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_puede_inscribirse'));
+            this.puedeInscribirse = false;
+            this.soloPuedeVer = true;
+          }
+        } else {
+          this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_hay_programa_evento'));
+          this.puedeInscribirse = false;
+          this.soloPuedeVer = false;
+        }
+      } else {
+        this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_hay_programa_evento'));
+        this.puedeInscribirse = false;
+        this.soloPuedeVer = false;
+      }
+    }
+    localStorage.setItem("goToEdit", String(this.puedeInscribirse));
   }
 
   loadTipoInscripcion(IdTipo: number) {
@@ -1138,6 +1174,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     } else {
       this.tieneEnfasis = false;
       this.enfasis = [];
+    }
+    if (this.enfasisSelected) {
+      this.checkEventoInscripcion();
     }
     switch (this.selectedTipo) {
       case ('Pregrado'):

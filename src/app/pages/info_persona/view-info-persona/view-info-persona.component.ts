@@ -30,6 +30,7 @@ export class ViewInfoPersonaComponent implements OnInit {
   idSoportePoblacion: number = undefined;
   docDiscapacidad: any;
   docPoblacion: any;
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set name(persona_id: number) {
@@ -53,6 +54,7 @@ export class ViewInfoPersonaComponent implements OnInit {
     private popUpManager: PopUpManager) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
     // this.loadInfoPersona();
   }
 

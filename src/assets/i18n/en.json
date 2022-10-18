@@ -1310,7 +1310,9 @@
         "inscripcion_general": "General information",
         "generar_matricula": "Generate registration receipt",
         "persona_ya_existe": "The SGA system has found personal information related to the document number filled out!",
-        "info_persona_ya_existe": "In order to avoid duplication of information, the data found will be used to continue the registration process.\nIf you consider that the data presented does not coincide, you must make a formal request to the Systems Advisory Office, which will review the veracity of the data."
+        "info_persona_ya_existe": "In order to avoid duplication of information, the data found will be used to continue the registration process.\nIf you consider that the data presented does not coincide, you must make a formal request to the Systems Advisory Office, which will review the veracity of the data.",
+        "no_hay_programa_evento": "The program has not yet been assigned to a calendar or registration dates have not yet been defined.",
+        "no_puede_inscribirse": "You can't register, the registration period has finished."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",

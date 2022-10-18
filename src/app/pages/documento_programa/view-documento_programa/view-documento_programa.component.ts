@@ -25,6 +25,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   dataSop: Array<any>;
   docSoporte = [];
   variable = this.translate.instant('GLOBAL.tooltip_ver_registro')
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set info(info: number) {
@@ -55,6 +56,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     private userService: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
   }
 
   useLanguage(language: string) {

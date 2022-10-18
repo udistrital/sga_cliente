@@ -139,10 +139,14 @@ export class ListExperienciaLaboralComponent implements OnInit {
           this.source.load(this.data);
         } else if (response !== null && response.Data.Code === '404') {
           this.popUpManager.showToast('info', this.translate.instant('experiencia_laboral.no_data'));
+          this.getPercentage(0);
+          this.source.load([]);
         } else {
           this.showToast('error', this.translate.instant('GLOBAL.error'),
             this.translate.instant('experiencia_laboral.error'));
-        }
+            this.getPercentage(0);
+            this.source.load([]);
+          }
         this.loading = false;
       },
       (error: HttpErrorResponse) => {
@@ -154,6 +158,8 @@ export class ListExperienciaLaboralComponent implements OnInit {
           footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+        this.getPercentage(0);
+        this.source.load([]);
       });
   }
 
