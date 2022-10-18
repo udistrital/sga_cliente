@@ -84,6 +84,9 @@ export class CrudPropuestaGradoComponent implements OnInit {
     private popUpManager: PopUpManager,
     private newNuxeoService: NewNuxeoService,
     private toasterService: ToasterService) {
+      this.listService.findGrupoInvestigacion();
+      this.listService.findLineaInvestigacion();
+      this.listService.findTipoProyecto();
     this.formPropuestaGrado = FORM_PROPUESTA_GRADO;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -92,8 +95,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
     this.loading = true;
     this.cargarValores().then(aux => {
       this.loadLists();
-      this.loadPropuestaGrado();
     });
+    this.loadPropuestaGrado();
   }
 
   async cargarValores() {
@@ -256,9 +259,11 @@ export class CrudPropuestaGradoComponent implements OnInit {
                         const r = <any>res;
                         if (r !== null && r.Type !== 'error') {
                           this.info_propuesta_grado = <PropuestaGrado><unknown>res;
+                          this.loading = false;
                           this.eventChange.emit(true);
                           this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_registrada'));
                         } else {
+                          this.loading = false;
                           this.popUpManager.showErrorToast(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
                         }
                       },
@@ -343,6 +348,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
                 this.eventChange.emit(true);
                 this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
               } else {
+                this.loading = false;
                 this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
               }
               this.loading = false;

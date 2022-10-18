@@ -22,6 +22,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
   estado_inscripcion: number;
   FormatoProyecto: any;
   variable = this.translate.instant('GLOBAL.tooltip_ver_registro')
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set info(info: number) {
@@ -55,6 +56,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
     private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
     //this.persona_id = this.users.getPersonaId();
   }
 

@@ -494,6 +494,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
 
   postExperianciaLaboral() {
     this.loading = true;
+    console.log(this.info_experiencia_laboral)
     this.sgaMidService.post('experiencia_laboral/', this.info_experiencia_laboral)
       .subscribe(res => {
         const r = <any>res;

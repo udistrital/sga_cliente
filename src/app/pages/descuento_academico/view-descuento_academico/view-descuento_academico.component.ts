@@ -29,6 +29,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   solicituddescuento: SolicitudDescuento;
   docDesSoporte = [];
   variable = this.translate.instant('GLOBAL.tooltip_ver_registro')
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set info(info: number) {
@@ -59,6 +60,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     private sgaMidService: SgaMidService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
