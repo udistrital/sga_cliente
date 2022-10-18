@@ -20,6 +20,7 @@ export class ViewProduccionAcademicaComponent implements OnInit {
   info_produccion_academica: ProduccionAcademicaPost[];
   persona_id: number;
   inscripcion_id: number;
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set info(info: number) {
@@ -45,7 +46,8 @@ export class ViewProduccionAcademicaComponent implements OnInit {
     private users: UserService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-//    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
+    //    this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
 //    this.loadData();
   }
 

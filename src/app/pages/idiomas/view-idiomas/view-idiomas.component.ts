@@ -15,6 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ViewIdiomasComponent implements OnInit {
   persona_id: number;
   inscripcion: number;
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set info(info: number) {
@@ -46,6 +47,7 @@ export class ViewIdiomasComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
     this.loadData();
   }
 

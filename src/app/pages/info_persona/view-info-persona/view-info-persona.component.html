@@ -53,7 +53,7 @@
         <li><label><strong>
             </strong></label> </li>
       </ul> -->
-      <span *ngIf="url_editar" (click)="editar()" class="link"><i
+      <span *ngIf="url_editar && gotoEdit" (click)="editar()" class="link"><i
           class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
     </div>
   </nb-card-body>

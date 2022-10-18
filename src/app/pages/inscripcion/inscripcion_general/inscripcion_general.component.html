@@ -26,7 +26,7 @@
                 <mat-form-field style="width: 100%;">
                     <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedValue"
                         placeholder="{{ 'inscripcion.aviso_programa' | translate }}"
-                        (ngModelChange)="tipo_inscripcion()">
+                        (ngModelChange)="tipo_inscripcion()" disabled="true">
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of posgrados" [value]="item.ProyectoId">
                             {{ item.NombreProyecto }}
@@ -50,10 +50,10 @@
             <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
             <div class="row" *ngIf="!hide_header_labels">
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="selectTipo=='Pregrado' && selectedValue ||
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="puedeInscribirse && (selectTipo=='Pregrado' && selectedValue ||
                      selectTipo=='Posgrado'|| selectTipo=='Transferencia interna'||
                      selectTipo=='Reingreso' || selectTipo=='Transferencia externa'||
-                     selectTipo=='Transferencia externa'">
+                     selectTipo=='Transferencia externa')">
                     <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
                         <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -63,9 +63,9 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="selectTipo=='Pregrado' &&
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="puedeInscribirse && (selectTipo=='Pregrado' &&
                      selectedValue || selectTipo=='Posgrado' ||
-                     selectTipo=='Transferencia externa'">
+                     selectTipo=='Transferencia externa')">
                     <nb-card class="exp-card" (click)="perfil_editar('formacion_academica')">
                         <nb-card-header>{{ 'inscripcion.formacion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="experiencia_laboral"
-                    *ngIf="selectTipo=='Posgrado' && selectedValue">
+                    *ngIf="puedeInscribirse && (selectTipo=='Posgrado' && selectedValue)">
                     <nb-card class="exp-card" (click)="perfil_editar('experiencia_laboral')">
                         <nb-card-header>{{ 'inscripcion.experiencia_laboral' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -86,7 +86,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue"
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="puedeInscribirse && (selectTipo=='Posgrado' && selectedValue)"
                     id="produccion_academica">
                     <nb-card class="exp-card" (click)="perfil_editar('produccion_academica')">
                         <nb-card-header>{{ 'inscripcion.produccion_academica' | translate }}</nb-card-header>
@@ -97,7 +97,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue"
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="puedeInscribirse && (selectTipo=='Posgrado' && selectedValue)"
                     id="documento_programa">
                     <nb-card class="exp-card" (click)="perfil_editar('documento_programa')">
                         <nb-card-header>{{ 'inscripcion.documento_programa' | translate }}</nb-card-header>
@@ -108,7 +108,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue"
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="puedeInscribirse && (selectTipo=='Posgrado' && selectedValue)"
                     id="descuento_matricula">
                     <nb-card class="exp-card" (click)="perfil_editar('descuento_matricula')">
                         <nb-card-header>{{ 'inscripcion.descuento_matricula' | translate }}</nb-card-header>
@@ -119,7 +119,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue"
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="puedeInscribirse && (selectTipo=='Posgrado' && selectedValue)"
                     id="propuesta_grado">
                     <nb-card class="exp-card" (click)="perfil_editar('propuesta_grado')">
                         <nb-card-header>{{ 'inscripcion.propuesta_grado' | translate }}</nb-card-header>
@@ -130,7 +130,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="selectTipo=='Posgrado' && selectedValue">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="(soloPuedeVer || puedeInscribirse) && (selectTipo=='Posgrado' && selectedValue)">
                     <nb-card class="exp-card" (click)="perfil_editar('perfil')">
                         <nb-card-header>{{ 'inscripcion.perfil' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -141,7 +141,7 @@
             </div>
 
             <div class="row" *ngIf="hide_header_labels">
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="basic_info_button">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="puedeInscribirse && (basic_info_button)">
                     <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
                         <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -151,7 +151,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="formacion_academica_button">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="formacion_academica" *ngIf="puedeInscribirse && (formacion_academica_button)">
                     <nb-card class="exp-card" (click)="perfil_editar('formacion_academica')">
                         <nb-card-header>{{ 'inscripcion.formacion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -162,7 +162,7 @@
                 </div>
 
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="experiencia_laboral"
-                    *ngIf="experiencia_laboral">
+                    *ngIf="puedeInscribirse && (puedeInscribirse && (experiencia_laboral))">
                     <nb-card class="exp-card" (click)="perfil_editar('experiencia_laboral')">
                         <nb-card-header>{{ 'inscripcion.experiencia_laboral' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -172,7 +172,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="produccion_academica"
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="puedeInscribirse && (produccion_academica)"
                     id="produccion_academica">
                     <nb-card class="exp-card" (click)="perfil_editar('produccion_academica')">
                         <nb-card-header>{{ 'inscripcion.produccion_academica' | translate }}</nb-card-header>
@@ -183,7 +183,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="documentos_programa_button"
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="puedeInscribirse && (documentos_programa_button)"
                     id="documento_programa">
                     <nb-card class="exp-card" (click)="perfil_editar('documento_programa')">
                         <nb-card-header>{{ 'inscripcion.documento_programa' | translate }}</nb-card-header>
@@ -194,7 +194,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="" id="descuento_matricula">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="puedeInscribirse" id="descuento_matricula">
                     <nb-card class="exp-card" (click)="perfil_editar('descuento_matricula')">
                         <nb-card-header>{{ 'inscripcion.descuento_matricula' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -204,7 +204,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="" id="propuesta_grado">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="puedeInscribirse" id="propuesta_grado">
                     <nb-card class="exp-card" (click)="perfil_editar('propuesta_grado')">
                         <nb-card-header>{{ 'inscripcion.propuesta_grado' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -214,7 +214,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="detalle_inscripcion">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="(soloPuedeVer || puedeInscribirse) && (detalle_inscripcion)">
                     <nb-card class="exp-card" (click)="perfil_editar('perfil')">
                         <nb-card-header>{{ 'inscripcion.perfil' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -234,7 +234,7 @@
                 <blockquote class="blockquote">
                     <li>{{ 'inscripcion.aviso_progreso' | translate}}</li>
                 </blockquote>
-                <button *ngIf="!es_transferencia" mat-button class="item1" [disabled]="total" (click)="realizarInscripcion()">
+                <button *ngIf="!es_transferencia" mat-button class="item1" [disabled]="total || !puedeInscribirse" (click)="realizarInscripcion()">
                     {{ 'inscripcion.inscribirse' | translate }}
                 </button>
             </div>

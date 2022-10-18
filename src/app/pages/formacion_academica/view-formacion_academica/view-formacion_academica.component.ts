@@ -16,6 +16,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   info_formacion_academica_id: number;
   organizacion: any;
   persona_id: number;
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set info(info: number) {
@@ -43,6 +44,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
     this.loadData();
   }
 

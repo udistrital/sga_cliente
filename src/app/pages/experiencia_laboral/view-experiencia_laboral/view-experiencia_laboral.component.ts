@@ -16,6 +16,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   persona_id: number;
   info_experiencia_laboral: any;
   data: Array<any>;
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set info(info: number) {
@@ -44,6 +45,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     private sanitization: DomSanitizer) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
