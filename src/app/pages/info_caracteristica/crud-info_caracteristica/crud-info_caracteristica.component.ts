@@ -339,13 +339,15 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           this.loading = true;
           this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
           this.info_info_caracteristica.Ente = this.info_persona_id;
+          //console.log("put: ", this.info_info_caracteristica); this.loading = false;
           this.sgamidService.put('persona/actualizar_complementarios', this.info_info_caracteristica)
             .subscribe(res => {
               this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                 this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
                 this.translate.instant('GLOBAL.confirmarActualizar'));
-              this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
-              this.loadInfoCaracteristica();
+              this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar')).then(() => {
+                this.loadInfoCaracteristica();
+              });
               this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab'));
             },
               (error: HttpErrorResponse) => {
@@ -388,7 +390,9 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             .subscribe(res => {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
-                this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.guardar'));
+                this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.guardar')).then(() => {
+                  this.loadInfoCaracteristica();
+                });
                 this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab'));
               }
               this.loading = false;

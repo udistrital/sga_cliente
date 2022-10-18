@@ -58,6 +58,24 @@ export class ListReducer {
     }
   }
 
+  static ListReducerInfoSocioEconomica(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.InfoSocioEconomica:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerInfoContacto(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.InfoContacto:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
   static ListReducerEPS(state: Array<any> = new Array, action) {
     switch (action.type) {
       case REDUCER_LIST.EPS:

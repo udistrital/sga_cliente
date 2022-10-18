@@ -128,6 +128,42 @@ export class ListService {
     );
   }
 
+  public findInfoSocioEconomica() {
+    this.store.select(<any>REDUCER_LIST.InfoSocioEconomica).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:9,Activo:true&limit=0')
+          .subscribe(
+            (result: any[]) => {
+              this.addList(REDUCER_LIST.InfoSocioEconomica, result);
+            },
+            error => {
+              this.addList(REDUCER_LIST.InfoSocioEconomica, []);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  public findInfoContacto() {
+    this.store.select(<any>REDUCER_LIST.InfoContacto).subscribe(
+      (list: any) => {
+        if (!list || list.length === 0) {
+          this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:10,Activo:true&limit=0')
+          .subscribe(
+            (result: any[]) => {
+              this.addList(REDUCER_LIST.InfoContacto, result);
+            },
+            error => {
+              this.addList(REDUCER_LIST.InfoContacto, []);
+            },
+          );
+        }
+      },
+    );
+  }
+
   public findClasificacionNivelIdioma() {
     this.store.select(<any>REDUCER_LIST.ClasificacionNivelIdioma).subscribe(
       (list: any) => {

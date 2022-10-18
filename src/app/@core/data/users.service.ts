@@ -33,6 +33,8 @@ export class UserService {
         UsuarioWSO2 = payload.sub? payload.sub : null;
         CorreoUsuario = payload.email ? payload.email : null;
 
+        UsuarioWSO2 = "aspirante01";
+
         console.log([DocIdentificacion, UsuarioWSO2, CorreoUsuario]);
 
         let foundId: boolean = false;
