@@ -87,5 +87,25 @@ export let FORM_INFORMACION_CONTACTO = {
       requerido: true,
       tipo: 'text',
     },
+    {
+      etiqueta: 'input',
+      claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+      nombre: 'CorreoIngreso',
+      label_i18n: 'correo_principal',
+      placeholder_i18n: 'correo_principal',
+      requerido: true,
+      deshabilitar: true,
+      tipo: 'email',
+    },
+    {
+      etiqueta: 'input',
+      claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+      nombre: 'CorreoAlterno',
+      label_i18n: 'correo_alterno',
+      placeholder_i18n: 'correo_alterno',
+      requerido: true,
+      tipo: 'email',
+    },
+    
   ],
 }

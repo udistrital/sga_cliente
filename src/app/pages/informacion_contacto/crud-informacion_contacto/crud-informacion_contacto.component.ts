@@ -14,6 +14,8 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { Store } from '@ngrx/store';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import { InfoComplementaria } from '../../../@core/data/models/terceros/info_complementaria';
 
 @Component({
   selector: 'ngx-crud-informacion-contacto',
@@ -25,6 +27,9 @@ export class CrudInformacionContactoComponent implements OnInit {
   persona_id: number;
   informacion_contacto_id: number;
   info_informacion_contacto: any;
+  InfoSocioEconomica: any;
+  InfoContacto: any;
+  IDsforPut: {estrato: 0, codigoPostal: 0, telefono: 0, direccion: 0, correoReg: 0, correoAlt: 0};
 
   @Input('informacion_contacto_id')
   set name(informacion_contacto_id: number) {
@@ -51,7 +56,8 @@ export class CrudInformacionContactoComponent implements OnInit {
     private listService: ListService,
     private userService: UserService,
     private sgaMidService: SgaMidService,
-    private toasterService: ToasterService) {
+    private toasterService: ToasterService,
+    private autenticationService: ImplicitAutenticationService) {
     this.formInformacionContacto = FORM_INFORMACION_CONTACTO;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -59,6 +65,8 @@ export class CrudInformacionContactoComponent implements OnInit {
     });
     this.loading = true;
     this.listService.findPais();
+    this.listService.findInfoSocioEconomica();
+    this.listService.findInfoContacto();
     this.loadLists();
     this.persona_id = this.userService.getPersonaId();
     this.loadInformacionContacto();
@@ -71,6 +79,7 @@ export class CrudInformacionContactoComponent implements OnInit {
       this.formInformacionContacto.campos[i].label = this.translate.instant('GLOBAL.' + this.formInformacionContacto.campos[i].label_i18n);
       this.formInformacionContacto.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' + this.formInformacionContacto.campos[i].label_i18n);
     }
+    this.formInformacionContacto.campos[this.getIndexForm('CorreoIngreso')].valor = this.autenticationService.getPayload().email;
   }
 
   useLanguage(language: string) {
@@ -206,30 +215,30 @@ export class CrudInformacionContactoComponent implements OnInit {
         InfoComplementariaTercero: [
           {
             // Estrato
-            Id: 0,
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdEstratoEnte : 0,
             TerceroId: tercero,
             InfoComplementariaId: {
-              Id: 41,
+              Id: this.InfoSocioEconomica.find(se => se.CodigoAbreviacion == "ESTRATO").Id,
             },
             Dato: JSON.stringify({ value: formData.EstratoResidencia }),
             Activo: true,
           },
           {
             // CodigoPostal
-            Id: 0,
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdCodigoEnte : 0,
             TerceroId: tercero,
             InfoComplementariaId: {
-              Id: 55,
+              Id: this.InfoContacto.find(c => c.CodigoAbreviacion == "CODIGO_POSTAL").Id,
             },
             Dato: JSON.stringify({ value: formData.CodigoPostal }),
             Activo: true,
           },
           {
             // Telefono
-            Id: 0,
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdTelefonoEnte : 0,
             TerceroId: tercero,
             InfoComplementariaId: {
-              Id: 51,
+              Id: this.InfoContacto.find(c => c.CodigoAbreviacion == "TELEFONO").Id,
             },
             Dato: JSON.stringify({
               principal: formData.Telefono,
@@ -239,10 +248,10 @@ export class CrudInformacionContactoComponent implements OnInit {
           },
           {
             // Dirección
-            Id: 0,
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdLugarEnte : 0,
             TerceroId: tercero,
             InfoComplementariaId: {
-              Id: 54,
+              Id: this.InfoContacto.find(c => c.CodigoAbreviacion == "DIRECCIÓN").Id,
             },
             Dato: JSON.stringify({
               country: formData.PaisResidencia,
@@ -252,6 +261,26 @@ export class CrudInformacionContactoComponent implements OnInit {
             }),
             Activo: true,
           },
+          {
+            // Correo
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdCorreo : 0,
+            TerceroId: tercero,
+            InfoComplementariaId: {
+              Id: this.InfoContacto.find(c => c.CodigoAbreviacion == "CORREO").Id,
+            },
+            Dato: JSON.stringify({ value: formData.CorreoIngreso }),
+            Activo: true,
+          },
+          {
+            // Correo alterno
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdCorreoAlterno : 0,
+            TerceroId: tercero,
+            InfoComplementariaId: {
+              Id: this.InfoContacto.find(c => c.CodigoAbreviacion == "CORREOALTER").Id,
+            },
+            Dato: JSON.stringify({ value: formData.CorreoAlterno }),
+            Activo: true,
+          }
         ],
       }
       if (this.info_informacion_contacto === undefined && !this.denied_acces) {
@@ -289,8 +318,9 @@ export class CrudInformacionContactoComponent implements OnInit {
                 this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                   this.translate.instant('GLOBAL.info_contacto') + ' ' +
                   this.translate.instant('GLOBAL.confirmarActualizar'));
-                this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
-                this.loadInformacionContacto();
+                this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar')).then(() => {
+                  this.loadInformacionContacto();
+                });
               }
               this.loading = false;
             },
@@ -332,15 +362,17 @@ export class CrudInformacionContactoComponent implements OnInit {
             .subscribe(res => {
               const r = <any>res;
               if (r !== null && r.Type !== 'error') {
-                this.popUpManager.showSuccessAlert(this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
+                this.loading = false;
+                this.popUpManager.showSuccessAlert(this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada')).then(() => {
+                  this.loadInformacionContacto();
+                });
                 this.showToast('info', this.translate.instant('GLOBAL.registrar'),
                   this.translate.instant('informacion_contacto_posgrado.informacion_contacto_registrada'));
-                this.clean = !this.clean;
               } else {
+                this.loading = false;
                 this.showToast('error', this.translate.instant('GLOBAL.error'),
                   this.translate.instant('informacion_contacto_posgrado.informacion_contacto_no_registrada'));
               }
-              this.loading = false;
             },
               (error: HttpErrorResponse) => {
                 this.loading = false;
@@ -389,6 +421,8 @@ export class CrudInformacionContactoComponent implements OnInit {
     this.store.select((state) => state).subscribe(
       (list) => {
         this.formInformacionContacto.campos[this.getIndexForm('PaisResidencia')].opciones = list.listPais[0];
+        this.InfoContacto = list.listInfoContacto[0];
+        this.InfoSocioEconomica = list.listInfoSocioEconomica[0];
       },
     );
   }
