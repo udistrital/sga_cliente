@@ -6,6 +6,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-view-formacion-academica',
@@ -34,14 +35,14 @@ export class ViewFormacionAcademicaComponent implements OnInit {
 
   info_formacion_academica: any;
   soporte: any;
-  documentosSoporte = [];
 
   constructor(
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private nuxeoService: NuxeoService,
     private newNuxeoService: NewNuxeoService,
-    private sanitization: DomSanitizer) {
+    private sanitization: DomSanitizer,
+    private utilidades: UtilidadesService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -77,15 +78,16 @@ export class ViewFormacionAcademicaComponent implements OnInit {
             if (element.Documento + '' !== '0') {
               soportes.push({ Id: element.Documento, key: 'DocumentoAcad' + element.Documento });
             }
-            console.log("new nux")
             this.newNuxeoService.get(soportes).subscribe(
               response => {
-                this.documentosSoporte = <Array<any>>response;
-                //if (Object.values(this.documentosSoporte).length === data.length) {
-                  //for (let i = 0; i < data.length; i++) {
-                    element.Documento = this.documentosSoporte[0];
-                  //}
-                //}
+                    element.Documento = response[0]["Documento"]; 
+                    element.DocumentoId = response[0].Id;
+                    let estadoDoc = this.utilidades.getEvaluacionDocumento(response[0].Metadatos);
+                    element.aprobado = estadoDoc.aprobado;
+                    element.estadoObservacion = estadoDoc.estadoObservacion;
+                    element.observacion = estadoDoc.observacion;
+                    element.nombreDocumento = element.ProgramaAcademico ? element.ProgramaAcademico.Nombre : '';
+                    element.tabName = this.translate.instant('GLOBAL.formacion_academica');
               },
                 (error: HttpErrorResponse) => {
                   Swal.fire({
@@ -101,7 +103,6 @@ export class ViewFormacionAcademicaComponent implements OnInit {
 
 
           })
-          console.log(data);
           this.info_formacion_academica = data;
         }
       },

@@ -10,6 +10,7 @@ import { ViewInscripcionComponent } from './view-inscripcion/view-inscripcion.co
 import { TransferenciaComponent } from './transferencia/transferencia.component';
 import { SolicitudTransferenciaComponent } from './solicitud-transferencia/solicitud-transferencia.component';
 import { DialogoDocumentosTransferenciasComponent } from './dialogo-documentos-transferencias/dialogo-documentos-transferencias.component';
+import { DialogoDocumentosComponent } from '../admision/dialogo-documentos/dialogo-documentos.component';
 
 const routes: Routes = [{
   path: '',
@@ -50,4 +51,5 @@ export const routedComponents = [
   TransferenciaComponent,
   SolicitudTransferenciaComponent,
   DialogoDocumentosTransferenciasComponent,
+  DialogoDocumentosComponent,
 ];

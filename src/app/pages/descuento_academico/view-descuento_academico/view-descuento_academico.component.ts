@@ -10,6 +10,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-view-descuento-academico',
@@ -57,7 +58,8 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     private sanitization: DomSanitizer,
     private inscripcionService: InscripcionService,
     private newNuxeoService: NewNuxeoService,
-    private sgaMidService: SgaMidService) {
+    private sgaMidService: SgaMidService,
+    private utilidades: UtilidadesService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -96,7 +98,19 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
               this.docDesSoporte = <Array<any>>response;
               this.info_descuento.forEach(info => {
                 let doc = this.docDesSoporte.find(doc => doc.Id === info.DocumentoId);
-                info.Soporte = doc;
+                if (doc !== undefined) {
+                  let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
+                  info.Soporte = {
+                    Documento: doc.Documento, 
+                    DocumentoId: doc.Id,
+                    aprobado: estadoDoc.aprobado, 
+                    estadoObservacion: estadoDoc.estadoObservacion,
+                    observacion: estadoDoc.observacion,
+                    nombreDocumento: info.DescuentosDependenciaId ? info.DescuentosDependenciaId.TipoDescuentoId ? info.DescuentosDependenciaId.TipoDescuentoId.Nombre : '' : '',
+                    tabName: this.translate.instant('inscripcion.descuento_matricula')
+                  }
+                }
+                
               });
             },
               (error: HttpErrorResponse) => {

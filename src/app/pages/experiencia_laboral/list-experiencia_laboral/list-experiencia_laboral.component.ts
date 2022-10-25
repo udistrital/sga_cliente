@@ -11,6 +11,9 @@ import { ExperienciaService } from '../../../@core/data/experiencia.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { formatDate } from '@angular/common';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { DocumentoService } from '../../../@core/data/documento.service';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { Documento } from '../../../@core/data/models/documento/documento';
 
 @Component({
   selector: 'ngx-list-experiencia-laboral',
@@ -52,7 +55,9 @@ export class ListExperienciaLaboralComponent implements OnInit {
     private experienciaService: ExperienciaService,
     private userService: UserService,
     private popUpManager: PopUpManager,
-    private organizacionService: OrganizacionService) {
+    private organizacionService: OrganizacionService,
+    private documentoService: DocumentoService,
+    private utilidades: UtilidadesService,) {
     if (this.eid !== undefined && this.eid !== null && this.eid.toString() !== '') {
       this.loadData();
     }
@@ -98,6 +103,20 @@ export class ListExperienciaLaboralComponent implements OnInit {
             return formatDate(value, 'yyyy-MM-dd', 'en');
           },
         },
+        Estado: {
+          title: this.translate.instant('admision.estado'),
+          width: '5%',
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+        },
+        Observacion: {
+          title: this.translate.instant('admision.observacion'),
+          width: '5%',
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+        },
       },
       mode: 'external',
       actions: {
@@ -136,6 +155,12 @@ export class ListExperienciaLaboralComponent implements OnInit {
           this.data = <Array<any>>response.Data.Body[1];
           this.loading = false;
           this.getPercentage(1);
+          this.data.forEach(async (expLab) => {
+            let estadoDoc = await <any>this.cargarEstadoDocumento(expLab.Soporte);
+            expLab.Estado = estadoDoc.estadoObservacion;
+            expLab.Observacion = estadoDoc.observacion;
+            this.source.load(this.data);
+          });
           this.source.load(this.data);
         } else if (response !== null && response.Data.Code === '404') {
           this.popUpManager.showToast('info', this.translate.instant('experiencia_laboral.no_data'));
@@ -161,6 +186,16 @@ export class ListExperienciaLaboralComponent implements OnInit {
         this.getPercentage(0);
         this.source.load([]);
       });
+  }
+
+  cargarEstadoDocumento(Id: any) {
+    return new Promise((resolve) => {
+      this.documentoService.get('documento/' + Id).subscribe(
+        (doc: Documento) => {
+          let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
+          resolve(estadoDoc)
+        });
+    });
   }
 
   ngOnInit() {

@@ -11,6 +11,8 @@
                                       (result)="getPercentage($event)"></ngx-crud-descuento-academico>
         <ng2-smart-table [settings]="settings"
                          [source]="source"
+                         (custom)="onAction($event)"
+                         
                          (delete)="onDelete($event)"
                          (rowSelect)="itemselec($event)"
                          (edit)="onEdit($event)"

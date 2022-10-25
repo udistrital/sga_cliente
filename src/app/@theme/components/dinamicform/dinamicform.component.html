@@ -485,7 +485,7 @@
                         </div>
 
                         <!--label-->
-                        <mat-label class="{{c.claseGrid}}" *ngSwitchCase="'label'">{{ c.label }}</mat-label>
+                        <mat-label class="{{c.claseGrid}} {{c.ocultar?'no-mostrar':''}}" *ngSwitchCase="'label'">{{ c.valor ? c.valor : c.label }}</mat-label>
                     </div>
                 </div>
             </div>

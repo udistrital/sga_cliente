@@ -565,7 +565,7 @@
 
     <!-- <div [hidden]="!show_profile"> -->
     <div *ngIf="show_profile">
-        <ngx-perfil (url_editar)="perfil_editar($event)" info_persona_id="{{this.info_persona_id}}"
+        <ngx-perfil [en_revision]="false" (revisar_doc)="revisarDocumento($event)" (url_editar)="perfil_editar($event)" info_persona_id="{{this.info_persona_id}}"
             inscripcion_id="{{this.inscripcion_id}}" imprimir="{{this.imprimir}}">
         </ngx-perfil>
     </div>

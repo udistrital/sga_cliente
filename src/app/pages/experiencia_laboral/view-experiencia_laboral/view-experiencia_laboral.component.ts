@@ -6,6 +6,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-view-experiencia-laboral',
@@ -42,7 +43,8 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     private sgaMidService: SgaMidService,
     private nuxeoService: NuxeoService,
     private newNuxeoService: NewNuxeoService,
-    private sanitization: DomSanitizer) {
+    private sanitization: DomSanitizer,
+    private utilidades: UtilidadesService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -77,22 +79,27 @@ export class ViewExperienciaLaboralComponent implements OnInit {
           this.newNuxeoService.get(soportes).subscribe(
             response => {
                 this.documentosSoporte = <Array<any>>response;
-                console.log("sop:",soportes)
-                console.log("new method",JSON.parse(JSON.stringify(this.documentosSoporte)));
                 if (Object.values(this.documentosSoporte).length === this.info_experiencia_laboral.length) {
-                  console.log("si length exp:", JSON.parse(JSON.stringify(this.info_experiencia_laboral)))
                   this.info_experiencia_laboral.forEach(info => {
                     let doc = this.documentosSoporte.find(doc => doc.Id == info.IdDoc);
-                    console.log("doc for: ", info.Soporte, " > ", doc)
                     if (doc !== undefined) {
-                      info.Soporte = doc;
+                      //info.Soporte = doc;
+                      let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
+                      info.Soporte = {
+                        Documento: doc.Documento, 
+                        DocumentoId: doc.Id,
+                        aprobado: estadoDoc.aprobado, 
+                        estadoObservacion: estadoDoc.estadoObservacion,
+                        observacion: estadoDoc.observacion,
+                        nombreDocumento: info.Cargo ? info.Cargo.Nombre : '',
+                        tabName: this.translate.instant('inscripcion.experiencia_laboral')
+                      }
                     }
                   });
                   /* for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
                     this.info_experiencia_laboral[i].Soporte = this.documentosSoporte[i];
                   } */
                 }
-                console.log("exp lab:", this.info_experiencia_laboral)
             },
               (error: HttpErrorResponse) => {
                 Swal.fire({

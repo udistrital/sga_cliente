@@ -1,6 +1,6 @@
 <div class="dinamic-form" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
   nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-  <form novalidate [formGroup]="revisionForm" (ngSubmit)="guardarRevision()" class="form-horizontal" >
+  <form novalidate [formGroup]="revisionForm" class="form-horizontal" >
     <fieldset [ngClass]="{'fieldseter': true} ">
       <legend>
         &nbsp; {{ 'admision.revisar_docs' | translate }}
@@ -10,39 +10,38 @@
           <ngx-extended-pdf-viewer [src]="documento" [height]="'65vh'" [useBrowserLocale]="true" (pdfLoaded)="docCargado()">
           </ngx-extended-pdf-viewer>
         </div>
-        <div class="col-6 d-flex align-items-start flex-column">
-          <div class="row mb-auto" style="width: 100%;">
-            <div class="col-4">
-              <mat-label>{{ 'GLOBAL.soporte_documento' | translate }}: </mat-label>
-            </div>
-            <div class="col-8">
-              <mat-label> {{ nombreDocumento }} </mat-label>
-            </div>
+        <div class="col-6" style="padding: 5%;">
+          <div class="row d-flex justify-content-center">
+            <h5><mat-label>{{tabName}}</mat-label></h5>
+          </div><br>
+          <div class="row">
+            <mat-form-field style="width: 100%;" appearance="fill">
+              <mat-label>{{ 'GLOBAL.soporte_documento' | translate }}</mat-label>
+              <input matInput placeholder="{{ 'GLOBAL.placeholder_soporte_documento' | translate }}" value="{{nombreDocumento}}" readonly>
+            </mat-form-field>
           </div>
-          <div class="row mb-auto" style="width: 100%;" *ngIf="!observando">
-            <div class="col-4">
-              <mat-label>{{ 'admision.doc_valido' | translate }}*: </mat-label>
-            </div>
-            <div class="col-8">
-              <mat-slide-toggle formControlName="aprobado"></mat-slide-toggle>
-            </div>
+          <div class="row">
+            <mat-form-field style="width: 100%;" appearance="fill">
+              <mat-label>{{ 'GLOBAL.estado' | translate }}</mat-label>
+              <input matInput placeholder="{{ 'GLOBAL.estado' | translate }}" value="{{verEstado}}" readonly>
+            </mat-form-field>
           </div>
-          <div class="row mb-auto" style="width: 100%;">
-            <div class="col-3">
-              <mat-label>{{ 'GLOBAL.observacion' | translate }}: </mat-label>
-            </div>
-            <div class="col-9">
-              <mat-form-field style="width: 100%;" *ngIf="!observando">
-                <textarea class="observacion" matInput formControlName="observacion" rows="10"></textarea>
-              </mat-form-field>
-                <textarea class="observacion" formControlName="observacion" rows="10" disabled style="width: 100%;"
-                  *ngIf="observando"></textarea>
-            </div>
+          <div class="row">
+            <mat-form-field style="width: 100%;" appearance="fill">
+              <mat-label>{{ 'GLOBAL.observacion' | translate }}</mat-label>
+              <textarea matInput rows="5" placeholder="{{ 'GLOBAL.placeholder_observacion' | translate }}" formControlName="observacion" [readonly]="observando">
+              </textarea>
+            </mat-form-field>
           </div>
-          <div class="row mt-auto ml-auto" style="width: 100%;" *ngIf="!observando">
-            <div class="col-12">
-              <button class="float-right" mat-button type="submit" [disabled]="revisionForm.invalid">{{ 'GLOBAL.guardar'
-                | translate }} </button>
+          <br><br><br>
+          <div class="row" *ngIf="!observando">
+            <div class="col-6 d-flex justify-content-center">
+              <button mat-raised-button color="warn" (click)="guardarRevision('NoAprueba')">{{ 'admision.btn_doc_No_aprobar' |
+                translate }}</button>
+            </div>
+            <div class="col-6 d-flex justify-content-center">
+              <button mat-raised-button color="primary" (click)="guardarRevision('Aprueba')">{{ 'admision.btn_doc_aprobar' |
+                translate }}</button>
             </div>
           </div>
         </div>
