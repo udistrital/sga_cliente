@@ -17,6 +17,7 @@ import { IAppState } from '../../../@core/store/app.state';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-crud-info-caracteristica',
@@ -66,7 +67,8 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     private listService: ListService,
     private nuxeo: NuxeoService,
     private newNuxeoService: NewNuxeoService,
-    private toasterService: ToasterService) {
+    private toasterService: ToasterService,
+    private utilidades: UtilidadesService) {
     this.formInfoCaracteristica = FORM_INFO_CARACTERISTICA;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -103,10 +105,14 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
       this.departamentoSeleccionado = event.valor;
       this.loadOptionsCiudadNacimiento();
     } else if (event.nombre === 'TipoDiscapacidad') {
-      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar =
-        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
-
-      if ((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0) {
+      let NoAplicaDisc = !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
+      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar = NoAplicaDisc;
+      this.formInfoCaracteristica.campos[this.getIndexForm('estadoDiscapacidad')].ocultar = NoAplicaDisc;
+      this.formInfoCaracteristica.campos[this.getIndexForm('estadoDiscapacidad')].valor = null;
+      this.formInfoCaracteristica.campos[this.getIndexForm('observacionDiscapacidad')].ocultar = NoAplicaDisc;
+      this.formInfoCaracteristica.campos[this.getIndexForm('observacionDiscapacidad')].valor = null;
+      
+      if (!NoAplicaDisc) {
         this.mensaje_discapcidades = true;
       } else {
         this.mensaje_discapcidades = false;
@@ -120,10 +126,14 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
         this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].valor = this.formInfoCaracteristica.campos[this.getIndexForm('TipoDiscapacidad')].valor.filter(data => data.Nombre !== 'NO APLICA');
       }
     } else if (event.nombre === 'TipoPoblacion') {
-      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].ocultar =
-        !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
+      let NoAplicaPob = !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
+      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].ocultar = NoAplicaPob;
+      this.formInfoCaracteristica.campos[this.getIndexForm('estadoPoblacion')].ocultar = NoAplicaPob;
+      this.formInfoCaracteristica.campos[this.getIndexForm('estadoPoblacion')].valor = null;
+      this.formInfoCaracteristica.campos[this.getIndexForm('observacionPoblacion')].ocultar = NoAplicaPob;
+      this.formInfoCaracteristica.campos[this.getIndexForm('observacionPoblacion')].valor = null;
 
-      if ((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0) {
+      if (!NoAplicaPob) {
         this.mensaje_poblacion = true;
       } else {
         this.mensaje_poblacion = false;
@@ -232,9 +242,19 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                 if (fileR['Id'] === this.formInfoCaracteristica.ComprobantePoblacion) {
                   this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].urlTemp = fileR.url;
                   this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].valor = fileR.url;
+                  let estadoDoc = this.utilidades.getEvaluacionDocumento(fileR.Metadatos);
+                  this.formInfoCaracteristica.campos[this.getIndexForm('estadoPoblacion')].valor = this.translate.instant('GLOBAL.estado') + ": " + estadoDoc.estadoObservacion;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('observacionPoblacion')].valor = this.translate.instant('GLOBAL.observacion') + ": " + estadoDoc.observacion;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('estadoPoblacion')].ocultar = false;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('observacionPoblacion')].ocultar = false;
                 } else if (fileR['Id'] === this.formInfoCaracteristica.ComprobanteDiscapacidad) {
                   this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = fileR.url;
                   this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = fileR.url;
+                  let estadoDoc = this.utilidades.getEvaluacionDocumento(fileR.Metadatos);
+                  this.formInfoCaracteristica.campos[this.getIndexForm('estadoDiscapacidad')].valor = this.translate.instant('GLOBAL.estado') + ": " + estadoDoc.estadoObservacion;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('observacionDiscapacidad')].valor = this.translate.instant('GLOBAL.observacion') + ": " + estadoDoc.observacion;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('estadoDiscapacidad')].ocultar = false;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('observacionDiscapacidad')].ocultar = false;
                 }
               })
               this.loading = false;

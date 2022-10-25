@@ -57,4 +57,27 @@ export class UtilidadesService {
     });
   }
 
+
+  getEvaluacionDocumento(MetadatosString: string) {
+    let ObjetMetadatos = { 
+        aprobado: null, 
+        estadoObservacion: this.translate.instant('GLOBAL.estado_no_definido'), 
+        observacion: ""
+    };
+    if (MetadatosString !== '') {
+        let metadatos = JSON.parse(MetadatosString);
+        if (metadatos.hasOwnProperty('aprobado') && metadatos.hasOwnProperty('observacion')) {
+            if (metadatos.aprobado) {
+                ObjetMetadatos.aprobado = true;
+                ObjetMetadatos.estadoObservacion = this.translate.instant('GLOBAL.estado_aprobado');
+            } else {
+                ObjetMetadatos.aprobado = false;
+                ObjetMetadatos.estadoObservacion = this.translate.instant('GLOBAL.estado_no_aprobado');
+            }
+            ObjetMetadatos.observacion = metadatos.observacion;
+        }
+    }
+    return ObjetMetadatos;
+  }
+
 }

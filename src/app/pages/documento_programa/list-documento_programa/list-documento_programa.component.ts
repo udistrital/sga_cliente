@@ -9,6 +9,7 @@ import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { SoporteDocumentoAux } from '../../../@core/data/models/documento/soporte_documento_aux';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-list-documento-programa',
@@ -64,6 +65,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     private inscripcionService: InscripcionService,
     private popUpManager: PopUpManager,
     private newNuxeoService: NewNuxeoService,
+    private utilidades: UtilidadesService,
   ) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -83,12 +85,12 @@ export class ListDocumentoProgramaComponent implements OnInit {
         },
         EstadoObservacion: {
           title: this.translate.instant('admision.estado'),
-          width: '10%',
+          width: '20%',
           editable: false,
         },
         Observacion: {
           title: this.translate.instant('admision.observacion'),
-          width: '60%',
+          width: '40%',
           editable: false,
         },
       },
@@ -121,7 +123,6 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
       this.inscripcion + ',DocumentoProgramaId.ProgramaId:' + this.programa + ',DocumentoProgramaId.TipoInscripcionId:' + this.tipoInscripcion + ',DocumentoProgramaId.PeriodoId:' + parseInt(sessionStorage.getItem('IdPeriodo'), 10)  + ',DocumentoProgramaId.Activo:true&limit=0').subscribe(
         (response: any[]) => {
-          console.info(Object.keys(response[0]).length)
           if (Object.keys(response[0]).length > 0) {
             response.forEach(async soporte => {
               const documento: SoporteDocumentoAux = new SoporteDocumentoAux();
@@ -156,21 +157,9 @@ export class ListDocumentoProgramaComponent implements OnInit {
     return new Promise((resolve) => {
       this.documentoService.get('documento/' + documento.DocumentoId).subscribe(
         (doc: Documento) => {
-          if (doc.Metadatos == '') {
-            this.estadoObservacion = '';
-            this.observacion = '';
-          } else {
-            if (doc.Metadatos !== '') {
-              const metadatos = JSON.parse(doc.Metadatos);
-              if (metadatos.aprobado) {
-                this.estadoObservacion = 'Aprobado';
-                this.observacion = metadatos.observacion;
-              } else {
-                this.estadoObservacion = 'No aprobado';
-                this.observacion = metadatos.observacion;
-              }
-            }
-          }
+          let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
+          this.estadoObservacion = estadoDoc.estadoObservacion;
+          this.observacion = estadoDoc.observacion;
           resolve(this.estadoObservacion)
         });
     });
@@ -217,7 +206,6 @@ export class ListDocumentoProgramaComponent implements OnInit {
         key: event.data.DocumentoId,
       },
     ];
-    console.log("new nux prog")
     this.newNuxeoService.get(filesToGet).subscribe(
       response => {
         const filesResponse = <any>response;

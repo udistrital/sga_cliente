@@ -84,7 +84,6 @@ export class PerfilComponent implements OnInit {
     const ifLoaded = await this.ifFinishLoaded(event)
     if (ifLoaded) {
       this.onDestroy$.next();
-      console.log("spiners", ifLoaded)
       this.generarComprobante()
         .then(() => {
           this.imprimir = false;
@@ -128,12 +127,11 @@ export class PerfilComponent implements OnInit {
   }
 
   abrirDocumento(documento: any) {
-    console.log("FROM PERFIL: ",documento);
     if (this.en_revision) {
       this.revisar_doc.emit(documento)
     } else {
-      console.log("showing doc..:",documento.Documento.changingThisBreaksApplicationSecurity)
-      window.open(documento.Documento.changingThisBreaksApplicationSecurity)
+      documento.observando = true; 
+      this.revisar_doc.emit(documento)
     }
   }
 

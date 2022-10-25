@@ -33,27 +33,21 @@ export class UserService {
         UsuarioWSO2 = payload.sub? payload.sub : null;
         CorreoUsuario = payload.email ? payload.email : null;
 
-        console.log([DocIdentificacion, UsuarioWSO2, CorreoUsuario]);
-
         let foundId: boolean = false;
 
         if (DocIdentificacion) {
-          console.log("por doc...")
           await this.findByDocument(DocIdentificacion, UsuarioWSO2, CorreoUsuario).then(found => foundId = true).catch(e => foundId = false);
         }
 
         if (UsuarioWSO2 && !foundId) {
-          console.log("por user...")
           await this.findByUserEmail(UsuarioWSO2).then(found => foundId = true).catch(e => foundId = false);
         }
 
         if (CorreoUsuario && !foundId) {
-          console.log("por mail...")
           await this.findByUserEmail(CorreoUsuario).then(found => foundId = true).catch(e => foundId = false);
         }
 
         if (!foundId) {
-          console.log("pailas... o Nuevo registro?")
           window.localStorage.setItem('persona_id', '0');
         }
 
@@ -67,9 +61,7 @@ export class UserService {
       .subscribe((res: any[]) => {
         if (res !== null) {
           if (res.length > 1) {
-            console.log("Hay varios documentos");
             let tercero = null;
-            console.log("Check por User...");
             for (let i = 0; i < res.length; i++) {
               if (res[i].TerceroId.UsuarioWSO2 == Usuario){
                 tercero = res[i].TerceroId;
@@ -77,7 +69,6 @@ export class UserService {
               }
             }
             if(tercero == null){
-              console.log("Check por Correo...");
               for (let i = 0; i < res.length; i++) {
                 if (res[i].TerceroId.UsuarioWSO2 == Correo){
                   tercero = res[i].TerceroId;
@@ -88,11 +79,9 @@ export class UserService {
             if(tercero != null) {
               this.user = tercero;
             } else {
-              console.log("No coinciden, se toma el más reciente");
               this.user = res[0].TerceroId;
             }
           } else {
-            console.log("Solo hay uno")
             this.user = res[0].TerceroId;
           }
           
@@ -100,7 +89,6 @@ export class UserService {
           if (Object.keys(this.user).length !== 0) {
             this.user$.next(this.user);
             this.userSubject.next(this.user);              // window.localStorage.setItem('ente', res[0].Ente);
-            console.log(this.user.Id);
             window.localStorage.setItem('persona_id', this.user.Id);
             resolve(true);
           } else {
@@ -124,7 +112,6 @@ export class UserService {
           if (Object.keys(this.user).length !== 0) {
             this.user$.next(this.user);
             this.userSubject.next(this.user);
-            console.log(this.user.Id);
             window.localStorage.setItem('persona_id', this.user.Id);
             resolve(true);
           } else {
