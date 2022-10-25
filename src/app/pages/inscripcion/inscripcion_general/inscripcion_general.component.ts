@@ -16,6 +16,8 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
 import * as moment from 'moment';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogoDocumentosComponent } from '../../admision/dialogo-documentos/dialogo-documentos.component';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -169,6 +171,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private parametrosService: ParametrosService,
     private programaService: ProyectoAcademicoService,
     private sgaMidService: SgaMidService,
+    private dialog: MatDialog
   ) {
     sessionStorage.setItem('TerceroId', this.userService.getPersonaId().toString());
     this.info_persona_id = this.userService.getPersonaId();
@@ -276,7 +279,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           let ahora = moment().tz("America/Bogota").toDate();
           
           if(fechafin > ahora) {
-            console.log("aún puede matricular");
             this.puedeInscribirse = true;
           } else {
             this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_puede_inscribirse'));
@@ -1218,5 +1220,14 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   mostrarBarraExterna() {
     this.ocultarBarra.emit(false);
+  }
+
+  revisarDocumento(doc: any) {
+      const assignConfig = new MatDialogConfig();
+      assignConfig.width = '1300px';
+      assignConfig.height = '750px';
+      assignConfig.data = { documento: doc }
+      const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
+//      dialogo.afterClosed().subscribe(data => {});
   }
 }

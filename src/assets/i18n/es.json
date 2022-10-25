@@ -345,6 +345,10 @@
         "placeholder_telefono_universidad": "Ej: 55555555",
         "programa_academico": "Programa académico",
         "placeholder_programa_academico": "Ej: Ingeniería de sistemas",
+        "programa_academico_no_encontrado": "El programa que ha buscado no se encuentra",
+        "crear_programa_academico": "¿Desea crear el programa académico?",
+        "programa_creado_ok": "El programa académico se ha guardado con exito",
+        "programa_creado_fail": "No se ha podido guardar el programa académico",
         "titulo_trabajo_grado": "Título del trabajo de grado",
         "placeholder_titulo_trabajo_grado": "Ej: Título del trabajo de grado",
         "descripcion_trabajo_grado": "Descripción del trabajo de grado",
@@ -534,7 +538,8 @@
         "tipo_inscrip": "Tipo de inscripción",
         "placeholder_tipo_inscrip": "Ej: Normal",
         "observacion": "Observaciones",
-        "placeholder_observacion": "",
+        "placeholder_observacion": "Ej: El documento no ha sido aprobado por tal motivo...",
+        "observacion_requerida": "El campo de observaciones no puede estar vacío",
         "documento_trans": "Documento de identidad",
         "placeholder_documento_trans": "Ej: 12345678",
         "fecha_expe": "Fecha Expedición Documento",
@@ -662,7 +667,10 @@
         "placeholder_verificar_numero_documento": "Ej: 55555555",
         "no_coinciden": "Los datos no coinciden",
         "persona_actualizado": "¡Su información personal ha sido actualizada correctamente!",
-        "error_actualizar_persona": "No se ha podido actualizar su información personal"
+        "error_actualizar_persona": "No se ha podido actualizar su información personal",
+        "estado_aprobado": "Aprobado",
+        "estado_no_aprobado": "No aprobado",
+        "estado_no_definido": "Por definir"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1596,7 +1604,9 @@
         "cupos_proyectos": "Asignación de cupos por proyecto curricular",
         "error_no_aspirantes": "No existen aspirantes por evaluar para el periodo y proyecto seleccionado",
         "titulo_no_aspirantes": "No hay aspirantes por evaluar",
-        "error_no_proyecto": "No hay proyectos curriculares disponibles"
+        "error_no_proyecto": "No hay proyectos curriculares disponibles",
+        "btn_doc_aprobar": "Aprobar documento",
+        "btn_doc_No_aprobar": "Rechazar documento"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

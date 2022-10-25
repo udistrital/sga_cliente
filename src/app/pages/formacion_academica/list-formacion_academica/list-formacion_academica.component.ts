@@ -8,6 +8,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { DocumentoService } from '../../../@core/data/documento.service';
+import { Documento } from '../../../@core/data/models/documento/documento';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-list-formacion-academica',
@@ -37,7 +40,9 @@ export class ListFormacionAcademicaComponent implements OnInit {
     private popUpManager: PopUpManager,
     private toasterService: ToasterService,
     private userService: UserService,
-    private sgaMidService: SgaMidService) {
+    private sgaMidService: SgaMidService,
+    private documentoService: DocumentoService,
+    private utilidades: UtilidadesService,) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
     });
@@ -57,21 +62,21 @@ export class ListFormacionAcademicaComponent implements OnInit {
       columns: {
         Nit: {
           title: this.translate.instant('GLOBAL.nit'),
-          width: '10%',
+          width: '5%',
           valuePrepareFunction: (value) => {
             return value;
           },
         },
         NombreCompleto: {
           title: this.translate.instant('GLOBAL.nombre_universidad'),
-          width: '28%',
+          width: '25%',
           valuePrepareFunction: (value) => {
             return value;
           },
         },
         Ubicacion: {
           title: this.translate.instant('GLOBAL.pais_universidad'),
-          width: '20%',
+          width: '15%',
           valuePrepareFunction: (value) => {
             return value;
           },
@@ -93,6 +98,20 @@ export class ListFormacionAcademicaComponent implements OnInit {
         FechaFinalizacion: {
           title: this.translate.instant('GLOBAL.fecha_fin'),
           width: '10%',
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+        },
+        Estado: {
+          title: this.translate.instant('admision.estado'),
+          width: '5%',
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+        },
+        Observacion: {
+          title: this.translate.instant('admision.observacion'),
+          width: '5%',
           valuePrepareFunction: (value) => {
             return value;
           },
@@ -132,11 +151,14 @@ export class ListFormacionAcademicaComponent implements OnInit {
       } else if (response !== null && response.Response.Code === '200') {
         const data = <Array<any>>response.Response.Body[0];
         const dataInfo = <Array<any>>[];
-        data.forEach(element => {
+        data.forEach(async element => {
           const FechaI = element.FechaInicio;
           const FechaF = element.FechaFinalizacion;
           element.FechaInicio = FechaI.substring(0, 2) + '-' + FechaI.substring(2, 4) + '-' + FechaI.substring(4, 8);
           element.FechaFinalizacion = FechaF.substring(0, 2) + '-' + FechaF.substring(2, 4) + '-' + FechaF.substring(4, 8);
+          let estadoDoc = await <any>this.cargarEstadoDocumento(element.Documento);
+          element.Estado = estadoDoc.estadoObservacion;
+          element.Observacion = estadoDoc.observacion;
           dataInfo.push(element);
           this.getPercentage(1);
           this.source.load(dataInfo);
@@ -150,6 +172,16 @@ export class ListFormacionAcademicaComponent implements OnInit {
     (error: HttpErrorResponse) => {
       this.loading = false;
       this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+    });
+  }
+
+  cargarEstadoDocumento(Id: any) {
+    return new Promise((resolve) => {
+      this.documentoService.get('documento/' + Id).subscribe(
+        (doc: Documento) => {
+          let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
+          resolve(estadoDoc)
+        });
     });
   }
 

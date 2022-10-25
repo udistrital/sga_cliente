@@ -112,7 +112,7 @@ import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
     CrudAsignacionCupoComponent,
     DialogoCriteriosComponent,
     CheckboxAssistanceComponent,
-    DialogoDocumentosComponent,
+    //DialogoDocumentosComponent,
     ListDocumentoProyectoComponent,
     SelectDocumentoProyectoComponent,
     CrudDocumentoProyectoComponent,

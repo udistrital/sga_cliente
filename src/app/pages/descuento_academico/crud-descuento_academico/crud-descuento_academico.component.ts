@@ -41,7 +41,13 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   @Input('descuento_academico_id')
   set name(descuento_academico_id: number) {
     this.descuento_academico_id = descuento_academico_id;
-    this.loadDescuentoAcademico();
+    if (this.descuento_academico_id > 0){
+      this.popUpManager.showAlert(
+        this.translate.instant('GLOBAL.info'),
+        this.translate.instant('documento_programa.documento_cambiar'),
+      );
+      this.loadDescuentoAcademico();
+    }
   }
 
   @Input('persona_id')
@@ -258,7 +264,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
               const files = [];
               if (this.temp.DocumentoId + '' !== '0') {
                 files.push({ Id: this.temp.DocumentoId });
-              }
+              } else { this.loading = false; }
               this.newNuxeoService.get(files).subscribe(
                 response => {
                   const filesResponse = <any>response;
@@ -273,10 +279,13 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                       { Id: 0, Nombre: 'No registrado' };
                     this.info_descuento_academico.Periodo = this.periodo;
                     this.info_descuento_academico.Documento = filesResponse[0].url;
+                    this.loading = false;
+                  } else {
+                    this.loading = false;
                   }
-                  this.loading = false;
                 },
                   (error: HttpErrorResponse) => {
+                    this.loading = false;
                     Swal.fire({
                       icon: 'error',
                       title: error.status + '',
@@ -287,8 +296,9 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
                       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                     });
                   });
+            } else {
+              this.loading = false;
             }
-            this.loading = false;
           },
           (error: HttpErrorResponse) => {
             this.loading = false;
@@ -610,7 +620,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadDescuentoAcademico();
+    //this.loadDescuentoAcademico();
   }
 
   setPercentage(event) {

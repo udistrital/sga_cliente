@@ -72,7 +72,7 @@ export const routedComponents = [
   AdministradorCriteriosComponent,
   DialogoCriteriosComponent,
   EvaluacionAspirantesComponent,
-  DialogoDocumentosComponent,
+  //DialogoDocumentosComponent,
   EvaluacionDocumentosInscritosComponent,
   AsignarDocumentosDescuentosComponent,
 ];
