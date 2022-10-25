@@ -1,3 +1,5 @@
+import { environment } from "../../../../environments/environment"
+
 export let FORM_FORMACION_ACADEMICA = {
   // titulo: 'FormacionAcademica',
   tipo_formulario: 'mini',
@@ -77,7 +79,7 @@ export let FORM_FORMACION_ACADEMICA = {
       deshabilitar: true,
       tipo: 'text',
     },
-    {
+    /* {
       etiqueta: 'select',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       nombre: 'ProgramaAcademico',
@@ -87,6 +89,21 @@ export let FORM_FORMACION_ACADEMICA = {
       tipo: 'ProgramaAcademico',
       key: 'Nombre',
       opciones: [],
+    }, */
+    {
+      etiqueta: 'autocomplete',
+      claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+      nombre: 'ProgramaAcademico',
+      label_i18n: 'programa_academico',
+      placeholder_i18n: 'programa_academico',
+      path: environment.PARAMETROS_SERVICE,
+      query: "parametro?query=Nombre__icontains:ROLE_TEXT_HERE,TipoParametroId__Id:60&limit=0",
+      keyToFilter: 'ROLE_TEXT_HERE',
+      requerido: true,
+      tipo: 'text',
+      key: 'Nombre',
+      opciones: [],
+      entrelazado: true,
     },
     {
       etiqueta: 'mat-date',
