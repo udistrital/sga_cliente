@@ -13,4 +13,5 @@ export class InfoIdioma {
   NivelHablaId: NivelIdioma;
   NivelLeeId: NivelIdioma;
   NivelId: ClasificacionNivelIdioma;
+  Activo: boolean;
 }

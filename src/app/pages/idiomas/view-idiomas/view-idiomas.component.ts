@@ -60,7 +60,7 @@ export class ViewIdiomasComponent implements OnInit {
   }
 
   loadData(): void {
-    this.idiomaService.get('conocimiento_idioma?query=TercerosId:' + this.persona_id +
+    this.idiomaService.get('conocimiento_idioma?query=Activo:true,TercerosId:' + this.persona_id +
       '&limit=0')
       .subscribe(res => {
         if (res !== null && JSON.stringify(res[0]) !== '{}') {
