@@ -13,6 +13,7 @@ export class ButtonPaymentComponent implements ViewCell, OnInit {
   notPaid: boolean;
   isPaid: boolean;
   vencido: boolean;
+  yaInscrito: boolean;
 
   @Input() value: string | number;
   @Input() rowData: any;
@@ -34,6 +35,11 @@ export class ButtonPaymentComponent implements ViewCell, OnInit {
       this.notPaid = false;
       this.isPaid = false;
       this.vencido = true;
+    }
+    if(this.rowData.EstadoInscripcion !== 'Inscripción solicitada'){
+      this.yaInscrito = true;
+    } else {
+      this.yaInscrito = false;
     }
   }
 

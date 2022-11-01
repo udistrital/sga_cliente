@@ -87,6 +87,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   info_persona_id: number;
   info_ente_id: number;
   estado_inscripcion: number;
+  estado_inscripcion_nombre: string = "";
+  estaInscrito: boolean = false;
   info_info_persona: any;
   usuariowso2: any;
   datos_persona: any;
@@ -279,7 +281,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           if(fechafin > ahora) {
             this.puedeInscribirse = true;
           } else {
-            this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_puede_inscribirse'));
+            if(!this.estaInscrito){
+              this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_puede_inscribirse'));
+            }
             this.puedeInscribirse = false;
             this.soloPuedeVer = true;
           }
@@ -714,6 +718,15 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   async ngOnInit() {
+
+    this.estado_inscripcion_nombre = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase();
+    
+    if (this.estado_inscripcion_nombre !== "INSCRIPCIÓN SOLICITADA") {
+      this.Campo1Control.disable();
+      this.enfasisControl.disable();
+      this.estaInscrito = true;
+    }
+
     await this.loadLists();
 
     // Consulta si hay información en el tab de información personal

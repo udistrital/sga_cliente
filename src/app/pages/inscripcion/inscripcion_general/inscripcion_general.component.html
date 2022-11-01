@@ -13,20 +13,26 @@
                     {{ 'inscripcion.alerta_preinscripcion' | translate }}
                 </div>
 
-                <div class="col-12">
-                    {{ 'inscripcion.periodo' | translate }}: {{ this.inscripcion.PeriodoId }}
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ 'inscripcion.nivel' | translate }}: {{
-                    this.inscripcion.Nivel }}
+                <div class="row">
+                    <div class="col-3">
+                        {{ 'inscripcion.periodo' | translate }}: {{ this.inscripcion.PeriodoId }}
+                    </div>
+                    <div class="col-2">
+                        {{ 'inscripcion.nivel' | translate }}: {{ this.inscripcion.Nivel }}
+                    </div>
+                    <div class="col-3">
+                        {{ 'inscripcion.tipo' | translate }}: {{ this.inscripcion.TipoInscripcion }}
+                    </div>
+                    <div class="col-4">
+                        {{ 'inscripcion.estado_inscripcion' | translate }}: {{ estado_inscripcion_nombre }}
+                    </div>
                 </div>
-                <br />
-                <div class="col-12">
-                    {{ 'inscripcion.tipo' | translate }}: {{ this.inscripcion.TipoInscripcion }}
-                </div>
+                <br>
 
                 <mat-form-field style="width: 100%;">
                     <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedValue"
                         placeholder="{{ 'inscripcion.aviso_programa' | translate }}"
-                        (ngModelChange)="tipo_inscripcion()" disabled="true">
+                        (ngModelChange)="tipo_inscripcion()" >
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of posgrados" [value]="item.ProyectoId">
                             {{ item.NombreProyecto }}
@@ -226,7 +232,7 @@
 
         </nb-card-header>
 
-        <nb-card-body class="example-items-rows trans text-center">
+        <nb-card-body class="example-items-rows trans text-center" *ngIf="!estaInscrito">
             <div class="col-md-12">
                 <ngb-progressbar showValue="true" type="success" [value]="percentage_total" [animated]="true"
                     [height]="'15px'">
