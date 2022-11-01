@@ -119,7 +119,7 @@ export class ListIdiomasComponent implements OnInit {
     this.loading = true;
     this.persona_id = this.userService.getPersonaId() || 1;
     // no tiene campo Activo ??? Activo:true,
-    this.idiomaService.get('conocimiento_idioma?query=TercerosId:' + this.persona_id +
+    this.idiomaService.get('conocimiento_idioma?Activo:true,query=TercerosId:' + this.persona_id +
       '&limit=0')
       .subscribe(res => {
         if (res !== null && JSON.stringify(res[0]) !== '{}') {
@@ -155,9 +155,9 @@ export class ListIdiomasComponent implements OnInit {
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
-          //event.data.Activo = false;
-          //this.idiomaService.put('conocimiento_idioma', event.data).subscribe(res => {
-          this.idiomaService.delete('conocimiento_idioma', event.data).subscribe(res => {
+          event.data.Activo = false;
+          this.idiomaService.put('conocimiento_idioma', event.data).subscribe(res => {
+          //this.idiomaService.delete('conocimiento_idioma', event.data).subscribe(res => {
             if (res !== null) {
               this.loadData();
               this.popUpManager.showInfoToast(
