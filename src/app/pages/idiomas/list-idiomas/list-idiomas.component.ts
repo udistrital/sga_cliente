@@ -119,7 +119,7 @@ export class ListIdiomasComponent implements OnInit {
     this.loading = true;
     this.persona_id = this.userService.getPersonaId() || 1;
     // no tiene campo Activo ??? Activo:true,
-    this.idiomaService.get('conocimiento_idioma?Activo:true,query=TercerosId:' + this.persona_id +
+    this.idiomaService.get('conocimiento_idioma?query=Activo:true,TercerosId:' + this.persona_id +
       '&limit=0')
       .subscribe(res => {
         if (res !== null && JSON.stringify(res[0]) !== '{}') {

@@ -553,7 +553,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   loadPercentageIdiomas() {
     this.loading = true;
     return new Promise((resolve, reject) => {
-      this.idiomaService.get('conocimiento_idioma?query=TercerosId:' + this.info_persona_id + '&limit=0')
+      this.idiomaService.get('conocimiento_idioma?query=Activo:true,TercerosId:' + this.info_persona_id + '&limit=0')
         .subscribe(res => {
           if (res !== null && JSON.stringify(res[0]) !== '{}') {
             this.percentage_acad = this.percentage_acad + 50;
