@@ -151,6 +151,7 @@ export class CrudIdiomasComponent implements OnInit {
           // this.info_idioma.Idioma.Id !== this.idioma_examen) {
           this.popUpManager.showErrorAlert(this.translate.instant('idiomas.doble_examen'))
         } else {
+          this.info_idioma.Activo = true;
           this.idiomaService.post('conocimiento_idioma', this.info_idioma)
             .subscribe(res => {
               const r = <any>res;

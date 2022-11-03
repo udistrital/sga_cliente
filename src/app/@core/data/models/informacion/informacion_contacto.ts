@@ -9,6 +9,7 @@ export class InformacionContacto {
   CodigoPostal: string;
   Telefono: string;
   Correo: string;
+  CorreoAlterno: string;
   TelefonoAlterno: string;
   Ente: number;
   IdLugarEnte: number;
@@ -18,4 +19,6 @@ export class InformacionContacto {
   IdTelefonoEnte: number;
   IdTelefonoAlternoEnte: number;
   LocalidadResidencia: any;
+  IdCorreo: number;
+  IdCorreoAlterno: number;
 }

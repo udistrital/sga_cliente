@@ -1,12 +1,18 @@
 <!--Botón de pago cuando el recibo se encuentra en estado de "No pago"-->
 <button *ngIf="notPaid" (click)="showOptions()">
-  Pagar <i class="fa fa-arrow-circle-right"></i>
+  {{ 'inscripcion.pagar_recibo' | translate }} <i class="fa fa-arrow-circle-right"></i>
 </button>
 
 <!--Botón de pago cuando el recibo se encuentra en estado de "pago"-->
 <button *ngIf="isPaid" (click)="showInscription()"> 
-  Inscribirme <i class="fa fa-pencil"></i>
+  <ng-container *ngIf="!yaInscrito">
+    {{ 'inscripcion.btn_inscribirme' | translate }} <i class="fa fa-pencil"></i>
+  </ng-container>
+  <ng-container *ngIf="yaInscrito">
+    {{ 'inscripcion.btn_ver_inscripcion' | translate }} <i class="fa fa-eye"></i>
+  </ng-container>
+
 </button>
 
 <!--Label cuando el recibo de pago se encuentra vencido-->
-<label *ngIf="vencido">Sin pago</label>
+<label *ngIf="vencido"> {{ 'inscripcion.lbl_sin_pago' | translate }} </label>

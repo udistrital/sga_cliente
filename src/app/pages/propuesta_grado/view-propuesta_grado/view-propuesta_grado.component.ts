@@ -9,6 +9,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { CIDCService } from '../../../@core/data/cidc.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { Documento } from '../../../@core/data/models/documento/documento';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-view-propuesta-grado',
@@ -22,6 +24,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
   estado_inscripcion: number;
   FormatoProyecto: any;
   variable = this.translate.instant('GLOBAL.tooltip_ver_registro')
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set info(info: number) {
@@ -52,9 +55,11 @@ export class ViewPropuestaGradoComponent implements OnInit {
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
     private newNuxeoService: NewNuxeoService,
-    private sanitization: DomSanitizer) {
+    private sanitization: DomSanitizer,
+    private utilidades: UtilidadesService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
     //this.persona_id = this.users.getPersonaId();
   }
 
@@ -79,7 +84,6 @@ export class ViewPropuestaGradoComponent implements OnInit {
           if (temp.DocumentoId + '' !== '0') {
             files9.push({ Id: temp.DocumentoId, key: 'FormatoProyecto' });
           }
-          console.log("this get is for propuesta")
           this.newNuxeoService.get(files9).subscribe(
             response_2 => {
               const filesResponse_2 = <any>response_2;
@@ -248,17 +252,21 @@ export class ViewPropuestaGradoComponent implements OnInit {
             files9.push({ Id: temp.DocumentoId, key: 'FormatoProyecto' });
           }
           this.newNuxeoService.get(files9).subscribe(
-            response_2 => {
-              console.log("////////// nuxeo get ////////")
+            async response_2 => {
               const filesResponse_2 = <any>response_2;
               if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2 !== undefined)) {
                 temp.FormatoProyecto = filesResponse_2[0].url;
+                let estadoDoc = this.utilidades.getEvaluacionDocumento(filesResponse_2[0].Metadatos);
                 temp.Soporte = {
-                  ...temp,
-                  ...{ Documento: filesResponse_2[0].Documento },
+                  Documento: filesResponse_2[0].Documento, 
+                  DocumentoId: filesResponse_2[0].Id,
+                  aprobado: estadoDoc.aprobado, 
+                  estadoObservacion: estadoDoc.estadoObservacion,
+                  observacion: estadoDoc.observacion,
+                  nombreDocumento: temp.Nombre,
+                  tabName: this.translate.instant('inscripcion.propuesta_grado'),
                 }
                 this.FormatoProyecto = temp.DocumentoId;
-                console.log("///> ", temp)
                 if (temp.GrupoInvestigacionId === 0) {
                   temp.GrupoInvestigacion = <any>{ name: "No aplica" };
                   this.info_propuesta_grado = temp;
@@ -306,6 +314,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
                       });
                     });
                 }
+
                 this.listo.emit(true);
               }
             },

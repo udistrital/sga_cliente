@@ -13,6 +13,24 @@ export class ListReducer {
     }
   }
 
+  static ListReducerOrientacionSexual(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.OrientacionSexual:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerIdentidadGenero(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.IdentidadGenero:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
   static ListReducerGrupoSanguineo(state: Array<any> = new Array, action) {
     switch (action.type) {
       case REDUCER_LIST.Sanguineo:
@@ -34,6 +52,24 @@ export class ListReducer {
   static ListReducerFactorRH(state: Array<any> = new Array, action) {
     switch (action.type) {
       case REDUCER_LIST.RH:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerInfoSocioEconomica(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.InfoSocioEconomica:
+        return [...state, action.payload];
+      default:
+        return state;
+    }
+  }
+
+  static ListReducerInfoContacto(state: Array<any> = new Array, action) {
+    switch (action.type) {
+      case REDUCER_LIST.InfoContacto:
         return [...state, action.payload];
       default:
         return state;

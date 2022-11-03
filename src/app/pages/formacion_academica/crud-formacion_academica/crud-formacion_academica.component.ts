@@ -20,6 +20,9 @@ import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { Lugar } from './../../../@core/data/models/lugar/lugar'
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { FormControl, Validators } from '@angular/forms';
+import { ParametrosService } from '../../../@core/data/parametros.service';
+import { Parametro } from '../../../@core/data/models/parametro/parametro';
 
 @Component({
   selector: 'ngx-crud-formacion-academica',
@@ -40,6 +43,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   loading: boolean = false;
   listaPaises: Lugar[];
   nit: any;
+  nuevoPrograma: boolean = false;
 
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
@@ -82,6 +86,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   infoComplementariaUniversidadId: number = 1;
   universidadConsultada: any;
 
+  NombreProgramaNuevo = new FormControl('', [Validators.required]);
+
   constructor(
     private popUpManager: PopUpManager,
     private translate: TranslateService,
@@ -94,7 +100,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     private store: Store<IAppState>,
     private listService: ListService,
     private newNuxeoService: NewNuxeoService,
-    private toasterService: ToasterService) {
+    private toasterService: ToasterService,
+    private parametrosService: ParametrosService) {
     this.formInfoFormacionAcademica = FORM_FORMACION_ACADEMICA;
     this.formInfoNuevoTercero = NUEVO_TERCERO;
     this.construirForm();
@@ -104,7 +111,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     this.loadLists();
     this.persona_id = this.users.getPersonaId();
     this.listService.findPais();
-    this.listService.findProgramaAcademico();
+    //this.listService.findProgramaAcademico();
     this.listService.findTipoTercero();
     this.loading = true;
   }
@@ -131,7 +138,66 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     this.translate.use(language);
   }
 
-  getPais(event) { }
+  getEvento(event) {
+    if (event.nombre == "ProgramaAcademico" && event.noOpciones) {
+      this.popUpManager.showPopUpGeneric(this.translate.instant('GLOBAL.programa_academico_no_encontrado'),this.translate.instant('GLOBAL.crear_programa_academico'), "info", true).then(
+        accion => {
+          if (accion.value) {
+            this.nuevoPrograma = true;
+            this.NombreProgramaNuevo.setValue(event.valorBuscado);
+            this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('inscripcion.alerta_veracidad_informacion'));
+          }
+        }
+      )
+    }
+  }
+
+  guardarProgramaNuevo(){
+    if (this.NombreProgramaNuevo.valid) {
+      let nombre = <string>this.NombreProgramaNuevo.value;
+      let ProgramaPost: Parametro = {
+        Id: 0,
+        Nombre: nombre.toUpperCase(),
+        Descripcion: nombre.toUpperCase(),
+        CodigoAbreviacion: "",
+        Activo: true,
+        NumeroOrden: 0,
+        TipoParametroId: {
+          Id: 60,
+          Nombre: "",
+          Descripcion: "",
+          CodigoAbreviacion: "",
+          Activo: false,
+          NumeroOrden: 0
+        }
+      };
+      
+      this.popUpManager.showConfirmAlert(this.translate.instant('GLOBAL.crear_programa_academico')).then(
+        (Accion) => {
+          if (Accion.value) {
+            this.loading = true;
+            this.parametrosService.post('parametro',ProgramaPost).subscribe(
+              (response) => {
+                if (response.Status == "201") {
+                  this.loading = false;
+                  this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.programa_creado_ok'));
+                  this.nuevoPrograma = false;
+                  this.formInfoFormacionAcademica.campos[this.getIndexForm("ProgramaAcademico")].valor = response.Data;
+                } else {
+                  this.loading = false;
+                  this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.programa_creado_fail'))
+                }
+              }, 
+              (error) => {
+                this.loading = false;
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+              }
+            );
+          }
+        }
+      );
+    }
+  }
 
   getIndexForm(nombre: String): number {
     for (let index = 0; index < this.formInfoFormacionAcademica.campos.length; index++) {
@@ -610,7 +676,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       (list) => {
         this.formInfoFormacionAcademica.campos[this.getIndexForm('Pais')].opciones = list.listPais[0];
         this.formInfoNuevoTercero.campos[this.getIndexForm('Pais')].opciones = list.listPais[0];
-        this.formInfoFormacionAcademica.campos[this.getIndexForm('ProgramaAcademico')].opciones = list.listProgramaAcademico[0];
+        //this.formInfoFormacionAcademica.campos[this.getIndexForm('ProgramaAcademico')].opciones = list.listProgramaAcademico[0];
       },
     );
   }

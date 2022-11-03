@@ -15,6 +15,9 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
+import * as moment from 'moment';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogoDocumentosComponent } from '../../admision/dialogo-documentos/dialogo-documentos.component';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -84,6 +87,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   info_persona_id: number;
   info_ente_id: number;
   estado_inscripcion: number;
+  estado_inscripcion_nombre: string = "";
+  estaInscrito: boolean = false;
   info_info_persona: any;
   usuariowso2: any;
   datos_persona: any;
@@ -154,6 +159,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   tieneEnfasis: boolean = false;
   enfasis: any = [];
 
+  puedeInscribirse: boolean = false;
+  soloPuedeVer: boolean = false;
+
   constructor(
     private listService: ListService,
     private popUpManager: PopUpManager,
@@ -165,6 +173,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private parametrosService: ParametrosService,
     private programaService: ProyectoAcademicoService,
     private sgaMidService: SgaMidService,
+    private dialog: MatDialog
   ) {
     sessionStorage.setItem('TerceroId', this.userService.getPersonaId().toString());
     this.info_persona_id = this.userService.getPersonaId();
@@ -259,6 +268,39 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       },
     );
+  }
+
+  checkEventoInscripcion() {
+    if(this.selectedValue) {
+      let EventosPrograma = this.posgrados.find((EventsProgram) => EventsProgram.ProyectoId == this.selectedValue);
+      if (EventosPrograma) {
+        if (EventosPrograma.EventoInscripcion) {
+          let fechafin = moment(EventosPrograma.EventoInscripcion.FechaFinEvento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+          fechafin.setDate(fechafin.getDate() + 1);
+
+          let ahora = moment().tz("America/Bogota").toDate();
+          
+          if(fechafin > ahora) {
+            this.puedeInscribirse = true;
+          } else {
+            if(!this.estaInscrito){
+              this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_puede_inscribirse'));
+            }
+            this.puedeInscribirse = false;
+            this.soloPuedeVer = true;
+          }
+        } else {
+          this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_hay_programa_evento'));
+          this.puedeInscribirse = false;
+          this.soloPuedeVer = false;
+        }
+      } else {
+        this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_hay_programa_evento'));
+        this.puedeInscribirse = false;
+        this.soloPuedeVer = false;
+      }
+    }
+    localStorage.setItem("goToEdit", String(this.puedeInscribirse));
   }
 
   loadTipoInscripcion(IdTipo: number) {
@@ -525,7 +567,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   loadPercentageIdiomas() {
     this.loading = true;
     return new Promise((resolve, reject) => {
-      this.idiomaService.get('conocimiento_idioma?query=TercerosId:' + this.info_persona_id + '&limit=0')
+      this.idiomaService.get('conocimiento_idioma?query=Activo:true,TercerosId:' + this.info_persona_id + '&limit=0')
         .subscribe(res => {
           if (res !== null && JSON.stringify(res[0]) !== '{}') {
             this.percentage_acad = this.percentage_acad + 50;
@@ -700,6 +742,15 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   async ngOnInit() {
+
+    this.estado_inscripcion_nombre = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase();
+    
+    if (this.estado_inscripcion_nombre !== "INSCRIPCIÓN SOLICITADA") {
+      this.Campo1Control.disable();
+      this.enfasisControl.disable();
+      this.estaInscrito = true;
+    }
+
     await this.loadLists();
 
     // Consulta si hay información en el tab de información personal
@@ -1139,6 +1190,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.tieneEnfasis = false;
       this.enfasis = [];
     }
+    if (this.enfasisSelected) {
+      this.checkEventoInscripcion();
+    }
     switch (this.selectedTipo) {
       case ('Pregrado'):
         this.selectTipo = 'Pregrado';
@@ -1179,5 +1233,14 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   mostrarBarraExterna() {
     this.ocultarBarra.emit(false);
+  }
+
+  revisarDocumento(doc: any) {
+      const assignConfig = new MatDialogConfig();
+      assignConfig.width = '1300px';
+      assignConfig.height = '750px';
+      assignConfig.data = { documento: doc }
+      const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
+//      dialogo.afterClosed().subscribe(data => {});
   }
 }

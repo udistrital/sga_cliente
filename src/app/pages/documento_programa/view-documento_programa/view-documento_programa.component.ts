@@ -8,6 +8,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-view-documento-programa',
@@ -25,6 +26,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   dataSop: Array<any>;
   docSoporte = [];
   variable = this.translate.instant('GLOBAL.tooltip_ver_registro')
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set info(info: number) {
@@ -52,9 +54,11 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     private sanitization: DomSanitizer,
     private popUpManager: PopUpManager,
     private newNuxeoService: NewNuxeoService,
-    private userService: UserService) {
+    private userService: UserService,
+    private utilidades: UtilidadesService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
   }
 
   useLanguage(language: string) {
@@ -79,39 +83,22 @@ export class ViewDocumentoProgramaComponent implements OnInit {
             this.info_documento_programa.forEach(doc => {
               this.docSoporte.push({ Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId })
               doc.IdDoc = doc.DocumentoId;
-
-              this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
-                (documento: Documento) => {
-                  if (documento.Metadatos !== '') {
-                    let metadatos = JSON.parse(documento.Metadatos);
-                    if (metadatos.hasOwnProperty('aprobado')) {
-                      doc.aprobado = metadatos.aprobado;
-                      if (metadatos.aprobado) {
-                        doc.estadoObservacion = 'Aprobado';
-                        doc.observacion = metadatos.observacion;
-                      } else {
-                        doc.estadoObservacion = 'No Aprobado';
-                        doc.observacion = metadatos.observacion;
-                      }
-                    }
-                  }
-                });
-
             });
-            console.log("new nux doc prog")
-            console.log(this.docSoporte)
             this.newNuxeoService.get(this.docSoporte).subscribe(
               response => {
                 if (Object.keys(response).length > 0) {
                   this.info_documento_programa.forEach(doc => {
-                    console.log("response:", response)
                     let f = response.find(file => doc.IdDoc === file.Id);
-                    console.log("f find: ",JSON.parse(JSON.stringify(f)))
                     if (f !== undefined) {
                       doc.Documento = f["Documento"];
+                      let estadoDoc = this.utilidades.getEvaluacionDocumento(f.Metadatos);
+                      doc.aprobado = estadoDoc.aprobado;
+                      doc.estadoObservacion = estadoDoc.estadoObservacion;
+                      doc.observacion = estadoDoc.observacion;
+                      doc.nombreDocumento = doc.DocumentoProgramaId ? doc.DocumentoProgramaId.TipoDocumentoProgramaId ? doc.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre : '' : '';
+                      doc.tabName = this.translate.instant('inscripcion.documento_programa');
                     }
                   });
-                  console.log("resultado: ",this.info_documento_programa)
                 }
               },
               error => {

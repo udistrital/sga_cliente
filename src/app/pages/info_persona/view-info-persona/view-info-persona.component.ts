@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import 'style-loader!angular2-toaster/toaster.css';
 import { InfoCaracteristica } from '../../../@core/data/models/informacion/info_caracteristica';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-view-info-persona',
@@ -30,6 +31,7 @@ export class ViewInfoPersonaComponent implements OnInit {
   idSoportePoblacion: number = undefined;
   docDiscapacidad: any;
   docPoblacion: any;
+  gotoEdit: boolean = false;
 
   @Input('persona_id')
   set name(persona_id: number) {
@@ -50,9 +52,11 @@ export class ViewInfoPersonaComponent implements OnInit {
     private translate: TranslateService,
     private userService: UserService,
     private newNuxeoService: NewNuxeoService,
-    private popUpManager: PopUpManager) {
+    private popUpManager: PopUpManager,
+    private utilidades: UtilidadesService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
+    this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
     // this.loadInfoPersona();
   }
 
@@ -87,35 +91,54 @@ export class ViewInfoPersonaComponent implements OnInit {
                 if(this.info_info_caracteristica.hasOwnProperty('IdDocumentoDiscapacidad')){
                   this.idSoporteDiscapacidad = <number>this.info_info_caracteristica["IdDocumentoDiscapacidad"];
                   this.newNuxeoService.get([{Id: this.idSoporteDiscapacidad}]).subscribe(
-                    respose => {
-                      this.docDiscapacidad = respose[0];
+                    response => {
+                      let estadoDoc = this.utilidades.getEvaluacionDocumento(response[0].Metadatos);
+                      this.tipoDiscapacidad = "";
+                      let total = this.info_info_caracteristica.TipoDiscapacidad.length - 1;
+                      this.info_info_caracteristica.TipoDiscapacidad.forEach((dis, i) => {
+                        this.tipoDiscapacidad += dis.Nombre;
+                        if(i < total){
+                          this.tipoDiscapacidad += ", ";
+                        }
+                      });
+                      this.docDiscapacidad = {
+                        Documento: response[0]["Documento"],
+                        DocumentoId: response[0].Id,
+                        aprobado: estadoDoc.aprobado,
+                        estadoObservacion: estadoDoc.estadoObservacion,
+                        observacion: estadoDoc.observacion,
+                        nombreDocumento: this.tipoDiscapacidad,
+                        tabName: this.translate.instant('GLOBAL.comprobante_discapacidad'),
+                      }
                     }
                   )
-                  this.tipoDiscapacidad = "";
-                  let total = this.info_info_caracteristica.TipoDiscapacidad.length - 1;
-                  this.info_info_caracteristica.TipoDiscapacidad.forEach((dis, i) => {
-                    this.tipoDiscapacidad += dis.Nombre;
-                    if(i < total){
-                      this.tipoDiscapacidad += ", ";
-                    }
-                  });
                 }
 
                 if(this.info_info_caracteristica.hasOwnProperty('IdDocumentoPoblacion')){
                   this.idSoportePoblacion = <number>this.info_info_caracteristica["IdDocumentoPoblacion"];
                   this.newNuxeoService.get([{Id: this.idSoportePoblacion}]).subscribe(
-                    respose => {
-                      this.docPoblacion = respose[0];
+                    response => {
+                      let estadoDoc = this.utilidades.getEvaluacionDocumento(response[0].Metadatos);
+                      this.tipoPoblacion = "";
+                      let total = this.info_info_caracteristica.TipoPoblacion.length - 1;
+                      this.info_info_caracteristica.TipoPoblacion.forEach((dis, i) => {
+                        this.tipoPoblacion += dis.Nombre;
+                        if(i < total){
+                          this.tipoPoblacion += ", ";
+                        }
+                      });
+                      this.docPoblacion = {
+                        Documento: response[0]["Documento"],
+                        DocumentoId: response[0].Id,
+                        aprobado: estadoDoc.aprobado,
+                        estadoObservacion: estadoDoc.estadoObservacion,
+                        observacion: estadoDoc.observacion,
+                        nombreDocumento: this.tipoPoblacion,
+                        tabName: this.translate.instant('GLOBAL.comprobante_poblacion'),
+                      }
                     }
                   )
-                  this.tipoPoblacion = "";
-                  let total = this.info_info_caracteristica.TipoPoblacion.length - 1;
-                  this.info_info_caracteristica.TipoPoblacion.forEach((dis, i) => {
-                    this.tipoPoblacion += dis.Nombre;
-                    if(i < total){
-                      this.tipoPoblacion += ", ";
-                    }
-                  });
+                  
                 }
                 
               } else {
@@ -138,7 +161,6 @@ export class ViewInfoPersonaComponent implements OnInit {
   }
 
   verInfoCaracteristca(documento: any) {
-    documento.DocumentoId = documento.Id;
     this.revisar_doc.emit(documento);
   }
 }

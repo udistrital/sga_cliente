@@ -183,12 +183,18 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         Id: {
           title: this.translate.instant('inscripcion.inscripcion'),
           editable: false,
-          width: '10%',
+          width: '5%',
           filter: false,
         },
         ProgramaAcademicoId: {
           title: this.translate.instant('inscripcion.programa'),
-          width: '30%',
+          width: '25%',
+          editable: false,
+          filter: false,
+        },
+        EstadoInscripcion: {
+          title: this.translate.instant('inscripcion.estado_inscripcion'),
+          width: '10%',
           editable: false,
           filter: false,
         },
@@ -199,7 +205,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           filter: false,
         },
         Estado: {
-          title: this.translate.instant('inscripcion.estado'),
+          title: this.translate.instant('inscripcion.estado_recibo'),
           width: '10%',
           editable: false,
           filter: false,
@@ -231,6 +237,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               if (data.estado === false || data.estado === 'false') {
                 this.abrirPago(data.data);
               } else if (data.estado === true || data.estado === 'true') {
+                sessionStorage.setItem('IdEstadoInscripcion', data.data.EstadoInscripcion);
                 this.itemSelect({ data: data.data });
               }
             });

@@ -9,6 +9,10 @@ import Swal from 'sweetalert2';
 import 'style-loader!angular2-toaster/toaster.css';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { DocumentoService } from '../../../@core/data/documento.service';
+import { Documento } from '../../../@core/data/models/documento/documento';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-list-descuento-academico',
@@ -53,7 +57,10 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     private mid: CampusMidService,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
-    private toasterService: ToasterService) {
+    private toasterService: ToasterService,
+    private documentoService: DocumentoService,
+    private utilidades: UtilidadesService,
+    private newNuxeoService: NewNuxeoService) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
@@ -67,23 +74,41 @@ export class ListDescuentoAcademicoComponent implements OnInit {
       columns: {
         DescuentosDependenciaId: {
           title: this.translate.instant('GLOBAL.tipo_descuento_matricula'),
-          width: '100%',
+          width: '30%',
           valuePrepareFunction: (value) => {
             return value.TipoDescuentoId.Nombre;
           },
         },
+        EstadoObservacion: {
+          title: this.translate.instant('admision.estado'),
+          width: '20%',
+          editable: false,
+        },
+        Observacion: {
+          title: this.translate.instant('admision.observacion'),
+          width: '40%',
+          editable: false,
+        },
       },
       mode: 'external',
+      hideSubHeader: true,
       actions: {
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
         add: false,
-        edit: true,
+        edit: false,
         delete: false,
-      },
-      edit: {
-        editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
-      },
+        custom: [
+          {
+            name: 'open',
+            title: '<i class="nb-compose" title="' + this.translate.instant('GLOBAL.tooltip_ver_registro') + '"></i>',
+          },
+          {
+            name: 'edit',
+            title: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
+          },
+        ],
+      }
     };
   }
 
@@ -98,7 +123,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     //     this.programa = inscripciondata.ProgramaAcademicoId;
     //     this.periodo = inscripciondata.PeriodoId;
     //     this.programa = 16;
-    this.loading = true;
+    //this.loading = true;
         this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' +
           'PersonaId=' + Number(window.localStorage.getItem('persona_id')) + '&DependenciaId=' +
           Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
@@ -109,13 +134,19 @@ export class ListDescuentoAcademicoComponent implements OnInit {
                   this.getPercentage(0);
                 }else {
                   this.data = <Array<SolicitudDescuento>>r;
+                  this.data.forEach(async docDesc => {
+                    let estadoDoc = await <any>this.cargarEstadoDocumento(docDesc["DocumentoId"]);
+                    docDesc["EstadoObservacion"] = estadoDoc.estadoObservacion;
+                    docDesc["Observacion"] = estadoDoc.observacion;
+                    this.source.load(this.data);
+                  });
                   this.getPercentage(1);
                   this.source.load(this.data);
                 }
-                this.loading = false;
+                //this.loading = false;
           },
             (error: HttpErrorResponse) => {
-              this.loading = false;
+              //this.loading = false;
               Swal.fire({
                 icon: 'error',
                 title: error.status + '',
@@ -200,8 +231,53 @@ export class ListDescuentoAcademicoComponent implements OnInit {
       // });
   }
 
+  cargarEstadoDocumento(Id: any) {
+    return new Promise((resolve) => {
+      this.documentoService.get('documento/' + Id).subscribe(
+        (doc: Documento) => {
+          let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
+          resolve(estadoDoc)
+        });
+    });
+
+  }
+
   ngOnInit() {
     this.uid = 0;
+  }
+
+  onAction(event): void {
+    switch (event.action) {
+      case 'open':
+        this.onOpen(event);
+        break;
+      case 'edit':
+        this.onEdit(event);
+        break;
+    }
+  }
+
+  onOpen(event) {
+    const filesToGet = [
+      {
+        Id: event.data.DocumentoId,
+        key: event.data.DocumentoId,
+      },
+    ];
+    this.newNuxeoService.get(filesToGet).subscribe(
+      response => {
+        const filesResponse = <any>response;
+        if (Object.keys(filesResponse).length === filesToGet.length) {
+          filesToGet.forEach((file: any) => {
+            const url = filesResponse[0].url;
+            window.open(url);
+          });
+        }
+      },
+        error => {
+          this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
+        },
+      );
   }
 
   onEdit(event): void {

@@ -3,13 +3,15 @@
         <div class="col-md-12">
             <table class="table-responsive">
                 <thead>
-                    <tr><th colspan="6">{{"GLOBAL.formacion_academica" | translate}}</th></tr>
+                    <tr><th colspan="8">{{"GLOBAL.formacion_academica" | translate}}</th></tr>
                     <tr class="subheader">
                         <th>{{ 'GLOBAL.institucion' | translate }}</th>
                         <th>{{ 'GLOBAL.programa' | translate }}</th>
                         <th>{{ 'GLOBAL.nivel' | translate }}</th>
                         <th>{{ 'GLOBAL.fecha_inicio' | translate }}</th>
                         <th>{{ 'GLOBAL.fecha_fin' | translate }}</th>
+                        <th>{{ 'admision.estado' | translate }}</th>
+                        <th>{{ 'admision.observacion' | translate }}</th>
                         <th>{{ 'solicitudes.soporte' | translate }} </th>
                     </tr>
                 </thead>
@@ -20,8 +22,10 @@
                         <td></td>
                         <td>{{formacion.FechaInicio }}</td>
                         <td>{{formacion.FechaFinalizacion }}</td>
+                        <td>{{formacion.estadoObservacion?formacion.estadoObservacion:''}}</td>
+                        <td>{{formacion.observacion?formacion.observacion:''}}</td>
                         <td *ngIf="formacion.Documento !== undefined">
-                            <button mat-button type="button" (click)="abrirDocumento(formacion.Documento)">
+                            <button mat-button type="button" (click)="abrirDocumento(formacion)">
                               <i class="nb-search" title={{variable}}></i></button>
                           </td>
                           <td *ngIf="formacion.Documento === undefined">
@@ -30,7 +34,7 @@
                     </tr>
                 </tbody>
             </table>
-            <span *ngIf="url_editar" (click)="editar()" class="link"><i
+            <span *ngIf="url_editar && gotoEdit" (click)="editar()" class="link"><i
                     class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
         </div>
     </nb-card-body>
