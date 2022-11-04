@@ -215,7 +215,7 @@ export class CrudInformacionContactoComponent implements OnInit {
         InfoComplementariaTercero: [
           {
             // Estrato
-            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdEstratoEnte : 0,
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdEstratoEnte || 0 : 0,
             TerceroId: tercero,
             InfoComplementariaId: {
               Id: this.InfoSocioEconomica.find(se => se.CodigoAbreviacion == "ESTRATO").Id,
@@ -225,7 +225,7 @@ export class CrudInformacionContactoComponent implements OnInit {
           },
           {
             // CodigoPostal
-            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdCodigoEnte : 0,
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdCodigoEnte || 0 : 0,
             TerceroId: tercero,
             InfoComplementariaId: {
               Id: this.InfoContacto.find(c => c.CodigoAbreviacion == "CODIGO_POSTAL").Id,
@@ -235,7 +235,7 @@ export class CrudInformacionContactoComponent implements OnInit {
           },
           {
             // Telefono
-            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdTelefonoEnte : 0,
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdTelefonoEnte || 0 : 0,
             TerceroId: tercero,
             InfoComplementariaId: {
               Id: this.InfoContacto.find(c => c.CodigoAbreviacion == "TELEFONO").Id,
@@ -248,7 +248,7 @@ export class CrudInformacionContactoComponent implements OnInit {
           },
           {
             // Dirección
-            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdLugarEnte : 0,
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdLugarEnte || 0 : 0,
             TerceroId: tercero,
             InfoComplementariaId: {
               Id: this.InfoContacto.find(c => c.CodigoAbreviacion == "DIRECCIÓN").Id,
@@ -263,7 +263,7 @@ export class CrudInformacionContactoComponent implements OnInit {
           },
           {
             // Correo
-            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdCorreo : 0,
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdCorreo || 0 : 0,
             TerceroId: tercero,
             InfoComplementariaId: {
               Id: this.InfoContacto.find(c => c.CodigoAbreviacion == "CORREO").Id,
@@ -273,7 +273,7 @@ export class CrudInformacionContactoComponent implements OnInit {
           },
           {
             // Correo alterno
-            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdCorreoAlterno : 0,
+            Id: this.info_informacion_contacto ? this.info_informacion_contacto.IdCorreoAlterno || 0 : 0,
             TerceroId: tercero,
             InfoComplementariaId: {
               Id: this.InfoContacto.find(c => c.CodigoAbreviacion == "CORREOALTER").Id,
