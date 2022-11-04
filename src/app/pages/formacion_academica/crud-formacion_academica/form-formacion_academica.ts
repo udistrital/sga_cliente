@@ -123,7 +123,12 @@ export let FORM_FORMACION_ACADEMICA = {
       requerido: true,
       tipo: 'date',
     },
-
+    {
+      etiqueta: 'label',
+      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
+      label_i18n: "placeholder_programa_academico_autocomplete",
+      tipo: 'text',
+    },
     {
       etiqueta: 'input',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',

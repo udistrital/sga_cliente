@@ -291,7 +291,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
       }
     }
     if ((c.etiqueta === 'input' || c.etiqueta === 'inputConfirmacion') && c.tipo === 'email') {
-      const pattern: RegExp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+      const pattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
       let esValido: boolean = c.valor.match(pattern) ? true : false;
       if(!esValido) {
         c.clase = 'form-control form-control-danger';
