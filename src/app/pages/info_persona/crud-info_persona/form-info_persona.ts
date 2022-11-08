@@ -145,8 +145,18 @@ export let FORM_INFO_PERSONA = {
             label_i18n: 'correo_principal',
             placeholder_i18n: 'correo_principal',
             requerido: true,
-            tipo: 'text',
+            tipo: 'email',
             deshabilitar: true,
-        }
+        },
+        {
+          etiqueta: 'input',
+          claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
+          nombre: 'Telefono',
+          label_i18n: 'telefono',
+          placeholder_i18n: 'telefono',
+          requerido: true,
+          tipo: 'number',
+          minimo: 1000,
+        },
     ],
 }
