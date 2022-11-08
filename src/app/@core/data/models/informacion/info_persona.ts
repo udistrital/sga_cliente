@@ -19,4 +19,5 @@ export class InfoPersona {
   IdentidadGenero: IdentidadGenero;
   Usuario: string;  
   Id: number;
+  Telefono: Number;
 }
