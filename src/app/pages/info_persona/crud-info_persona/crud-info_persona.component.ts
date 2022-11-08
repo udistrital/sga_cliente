@@ -123,6 +123,9 @@ export class CrudInfoPersonaComponent implements OnInit {
             this.formInfoPersona.campos.forEach(campo => {
               campo.deshabilitar = true;
             });
+            if (temp.Telefono == null || temp.Telefono == undefined) {
+              this.popUpManager.showAlert(this.translate.instant('GLOBAL.info_persona'),this.translate.instant('inscripcion.sin_telefono'))
+            }
           }
           this.loading = false;
         },
@@ -153,7 +156,6 @@ export class CrudInfoPersonaComponent implements OnInit {
       this.loading = true;
       this.sgamidService.get('persona/existe_persona/'+doc).subscribe(
         (res) => {
-          console.log(res);
           this.loading = false;
           this.info_info_persona = res[0];
           this.datosEncontrados = {...res[0]};
@@ -188,9 +190,9 @@ export class CrudInfoPersonaComponent implements OnInit {
         EstadoCivil: { hasId: null, data: {} },
         OrientacionSexual: { hasId: null, data: {} },
         IdentidadGenero: { hasId: null, data: {} },
+        Telefono: { hasId: null, data: {} },
       } 
     }
-    console.log(infoPersona)
 
     prepareUpdate.Tercero.hasId = infoPersona.Id;
 
@@ -222,7 +224,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     }
 
     if(this.datosEncontrados.hasOwnProperty('Genero')){
-      prepareUpdate.Complementarios.EstadoCivil.hasId = this.datosEncontrados.GeneroId;
+      prepareUpdate.Complementarios.Genero.hasId = this.datosEncontrados.GeneroId;
     }
     prepareUpdate.Complementarios.Genero.data = infoPersona.Genero;
 
@@ -240,7 +242,13 @@ export class CrudInfoPersonaComponent implements OnInit {
       prepareUpdate.Complementarios.IdentidadGenero.hasId = this.datosEncontrados.IdentidadGeneroId;
     }
     prepareUpdate.Complementarios.IdentidadGenero.data = infoPersona.IdentidadGenero;
-    
+
+    if(this.datosEncontrados.hasOwnProperty('Telefono')){
+      prepareUpdate.Complementarios.Telefono.hasId = this.datosEncontrados.TelefonoId;
+    }
+    let dataTel = {principal: infoPersona.Telefono, alterno: this.datosEncontrados.TelefonoAlterno? this.datosEncontrados.TelefonoAlterno : null}
+    prepareUpdate.Complementarios.Telefono.data = JSON.stringify(dataTel);
+
     this.sgamidService.put('persona/actualizar_persona',prepareUpdate).subscribe((response) => {
       this.faltandatos = false;
       this.existePersona = false;
@@ -269,13 +277,12 @@ export class CrudInfoPersonaComponent implements OnInit {
           this.loading = true;
           const files = []
           this.info_info_persona = <any>infoPersona;
-          this.info_info_persona.FechaNacimiento = momentTimezone.tz(this.info_info_persona.FechaNacimiento, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+          this.info_info_persona.Fechaconsultar_personaNacimiento = momentTimezone.tz(this.info_info_persona.FechaNacimiento, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
           this.info_info_persona.FechaNacimiento = this.info_info_persona.FechaNacimiento + ' +0000 +0000';
           this.info_info_persona.FechaExpedicion = momentTimezone.tz(this.info_info_persona.FechaExpedicion, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
           this.info_info_persona.FechaExpedicion = this.info_info_persona.FechaExpedicion + ' +0000 +0000';
           this.info_info_persona.NumeroIdentificacion = (this.info_info_persona.NumeroIdentificacion).toString();
           this.info_info_persona.Usuario = this.autenticationService.getPayload().email;
-          console.log(this.info_info_persona);
           this.sgamidService.post('persona/guardar_persona', this.info_info_persona).subscribe(res => {
             const r = <any>res
             if (r !== null && r.Type !== 'error') {
@@ -358,7 +365,6 @@ export class CrudInfoPersonaComponent implements OnInit {
   setPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);
-    console.log(this.percentage);
     if(this.percentage < 1.0) {
       this.formInfoPersona.campos.forEach(campo => {
         if(!campo.valor) {

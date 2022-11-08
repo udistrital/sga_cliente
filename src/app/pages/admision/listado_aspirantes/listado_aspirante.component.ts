@@ -18,6 +18,9 @@ import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_ins
 import * as _ from 'lodash';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { IAppState } from '../../../@core/store/app.state';
+import { Store } from '@ngrx/store';
+import { ListService } from '../../../@core/store/services/list.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -67,6 +70,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   cuposProyecto: number;
   estadoAdmitido = null;
   estados = [];
+  IdIncripcionSolicitada = null;
+  InfoContacto: any;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -81,12 +86,16 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     private tercerosService: TercerosService,
     private toasterService: ToasterService,
     private proyectoAcademicoService: ProyectoAcademicoService,
-    private evaluacionService: EvaluacionInscripcionService) {
+    private evaluacionService: EvaluacionInscripcionService,
+    private store: Store<IAppState>,
+    private listService: ListService,) {
 
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-
+      this.createTable();
     });
+    this.listService.findInfoContacto();
+    this.loadLists();
     this.cargarPeriodo();
     this.nivel_load();
     this.show_listado = false;
@@ -95,6 +104,9 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         this.estados = state.map((e) => {
           if (e.Nombre === 'ADMITIDO') {
             this.estadoAdmitido = e;
+          }
+          if (e.Nombre === 'Inscripción solicitada') {
+            this.IdIncripcionSolicitada = e.Id;
           }
           return {
             value: e.Id,
@@ -116,6 +128,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         edit: true,
         add: false,
         position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
       },
       mode: 'internal',
       columns: {
@@ -143,7 +156,23 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           valuePrepareFunction: (value) => {
             return value;
           },
-          width: '50%',
+          width: '15%',
+        },
+        Telefono: {
+          editable: false,
+          title: this.translate.instant('GLOBAL.telefono'),
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+          width: '10%',
+        },
+        Email: {
+          editable: false,
+          title: this.translate.instant('GLOBAL.correo_principal'),
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+          width: '18%',
         },
         NotaFinal: {
           editable: false,
@@ -163,7 +192,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
-          width: '25%',
+          width: '10%',
         },
         EnfasisId: {
           editable: false,
@@ -178,7 +207,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           valuePrepareFunction: (value) => {
             return value.Nombre;
           },
-          width: '25%',
+          width: '10%',
         },
         EstadoInscripcionId: {
           title: this.translate.instant('GLOBAL.Estado'),
@@ -200,8 +229,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       },
       edit: {
         confirmSave: true,
-        editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('experiencia_laboral.tooltip_editar') + '"></i>',
-        saveButtonContent: '<i class="nb-checkmark"></i>',
+        editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('inscripcion.editar_estado_iscripcion') + '"></i>',
+        saveButtonContent: '<i class="nb-checkmark"  title="' + this.translate.instant('GLOBAL.guardar') + '"></i>',
         cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
       },
     };
@@ -284,6 +313,9 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
 
   onSaveConfirm(event) {
     const newState = this.estados.filter((data) => (data.value === parseInt(event.newData.EstadoInscripcionId, 10)))[0];
+    if (newState.value == this.IdIncripcionSolicitada) {
+      this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_cambiar_inscripcion_solicitada'))
+    } else {
     Swal.fire({
       title: this.translate.instant('GLOBAL.' + 'confirmar_actualizar'),
       text: newState.title,
@@ -311,6 +343,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         event.confirm.reject();
       }
     });
+    }
   }
 
   loadProyectos() {
@@ -371,6 +404,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.inscritos = [];
     this.admitidos = [];
 
+    let idTelefono = this.InfoContacto.find(c => c.CodigoAbreviacion == "TELEFONO").Id;
+
     this.inscripcionService.get('inscripcion?query=Activo:true,ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=NotaFinal&order=desc&limit=0').subscribe(
       (res: any) => {
         const r = <any>res
@@ -391,6 +426,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                       Inscripcion: element,
                       NumeroDocumento: undefined,
                       NombreAspirante: rTercero.NombreCompleto,
+                      Telefono: undefined,
+                      Email: rTercero.UsuarioWSO2,
                       NotaFinal: element.NotaFinal,
                       TipoInscripcionId: element.TipoInscripcionId,
                       EstadoInscripcionId: element.EstadoInscripcionId,
@@ -398,6 +435,13 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                     }
 
                     aspiranteAux.NumeroDocumento = await this.documento(element.PersonaId);
+
+                    try {
+                      aspiranteAux.Telefono = await this.telefono(element.PersonaId, idTelefono);
+                    } catch (error) {
+                      aspiranteAux.Telefono = undefined;
+                    }
+                    
 
                     if(element.EnfasisId != 0){
                       aspiranteAux.EnfasisId = await this.enfasis(element.EnfasisId);
@@ -456,6 +500,24 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       })
     });
     return promiseIdentificacion;
+  }
+
+  telefono(idTercero, idtel) {
+    return new Promise((resolve, reject) => {
+      this.tercerosService.get('info_complementaria_tercero?query=TerceroId.Id:'+idTercero+',InfoComplementariaId.Id:'+idtel+'&sortby=Id&order=desc&fields=Dato&limit=1')
+        .subscribe((response) => {
+          if (response != null && response.Status != '404' 
+              && Object.keys(response[0]).length > 0) {
+                let dataTel = JSON.parse(response[0].Dato)
+                resolve(dataTel.principal)
+          } else {
+            reject("Bad answer")
+          }
+        },
+        (error: HttpErrorResponse) => {
+          reject(error)
+        });
+    });
   }
 
   ngOnInit() {
@@ -527,6 +589,14 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         }
       })
   }
+
+public loadLists() {
+  this.store.select((state) => state).subscribe(
+    (list) => {
+      this.InfoContacto = list.listInfoContacto[0];
+    },
+  );
+}
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({

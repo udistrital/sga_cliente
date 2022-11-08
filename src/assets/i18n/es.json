@@ -125,7 +125,8 @@
             "listado_aspirante": "Listar aspirantes",
             "administrar_criterios": "Administrar criterios\nde admisión",
             "documentos_descuentos": "Asignación de documentos\ny descuentos por proyecto",
-            "solicitud_transferencias": "Solicitud de transferencias"
+            "solicitud_transferencias": "Solicitud de transferencias",
+            "definicion_suite_inscripcion_programa": "SUITE de inscripción\npor proyecto curricular"
         },
         "solicitudes": {
             "solicitudes": "Datos básicos",
@@ -187,6 +188,7 @@
         "aceptar": "Aceptar",
         "terminos_datos": "Política de privacidad y tratamiento de datos",
         "acepto_terminos": "He leído y estoy de acuerdo con los términos de la política de tratamiento y privacidad de la información",
+        "rechazo_terminos": "No ha aceptado los términos de la política de tratamiento y privacidad de la información",
         "cancelar": "Cancelar",
         "info_persona": "Información personal",
         "no_info_persona": "No hay información registrada para este Usuario. Por favor registre sus datos.",
@@ -610,12 +612,12 @@
         "cupos": "Cupos especiales",
         "numero_cupos": "Número de cupos especiales asignados por el concejo superior",
         "info_cupos": "Cupos Asignados",
-        "Nombre": "NOMBRE COMPLETO",
-        "TipoInscripcion": "TIPO DE INSCRIPCION",
-        "Estado": "ESTADO",
-        "Tipo": "TIPO",
+        "Nombre": "Nombre completo",
+        "TipoInscripcion": "Tipo de inscripción",
+        "Estado": "Estado",
+        "Tipo": "Tipo",
         "Documento": "Número Documento",
-        "Puntaje": "PUNTAJE",
+        "Puntaje": "Puntaje",
         "acciones": "Acciones",
         "pregrado": "Pregrado",
         "posgrado": "Posgrado",
@@ -671,7 +673,9 @@
         "error_actualizar_persona": "No se ha podido actualizar su información personal",
         "estado_aprobado": "Aprobado",
         "estado_no_aprobado": "No aprobado",
-        "estado_no_definido": "Por definir"
+        "estado_no_definido": "Por definir",
+        "seleccionar": "Seleccionar",
+        "obligatorio": "Obligatorio"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1369,7 +1373,10 @@
         "persona_ya_existe": "¡El sistema SGA ha encontrado información personal relacionada con el numero de documento diligenciado!",
         "info_persona_ya_existe": "Con el fin de evitar duplicado de información se utilizarán los datos encontrados para continuar el proceso de inscripción.\nSi considera que los datos presentados no coinciden debe realizar una solicitud formal a la Oficina Asesora de Sistemas quien revisará la veracidad de los datos.",
         "no_hay_programa_evento": "El programa aún no ha sido asignado a un calendario o aún no se han definido fechas para la inscripción.",
-        "no_puede_inscribirse": "No puede inscribirse, el periodo de inscripciones ha finalizado."
+        "no_puede_inscribirse": "No puede inscribirse, el periodo de inscripciones ha finalizado.",
+        "no_cambiar_inscripcion_solicitada": "No es posible cambiar el estado a Inscripción Solicitada",
+        "editar_estado_iscripcion": "Editar estado de inscripción",
+        "sin_telefono": "Sin número de contacto, por favor ingrese un número de telefono"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -1561,7 +1568,7 @@
         "porcentajeIncompleto": "El porcentaje total debe ser 100%",
         "total": "Total",
         "programa": "Programa académico",
-        "periodo": "Periodo procesó de admisión",
+        "periodo": "Periodo proceso de admisión",
         "aviso_periodo": "Periodo en el cual se define los criterios de admisión",
         "aviso_nivel": "Seleccione el nivel al que desea definir los criterios de admisión",
         "aviso_proyecto": "Selecione el proyecto curricular que desea definir los criterios de admisión",
@@ -1615,7 +1622,15 @@
         "titulo_no_aspirantes": "No hay aspirantes por evaluar",
         "error_no_proyecto": "No hay proyectos curriculares disponibles",
         "btn_doc_aprobar": "Aprobar documento",
-        "btn_doc_No_aprobar": "Rechazar documento"
+        "btn_doc_No_aprobar": "Rechazar documento",
+        "definicion_suite_inscripcion_programa": "Definición de SUITE de inscripción por proyecto curricular",
+        "tipo_inscripcion": "Seleccione el tipo de inscripción",
+        "no_tiene_suite": "Este programa aún no cuenta con Suite definida",
+        "guardar_suite_inscripción": "¿Desea crear la Suite para el proyecto curricular seleccionado?",
+        "cambios_suite_inscripción": "¿Desea guardar cambios a la Suite para el proyecto curricular seleccionado?",
+        "guardado_existoso_suite": "Los datos de la Suite se han guardado correctamente",
+        "fallo_guardado_suite": "Algo salió mal, la Suite no ha podido ser guardada",
+        "info_uso_select_tags": "Seleccione los \"tags\" necesarios haciendo clic sobre los íconos, estos quedarán marcados con un recuadro. Los marcados por el recuadro serán visibles para el aspirante y puede hacer que la información requerida sea obligatoria o no seleccionando la opción \"Obligatorio\"."
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

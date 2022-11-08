@@ -58,6 +58,7 @@ import { DescuentoProyectoModule } from '../descuento_proyecto/descuento-proyect
 import { DocumentoProgramaService } from '../../@core/data/documento_programa.service';
 import { AsignarDocumentosDescuentosComponent } from './asignar_documentos_descuentos/asignar_documentos_descuentos.component';
 import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
+import { DefSuiteInscripProgramaComponent } from './def_suite_inscrip_programa/def-suite-inscrip-programa.component';
 
 
 @NgModule({
@@ -130,6 +131,7 @@ import { ListEnfasisService } from '../../@core/data/list_enfasis.service';
     EvaluacionAspirantesComponent,
     EvaluacionDocumentosInscritosComponent,
     AsignarDocumentosDescuentosComponent,
+    DefSuiteInscripProgramaComponent,
   ],
 })
 export class AdmisionModule { }

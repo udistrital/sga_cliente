@@ -1,0 +1,29 @@
+.exp-card {
+    align-content: center;
+    cursor: pointer;
+    width: 13.5rem;
+    height: 14.5rem;
+    transition: background-color 350ms;
+}
+
+.isSelected {
+    background-color: lightcyan;
+    border: solid;
+    border-color: darkcyan;
+    border-radius: 2%;
+}
+
+.exp-card:hover {
+    background-color: rgb(156, 220, 255);
+}
+
+.icon-form {
+    vertical-align: middle;
+}
+
+.info-alert {
+    background-color: var(--warning-main);
+    font-weight: 700;
+    padding: 2rem;
+    border-radius: 0.4rem;
+}

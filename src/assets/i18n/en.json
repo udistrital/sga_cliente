@@ -121,7 +121,10 @@
             "actualizacion_estado": "Assignment of quotas \nfor projects",
             "listado_aspirante": "List applicants",
             "administrar_criterios": "Manage admission criteria",
-            "documentos_descuentos": "Assignment of documents\nand discounts by project"
+            "documentos_descuentos": "Assignment of documents\nand discounts by project",
+            "solicitud_transferencias": "Transfer Requests",
+            "definicion_suite_inscripcion_programa": "Enrollment SUITE\nby curricular project"
+            
         },
         "solicitudes": {
             "solicitudes": "Basic data",
@@ -150,6 +153,8 @@
         }
     },
     "GLOBAL": {
+        "admitir": "Admit",
+        "aspirantes_inscritos": "Enrolled Applicants",
         "click_aqui": "Click here",
         "detalle": "Detail",
         "adjuntar":"Attach",
@@ -189,6 +194,7 @@
         "regresar": "Return",
         "terminos_datos": "Privacy and data processing policy",
         "acepto_terminos": "I have read and agree to the privacy and treatment of information policy terms",
+        "rechazo_terminos": "You have not accepted the terms of the information treatment and privacy policy",
         "error": "Error",
         "informacion": "Information",
         "operacion_exitosa": "Successfull operation",
@@ -578,12 +584,12 @@
         "cupos": "Special quotas",
         "numero_cupos": "Number of special quotas allocated by the superior council",
         "info_cupos": "Assigned Quotas",
-        "Nombre": "NAME",
+        "Nombre": "Full name",
         "TipoInscripcion": "Type of registration",
-        "Estado": "STATE",
-        "Tipo": "TYPE",
-        "Documento": "ID CARD",
-        "Puntaje": "SCORE",
+        "Estado": "State",
+        "Tipo": "Type",
+        "Documento": "ID Card",
+        "Puntaje": "Score",
         "acciones": "Actions",
         "pregrado": "Undergraduate",
         "posgrado": "Postgraduate",
@@ -632,7 +638,9 @@
         "error_actualizar_persona": "Unable to update your personal information",
         "estado_aprobado": "Approved",
         "estado_no_aprobado": "Not approved",
-        "estado_no_definido": "To be defined"
+        "estado_no_definido": "To be defined",
+        "seleccionar": "Select",
+        "obligatorio": "Required"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1329,7 +1337,10 @@
         "persona_ya_existe": "The SGA system has found personal information related to the document number filled out!",
         "info_persona_ya_existe": "In order to avoid duplication of information, the data found will be used to continue the registration process.\nIf you consider that the data presented does not coincide, you must make a formal request to the Systems Advisory Office, which will review the veracity of the data.",
         "no_hay_programa_evento": "The program has not yet been assigned to a calendar or registration dates have not yet been defined.",
-        "no_puede_inscribirse": "You can't register, the registration period has finished."
+        "no_puede_inscribirse": "You can't register, the registration period has finished.",
+        "no_cambiar_inscripcion_solicitada": "It is not possible to change the status to Enrollment Requested",
+        "editar_estado_iscripcion": "Edit Enrollment Status",
+        "sin_telefono": "No contact number, please enter a phone number"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
@@ -1577,9 +1588,17 @@
         "cupos_proyectos": "Allocation of quotas per academic project",
         "error_no_aspirantes": "There are no applicants to evaluate for the selected period and project",
         "titulo_no_aspirantes": "There are no applicants to evaluate",
-        "error_no_proyecto": "No curriculum projects available",
+        "error_no_proyecto": "No curricular projects available",
         "btn_doc_aprobar": "Approve document",
-        "btn_doc_No_aprobar": "Reject document"
+        "btn_doc_No_aprobar": "Reject document",
+        "definicion_suite_inscripcion_programa": "Definition of enrollment SUITE by curricular project",
+        "tipo_inscripcion": "Select the type of enrollment",
+        "no_tiene_suite": "This program does not yet have a defined Suite",
+        "guardar_suite_inscripción": "Do you want to create the Suite for the selected curricular project?",
+        "cambios_suite_inscripción": "Do you want to save changes to the Suite for the selected curricular project?",
+        "guardado_existoso_suite": "Suite data has been successfully saved",
+        "fallo_guardado_suite": "Something went wrong, the Suite could not be saved",
+        "info_uso_select_tags": "Select the necessary \"tags\" by clicking on the icons, these will be marked with a box. Those marked by the box will be visible to the applicant and you can make the required information mandatory or not by selecting the \"Required\" option."
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",
