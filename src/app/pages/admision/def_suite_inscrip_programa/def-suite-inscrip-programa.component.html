@@ -1,0 +1,152 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <nb-card-body>
+        <fieldset [ngClass]="{'fieldseter':true}">
+            <legend>
+                &nbsp; {{ 'admision.definicion_suite_inscripcion_programa' | translate }}
+            </legend>
+            <div class="container" style="padding: 2%;">
+                <div class="row">
+                    <!-- select periodo -->
+                    <mat-form-field style="width: 35%;">
+                        <mat-label>{{ 'admision.periodo' | translate }}:</mat-label>
+                        <mat-select [(ngModel)]="periodo" [disabled]='true'>
+                            <mat-option> {{ 'GLOBAL.seleccionar' | translate }} </mat-option>
+                            <mat-option *ngFor="let item of periodos" [value]="item.Id"> {{item.Nombre}} </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <!-- select Nivel -->
+                    <mat-form-field style="width: 100%;">
+                        <mat-label>{{ 'admision.nivel' | translate }}:</mat-label>
+                        <mat-select [(ngModel)]="nivel" (selectionChange)="filtrarPorNivel(nivel)">
+                            <mat-option> {{ 'GLOBAL.seleccionar' | translate }} </mat-option>
+                            <mat-option *ngFor="let item of niveles" [value]="item.Id"> {{item.Nombre}} </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <!-- select Proyectos -->
+                    <mat-form-field style="width: 100%;">
+                        <mat-label>{{ 'admision.proyecto' | translate }}:</mat-label>
+                        <mat-select [(ngModel)]="proyecto" (selectionChange)="cambioProyecto(proyecto)">
+                            <mat-option> {{ 'GLOBAL.seleccionar' | translate }} </mat-option>
+                            <mat-option *ngFor="let item of proyectosFiltered" [value]="item.Id"> {{item.Nombre}} </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <!-- select Tipo Inscripcion -->
+                    <mat-form-field style="width: 100%;">
+                        <mat-label>{{ 'admision.tipo_inscripcion' | translate }}:</mat-label>
+                        <mat-select [(ngModel)]="tipoInscrip" (selectionChange)="cambioTipoInscrip(tipoInscrip)">
+                            <mat-option> {{ 'GLOBAL.seleccionar' | translate }} </mat-option>
+                            <mat-option *ngFor="let item of tiposInscripFiltered" [value]="item.Id"> {{item.Nombre}} </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div class="container" align="center" *ngIf="periodo && nivel && proyecto && tipoInscrip">
+                <div class="row>">
+                    <div class="col-12 info-alert"> {{ 'admision.info_uso_select_tags' | translate }} </div>
+                </div><br>
+                <div class="row">
+                    <nb-card class="exp-card" align="center" [ngClass]="{'isSelected':tagsObject.info_persona.selected}">
+                        <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form" (click)="clickTag('Yes_info_persona')" title="{{ 'GLOBAL.seleccionar' | translate }}">
+                            <i class="fa fa-address-card-o fa-4x"></i>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <mat-checkbox color="primary" (click)="$event.preventDefault()" [(ngModel)]="tagsObject.info_persona.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                        </nb-card-footer>
+                    </nb-card>
+
+                    <nb-card class="exp-card" align="center" [ngClass]="{'isSelected':tagsObject.formacion_academica.selected}">
+                        <nb-card-header>{{ 'inscripcion.formacion_academica' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form" (click)="clickTag('formacion_academica')" title="{{ 'GLOBAL.seleccionar' | translate }}">
+                            <i class="fa fa-graduation-cap fa-4x"></i>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.formacion_academica.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                        </nb-card-footer>
+                    </nb-card>
+
+                    <nb-card class="exp-card" align="center" [ngClass]="{'isSelected':tagsObject.idiomas.selected}">
+                        <nb-card-header>{{ 'inscripcion.idiomas' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form" (click)="clickTag('idiomas')" title="{{ 'GLOBAL.seleccionar' | translate }}">
+                            <i class="fa fa-globe fa-4x"></i>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.idiomas.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                        </nb-card-footer>
+                    </nb-card>
+
+                    <nb-card class="exp-card" align="center" [ngClass]="{'isSelected':tagsObject.experiencia_laboral.selected}">
+                        <nb-card-header>{{ 'inscripcion.experiencia_laboral' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form" (click)="clickTag('experiencia_laboral')" title="{{ 'GLOBAL.seleccionar' | translate }}">
+                            <i class="fa fa-briefcase fa-4x"></i>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.experiencia_laboral.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                        </nb-card-footer>
+                    </nb-card>
+
+                    <nb-card class="exp-card" align="center" [ngClass]="{'isSelected':tagsObject.produccion_academica.selected}">
+                        <nb-card-header>{{ 'inscripcion.produccion_academica' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form" (click)="clickTag('produccion_academica')" title="{{ 'GLOBAL.seleccionar' | translate }}">
+                            <i class="fa fa-book fa-4x"></i>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.produccion_academica.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                        </nb-card-footer>
+                    </nb-card>
+
+                    <nb-card class="exp-card" align="center" [ngClass]="{'isSelected':tagsObject.documento_programa.selected}">
+                        <nb-card-header>{{ 'inscripcion.documento_programa' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form" (click)="clickTag('documento_programa')" title="{{ 'GLOBAL.seleccionar' | translate }}">
+                            <i class="fa fa-list-alt fa-4x"></i>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.documento_programa.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                        </nb-card-footer>
+                    </nb-card>
+
+                    <nb-card class="exp-card" align="center" [ngClass]="{'isSelected':tagsObject.descuento_matricula.selected}">
+                        <nb-card-header>{{ 'inscripcion.descuento_matricula' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form" (click)="clickTag('descuento_matricula')" title="{{ 'GLOBAL.seleccionar' | translate }}">
+                            <i class="fa fa-dollar fa-4x"></i>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.descuento_matricula.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                        </nb-card-footer>
+                    </nb-card>
+
+                    <nb-card class="exp-card" align="center" [ngClass]="{'isSelected':tagsObject.propuesta_grado.selected}">
+                        <nb-card-header>{{ 'inscripcion.propuesta_grado' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form" (click)="clickTag('propuesta_grado')" title="{{ 'GLOBAL.seleccionar' | translate }}">
+                            <i class="fa fa-file-text-o fa-4x"></i>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.propuesta_grado.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                        </nb-card-footer>
+                    </nb-card>
+
+                    <nb-card class="exp-card" align="center" [ngClass]="{'isSelected':tagsObject.perfil.selected}">
+                        <nb-card-header>{{ 'inscripcion.perfil' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form" (click)="clickTag('Yes_perfil')" title="{{ 'GLOBAL.seleccionar' | translate }}">
+                            <i class="fa fa-user fa-4x"></i>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <mat-checkbox color="primary" (click)="$event.preventDefault()" [(ngModel)]="tagsObject.perfil.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+                <br>
+                <div class="container" style="padding: 2%;">
+                    <div class="row justify-content-md-center">
+                        <button mat-raised-button color="primary" (click)="guardar()">{{ 'GLOBAL.guardar' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </nb-card-body>
+</nb-card>

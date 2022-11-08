@@ -121,7 +121,10 @@
             "actualizacion_estado": "Assignment of quotas \nfor projects",
             "listado_aspirante": "List applicants",
             "administrar_criterios": "Manage admission criteria",
-            "documentos_descuentos": "Assignment of documents\nand discounts by project"
+            "documentos_descuentos": "Assignment of documents\nand discounts by project",
+            "solicitud_transferencias": "Transfer Requests",
+            "definicion_suite_inscripcion_programa": "Enrollment SUITE\nby curricular project"
+            
         },
         "solicitudes": {
             "solicitudes": "Basic data",
@@ -632,7 +635,9 @@
         "error_actualizar_persona": "Unable to update your personal information",
         "estado_aprobado": "Approved",
         "estado_no_aprobado": "Not approved",
-        "estado_no_definido": "To be defined"
+        "estado_no_definido": "To be defined",
+        "seleccionar": "Select",
+        "obligatorio": "Required"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1577,9 +1582,17 @@
         "cupos_proyectos": "Allocation of quotas per academic project",
         "error_no_aspirantes": "There are no applicants to evaluate for the selected period and project",
         "titulo_no_aspirantes": "There are no applicants to evaluate",
-        "error_no_proyecto": "No curriculum projects available",
+        "error_no_proyecto": "No curricular projects available",
         "btn_doc_aprobar": "Approve document",
-        "btn_doc_No_aprobar": "Reject document"
+        "btn_doc_No_aprobar": "Reject document",
+        "definicion_suite_inscripcion_programa": "Definition of enrollment SUITE by curricular project",
+        "tipo_inscripcion": "Select the type of enrollment",
+        "no_tiene_suite": "This program does not yet have a defined Suite",
+        "guardar_suite_inscripción": "Do you want to create the Suite for the selected curricular project?",
+        "cambios_suite_inscripción": "Do you want to save changes to the Suite for the selected curricular project?",
+        "guardado_existoso_suite": "Suite data has been successfully saved",
+        "fallo_guardado_suite": "Something went wrong, the Suite could not be saved",
+        "info_uso_select_tags": "Select the necessary \"tags\" by clicking on the icons, these will be marked with a box. Those marked by the box will be visible to the applicant and you can make the required information mandatory or not by selecting the \"Required\" option."
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",
