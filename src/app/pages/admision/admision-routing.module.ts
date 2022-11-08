@@ -12,6 +12,7 @@ import { EvaluacionAspirantesComponent } from './evaluacion-aspirantes/evaluacio
 import { DialogoDocumentosComponent } from './dialogo-documentos/dialogo-documentos.component';
 import { EvaluacionDocumentosInscritosComponent } from './evaluacion-documentos-inscritos/evaluacion-documentos-inscritos.component';
 import { AsignarDocumentosDescuentosComponent } from './asignar_documentos_descuentos/asignar_documentos_descuentos.component';
+import { DefSuiteInscripProgramaComponent } from './def_suite_inscrip_programa/def-suite-inscrip-programa.component';
 
 const routes: Routes = [{
   path: '',
@@ -49,6 +50,10 @@ const routes: Routes = [{
       path: 'evaluacion-aspirantes',
       component: EvaluacionAspirantesComponent,
     },
+    {
+      path: 'suite-programa',
+      component: DefSuiteInscripProgramaComponent,
+    },
   ],
 }];
 
@@ -75,4 +80,5 @@ export const routedComponents = [
   //DialogoDocumentosComponent,
   EvaluacionDocumentosInscritosComponent,
   AsignarDocumentosDescuentosComponent,
+  DefSuiteInscripProgramaComponent,
 ];
