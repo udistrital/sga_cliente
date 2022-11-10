@@ -220,7 +220,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     const icorreo = this.getIndexForm('Correo');
     const iPais = this.getIndexForm('Pais');
     this.formInfoFormacionAcademica.campos[init].valor = nit;
-
+    
     this.sgaMidService.get('formacion_academica/info_universidad?Id=' + nit)
       .subscribe((res: any) => {
         this.universidadConsultada = res;
@@ -300,7 +300,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         this.info_formacion_academica = undefined;
         this.info_formacion_academica_id = 0;
         this.edit_status = false;
-        this.loading = false;
+        //this.loading = false;
       } else {
         if (Object.entries(this.formInfoFormacionAcademica.campos[inombre].valor).length !== 0 &&
           this.formInfoFormacionAcademica.campos[inombre].valor !== null) {

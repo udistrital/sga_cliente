@@ -78,7 +78,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       placeholder_i18n: 'correo_empresa',
       requerido: true,
       deshabilitar: true,
-      tipo: 'email',
+      tipo: 'text',
     },
     {
       etiqueta: 'input',
