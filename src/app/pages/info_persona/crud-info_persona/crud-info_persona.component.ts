@@ -11,6 +11,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as momentTimezone from 'moment-timezone';
+import * as moment from 'moment';
 
 @Component({
   selector: 'ngx-crud-info-persona',
@@ -119,6 +120,10 @@ export class CrudInfoPersonaComponent implements OnInit {
             this.formInfoPersona.campos[this.getIndexForm('Genero')].valor = temp.Genero;
             this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].valor = temp.EstadoCivil;
             this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].valor = temp.TipoIdentificacion;
+            temp.FechaNacimiento = temp.FechaNacimiento.replace("T00:00:00Z", "T05:00:00Z");
+            temp.FechaExpedicion = temp.FechaExpedicion.replace("T00:00:00Z", "T05:00:00Z");
+            this.formInfoPersona.campos[this.getIndexForm('FechaNacimiento')].valor = moment(temp.FechaNacimiento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+            this.formInfoPersona.campos[this.getIndexForm('FechaExpedicion')].valor = moment(temp.FechaExpedicion,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
             this.formInfoPersona.campos.splice(this.getIndexForm('VerificarNumeroIdentificacion'),1);
             this.formInfoPersona.campos.forEach(campo => {
               campo.deshabilitar = true;

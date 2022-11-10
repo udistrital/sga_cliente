@@ -67,7 +67,7 @@ export let FORM_FORMACION_ACADEMICA = {
       placeholder_i18n: 'correo_universidad',
       requerido: true,
       deshabilitar: true,
-      tipo: 'email',
+      tipo: 'text',
     },
     {
       etiqueta: 'input',
