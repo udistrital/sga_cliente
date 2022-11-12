@@ -146,6 +146,7 @@ export let FORM_FORMACION_ACADEMICA = {
       placeholder_i18n: 'descripcion_trabajo_grado',
       requerido: true,
       tipo: 'text',
+      cantidadCaracteres: 400,
     },
     {
       etiqueta: 'file',
