@@ -158,6 +158,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       placeholder_i18n: 'descripcion_cargo',
       requerido: true,
       tipo: 'text',
+      cantidadCaracteres: 400,
     },
     {
       etiqueta: 'file',

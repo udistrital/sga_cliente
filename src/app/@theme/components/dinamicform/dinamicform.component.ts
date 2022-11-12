@@ -332,6 +332,21 @@ export class DinamicformComponent implements OnInit, OnChanges {
         this.interlaced.emit(c);
       }
     }
+    if (c.etiqueta === 'textarea') {
+      const caracteresEspeciales1: RegExp = /[\"\\\/\b\f]/g;  // pueden romper JSON string in api GO
+      const caracteresEspeciales2: RegExp = /[\t\n\r]/g;  // pueden romper JSON string in api GO
+      const multiespacio: RegExp = /\s\s+/g; // bonus: quitar muchos espacios juntos
+      c.valor = c.valor.replace(caracteresEspeciales1,'');
+      c.valor = c.valor.replace(caracteresEspeciales2,' '); // tabs y enter se reemplazan por espacio
+      c.valor = c.valor.replace(multiespacio, ' ');
+      if (c.cantidadCaracteres) {
+        if (c.valor.length > c.cantidadCaracteres) {
+          c.clase = 'form-control form-control-danger'
+          c.alerta = 'El texto supera el máximo de caracteres permitido (máximo: ' +  c.cantidadCaracteres + ', actualmente: ' + c.valor.length +')';
+          return false;
+        }
+      }
+    }
     // if (!this.normalform.btn) {
     //   if (this.validForm().valid) {
     //     this.resultSmart.emit(this.validForm());
