@@ -140,6 +140,14 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         //   },
         //   width: '2%',
         // },
+        RowCount: {
+          editable: false,
+          title: '#',
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+          width: '2%',
+        },
         NumeroDocumento: {
           editable: false,
           title: this.translate.instant('GLOBAL.Documento'),
@@ -401,23 +409,24 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
 
     let idTelefono = this.InfoContacto.find(c => c.CodigoAbreviacion == "TELEFONO").Id;
 
+    this.loading = true;
     this.inscripcionService.get('inscripcion?query=Activo:true,ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=NotaFinal&order=desc&limit=0').subscribe(
       (res: any) => {
         const r = <any>res
         if (res !== '[{}]') {
           if (r !== null && r.Type !== 'error') {
-            this.loading = false;
             const data = <Array<any>>r;
             this.admitidos = data.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'ADMITIDO'));
             this.inscritos = data.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'INSCRITO'));
             this.cuposAsignados = this.admitidos.length;
             // this.source_emphasys.load(data);
-            data.forEach(element => {
+            data.forEach((element, idx) => {
               if (element.PersonaId != undefined) {
                 this.tercerosService.get('tercero/' + element.PersonaId).subscribe(
                   async (rTercero: any) => {
 
                     let aspiranteAux = {
+                      RowCount: idx,
                       Inscripcion: element,
                       NumeroDocumento: undefined,
                       NombreAspirante: rTercero.NombreCompleto,
@@ -448,8 +457,10 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                     
                     this.Aspirantes.push(aspiranteAux);
                     this.source_emphasys.load(this.Aspirantes);
+                    this.loading = false;
                   },
                   error => {
+                    this.loading = false;
                     this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
                   }
                 )
@@ -458,14 +469,17 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             });
 
           } else {
+            this.loading = false;
             this.showToast('error', this.translate.instant('GLOBAL.error'),
               this.translate.instant('GLOBAL.error'));
           }
         } else {
+          this.loading = false;
           this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
         }
       },
       (error: HttpErrorResponse) => {
+        this.loading = false;
         Swal.fire({
           icon: 'error',
           title: error.status + '',
