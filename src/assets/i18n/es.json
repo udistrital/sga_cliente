@@ -675,7 +675,8 @@
         "estado_no_aprobado": "No aprobado",
         "estado_no_definido": "Por definir",
         "seleccionar": "Seleccionar",
-        "obligatorio": "Obligatorio"
+        "obligatorio": "Obligatorio",
+        "opcional": "Opcional"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",

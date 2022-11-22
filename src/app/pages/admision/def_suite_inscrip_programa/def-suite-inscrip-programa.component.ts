@@ -28,7 +28,7 @@ export class DefSuiteInscripProgramaComponent implements OnInit {
   tiposInscrip: any[];
   tiposInscripFiltered: any[];
 
-  tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
+  tagsObject = undefined;
   nuevaSuite: boolean = false;
   respuestaTagsOriginal: any; 
 
@@ -46,6 +46,7 @@ export class DefSuiteInscripProgramaComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
     try {
       this.loading = true;
       await this.cargarPeriodo();
@@ -61,7 +62,7 @@ export class DefSuiteInscripProgramaComponent implements OnInit {
 
   cargarPeriodo(){
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
+      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
         .subscribe((response: any) => {
           if (response != null && response.Status == '200') {
             this.periodo = response.Data[0].Id;
@@ -130,6 +131,13 @@ export class DefSuiteInscripProgramaComponent implements OnInit {
         });
     });
   }
+
+  cambioPeriodo(selPeriodo) {
+    this.nivel = undefined;
+    this.proyecto = undefined;
+    this.tipoInscrip = undefined;
+    this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
+  }
   
   filtrarPorNivel(selNivel) {
     this.proyectosFiltered = this.proyectos.filter(
@@ -154,16 +162,19 @@ export class DefSuiteInscripProgramaComponent implements OnInit {
     );
     this.proyecto = undefined;
     this.tipoInscrip = undefined;
+    this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
   }
 
   cambioProyecto(selProyecto) {
     this.tipoInscrip = undefined;
+    this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
   }
 
   cambioTipoInscrip(selTipoInscrip) {
+    this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
     if (this.periodo && this.nivel && this.proyecto && this.tipoInscrip) {
       this.loading = true;
-      this.evaluacionInscripcionService.get('tags_por_dependencia?query=Activo:true,PeriodoId:'+this.periodo+',DependenciaId:'+this.proyecto)
+      this.evaluacionInscripcionService.get('tags_por_dependencia?query=Activo:true,PeriodoId:'+this.periodo+',DependenciaId:'+this.proyecto+',TipoInscripcionId:'+this.tipoInscrip)
         .subscribe((response: any) => {
           if (response != null && response.Status == '200') {
             if (Object.keys(response.Data[0]).length > 0) {
@@ -240,7 +251,8 @@ export class DefSuiteInscripProgramaComponent implements OnInit {
           Activo: true,
           DependenciaId: this.proyecto,
           ListaTags: JSON.stringify(this.tagsObject),
-          PeriodoId: this.periodo
+          PeriodoId: this.periodo,
+          TipoInscripcionId: this.tipoInscrip,
         };
         this.postTags(postData);
       } else {

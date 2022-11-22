@@ -18,6 +18,8 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import * as moment from 'moment';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoDocumentosComponent } from '../../admision/dialogo-documentos/dialogo-documentos.component';
+import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
+import { TAGS_INSCRIPCION_PROGRAMA } from '../../admision/def_suite_inscrip_programa/def_tags_por_programa';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -36,6 +38,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   produccion_academica: boolean = false;
   es_transferencia: boolean = false;
   nivel: any;
+
+  tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
 
   @Input('inscriptionSettings')
   set nameInscription(inscriptionSettings: any) {
@@ -103,6 +107,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   percentage_info: number = 0;
   percentage_acad: number = 0;
+  percentage_idio: number = 0;
   percentage_expe: number = 0;
   percentage_proy: number = 0;
   percentage_prod: number = 0;
@@ -115,6 +120,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   percentage_tab_info = [];
   percentage_tab_expe = [];
   percentage_tab_acad = [];
+  percentage_tab_idio = [];
   percentage_tab_proy = [];
   percentage_tab_prod = [];
   percentage_tab_desc = [];
@@ -128,6 +134,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   show_profile = false;
   show_acad_pregrado = false;
   show_acad = false;
+  show_idiomas = false;
   show_expe = false;
   show_proy = false;
   show_prod = false;
@@ -173,7 +180,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private parametrosService: ParametrosService,
     private programaService: ProyectoAcademicoService,
     private sgaMidService: SgaMidService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private evaluacionInscripcionService: EvaluacionInscripcionService,
   ) {
     sessionStorage.setItem('TerceroId', this.userService.getPersonaId().toString());
     this.info_persona_id = this.userService.getPersonaId();
@@ -299,6 +307,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       }
     }
     localStorage.setItem("goToEdit", String(this.puedeInscribirse));
+    return this.puedeInscribirse;
   }
 
   loadTipoInscripcion(IdTipo: number) {
@@ -376,8 +385,14 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   setPercentage_acad(number, tab) {
-    this.percentage_tab_acad[tab] = (number * 100) / 2;
+    this.percentage_tab_acad[tab] = (number * 100) / 1;
     this.percentage_acad = Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad));
+    this.setPercentage_total();
+  }
+
+  setPercentage_idio(number, tab) {
+    this.percentage_tab_idio[tab] = (number * 100) / 1;
+    this.percentage_idio = Math.round(UtilidadesService.getSumArray(this.percentage_tab_idio));
     this.setPercentage_total();
   }
 
@@ -399,11 +414,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   setPercentage_proy(number, tab) {
     this.percentage_tab_proy[tab] = (number * 100) / 1;
     this.percentage_proy = Math.round(UtilidadesService.getSumArray(this.percentage_tab_proy));
+    this.setPercentage_total();
   }
 
   setPercentage_desc(number, tab) {
     this.percentage_tab_desc[tab] = (number * 100) / 1;
     this.percentage_desc = Math.round(UtilidadesService.getSumArray(this.percentage_tab_desc));
+    this.setPercentage_total();
   }
 
   setPercentage_docu(number, tab) {
@@ -415,14 +432,66 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   setPercentage_prod(number, tab) {
     this.percentage_tab_prod[tab] = (number * 100) / 1;
     this.percentage_prod = Math.round(UtilidadesService.getSumArray(this.percentage_tab_prod));
-    this.percentage_prod = (this.percentage_prod * 100) / this.percentage_prod;
+    this.setPercentage_total();
   }
 
   setPercentage_total() {
-    this.percentage_total = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info)) / 4;  // Información básica
-    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_acad)) / 4; // Formación académica
-    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_docu)) / 4; // Documentos solicitados
-    this.percentage_total += Math.round(UtilidadesService.getSumArray(this.percentage_tab_expe)) / 4; // Experiencia laboral
+
+    let conteoObligatorios = 0;
+    let sumaPorcentajes = 0;
+
+    if (this.tagsObject.info_persona.required) {
+      sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_info);
+      console.log("info: ", this.percentage_tab_info)
+      conteoObligatorios += 1;
+    }
+
+    if (this.tagsObject.formacion_academica.required) {
+      sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_acad);
+      console.log("acad: ", this.percentage_tab_acad)
+      conteoObligatorios += 1;
+    }
+
+    if (this.tagsObject.idiomas.required) {
+      sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_idio);
+      console.log("idio", this.percentage_tab_idio)
+      conteoObligatorios += 1;
+    }
+
+    if (this.tagsObject.experiencia_laboral.required) {
+      sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_expe);
+      console.log("expe", this.percentage_tab_expe)
+      conteoObligatorios += 1;
+    }
+
+    if (this.tagsObject.produccion_academica.required) {
+      sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_prod);
+      console.log("prod", this.percentage_tab_prod)
+      conteoObligatorios += 1;
+    }
+
+    if (this.tagsObject.documento_programa.required) {
+      sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_docu);
+      console.log("docu", this.percentage_tab_docu)
+      conteoObligatorios += 1;
+    }
+
+    if (this.tagsObject.descuento_matricula.required) {
+      sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_desc);
+      console.log("desc", this.percentage_tab_desc)
+      conteoObligatorios += 1;
+    }
+
+    if (this.tagsObject.propuesta_grado.required) {
+      sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_proy);
+      console.log("proy", this.percentage_tab_proy)
+      conteoObligatorios += 1;
+    }
+
+    console.log("conteoObligatorios", conteoObligatorios)
+
+    this.percentage_total = Math.round(sumaPorcentajes / conteoObligatorios);
+
     this.result.emit(this.percentage_total);
     if (sessionStorage.EstadoInscripcion) {
       if (this.percentage_total >= 100) {
@@ -513,10 +582,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.sgaMidService.get('formacion_academica?Id=' + this.info_persona_id)
         .subscribe(res => {
           if (res.Response.Code === '200') {
-            this.percentage_acad = this.percentage_acad + 50;
-            this.percentage_tab_acad[0] = 50;
+            this.percentage_acad = 100;
+            this.percentage_tab_acad[0] = 100;
           } else {
-            this.percentage_acad = this.percentage_acad + 0;
+            this.percentage_acad = 0;
             this.percentage_tab_acad[0] = 0;
           }
           this.loading = false;
@@ -556,11 +625,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.idiomaService.get('conocimiento_idioma?query=Activo:true,TercerosId:' + this.info_persona_id + '&limit=0')
         .subscribe(res => {
           if (res !== null && JSON.stringify(res[0]) !== '{}') {
-            this.percentage_acad = this.percentage_acad + 50;
-            this.percentage_tab_acad[1] = 50;
+            this.percentage_idio = 100;
+            this.percentage_tab_idio[0] = 100;
           } else {
-            this.percentage_acad = this.percentage_acad + 0;
-            this.percentage_tab_acad[1] = 0;
+            this.percentage_idio = 0;
+            this.percentage_tab_idio[0] = 0;
           }
           this.loading = false;
           resolve(this.percentage_acad);
@@ -601,8 +670,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         .subscribe(res => {
           if (res.Response.Code === '200') {
             this.percentage_prod = 100;
+            this.percentage_tab_prod[0] = 100;
           } else {
             this.percentage_prod = 0;
+            this.percentage_tab_prod[0] = 0;
           }
           this.loading = false;
           resolve(this.percentage_prod);
@@ -674,8 +745,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         .subscribe((res: any) => {
           if (res.Data.Code === '200') {
             this.percentage_desc = 100;
+            this.percentage_tab_desc[0] = 100;
           } else {
             this.percentage_desc = 0;
+            this.percentage_tab_desc[0] = 0;
           }
           this.loading = false;
           resolve(this.percentage_desc)
@@ -694,6 +767,10 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         Number(window.sessionStorage.getItem('IdInscripcion'))).subscribe((res: any) => {
           if (res !== null && JSON.stringify(res[0]) !== '{}') {
             this.percentage_proy = 100;
+            this.percentage_tab_proy[0] = 100;
+          } else {
+            this.percentage_proy = 0;
+            this.percentage_tab_proy[0] = 0;
           }
           this.loading = false;
           resolve(this.percentage_proy)
@@ -717,20 +794,27 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     );
   }
 
-  async ngOnInit() {
-
+  ngOnInit() {
     this.estado_inscripcion_nombre = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase();
     
     if (this.estado_inscripcion_nombre !== "INSCRIPCIÓN SOLICITADA") {
       this.Campo1Control.disable();
       this.enfasisControl.disable();
       this.estaInscrito = true;
+      const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10);
+      const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10)
+      const IdPrograma = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
+      this.loadSuitePrograma(IdPeriodo, IdPrograma, IdTipo);
+      this.soloPuedeVer = true;
+      this.puedeInscribirse = false;
+      localStorage.setItem("goToEdit", String(this.puedeInscribirse));
     }
+  }
 
-    await this.loadLists();
+  async getPorcentajes() {
 
     // Consulta si hay información en el tab de información personal
-    if (this.percentage_info === 0) {
+    if (this.percentage_info === 0 && this.tagsObject.info_persona.selected) {
       if (this.selectTipo === 'Transferencia externa' || this.nivel == 'Pregrado') {
         await this.loadPercentageInfoCaracteristica(3);
         await this.loadPercentageInfoContacto(3);
@@ -742,7 +826,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     }
 
     // Consulta si hay información en formación académica
-    if (this.percentage_acad === 0) {
+    if (this.percentage_acad === 0 && this.tagsObject.formacion_academica.selected) {
       if (this.nivel == 'Pregrado') {
         let factor = 1
         if (this.selectTipo != 'Transferencia interna' && this.selectTipo != 'Reingreso' && this.selectTipo != 'Transferencia externa') {
@@ -754,32 +838,47 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         await this.loadPercentageFormacionAcademicaPregado(factor);
       } else {
         await this.loadPercentageFormacionAcademica();
+      }
+    }
+
+    // Consulta si hay información en idiomas
+    if (this.percentage_idio === 0 && this.tagsObject.idiomas.selected) {
+      if (this.nivel == 'Pregrado') {
+        let factor = 1
+        if (this.selectTipo != 'Transferencia interna' && this.selectTipo != 'Reingreso' && this.selectTipo != 'Transferencia externa') {
+          let factor = 2
+          ////////////////////////////////////////////////////////////////////////////////
+          ////// TO DO: Preguntas de ingreso a al univerisdad en inscripción normal //////
+          ////////////////////////////////////////////////////////////////////////////////
+        }
+      } else {
         await this.loadPercentageIdiomas();
       }
     }
 
     // Consulta si hay información en experiencia laboral
-    if (this.percentage_expe === 0) {
+    if (this.percentage_expe === 0 && this.tagsObject.experiencia_laboral.selected) {
       await this.loadPercentageExperienciaLaboral();
     }
 
     // Consulta si hay información en produccion academica
-    if (this.percentage_prod === 0) {
+    if (this.percentage_prod === 0 && this.tagsObject.produccion_academica.selected) {
       await this.loadPercentageProduccionAcademica();
     }
 
     // Consulta si hay información en documentos solicitados
-    if (this.percentage_docu === 0) {
+    if (this.percentage_docu === 0 && this.tagsObject.documento_programa.selected) {
+      await this.loadLists();
       await this.loadPercentageDocumentos();
     }
 
     // Consulta si hay información en descuento
-    if (this.percentage_desc === 0) {
+    if (this.percentage_desc === 0 && this.tagsObject.descuento_matricula.selected) {
       await this.loadPercentageDescuentos();
     }
 
     // Consulta si hay información en propuesta trabajo de grado
-    if (this.percentage_proy === 0) {
+    if (this.percentage_proy === 0 && this.tagsObject.propuesta_grado.selected) {
       await this.loadPercentageTrabajoDeGrado();
     }
 
@@ -875,6 +974,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_info = false;
         this.show_profile = false;
         this.show_acad = false;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.info_contacto = true;
         this.info_caracteristica = false;
@@ -885,9 +985,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_prod = false;
         break;
       case 'info_caracteristica':
+        this.showRegreso = false;
         this.show_info = false;
         this.show_profile = false;
         this.show_acad = false;
+        this.show_idiomas = false
         this.show_expe = false;
         this.info_contacto = false;
         this.info_caracteristica = true;
@@ -896,7 +998,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_docu = false;
         this.show_desc = false;
         this.show_prod = false;
-        this.showRegreso = false;
         break;
       case 'info_persona':
         if (this.selectTipo === 'Pregrado') {
@@ -927,6 +1028,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_info = false;
         this.show_profile = false;
         this.show_acad = false;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.info_contacto = false;
         this.info_familiar = true;
@@ -945,6 +1047,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.info_caracteristica = false;
         this.show_acad = false;
         this.show_docu = false;
+        this.show_idiomas = false;
         this.show_expe = true;
         this.info_persona = false;
         this.show_proy = false;
@@ -971,11 +1074,27 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           }
         }
         break;
+      case 'idiomas':
+        this.showRegreso = false;
+        this.show_info = false;
+        this.show_profile = false;
+        this.show_acad = false;
+        this.show_idiomas = true;
+        this.show_expe = false;
+        this.show_docu = false;
+        this.info_contacto = false;
+        this.info_caracteristica = false;
+        this.info_persona = false;
+        this.show_desc = false;
+        this.show_proy = false;
+        this.show_prod = false;
+        break;
       case 'produccion_academica':
         this.showRegreso = false;
         this.show_info = false;
         this.show_profile = false;
         this.show_acad = false;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.show_docu = false;
         this.info_contacto = false;
@@ -990,6 +1109,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_info = false;
         this.show_profile = false;
         this.show_acad = false;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.info_contacto = false;
         this.show_docu = true;
@@ -1004,6 +1124,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_info = false;
         this.show_profile = false;
         this.show_acad = false;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.info_contacto = false;
         this.show_docu = false;
@@ -1019,6 +1140,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_profile = false;
         this.show_docu = false;
         this.show_acad = false;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.info_contacto = false;
         this.info_caracteristica = false;
@@ -1032,6 +1154,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_info = false;
         this.show_profile = true;
         this.show_acad = false;
+        this.show_idiomas = false;
         this.info_contacto = false;
         this.show_docu = false;
         this.info_caracteristica = false;
@@ -1046,6 +1169,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_docu = false;
         this.show_profile = false;
         this.show_acad = false;
+        this.show_idiomas = false
         this.info_contacto = false;
         this.info_caracteristica = false;
         this.show_desc = false;
@@ -1066,6 +1190,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_info_pregrado = true;
         this.show_profile = false;
         this.show_acad_pregrado = false;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.info_contacto = false;
         this.info_caracteristica = false;
@@ -1080,6 +1205,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_info_pregrado = false;
         this.show_profile = false;
         this.show_acad_pregrado = true;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.info_contacto = false;
         this.info_caracteristica = false;
@@ -1094,6 +1220,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_info = true;
         this.show_profile = false;
         this.show_acad = false;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.info_contacto = false;
         this.info_caracteristica = false;
@@ -1108,6 +1235,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_info = false;
         this.show_profile = false;
         this.show_acad = true;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.info_contacto = false;
         this.info_caracteristica = false;
@@ -1122,6 +1250,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_info_externa = true;
         this.show_profile = false;
         this.show_acad_pregrado = false;
+        this.show_idiomas = false;
         this.show_expe = false;
         this.info_contacto = false;
         this.info_caracteristica = false;
@@ -1149,7 +1278,15 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   ngOnChanges() {
   }
 
-  tipo_inscripcion() {
+  tipo_inscripcion(select) {
+    if (select == 'programa') {
+      this.enfasisSelected = undefined;
+      this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
+      this.puedeInscribirse = false;
+      if (this.estado_inscripcion_nombre == "INSCRIPCIÓN SOLICITADA") {
+        this.soloPuedeVer = false;
+      }
+    }
     if (this.inscripcion.IdNivel === 1) {
       this.selectedTipo = 'Pregrado'
     } else {
@@ -1167,7 +1304,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.enfasis = [];
     }
     if (this.enfasisSelected) {
-      this.checkEventoInscripcion();
+      if (this.checkEventoInscripcion()) {
+        const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10);
+        const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10)
+        this.loadSuitePrograma(IdPeriodo, this.selectedValue, IdTipo);
+      }
     }
     switch (this.selectedTipo) {
       case ('Pregrado'):
@@ -1205,6 +1346,39 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     }
 
 
+  }
+
+  loadSuitePrograma(periodo, proyecto, tipoInscrip) {
+    this.loading = true;
+    this.evaluacionInscripcionService.get('tags_por_dependencia?query=Activo:true,PeriodoId:'+periodo+',DependenciaId:'+proyecto+',TipoInscripcionId:'+tipoInscrip)
+        .subscribe((response: any) => {
+          if (response != null && response.Status == '200') {
+            if (Object.keys(response.Data[0]).length > 0) {
+              this.tagsObject = JSON.parse(response.Data[0].ListaTags);
+              this.getPorcentajes();
+              this.loading = false;
+            } else {
+              this.loading = false;
+              this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
+              this.puedeInscribirse = false;
+              this.soloPuedeVer = false;
+              this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('admision.no_tiene_suite'));
+            }
+          } else {
+            this.loading = false;
+            this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
+            this.puedeInscribirse = false;
+            this.soloPuedeVer = false;
+              this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('admision.no_tiene_suite'));
+          }
+        },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
+          this.puedeInscribirse = false;
+          this.soloPuedeVer = false;
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        });
   }
 
   mostrarBarraExterna() {

@@ -4,12 +4,12 @@
     border-bottom-width: thin;
 }
 
-// }
+
 .exp-card {
     align-content: center;
     cursor: pointer;
     width: 13.5rem;
-    height: 14.5rem;
+    height: 16rem;
     transition: background-color 1s;
 }
 
@@ -22,6 +22,7 @@
 }
 
 .percentage {
+    padding-top: 5%;
     font-size: 1.6rem;
 }
 
