@@ -10,7 +10,7 @@
                     <!-- select periodo -->
                     <mat-form-field style="width: 35%;">
                         <mat-label>{{ 'admision.periodo' | translate }}:</mat-label>
-                        <mat-select [(ngModel)]="periodo" [disabled]='true'>
+                        <mat-select [(ngModel)]="periodo" (selectionChange)="cambioPeriodo(periodo)">
                             <mat-option> {{ 'GLOBAL.seleccionar' | translate }} </mat-option>
                             <mat-option *ngFor="let item of periodos" [value]="item.Id"> {{item.Nombre}} </mat-option>
                         </mat-select>
@@ -66,7 +66,7 @@
                             <i class="fa fa-graduation-cap fa-4x"></i>
                         </nb-card-body>
                         <nb-card-footer>
-                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.formacion_academica.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                            <mat-checkbox color="primary" (click)="!tagsObject.formacion_academica.selected ? $event.preventDefault() : ''" [(ngModel)]="tagsObject.formacion_academica.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
                         </nb-card-footer>
                     </nb-card>
 
@@ -76,7 +76,7 @@
                             <i class="fa fa-globe fa-4x"></i>
                         </nb-card-body>
                         <nb-card-footer>
-                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.idiomas.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                            <mat-checkbox color="primary" (click)="!tagsObject.idiomas.selected ? $event.preventDefault() : ''" [(ngModel)]="tagsObject.idiomas.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
                         </nb-card-footer>
                     </nb-card>
 
@@ -86,7 +86,7 @@
                             <i class="fa fa-briefcase fa-4x"></i>
                         </nb-card-body>
                         <nb-card-footer>
-                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.experiencia_laboral.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                            <mat-checkbox color="primary" (click)="!tagsObject.experiencia_laboral.selected ? $event.preventDefault() : ''" [(ngModel)]="tagsObject.experiencia_laboral.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
                         </nb-card-footer>
                     </nb-card>
 
@@ -96,7 +96,7 @@
                             <i class="fa fa-book fa-4x"></i>
                         </nb-card-body>
                         <nb-card-footer>
-                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.produccion_academica.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                            <mat-checkbox color="primary" (click)="!tagsObject.produccion_academica.selected ? $event.preventDefault() : ''" [(ngModel)]="tagsObject.produccion_academica.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
                         </nb-card-footer>
                     </nb-card>
 
@@ -106,7 +106,7 @@
                             <i class="fa fa-list-alt fa-4x"></i>
                         </nb-card-body>
                         <nb-card-footer>
-                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.documento_programa.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                            <mat-checkbox color="primary" (click)="!tagsObject.documento_programa.selected ? $event.preventDefault() : ''" [(ngModel)]="tagsObject.documento_programa.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
                         </nb-card-footer>
                     </nb-card>
 
@@ -116,7 +116,7 @@
                             <i class="fa fa-dollar fa-4x"></i>
                         </nb-card-body>
                         <nb-card-footer>
-                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.descuento_matricula.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                            <mat-checkbox color="primary" (click)="!tagsObject.descuento_matricula.selected ? $event.preventDefault() : ''" [(ngModel)]="tagsObject.descuento_matricula.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
                         </nb-card-footer>
                     </nb-card>
 
@@ -126,7 +126,7 @@
                             <i class="fa fa-file-text-o fa-4x"></i>
                         </nb-card-body>
                         <nb-card-footer>
-                            <mat-checkbox color="primary" [(ngModel)]="tagsObject.propuesta_grado.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
+                            <mat-checkbox color="primary" (click)="!tagsObject.propuesta_grado.selected ? $event.preventDefault() : ''" [(ngModel)]="tagsObject.propuesta_grado.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></mat-checkbox>
                         </nb-card-footer>
                     </nb-card>
 

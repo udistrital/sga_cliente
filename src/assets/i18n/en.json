@@ -640,7 +640,8 @@
         "estado_no_aprobado": "Not approved",
         "estado_no_definido": "To be defined",
         "seleccionar": "Select",
-        "obligatorio": "Required"
+        "obligatorio": "Required",
+        "opcional": "Optional"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
