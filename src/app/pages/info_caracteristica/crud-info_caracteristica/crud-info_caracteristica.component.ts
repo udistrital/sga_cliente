@@ -466,6 +466,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
                       this.updateInfoCaracteristica(event.data.InfoCaracteristica);
                     }
                   })
+
               } else {
                 if(this.datosGet !== undefined){
                 if (this.datosGet.IdDocumentoDiscapacidad !== undefined && event.data.InfoCaracteristica.TipoDiscapacidad[0].Nombre !== 'NO APLICA') {

@@ -33,6 +33,7 @@ import { environment } from '../../../../environments/environment';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { info } from 'console';
 
+
 @Component({
   selector: 'ngx-crud-produccion-academica',
   templateUrl: './crud-produccion_academica.component.html',
@@ -101,6 +102,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
     private toasterService: ToasterService,
     private http: HttpClient,
     private newNuxeoService: NewNuxeoService,
+
     private sgaMidService: SgaMidService) {
     this.formProduccionAcademica = JSON.parse(JSON.stringify(FORM_produccion_academica));
     this.formInfoNuevoAutor = NUEVO_AUTOR;
@@ -586,6 +588,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
         persona['PersonaId'] = persona.Id;
       });
     });
+
   }
 
   onSelected(event) {
