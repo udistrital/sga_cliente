@@ -5,7 +5,7 @@
              show_expe || show_proy ||
              show_prod || show_desc ||
              show_docu ||show_info ||
-             show_acad || show_info_externa" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+             show_acad || show_info_externa || show_idiomas" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
         nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
         <nb-card-header>
             <div *ngIf="!hide_header_labels">
@@ -32,7 +32,7 @@
                 <mat-form-field style="width: 100%;">
                     <mat-select [formControl]="Campo1Control" [(ngModel)]="selectedValue"
                         placeholder="{{ 'inscripcion.aviso_programa' | translate }}"
-                        (ngModelChange)="tipo_inscripcion()" >
+                        (ngModelChange)="tipo_inscripcion('programa')" >
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of posgrados" [value]="item.ProyectoId">
                             {{ item.NombreProyecto }}
@@ -42,7 +42,7 @@
 
                 <mat-form-field style="width: 100%;" *ngIf="tieneEnfasis">
                     <mat-select [formControl]="enfasisControl" [(ngModel)]="enfasisSelected"
-                        placeholder="{{ 'enfasis.select_enfasis' | translate }}" (ngModelChange)="tipo_inscripcion()">
+                        placeholder="{{ 'enfasis.select_enfasis' | translate }}" (ngModelChange)="tipo_inscripcion('enfasis')">
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of enfasis" [value]="item.Id">
                             {{ item.Nombre }}
@@ -55,7 +55,130 @@
             <br />
             <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
-            <div class="row" *ngIf="!hide_header_labels">
+            <div class="row">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.info_persona.selected && puedeInscribirse">
+                    <nb-card class="exp-card" align="center" (click)="perfil_editar('info_persona')">
+                        <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form">
+                            <i class="fa fa-address-card-o fa-4x"></i>
+                            <p class="percentage">{{percentage_info}} %</p>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <div *ngIf="tagsObject.info_persona.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></div>
+                            <div *ngIf="!tagsObject.info_persona.required"><b>{{ 'GLOBAL.opcional' | translate }}</b></div>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.formacion_academica.selected && puedeInscribirse">
+                    <nb-card class="exp-card" align="center" (click)="perfil_editar('formacion_academica')">
+                        <nb-card-header>{{ 'inscripcion.formacion_academica' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form">
+                            <i class="fa fa-graduation-cap fa-4x"></i>
+                            <p class="percentage">{{percentage_acad}} %</p>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <div *ngIf="tagsObject.formacion_academica.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></div>
+                            <div *ngIf="!tagsObject.formacion_academica.required"><b>{{ 'GLOBAL.opcional' | translate }}</b></div>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+                
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.idiomas.selected && puedeInscribirse">
+                    <nb-card class="exp-card" align="center" (click)="perfil_editar('idiomas')" >
+                        <nb-card-header>{{ 'inscripcion.idiomas' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form">
+                            <i class="fa fa-globe fa-4x"></i>
+                            <p class="percentage">{{percentage_idio}} %</p>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <div *ngIf="tagsObject.idiomas.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></div>
+                            <div *ngIf="!tagsObject.idiomas.required"><b>{{ 'GLOBAL.opcional' | translate }}</b></div>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+                
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.experiencia_laboral.selected && puedeInscribirse">
+                    <nb-card class="exp-card" align="center" (click)="perfil_editar('experiencia_laboral')">
+                        <nb-card-header>{{ 'inscripcion.experiencia_laboral' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form">
+                            <i class="fa fa-briefcase fa-4x"></i>
+                            <p class="percentage">{{percentage_expe}} %</p>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <div *ngIf="tagsObject.experiencia_laboral.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></div>
+                            <div *ngIf="!tagsObject.experiencia_laboral.required"><b>{{ 'GLOBAL.opcional' | translate }}</b></div>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+                
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.produccion_academica.selected && puedeInscribirse">
+                    <nb-card class="exp-card" align="center" (click)="perfil_editar('produccion_academica')">
+                        <nb-card-header>{{ 'inscripcion.produccion_academica' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form">
+                            <i class="fa fa-book fa-4x"></i>
+                            <p class="percentage">{{percentage_prod}} %</p>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <div *ngIf="tagsObject.produccion_academica.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></div>
+                            <div *ngIf="!tagsObject.produccion_academica.required"><b>{{ 'GLOBAL.opcional' | translate }}</b></div>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+                
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.documento_programa.selected && puedeInscribirse">
+                    <nb-card class="exp-card" align="center" (click)="perfil_editar('documento_programa')">
+                        <nb-card-header>{{ 'inscripcion.documento_programa' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form">
+                            <i class="fa fa-list-alt fa-4x"></i>
+                            <p class="percentage">{{percentage_docu}} %</p>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <div *ngIf="tagsObject.documento_programa.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></div>
+                            <div *ngIf="!tagsObject.documento_programa.required"><b>{{ 'GLOBAL.opcional' | translate }}</b></div>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+                
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.descuento_matricula.selected && puedeInscribirse">
+                    <nb-card class="exp-card" align="center" (click)="perfil_editar('descuento_matricula')">
+                        <nb-card-header>{{ 'inscripcion.descuento_matricula' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form">
+                            <i class="fa fa-dollar fa-4x"></i>
+                            <p class="percentage">{{percentage_desc}} %</p>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <div *ngIf="tagsObject.descuento_matricula.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></div>
+                            <div *ngIf="!tagsObject.descuento_matricula.required"><b>{{ 'GLOBAL.opcional' | translate }}</b></div>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+                
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.propuesta_grado.selected && puedeInscribirse">
+                    <nb-card class="exp-card" align="center" (click)="perfil_editar('propuesta_grado')">
+                        <nb-card-header>{{ 'inscripcion.propuesta_grado' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form">
+                            <i class="fa fa-file-text-o fa-4x"></i>
+                            <p class="percentage">{{percentage_proy}} %</p>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <div *ngIf="tagsObject.propuesta_grado.required"><b>{{ 'GLOBAL.obligatorio' | translate }}</b></div>
+                            <div *ngIf="!tagsObject.propuesta_grado.required"><b>{{ 'GLOBAL.opcional' | translate }}</b></div>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+                
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.perfil.selected && (soloPuedeVer || puedeInscribirse)">
+                    <nb-card class="exp-card" align="center" (click)="perfil_editar('perfil')">
+                        <nb-card-header>{{ 'inscripcion.perfil' | translate }}</nb-card-header>
+                        <nb-card-body class="icon-form">
+                            <i class="fa fa-user fa-5x"></i>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="!hide_header_labels && false">
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="puedeInscribirse && (selectTipo=='Pregrado' && selectedValue ||
                      selectTipo=='Posgrado'|| selectTipo=='Transferencia interna'||
                      selectTipo=='Reingreso' || selectTipo=='Transferencia externa'||
@@ -146,7 +269,7 @@
                 </div>
             </div>
 
-            <div class="row" *ngIf="hide_header_labels">
+            <div class="row" *ngIf="hide_header_labels && false">
                 <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIf="puedeInscribirse && (basic_info_button)">
                     <nb-card class="exp-card" (click)="perfil_editar('info_persona')">
                         <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
@@ -427,8 +550,31 @@
                     <ngx-list-formacion-academica (result)="setPercentage_acad($event,0)">
                     </ngx-list-formacion-academica>
                 </nb-tab>
+                
+            </nb-tabset>
+        </nb-card-body>
+    </nb-card>
+    
+    <!-- idiomas -->
+    <nb-card *ngIf="show_idiomas">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-11">
+                    <ngb-progressbar showValue="true" type="success" [value]="percentage_acad" [animated]="true"
+                        [height]="'15px'">
+                    </ngb-progressbar>
+                </div>
+                <div class="col-md-1" align="right">
+                    <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
+                            show_idiomas=false; show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                    </button>
+                </div>
+            </div>
+
+            <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'inscripcion.idiomas' | translate }}">
-                    <ngx-list-idiomas (result)="setPercentage_acad($event,1)"
+                    <ngx-list-idiomas (result)="setPercentage_idio($event,0)"
                         (bridge_create_inscripcion)="create_inscription($event)"
                         inscripcion_id="{{this.inscripcion_id}}">
                     </ngx-list-idiomas>
