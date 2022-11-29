@@ -159,7 +159,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
+      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {
