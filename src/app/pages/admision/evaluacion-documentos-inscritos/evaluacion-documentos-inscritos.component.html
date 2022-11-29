@@ -1,4 +1,5 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
   <nb-card-body>
     <div class=col-12>
       <fieldset [ngClass]="{'fieldseter':true}" >
@@ -10,7 +11,7 @@
           <!--Periodo académico-->
           <mat-form-field style="width: 35%;">
             <mat-label>{{ 'admision.periodo_' | translate }}:</mat-label>
-            <mat-select [(ngModel)]="periodo" [disabled]='true'>
+            <mat-select [(ngModel)]="periodo" >
               <mat-option *ngFor="let item of periodos" [value]="item"> {{item.Nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
@@ -37,6 +38,9 @@
           </mat-form-field>
           <br/><br/>
 
+          <nb-card-body class="d-flex justify-content-around align-items-center">
+            <p>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></p>
+          </nb-card-body>
             <!--Tabla-->
             <nb-card-body>
               <div style="overflow: auto;">
