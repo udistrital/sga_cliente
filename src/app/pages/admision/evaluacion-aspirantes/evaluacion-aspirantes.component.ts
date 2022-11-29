@@ -107,6 +107,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
   settings: any;
   columnas = [];
   criterio = [];
+  cantidad_aspirantes: number = 0;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -158,7 +159,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
+      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {
@@ -438,7 +439,29 @@ export class EvaluacionAspirantesComponent implements OnInit {
 
   async loadAspirantes() {
     return new Promise((resolve, reject) => {
-      this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
+
+      this.sgaMidService.get('admision/getlistaaspirantespor?id_periodo='+this.periodo.Id+'&id_proyecto='+this.proyectos_selected+'&tipo_lista=2')
+      .subscribe(
+        (response: any) => {
+          if (response.Success && response.Status == "200") {
+            this.Aspirantes = response.Data;
+            this.cantidad_aspirantes = this.Aspirantes.length;
+            this.dataSource.load(this.Aspirantes);
+            resolve(this.Aspirantes)
+          }
+        },
+        (error: HttpErrorResponse) => {
+          reject(error)
+          Swal.fire({
+            icon: 'warning',
+            title: this.translate.instant('admision.titulo_no_aspirantes'),
+            text: this.translate.instant('admision.error_no_aspirantes'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        }
+      );
+
+      /* this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
         this.proyectos_selected + ',PeriodoId:' + this.periodo.Id + '&sortby=Id&order=asc').subscribe(
           (response: any) => {
             if (Object.keys(response[0]).length !== 0) {
@@ -479,7 +502,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
             reject(error);
             this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
           },
-        );
+        ); */
     });
 
   }
