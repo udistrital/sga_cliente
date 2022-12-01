@@ -303,8 +303,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         this.edit_status = false;
         //this.loading = false;
       } else {
-        if (Object.entries(this.formInfoFormacionAcademica.campos[inombre].valor).length !== 0 &&
-          this.formInfoFormacionAcademica.campos[inombre].valor !== null) {
+        if (this.formInfoFormacionAcademica.campos[inombre].valor ? 
+          this.formInfoFormacionAcademica.campos[inombre].valor.Id ? true : false : false) {
           IdUniversidad = this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].valor.Id;
           this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdUniversidad).subscribe(
             (res: any) => {
@@ -321,16 +321,17 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           )
         } else {
           this.loading = false;
-          [this.formInfoFormacionAcademica.campos[idir],
+          /* [this.formInfoFormacionAcademica.campos[idir],
           this.formInfoFormacionAcademica.campos[icorreo],
           this.formInfoFormacionAcademica.campos[iPais],
           this.formInfoFormacionAcademica.campos[itel]]
             .forEach(element => {
               element.deshabilitar = false;
-            });
+            }); */
           this.loadListUniversidades(nit);
-          this.nit = nit;
-          this.formInfoFormacionAcademica.campos[inombre].valor = nit;
+          //this.nit = nit;
+          //this.formInfoFormacionAcademica.campos[inombre].valor = nit;
+          this.formInfoFormacionAcademica.campos[init].valor = null;
         }
       }
     } else {

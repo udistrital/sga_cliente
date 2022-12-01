@@ -240,7 +240,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         this.detalleExp = null;
       } else {
         this.clean = !this.clean;
-        this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
+        //this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
         this.loadListEmpresa(nit);
         this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
       }
