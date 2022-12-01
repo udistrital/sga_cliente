@@ -231,7 +231,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         this.formInfoFormacionAcademica.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
         this.formInfoFormacionAcademica.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
         this.formInfoFormacionAcademica.campos[iPais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : { Id: 0, Nombre: 'No registrado' };
-        [this.formInfoFormacionAcademica.campos[inombre],
+        [this.formInfoFormacionAcademica.campos[init],
+        this.formInfoFormacionAcademica.campos[inombre],
         this.formInfoFormacionAcademica.campos[idir],
         this.formInfoFormacionAcademica.campos[icorreo],
         this.formInfoFormacionAcademica.campos[iPais],
@@ -405,6 +406,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                       DescripcionTrabajoGrado: this.temp_info_academica.DescripcionTrabajoGrado,
                     }
                     this.formInfoFormacionAcademica.campos[init].valor = this.info_formacion_academica.Nit;
+                    this.formInfoFormacionAcademica.campos[init].deshabilitar = true;
                     this.searchNit(this.temp_info_academica.Nit);
                     this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse[0].url;
                     this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].valor = filesResponse[0].url;
@@ -622,7 +624,11 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   setPercentage(event) {
     setTimeout(() => {
       this.percentage = event;
-      this.result.emit(this.percentage);
+      if(this.percentage == 0){
+        this.formInfoFormacionAcademica.campos[this.getIndexForm('Nit')].deshabilitar = false;
+      } else {
+        this.result.emit(this.percentage);
+      }
     });
   }
 
