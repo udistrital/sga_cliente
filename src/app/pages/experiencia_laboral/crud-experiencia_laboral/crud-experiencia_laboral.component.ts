@@ -185,7 +185,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     this.formInfoExperienciaLaboral.campos[icargo].valor = (this.detalleExp.Cargo &&
       this.detalleExp.Cargo.Id) ? this.detalleExp.Cargo : { Id: 0, Nombre: 'No registrado' };
     this.formInfoExperienciaLaboral.campos[iactividades].valor = (this.detalleExp.Actividades);
-    // this.formInfoExperienciaLaboral.campos[init].deshabilitar = true;
+     this.formInfoExperienciaLaboral.campos[init].deshabilitar = true;
 
     const files = []
     if (this.detalleExp.Soporte + '' !== '0') {
@@ -240,7 +240,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         this.detalleExp = null;
       } else {
         this.clean = !this.clean;
-        this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
+        //this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
         this.loadListEmpresa(nit);
         this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
       }
@@ -316,6 +316,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         this.formInfoExperienciaLaboral.campos[itipo].valor = (res.TipoTerceroId &&
           res.TipoTerceroId.Id) ? res.TipoTerceroId : { Id: 0, Nombre: 'No registrado' };
         [
+          this.formInfoExperienciaLaboral.campos[init],
           this.formInfoExperienciaLaboral.campos[inombre],
           this.formInfoExperienciaLaboral.campos[idir],
           this.formInfoExperienciaLaboral.campos[icorreo],
@@ -532,7 +533,11 @@ export class CrudExperienciaLaboralComponent implements OnInit {
 
   setPercentage(event) {
     this.percentage = event;
-    this.result.emit(this.percentage);
+    if(this.percentage == 0){
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('Nit')].deshabilitar = false;
+    } else {
+      this.result.emit(this.percentage);
+    }
   }
 
   validarForm(event) {
