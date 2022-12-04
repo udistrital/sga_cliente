@@ -87,6 +87,7 @@
 
 <nb-card [hidden]="!show_listado" accent="info">
         <nb-card-header class="d-flex justify-content-around align-items-center">
+          <p>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></p>
           <p>{{ 'cupos.cupos_proyecto' | translate }}: <b>{{cuposProyecto}}</b></p>
           <p>{{ 'cupos.cupos_disponibles' | translate }} <b>{{(cuposProyecto - cuposAsignados )}}</b></p>
           <button class="btn btn-primary" (click)="admitirInscritos()" *ngIf="(cuposProyecto - cuposAsignados ) > 0" >
@@ -97,7 +98,8 @@
         </nb-card-header>
 </nb-card>
 
-<nb-card *ngIf="show_listado" accent="info">
+<nb-card *ngIf="show_listado" accent="info"  [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
         <nb-card-body>
             <div class="row">
                 <div class="col-12">

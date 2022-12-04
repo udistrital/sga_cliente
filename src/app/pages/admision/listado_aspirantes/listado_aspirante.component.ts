@@ -21,6 +21,7 @@ import { map } from 'rxjs/operators';
 import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { ListService } from '../../../@core/store/services/list.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -72,6 +73,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   estados = [];
   IdIncripcionSolicitada = null;
   InfoContacto: any;
+  cantidad_aspirantes: number = 0;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -88,7 +90,9 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     private proyectoAcademicoService: ProyectoAcademicoService,
     private evaluacionService: EvaluacionInscripcionService,
     private store: Store<IAppState>,
-    private listService: ListService,) {
+    private listService: ListService,
+    private sgaMidService: SgaMidService,
+    ) {
 
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -404,7 +408,27 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.inscritos = [];
     this.admitidos = [];
 
-    let idTelefono = this.InfoContacto.find(c => c.CodigoAbreviacion == "TELEFONO").Id;
+    this.loading = true;
+    this.sgaMidService.get('admision/getlistaaspirantespor?id_periodo='+this.periodo.Id+'&id_proyecto='+this.proyectos_selected.Id+'&tipo_lista=3')
+      .subscribe(
+        (response: any) => {
+          if (response.Success && response.Status == "200") {
+            this.Aspirantes = response.Data;
+            this.admitidos = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'ADMITIDO'));
+            this.inscritos = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'INSCRITO'));
+            this.cuposAsignados = this.admitidos.length;
+            this.cantidad_aspirantes = this.Aspirantes.length;
+            this.source_emphasys.load(this.Aspirantes);
+            this.loading = false;
+          }
+        },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
+        }
+      );
+
+    /* let idTelefono = this.InfoContacto.find(c => c.CodigoAbreviacion == "TELEFONO").Id;
 
     this.inscripcionService.get('inscripcion?query=Activo:true,ProgramaAcademicoId:' + this.proyectos_selected.Id + ',PeriodoId:' + this.periodo.Id + '&sortby=NotaFinal&order=desc&limit=0').subscribe(
       (res: any) => {
@@ -479,7 +503,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             this.translate.instant('GLOBAL.info_estado'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
-      });
+      }); */
   }
 
   enfasis(idEnf) {
