@@ -12,11 +12,25 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
             <legend>
                 {{ 'calendario.informacion_general' | translate}}
             </legend>
+            <div class="row" *ngIf="IsAdmin">
+                <div class="col-3">
+                    <mat-form-field style="width: 100%;">
+                        <mat-label> {{ 'proyecto.nivel_proyecto' | translate }} </mat-label>
+                        <mat-select [(ngModel)]="nivelesSelected" (selectionChange)="onSelectLevel()">
+                            <mat-option *ngFor="let nivel of niveles" [value]="nivel">{{ nivel.Nombre }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-6">
                     <mat-form-field style="width: 100%;">
                         <mat-label> {{ 'calendario.proyecto_curricular' | translate }} </mat-label>
-                        <input matInput type="text" placeholder="{{ 'calendario.proyecto_curricular' | translate }}" value="{{Proyecto_nombre}}" readonly />
+                        <mat-select [(ngModel)]="proyectoSelected" (selectionChange)="onSelectPrograma()">
+                            <mat-option *ngFor="let proyecto of Proyectos" [value]="proyecto">
+                                {{proyecto.Nombre}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </div>
             </div>
