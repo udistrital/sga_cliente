@@ -16,6 +16,8 @@ import * as moment from 'moment';
 import { EventoService } from '../../../@core/data/evento.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 
 @Component({
   selector: 'administracion-calendario',
@@ -24,14 +26,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AdministracionCalendarioComponent implements OnInit {
 
-  loading: boolean = false;
-  processSettings: any;
-  activitiesSettings: any;
-  processTable: LocalDataSource;
-  processes: Proceso[] = [];
+loading: boolean = false;
+processSettings: any;
+activitiesSettings: any;
+processTable: LocalDataSource;
+processes: Proceso[] = [];
 
 userId: number = 0;
 DependenciaID: number = 0;
+IsAdmin: boolean = false;
+
+niveles: NivelFormacion[];
+nivelesSelected: NivelFormacion; 
+ProyectosFull: ProyectoAcademicoInstitucion[];
+Proyectos: ProyectoAcademicoInstitucion[];
+proyectoSelected: ProyectoAcademicoInstitucion;
 
 Proyecto_nombre: string = "";
 Calendario_academico: string = "";
@@ -51,6 +60,7 @@ idCalendario: number = 0;
     private parametrosService: ParametrosService,
     private router: Router,
     private route: ActivatedRoute,
+    private autenticationService: ImplicitAutenticationService,
     ) {
       this.processTable = new LocalDataSource();
       this.createProcessTable();
@@ -62,7 +72,22 @@ idCalendario: number = 0;
     }
 
   ngOnInit() {
-    this.getInfoPrograma();
+    this.autenticationService.getRole().then(
+      (rol: Array <String>) => {
+          let r = rol.find(role => role == "ADMIN_SGA");
+          if (r) {
+            this.IsAdmin = true;
+            this.getNivel();
+            this.getListaProyectos();
+          } else {
+            this.IsAdmin = false;
+            this.getProgramaIdByUser().then((id: number) => {
+              this.DependenciaID = id;
+              this.getInfoPrograma(this.DependenciaID);
+            })
+          }
+      }
+    );
   }
 
   createProcessTable() {
@@ -194,16 +219,14 @@ idCalendario: number = 0;
     activityConfig.data = { process: process, activity: event.data, periodo: this.periodo_calendario, dependencia: this.DependenciaID, vista: "edit_act" };
     const newActivity = this.dialog.open(EdicionActividadesProgramasComponent, activityConfig);
     newActivity.afterClosed().subscribe((activity: any) => {
-      console.log(activity)
       if (activity != undefined) {
         this.eventoService.get('calendario_evento/' + event.data.actividadId).subscribe(
           respGet => {
             respGet.DependenciaId = JSON.stringify(activity.UpdateDependencias)
             this.eventoService.put('calendario_evento', respGet).subscribe(
               respPut => {
-                console.log(respPut)
                 this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
-                this.getInfoPrograma();
+                this.getInfoPrograma(this.DependenciaID);
               }, error => {
                 this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
               }
@@ -230,11 +253,9 @@ idCalendario: number = 0;
                 }
               });
               respGet.DependenciaId = JSON.stringify(dep);
-              console.log(respGet)
               this.eventoService.put('calendario_evento', respGet).subscribe(
                 respPut => {
-                  console.log(respPut)
-                  this.getInfoPrograma();
+                  this.getInfoPrograma(this.DependenciaID);
                   this.popUpManager.showSuccessAlert(this.translate.instant('calendario.actividad_actualizada'));
                 }, error => {
                   this.popUpManager.showErrorToast(this.translate.instant('calendario.error_registro_actividad'));
@@ -251,122 +272,182 @@ idCalendario: number = 0;
     })
   }
 
-  getInfoPrograma() {
-    this.loading = true;
-    this.userId = this.userService.getPersonaId();//9855
+  getNivel() {
+    this.projectService.get('nivel_formacion?query=NivelFormacionPadreId__isnull:true&limit=0').subscribe(
+      (response: NivelFormacion[]) => {
+        this.niveles = response;
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
+  }
+
+  getListaProyectos() {
+    this.projectService.get('proyecto_academico_institucion?query=Activo:true&limit=0&fields=Id,Nombre,NivelFormacionId')
+      .subscribe(
+        (response: ProyectoAcademicoInstitucion[]) => {
+          this.ProyectosFull = response;
+        },
+        (error) => {
+          this.ProyectosFull = [];
+        }
+      );
+  }
+
+  onSelectLevel() {
+    this.proyectoSelected = undefined;
+    this.Calendario_academico = undefined;
     this.processes = [];
-    console.log("user id: ", this.userId)
-    console.log("vinculacion?query=Activo:true,tercero_principal_id:" + this.userId)
-    this.terceroService.get("vinculacion?query=Activo:true,tercero_principal_id:" + this.userId).subscribe(
-      (res_tercero: Vinculacion[]) => {
-        this.DependenciaID = res_tercero[0].DependenciaId;
-        this.projectService.get('proyecto_academico_institucion/' + this.DependenciaID).subscribe(
-          (res_proyecto: ProyectoAcademicoInstitucion) => {
-            this.Proyecto_nombre = res_proyecto.Nombre;
-            this.eventoService.get('tipo_recurrencia?limit=0').subscribe(
-              res_recurrencia => {
-                console.log("recurrencia: ", res_recurrencia)
-                this.periodicidad = res_recurrencia;
-                this.sgaMidService.get('consulta_calendario_proyecto/' + this.DependenciaID).subscribe(
-                  resp_calendar_project => {
-                    this.idCalendario = resp_calendar_project["CalendarioId"];
-                    this.sgaMidService.get('calendario_academico/v2/' + resp_calendar_project["CalendarioId"]).subscribe(
-                      response => {
-                        this.parametrosService.get('periodo/' + response.Data[0].PeriodoId).subscribe(
-                          resp => {
-                            console.log("periodo", resp.Data.Nombre)
-                            this.periodo_calendario = resp.Data.Nombre;
-                            this.Calendario_academico = response.Data[0].Nombre
-                            const processes: any[] = response.Data[0].proceso;
-                            if (processes !== null) {
-                              processes.forEach(element => {
-                                if (Object.keys(element).length !== 0) {
-                                  const loadedProcess: Proceso = new Proceso();
-                                  loadedProcess.Nombre = element['Proceso'];
-                                  loadedProcess.CalendarioId = { Id: res_tercero[0].PeriodoId };
-                                  loadedProcess.actividades = [];
-                                  const activities: any[] = element['Actividades']
-                                  if (activities !== null) {
-                                    activities.forEach(element => {
-                                      if (Object.keys(element).length !== 0 && element['EventoPadreId'] == null) {
-                                        const loadedActivity: Actividad = new Actividad();
-                                        loadedActivity.actividadId = element['actividadId'];
-                                        loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
-                                        loadedActivity.Nombre = element['Nombre'];
-                                        loadedActivity.Descripcion = element['Descripcion'];
-                                        loadedActivity['DependenciaId'] = this.validJSONdeps(element['DependenciaId']);
-                                        var FechasParticulares = this.findDatesforDep(loadedActivity['DependenciaId'], this.DependenciaID);
-                                        if(FechasParticulares == undefined){
-                                          loadedActivity.FechaInicio = moment(element['FechaInicio'], 'YYYY-MM-DD').format('DD-MM-YYYY');
-                                          loadedActivity.FechaFin = moment(element['FechaFin'], 'YYYY-MM-DD').format('DD-MM-YYYY');
-                                          loadedActivity.Activo = element['Activo'];
-                                          loadedActivity['Editable'] = false;
-                                        } else {
-                                          loadedActivity.FechaInicio = moment(FechasParticulares.Inicio, 'YYYY-MM-DDTHH:mm:ss[Z]').format('DD-MM-YYYY');
-                                          loadedActivity.FechaFin = moment(FechasParticulares.Fin, 'YYYY-MM-DDTHH:mm:ss[Z]').format('DD-MM-YYYY');
-                                          loadedActivity.Activo = FechasParticulares.Activo;
-                                          loadedActivity['Editable'] = true;
-                                        }
-                                        loadedActivity['FechaInicioOrg'] = moment(element['FechaInicio'], 'YYYY-MM-DD').format('DD-MM-YYYY');
-                                        loadedActivity['FechaFinOrg'] = moment(element['FechaFin'], 'YYYY-MM-DD').format('DD-MM-YYYY');
-                                        loadedActivity.responsables = element['Responsable'];
-                                        loadedProcess.procesoId = element['TipoEventoId']['Id'];
-                                        loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
-                                        let id_rec = element['TipoEventoId']['TipoRecurrenciaId']['Id']
-                                        loadedProcess.TipoRecurrenciaId = { Id: id_rec, Nombre: this.periodicidad.find(rec => rec.Id == id_rec).Nombre };
-                                        loadedProcess.actividades.push(loadedActivity);
+    this.processTable.load(this.processes);
+    this.Proyectos = this.ProyectosFull.filter((proyecto) => this.filtrarProyecto(proyecto));
+  }
+
+  filtrarProyecto(proyecto) {
+    if (this.nivelesSelected.Id === proyecto['NivelFormacionId']['Id']) {
+      return true
+    }
+    if (proyecto['NivelFormacionId']['NivelFormacionPadreId'] !== null) {
+      if (proyecto['NivelFormacionId']['NivelFormacionPadreId']['Id'] === this.nivelesSelected.Id) {
+        return true
+      }
+    } else {
+      return false
+    }
+  }
+
+  onSelectPrograma() {
+    this.Calendario_academico = undefined;
+    this.processes = [];
+    this.processTable.load(this.processes);
+    this.DependenciaID = this.proyectoSelected.Id;
+    this.getInfoPrograma(this.DependenciaID);
+  }
+
+  getProgramaIdByUser() {
+    return new Promise((resolve, reject) => {
+      this.userId = this.userService.getPersonaId();
+      this.terceroService.get("vinculacion?query=Activo:true,tercero_principal_id:" + this.userId)
+        .subscribe(
+          (response: Vinculacion[]) => {
+            let dependenciaId = response[0].DependenciaId || 0;
+            if (dependenciaId > 0){
+              resolve(dependenciaId)
+            } else {
+              reject("No valid Ids")
+            }
+          },
+          (error) => {
+            reject("Fail to connect")
+          }
+        );
+    });  
+  }
+
+  getInfoPrograma(DependenciaId: number) {
+    this.loading = true;
+    this.processes = [];
+    this.projectService.get('proyecto_academico_institucion/' + DependenciaId).subscribe(
+      (res_proyecto: ProyectoAcademicoInstitucion) => {
+        this.Proyecto_nombre = res_proyecto.Nombre;
+        if (!this.IsAdmin) {
+          this.Proyectos = [res_proyecto];
+          this.proyectoSelected = res_proyecto;
+        }
+        this.eventoService.get('tipo_recurrencia?limit=0').subscribe(
+          res_recurrencia => {
+            this.periodicidad = res_recurrencia;
+            this.sgaMidService.get('consulta_calendario_proyecto/' + DependenciaId).subscribe(
+              resp_calendar_project => {
+                this.idCalendario = resp_calendar_project["CalendarioId"];
+                if (this.idCalendario > 0) {
+                  this.sgaMidService.get('calendario_academico/v2/' + resp_calendar_project["CalendarioId"]).subscribe(
+                    response => {
+                      this.parametrosService.get('periodo/' + response.Data[0].PeriodoId).subscribe(
+                        resp => {
+                          this.periodo_calendario = resp.Data.Nombre;
+                          this.Calendario_academico = response.Data[0].Nombre
+                          const processes: any[] = response.Data[0].proceso;
+                          if (processes !== null) {
+                            processes.forEach(element => {
+                              if (Object.keys(element).length !== 0) {
+                                const loadedProcess: Proceso = new Proceso();
+                                loadedProcess.Nombre = element['Proceso'];
+                                loadedProcess.CalendarioId = { Id: response.Data[0].Id };
+                                loadedProcess.actividades = [];
+                                const activities: any[] = element['Actividades']
+                                if (activities !== null) {
+                                  activities.forEach(element => {
+                                    if (Object.keys(element).length !== 0 && element['EventoPadreId'] == null) {
+                                      const loadedActivity: Actividad = new Actividad();
+                                      loadedActivity.actividadId = element['actividadId'];
+                                      loadedActivity.TipoEventoId = { Id: element['TipoEventoId']['Id'] };
+                                      loadedActivity.Nombre = element['Nombre'];
+                                      loadedActivity.Descripcion = element['Descripcion'];
+                                      loadedActivity['DependenciaId'] = this.validJSONdeps(element['DependenciaId']);
+                                      var FechasParticulares = this.findDatesforDep(loadedActivity['DependenciaId'], DependenciaId);
+                                      if(FechasParticulares == undefined){
+                                        loadedActivity.FechaInicio = moment(element['FechaInicio'], 'YYYY-MM-DD').format('DD-MM-YYYY');
+                                        loadedActivity.FechaFin = moment(element['FechaFin'], 'YYYY-MM-DD').format('DD-MM-YYYY');
+                                        loadedActivity.Activo = element['Activo'];
+                                        loadedActivity['Editable'] = false;
+                                      } else {
+                                        loadedActivity.FechaInicio = moment(FechasParticulares.Inicio, 'YYYY-MM-DDTHH:mm:ss[Z]').format('DD-MM-YYYY');
+                                        loadedActivity.FechaFin = moment(FechasParticulares.Fin, 'YYYY-MM-DDTHH:mm:ss[Z]').format('DD-MM-YYYY');
+                                        loadedActivity.Activo = FechasParticulares.Activo;
+                                        loadedActivity['Editable'] = true;
                                       }
-                                    });
-                                    this.processes.push(loadedProcess);
-                                  }
+                                      loadedActivity['FechaInicioOrg'] = moment(element['FechaInicio'], 'YYYY-MM-DD').format('DD-MM-YYYY');
+                                      loadedActivity['FechaFinOrg'] = moment(element['FechaFin'], 'YYYY-MM-DD').format('DD-MM-YYYY');
+                                      loadedActivity.responsables = element['Responsable'];
+                                      loadedProcess.procesoId = element['TipoEventoId']['Id'];
+                                      loadedProcess.Descripcion = element['TipoEventoId']['Descripcion'];
+                                      let id_rec = element['TipoEventoId']['TipoRecurrenciaId']['Id']
+                                      loadedProcess.TipoRecurrenciaId = { Id: id_rec, Nombre: this.periodicidad.find(rec => rec.Id == id_rec).Nombre };
+                                      loadedProcess.actividades.push(loadedActivity);
+                                    }
+                                  });
+                                  this.processes.push(loadedProcess);
                                 }
-                              });
-                              this.processTable.load(this.processes);
-                              this.loading = false;
-                            } else {
-                              this.loading = false;
-                            }
-                            if( <boolean>response.Data[0].AplicaExtension ){
-                              this.popUpManager.showAlert(this.translate.instant('calendario.formulario_extension'),this.translate.instant('calendario.calendario_tiene_extension'));
-                            }
-                          },
-                          error => {
-                            console.log("error_periodo:", error)
+                              }
+                            });
+                            this.processTable.load(this.processes);
                             this.loading = false;
-                            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                          } else {
+                            this.loading = false;
                           }
-                        );
-                      },
-                      error => {
-                        console.log("error calend: ", error)
-                        this.loading = false;
-                        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                      }
-                    );
-                  }, error => {
-                    console.log("error_calendario_por_dependencia: ", error)
-                    this.loading = false;
-                    this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                    
-                  }
-                );
-              },
-              error => {
-                console.log("error_recurrencia: ", error)
+                          if( <boolean>response.Data[0].AplicaExtension ){
+                            this.popUpManager.showAlert(this.translate.instant('calendario.formulario_extension'),this.translate.instant('calendario.calendario_tiene_extension'));
+                          }
+                        },
+                        error => {
+                          this.loading = false;
+                          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                        }
+                      );
+                    },
+                    error => {
+                      this.loading = false;
+                      this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                    }
+                  );
+                } else {
+                  this.loading = false;
+                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                }
+              }, error => {
                 this.loading = false;
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.general')); 
               }
             );
           },
           error => {
-            console.log("error proyec:", error)
             this.loading = false;
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
           }
-        )
+        );
       },
       error => {
-        console.log("error info prog:", error)
         this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       }
@@ -410,6 +491,3 @@ idCalendario: number = 0;
   }
 
 }
-
-
- 
