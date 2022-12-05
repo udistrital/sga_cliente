@@ -18,6 +18,7 @@ import { Invitacion } from '../../../@core/data/models/correo/invitacion';
 import { InvitacionTemplate } from '../../../@core/data/models/correo/invitacionTemplate';
 import Swal from 'sweetalert2';
 import { PivotDocument } from '../../../@core/utils/pivot_document.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 
 @Component({
@@ -28,6 +29,7 @@ import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 })
 export class EvaluacionDocumentosInscritosComponent implements OnInit {
 
+  loading: boolean = false;
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
   settings: any;
@@ -41,6 +43,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   showProfile: boolean;
   invitacion: Invitacion;
   invitacionTemplate: InvitacionTemplate;
+  cantidad_aspirantes: number = 0;
 
   periodos = [];
   proyectos = [];
@@ -57,7 +60,8 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     private documentoService: DocumentoService,
     private dialog: MatDialog,
     private googleMidService: GoogleService,
-    private pivotDocument: PivotDocument
+    private pivotDocument: PivotDocument,
+    private sgaMidService: SgaMidService,
   ) {
     this.invitacion = new Invitacion();
     this.invitacionTemplate = new InvitacionTemplate();
@@ -158,9 +162,32 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   }
 
   loadInscritos() {
+    this.loading = true;
     this.dataSource.load([]);
     this.Aspirantes = [];
-    this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
+
+    this.sgaMidService.get('admision/getlistaaspirantespor?id_periodo='+this.periodo.Id+'&id_proyecto='+this.proyectos_selected+'&tipo_lista=1')
+    .subscribe(
+      (response: any) => {
+        if (response.Success && response.Status == "200") {
+          this.Aspirantes = response.Data;
+          this.cantidad_aspirantes = this.Aspirantes.length;
+          this.dataSource.load(this.Aspirantes);
+          this.loading = false;
+        }
+      },
+      (error: HttpErrorResponse) => {
+        this.loading = false;
+        Swal.fire({
+          icon: 'warning',
+          title: this.translate.instant('admision.titulo_no_aspirantes'),
+          text: this.translate.instant('admision.error_no_aspirantes'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
+      }
+    );
+    
+    /* this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
       this.proyectos_selected + ',PeriodoId:' + this.periodo.Id +
       '&sortby=Id&order=asc').subscribe(
         (response: any) => {
@@ -198,7 +225,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
         error => {
           this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
         },
-      );
+      ); */
   }
 
   activateTab() {

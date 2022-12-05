@@ -106,6 +106,9 @@
               </label>
             </div>
             <br/>
+            <div class="d-flex justify-content-around align-items-center">
+                <p>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></p>
+            </div>
             <ng2-smart-table [settings]="settings"
                              [source]="dataSource"
                              (editConfirm)="onEditConfirm($event)"

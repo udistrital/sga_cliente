@@ -1,4 +1,5 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
   <nb-card-body>
     <div class=col-12>
       <fieldset [ngClass]="{'fieldseter':true}" >
@@ -37,6 +38,9 @@
           </mat-form-field>
           <br/><br/>
 
+          <nb-card-body class="d-flex justify-content-around align-items-center">
+            <p>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></p>
+          </nb-card-body>
             <!--Tabla-->
             <nb-card-body>
               <div style="overflow: auto;">
