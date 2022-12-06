@@ -38,9 +38,17 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
           </mat-form-field>
           <br/><br/>
 
-          <nb-card-body class="d-flex justify-content-around align-items-center">
-            <p>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></p>
-          </nb-card-body>
+          <nb-card status="success" style="border: 1px solid var(--primary);" *ngIf="mostrarConteos">
+            <nb-card-header class="d-flex justify-content-around align-items-center">
+              {{ 'admision.resumen_estados_inscripcion' | translate }}
+            </nb-card-header>
+            <nb-card-body class="d-flex justify-content-around align-items-center">
+              <label>{{ 'admision.estado_inscrito' | translate }}: <b>{{cantidad_inscritos}}</b></label>
+              <label>{{ 'admision.estado_admitido' | translate }}: <b>{{cantidad_admitidos}}</b></label>
+              <label>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></label>
+            </nb-card-body>
+          </nb-card>
+          
             <!--Tabla-->
             <nb-card-body>
               <div style="overflow: auto;">

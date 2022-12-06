@@ -1632,7 +1632,13 @@
         "guardado_existoso_suite": "Los datos de la Suite se han guardado correctamente",
         "fallo_guardado_suite": "Algo salió mal, la Suite no ha podido ser guardada",
         "info_uso_select_tags": "Seleccione los \"tags\" necesarios haciendo clic sobre los íconos, estos quedarán marcados con un recuadro. Los marcados por el recuadro serán visibles para el aspirante y puede hacer que la información requerida sea obligatoria o no seleccionando la opción \"Obligatorio\".",
-        "total_aspirantes": "Total aspirantes"
+        "total_aspirantes": "Total aspirantes",
+        "estado_inscrip_solicitada": "Inscripción solicitada",
+        "estado_admitido": "Admitido",
+        "estado_opcionado": "Opcionado",
+        "estado_no_admitido": "No Admitido",
+        "estado_inscrito": "Inscrito",
+        "resumen_estados_inscripcion": "Resumen estados de inscripción aspirantes"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",
