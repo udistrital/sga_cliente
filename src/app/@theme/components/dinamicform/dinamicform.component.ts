@@ -369,6 +369,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
         d.valor = "";
       }
     });
+    this.percentage.emit(0);
   }
 
   validForm() {

@@ -47,6 +47,7 @@
               <mat-label>{{ 'calendario.periodo' | translate }}:</mat-label>
               <mat-select [(ngModel)]="periodo" >
                 <mat-option>--Seleccionar--</mat-option>
+
                 <mat-option *ngFor="let item of periodos" [value]="item">
                   {{item.Nombre}}
                 </mat-option>

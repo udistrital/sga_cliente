@@ -178,6 +178,11 @@ export class EvaluacionAspirantesComponent implements OnInit {
     });
   }
 
+  changePeriodo() {
+    this.CampoControl.setValue('');
+    this.Campo1Control.setValue('');
+  }
+
   loadLevel() {
     this.projectService.get('nivel_formacion?limit=0').subscribe(
       (response: any) => {

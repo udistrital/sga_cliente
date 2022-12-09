@@ -48,6 +48,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   cantidad_inscritos: number = 0;
   mostrarConteos: boolean = false;
 
+
   periodos = [];
   proyectos = [];
   Aspirantes = [];
@@ -114,6 +115,11 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
             reject(error);
           });
     });
+  }
+
+  changePeriodo() {
+    this.CampoControl.setValue('');
+    this.Campo1Control.setValue('');
   }
 
   loadLevel() {
@@ -187,6 +193,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
           });
         }
       );
+
 
     /* this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
       this.proyectos_selected + ',PeriodoId:' + this.periodo.Id +

@@ -81,6 +81,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   cantidad_inscritos: number = 0;
   mostrarConteos: boolean = false;
 
+
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
@@ -267,6 +268,11 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     });
   }
 
+  changePeriodo() {
+    this.CampoControl.setValue('');
+    this.Campo1Control.setValue('');
+  }
+
   nivel_load() {
     this.projectService.get('nivel_formacion?limit=0').subscribe(
       (response: NivelFormacion[]) => {
@@ -418,7 +424,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             this.admitidos = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'ADMITIDO'));
             this.inscritos = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'INSCRITO'));
             this.cuposAsignados = this.admitidos.length;
-
             this.cantidad_inscrip_solicitada = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'Inscripción solicitada')).length;
             this.cantidad_admitidos = this.admitidos.length;
             this.cantidad_opcionados = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'OPCIONADO')).length;
