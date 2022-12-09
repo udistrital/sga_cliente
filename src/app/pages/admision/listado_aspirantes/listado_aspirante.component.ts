@@ -74,6 +74,12 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   IdIncripcionSolicitada = null;
   InfoContacto: any;
   cantidad_aspirantes: number = 0;
+  cantidad_inscrip_solicitada: number = 0;
+  cantidad_admitidos: number = 0;
+  cantidad_opcionados: number = 0;
+  cantidad_no_admitidos: number = 0;
+  cantidad_inscritos: number = 0;
+  mostrarConteos: boolean = false;
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -412,13 +418,22 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             this.admitidos = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'ADMITIDO'));
             this.inscritos = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'INSCRITO'));
             this.cuposAsignados = this.admitidos.length;
-            this.cantidad_aspirantes = this.Aspirantes.length;
+
+            this.cantidad_inscrip_solicitada = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'Inscripción solicitada')).length;
+            this.cantidad_admitidos = this.admitidos.length;
+            this.cantidad_opcionados = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'OPCIONADO')).length;
+            this.cantidad_no_admitidos = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'NO ADMITIDO')).length;
+            this.cantidad_inscritos = this.inscritos.length;
+            this.cantidad_aspirantes = this.cantidad_inscrip_solicitada + this.cantidad_admitidos + this.cantidad_opcionados + this.cantidad_no_admitidos + this.cantidad_inscritos;
+
             this.source_emphasys.load(this.Aspirantes);
             this.loading = false;
+            this.mostrarConteos = true;
           }
         },
         (error: HttpErrorResponse) => {
           this.loading = false;
+          this.mostrarConteos = false;
           this.popUpManager.showErrorToast(this.translate.instant('admision.no_data'));
         }
       );

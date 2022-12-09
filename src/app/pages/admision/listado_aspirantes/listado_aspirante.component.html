@@ -86,11 +86,24 @@
   </nb-card-body>
 </nb-card>
 
+<nb-card status="success" style="border: 1px solid var(--primary);" *ngIf="mostrarConteos">
+  <nb-card-header class="d-flex justify-content-around align-items-center">
+    {{ 'admision.resumen_estados_inscripcion' | translate }}
+  </nb-card-header>
+  <nb-card-body class="d-flex justify-content-around align-items-center">
+    <label>{{ 'admision.estado_inscrip_solicitada' | translate }}: <b>{{cantidad_inscrip_solicitada}}</b></label>
+    <label>{{ 'admision.estado_admitido' | translate }}: <b>{{cantidad_admitidos}}</b></label>
+    <label>{{ 'admision.estado_opcionado' | translate }}: <b>{{cantidad_opcionados}}</b></label>
+    <label>{{ 'admision.estado_no_admitido' | translate }}: <b>{{cantidad_no_admitidos}}</b></label>
+    <label>{{ 'admision.estado_inscrito' | translate }}: <b>{{cantidad_inscritos}}</b></label>
+    <label>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></label>
+  </nb-card-body>
+</nb-card>
+
 <nb-card [hidden]="!show_listado" accent="info">
         <nb-card-header class="d-flex justify-content-around align-items-center">
-          <p>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></p>
-          <p>{{ 'cupos.cupos_proyecto' | translate }}: <b>{{cuposProyecto}}</b></p>
-          <p>{{ 'cupos.cupos_disponibles' | translate }} <b>{{(cuposProyecto - cuposAsignados )}}</b></p>
+          <label>{{ 'cupos.cupos_proyecto' | translate }}: <b>{{cuposProyecto}}</b></label>
+          <label>{{ 'cupos.cupos_disponibles' | translate }} <b>{{(cuposProyecto - cuposAsignados )}}</b></label>
           <button class="btn btn-primary" (click)="admitirInscritos()" *ngIf="(cuposProyecto - cuposAsignados ) > 0" >
             {{ 'GLOBAL.admitir' | translate }} 
             {{inscritos.length < (cuposProyecto - cuposAsignados )? inscritos.length: (cuposProyecto - cuposAsignados ) }} 

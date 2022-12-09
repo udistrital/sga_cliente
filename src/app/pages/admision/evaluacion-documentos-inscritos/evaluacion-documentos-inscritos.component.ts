@@ -44,6 +44,9 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   invitacion: Invitacion;
   invitacionTemplate: InvitacionTemplate;
   cantidad_aspirantes: number = 0;
+  cantidad_admitidos: number = 0;
+  cantidad_inscritos: number = 0;
+  mostrarConteos: boolean = false;
 
   periodos = [];
   proyectos = [];
@@ -165,13 +168,17 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
         (response: any) => {
           if (response.Success && response.Status == "200") {
             this.Aspirantes = response.Data;
-            this.cantidad_aspirantes = this.Aspirantes.length;
+            this.cantidad_inscritos = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO").length;
+            this.cantidad_admitidos = this.Aspirantes.filter(aspirante => aspirante.Estado == "ADMITIDO").length;
+            this.cantidad_aspirantes = this.cantidad_inscritos + this.cantidad_inscritos;
             this.dataSource.load(this.Aspirantes);
             this.loading = false;
+            this.mostrarConteos = true;
           }
         },
         (error: HttpErrorResponse) => {
           this.loading = false;
+          this.mostrarConteos = false;
           Swal.fire({
             icon: 'warning',
             title: this.translate.instant('admision.titulo_no_aspirantes'),

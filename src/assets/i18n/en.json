@@ -1600,7 +1600,14 @@
         "guardado_existoso_suite": "Suite data has been successfully saved",
         "fallo_guardado_suite": "Something went wrong, the Suite could not be saved",
         "info_uso_select_tags": "Select the necessary \"tags\" by clicking on the icons, these will be marked with a box. Those marked by the box will be visible to the applicant and you can make the required information mandatory or not by selecting the \"Required\" option.",
-        "total_aspirantes": "Total applicants"
+        "total_aspirantes": "Total applicants",
+        "estado_inscrip_solicitada": "Requested enrollment",
+        "estado_admitido": "Admitted",
+        "estado_opcionado": "Optioned",
+        "estado_no_admitido": "Unadmitted",
+        "estado_inscrito": "Enrolled",
+        "resumen_estados_inscripcion": "Summary status of applicants"
+
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",
