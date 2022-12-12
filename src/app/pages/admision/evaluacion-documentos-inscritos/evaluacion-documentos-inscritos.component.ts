@@ -44,6 +44,10 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   invitacion: Invitacion;
   invitacionTemplate: InvitacionTemplate;
   cantidad_aspirantes: number = 0;
+  cantidad_admitidos: number = 0;
+  cantidad_inscritos: number = 0;
+  mostrarConteos: boolean = false;
+
 
   periodos = [];
   proyectos = [];
@@ -94,7 +98,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo/?query=CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
+      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {
@@ -165,28 +169,32 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     this.loading = true;
     this.dataSource.load([]);
     this.Aspirantes = [];
-
     this.sgaMidService.get('admision/getlistaaspirantespor?id_periodo='+this.periodo.Id+'&id_proyecto='+this.proyectos_selected+'&tipo_lista=1')
-    .subscribe(
-      (response: any) => {
-        if (response.Success && response.Status == "200") {
-          this.Aspirantes = response.Data;
-          this.cantidad_aspirantes = this.Aspirantes.length;
-          this.dataSource.load(this.Aspirantes);
+      .subscribe(
+        (response: any) => {
+          if (response.Success && response.Status == "200") {
+            this.Aspirantes = response.Data;
+            this.cantidad_inscritos = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO").length;
+            this.cantidad_admitidos = this.Aspirantes.filter(aspirante => aspirante.Estado == "ADMITIDO").length;
+            this.cantidad_aspirantes = this.cantidad_inscritos + this.cantidad_inscritos;
+            this.dataSource.load(this.Aspirantes);
+            this.loading = false;
+            this.mostrarConteos = true;
+          }
+        },
+        (error: HttpErrorResponse) => {
           this.loading = false;
+          this.mostrarConteos = false;
+          Swal.fire({
+            icon: 'warning',
+            title: this.translate.instant('admision.titulo_no_aspirantes'),
+            text: this.translate.instant('admision.error_no_aspirantes'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
         }
-      },
-      (error: HttpErrorResponse) => {
-        this.loading = false;
-        Swal.fire({
-          icon: 'warning',
-          title: this.translate.instant('admision.titulo_no_aspirantes'),
-          text: this.translate.instant('admision.error_no_aspirantes'),
-          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        });
-      }
-    );
-    
+      );
+
+
     /* this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
       this.proyectos_selected + ',PeriodoId:' + this.periodo.Id +
       '&sortby=Id&order=asc').subscribe(

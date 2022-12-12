@@ -12,7 +12,7 @@
                 <!-- select periodo -->
                 <mat-form-field style="width: 35%;">
                   <mat-label>{{ 'admision.aviso_periodo' | translate }}:</mat-label>
-                  <mat-select [(ngModel)]="periodo" [disabled]='false' (selectionChange)="changePeriodo()">
+                  <mat-select [(ngModel)]="periodo" >
                     <mat-option *ngFor="let item of periodos" [value]="item"> {{item.Nombre}} </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -107,8 +107,10 @@
             </div>
             <br/>
             <div class="d-flex justify-content-around align-items-center">
-                <p>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></p>
+                <label>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></label>
             </div>
+            <br>
+
             <ng2-smart-table [settings]="settings"
                              [source]="dataSource"
                              (editConfirm)="onEditConfirm($event)"
