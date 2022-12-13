@@ -11,6 +11,7 @@ import { CIDCService } from '../../../@core/data/cidc.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
 
 @Component({
   selector: 'ngx-view-propuesta-grado',
@@ -56,7 +57,8 @@ export class ViewPropuestaGradoComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private newNuxeoService: NewNuxeoService,
     private sanitization: DomSanitizer,
-    private utilidades: UtilidadesService) {
+    private utilidades: UtilidadesService,
+    private zipManagerService: ZipManagerService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -265,7 +267,9 @@ export class ViewPropuestaGradoComponent implements OnInit {
                   observacion: estadoDoc.observacion,
                   nombreDocumento: temp.Nombre,
                   tabName: this.translate.instant('inscripcion.propuesta_grado'),
+                  carpeta: "Propuesta de Trabajo de Grado"
                 }
+                this.zipManagerService.adjuntarArchivos([temp.Soporte]);
                 this.FormatoProyecto = temp.DocumentoId;
                 if (temp.GrupoInvestigacionId === 0) {
                   temp.GrupoInvestigacion = <any>{ name: "No aplica" };

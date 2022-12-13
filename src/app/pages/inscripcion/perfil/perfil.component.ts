@@ -4,6 +4,7 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 import html2canvas from 'html2canvas';
 import { interval, Subject, Subscription } from 'rxjs';
+import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
 
 @Component({
   selector: 'ngx-perfil',
@@ -41,7 +42,8 @@ export class PerfilComponent implements OnInit {
   @ViewChild('comprobante', {static: true}) comprobante: ElementRef;
 
   constructor(private translate: TranslateService,
-    public pivotDocument: PivotDocument) {
+    public pivotDocument: PivotDocument,
+    private zipManagerService: ZipManagerService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.loading = true;
@@ -56,6 +58,7 @@ export class PerfilComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.zipManagerService.limpiarArchivos();
   }
 
   ngOnChanges() {
@@ -133,6 +136,20 @@ export class PerfilComponent implements OnInit {
       documento.observando = true; 
       this.revisar_doc.emit(documento)
     }
+  }
+
+  descargar_compilado_zip() {
+    this.loading = true;
+    let nombre: string = sessionStorage.getItem('nameFolder');
+    this.zipManagerService.generarZip(nombre).then((zip: string) => {
+      this.loading = false;
+      let download = document.createElement("a");
+      download.href = zip;
+      download.download = nombre+".zip";
+      document.body.appendChild(download);
+      download.click();
+      document.body.removeChild(download);
+    })
   }
 
 }
