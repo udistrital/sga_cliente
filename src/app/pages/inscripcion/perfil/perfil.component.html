@@ -94,6 +94,11 @@
                                      persona_id="{{info_persona_id}}"
                                      class="col-md-12">
         </ngx-view-documento-programa>
+
+        <div class="col-md-12" *ngIf="en_revision">
+          <button mat-raised-button color="primary" (click)="descargar_compilado_zip()">{{ 'admision.descargar_zip' | translate }}</button>
+        </div>
+
         <div class="col-md-12">
           <nb-card *ngIf="imprimir">
             <nb-card-body class="row container">

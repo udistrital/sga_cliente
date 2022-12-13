@@ -1638,7 +1638,8 @@
         "estado_opcionado": "Opcionado",
         "estado_no_admitido": "No Admitido",
         "estado_inscrito": "Inscrito",
-        "resumen_estados_inscripcion": "Resumen estados de inscripción aspirantes"
+        "resumen_estados_inscripcion": "Resumen estados de inscripción aspirantes",
+        "descargar_zip": "Descargar compilado documental del aspirante"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",
