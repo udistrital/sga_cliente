@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
 
 @Component({
   selector: 'ngx-view-descuento-academico',
@@ -59,7 +60,8 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     private inscripcionService: InscripcionService,
     private newNuxeoService: NewNuxeoService,
     private sgaMidService: SgaMidService,
-    private utilidades: UtilidadesService) {
+    private utilidades: UtilidadesService,
+    private zipManagerService: ZipManagerService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -107,8 +109,10 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
                     estadoObservacion: estadoDoc.estadoObservacion,
                     observacion: estadoDoc.observacion,
                     nombreDocumento: info.DescuentosDependenciaId ? info.DescuentosDependenciaId.TipoDescuentoId ? info.DescuentosDependenciaId.TipoDescuentoId.Nombre : '' : '',
-                    tabName: this.translate.instant('inscripcion.descuento_matricula')
+                    tabName: this.translate.instant('inscripcion.descuento_matricula'),
+                    carpeta: "Descuentos de Matrícula"
                   }
+                  this.zipManagerService.adjuntarArchivos([info.Soporte]);
                 }
                 
               });

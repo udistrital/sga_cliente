@@ -12,6 +12,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { InfoCaracteristica } from '../../../@core/data/models/informacion/info_caracteristica';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
 
 @Component({
   selector: 'ngx-view-info-persona',
@@ -53,7 +54,8 @@ export class ViewInfoPersonaComponent implements OnInit {
     private userService: UserService,
     private newNuxeoService: NewNuxeoService,
     private popUpManager: PopUpManager,
-    private utilidades: UtilidadesService) {
+    private utilidades: UtilidadesService,
+    private zipManagerService: ZipManagerService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -83,6 +85,10 @@ export class ViewInfoPersonaComponent implements OnInit {
           const r = <any>res;
           if (r !== null && r.Type !== 'error') {
             this.info_info_persona = <InfoPersona>res;
+            let nombreAspirante: string = this.info_info_persona.PrimerApellido + ' ' + this.info_info_persona.SegundoApellido + ' '
+                                  + this.info_info_persona.PrimerNombre + ' ' + this.info_info_persona.SegundoNombre;
+            let nombreCarpetaDocumental: string = sessionStorage.getItem('IdInscripcion') + ' ' + nombreAspirante;
+            sessionStorage.setItem('nameFolder', nombreCarpetaDocumental);
             this.sgaMidService.get('persona/consultar_complementarios/' + this.info_persona_id)
             .subscribe( res => {
               if (res !== null && res.Response.Code !== '404') {
@@ -109,7 +115,9 @@ export class ViewInfoPersonaComponent implements OnInit {
                         observacion: estadoDoc.observacion,
                         nombreDocumento: this.tipoDiscapacidad,
                         tabName: this.translate.instant('GLOBAL.comprobante_discapacidad'),
+                        carpeta: "Informacion Básica"
                       }
+                      this.zipManagerService.adjuntarArchivos([this.docDiscapacidad]);
                     }
                   )
                 }
@@ -135,7 +143,9 @@ export class ViewInfoPersonaComponent implements OnInit {
                         observacion: estadoDoc.observacion,
                         nombreDocumento: this.tipoPoblacion,
                         tabName: this.translate.instant('GLOBAL.comprobante_poblacion'),
+                        carpeta: "Informacion Básica"
                       }
+                      this.zipManagerService.adjuntarArchivos([this.docPoblacion]);
                     }
                   )
                   

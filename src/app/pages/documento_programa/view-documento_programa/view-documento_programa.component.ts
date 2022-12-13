@@ -9,6 +9,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
 
 @Component({
   selector: 'ngx-view-documento-programa',
@@ -55,7 +56,8 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     private popUpManager: PopUpManager,
     private newNuxeoService: NewNuxeoService,
     private userService: UserService,
-    private utilidades: UtilidadesService) {
+    private utilidades: UtilidadesService,
+    private zipManagerService: ZipManagerService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -97,6 +99,8 @@ export class ViewDocumentoProgramaComponent implements OnInit {
                       doc.observacion = estadoDoc.observacion;
                       doc.nombreDocumento = doc.DocumentoProgramaId ? doc.DocumentoProgramaId.TipoDocumentoProgramaId ? doc.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre : '' : '';
                       doc.tabName = this.translate.instant('inscripcion.documento_programa');
+                      doc.carpeta = "Documentos Solicitados";
+                      this.zipManagerService.adjuntarArchivos([doc]);
                     }
                   });
                 }

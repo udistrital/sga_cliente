@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
 
 @Component({
   selector: 'ngx-view-experiencia-laboral',
@@ -44,7 +45,8 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private newNuxeoService: NewNuxeoService,
     private sanitization: DomSanitizer,
-    private utilidades: UtilidadesService) {
+    private utilidades: UtilidadesService,
+    private zipManagerService: ZipManagerService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -92,8 +94,10 @@ export class ViewExperienciaLaboralComponent implements OnInit {
                         estadoObservacion: estadoDoc.estadoObservacion,
                         observacion: estadoDoc.observacion,
                         nombreDocumento: info.Cargo ? info.Cargo.Nombre : '',
-                        tabName: this.translate.instant('inscripcion.experiencia_laboral')
+                        tabName: this.translate.instant('inscripcion.experiencia_laboral'),
+                        carpeta: "Experiencia Laboral",
                       }
+                      this.zipManagerService.adjuntarArchivos([info.Soporte]);
                     }
                   });
                   /* for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
