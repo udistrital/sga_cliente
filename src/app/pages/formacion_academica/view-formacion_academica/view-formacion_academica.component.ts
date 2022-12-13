@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
 
 @Component({
   selector: 'ngx-view-formacion-academica',
@@ -42,7 +43,8 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     private nuxeoService: NuxeoService,
     private newNuxeoService: NewNuxeoService,
     private sanitization: DomSanitizer,
-    private utilidades: UtilidadesService) {
+    private utilidades: UtilidadesService,
+    private zipManagerService: ZipManagerService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -88,6 +90,8 @@ export class ViewFormacionAcademicaComponent implements OnInit {
                     element.observacion = estadoDoc.observacion;
                     element.nombreDocumento = element.ProgramaAcademico ? element.ProgramaAcademico.Nombre : '';
                     element.tabName = this.translate.instant('GLOBAL.formacion_academica');
+                    element.carpeta = "Formación Académica";
+                    this.zipManagerService.adjuntarArchivos([element]);
               },
                 (error: HttpErrorResponse) => {
                   Swal.fire({

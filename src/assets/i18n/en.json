@@ -1606,7 +1606,8 @@
         "estado_opcionado": "Optioned",
         "estado_no_admitido": "Unadmitted",
         "estado_inscrito": "Enrolled",
-        "resumen_estados_inscripcion": "Summary status of applicants"
+        "resumen_estados_inscripcion": "Summary status of applicants",
+        "descargar_zip": "Download the applicant's documentary compilation"
 
     },
     "cupos": {
