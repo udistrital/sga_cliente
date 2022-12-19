@@ -1284,7 +1284,7 @@
         "comprobante_inscripcion": "Inscription Voucher",
         "info_comprobante": "Fulfilling this form means the candidate has known the official admissions manual for the ACTUAL PERIOD and according with the 1571 law from 2012 authorizes expressly and unequivocally the data management according to the proper functions of the University in his condition of High Education Institution.",
         "warning_info":"Dear user, remember that you can only generate up to 3 receipts in pending payment status. If you want to generate another pre-registration to another project, you must pay at least one of the generated receipts.",
-        "alerta_preinscripcion":"Applicant, in order to complete the registration process, you must fill out 100% of the Basic Information, Academic training, Work Experience and Requested Documents sections.",
+        "alerta_preinscripcion":"Applicant, in order to complete the registration process, you must fill out 100% of the required information sections.",
         "alerta_posgrado":"Dear applicant, keep in mind that in order to enroll in a graduate program, you must have a completed and graduated undergraduate degree, with their respective documentary supports.",
         "alerta_veracidad_informacion": "Applicant, please note that the information you will fill out below must be true in order to continue with the registration process.",
         "alerta_discapacidades": "Dear applicant, please note that the disability must be contained in the statutory law 1618 of 2013, with their respective documentary support, if you have more than one disability condition, please upload a single document in pdf format with all the necessary certifications.",
@@ -1341,7 +1341,8 @@
         "no_puede_inscribirse": "You can't register, the registration period has finished.",
         "no_cambiar_inscripcion_solicitada": "It is not possible to change the status to Enrollment Requested",
         "editar_estado_iscripcion": "Edit Enrollment Status",
-        "sin_telefono": "No contact number, please enter a phone number"
+        "sin_telefono": "No contact number, please enter a phone number",
+        "mensaje_100_inscripcion": "Applicant, you already have 100% of the required documentation, do not forget to press the \"Register\" button to continue with the process."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",

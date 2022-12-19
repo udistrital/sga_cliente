@@ -446,53 +446,43 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
     if (this.tagsObject.info_persona.required) {
       sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_info);
-      console.log("info: ", this.percentage_tab_info)
       conteoObligatorios += 1;
     }
 
     if (this.tagsObject.formacion_academica.required) {
       sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_acad);
-      console.log("acad: ", this.percentage_tab_acad)
       conteoObligatorios += 1;
     }
 
     if (this.tagsObject.idiomas.required) {
       sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_idio);
-      console.log("idio", this.percentage_tab_idio)
       conteoObligatorios += 1;
     }
 
     if (this.tagsObject.experiencia_laboral.required) {
       sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_expe);
-      console.log("expe", this.percentage_tab_expe)
       conteoObligatorios += 1;
     }
 
     if (this.tagsObject.produccion_academica.required) {
       sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_prod);
-      console.log("prod", this.percentage_tab_prod)
       conteoObligatorios += 1;
     }
 
     if (this.tagsObject.documento_programa.required) {
       sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_docu);
-      console.log("docu", this.percentage_tab_docu)
       conteoObligatorios += 1;
     }
 
     if (this.tagsObject.descuento_matricula.required) {
       sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_desc);
-      console.log("desc", this.percentage_tab_desc)
       conteoObligatorios += 1;
     }
 
     if (this.tagsObject.propuesta_grado.required) {
       sumaPorcentajes += UtilidadesService.getSumArray(this.percentage_tab_proy);
-      console.log("proy", this.percentage_tab_proy)
       conteoObligatorios += 1;
     }
-
-    console.log("conteoObligatorios", conteoObligatorios)
 
     this.percentage_total = Math.round(sumaPorcentajes / conteoObligatorios);
 
@@ -500,6 +490,14 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     if (sessionStorage.EstadoInscripcion) {
       if (this.percentage_total >= 100) {
         this.total = false;
+        let enAlgunaVista = this.show_profile || this.show_info_pregrado ||
+                            this.show_acad_pregrado || this.show_expe || 
+                            this.show_proy || this.show_prod || this.show_desc ||
+                            this.show_docu || this.show_info || this.show_acad || 
+                            this.show_info_externa || this.show_idiomas;
+        if (!enAlgunaVista && this.estado_inscripcion_nombre == "INSCRIPCIÓN SOLICITADA"){
+          this.popUpManager.showConfirmAlert(this.translate.instant('inscripcion.mensaje_100_inscripcion'), this.translate.instant('inscripcion.inscripcion'))
+        }
       }
     }
     // if (this.info_inscripcion !== undefined) {
@@ -1409,6 +1407,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   mostrarBarraExterna() {
     this.ocultarBarra.emit(false);
+    this.setPercentage_total();
   }
 
   revisarDocumento(doc: any) {

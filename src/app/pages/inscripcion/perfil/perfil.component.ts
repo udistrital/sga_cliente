@@ -141,6 +141,7 @@ export class PerfilComponent implements OnInit {
   descargar_compilado_zip() {
     this.loading = true;
     let nombre: string = sessionStorage.getItem('nameFolder');
+    nombre = nombre.toUpperCase();
     this.zipManagerService.generarZip(nombre).then((zip: string) => {
       this.loading = false;
       let download = document.createElement("a");
