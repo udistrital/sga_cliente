@@ -170,7 +170,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
             this.Aspirantes = response.Data;
             this.cantidad_inscritos = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO").length;
             this.cantidad_admitidos = this.Aspirantes.filter(aspirante => aspirante.Estado == "ADMITIDO").length;
-            this.cantidad_aspirantes = this.cantidad_inscritos + this.cantidad_inscritos;
+            this.cantidad_aspirantes = this.cantidad_inscritos + this.cantidad_admitidos;
             this.dataSource.load(this.Aspirantes);
             this.loading = false;
             this.mostrarConteos = true;
