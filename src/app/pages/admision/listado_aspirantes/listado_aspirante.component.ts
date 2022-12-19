@@ -143,18 +143,17 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       },
       mode: 'internal',
       columns: {
-        // TipoDocumento: {
-        //   title: this.translate.instant('GLOBAL.Tipo'),
-        //   // type: 'string;',
-        //   valuePrepareFunction: (value) => {
-        //     return value;
-        //   },
-        //   width: '2%',
-        // },
+        index:{
+          title: '#',
+          filter: false,
+          valuePrepareFunction: (value,row,cell) => {
+            return cell.row.index+1;
+           },
+          width: '2%',
+        },
         NumeroDocumento: {
           editable: false,
           title: this.translate.instant('GLOBAL.Documento'),
-          // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
           },
@@ -163,7 +162,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         NombreAspirante: {
           editable: false,
           title: this.translate.instant('GLOBAL.Nombre'),
-          // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
           },
@@ -183,59 +181,73 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           valuePrepareFunction: (value) => {
             return value;
           },
-          width: '18%',
+          width: '15%',
         },
         NotaFinal: {
           editable: false,
           title: this.translate.instant('GLOBAL.Puntaje'),
           sort: true,
           sortDirection: 'desc',
-          // type: 'string;',
           valuePrepareFunction: (value) => {
             return value;
           },
           width: '5%',
         },
-        TipoInscripcionId: {
+        TipoInscripcion: {
           editable: false,
           title: this.translate.instant('GLOBAL.TipoInscripcion'),
-          // type: 'string;',
           valuePrepareFunction: (value) => {
-            return value.Nombre;
+            return value
           },
           width: '10%',
         },
-        EnfasisId: {
+        Enfasis: {
           editable: false,
           title: this.translate.instant('enfasis.enfasis'),
-          // type: 'string;',
-          filterFunction: (cell?: any, search?: string) => {
-            // cell? is the value of the cell, in this case is a timeStamp
-            if (search.length > 0) {
-              return cell.Nombre.match(search);
-            }
-          },
           valuePrepareFunction: (value) => {
-            return value.Nombre;
+            return value
           },
           width: '10%',
         },
         EstadoInscripcionId: {
           title: this.translate.instant('GLOBAL.Estado'),
+          filterFunction: (cell?: any, search?: string) => {
+            if (search.length > 0) {
+              return cell.Nombre.match(RegExp(search,"i"));
+            }
+          },
+          compareFunction: (direction: any, a: any, b: any) => {
+            let first = a.Nombre.toLowerCase();
+            let second = b.Nombre.toLowerCase();
+
+            if (first < second) {
+                return -1 * direction;
+            }
+            if (first > second) {
+                return direction;
+            }
+            return 0;
+         },
           valuePrepareFunction: (cell, row, test) => {
             var t = test.column.editor.config.list.find(x => x.value === cell.Id)
             if (t)
               return t.title
           },
-          filter: false,
-          width: '250px',
-          type: 'html',
+          width: '10%',
           editor: {
             type: 'list',
             config: {
               list: this.estados
             },
           }
+        },
+        EstadoRecibo: {
+          editable: false,
+          title: this.translate.instant('inscripcion.estado_recibo'),
+          valuePrepareFunction: (value) => {
+            return value;
+          },
+          width: '5%',
         },
       },
       edit: {

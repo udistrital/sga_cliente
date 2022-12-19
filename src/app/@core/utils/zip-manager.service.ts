@@ -21,13 +21,14 @@ export class ZipManagerService {
     return "cleaned"
   }
 
-  generarZip(nombre: string) {
+  generarZip(nombreCarpeta: string) {
     return new Promise((resolve, reject) => {
-      this.CarpetaPrincipal = nombre != "" ? nombre : this.CarpetaPrincipal;
+      this.CarpetaPrincipal = nombreCarpeta != "" ? nombreCarpeta : this.CarpetaPrincipal;
       let zip = new JSZip();
       this.Archivos.forEach((archivo, index) => {
         let nombre = <string>archivo.nombreDocumento;
         let carpeta = <string>archivo.carpeta;
+        nombre = nombre.replace(/[\<\>\:\"\|\?\*\/\.]/g,'');  
         nombre = nombre.concat('.pdf');
         fetch(archivo.Documento.changingThisBreaksApplicationSecurity)
           .then((res) => res.blob())
