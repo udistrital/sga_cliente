@@ -912,7 +912,8 @@
         "autor_no_creado": "The new author could not be created",
         "ejecutable_programa": "Application executable file support",
         "codigo_fuente": "Software source code support",
-        "archivo_video": "Audiovisual production support"
+        "archivo_video": "Audiovisual production support",
+        "soportes": "Supports list"
     },
     "archivo_icfes": {
         "archivo_icfes": "Icfes file",
