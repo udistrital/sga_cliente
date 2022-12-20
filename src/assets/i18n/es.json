@@ -946,7 +946,8 @@
         "autor_no_creado": "No fue posible crear el nuevo autor",
         "ejecutable_programa": "Soporte de archivo ejecutable de aplicación",
         "codigo_fuente": "Soporte de código fuente del software",
-        "archivo_video": "Soporte de producción audiovisual"
+        "archivo_video": "Soporte de producción audiovisual",
+        "soportes": "Lista de soportes"
     },
     "archivo_icfes": {
         "archivo_icfes": "Archivo de registros del ICFES",
