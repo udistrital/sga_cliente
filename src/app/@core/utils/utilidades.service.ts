@@ -80,4 +80,12 @@ export class UtilidadesService {
     return ObjetMetadatos;
   }
 
+  static hardCopy(Objeto: Object): Object {
+    return JSON.parse(JSON.stringify(Objeto));
+  }
+
+  static ListaPatrones = {
+    correo: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+  }
+
 }

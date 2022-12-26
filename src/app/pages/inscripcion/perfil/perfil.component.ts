@@ -91,6 +91,7 @@ export class PerfilComponent implements OnInit {
         .then(() => {
           this.imprimir = false;
           this.loading = false;
+          this.editar(null, 'salir_preinscripcion')
         })
     }
 
