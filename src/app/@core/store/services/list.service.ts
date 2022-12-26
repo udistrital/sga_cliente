@@ -39,57 +39,75 @@ export class ListService {
   loading: boolean = false;
 
   public findGenero() {
-    this.store.select(<any>REDUCER_LIST.Genero).subscribe(
-      (list: any) => {
-        if (!list || list.length === 0) {
-          this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:6,Activo:true&limit=0')
-            .subscribe(
-              (result: any[]) => {
-                this.addList(REDUCER_LIST.Genero, result);
-              },
-              error => {
-                this.addList(REDUCER_LIST.Genero, []);
-              },
-            );
-        }
-      },
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.store.select(<any>REDUCER_LIST.Genero).subscribe(
+        (list: any) => {
+          if (!list || list.length === 0) {
+            this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:6,Activo:true&limit=0')
+              .subscribe(
+                (result: any[]) => {
+                  this.addList(REDUCER_LIST.Genero, result);
+                  resolve();
+                },
+                error => {
+                  this.addList(REDUCER_LIST.Genero, []);
+                  reject();
+                },
+              );
+          } else {
+            resolve();
+          }
+        },
+      );
+    });
   }
 
   public findOrientacionSexual() {
-    this.store.select(<any>REDUCER_LIST.OrientacionSexual).subscribe(
-      (list: any) => {
-        if (!list || list.length === 0) {
-          this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:1636,Activo:true&limit=0')
-            .subscribe(
-              (result: any[]) => {
-                this.addList(REDUCER_LIST.OrientacionSexual, result);
-              },
-              error => {
-                this.addList(REDUCER_LIST.OrientacionSexual, []);
-              },
-            );
-        }
-      },
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.store.select(<any>REDUCER_LIST.OrientacionSexual).subscribe(
+        (list: any) => {
+          if (!list || list.length === 0) {
+            this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:1636,Activo:true&limit=0')
+              .subscribe(
+                (result: any[]) => {
+                  this.addList(REDUCER_LIST.OrientacionSexual, result);
+                  resolve();
+                },
+                error => {
+                  this.addList(REDUCER_LIST.OrientacionSexual, []);
+                  reject();
+                },
+              );
+          } else {
+            resolve();
+          }
+        },
+      );
+    });
   }
 
   public findIdentidadGenero() {
-    this.store.select(<any>REDUCER_LIST.IdentidadGenero).subscribe(
-      (list: any) => {
-        if (!list || list.length === 0) {
-          this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:1637,Activo:true&limit=0')
-            .subscribe(
-              (result: any[]) => {
-                this.addList(REDUCER_LIST.IdentidadGenero, result);
-              },
-              error => {
-                this.addList(REDUCER_LIST.IdentidadGenero, []);
-              },
-            );
-        }
-      },
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.store.select(<any>REDUCER_LIST.IdentidadGenero).subscribe(
+        (list: any) => {
+          if (!list || list.length === 0) {
+            this.tercerosService.get('info_complementaria?query=GrupoInfoComplementariaId.Id:1637,Activo:true&limit=0')
+              .subscribe(
+                (result: any[]) => {
+                  this.addList(REDUCER_LIST.IdentidadGenero, result);
+                  resolve();
+                },
+                error => {
+                  this.addList(REDUCER_LIST.IdentidadGenero, []);
+                  reject();
+                },
+              );
+          } else {
+            resolve();
+          }
+        },
+      );
+    });
   }
 
   public findGrupoSanguineo() {
@@ -201,21 +219,27 @@ export class ListService {
   }
 
   public findEstadoCivil() {
-    this.store.select(<any>REDUCER_LIST.EstadoCivil).subscribe(
-      (list: any) => {
-        if (!list || list.length === 0) {
-          this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:2')
-            .subscribe(
-              (result: any[]) => {
-                this.addList(REDUCER_LIST.EstadoCivil, result);
-              },
-              error => {
-                this.addList(REDUCER_LIST.EstadoCivil, []);
-              },
-            );
-        }
-      },
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.store.select(<any>REDUCER_LIST.EstadoCivil).subscribe(
+        (list: any) => {
+          if (!list || list.length === 0) {
+            this.tercerosService.get('info_complementaria/?query=GrupoInfoComplementariaId.Id:2')
+              .subscribe(
+                (result: any[]) => {
+                  this.addList(REDUCER_LIST.EstadoCivil, result);
+                  resolve();
+                },
+                error => {
+                  this.addList(REDUCER_LIST.EstadoCivil, []);
+                  reject();
+                },
+              );
+          } else {
+            resolve();
+          }
+        },
+      );
+    });
   }
 
   public findTipoPoblacion() {
@@ -551,21 +575,27 @@ export class ListService {
   }
 
   public findTipoIdentificacion() {
-    this.store.select(<any>REDUCER_LIST.TipoIdentificacion).subscribe(
-      (list: any) => {
-        if (!list || list.length === 0) {
-          this.tercerosService.get('tipo_documento/?query=Activo:true&limit=0')
-            .subscribe(
-              (result: any[]) => {
-                this.addList(REDUCER_LIST.TipoIdentificacion, result);
-              },
-              error => {
-                this.addList(REDUCER_LIST.TipoIdentificacion, []);
-              },
-            );
-        }
-      },
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.store.select(<any>REDUCER_LIST.TipoIdentificacion).subscribe(
+        (list: any) => {
+          if (!list || list.length === 0) {
+            this.tercerosService.get('tipo_documento/?query=Activo:true&limit=0')
+              .subscribe(
+                (result: any[]) => {
+                  this.addList(REDUCER_LIST.TipoIdentificacion, result);
+                  resolve();
+                },
+                error => {
+                  this.addList(REDUCER_LIST.TipoIdentificacion, []);
+                  reject();
+                },
+              );
+          } else {
+            resolve();
+          }
+        },
+      );
+    });
   }
 
   public findTipoProyecto() {

@@ -12,6 +12,7 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-crud-info-persona',
@@ -26,13 +27,13 @@ export class CrudInfoPersonaComponent implements OnInit {
   faltandatos: boolean = false;
   existePersona: boolean = false;
   datosEncontrados: any;
+  forzarCambioUsuario: boolean = false;
 
   @Input('info_persona_id')
   set persona(info_persona_id: number) {
     this.info_persona_id = info_persona_id;
     this.loadInfoPersona();
   }
-
 
   @Input('inscripcion_id')
   set admision(inscripcion_id: number) {
@@ -56,7 +57,7 @@ export class CrudInfoPersonaComponent implements OnInit {
   info_inscripcion: any;
   clean: boolean;
   percentage: number;
-  aceptaTerminos: boolean;
+  aceptaTerminos: boolean = false;
   programa: number;
   aspirante: number;
   periodo: any;
@@ -69,18 +70,20 @@ export class CrudInfoPersonaComponent implements OnInit {
     private store: Store<IAppState>,
     private listService: ListService,
   ) {
-      this.formInfoPersona = {...FORM_INFO_PERSONA};
+      this.formInfoPersona = UtilidadesService.hardCopy(FORM_INFO_PERSONA);
       this.construirForm();
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
         this.construirForm();
       });
-      this.listService.findGenero();
-      this.listService.findOrientacionSexual();
-      this.listService.findIdentidadGenero();
-      this.listService.findEstadoCivil();
-      this.listService.findTipoIdentificacion();
       this.loading = true;
-      this.loadLists();
+      Promise.all([
+      this.listService.findGenero(),
+      this.listService.findOrientacionSexual(),
+      this.listService.findIdentidadGenero(),
+      this.listService.findEstadoCivil(),
+      this.listService.findTipoIdentificacion()]).then(() => {
+        this.loadLists();
+      });
   }
 
   construirForm() {
@@ -113,6 +116,7 @@ export class CrudInfoPersonaComponent implements OnInit {
         .subscribe(res => {
           if (res !== null && res.Id !== undefined) {
             const temp = <InfoPersona>res;
+            this.aceptaTerminos = true;
             this.info_info_persona = temp;
             this.datosEncontrados = {...res}
             const files = []
@@ -157,13 +161,18 @@ export class CrudInfoPersonaComponent implements OnInit {
   checkExistePersona(e) {
     let doc = this.formInfoPersona.campos[this.getIndexForm('NumeroIdentificacion')].valor;
     let verif = this.formInfoPersona.campos[this.getIndexForm('VerificarNumeroIdentificacion')].valor
-    if((doc && verif) && (doc == verif)) {
+    if((doc && verif) && (doc == verif) && !this.aceptaTerminos) {
       this.loading = true;
       this.sgamidService.get('persona/existe_persona/'+doc).subscribe(
         (res) => {
           this.loading = false;
           this.info_info_persona = res[0];
           this.datosEncontrados = {...res[0]};
+          res[0].FechaNacimiento = res[0].FechaNacimiento.replace("T00:00:00Z", "T05:00:00Z");
+          res[0].FechaExpedicion = res[0].FechaExpedicion.replace("T00:00:00Z", "T05:00:00Z");
+          this.formInfoPersona.campos[this.getIndexForm('FechaNacimiento')].valor = moment(res[0].FechaNacimiento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+          this.formInfoPersona.campos[this.getIndexForm('FechaExpedicion')].valor = moment(res[0].FechaExpedicion,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+          
           this.formInfoPersona.campos.splice(this.getIndexForm('VerificarNumeroIdentificacion'),1);
 
           this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.persona_ya_existe'), this.translate.instant('inscripcion.info_persona_ya_existe'),'info',false).then(()=>{
@@ -175,6 +184,25 @@ export class CrudInfoPersonaComponent implements OnInit {
                 }
               }
             });
+            let UsuarioExistente = <string>this.info_info_persona.UsuarioWSO2;
+            let correoActual = <string>this.autenticationService.getPayload().email;
+            if (UsuarioExistente.match(UtilidadesService.ListaPatrones.correo)) {
+              if (UsuarioExistente != correoActual) {
+                this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.info_persona'), this.translate.instant('inscripcion.ya_existe_usuarioCorreo') + '<br>'
+                                                  + this.translate.instant('inscripcion.correo_anterior') + ': ' + UsuarioExistente + '<br>'
+                                                  + this.translate.instant('inscripcion.correo_actual') + ': ' + correoActual, 'info', true).then(
+                  action => {
+                    if (action.value) {
+                      this.forzarCambioUsuario = true;
+                    } else {
+                      this.autenticationService.logout('from inscripcion');
+                    }
+                  }
+                );
+              }
+            } else {
+              this.forzarCambioUsuario = true;
+            }
           });
           this.existePersona = true;
         },
@@ -187,6 +215,7 @@ export class CrudInfoPersonaComponent implements OnInit {
   }
 
   updateInfoPersona(infoPersona: any) {
+    this.loading = true;
     let prepareUpdate: any = {
       Tercero: { hasId: null, data: {} },
       Identificacion: { hasId: null, data: {} },
@@ -216,7 +245,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     if(!this.datosEncontrados.FechaNacimiento) {
       prepareUpdate.Tercero.data["FechaNacimiento"] = momentTimezone.tz(infoPersona.FechaNacimiento, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss') + ' +0000 +0000';
     }
-    if(!this.datosEncontrados.UsuarioWSO2) {
+    if(!this.datosEncontrados.UsuarioWSO2 || this.forzarCambioUsuario) {
       prepareUpdate.Tercero.hasId = infoPersona.Id;
       prepareUpdate.Tercero.data["UsuarioWSO2"] = this.autenticationService.getPayload().email;
     }
@@ -258,63 +287,64 @@ export class CrudInfoPersonaComponent implements OnInit {
       this.faltandatos = false;
       this.existePersona = false;
       this.formInfoPersona.btn = '';
+      this.formInfoPersona.campos.forEach((campo) => {
+        campo.deshabilitar = true;
+      });
+      window.localStorage.setItem('ente', response.tercero.Id);
+      window.localStorage.setItem('persona_id', response.tercero.Id);
+      this.info_persona_id = response.tercero.Id;
+      sessionStorage.setItem('IdTercero', String(this.info_persona_id));
+      this.setPercentage(1);
+      this.loading = false;
       this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.persona_actualizado'));
+      this.success.emit();
     },
     (error: HttpErrorResponse) => {
+      this.loading = false;
       this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.error_actualizar_persona'));
     });
   }
 
   createInfoPersona(infoPersona: any): void {
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.crear'),
-      text: this.translate.instant('GLOBAL.crear_info_persona'),
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      showCancelButton: true,
-      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-    };
-    Swal.fire(opt)
-      .then((willDelete) => {
-        if (willDelete.value) {
-          this.loading = true;
-          const files = []
-          this.info_info_persona = <any>infoPersona;
-          this.info_info_persona.FechaNacimiento = momentTimezone.tz(this.info_info_persona.FechaNacimiento, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
-          this.info_info_persona.FechaNacimiento = this.info_info_persona.FechaNacimiento + ' +0000 +0000';
-          this.info_info_persona.FechaExpedicion = momentTimezone.tz(this.info_info_persona.FechaExpedicion, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
-          this.info_info_persona.FechaExpedicion = this.info_info_persona.FechaExpedicion + ' +0000 +0000';
-          this.info_info_persona.NumeroIdentificacion = (this.info_info_persona.NumeroIdentificacion).toString();
-          this.info_info_persona.Usuario = this.autenticationService.getPayload().email;
-          this.sgamidService.post('persona/guardar_persona', this.info_info_persona).subscribe(res => {
-            const r = <any>res
-            if (r !== null && r.Type !== 'error') {
-              window.localStorage.setItem('ente', r.Id);
-              window.localStorage.setItem('persona_id', r.Id);
-              this.info_persona_id = r.Id;
-              sessionStorage.setItem('IdTercero', String(this.info_persona_id));
-              this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.persona_creado'));
-              this.success.emit();
-            } else {
-              this.popUpManager.showErrorToast(this.translate.instant('GLOBAL.error'))
-            }
-            this.loading = false;
-          },
-          (error: HttpErrorResponse) => {
-            this.loading = false;
-            Swal.fire({
-              icon: 'error',
-              title: error.status + '',
-              text: this.translate.instant('ERROR.' + error.status),
-              footer: this.translate.instant('GLOBAL.crear') + '-' +
-                      this.translate.instant('GLOBAL.info_persona'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
-          });
-        }
+    this.loading = true;
+    const files = []
+    infoPersona.FechaNacimiento = momentTimezone.tz(infoPersona.FechaNacimiento, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+    infoPersona.FechaNacimiento = infoPersona.FechaNacimiento + ' +0000 +0000';
+    infoPersona.FechaExpedicion = momentTimezone.tz(infoPersona.FechaExpedicion, 'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+    infoPersona.FechaExpedicion = infoPersona.FechaExpedicion + ' +0000 +0000';
+    infoPersona.NumeroIdentificacion = (infoPersona.NumeroIdentificacion).toString();
+    infoPersona.Usuario = this.autenticationService.getPayload().email;
+    this.sgamidService.post('persona/guardar_persona', infoPersona).subscribe(res => {
+      const r = <any>res
+      if (r !== null && r.Type !== 'error') {
+        window.localStorage.setItem('ente', r.Id);
+        window.localStorage.setItem('persona_id', r.Id);
+        this.info_persona_id = r.Id;
+        sessionStorage.setItem('IdTercero', String(this.info_persona_id));
+        this.formInfoPersona.campos.splice(this.getIndexForm('VerificarNumeroIdentificacion'),1);
+        this.formInfoPersona.btn = '';
+        this.formInfoPersona.campos.forEach((campo) => {
+          campo.deshabilitar = true;
+        });
+        this.setPercentage(1);
+        this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.persona_creado'));
+        this.success.emit();
+      } else {
+        this.popUpManager.showErrorToast(this.translate.instant('GLOBAL.error'))
+      }
+      this.loading = false;
+    },
+    (error: HttpErrorResponse) => {
+      this.loading = false;
+      Swal.fire({
+        icon: 'error',
+        title: error.status + '',
+        text: this.translate.instant('ERROR.' + error.status),
+        footer: this.translate.instant('GLOBAL.crear') + '-' +
+                this.translate.instant('GLOBAL.info_persona'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
+    });
   }
 
   ngOnInit() {
@@ -338,7 +368,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     Swal.fire({
       title: this.translate.instant('GLOBAL.terminos_datos'),
       width: 800,
-      allowOutsideClick: true,
+      allowOutsideClick: false,
       allowEscapeKey: true,
       html: '<embed src="/assets/pdf/politicasUD.pdf" type="application/pdf" style="width:100%; height:375px;" frameborder="0"></embed>',
       input: 'checkbox',
@@ -347,15 +377,26 @@ export class CrudInfoPersonaComponent implements OnInit {
     })
       .then((result) => {
         if (result.value) {
-          //if (this.info_info_persona === undefined) {
+            this.aceptaTerminos = true;
             if(this.existePersona || this.faltandatos){
-              this.updateInfoPersona(event.data.InfoPersona);
+              this.popUpManager.showPopUpGeneric(this.translate.instant('GLOBAL.actualizar'),this.translate.instant('GLOBAL.actualizar_info_persona'),'warning',true)
+                .then((action) => {
+                  if (action.value) {
+                    this.updateInfoPersona(event.data.InfoPersona);
+                  } else {
+                    this.aceptaTerminos = false;
+                  }
+                });
             } else {
-              this.createInfoPersona(event.data.InfoPersona);
+              this.popUpManager.showPopUpGeneric(this.translate.instant('GLOBAL.crear'),this.translate.instant('GLOBAL.crear_info_persona'),'warning',true)
+                .then((action) => {
+                    if (action.value) {
+                      this.createInfoPersona(event.data.InfoPersona);
+                    } else {
+                      this.aceptaTerminos = false;
+                    }
+                });
             }
-          //} else {
-          //  this.formInfoPersona.btn = '';
-          //}
         } else if (result.value === 0) {
           Swal.fire({
             icon: 'error',
@@ -368,9 +409,13 @@ export class CrudInfoPersonaComponent implements OnInit {
   }
 
   setPercentage(event) {
-    this.percentage = event;
+    if (this.aceptaTerminos) {
+      this.percentage = event;
+    } else {
+      this.percentage = event*0.98;
+    }
     this.result.emit(this.percentage);
-    if(this.percentage < 1.0) {
+    if(event < 1.0) {
       this.formInfoPersona.campos.forEach(campo => {
         if(!campo.valor) {
           campo.deshabilitar = false;
