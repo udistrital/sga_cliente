@@ -1188,6 +1188,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_prod = false;
         this.show_desc = false;
         break;
+      case 'salir_preinscripcion':
+        this.activateTab();
+        break;
       default:
         this.show_info = false;
         this.show_docu = false;

@@ -231,6 +231,7 @@
         "placeholder_periodo": "E.g.: I,II,III",
         "tiporecurrencia": "Recurrence type",
         "crear_info_persona": "Are you sure you want to save personal information?\n You will not be able to modify it after accepting.",
+        "actualizar_info_persona": "Are you sure you want to update personal information?\n You will not be able to modify it after accepting.",
         "placeholder_tiporecurrencia": "E.g.: Recurrence type",
         "codigoabreviacion": "abbreviation code",
         "placeholder_codigoabreviacion": "E.g.: abbreviation code",
@@ -1343,7 +1344,10 @@
         "no_cambiar_inscripcion_solicitada": "It is not possible to change the status to Enrollment Requested",
         "editar_estado_iscripcion": "Edit Enrollment Status",
         "sin_telefono": "No contact number, please enter a phone number",
-        "mensaje_100_inscripcion": "Applicant, you already have 100% of the required documentation, do not forget to press the \"Register\" button to continue with the process."
+        "mensaje_100_inscripcion": "Applicant, you already have 100% of the required documentation, do not forget to press the \"Register\" button to continue with the process.",
+        "ya_existe_usuarioCorreo": "The mail found does not match the one in the current session! Press ACCEPT to update it, or press CANCEL to log out and enter with the previous email.",
+        "correo_anterior": "Previous email",
+        "correo_actual": "Current email"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
