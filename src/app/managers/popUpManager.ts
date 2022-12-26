@@ -76,9 +76,10 @@ export class PopUpManager {
     public showPopUpGeneric(title, text, type, cancelar): Promise<any> {
         const opt: any = {
             title: title,
-            text: text,
+            html: text,
             icon: type,
             showCancelButton: cancelar,
+            allowOutsideClick: !cancelar,
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
             cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
         };
