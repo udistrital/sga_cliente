@@ -33,6 +33,9 @@ export class PerfilComponent implements OnInit {
 
   @Input('imprimir') imprimir: boolean = false;
 
+  @Input('SuiteTags') SuiteTags: any;
+
+  suiteLoaded: boolean = false;
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
@@ -46,7 +49,7 @@ export class PerfilComponent implements OnInit {
     private zipManagerService: ZipManagerService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    this.loading = true;
+    //this.loading = true;
   }
 
   useLanguage(language: string) {
@@ -64,6 +67,7 @@ export class PerfilComponent implements OnInit {
   ngOnChanges() {
     this.imprimir = this.imprimir.toString() === 'true';
     this.en_revision = this.en_revision.toString() === 'true';
+    this.manageSuiteTags(this.SuiteTags);
   }
 
   ifFinishLoaded(event) {
@@ -82,6 +86,13 @@ export class PerfilComponent implements OnInit {
     return finishLoaded;
   }
 
+  manageSuiteTags(Suite) {
+    if (Suite == undefined) {
+      this.suiteLoaded = false;
+    } else {
+      this.suiteLoaded = true;
+    }
+  }
 
   async activarImprimir(event: boolean) {
     const ifLoaded = await this.ifFinishLoaded(event)
