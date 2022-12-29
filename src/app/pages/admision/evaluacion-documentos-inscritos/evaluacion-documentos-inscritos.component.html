@@ -65,7 +65,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
             <button (click)="activateTab()" class="btn btn-info btn-sm"> <i class="nb-arrow-dropleft"></i> {{ 'GLOBAL.regresar' | translate }}</button>
           </div>
           <div class="text-center">
-            <ngx-perfil [en_revision]="true" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}"
+            <ngx-perfil [SuiteTags]="tagsObject" [en_revision]="true" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}"
               (revisar_doc)="revisarDocumento($event)">
             </ngx-perfil>
           </div>
