@@ -56,7 +56,7 @@
             <!--ngx-loading [hidden]="!loading"></ngx-loading-->
 
             <div class="row">
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.info_persona.selected && puedeInscribirse">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.info_persona.selected && (puedeInscribirse && !soloPuedeVer)">
                     <nb-card class="exp-card" align="center" (click)="perfil_editar('info_persona')">
                         <nb-card-header>{{ 'inscripcion.info_basica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -70,7 +70,7 @@
                     </nb-card>
                 </div>
 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.formacion_academica.selected && puedeInscribirse">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.formacion_academica.selected && (puedeInscribirse && !soloPuedeVer)">
                     <nb-card class="exp-card" align="center" (click)="perfil_editar('formacion_academica')">
                         <nb-card-header>{{ 'inscripcion.formacion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -84,7 +84,7 @@
                     </nb-card>
                 </div>
                 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.idiomas.selected && puedeInscribirse">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.idiomas.selected && (puedeInscribirse && !soloPuedeVer)">
                     <nb-card class="exp-card" align="center" (click)="perfil_editar('idiomas')" >
                         <nb-card-header>{{ 'inscripcion.idiomas' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -98,7 +98,7 @@
                     </nb-card>
                 </div>
                 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.experiencia_laboral.selected && puedeInscribirse">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.experiencia_laboral.selected && (puedeInscribirse && !soloPuedeVer)">
                     <nb-card class="exp-card" align="center" (click)="perfil_editar('experiencia_laboral')">
                         <nb-card-header>{{ 'inscripcion.experiencia_laboral' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -112,7 +112,7 @@
                     </nb-card>
                 </div>
                 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.produccion_academica.selected && puedeInscribirse">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.produccion_academica.selected && (puedeInscribirse && !soloPuedeVer)">
                     <nb-card class="exp-card" align="center" (click)="perfil_editar('produccion_academica')">
                         <nb-card-header>{{ 'inscripcion.produccion_academica' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -126,7 +126,7 @@
                     </nb-card>
                 </div>
                 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.documento_programa.selected && puedeInscribirse">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.documento_programa.selected && (puedeInscribirse && !soloPuedeVer)">
                     <nb-card class="exp-card" align="center" (click)="perfil_editar('documento_programa')">
                         <nb-card-header>{{ 'inscripcion.documento_programa' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -140,7 +140,7 @@
                     </nb-card>
                 </div>
                 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.descuento_matricula.selected && puedeInscribirse">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.descuento_matricula.selected && (puedeInscribirse && !soloPuedeVer)">
                     <nb-card class="exp-card" align="center" (click)="perfil_editar('descuento_matricula')">
                         <nb-card-header>{{ 'inscripcion.descuento_matricula' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
@@ -154,7 +154,7 @@
                     </nb-card>
                 </div>
                 
-                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.propuesta_grado.selected && puedeInscribirse">
+                <div class="col-sm-6 col-md-4 col-lg-3" align="center" *ngIf="tagsObject.propuesta_grado.selected && (puedeInscribirse && !soloPuedeVer)">
                     <nb-card class="exp-card" align="center" (click)="perfil_editar('propuesta_grado')">
                         <nb-card-header>{{ 'inscripcion.propuesta_grado' | translate }}</nb-card-header>
                         <nb-card-body class="icon-form">
