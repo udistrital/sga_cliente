@@ -19,6 +19,8 @@ import { InvitacionTemplate } from '../../../@core/data/models/correo/invitacion
 import Swal from 'sweetalert2';
 import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
+import { TAGS_INSCRIPCION_PROGRAMA } from '../def_suite_inscrip_programa/def_tags_por_programa';
 
 
 @Component({
@@ -47,6 +49,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   cantidad_admitidos: number = 0;
   cantidad_inscritos: number = 0;
   mostrarConteos: boolean = false;
+  tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
 
 
   periodos = [];
@@ -66,6 +69,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     private googleMidService: GoogleService,
     private pivotDocument: PivotDocument,
     private sgaMidService: SgaMidService,
+    private evaluacionInscripcionService: EvaluacionInscripcionService,
   ) {
     this.invitacion = new Invitacion();
     this.invitacionTemplate = new InvitacionTemplate();
@@ -84,6 +88,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
         this.revisarDocumento(document)
       }
     })
+    localStorage.setItem("goToEdit", String(false));
   }
 
   async loadData() {
@@ -248,23 +253,38 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
             this.inscripcion_id = event.data['Credencial'];
             this.inscripcionService.get('inscripcion?query=Id:' + this.inscripcion_id).subscribe(
               (resp: any[]) => {
+                this.evaluacionInscripcionService.get('tags_por_dependencia?query=Activo:true,PeriodoId:'+this.periodo.Id+',DependenciaId:'+this.proyectos_selected+',TipoInscripcionId:'+resp[0].TipoInscripcionId.Id)
+                  .subscribe((respSuite: any) => {
+                    if (respSuite != null && respSuite.Status == '200') {
+                      if (Object.keys(respSuite.Data[0]).length > 0) {
+                        this.tagsObject = JSON.parse(respSuite.Data[0].ListaTags);
 
-                this.info_persona_id = response[0].TerceroId.Id;
-                this.pivotDocument.updateInfo({
-                  TerceroId: response[0].TerceroId.Id,
-                  IdInscripcion: event.data['Credencial'],
-                  ProgramaAcademicoId: this.proyectos_selected.toString(),
-                  ProgramaAcademico: res.Nombre,
-                  IdPeriodo: this.periodo.Id
-                })
-                sessionStorage.setItem('TerceroId', response[0].TerceroId.Id);
-                sessionStorage.setItem('IdInscripcion', event.data['Credencial']);
-                sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
-                sessionStorage.setItem('ProgramaAcademico', res.Nombre);
-                sessionStorage.setItem('IdPeriodo', this.periodo.Id);
-                sessionStorage.setItem('IdTipoInscripcion', resp[0].TipoInscripcionId.Id);
-                this.showProfile = false;
+                        this.info_persona_id = response[0].TerceroId.Id;
+                        this.pivotDocument.updateInfo({
+                          TerceroId: response[0].TerceroId.Id,
+                          IdInscripcion: event.data['Credencial'],
+                          ProgramaAcademicoId: this.proyectos_selected.toString(),
+                          ProgramaAcademico: res.Nombre,
+                          IdPeriodo: this.periodo.Id
+                        })
+                        sessionStorage.setItem('TerceroId', response[0].TerceroId.Id);
+                        sessionStorage.setItem('IdInscripcion', event.data['Credencial']);
+                        sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
+                        sessionStorage.setItem('ProgramaAcademico', res.Nombre);
+                        sessionStorage.setItem('IdPeriodo', this.periodo.Id);
+                        sessionStorage.setItem('IdTipoInscripcion', resp[0].TipoInscripcionId.Id);
+                        this.showProfile = false;
 
+                      } else {
+                        this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('admision.no_tiene_suite'));
+                      }
+                    } else {
+                      this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('admision.no_tiene_suite'));
+                    }
+                  },
+                  (error: HttpErrorResponse) => {
+                    this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+                  });
               },
               error => {
                 this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));

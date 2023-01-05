@@ -75,10 +75,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.selectedValue = undefined;
       window.localStorage.setItem('programa', this.selectedValue);
     }
-    if (this.inscripcion_id !== undefined && this.inscripcion_id !== 0 && this.inscripcion_id.toString() !== ''
-      && this.inscripcion_id.toString() !== '0') {
-      this.getInfoInscripcion();
-    }
   }
 
   @Output() eventChange = new EventEmitter();
@@ -198,13 +194,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     this.changeTab.emit(false);
   }
 
-  getInfoInscripcion() {
-    this.inscripcionService.get('inscripcion/' + this.inscripcion_id).subscribe(
-      (response: any) => {
-        this.enfasisSelected = response.EnfasisId ? response.EnfasisId : null;
-      });
-  }
-
   async loadData() {
     this.inscripcion = new Inscripcion();
     this.inscripcion.Id = parseInt(sessionStorage.getItem('IdInscripcion'), 10);
@@ -295,20 +284,17 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
               this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_puede_inscribirse'));
             }
             this.puedeInscribirse = false;
-            this.soloPuedeVer = true;
           }
         } else {
           this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_hay_programa_evento'));
           this.puedeInscribirse = false;
-          this.soloPuedeVer = false;
         }
       } else {
         this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_hay_programa_evento'));
         this.puedeInscribirse = false;
-        this.soloPuedeVer = false;
       }
     }
-    localStorage.setItem("goToEdit", String(this.puedeInscribirse));
+    localStorage.setItem("goToEdit", String(this.puedeInscribirse && !this.soloPuedeVer));
     return this.puedeInscribirse;
   }
 
@@ -943,6 +929,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                     this.loading = false;
                     this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.actualizar'));
                     this.imprimir = true;
+                    localStorage.setItem("goToEdit", String(false));
                     this.perfil_editar('perfil');
                   }
                 },
@@ -1309,70 +1296,71 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     if (select == 'programa') {
       this.enfasisSelected = undefined;
       this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
-      this.puedeInscribirse = false;
-      if (this.estado_inscripcion_nombre == "INSCRIPCIÓN SOLICITADA") {
-        this.soloPuedeVer = false;
+    
+      if (this.inscripcion.IdNivel === 1) {
+        this.selectedTipo = 'Pregrado'
+      } else {
+        this.selectedTipo = 'Posgrado'
+      }
+
+      if (this.selectedValue !== undefined) {
+        sessionStorage.setItem('ProgramaAcademicoId', this.selectedValue);
+        this.programaService.get('proyecto_academico_enfasis/?query=ProyectoAcademicoInstitucionId.Id:' + this.selectedValue)
+          .subscribe((enfasis: any) => {
+            this.enfasis = enfasis.map((e) => (e.EnfasisId));
+            this.tieneEnfasis = this.enfasis.length > 0;
+            this.enfasisSelected = parseInt(sessionStorage.getItem('IdEnfasis'));
+          })
+      } else {
+        this.tieneEnfasis = false;
+        this.enfasis = [];
+      }
+    
+      switch (this.selectedTipo) {
+        case ('Pregrado'):
+          this.selectTipo = 'Pregrado';
+          this.selectprograma = true;
+          break;
+        case ('Posgrado'):
+          this.selectTipo = 'Posgrado';
+          this.selectprograma = true;
+          break;
+        case ('Transferencia interna'):
+          this.selectprograma = false;
+          this.selectTipo = 'Transferencia interna';
+          break;
+        case ('Reingreso'):
+          this.selectprograma = false;
+          this.selectTipo = 'Reingreso';
+          break;
+        case ('Transferencia externa'):
+          this.selectprograma = true;
+          this.selectTipo = 'Transferencia externa';
+          break;
+        case ('Profesionalización tecnólogos'):
+          this.selectTipo = 'Pregrado';
+          this.selectprograma = true;
+          break;
+        case ('Ciclos propedéuticos'):
+          this.selectTipo = 'Pregrado';
+          this.selectprograma = true;
+          break;
+        case ('Movilidad Académica'):
+          this.selectTipo = 'Pregrado';
+          this.selectprograma = true;
+          break;
       }
     }
-    if (this.inscripcion.IdNivel === 1) {
-      this.selectedTipo = 'Pregrado'
-    } else {
-      this.selectedTipo = 'Posgrado'
-    }
-    if (this.selectedValue !== undefined) {
-      sessionStorage.setItem('ProgramaAcademicoId', this.selectedValue);
-      this.programaService.get('proyecto_academico_enfasis/?query=ProyectoAcademicoInstitucionId.Id:' + this.selectedValue)
-        .subscribe((enfasis: any) => {
-          this.enfasis = enfasis.map((e) => (e.EnfasisId));
-          this.tieneEnfasis = this.enfasis.length > 0;
-        })
-    } else {
-      this.tieneEnfasis = false;
-      this.enfasis = [];
-    }
-    if (this.enfasisSelected) {
-      if (this.checkEventoInscripcion()) {
-        const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10);
-        const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10)
-        this.loadSuitePrograma(IdPeriodo, this.selectedValue, IdTipo);
+
+    if (select == 'enfasis') {
+      if (this.enfasisSelected) {
+        if (this.checkEventoInscripcion()) {
+          const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10);
+          const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10)
+          this.loadSuitePrograma(IdPeriodo, this.selectedValue, IdTipo);
+        }
       }
     }
-    switch (this.selectedTipo) {
-      case ('Pregrado'):
-        this.selectTipo = 'Pregrado';
-        this.selectprograma = true;
-        break;
-      case ('Posgrado'):
-        this.selectTipo = 'Posgrado';
-        this.selectprograma = true;
-        break;
-      case ('Transferencia interna'):
-        this.selectprograma = false;
-        this.selectTipo = 'Transferencia interna';
-        break;
-      case ('Reingreso'):
-        this.selectprograma = false;
-        this.selectTipo = 'Reingreso';
-        break;
-      case ('Transferencia externa'):
-        this.selectprograma = true;
-        this.selectTipo = 'Transferencia externa';
-        break;
-      case ('Profesionalización tecnólogos'):
-        this.selectTipo = 'Pregrado';
-        this.selectprograma = true;
-        break;
-      case ('Ciclos propedéuticos'):
-        this.selectTipo = 'Pregrado';
-        this.selectprograma = true;
-        break;
-      case ('Movilidad Académica'):
-        this.selectTipo = 'Pregrado';
-        this.selectprograma = true;
-        break;
-    }
-
-
   }
 
   loadSuitePrograma(periodo, proyecto, tipoInscrip) {

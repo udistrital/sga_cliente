@@ -16,6 +16,26 @@
             <td colspan="2">{{info_info_persona.PrimerApellido}} {{info_info_persona.SegundoApellido}}</td>
             <td colspan="2">{{info_info_persona.TipoIdentificacion.CodigoAbreviacion}}: {{info_info_persona.NumeroIdentificacion}}</td>
           </tr>
+          <tr class="subheader">
+            <th colspan="2">{{ 'GLOBAL.correo_principal' | translate }}</th>
+            <th colspan="2">{{ 'GLOBAL.telefono' | translate }}</th>
+            <th colspan="2">{{ 'GLOBAL.telefono_alternativo' | translate }}</th>
+          </tr>
+          <tr>
+            <td colspan="2">{{correo}}</td>
+            <td colspan="2">{{telefono}}</td>
+            <td colspan="2">{{telefonoAlt}} </td>
+          </tr>
+          <tr class="subheader">
+            <th colspan="2">{{ 'GLOBAL.fecha_nacimiento' | translate }}</th>
+            <th colspan="2">{{ 'GLOBAL.lugar_nacimiento' | translate }}</th>
+            <th colspan="2">{{ 'GLOBAL.direccion_residencia' | translate }}</th>
+          </tr>
+          <tr>
+            <td colspan="2">{{fechaNacimiento}}</td>
+            <td colspan="2">{{lugarOrigen}}</td>
+            <td colspan="2">{{direccion}}</td>
+          </tr>
         </tbody>
         <tbody *ngIf="idSoporteDiscapacidad || idSoportePoblacion">
           <tr class="subheader">

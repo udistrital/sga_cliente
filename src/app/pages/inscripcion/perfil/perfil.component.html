@@ -6,7 +6,7 @@
                   nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
       <div>
         <div class="row" [hidden]="imprimir">
-          <div class="col-md-11 text-center">
+          <div [ngClass]="!en_revision ? 'col-md-11 text-center' : 'col-md-12 text-center'">
             <h1>{{ 'inscripcion.perfil' | translate }}</h1>
           </div>
           <div class="col-md-1 float-right" *ngIf="!en_revision">
@@ -29,12 +29,13 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row" *ngIf="suiteLoaded">
         <ngx-view-inscripcion class="col-md-12"></ngx-view-inscripcion>
         <ngx-view-info-persona (url_editar)="editar($event,'info_persona')"
                                (revisar_doc)="abrirDocumento($event)"
                                persona_id="{{info_persona_id}}"
-                               class="col-md-12">
+                               class="col-md-12"
+                               *ngIf="SuiteTags.info_persona.selected">
         </ngx-view-info-persona>
         <!--<ngx-view-info-caracteristica
           (url_editar)="editar($event,'info_caracteristica')"
@@ -45,17 +46,20 @@
         <ngx-view-formacion-academica (url_editar)="editar($event,'formacion_academica')"
                                       (revisar_doc)="abrirDocumento($event)"
                                       persona_id="{{info_persona_id}}"
-                                      class="col-md-12">
+                                      class="col-md-12"
+                                      *ngIf="SuiteTags.formacion_academica.selected">
         </ngx-view-formacion-academica>
         <ngx-view-idiomas (url_editar)="editar($event,'formacion_academica')"
                           persona_id="{{info_persona_id}}"
                           inscripcion_id="{{info_inscripcion_id}}"
-                          class="col-md-12">
+                          class="col-md-12"
+                          *ngIf="SuiteTags.idiomas.selected">
         </ngx-view-idiomas>
         <ngx-view-experiencia-laboral (url_editar)="editar($event,'experiencia_laboral')"
                                       (revisar_doc)="abrirDocumento($event)"
                                       persona_id="{{info_persona_id}}"
-                                      class="col-md-12">
+                                      class="col-md-12"
+                                      *ngIf="SuiteTags.experiencia_laboral.selected">
         </ngx-view-experiencia-laboral>
         <!--<ngx-view-libro (url_editar)="editar($event,'default')"
           persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-libro>
@@ -74,26 +78,30 @@
         <ngx-view-produccion-academica (url_editar)="editar($event,'produccion_academica')"
                                       (revisar_doc)="abrirDocumento($event)"
                                        persona_id="{{info_persona_id}}"
-                                       class="col-md-12">
+                                       class="col-md-12"
+                                       *ngIf="SuiteTags.produccion_academica.selected">
         </ngx-view-produccion-academica>
         <ngx-view-descuento-academico (url_editar)="editar($event,'descuento_matricula')"
                                       (revisar_doc)="abrirDocumento($event)"
                                       inscripcion_id="{{info_inscripcion_id}}"
                                       persona_id="{{info_persona_id}}"
-                                      class="col-md-12">
+                                      class="col-md-12"
+                                      *ngIf="SuiteTags.descuento_matricula.selected">
         </ngx-view-descuento-academico>
         <ngx-view-propuesta-grado (url_editar)="editar($event,'propuesta_grado')"
                                   (listo)="activarImprimir($event)"
                                   (revisar_doc)="abrirDocumento($event)"
                                   inscripcion_id="{{info_inscripcion_id}}"
                                   persona_id="{{info_persona_id}}"
-                                  class="col-md-12">
+                                  class="col-md-12"
+                                  *ngIf="SuiteTags.propuesta_grado.selected">
         </ngx-view-propuesta-grado>
         <ngx-view-documento-programa (url_editar)="editar($event, 'documento_programa')"
                                      (revisar_doc)="abrirDocumento($event)"
                                      inscripcion_id="{{info_inscripcion_id}}"
                                      persona_id="{{info_persona_id}}"
-                                     class="col-md-12">
+                                     class="col-md-12"
+                                     *ngIf="SuiteTags.documento_programa.selected">
         </ngx-view-documento-programa>
 
         <div class="col-md-12" *ngIf="en_revision">
