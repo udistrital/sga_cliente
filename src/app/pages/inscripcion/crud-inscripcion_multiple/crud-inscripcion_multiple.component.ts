@@ -263,6 +263,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         sessionStorage.setItem('IdPeriodo', response.PeriodoId);
         sessionStorage.setItem('IdTipoInscripcion', response.TipoInscripcionId.Id);
         sessionStorage.setItem('ProgramaAcademicoId', response.ProgramaAcademicoId);
+        sessionStorage.setItem('IdEnfasis', response.EnfasisId);
         const EstadoIns = sessionStorage.getItem('EstadoInscripcion');
         if (EstadoIns === 'true') {
           this.loadInscriptionModule();
