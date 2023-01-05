@@ -33,6 +33,12 @@ export class ViewInfoPersonaComponent implements OnInit {
   docDiscapacidad: any;
   docPoblacion: any;
   gotoEdit: boolean = false;
+  lugarOrigen: string = "";
+  fechaNacimiento: string = "";
+  correo: string = "";
+  telefono: string = "";
+  telefonoAlt: string = "";
+  direccion: string = "";
 
   @Input('persona_id')
   set name(persona_id: number) {
@@ -89,10 +95,30 @@ export class ViewInfoPersonaComponent implements OnInit {
                                   + this.info_info_persona.PrimerNombre + ' ' + this.info_info_persona.SegundoNombre;
             let nombreCarpetaDocumental: string = sessionStorage.getItem('IdInscripcion') + ' ' + nombreAspirante;
             sessionStorage.setItem('nameFolder', nombreCarpetaDocumental);
+
             this.sgaMidService.get('persona/consultar_complementarios/' + this.info_persona_id)
             .subscribe( res => {
               if (res !== null && res.Response.Code !== '404') {
                 this.info_info_caracteristica = <InfoCaracteristica>res.Response.Body[0].Data;
+
+                //this.lugarOrigen = this.info_info_caracteristica.Lugar["Lugar"].CIUDAD.Nombre + ", " + this.info_info_caracteristica.Lugar["Lugar"].DEPARTAMENTO.Nombre
+
+                this.sgaMidService.get('inscripciones/info_complementaria_tercero/' + this.info_persona_id)
+                  .subscribe(resp => {
+                    if (resp.Response.Code == "200") {
+                      let rawDate = this.info_info_persona.FechaNacimiento.split('-')
+                      this.fechaNacimiento = rawDate[2].slice(0,2)+"/"+rawDate[1]+"/"+rawDate[0];
+                      let info = resp.Response.Body[0];
+                      this.correo = info.Correo;
+                      this.direccion = info.DireccionResidencia;
+                      this.telefono = info.Telefono;
+                      this.telefonoAlt = info.TelefonoAlterno;
+                      this.lugarOrigen = info.CiudadResidencia.Nombre + ", " + info.DepartamentoResidencia.Nombre;
+                    }
+                  },
+                  (error: HttpErrorResponse) => {
+                    this.popUpManager.showErrorToast(this.translate.instant('ERROR' + error.status));
+                  });
 
                 if(this.info_info_caracteristica.hasOwnProperty('IdDocumentoDiscapacidad')){
                   this.idSoporteDiscapacidad = <number>this.info_info_caracteristica["IdDocumentoDiscapacidad"];
