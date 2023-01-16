@@ -1,9 +1,9 @@
-<nb-card>
+<!-- <nb-card>
   <nb-card-body>
-      <div class="col-md-12">
+      <div class="col-md-12"> -->
           <table class="table-responsive">
               <thead>
-                  <tr><th colspan="5">{{"produccion_academica.producciones_academicas" | translate}}</th></tr>
+                  <!-- <tr><th colspan="5">{{"produccion_academica.producciones_academicas" | translate}}</th></tr> -->
                   <tr class="subheader">
                       <th>{{'produccion_academica.titulo_produccion_academica' | translate}}</th>
                       <th>{{'produccion_academica.tipo_produccion_academica' | translate}}</th>
@@ -46,9 +46,16 @@
                     </ng-container>
                   </ng-container>
               </tbody>
+              <tfoot *ngIf="url_editar && gotoEdit">
+                <tr>
+                  <td colspan="5" style="background-color: lightyellow;">
+                    <span (click)="editar()" class="link"><i
+                      class="ion-edit"></i> {{"GLOBAL.actualizar" | translate}}</span>
+                  </td>
+                </tr>
+              </tfoot>
           </table>
-          <span *ngIf="url_editar && gotoEdit" (click)="editar()" class="link"><i
-                  class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
-      </div>
+<!--       </div>
   </nb-card-body>
 </nb-card>
+ -->

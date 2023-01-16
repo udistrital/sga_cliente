@@ -1,11 +1,11 @@
-<nb-card>
+<!-- <nb-card>
     <nb-card-body>
-        <div class="col-md-12">
+        <div class="col-md-12"> -->
             <p *ngIf="inscripcion && info_examen"><label><strong>** {{"GLOBAL.idioma_examen" | translate}}: </strong></label>
                 {{info_examen.Idioma.Nombre}}</p>
             <table class="table-responsive">
                 <thead>
-                    <tr><th colspan="6">{{"inscripcion.idiomas" | translate}}</th></tr>
+                    <!-- <tr><th colspan="6">{{"inscripcion.idiomas" | translate}}</th></tr> -->
                     <tr class="subheader">
                         <th>{{"GLOBAL.idioma" | translate}}</th>
                         <th>{{"GLOBAL.nativo" | translate}}</th>
@@ -28,9 +28,16 @@
                         <td>{{idioma.NivelLeeId.Nombre}}</td>
                     </tr>
                 </tbody>
+                <tfoot *ngIf="url_editar && gotoEdit">
+                  <tr>
+                    <td colspan="6" style="background-color: lightyellow;">
+                      <span (click)="editar()" class="link"><i
+                        class="ion-edit"></i> {{"GLOBAL.actualizar" | translate}}</span>
+                    </td>
+                  </tr>
+                </tfoot>
             </table>
-            <span *ngIf="url_editar && gotoEdit" (click)="editar()" class="link"><i
-                    class="ion-edit"></i>{{"GLOBAL.actualizar" | translate}}</span>
-        </div>
+<!--         </div>
     </nb-card-body>
 </nb-card>
+ -->

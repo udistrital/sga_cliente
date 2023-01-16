@@ -52,6 +52,14 @@ export class ViewInfoPersonaComponent implements OnInit {
    // tslint:disable-next-line: no-output-rename
   @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
 
+  @Output('estadoCarga') estadoCarga: EventEmitter<any> = new EventEmitter(true);
+  infoCarga: any = {
+    porcentaje: 0,
+    nCargado: 0,
+    nCargas: 0,
+    status: ""
+  }
+
   constructor(private sgaMidService: SgaMidService,
     private documentoService: DocumentoService,
     private sanitization: DomSanitizer,
@@ -81,9 +89,12 @@ export class ViewInfoPersonaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.infoCarga.status = "start";
+    this.estadoCarga.emit(this.infoCarga);
   }
 
   public loadInfoPersona(): void {
+    this.infoCarga.nCargas = 3;
     const id = this.info_persona_id ? this.info_persona_id : this.userService.getPersonaId();
     if (id !== undefined && id !== 0 && id.toString() !== '') {
       this.sgaMidService.get('persona/consultar_persona/' + id)
@@ -95,6 +106,7 @@ export class ViewInfoPersonaComponent implements OnInit {
                                   + this.info_info_persona.PrimerNombre + ' ' + this.info_info_persona.SegundoNombre;
             let nombreCarpetaDocumental: string = sessionStorage.getItem('IdInscripcion') + ' ' + nombreAspirante;
             sessionStorage.setItem('nameFolder', nombreCarpetaDocumental);
+
 
             this.sgaMidService.get('persona/consultar_complementarios/' + this.info_persona_id)
             .subscribe( res => {
@@ -114,13 +126,16 @@ export class ViewInfoPersonaComponent implements OnInit {
                       this.telefono = info.Telefono;
                       this.telefonoAlt = info.TelefonoAlterno;
                       this.lugarOrigen = info.CiudadResidencia.Nombre + ", " + info.DepartamentoResidencia.Nombre;
+                      this.addCargado(3);
                     }
                   },
                   (error: HttpErrorResponse) => {
+                    this.infoFalla();
                     this.popUpManager.showErrorToast(this.translate.instant('ERROR' + error.status));
                   });
 
                 if(this.info_info_caracteristica.hasOwnProperty('IdDocumentoDiscapacidad')){
+                  this.infoCarga.nCargas++;
                   this.idSoporteDiscapacidad = <number>this.info_info_caracteristica["IdDocumentoDiscapacidad"];
                   this.newNuxeoService.get([{Id: this.idSoporteDiscapacidad}]).subscribe(
                     response => {
@@ -141,14 +156,16 @@ export class ViewInfoPersonaComponent implements OnInit {
                         observacion: estadoDoc.observacion,
                         nombreDocumento: this.tipoDiscapacidad,
                         tabName: this.translate.instant('GLOBAL.comprobante_discapacidad'),
-                        carpeta: "Informacion Básica"
+                        carpeta: "Información Básica"
                       }
                       this.zipManagerService.adjuntarArchivos([this.docDiscapacidad]);
+                      this.addCargado(1);
                     }
                   )
                 }
 
                 if(this.info_info_caracteristica.hasOwnProperty('IdDocumentoPoblacion')){
+                  this.infoCarga.nCargas++;
                   this.idSoportePoblacion = <number>this.info_info_caracteristica["IdDocumentoPoblacion"];
                   this.newNuxeoService.get([{Id: this.idSoportePoblacion}]).subscribe(
                     response => {
@@ -169,34 +186,61 @@ export class ViewInfoPersonaComponent implements OnInit {
                         observacion: estadoDoc.observacion,
                         nombreDocumento: this.tipoPoblacion,
                         tabName: this.translate.instant('GLOBAL.comprobante_poblacion'),
-                        carpeta: "Informacion Básica"
+                        carpeta: "Información Básica"
                       }
                       this.zipManagerService.adjuntarArchivos([this.docPoblacion]);
+                      this.addCargado(1);
                     }
                   )
-                  
                 }
                 
               } else {
                 this.info_info_caracteristica = undefined;
+                this.infoFalla();
               }
             },
             (error: HttpErrorResponse) => {
+              this.infoFalla();
               this.popUpManager.showErrorToast(this.translate.instant('ERROR' + error.status));
             })
           } else {
             this.info_info_persona = undefined;
+            this.infoFalla();
           }
         },
           (error: HttpErrorResponse) => {
+            this.infoFalla();
             this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
           });
     } else {
       this.info_info_persona = undefined
+      this.infoFalla();
     }
   }
 
   verInfoCaracteristca(documento: any) {
     this.revisar_doc.emit(documento);
+  }
+
+  addCargado(carga: number) {
+    this.infoCarga.nCargado += carga;
+    this.infoCarga.porcentaje = this.infoCarga.nCargado/this.infoCarga.nCargas;
+    if (this.infoCarga.porcentaje >= 1) {
+      this.infoCarga.status = "completed";
+      this.infoCarga.outInfo = {
+        id: this.info_info_persona.Id,
+        numeroDocId: this.info_info_persona.NumeroIdentificacion,
+        nombre: this.info_info_persona["NombreCompleto"],
+        tipoDoc: this.info_info_persona.TipoIdentificacion.Nombre.toLowerCase(),
+        telefono: this.telefono,
+        correo: this.correo,
+      }
+    }
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  infoFalla() {
+    this.infoCarga.status = "failed";
+    this.estadoCarga.emit(this.infoCarga);
   }
 }

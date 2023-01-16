@@ -47,6 +47,14 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
 
+  @Output('estadoCarga') estadoCarga: EventEmitter<any> = new EventEmitter(true);
+  infoCarga: any = {
+    porcentaje: 0,
+    nCargado: 0,
+    nCargas: 0,
+    status: ""
+  }
+
   constructor(
     private translate: TranslateService,
     private inscripcionService: InscripcionService,
@@ -82,6 +90,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
         (response: any[]) => {
           if (response !== null && Object.keys(response[0]).length > 0 && response[0] != '{}') {
             this.info_documento_programa = response;
+            this.infoCarga.nCargas = this.info_documento_programa.length;
             this.info_documento_programa.forEach(doc => {
               this.docSoporte.push({ Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId })
               doc.IdDoc = doc.DocumentoId;
@@ -101,25 +110,31 @@ export class ViewDocumentoProgramaComponent implements OnInit {
                       doc.tabName = this.translate.instant('inscripcion.documento_programa');
                       doc.carpeta = "Documentos Solicitados";
                       this.zipManagerService.adjuntarArchivos([doc]);
+                      this.addCargado(1);
                     }
                   });
                 }
               },
               error => {
+                this.infoFalla();
                 this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
               },
             );
           } else {
             this.info_documento_programa = null
+            this.infoFalla();
           }
         },
         error => {
+          this.infoFalla();
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
         },
     );
   }
 
   ngOnInit() {
+    this.infoCarga.status = "start";
+    this.estadoCarga.emit(this.infoCarga);
     this.programa_id = parseInt(sessionStorage.getItem('ProgramaAcademicoId'));
     this.persona_id = this.persona_id ? this.persona_id : this.userService.getPersonaId();
     this.inscripcion_id = this.inscripcion_id ? this.inscripcion_id : parseInt(sessionStorage.getItem('IdInscripcion'));
@@ -129,5 +144,19 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   abrirDocumento(documento: any) {
     documento.Id = documento.DocumentoId;
     this.revisar_doc.emit(documento);
+  }
+
+  addCargado(carga: number) {
+    this.infoCarga.nCargado += carga;
+    this.infoCarga.porcentaje = this.infoCarga.nCargado/this.infoCarga.nCargas;
+    if (this.infoCarga.porcentaje >= 1) {
+      this.infoCarga.status = "completed";
+    }
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  infoFalla() {
+    this.infoCarga.status = "failed";
+    this.estadoCarga.emit(this.infoCarga);
   }
 }
