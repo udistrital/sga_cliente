@@ -34,6 +34,14 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
 
+  @Output('estadoCarga') estadoCarga: EventEmitter<any> = new EventEmitter(true);
+  infoCarga: any = {
+    porcentaje: 0,
+    nCargado: 0,
+    nCargas: 0,
+    status: ""
+  }
+
   info_formacion_academica: any;
   soporte: any;
 
@@ -48,7 +56,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
-    this.loadData();
+    //this.loadData();
   }
 
   public cleanURL(oldURL: string): SafeResourceUrl {
@@ -68,6 +76,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
       .subscribe(response => {
         if (response !== null && response.Response.Code === '200') {
           const data = <Array<any>>response.Response.Body[0];
+          this.infoCarga.nCargas = data.length;
           const dataInfo = <Array<any>>[];
           data.forEach(element => {
             const FechaI = element.FechaInicio;
@@ -92,8 +101,10 @@ export class ViewFormacionAcademicaComponent implements OnInit {
                     element.tabName = this.translate.instant('GLOBAL.formacion_academica');
                     element.carpeta = "Formación Académica";
                     this.zipManagerService.adjuntarArchivos([element]);
+                    this.addCargado(1);
               },
                 (error: HttpErrorResponse) => {
+                  this.infoFalla();
                   Swal.fire({
                     icon: 'error',
                     title: error.status + '',
@@ -108,9 +119,12 @@ export class ViewFormacionAcademicaComponent implements OnInit {
 
           })
           this.info_formacion_academica = data;
+        } else {
+          this.infoFalla();
         }
       },
         (error: HttpErrorResponse) => {
+          this.infoFalla();
           Swal.fire({
             icon: 'error',
             title: error.status + '',
@@ -123,7 +137,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
         });
   }
 
-  loadDataOld(): void {
+  /* loadDataOld(): void {
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
       .subscribe(res => {
         if (res !== null) {
@@ -262,12 +276,28 @@ export class ViewFormacionAcademicaComponent implements OnInit {
     //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
     //       });
     //     });
-  }
+  } */
 
   ngOnInit() {
+    this.infoCarga.status = "start";
+    this.estadoCarga.emit(this.infoCarga);
   }
 
   abrirDocumento(document) {
     this.revisar_doc.emit(document);
+  }
+
+  addCargado(carga: number) {
+    this.infoCarga.nCargado += carga;
+    this.infoCarga.porcentaje = this.infoCarga.nCargado/this.infoCarga.nCargas;
+    if (this.infoCarga.porcentaje >= 1) {
+      this.infoCarga.status = "completed";
+    }
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  infoFalla() {
+    this.infoCarga.status = "failed";
+    this.estadoCarga.emit(this.infoCarga);
   }
 }

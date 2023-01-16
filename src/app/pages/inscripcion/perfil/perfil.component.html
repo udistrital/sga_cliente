@@ -1,66 +1,228 @@
-<div #comprobante>
   <nb-card>
     <nb-card-body [nbSpinner]="loading"
                   nbSpinnerStatus="success"
                   nbSpinnerSize="xxlarge"
                   nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
-      <div>
-        <div class="row" [hidden]="imprimir">
-          <div [ngClass]="!en_revision ? 'col-md-11 text-center' : 'col-md-12 text-center'">
-            <h1>{{ 'inscripcion.perfil' | translate }}</h1>
-          </div>
-          <div class="col-md-1 float-right" *ngIf="!en_revision">
-            <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="editar($event,'salir_perfil')">X</button>
-          </div>
+
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <h2 *ngIf="imprimir" class="text-center">{{ 'inscripcion.comprobante_inscripcion' | translate }}</h2>
+          <h2 *ngIf="!imprimir" class="text-center">{{ 'inscripcion.perfil' | translate }}</h2>
         </div>
-        <div class="row" *ngIf="imprimir">
-          <div class="col-md-12">
-            <nb-card>
-              <nb-card-header class="row container">
-                <div class="col-md-12">
-                  <div class="col-md-12 info-comprobante">
-                    <h4 class="text-center">
-                      {{ 'inscripcion.comprobante_inscripcion' | translate }}
-                    </h4>
-                  </div>
-                </div>
-              </nb-card-header>
-            </nb-card>
-          </div>
+        <div class="col-md-1">
+          <h2 *ngIf="!en_revision && !imprimir">
+            <button class="btn btn-primary btn-icon input-group-text btn-tn" (click)="editar($event,'salir_perfil')">X</button>
+          </h2>
         </div>
       </div>
-      <div class="row" *ngIf="suiteLoaded">
-        <ngx-view-inscripcion class="col-md-12"></ngx-view-inscripcion>
-        <ngx-view-info-persona (url_editar)="editar($event,'info_persona')"
-                               (revisar_doc)="abrirDocumento($event)"
-                               persona_id="{{info_persona_id}}"
-                               class="col-md-12"
-                               *ngIf="SuiteTags.info_persona.selected">
-        </ngx-view-info-persona>
+
+      <div *ngIf="suiteLoaded">
+        <mat-accordion multi>
+          <mat-expansion-panel [expanded]="true" hideToggle>
+            <mat-expansion-panel-header [expandedHeight]="'32px'">
+              <mat-panel-title>{{ 'inscripcion.inscripcion' | translate }}</mat-panel-title>
+              <mat-panel-description></mat-panel-description>
+          </mat-expansion-panel-header>
+              <ngx-view-inscripcion (estadoCarga)="manageLoading($event, 'inscripcion')">
+              </ngx-view-inscripcion>
+              <mat-action-row *ngIf="!(contTag > 0) && !loading">
+                <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde()">{{ 'GLOBAL.siguiente' | translate }}</button>
+              </mat-action-row>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel  id="info_persona" *ngIf="SuiteTags.info_persona.selected" hideToggle
+                                [disabled]="!SuiteTags.info_persona.render"
+                                [expanded]="SuiteTags.info_persona.render">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ 'inscripcion.info_basica' | translate }}</mat-panel-title>
+              <mat-panel-description>
+                <div *ngIf="SuiteTags.info_persona.required">{{ 'GLOBAL.obligatorio' | translate }}</div>
+                <div *ngIf="!SuiteTags.info_persona.required">{{ 'GLOBAL.opcional' | translate }}</div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+              <ngx-view-info-persona  (url_editar)="editar($event,'info_persona')"
+                                      (revisar_doc)="abrirDocumento($event)"
+                                      (estadoCarga)="manageLoading($event, 'info_persona')"
+                                      persona_id="{{info_persona_id}}"
+                                      *ngIf="SuiteTags.info_persona.render">
+              </ngx-view-info-persona>
+              <mat-action-row *ngIf="SuiteTags.info_persona.buttonNext && !loading">
+                <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('info_persona')">{{ 'GLOBAL.siguiente' | translate }}</button>
+              </mat-action-row>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel  id="formacion_academica" *ngIf="SuiteTags.formacion_academica.selected" hideToggle
+                                [disabled]="!SuiteTags.formacion_academica.render"
+                                [expanded]="SuiteTags.formacion_academica.render">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ 'inscripcion.formacion_academica' | translate }}</mat-panel-title>
+              <mat-panel-description>
+                <div *ngIf="SuiteTags.formacion_academica.required">{{ 'GLOBAL.obligatorio' | translate }}</div>
+                <div *ngIf="!SuiteTags.formacion_academica.required">{{ 'GLOBAL.opcional' | translate }}</div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+              <ngx-view-formacion-academica (url_editar)="editar($event,'formacion_academica')"
+                                            (revisar_doc)="abrirDocumento($event)"
+                                            (estadoCarga)="manageLoading($event, 'formacion_academica')"
+                                            persona_id="{{info_persona_id}}"
+                                            *ngIf="SuiteTags.formacion_academica.render">
+              </ngx-view-formacion-academica>
+              <mat-action-row *ngIf="SuiteTags.formacion_academica.buttonNext && !loading">
+                <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('formacion_academica')">{{ 'GLOBAL.siguiente' | translate }}</button>
+              </mat-action-row>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel  id="idiomas" *ngIf="SuiteTags.idiomas.selected" hideToggle
+                                [disabled]="!SuiteTags.idiomas.render"
+                                [expanded]="SuiteTags.idiomas.render">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ 'inscripcion.idiomas' | translate }}</mat-panel-title>
+              <mat-panel-description>
+                <div *ngIf="SuiteTags.idiomas.required">{{ 'GLOBAL.obligatorio' | translate }}</div>
+                <div *ngIf="!SuiteTags.idiomas.required">{{ 'GLOBAL.opcional' | translate }}</div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+              <ngx-view-idiomas (url_editar)="editar($event,'idiomas')"
+                                (estadoCarga)="manageLoading($event, 'idiomas')"
+                                persona_id="{{info_persona_id}}"
+                                inscripcion_id="{{info_inscripcion_id}}"
+                                *ngIf="SuiteTags.idiomas.render">
+              </ngx-view-idiomas>
+              <mat-action-row *ngIf="SuiteTags.idiomas.buttonNext && !loading">
+                <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('idiomas')">{{ 'GLOBAL.siguiente' | translate }}</button>
+              </mat-action-row>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel  id="experiencia_laboral" *ngIf="SuiteTags.experiencia_laboral.selected" hideToggle
+                                [disabled]="!SuiteTags.experiencia_laboral.render"
+                                [expanded]="SuiteTags.experiencia_laboral.render">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ 'inscripcion.experiencia_laboral' | translate }}</mat-panel-title>
+              <mat-panel-description>
+                <div *ngIf="SuiteTags.experiencia_laboral.required">{{ 'GLOBAL.obligatorio' | translate }}</div>
+                <div *ngIf="!SuiteTags.experiencia_laboral.required">{{ 'GLOBAL.opcional' | translate }}</div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+              <ngx-view-experiencia-laboral (url_editar)="editar($event,'experiencia_laboral')"
+                                            (revisar_doc)="abrirDocumento($event)"
+                                            (estadoCarga)="manageLoading($event, 'experiencia_laboral')"
+                                            persona_id="{{info_persona_id}}"
+                                            *ngIf="SuiteTags.experiencia_laboral.render">
+              </ngx-view-experiencia-laboral>
+              <mat-action-row *ngIf="SuiteTags.experiencia_laboral.buttonNext && !loading">
+                <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('experiencia_laboral')">{{ 'GLOBAL.siguiente' | translate }}</button>
+              </mat-action-row>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel  id="produccion_academica" *ngIf="SuiteTags.produccion_academica.selected" hideToggle
+                                [disabled]="!SuiteTags.produccion_academica.render"
+                                [expanded]="SuiteTags.produccion_academica.render">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ 'inscripcion.produccion_academica' | translate }}</mat-panel-title>
+              <mat-panel-description>
+                <div *ngIf="SuiteTags.produccion_academica.required">{{ 'GLOBAL.obligatorio' | translate }}</div>
+                <div *ngIf="!SuiteTags.produccion_academica.required">{{ 'GLOBAL.opcional' | translate }}</div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+              <ngx-view-produccion-academica  (url_editar)="editar($event,'produccion_academica')"
+                                              (revisar_doc)="abrirDocumento($event)"
+                                              (estadoCarga)="manageLoading($event, 'produccion_academica')"
+                                              persona_id="{{info_persona_id}}"
+                                              *ngIf="SuiteTags.produccion_academica.render">
+              </ngx-view-produccion-academica>
+              <mat-action-row *ngIf="SuiteTags.produccion_academica.buttonNext && !loading">
+                <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('produccion_academica')">{{ 'GLOBAL.siguiente' | translate }}</button>
+              </mat-action-row>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel  id="documento_programa" *ngIf="SuiteTags.documento_programa.selected" hideToggle
+                                [disabled]="!SuiteTags.documento_programa.render"
+                                [expanded]="SuiteTags.documento_programa.render">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ 'inscripcion.documento_programa' | translate }}</mat-panel-title>
+              <mat-panel-description>
+                <div *ngIf="SuiteTags.documento_programa.required">{{ 'GLOBAL.obligatorio' | translate }}</div>
+                <div *ngIf="!SuiteTags.documento_programa.required">{{ 'GLOBAL.opcional' | translate }}</div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+              <ngx-view-documento-programa  (url_editar)="editar($event, 'documento_programa')"
+                                            (revisar_doc)="abrirDocumento($event)"
+                                            (estadoCarga)="manageLoading($event, 'documento_programa')"
+                                            inscripcion_id="{{info_inscripcion_id}}"
+                                            persona_id="{{info_persona_id}}"
+                                            *ngIf="SuiteTags.documento_programa.render">
+              </ngx-view-documento-programa>
+              <mat-action-row *ngIf="SuiteTags.documento_programa.buttonNext && !loading">
+                <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('documento_programa')">{{ 'GLOBAL.siguiente' | translate }}</button>
+              </mat-action-row>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel  id="descuento_matricula" *ngIf="SuiteTags.descuento_matricula.selected" hideToggle
+                                [disabled]="!SuiteTags.descuento_matricula.render"
+                                [expanded]="SuiteTags.descuento_matricula.render">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ 'inscripcion.descuento_matricula' | translate }}</mat-panel-title>
+              <mat-panel-description>
+                <div *ngIf="SuiteTags.descuento_matricula.required">{{ 'GLOBAL.obligatorio' | translate }}</div>
+                <div *ngIf="!SuiteTags.descuento_matricula.required">{{ 'GLOBAL.opcional' | translate }}</div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+              <ngx-view-descuento-academico (url_editar)="editar($event,'descuento_matricula')"
+                                            (revisar_doc)="abrirDocumento($event)"
+                                            (estadoCarga)="manageLoading($event, 'descuento_matricula')"
+                                            inscripcion_id="{{info_inscripcion_id}}"
+                                            persona_id="{{info_persona_id}}"
+                                            *ngIf="SuiteTags.descuento_matricula.render">
+              </ngx-view-descuento-academico>
+              <mat-action-row *ngIf="SuiteTags.descuento_matricula.buttonNext && !loading">
+                <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('descuento_matricula')">{{ 'GLOBAL.siguiente' | translate }}</button>
+              </mat-action-row>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel  id="propuesta_grado" *ngIf="SuiteTags.propuesta_grado.selected" hideToggle
+                                [disabled]="!SuiteTags.propuesta_grado.render"
+                                [expanded]="SuiteTags.propuesta_grado.render">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ 'inscripcion.propuesta_grado' | translate }}</mat-panel-title>
+              <mat-panel-description>
+                <div *ngIf="SuiteTags.propuesta_grado.required">{{ 'GLOBAL.obligatorio' | translate }}</div>
+                <div *ngIf="!SuiteTags.propuesta_grado.required">{{ 'GLOBAL.opcional' | translate }}</div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+              <ngx-view-propuesta-grado (url_editar)="editar($event,'propuesta_grado')"
+                                        (revisar_doc)="abrirDocumento($event)"
+                                        (estadoCarga)="manageLoading($event, 'propuesta_grado')"
+                                        inscripcion_id="{{info_inscripcion_id}}"
+                                        persona_id="{{info_persona_id}}"
+                                        *ngIf="SuiteTags.propuesta_grado.render">
+              </ngx-view-propuesta-grado>
+              <mat-action-row *ngIf="SuiteTags.propuesta_grado.buttonNext && !loading">
+                <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('propuesta_grado')">{{ 'GLOBAL.siguiente' | translate }}</button>
+              </mat-action-row>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+
+      <br>
+      <ngb-progressbar type="success" [value]="((contTag*reduceWhenloading)/maxTags*100)" [animated]="true">
+      </ngb-progressbar>
+      <br>
+      <div class="preinscription-alert" *ngIf="(contTag < maxTags)">
+        <div class="col-md-12"> {{ 'inscripcion.info_completar_carga' | translate }} </div>
+        <div class="col-md-12" *ngIf="imprimir" > {{ 'inscripcion.info_impresion_auto' | translate }} </div>
+      </div>
+      <div class="info-comprobante" *ngIf="imprimir">
+        {{ 'inscripcion.info_comprobante' | translate }}
+      </div>
+      <br>
+      
         <!--<ngx-view-info-caracteristica
           (url_editar)="editar($event,'info_caracteristica')"
           info_caracteristica_id="{{info_persona_id}}" class="col-md-6"></ngx-view-info-caracteristica>
         <ngx-view-informacion-contacto
           (url_editar)="editar($event,'info_contacto')"
           persona_id="{{info_persona_id}}" class="col-md-6"></ngx-view-informacion-contacto>-->
-        <ngx-view-formacion-academica (url_editar)="editar($event,'formacion_academica')"
-                                      (revisar_doc)="abrirDocumento($event)"
-                                      persona_id="{{info_persona_id}}"
-                                      class="col-md-12"
-                                      *ngIf="SuiteTags.formacion_academica.selected">
-        </ngx-view-formacion-academica>
-        <ngx-view-idiomas (url_editar)="editar($event,'formacion_academica')"
-                          persona_id="{{info_persona_id}}"
-                          inscripcion_id="{{info_inscripcion_id}}"
-                          class="col-md-12"
-                          *ngIf="SuiteTags.idiomas.selected">
-        </ngx-view-idiomas>
-        <ngx-view-experiencia-laboral (url_editar)="editar($event,'experiencia_laboral')"
-                                      (revisar_doc)="abrirDocumento($event)"
-                                      persona_id="{{info_persona_id}}"
-                                      class="col-md-12"
-                                      *ngIf="SuiteTags.experiencia_laboral.selected">
-        </ngx-view-experiencia-laboral>
         <!--<ngx-view-libro (url_editar)="editar($event,'default')"
           persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-libro>
         <ngx-view-articulo (url_editar)="editar($event,'default')"
@@ -68,59 +230,21 @@
         <ngx-view-traduccion (url_editar)="editar($event,'default')"
           persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-traduccion>
         <ngx-view-otra-publicacion (url_editar)="editar($event,'default')"
-          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-otra-publicacion>
+          persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-otra-puRegresarblicacion>
         <ngx-view-otro-documento (url_editar)="editar($event,'default')"
           persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-otro-documento>
         <ngx-view-produccion-tecnica (url_editar)="editar($event,'default')"
           persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion-tecnica>
         <ngx-view-produccion-artes-arqu-diseno (url_editar)="editar($event,'default')"
           persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion-artes-arqu-diseno>-->
-        <ngx-view-produccion-academica (url_editar)="editar($event,'produccion_academica')"
-                                      (revisar_doc)="abrirDocumento($event)"
-                                       persona_id="{{info_persona_id}}"
-                                       class="col-md-12"
-                                       *ngIf="SuiteTags.produccion_academica.selected">
-        </ngx-view-produccion-academica>
-        <ngx-view-descuento-academico (url_editar)="editar($event,'descuento_matricula')"
-                                      (revisar_doc)="abrirDocumento($event)"
-                                      inscripcion_id="{{info_inscripcion_id}}"
-                                      persona_id="{{info_persona_id}}"
-                                      class="col-md-12"
-                                      *ngIf="SuiteTags.descuento_matricula.selected">
-        </ngx-view-descuento-academico>
-        <ngx-view-propuesta-grado (url_editar)="editar($event,'propuesta_grado')"
-                                  (listo)="activarImprimir($event)"
-                                  (revisar_doc)="abrirDocumento($event)"
-                                  inscripcion_id="{{info_inscripcion_id}}"
-                                  persona_id="{{info_persona_id}}"
-                                  class="col-md-12"
-                                  *ngIf="SuiteTags.propuesta_grado.selected">
-        </ngx-view-propuesta-grado>
-        <ngx-view-documento-programa (url_editar)="editar($event, 'documento_programa')"
-                                     (revisar_doc)="abrirDocumento($event)"
-                                     inscripcion_id="{{info_inscripcion_id}}"
-                                     persona_id="{{info_persona_id}}"
-                                     class="col-md-12"
-                                     *ngIf="SuiteTags.documento_programa.selected">
-        </ngx-view-documento-programa>
-
-        <div class="col-md-12" *ngIf="en_revision">
-          <button mat-raised-button color="primary" (click)="descargar_compilado_zip()">{{ 'admision.descargar_zip' | translate }}</button>
-        </div>
-
-        <div class="col-md-12">
-          <nb-card *ngIf="imprimir">
-            <nb-card-body class="row container">
-              <div class="col-md-12">
-                <div class="col-md-12 info-comprobante">
-                  <h5 class="text-center"> {{ 'inscripcion.imprimir_comprobante' | translate }} </h5>
-                  <p>{{ 'inscripcion.info_comprobante' | translate }} </p>
-                </div>
-              </div>
-            </nb-card-body>
-          </nb-card>
-        </div>
+      
+      <div class="col-md-12" *ngIf="(contTag >= maxTags)">
+        <button *ngIf="en_revision" mat-raised-button color="primary" (click)="descargar_compilado_zip()">
+          {{ 'admision.descargar_zip' | translate }}
+        </button>
+        <button *ngIf="imprimir" mat-raised-button color="primary" (click)="editar($event,'salir_preinscripcion')">{{ 'GLOBAL.regresar' | translate }}</button>
+        <button *ngIf="imprimir" mat-raised-button color="link" (click)="descargar_comprobante_inscription()">{{ 'inscripcion.generar_comprobante' | translate }}</button>
       </div>
+
     </nb-card-body>
   </nb-card>
-</div>
