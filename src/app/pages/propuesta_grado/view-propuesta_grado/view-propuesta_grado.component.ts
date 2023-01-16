@@ -47,8 +47,13 @@ export class ViewPropuestaGradoComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
 
-  // tslint:disable-next-line: no-output-rename
-  @Output('listo') listo: EventEmitter<boolean> = new EventEmitter();
+  @Output('estadoCarga') estadoCarga: EventEmitter<any> = new EventEmitter(true);
+  infoCarga: any = {
+    porcentaje: 0,
+    nCargado: 0,
+    nCargas: 0,
+    status: ""
+  }
 
   constructor(private translate: TranslateService,
     private inscripcionService: InscripcionService,
@@ -245,6 +250,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
   }
 
   loadPropuestaGrado(): void {
+    this.infoCarga.nCargas = 4;
     this.inscripcionService.get('propuesta?query=Activo:true,InscripcionId:' + Number(window.sessionStorage.getItem('IdInscripcion')))
       .subscribe(res => {
         if (res !== null && JSON.stringify(res[0]) !== '{}') {
@@ -271,18 +277,22 @@ export class ViewPropuestaGradoComponent implements OnInit {
                 }
                 this.zipManagerService.adjuntarArchivos([temp.Soporte]);
                 this.FormatoProyecto = temp.DocumentoId;
+                this.addCargado(2);
+
                 if (temp.GrupoInvestigacionId === 0) {
                   temp.GrupoInvestigacion = <any>{ name: "No aplica" };
                   this.info_propuesta_grado = temp;
+                  this.addCargado(1);
                 } else {
                   this.cidcService.get('research_units/' + temp.GrupoInvestigacionId)
                     .subscribe(grupo => {
                       if (grupo !== null) {
                         temp.GrupoInvestigacion = <any>grupo;
                         this.info_propuesta_grado = temp;
+                        this.addCargado(1);
                       }
                     }, (error: HttpErrorResponse) => {
-                      this.listo.emit(false);
+                      this.infoFalla();
                       Swal.fire({
                         icon: 'error',
                         title: error.status + '',
@@ -298,15 +308,17 @@ export class ViewPropuestaGradoComponent implements OnInit {
                 if (temp.LineaInvestigacionId === 0) {
                   temp.LineaInvestigacion = <any>{ st_name: "No aplica" };
                   this.info_propuesta_grado = temp;
+                  this.addCargado(1);
                 } else {
                   this.cidcService.get('subtypes/' + temp.LineaInvestigacionId)
                     .subscribe(linea => {
                       if (linea !== null) {
                         temp.LineaInvestigacion = <any>linea;
                         this.info_propuesta_grado = temp;
+                        this.addCargado(1);
                       }
                     }, (error: HttpErrorResponse) => {
-                      this.listo.emit(false);
+                      this.infoFalla();
                       Swal.fire({
                         icon: 'error',
                         title: error.status + '',
@@ -319,11 +331,10 @@ export class ViewPropuestaGradoComponent implements OnInit {
                     });
                 }
 
-                this.listo.emit(true);
               }
             },
               (error: HttpErrorResponse) => {
-                this.listo.emit(false);
+                this.infoFalla();
                 Swal.fire({
                   icon: 'error',
                   title: error.status + '',
@@ -335,11 +346,11 @@ export class ViewPropuestaGradoComponent implements OnInit {
                 });
               });
         } else {
-          this.listo.emit(true);
+          this.infoFalla();
         }
       },
         (error: HttpErrorResponse) => {
-          this.listo.emit(false);
+          this.infoFalla();
           Swal.fire({
             icon: 'error',
             title: error.status + '',
@@ -357,6 +368,22 @@ export class ViewPropuestaGradoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.infoCarga.status = "start";
+    this.estadoCarga.emit(this.infoCarga);
     this.loadPropuestaGrado();
+  }
+
+  addCargado(carga: number) {
+    this.infoCarga.nCargado += carga;
+    this.infoCarga.porcentaje = this.infoCarga.nCargado/this.infoCarga.nCargas;
+    if (this.infoCarga.porcentaje >= 1) {
+      this.infoCarga.status = "completed";
+    }
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  infoFalla() {
+    this.infoCarga.status = "failed";
+    this.estadoCarga.emit(this.infoCarga);
   }
 }

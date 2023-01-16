@@ -210,6 +210,7 @@
         "formulario": "Formulario",
         "lista": "Lista",
         "regresar": "Regresar",
+        "siguiente": "Siguiente",
         "error": "Error",
         "informacion": "Información",
         "operacion_exitosa": "Operación exitosa",
@@ -1383,7 +1384,11 @@
         "mensaje_100_inscripcion": "Aspirante, ya cuenta con el 100% de la documentación requerida, no olvide presionar el botón \"Inscribirse\" para continuar con el proceso.",
         "ya_existe_usuarioCorreo": "¡El correo encontrado no coincide con el de la sesión actual! Presione ACEPTAR para actualizarlo, o presione CANCELAR para cerrar sesión e ingresar con el correo anterior.",
         "correo_anterior": "Correo anterior",
-        "correo_actual": "Correo actual"
+        "correo_actual": "Correo actual",
+        "generar_comprobante": "Si no ha guardado o no se ha generado el comprobante, presione aquí",
+        "info_completar_carga": "Revise uno a uno los apartados de información para completar el proceso. Para avanzar presione siguiente, habrá finalizado cuando la barra de carga se complete.",
+        "info_impresion_auto": "NOTA: Se genera un documento comprobante de inscripción al completar la barra de carga.",
+        "fallo_carga_mensaje": "Algó falló en la carga de información, por favor regrese e intente de nuevo"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
