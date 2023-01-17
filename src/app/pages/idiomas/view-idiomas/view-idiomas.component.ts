@@ -36,6 +36,14 @@ export class ViewIdiomasComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
 
+  @Output('estadoCarga') estadoCarga: EventEmitter<any> = new EventEmitter(true);
+  infoCarga: any = {
+    porcentaje: 0,
+    nCargado: 0,
+    nCargas: 0,
+    status: ""
+  }
+
   info_idioma: any;
   info_examen: any;
 
@@ -60,15 +68,20 @@ export class ViewIdiomasComponent implements OnInit {
   }
 
   loadData(): void {
+    this.infoCarga.nCargas = 1;
     this.idiomaService.get('conocimiento_idioma?query=Activo:true,TercerosId:' + this.persona_id +
       '&limit=0')
       .subscribe(res => {
         if (res !== null && JSON.stringify(res[0]) !== '{}') {
           const data = <Array<any>>res;
           this.info_idioma = data;
+          this.addCargado(1);
+        } else {
+          this.infoFalla();
         }
       },
       (error: HttpErrorResponse) => {
+        this.infoFalla();
         Swal.fire({
           icon: 'error',
           title: error.status + '',
@@ -81,5 +94,21 @@ export class ViewIdiomasComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.infoCarga.status = "start";
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  addCargado(carga: number) {
+    this.infoCarga.nCargado += carga;
+    this.infoCarga.porcentaje = this.infoCarga.nCargado/this.infoCarga.nCargas;
+    if (this.infoCarga.porcentaje >= 1) {
+      this.infoCarga.status = "completed";
+    }
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  infoFalla() {
+    this.infoCarga.status = "failed";
+    this.estadoCarga.emit(this.infoCarga);
   }
 }

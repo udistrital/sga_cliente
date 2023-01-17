@@ -21,6 +21,18 @@ export class ZipManagerService {
     return "cleaned"
   }
 
+  listarArchivos(): any[] {
+    return [...this.Archivos.map(f => {
+      return {
+        carpeta: f.carpeta.split('/')[0],
+        grupoDoc: f.tabName, 
+        nombreDocumento: f.nombreDocumento,
+        aprobado: f.estadoObservacion,
+        observacion: f.observacion
+      }
+    })]
+  }
+
   generarZip(nombreCarpeta: string) {
     return new Promise((resolve, reject) => {
       this.CarpetaPrincipal = nombreCarpeta != "" ? nombreCarpeta : this.CarpetaPrincipal;

@@ -482,7 +482,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
                             this.show_docu || this.show_info || this.show_acad || 
                             this.show_info_externa || this.show_idiomas;
         if (!enAlgunaVista && this.estado_inscripcion_nombre == "INSCRIPCIÓN SOLICITADA"){
-          this.popUpManager.showConfirmAlert(this.translate.instant('inscripcion.mensaje_100_inscripcion'), this.translate.instant('inscripcion.inscripcion'))
+          this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.inscripcion'), this.translate.instant('inscripcion.mensaje_100_inscripcion'), "info", false)
         }
       }
     }

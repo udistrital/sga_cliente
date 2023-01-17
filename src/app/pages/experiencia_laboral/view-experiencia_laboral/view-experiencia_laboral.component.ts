@@ -34,6 +34,14 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
 
+  @Output('estadoCarga') estadoCarga: EventEmitter<any> = new EventEmitter(true);
+  infoCarga: any = {
+    porcentaje: 0,
+    nCargado: 0,
+    nCargas: 0,
+    status: ""
+  }
+
   organizacion: any;
   soporte: any;
   documentosSoporte = [];
@@ -71,6 +79,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
         const soportes = [];
         if (response.Data.Code === '200') {
           this.data = <Array<any>>response.Data.Body[1];
+          this.infoCarga.nCargas = this.data.length;
           this.info_experiencia_laboral = this.data;
           for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
             if (this.info_experiencia_laboral[i].Soporte + '' !== '0') {
@@ -98,14 +107,13 @@ export class ViewExperienciaLaboralComponent implements OnInit {
                         carpeta: "Experiencia Laboral",
                       }
                       this.zipManagerService.adjuntarArchivos([info.Soporte]);
+                      this.addCargado(1);
                     }
                   });
-                  /* for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
-                    this.info_experiencia_laboral[i].Soporte = this.documentosSoporte[i];
-                  } */
                 }
             },
               (error: HttpErrorResponse) => {
+                this.infoFalla();
                 Swal.fire({
                   icon:'error',
                   title: error.status + '',
@@ -116,16 +124,18 @@ export class ViewExperienciaLaboralComponent implements OnInit {
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
-        } if (response.Data.Code === "400") {
-          Swal.fire({
+        } else {
+          this.infoFalla();
+          /* Swal.fire({ // Sale cuando no hay información relacionada, no debería mostrarse si la información es opcional
             icon:'error',
-            text: this.translate.instant('ERROR 400'),
+            text: this.translate.instant('ERROR.'+response.Data.Code),
             footer: this.translate.instant('experiencia_laboral.cargar_experiencia'),
             confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
+          }); */
         }
       },
       (error: HttpErrorResponse) => {
+        this.infoFalla();
         Swal.fire({
           icon:'error',
           title: error.status + '',
@@ -141,5 +151,21 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.infoCarga.status = "start";
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  addCargado(carga: number) {
+    this.infoCarga.nCargado += carga;
+    this.infoCarga.porcentaje = this.infoCarga.nCargado/this.infoCarga.nCargas;
+    if (this.infoCarga.porcentaje >= 1) {
+      this.infoCarga.status = "completed";
+    }
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  infoFalla() {
+    this.infoCarga.status = "failed";
+    this.estadoCarga.emit(this.infoCarga);
   }
 }

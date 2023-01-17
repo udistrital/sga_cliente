@@ -52,6 +52,14 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   // tslint:disable-next-line: no-output-rename
   @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
 
+  @Output('estadoCarga') estadoCarga: EventEmitter<any> = new EventEmitter(true);
+  infoCarga: any = {
+    porcentaje: 0,
+    nCargado: 0,
+    nCargas: 0,
+    status: ""
+  }
+
   constructor(private translate: TranslateService,
     private mid: CampusMidService,
     private documentoService: DocumentoService,
@@ -94,6 +102,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
               soportes.push({ Id: this.info_descuento[i].DocumentoId, key: i });
             }
           }
+          this.infoCarga.nCargas = soportes.length;
 
           this.newNuxeoService.get(soportes).subscribe(
             response => {
@@ -113,11 +122,13 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
                     carpeta: "Descuentos de Matrícula"
                   }
                   this.zipManagerService.adjuntarArchivos([info.Soporte]);
+                  this.addCargado(1);
                 }
                 
               });
             },
               (error: HttpErrorResponse) => {
+                this.infoFalla();
                 Swal.fire({
                   icon: 'error',
                   title: error.status + '',
@@ -128,9 +139,12 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
+        } else {
+          this.infoFalla();
         }
       },
         (error: HttpErrorResponse) => {
+          this.infoFalla();
           Swal.fire({
             icon: 'error',
             title: error.status + '',
@@ -143,7 +157,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
         });
   }
 
-  loadDataOld(): void {
+  /* loadDataOld(): void {
     this.inscripcionService.get('inscripcion/' + this.inscripcion)
       .subscribe(dato_inscripcion => {
         const inscripciondata = <any>dato_inscripcion;
@@ -274,8 +288,24 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
     //       });
     //   });
-  }
+  } */
 
   ngOnInit() {
+    this.infoCarga.status = "start";
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  addCargado(carga: number) {
+    this.infoCarga.nCargado += carga;
+    this.infoCarga.porcentaje = this.infoCarga.nCargado/this.infoCarga.nCargas;
+    if (this.infoCarga.porcentaje >= 1) {
+      this.infoCarga.status = "completed";
+    }
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  infoFalla() {
+    this.infoCarga.status = "failed";
+    this.estadoCarga.emit(this.infoCarga);
   }
 }

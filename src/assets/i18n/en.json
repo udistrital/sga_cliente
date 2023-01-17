@@ -192,6 +192,7 @@
         "formulario": "Form",
         "lista": "List",
         "regresar": "Return",
+        "siguiente": "Next",
         "terminos_datos": "Privacy and data processing policy",
         "acepto_terminos": "I have read and agree to the privacy and treatment of information policy terms",
         "rechazo_terminos": "You have not accepted the terms of the information treatment and privacy policy",
@@ -1347,7 +1348,11 @@
         "mensaje_100_inscripcion": "Applicant, you already have 100% of the required documentation, do not forget to press the \"Register\" button to continue with the process.",
         "ya_existe_usuarioCorreo": "The mail found does not match the one in the current session! Press ACCEPT to update it, or press CANCEL to log out and enter with the previous email.",
         "correo_anterior": "Previous email",
-        "correo_actual": "Current email"
+        "correo_actual": "Current email",
+        "generar_comprobante": "If you have not saved or the receipt has not been generated, click here",
+        "info_completar_carga": "Review the information sections one by one to complete the process. To advance press next, it will be finished when the loading bar is complete.",
+        "info_impresion_auto": "NOTE: A proof of enrollment document is generated upon completion of the loading bar.",
+        "fallo_carga_mensaje": "Something failed to load information, please come back and try again"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",

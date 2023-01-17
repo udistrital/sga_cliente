@@ -1,11 +1,11 @@
-<nb-card>
+<!-- <nb-card>
     <nb-card-body>
-        <div class="col-md-12">
+        <div class="col-md-12"> -->
             <table class="table-responsive">
                 <thead>
-                    <tr>
+                    <!-- <tr>
                         <th colspan="4">{{ 'inscripcion.documento_programa' | translate}}</th>
-                    </tr>
+                    </tr> -->
                     <tr class="subheader">
                         <th>{{ 'GLOBAL.soporte_documento' | translate }}</th>
                         <th>{{ 'GLOBAL.estado' | translate }} </th>
@@ -24,9 +24,16 @@
                         </td>
                     </tr>
                 </tbody>
+                <tfoot *ngIf="url_editar && gotoEdit">
+                  <tr>
+                    <td colspan="4" style="background-color: lightyellow;">
+                      <span (click)="editar()" class="link"><i
+                        class="ion-edit"></i> {{"GLOBAL.actualizar" | translate}}</span>
+                    </td>
+                  </tr>
+                </tfoot>
             </table>
-            <span *ngIf="url_editar && gotoEdit" (click)="editar()" class="link">
-        <i class="ion-edit"></i>{{ 'GLOBAL.actualizar' | translate}}</span>
-        </div>
+<!--         </div>
     </nb-card-body>
 </nb-card>
+ -->

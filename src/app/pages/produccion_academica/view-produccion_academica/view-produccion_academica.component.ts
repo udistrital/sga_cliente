@@ -43,6 +43,14 @@ export class ViewProduccionAcademicaComponent implements OnInit {
 
   @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
 
+  @Output('estadoCarga') estadoCarga: EventEmitter<any> = new EventEmitter(true);
+  infoCarga: any = {
+    porcentaje: 0,
+    nCargado: 0,
+    nCargas: 0,
+    status: ""
+  }
+
   constructor(private translate: TranslateService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
@@ -77,43 +85,57 @@ export class ViewProduccionAcademicaComponent implements OnInit {
         if (res !== null) {
           if (res.Response.Code === '200') {
             this.info_produccion_academica = <Array<ProduccionAcademicaPost>>res.Response.Body[0];
+            this.infoCarga.nCargas = this.info_produccion_academica.length;
             this.info_produccion_academica.forEach((produccion) => {
               produccion["VerSoportes"] = false;
               produccion["Soportes"] = [];
-              produccion.Metadatos.forEach((m) => {
+              let metaFiles = produccion.Metadatos.filter((m) => JSON.parse(m.MetadatoSubtipoProduccionId.TipoMetadatoId.FormDefinition).etiqueta == "file")
+              let totalFiles = metaFiles.length;
+              metaFiles.forEach((m, i) => {
                 let itemForm = JSON.parse(m.MetadatoSubtipoProduccionId.TipoMetadatoId.FormDefinition)
-                if ( itemForm.etiqueta == "file") {
-                  this.newNuxeoService.get([{Id: m.Valor}]).subscribe(
-                    (response) => {
-                      let estadoDoc = this.utilidades.getEvaluacionDocumento(response[0].Metadatos);
-                      let prepareNombre: string = (produccion.SubtipoProduccionId.Nombre).toUpperCase() + ' (' + produccion.Titulo + ')';
-                      let prepareDoc = {
-                        Documento: response[0]["Documento"],
-                        DocumentoId: response[0].Id,
-                        aprobado: estadoDoc.aprobado,
-                        estadoObservacion: estadoDoc.estadoObservacion,
-                        observacion: estadoDoc.observacion,
-                        nombreDocumento: this.translate.instant('produccion_academica.'+itemForm.label_i18n),
-                        tabName: prepareNombre, 
-                        carpeta: "Produccion Academica/"+prepareNombre.replace(/[\<\>\:\"\|\?\*\/\.]/g,'')};
-                      produccion["Soportes"].push(prepareDoc);
-                    this.zipManagerService.adjuntarArchivos([prepareDoc]);
-                    }
-                  );
-                  
-                }
+                this.newNuxeoService.get([{Id: m.Valor}]).subscribe(
+                  (response) => {
+                    let estadoDoc = this.utilidades.getEvaluacionDocumento(response[0].Metadatos);
+                    let prepareNombre: string = (produccion.SubtipoProduccionId.Nombre).toUpperCase() + ' (' + produccion.Titulo + ')';
+                    let prepareDoc = {
+                      Documento: response[0]["Documento"],
+                      DocumentoId: response[0].Id,
+                      aprobado: estadoDoc.aprobado,
+                      estadoObservacion: estadoDoc.estadoObservacion,
+                      observacion: estadoDoc.observacion,
+                      nombreDocumento: this.translate.instant('produccion_academica.'+itemForm.label_i18n),
+                      tabName: prepareNombre, 
+                      carpeta: "Producción Académica/"+prepareNombre.replace(/[\<\>\:\"\|\?\*\/\.]/g,'')};
+                    produccion["Soportes"].push(prepareDoc);
+                  this.zipManagerService.adjuntarArchivos([prepareDoc]);
+                  if (i >= totalFiles-1) {
+                    this.addCargado(1);
+                  }
+                  },
+                  (error) => {
+                    this.infoFalla();
+                    Swal.fire({
+                      icon: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                  }
+                );
               });
             });
-          } else if (res.Response.Code === '400') {
-            Swal.fire({
+          } else {
+            this.infoFalla();
+            /* Swal.fire({ // Sale cuando no hay información relacionada, no debería mostrarse si la información es opcional
               icon: 'error',
-              title: '400',
-              text: this.translate.instant('ERROR.400'),
+              title: res.Response.Code,
+              text: this.translate.instant('ERROR.'+res.Response.Code),
               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            });
+            }); */
           }
         }
       }, (error: HttpErrorResponse) => {
+        this.infoFalla();
         Swal.fire({
           icon: 'error',
           title: error.status + '',
@@ -124,6 +146,8 @@ export class ViewProduccionAcademicaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.infoCarga.status = "start";
+    this.estadoCarga.emit(this.infoCarga);
   }
 
   verListaDocumentos(produccionClicked) {
@@ -139,5 +163,19 @@ export class ViewProduccionAcademicaComponent implements OnInit {
 
   verDocumento(document) {
     this.revisar_doc.emit(document);
+  }
+
+  addCargado(carga: number) {
+    this.infoCarga.nCargado += carga;
+    this.infoCarga.porcentaje = this.infoCarga.nCargado/this.infoCarga.nCargas;
+    if (this.infoCarga.porcentaje >= 1) {
+      this.infoCarga.status = "completed";
+    }
+    this.estadoCarga.emit(this.infoCarga);
+  }
+
+  infoFalla() {
+    this.infoCarga.status = "failed";
+    this.estadoCarga.emit(this.infoCarga);
   }
 }
