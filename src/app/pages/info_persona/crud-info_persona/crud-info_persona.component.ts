@@ -121,13 +121,19 @@ export class CrudInfoPersonaComponent implements OnInit {
             this.datosEncontrados = {...res}
             const files = []
             this.formInfoPersona.btn = '';
-            this.formInfoPersona.campos[this.getIndexForm('Genero')].valor = temp.Genero;
+            if (temp.Genero.Nombre != "NO APLICA") {
+              this.formInfoPersona.campos[this.getIndexForm('Genero')].valor = temp.Genero;
+            }
             this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].valor = temp.EstadoCivil;
             this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].valor = temp.TipoIdentificacion;
-            temp.FechaNacimiento = temp.FechaNacimiento.replace("T00:00:00Z", "T05:00:00Z");
-            temp.FechaExpedicion = temp.FechaExpedicion.replace("T00:00:00Z", "T05:00:00Z");
-            this.formInfoPersona.campos[this.getIndexForm('FechaNacimiento')].valor = moment(temp.FechaNacimiento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
-            this.formInfoPersona.campos[this.getIndexForm('FechaExpedicion')].valor = moment(temp.FechaExpedicion,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+            if (temp.FechaNacimiento != null) {
+              temp.FechaNacimiento = temp.FechaNacimiento.replace("T00:00:00Z", "T05:00:00Z");
+              this.formInfoPersona.campos[this.getIndexForm('FechaNacimiento')].valor = moment(temp.FechaNacimiento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+            }
+            if (temp.FechaExpedicion != null) {
+              temp.FechaExpedicion = temp.FechaExpedicion.replace("T00:00:00Z", "T05:00:00Z");
+              this.formInfoPersona.campos[this.getIndexForm('FechaExpedicion')].valor = moment(temp.FechaExpedicion,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+            }
             this.formInfoPersona.campos.splice(this.getIndexForm('VerificarNumeroIdentificacion'),1);
             this.formInfoPersona.campos.forEach(campo => {
               campo.deshabilitar = true;
@@ -168,10 +174,17 @@ export class CrudInfoPersonaComponent implements OnInit {
           this.loading = false;
           this.info_info_persona = res[0];
           this.datosEncontrados = {...res[0]};
-          res[0].FechaNacimiento = res[0].FechaNacimiento.replace("T00:00:00Z", "T05:00:00Z");
-          res[0].FechaExpedicion = res[0].FechaExpedicion.replace("T00:00:00Z", "T05:00:00Z");
-          this.formInfoPersona.campos[this.getIndexForm('FechaNacimiento')].valor = moment(res[0].FechaNacimiento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
-          this.formInfoPersona.campos[this.getIndexForm('FechaExpedicion')].valor = moment(res[0].FechaExpedicion,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+          if (res[0].FechaNacimiento != null) {
+            res[0].FechaNacimiento = res[0].FechaNacimiento.replace("T00:00:00Z", "T05:00:00Z");
+            this.formInfoPersona.campos[this.getIndexForm('FechaNacimiento')].valor = moment(res[0].FechaNacimiento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+          }
+          if (res[0].FechaExpedicion != null) {
+            res[0].FechaExpedicion = res[0].FechaExpedicion.replace("T00:00:00Z", "T05:00:00Z");
+            this.formInfoPersona.campos[this.getIndexForm('FechaExpedicion')].valor = moment(res[0].FechaExpedicion,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+          }
+          if (res[0].Genero.Nombre != "NO APLICA") {
+            this.formInfoPersona.campos[this.getIndexForm('Genero')].valor = res[0].Genero;
+          }
           
           this.formInfoPersona.campos.splice(this.getIndexForm('VerificarNumeroIdentificacion'),1);
 
@@ -429,7 +442,7 @@ export class CrudInfoPersonaComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
-        this.formInfoPersona.campos[this.getIndexForm('Genero')].opciones = list.listGenero[0];
+        this.formInfoPersona.campos[this.getIndexForm('Genero')].opciones = (<any>list.listGenero[0]).filter((g) => g.Nombre != "NO APLICA");
         this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].opciones = list.listEstadoCivil[0];
         this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].opciones = list.listTipoIdentificacion[0];
         this.formInfoPersona.campos[this.getIndexForm('OrientacionSexual')].opciones = list.listOrientacionSexual[0];
