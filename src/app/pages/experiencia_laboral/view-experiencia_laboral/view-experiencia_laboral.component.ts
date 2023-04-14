@@ -8,6 +8,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-view-experiencia-laboral',
@@ -52,9 +54,11 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     private sgaMidService: SgaMidService,
     private nuxeoService: NuxeoService,
     private newNuxeoService: NewNuxeoService,
+    private documentoService: DocumentoService,
     private sanitization: DomSanitizer,
     private utilidades: UtilidadesService,
-    private zipManagerService: ZipManagerService) {
+    private zipManagerService: ZipManagerService,
+    private popUpManager: PopUpManager,) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -77,17 +81,62 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     this.sgaMidService.get('experiencia_laboral/by_tercero?Id=' + this.persona_id).subscribe(
       (response: any) => {
         const soportes = [];
+        let soportes1 = "";
         if (response.Data.Code === '200') {
           this.data = <Array<any>>response.Data.Body[1];
           this.infoCarga.nCargas = this.data.length;
           this.info_experiencia_laboral = this.data;
           for (let i = 0; i < this.info_experiencia_laboral.length; i++) {
-            if (this.info_experiencia_laboral[i].Soporte + '' !== '0') {
+            if (Number(this.info_experiencia_laboral[i].Soporte) > 0) {
               soportes.push({ Id: this.info_experiencia_laboral[i].Soporte, key: 'DocumentoExp' + this.info_experiencia_laboral[i].Soporte });
+              soportes1 += String(this.info_experiencia_laboral[i].Soporte);
+              if( i < (this.info_experiencia_laboral.length - 1) ) {
+                soportes1 += '|';
+              }
               this.info_experiencia_laboral[i].IdDoc = parseInt(this.info_experiencia_laboral[i].Soporte,10);
             }
           }
-          this.newNuxeoService.get(soportes).subscribe(
+
+          if (soportes1 != '') {
+            this.documentoService.get('documento?query=Id__in:'+soportes1)
+              .subscribe((resp: any) => {
+                if((resp.Status && (resp.Status == "400" || resp.Status == "404")) || Object.keys(resp[0]).length == 0) {
+                  this.infoFalla();
+                } else {
+                  this.documentosSoporte = <Array<any>>resp;
+                  if (Object.values(this.documentosSoporte).length === this.info_experiencia_laboral.length) {
+                    this.info_experiencia_laboral.forEach(info => {
+                      let doc = this.documentosSoporte.find(doc => doc.Id == info.IdDoc);
+                      if (doc !== undefined) {
+                        //info.Soporte = doc;
+                        let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
+                        info.Soporte = {
+                          //Documento: doc.Documento, 
+                          DocumentoId: doc.Id,
+                          aprobado: estadoDoc.aprobado, 
+                          estadoObservacion: estadoDoc.estadoObservacion,
+                          observacion: estadoDoc.observacion,
+                          nombreDocumento: info.Cargo ? info.Cargo.Nombre : '',
+                          tabName: this.translate.instant('inscripcion.experiencia_laboral'),
+                          carpeta: "Experiencia Laboral",
+                        }
+                        this.zipManagerService.adjuntarArchivos([info.Soporte]);
+                        this.addCargado(1);
+                      }
+                    });
+                  } else {
+                    this.infoFalla();
+                  }
+                }
+              },
+              (error: HttpErrorResponse) => {
+                this.infoFalla();
+                //this.popUpManager.showErrorToast(this.translate.instant('ERROR' + error.status));
+              }
+              );
+          }
+
+          /* this.newNuxeoService.get(soportes).subscribe(
             response => {
                 this.documentosSoporte = <Array<any>>response;
                 if (Object.values(this.documentosSoporte).length === this.info_experiencia_laboral.length) {
@@ -123,7 +172,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
                     this.translate.instant('GLOBAL.soporte_documento'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
-              });
+              }); */
         } else {
           this.infoFalla();
           /* Swal.fire({ // Sale cuando no hay información relacionada, no debería mostrarse si la información es opcional
@@ -146,8 +195,15 @@ export class ViewExperienciaLaboralComponent implements OnInit {
       });
   }
 
-  verDocumento(document) {
-    this.revisar_doc.emit(document);
+  verDocumento(documento) {
+    this.newNuxeoService.getByIdLocal(documento.DocumentoId)
+      .subscribe(url => {
+        documento.Documento = {
+          "changingThisBreaksApplicationSecurity" : url};
+        this.revisar_doc.emit(documento);
+      }, error => {
+        this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.sin_documento'));
+      })
   }
 
   ngOnInit() {

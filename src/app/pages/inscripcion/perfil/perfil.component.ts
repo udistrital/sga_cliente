@@ -7,6 +7,7 @@ import { interval, Subject, Subscription } from 'rxjs';
 import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'ngx-perfil',
@@ -41,7 +42,7 @@ export class PerfilComponent implements OnInit {
   selectedTags: string[] = [];
   maxTags: number = 0;
   contTag: number = 0;
-  reduceWhenloading: number = 0.9;
+  //reduceWhenloading: number = 0.9;
   data = {
     "INSCRIPCION": {},
     "ASPIRANTE": {},
@@ -49,6 +50,9 @@ export class PerfilComponent implements OnInit {
     "DOCUMENTACION": {}
   };
   showErrors = false;
+  checkComplete: boolean = false;
+  progressDownloadDocs: number = 0;
+  triggeredDownload: boolean = false;
 
   // tslint:disable-next-line: no-output-rename
   @Output('url_editar') url_editar: EventEmitter<boolean> = new EventEmitter();
@@ -60,7 +64,8 @@ export class PerfilComponent implements OnInit {
     public pivotDocument: PivotDocument,
     private zipManagerService: ZipManagerService,
     private popUpManager: PopUpManager,
-    private sgaMidService: SgaMidService,) {
+    private sgaMidService: SgaMidService,
+    private gestorDocumentalService: NewNuxeoService) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.loading = false;
@@ -93,7 +98,7 @@ export class PerfilComponent implements OnInit {
     } else {
       Object.keys(Suite).forEach((tag: string) => {
         Suite[tag]["render"] = false;
-        Suite[tag]["buttonNext"] = false;
+        //Suite[tag]["buttonNext"] = false;
         if (Suite[tag].selected) {
           this.selectedTags = this.selectedTags.concat(tag);
         }
@@ -113,7 +118,7 @@ export class PerfilComponent implements OnInit {
     }
   }
 
-  descargar_compilado_zip() {
+  descargar_compilado_zip() {  
     this.loading = true;
     let nombre: string = sessionStorage.getItem('nameFolder');
     nombre = nombre.toUpperCase();
@@ -154,6 +159,33 @@ export class PerfilComponent implements OnInit {
     );
   }
 
+  descargar_archivos() {
+    if (!this.triggeredDownload) {
+      this.triggeredDownload = true;
+      const lista = this.zipManagerService.listarArchivos();
+      const limitQuery = lista.length;
+      let idsForQuery = "";
+      lista.forEach((f, i) => {
+        idsForQuery += String(f.documentoId);
+        if (i < limitQuery-1) idsForQuery += '|';
+      });
+      this.loading = true;
+      this.gestorDocumentalService.getManyFiles('?query=Id__in:'+idsForQuery+'&limit='+limitQuery)
+        .subscribe(r => {
+          if(r.downloadProgress) {
+            this.loading = true;
+            document.getElementById("progressbar").scrollIntoView({behavior: 'smooth'})
+            this.progressDownloadDocs = r.downloadProgress;
+          } else {
+            this.loading = false;
+          }
+        }, e => {
+          this.loading = false;
+          this.progressDownloadDocs = 0;
+        });
+    }
+  }
+
   guardar_archivo(urlFile: string, nombre: string, extension: string) {
     let download = document.createElement("a");
       download.href = urlFile;
@@ -165,24 +197,37 @@ export class PerfilComponent implements OnInit {
 
   siguienteTagDesde(actualTag: string) {
     if (this.contTag < this.maxTags-1) {
-      if (actualTag != undefined) {
+/*       if (actualTag != undefined) {
         this.SuiteTags[actualTag].buttonNext = false;
-      }
+      } */
       this.SuiteTags[this.selectedTags[this.contTag]].render = true;
-      this.SuiteTags[this.selectedTags[this.contTag]].buttonNext = true;
+      //this.SuiteTags[this.selectedTags[this.contTag]].buttonNext = true;
       document.getElementById(this.selectedTags[this.contTag]).scrollIntoView({behavior: 'smooth'})
-      this.contTag++;
+      this.properlyCont(actualTag);
     } else if (this.contTag < this.maxTags) {
-      this.SuiteTags[this.selectedTags[this.contTag-1]].buttonNext = false;
-      this.contTag++;
+      //this.SuiteTags[this.selectedTags[this.contTag-1]].buttonNext = false;
+      this.properlyCont(actualTag);
+      this.descargar_archivos();          
+
       if (this.imprimir) {
         this.descargar_comprobante_inscription();
       }
     }
   }
 
+  properlyCont(actualTag) {
+    if(this.contTag > 0) {
+      if(this.selectedTags[this.contTag-1] == actualTag) {
+        this.contTag++;
+      }
+    } else {
+      this.contTag++;
+    }
+  }
+
   manageLoading(infoCarga, actualTag: string) {
     if(infoCarga.status == "start") {
+      this.checkComplete = false;
       this.loading = true;
     }
     if(infoCarga.status == "completed") {
@@ -212,7 +257,13 @@ export class PerfilComponent implements OnInit {
       }
     }
     
-    this.loading ? this.reduceWhenloading = 0.9 : this.reduceWhenloading = 1;
+    //this.loading ? this.reduceWhenloading = 0.9 : this.reduceWhenloading = 1;
+
+    if(infoCarga.status == "completed" && !this.checkComplete) {
+      this.checkComplete = true;
+      this.siguienteTagDesde(actualTag);
+    }
+
   }
 
 }

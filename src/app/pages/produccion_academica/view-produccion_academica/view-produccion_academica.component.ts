@@ -13,6 +13,7 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 @Component({
   selector: 'ngx-view-produccion-academica',
   templateUrl: './view-produccion_academica.component.html',
@@ -59,7 +60,8 @@ export class ViewProduccionAcademicaComponent implements OnInit {
     private users: UserService,
     private newNuxeoService: NewNuxeoService,
     private utilidades: UtilidadesService,
-    private zipManagerService: ZipManagerService) {
+    private zipManagerService: ZipManagerService,
+    private popUpManager: PopUpManager,) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -93,7 +95,41 @@ export class ViewProduccionAcademicaComponent implements OnInit {
               let totalFiles = metaFiles.length;
               metaFiles.forEach((m, i) => {
                 let itemForm = JSON.parse(m.MetadatoSubtipoProduccionId.TipoMetadatoId.FormDefinition)
-                this.newNuxeoService.get([{Id: m.Valor}]).subscribe(
+                this.documentoService.get('documento/'+m.Valor)
+                  .subscribe((resp: any) => {
+                    if(resp.Status && (resp.Status == "400" || resp.status == "404")) {
+                      this.infoFalla();
+                    } else {
+                      let estadoDoc = this.utilidades.getEvaluacionDocumento(resp.Metadatos);
+                      let prepareNombre: string = (produccion.SubtipoProduccionId.Nombre).toUpperCase() + ' (' + produccion.Titulo + ')';
+                      let prepareDoc = {
+                        //Documento: response[0]["Documento"],
+                        DocumentoId: resp.Id,
+                        aprobado: estadoDoc.aprobado,
+                        estadoObservacion: estadoDoc.estadoObservacion,
+                        observacion: estadoDoc.observacion,
+                        nombreDocumento: this.translate.instant('produccion_academica.'+itemForm.label_i18n),
+                        tabName: prepareNombre, 
+                        carpeta: "Producción Académica/"+prepareNombre.replace(/[\<\>\:\"\|\?\*\/\.]/g,'')
+                      };
+                      produccion["Soportes"].push(prepareDoc);
+                      this.zipManagerService.adjuntarArchivos([prepareDoc]);
+                      if (i >= totalFiles-1) {
+                        this.addCargado(1);
+                      }
+                    }
+                  },
+                  (error: HttpErrorResponse) => {
+                    this.infoFalla();
+                    Swal.fire({
+                      icon: 'error',
+                      title: error.status + '',
+                      text: this.translate.instant('ERROR.' + error.status),
+                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                    });
+                  }
+                  );
+                /* this.newNuxeoService.get([{Id: m.Valor}]).subscribe(
                   (response) => {
                     let estadoDoc = this.utilidades.getEvaluacionDocumento(response[0].Metadatos);
                     let prepareNombre: string = (produccion.SubtipoProduccionId.Nombre).toUpperCase() + ' (' + produccion.Titulo + ')';
@@ -121,7 +157,7 @@ export class ViewProduccionAcademicaComponent implements OnInit {
                       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                     });
                   }
-                );
+                ); */
               });
             });
           } else {
@@ -161,8 +197,15 @@ export class ViewProduccionAcademicaComponent implements OnInit {
     this.ViendoSoportes = this.info_produccion_academica.some((produccion) => produccion["VerSoportes"] == true);    
   }
 
-  verDocumento(document) {
-    this.revisar_doc.emit(document);
+  verDocumento(documento) {
+    this.newNuxeoService.getByIdLocal(documento.DocumentoId)
+      .subscribe(url => {
+        documento.Documento = {
+          "changingThisBreaksApplicationSecurity" : url};
+        this.revisar_doc.emit(documento);
+      }, error => {
+        this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.sin_documento'));
+      })
   }
 
   addCargado(carga: number) {

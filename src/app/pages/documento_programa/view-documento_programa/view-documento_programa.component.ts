@@ -91,11 +91,45 @@ export class ViewDocumentoProgramaComponent implements OnInit {
           if (response !== null && Object.keys(response[0]).length > 0 && response[0] != '{}') {
             this.info_documento_programa = response;
             this.infoCarga.nCargas = this.info_documento_programa.length;
-            this.info_documento_programa.forEach(doc => {
+            let docSoporte1 = "";
+            this.info_documento_programa.forEach((doc, i) => {
               this.docSoporte.push({ Id: doc.DocumentoId, key: 'DocumentoPrograma' + doc.DocumentoId })
+              docSoporte1 += String(doc.DocumentoId);
+              if (i < this.infoCarga.nCargas - 1 ) {
+                docSoporte1 += '|'
+              }
               doc.IdDoc = doc.DocumentoId;
             });
-            this.newNuxeoService.get(this.docSoporte).subscribe(
+            if (docSoporte1 != '') {
+              this.documentoService.get('documento?query=Id__in:'+docSoporte1)
+                .subscribe((resp: any) => {
+                  if((resp.Status && (resp.Status == "400" || resp.Status == "404")) || Object.keys(resp[0]).length == 0) {
+                    this.infoFalla();
+                  } else {
+                    this.info_documento_programa.forEach(doc => {
+                      let f = resp.find(file => doc.IdDoc === file.Id);
+                      if (f !== undefined) {
+                        //doc.Documento = f["Documento"];
+                        let estadoDoc = this.utilidades.getEvaluacionDocumento(f.Metadatos);
+                        doc.aprobado = estadoDoc.aprobado;
+                        doc.estadoObservacion = estadoDoc.estadoObservacion;
+                        doc.observacion = estadoDoc.observacion;
+                        doc.nombreDocumento = doc.DocumentoProgramaId ? doc.DocumentoProgramaId.TipoDocumentoProgramaId ? doc.DocumentoProgramaId.TipoDocumentoProgramaId.Nombre : '' : '';
+                        doc.tabName = this.translate.instant('inscripcion.documento_programa');
+                        doc.carpeta = "Documentos Solicitados";
+                        this.zipManagerService.adjuntarArchivos([doc]);
+                        this.addCargado(1);
+                      }
+                    });
+                  }
+                },
+                (error) => {
+                  this.infoFalla();
+                  //this.popUpManager.showErrorToast(this.translate.instant('ERROR' + error.status));
+                }
+                );
+            }
+            /* this.newNuxeoService.get(this.docSoporte).subscribe(
               response => {
                 if (Object.keys(response).length > 0) {
                   this.info_documento_programa.forEach(doc => {
@@ -119,7 +153,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
                 this.infoFalla();
                 this.popUpManager.showErrorToast(this.translate.instant('ERROR.error_cargar_documento'));
               },
-            );
+            ); */
           } else {
             this.info_documento_programa = null
             this.infoFalla();
@@ -143,7 +177,14 @@ export class ViewDocumentoProgramaComponent implements OnInit {
 
   abrirDocumento(documento: any) {
     documento.Id = documento.DocumentoId;
-    this.revisar_doc.emit(documento);
+    this.newNuxeoService.getByIdLocal(documento.DocumentoId)
+      .subscribe(url => {
+        documento.Documento = {
+          "changingThisBreaksApplicationSecurity" : url};
+        this.revisar_doc.emit(documento);
+      }, error => {
+        this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.sin_documento'));
+      })
   }
 
   addCargado(carga: number) {
