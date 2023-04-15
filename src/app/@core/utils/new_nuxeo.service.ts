@@ -16,6 +16,29 @@ export class NewNuxeoService {
 
     private documentsList: any[] = [];
 
+    private mimeTypes = {
+        "image/jpeg": ".jpg",
+        "image/png": ".png",
+        "image/gif": ".gif",
+        "image/bmp": ".bmp",
+        "image/webp": ".webp",
+        "image/svg+xml": ".svg",
+        "application/pdf": ".pdf",
+        "application/msword": ".doc",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+        "application/vnd.ms-excel": ".xls",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ".xlsx",
+        "application/vnd.ms-powerpoint": ".ppt",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation": ".pptx",
+        "text/plain": ".txt",
+        "text/html": ".html",
+        "text/css": ".css",
+        "text/javascript": ".js",
+        "application/json": ".json",
+        "application/xml": ".xml"
+      };
+      
+
     constructor(
         private anyService: AnyService,
         private sanitization: DomSanitizer,
@@ -69,7 +92,8 @@ export class NewNuxeoService {
                                 Id: doc.Id,
                                 Nombre: doc.Nombre,
                                 Enlace: doc.Enlace,
-                                Url: await this.getUrlFile(doc.Nuxeo.file, doc.Nuxeo['file:content']['mime-type'])
+                                Url: await this.getUrlFile(doc.Nuxeo.file, doc.Nuxeo['file:content']['mime-type']),
+                                TipoArchivo: this.mimeTypes[doc.Nuxeo['file:content']['mime-type']],
                             }
                         }
                     }));
@@ -90,7 +114,7 @@ export class NewNuxeoService {
         const doc = this.documentsList.find(doc => doc.Id === id);
         if (doc != undefined) {
             setTimeout(() => {
-                documentsSubject.next(doc.Url);
+                documentsSubject.next({"url": doc.Url, "type": doc.TipoArchivo});
             }, 1);
         } else {
             documentsSubject.error("Document not found");
@@ -113,7 +137,7 @@ export class NewNuxeoService {
                 file: await this.fileToBase64(file.file)
             }]
 
-            this.anyService.post(environment.NUXEO_SERVICE, '/document/upload', sendFileData)
+            this.anyService.post(environment.NUXEO_SERVICE, '/document/uploadAnyFormat', sendFileData)
                 .subscribe((dataResponse) => {
                     documentos.push(dataResponse);
                     if (documentos.length === files.length) {

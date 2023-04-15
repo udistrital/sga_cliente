@@ -45,13 +45,13 @@ export class ZipManagerService {
         let nombre = <string>archivo.nombreDocumento;
         let carpeta = <string>archivo.carpeta;
         nombre = nombre.replace(/[\<\>\:\"\|\?\*\/\.]/g,'');  
-        nombre = nombre.concat('.pdf');
+        //nombre = nombre.concat('.pdf');
         this.newNuxeoService.getByIdLocal(archivo.DocumentoId)
-          .subscribe(url => {
-        fetch(url)
+          .subscribe(file => {
+        fetch(file.url)
           .then((res) => res.blob())
           .then((blob) => {
-            zip.folder(this.CarpetaPrincipal).folder(carpeta).file(nombre, blob, {binary: true});
+            zip.folder(this.CarpetaPrincipal).folder(carpeta).file(nombre+file.type, blob, {binary: true});
             if (index === this.Archivos.length - 1) {
               zip.generateAsync({type:"blob"})
                 .then((content) => {

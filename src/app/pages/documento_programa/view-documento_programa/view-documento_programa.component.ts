@@ -178,9 +178,8 @@ export class ViewDocumentoProgramaComponent implements OnInit {
   abrirDocumento(documento: any) {
     documento.Id = documento.DocumentoId;
     this.newNuxeoService.getByIdLocal(documento.DocumentoId)
-      .subscribe(url => {
-        documento.Documento = {
-          "changingThisBreaksApplicationSecurity" : url};
+      .subscribe(file => {
+        documento.Documento = file;
         this.revisar_doc.emit(documento);
       }, error => {
         this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.sin_documento'));
