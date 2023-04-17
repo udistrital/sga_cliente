@@ -22,9 +22,8 @@ export class IcfesProyectoComponent implements OnInit {
 
   initReportConfig() {
     this.reportConfig = {
-      documentLabel: 'icfes_snp',
-      eecutionRole: '/spagobi/user/admin',
-      // parameters: {'PARAMETERS': 'param_1=1&param_2=2'},
+      documentLabel: 'RteTitan',
+      executionRole: '/spagobi/user',
       displayToolbar: true,
       displaySliders: true,
       iframe: {
