@@ -26,9 +26,9 @@
           </mat-expansion-panel-header>
               <ngx-view-inscripcion (estadoCarga)="manageLoading($event, 'inscripcion')">
               </ngx-view-inscripcion>
-              <mat-action-row *ngIf="!(contTag > 0) && !loading">
+              <!-- <mat-action-row *ngIf="!(contTag > 0) && !loading">
                 <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde()">{{ 'GLOBAL.siguiente' | translate }}</button>
-              </mat-action-row>
+              </mat-action-row> -->
           </mat-expansion-panel>
   
           <mat-expansion-panel  id="info_persona" *ngIf="SuiteTags.info_persona.selected" hideToggle
@@ -47,9 +47,9 @@
                                       persona_id="{{info_persona_id}}"
                                       *ngIf="SuiteTags.info_persona.render">
               </ngx-view-info-persona>
-              <mat-action-row *ngIf="SuiteTags.info_persona.buttonNext && !loading">
+              <!-- <mat-action-row *ngIf="SuiteTags.info_persona.buttonNext && !loading">
                 <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('info_persona')">{{ 'GLOBAL.siguiente' | translate }}</button>
-              </mat-action-row>
+              </mat-action-row> -->
           </mat-expansion-panel>
   
           <mat-expansion-panel  id="formacion_academica" *ngIf="SuiteTags.formacion_academica.selected" hideToggle
@@ -68,9 +68,9 @@
                                             persona_id="{{info_persona_id}}"
                                             *ngIf="SuiteTags.formacion_academica.render">
               </ngx-view-formacion-academica>
-              <mat-action-row *ngIf="SuiteTags.formacion_academica.buttonNext && !loading">
+              <!-- <mat-action-row *ngIf="SuiteTags.formacion_academica.buttonNext && !loading">
                 <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('formacion_academica')">{{ 'GLOBAL.siguiente' | translate }}</button>
-              </mat-action-row>
+              </mat-action-row> -->
           </mat-expansion-panel>
   
           <mat-expansion-panel  id="idiomas" *ngIf="SuiteTags.idiomas.selected" hideToggle
@@ -89,9 +89,9 @@
                                 inscripcion_id="{{info_inscripcion_id}}"
                                 *ngIf="SuiteTags.idiomas.render">
               </ngx-view-idiomas>
-              <mat-action-row *ngIf="SuiteTags.idiomas.buttonNext && !loading">
+              <!-- <mat-action-row *ngIf="SuiteTags.idiomas.buttonNext && !loading">
                 <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('idiomas')">{{ 'GLOBAL.siguiente' | translate }}</button>
-              </mat-action-row>
+              </mat-action-row> -->
           </mat-expansion-panel>
   
           <mat-expansion-panel  id="experiencia_laboral" *ngIf="SuiteTags.experiencia_laboral.selected" hideToggle
@@ -110,9 +110,9 @@
                                             persona_id="{{info_persona_id}}"
                                             *ngIf="SuiteTags.experiencia_laboral.render">
               </ngx-view-experiencia-laboral>
-              <mat-action-row *ngIf="SuiteTags.experiencia_laboral.buttonNext && !loading">
+              <!-- <mat-action-row *ngIf="SuiteTags.experiencia_laboral.buttonNext && !loading">
                 <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('experiencia_laboral')">{{ 'GLOBAL.siguiente' | translate }}</button>
-              </mat-action-row>
+              </mat-action-row> -->
           </mat-expansion-panel>
   
           <mat-expansion-panel  id="produccion_academica" *ngIf="SuiteTags.produccion_academica.selected" hideToggle
@@ -131,9 +131,9 @@
                                               persona_id="{{info_persona_id}}"
                                               *ngIf="SuiteTags.produccion_academica.render">
               </ngx-view-produccion-academica>
-              <mat-action-row *ngIf="SuiteTags.produccion_academica.buttonNext && !loading">
+              <!-- <mat-action-row *ngIf="SuiteTags.produccion_academica.buttonNext && !loading">
                 <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('produccion_academica')">{{ 'GLOBAL.siguiente' | translate }}</button>
-              </mat-action-row>
+              </mat-action-row> -->
           </mat-expansion-panel>
   
           <mat-expansion-panel  id="documento_programa" *ngIf="SuiteTags.documento_programa.selected" hideToggle
@@ -153,9 +153,9 @@
                                             persona_id="{{info_persona_id}}"
                                             *ngIf="SuiteTags.documento_programa.render">
               </ngx-view-documento-programa>
-              <mat-action-row *ngIf="SuiteTags.documento_programa.buttonNext && !loading">
+              <!-- <mat-action-row *ngIf="SuiteTags.documento_programa.buttonNext && !loading">
                 <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('documento_programa')">{{ 'GLOBAL.siguiente' | translate }}</button>
-              </mat-action-row>
+              </mat-action-row> -->
           </mat-expansion-panel>
   
           <mat-expansion-panel  id="descuento_matricula" *ngIf="SuiteTags.descuento_matricula.selected" hideToggle
@@ -175,9 +175,9 @@
                                             persona_id="{{info_persona_id}}"
                                             *ngIf="SuiteTags.descuento_matricula.render">
               </ngx-view-descuento-academico>
-              <mat-action-row *ngIf="SuiteTags.descuento_matricula.buttonNext && !loading">
+              <!-- <mat-action-row *ngIf="SuiteTags.descuento_matricula.buttonNext && !loading">
                 <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('descuento_matricula')">{{ 'GLOBAL.siguiente' | translate }}</button>
-              </mat-action-row>
+              </mat-action-row> -->
           </mat-expansion-panel>
   
           <mat-expansion-panel  id="propuesta_grado" *ngIf="SuiteTags.propuesta_grado.selected" hideToggle
@@ -197,15 +197,17 @@
                                         persona_id="{{info_persona_id}}"
                                         *ngIf="SuiteTags.propuesta_grado.render">
               </ngx-view-propuesta-grado>
-              <mat-action-row *ngIf="SuiteTags.propuesta_grado.buttonNext && !loading">
+              <!-- <mat-action-row *ngIf="SuiteTags.propuesta_grado.buttonNext && !loading">
                 <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde('propuesta_grado')">{{ 'GLOBAL.siguiente' | translate }}</button>
-              </mat-action-row>
+              </mat-action-row> -->
           </mat-expansion-panel>
         </mat-accordion>
       </div>
 
       <br>
-      <ngb-progressbar type="success" [value]="((contTag*reduceWhenloading)/maxTags*100)" [animated]="true">
+      <!-- <ngb-progressbar type="success" [value]="((contTag*reduceWhenloading)/maxTags*100)" [animated]="true">
+      </ngb-progressbar> -->
+      <ngb-progressbar id="progressbar" type="success" [value]="progressDownloadDocs" [striped]="loading" [animated]="true">
       </ngb-progressbar>
       <br>
       <div class="preinscription-alert" *ngIf="(contTag < maxTags)">
@@ -238,7 +240,8 @@
         <ngx-view-produccion-artes-arqu-diseno (url_editar)="editar($event,'default')"
           persona_id="{{info_persona_id}}" class="col-md-12"></ngx-view-produccion-artes-arqu-diseno>-->
       
-      <div class="col-md-12" *ngIf="(contTag >= maxTags)">
+      <!-- <div class="col-md-12" *ngIf="(contTag >= maxTags)"> -->
+      <div class="col-md-12" *ngIf="progressDownloadDocs >= 100">
         <button *ngIf="en_revision" mat-raised-button color="primary" (click)="descargar_compilado_zip()">
           {{ 'admision.descargar_zip' | translate }}
         </button>

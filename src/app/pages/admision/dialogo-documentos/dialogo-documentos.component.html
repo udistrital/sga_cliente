@@ -7,8 +7,11 @@
       </legend>
       <div class="row">
         <div class="col-6">
-          <ngx-extended-pdf-viewer [src]="documento" [height]="'65vh'" [useBrowserLocale]="true" (pdfLoaded)="docCargado()">
+          <ngx-extended-pdf-viewer [src]="documento" [height]="'65vh'" [useBrowserLocale]="true" (pdfLoaded)="docCargado()" *ngIf="isPDF">
           </ngx-extended-pdf-viewer>
+          <div class="viewer" *ngIf="!isPDF">
+            <img [src]="documento" [alt]="tabName">
+          </div>
         </div>
         <div class="col-6" style="padding: 5%;">
           <div class="row d-flex justify-content-center">
