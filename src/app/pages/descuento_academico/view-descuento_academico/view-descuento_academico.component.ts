@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-view-descuento-academico',
@@ -69,7 +70,8 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     private newNuxeoService: NewNuxeoService,
     private sgaMidService: SgaMidService,
     private utilidades: UtilidadesService,
-    private zipManagerService: ZipManagerService) {
+    private zipManagerService: ZipManagerService,
+    private popUpManager: PopUpManager,) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -96,15 +98,53 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
         if (result !== null && result.Data.Code == '200') {
           const data = <Array<SolicitudDescuento>>r;
           const soportes = [];
+          let soportes1 = "";
           this.info_descuento = data;
           for (let i = 0; i < this.info_descuento.length; i++) {
-            if (this.info_descuento[i].DocumentoId + '' !== '0') {
+            if (Number(this.info_descuento[i].DocumentoId) > 0) {
               soportes.push({ Id: this.info_descuento[i].DocumentoId, key: i });
+              soportes1 += String(this.info_descuento[i].DocumentoId);
+              if (i < this.info_descuento.length - 1 ) {
+                soportes1 += '|';
+              }
             }
           }
           this.infoCarga.nCargas = soportes.length;
-
-          this.newNuxeoService.get(soportes).subscribe(
+          
+          if (soportes1 != '') {
+            this.documentoService.get('documento?query=Id__in:'+soportes1)
+              .subscribe((resp: any) => {
+                if((resp.Status && (resp.Status == "400" || resp.Status == "404")) || Object.keys(resp[0]).length == 0) {
+                  this.infoFalla();
+                } else {
+                  this.docDesSoporte = <Array<any>>resp;
+                  this.info_descuento.forEach(info => {
+                    let doc = this.docDesSoporte.find(doc => doc.Id === info.DocumentoId);
+                    if (doc !== undefined) {
+                      let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
+                      info.Soporte = {
+                        //Documento: doc.Documento, 
+                        DocumentoId: doc.Id,
+                        aprobado: estadoDoc.aprobado, 
+                        estadoObservacion: estadoDoc.estadoObservacion,
+                        observacion: estadoDoc.observacion,
+                        nombreDocumento: info.DescuentosDependenciaId ? info.DescuentosDependenciaId.TipoDescuentoId ? info.DescuentosDependenciaId.TipoDescuentoId.Nombre : '' : '',
+                        tabName: this.translate.instant('inscripcion.descuento_matricula'),
+                        carpeta: "Descuentos de Matrícula"
+                      }
+                      this.zipManagerService.adjuntarArchivos([info.Soporte]);
+                      this.addCargado(1);
+                    }
+                  });
+                }
+              },
+              (error) => {
+                this.infoFalla();
+                //this.popUpManager.showErrorToast(this.translate.instant('ERROR' + error.status));
+              }
+              );
+          }
+          /* this.newNuxeoService.get(soportes).subscribe(
             response => {
               this.docDesSoporte = <Array<any>>response;
               this.info_descuento.forEach(info => {
@@ -138,7 +178,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
                     this.translate.instant('GLOBAL.soporte_documento'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
-              });
+              }); */
         } else {
           this.infoFalla();
         }
@@ -293,6 +333,16 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   ngOnInit() {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
+  }
+
+  abrirDocumento(documento: any) {
+    this.newNuxeoService.getByIdLocal(documento.DocumentoId)
+      .subscribe(file => {
+        documento.Documento = file;
+        this.revisar_doc.emit(documento);
+      }, error => {
+        this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.sin_documento'));
+      })
   }
 
   addCargado(carga: number) {

@@ -1352,7 +1352,8 @@
         "generar_comprobante": "If you have not saved or the receipt has not been generated, click here",
         "info_completar_carga": "Review the information sections one by one to complete the process. To advance press next, it will be finished when the loading bar is complete.",
         "info_impresion_auto": "NOTE: A proof of enrollment document is generated upon completion of the loading bar.",
-        "fallo_carga_mensaje": "Something failed to load information, please come back and try again"
+        "fallo_carga_mensaje": "Something failed to load information, please come back and try again",
+        "sin_documento": "The file you are trying to view cannot be found"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",

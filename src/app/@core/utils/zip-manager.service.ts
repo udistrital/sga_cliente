@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as JSZip from 'jszip';
+import { NewNuxeoService } from './new_nuxeo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,9 @@ export class ZipManagerService {
   private Archivos: any[] = [];
   private CarpetaPrincipal: string = "Compilado Documental";
 
-  constructor() { }
+  constructor(
+    private newNuxeoService: NewNuxeoService,
+    ) { }
 
   adjuntarArchivos(file: any[]): number {
     this.Archivos.push(...file);
@@ -25,7 +28,8 @@ export class ZipManagerService {
     return [...this.Archivos.map(f => {
       return {
         carpeta: f.carpeta.split('/')[0],
-        grupoDoc: f.tabName, 
+        grupoDoc: f.tabName,
+        documentoId: f.DocumentoId,
         nombreDocumento: f.nombreDocumento,
         aprobado: f.estadoObservacion,
         observacion: f.observacion
@@ -41,11 +45,13 @@ export class ZipManagerService {
         let nombre = <string>archivo.nombreDocumento;
         let carpeta = <string>archivo.carpeta;
         nombre = nombre.replace(/[\<\>\:\"\|\?\*\/\.]/g,'');  
-        nombre = nombre.concat('.pdf');
-        fetch(archivo.Documento.changingThisBreaksApplicationSecurity)
+        //nombre = nombre.concat('.pdf');
+        this.newNuxeoService.getByIdLocal(archivo.DocumentoId)
+          .subscribe(file => {
+        fetch(file.url)
           .then((res) => res.blob())
           .then((blob) => {
-            zip.folder(this.CarpetaPrincipal).folder(carpeta).file(nombre, blob, {binary: true});
+            zip.folder(this.CarpetaPrincipal).folder(carpeta).file(nombre+file.type, blob, {binary: true});
             if (index === this.Archivos.length - 1) {
               zip.generateAsync({type:"blob"})
                 .then((content) => {
@@ -55,7 +61,11 @@ export class ZipManagerService {
                 })
                 .catch((error) => reject(error))
             }
-          })
+          });
+        }, error => {
+          reject(error);
+        })
+          
       });
     });
   }
