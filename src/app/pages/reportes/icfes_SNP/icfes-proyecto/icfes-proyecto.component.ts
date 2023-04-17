@@ -22,7 +22,7 @@ export class IcfesProyectoComponent implements OnInit {
 
   initReportConfig() {
     this.reportConfig = {
-      documentLabel: 'RteTitan',
+      documentLabel: 'RteAspirantes',
       executionRole: '/spagobi/user',
       displayToolbar: true,
       displaySliders: true,
