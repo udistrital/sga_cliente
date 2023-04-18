@@ -1,0 +1,9 @@
+<toaster-container [toasterconfig]="config"></toaster-container>
+<mat-card>
+    <mat-card-title *ngIf="reportLabel">
+        {{ 'reportes.' + reportLabel | translate}}
+    </mat-card-title>
+    <mat-card-content>
+        <div #spagoBIDocumentArea></div>
+    </mat-card-content>
+</mat-card>

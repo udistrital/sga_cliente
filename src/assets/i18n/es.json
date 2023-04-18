@@ -967,7 +967,8 @@
         "proyectos_curriculares": "Proyectos curriculares",
         "historico_acreditaciones": "Histórico de acreditaciones",
         "error_obteniendo_reporte": "Se produjo un error al obtener la información del informe, por favor vuelva a intentarlo.",
-        "icfes_snp": "Listado por proyectos de los aspirantes con registro SNP"
+        "icfes_snp": "Listado por proyectos de los aspirantes con registro SNP",
+        "RteAspirantes": "Listado de aspirantes por periodo y proyecto."
     },
     "evento": {
         "evento": "Evento",

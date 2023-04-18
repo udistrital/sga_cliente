@@ -6,6 +6,7 @@ import { ToasterModule } from 'angular2-toaster';
 import { SharedModule } from '../../shared/shared.module';
 import { InscritosProyectoComponent } from './inscripciones/inscritos-proyecto/inscritos-proyecto.component';
 import { UserService } from '../../@core/data/users.service';
+import { VisualizacionComponent } from './visualizacion/visualizacion.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { UserService } from '../../@core/data/users.service';
   ],
   declarations: [
     ...routedComponents,
+    VisualizacionComponent,
   ],
   providers: [
     UserService,
