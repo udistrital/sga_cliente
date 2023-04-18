@@ -62,10 +62,10 @@ export class DefSuiteInscripProgramaComponent implements OnInit {
 
   cargarPeriodo(){
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
+      this.parametrosService.get('periodo/?query=CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
         .subscribe((response: any) => {
           if (response != null && response.Status == '200') {
-            this.periodo = response.Data[0].Id;
+            this.periodo = response.Data.find(p => p.Activo).Id;
             this.periodos = response.Data;
             resolve(this.periodos);
           } else {

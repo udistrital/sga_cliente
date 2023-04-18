@@ -13,7 +13,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                 <!-- select periodo -->
                 <mat-form-field style="width: 35%;">
                   <mat-label>{{ 'documento_proyecto.aviso_periodo' | translate }}:</mat-label>
-                  <mat-select [(ngModel)]="periodo" [disabled]='true'>
+                  <mat-select [(ngModel)]="periodo" [disabled]='false'>
                     <mat-option *ngFor="let item of periodos" [value]="item"> {{item.Nombre}} </mat-option>
                   </mat-select>
                 </mat-form-field>
