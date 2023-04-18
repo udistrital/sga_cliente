@@ -933,7 +933,8 @@
         "proyectos_curriculares": "Academic projects",
         "historico_acreditaciones": "Accreditation history",
         "error_obteniendo_reporte": "There was an error getting the report information, please try again.",
-        "icfes_snp": "List of applicants projects with SNP registration"
+        "icfes_snp": "List of applicants projects with SNP registration",
+        "RteAspirantes": "Listado de aspirantes por periodo y proyecto."
     },
     "evento": {
         "evento": "Event",
