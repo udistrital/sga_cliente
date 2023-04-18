@@ -6,6 +6,7 @@ import { AdmisionProyectoComponent } from './inscripciones/admision-proyecto/adm
 import { ReporteProyectosListComponent } from './proyectos/list-proyectos/list-proyectos.component';
 import { ReporteHistoricoAcreditacionesComponent } from './proyectos/historico-acreditaciones/historico-acreditaciones.component';
 import {IcfesProyectoComponent} from './icfes_SNP/icfes-proyecto/icfes-proyecto.component';
+import { VisualizacionComponent } from './visualizacion/visualizacion.component';
 
 const routes: Routes = [{
   path: '',
@@ -22,6 +23,11 @@ const routes: Routes = [{
     {
       path: 'icfes_SNP/icfes-proyecto',
       component: IcfesProyectoComponent,
+    },
+    {
+      path: 'admitidos',
+      component: VisualizacionComponent,
+      data: { reportLabel: 'RteAspirantes' },
     },
     {
       path: 'proyectos/list-proyectos',
