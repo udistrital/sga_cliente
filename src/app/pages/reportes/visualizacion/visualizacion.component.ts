@@ -14,6 +14,7 @@ export class VisualizacionComponent implements OnInit {
   config: ToasterConfig;
   reportConfig: any;
   retry: boolean = true;
+  spinner: string = 'Cargando reporte.';
 
   @ViewChild('spagoBIDocumentArea', { static: true }) spagoBIDocumentArea: ElementRef;
   @Input() reportLabel: string;
@@ -46,14 +47,16 @@ export class VisualizacionComponent implements OnInit {
   }
 
   callbackFunction(result, args, success) {
-    console.info(result, args, success)
     if (success === true) {
+      this.spinner = '';
       const html = spagoBIService.getDocumentHtml(this.reportConfig);
       this.spagoBIDocumentArea.nativeElement.innerHTML = html;
     } else if (this.retry) {
+      this.spinner = 'Cargando reporte.';
       this.retry = false;
       this.getReport();
     } else {
+      this.spinner = '';
       const message = this.translate.instant('reportes.error_obteniendo_reporte');
       this.spagoBIDocumentArea.nativeElement.innerHTML = `<h5>${message}</h5>`;
       this.showToast('error', 'Error', this.translate.instant('reportes.error_obteniendo_reporte'));
