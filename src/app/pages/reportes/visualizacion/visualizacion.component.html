@@ -1,5 +1,5 @@
 <toaster-container [toasterconfig]="config"></toaster-container>
-<mat-card>
+<mat-card [nbSpinner]="spinner" [nbSpinnerMessage]="spinner">
     <mat-card-title *ngIf="reportLabel">
         {{ 'reportes.' + reportLabel | translate}}
     </mat-card-title>

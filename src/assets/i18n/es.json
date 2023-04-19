@@ -63,8 +63,9 @@
             "reportes": "Reportes",
             "inscripciones": {
                 "inscripciones": "Inscripciones",
-                "inscritos_por_proyecto": "Inscritos por proyecto",
-                "admision_por_proyecto": "Admitidos por proyecto"
+                "aspirantes": "Inscritos por programa",
+                "admitidos": "Admitidos por programa",
+                "inscritos": "Aspirantes por programa"
             },
             "icfes": {
                 "icfes": "Registro ICFES SNP",
@@ -968,7 +969,9 @@
         "historico_acreditaciones": "Histórico de acreditaciones",
         "error_obteniendo_reporte": "Se produjo un error al obtener la información del informe, por favor vuelva a intentarlo.",
         "icfes_snp": "Listado por proyectos de los aspirantes con registro SNP",
-        "RteAspirantes": "Listado de aspirantes por periodo y proyecto."
+        "RteAdmitidos": "Listado de admitidos por periodo y proyecto.",
+        "RteAspirantes": "Listado de aspirantes por periodo y proyecto.",
+        "RteInscritos": "Listado de inscritos por periodo y proyecto."
     },
     "evento": {
         "evento": "Evento",
