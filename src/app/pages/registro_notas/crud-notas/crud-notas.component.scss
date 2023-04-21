@@ -3,7 +3,7 @@ label.underline {
 	display: block;
 }
 
-:host /deep/ ng2-smart-table thead th{
+::deep ng2-smart-table thead th{
 	text-align: center;
   }
 

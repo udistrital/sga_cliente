@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Documento } from '../data/models/documento/documento'
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { DocumentoService } from '../data/documento.service';
 import { AnyService } from '../data/any.service';
 import { mergeMap } from 'rxjs/operators';

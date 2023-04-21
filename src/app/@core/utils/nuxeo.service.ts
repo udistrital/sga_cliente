@@ -1,10 +1,9 @@
 import * as Nuxeo from 'nuxeo';
 import { Injectable } from '@angular/core';
 import { environment } from './../../../environments/environment';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 import { Documento } from './../data/models/documento/documento'
 import { TipoDocumento } from './../data/models/documento/tipo_documento'
-import { Subject } from 'rxjs/Subject';
 import { DocumentoService } from '../data/documento.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
