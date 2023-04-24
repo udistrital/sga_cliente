@@ -7,18 +7,10 @@ import { AuthGuard } from '../../@core/_guards/auth.guard';
 const routes: Routes = [{
   path: '',
   component: CriterioIcfesComponent,
-  children: [ {
+  children: [{
     path: 'crud-criterio_icfes',
     component: CrudCriterioIcfesComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   }],
 }];
 

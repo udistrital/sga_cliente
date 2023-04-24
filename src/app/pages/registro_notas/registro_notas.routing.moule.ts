@@ -5,22 +5,27 @@ import { CrudNotasComponent } from './crud-notas/crud-notas.component';
 import { DefinicionCortesComponent } from './definicion-cortes/definicion-cortes.component';
 import { ListNotasComponent } from './list-notas/list-notas.component';
 import { RegistroNotasComponent } from './registro_notas.component';
-
-
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 const routes: Routes = [{
   path: '',
   component: RegistroNotasComponent,
   children: [{
     path: 'list-notas',
-    component: ListNotasComponent ,
-  }, {
+    component: ListNotasComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'crud-notas',
     component: CrudNotasComponent,
-  }, {
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'captura-notas',
     component: CapturaNotasComponent,
-  }, {
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'definicion-cortes',
     component: DefinicionCortesComponent,
   }],
@@ -28,19 +33,19 @@ const routes: Routes = [{
 
 @NgModule({
   imports: [
-      RouterModule.forChild(routes),
+    RouterModule.forChild(routes),
   ],
   exports: [
-      RouterModule,
+    RouterModule,
   ],
 })
 
 export class RegistroNotasRoutingModule { }
 
 export const routedComponents = [
-    ListNotasComponent,
-    CrudNotasComponent,
-    RegistroNotasComponent,
-    CapturaNotasComponent,
-    DefinicionCortesComponent
+  ListNotasComponent,
+  CrudNotasComponent,
+  RegistroNotasComponent,
+  CapturaNotasComponent,
+  DefinicionCortesComponent
 ];

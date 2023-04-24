@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ReportesComponent } from './reportes.component';
 import { VisualizacionComponent } from './visualizacion/visualizacion.component';
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 const routes: Routes = [{
   path: '',
@@ -11,16 +12,19 @@ const routes: Routes = [{
       path: 'inscripciones/inscritos',
       component: VisualizacionComponent,
       data: { reportLabel: 'RteInscritos' },
+      canActivate: [AuthGuard],
     },
     {
       path: 'inscripciones/aspirantes',
       component: VisualizacionComponent,
       data: { reportLabel: 'RteAspirantes' },
+      canActivate: [AuthGuard],
     },
     {
       path: 'inscripciones/admitidos',
       component: VisualizacionComponent,
       data: { reportLabel: 'RteAdmitidos' },
+      canActivate: [AuthGuard],
     },
   ],
 }];

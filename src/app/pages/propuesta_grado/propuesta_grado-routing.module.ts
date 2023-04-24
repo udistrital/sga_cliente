@@ -13,35 +13,16 @@ const routes: Routes = [{
     path: 'list-propuesta_grado',
     component: ListPropuestaGradoComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'crud-propuesta_grado',
     component: CrudPropuestaGradoComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'view-propuesta_grado',
     component: ViewPropuestaGradoComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   }],
 }];
 

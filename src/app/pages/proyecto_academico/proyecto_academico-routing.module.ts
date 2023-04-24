@@ -7,8 +7,7 @@ import { ConsultaProyectoAcademicoComponent } from './consulta-proyecto_academic
 import { ModificarProyectoAcademicoComponent } from './modificar-proyecto_academico/modificar-proyecto_academico.component';
 import { ListRegistroProyectoAcademicoComponent } from './list-registro_proyecto_academico/list-registro_proyecto_academico.component';
 import { RegistroProyectoAcademicoComponent } from './registro-proyecto_academico/registro-proyecto_academico.component';
-
-
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 const routes: Routes = [{
   path: '',
@@ -16,38 +15,47 @@ const routes: Routes = [{
   children: [{
     path: 'list-proyecto_academico',
     component: ListProyectoAcademicoComponent,
-  }, {
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'crud-proyecto_academico',
     component: CrudProyectoAcademicoComponent,
-  }, {
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'crud-proyecto_academico/:proyecto_id',
     component: CrudProyectoAcademicoComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'consulta-proyecto_academico',
     component: ConsultaProyectoAcademicoComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'modificar-proyecto_academico',
     component: ModificarProyectoAcademicoComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'list-registro_proyecto_academico',
     component: ListRegistroProyectoAcademicoComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'registro-proyecto_academico',
     component: RegistroProyectoAcademicoComponent,
+    canActivate: [AuthGuard],
   },
-],
+  ],
 }];
 
 @NgModule({
   imports: [
-      RouterModule.forChild(routes),
+    RouterModule.forChild(routes),
   ],
   exports: [
-      RouterModule,
+    RouterModule,
   ],
 })
 

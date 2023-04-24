@@ -21,38 +21,47 @@ const routes: Routes = [{
     {
       path: 'criterio_admision',
       component: CriterioAdmisionComponent,
+      canActivate: [AuthGuard],      
     },
     {
       path: 'asignar_documentos_descuentos',
       component: AsignarDocumentosDescuentosComponent,
+      canActivate: [AuthGuard],
     },
     {
       path: 'asignacion_cupos',
       component: AsignacionCuposComponent,
+      canActivate: [AuthGuard],
     },
     {
       path: 'actualizacion_estado',
       component: ActualizacionEstadoComponent,
+      canActivate: [AuthGuard],
     },
     {
       path: 'listado_aspirante',
       component: ListadoAspiranteComponent,
+      canActivate: [AuthGuard],
     },
     {
       path: 'administrar-criterios',
       component: AdministradorCriteriosComponent,
+      canActivate: [AuthGuard],
     },
     {
       path: 'evaluacion-documentos-inscritos',
       component: EvaluacionDocumentosInscritosComponent,
+      canActivate: [AuthGuard],
     },
     {
       path: 'evaluacion-aspirantes',
       component: EvaluacionAspirantesComponent,
+      canActivate: [AuthGuard],
     },
     {
       path: 'suite-programa',
       component: DefSuiteInscripProgramaComponent,
+      canActivate: [AuthGuard],
     },
   ],
 }];
