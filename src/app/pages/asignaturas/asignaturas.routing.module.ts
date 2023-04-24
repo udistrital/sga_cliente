@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AsignaturasComponent } from './asignaturas.component';
 import { NotasParcialesComponent } from './notas-parciales/notas-parciales.component';
-
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 const routes: Routes = [{
   path: '',
@@ -10,6 +10,7 @@ const routes: Routes = [{
   children: [{
     path: 'notas-parciales',
     component: NotasParcialesComponent,
+    canActivate: [AuthGuard],
   }],
 }];
 

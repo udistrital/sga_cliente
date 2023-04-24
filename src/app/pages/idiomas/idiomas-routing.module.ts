@@ -13,38 +13,16 @@ const routes: Routes = [{
     path: 'list-idiomas',
     component: ListIdiomasComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'crud-idiomas',
     component: CrudIdiomasComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'view-idiomas',
     component: ViewIdiomasComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   }],
 }];
 

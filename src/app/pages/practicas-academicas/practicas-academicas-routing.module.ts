@@ -5,6 +5,7 @@ import { NuevaSolicitudComponent } from './nueva-solicitud/nueva-solicitud.compo
 import { SolicitantePracticaComponent } from './solicitante-practica/solicitante-practica.component';
 import { ListPracticasAcademicasComponent } from './list-practicas-academicas/list-practicas-academicas.component';
 import { DetallePracticaAcademicaComponent } from './detalle-practica-academica/detalle-practica-academica.component';
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 const routes: Routes = [{
     path: '',
@@ -13,18 +14,22 @@ const routes: Routes = [{
         {
             path: 'nueva-solicitud',
             component: NuevaSolicitudComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'nueva-solicitud/:id/:process',
             component: NuevaSolicitudComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'lista-practicas/:process',
             component: ListPracticasAcademicasComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'detalle-practica-academica/:id/:process',
             component: DetallePracticaAcademicaComponent,
+            canActivate: [AuthGuard],
         }
     ]
 }];
@@ -46,4 +51,3 @@ export const routedComponents = [
     ListPracticasAcademicasComponent,
     DetallePracticaAcademicaComponent,
 ]
-  

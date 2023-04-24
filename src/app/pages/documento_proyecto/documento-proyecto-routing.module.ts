@@ -4,7 +4,7 @@ import { DocumentoProyectoComponent } from './documento_proyecto.component';
 import { SelectDocumentoProyectoComponent } from './select-documento-proyecto/select-documento-proyecto.component';
 import { ListDocumentoProyectoComponent } from './list-documento-proyecto/list-documento-proyecto.component';
 import { CrudDocumentoProyectoComponent } from './crud-documento-proyecto/crud-documento-proyecto.component';
-
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 const routes: Routes = [{
   path: '',
@@ -12,12 +12,17 @@ const routes: Routes = [{
   children: [{
     path: 'select-documento-proyecto',
     component: SelectDocumentoProyectoComponent,
-  }, {
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'list-documento-proyecto',
     component: ListDocumentoProyectoComponent,
-  }, {
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'crud-documento-proyecto',
     component: CrudDocumentoProyectoComponent,
+    canActivate: [AuthGuard],
   }],
 }];
 

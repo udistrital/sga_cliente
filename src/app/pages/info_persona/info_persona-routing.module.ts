@@ -13,35 +13,16 @@ const routes: Routes = [{
     path: 'list-info_persona',
     component: ListInfoPersonaComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'crud-info_persona',
     component: CrudInfoPersonaComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'view-info_persona',
     component: ViewInfoPersonaComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   }],
 }];
 

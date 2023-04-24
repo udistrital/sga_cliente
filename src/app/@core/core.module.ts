@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { NbAuthModule, NbDummyAuthStrategy } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
-import { throwIfAlreadyLoaded } from './module-import-guard';
 import { DataModule } from './data/data.module';
 import { AnalyticsService } from './utils/analytics.service';
 import { AuthGuard } from './_guards/auth.guard';
@@ -97,11 +96,14 @@ export const NB_CORE_PROVIDERS = [
   ],
 })
 export class CoreModule {
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
-    throwIfAlreadyLoaded(parentModule, 'CoreModule');
+  constructor(@Optional() @SkipSelf() parentModule?: CoreModule) {
+    if (parentModule) {
+      throw new Error(
+        'CoreModule is already loaded. Import it in the AppModule only');
+    }
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<CoreModule> {
     return <ModuleWithProviders>{
       ngModule: CoreModule,
       providers: [

@@ -11,14 +11,6 @@ const routes: Routes = [{
     path: 'estado_admision',
     component: ListAdmisionComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   }],
 }];
 

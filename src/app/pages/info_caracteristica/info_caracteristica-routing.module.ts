@@ -14,48 +14,21 @@ const routes: Routes = [{
     path: 'list-info_caracteristica',
     component: ListInfoCaracteristicaComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'crud-info_caracteristica',
     component: CrudInfoCaracteristicaComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   },
   {
     path: 'crud-info_caracteristica_pregrado',
     component: CrudInfoCaracteristicaPregradoComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'view-info_caracteristica',
     component: ViewInfoCaracteristicaComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   }],
 }];
 
