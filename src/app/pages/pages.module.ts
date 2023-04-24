@@ -32,8 +32,6 @@ const PAGES_COMPONENTS = [
   entryComponents: [
   ],
   providers: [
-    ConfiguracionService,
-    MenuService,
     CampusMidService,
     SgaMidService,
     DocumentoService,

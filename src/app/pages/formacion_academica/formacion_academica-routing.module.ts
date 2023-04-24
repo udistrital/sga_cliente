@@ -18,104 +18,41 @@ const routes: Routes = [{
     path: 'list-formacion_academica',
     component: ListFormacionAcademicaComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'crud-formacion_academica',
     component: CrudFormacionAcademicaComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   },
   {
     path: 'crud-icfes',
     component: CrudIcfesComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   },
   {
     path: 'crud-icfes_externa',
     component: CrudIcfesExternoComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   },
   {
     path: 'crud-preguntas',
     component: CrudPreguntasComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   },
-    {
+  {
     path: 'crud-transferencia_interna',
     component: CrudTransferenciaInternaComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   },
   {
     path: 'crud-reingreso',
     component: CrudReingresoComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   },
   {
     path: 'view-formacion_academica',
     component: ViewFormacionAcademicaComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   }],
 }];
 

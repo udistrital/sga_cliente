@@ -3,8 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PerfilComponent } from './perfil.component';
 import { ListPerfilComponent } from './list-perfil/list-perfil.component';
 import { CrudPerfilComponent } from './crud-perfil/crud-perfil.component';
-
-
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 const routes: Routes = [{
   path: '',
@@ -12,18 +11,21 @@ const routes: Routes = [{
   children: [{
     path: 'list-perfil',
     component: ListPerfilComponent,
-  }, {
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'crud-perfil',
     component: CrudPerfilComponent,
+    canActivate: [AuthGuard],
   }],
 }];
 
 @NgModule({
   imports: [
-      RouterModule.forChild(routes),
+    RouterModule.forChild(routes),
   ],
   exports: [
-      RouterModule,
+    RouterModule,
   ],
 })
 

@@ -18,13 +18,16 @@ const routes: Routes = [{
   children: [{
     path: 'preinscripcion',
     component: PreinscripcionComponent,
+    canActivate: [AuthGuard],
   }, {
     path: 'transferencia/:process',
     component: TransferenciaComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'solicitud-transferencia/:id/:process',
     component: SolicitudTransferenciaComponent,
+    canActivate: [AuthGuard],
   },
 
   ],

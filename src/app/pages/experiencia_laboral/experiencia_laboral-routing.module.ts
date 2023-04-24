@@ -13,38 +13,16 @@ const routes: Routes = [{
     path: 'list-experiencia_laboral',
     component: ListExperienciaLaboralComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'crud-experiencia_laboral',
     component: CrudExperienciaLaboralComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
-  }, {
+  },
+  {
     path: 'view-experiencia_laboral',
     component: ViewExperienciaLaboralComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   }],
 }];
 

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { MenuItem } from './menu-item';
-import { MENU_ITEMS } from './pages-menu';
-// import { MENU_PUBLICO } from './pages-menu';
 import { MenuService } from '../@core/data/menu.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
@@ -96,6 +94,7 @@ export class PagesComponent implements OnInit {
     const menuStorage = localStorage.getItem('menu');
     if (menuStorage) {
       this.dataMenu = JSON.parse(atob(menuStorage));
+      this.menuws.setPermisos(this.dataMenu);
       this.menu = this.translateTree(this.dataMenu)
       this.menu.unshift(homeOption);
       this.translateMenu();
@@ -103,6 +102,7 @@ export class PagesComponent implements OnInit {
       this.menuws.get(this.roles + '/SGA').subscribe(
         data => {
           this.dataMenu = <any>data;
+          this.menuws.setPermisos(this.dataMenu);
           localStorage.setItem('menu', btoa(JSON.stringify(data)));
           this.menu = this.translateTree(this.dataMenu)
           this.menu.unshift(homeOption);
