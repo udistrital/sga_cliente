@@ -3,5 +3,5 @@
     <mat-card-title *ngIf="reportLabel">
         {{ 'reportes.' + reportLabel | translate}}
     </mat-card-title>
-    <div [nbSpinner]="spinner" [nbSpinnerMessage]="spinner" class="reporte-container"></div>
+    <div #spagoBIDocumentArea [nbSpinner]="spinner" [nbSpinnerMessage]="spinner" class="reporte-container"></div>
 </mat-card>
