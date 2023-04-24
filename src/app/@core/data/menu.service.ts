@@ -1,46 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
+import { RequestManager } from '../../managers/requestManager';
 
-import { environment } from './../../../environments/environment'
+const path = 'CONF_MENU_SERVICE';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Accept': 'application/json',
-  }),
-}
-
-const path = environment.CONF_MENU_SERVICE;
-
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class MenuService {
 
-  constructor(private http: HttpClient) {
+  private permisos: Partial<any>[];
+
+  constructor(
+    private requestManager: RequestManager
+  ) {
+    this.permisos = []; 
   }
 
   get(endpoint) {
-    return this.http.get(path + endpoint, httpOptions).pipe(
-      catchError(this.handleError),
-    );
+    this.requestManager.setPath(path);
+    return this.requestManager.get(endpoint);
   }
 
   post(endpoint, element) {
-    return this.http.post(path + endpoint, element, httpOptions).pipe(
-      catchError(this.handleError),
-    );
+    this.requestManager.setPath(path);
+    return this.requestManager.post(endpoint, element);
   }
 
   put(endpoint, element) {
-    return this.http.put(path + endpoint + '/' + element.Id, element, httpOptions).pipe(
-      catchError(this.handleError),
-    );
+    this.requestManager.setPath(path);
+    return this.requestManager.put(endpoint, element);
   }
 
   delete(endpoint, element) {
-    return this.http.delete(path + endpoint + '/' + element.Id, httpOptions).pipe(
-      catchError(this.handleError),
-    );
+    this.requestManager.setPath(path);
+    return this.requestManager.delete(endpoint, element.Id);
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -60,4 +55,18 @@ export class MenuService {
       message: 'Something bad happened; please try again later.',
     });
   };
+
+  public setPermisos(configuraciones: any) {
+    this.permisos = configuraciones;
+  }
+
+  public getRoute(accion: string): any {
+    return this.findRoute(this.permisos, accion);
+  }
+
+  findRoute(menu: any[], option: string) {
+    return menu.find(opt => (opt.Url === option) ||
+      (opt.Opciones && opt.Opciones.length && this.findRoute(opt.Opciones, option)));
+  }
+
 }
