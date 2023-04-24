@@ -1,9 +1,8 @@
 <toaster-container [toasterconfig]="config"></toaster-container>
-<mat-card [nbSpinner]="spinner" [nbSpinnerMessage]="spinner">
+<mat-card>
     <mat-card-title *ngIf="reportLabel">
         {{ 'reportes.' + reportLabel | translate}}
     </mat-card-title>
-    <mat-card-content>
-        <div #spagoBIDocumentArea></div>
-    </mat-card-content>
+    <div *ngIf="spinner" [nbSpinner]="spinner" [nbSpinnerMessage]="spinner" class="reporte-container"></div>
+    <div *ngIf="!spinner" #spagoBIDocumentArea></div>
 </mat-card>
