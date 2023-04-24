@@ -38,7 +38,7 @@ export class VisualizacionComponent implements OnInit {
           displaySliders: true,
           iframe: {
             style: 'border: solid rgb(0,0,0,0.2) 1px;',
-            height: '500px;',
+            height: '600px;',
             width: '100%',
           },
         };
