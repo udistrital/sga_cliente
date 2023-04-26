@@ -33,9 +33,8 @@ export class ListDocumentoProgramaComponent implements OnInit {
   soporteDocumento: SoporteDocumentoAux[];
   soporteId: number;
   source: LocalDataSource = new LocalDataSource();
-  estadoObservacion: string = '';
-  observacion: string = '';
   tipoInscripcion: number;
+  listAlreadyUploaded: number[] = [];
 
   @Input('persona_id')
   set info(info: number) {
@@ -127,12 +126,15 @@ export class ListDocumentoProgramaComponent implements OnInit {
             response.forEach(async soporte => {
               const documento: SoporteDocumentoAux = new SoporteDocumentoAux();
               documento.TipoDocumentoId = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Id'];
+              this.listAlreadyUploaded.push(documento.TipoDocumentoId);
               documento.TipoDocumento = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Nombre'];
               documento.DocumentoId = soporte['DocumentoId'];
               documento.SoporteDocumentoId = soporte['Id'];
-              await this.cargarEstadoDocumento(documento);
-              documento.EstadoObservacion = this.estadoObservacion;
-              documento.Observacion = this.observacion;
+              await this.cargarEstadoDocumento(documento).then((estado: any) => {
+                documento.EstadoObservacion = estado.estadoObservacion;
+                documento.Observacion = estado.observacion;
+                documento["Aprobado"] = estado.aprobado;
+              });
               this.soporteDocumento.push(documento);
               this.source.load(this.soporteDocumento);
               if (<boolean>soporte['DocumentoProgramaId']['Obligatorio'] == true){
@@ -158,9 +160,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
       this.documentoService.get('documento/' + documento.DocumentoId).subscribe(
         (doc: Documento) => {
           let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
-          this.estadoObservacion = estadoDoc.estadoObservacion;
-          this.observacion = estadoDoc.observacion;
-          resolve(this.estadoObservacion)
+          resolve(estadoDoc)
         });
     });
 
@@ -223,8 +223,15 @@ export class ListDocumentoProgramaComponent implements OnInit {
   }
 
   onEdit(event): void {
-    this.uid = event.data.TipoDocumentoId;
-    this.soporteId = event.data.SoporteDocumentoId;
+    if(event.data.Aprobado != true) {
+      this.uid = event.data.TipoDocumentoId;
+      this.soporteId = event.data.SoporteDocumentoId;
+    } else {
+      this.popUpManager.showAlert(
+        this.translate.instant('GLOBAL.info'),
+        this.translate.instant('inscripcion.no_edit_doc_aprobado'),
+      )
+    }
   }
 
   onAction(event): void {

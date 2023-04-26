@@ -39,6 +39,8 @@ export class ViewInfoPersonaComponent implements OnInit {
   telefono: string = "";
   telefonoAlt: string = "";
   direccion: string = "";
+  updateDocument: boolean = false;
+  canUpdateDocument: boolean = false;
 
   @Input('persona_id')
   set name(persona_id: number) {
@@ -59,6 +61,8 @@ export class ViewInfoPersonaComponent implements OnInit {
     nCargas: 0,
     status: ""
   }
+
+  @Output('docs_editados') docs_editados: EventEmitter<any> = new EventEmitter(true);
 
   constructor(private sgaMidService: SgaMidService,
     private documentoService: DocumentoService,
@@ -91,6 +95,7 @@ export class ViewInfoPersonaComponent implements OnInit {
   ngOnInit() {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   public loadInfoPersona(): void {
@@ -142,6 +147,10 @@ export class ViewInfoPersonaComponent implements OnInit {
                         this.infoFalla();
                       } else {
                         let estadoDoc = this.utilidades.getEvaluacionDocumento(resp.Metadatos);
+                        if (estadoDoc.aprobado === false) {
+                          this.updateDocument = true;
+                        }
+                        this.docs_editados.emit(this.updateDocument);
                         this.tipoDiscapacidad = "";
                         let total = this.info_info_caracteristica.TipoDiscapacidad.length - 1;
                         this.info_info_caracteristica.TipoDiscapacidad.forEach((dis, i) => {
@@ -206,6 +215,10 @@ export class ViewInfoPersonaComponent implements OnInit {
                         this.infoFalla();
                       } else {
                         let estadoDoc = this.utilidades.getEvaluacionDocumento(resp.Metadatos);
+                        if (estadoDoc.aprobado === false) {
+                          this.updateDocument = true;
+                        }
+                        this.docs_editados.emit(this.updateDocument);
                         this.tipoPoblacion = "";
                         let total = this.info_info_caracteristica.TipoPoblacion.length - 1;
                         this.info_info_caracteristica.TipoPoblacion.forEach((dis, i) => {

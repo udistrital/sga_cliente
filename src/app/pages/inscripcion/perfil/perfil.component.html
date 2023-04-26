@@ -24,7 +24,7 @@
               <mat-panel-title>{{ 'inscripcion.inscripcion' | translate }}</mat-panel-title>
               <mat-panel-description></mat-panel-description>
           </mat-expansion-panel-header>
-              <ngx-view-inscripcion (estadoCarga)="manageLoading($event, 'inscripcion')">
+              <ngx-view-inscripcion (estadoCarga)="manageLoading($event, 'inscripcion')" *ngIf="renderInscripcion">
               </ngx-view-inscripcion>
               <!-- <mat-action-row *ngIf="!(contTag > 0) && !loading">
                 <button mat-flat-button type="button" color="primary" (click)="siguienteTagDesde()">{{ 'GLOBAL.siguiente' | translate }}</button>
@@ -44,6 +44,7 @@
               <ngx-view-info-persona  (url_editar)="editar($event,'info_persona')"
                                       (revisar_doc)="abrirDocumento($event)"
                                       (estadoCarga)="manageLoading($event, 'info_persona')"
+                                      (docs_editados)="SuiteTags.info_persona.observacion = $event; checkZeroObservations()"
                                       persona_id="{{info_persona_id}}"
                                       *ngIf="SuiteTags.info_persona.render">
               </ngx-view-info-persona>
@@ -65,6 +66,7 @@
               <ngx-view-formacion-academica (url_editar)="editar($event,'formacion_academica')"
                                             (revisar_doc)="abrirDocumento($event)"
                                             (estadoCarga)="manageLoading($event, 'formacion_academica')"
+                                            (docs_editados)="SuiteTags.formacion_academica.observacion = $event; checkZeroObservations()"
                                             persona_id="{{info_persona_id}}"
                                             *ngIf="SuiteTags.formacion_academica.render">
               </ngx-view-formacion-academica>
@@ -107,6 +109,7 @@
               <ngx-view-experiencia-laboral (url_editar)="editar($event,'experiencia_laboral')"
                                             (revisar_doc)="abrirDocumento($event)"
                                             (estadoCarga)="manageLoading($event, 'experiencia_laboral')"
+                                            (docs_editados)="SuiteTags.experiencia_laboral.observacion = $event; checkZeroObservations()"
                                             persona_id="{{info_persona_id}}"
                                             *ngIf="SuiteTags.experiencia_laboral.render">
               </ngx-view-experiencia-laboral>
@@ -128,6 +131,7 @@
               <ngx-view-produccion-academica  (url_editar)="editar($event,'produccion_academica')"
                                               (revisar_doc)="abrirDocumento($event)"
                                               (estadoCarga)="manageLoading($event, 'produccion_academica')"
+                                              (docs_editados)="SuiteTags.produccion_academica.observacion = $event; checkZeroObservations()"
                                               persona_id="{{info_persona_id}}"
                                               *ngIf="SuiteTags.produccion_academica.render">
               </ngx-view-produccion-academica>
@@ -149,6 +153,7 @@
               <ngx-view-documento-programa  (url_editar)="editar($event, 'documento_programa')"
                                             (revisar_doc)="abrirDocumento($event)"
                                             (estadoCarga)="manageLoading($event, 'documento_programa')"
+                                            (docs_editados)="SuiteTags.documento_programa.observacion = $event; checkZeroObservations()"
                                             inscripcion_id="{{info_inscripcion_id}}"
                                             persona_id="{{info_persona_id}}"
                                             *ngIf="SuiteTags.documento_programa.render">
@@ -171,6 +176,7 @@
               <ngx-view-descuento-academico (url_editar)="editar($event,'descuento_matricula')"
                                             (revisar_doc)="abrirDocumento($event)"
                                             (estadoCarga)="manageLoading($event, 'descuento_matricula')"
+                                            (docs_editados)="SuiteTags.descuento_matricula.observacion = $event; checkZeroObservations()"
                                             inscripcion_id="{{info_inscripcion_id}}"
                                             persona_id="{{info_persona_id}}"
                                             *ngIf="SuiteTags.descuento_matricula.render">
@@ -193,6 +199,7 @@
               <ngx-view-propuesta-grado (url_editar)="editar($event,'propuesta_grado')"
                                         (revisar_doc)="abrirDocumento($event)"
                                         (estadoCarga)="manageLoading($event, 'propuesta_grado')"
+                                        (docs_editados)="SuiteTags.propuesta_grado.observacion = $event; checkZeroObservations()"
                                         inscripcion_id="{{info_inscripcion_id}}"
                                         persona_id="{{info_persona_id}}"
                                         *ngIf="SuiteTags.propuesta_grado.render">
@@ -218,6 +225,13 @@
         {{ 'inscripcion.info_comprobante' | translate }}
       </div>
       <br>
+      <div class="col-12" *ngIf="!en_revision && canUpdateDocument">
+        <button mat-flat-button type="button" color="primary" (click)="changeToInscritoAgain()" [disabled]="hasObservations">{{'inscripcion.confirmar_ajuste_documentos_observacion' | translate}}</button>
+      </div>
+      <br>
+      <div class="preinscription-alert" *ngIf="!en_revision && canUpdateDocument">
+        <div class="col-12">{{ 'inscripcion.nota_confirmar_ajuste' | translate}}</div>
+      </div>
       
         <!--<ngx-view-info-caracteristica
           (url_editar)="editar($event,'info_caracteristica')"

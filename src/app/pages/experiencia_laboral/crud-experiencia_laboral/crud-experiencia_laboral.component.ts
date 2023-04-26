@@ -18,6 +18,7 @@ import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-crud-experiencia-laboral',
@@ -91,7 +92,8 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     private tercerosService: TercerosService,
     private newNuxeoService: NewNuxeoService,
     private popUpManager: PopUpManager,
-    private users: UserService) {
+    private users: UserService,
+    private utilidades: UtilidadesService,) {
     this.formInfoExperienciaLaboral = FORM_EXPERIENCIA_LABORAL;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -197,8 +199,10 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         response => {
           const filesResponse = <Array<any>>response;
           if (Object.keys(filesResponse).length === files.length) {
-            this.formInfoExperienciaLaboral.campos[isoporte].urlTemp = filesResponse[0].url;
+            //this.formInfoExperienciaLaboral.campos[isoporte].urlTemp = filesResponse[0].url;
             this.formInfoExperienciaLaboral.campos[isoporte].valor = filesResponse[0].url;
+            let estadoDoc = this.utilidades.getEvaluacionDocumento(filesResponse[0].Metadatos);
+            this.formInfoExperienciaLaboral.campos[isoporte].estadoDoc = estadoDoc;
 
             [
               this.formInfoExperienciaLaboral.campos[ifechaInicio],

@@ -95,7 +95,11 @@ export class DialogoDocumentosComponent implements OnInit {
       this.popUpManager.showConfirmAlert(this.translate.instant('admision.seguro_revision')).then(
         ok => {
           if (ok.value) {
-            this.dialogRef.close(this.revisionForm.value)
+            const data = {
+              metadata: this.revisionForm.value,
+              folderOrTag: this.data.documento.carpeta || ""
+            }
+            this.dialogRef.close(data)
           } else {
             this.revisionForm.patchValue({
               observacion: "",

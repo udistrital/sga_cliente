@@ -50,6 +50,8 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   cantidad_inscritos: number = 0;
   mostrarConteos: boolean = false;
   tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
+  folderTagtoReload: string = "";
+  inscripcionInfo: any;
 
   periodos = [];
   proyectos = [];
@@ -236,6 +238,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
 
   activateTab() {
     this.showProfile = true;
+    this.loadInscritos();
   }
 
   loadPerfil(event) {
@@ -246,6 +249,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
             this.inscripcion_id = event.data['Credencial'];
             this.inscripcionService.get('inscripcion?query=Id:' + this.inscripcion_id).subscribe(
               (resp: any[]) => {
+                this.inscripcionInfo = resp[0];
                 this.evaluacionInscripcionService.get('tags_por_dependencia?query=Activo:true,PeriodoId:'+this.periodo.Id+',DependenciaId:'+this.proyectos_selected+',TipoInscripcionId:'+resp[0].TipoInscripcionId.Id)
                   .subscribe((respSuite: any) => {
                     if (respSuite != null && respSuite.Status == '200') {
@@ -341,6 +345,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   }
 
   revisarDocumento(doc: any) {
+    this.folderTagtoReload = "";
     const assignConfig = new MatDialogConfig();
     assignConfig.width = '1300px';
     assignConfig.height = '750px';
@@ -350,12 +355,22 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
       if (data) {
         this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
           (documento: Documento) => {
-            this.showProfile = true
-            documento.Metadatos = JSON.stringify(data);
+            //this.showProfile = true
+            let metadataJoin = {...JSON.parse(documento.Metadatos), ...data.metadata};
+            documento.Metadatos = JSON.stringify(metadataJoin);
             this.documentoService.put('documento', documento).subscribe(
               response => {
                 this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'))
-                if (!data.aprobado && data.observacion !== '') {
+                this.folderTagtoReload = data.folderOrTag;
+                if (!data.metadata.aprobado && data.metadata.observacion !== '') {
+
+                  this.inscripcionInfo.EstadoInscripcionId.Id = 6; // 6 id de INSCRITO con Observacion
+                  this.inscripcionService.put('inscripcion', this.inscripcionInfo)
+                    .subscribe(resp => {
+                      console.log(resp, "ok");
+                    }, err => {
+                      console.log(err, "error");
+                    })
                   // llamar funcion que envia correo con la observacion
                   // enviarCorreo(data.observacion);
                   const correo = JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).email;
@@ -373,7 +388,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                     this.sendCorreo();
                   }
                 }
-                this.showProfile = false
+                //this.showProfile = false
               },
               error => {
                 this.popUpManager.showErrorToast('ERROR.error_cargar_documento');

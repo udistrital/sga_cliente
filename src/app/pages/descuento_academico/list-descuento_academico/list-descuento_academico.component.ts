@@ -31,6 +31,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
   data: Array<SolicitudDescuento>;
   solicituddescuento: any;
+  listAlreadyUploaded: number[] = [];
 
   @Input('persona_id')
   set info(info: number) {
@@ -136,8 +137,10 @@ export class ListDescuentoAcademicoComponent implements OnInit {
                   this.data = <Array<SolicitudDescuento>>r;
                   this.data.forEach(async docDesc => {
                     let estadoDoc = await <any>this.cargarEstadoDocumento(docDesc["DocumentoId"]);
+                    this.listAlreadyUploaded.push(docDesc["DescuentosDependenciaId"].TipoDescuentoId.Id);
                     docDesc["EstadoObservacion"] = estadoDoc.estadoObservacion;
                     docDesc["Observacion"] = estadoDoc.observacion;
+                    docDesc["Aprobado"] = estadoDoc.aprobado;
                     this.source.load(this.data);
                   });
                   this.getPercentage(1);
@@ -281,7 +284,14 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   }
 
   onEdit(event): void {
-    this.uid = event.data.Id;
+    if(event.data.Aprobado != true) {
+      this.uid = event.data.Id;
+    } else {
+      this.popUpManager.showAlert(
+        this.translate.instant('GLOBAL.info'),
+        this.translate.instant('inscripcion.no_edit_doc_aprobado'),
+      )
+    }
   }
 
   onCreate(event): void {

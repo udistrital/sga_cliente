@@ -24,7 +24,7 @@
                         </td>
                     </tr>
                 </tbody>
-                <tfoot *ngIf="url_editar && gotoEdit">
+                <tfoot *ngIf="(url_editar && gotoEdit) || (updateDocument && canUpdateDocument)">
                   <tr>
                     <td colspan="4" style="background-color: lightyellow;">
                       <span (click)="editar()" class="link"><i

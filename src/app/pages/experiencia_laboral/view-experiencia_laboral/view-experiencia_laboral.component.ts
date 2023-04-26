@@ -44,6 +44,12 @@ export class ViewExperienciaLaboralComponent implements OnInit {
     status: ""
   }
 
+  updateDocument: boolean = false;
+  canUpdateDocument: boolean = false;
+
+  @Output('docs_editados') docs_editados: EventEmitter<any> = new EventEmitter(true);
+
+
   organizacion: any;
   soporte: any;
   documentosSoporte = [];
@@ -110,6 +116,9 @@ export class ViewExperienciaLaboralComponent implements OnInit {
                       if (doc !== undefined) {
                         //info.Soporte = doc;
                         let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
+                        if (estadoDoc.aprobado === false) {
+                          this.updateDocument = true;
+                        }
                         info.Soporte = {
                           //Documento: doc.Documento, 
                           DocumentoId: doc.Id,
@@ -208,6 +217,7 @@ export class ViewExperienciaLaboralComponent implements OnInit {
   ngOnInit() {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   addCargado(carga: number) {
