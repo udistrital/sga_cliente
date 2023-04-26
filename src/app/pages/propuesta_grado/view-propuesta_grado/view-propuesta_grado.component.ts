@@ -56,6 +56,11 @@ export class ViewPropuestaGradoComponent implements OnInit {
     status: ""
   }
 
+  updateDocument: boolean = false;
+  canUpdateDocument: boolean = false;
+
+  @Output('docs_editados') docs_editados: EventEmitter<any> = new EventEmitter(true);
+
   constructor(private translate: TranslateService,
     private inscripcionService: InscripcionService,
     private cidcService: CIDCService,
@@ -268,6 +273,10 @@ export class ViewPropuestaGradoComponent implements OnInit {
               } else {
                 //temp.FormatoProyecto = filesResponse_2[0].url;
                 let estadoDoc = this.utilidades.getEvaluacionDocumento(resp.Metadatos);
+                if (estadoDoc.aprobado === false) {
+                  this.updateDocument = true;
+                }
+                this.docs_editados.emit(this.updateDocument);
                 temp.Soporte = {
                   //Documento: filesResponse_2[0].Documento, 
                   DocumentoId: resp.Id,
@@ -402,6 +411,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
     this.loadPropuestaGrado();
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   addCargado(carga: number) {

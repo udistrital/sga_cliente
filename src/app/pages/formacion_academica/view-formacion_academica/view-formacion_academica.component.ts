@@ -47,6 +47,11 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   info_formacion_academica: any;
   soporte: any;
 
+  updateDocument: boolean = false;
+  canUpdateDocument: boolean = false;
+
+  @Output('docs_editados') docs_editados: EventEmitter<any> = new EventEmitter(true);
+
   constructor(
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
@@ -98,6 +103,10 @@ export class ViewFormacionAcademicaComponent implements OnInit {
                       //element.Documento = response[0]["Documento"]; 
                       element.DocumentoId = resp.Id;
                       let estadoDoc = this.utilidades.getEvaluacionDocumento(resp.Metadatos);
+                      if (estadoDoc.aprobado === false) {
+                        this.updateDocument = true;
+                      }
+                      this.docs_editados.emit(this.updateDocument);
                       element.aprobado = estadoDoc.aprobado;
                       element.estadoObservacion = estadoDoc.estadoObservacion;
                       element.observacion = estadoDoc.observacion;
@@ -309,6 +318,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   ngOnInit() {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   abrirDocumento(documento) {

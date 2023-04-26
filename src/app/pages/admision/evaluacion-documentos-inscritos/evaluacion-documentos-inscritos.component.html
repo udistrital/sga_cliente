@@ -67,7 +67,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
           </div>
           <div class="text-center">
             <ngx-perfil [SuiteTags]="tagsObject" [en_revision]="true" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}"
-              (revisar_doc)="revisarDocumento($event)">
+              (revisar_doc)="revisarDocumento($event)" [reloadTagComponent]="folderTagtoReload">
             </ngx-perfil>
           </div>
         </div>

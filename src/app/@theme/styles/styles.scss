@@ -278,3 +278,8 @@ nb-menu {
   text-align: center;
   justify-content: center;
 }
+
+mat-form-field.mat-form-field-should-float label {
+  font-size: 18px !important;
+  color: rgba(0, 0, 0, 0.75) !important;
+}

@@ -8,6 +8,7 @@ import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { InscripcionService } from '../../../@core/data/inscripcion.service';
 
 @Component({
   selector: 'ngx-perfil',
@@ -38,6 +39,23 @@ export class PerfilComponent implements OnInit {
 
   @Input('SuiteTags') SuiteTags: any;
 
+  @Input('reloadTagComponent') reloadTagComponent: string = "";
+
+  hasObservations: boolean = false;
+  canUpdateDocument: boolean = false;
+
+  linkFolderWithTag = {
+    "Información Básica":"info_persona",
+    "Formación Académica":"formacion_academica",
+    "Experiencia Laboral":"experiencia_laboral",
+    "Producción Académica":"produccion_academica",
+    "Documentos Solicitados":"documento_programa",
+    "Descuentos de Matrícula":"descuento_matricula",
+    "Propuesta de Trabajo de Grado":"propuesta_grado"
+  }
+
+  renderInscripcion: boolean = true;
+
   suiteLoaded: boolean = false;
   selectedTags: string[] = [];
   maxTags: number = 0;
@@ -65,7 +83,8 @@ export class PerfilComponent implements OnInit {
     private zipManagerService: ZipManagerService,
     private popUpManager: PopUpManager,
     private sgaMidService: SgaMidService,
-    private gestorDocumentalService: NewNuxeoService) {
+    private gestorDocumentalService: NewNuxeoService,
+    private inscripcionService: InscripcionService,) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.loading = false;
@@ -81,6 +100,7 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit() {
     this.zipManagerService.limpiarArchivos();
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   ngOnChanges() {
@@ -90,23 +110,63 @@ export class PerfilComponent implements OnInit {
     if (this.imprimir) {
       this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.imprimir_comprobante'), this.translate.instant('inscripcion.info_impresion_auto'),'info',false);
     }
+    if (this.reloadTagComponent != "") {
+      this.manageReloadComponent(this.linkFolderWithTag[this.reloadTagComponent]);
+    }
   }
 
   manageSuiteTags(Suite) {
-    if (Suite == undefined) {
-      this.suiteLoaded = false;
-    } else {
-      Object.keys(Suite).forEach((tag: string) => {
-        Suite[tag]["render"] = false;
-        //Suite[tag]["buttonNext"] = false;
-        if (Suite[tag].selected) {
-          this.selectedTags = this.selectedTags.concat(tag);
-        }
-      })
-      this.SuiteTags = Suite;
-      this.maxTags = this.selectedTags.length;
-      this.suiteLoaded = true;
+    if (!this.suiteLoaded) {
+      if (Suite == undefined) {
+        this.suiteLoaded = false;
+      } else {
+        Object.keys(Suite).forEach((tag: string) => {
+          Suite[tag]["render"] = false;
+          Suite[tag]["observacion"] = false;
+          if (Suite[tag].selected) {
+            this.selectedTags = this.selectedTags.concat(tag);
+          }
+        })
+        this.SuiteTags = Suite;
+        this.maxTags = this.selectedTags.length;
+        this.suiteLoaded = true;
+      }
     }
+  }
+
+  manageReloadComponent(tagName) {
+    this.SuiteTags[tagName].render = false;
+    this.renderInscripcion = false;
+    setTimeout(() => {
+      this.SuiteTags[tagName].render = true;
+      this.renderInscripcion = true;
+    }, 1);
+  }
+
+  checkZeroObservations() {
+    this.hasObservations = false;
+    this.selectedTags.forEach(tag => {
+      if(this.SuiteTags[tag].observacion) {
+        this.hasObservations = true;
+      }
+    });
+  }
+
+  changeToInscritoAgain() {
+    this.inscripcionService.get('inscripcion/'+this.info_inscripcion_id)
+      .subscribe(resG => {
+        resG.EstadoInscripcionId.Id = 5; // id inscrito.
+        this.inscripcionService.put('inscripcion', resG)
+          .subscribe(res => {
+            sessionStorage.setItem('IdEstadoInscripcion',"");
+            this.editar("",'salir_preinscripcion');
+            this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.cambio_estado_ok'));
+          }, err => {
+            this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.fallo_carga_mensaje'));
+          })
+      }, err => {
+        this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.fallo_carga_mensaje'));
+      });
   }
 
   abrirDocumento(documento: any) {

@@ -679,7 +679,10 @@
         "estado_no_definido": "Por definir",
         "seleccionar": "Seleccionar",
         "obligatorio": "Obligatorio",
-        "opcional": "Opcional"
+        "opcional": "Opcional",
+        "tooltip_previsualizar_archivo": "Previsualizar archivo seleccionado",
+        "tooltip_descargar_arhivo": "Descargar archivo en línea",
+        "seleccionar_archivo": "Seleccionar archivo"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1393,7 +1396,12 @@
         "info_completar_carga": "Revise uno a uno los apartados de información para completar el proceso. Para avanzar presione siguiente, habrá finalizado cuando la barra de carga se complete.",
         "info_impresion_auto": "NOTA: Se genera un documento comprobante de inscripción al completar la barra de carga.",
         "fallo_carga_mensaje": "Algó falló en la carga de información, por favor regrese e intente de nuevo",
-        "sin_documento": "El archivo que intenta visualizar no se encuentra"
+        "sin_documento": "El archivo que intenta visualizar no se encuentra",
+        "confirmar_ajuste_documentos_observacion": "Confirmar edición de documentos con observaciones",
+        "cambio_estado_ok": "Confirmación de edición exitosa",
+        "nota_confirmar_ajuste": "Actualmente su inscripción presenta observaciones en algunos documentos relacionados, por favor actualice los documentos no aprobados para habilitar el botón que comfirma la edición. No olvide presionar este botón o su estado de inscripción no será actualizado.",
+        "no_edit_doc_aprobado": "No puedes editar documento aprobado",
+        "ya_existe_registro" : "Ya cuenta con información cargada para este campo"
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",

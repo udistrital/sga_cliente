@@ -97,12 +97,14 @@ export class CrudPropuestaGradoComponent implements OnInit {
     this.loading = true;
     this.cargarValores().then(aux => {
       this.loadLists();
+      console.log("goes here?")
     });
     this.loadPropuestaGrado();
   }
 
   async cargarValores() {
     try {
+      console.log("thigger here?")
       await this.listService.findGrupoInvestigacion();
       await this.listService.findLineaInvestigacion();
       await this.listService.findTipoProyecto();
@@ -168,8 +170,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
                 this.setOption('GrupoInvestigacion', temp.GrupoInvestigacionId);
                 this.setOption('LineaInvestigacion', temp.LineaInvestigacionId);
                 let estadoDoc = this.utilidades.getEvaluacionDocumento(filesResponse_2[0].Metadatos);
-                this.formPropuestaGrado.campos[this.getIndexForm('estadoPropuesta')].valor = this.translate.instant('GLOBAL.estado') + ": " + estadoDoc.estadoObservacion;
-                this.formPropuestaGrado.campos[this.getIndexForm('observacionPropuesta')].valor = this.translate.instant('GLOBAL.observacion') + ": " + estadoDoc.observacion;
+                this.formPropuestaGrado.campos[this.getIndexForm('FormatoProyecto')].estadoDoc = estadoDoc;
               }
 
               this.loading = false;
