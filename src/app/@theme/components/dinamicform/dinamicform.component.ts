@@ -416,6 +416,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
       d.alerta = "";
       d.clase = 'form-control form-control-success';
   });
+    this.percentage.emit(0);
   }
 
   validForm() {
