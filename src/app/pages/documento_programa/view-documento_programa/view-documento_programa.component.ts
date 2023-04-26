@@ -182,7 +182,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     this.persona_id = this.persona_id ? this.persona_id : this.userService.getPersonaId();
     this.inscripcion_id = this.inscripcion_id ? this.inscripcion_id : parseInt(sessionStorage.getItem('IdInscripcion'));
     this.loadData();
-    this.canUpdateDocument = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase() === "INSCRITO CON OBSERVACIÓN";
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   abrirDocumento(documento: any) {

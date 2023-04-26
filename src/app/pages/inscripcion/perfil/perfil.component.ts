@@ -100,7 +100,7 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit() {
     this.zipManagerService.limpiarArchivos();
-    this.canUpdateDocument = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase() === "INSCRITO CON OBSERVACIÓN";
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   ngOnChanges() {

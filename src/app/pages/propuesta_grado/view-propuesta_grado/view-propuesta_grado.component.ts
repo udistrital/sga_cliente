@@ -411,7 +411,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
     this.loadPropuestaGrado();
-    this.canUpdateDocument = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase() === "INSCRITO CON OBSERVACIÓN";
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   addCargado(carga: number) {

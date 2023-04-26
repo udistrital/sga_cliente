@@ -193,7 +193,7 @@ export class ViewProduccionAcademicaComponent implements OnInit {
   ngOnInit() {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
-    this.canUpdateDocument = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase() === "INSCRITO CON OBSERVACIÓN";
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   verListaDocumentos(produccionClicked) {
