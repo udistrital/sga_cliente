@@ -107,10 +107,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     } else if (event.nombre === 'TipoDiscapacidad') {
       let NoAplicaDisc = !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
       this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar = NoAplicaDisc;
-      this.formInfoCaracteristica.campos[this.getIndexForm('estadoDiscapacidad')].ocultar = NoAplicaDisc;
-      this.formInfoCaracteristica.campos[this.getIndexForm('estadoDiscapacidad')].valor = null;
-      this.formInfoCaracteristica.campos[this.getIndexForm('observacionDiscapacidad')].ocultar = NoAplicaDisc;
-      this.formInfoCaracteristica.campos[this.getIndexForm('observacionDiscapacidad')].valor = null;
       
       if (!NoAplicaDisc) {
         this.mensaje_discapcidades = true;
@@ -128,10 +124,6 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     } else if (event.nombre === 'TipoPoblacion') {
       let NoAplicaPob = !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
       this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].ocultar = NoAplicaPob;
-      this.formInfoCaracteristica.campos[this.getIndexForm('estadoPoblacion')].ocultar = NoAplicaPob;
-      this.formInfoCaracteristica.campos[this.getIndexForm('estadoPoblacion')].valor = null;
-      this.formInfoCaracteristica.campos[this.getIndexForm('observacionPoblacion')].ocultar = NoAplicaPob;
-      this.formInfoCaracteristica.campos[this.getIndexForm('observacionPoblacion')].valor = null;
 
       if (!NoAplicaPob) {
         this.mensaje_poblacion = true;
@@ -240,21 +232,15 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
             if (Object.keys(filesResponse).length === filesll.length) {
               filesResponse.forEach(fileR => {
                 if (fileR['Id'] === this.formInfoCaracteristica.ComprobantePoblacion) {
-                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].urlTemp = fileR.url;
+                  //this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].urlTemp = fileR.url;
                   this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].valor = fileR.url;
                   let estadoDoc = this.utilidades.getEvaluacionDocumento(fileR.Metadatos);
-                  this.formInfoCaracteristica.campos[this.getIndexForm('estadoPoblacion')].valor = this.translate.instant('GLOBAL.estado') + ": " + estadoDoc.estadoObservacion;
-                  this.formInfoCaracteristica.campos[this.getIndexForm('observacionPoblacion')].valor = this.translate.instant('GLOBAL.observacion') + ": " + estadoDoc.observacion;
-                  this.formInfoCaracteristica.campos[this.getIndexForm('estadoPoblacion')].ocultar = false;
-                  this.formInfoCaracteristica.campos[this.getIndexForm('observacionPoblacion')].ocultar = false;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].estadoDoc = estadoDoc;
                 } else if (fileR['Id'] === this.formInfoCaracteristica.ComprobanteDiscapacidad) {
-                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = fileR.url;
+                  //this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].urlTemp = fileR.url;
                   this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].valor = fileR.url;
                   let estadoDoc = this.utilidades.getEvaluacionDocumento(fileR.Metadatos);
-                  this.formInfoCaracteristica.campos[this.getIndexForm('estadoDiscapacidad')].valor = this.translate.instant('GLOBAL.estado') + ": " + estadoDoc.estadoObservacion;
-                  this.formInfoCaracteristica.campos[this.getIndexForm('observacionDiscapacidad')].valor = this.translate.instant('GLOBAL.observacion') + ": " + estadoDoc.observacion;
-                  this.formInfoCaracteristica.campos[this.getIndexForm('estadoDiscapacidad')].ocultar = false;
-                  this.formInfoCaracteristica.campos[this.getIndexForm('observacionDiscapacidad')].ocultar = false;
+                  this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].estadoDoc = estadoDoc;
                 }
               })
               this.loading = false;

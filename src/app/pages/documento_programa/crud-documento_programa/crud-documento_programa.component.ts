@@ -24,6 +24,8 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   inscripcion: number;
   soporteId: number;
   tipoInscripcion: number;
+  listed: number[] = [];
+  isEdit: boolean = false;
 
   @Input('documento_programa_id')
   set name(documento_programa_id: number) {
@@ -31,6 +33,7 @@ export class CrudDocumentoProgramaComponent implements OnInit {
     if (this.documento_programa_id !== undefined && this.documento_programa_id !== null &&
       this.documento_programa_id !== 0 && this.documento_programa_id.toString() !== '') {
       this.loadDocumentoPrograma();
+      this.isEdit = true;
     }
   }
 
@@ -47,6 +50,11 @@ export class CrudDocumentoProgramaComponent implements OnInit {
   @Input('soporte_id')
   set info3(soporte_id: number) {
     this.soporteId = soporte_id;
+  }
+
+  @Input('already_listed')
+  set info4(already_listed: number[]) {
+    this.listed = already_listed;
   }
 
   @Output() eventChange = new EventEmitter();
@@ -152,10 +160,18 @@ export class CrudDocumentoProgramaComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
-      if (this.info_documento_programa === undefined) {
+      const idActualSelect = this.formDocumentoPrograma.campos[this.getIndexForm('DocumentoProgramaId')].valor.Id;
+      if (this.listed.find(id => id === idActualSelect) && !this.isEdit) {
+        this.popUpManager.showAlert(
+          this.translate.instant('GLOBAL.info'),
+          this.translate.instant('inscripcion.ya_existe_registro'),
+        )
+      } else if (this.info_documento_programa === undefined) {
         this.createDocumentoPrograma(event.data.DocumentoPrograma)
+        this.isEdit = false;
       } else {
         this.updateDocumentoPrograma(event.data.DocumentoPrograma);
+        this.isEdit = false;
       }
     }
   }

@@ -149,19 +149,19 @@ export let FORM_FORMACION_ACADEMICA = {
       cantidadCaracteres: 400,
     },
     {
-      etiqueta: 'file',
+      etiqueta: 'fileRev',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       clase: 'form-control',
       nombre: 'Documento',
       label_i18n: 'soporte_documento',
       placeholder_i18n: 'soporte_documento',
-      requerido: false,
+      requerido: true,
       tipo: 'pdf',
       tipoDocumento: 16,
       formatos: 'pdf',
       url: '',
       tamanoMaximo: 2,
-    },
+    }
   ],
 }
 

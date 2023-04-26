@@ -61,6 +61,11 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
     status: ""
   }
 
+  updateDocument: boolean = false;
+  canUpdateDocument: boolean = false;
+
+  @Output('docs_editados') docs_editados: EventEmitter<any> = new EventEmitter(true);
+
   constructor(private translate: TranslateService,
     private mid: CampusMidService,
     private documentoService: DocumentoService,
@@ -122,6 +127,10 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
                     let doc = this.docDesSoporte.find(doc => doc.Id === info.DocumentoId);
                     if (doc !== undefined) {
                       let estadoDoc = this.utilidades.getEvaluacionDocumento(doc.Metadatos);
+                      if (estadoDoc.aprobado === false) {
+                        this.updateDocument = true;
+                      }
+                      this.docs_editados.emit(this.updateDocument);
                       info.Soporte = {
                         //Documento: doc.Documento, 
                         DocumentoId: doc.Id,
@@ -333,6 +342,7 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
   ngOnInit() {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
+    this.canUpdateDocument = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   abrirDocumento(documento: any) {

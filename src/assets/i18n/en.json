@@ -643,7 +643,10 @@
         "estado_no_definido": "To be defined",
         "seleccionar": "Select",
         "obligatorio": "Required",
-        "opcional": "Optional"
+        "opcional": "Optional",
+        "tooltip_previsualizar_archivo": "Preview selected file",
+        "tooltip_descargar_arhivo": "Download online file",
+        "seleccionar_archivo": "Select file"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1354,7 +1357,12 @@
         "info_completar_carga": "Review the information sections one by one to complete the process. To advance press next, it will be finished when the loading bar is complete.",
         "info_impresion_auto": "NOTE: A proof of enrollment document is generated upon completion of the loading bar.",
         "fallo_carga_mensaje": "Something failed to load information, please come back and try again",
-        "sin_documento": "The file you are trying to view cannot be found"
+        "sin_documento": "The file you are trying to view cannot be found",
+        "confirmar_ajuste_documentos_observacion": "Confirm edition of documents with observations",
+        "cambio_estado_ok": "Confirmation of successful edition",
+        "nota_confirmar_ajuste": "Currently your enrollment presents observations in some related documents, please update the unapproved documents to enable the button that confirms the edition. Don't forget to press this button or your registration status will not be updated.",
+        "no_edit_doc_aprobado": "You cannot edit approved document",
+        "ya_existe_registro" : "You already have information loaded for this field"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",

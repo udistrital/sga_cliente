@@ -55,6 +55,11 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     status: ""
   }
 
+  updateDocument: boolean = false;
+  canUpdateDocument: boolean = false;
+
+  @Output('docs_editados') docs_editados: EventEmitter<any> = new EventEmitter(true);
+
   constructor(
     private translate: TranslateService,
     private inscripcionService: InscripcionService,
@@ -111,6 +116,10 @@ export class ViewDocumentoProgramaComponent implements OnInit {
                       if (f !== undefined) {
                         //doc.Documento = f["Documento"];
                         let estadoDoc = this.utilidades.getEvaluacionDocumento(f.Metadatos);
+                        if (estadoDoc.aprobado === false) {
+                          this.updateDocument = true;
+                        }
+                        this.docs_editados.emit(this.updateDocument);
                         doc.aprobado = estadoDoc.aprobado;
                         doc.estadoObservacion = estadoDoc.estadoObservacion;
                         doc.observacion = estadoDoc.observacion;
@@ -173,6 +182,7 @@ export class ViewDocumentoProgramaComponent implements OnInit {
     this.persona_id = this.persona_id ? this.persona_id : this.userService.getPersonaId();
     this.inscripcion_id = this.inscripcion_id ? this.inscripcion_id : parseInt(sessionStorage.getItem('IdInscripcion'));
     this.loadData();
+    this.canUpdateDocument = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   abrirDocumento(documento: any) {

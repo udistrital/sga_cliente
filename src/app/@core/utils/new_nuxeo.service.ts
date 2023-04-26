@@ -131,7 +131,7 @@ export class NewNuxeoService {
         files.map(async (file) => {
             const sendFileData = [{
                 IdTipoDocumento: file.IdDocumento,
-                nombre: file.nombre,
+                nombre: file.nombre.replace(/[\.]/g),
                 metadatos: file.metadatos ? file.metadatos : {},
                 descripcion: file.descripcion ? file.descripcion : "",
                 file: await this.fileToBase64(file.file)

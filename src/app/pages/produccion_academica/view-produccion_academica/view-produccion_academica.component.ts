@@ -52,6 +52,11 @@ export class ViewProduccionAcademicaComponent implements OnInit {
     status: ""
   }
 
+  updateDocument: boolean = false;
+  canUpdateDocument: boolean = false;
+
+  @Output('docs_editados') docs_editados: EventEmitter<any> = new EventEmitter(true);
+
   constructor(private translate: TranslateService,
     private documentoService: DocumentoService,
     private nuxeoService: NuxeoService,
@@ -101,6 +106,10 @@ export class ViewProduccionAcademicaComponent implements OnInit {
                       this.infoFalla();
                     } else {
                       let estadoDoc = this.utilidades.getEvaluacionDocumento(resp.Metadatos);
+                      if (estadoDoc.aprobado === false) {
+                        this.updateDocument = true;
+                      }
+                      this.docs_editados.emit(this.updateDocument);
                       let prepareNombre: string = (produccion.SubtipoProduccionId.Nombre).toUpperCase() + ' (' + produccion.Titulo + ')';
                       let prepareDoc = {
                         //Documento: response[0]["Documento"],
@@ -184,6 +193,7 @@ export class ViewProduccionAcademicaComponent implements OnInit {
   ngOnInit() {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
+    this.canUpdateDocument = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   verListaDocumentos(produccionClicked) {

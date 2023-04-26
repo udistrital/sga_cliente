@@ -32,6 +32,7 @@ import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/oper
 import { environment } from '../../../../environments/environment';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { info } from 'console';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 
 @Component({
@@ -102,8 +103,8 @@ export class CrudProduccionAcademicaComponent implements OnInit {
     private toasterService: ToasterService,
     private http: HttpClient,
     private newNuxeoService: NewNuxeoService,
-
-    private sgaMidService: SgaMidService) {
+    private sgaMidService: SgaMidService,
+    private utilidades: UtilidadesService) {
     this.formProduccionAcademica = JSON.parse(JSON.stringify(FORM_produccion_academica));
     this.formInfoNuevoAutor = NUEVO_AUTOR;
     this.construirForm();
@@ -346,13 +347,14 @@ export class CrudProduccionAcademicaComponent implements OnInit {
         if (res !== null) {
           (<Array<MetadatoSubtipoProduccion>>res).forEach(metadato => {
             if (Object.keys(metadato).length > 0) {
+              metadato.TipoMetadatoId.FormDefinition = metadato.TipoMetadatoId.FormDefinition.replace('"etiqueta":"file"','"etiqueta":"fileRev"')
               const field = JSON.parse(metadato.TipoMetadatoId.FormDefinition);
               field.nombre = metadato.Id;
               this.formProduccionAcademica.campos.push(field);
             }
           });
           if (callback !== undefined) {
-            callback(this.formProduccionAcademica.campos, this.info_produccion_academica.Metadatos, this.newNuxeoService);
+            callback(this.formProduccionAcademica.campos, this.info_produccion_academica.Metadatos, this.newNuxeoService, this.utilidades);
           }
           this.construirForm();
           this.formConstruido = true;
@@ -415,13 +417,14 @@ export class CrudProduccionAcademicaComponent implements OnInit {
       this.source.load(this.source_authors);
       this.Metadatos = [];
       // this.formProduccionAcademica = JSON.parse(JSON.stringify(FORM_produccion_academica));
-      const fillForm = function (campos, Metadatos, newNuxeoService) {
+      const fillForm = function (campos, Metadatos, newNuxeoService, utilidades) {
         const filesToGet = [];
         campos.forEach(campo => {
           Metadatos.forEach(metadato => {
             // const field = JSON.parse(datoAdicional.DatoAdicionalSubtipoProduccion.TipoDatoAdicional.FormDefiniton);
             if (campo.nombre === metadato.MetadatoSubtipoProduccionId.Id) {
               campo.valor = metadato.Valor;
+              //metadato.TipoMetadatoId.FormDefinition = metadato.TipoMetadatoId.FormDefinition.replace('"etiqueta":"file"','"etiqueta":"fileRev"')
               let formDef = JSON.parse(metadato.MetadatoSubtipoProduccionId.TipoMetadatoId.FormDefinition);
               if(formDef.hasOwnProperty('etiqueta')){
                 if(formDef.etiqueta == "select"){
@@ -429,7 +432,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
                   campo.valor = formDef.opciones[parseInt(metadato.Valor)-1];
                 }
               }
-              if (campo.etiqueta === 'file') {
+              if (campo.etiqueta === 'fileRev') {
                 campo.idFile = parseInt(metadato.Valor, 10);
                 filesToGet.push({ Id: campo.idFile, key: campo.nombre });
               }
@@ -444,10 +447,13 @@ export class CrudProduccionAcademicaComponent implements OnInit {
               console.log("campos BEFORE: ", JSON.parse(JSON.stringify(campos)))
               if (Object.keys(filesResponse).length === filesToGet.length) {
                 campos.forEach(campo => {
-                  if (campo.etiqueta === 'file') {
+                  if (campo.etiqueta === 'fileRev') {
                     let f = filesResponse.find((res) => res.Id == campo.idFile);
-                    campo.url = f.url;
-                    campo.urlTemp = f.url;
+                    console.log("fileRev: ", campo)
+                    campo.valor = f.url;
+                    let estadoDoc = utilidades.getEvaluacionDocumento(f.Metadatos);
+                    campo.estadoDoc = estadoDoc;
+                    //campo.urlTemp = f.url;
                   }
                 });
                 console.log("campos AFTER: ", JSON.parse(JSON.stringify(campos)))
