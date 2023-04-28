@@ -15,11 +15,12 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoDocumentosComponent } from '../../admision/dialogo-documentos/dialogo-documentos.component';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { TAGS_INSCRIPCION_PROGRAMA } from '../../admision/def_suite_inscrip_programa/def_tags_por_programa';
+import { TimeService } from '../../../@core/utils/time.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -178,6 +179,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private sgaMidService: SgaMidService,
     private dialog: MatDialog,
     private evaluacionInscripcionService: EvaluacionInscripcionService,
+    private timeService: TimeService,
   ) {
     sessionStorage.setItem('TerceroId', this.userService.getPersonaId().toString());
     this.info_persona_id = this.userService.getPersonaId();
@@ -267,7 +269,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     );
   }
 
-  checkEventoInscripcion() {
+  async checkEventoInscripcion() {
     if(this.selectedValue) {
       let EventosPrograma = this.posgrados.find((EventsProgram) => EventsProgram.ProyectoId == this.selectedValue);
       if (EventosPrograma) {
@@ -275,8 +277,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           let fechafin = moment(EventosPrograma.EventoInscripcion.FechaFinEvento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
           fechafin.setDate(fechafin.getDate() + 1);
 
-          let ahora = moment().tz("America/Bogota").toDate();
-          
+          const realhora = await this.timeService.getDate("BOG");
+          let ahora = moment(realhora).tz("America/Bogota").toDate();
+
           if(fechafin > ahora) {
             this.puedeInscribirse = true;
           } else {

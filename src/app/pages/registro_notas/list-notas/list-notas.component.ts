@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { LocalDataSource } from 'ng2-smart-table';
 import { RegistroNotasDocente } from '../../../@core/data/models/registro-notas/registro-notas-docente';
 import { ParametrosService } from '../../../@core/data/parametros.service';
@@ -10,6 +10,7 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
 import { CustomizeButtonComponent } from '../../../@theme/components/customize-button/customize-button.component';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { TimeService } from '../../../@core/utils/time.service';
 
 @Component({
   selector: 'list-notas',
@@ -64,7 +65,8 @@ export class ListNotasComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private popUpManager: PopUpManager,
     private userService: UserService,
-    public regNotService: RegistroNotasService
+    public regNotService: RegistroNotasService,
+    private timeService: TimeService,
   ) { 
     this.dataSource = new LocalDataSource();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -178,7 +180,7 @@ export class ListNotasComponent implements OnInit, OnDestroy {
 
   async validarIngresoaCapturaNotas(asignatura, periodo){
     try {
-      var hayExtemporaneo = await this.checkModificacionExtemporanea(asignatura);
+      var hayExtemporaneo = <number>await this.checkModificacionExtemporanea(asignatura);
       if(hayExtemporaneo > 0){
         if(hayExtemporaneo == this.EstadosRegistro.Corte1){
           this.popUpManager.showAlert(this.translate.instant('notas.captura_notas_parciales'), this.translate.instant('notas.modificacion_extemporanea_Corte1')); //"Esta ingresando por extemporaneo corte1"
@@ -252,7 +254,9 @@ export class ListNotasComponent implements OnInit, OnDestroy {
           }
           else{
             this.loading = false;
-            this.chechDates()
+            this.timeService.getDate("BOG").then(t => {
+              this.chechDates(t);
+            });
           }
         }
         this.loading = false;
@@ -264,7 +268,7 @@ export class ListNotasComponent implements OnInit, OnDestroy {
     );
   }
 
-  chechDates(){
+  chechDates(fechaActual){
 
     this.validado = {
       corte1: {
@@ -289,28 +293,28 @@ export class ListNotasComponent implements OnInit, OnDestroy {
       this.proceso["Actividades"].forEach((element) => {
         if(this.existe(element.Nombre,["primer"])){
           this.validado.corte1.existe = true;
-        if(this.enFechas(element.FechaInicio,element.FechaFin)){
+        if(this.enFechas(element.FechaInicio,element.FechaFin,fechaActual)){
           this.validado.corte1.enFecha = true;
         }
       }
 
         if(this.existe(element.Nombre,["segundo"])){
           this.validado.corte2.existe = true;
-        if(this.enFechas(element.FechaInicio,element.FechaFin)){
+        if(this.enFechas(element.FechaInicio,element.FechaFin,fechaActual)){
           this.validado.corte2.enFecha = true;
         }
       }
 
         if(this.existe(element.Nombre,["ultimo", "examen"])){
           this.validado.examen.existe = true;
-        if(this.enFechas(element.FechaInicio,element.FechaFin)){
+        if(this.enFechas(element.FechaInicio,element.FechaFin,fechaActual)){
           this.validado.examen.enFecha = true;
         }
       }
 
         if(this.existe(element.Nombre,["habilitacion", "habilitaciones"])){
           this.validado.habilit.existe = true;
-        if(this.enFechas(element.FechaInicio,element.FechaFin)){
+        if(this.enFechas(element.FechaInicio,element.FechaFin,fechaActual)){
           this.validado.habilit.enFecha = true;
         }
       }
@@ -375,10 +379,11 @@ export class ListNotasComponent implements OnInit, OnDestroy {
     return textos.some( (texto) => variable.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(texto) !== -1 );
   }
 
-  enFechas(fechaIni, fechaFin){
+  enFechas(fechaIni, fechaFin, fechaActual){
     let fi = moment(fechaIni,"YYYY-MM-DDTHH:mm:ss").toDate();
     let ff = moment(fechaFin,"YYYY-MM-DDTHH:mm:ss").toDate();
-    let f = new Date();
+    ff.setDate(ff.getDate() + 1);
+    let f = moment(fechaActual).tz("America/Bogota").toDate();
     return (fi <= f) && (ff >= f)
   }
 
