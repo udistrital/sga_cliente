@@ -84,6 +84,12 @@ idCalendario: number = 0;
             this.getProgramaIdByUser().then((id: number) => {
               this.DependenciaID = id;
               this.getInfoPrograma(this.DependenciaID);
+            },(err: any) => {
+              if (err) {
+                this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+              } else {
+                this.popUpManager.showErrorAlert(this.translate.instant('admision.no_vinculacion_no_rol')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+              }
             })
           }
       }
@@ -327,18 +333,18 @@ idCalendario: number = 0;
   getProgramaIdByUser() {
     return new Promise((resolve, reject) => {
       this.userId = this.userService.getPersonaId();
-      this.terceroService.get("vinculacion?query=Activo:true,tercero_principal_id:" + this.userId)
+      this.sgaMidService.get('admision/dependencia_vinculacion_tercero/'+this.userId)
         .subscribe(
-          (response: Vinculacion[]) => {
-            let dependenciaId = response[0].DependenciaId || 0;
-            if (dependenciaId > 0){
-              resolve(dependenciaId)
+          (respDependencia: any) => {
+            const dependencias = <Number[]>respDependencia.Data.DependenciaId;
+            if (dependencias.length == 1){
+              resolve(dependencias[0])
             } else {
-              reject("No valid Ids")
+              reject(dependencias)
             }
           },
           (error) => {
-            reject("Fail to connect")
+            reject(null)
           }
         );
     });  

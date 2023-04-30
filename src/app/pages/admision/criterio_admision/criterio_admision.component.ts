@@ -15,6 +15,8 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import { LocalDataSource } from 'ng2-smart-table';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   selector: 'ngx-criterio-admision',
@@ -127,6 +129,8 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     private parametrosService: ParametrosService,
     private evaluacionService: EvaluacionInscripcionService,
     private admisiones: EvaluacionInscripcionService,
+    private sgaMidService: SgaMidService,
+    private autenticationService: ImplicitAutenticationService,
   ) {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -307,8 +311,32 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     this.loading = true;
     this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
       res => {
-        this.proyectos = <any[]>res.filter(
-          proyecto => this.filtrarProyecto(proyecto),
+        this.autenticationService.getRole().then(
+          (rol: Array <String>) => {
+            let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+            if (r) {
+              this.proyectos = <any[]>res.filter(
+                proyecto => this.filtrarProyecto(proyecto),
+              );
+            } else {
+              const id_tercero = this.userService.getPersonaId();
+              this.sgaMidService.get('admision/dependencia_vinculacion_tercero/'+id_tercero).subscribe(
+                (respDependencia: any) => {
+                  const dependencias = <Number[]>respDependencia.Data.DependenciaId;
+                  this.proyectos = <any[]>res.filter(
+                    proyecto => dependencias.includes(proyecto.Id)
+                  );
+                  if (dependencias.length > 1) {
+                    this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                    this.proyectos.forEach(p => { p.Id = undefined })
+                  }
+                },
+                (error: any) => {
+                  this.popUpManager.showErrorAlert(this.translate.instant('admision.no_vinculacion_no_rol')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                }
+              );
+            }
+          }
         );
       },
       (error: HttpErrorResponse) => {

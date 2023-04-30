@@ -36,7 +36,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                               [(ngModel)]="proyectos_selected"
                               (selectionChange)="loadTipoInscripcion()">
                               <!-- (selectionChange)="loadCriterios()" -->
-                    <mat-option *ngFor="let item of proyectos" [value]="item.Id">{{item.Nombre}}</mat-option>
+                    <mat-option *ngFor="let item of proyectos" [value]="item.Id" [disabled]="!item.Id">{{item.Nombre}}</mat-option>
                   </mat-select>
                   <mat-error *ngIf="Campo1Control.hasError('required')">
                     {{ 'documento_proyecto.erro_selec_proyecto' | translate }}

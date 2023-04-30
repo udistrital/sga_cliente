@@ -9,7 +9,7 @@
         nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
         <nb-card-header>
             <div *ngIf="!hide_header_labels">
-                <div class="preinscription-alert">
+                <div class="preinscription-alert" *ngIf="!estaInscrito">
                     {{ 'inscripcion.alerta_preinscripcion' | translate }}
                 </div>
 
@@ -383,9 +383,9 @@
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false;
-                                                                    show_acad=false; show_expe=false; show_proy=false;
+                                                                    show_acad=false; show_idiomas=false; show_expe=false; show_proy=false;
                                                                     show_prod=false; show_docu=false; show_info_externa=false;
-                                                                    show_desc=false; mostrarBarraExterna();">X
+                                                                    show_desc=false; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>
@@ -425,9 +425,9 @@
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false;
-                            show_acad=false; show_expe=false; show_proy=false;
+                            show_acad=false; show_idiomas=false; show_expe=false; show_proy=false;
                             show_prod=false; show_docu=false; show_info_externa=false;
-                            show_desc=false; mostrarBarraExterna();">X
+                            show_desc=false; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>
@@ -466,8 +466,8 @@
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                            show_idiomas=false; show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>
@@ -508,8 +508,8 @@
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info_pregrado=false; show_acad_pregrado=false;
-                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                            show_idiomas=false; show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>
@@ -538,8 +538,8 @@
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                            show_idiomas=false; show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>
@@ -567,7 +567,7 @@
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
                             show_idiomas=false; show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                            show_desc=false; showRegreso=true; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>
@@ -595,8 +595,8 @@
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                            show_idiomas=false; show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>
@@ -621,8 +621,8 @@
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                            show_idiomas=false; show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>
@@ -646,8 +646,8 @@
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                            show_idiomas=false; show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>
@@ -672,8 +672,8 @@
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                            show_idiomas=false; show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>
@@ -698,8 +698,8 @@
                 </div>
                 <div class="col-md-1" align="right">
                     <button class="btn btn-danger btn-icon input-group-text btn-tn" (click)="show_profile=false; show_info=false; show_acad=false;
-                            show_expe=false; show_proy=false; show_prod=false; show_docu=false;
-                            show_desc=false; showRegreso=true; mostrarBarraExterna();">X
+                            show_idiomas=false; show_expe=false; show_proy=false; show_prod=false; show_docu=false;
+                            show_desc=false; showRegreso=true; mostrarBarraExterna(); redirectBecauseObservations();">X
                     </button>
                 </div>
             </div>

@@ -682,7 +682,8 @@
         "opcional": "Opcional",
         "tooltip_previsualizar_archivo": "Previsualizar archivo seleccionado",
         "tooltip_descargar_arhivo": "Descargar archivo en línea",
-        "seleccionar_archivo": "Seleccionar archivo"
+        "seleccionar_archivo": "Seleccionar archivo",
+        "comunicar_OAS_error": "Por favor comuníquese con Oficina Asesora de Sistemas (OAS) para atender el problema"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1393,15 +1394,16 @@
         "correo_anterior": "Correo anterior",
         "correo_actual": "Correo actual",
         "generar_comprobante": "Si no ha guardado o no se ha generado el comprobante, presione aquí",
-        "info_completar_carga": "Revise uno a uno los apartados de información para completar el proceso. Para avanzar presione siguiente, habrá finalizado cuando la barra de carga se complete.",
         "info_impresion_auto": "NOTA: Se genera un documento comprobante de inscripción al completar la barra de carga.",
         "fallo_carga_mensaje": "Algó falló en la carga de información, por favor regrese e intente de nuevo",
         "sin_documento": "El archivo que intenta visualizar no se encuentra",
         "confirmar_ajuste_documentos_observacion": "Confirmar edición de documentos con observaciones",
         "cambio_estado_ok": "Confirmación de edición exitosa",
-        "nota_confirmar_ajuste": "Actualmente su inscripción presenta observaciones en algunos documentos relacionados, por favor actualice los documentos no aprobados para habilitar el botón que comfirma la edición. No olvide presionar este botón o su estado de inscripción no será actualizado.",
+        "nota_confirmar_ajuste": "Actualmente su inscripción presenta observaciones en algunos documentos relacionados, por favor actualice los documentos no aprobados para habilitar el botón que confirma la edición. No olvide presionar este botón o su estado de inscripción no será actualizado.",
         "no_edit_doc_aprobado": "No puedes editar documento aprobado",
-        "ya_existe_registro" : "Ya cuenta con información cargada para este campo"
+        "ya_existe_registro" : "Ya cuenta con información cargada para este campo",
+        "informar_estado_inscrito_obs": "Aspirante, su inscripción se encuentra condicionada por observaciones en documentación adjunta, por favor diríjase a Detalle de inscripción para revisar y corregir la información no aprobada. Si no lo hace no puede continuar con el proceso.",
+        "info_boton_cambio_inscrito": "No olvide presionar el botón \"Confirmar edición de documentos con observaciones\" para volver al estado INSCRITO, este se habilita cuando haya editado todos los documentos no aprobados."
     },
     "reingreso": {
         "reingreso_no_registrado": "Solicitud de reingreso no registrada",
@@ -1662,8 +1664,11 @@
         "estado_opcionado": "Opcionado",
         "estado_no_admitido": "No Admitido",
         "estado_inscrito": "Inscrito",
+        "estado_inscrito_observacion": "Inscrito con observación",
         "resumen_estados_inscripcion": "Resumen estados de inscripción aspirantes",
-        "descargar_zip": "Descargar compilado documental del aspirante"
+        "descargar_zip": "Descargar compilado documental del aspirante",
+        "no_vinculacion_no_rol": "Su usuario no se encuentra vinculado a ningun proyecto curricular ni cuenta con el rol adecuado",
+        "multiple_vinculacion": "Su usuario aparece vinculado a más de un proyecto curricular"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

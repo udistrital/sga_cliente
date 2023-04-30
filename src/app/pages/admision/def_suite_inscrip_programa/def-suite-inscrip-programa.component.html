@@ -30,7 +30,7 @@
                         <mat-label>{{ 'admision.proyecto' | translate }}:</mat-label>
                         <mat-select [(ngModel)]="proyecto" (selectionChange)="cambioProyecto(proyecto)">
                             <mat-option> {{ 'GLOBAL.seleccionar' | translate }} </mat-option>
-                            <mat-option *ngFor="let item of proyectosFiltered" [value]="item.Id"> {{item.Nombre}} </mat-option>
+                            <mat-option *ngFor="let item of proyectosFiltered" [value]="item.Id" [disabled]="!item.Id"> {{item.Nombre}} </mat-option>
                         </mat-select>
                     </mat-form-field>
 
