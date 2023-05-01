@@ -40,7 +40,7 @@
                                 [(ngModel)]="proyectos_selected"
                                 (selectionChange)="perfil_editar('info_cupos')"
                                 [disabled]='selectprograma'>
-                        <mat-option *ngFor="let item of proyectos" [value]="item">
+                        <mat-option *ngFor="let item of proyectos" [value]="item" [disabled]="!item.Id">
                             {{item.Nombre}}
                         </mat-option>
                     </mat-select>

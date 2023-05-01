@@ -7,6 +7,9 @@ import { ParametrosService } from '../../../@core/data/parametros.service';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { TAGS_INSCRIPCION_PROGRAMA } from './def_tags_por_programa';
+import { UserService } from '../../../@core/data/users.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   selector: 'def-suite-inscrip-programa',
@@ -39,6 +42,9 @@ export class DefSuiteInscripProgramaComponent implements OnInit {
     private projectService: ProyectoAcademicoService,
     private inscripcionService: InscripcionService,
     private evaluacionInscripcionService: EvaluacionInscripcionService,
+    private userService: UserService,
+    private sgaMidService: SgaMidService,
+    private autenticationService: ImplicitAutenticationService,
   ) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
 
@@ -102,7 +108,31 @@ export class DefSuiteInscripProgramaComponent implements OnInit {
         .subscribe((response: any) => {
           if (response != null && response.Status != '404' 
               && Object.keys(response[0]).length > 0) {
-                this.proyectos = response;
+                this.autenticationService.getRole().then(
+                  (rol: Array <String>) => {
+                    let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+                    if (r) {
+                      this.proyectos = response;
+                    } else {
+                      const id_tercero = this.userService.getPersonaId();
+                      this.sgaMidService.get('admision/dependencia_vinculacion_tercero/'+id_tercero).subscribe(
+                        (respDependencia: any) => {
+                          const dependencias = <Number[]>respDependencia.Data.DependenciaId;
+                          this.proyectos = <any[]>response.filter(
+                            proyecto => dependencias.includes(proyecto.Id)
+                          );
+                          if (dependencias.length > 1) {
+                            this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                            this.proyectos.forEach(p => { p.Id = undefined })
+                          }
+                        },
+                        (error: any) => {
+                          this.popUpManager.showErrorAlert(this.translate.instant('admision.no_vinculacion_no_rol')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                        }
+                      );
+                    }
+                  }
+                );
                 resolve(this.proyectos);
           } else {
             reject({Proyecto: "Bad answer"});
