@@ -32,7 +32,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                         [(ngModel)]="proyectos_selected"
                         (selectionChange)="loadInscritos()"
                         [disabled]='selectprograma'>
-              <mat-option *ngFor="let item of proyectos" [value]="item.Id">{{item.Nombre}}</mat-option>
+              <mat-option *ngFor="let item of proyectos" [value]="item.Id" [disabled]="!item.Id">{{item.Nombre}}</mat-option>
             </mat-select>
             <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'admision.error_proyecto' | translate }}</mat-error>
           </mat-form-field>
@@ -44,6 +44,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
             </nb-card-header>
             <nb-card-body class="d-flex justify-content-around align-items-center">
               <label>{{ 'admision.estado_inscrito' | translate }}: <b>{{cantidad_inscritos}}</b></label>
+              <label>{{ 'admision.estado_inscrito_observacion' | translate }}: <b>{{cantidad_inscritos_obs}}</b></label>
               <label>{{ 'admision.estado_admitido' | translate }}: <b>{{cantidad_admitidos}}</b></label>
               <label>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></label>
             </nb-card-body>
@@ -67,7 +68,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
           </div>
           <div class="text-center">
             <ngx-perfil [SuiteTags]="tagsObject" [en_revision]="true" info_persona_id="{{info_persona_id}}" inscripcion_id="{{inscripcion_id}}"
-              (revisar_doc)="revisarDocumento($event)">
+              (revisar_doc)="revisarDocumento($event)" [reloadTagComponent]="folderTagtoReload">
             </ngx-perfil>
           </div>
         </div>

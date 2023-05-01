@@ -23,6 +23,7 @@ import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { FormControl, Validators } from '@angular/forms';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { Parametro } from '../../../@core/data/models/parametro/parametro';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'ngx-crud-formacion-academica',
@@ -101,7 +102,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     private listService: ListService,
     private newNuxeoService: NewNuxeoService,
     private toasterService: ToasterService,
-    private parametrosService: ParametrosService) {
+    private parametrosService: ParametrosService,
+    private utilidades: UtilidadesService,) {
     this.formInfoFormacionAcademica = FORM_FORMACION_ACADEMICA;
     this.formInfoNuevoTercero = NUEVO_TERCERO;
     this.construirForm();
@@ -409,8 +411,10 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                     this.formInfoFormacionAcademica.campos[init].valor = this.info_formacion_academica.Nit;
                     this.formInfoFormacionAcademica.campos[init].deshabilitar = true;
                     this.searchNit(this.temp_info_academica.Nit);
-                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse[0].url;
+                    //this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse[0].url;
                     this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].valor = filesResponse[0].url;
+                    let estadoDoc = this.utilidades.getEvaluacionDocumento(filesResponse[0].Metadatos);
+                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].estadoDoc = estadoDoc;
                   }
                 },
                   (error: HttpErrorResponse) => {

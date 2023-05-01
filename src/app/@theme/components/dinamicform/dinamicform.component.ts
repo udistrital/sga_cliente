@@ -186,6 +186,17 @@ export class DinamicformComponent implements OnInit, OnChanges {
     }
   }
 
+  onChange2(event, c) {
+    if (event.srcElement.files.length > 0) {
+      c.File = event.srcElement.files[0];
+      c.urlTemp = URL.createObjectURL(event.srcElement.files[0]);
+      c.url = this.cleanURL(c.urlTemp);
+    } else {
+      c.File = undefined, c.urlTemp = undefined, c.url = undefined;
+    }
+    this.validCampo(c);
+  }
+
   cleanURL(oldURL: string): SafeResourceUrl {
     return this.sanitization.bypassSecurityTrustUrl(oldURL);
   }
@@ -249,6 +260,10 @@ export class DinamicformComponent implements OnInit, OnChanges {
       if (!d.deshabilitar) {
         d.deshabilitar = false;
       }
+      if (d.etiqueta === 'fileRev') {
+        d.File = undefined;
+        d.urlTemp = undefined;
+      }
       return d;
     });
   }
@@ -258,6 +273,33 @@ export class DinamicformComponent implements OnInit, OnChanges {
   }
 
   validCampo(c, emit = true): boolean {
+    if (c.etiqueta === 'fileRev' && !c.ocultar) {
+      if (c.requerido && !c.valor && (c.File === undefined || c.File === null || c.File === '' ||
+          c.urlTemp === undefined || c.urlTemp === null || c.urlTemp === '')) {
+            c.alerta = '** Debe llenar este campo'
+            c.clase = 'form-control form-control-danger';
+            return false;
+      }
+      if (c.File) {
+        if (c.tamanoMaximo) {
+          if (c.File.size > c.tamanoMaximo * 1024000) {
+            c.clase = 'form-control form-control-danger';
+            c.alerta = 'El tamaño del archivo es superior a : ' + c.tamanoMaximo + 'MB. ';
+            return false;
+          }
+        }
+        if (c.formatos) {
+          if (c.formatos.indexOf(c.File.type.split('/')[1]) === -1) {
+            c.clase = 'form-control form-control-danger';
+            c.alerta = 'Solo se admiten los siguientes formatos: ' + c.formatos;
+            return false;
+          }
+        }
+      }
+      c.clase = 'form-control form-control-success';
+      c.alerta = '';
+      return true;
+    }
     if (c.etiqueta === 'file' && !!c.ocultar) {
       return true;
       // console.info((c.etiqueta === 'file' && (c.valor)?true:c.valor.name === undefined));
@@ -368,7 +410,12 @@ export class DinamicformComponent implements OnInit, OnChanges {
         d.urlTemp = "";
         d.valor = "";
       }
-    });
+      if (d.etiqueta === 'fileRev') {
+        d.File = undefined, d.urlTemp = undefined, d.url = undefined, d.valor = undefined;
+      }
+      d.alerta = "";
+      d.clase = 'form-control form-control-success';
+  });
     this.percentage.emit(0);
   }
 
@@ -384,7 +431,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     this.normalform.campos.forEach(d => {
       requeridos = d.requerido && !d.ocultar ? requeridos + 1 : requeridos;
       if (this.validCampo(d, false)) {
-        if (d.etiqueta === 'file' && !d.ocultar) {
+        if ((d.etiqueta === 'file' || d.etiqueta === 'fileRev') && !d.ocultar) {
           result[d.nombre] = { nombre: d.nombre, file: d.File, url: d.url, IdDocumento: d.tipoDocumento };
           // result[d.nombre].push({ nombre: d.name, file: d.valor });
         } else if (d.etiqueta === 'select') {

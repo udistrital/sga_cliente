@@ -12,6 +12,7 @@ import { AsignarCalendarioProyectoComponent } from './asignar-calendario-proyect
 import { CalendarioProyectoComponent } from './calendario-proyecto/calendario-proyecto.component';
 import { EdicionActividadesProgramasComponent } from './edicion-actividades-programas/edicion-actividades-programas.component';
 import { AdministracionCalendarioComponent } from './administracion-calendario/administracion-calendario.component';
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 const routes: Routes = [{
     path: '',
@@ -20,38 +21,47 @@ const routes: Routes = [{
         {
             path: 'list-calendario-academico',
             component: ListCalendarioAcademicoComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'def-calendario-academico',
             component: DefCalendarioAcademicoComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'proceso',
             component: ProcesoCalendarioAcademicoComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'actividad',
             component: ActividadCalendarioAcademicoComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'detalle-calendario',
             component: DetalleCalendarioComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'asignar-calendario-proyecto',
             component: AsignarCalendarioProyectoComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'calendario-proyecto',
             component: CalendarioProyectoComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'edit-actividad',
             component: EdicionActividadesProgramasComponent,
+            canActivate: [AuthGuard],
         },
         {
             path: 'administracion-calendario',
             component: AdministracionCalendarioComponent,
+            canActivate: [AuthGuard],
         }
     ],
 }];

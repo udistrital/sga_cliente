@@ -26,6 +26,12 @@ export class AnyService {
         );
     }
 
+    getp(path, endpoint) {
+      return this.http.get(path + endpoint, { ...httpOptions, reportProgress: true, observe: 'events' }).pipe(
+        catchError(this.handleError),
+      );
+  }
+
     post(path, endpoint, element) {
         return this.http.post(path + endpoint, element, httpOptions).pipe(
           catchError(this.handleError),

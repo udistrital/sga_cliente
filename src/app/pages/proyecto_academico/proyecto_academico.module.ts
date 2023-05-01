@@ -12,7 +12,6 @@ import { UserService } from '../../@core/data/users.service';
 import { TercerosService } from '../../@core/data/terceros.service';
 import { NuxeoService } from '../../@core/utils/nuxeo.service';
 import { NbDialogService } from '@nebular/theme';
-import { NgDatepickerModule } from 'ng2-datepicker';
 import { ConsultaProyectoAcademicoComponent } from './consulta-proyecto_academico/consulta-proyecto_academico.component';
 import { ModificarProyectoAcademicoComponent } from './modificar-proyecto_academico/modificar-proyecto_academico.component';
 import { ListEnfasisComponent } from '../enfasis/list-enfasis/list-enfasis.component';
@@ -30,7 +29,6 @@ import {DpDatePickerModule} from 'ng2-date-picker';
     Ng2SmartTableModule,
     ToasterModule,
     SharedModule,
-    NgDatepickerModule,
     EnfasisModule,
     DpDatePickerModule,
     MatIconModule,

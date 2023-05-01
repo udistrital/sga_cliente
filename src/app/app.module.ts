@@ -29,7 +29,6 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { NbToastrModule } from '@nebular/theme';
-import { TreeModule } from 'angular-tree-component';
 import { Store, StoreModule } from '@ngrx/store';
 import { rootReducer } from './@core/store/rootReducer';
 import { ListService } from './@core/store/services/list.service';
@@ -157,7 +156,6 @@ import { LoadComponent } from './load/load.component';
     MatSelectModule,
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule,
     AppRoutingModule,
     MaterialModule,
     ToasterModule.forRoot(),
@@ -166,7 +164,6 @@ import { LoadComponent } from './load/load.component';
     NbDialogModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
-    TreeModule.forRoot(),
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {

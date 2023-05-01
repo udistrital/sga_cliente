@@ -56,7 +56,7 @@ export class ViewIdiomasComponent implements OnInit {
     });
     this.persona_id = parseInt(sessionStorage.getItem('TerceroId'));
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
-    this.loadData();
+    //this.loadData();
   }
 
   useLanguage(language: string) {

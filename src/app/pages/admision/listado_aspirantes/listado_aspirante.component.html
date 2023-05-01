@@ -72,7 +72,7 @@
                           [(ngModel)]="proyectos_selected"
                           (selectionChange)="activar_button()"
                           [disabled]='selectprograma'>
-                <mat-option *ngFor="let item of proyectos" [value]="item">
+                <mat-option *ngFor="let item of proyectos" [value]="item" [disabled]="!item.Id">
                   {{item.Nombre}}
                 </mat-option>
               </mat-select>
@@ -97,6 +97,7 @@
     <label>{{ 'admision.estado_opcionado' | translate }}: <b>{{cantidad_opcionados}}</b></label>
     <label>{{ 'admision.estado_no_admitido' | translate }}: <b>{{cantidad_no_admitidos}}</b></label>
     <label>{{ 'admision.estado_inscrito' | translate }}: <b>{{cantidad_inscritos}}</b></label>
+    <label>{{ 'admision.estado_inscrito_observacion' | translate }}: <b>{{cantidad_inscritos_obs}}</b></label>
     <label>{{ 'admision.total_aspirantes' | translate }}: <b>{{cantidad_aspirantes}}</b></label>
   </nb-card-body>
 </nb-card>

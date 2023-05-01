@@ -3,8 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { EnfasisComponent } from './enfasis.component';
 import { ListEnfasisComponent } from './list-enfasis/list-enfasis.component';
 import { CrudEnfasisComponent } from './crud-enfasis/crud-enfasis.component';
-
-
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 const routes: Routes = [{
   path: '',
@@ -12,9 +11,12 @@ const routes: Routes = [{
   children: [{
     path: 'list-enfasis',
     component: ListEnfasisComponent,
-  }, {
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'crud-enfasis',
     component: CrudEnfasisComponent,
+    canActivate: [AuthGuard],
   }],
 }];
 

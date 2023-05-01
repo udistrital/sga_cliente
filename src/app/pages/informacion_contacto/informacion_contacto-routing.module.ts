@@ -14,63 +14,27 @@ const routes: Routes = [{
   children: [{
     path: 'list-informacion_contacto',
     component: ListInformacionContactoComponent,
-   canActivate: [AuthGuard],
-     data: {
-     roles: [
-       'ADMIN_CAMPUS',
-       ],
-    },
-  }, {
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'crud-informacion_contacto_pregrado',
     component: CrudInformacionContactoPregradoComponent,
-     canActivate: [AuthGuard],
-     data: {
-       roles: [
-         'ADMIN_CAMPUS',
-         'ASPIRANTE',
-         'Internal/selfsignup',
-         'Internal/everyone',
-       ],
-     },
+    canActivate: [AuthGuard],
   },
-    {
+  {
     path: 'crud-informacion_contacto',
     component: CrudInformacionContactoComponent,
-     canActivate: [AuthGuard],
-     data: {
-       roles: [
-         'ADMIN_CAMPUS',
-         'ASPIRANTE',
-         'Internal/selfsignup',
-         'Internal/everyone',
-       ],
-     },
+    canActivate: [AuthGuard],
   },
   {
     path: 'crud-informacion_familiar',
     component: CrudInformacionFamiliarComponent,
-     canActivate: [AuthGuard],
-     data: {
-       roles: [
-         'ADMIN_CAMPUS',
-         'ASPIRANTE',
-         'Internal/selfsignup',
-         'Internal/everyone',
-       ],
-     },
+    canActivate: [AuthGuard],
   },
   {
     path: 'view-informacion_contacto',
     component: ViewInformacionContactoComponent,
-    // canActivate: [AuthGuard],
-    // data: {
-    //   roles: [
-    //     'ADMIN_CAMPUS',
-    //     'ASPIRANTE',
-    //     'Internal/selfsignup',
-    //     'Internal/everyone',
-    //   ],
-    // },
+    canActivate: [AuthGuard],
   }],
 }];
 

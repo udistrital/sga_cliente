@@ -37,6 +37,8 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
   programa: number;
   periodo: number;
   inscripcion: number;
+  listed: number[] = [];
+  isEdit: boolean = false;
 
   @Input('descuento_academico_id')
   set name(descuento_academico_id: number) {
@@ -47,6 +49,7 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
         this.translate.instant('documento_programa.documento_cambiar'),
       );
       this.loadDescuentoAcademico();
+      this.isEdit = true;
     }
   }
 
@@ -62,6 +65,11 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
       this.inscripcion.toString() !== '') {
         // this.loadOptionsTipoDescuento();
     }
+  }
+
+  @Input('already_listed')
+  set info4(already_listed: number[]) {
+    this.listed = already_listed;
   }
 
   @Output() eventChange = new EventEmitter();
@@ -635,7 +643,16 @@ export class CrudDescuentoAcademicoComponent implements OnInit {
       // } else {
       //   // this.updateDescuentoAcademico(event.data.SolicitudDescuento);
       // }
-      this.createDescuentoAcademico(event.data.SolicitudDescuento);
+      const idActualSelect = this.formDescuentoAcademico.campos[this.getIndexForm('DescuentoDependencia')].valor.Id;
+      if (this.listed.find(id => id === idActualSelect) && !this.isEdit) {
+        this.popUpManager.showAlert(
+          this.translate.instant('GLOBAL.info'),
+          this.translate.instant('inscripcion.ya_existe_registro'),
+        )
+      } else {
+        this.createDescuentoAcademico(event.data.SolicitudDescuento);
+        this.isEdit = false;
+      }
       // this.result.emit(event);
     }
   }

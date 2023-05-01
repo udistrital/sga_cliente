@@ -62,8 +62,9 @@
             "reportes": "Reports",
             "inscripciones": {
                 "inscripciones": "Inscriptions",
-                "inscritos_por_proyecto": "Enrolled by project",
-                "admision_por_proyecto": "Supported by project"
+                "aspirantes": "Inscritos por programa",
+                "admitidos": "Admitidos por programa",
+                "inscritos": "Aspirantes por programa"
             },
             "icfes": {
                 "icfes": "ICFES SNP Registration",
@@ -643,7 +644,11 @@
         "estado_no_definido": "To be defined",
         "seleccionar": "Select",
         "obligatorio": "Required",
-        "opcional": "Optional"
+        "opcional": "Optional",
+        "tooltip_previsualizar_archivo": "Preview selected file",
+        "tooltip_descargar_arhivo": "Download online file",
+        "seleccionar_archivo": "Select file",
+        "comunicar_OAS_error": "Please contact the Systems Advisory Office (Oficina Asesora de Sistemas) to attend to the problem"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -933,7 +938,10 @@
         "proyectos_curriculares": "Academic projects",
         "historico_acreditaciones": "Accreditation history",
         "error_obteniendo_reporte": "There was an error getting the report information, please try again.",
-        "icfes_snp": "List of applicants projects with SNP registration"
+        "icfes_snp": "List of applicants projects with SNP registration",
+        "RteAdmitidos": "Listado de admitidos por periodo y proyecto.",
+        "RteAspirantes": "Listado de aspirantes por periodo y proyecto.",
+        "RteInscritos": "Listado de inscritos por periodo y proyecto."
     },
     "evento": {
         "evento": "Event",
@@ -1350,9 +1358,16 @@
         "correo_anterior": "Previous email",
         "correo_actual": "Current email",
         "generar_comprobante": "If you have not saved or the receipt has not been generated, click here",
-        "info_completar_carga": "Review the information sections one by one to complete the process. To advance press next, it will be finished when the loading bar is complete.",
         "info_impresion_auto": "NOTE: A proof of enrollment document is generated upon completion of the loading bar.",
-        "fallo_carga_mensaje": "Something failed to load information, please come back and try again"
+        "fallo_carga_mensaje": "Something failed to load information, please come back and try again",
+        "sin_documento": "The file you are trying to view cannot be found",
+        "confirmar_ajuste_documentos_observacion": "Confirm edition of documents with observations",
+        "cambio_estado_ok": "Confirmation of successful edition",
+        "nota_confirmar_ajuste": "Currently your enrollment presents observations in some related documents, please update the unapproved documents to enable the button that confirms the edition. Don't forget to press this button or your registration status will not be updated.",
+        "no_edit_doc_aprobado": "You cannot edit approved document",
+        "ya_existe_registro" : "You already have information loaded for this field",
+        "informar_estado_inscrito_obs": "Applicant, your enrollment is conditioned by observations in the attached documentation, please go to Registration Details to review and correct the information not approved. If you do not, you cannot continue with the process.",
+        "info_boton_cambio_inscrito": "Do not forget to press the button \"Confirm edition of documents with observations\" to return to the ENROLLED status, this is enabled when you have edited all the not approved documents."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
@@ -1617,9 +1632,11 @@
         "estado_opcionado": "Optioned",
         "estado_no_admitido": "Unadmitted",
         "estado_inscrito": "Enrolled",
+        "estado_inscrito_observacion": "Enrolled with observation",
         "resumen_estados_inscripcion": "Summary status of applicants",
-        "descargar_zip": "Download the applicant's documentary compilation"
-
+        "descargar_zip": "Download the applicant's documentary compilation",
+        "no_vinculacion_no_rol": "Your user is not linked to any academic project and does not have the appropriate role",
+        "multiple_vinculacion": "Your user appears linked to more than one academic project"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",

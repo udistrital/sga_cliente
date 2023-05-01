@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { CheckboxAssistanceComponent } from '../../../@theme/components/checkbox-assistance/checkbox-assistance.component';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   selector: 'evaluacion-aspirantes',
@@ -122,7 +123,8 @@ export class EvaluacionAspirantesComponent implements OnInit {
     private tercerosService: TercerosService,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
-    private inscripcionService: InscripcionService) {
+    private inscripcionService: InscripcionService,
+    private autenticationService: ImplicitAutenticationService,) {
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => { });
     this.total = true;
@@ -159,11 +161,11 @@ export class EvaluacionAspirantesComponent implements OnInit {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
+      this.parametrosService.get('periodo/?query=CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {
-            this.periodo = <any>res['Data'][0];
+            this.periodo = res.Data.find(p => p.Activo);
             window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
             resolve(this.periodo);
             const periodos = <any[]>res['Data'];
@@ -217,8 +219,32 @@ export class EvaluacionAspirantesComponent implements OnInit {
     if (this.selectednivel !== NaN) {
       this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
-          this.proyectos = <any[]>response.filter(
-            proyecto => this.filtrarProyecto(proyecto),
+          this.autenticationService.getRole().then(
+            (rol: Array <String>) => {
+              let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+              if (r) {
+                this.proyectos = <any[]>response.filter(
+                  proyecto => this.filtrarProyecto(proyecto),
+                );
+              } else {
+                const id_tercero = this.userService.getPersonaId();
+                this.sgaMidService.get('admision/dependencia_vinculacion_tercero/'+id_tercero).subscribe(
+                  (respDependencia: any) => {
+                    const dependencias = <Number[]>respDependencia.Data.DependenciaId;
+                    this.proyectos = <any[]>response.filter(
+                      proyecto => dependencias.includes(proyecto.Id)
+                    );
+                    if (dependencias.length > 1) {
+                      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                      this.proyectos.forEach(p => { p.Id = undefined })
+                    }
+                  },
+                  (error: any) => {
+                    this.popUpManager.showErrorAlert(this.translate.instant('admision.no_vinculacion_no_rol')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                  }
+                );
+              }
+            }
           );
         },
         error => {

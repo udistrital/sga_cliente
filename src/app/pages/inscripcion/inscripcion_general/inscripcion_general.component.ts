@@ -15,11 +15,12 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoDocumentosComponent } from '../../admision/dialogo-documentos/dialogo-documentos.component';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { TAGS_INSCRIPCION_PROGRAMA } from '../../admision/def_suite_inscrip_programa/def_tags_por_programa';
+import { TimeService } from '../../../@core/utils/time.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -178,6 +179,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private sgaMidService: SgaMidService,
     private dialog: MatDialog,
     private evaluacionInscripcionService: EvaluacionInscripcionService,
+    private timeService: TimeService,
   ) {
     sessionStorage.setItem('TerceroId', this.userService.getPersonaId().toString());
     this.info_persona_id = this.userService.getPersonaId();
@@ -195,6 +197,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   async loadData() {
+    this.estado_inscripcion_nombre = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase();
     this.inscripcion = new Inscripcion();
     this.inscripcion.Id = parseInt(sessionStorage.getItem('IdInscripcion'), 10);
     this.inscripcion.ProgramaAcademicoId = sessionStorage.getItem('ProgramaAcademico');
@@ -267,7 +270,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     );
   }
 
-  checkEventoInscripcion() {
+  async checkEventoInscripcion() {
     if(this.selectedValue) {
       let EventosPrograma = this.posgrados.find((EventsProgram) => EventsProgram.ProyectoId == this.selectedValue);
       if (EventosPrograma) {
@@ -275,8 +278,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           let fechafin = moment(EventosPrograma.EventoInscripcion.FechaFinEvento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
           fechafin.setDate(fechafin.getDate() + 1);
 
-          let ahora = moment().tz("America/Bogota").toDate();
-          
+          const realhora = await this.timeService.getDate("BOG");
+          let ahora = moment(realhora).tz("America/Bogota").toDate();
+
           if(fechafin > ahora) {
             this.puedeInscribirse = true;
           } else {
@@ -484,6 +488,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         if (!enAlgunaVista && this.estado_inscripcion_nombre == "INSCRIPCIÓN SOLICITADA"){
           this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.inscripcion'), this.translate.instant('inscripcion.mensaje_100_inscripcion'), "info", false)
         }
+      } else {
+        this.total = true;
       }
     }
     // if (this.info_inscripcion !== undefined) {
@@ -697,36 +703,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.inscripcionService.get('soporte_documento_programa?query=InscripcionId.Id:' +
         this.inscripcion.Id + ',DocumentoProgramaId.ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',DocumentoProgramaId.TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + ',DocumentoProgramaId.PeriodoId:' + parseInt(sessionStorage.getItem('IdPeriodo'), 10) + ',DocumentoProgramaId.Activo:true,DocumentoProgramaId.Obligatorio:true&limit=0').subscribe(
           (res: any[]) => {
-            if (res !== null && JSON.stringify(res[0]) !== '{}') {
-              let percentage_docu = 0;
-              for (let i = 0; i < res.length; i++) {
-                this.documentoService.get('documento/' + res[i].DocumentoId).subscribe(
-                  response => {
-
-                    if (response.Metadatos === '') {
-                      percentage_docu += 1;
-                    } else {
-                      if (response.Metadatos !== '') {
-                        let metadata = JSON.parse(response.Metadatos);
-                        if (JSON.hasOwnProperty('aprobado')){
-                          if (JSON.parse(response.Metadatos).aprobado) {
-                            percentage_docu += 1;
-                          }
-                        } else {
-                          percentage_docu += 1;
-                        }
-                      }
-                    }
-
-                    this.percentage_docu = Math.round((percentage_docu/this.tipo_documentos.length * 100));
-                    if(this.percentage_docu >= 100){
-                      this.percentage_docu = 100;
-                    }
-
-                    this.percentage_tab_docu[0] = Math.round(this.percentage_docu);
-                    this.loading = false;
-                  })
-              };
+            if (Object.keys(res[0]).length > 0) {
+              this.percentage_docu = Math.round((res.length / this.tipo_documentos.length) * 100);
+              if(this.percentage_docu >= 100){
+                this.percentage_docu = 100;
+              }
+              this.percentage_tab_docu[0] = Math.round(this.percentage_docu);
+              this.loading = false;
               resolve(this.percentage_docu);
             } else {
               this.percentage_docu = 0;
@@ -793,32 +776,26 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     });
   }
 
-  public loadLists() {
+  loadLists() {  
+    return new Promise((resolve, reject) => {
     this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + ',PeriodoId:'+sessionStorage.getItem('IdPeriodo') + ',Obligatorio:true&limit=0').subscribe(
       response => {
-        this.tipo_documentos = <any[]>response;
+        if (Object.keys(response[0]).length > 0) {
+          this.tipo_documentos = <any[]>response;
+        } else {
+          this.tipo_documentos = [];
+        }
+        resolve(this.tipo_documentos)
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        reject(error)
       },
     );
+    });
   }
 
   ngOnInit() {
-    this.estado_inscripcion_nombre = <string>sessionStorage.getItem('IdEstadoInscripcion').toUpperCase();
-    
-    if (this.estado_inscripcion_nombre !== "INSCRIPCIÓN SOLICITADA") {
-      this.Campo1Control.disable();
-      this.enfasisControl.disable();
-      this.estaInscrito = true;
-      const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10);
-      const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10)
-      const IdPrograma = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
-      this.loadSuitePrograma(IdPeriodo, IdPrograma, IdTipo);
-      this.soloPuedeVer = true;
-      this.puedeInscribirse = false;
-      localStorage.setItem("goToEdit", String(this.puedeInscribirse));
-    }
   }
 
   async getPorcentajes() {
@@ -875,11 +852,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     if (this.percentage_prod === 0 && this.tagsObject.produccion_academica.selected) {
       await this.loadPercentageProduccionAcademica();
     }
-
     // Consulta si hay información en documentos solicitados
     if (this.percentage_docu === 0 && this.tagsObject.documento_programa.selected) {
-      await this.loadLists();
-      await this.loadPercentageDocumentos();
+      await this.loadLists().then(async () => {
+        await this.loadPercentageDocumentos();
+      })
     }
 
     // Consulta si hay información en descuento
@@ -891,8 +868,27 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     if (this.percentage_proy === 0 && this.tagsObject.propuesta_grado.selected) {
       await this.loadPercentageTrabajoDeGrado();
     }
-
     this.setPercentage_total();
+  }
+
+  resetPercentages() {
+    this.percentage_total = 0;
+    this.percentage_info = 0;
+    this.percentage_acad = 0;
+    this.percentage_idio = 0;
+    this.percentage_expe = 0;
+    this.percentage_prod = 0;
+    this.percentage_docu = 0;
+    this.percentage_desc = 0;
+    this.percentage_proy = 0;
+    this.percentage_tab_info = [];
+    this.percentage_tab_acad = [];
+    this.percentage_tab_idio = [];
+    this.percentage_tab_expe = [];
+    this.percentage_tab_prod = [];
+    this.percentage_tab_docu = [];
+    this.percentage_tab_desc = [];
+    this.percentage_tab_proy = [];
   }
 
   realizarInscripcion() {
@@ -1292,7 +1288,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   ngOnChanges() {
   }
 
-  tipo_inscripcion(select) {
+  async tipo_inscripcion(select) {
     if (select == 'programa') {
       this.enfasisSelected = undefined;
       this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
@@ -1354,37 +1350,63 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
     if (select == 'enfasis') {
       if (this.enfasisSelected) {
-        if (this.checkEventoInscripcion()) {
-          const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10);
-          const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10)
-          this.loadSuitePrograma(IdPeriodo, this.selectedValue, IdTipo);
+        this.resetPercentages();
+        const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10);
+        const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10)
+        if(await this.loadSuitePrograma(IdPeriodo, this.selectedValue, IdTipo)) {
+          if (this.estado_inscripcion_nombre !== "INSCRIPCIÓN SOLICITADA") {
+            this.Campo1Control.disable();
+            this.enfasisControl.disable();
+            this.estaInscrito = true;
+            this.soloPuedeVer = true;
+            this.puedeInscribirse = false;
+            localStorage.setItem("goToEdit", String(this.puedeInscribirse));
+            if (this.estado_inscripcion_nombre == "INSCRITO CON OBSERVACIÓN"){
+              this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.inscripcion'), 
+                    this.translate.instant('inscripcion.informar_estado_inscrito_obs'), "info", false);
+            }
+          } else if (await this.checkEventoInscripcion()) {
+            this.percentage_total = 0;
+            await this.getPorcentajes();
+          }
         }
       }
     }
   }
 
+  redirectBecauseObservations() {
+    if (this.estado_inscripcion_nombre == "INSCRITO CON OBSERVACIÓN"){
+      this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.inscripcion'), 
+            this.translate.instant('inscripcion.info_boton_cambio_inscrito'), "info", false);
+      this.perfil_editar('perfil');
+    }
+  }
+
   loadSuitePrograma(periodo, proyecto, tipoInscrip) {
+    return new Promise((resolve) => {
     this.loading = true;
     this.evaluacionInscripcionService.get('tags_por_dependencia?query=Activo:true,PeriodoId:'+periodo+',DependenciaId:'+proyecto+',TipoInscripcionId:'+tipoInscrip)
         .subscribe((response: any) => {
           if (response != null && response.Status == '200') {
             if (Object.keys(response.Data[0]).length > 0) {
               this.tagsObject = JSON.parse(response.Data[0].ListaTags);
-              this.getPorcentajes();
               this.loading = false;
+              resolve(this.tagsObject)
             } else {
               this.loading = false;
               this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
               this.puedeInscribirse = false;
               this.soloPuedeVer = false;
               this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('admision.no_tiene_suite'));
+              resolve(false);
             }
           } else {
             this.loading = false;
             this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
             this.puedeInscribirse = false;
             this.soloPuedeVer = false;
-              this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('admision.no_tiene_suite'));
+            this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('admision.no_tiene_suite'));
+            resolve(false);
           }
         },
         (error: HttpErrorResponse) => {
@@ -1393,7 +1415,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.puedeInscribirse = false;
           this.soloPuedeVer = false;
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          resolve(false);
         });
+  });
   }
 
   mostrarBarraExterna() {

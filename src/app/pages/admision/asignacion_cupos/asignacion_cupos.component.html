@@ -11,7 +11,7 @@
                 <!-- select periodo -->
                 <mat-form-field style="width: 40%;">
                     <mat-label>{{ 'calendario.periodo' | translate }}:</mat-label>
-                    <mat-select [(ngModel)]="periodo" [disabled]='true'>
+                    <mat-select [(ngModel)]="periodo" [disabled]='false'>
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of periodos" [value]="item">
                             {{item.Nombre}}
@@ -40,7 +40,7 @@
                                 [(ngModel)]="proyectos_selected"
                                 (selectionChange)="perfil_editar('info_cupos')"
                                 [disabled]='selectprograma'>
-                        <mat-option *ngFor="let item of proyectos" [value]="item">
+                        <mat-option *ngFor="let item of proyectos" [value]="item" [disabled]="!item.Id">
                             {{item.Nombre}}
                         </mat-option>
                     </mat-select>

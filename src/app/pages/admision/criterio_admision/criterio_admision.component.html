@@ -11,7 +11,7 @@
                 <!-- select periodo -->
                 <mat-form-field style="width: 40%;">
                     <mat-label>{{ 'admision.aviso_periodo' | translate }}:</mat-label>
-                    <mat-select [(ngModel)]="periodo" [disabled]='true'>
+                    <mat-select [(ngModel)]="periodo" [disabled]='false'>
                         <mat-option>--Seleccionar--</mat-option>
                         <mat-option *ngFor="let item of periodos" [value]="item">
                             {{item.Nombre}}
@@ -42,7 +42,7 @@
                                 [(ngModel)]="proyectos_selected"
                                 (selectionChange)="activeCriterios()">
                         <mat-option>--Seleccionar--</mat-option>
-                        <mat-option *ngFor="let project of proyectos" [value]="project.Id">{{ project.Nombre }}</mat-option>
+                        <mat-option *ngFor="let project of proyectos" [value]="project.Id" [disabled]="!project.Id">{{ project.Nombre }}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="Campo1Control.hasError('required')">
                       {{ 'admision.erro_selec_proyecto' | translate }}

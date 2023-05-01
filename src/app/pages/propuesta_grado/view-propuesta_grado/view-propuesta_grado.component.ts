@@ -12,6 +12,7 @@ import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-view-propuesta-grado',
@@ -55,6 +56,11 @@ export class ViewPropuestaGradoComponent implements OnInit {
     status: ""
   }
 
+  updateDocument: boolean = false;
+  canUpdateDocument: boolean = false;
+
+  @Output('docs_editados') docs_editados: EventEmitter<any> = new EventEmitter(true);
+
   constructor(private translate: TranslateService,
     private inscripcionService: InscripcionService,
     private cidcService: CIDCService,
@@ -63,7 +69,8 @@ export class ViewPropuestaGradoComponent implements OnInit {
     private newNuxeoService: NewNuxeoService,
     private sanitization: DomSanitizer,
     private utilidades: UtilidadesService,
-    private zipManagerService: ZipManagerService) {
+    private zipManagerService: ZipManagerService,
+    private popUpManager: PopUpManager) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -259,7 +266,34 @@ export class ViewPropuestaGradoComponent implements OnInit {
           if (temp.DocumentoId + '' !== '0') {
             files9.push({ Id: temp.DocumentoId, key: 'FormatoProyecto' });
           }
-          this.newNuxeoService.get(files9).subscribe(
+          this.documentoService.get('documento/'+temp.DocumentoId)
+            .subscribe((resp: any) => {
+              if(resp.Status && (resp.Status == "400" || resp.Status == "404")) {
+                this.infoFalla();
+              } else {
+                //temp.FormatoProyecto = filesResponse_2[0].url;
+                let estadoDoc = this.utilidades.getEvaluacionDocumento(resp.Metadatos);
+                if (estadoDoc.aprobado === false) {
+                  this.updateDocument = true;
+                }
+                this.docs_editados.emit(this.updateDocument);
+                temp.Soporte = {
+                  //Documento: filesResponse_2[0].Documento, 
+                  DocumentoId: resp.Id,
+                  aprobado: estadoDoc.aprobado, 
+                  estadoObservacion: estadoDoc.estadoObservacion,
+                  observacion: estadoDoc.observacion,
+                  nombreDocumento: temp.Nombre,
+                  tabName: this.translate.instant('inscripcion.propuesta_grado'),
+                  carpeta: "Propuesta de Trabajo de Grado"
+                }
+                this.zipManagerService.adjuntarArchivos([temp.Soporte]);
+                //this.FormatoProyecto = temp.DocumentoId;
+                this.addCargado(2);
+/*               }
+            }); */
+
+/*           this.newNuxeoService.get(files9).subscribe(
             async response_2 => {
               const filesResponse_2 = <any>response_2;
               if ((Object.keys(filesResponse_2).length !== 0) && (filesResponse_2 !== undefined)) {
@@ -277,7 +311,7 @@ export class ViewPropuestaGradoComponent implements OnInit {
                 }
                 this.zipManagerService.adjuntarArchivos([temp.Soporte]);
                 this.FormatoProyecto = temp.DocumentoId;
-                this.addCargado(2);
+                this.addCargado(2); */
 
                 if (temp.GrupoInvestigacionId === 0) {
                   temp.GrupoInvestigacion = <any>{ name: "No aplica" };
@@ -362,15 +396,22 @@ export class ViewPropuestaGradoComponent implements OnInit {
         });
   }
 
-  verPropuesta(document) {
-    document.Id = document.DocumentoId;
-    this.revisar_doc.emit(document);
+  verPropuesta(documento) {
+    documento.Id = documento.DocumentoId;
+    this.newNuxeoService.getByIdLocal(documento.DocumentoId)
+      .subscribe(file => {
+        documento.Documento = file;
+        this.revisar_doc.emit(documento);
+      }, error => {
+        this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.sin_documento'));
+      })
   }
 
   ngOnInit() {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
     this.loadPropuestaGrado();
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   addCargado(carga: number) {

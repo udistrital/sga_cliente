@@ -22,6 +22,8 @@ import { IAppState } from '../../../@core/store/app.state';
 import { Store } from '@ngrx/store';
 import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { UserService } from '../../../@core/data/users.service';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -79,6 +81,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   cantidad_opcionados: number = 0;
   cantidad_no_admitidos: number = 0;
   cantidad_inscritos: number = 0;
+  cantidad_inscritos_obs: number = 0;
   mostrarConteos: boolean = false;
 
 
@@ -99,6 +102,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     private store: Store<IAppState>,
     private listService: ListService,
     private sgaMidService: SgaMidService,
+    private userService: UserService,
+    private autenticationService: ImplicitAutenticationService,
     ) {
 
     this.translate = translate;
@@ -261,11 +266,11 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
+      this.parametrosService.get('periodo/?query=CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {
-            this.periodo = <any>res['Data'][0];
+            this.periodo = res.Data.find(p => p.Activo);
             window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
             resolve(this.periodo);
             const periodos = <any[]>res['Data'];
@@ -376,8 +381,32 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     if (this.selectednivel !== NaN && this.selectednivel !== undefined) {
       this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
-          this.proyectos = <any[]>response.filter(
-            proyecto => this.filtrarProyecto(proyecto),
+          this.autenticationService.getRole().then(
+            (rol: Array <String>) => {
+              let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+              if (r) {
+                this.proyectos = <any[]>response.filter(
+                  proyecto => this.filtrarProyecto(proyecto),
+                );
+              } else {
+                const id_tercero = this.userService.getPersonaId();
+                this.sgaMidService.get('admision/dependencia_vinculacion_tercero/'+id_tercero).subscribe(
+                  (respDependencia: any) => {
+                    const dependencias = <Number[]>respDependencia.Data.DependenciaId;
+                    this.proyectos = <any[]>response.filter(
+                      proyecto => dependencias.includes(proyecto.Id)
+                    );
+                    if (dependencias.length > 1) {
+                      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                      this.proyectos.forEach(p => { p.Id = undefined })
+                    }
+                  },
+                  (error: any) => {
+                    this.popUpManager.showErrorAlert(this.translate.instant('admision.no_vinculacion_no_rol')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                  }
+                );
+              }
+            }
           );
         },
         error => {
@@ -441,7 +470,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             this.cantidad_opcionados = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'OPCIONADO')).length;
             this.cantidad_no_admitidos = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'NO ADMITIDO')).length;
             this.cantidad_inscritos = this.inscritos.length;
-            this.cantidad_aspirantes = this.cantidad_inscrip_solicitada + this.cantidad_admitidos + this.cantidad_opcionados + this.cantidad_no_admitidos + this.cantidad_inscritos;
+            this.cantidad_inscritos_obs = this.Aspirantes.filter((inscripcion) => (inscripcion.EstadoInscripcionId.Nombre === 'INSCRITO con Observación')).length;
+            this.cantidad_aspirantes = this.cantidad_inscrip_solicitada + this.cantidad_admitidos + this.cantidad_opcionados + this.cantidad_no_admitidos + this.cantidad_inscritos + this.cantidad_inscritos_obs;
 
             this.source_emphasys.load(this.Aspirantes);
             this.loading = false;

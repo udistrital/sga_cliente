@@ -12,14 +12,6 @@ const routes: Routes = [{
     path: 'pago_inscripcion',
     component: PagoInscripcionComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   }],
 }];
 

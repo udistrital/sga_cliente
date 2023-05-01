@@ -39,6 +39,8 @@ export class ViewInfoPersonaComponent implements OnInit {
   telefono: string = "";
   telefonoAlt: string = "";
   direccion: string = "";
+  updateDocument: boolean = false;
+  canUpdateDocument: boolean = false;
 
   @Input('persona_id')
   set name(persona_id: number) {
@@ -59,6 +61,8 @@ export class ViewInfoPersonaComponent implements OnInit {
     nCargas: 0,
     status: ""
   }
+
+  @Output('docs_editados') docs_editados: EventEmitter<any> = new EventEmitter(true);
 
   constructor(private sgaMidService: SgaMidService,
     private documentoService: DocumentoService,
@@ -91,10 +95,11 @@ export class ViewInfoPersonaComponent implements OnInit {
   ngOnInit() {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
   public loadInfoPersona(): void {
-    this.infoCarga.nCargas = 3;
+    this.infoCarga.nCargas = 5;
     const id = this.info_persona_id ? this.info_persona_id : this.userService.getPersonaId();
     if (id !== undefined && id !== 0 && id.toString() !== '') {
       this.sgaMidService.get('persona/consultar_persona/' + id)
@@ -135,9 +140,45 @@ export class ViewInfoPersonaComponent implements OnInit {
                   });
 
                 if(this.info_info_caracteristica.hasOwnProperty('IdDocumentoDiscapacidad')){
-                  this.infoCarga.nCargas++;
                   this.idSoporteDiscapacidad = <number>this.info_info_caracteristica["IdDocumentoDiscapacidad"];
-                  this.newNuxeoService.get([{Id: this.idSoporteDiscapacidad}]).subscribe(
+                  this.documentoService.get('documento/'+this.idSoporteDiscapacidad)
+                    .subscribe((resp: any) => {
+                      if(resp.Status && (resp.Status == "400" || resp.Status == "404")) {
+                        this.infoFalla();
+                      } else {
+                        let estadoDoc = this.utilidades.getEvaluacionDocumento(resp.Metadatos);
+                        if (estadoDoc.aprobado === false) {
+                          this.updateDocument = true;
+                        }
+                        this.docs_editados.emit(this.updateDocument);
+                        this.tipoDiscapacidad = "";
+                        let total = this.info_info_caracteristica.TipoDiscapacidad.length - 1;
+                        this.info_info_caracteristica.TipoDiscapacidad.forEach((dis, i) => {
+                          this.tipoDiscapacidad += dis.Nombre;
+                          if(i < total){
+                            this.tipoDiscapacidad += ", ";
+                          }
+                        });
+                        this.docDiscapacidad = {
+                          //Documento: response[0]["Documento"],
+                          DocumentoId: resp.Id,
+                          aprobado: estadoDoc.aprobado,
+                          estadoObservacion: estadoDoc.estadoObservacion,
+                          observacion: estadoDoc.observacion,
+                          nombreDocumento: this.tipoDiscapacidad,
+                          tabName: this.translate.instant('GLOBAL.comprobante_discapacidad'),
+                          carpeta: "Información Básica"
+                        }
+                        this.zipManagerService.adjuntarArchivos([this.docDiscapacidad]);
+                        this.addCargado(1);
+                      }
+                    },
+                    (error: HttpErrorResponse) => {
+                      this.infoFalla();
+                      this.popUpManager.showErrorToast(this.translate.instant('ERROR' + error.status));
+                    }
+                  );
+                  /* this.newNuxeoService.get([{Id: this.idSoporteDiscapacidad}]).subscribe(
                     response => {
                       let estadoDoc = this.utilidades.getEvaluacionDocumento(response[0].Metadatos);
                       this.tipoDiscapacidad = "";
@@ -161,13 +202,50 @@ export class ViewInfoPersonaComponent implements OnInit {
                       this.zipManagerService.adjuntarArchivos([this.docDiscapacidad]);
                       this.addCargado(1);
                     }
-                  )
+                  ) */
+                } else {
+                  this.addCargado(1);
                 }
 
                 if(this.info_info_caracteristica.hasOwnProperty('IdDocumentoPoblacion')){
-                  this.infoCarga.nCargas++;
                   this.idSoportePoblacion = <number>this.info_info_caracteristica["IdDocumentoPoblacion"];
-                  this.newNuxeoService.get([{Id: this.idSoportePoblacion}]).subscribe(
+                  this.documentoService.get('documento/'+this.idSoportePoblacion)
+                    .subscribe((resp: any) => {
+                      if(resp.Status && (resp.Status == "400" || resp.Status == "404")) {
+                        this.infoFalla();
+                      } else {
+                        let estadoDoc = this.utilidades.getEvaluacionDocumento(resp.Metadatos);
+                        if (estadoDoc.aprobado === false) {
+                          this.updateDocument = true;
+                        }
+                        this.docs_editados.emit(this.updateDocument);
+                        this.tipoPoblacion = "";
+                        let total = this.info_info_caracteristica.TipoPoblacion.length - 1;
+                        this.info_info_caracteristica.TipoPoblacion.forEach((dis, i) => {
+                          this.tipoPoblacion += dis.Nombre;
+                          if(i < total){
+                            this.tipoPoblacion += ", ";
+                          }
+                        });
+                        this.docPoblacion = {
+                          //Documento: response[0]["Documento"],
+                          DocumentoId: resp.Id,
+                          aprobado: estadoDoc.aprobado,
+                          estadoObservacion: estadoDoc.estadoObservacion,
+                          observacion: estadoDoc.observacion,
+                          nombreDocumento: this.tipoPoblacion,
+                          tabName: this.translate.instant('GLOBAL.comprobante_poblacion'),
+                          carpeta: "Información Básica"
+                        }
+                        this.zipManagerService.adjuntarArchivos([this.docPoblacion]);
+                        this.addCargado(1);
+                        }
+                    }, (error: HttpErrorResponse) => {
+                      this.infoFalla();
+                      this.popUpManager.showErrorToast(this.translate.instant('ERROR' + error.status));
+                    }
+                  );
+                  /* this.newNuxeoService.get([{Id: this.idSoportePoblacion}]).subscribe(
                     response => {
                       let estadoDoc = this.utilidades.getEvaluacionDocumento(response[0].Metadatos);
                       this.tipoPoblacion = "";
@@ -191,7 +269,9 @@ export class ViewInfoPersonaComponent implements OnInit {
                       this.zipManagerService.adjuntarArchivos([this.docPoblacion]);
                       this.addCargado(1);
                     }
-                  )
+                  ) */
+                } else {
+                  this.addCargado(1);
                 }
                 
               } else {
@@ -219,7 +299,13 @@ export class ViewInfoPersonaComponent implements OnInit {
   }
 
   verInfoCaracteristca(documento: any) {
-    this.revisar_doc.emit(documento);
+    this.newNuxeoService.getByIdLocal(documento.DocumentoId)
+      .subscribe(file => {
+        documento.Documento = file;
+        this.revisar_doc.emit(documento);
+      }, error => {
+        this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.sin_documento'));
+      })
   }
 
   addCargado(carga: number) {

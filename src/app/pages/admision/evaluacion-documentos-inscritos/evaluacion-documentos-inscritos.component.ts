@@ -21,6 +21,7 @@ import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { TAGS_INSCRIPCION_PROGRAMA } from '../def_suite_inscrip_programa/def_tags_por_programa';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 
 @Component({
@@ -48,8 +49,11 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   cantidad_aspirantes: number = 0;
   cantidad_admitidos: number = 0;
   cantidad_inscritos: number = 0;
+  cantidad_inscritos_obs: number = 0;
   mostrarConteos: boolean = false;
   tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
+  folderTagtoReload: string = "";
+  inscripcionInfo: any;
 
 
   periodos = [];
@@ -70,6 +74,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     private pivotDocument: PivotDocument,
     private sgaMidService: SgaMidService,
     private evaluacionInscripcionService: EvaluacionInscripcionService,
+    private autenticationService: ImplicitAutenticationService,
   ) {
     this.invitacion = new Invitacion();
     this.invitacionTemplate = new InvitacionTemplate();
@@ -103,11 +108,11 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo/?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
+      this.parametrosService.get('periodo/?query=CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {
-            this.periodo = <any>res['Data'][0];
+            this.periodo = res.Data.find(p => p.Activo);
             window.localStorage.setItem('IdPeriodo', String(this.periodo['Id']));
             resolve(this.periodo);
             const periodos = <any[]>res['Data'];
@@ -159,8 +164,32 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     if (this.selectednivel !== NaN) {
       this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
-          this.proyectos = <any[]>response.filter(
-            proyecto => this.filtrarProyecto(proyecto),
+          this.autenticationService.getRole().then(
+            (rol: Array <String>) => {
+              let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+              if (r) {
+                this.proyectos = <any[]>response.filter(
+                  proyecto => this.filtrarProyecto(proyecto),
+                );
+              } else {
+                const id_tercero = this.userService.getPersonaId();
+                this.sgaMidService.get('admision/dependencia_vinculacion_tercero/'+id_tercero).subscribe(
+                  (respDependencia: any) => {
+                    const dependencias = <Number[]>respDependencia.Data.DependenciaId;
+                    this.proyectos = <any[]>response.filter(
+                      proyecto => dependencias.includes(proyecto.Id)
+                    );
+                    if (dependencias.length > 1) {
+                      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                      this.proyectos.forEach(p => { p.Id = undefined })
+                    }
+                  },
+                  (error: any) => {
+                    this.popUpManager.showErrorAlert(this.translate.instant('admision.no_vinculacion_no_rol')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                  }
+                );
+              }
+            }
           );
         },
         error => {
@@ -180,8 +209,9 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
           if (response.Success && response.Status == "200") {
             this.Aspirantes = response.Data;
             this.cantidad_inscritos = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO").length;
+            this.cantidad_inscritos_obs = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO con Observación").length;
             this.cantidad_admitidos = this.Aspirantes.filter(aspirante => aspirante.Estado == "ADMITIDO").length;
-            this.cantidad_aspirantes = this.cantidad_inscritos + this.cantidad_admitidos;
+            this.cantidad_aspirantes = this.cantidad_inscritos + this.cantidad_inscritos_obs + this.cantidad_admitidos;
             this.dataSource.load(this.Aspirantes);
             this.loading = false;
             this.mostrarConteos = true;
@@ -243,6 +273,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
 
   activateTab() {
     this.showProfile = true;
+    this.loadInscritos();
   }
 
   loadPerfil(event) {
@@ -253,6 +284,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
             this.inscripcion_id = event.data['Credencial'];
             this.inscripcionService.get('inscripcion?query=Id:' + this.inscripcion_id).subscribe(
               (resp: any[]) => {
+                this.inscripcionInfo = resp[0];
                 this.evaluacionInscripcionService.get('tags_por_dependencia?query=Activo:true,PeriodoId:'+this.periodo.Id+',DependenciaId:'+this.proyectos_selected+',TipoInscripcionId:'+resp[0].TipoInscripcionId.Id)
                   .subscribe((respSuite: any) => {
                     if (respSuite != null && respSuite.Status == '200') {
@@ -348,6 +380,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   }
 
   revisarDocumento(doc: any) {
+    this.folderTagtoReload = "";
     const assignConfig = new MatDialogConfig();
     assignConfig.width = '1300px';
     assignConfig.height = '750px';
@@ -357,12 +390,22 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
       if (data) {
         this.documentoService.get('documento/' + doc.DocumentoId).subscribe(
           (documento: Documento) => {
-            this.showProfile = true
-            documento.Metadatos = JSON.stringify(data);
+            //this.showProfile = true
+            let metadataJoin = {...JSON.parse(documento.Metadatos), ...data.metadata};
+            documento.Metadatos = JSON.stringify(metadataJoin);
             this.documentoService.put('documento', documento).subscribe(
               response => {
                 this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'))
-                if (!data.aprobado && data.observacion !== '') {
+                this.folderTagtoReload = data.folderOrTag;
+                if (!data.metadata.aprobado && data.metadata.observacion !== '') {
+
+                  this.inscripcionInfo.EstadoInscripcionId.Id = 6; // 6 id de INSCRITO con Observacion
+                  this.inscripcionService.put('inscripcion', this.inscripcionInfo)
+                    .subscribe(resp => {
+                      this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'))
+                    }, err => {
+                      this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
+                    })
                   // llamar funcion que envia correo con la observacion
                   // enviarCorreo(data.observacion);
                   const correo = JSON.parse(atob(localStorage.getItem('id_token').split('.')[1])).email;
@@ -380,7 +423,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                     this.sendCorreo();
                   }
                 }
-                this.showProfile = false
+                //this.showProfile = false
               },
               error => {
                 this.popUpManager.showErrorToast('ERROR.error_cargar_documento');

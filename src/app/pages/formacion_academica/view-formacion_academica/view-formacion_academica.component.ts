@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { ZipManagerService } from '../../../@core/utils/zip-manager.service';
+import { DocumentoService } from '../../../@core/data/documento.service';
+import { PopUpManager } from '../../../managers/popUpManager';
 
 @Component({
   selector: 'ngx-view-formacion-academica',
@@ -45,14 +47,21 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   info_formacion_academica: any;
   soporte: any;
 
+  updateDocument: boolean = false;
+  canUpdateDocument: boolean = false;
+
+  @Output('docs_editados') docs_editados: EventEmitter<any> = new EventEmitter(true);
+
   constructor(
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
     private nuxeoService: NuxeoService,
+    private documentoService: DocumentoService,
     private newNuxeoService: NewNuxeoService,
     private sanitization: DomSanitizer,
     private utilidades: UtilidadesService,
-    private zipManagerService: ZipManagerService) {
+    private zipManagerService: ZipManagerService,
+    private popUpManager: PopUpManager,) {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
     this.gotoEdit = localStorage.getItem('goToEdit') === 'true';
@@ -85,11 +94,39 @@ export class ViewFormacionAcademicaComponent implements OnInit {
             element.FechaFinalizacion = FechaF.substring(0, 2) + '/' + FechaF.substring(2, 4) + '/' + FechaF.substring(4, 8);
             dataInfo.push(element);
 
-            const soportes = [];
-            if (element.Documento + '' !== '0') {
-              soportes.push({ Id: element.Documento, key: 'DocumentoAcad' + element.Documento });
+            if (Number(element.Documento) > 0) {
+              this.documentoService.get('documento/'+element.Documento)
+                .subscribe((resp: any) => {
+                    if(resp.Status && (resp.Status == "400" || resp.status == "404")) {
+                      this.infoFalla();
+                    } else {
+                      //element.Documento = response[0]["Documento"]; 
+                      element.DocumentoId = resp.Id;
+                      let estadoDoc = this.utilidades.getEvaluacionDocumento(resp.Metadatos);
+                      if (estadoDoc.aprobado === false) {
+                        this.updateDocument = true;
+                      }
+                      this.docs_editados.emit(this.updateDocument);
+                      element.aprobado = estadoDoc.aprobado;
+                      element.estadoObservacion = estadoDoc.estadoObservacion;
+                      element.observacion = estadoDoc.observacion;
+                      element.nombreDocumento = element.ProgramaAcademico ? element.ProgramaAcademico.Nombre : '';
+                      element.tabName = this.translate.instant('GLOBAL.formacion_academica');
+                      element.carpeta = "Formación Académica";
+                      this.zipManagerService.adjuntarArchivos([element]);
+                      this.addCargado(1);
+                    }
+                  },
+                  (error: HttpErrorResponse) => {
+                    this.infoFalla();
+                    //this.popUpManager.showErrorToast(this.translate.instant('ERROR' + error.status));
+                  }
+                );
+            } else {
+              this.infoFalla();
             }
-            this.newNuxeoService.get(soportes).subscribe(
+            
+            /* this.newNuxeoService.get(soportes).subscribe(
               response => {
                     element.Documento = response[0]["Documento"]; 
                     element.DocumentoId = response[0].Id;
@@ -114,7 +151,7 @@ export class ViewFormacionAcademicaComponent implements OnInit {
                       this.translate.instant('GLOBAL.soporte_documento'),
                     confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                   });
-                });
+                }); */
 
 
           })
@@ -281,10 +318,17 @@ export class ViewFormacionAcademicaComponent implements OnInit {
   ngOnInit() {
     this.infoCarga.status = "start";
     this.estadoCarga.emit(this.infoCarga);
+    this.canUpdateDocument = <string>(sessionStorage.getItem('IdEstadoInscripcion') || "").toUpperCase() === "INSCRITO CON OBSERVACIÓN";
   }
 
-  abrirDocumento(document) {
-    this.revisar_doc.emit(document);
+  abrirDocumento(documento) {
+    this.newNuxeoService.getByIdLocal(documento.DocumentoId)
+      .subscribe(file => {
+        documento.Documento = file;
+        this.revisar_doc.emit(documento);
+      }, error => {
+        this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.sin_documento'));
+      })
   }
 
   addCargado(carga: number) {

@@ -7,18 +7,10 @@ import { AuthGuard } from '../../@core/_guards/auth.guard';
 const routes: Routes = [{
   path: '',
   component: AsignacionCupoComponent,
-  children: [ {
+  children: [{
     path: 'crud-asignacion_cupo',
     component: CrudAsignacionCupoComponent,
     canActivate: [AuthGuard],
-    data: {
-      roles: [
-        'ADMIN_CAMPUS',
-        'ASPIRANTE',
-        'Internal/selfsignup',
-        'Internal/everyone',
-      ],
-    },
   }],
 }];
 

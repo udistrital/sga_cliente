@@ -9,6 +9,7 @@ import { ListSolicitudesEstudianteComponent } from './list-solicitudes-estudiant
 import { DatosSolicitanteComponent } from './datos-solicitante/datos-solicitante.component';
 import { DialogoSoporteComponent } from './dialogo-soporte/dialogo-soporte.component';
 import { ViewSolicitudesComponent } from './view-solicitudes/view-solicitudes.component';
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 const routes: Routes = [{
   path: '',
@@ -17,10 +18,12 @@ const routes: Routes = [{
     {
       path: 'list-solicitudes-estudiante',
       component: ListSolicitudesEstudianteComponent,
+      canActivate: [AuthGuard],
     },
     {
       path: 'ver-solicitudes',
       component: ViewSolicitudesComponent,
+      canActivate: [AuthGuard],
     },
   ],
 }];

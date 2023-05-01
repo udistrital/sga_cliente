@@ -13,7 +13,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                 <!-- select periodo -->
                 <mat-form-field style="width: 35%;">
                   <mat-label>{{ 'documento_proyecto.aviso_periodo' | translate }}:</mat-label>
-                  <mat-select [(ngModel)]="periodo" [disabled]='true'>
+                  <mat-select [(ngModel)]="periodo" [disabled]='false'>
                     <mat-option *ngFor="let item of periodos" [value]="item"> {{item.Nombre}} </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -36,7 +36,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                               [(ngModel)]="proyectos_selected"
                               (selectionChange)="loadTipoInscripcion()">
                               <!-- (selectionChange)="loadCriterios()" -->
-                    <mat-option *ngFor="let item of proyectos" [value]="item.Id">{{item.Nombre}}</mat-option>
+                    <mat-option *ngFor="let item of proyectos" [value]="item.Id" [disabled]="!item.Id">{{item.Nombre}}</mat-option>
                   </mat-select>
                   <mat-error *ngIf="Campo1Control.hasError('required')">
                     {{ 'documento_proyecto.erro_selec_proyecto' | translate }}

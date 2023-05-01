@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'dialogo-documentos',
@@ -18,6 +19,7 @@ export class DialogoDocumentosComponent implements OnInit {
   verEstado: string = "";
   loading: boolean;
   observando: boolean;
+  isPDF: boolean = true;
 
   constructor(
     public dialogRef: MatDialogRef<DialogoDocumentosComponent>,
@@ -25,12 +27,14 @@ export class DialogoDocumentosComponent implements OnInit {
     private translate: TranslateService,
     private popUpManager: PopUpManager,
     private builder: FormBuilder,
+    private sanitization: DomSanitizer,
   ) {
     this.crearForm();
     this.dialogRef.backdropClick().subscribe(() => this.dialogRef.close());
   }
 
   ngOnInit() {
+    this.isPDF = true;
     this.loading = true;
     this.tabName = this.data.documento.tabName || "";
     if(this.data.documento.hasOwnProperty('nombreDocumento')){
@@ -47,7 +51,16 @@ export class DialogoDocumentosComponent implements OnInit {
     } else {
       this.verEstado = this.translate.instant('GLOBAL.estado_no_definido');
     }
-    this.documento = this.data.documento.Documento['changingThisBreaksApplicationSecurity'];
+    if (this.data.documento.Documento.changingThisBreaksApplicationSecurity) {
+      this.documento = this.data.documento.Documento['changingThisBreaksApplicationSecurity'];
+    } else {
+      this.documento = this.data.documento.Documento.url;
+      this.isPDF = this.data.documento.Documento.type == '.pdf';
+      if(!this.isPDF) {
+        this.documento = this.sanitization.bypassSecurityTrustUrl(this.documento);
+      }
+      this.loading = false;
+    }
     this.observando = this.data.documento.observando ? true : false;
     this.revisionForm.setValue({
       observacion: this.data.documento.observacion ? this.data.documento.observacion : "",
@@ -82,7 +95,11 @@ export class DialogoDocumentosComponent implements OnInit {
       this.popUpManager.showConfirmAlert(this.translate.instant('admision.seguro_revision')).then(
         ok => {
           if (ok.value) {
-            this.dialogRef.close(this.revisionForm.value)
+            const data = {
+              metadata: this.revisionForm.value,
+              folderOrTag: this.data.documento.carpeta || ""
+            }
+            this.dialogRef.close(data)
           } else {
             this.revisionForm.patchValue({
               observacion: "",
