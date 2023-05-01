@@ -21,6 +21,7 @@ import { PivotDocument } from '../../../@core/utils/pivot_document.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { TAGS_INSCRIPCION_PROGRAMA } from '../def_suite_inscrip_programa/def_tags_por_programa';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 
 @Component({
@@ -48,6 +49,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   cantidad_aspirantes: number = 0;
   cantidad_admitidos: number = 0;
   cantidad_inscritos: number = 0;
+  cantidad_inscritos_obs: number = 0;
   mostrarConteos: boolean = false;
   tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
   folderTagtoReload: string = "";
@@ -72,6 +74,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     private pivotDocument: PivotDocument,
     private sgaMidService: SgaMidService,
     private evaluacionInscripcionService: EvaluacionInscripcionService,
+    private autenticationService: ImplicitAutenticationService,
   ) {
     this.invitacion = new Invitacion();
     this.invitacionTemplate = new InvitacionTemplate();
@@ -161,8 +164,32 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     if (this.selectednivel !== NaN) {
       this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
-          this.proyectos = <any[]>response.filter(
-            proyecto => this.filtrarProyecto(proyecto),
+          this.autenticationService.getRole().then(
+            (rol: Array <String>) => {
+              let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+              if (r) {
+                this.proyectos = <any[]>response.filter(
+                  proyecto => this.filtrarProyecto(proyecto),
+                );
+              } else {
+                const id_tercero = this.userService.getPersonaId();
+                this.sgaMidService.get('admision/dependencia_vinculacion_tercero/'+id_tercero).subscribe(
+                  (respDependencia: any) => {
+                    const dependencias = <Number[]>respDependencia.Data.DependenciaId;
+                    this.proyectos = <any[]>response.filter(
+                      proyecto => dependencias.includes(proyecto.Id)
+                    );
+                    if (dependencias.length > 1) {
+                      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                      this.proyectos.forEach(p => { p.Id = undefined })
+                    }
+                  },
+                  (error: any) => {
+                    this.popUpManager.showErrorAlert(this.translate.instant('admision.no_vinculacion_no_rol')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                  }
+                );
+              }
+            }
           );
         },
         error => {
@@ -182,8 +209,9 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
           if (response.Success && response.Status == "200") {
             this.Aspirantes = response.Data;
             this.cantidad_inscritos = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO").length;
+            this.cantidad_inscritos_obs = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO con Observación").length;
             this.cantidad_admitidos = this.Aspirantes.filter(aspirante => aspirante.Estado == "ADMITIDO").length;
-            this.cantidad_aspirantes = this.cantidad_inscritos + this.cantidad_admitidos;
+            this.cantidad_aspirantes = this.cantidad_inscritos + this.cantidad_inscritos_obs + this.cantidad_admitidos;
             this.dataSource.load(this.Aspirantes);
             this.loading = false;
             this.mostrarConteos = true;
@@ -374,9 +402,9 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                   this.inscripcionInfo.EstadoInscripcionId.Id = 6; // 6 id de INSCRITO con Observacion
                   this.inscripcionService.put('inscripcion', this.inscripcionInfo)
                     .subscribe(resp => {
-                      console.log(resp, "ok");
+                      this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'))
                     }, err => {
-                      console.log(err, "error");
+                      this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
                     })
                   // llamar funcion que envia correo con la observacion
                   // enviarCorreo(data.observacion);

@@ -217,9 +217,8 @@
       <ngb-progressbar id="progressbar" type="success" [value]="progressDownloadDocs" [striped]="loading" [animated]="true">
       </ngb-progressbar>
       <br>
-      <div class="preinscription-alert" *ngIf="(contTag < maxTags)">
-        <div class="col-md-12"> {{ 'inscripcion.info_completar_carga' | translate }} </div>
-        <div class="col-md-12" *ngIf="imprimir" > {{ 'inscripcion.info_impresion_auto' | translate }} </div>
+      <div class="preinscription-alert" *ngIf="imprimir">
+        <div class="col-md-12"> {{ 'inscripcion.info_impresion_auto' | translate }} </div>
       </div>
       <div class="info-comprobante" *ngIf="imprimir">
         {{ 'inscripcion.info_comprobante' | translate }}
