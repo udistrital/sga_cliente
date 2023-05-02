@@ -315,6 +315,10 @@ export class PerfilComponent implements OnInit {
           this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.fallo_carga_mensaje'));
         }
       }
+      if (!this.checkComplete) {
+        this.checkComplete = true;
+        this.siguienteTagDesde(actualTag);
+      }
     }
     
     //this.loading ? this.reduceWhenloading = 0.9 : this.reduceWhenloading = 1;
