@@ -135,7 +135,7 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
         (response: any) => {
           this.autenticationService.getRole().then(
             (rol: Array <String>) => {
-              let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+              let r = rol.find(role => (role == "ADMIN_SGA" || role == "VICERRECTOR" || role == "ASESOR_VICE")); // rol admin, pendiente vice
               if (r) {
                 this.proyectos = <any[]>response.filter(
                   proyecto => this.filtrarProyecto(proyecto),
