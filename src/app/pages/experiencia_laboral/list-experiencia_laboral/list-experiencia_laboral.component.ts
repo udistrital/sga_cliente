@@ -120,7 +120,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
       },
       mode: 'external',
       actions: {
-        add: false,
+        add: true,
         edit: true,
         delete: true,
         position: 'right',
@@ -163,11 +163,11 @@ export class ListExperienciaLaboralComponent implements OnInit {
           });
           this.source.load(this.data);
         } else if (response !== null && response.Data.Code === '404') {
-          this.popUpManager.showToast('info', this.translate.instant('experiencia_laboral.no_data'));
+          this.popUpManager.showAlert('', this.translate.instant('experiencia_laboral.no_data'));
           this.getPercentage(0);
           this.source.load([]);
         } else {
-          this.showToast('error', this.translate.instant('GLOBAL.error'),
+          this.popUpManager.showAlert(this.translate.instant('GLOBAL.error'),
             this.translate.instant('experiencia_laboral.error'));
             this.getPercentage(0);
             this.source.load([]);
@@ -210,6 +210,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
     this.indexSelect = event.index;
     this.detalleExp = this.data[event.index];
     this.crud = true;
+    this.activetab();
   }
 
   onCreate(event): void {
@@ -217,6 +218,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
     this.crud = true;
     this.indexSelect = NaN;
     this.detalleExp = undefined;
+    this.activetab();
   }
 
   selectTab(event): void {
@@ -227,6 +229,10 @@ export class ListExperienciaLaboralComponent implements OnInit {
     }
   }
 
+  activetab(): void {
+    this.cambiotab = !this.cambiotab;
+  }
+
   onChange(event) {
     if (event) {
       this.uid = 0;
@@ -234,6 +240,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
       this.detalleExp = undefined;
       this.loadData();
       this.cargarCampos();
+      this.cambiotab = false;
     }
   }
 

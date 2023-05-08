@@ -2,6 +2,7 @@ export let FORM_IDIOMAS = {
   // titulo: 'Idiomas',
   tipo_formulario: 'mini',
   btn: 'Guardar',
+  btnLimpiar: 'Limpiar',
   alertas: true,
   modelo: 'InfoIdioma',
   campos: [

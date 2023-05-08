@@ -94,6 +94,12 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
     });
   }
 
+  selectPeriodo() {
+    this.selectednivel = undefined;
+    this.proyectos_selected = undefined;
+    this.tipo_inscripcion_selected = undefined;
+  }
+
   loadLevel() {
     this.loading = true;
     this.projectService.get('nivel_formacion?limit=0').subscribe(
@@ -135,7 +141,7 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
         (response: any) => {
           this.autenticationService.getRole().then(
             (rol: Array <String>) => {
-              let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+              let r = rol.find(role => (role == "ADMIN_SGA" || role == "VICERRECTOR" || role == "ASESOR_VICE")); // rol admin o vice
               if (r) {
                 this.proyectos = <any[]>response.filter(
                   proyecto => this.filtrarProyecto(proyecto),

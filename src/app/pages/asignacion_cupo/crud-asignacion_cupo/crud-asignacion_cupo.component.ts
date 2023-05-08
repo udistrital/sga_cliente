@@ -280,7 +280,6 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
           this.sgamidService.post('admision/postcupos', this.info_cupos)
             .subscribe(res => {
               const r = <any>res
-              console.log(r)
               if (r !== null && r.Status === '200') {
                 this.loading = false;
                 //this.cambiarestados();
@@ -315,7 +314,7 @@ export class CrudAsignacionCupoComponent implements OnInit, OnChanges {
     this.show_posgrado = this.info_nivel;
 
     if (this.info_proyectos != undefined && this.info_proyectos != null) {
-      this.evaluacionService.get('cupos_por_dependencia/?query=DependenciaId:' + Number(this.info_proyectos.Id) + '&limit=0').subscribe(
+      this.evaluacionService.get('cupos_por_dependencia/?query=DependenciaId:' + Number(this.info_proyectos.Id) + ',PeriodoId:' + Number(this.info_periodo.Id) + '&limit=1').subscribe(
         (response: any) => {
           if (response !== null && response !== undefined && response[0].Id !== undefined) {
 
