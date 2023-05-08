@@ -93,11 +93,16 @@ export class ListIdiomasComponent implements OnInit {
       },
       mode: 'external',
       actions: {
-        add: false,
+        add: true,
         edit: true,
         delete: true,
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
+      },
+      add: {
+        addButtonContent: '<i class="nb-plus" title="' + this.translate.instant('idiomas.tooltip_crear') + '"></i>',
+        createButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
       },
       edit: {
         editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('idiomas.tooltip_editar') + '"></i>',
@@ -129,6 +134,7 @@ export class ListIdiomasComponent implements OnInit {
         } else {
           this.getPercentage(0);
           this.source.load([])
+          this.popUpManager.showAlert('', this.translate.instant('idiomas.no_data'));
         }
         this.loading = false;
       },
@@ -142,12 +148,15 @@ export class ListIdiomasComponent implements OnInit {
     if (event) {
       this.uid = 0;
       this.loadData();
+      this.cambiotab = false;
     }
   }
 
   getPercentage(event) {
-    this.percentage = event;
-    this.result.emit(this.percentage);
+    setTimeout(() => {
+      this.percentage = event;
+      this.result.emit(this.percentage);
+    });
   }
 
   onDelete(event): void {
@@ -181,10 +190,12 @@ export class ListIdiomasComponent implements OnInit {
 
   onEdit(event): void {
     this.uid = event.data.Id;
+    this.activetab();
   }
 
   onCreate(event): void {
     this.uid = 0;
+    this.activetab();
   }
 
   selectTab(event): void {

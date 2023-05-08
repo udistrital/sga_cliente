@@ -11,8 +11,8 @@
                 <!-- select periodo -->
                 <mat-form-field style="width: 40%;">
                     <mat-label>{{ 'calendario.periodo' | translate }}:</mat-label>
-                    <mat-select [(ngModel)]="periodo" [disabled]='false'>
-                        <mat-option>--Seleccionar--</mat-option>
+                    <mat-select [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()">
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
                         <mat-option *ngFor="let item of periodos" [value]="item">
                             {{item.Nombre}}
                         </mat-option>
@@ -25,7 +25,7 @@
                     <mat-select [formControl]="CampoControl"
                                 [(ngModel)]="selectednivel"
                                 (selectionChange)="loadProyectos()">
-                        <mat-option>--Seleccionar--</mat-option>
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
                         <mat-option *ngFor="let item of niveles" [value]="item.Id">
                             {{item.Nombre}}
                         </mat-option>
@@ -40,6 +40,7 @@
                                 [(ngModel)]="proyectos_selected"
                                 (selectionChange)="perfil_editar('info_cupos')"
                                 [disabled]='selectprograma'>
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
                         <mat-option *ngFor="let item of proyectos" [value]="item" [disabled]="!item.Id">
                             {{item.Nombre}}
                         </mat-option>

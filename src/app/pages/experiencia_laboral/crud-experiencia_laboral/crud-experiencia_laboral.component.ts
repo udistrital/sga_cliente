@@ -79,6 +79,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   percentage: number;
   persona_id: number;
   loading: boolean = false;
+  canEmit: boolean = false;
 
   constructor(
     private autenticationService: ImplicitAutenticationService,
@@ -128,6 +129,10 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         this.formInfoExperienciaLaboral.campos[i].label_i18n);
       this.formInfoExperienciaLaboral.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +
         this.formInfoExperienciaLaboral.campos[i].label_i18n);
+        if (this.formInfoExperienciaLaboral.campos[i].placeholder_i18n_2) {
+          this.formInfoExperienciaLaboral.campos[i].placeholder2 = this.translate.instant('GLOBAL.placeholder_' + 
+            this.formInfoExperienciaLaboral.campos[i].placeholder_i18n_2)
+        }
     }
   }
 
@@ -195,6 +200,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     }
 
     if (this.detalleExp.Soporte !== undefined && this.detalleExp.Soporte !== null && this.detalleExp.Soporte !== 0) {
+      this.loading = true;
       this.newNuxeoService.get(files).subscribe(
         response => {
           const filesResponse = <Array<any>>response;
@@ -215,9 +221,13 @@ export class CrudExperienciaLaboralComponent implements OnInit {
               .forEach(element => {
                 element.deshabilitar = false
               });
+              this.loading = false;
+          } else {
+            this.loading = false;
           }
         },
           (error: HttpErrorResponse) => {
+            this.loading = false;
             Swal.fire({
               icon: 'error',
               title: error.status + '',
@@ -472,16 +482,16 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         const r = <any>res;
         if (r !== null && r.Type !== 'error') {
           this.eventChange.emit(true);
-          this.showToast('info', this.translate.instant('GLOBAL.crear'),
-            this.translate.instant('experiencia_laboral.experiencia_laboral_registrada'));
+          this.popUpManager.showSuccessAlert(this.translate.instant('experiencia_laboral.experiencia_laboral_registrada'));
           this.info_experiencia_laboral_id = 0;
           this.info_experiencia_laboral = undefined;
           this.indexSelect = NaN;
           this.detalleExp = undefined;
           this.clean = !this.clean;
+          this.canEmit = true;
+          this.setPercentage(1);
         } else {
-          this.showToast('error', this.translate.instant('GLOBAL.error'),
-            this.translate.instant('experiencia_laboral.experiencia_laboral_no_registrada'));
+          this.popUpManager.showErrorAlert(this.translate.instant('experiencia_laboral.experiencia_laboral_no_registrada'));
         }
         this.loading = false;
       },
@@ -499,23 +509,22 @@ export class CrudExperienciaLaboralComponent implements OnInit {
 
   postExperianciaLaboral() {
     this.loading = true;
-    console.log(this.info_experiencia_laboral)
     this.sgaMidService.post('experiencia_laboral/', this.info_experiencia_laboral)
       .subscribe(res => {
         const r = <any>res;
         if (r !== null && r.Type !== 'error') {
           this.eventChange.emit(true);
-          this.showToast('info', this.translate.instant('GLOBAL.crear'),
-            this.translate.instant('experiencia_laboral.experiencia_laboral_registrada'));
+          this.popUpManager.showSuccessAlert(this.translate.instant('experiencia_laboral.experiencia_laboral_registrada'));
           this.info_experiencia_laboral_id = 0;
           this.info_experiencia_laboral = undefined;
           this.indexSelect = NaN;
           this.detalleExp = undefined;
           this.clean = !this.clean;
+          this.canEmit = true;
+          this.setPercentage(1);
           // this.result.emit(event);
         } else {
-          this.showToast('error', this.translate.instant('GLOBAL.error'),
-            this.translate.instant('experiencia_laboral.experiencia_laboral_no_registrada'));
+          this.popUpManager.showErrorAlert(this.translate.instant('experiencia_laboral.experiencia_laboral_no_registrada'));
         }
         this.loading = false;
       },
@@ -540,7 +549,10 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     if(this.percentage == 0){
       this.formInfoExperienciaLaboral.campos[this.getIndexForm('Nit')].deshabilitar = false;
     } else {
-      this.result.emit(this.percentage);
+      if (this.canEmit) {
+        this.result.emit(this.percentage);
+        this.canEmit = false;
+      }
     }
   }
 
@@ -585,7 +597,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         },
       }
       this.createInfoExperienciaLaboral(postData);
-      this.result.emit(event);
+      //this.result.emit(event);
     }
   }
 

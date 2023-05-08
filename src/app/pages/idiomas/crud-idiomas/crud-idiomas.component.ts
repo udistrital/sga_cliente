@@ -55,6 +55,7 @@ export class CrudIdiomasComponent implements OnInit {
   persona_id: number;
   idioma_examen: any;
   idioma: number;
+  canEmit: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -107,7 +108,10 @@ export class CrudIdiomasComponent implements OnInit {
 
   setPercentage(event) {
     this.percentage = event;
-    this.result.emit(this.percentage);
+    if (this.canEmit) {
+      this.result.emit(this.percentage);
+      this.canEmit = false;
+    }
   }
 
   cargarIdiomaExamen(): void {
@@ -167,6 +171,8 @@ export class CrudIdiomasComponent implements OnInit {
                       const rex = <any>resexamen;
                       if (rex !== null && rex.Type !== 'error') {
                         this.idioma_examen = this.info_idioma.IdiomaId.Id;
+                        this.canEmit = true;
+                        this.setPercentage(1);
                         this.eventChange.emit(true);
                         this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_registrada'));
                         this.info_idioma_id = 0;
@@ -242,6 +248,8 @@ export class CrudIdiomasComponent implements OnInit {
           this.idiomaService.put('conocimiento_idioma', this.info_idioma).subscribe(
             (resp: any) => {
               if (resp !== null && resp.Type !== 'error') {
+                this.canEmit = true;
+                this.setPercentage(1);
                 this.popUpManager.showSuccessAlert(this.translate.instant('idiomas.informacion_idioma_actualizada'));
                 this.eventChange.emit(true);
               }
@@ -263,12 +271,12 @@ export class CrudIdiomasComponent implements OnInit {
       } else {
         if (this.info_idioma_id !== undefined && this.info_idioma_id !== 0 &&
           this.info_idioma_id.toString() !== '') {
-          this.updateInfoIdioma(this.formData)
+          this.updateInfoIdioma(this.formData);
         } else {
           this.createInfoIdioma(this.formData);
         }
       }
-      this.result.emit(event);
+      //this.result.emit(event);
     }
   }
 

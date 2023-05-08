@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { MenuService } from '../data/menu.service';
 import { PopUpManager } from '../../managers/popUpManager';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private menu: MenuService,
     private pUpManager: PopUpManager,
+    private translate: TranslateService,
   ) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -24,7 +26,7 @@ export class AuthGuard implements CanActivate {
       }
     }
 
-    this.pUpManager.showErrorAlert('No tiene permisos');
+    this.pUpManager.showErrorAlert(this.translate.instant('ERROR.rol_insuficiente_titulo'));
     return false;
 
   }

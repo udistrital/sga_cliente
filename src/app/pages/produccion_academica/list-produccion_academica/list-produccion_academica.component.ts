@@ -41,6 +41,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
   }
 
   getPercentage(event) {
+    console.log('getPercentage', event);
     this.percentage = event;
     this.result.emit(this.percentage);
   }
@@ -128,6 +129,8 @@ export class ListProduccionAcademicaComponent implements OnInit {
           this.result.emit(1);
         } else if (res !== null && res.Response.Code === '404') {
           this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+          this.source.load([]);
+          this.result.emit(0);
         } else {
           Swal.fire({
             icon: 'error',
@@ -149,6 +152,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
 
   ngOnInit() {
     this.loadData();
+    this.cambiotab = false;
   }
 
   onEdit(event): void {
@@ -181,15 +185,13 @@ export class ListProduccionAcademicaComponent implements OnInit {
         .then((willDelete) => {
           if (willDelete.value) {
             this.sgaMidService.delete('produccion_academica', event.data).subscribe((res: any) => {
-              if (res !== null) {
-                if (res.Body.Id !== undefined) {
+              if (res !== null ) {
                   this.source.load([]);
                   this.loadData();
                   this.showToast('info', 'Ok', this.translate.instant('produccion_academica.produccion_eliminada'));
                 } else {
                   this.showToast('info', 'Error', this.translate.instant('produccion_academica.produccion_no_eliminada'));
                 }
-              }
             }, (error: HttpErrorResponse) => {
               Swal.fire({
                 icon: 'error',
@@ -287,6 +289,7 @@ export class ListProduccionAcademicaComponent implements OnInit {
   }
 
   onChange(event) {
+    console.log("onChange", event);
     if (event) {
       this.loadData();
       this.cambiotab = !this.cambiotab;

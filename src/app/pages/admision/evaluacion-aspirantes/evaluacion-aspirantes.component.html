@@ -12,7 +12,8 @@
                 <!-- select periodo -->
                 <mat-form-field style="width: 35%;">
                   <mat-label>{{ 'admision.aviso_periodo' | translate }}:</mat-label>
-                  <mat-select [(ngModel)]="periodo" >
+                  <mat-select [(ngModel)]="periodo" (selectionChange)="selectPeriodo()">
+                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
                     <mat-option *ngFor="let item of periodos" [value]="item"> {{item.Nombre}} </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -23,6 +24,7 @@
                   <mat-select [formControl]="CampoControl"
                               [(ngModel)]="selectednivel"
                               (selectionChange)="loadProyectos()" >
+                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
                     <mat-option *ngFor="let item of nivel_load" [value]="item.Id"> {{item.Nombre}} </mat-option>
                   </mat-select>
                   <mat-error *ngIf="CampoControl.hasError('required')">{{ 'admision.erro_selec_nivel' | translate }}</mat-error>
@@ -35,6 +37,7 @@
                               [(ngModel)]="proyectos_selected"
                               (selectionChange)="loadCriterios()"
                               [disabled]='selectprograma'>
+                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
                     <mat-option *ngFor="let item of proyectos" [value]="item.Id" [disabled]="!item.Id">{{item.Nombre}}</mat-option>
                   </mat-select>
                   <mat-error *ngIf="Campo1Control.hasError('required')">

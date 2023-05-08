@@ -180,6 +180,11 @@ export class EvaluacionAspirantesComponent implements OnInit {
     });
   }
 
+  selectPeriodo() {
+    this.selectednivel = undefined;
+    this.proyectos_selected = undefined;
+  }
+
   changePeriodo() {
     this.CampoControl.setValue('');
     this.Campo1Control.setValue('');
@@ -221,7 +226,7 @@ export class EvaluacionAspirantesComponent implements OnInit {
         (response: any) => {
           this.autenticationService.getRole().then(
             (rol: Array <String>) => {
-              let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+              let r = rol.find(role => (role == "ADMIN_SGA" || role == "VICERRECTOR" || role == "ASESOR_VICE")); // rol admin o vice
               if (r) {
                 this.proyectos = <any[]>response.filter(
                   proyecto => this.filtrarProyecto(proyecto),
