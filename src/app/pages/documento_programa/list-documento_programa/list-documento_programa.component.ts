@@ -94,11 +94,10 @@ export class ListDocumentoProgramaComponent implements OnInit {
         },
       },
       mode: 'external',
-      hideSubHeader: true,
       actions: {
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
-        add: false,
+        add: true,
         edit: false,
         delete: false,
         custom: [
@@ -111,6 +110,11 @@ export class ListDocumentoProgramaComponent implements OnInit {
             title: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
           },
         ],
+      },
+      add: {
+        addButtonContent: '<i class="nb-plus" title="' + this.translate.instant('documento_programa.tooltip_crear') + '"></i>',
+        createButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
       },
     };
   }
@@ -144,13 +148,15 @@ export class ListDocumentoProgramaComponent implements OnInit {
               }
             });
           } else {
-            this.popUpManager.showInfoToast(this.translate.instant('documento_programa.no_documentos'));
+            this.source.load([]);
+            this.getPercentage(0);
+            this.popUpManager.showAlert('', this.translate.instant('documento_programa.no_documentos'));
           }
           this.loading = false;
         },
         (error: HttpErrorResponse) => {
           this.loading = false;
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.' + error.status));
+          this.popUpManager.showErrorAlert(this.translate.instant('ERROR.' + error.status));
         },
       );
   }
@@ -226,12 +232,18 @@ export class ListDocumentoProgramaComponent implements OnInit {
     if(event.data.Aprobado != true) {
       this.uid = event.data.TipoDocumentoId;
       this.soporteId = event.data.SoporteDocumentoId;
+      this.activetab();
     } else {
       this.popUpManager.showAlert(
         this.translate.instant('GLOBAL.info'),
         this.translate.instant('inscripcion.no_edit_doc_aprobado'),
       )
     }
+  }
+
+  onCreate(event): void {
+    this.uid = 0;
+    this.activetab();
   }
 
   onAction(event): void {
@@ -249,6 +261,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     if (event === true) {
       this.uid = 0;
       this.loadData();
+      this.cambiotab = false;
     } /*else {
       // this.getPercentage(this.soporteDocumento.length / event)
       this.getPercentage(event)
@@ -266,6 +279,18 @@ export class ListDocumentoProgramaComponent implements OnInit {
     } else {
       this.result.emit(this.percentage / 100);
     }
+  }
+
+  selectTab(event): void {
+    if (event.tabTitle === this.translate.instant('GLOBAL.lista')) {
+      this.cambiotab = false;
+    } else {
+      this.cambiotab = true;
+    }
+  }
+
+  activetab(): void {
+    this.cambiotab = !this.cambiotab;
   }
 
 }

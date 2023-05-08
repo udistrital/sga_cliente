@@ -136,6 +136,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       nombre: 'Cargo',
       label_i18n: 'cargo',
       placeholder_i18n: 'cargo',
+      placeholder_i18n_2: 'cargo_mensaje',
       path: environment.EXPERIENCIA_SERVICE,
       query: "cargo/?limit=0&query=Activo:true,Nombre__icontains:ROLE_TEXT_HERE&order=asc&sortby=Nombre&fields=Id,Nombre",
       keyToFilter: 'ROLE_TEXT_HERE',
@@ -143,12 +144,6 @@ export let FORM_EXPERIENCIA_LABORAL = {
       tipo: 'text',
       key: 'Nombre',
       opciones: [],
-    },
-    {
-      etiqueta: 'label',
-      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
-      label_i18n: "placeholder_cargo_mensaje",
-      tipo: 'text',
     },
     {
       etiqueta: 'textarea',

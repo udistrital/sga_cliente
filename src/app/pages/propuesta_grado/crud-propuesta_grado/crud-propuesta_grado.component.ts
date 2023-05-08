@@ -73,6 +73,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
   percentage: number;
   grupoSeleccionado: any;
   formData: any;
+  canEmit: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -97,14 +98,12 @@ export class CrudPropuestaGradoComponent implements OnInit {
     this.loading = true;
     this.cargarValores().then(aux => {
       this.loadLists();
-      console.log("goes here?")
     });
     this.loadPropuestaGrado();
   }
 
   async cargarValores() {
     try {
-      console.log("thigger here?")
       await this.listService.findGrupoInvestigacion();
       await this.listService.findLineaInvestigacion();
       await this.listService.findTipoProyecto();
@@ -190,6 +189,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
               })
         } else {
           this.loading = false;
+          this.percentage = 0;
+          this.result.emit(this.percentage);
         }
       }, (error: HttpErrorResponse) => {
         this.loading = false;
@@ -266,6 +267,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
                         if (r !== null && r.Type !== 'error') {
                           this.info_propuesta_grado = <PropuestaGrado><unknown>res;
                           this.loading = false;
+                          this.canEmit = true;
+                          this.setPercentage(1);
                           this.eventChange.emit(true);
                           this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_registrada'));
                         } else {
@@ -351,11 +354,13 @@ export class CrudPropuestaGradoComponent implements OnInit {
               if (r !== null && r.Type !== 'error') {
                 this.info_propuesta_grado = <PropuestaGrado><unknown>res;
                 this.loading = false;
+                this.canEmit = true;
+                this.setPercentage(1);
                 this.eventChange.emit(true);
                 this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
               } else {
                 this.loading = false;
-                this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
+                this.popUpManager.showErrorAlert(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
               }
               this.loading = false;
             },
@@ -399,13 +404,16 @@ export class CrudPropuestaGradoComponent implements OnInit {
       } else {
         this.createPropuestaGrado(this.formData);
       }
-      this.result.emit(event);
+      //this.result.emit(event);
     }
   }
 
   setPercentage(event) {
     this.percentage = event;
-    this.result.emit(this.percentage);
+    if (this.canEmit) {
+      this.result.emit(this.percentage);
+      this.canEmit = false;
+    }
   }
 
   private showToast(type: string, title: string, body: string) {

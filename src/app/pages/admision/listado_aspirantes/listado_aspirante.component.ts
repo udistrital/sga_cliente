@@ -285,6 +285,11 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     });
   }
 
+  selectPeriodo() {
+    this.selectednivel = undefined;
+    this.proyectos_selected = undefined;
+  }
+
   changePeriodo() {
     this.CampoControl.setValue('');
     this.Campo1Control.setValue('');
@@ -302,16 +307,17 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   }
 
   cargarCantidadCupos() {
-    this.evaluacionService.get('cupos_por_dependencia/?query=DependenciaId:' + Number(this.proyectos_selected.Id) + '&limit=0').subscribe(
+    this.evaluacionService.get('cupos_por_dependencia/?query=DependenciaId:' + Number(this.proyectos_selected.Id) + ',PeriodoId:' + Number(this.periodo.Id) + '&limit=1').subscribe(
       (response: any) => {
         if (response !== null && response !== undefined && response[0].Id !== undefined) {
           this.cuposProyecto = response[0].CuposHabilitados;
         } else {
           this.cuposProyecto = 0;
+          this.popUpManager.showErrorAlert(this.translate.instant('cupos.sin_cupos_periodo'));
         }
       },
       error => {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        this.popUpManager.showErrorAlert(this.translate.instant('cupos.sin_cupos_periodo'));
       },
     );
   }
@@ -383,7 +389,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         (response: any) => {
           this.autenticationService.getRole().then(
             (rol: Array <String>) => {
-              let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+              let r = rol.find(role => (role == "ADMIN_SGA" || role == "VICERRECTOR" || role == "ASESOR_VICE")); // rol admin o vice
               if (r) {
                 this.proyectos = <any[]>response.filter(
                   proyecto => this.filtrarProyecto(proyecto),

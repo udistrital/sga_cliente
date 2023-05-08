@@ -1453,7 +1453,7 @@
         "cargar_experiencia": "Ocurruió un error al cargar la información de la experiencia laboral",
         "error_cargar_empresa": "Ocurruió un error al cargar la información de la empresa",
         "empresa_no_encontrada": "No existe información con los datos ingresados",
-        "no_data": "No existe información registrada de la experiencia laboral",
+        "no_data": "No existe información registrada sobre experiencia laboral",
         "error": "Ha ocurrido un error inesperado al cargar la información",
         "tooltip_editar": "Editar experiencia laboral",
         "tooltip_eliminar": "Eliminar experiencia laboral",
@@ -1467,6 +1467,7 @@
         "documento_programa_no_registrado": "Documento no registrado",
         "documento_programa_registrado": "Documento registrado",
         "documento_documento_programa_no_registrado": "Error subiendo el documento de soporte",
+        "tooltip_crear": "Crear documento",
         "seguro_continuar_registrar": "¿Está seguro de registrar este documento?",
         "no_documentos": "No tiene documentos registrados.",
         "documento_cambiar": "Seleccione el reemplazo para el tipo de documento elegido."
@@ -1532,9 +1533,11 @@
         "seleccione_descuentos": "Seleccione los descuentos que desea asignar al programa:",
         "descuentos_seleccionados": "Descuentos asignados:",
         "carga_nuevo_descuento": "Asignando nuevo descuento...",
-        "carga_eliminando_descuento": "Eliminando descuento del proyecto..."
+        "carga_eliminando_descuento": "Eliminando descuento del proyecto...",
+        "tooltip_crear": "Crear descuento"
     },
     "idiomas": {
+        "no_data": "No existe información registrada sobre idiomas",
         "error_cargar_informacion_idiomas": "Ocurrió un error al cargar la información de los idiomas",
         "error_nativo_examen": "No puede solicitar un examen con su idioma nativo",
         "error_doble_examen": "Ya tiene registrado un idioma con examen",
@@ -1571,7 +1574,7 @@
         "id": "Identificación",
         "credencial": "Credencial",
         "periodo_": "*Periodo académico: *",
-        "inscripcion": "Inscripciones por proyecto curricular",
+        "inscripcion": "Inscripciones por proyecto curricular - Evaluación de documentos",
         "calculo_error": "Ocurrió un error al calcular el puntaje",
         "calculo_exito": "El puntaje final de los aspirantes ha sido calculado con éxito",
         "no_criterio": "El proyecto curricular seleccionado no tiene criterios relacionados",
@@ -1687,7 +1690,8 @@
         "seleccionar_admitidos": "Seleccionar admitidos",
         "ver_listado_aspirantes": "Ver listado de aspirantes",
         "cupos_proyecto": "Cantidad de cupos asignados",
-        "cupos_disponibles": "Cantidad de cupos disponibles:"
+        "cupos_disponibles": "Cantidad de cupos disponibles:",
+        "sin_cupos_periodo": "No se ha definido cupos para este periodo o proyecto curricular"
     },
     "calendario": {
         "seguro_continuar_inhabilitar_calendario": "¿Está seguro de inhabilitar este calendario?",
@@ -1936,7 +1940,7 @@
         "tooltip_guargar": "Guardar"
     },
     "formacion_academica": {
-        "no_data": "No existen datos registrados de la formación académica",
+        "no_data": "No existen datos registrados sobre formación académica",
         "tooltip_editar": "Editar formación",
         "tooltip_eliminar": "Eliminar formación",
         "tooltip_crear": "Crear formación",

@@ -47,7 +47,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
       this.cargarCampos();
     });
     this.persona_id = this.userService.getPersonaId();
-    this.loadData();
+    //this.loadData();
     this.cargarCampos();
     this.loading = true;
   }
@@ -119,11 +119,16 @@ export class ListFormacionAcademicaComponent implements OnInit {
       },
       mode: 'external',
       actions: {
-        add: false,
+        add: true,
         edit: true,
         delete: true,
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
+      },
+      add: {
+        addButtonContent: '<i class="nb-plus" title="' + this.translate.instant('formacion_academica.tooltip_crear') + '"></i>',
+        createButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
       },
       edit: {
         editButtonContent: '<i class="nb-edit" title="' + this.translate.instant('formacion_academica.tooltip_editar') + '"></i>',
@@ -149,6 +154,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
         this.loading = false;
         this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
       } else if (response !== null && response.Response.Code === '200') {
+        if (Object.keys(response.Response.Body[0]).length > 0) {
         const data = <Array<any>>response.Response.Body[0];
         const dataInfo = <Array<any>>[];
         data.forEach(async element => {
@@ -164,6 +170,11 @@ export class ListFormacionAcademicaComponent implements OnInit {
           this.source.load(dataInfo);
         });
         this.loading = false;
+      } else {
+        this.getPercentage(0);
+        this.source.load([]);
+        this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+      }
       } else {
         this.loading = false;
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
@@ -191,6 +202,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
     this.pid = undefined;
     this.UpdateInfo = false;
     this.loadData();
+    this.cambiotab = false;
   }
 
   activetab(): void {
@@ -202,10 +214,12 @@ export class ListFormacionAcademicaComponent implements OnInit {
     this.uid = event.data.Nit;
     this.pid = event.data.ProgramaAcademico.Id;
     this.UpdateInfo = true;
+    this.activetab();
   }
 
   onCreate(event): void {
     this.uid = 0;
+    this.activetab();
   }
 
   selectTab(event): void {

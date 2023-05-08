@@ -107,6 +107,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     } else if (event.nombre === 'TipoDiscapacidad') {
       let NoAplicaDisc = !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
       this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].ocultar = NoAplicaDisc;
+      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobanteDiscapacidad')].requerido = !NoAplicaDisc;
       
       if (!NoAplicaDisc) {
         this.mensaje_discapcidades = true;
@@ -124,6 +125,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     } else if (event.nombre === 'TipoPoblacion') {
       let NoAplicaPob = !((event.valor.filter(data => data.Nombre !== 'NO APLICA')).length > 0);
       this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].ocultar = NoAplicaPob;
+      this.formInfoCaracteristica.campos[this.getIndexForm('ComprobantePoblacion')].requerido = !NoAplicaPob;
 
       if (!NoAplicaPob) {
         this.mensaje_poblacion = true;

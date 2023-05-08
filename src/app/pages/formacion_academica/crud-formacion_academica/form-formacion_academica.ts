@@ -97,6 +97,7 @@ export let FORM_FORMACION_ACADEMICA = {
       nombre: 'ProgramaAcademico',
       label_i18n: 'programa_academico',
       placeholder_i18n: 'programa_academico',
+      placeholder_i18n_2: 'programa_academico_autocomplete',
       path: environment.PARAMETROS_SERVICE,
       query: "parametro?query=Nombre__icontains:ROLE_TEXT_HERE,TipoParametroId__Id:60&limit=0",
       keyToFilter: 'ROLE_TEXT_HERE',
@@ -123,12 +124,6 @@ export let FORM_FORMACION_ACADEMICA = {
       placeholder_i18n: 'fecha_fin',
       requerido: true,
       tipo: 'date',
-    },
-    {
-      etiqueta: 'label',
-      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
-      label_i18n: "placeholder_programa_academico_autocomplete",
-      tipo: 'text',
     },
     {
       etiqueta: 'input',

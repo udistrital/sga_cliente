@@ -418,7 +418,7 @@
                         <mat-form-field *ngSwitchCase="'autocomplete'" style="width: 100%;" floatLabel="always"
                             class="example-full-width">
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}:</mat-label>
-                            <input matInput type="text"
+                            <input matInput type="text" class="inputAuto"
                                 [placeholder]="c.valor?c.key?c.valor[c.key]?c.valor[c.key]:(c.valor|json):c.placeholder:c.placeholder"
                                 aria-label="Number" [matAutocomplete]="auto" [disabled]="c.deshabilitar"
                                 (keyup)="searchTerm$.next({text: $event.target.value, path: c.path, query: c.query, field: c, keyToFilter: c.keyToFilter})">
@@ -429,7 +429,14 @@
                                     {{c.key?item[c.key]:item | json}}
                                 </mat-option>
                             </mat-autocomplete>
-                            <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
+                            <mat-hint style="width: 100%;">
+                                <div class="row text-danger">
+                                    <div class="col-12">{{c.alerta}}</div>
+                                </div>
+                                <div class="row" style="font-size: 13px;" *ngIf="c.placeholder2">
+                                    <div class="col-12">{{c.placeholder2}}</div>
+                                </div>
+                            </mat-hint>
                         </mat-form-field>
 
                         <!-- editor -->
