@@ -110,7 +110,7 @@ export class DefSuiteInscripProgramaComponent implements OnInit {
               && Object.keys(response[0]).length > 0) {
                 this.autenticationService.getRole().then(
                   (rol: Array <String>) => {
-                    let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+                    let r = rol.find(role => (role == "ADMIN_SGA" || role == "VICERRECTOR" || role == "ASESOR_VICE")); // rol admin o vice
                     if (r) {
                       this.proyectos = response;
                     } else {

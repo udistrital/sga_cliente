@@ -28,6 +28,7 @@ const routes: Routes = [{
   {
     path: 'definicion-cortes',
     component: DefinicionCortesComponent,
+    canActivate: [AuthGuard],
   }],
 }];
 

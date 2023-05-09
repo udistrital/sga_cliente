@@ -45,6 +45,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   listaPaises: Lugar[];
   nit: any;
   nuevoPrograma: boolean = false;
+  canEmit: boolean = false;
 
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
@@ -125,6 +126,10 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       this.formInfoFormacionAcademica.campos[i].label = this.translate.instant('GLOBAL.' + this.formInfoFormacionAcademica.campos[i].label_i18n);
       this.formInfoFormacionAcademica.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +
         this.formInfoFormacionAcademica.campos[i].label_i18n);
+      if (this.formInfoFormacionAcademica.campos[i].placeholder_i18n_2) {
+        this.formInfoFormacionAcademica.campos[i].placeholder2 = this.translate.instant('GLOBAL.placeholder_' + 
+          this.formInfoFormacionAcademica.campos[i].placeholder_i18n_2)
+      }
     }
 
     this.formInfoNuevoTercero.btn = this.translate.instant('GLOBAL.guardar');
@@ -395,7 +400,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                 response => {
                   const filesResponse = <Array<any>>response;
                   if (Object.keys(filesResponse).length === files.length) {
-                    this.loading = true;
                     this.SoporteDocumento = this.temp_info_academica.Documento;
                     const FechaI = moment(this.temp_info_academica.FechaInicio, 'DD-MM-YYYY').toDate();
                     const FechaF = moment(this.temp_info_academica.FechaFinalizacion, 'DD-MM-YYYY').toDate();
@@ -416,14 +420,16 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                     let estadoDoc = this.utilidades.getEvaluacionDocumento(filesResponse[0].Metadatos);
                     this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].estadoDoc = estadoDoc;
                   }
+                  this.loading = false;
                 },
                   (error: HttpErrorResponse) => {
                     this.loading = false;
                     this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
                   });
             }
+          } else {
+            this.loading = false;
           }
-          this.loading = false;
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
@@ -477,16 +483,19 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                       if (documentos_actualizados[0] !== undefined) {
                         this.info_formacion_academica.DocumentoId = documentos_actualizados[0].res.Enlace;
                       }
-                      this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+                      this.canEmit = true;
+                      this.setPercentage(1);
+                      this.popUpManager.showSuccessAlert(this.translate.instant('informacion_academica.informacion_academica_registrada'));
+                      /* this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                         this.translate.instant('GLOBAL.formacion_academica') + ' ' +
-                        this.translate.instant('GLOBAL.confirmarActualizar'));
+                        this.translate.instant('GLOBAL.confirmarActualizar')); */
                       this.clean = !this.clean;
                       this.info_formacion_academica = undefined;
                       this.info_formacion_academica_id = 0;
                       this.edit_status = false;
                       this.updateFormacion.emit();
                       this.loading = false;
-                      this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab2'));
+                      //this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab2'));
                     },
                       (error: HttpErrorResponse) => {
                         this.loading = false;
@@ -520,9 +529,12 @@ export class CrudFormacionAcademicaComponent implements OnInit {
             this.info_formacion_academica.DocumentoId = this.SoporteDocumento;
             this.sgaMidService.put('formacion_academica?Id=' + this.info_id_formacion, this.info_formacion_academica)
               .subscribe(res => {
-                this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
+                /* this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                   this.translate.instant('GLOBAL.formacion_academica') + ' ' +
-                  this.translate.instant('GLOBAL.confirmarActualizar'));
+                  this.translate.instant('GLOBAL.confirmarActualizar')); */
+                this.canEmit = true;
+                this.setPercentage(1);
+                this.popUpManager.showSuccessAlert(this.translate.instant('informacion_academica.informacion_academica_registrada'));
                 this.clean = !this.clean;
                 this.info_formacion_academica = undefined;
                 this.info_formacion_academica_id = 0;
@@ -581,14 +593,17 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                     if (r !== null && r.Type !== 'error') {
                       const inombre = this.getIndexForm('NombreUniversidad');
                       this.eventChange.emit(true);
-                      this.showToast('info', this.translate.instant('GLOBAL.crear'),
-                        this.translate.instant('informacion_academica.informacion_academica_registrada'));
+                      this.popUpManager.showSuccessAlert(this.translate.instant('informacion_academica.informacion_academica_registrada'));
+                      /* this.showToast('info', this.translate.instant('GLOBAL.crear'),
+                        this.translate.instant('informacion_academica.informacion_academica_registrada')); */
                       this.formInfoFormacionAcademica.campos[inombre].valor = '';
                       this.info_formacion_academica_id = 0;
                       this.info_formacion_academica = undefined;
                       this.clean = !this.clean;
+                      this.canEmit = true;
+                      this.setPercentage(1);
                       this.updateFormacion.emit();
-                      this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab2'));
+                      //this.popUpManager.showToast('info', this.translate.instant('inscripcion.cambiar_tab2'));
                     } else {
                       this.showToast('error', this.translate.instant('GLOBAL.error'),
                         this.translate.instant('informacion_academica.informacion_academica_no_registrada'));
@@ -632,7 +647,10 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       if(this.percentage == 0){
         this.formInfoFormacionAcademica.campos[this.getIndexForm('Nit')].deshabilitar = false;
       } else {
-        this.result.emit(this.percentage);
+        if (this.canEmit) {
+          this.result.emit(this.percentage);
+          this.canEmit = false;
+        }
       }
     });
   }
@@ -653,10 +671,10 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       if (!this.info_formacion_academica || (this.info_formacion_academica === null && this.info_proyecto_id === null)
         || (this.info_formacion_academica_id === undefined && this.info_proyecto_id === undefined)) {
         this.createInfoFormacionAcademica(InfoFormacionAcademica);
-        this.result.emit(event);
+        //this.result.emit(event);
       } else {
         this.updateInfoFormacionAcademica(InfoFormacionAcademica);
-        this.result.emit(event);
+        //this.result.emit(event);
       }
     }
   }

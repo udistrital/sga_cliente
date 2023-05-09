@@ -66,7 +66,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
     });
-    this.loadData();
+    //this.loadData();
     this.loading = false;
   }
 
@@ -92,11 +92,10 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         },
       },
       mode: 'external',
-      hideSubHeader: true,
       actions: {
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
-        add: false,
+        add: true,
         edit: false,
         delete: false,
         custom: [
@@ -109,7 +108,12 @@ export class ListDescuentoAcademicoComponent implements OnInit {
             title: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
           },
         ],
-      }
+      },
+      add: {
+        addButtonContent: '<i class="nb-plus" title="' + this.translate.instant('descuento_academico.tooltip_crear') + '"></i>',
+        createButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close" title="' + this.translate.instant('GLOBAL.cancelar') + '"></i>',
+      },
     };
   }
 
@@ -133,6 +137,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
                 if (result !== null && (result.Data.Code == '400'|| result.Data.Code == '404') ) {
                   this.popUpManager.showAlert('', this.translate.instant('inscripcion.sin_descuento'));
                   this.getPercentage(0);
+                  this.source.load([]);
                 }else {
                   this.data = <Array<SolicitudDescuento>>r;
                   this.data.forEach(async docDesc => {
@@ -286,6 +291,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   onEdit(event): void {
     if(event.data.Aprobado != true) {
       this.uid = event.data.Id;
+      this.activetab();
     } else {
       this.popUpManager.showAlert(
         this.translate.instant('GLOBAL.info'),
@@ -296,6 +302,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
 
   onCreate(event): void {
     this.uid = 0;
+    this.activetab();
   }
 
   onDelete(event): void {
@@ -353,6 +360,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     if (event) {
       this.uid = 0;
       this.loadData();
+      this.cambiotab = false;
     }
   }
 

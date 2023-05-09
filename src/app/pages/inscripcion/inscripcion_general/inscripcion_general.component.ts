@@ -581,7 +581,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
       this.sgaMidService.get('formacion_academica?Id=' + this.info_persona_id)
         .subscribe(res => {
-          if (res.Response.Code === '200') {
+          if (res.Response.Code === '200' && (Object.keys(res.Response.Body[0]).length > 0)) {
             this.percentage_acad = 100;
             this.percentage_tab_acad[0] = 100;
             this.loading = false;

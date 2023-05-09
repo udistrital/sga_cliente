@@ -212,6 +212,11 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
     });
   }
 
+  selectPeriodo() {
+    this.selectednivel = undefined;
+    this.proyectos_selected = undefined;
+  }
+
   setPercentage_info(number, tab) {
     this.percentage_tab_info[tab] = (number * 100) / 2;
     this.percentage_info = Math.round(UtilidadesService.getSumArray(this.percentage_tab_info));
@@ -313,7 +318,7 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
       res => {
         this.autenticationService.getRole().then(
           (rol: Array <String>) => {
-            let r = rol.find(role => (role == "ADMIN_SGA")); // rol admin, pendiente vice
+            let r = rol.find(role => (role == "ADMIN_SGA" || role == "VICERRECTOR" || role == "ASESOR_VICE")); // rol admin o vice
             if (r) {
               this.proyectos = <any[]>res.filter(
                 proyecto => this.filtrarProyecto(proyecto),
@@ -507,7 +512,6 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
   }
 
   onEdit(event) {
-    console.log(event)
     this.requisitoId = undefined;
     this.mostrarSubcriterio = false;
     if (event.data.Porcentaje == '') {

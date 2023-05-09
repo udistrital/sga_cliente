@@ -236,7 +236,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
         }
       }
     } else {
-      console.log('Error, algún campo de confirmacion no tiene pareja');
+      console.warn('Error, algún campo de confirmacion no tiene pareja');
     }
 
     return valido;
@@ -412,6 +412,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
       }
       if (d.etiqueta === 'fileRev') {
         d.File = undefined, d.urlTemp = undefined, d.url = undefined, d.valor = undefined;
+      }
+      if (d.etiqueta === 'autocomplete') {
+        const e = document.querySelectorAll('.inputAuto');
+        e.forEach((e: HTMLInputElement) => { e.value = ''; });
+        d.opciones = [];
       }
       d.alerta = "";
       d.clase = 'form-control form-control-success';

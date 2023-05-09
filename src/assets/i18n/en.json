@@ -1431,6 +1431,7 @@
         "descuento_academico_no_registrado": "Academic discount not registered",
         "descuento_academico_registrado": "Academic discount registered",
         "documento_descuento_academico_no_registrado": "Error uploading support document",
+        "tooltip_crear": "Create document",
         "seguro_continuar_registrar": "Are you sure you want to register this academic discount?",
         "no_documentos": "There are no registered documents.",
         "documento_cambiar": "Please select the replacement document for the chosen item."
@@ -1500,9 +1501,11 @@
       "seleccione_descuentos": "Select the discounts you want to assign to the program:",
       "descuentos_seleccionados": "Discounts assigned:",
       "carga_nuevo_descuento": "Assigning new discount...",
-      "carga_eliminando_descuento": "Removing discount from project..."
+      "carga_eliminando_descuento": "Removing discount from project...",
+      "tooltip_crear": "Create discount"
     },
     "idiomas": {
+        "no_data": "There is no registered information on languages",
         "error_cargar_informacion_idiomas": "An error happened loading the languages information",
         "error_nativo_examen": "You can't request an exam with your native language",
         "error_doble_examen": "You already have a language exam request with other language",
@@ -1538,7 +1541,7 @@
         "id": "ID",
         "credencial": "Credential",
         "periodo_": "*Academic period: *",
-        "inscripcion": "Inscription by academic project",
+        "inscripcion": "Inscription by academic project - Evaluation of documents",
         "calculo_error": "An error occurred while calculating the score",
         "calculo_exito": "The final score of the applicants has been calculated successfully",
         "no_criterio": "The selected curricular project does not have related criteria",
@@ -1654,7 +1657,8 @@
         "asignar": "Assign quotas",
         "seleccionar_admitidos": "Select admitted",
         "ver_listado_aspirantes": "Show list of applicants",
-        "cupos_proyecto": "Number of assigned places"
+        "cupos_proyecto": "Number of assigned places",
+        "sin_cupos_periodo": "No quotas have been defined for this period or curricular project"
     },
     "calendario": {
         "seguro_continuar_inhabilitar_calendario": "¿Are you sure to disable this calendar?",

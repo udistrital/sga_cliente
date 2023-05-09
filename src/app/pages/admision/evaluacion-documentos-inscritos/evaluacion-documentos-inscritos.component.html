@@ -11,7 +11,8 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
           <!--Periodo académico-->
           <mat-form-field style="width: 35%;">
             <mat-label>{{ 'admision.periodo_' | translate }}:</mat-label>
-            <mat-select [(ngModel)]="periodo" >
+            <mat-select [(ngModel)]="periodo" (selectionChange)="selectPeriodo()">
+              <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
               <mat-option *ngFor="let item of periodos" [value]="item"> {{item.Nombre}} </mat-option>
             </mat-select>
           </mat-form-field>
@@ -20,6 +21,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
           <mat-form-field style="width: 75%;">
             <mat-label>{{ 'admision.nivel' | translate }}:</mat-label>
             <mat-select [formControl]="CampoControl" [(ngModel)]="selectednivel" (selectionChange)="loadProyectos()" >
+              <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
               <mat-option *ngFor="let item of nivel_load" [value]="item.Id"> {{item.Nombre}} </mat-option>
             </mat-select>
             <mat-error *ngIf="CampoControl.hasError('required')">{{ 'admision.erro_selec_nivel' | translate }}</mat-error>
@@ -32,6 +34,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                         [(ngModel)]="proyectos_selected"
                         (selectionChange)="loadInscritos()"
                         [disabled]='selectprograma'>
+              <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
               <mat-option *ngFor="let item of proyectos" [value]="item.Id" [disabled]="!item.Id">{{item.Nombre}}</mat-option>
             </mat-select>
             <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'admision.error_proyecto' | translate }}</mat-error>

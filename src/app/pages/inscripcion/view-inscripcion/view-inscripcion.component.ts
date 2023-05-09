@@ -60,6 +60,7 @@ export class ViewInscripcionComponent implements OnInit {
     this.inscripcion.Programa = sessionStorage.getItem('ProgramaAcademico');
     this.inscripcionService.get('inscripcion?query=Id:' + this.inscripcion_id).subscribe(
       (response: any[]) => {
+        if (Object.keys(response[0]).length > 0) {
         this.inscripcion.Estado = response[0].EstadoInscripcionId.Nombre;
         this.estadoCarga.emit({EstadoInscripcion: this.inscripcion.Estado});
         this.inscripcion.TipoInscripcion = response[0].TipoInscripcionId.Nombre;
@@ -79,6 +80,9 @@ export class ViewInscripcionComponent implements OnInit {
         );
         this.inscripcion.idRecibo = response[0].ReciboInscripcion;
         this.addCargado(1);
+        } else {
+          this.infoFalla();
+        }
       },
       (error: HttpErrorResponse) => {
         this.infoFalla();
