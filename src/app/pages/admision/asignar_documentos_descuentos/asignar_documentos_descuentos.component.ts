@@ -156,8 +156,8 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
                       proyecto => dependencias.includes(proyecto.Id)
                     );
                     if (dependencias.length > 1) {
-                      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
-                      this.proyectos.forEach(p => { p.Id = undefined })
+                      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion'));//+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                      //this.proyectos.forEach(p => { p.Id = undefined })
                     }
                   },
                   (error: any) => {
