@@ -527,7 +527,7 @@
                 </div>
             </div>
             <ng-content></ng-content>
-            <div class="buttons-container">
+            <div class="buttons-container" *ngIf="normalform.btnLimpiar || normalform.btn">
                 <button class="btn btn-primary btn-sm" (click)="clearForm()"
                     [hidden]="!normalform.btnLimpiar">{{normalform.btnLimpiar}}</button>
                 <button class="btn btn-success btn-sm ml-2" (click)="validForm()"

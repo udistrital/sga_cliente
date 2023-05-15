@@ -1,0 +1,69 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
+    <!-- Vista de tabla lista docentes -->
+    <ng-container *ngSwitchCase="VIEWS.LIST">
+        <nb-card-header>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'ptd.asignacion_ptd' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <fieldset [ngClass]="{'fieldseter':true}">
+                <legend><small>&nbsp; {{ 'ptd.list_docente' | translate }}</small></legend>
+                <ng2-smart-table [settings]="tbDocente" [source]="dataDocentes">
+                </ng2-smart-table>
+            </fieldset>
+        </nb-card-body>
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+    <!-- Vista de gestión ptd -->
+    <ng-container *ngSwitchCase="VIEWS.FORM">
+        <nb-card-header>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'ptd.gest_ptd' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <!-- Select periodo -->
+            <fieldset [ngClass]="{'fieldseter':true}">
+                <legend><small>&nbsp; {{ 'periodo.select_periodo' | translate }}</small></legend>
+                <mat-form-field style="width: 40%;">
+                    <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                    <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <!-- <mat-option *ngFor="let item of periodos" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option> -->
+                    </mat-select>
+                </mat-form-field>
+            </fieldset>
+            <!-- info docente -->
+            <ngx-dinamicform [normalform]="formDocente" [modeloData]="dataDocente">
+            </ngx-dinamicform>
+            <!-- clon ptd -->
+            <fieldset [ngClass]="{'fieldseter':true}">
+                <legend><small>&nbsp; {{ 'ptd.copy_ptd' | translate }}</small></legend>
+                <mat-form-field style="width: 40%;">
+                    <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                    <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <!-- <mat-option *ngFor="let item of periodos" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option> -->
+                    </mat-select>
+                </mat-form-field>
+                <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="copy_ptd()"> {{ 'GLOBAL.agregar' | translate }} </button>
+            </fieldset>
+            <!-- horario carga lectiva -->
+            <horario-carga-lectiva></horario-carga-lectiva>
+        </nb-card-body>
+        <nb-card-footer>
+            <!-- <button mat-raised-button color="primary" (click)="vista = VIEWS.LIST"> regresar </button> -->
+        </nb-card-footer>
+    </ng-container>
+</nb-card>

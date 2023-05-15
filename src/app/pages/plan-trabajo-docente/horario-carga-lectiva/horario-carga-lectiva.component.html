@@ -1,0 +1,160 @@
+<fieldset [ngClass]="{'fieldseter':true}">
+    <legend><small>&nbsp; {{ 'ptd.select_carga_lectiva' | translate }}</small></legend>
+    <mat-form-field style="width: 40%;">
+        <mat-label>{{ 'ptd.tipo_vinculo_docente' | translate }}:</mat-label>
+        <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
+            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+            <!-- <mat-option *ngFor="let item of periodos" [value]="item">
+                {{item.Nombre}}
+            </mat-option> -->
+        </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field style="width: 40%;">
+        <mat-label>{{ 'ptd.select_asignatura' | translate }}:</mat-label>
+        <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
+            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+            <!-- <mat-option *ngFor="let item of periodos" [value]="item">
+                {{item.Nombre}}
+            </mat-option> -->
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="addCarga()"> {{ 'GLOBAL.agregar' | translate }} </button>
+</fieldset>
+<fieldset [ngClass]="{'fieldseter':true}">
+    <legend><small>&nbsp; {{ 'ptd.insert_carga_lectiva' | translate }}</small></legend>
+    <div class="row">
+        <div class="col-8">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{{ 'ptd.lu' | translate }}</th>
+                        <th>{{ 'ptd.ma' | translate }}</th>
+                        <th>{{ 'ptd.mi' | translate }}</th>
+                        <th>{{ 'ptd.ju' | translate }}</th>
+                        <th>{{ 'ptd.vi' | translate }}</th>
+                        <th>{{ 'ptd.sa' | translate }}</th>
+                        <th>{{ 'ptd.do' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody style="position: relative;">
+                    <tr *ngFor="let hour of genHoursforTable()">
+                        <td>{{hour}}:00 - {{hour+1}}:00</td>
+                        <td class="drag-area" *ngIf="hour == horarioSize.hourIni">
+                            <div class="grid-carga-lectiva" #contenedorCargaLectiva>
+                                <div class="element-carga-lectiva" *ngFor="let element of listaCargaLectiva" 
+                                    style="position: absolute;"
+                                    cdkDrag [cdkDragFreeDragPosition]="element.dragPosition"
+                                    [cdkDragDisabled]="modificar"
+                                    cdkDragBoundary=".grid-carga-lectiva"
+                                    (cdkDragMoved)="onDragMoved($event, element)"
+                                    (cdkDragReleased)="onDragReleased($event, element)">
+                                    <label class="emule-button left-top" title="edit" (click)="editElement($event.target, element)"><i class="nb-edit"></i></label>
+                                    <label class="emule-button right-top" title="delte" (click)="deleteElement($event.target, element)"><i class="nb-trash"></i></label>
+                                    {{ element.id }} {{ element.nombre }}
+                                </div>
+                            </div>
+                        </td>
+                        <td class="drag-area" *ngIf="hour != horarioSize.hourIni"></td>
+                        <td class="drag-area"></td>
+                        <td class="drag-area"></td>
+                        <td class="drag-area"></td>
+                        <td class="drag-area"></td>
+                        <td class="drag-area"></td>
+                        <td class="drag-area"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" class="delete-area">{{ 'ptd.arrastre_aqui_borrar' | translate }} <i class="nb-trash" style="font-size: 1.5rem;"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4" [style.padding-top.px]="snapGridSize.y*3">
+            <div class="view-modificar" *ngIf="modificar">
+            <mat-form-field style="width: 100%;">
+                <mat-label>{{ 'ptd.sede' | translate }}:</mat-label>
+                <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
+                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                    <!-- <mat-option *ngFor="let item of periodos" [value]="item">
+                        {{item.Nombre}}
+                    </mat-option> -->
+                </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field style="width: 100%;">
+                <mat-label>{{ 'ptd.edificio' | translate }}:</mat-label>
+                <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
+                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                    <!-- <mat-option *ngFor="let item of periodos" [value]="item">
+                        {{item.Nombre}}
+                    </mat-option> -->
+                </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field style="width: 50%;">
+                <mat-label>{{ 'ptd.salon' | translate }}:</mat-label>
+                <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
+                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                    <!-- <mat-option *ngFor="let item of periodos" [value]="item">
+                        {{item.Nombre}}
+                    </mat-option> -->
+                </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field style="width: 25%;">
+                <mat-label>{{ 'ptd.horas' | translate }}:</mat-label>
+                <input matInput type="number"/>
+            </mat-form-field>
+            <br>
+            <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="modificar=false"> {{ 'ptd.modificar' | translate }} </button>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<fieldset [ngClass]="{'fieldseter':true}">
+    <legend><small>&nbsp; {{ 'GLOBAL.resumen' | translate }}</small></legend>
+    <div class="row" style="display: flex; align-items: center;">
+        <table style="width: 80%; margin: auto;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{{ 'GLOBAL.tipo_vinculacion' | translate }}</th>
+                    <th>{{ 'ptd.total_horas' | translate }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ 'ptd.carga_lectiva' | translate }}</td>
+                    <td class="drag-area"></td>
+                    <td class="drag-area"> {{ listaCargaLectiva.length }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'ptd.actividades' | translate }}</td>
+                    <td class="drag-area"></td>
+                    <td class="drag-area"></td>
+                </tr>
+                <tr>
+                    <td>{{ 'ptd.total' | translate }}</td>
+                    <td class="drag-area"></td>
+                    <td class="drag-area"> {{ listaCargaLectiva.length }} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="row" style="display: flex; align-items: center;">
+        <fieldset [ngClass]="{'fieldseter':true}" style="width: 80%; margin: auto;">
+            <legend><small>&nbsp; {{ 'GLOBAL.observaciones' | translate }}</small></legend>
+            <mat-form-field style="width: 100%;">
+                <mat-label>{{ 'GLOBAL.observaciones' | translate }}:</mat-label>
+                <textarea matInput ></textarea>
+            </mat-form-field>
+        </fieldset>
+    </div>
+    <br>
+    <div class="row" style="display: flex; justify-content: center; align-items: center;">
+        <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="guardar_ptd()"> {{ 'ptd.guardar_ptd' | translate }} </button>
+        <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="cancelar()"> {{ 'GLOBAL.cancelar' | translate }} </button>
+    </div>
+</fieldset>

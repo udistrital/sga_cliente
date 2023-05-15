@@ -133,7 +133,7 @@ import {
   CustomizeButtonComponent,
   NotePercentageComponent,
   RenderDataComponent,
-  
+  Ng2StButtonComponent
 } from './components';
 
 import { CapitalizePipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -203,6 +203,7 @@ const COMPONENTS = [
   NotePercentageComponent,
   RenderDataComponent,
   DocProgramaObligatorioComponent,
+  Ng2StButtonComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -211,6 +212,7 @@ const ENTRY_COMPONENTS = [
   CustomizeButtonComponent,
   RenderDataComponent,
   DocProgramaObligatorioComponent,
+  Ng2StButtonComponent,
 ];
 
 const PIPES = [

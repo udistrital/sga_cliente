@@ -1,0 +1,90 @@
+fieldset {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+$snap-grid-width: 130px;
+/* Valor de ancho de la cuadrícula */
+$snap-grid-height: 50px;
+/* Valor de alto de la cuadrícula */
+
+th, td {
+  width: $snap-grid-width;
+  height: $snap-grid-height;
+  background-color: var(--primary);
+  color: white;
+  text-align: center;
+  border: 1px solid lightblue;
+}
+
+.view-modificar {
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    padding: 10%;
+}
+
+.drag-area {
+  background-color: white;
+  border: 1px solid lightblue;
+  color: black;
+}
+
+.delete-area {
+  background-color: var(--danger-base);
+  border: 1px solid lightblue;
+}
+
+.left-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.right-top {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.grid-carga-lectiva {
+  position: absolute;
+  top: 0px;
+  left: $snap-grid-width;
+  z-index: 1;
+  height: 100%;
+  width: $snap-grid-width * 7;
+}
+
+.emule-button {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.element-carga-lectiva {
+  width: $snap-grid-width - 2;
+  height: $snap-grid-height - 2;
+  border: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  cursor: move;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: #fff;
+  border-radius: 4px;
+  position: relative;
+  z-index: 1;
+  transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.element-carga-lectiva:active {
+  background: lightgoldenrodyellow;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
