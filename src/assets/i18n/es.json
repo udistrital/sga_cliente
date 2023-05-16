@@ -155,6 +155,10 @@
         "espacios_academicos": {
             "espacios_academicos": "Espacios Académicos",
             "preinscripcion_espacios": "Preinscripción de\nEspacios Académicos"
+        },
+        "ptd":{
+            "ptd": "Plan de Trabajo Docente",
+            "asignar-ptd" : "Asignar PTD"
         }
     },
     "GLOBAL": {
@@ -683,7 +687,10 @@
         "tooltip_previsualizar_archivo": "Previsualizar archivo seleccionado",
         "tooltip_descargar_arhivo": "Descargar archivo en línea",
         "seleccionar_archivo": "Seleccionar archivo",
-        "comunicar_OAS_error": "Por favor comuníquese con Oficina Asesora de Sistemas (OAS) para atender el problema"
+        "comunicar_OAS_error": "Por favor comuníquese con Oficina Asesora de Sistemas (OAS) para atender el problema",
+        "table_no_data_found": "No se encontraron datos para la búsqueda realizada",
+        "copiar": "Copiar",
+        "agregar": "Agregar"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1057,7 +1064,8 @@
         "tooltip_eliminar": "Eliminar periodo",
         "tooltip_crear": "Crear periodo",
         "tooltip_cancelar": "Cancelar",
-        "tooltip_guargar": "Guardar"
+        "tooltip_guargar": "Guardar",
+        "select_periodo": "Seleccionar periodo"
     },
     "oferta": {
         "seguro_actualizar_periodo": "¿Está seguro de actualizar este oferta académica?",
@@ -2201,5 +2209,37 @@
         "corte2":"Corte 2",
         "imprimir": "IMPRIMIR NOTAS PARCIALES",
         "no_datos_notas_parciales": "No se encuentran datos para el periodo o busqueda realizada."
+    },
+    "ptd": {
+        "asignacion_ptd": "Asignación Plan de Trabajo Docente",
+        "list_docente": "Listado docentes",
+        "gest": "Gestión",
+        "gest_ptd": "Gestión Plan de Trabajo Docente",
+        "info_docente": "Información del docente",
+        "copy_ptd": "Copiar Plan de Trabajo Docente",
+        "select_carga_lectiva": "Selección de Carga Lectiva",
+        "tipo_vinculo_docente": "Tipo de vinculación del docente",
+        "select_asignatura": "Seleccione la asignatura",
+        "insert_carga_lectiva": "Insertar Carga Lectiva",
+        "arrastre_aqui_borrar": "Arrastre aquí para borrar",
+        "borrar": "Borrar",
+        "ask_borrar": "¿Seguro de borrar esta asignación?",
+        "sede": "Sede",
+        "edificio": "Edificio",
+        "salon": "Salón",
+        "horas": "Horas",
+        "modificar": "Modificar",
+        "total_horas": "Total Horas",
+        "carga_lectiva": "Carga lectiva",
+        "actividades": "Actividades",
+        "total": "TOTAL",
+        "lu": "Lunes",
+        "ma": "Martes",
+        "mi": "Miércoles",
+        "ju": "Jueves",
+        "vi": "Viernes",
+        "sa": "Sábado",
+        "do": "Domingo",
+        "guardar_ptd": "Guardar PTD"
     }
 }
