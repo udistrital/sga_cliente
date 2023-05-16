@@ -151,6 +151,10 @@
         "espacios_academicos": {
             "espacios_academicos": "Academic spaces",
             "preinscripcion_espacios": "Academic spaces\npre-registration"
+        },
+        "ptd":{
+            "ptd": "Teacher Work Plan",
+            "asignar-ptd" : "Assign TWP (PTD)"
         }
     },
     "GLOBAL": {
@@ -648,7 +652,9 @@
         "tooltip_previsualizar_archivo": "Preview selected file",
         "tooltip_descargar_arhivo": "Download online file",
         "seleccionar_archivo": "Select file",
-        "comunicar_OAS_error": "Please contact the Systems Advisory Office (Oficina Asesora de Sistemas) to attend to the problem"
+        "comunicar_OAS_error": "Please contact the Systems Advisory Office (Oficina Asesora de Sistemas) to attend to the problem",
+        "table_no_data_found": "No data were found for the search performed",
+        "copiar": "Copy"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1023,7 +1029,8 @@
         "tooltip_eliminar": "Delete period",
         "tooltip_crear":"Create period",
         "tooltip_cancelar": "Cancel",
-        "tooltip_guargar": "Save"
+        "tooltip_guargar": "Save",
+        "select_periodo": "Select period"
     },
     "oferta": {
         "seguro_actualizar_periodo": "Are you sure you update this Academic Offer?",
@@ -2126,5 +2133,24 @@
         "corte2":"2nd Cut",
         "imprimir": "PRINT PARTIAL GRADES",
         "no_datos_notas_parciales": "No data were found for the period or search performed."
+    },
+    "ptd": {
+        "asignacion_ptd": "Teacher Work Plan Assignment",
+        "list_docente": "Teachers list",
+        "gest": "Management",
+        "gest_ptd": "Teacher Work Plan Management",
+        "info_docente": "Teacher information",
+        "copy_ptd": "Copy Teacher Work Plan",
+        "select_carga_lectiva": "ENG - Selección de Carga Lectiva",
+        "tipo_vinculo_docente": "ENG - Tipo de vinculación del docente",
+        "select_asignatura": "ENG - Seleccione la asignatura",
+        "insert_carga_lectiva": "ENG - Insertar Carga Lectiva",
+        "lu": "Monday",
+        "ma": "Tuesday",
+        "mi": "Wednesday",
+        "ju": "Thursday",
+        "vi": "Friday",
+        "sa": "Saturday",
+        "do": "Sunday"
     }
 }
