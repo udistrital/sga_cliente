@@ -127,4 +127,10 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
       });
   }
 
+  guardar_ptd() {
+  }
+
+  cancelar() {
+  }
+
 }
