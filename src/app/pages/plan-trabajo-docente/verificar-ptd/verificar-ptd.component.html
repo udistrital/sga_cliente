@@ -1,0 +1,54 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
+    <!-- Vista de tabla lista planes -->
+    <ng-container *ngSwitchCase="VIEWS.LIST">
+        <nb-card-header>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'ptd.verificacion_ptd' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+                <legend><small>&nbsp; {{ 'ptd.list_planes' | translate }}</small></legend>
+                <ng2-smart-table [settings]="tbPlanes" [source]="dataPlanes">
+                </ng2-smart-table>
+            </fieldset>
+        </nb-card-body>
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+    <!-- Vista de verificar ptd -->
+    <ng-container *ngSwitchCase="VIEWS.FORM">
+        <nb-card-header>
+            <button mat-stroked-button class="top-left-regresar" (click)="vista=VIEWS.LIST">{{ 'GLOBAL.regresar' | translate }}</button>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'ptd.verif_plan' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <!-- info docente -->
+            <ngx-dinamicform [normalform]="formDocente" [modeloData]="dataDocente">
+            </ngx-dinamicform>
+            <!-- horario ptd -->
+            <horario-carga-lectiva (OutCancelar)="vista=VIEWS.LIST"></horario-carga-lectiva>
+            <!-- info verificar -->
+            <ngx-dinamicform [normalform]="formVerificar" [modeloData]="dataVerificar">
+            </ngx-dinamicform>
+            <!-- reportes -->
+            <fieldset [ngClass]="{'fieldseter':true}">
+                <legend><small>&nbsp; {{ 'GLOBAL.reportes' | translate }}</small></legend>
+                <div class="buttons_reportes">
+                    <button mat-raised-button color="primary" > {{ 'ptd.gen_rep_carga_lectiva' | translate }} </button>
+                    <button mat-raised-button color="primary" > {{ 'ptd.gen_rep_actividades' | translate }} </button>
+                    <button mat-raised-button color="primary" > {{ 'ptd.gen_rep_total' | translate }} </button>
+                </div>
+            </fieldset>
+        </nb-card-body>
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+</nb-card>

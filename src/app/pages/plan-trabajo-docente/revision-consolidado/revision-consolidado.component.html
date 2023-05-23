@@ -1,0 +1,40 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
+    <!-- Vista de tabla lista consolidados -->
+    <ng-container *ngSwitchCase="VIEWS.LIST">
+        <nb-card-header>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'ptd.revision_consolidado' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+                <legend><small>&nbsp; {{ 'ptd.list_consolidados' | translate }}</small></legend>
+                <ng2-smart-table [settings]="tbRevConsolidados" [source]="dataRevConsolidados">
+                </ng2-smart-table>
+            </fieldset>
+        </nb-card-body>
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+    <!-- Vista de formulario consolidados -->
+    <ng-container *ngSwitchCase="VIEWS.FORM">
+        <nb-card-header>
+            <button mat-stroked-button class="top-left-regresar" (click)="vista=VIEWS.LIST">{{ 'GLOBAL.regresar' | translate }}</button>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'ptd.revision_consolidado' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <!-- formulario revision consolidado -->
+            <ngx-dinamicform [normalform]="formRevConsolidado" [modeloData]="dataRevConsolidado">
+            </ngx-dinamicform>
+        </nb-card-body>
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+</nb-card>

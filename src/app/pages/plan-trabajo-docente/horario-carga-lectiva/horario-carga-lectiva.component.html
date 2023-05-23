@@ -1,5 +1,8 @@
-<fieldset [ngClass]="{'fieldseter':true}">
-    <legend><small>&nbsp; {{ 'ptd.select_carga_lectiva' | translate }}</small></legend>
+<fieldset [ngClass]="{'fieldseter':true}" *ngIf="isCoordinador || isDocente">
+    <legend>
+        <small *ngIf="isCoordinador">&nbsp; {{ 'ptd.select_carga_lectiva' | translate }}</small>
+        <small *ngIf="isDocente">&nbsp; {{ 'ptd.select_actividades' | translate }}</small>
+    </legend>
     <mat-form-field style="width: 40%;">
         <mat-label>{{ 'ptd.tipo_vinculo_docente' | translate }}:</mat-label>
         <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
@@ -10,8 +13,17 @@
         </mat-select>
     </mat-form-field>
     <br>
-    <mat-form-field style="width: 40%;">
+    <mat-form-field style="width: 40%;" *ngIf="isCoordinador">
         <mat-label>{{ 'ptd.select_asignatura' | translate }}:</mat-label>
+        <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
+            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+            <!-- <mat-option *ngFor="let item of periodos" [value]="item">
+                {{item.Nombre}}
+            </mat-option> -->
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 40%;" *ngIf="isDocente">
+        <mat-label>{{ 'ptd.select_actividad' | translate }}:</mat-label>
         <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
             <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
             <!-- <mat-option *ngFor="let item of periodos" [value]="item">
@@ -21,95 +33,66 @@
     </mat-form-field>
     <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="addCarga()"> {{ 'GLOBAL.agregar' | translate }} </button>
 </fieldset>
-<fieldset [ngClass]="{'fieldseter':true}">
-    <legend><small>&nbsp; {{ 'ptd.insert_carga_lectiva' | translate }}</small></legend>
-    <div class="row">
-        <div class="col-8">
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>{{ 'ptd.lu' | translate }}</th>
-                        <th>{{ 'ptd.ma' | translate }}</th>
-                        <th>{{ 'ptd.mi' | translate }}</th>
-                        <th>{{ 'ptd.ju' | translate }}</th>
-                        <th>{{ 'ptd.vi' | translate }}</th>
-                        <th>{{ 'ptd.sa' | translate }}</th>
-                        <th>{{ 'ptd.do' | translate }}</th>
-                    </tr>
-                </thead>
-                <tbody style="position: relative;">
-                    <tr *ngFor="let hour of genHoursforTable()">
-                        <td>{{hour}}:00 - {{hour+1}}:00</td>
-                        <td class="drag-area" *ngIf="hour == horarioSize.hourIni">
-                            <div class="grid-carga-lectiva" #contenedorCargaLectiva>
-                                <div class="element-carga-lectiva" *ngFor="let element of listaCargaLectiva" 
-                                    style="position: absolute;"
-                                    cdkDrag [cdkDragFreeDragPosition]="element.dragPosition"
-                                    [cdkDragDisabled]="modificar"
-                                    cdkDragBoundary=".grid-carga-lectiva"
-                                    (cdkDragMoved)="onDragMoved($event, element)"
-                                    (cdkDragReleased)="onDragReleased($event, element)">
-                                    <label class="emule-button left-top" title="edit" (click)="editElement($event.target, element)"><i class="nb-edit"></i></label>
-                                    <label class="emule-button right-top" title="delte" (click)="deleteElement($event.target, element)"><i class="nb-trash"></i></label>
-                                    {{ element.id }} {{ element.nombre }}
+<fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+    <legend>
+        <small *ngIf="!edit">&nbsp; {{ 'ptd.plan_trabajo' | translate }}</small>
+        <small *ngIf="isCoordinador && edit">&nbsp; {{ 'ptd.insert_carga_lectiva' | translate }}</small>
+        <small *ngIf="isDocente && edit">&nbsp; {{ 'ptd.insert_actividad' | translate }}</small>
+    </legend>
+    <div class="row" style="display: flex; align-items: center; margin: auto;" [style.padding-left.px]="snapGridSize.x*1.5" [style.padding-right.px]="snapGridSize.x*1.5">
+        <table style="margin: auto;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{{ 'ptd.lu' | translate }}</th>
+                    <th>{{ 'ptd.ma' | translate }}</th>
+                    <th>{{ 'ptd.mi' | translate }}</th>
+                    <th>{{ 'ptd.ju' | translate }}</th>
+                    <th>{{ 'ptd.vi' | translate }}</th>
+                    <th>{{ 'ptd.sa' | translate }}</th>
+                    <th>{{ 'ptd.do' | translate }}</th>
+                </tr>
+            </thead>
+            <tbody style="position: relative;">
+                <tr *ngFor="let hour of genHoursforTable()">
+                    <td>{{hour}}:00 - {{hour+1}}:00</td>
+                    <td class="drag-area" *ngIf="hour == horarioSize.hourIni">
+                        <div class="day">{{ 'ptd.lu' | translate }}</div>
+                        <div class="grid-carga-lectiva" #contenedorCargaLectiva>
+                            <div class="element-carga-lectiva" *ngFor="let element of listaCargaLectiva" 
+                                style="position: absolute;" [style.height.px]="element.horas * snapGridSize.y"
+                                [ngClass]="{'carga_lectiva': element.tipo == tipo.carga_lectiva, 'actividades': element.tipo == tipo.actividades, 'flotando': element.estado == estado.flotando, 'ocupado': element.estado == estado.ocupado }"
+                                cdkDrag [cdkDragFreeDragPosition]="element.dragPosition"
+                                [cdkDragDisabled]="element.bloqueado"
+                                cdkDragBoundary=".grid-carga-lectiva"
+                                (cdkDragMoved)="onDragMoved($event, element)"
+                                (cdkDragReleased)="onDragReleased($event, element)">
+                                <div class="info-tooltip">
+                                    <i>{{ 'ptd.editar' | translate }}</i>
+                                    <i>{{ 'ptd.mover' | translate }}</i>
+                                    <i>{{ 'ptd.borrar' | translate }}</i>
+                                </div>
+                                <div class="contenedor-opciones">
+                                    <label class="left-top" title="{{ 'ptd.editar' | translate }}" (click)="editElement($event.target, element)"><i class="nb-edit"></i></label>
+                                    <label cdkDragHandle class="center-top" title="{{ 'ptd.mover' | translate }}"><i class="nb-keypad"></i><i class="nb-keypad"></i><i class="nb-keypad"></i><i class="nb-keypad"></i><i class="nb-keypad"></i></label>
+                                    <label class="right-top" title="{{ 'ptd.borrar' | translate }}" (click)="deleteElement($event.target, element)"><i class="nb-trash"></i></label>
+                                </div>                                
+                                <div class="contenido">
+                                    {{ element.nombre }} {{ element.horaFormato }}
                                 </div>
                             </div>
-                        </td>
-                        <td class="drag-area" *ngIf="hour != horarioSize.hourIni"></td>
-                        <td class="drag-area"></td>
-                        <td class="drag-area"></td>
-                        <td class="drag-area"></td>
-                        <td class="drag-area"></td>
-                        <td class="drag-area"></td>
-                        <td class="drag-area"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="8" class="delete-area">{{ 'ptd.arrastre_aqui_borrar' | translate }} <i class="nb-trash" style="font-size: 1.5rem;"></i></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-4" [style.padding-top.px]="snapGridSize.y*3">
-            <div class="view-modificar" *ngIf="modificar">
-            <mat-form-field style="width: 100%;">
-                <mat-label>{{ 'ptd.sede' | translate }}:</mat-label>
-                <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
-                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
-                    <!-- <mat-option *ngFor="let item of periodos" [value]="item">
-                        {{item.Nombre}}
-                    </mat-option> -->
-                </mat-select>
-            </mat-form-field>
-            <br>
-            <mat-form-field style="width: 100%;">
-                <mat-label>{{ 'ptd.edificio' | translate }}:</mat-label>
-                <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
-                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
-                    <!-- <mat-option *ngFor="let item of periodos" [value]="item">
-                        {{item.Nombre}}
-                    </mat-option> -->
-                </mat-select>
-            </mat-form-field>
-            <br>
-            <mat-form-field style="width: 50%;">
-                <mat-label>{{ 'ptd.salon' | translate }}:</mat-label>
-                <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
-                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
-                    <!-- <mat-option *ngFor="let item of periodos" [value]="item">
-                        {{item.Nombre}}
-                    </mat-option> -->
-                </mat-select>
-            </mat-form-field>
-            <br>
-            <mat-form-field style="width: 25%;">
-                <mat-label>{{ 'ptd.horas' | translate }}:</mat-label>
-                <input matInput type="number"/>
-            </mat-form-field>
-            <br>
-            <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="modificar=false"> {{ 'ptd.modificar' | translate }} </button>
-            </div>
-        </div>
+                        </div>
+                    </td>
+                    <td class="drag-area" *ngIf="hour != horarioSize.hourIni"><div class="day">{{ 'ptd.lu' | translate }}</div></td>
+                    <td class="drag-area"><div class="day">{{ 'ptd.ma' | translate }}</div></td>
+                    <td class="drag-area"><div class="day">{{ 'ptd.mi' | translate }}</div></td>
+                    <td class="drag-area"><div class="day">{{ 'ptd.ju' | translate }}</div></td>
+                    <td class="drag-area"><div class="day">{{ 'ptd.vi' | translate }}</div></td>
+                    <td class="drag-area"><div class="day">{{ 'ptd.sa' | translate }}</div></td>
+                    <td class="drag-area"><div class="day">{{ 'ptd.do' | translate }}</div></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </fieldset>
 <fieldset [ngClass]="{'fieldseter':true}">
@@ -127,17 +110,17 @@
                 <tr>
                     <td>{{ 'ptd.carga_lectiva' | translate }}</td>
                     <td class="drag-area"></td>
-                    <td class="drag-area"> {{ listaCargaLectiva.length }} </td>
+                    <td class="drag-area"> {{ calcularHoras(tipo.carga_lectiva) }} </td>
                 </tr>
                 <tr>
                     <td>{{ 'ptd.actividades' | translate }}</td>
                     <td class="drag-area"></td>
-                    <td class="drag-area"></td>
+                    <td class="drag-area"> {{ calcularHoras(tipo.actividades) }} </td>
                 </tr>
                 <tr>
                     <td>{{ 'ptd.total' | translate }}</td>
                     <td class="drag-area"></td>
-                    <td class="drag-area"> {{ listaCargaLectiva.length }} </td>
+                    <td class="drag-area"> {{ calcularHoras() }} </td>
                 </tr>
             </tbody>
         </table>
@@ -153,8 +136,8 @@
         </fieldset>
     </div>
     <br>
-    <div class="row" style="display: flex; justify-content: center; align-items: center;">
+    <div class="row" style="display: flex; justify-content: center; align-items: center;" *ngIf="edit">
         <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="guardar_ptd()"> {{ 'ptd.guardar_ptd' | translate }} </button>
         <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="cancelar()"> {{ 'GLOBAL.cancelar' | translate }} </button>
-    </div>
+    </div>      
 </fieldset>

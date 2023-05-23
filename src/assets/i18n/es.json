@@ -158,7 +158,10 @@
         },
         "ptd":{
             "ptd": "Plan de Trabajo Docente",
-            "asignar-ptd" : "Asignar PTD"
+            "asignar-ptd" : "Asignar PTD",
+            "verificar-ptd" : "Verificar PTD",
+            "consolidado": "Consolidado",
+            "revision-consolidado": "Revisión Consolidado"
         }
     },
     "GLOBAL": {
@@ -690,7 +693,9 @@
         "comunicar_OAS_error": "Por favor comuníquese con Oficina Asesora de Sistemas (OAS) para atender el problema",
         "table_no_data_found": "No se encontraron datos para la búsqueda realizada",
         "copiar": "Copiar",
-        "agregar": "Agregar"
+        "agregar": "Agregar",
+        "reportes": "Reportes",
+        "adjuntar_documento": "Adjuntar documento solicitado"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -2218,12 +2223,17 @@
         "info_docente": "Información del docente",
         "copy_ptd": "Copiar Plan de Trabajo Docente",
         "select_carga_lectiva": "Selección de Carga Lectiva",
+        "select_actividades": "Selección de Actividades",
         "tipo_vinculo_docente": "Tipo de vinculación del docente",
         "select_asignatura": "Seleccione la asignatura",
+        "select_actividad": "Seleccione la actividad",
         "insert_carga_lectiva": "Insertar Carga Lectiva",
-        "arrastre_aqui_borrar": "Arrastre aquí para borrar",
+        "insert_actividad": "Insertar Actividades",
+        "editar": "Editar",
+        "mover": "Mover",
         "borrar": "Borrar",
         "ask_borrar": "¿Seguro de borrar esta asignación?",
+        "espacio_fisico": "Espacio físico",
         "sede": "Sede",
         "edificio": "Edificio",
         "salon": "Salón",
@@ -2240,6 +2250,39 @@
         "vi": "Viernes",
         "sa": "Sábado",
         "do": "Domingo",
-        "guardar_ptd": "Guardar PTD"
+        "guardar_ptd": "Guardar PTD",
+        "verificacion_ptd": "Verificación Plan de Trabajo Docente",
+        "list_planes": "Listado de planes",
+        "verif_plan": "Verificar Plan de Trabajo Docente",
+        "plan_trabajo": "Plan de Trabajo",
+        "deacuerdo_concertado": "Plan de trabajo docente, ¿de acuerdo a lo concertado?",
+        "quien_responde": "Quien da la respuesta",
+        "placeholder_quien_responde": "Nombre de quien responde",
+        "dar_respuesta": "Dar respuesta",
+        "gen_rep_carga_lectiva": "Generar reporte por Carga Lectiva",
+        "gen_rep_actividades": "Generar reporte por Actividades",
+        "gen_rep_total": "Generar reporte de totales",
+        "gest_consolidados": "Gestionar consolidados",
+        "list_consolidados": "Lista Consolidados",
+        "new_consolidado": "Nuevo Consolidado",
+        "diligenciar_consolidado": "Diligenciar Consolidado",
+        "respuesta_decanatura": "Respuesta Decanatura",
+        "formato_control_cumplimiento_norma": "Formato de control del cumplimiento de la normatividad vigente",
+        "revision_decanatura": "Revisión Decanatura",
+        "fecha_radicado": "Fecha radicado",
+        "quien_envia": "Quien envía",
+        "placeholder_quien_envia": "Nombre de quien envía",
+        "respuesta": "Respuesta",
+        "revision_consolidado": "Revisión Consolidado",
+        "ask_cumple_normatividad": "¿Consolidado cumple con la normatividad?",
+        "select_enviar_aprov_dec": "Enviar para aprobación por Decanatura",
+        "copiar_plan_ver_coordinador_p1": "Usted ha solicitado copiar el plan de trabajo del periodo ",
+        "copiar_plan_ver_coordinador_p2": "Se copiará la carga académica y su información relacionada",
+        "aviso_informativo_docente_p1": "Tenga en cuenta que debe tener presente las fechas estipuladas en el calendario académico",
+        "aviso_informativo_docente_p2": "Tenga en cuenta que de acuerdo a lo expuesto en el artículo 50 del acuerdo 011/2022, los docentes de la carrera deberan concertar con su coordinador de proyecto curricular y anticipación mínima de un (1) mes al inicio del periodo académico el plan de trabajo",
+        "copiar_plan_ver_docente_p1": "Se copiarán las actividades que: ",
+        "copiar_plan_ver_docente_p2": "* No se crucen con las que ya hayan sido registradas (no se reescribirán las actividades registradas en el periodo actual)",
+        "copiar_plan_ver_docente_p3": "* No se crucen con la carga académica registrada",
+        "copiar_plan_ver_docente_p4": "* Correspondan a un espacio físico disponible"
     }
 }
