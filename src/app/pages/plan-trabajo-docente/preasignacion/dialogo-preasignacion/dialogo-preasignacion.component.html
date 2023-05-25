@@ -1,0 +1,168 @@
+<div class="dinamic-form" [nbSpinner]="loading">
+    <ng-container>
+        <nb-card-header>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'ptd.preasignar_ptd' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+
+        <nb-card-body>
+            <form novalidate [formGroup]="preasignacionForm" #fform="ngForm" class="form-horizontal">
+                <fieldset [ngClass]="{'fieldseter':true} ">
+                    <legend><small>&nbsp; {{ 'ptd.seleccion_docente' | translate }}</small></legend>
+                    <div class="row">
+                        <div class="campos">
+                            <div class="espacio">
+                                <mat-form-field style="width: 65%;">
+                                    <mat-label>*{{ 'GLOBAL.tipo_vinculacion' | translate }}:</mat-label>
+                                    <mat-select formControlName="tipo_vinculacion">
+                                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                                        <mat-option *ngFor="let item of tipoVinculacion" [value]="item.id">
+                                            {{item.nombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="preasignacionForm.get('tipo_vinculacion').hasError('required') && preasignacionForm.get('tipo_vinculacion').touched">
+                                        {{ 'ptd.error_tipo_vinculacion' | translate }}
+                                    </mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field style="width: 33%;">
+                                    <mat-label>*{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                                    <mat-select formControlName="periodo">
+                                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                                        <mat-option *ngFor="let item of periodos" [value]="item">
+                                            {{item.Nombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="preasignacionForm.get('periodo').hasError('required') && preasignacionForm.get('periodo').touched">
+                                        {{ 'ptd.error_periodo' | translate }}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="espacio">
+                                <mat-form-field style="width: 90%;">
+                                    <input matInput type="text" formControlName="doc_docente"
+                                        onkeypress="return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57"
+                                        placeholder="*{{ 'ptd.documento_docente' | translate }}: " />
+                                    <mat-error
+                                        *ngIf="preasignacionForm.get('doc_docente').hasError('required') && preasignacionForm.get('doc_docente').touched">
+                                        {{ 'ptd.error_doc_docente' | translate }}
+                                    </mat-error>
+                                </mat-form-field>
+
+                                <button mat-raised-button color="primary" style="width: 8%;"
+                                    (click)="buscarDocenteDocumento()">
+                                    <i class="nb-search" title="{{ 'GLOBAL.buscar' | translate }}"></i>
+                                </button>
+                            </div>
+
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>*{{ 'ptd.nombre_docente' | translate }}:</mat-label>
+                                <input matInput type="text" formControlName="docente" [matAutocomplete]="auto"
+                                    (keyup)="searchTerm$.next({text: $event.target.value, field: fform.directives[3]})">
+                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                    (optionSelected)="setDocente($event)">
+                                    <mat-option *ngFor="let option of filteredDocentes | async" [value]="option">
+                                        {{option.Nombre}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-hint style="width: 100%;">
+                                    <div class="row" style="font-size: 13px;">
+                                        <div class="col-12">{{'ptd.placeholder_nombre_docente' | translate }}</div>
+                                    </div>
+                                </mat-hint>
+                                <mat-error
+                                    *ngIf="preasignacionForm.get('docente').hasError('required') && preasignacionForm.get('docente').touched">
+                                    {{ 'ptd.error_docente' | translate }}
+                                </mat-error>
+                            </mat-form-field>
+
+                            <div class="espacio">
+                                <mat-form-field style="width: 90%;">
+                                    <input matInput type="text" formControlName="codigo"
+                                        placeholder="*{{ 'ptd.codigo_espacio_academico' | translate }}: " />
+                                    <mat-error
+                                        *ngIf="preasignacionForm.get('codigo').hasError('required') && preasignacionForm.get('codigo').touched">
+                                        {{ 'ptd.error_espacio_academico' | translate }}
+                                    </mat-error>
+                                </mat-form-field>
+                                <button mat-raised-button color="primary" style="width: 8%;"
+                                    (click)="buscarEspacioAcademico()">
+                                    <i class="nb-search" title="{{ 'GLOBAL.buscar' | translate }}"></i>
+                                </button>
+                            </div>
+
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>*{{ 'ptd.espacio_academico' | translate }}:</mat-label>
+                                <mat-select formControlName="espacio_academico" (selectionChange)="loadProyectos()">
+                                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                                    <mat-option *ngFor="let item of opcionesEspaciosAcademicos" [value]="item">
+                                        {{item.nombre}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="preasignacionForm.get('espacio_academico').hasError('required') && preasignacionForm.get('espacio_academico').touched">
+                                    {{ 'ptd.error_espacio_academico' | translate }}
+                                </mat-error>
+                            </mat-form-field>
+
+
+                            <div class="espacio">
+                                <mat-form-field style="width: 48%;">
+                                    <mat-label>*{{ 'ptd.proyecto' | translate }}:</mat-label>
+                                    <mat-select formControlName="proyecto" (selectionChange)="changeProyecto()">
+                                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                                        <mat-option *ngFor="let item of opcionesProyectos" [value]="item">
+                                            {{item}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="preasignacionForm.get('proyecto').hasError('required') && preasignacionForm.get('proyecto').touched">
+                                        {{ 'ptd.error_proyecto' | translate }}
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field style="width: 24%;">
+                                    <input matInput type="text" formControlName="nivel" readonly
+                                        placeholder="*{{ 'GLOBAL.nivel' | translate }}:" />
+                                    <mat-error
+                                        *ngIf="preasignacionForm.get('nivel').hasError('required') && preasignacionForm.get('nivel').touched">
+                                        {{ 'ptd.error_nivel' | translate }}
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field style="width: 24%;">
+                                    <mat-label>*{{ 'asignaturas.grupo' | translate }}:</mat-label>
+                                    <mat-select formControlName="grupo" (selectionChange)="changeGrupo()">
+                                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                                        <mat-option *ngFor="let item of opcionesGrupos" [value]="item">
+                                            {{item.grupo}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="preasignacionForm.get('grupo').hasError('required') && preasignacionForm.get('grupo').touched">
+                                        {{ 'ptd.error_grupo' | translate }}
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="botones">
+                        <button class="float-right" (click)="pre_asignacion()" mat-button type="button">{{
+                            'GLOBAL.aceptar' | translate }}
+                        </button>
+                        <button class="float-right" (click)="cancelar()" mat-button type="button">{{
+                            'GLOBAL.cancelar' | translate }} </button>
+                        <button class="float-right" (click)="eliminarPreasignacion()" [disabled]="!modificando"
+                            mat-button type="button">{{
+                            'GLOBAL.eliminar' | translate }} </button>
+                    </div>
+                </fieldset>
+            </form>
+        </nb-card-body>
+    </ng-container>
+</div>

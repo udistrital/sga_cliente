@@ -133,7 +133,8 @@ import {
   CustomizeButtonComponent,
   NotePercentageComponent,
   RenderDataComponent,
-  Ng2StButtonComponent
+  Ng2StButtonComponent,
+  Ng2StCheckComponent,
 } from './components';
 
 import { CapitalizePipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -204,6 +205,7 @@ const COMPONENTS = [
   RenderDataComponent,
   DocProgramaObligatorioComponent,
   Ng2StButtonComponent,
+  Ng2StCheckComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -213,6 +215,7 @@ const ENTRY_COMPONENTS = [
   RenderDataComponent,
   DocProgramaObligatorioComponent,
   Ng2StButtonComponent,
+  Ng2StCheckComponent,
 ];
 
 const PIPES = [
@@ -240,7 +243,7 @@ const NB_THEME_PROVIDERS = [
 
 
 @NgModule({
-  imports: [...BASE_MODULES, ...NB_MODULES, SharedModule, ...MAT_MODULES, MomentModule,   NbEvaIconsModule,  ],
+  imports: [...BASE_MODULES, ...NB_MODULES, SharedModule, ...MAT_MODULES, MomentModule, NbEvaIconsModule,],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES, ...MAT_MODULES, ...DIRECTIVES],
   declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective, NotePercentageComponent, DocProgramaObligatorioComponent],
   entryComponents: [...ENTRY_COMPONENTS],
