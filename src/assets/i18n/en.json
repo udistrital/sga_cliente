@@ -157,7 +157,8 @@
             "asignar-ptd" : "Assign TWP (PTD)",
             "verificar-ptd" : "Verify (PTD)",
             "consolidado": "Consolidated",
-            "revision-consolidado": "Consolidated Revision"
+            "revision-consolidado": "Consolidated Revision",
+            "preasignar-ptd": "Pre-assignment TWP (PTD)"
         }
     },
     "GLOBAL": {
@@ -662,7 +663,11 @@
         "reportes": "Reports",
         "adjuntar_documento": "Attach requested document",
         "soporte_documental": "Documental support",
-        "enviar": "Send"
+        "enviar": "Send",
+        "nuevo": "New",
+        "enviar_aprobacion": "Submit approval",
+        "editar": "Edit",
+        "docente": "Teacher"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -2100,7 +2105,6 @@
         "examen": "Test",
         "regresar": "Go back",
         "finalizar": "FINALIZE",
-
         "sin_espacios_academicos": "No academic spaces related to the teacher are found",
         "sin_informacion_docente_asignatura": "The information related to the teacher or the subject has not been found",
         "sin_info_porcentajes": "The information related to the percentages could not be obtained",
@@ -2143,6 +2147,10 @@
         "no_datos_notas_parciales": "No data were found for the period or search performed."
     },
     "ptd": {
+        "espacio_academico": "Academic course",
+        "proyecto": "Project",
+        "nombre_docente": "Teacher's name",	
+        "documento_docente": "Teacher's ID",
         "asignacion_ptd": "Teacher Work Plan Assignment",
         "list_docente": "Teacher list",
         "gest": "Management",
@@ -2210,6 +2218,30 @@
         "copiar_plan_ver_docente_p1": "Activities will be copied that: ",
         "copiar_plan_ver_docente_p2": "* Do not intersect with those that have already been registered (activities registered in the current period will not be overwritten)",
         "copiar_plan_ver_docente_p3": "* Do not cross the registered academic load",
-        "copiar_plan_ver_docente_p4": "* Correspond to an available physical space"
+        "copiar_plan_ver_docente_p4": "* Correspond to an available physical space",
+        "placeholder_nombre_docente": "You must enter at least 3 characters in the field to search for the teacher.",
+        "preasignar_ptd": "Pre-assignment of academic load",
+        "preasignacion": "Pre-assignment",
+        "aprobacion_docente": "Teacher approval",
+        "aprobacion_proyecto": "Project approval",
+        "seleccion_docente": "Teacher selection",
+        "codigo_espacio_academico": "Academic course code",
+        "error_tipo_vinculacion": "Please indicate the type of relationship of the teacher.",
+        "error_docente": "Please enter the name and select the teacher.",
+        "error_doc_docente": "Please indicate the document number of the teacher.",
+        "error_espacio_academico": "Please select the academic course.",
+        "error_grupo": "Please select the group.",
+        "error_proyecto": "Please select the project.",
+        "error_nivel": "Please select the level.",
+        "error_periodo": "Please select the period.",
+        "error_no_found_docente": "No teachers found with the document entered.",
+        "error_no_found_espacio_academico": "No academic course were found with the code entered.",
+        "error_no_found_proyectos": "The selected academic course has no projects or groups assigned.",
+        "error_no_found_preasignaciones": "No pre-assignment were found for the selected period.",
+        "error_codigo": "Please enter the academic course code.",
+        "error_crear_preasignacion": "Pre-assignment could not be created",
+        "error_actualizar_preasignacion": "Pre-assignment could not be updated",
+        "alerta_campos_preasignacion": "Verify the form fields",
+        "seleccion_periodo": "Please select the period to load the pre-assignment"
     }
 }
