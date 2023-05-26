@@ -9,6 +9,7 @@ import { ImplicitAutenticationService } from './../@core/utils/implicit_autentic
 import { environment } from '../../environments/environment';
 import { NbSidebarService } from '@nebular/theme';
 import { RouteConfigLoadStart, Router } from '@angular/router';
+import { MENU_ITEMS } from './pages-menu';
 
 
 @Component({
@@ -98,6 +99,7 @@ export class PagesComponent implements OnInit {
       this.menu = this.translateTree(this.dataMenu)
       this.menu.unshift(homeOption);
       this.translateMenu();
+      // this.menu = MENU_ITEMS;
     } else {
       this.menuws.get(this.roles + '/SGA').subscribe(
         data => {
@@ -138,7 +140,7 @@ export class PagesComponent implements OnInit {
             });
           }
 
-          //this.menu = MENU_ITEMS;
+          // this.menu = MENU_ITEMS;
           this.translateMenu();
         });
     }

@@ -4,6 +4,9 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { SharedModule } from '../../shared/shared.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDialog, MatDialogModule } from '@angular/material';
+import { dialogoPreAsignacionPtdComponent } from './preasignacion/dialogo-preasignacion/dialogo-preasignacion.component';
+import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.service';
 
 
 @NgModule({
@@ -13,7 +16,18 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     SharedModule,
     Ng2SmartTableModule,
     PlanTrabajoDocenteRoutingModule,
-    DragDropModule
+    DragDropModule,
+    MatDialogModule
+  ],
+  providers: [
+    MatDialog,
+    EspaciosAcademicosService
+  ],
+  entryComponents: [
+    dialogoPreAsignacionPtdComponent,
+  ],
+  exports: [
+    dialogoPreAsignacionPtdComponent,
   ]
 })
 export class PlanTrabajoDocenteModule { }

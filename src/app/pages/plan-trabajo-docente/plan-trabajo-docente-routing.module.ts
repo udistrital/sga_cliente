@@ -6,6 +6,8 @@ import { HorarioCargaLectivaComponent } from './horario-carga-lectiva/horario-ca
 import { VerificarPtdComponent } from './verificar-ptd/verificar-ptd.component';
 import { ConsolidadoComponent } from './consolidado/consolidado.component';
 import { RevisionConsolidadoComponent } from './revision-consolidado/revision-consolidado.component';
+import { PreAsignacionPtdComponent } from './preasignacion/preasignacion.component';
+import { dialogoPreAsignacionPtdComponent } from './preasignacion/dialogo-preasignacion/dialogo-preasignacion.component';
 
 
 const routes: Routes = [{
@@ -26,6 +28,10 @@ const routes: Routes = [{
   {
     path: 'revision-consolidado',
     component: RevisionConsolidadoComponent
+  },
+  {
+    path: 'preasignacion',
+    component: PreAsignacionPtdComponent,
   }]
 }];
 
@@ -41,5 +47,7 @@ export const routedComponents = [
   HorarioCargaLectivaComponent,
   VerificarPtdComponent,
   ConsolidadoComponent,
-  RevisionConsolidadoComponent
+  RevisionConsolidadoComponent,
+  PreAsignacionPtdComponent,
+  dialogoPreAsignacionPtdComponent
 ]
