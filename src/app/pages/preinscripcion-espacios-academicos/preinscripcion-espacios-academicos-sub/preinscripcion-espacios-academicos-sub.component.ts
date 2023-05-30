@@ -4,11 +4,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { CheckboxAssistanceComponent } from '../../../@theme/components/checkbox-assistance/checkbox-assistance.component';
 
 @Component({
-  selector: 'ngx-preinscripcion-espacios-academicos',
-  templateUrl: './preinscripcion-espacios-academicos.component.html',
-  styleUrls: ['../espacios-academicos.component.scss'],
+  selector: 'ngx-preinscripcion-espacios-academicos-sub',
+  templateUrl: './preinscripcion-espacios-academicos-sub.component.html',
+  styleUrls: ['../preinscripcion-espacios-academicos.component.scss'],
 })
-export class PreinscripcionEspaciosAcademicosComponent implements OnInit {
+export class PreinscripcionEspaciosAcademicosComponentSub implements OnInit {
 
   /*
    * Estos datos se deben cargar de una API que contenga los datos del plan de estudios
@@ -97,7 +97,7 @@ export class PreinscripcionEspaciosAcademicosComponent implements OnInit {
         width: '20%',
       },
       Adicionar: {
-        title: this.translate.instant('espacios_academicos.adicionar'),
+        title: this.translate.instant('preinscripcion_espacios_academicos.adicionar'),
         width: '20%',
         type: 'custom',
         renderComponent: CheckboxAssistanceComponent,

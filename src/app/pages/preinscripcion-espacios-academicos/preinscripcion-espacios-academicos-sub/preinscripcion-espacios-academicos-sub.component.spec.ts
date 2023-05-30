@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PreinscripcionEspaciosAcademicosComponent } from './preinscripcion-espacios-academicos.component';
+import { PreinscripcionEspaciosAcademicosComponentSub } from './preinscripcion-espacios-academicos-sub.component';
 
 describe('PreinscripcionEspaciosAcademicosComponent', () => {
-  let component: PreinscripcionEspaciosAcademicosComponent;
-  let fixture: ComponentFixture<PreinscripcionEspaciosAcademicosComponent>;
+  let component: PreinscripcionEspaciosAcademicosComponentSub;
+  let fixture: ComponentFixture<PreinscripcionEspaciosAcademicosComponentSub>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PreinscripcionEspaciosAcademicosComponent ]
+      declarations: [ PreinscripcionEspaciosAcademicosComponentSub ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PreinscripcionEspaciosAcademicosComponent);
+    fixture = TestBed.createComponent(PreinscripcionEspaciosAcademicosComponentSub);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
