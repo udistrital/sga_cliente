@@ -29,8 +29,8 @@ const routes: Routes = [{
       loadChildren: () => import ('./practicas-academicas/practicas-academicas.module').then(m => m.PracticasAcademicasModule)
     },
     {
-      path: 'espacios-academicos',
-      loadChildren: () => import ('./espacios-academicos/espacios-academicos.module').then(m => m.EspaciosAcademicosModule)
+      path: 'preinscripcion-espacios-academicos',
+      loadChildren: () => import ('./preinscripcion-espacios-academicos/preinscripcion-espacios-academicos.module').then(m => m.PreinscripcionEspaciosAcademicosModule)
     },
     {
       path: 'inscripcion',
@@ -99,6 +99,10 @@ const routes: Routes = [{
     {
       path: 'ptd',
       loadChildren: () => import ('./plan-trabajo-docente/plan-trabajo-docente.module').then(m => m.PlanTrabajoDocenteModule),
+    },
+    {
+      path: 'espacios-academicos',
+      loadChildren: () => import ('./espacios-academicos/espacios-academicos.module').then(m => m.EspaciosAcademicosModule),
     },
     {
         path: '',

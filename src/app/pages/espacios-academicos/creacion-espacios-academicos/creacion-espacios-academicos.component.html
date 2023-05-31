@@ -1,0 +1,187 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
+    <!-- vista tabla lista espacios academicos -->
+    <ng-container *ngSwitchCase="VIEWS.LIST">
+        <nb-card-header>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'espacios_academicos.consulta_espacios' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+                <legend><small>&nbsp; {{ 'espacios_academicos.resultados_espacios' | translate }}</small></legend>
+                <ng2-smart-table [settings]="tbEspaciosAcademicos" [source]="dataEspaciosAcademicos">
+                </ng2-smart-table>
+                <br>
+                <div class="button-center">
+                    <button mat-raised-button color="primary" (click)="vista=VIEWS.FORM"> {{ 'espacios_academicos.nuevo_espacio' | translate }} </button>
+                </div>
+            </fieldset>
+        </nb-card-body>
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+    <!-- vista formulario creación edición espacios academicos -->
+    <ng-container *ngSwitchCase="VIEWS.FORM">
+        <nb-card-header>
+            <button mat-stroked-button class="top-left-regresar" (click)="vista=VIEWS.LIST">{{ 'GLOBAL.regresar' | translate }}</button>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'espacios_academicos.crear_espacios' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <!-- formularios -->
+            <mat-vertical-stepper #stepper [linear]="false">
+                <mat-step [stepControl]="formStep1" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}">
+                    <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
+                    <form [formGroup]="formStep1">
+                        <div class="row">
+                        <div *ngFor="let campo of formDef.campos_p1" [class]="campo.claseGrid">
+                            <ng-container [ngSwitch]="campo.etiqueta">
+                                <ng-container *ngIf="!(campo.ocultar ? campo.ocultar : false)">
+                                    <mat-form-field *ngSwitchCase="'select'" floatLabel="always">
+                                        <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                                        <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                                            <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
+                                            <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre }}</mat-option>
+                                        </mat-select>
+                                        <mat-hint *ngIf="formStep1.get(campo.nombre).touched && formStep1.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                    </mat-form-field>
+                                </ng-container>
+                            </ng-container>
+                        </div>
+                        </div>
+                    </form>
+                    <div class="button-center">
+                        <button mat-raised-button matStepperPrevious disabled>{{ 'GLOBAL.regresar' | translate }}</button>
+                        <button mat-raised-button matStepperNext>{{ 'GLOBAL.siguiente' | translate }}</button>
+                    </div>
+                </mat-step>
+                <mat-step [stepControl]="formStep2" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}">
+                    <ng-template matStepLabel>{{ 'espacios_academicos.info_espacio_academico' | translate }}</ng-template>
+                    <form [formGroup]="formStep2">
+                        <div class="row">
+                        <div *ngFor="let campo of formDef.campos_p2" [class]="campo.claseGrid + ' box-field'">
+                            <ng-container [ngSwitch]="campo.etiqueta">
+                                <ng-container *ngIf="!(campo.ocultar ? campo.ocultar : false)">
+                                    <mat-form-field *ngSwitchCase="'input'" floatLabel="always">
+                                        <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                                        <input matInput [formControlName]="campo.nombre" [type]="campo.tipo" [placeholder]="campo.placeholder" [readonly]="campo.sololectura ? campo.sololectura : false" [min]="campo.min">
+                                        <mat-hint *ngIf="formStep2.get(campo.nombre).touched && formStep2.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                    </mat-form-field>
+                                    <table *ngSwitchCase="'input-table'" align="center">
+                                        <tr>
+                                            <th>{{ campo.requerido ? '* '+campo.label : campo.label }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <mat-form-field appearance="outline">
+                                                    <input style="text-align: center;" matInput [formControlName]="campo.nombre" [type]="campo.tipo" [placeholder]="campo.placeholder" [min]="campo.min" [readonly]="campo.sololectura ? campo.sololectura : false">
+                                                    <mat-hint *ngIf="formStep2.get(campo.nombre).touched && formStep2.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                                    <mat-hint *ngIf="(campo.nombre == 'total') && ((formStep2.get('total').value) != (formStep2.get('creditos').value * horasCredito))">{{ 'espacios_academicos.total_horas_es' | translate }}: {{ formStep2.get('creditos').value * horasCredito }}h</mat-hint>
+                                                </mat-form-field>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <mat-form-field *ngSwitchCase="'select'" floatLabel="always">
+                                        <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                                        <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                                            <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
+                                            <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre }}</mat-option>
+                                        </mat-select>
+                                        <mat-hint *ngIf="formStep2.get(campo.nombre).touched && formStep2.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                    </mat-form-field>
+                                    <mat-form-field multiple *ngSwitchCase="'selectMultiple'" floatLabel="always">
+                                        <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                                        <mat-select multiple [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                                            <mat-option disabled>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
+                                            <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre ? opcion.Nombre : opcion.nombre }}</mat-option>
+                                        </mat-select>
+                                        <mat-hint *ngIf="formStep2.get(campo.nombre).touched && formStep2.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                    </mat-form-field>
+                                </ng-container>
+                            </ng-container>
+                        </div>
+                        <table style="width: 75%; margin-bottom: 1.25rem;" align="center">
+                            <tr>
+                                <th>{{ 'espacios_academicos.espacios_requeridos' | translate }}</th>
+                            </tr>
+                            <tr *ngFor="let espacio of esp_required">
+                                <td>
+                                    {{ espacio.nombre }}
+                                </td>
+                            </tr>
+                        </table>
+                        </div>
+                    </form>
+                    <div class="button-center">
+                        <button mat-raised-button matStepperPrevious>{{ 'GLOBAL.regresar' | translate }}</button>
+                        <button mat-raised-button matStepperNext>{{ 'GLOBAL.siguiente' | translate }}</button>
+                    </div>
+                </mat-step>
+                <mat-step [stepControl]="formStep3" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}">
+                    <ng-template matStepLabel>{{ 'espacios_academicos.soporte_observacion' | translate }}</ng-template>
+                    <form [formGroup]="formStep3">
+                        <div class="row">
+                        <div *ngFor="let campo of formDef.campos_p3" [class]="campo.claseGrid">
+                            <ng-container [ngSwitch]="campo.etiqueta">
+                                <ng-container *ngIf="!(campo.ocultar ? campo.ocultar : false)">
+                                <mat-form-field *ngSwitchCase="'file'"  floatLabel="always">
+                                    <input #documento type="file" multiple (change)="onChangeSelectFiles(campo.nombre, $event)" style="display: none;"/>
+                                    <input matInput [formControlName]="campo.nombre" [type]="text" style="display: none;">
+                                    <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}: <i>({{ 'espacios_academicos.agregar_varios_archivos' | translate }})</i></mat-label>
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <button type="button" mat-raised-button (click)="documento.click()">{{'GLOBAL.seleccionar_archivo' | translate}}</button>
+                                            <span class="enlace-documento" *ngFor="let archivo of campo.archivos" (click)="previewFile(archivo.urlTemp)" title="{{'GLOBAL.tooltip_previsualizar_archivo' | translate}}" [ngClass]="{'archivo_invalido': archivo.err}">
+                                                {{ archivo.file.name }} <i class="fa fa-times fa-2xs" aria-hidden="true" title="{{'GLOBAL.eliminar' | translate}}" (click)="deleteSelectedFile(campo.nombre, archivo.file.name)"></i>
+                                             </span>
+                                        </div>
+                                        <div class="col-3">
+                                            <span *ngIf="campo.archivosEnLinea.length > 0" class="enlace-documento alinear" (click)="download(archivo.urlTemp)" title="{{'GLOBAL.tooltip_descargar_arhivo' | translate}}">
+                                                <i class="fa fa-cloud-download fa-2x" aria-hidden="true"></i>
+                                                <i>{{'GLOBAL.tooltip_descargar' | translate}}</i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <mat-hint *ngIf="formStep3.get(campo.nombre).touched && formStep3.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                    <mat-hint *ngIf="campo.validacionArchivos.errTipo">&nbsp; {{ 'GLOBAL.formatos_permitidos' | translate }}: {{ campo.formatos }}</mat-hint>
+                                    <mat-hint *ngIf="campo.validacionArchivos.errTam">&nbsp; {{ 'GLOBAL.tamano_superado' | translate }}{{ campo.tamanoMaximo }}MB</mat-hint>
+                                </mat-form-field>
+                                <mat-form-field *ngSwitchCase="'select'" floatLabel="always">
+                                    <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                                    <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                                        <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
+                                        <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre }}</mat-option>
+                                    </mat-select>
+                                    <mat-hint *ngIf="formStep3.get(campo.nombre).touched && formStep3.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                </mat-form-field>
+                                <mat-form-field *ngSwitchCase="'textarea'" floatLabel="always">
+                                    <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                                    <textarea matInput [formControlName]="campo.nombre" [placeholder]="campo.placeholder" [readonly]="campo.sololectura ? campo.sololectura : false">
+                                    </textarea>
+                                    <mat-hint *ngIf="formStep3.get(campo.nombre).touched && formStep3.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                </mat-form-field>
+                                </ng-container>
+                            </ng-container>
+                        </div>
+                        </div>
+                    </form>
+                    <div class="button-center">
+                        <button mat-raised-button matStepperPrevious>{{ 'GLOBAL.regresar' | translate }}</button>
+                        <button mat-raised-button matStepperNext disabled>{{ 'GLOBAL.siguiente' | translate }}</button>
+                    </div>
+                </mat-step>
+            </mat-vertical-stepper>
+            <div class="button-center">
+                <button mat-raised-button color="primary" *ngIf="formularioCompleto()" (click)="prepararEnvioData()">{{ 'GLOBAL.guardar' | translate }}</button>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+</nb-card>
