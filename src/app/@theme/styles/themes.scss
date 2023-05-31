@@ -3,6 +3,8 @@
 // @nebular out of the box themes
 @import "~@nebular/theme/styles/themes";
 
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
 $nb-enabled-themes: (default, cosmic, corporate, ud);
 
 $nb-themes: nb-register-theme(

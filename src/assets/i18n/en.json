@@ -148,17 +148,20 @@
             "en_proceso": "Requests in process",
             "invitacion": "Invitation to academic\npractices"
         },
-        "espacios_academicos": {
-            "espacios_academicos": "Academic spaces",
+        "preinscripcion_espacios_academicos": {
             "preinscripcion_espacios": "Academic spaces\npre-registration"
         },
         "ptd":{
             "ptd": "Teacher Work Plan",
             "asignar-ptd" : "Assign TWP (PTD)",
-            "verificar-ptd" : "Verify (PTD)",
+            "verificar-ptd" : "Verify TWP (PTD)",
             "consolidado": "Consolidated",
             "revision-consolidado": "Consolidated Revision",
             "preasignar-ptd": "Pre-assignment TWP (PTD)"
+        },
+        "espacios_academicos": {
+            "espacios_academicos": "Academic Spaces",
+            "admin_espacios": "Manage Academic Spaces"
         }
     },
     "GLOBAL": {
@@ -611,6 +614,8 @@
         "cupos_especiales": "Corresponds to special quotas?",
         "nivel": "Level",
         "placeholder_nivel": "Select the level that is required to be assigned to the registration type",
+        "subnivel": "Sublevel",
+        "placeholder_subnivel": "Select the sublevel that is required to be assigned to the registration type",
         "proyecto_academico": "Academic Project",
         "creditos": "Credits",
         "clasificacion": "Type",
@@ -667,7 +672,16 @@
         "nuevo": "New",
         "enviar_aprobacion": "Submit approval",
         "editar": "Edit",
-        "docente": "Teacher"
+        "docente": "Teacher",
+        "codigo": "Code",
+        "diligenciar_paso": "You must complete this step",
+        "tipo": "Type",
+        "clase": "Class",
+        "grupos": "Groups",
+        "total": "Total",
+        "falta_campo": "** You must fill this field",
+        "formatos_permitidos": "** Only the following formats are supported",
+        "tamano_superado": "** The file size is greater than "
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -2019,7 +2033,7 @@
         "invitaciones_enviadas": "Invitations were sent",
         "solicitud_creada": "The request was successfully created. Request ID: "
     },
-    "espacios_academicos": {
+    "preinscripcion_espacios_academicos": {
         "preinscripcion_titulo": "Academic spaces Pre-registration",
         "preinscribir_boton": "Pre-register academic spaces",
         "sin_preinscripcion": "The student doesn't have any pre-registration for this academic period",
@@ -2243,5 +2257,32 @@
         "error_actualizar_preasignacion": "Pre-assignment could not be updated",
         "alerta_campos_preasignacion": "Verify the form fields",
         "seleccion_periodo": "Please select the period to load the pre-assignment"
+    },
+    "espacios_academicos": {
+        "consulta_espacios": "Consult academic spaces",
+        "resultados_espacios": "Results",
+        "nuevo_espacio": "New academic space",
+        "crear_espacios": "Creation of academic spaces",
+        "editar_espacios": "Edition of academic spaces",
+        "select_proyecto": "Select Curricular Project",
+        "info_espacio_academico": "Information about the Academic Space",
+        "soporte_observacion": "Loading of supports and observations",
+        "plan_estudios": "Curriculum",
+        "espacios_requeridos": "Spaces required (prerequisites)",
+        "htd": "DWH (HTD)",
+        "htc": "CWH (HTC)",
+        "hta": "AWH (HTA)",
+        "placeholder_htd": "Direct Work Hours",
+        "placeholder_htc": "Cooperative Work Hours",
+        "placeholder_hta": "Autonomous Work Hours",
+        "placeholder_creditos": "Amount of credits greater than or equal to 1",
+        "placeholder_plan_estudios": "Numbering for study plan",
+        "placeholder_codigo": "Code can be alphanumeric",
+        "placeholder_nombre": "Name of the academic space",
+        "placeholder_grupos": "Group name can be alphanumeric, can include several separated by commas",
+        "aprobar_espacio": "Approval of academic space",
+        "total_horas_es": "Total hours must be equal to",
+        "crear_espacios_pregunta": "About to create an academic space, do you want to continue?",
+        "agregar_varios_archivos": "You can add multiple files if required"
     }
 }

@@ -1,0 +1,65 @@
+fieldset {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+nb-card-header {
+    background-color: white;
+    position: sticky;
+    top: 77px;
+    z-index: 2;
+}
+
+.top-left-regresar {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 3;
+}
+
+.button-center {
+    display: flex;
+    justify-content: space-around;
+}
+
+mat-vertical-stepper {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.box-field {
+    //border: 1px solid pink;
+    padding-bottom: 1.25rem;
+    padding-top: 1.25rem;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+mat-hint {
+    color: red !important;
+}
+
+table {
+    width: 100%;
+    border: 1px solid darkcyan;
+    th {
+        text-align: center;
+        color: white;
+        background-color: var(--primary);
+    }
+    td {
+        text-align: center !important;
+    }
+}
+
+.kindaTable {
+    padding: 0 !important;
+    margin: -1px;
+}
+
+.archivo_invalido {
+    text-decoration:line-through;
+    color: red;
+}

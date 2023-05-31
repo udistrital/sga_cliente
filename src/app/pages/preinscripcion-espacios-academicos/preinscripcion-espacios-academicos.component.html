@@ -1,6 +1,6 @@
 <nb-card>
     <nb-card-header>
-        {{ 'espacios_academicos.preinscripcion_titulo' | translate }}
+        {{ 'preinscripcion_espacios_academicos.preinscripcion_titulo' | translate }}
     </nb-card-header>
     <nb-card-body>
         <div class="">
@@ -46,7 +46,7 @@
 
         <div class="text-center" [hidden]="isPreinscrito" >
             <label class="fondo_aviso">
-                {{ 'espacios_academicos.sin_preinscripcion' | translate }}
+                {{ 'preinscripcion_espacios_academicos.sin_preinscripcion' | translate }}
             </label>
         </div>
         <br>
@@ -57,7 +57,7 @@
         </div>
         <br>
         <div class="text-center" [hidden]="preinscribiendo">
-            <button type="button" mat-button (click)="preinscribir()" >{{ 'espacios_academicos.preinscribir_boton' | translate }} </button>
+            <button type="button" mat-button (click)="preinscribir()" >{{ 'preinscripcion_espacios_academicos.preinscribir_boton' | translate }} </button>
         </div>
     </nb-card-body>
 </nb-card>
