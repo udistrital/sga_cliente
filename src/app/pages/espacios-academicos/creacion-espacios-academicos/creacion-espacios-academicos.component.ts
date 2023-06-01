@@ -12,6 +12,8 @@ import { EspaciosAcademicosService } from '../../../@core/data/espacios_academic
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { format } from 'url';
+import { EstadoAprobacion } from '../../../@core/data/models/espacios_academicos/estado_aprobacion';
+import { EspacioAcademico } from '../../../@core/data/models/espacios_academicos/espacio_academico';
 
 @Component({
   selector: 'creacion-espacios-academicos',
@@ -35,8 +37,9 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
 
   niveles: any[];
   proyectos: any[];
-  espacios_academicos: any[];
+  espacios_academicos: EspacioAcademico[];
   esp_required: any[];
+  estados_aprobacion: EstadoAprobacion[];
 
   readonly horasCredito: number = 48;
 
@@ -314,15 +317,27 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
     });
   }
 
-  loadEspaciosAcademicos(): Promise<any> {
+  loadEspaciosAcademicos(): Promise<EspacioAcademico[]> {
     return new Promise<any>((resolve, reject) => {
-      this.espaciosAcademicosService.get('espacio-academico').subscribe(
+      this.espaciosAcademicosService.get('espacio-academico?query=activo:true&limit=0').subscribe(
         (resp) => {
           resolve(resp.Data);
         }, (err) => {
           reject(err);
         }
       );
+    });
+  }
+
+  loadEstadosAprobacion(): Promise<EstadoAprobacion[]> {
+    return new Promise<any>((resolve, reject) => {
+      this.espaciosAcademicosService.get('estado-aprobacion?query=activo:true&limit=0').subscribe(
+        (resp) => {
+          resolve(resp.Data);
+        }, (err) => {
+          reject(err);
+        }
+      )
     });
   }
 
@@ -344,9 +359,14 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
       if (idx != -1) {
         this.formDef.campos_p2[idx].opciones = clases;
       }
+      this.estados_aprobacion = await this.loadEstadosAprobacion();
+      idx = this.formDef.campos_p3.findIndex(campo => campo.nombre == 'aprobado');
+      if (idx != -1) {
+        this.formDef.campos_p3[idx].opciones = this.estados_aprobacion;
+      }
       this.espacios_academicos = await this.loadEspaciosAcademicos();
       this.espacios_academicos.forEach(espacio => {
-        espacio['estado'] = 'En Edición';        
+        espacio['estado'] = this.estados_aprobacion.find(estado => estado._id == espacio.estado_aprobacion_id).nombre;
         espacio['gestion'] = {value: undefined, type: 'editar', disabled: false};
         espacio['enviar'] = {value: undefined, type: 'enviar', disabled: false};
       });
@@ -435,6 +455,10 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
       archivosValid = !this.formDef.campos_p3[idx].validacionArchivos.errTipo && !this.formDef.campos_p3[idx].validacionArchivos.errTam;
     }
     return formsValid && totalHoras && archivosValid;
+  }
+
+  nuevoEspacioAcad() {
+    this.vista = VIEWS.FORM;
   }
 
   prepararEnvioData() {
