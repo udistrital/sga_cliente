@@ -63,4 +63,6 @@ export const environment = {
   PSE_SERVICE: 'https://pruebasfuncionarios.portaloas.udistrital.edu.co/botonPago/index.php?',
   PARAMETROS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/parametros/v1/',
   GOOGLE_MID_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8514/v1/',
+  ESPACIOS_ACADEMICOS_SERVICE: 'http://pruebasapi2.intranetoas.udistrital.edu.co:8530/',
+  PLAN_TRABAJO_DOCENTE_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8536/',
 };

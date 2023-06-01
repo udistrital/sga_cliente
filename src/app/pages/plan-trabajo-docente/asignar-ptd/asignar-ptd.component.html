@@ -1,5 +1,5 @@
 <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
-nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
     <!-- Vista de tabla lista docentes -->
     <ng-container *ngSwitchCase="VIEWS.LIST">
         <nb-card-header>
@@ -12,7 +12,18 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
         <nb-card-body>
             <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
                 <legend><small>&nbsp; {{ 'ptd.list_docente' | translate }}</small></legend>
-                <ng2-smart-table [settings]="tbDocente" [source]="dataDocentes">
+
+                <mat-form-field style="width: 40%;">
+                    <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="periodo" (selectionChange)="selectPeriodo($event)">
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <mat-option *ngFor="let item of periodos" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <ng2-smart-table [hidden]="!periodo" [settings]="tbDocente" [source]="dataDocentes">
                 </ng2-smart-table>
             </fieldset>
         </nb-card-body>
@@ -22,7 +33,8 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
     <!-- Vista de gestión ptd -->
     <ng-container *ngSwitchCase="VIEWS.FORM">
         <nb-card-header>
-            <button mat-stroked-button class="top-left-regresar" (click)="vista=VIEWS.LIST">{{ 'GLOBAL.regresar' | translate }}</button>
+            <button mat-stroked-button class="top-left-regresar" (click)="vista=VIEWS.LIST">{{ 'GLOBAL.regresar' |
+                translate }}</button>
             <div class="row" align="center">
                 <div class="col">
                     {{ 'ptd.gest_ptd' | translate }}
@@ -35,11 +47,11 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                 <legend><small>&nbsp; {{ 'periodo.select_periodo' | translate }}</small></legend>
                 <mat-form-field style="width: 40%;">
                     <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
-                    <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
+                    <mat-select [(ngModel)]="periodo" [disabled]='true' (selectionChange)="selectPeriodo($event)">
                         <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
-                        <!-- <mat-option *ngFor="let item of periodos" [value]="item">
+                        <mat-option *ngFor="let item of periodos" [value]="item">
                             {{item.Nombre}}
-                        </mat-option> -->
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </fieldset>
@@ -58,10 +70,12 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         </mat-option> -->
                     </mat-select>
                 </mat-form-field>
-                <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="copy_ptd()"> {{ 'GLOBAL.copiar' | translate }} </button>
+                <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="copy_ptd()"> {{
+                    'GLOBAL.copiar' | translate }} </button>
             </fieldset>
             <!-- horario carga lectiva -->
-            <horario-carga-lectiva [WorkingMode]="canEdit" [Rol]="rolIs" (OutCancelar)="vista=VIEWS.LIST"></horario-carga-lectiva>
+            <horario-carga-lectiva [WorkingMode]="canEdit" [Rol]="rolIs" [Data]="detalleAsignacion"
+                (OutCancelar)="vista=VIEWS.LIST"></horario-carga-lectiva>
         </nb-card-body>
         <nb-card-footer>
             <!-- <button mat-raised-button color="primary" (click)="vista = VIEWS.LIST"> regresar </button> -->
