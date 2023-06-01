@@ -13,6 +13,7 @@ export let FORM_INFO_DOCENTE = {
         placeholder_i18n: 'practicas_academicas.placeholder_nombre',
         requerido: false,
         tipo: 'text',
+        deshabilitar: true,
       },
       {
         etiqueta: 'input',
@@ -22,6 +23,7 @@ export let FORM_INFO_DOCENTE = {
         placeholder_i18n: 'practicas_academicas.placeholder_docDocente',
         requerido: false,
         tipo: 'text',
+        deshabilitar: true,
       },
       {
         etiqueta: 'input',
@@ -31,6 +33,7 @@ export let FORM_INFO_DOCENTE = {
         placeholder_i18n: 'practicas_academicas.placeholder_periodo',
         requerido: false,
         tipo: 'text',
+        deshabilitar: true,
       },
     ],
   }

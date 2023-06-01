@@ -2324,11 +2324,14 @@
         "error_no_found_espacio_academico": "No se encontraron espacios académicos con el código ingresado.",
         "error_no_found_proyectos": "El espacio académico seleccionado no tiene proyectos ni grupos asignados",
         "error_no_found_preasignaciones": "No se encontraron preasignacion para el periodo seleccionado.",
+        "error_no_found_asignaciones": "No se encontraron asignaciones para el periodo seleccionado",
         "error_codigo": "Por favor, ingrese el código del espacio académico.",
         "error_crear_preasignacion": "No se pudo crear la preasignación",
         "error_actualizar_preasignacion": "No se pudo actualizar la preasignación",
+        "error_aprobacion_preasignacion": "No se pudo aprobar la(s) preasignación(es)",
         "alerta_campos_preasignacion": "Verifique los campos del formulario",
-        "seleccion_periodo": "Por favor, seleccione el periodo para cargar las preasignaciones"
+        "seleccion_periodo": "Por favor, seleccione el periodo para cargar los datos",
+        "guardado_ptd_exito": "Se ha guardado el plan de trabajo docente para la vinculación"
     },
     "espacios_academicos": {
         "consulta_espacios": "Consulta espacios académicos",

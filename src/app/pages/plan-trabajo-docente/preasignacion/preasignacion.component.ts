@@ -256,6 +256,8 @@ export class PreAsignacionPtdComponent implements OnInit {
         this.sgaMidService.put('plan_trabajo_docente/aprobacion_preasignacion', req).subscribe((res) => {
           this.popUpManager.showSuccessAlert(this.translate.instant('ptd.aprobacion_preasignacion'));
           this.loadPreasignaciones();
+        }, err => {
+          this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_aprobacion_preasignacion'));
         });
       },
     );
@@ -308,7 +310,6 @@ export class PreAsignacionPtdComponent implements OnInit {
   selectPeriodo(periodo) {
     this.periodo = periodo.value;
     this.loading = true;
-    debugger
     if (this.periodo) {
       this.loadPreasignaciones();
     } else {
