@@ -8,7 +8,6 @@ import { ConsolidadoComponent } from './consolidado/consolidado.component';
 import { RevisionConsolidadoComponent } from './revision-consolidado/revision-consolidado.component';
 import { PreAsignacionPtdComponent } from './preasignacion/preasignacion.component';
 import { dialogoPreAsignacionPtdComponent } from './preasignacion/dialogo-preasignacion/dialogo-preasignacion.component';
-import { dialogoUbicacionComponent } from './dialogo-ubicacion/dialogo-ubicacion.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 
@@ -57,5 +56,4 @@ export const routedComponents = [
   RevisionConsolidadoComponent,
   PreAsignacionPtdComponent,
   dialogoPreAsignacionPtdComponent,
-  dialogoUbicacionComponent
 ]

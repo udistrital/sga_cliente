@@ -16,7 +16,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                 </ng2-smart-table>
                 <br>
                 <div class="button-center">
-                    <button mat-raised-button color="primary" (click)="vista=VIEWS.FORM"> {{ 'espacios_academicos.nuevo_espacio' | translate }} </button>
+                    <button mat-raised-button color="primary" (click)="nuevoEspacioAcad()"> {{ 'espacios_academicos.nuevo_espacio' | translate }} </button>
                 </div>
             </fieldset>
         </nb-card-body>
@@ -156,7 +156,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                     <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
                                     <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
                                         <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
-                                        <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre }}</mat-option>
+                                        <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre ? opcion.Nombre : opcion.nombre }}</mat-option>
                                     </mat-select>
                                     <mat-hint *ngIf="formStep3.get(campo.nombre).touched && formStep3.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
                                 </mat-form-field>
