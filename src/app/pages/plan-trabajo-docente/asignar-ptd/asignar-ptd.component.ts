@@ -6,6 +6,10 @@ import { ACTIONS, MODALS, ROLES, VIEWS } from '../../../@core/data/models/diccio
 import { FORM_INFO_DOCENTE } from '../forms/form-info_docente';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import { ParametrosService } from '../../../@core/data/parametros.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { UserService } from '../../../@core/data/users.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 
 @Component({
   selector: 'asignar-ptd',
@@ -17,40 +21,45 @@ export class AsignarPtdComponent implements OnInit {
   loading: boolean;
 
   readonly VIEWS = VIEWS;
+  readonly MODALS = MODALS;
+  readonly ACTIONS = ACTIONS;
   vista: Symbol;
 
   tbDocente: Object;
   dataDocentes: LocalDataSource;
-
+  coordinador = false;
   formDocente: any;
   dataDocente: any;
-
-  readonly MODALS = MODALS;
-  
-  readonly ACTIONS = ACTIONS;
-
+  periodos: any[] = [];
+  periodo: any;
   rolIs: String = undefined;
   canEdit: Symbol = ACTIONS.VIEW;
-
   asignaturaAdd: any = undefined;
+  detalleAsignacion: any = undefined;
 
   constructor(
     private translate: TranslateService,
     private popUpManager: PopUpManager,
+    private userService: UserService,
+    private sgaMidService: SgaMidService,
+    private parametrosService: ParametrosService,
     private autenticationService: ImplicitAutenticationService
-    ) {
-      this.dataDocentes = new LocalDataSource();
-      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-        this.createTable();
-        this.buildFormDocente();
-      })
-    }
+  ) {
+    this.dataDocentes = new LocalDataSource();
+    this.cargarPeriodo();
+  }
 
   ngOnInit() {
+    this.popUpManager.showAlert(this.translate.instant('ptd.seleccion_periodo'), "");
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.createTable();
+      this.buildFormDocente();
+    })
     this.autenticationService.getRole().then(
-      (rol: Array <String>) => {
+      (rol: Array<String>) => {
         rol.includes
         let r = rol.find(role => (role == ROLES.DOCENTE || role == ROLES.ADMIN_DOCENCIA || role == ROLES.COORDINADOR));
+        this.coordinador = rol.find(role => (role == 'COORDINADOR' || role == 'ADMIN_DOCENCIA')) ? true : false
         if (r) {
           this.rolIs = r;
           this.canEdit = ACTIONS.EDIT;
@@ -58,37 +67,25 @@ export class AsignarPtdComponent implements OnInit {
       }
     );
     this.loading = false;
-    this.vista = VIEWS.LIST,
-    this.formDocente = {...FORM_INFO_DOCENTE};
+    this.vista = VIEWS.LIST;
+    this.formDocente = { ...FORM_INFO_DOCENTE };
     this.createTable();
     this.buildFormDocente();
-    const data = [
-      {
-        nombre: 'x',
-        identificacion: '123',
-        tipo_vinculacion: 'vinculacion',
-        periodo_academico: '2022',
-        soporte_documental: {value: undefined, type: 'ver', disabled: true},
-        gestion: {value: undefined, type: 'editar', disabled: false},
-        estado: 'por definir',
-        enviar: {value: undefined, type: 'enviar', disabled: false},
-      }
-    ]
-    this.dataDocentes.load(data);
+    this.dataDocentes.load([]);
   }
 
   createTable() {
     this.tbDocente = {
       columns: {
-        index:{
+        index: {
           title: '#',
           filter: false,
-          valuePrepareFunction: (value,row,cell) => {
-            return cell.row.index+1;
-           },
+          valuePrepareFunction: (value, row, cell) => {
+            return cell.row.index + 1;
+          },
           width: '2%',
         },
-        nombre: {
+        docente: {
           title: this.translate.instant('GLOBAL.nombre'),
           editable: false,
           width: '25%',
@@ -122,7 +119,8 @@ export class AsignarPtdComponent implements OnInit {
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
               console.log("ver soporte:", out);
-            })}
+            })
+          }
         },
         gestion: {
           title: this.translate.instant('ptd.gest'),
@@ -133,12 +131,22 @@ export class AsignarPtdComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              this.vista = VIEWS.FORM;
-              if (this.rolIs == ROLES.DOCENTE) {
-                this.popUpManager.showPopUpGeneric(this.translate.instant('notas.docente'), this.translate.instant('ptd.aviso_informativo_docente_p1') + '.<br><br>' +
-                this.translate.instant('ptd.aviso_informativo_docente_p2') + '.', MODALS.INFO, false)
-              }
-            })}
+              this.loading = true;
+              this.sgaMidService.get(`plan_trabajo_docente/plan/${out.rowData.docente_id}/${out.rowData.periodo_id}/${out.rowData.tipo_vinculacion_id}`).subscribe((res: any) => {
+                this.loading = false;
+                this.detalleAsignacion = res.Data;
+                this.dataDocente = { Nombre: out.rowData.docente, Documento: out.rowData.identificacion, Periodo: out.rowData.periodo_academico, TipoVinculacion: out.rowData.tipo_vinculacion };
+                this.vista = VIEWS.FORM;
+                if (this.rolIs == ROLES.DOCENTE) {
+                  this.popUpManager.showPopUpGeneric(this.translate.instant('notas.docente'), this.translate.instant('ptd.aviso_informativo_docente_p1') + '.<br><br>' +
+                    this.translate.instant('ptd.aviso_informativo_docente_p2') + '.', MODALS.INFO, false)
+                }
+              }, (error: HttpErrorResponse) => {
+                this.loading = false;
+                console.log("error:", error);
+              });
+            })
+          }
         },
         estado: {
           title: this.translate.instant('GLOBAL.estado'),
@@ -156,7 +164,8 @@ export class AsignarPtdComponent implements OnInit {
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
               console.log("enviar:", out);
-            })}
+            })
+          }
         },
       },
       hideSubHeader: false,
@@ -177,10 +186,10 @@ export class AsignarPtdComponent implements OnInit {
   copy_ptd() {
     if (this.rolIs == ROLES.DOCENTE) {
       this.popUpManager.showPopUpGeneric('', this.translate.instant('ptd.copiar_plan_ver_coordinador_p1') + "xxxx-xx" + '.<br>' +
-                                             this.translate.instant('ptd.copiar_plan_ver_docente_p1') + '<br><br>' +
-                                             this.translate.instant('ptd.copiar_plan_ver_docente_p2') + '.<br>' +
-                                             this.translate.instant('ptd.copiar_plan_ver_docente_p3') + '.<br>' +
-                                             this.translate.instant('ptd.copiar_plan_ver_docente_p4') + '.', MODALS.QUESTION, true)
+        this.translate.instant('ptd.copiar_plan_ver_docente_p1') + '<br><br>' +
+        this.translate.instant('ptd.copiar_plan_ver_docente_p2') + '.<br>' +
+        this.translate.instant('ptd.copiar_plan_ver_docente_p3') + '.<br>' +
+        this.translate.instant('ptd.copiar_plan_ver_docente_p4') + '.', MODALS.QUESTION, true)
         .then(action => {
           if (action.value) {
             console.log("copiar actividades")
@@ -191,7 +200,7 @@ export class AsignarPtdComponent implements OnInit {
     }
     if (this.rolIs == ROLES.ADMIN_DOCENCIA || this.rolIs == ROLES.COORDINADOR) {
       this.popUpManager.showPopUpGeneric('', this.translate.instant('ptd.copiar_plan_ver_coordinador_p1') + "xxxx-xx" + '.<br>' +
-                                             this.translate.instant('ptd.copiar_plan_ver_coordinador_p2') + '.', MODALS.QUESTION, true)
+        this.translate.instant('ptd.copiar_plan_ver_coordinador_p2') + '.', MODALS.QUESTION, true)
         .then(action => {
           if (action.value) {
             console.log("copiar carga lectiva")
@@ -210,4 +219,58 @@ export class AsignarPtdComponent implements OnInit {
       }) */
   }
 
+  loadAsignaciones() {
+    if (this.coordinador) {
+      this.sgaMidService.get('plan_trabajo_docente/asignaciones/' + this.periodo.Id).subscribe(res => {
+        if (res !== null) {
+          this.dataDocentes.load(res["Data"]);
+        }
+        this.loading = false;
+      }, err => {
+        this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_no_found_asignaciones'));
+        this.loading = false;
+      });
+    } else {
+      const id_tercero = this.userService.getPersonaId();
+      this.sgaMidService.get('plan_trabajo_docente/asignaciones_docente/' + id_tercero + '/' + this.periodo.Id).subscribe(res => {
+        if (res !== null) {
+          this.dataDocentes.load(res["Data"]);
+        }
+        this.loading = false;
+      }, err => {
+        this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_no_found_asignaciones'));
+        this.loading = false;
+      });
+    }
+  }
+
+  cargarPeriodo() {
+    return new Promise((resolve, reject) => {
+      this.parametrosService.get('periodo/?query=CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
+        .subscribe(res => {
+          const r = <any>res;
+          if (res !== null && r.Status === '200') {
+            const periodos = <any[]>res['Data'];
+            periodos.forEach(element => {
+              this.periodos.push(element);
+            });
+            resolve(this.periodos);
+          }
+        },
+          (error: HttpErrorResponse) => {
+            reject(error);
+          });
+    });
+  }
+
+  selectPeriodo(periodo) {
+    this.periodo = periodo.value;
+    this.loading = true;
+    if (this.periodo) {
+      this.loadAsignaciones();
+    } else {
+      this.dataDocentes.load([]);
+      this.loading = false;
+    }
+  }
 }

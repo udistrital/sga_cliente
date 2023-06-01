@@ -18,6 +18,12 @@ th, td {
   border: 1px solid lightblue;
 }
 
+.resumen {
+  td {
+    height: 45px;
+  }
+}
+
 th {
   height: 50px;
 }
@@ -84,6 +90,7 @@ td {
   box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.2),
     0 8px 10px 1px rgba(0, 0, 0, 0.14),
     0 3px 14px 2px rgba(0, 0, 0, 0.12);
+
   .info-tooltip {
     visibility: visible;
   }

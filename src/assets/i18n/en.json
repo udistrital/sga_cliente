@@ -2252,11 +2252,14 @@
         "error_no_found_espacio_academico": "No academic course were found with the code entered.",
         "error_no_found_proyectos": "The selected academic course has no projects or groups assigned.",
         "error_no_found_preasignaciones": "No pre-assignment were found for the selected period.",
+        "error_no_found_asignaciones": "No assignments found for the selected period",
         "error_codigo": "Please enter the academic course code.",
         "error_crear_preasignacion": "Pre-assignment could not be created",
         "error_actualizar_preasignacion": "Pre-assignment could not be updated",
+        "error_aprobacion_preasignacion": "Pre-assignment(s) could not be approved",
         "alerta_campos_preasignacion": "Verify the form fields",
-        "seleccion_periodo": "Please select the period to load the pre-assignment"
+        "seleccion_periodo": "Please select the period to load the data",
+        "guardado_ptd_exito": "The teacher work plan assignment has been saved for the linkage"
     },
     "espacios_academicos": {
         "consulta_espacios": "Consult academic spaces",

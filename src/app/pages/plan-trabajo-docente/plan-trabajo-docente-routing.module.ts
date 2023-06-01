@@ -8,6 +8,8 @@ import { ConsolidadoComponent } from './consolidado/consolidado.component';
 import { RevisionConsolidadoComponent } from './revision-consolidado/revision-consolidado.component';
 import { PreAsignacionPtdComponent } from './preasignacion/preasignacion.component';
 import { dialogoPreAsignacionPtdComponent } from './preasignacion/dialogo-preasignacion/dialogo-preasignacion.component';
+import { dialogoUbicacionComponent } from './dialogo-ubicacion/dialogo-ubicacion.component';
+import { AuthGuard } from '../../@core/_guards/auth.guard';
 
 
 const routes: Routes = [{
@@ -15,23 +17,28 @@ const routes: Routes = [{
   component: PlanTrabajoDocenteComponent,
   children: [{
     path: 'asignar-ptd',
-    component: AsignarPtdComponent
+    component: AsignarPtdComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'verificar-ptd',
-    component: VerificarPtdComponent
+    component: VerificarPtdComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'consolidado',
-    component: ConsolidadoComponent
+    component: ConsolidadoComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'revision-consolidado',
-    component: RevisionConsolidadoComponent
+    component: RevisionConsolidadoComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'preasignacion',
     component: PreAsignacionPtdComponent,
+    canActivate: [AuthGuard]
   }]
 }];
 
@@ -49,5 +56,6 @@ export const routedComponents = [
   ConsolidadoComponent,
   RevisionConsolidadoComponent,
   PreAsignacionPtdComponent,
-  dialogoPreAsignacionPtdComponent
+  dialogoPreAsignacionPtdComponent,
+  dialogoUbicacionComponent
 ]
