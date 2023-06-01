@@ -158,6 +158,7 @@ import { SgaMidService } from '../@core/data/sga_mid.service';
 import { DocumentoService } from '../@core/data/documento.service';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DocProgramaObligatorioComponent } from './components/doc-programa-obligatorio/doc-programa-obligatorio.component';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -239,6 +240,7 @@ const NB_THEME_PROVIDERS = [
   ).providers,
   ...NbSidebarModule.forRoot().providers,
   ...NbMenuModule.forRoot().providers,
+  {provide: STEPPER_GLOBAL_OPTIONS, useValue: {showError: true}},
 ];
 
 

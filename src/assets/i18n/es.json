@@ -152,8 +152,7 @@
             "invitacion": "Invitación a prácticas\nacadémicas",
             "informe_practica": "Informe práctica"
         },
-        "espacios_academicos": {
-            "espacios_academicos": "Espacios Académicos",
+        "preinscripcion_espacios_academicos": {
             "preinscripcion_espacios": "Preinscripción de\nEspacios Académicos"
         },
         "ptd": {
@@ -163,6 +162,10 @@
             "consolidado": "Consolidado",
             "revision-consolidado": "Revisión Consolidado",
             "preasignar-ptd": "Pre-asignar PTD"
+        },
+        "espacios_academicos": {
+            "espacios_academicos": "Espacios Académicos",
+            "admin_espacios": "Administrar Espacios Académicos"
         }
     },
     "GLOBAL": {
@@ -639,6 +642,8 @@
         "cupos_especiales": "¿Corresponde a cupos especiales?",
         "nivel": "Nivel",
         "placeholder_nivel": "Seleccione el nivel que se requiere asignar al tipo de inscripción",
+        "subnivel": "Subnivel",
+        "placeholder_subnivel": "Seleccione el subnivel que se requiere asignar al tipo de inscripción",
         "info_contacto": "Información de contacto",
         "info_familiar": "Información familiar",
         "institucion": "Institución",
@@ -700,7 +705,15 @@
         "nuevo": "Nuevo",
         "enviar_aprobacion": "Enviar aprobación",
         "editar": "Editar",
-        "docente": "Docente"
+        "docente": "Docente",
+        "diligenciar_paso": "Debe diligenciar este paso",
+        "tipo": "Tipo",
+        "clase": "Clase",
+        "grupos": "Grupos",
+        "total": "Total",
+        "falta_campo": "** Debe llenar este campo",
+        "formatos_permitidos": "** Sólo se admiten los siguientes formatos",
+        "tamano_superado": "** El tamaño del archivo es superior a "
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -2087,7 +2100,7 @@
         "invitaciones_enviadas": "Las invitaciones fueron enviadas",
         "solicitud_creada": "La solicitud fue creada con éxito. Id solicitud: "
     },
-    "espacios_academicos": {
+    "preinscripcion_espacios_academicos": {
         "preinscripcion_titulo": "Preinscripción de Espacios académicos",
         "preinscribir_boton": "Preinscribir espacios académicos",
         "sin_preinscripcion": "El Estudiante no tiene preinscripciones para el periodo académico actual",
@@ -2319,5 +2332,32 @@
         "alerta_campos_preasignacion": "Verifique los campos del formulario",
         "seleccion_periodo": "Por favor, seleccione el periodo para cargar los datos",
         "guardado_ptd_exito": "Se ha guardado el plan de trabajo docente para la vinculación"
+    },
+    "espacios_academicos": {
+        "consulta_espacios": "Consulta espacios académicos",
+        "resultados_espacios": "Resultados",
+        "nuevo_espacio": "Nuevo espacio académico",
+        "crear_espacios": "Creación de espacios académicos",
+        "editar_espacios": "Edición de espacios académicos",
+        "select_proyecto": "Seleccionar Proyecto Curricular",
+        "info_espacio_academico": "Información sobre el Espacio Académico",
+        "soporte_observacion": "Carga de soportes y observaciones",
+        "plan_estudios": "Plan de estudios",
+        "espacios_requeridos": "Espacios requeridos (pre requisitos)",
+        "htd": "HTD",
+        "htc": "HTC",
+        "hta": "HTA",
+        "placeholder_htd": "Horas Trabajo Directo",
+        "placeholder_htc": "Horas Trabajo Cooperativo",
+        "placeholder_hta": "Horas Trabajo Autónomo",
+        "placeholder_creditos": "Cantidad de créditos mayor o igual a 1",
+        "placeholder_plan_estudios": "Numeración para plan de estudios",
+        "placeholder_codigo": "Código puede ser alfanumérico",
+        "placeholder_nombre": "Nombre del espacio académico",
+        "placeholder_grupos": "Nombre de grupos puede ser alfanumérico, puede incluir varios separados por coma",
+        "aprobar_espacio": "Aprobación de espacio academico",
+        "total_horas_es": "El total de horas debe ser igual a",
+        "crear_espacios_pregunta": "A punto de crear un espacio académico, ¿Desea continuar?",
+        "agregar_varios_archivos": "Puede agregar varios archivos si lo requiere"
     }
 }
