@@ -8,6 +8,11 @@ $snap-grid-width: 150px;
 /* Valor de alto de la cuadrícula */
 $snap-grid-height: 75px;
 
+#ubicacion {
+  scroll-margin-block: 130px;
+  scroll-behavior: smooth;
+}
+
 /* estilo cuadricula tabla horario - headers */
 th, td {
   width: $snap-grid-width;
@@ -184,4 +189,32 @@ td {
 
 i {
   width: 35px;
+}
+
+.botones {
+  // width: 80px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly
+}
+
+.row {
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+
+.campos {
+  width: 100%;
+  padding: 0rem 1rem;
+}
+
+.espacio {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

@@ -75,7 +75,7 @@
             </fieldset>
             <!-- horario carga lectiva -->
             <horario-carga-lectiva [WorkingMode]="canEdit" [Rol]="rolIs" [Data]="detalleAsignacion"
-                (OutCancelar)="vista=VIEWS.LIST"></horario-carga-lectiva>
+                (OutCancelar)="vista=VIEWS.LIST" (OutLoading)="loading=$event"></horario-carga-lectiva>
         </nb-card-body>
         <nb-card-footer>
             <!-- <button mat-raised-button color="primary" (click)="vista = VIEWS.LIST"> regresar </button> -->
