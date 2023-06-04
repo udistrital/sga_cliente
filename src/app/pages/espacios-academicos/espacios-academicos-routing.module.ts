@@ -11,7 +11,7 @@ const routes: Routes = [{
   children: [{
     path: 'crear-editar',
     component: CreacionEspaciosAcademicosComponent,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   }]
 }];
 
