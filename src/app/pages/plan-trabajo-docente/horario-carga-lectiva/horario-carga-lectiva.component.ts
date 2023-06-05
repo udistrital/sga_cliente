@@ -6,6 +6,11 @@ import { MODALS, ROLES } from '../../../@core/data/models/diccionario/diccionari
 import { ACTIONS } from '../../../@core/data/models/diccionario/diccionario';
 import { OikosService } from '../../../@core/data/oikos.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { AnyService } from '../../../@core/data/any.service';
+import { environment } from '../../../../environments/environment';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface elementDragDrop {
   id: number;
@@ -14,6 +19,9 @@ interface elementDragDrop {
   idEspacioAcademico: string;
   horas: number;
   horaFormato: string;
+  sede: any,
+  edificio: any,
+  salon: any,
   tipo: number;
   estado: number;
   bloqueado: boolean;
@@ -67,6 +75,9 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
+    private anySercive: AnyService,
+    private builder: FormBuilder,
+    private oikosService: OikosService,
   ) { }
   edit: boolean = false;
   isDocente: boolean = false;
@@ -80,6 +91,19 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   seleccion: number = 0;
   identificador: number = 0;
   observacion: string = '';
+  searchTerm$ = new Subject<any>();
+  opcionesEdificios: any[] = [];
+  opcionesSedes: any[] = [];
+  opcionesSalones: any[] = [];
+  opcionesSalonesFiltrados: any[] = [];
+  opcionesUsos: any[] = [];
+  sede: any;
+  edificio: any;
+  salon: any;
+  grupo: any;
+  ubicacionForm: FormGroup;
+  ubicacionActive: boolean = false;
+  editandoAsignacion: elementDragDrop = undefined;
 
   ngOnInit() {
     this.Data.carga[this.seleccion].forEach(carga => {
@@ -92,6 +116,9 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
         horas: carga.horario.horas,
         horaFormato: carga.horario.horaFormato,
         tipo: carga.horario.tipo,
+        sede: carga.sede,
+        edificio: carga.edificio,
+        salon: carga.salon,
         estado: carga.horario.estado,
         bloqueado: false,
         dragPosition: carga.horario.dragPosition,
@@ -99,6 +126,27 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
         finalPosition: carga.horario.finalPosition
       };
       this.listaCargaLectiva.push(newElement);
+      const coord = this.getPositionforMatrix(newElement);
+      this.changeStateRegion(coord.x, coord.y, newElement.horas, true);
+    });
+
+    this.getSedes().then(() => { this.OutLoading.emit(false); });
+
+    this.ubicacionForm = this.builder.group({
+      sede: [null, Validators.required],
+      edificio: [null, Validators.required],
+      salon: [null, Validators.required],
+      horas: [null, Validators.required],
+    });
+
+    this.ubicacionForm.get('edificio').disable();
+    this.ubicacionForm.get('salon').disable();
+    this.ubicacionForm.get('edificio').setValue(undefined);
+    this.ubicacionForm.get('salon').setValue(undefined);
+    this.opcionesEdificios = [];
+
+    this.searchTerm$.pipe(distinctUntilChanged(),).subscribe((response: any) => {
+      this.opcionesSalonesFiltrados = this.opcionesSalones.filter((value, index, array) => value.Nombre.toLowerCase().includes(response.text.toLowerCase()));
     });
   }
 
@@ -174,7 +222,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
     const ocupado = this.chechkUsedRegion(x, y, elementMoved.horas);
     if (ocupado) {
       elementMoved.dragPosition = elementMoved.prevPosition;
-      event.source._dragRef.setFreeDragPosition(elementMoved.prevPosition)
+      event.source._dragRef.setFreeDragPosition(elementMoved.prevPosition);
       event.source._dragRef.disabled = true;
       elementMoved.estado = this.estado.ocupado;
     } else {
@@ -198,15 +246,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   }
 
   onDragReleased(event: CdkDragRelease, elementMoved: elementDragDrop) {
-    const html = {
-      html: [
-        `<label class="swal2">${this.translate.instant('ptd.sede')}</label><select id="sede" class="swal2-input"><option value="1" >--Seleccionar--</option></select>` +
-        `<label class="swal2">${this.translate.instant('ptd.edificio')}</label><select id="edificio" class="swal2-input"><option value="1" >--Seleccionar--</option></select>` +
-        `<label class="swal2">${this.translate.instant('ptd.salon')}</label><select id="salon" class="swal2-input"><option value="1" >--Seleccionar--</option></select>`
-      ],
-      ids: ["sede", "edificio", "salon"],
-    }
-    this.popUpManager.showPopUpForm(this.translate.instant('ptd.espacio_fisico'), html, true).then(
+    this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.asignar'), this.translate.instant('ptd.ask_mover' )+"<br>" + elementMoved.horaFormato + "?", MODALS.QUESTION, true).then(
       (action) => {
         if (action.value) {
           elementMoved.estado = this.estado.ubicado;
@@ -232,74 +272,87 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
     );
   }
 
-  addCarga() {
-    this.identificador++;
-
-    const html = {
-      html: [
-        `<input id="horas" type="number" step="0.25" min="0.5" value="2" max="${this.horarioSize.hourEnd - this.horarioSize.hourIni}" class="swal2-input" style="width: 50%;"/>`
-      ],
-      ids: ["horas"]
-    }
-    this.popUpManager.showPopUpForm(this.translate.instant('ptd.horas'), html, false).then(
-      (action) => {
-        if (action.value) {
-          const h = Number(action.value.horas);
-          if (h > 0) {
-            const x = this.snapGridSize.x * -2.25;
-            const y = 0;
-            const newElement: elementDragDrop = {
-              id: this.identificador,
-              nombre: this.asignaturaSelected.nombre,
-              idCarga: null,
-              idEspacioAcademico: this.asignaturaSelected.id,
-              horas: h,
-              horaFormato: "",
-              tipo: this.isDocente ? this.tipo.actividades : this.tipo.carga_lectiva,
-              estado: this.estado.flotando,
-              bloqueado: false,
-              dragPosition: { x: x, y: y },
-              prevPosition: { x: x, y: y },
-              finalPosition: { x: x, y: y }
-            };
-            this.listaCargaLectiva.push(newElement);
-            const c: Element = this.contenedorCargaLectiva.nativeElement;
-            c.scrollIntoView({ block: "start", behavior: "smooth" });
-          }
-        }
-      }
-    )
+  async formularioEspacioFisico() {
+    this.ubicacionActive = true;
+    const c: Element = document.getElementById("ubicacion");
+    await new Promise(f => setTimeout(f, 10));
+    c.scrollIntoView({ behavior: "smooth" });
   }
 
-  editElement(htmlElement: HTMLElement, elementClicked: elementDragDrop) {
+  cancelarUbicacion() {
+    this.ubicacionForm.reset();
+    this.ubicacionActive = false;
+    this.editandoAsignacion = undefined;
+  }
+
+  addCarga() {
+    const h = Number(this.ubicacionForm.get('horas').value);
+    const salon = this.opcionesSalonesFiltrados.find(opcion => opcion.Nombre == this.ubicacionForm.get('salon').value);
+    const x = this.snapGridSize.x * -2.25;
+    const y = 0;
+
+    if (!this.editandoAsignacion) {
+      this.identificador++;
+      const newElement: elementDragDrop = {
+        id: this.identificador,
+        nombre: this.asignaturaSelected.nombre,
+        idCarga: null,
+        idEspacioAcademico: this.asignaturaSelected.id,
+        sede: this.ubicacionForm.get('sede').value,
+        edificio: this.ubicacionForm.get('edificio').value ? this.ubicacionForm.get('edificio').value : "-",
+        salon: salon ? salon : "-",
+        horas: h,
+        horaFormato: "",
+        tipo: this.isDocente ? this.tipo.actividades : this.tipo.carga_lectiva,
+        estado: this.estado.flotando,
+        bloqueado: false,
+        dragPosition: { x: x, y: y },
+        prevPosition: { x: x, y: y },
+        finalPosition: { x: x, y: y }
+      };
+      this.listaCargaLectiva.push(newElement);
+    } else {
+      if (this.isInsideGrid(this.editandoAsignacion)) {
+        const coord = this.getPositionforMatrix(this.editandoAsignacion);
+        this.changeStateRegion(coord.x, coord.y, this.editandoAsignacion.horas, false);
+      }
+      this.editandoAsignacion.horas = h;
+      this.editandoAsignacion.sede = this.ubicacionForm.get('sede').value;
+      this.editandoAsignacion.edificio = this.ubicacionForm.get('edificio').value ? this.ubicacionForm.get('edificio').value : "-";
+      this.editandoAsignacion.salon = salon ? salon : "-";
+      this.editandoAsignacion.dragPosition = { x: x, y: y };
+      this.editandoAsignacion.prevPosition = this.editandoAsignacion.dragPosition;
+      this.editandoAsignacion.finalPosition = this.editandoAsignacion.dragPosition;
+      this.editandoAsignacion.estado = this.estado.flotando;
+    }
+
+    this.cancelarUbicacion();
+  }
+
+  async editElement(elementClicked: elementDragDrop) {
     if (elementClicked.bloqueado) {
       return;
     }
-    const html = {
-      html: [
-        `<input id="horas" type="number" step="0.25" min="0.5" value="${elementClicked.horas}" max="${this.horarioSize.hourEnd - this.horarioSize.hourIni}" class="swal2-input" style="width: 50%;"/>`
-      ],
-      ids: ["horas"]
-    }
-    this.popUpManager.showPopUpForm(this.translate.instant('ptd.horas'), html, false).then(
-      (action) => {
-        if (action.value) {
-          const h = Number(action.value.horas);
-          if (h > 0) {
-            if (this.isInsideGrid(elementClicked)) {
-              const coord = this.getPositionforMatrix(elementClicked);
-              this.changeStateRegion(coord.x, coord.y, elementClicked.horas, false);
-            }
-            elementClicked.horas = h;
-            elementClicked.dragPosition = { x: this.snapGridSize.x * -2.25, y: 0 };
-            elementClicked.prevPosition = elementClicked.dragPosition;
-            elementClicked.finalPosition = elementClicked.dragPosition;
-            elementClicked.estado = this.estado.flotando;
-            htmlElement.scrollIntoView({ block: "center", behavior: "smooth" });
-          }
-        }
-      });
+    this.ubicacionActive = true;
 
+    if (this.isInsideGrid(elementClicked)) {
+      const coord = this.getPositionforMatrix(elementClicked);
+      this.changeStateRegion(coord.x, coord.y, elementClicked.horas, false);
+    }
+
+    this.sede = this.opcionesSedes.find(opcion => opcion.Id == elementClicked.sede.Id);
+    this.ubicacionForm.get('sede').setValue(this.sede);
+    this.cambioSede().then(() => {
+      this.edificio = this.opcionesEdificios.find(opcion => opcion.Id == elementClicked.edificio.Id);
+      this.ubicacionForm.get('edificio').setValue(this.edificio);
+      this.cambioEdificio();
+      this.ubicacionForm.get('salon').setValue(elementClicked.salon.Nombre);
+    });
+    this.ubicacionForm.get('horas').setValue(elementClicked.horas);
+    this.editandoAsignacion = elementClicked;
+    const c: Element = document.getElementById("ubicacion");
+    await new Promise(f => setTimeout(f, 10));
+    c.scrollIntoView({ behavior: "smooth" });
   }
 
   deleteElement(htmlElement: HTMLElement, elementClicked: elementDragDrop) {
@@ -309,12 +362,21 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
     this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.borrar'), this.translate.instant('ptd.ask_borrar'), MODALS.QUESTION, true).then(
       action => {
         if (action.value) {
+          this.OutLoading.emit(true);
           if (this.isInsideGrid(elementClicked)) {
             const coord = this.getPositionforMatrix(elementClicked);
             this.changeStateRegion(coord.x, coord.y, elementClicked.horas, false);
           }
           const idx = this.listaCargaLectiva.findIndex(element => element.id == elementClicked.id);
           this.listaCargaLectiva.splice(idx, 1);
+          if (elementClicked.idCarga) {
+            this.anySercive.delete(environment.PLAN_TRABAJO_DOCENTE_SERVICE, 'carga_plan', { Id: elementClicked.idCarga }).subscribe(
+              (response: any) => {
+                this.OutLoading.emit(false);
+              });
+          } else {
+            this.OutLoading.emit(false);
+          }
           const c: Element = this.contenedorCargaLectiva.nativeElement;
           c.removeChild(htmlElement.parentElement.parentElement);
         }
@@ -348,9 +410,9 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
           espacio_academico_id: this.listaCargaLectiva[j].idEspacioAcademico,
           id: this.listaCargaLectiva[j].idCarga,
           plan_docente_id: this.Data.plan_docente[this.seleccion],
-          sede_id: "-",
-          edificio_id: "-",
-          salon_id: "-",
+          sede_id: this.listaCargaLectiva[j].sede.Id,
+          edificio_id: this.listaCargaLectiva[j].edificio.Id ? this.listaCargaLectiva[j].edificio.Id : "-",
+          salon_id: this.listaCargaLectiva[j].salon.Id ? this.listaCargaLectiva[j].salon.Id : "-",
           horario: JSON.stringify({
             horas: this.listaCargaLectiva[j].horas,
             horaFormato: this.listaCargaLectiva[j].horaFormato,
@@ -410,5 +472,58 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
         element.bloqueado = true;
       }
     });
+  }
+
+  getSedes() {
+    return new Promise((resolve, reject) => {
+      this.oikosService.get('espacio_fisico?query=TipoEspacioFisicoId.Id:1,Activo:true&limit=0&fields=Id,Nombre,CodigoAbreviacion&sortby=Nombre&order=asc').subscribe(res => {
+        this.opcionesSedes = res;
+        resolve(res);
+      }, err => {
+        reject(err);
+      }
+      );
+    });
+  }
+
+  cambioSede() {
+    this.opcionesEdificios = [];
+    this.opcionesSalones = [];
+    this.opcionesSalonesFiltrados = [];
+    this.ubicacionForm.get('edificio').disable();
+    this.ubicacionForm.get('salon').disable();
+    this.ubicacionForm.get('edificio').setValue(undefined);
+    this.ubicacionForm.get('salon').setValue(undefined);
+    return new Promise((resolve, reject) => {
+      this.oikosService.get(`espacio_fisico_padre?query=PadreId.Id:${this.ubicacionForm.get("sede").value.Id}&fields=HijoId&limit=0`).subscribe(res => {
+        res.forEach(element => {
+          this.opcionesEdificios.push(element.HijoId);
+          this.ubicacionForm.get('edificio').enable();
+        });
+        this.opcionesEdificios.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+        resolve(res);
+      });
+    });
+  }
+
+  cambioEdificio() {
+    this.opcionesSalones = [];
+    this.opcionesSalonesFiltrados = [];
+    this.ubicacionForm.get('salon').disable();
+    this.ubicacionForm.get('salon').setValue(undefined);
+
+    this.oikosService.get(`espacio_fisico_padre?query=PadreId.Id:${this.ubicacionForm.get("edificio").value.Id}&fields=HijoId&limit=0`).subscribe(res => {
+      res.forEach(element => {
+        this.opcionesSalones.push(element.HijoId);
+        this.ubicacionForm.get('salon').enable();
+      });
+      this.opcionesSalones.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+      this.opcionesSalonesFiltrados = this.opcionesSalones;
+    });
+  }
+
+  cambioSalon(element) {
+    this.salon = element.option.value;
+    this.ubicacionForm.get('salon').setValue(this.salon.Nombre);
   }
 }
