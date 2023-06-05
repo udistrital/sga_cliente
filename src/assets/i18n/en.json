@@ -681,7 +681,9 @@
         "total": "Total",
         "falta_campo": "** You must fill this field",
         "formatos_permitidos": "** Only the following formats are supported",
-        "tamano_superado": "** The file size is greater than "
+        "tamano_superado": "** The file size is greater than ",
+        "enfoque": "Approach",
+        "eliminar_temporalmente": "Temporarily remove"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -699,7 +701,11 @@
         "error_cargar_documento": "An error ocurred downloading the documents, please try again.",
         "rol_insuficiente_titulo": "The user does not have permissions",
         "rol_insuficiente": "The user does not have sufficient permissions to use the system .",
-        "0": "Service not available"
+        "0": "Service not available",
+        "titulo_generico": "Sorry, something has gone wrong!",
+        "fallo_informacion_en": "There was an error querying the information about",
+        "sin_informacion_en": "No information has been found about",
+        "persiste_error_comunique_OAS": "Please return and try again later. If the error persists, contact the Systems Advisory Office (Oficina Asesora de Sistemas)"
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",
@@ -2262,6 +2268,7 @@
         "guardado_ptd_exito": "The teacher work plan assignment has been saved for the linkage"
     },
     "espacios_academicos": {
+        "espacios_academicos":"Academic Spaces",
         "consulta_espacios": "Consult academic spaces",
         "resultados_espacios": "Results",
         "nuevo_espacio": "New academic space",
@@ -2286,6 +2293,17 @@
         "aprobar_espacio": "Approval of academic space",
         "total_horas_es": "Total hours must be equal to",
         "crear_espacios_pregunta": "About to create an academic space, do you want to continue?",
-        "agregar_varios_archivos": "You can add multiple files if required"
+        "editar_espacios_pregunta": "About to edit an academic space, do you want to continue?",
+        "agregar_varios_archivos": "You can add multiple files if required",
+        "no_requeridos": "It does not require",
+        "creacion_espacio_ok": "Successful creation of academic space!",
+        "edicion_espacio_ok": "Successful edition of the current academic space!",
+        "creacion_espacio_fallo": "Could not create the academic space!",
+        "edicion_espacio_fallo": "Could not edit current academic space!",
+        "enviar_revision_pregunta": "About to submit for review, do you want to continue?",
+        "enviar_revision_ok": "Submission for review successful!",
+        "enviar_revision_fallo": "Could not submit for review!",
+        "formulario_no_completo": "The form is not complete or there is wrong information, please review and enter the missing or valid information",
+        "observacion_prev": "Previous observation"
     }
 }

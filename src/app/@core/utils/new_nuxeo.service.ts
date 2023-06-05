@@ -47,6 +47,10 @@ export class NewNuxeoService {
 
     }
 
+    clearLocalFiles() {
+        this.documentsList = [];
+    }
+
     getUrlFile(base64, minetype) {
         return new Promise<string>((resolve, reject) => {
             const url = `data:${minetype};base64,${base64}`;
@@ -114,7 +118,7 @@ export class NewNuxeoService {
         const doc = this.documentsList.find(doc => doc.Id === id);
         if (doc != undefined) {
             setTimeout(() => {
-                documentsSubject.next({"url": doc.Url, "type": doc.TipoArchivo});
+                documentsSubject.next({"Id": doc.Id, "nombre": doc.Nombre, "url": doc.Url, "type": doc.TipoArchivo});
             }, 1);
         } else {
             documentsSubject.error("Document not found");
@@ -184,6 +188,36 @@ export class NewNuxeoService {
             }, (error) => {
                 documentsSubject.next(error);
             })
+        return documents$;
+    }
+
+    deleteByUUID(uuid) {
+        const documentsSubject = new Subject<any>();
+        const documents$ = documentsSubject.asObservable();
+        const versionar = true;
+        this.anyService.delete2(environment.NUXEO_SERVICE, '/document/' + uuid + '?versionar=' + versionar)
+            .subscribe(r => {
+                documentsSubject.next(r)
+            }, e => {
+                documentsSubject.error(e)
+            })
+        return documents$;
+    }
+
+    deleteByIdDoc(Id, relacion) {
+        const documentsSubject = new Subject<any>();
+        const documents$ = documentsSubject.asObservable();
+        this.documentService.get('documento/'+Id).subscribe((doc: Documento) => {
+            doc.Activo = false;
+            doc.Descripcion = "id_relacionado: " + relacion;
+            this.documentService.put('documento/', doc).subscribe((doc: Documento) => {
+                documentsSubject.next(doc)
+            }, e => {
+                documentsSubject.error(e)
+            })
+        }, e => {
+            documentsSubject.error(e)
+        });
         return documents$;
     }
 }

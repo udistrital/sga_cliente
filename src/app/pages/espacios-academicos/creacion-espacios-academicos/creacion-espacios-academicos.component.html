@@ -16,6 +16,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                 </ng2-smart-table>
                 <br>
                 <div class="button-center">
+                    <button mat-raised-button (click)="recargarEspaciosAcademicos()">{{ 'GLOBAL.actualizar' | translate }}</button>
                     <button mat-raised-button color="primary" (click)="nuevoEspacioAcad()"> {{ 'espacios_academicos.nuevo_espacio' | translate }} </button>
                 </div>
             </fieldset>
@@ -28,8 +29,11 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
         <nb-card-header>
             <button mat-stroked-button class="top-left-regresar" (click)="vista=VIEWS.LIST">{{ 'GLOBAL.regresar' | translate }}</button>
             <div class="row" align="center">
-                <div class="col">
+                <div class="col" *ngIf="crear_editar == ACTIONS.CREATE">
                     {{ 'espacios_academicos.crear_espacios' | translate }}
+                </div>
+                <div class="col" *ngIf="crear_editar == ACTIONS.EDIT">
+                    {{ 'espacios_academicos.editar_espacios' | translate }}
                 </div>
             </div>
         </nb-card-header>
@@ -45,7 +49,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                 <ng-container *ngIf="!(campo.ocultar ? campo.ocultar : false)">
                                     <mat-form-field *ngSwitchCase="'select'" floatLabel="always">
                                         <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
-                                        <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                                        <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}" [disabled]="campo.sololectura ? campo.sololectura : false">
                                             <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
                                             <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre }}</mat-option>
                                         </mat-select>
@@ -56,9 +60,9 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         </div>
                         </div>
                     </form>
-                    <div class="button-center">
-                        <button mat-raised-button matStepperPrevious disabled>{{ 'GLOBAL.regresar' | translate }}</button>
-                        <button mat-raised-button matStepperNext>{{ 'GLOBAL.siguiente' | translate }}</button>
+                    <div class="button-stepper">
+                        <button mat-stroked-button matStepperPrevious disabled>{{ 'GLOBAL.regresar' | translate }}</button>
+                        <button mat-stroked-button matStepperNext>{{ 'GLOBAL.siguiente' | translate }}</button>
                     </div>
                 </mat-step>
                 <mat-step [stepControl]="formStep2" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}">
@@ -82,14 +86,14 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                                 <mat-form-field appearance="outline">
                                                     <input style="text-align: center;" matInput [formControlName]="campo.nombre" [type]="campo.tipo" [placeholder]="campo.placeholder" [min]="campo.min" [readonly]="campo.sololectura ? campo.sololectura : false">
                                                     <mat-hint *ngIf="formStep2.get(campo.nombre).touched && formStep2.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
-                                                    <mat-hint *ngIf="(campo.nombre == 'total') && ((formStep2.get('total').value) != (formStep2.get('creditos').value * horasCredito))">{{ 'espacios_academicos.total_horas_es' | translate }}: {{ formStep2.get('creditos').value * horasCredito }}h</mat-hint>
+                                                    <mat-hint *ngIf="(campo.nombre == 'total') && formStep2.get(campo.nombre).touched && ((formStep2.get('total').value) != (formStep2.get('creditos').value * horasCredito))">{{ 'espacios_academicos.total_horas_es' | translate }}: {{ formStep2.get('creditos').value * horasCredito }}h</mat-hint>
                                                 </mat-form-field>
                                             </td>
                                         </tr>
                                     </table>
                                     <mat-form-field *ngSwitchCase="'select'" floatLabel="always">
                                         <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
-                                        <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                                        <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}" [disabled]="campo.sololectura ? campo.sololectura : false">
                                             <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
                                             <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre }}</mat-option>
                                         </mat-select>
@@ -97,7 +101,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                     </mat-form-field>
                                     <mat-form-field multiple *ngSwitchCase="'selectMultiple'" floatLabel="always">
                                         <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
-                                        <mat-select multiple [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                                        <mat-select multiple [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}" [disabled]="campo.sololectura ? campo.sololectura : false">
                                             <mat-option disabled>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
                                             <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre ? opcion.Nombre : opcion.nombre }}</mat-option>
                                         </mat-select>
@@ -106,7 +110,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                 </ng-container>
                             </ng-container>
                         </div>
-                        <table style="width: 75%; margin-bottom: 1.25rem;" align="center">
+                        <table style="width: 60%; margin-bottom: 1.25rem;" align="center">
                             <tr>
                                 <th>{{ 'espacios_academicos.espacios_requeridos' | translate }}</th>
                             </tr>
@@ -115,12 +119,15 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                     {{ espacio.nombre }}
                                 </td>
                             </tr>
+                            <tr *ngIf="esp_required.length == 0">
+                                <td><i>{{ 'espacios_academicos.no_requeridos' | translate }}</i></td>
+                            </tr>
                         </table>
                         </div>
                     </form>
-                    <div class="button-center">
-                        <button mat-raised-button matStepperPrevious>{{ 'GLOBAL.regresar' | translate }}</button>
-                        <button mat-raised-button matStepperNext>{{ 'GLOBAL.siguiente' | translate }}</button>
+                    <div class="button-stepper">
+                        <button mat-stroked-button matStepperPrevious>{{ 'GLOBAL.regresar' | translate }}</button>
+                        <button mat-stroked-button matStepperNext>{{ 'GLOBAL.siguiente' | translate }}</button>
                     </div>
                 </mat-step>
                 <mat-step [stepControl]="formStep3" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}">
@@ -135,17 +142,16 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                     <input matInput [formControlName]="campo.nombre" [type]="text" style="display: none;">
                                     <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}: <i>({{ 'espacios_academicos.agregar_varios_archivos' | translate }})</i></mat-label>
                                     <div class="row">
-                                        <div class="col-9">
-                                            <button type="button" mat-raised-button (click)="documento.click()">{{'GLOBAL.seleccionar_archivo' | translate}}</button>
+                                        <div class="col-12">
+                                            <button #selectFiles type="button" mat-raised-button (click)="documento.click()"  [disabled]="campo.sololectura ? campo.sololectura : false">{{'GLOBAL.seleccionar_archivo' | translate}}</button>
                                             <span class="enlace-documento" *ngFor="let archivo of campo.archivos" (click)="previewFile(archivo.urlTemp)" title="{{'GLOBAL.tooltip_previsualizar_archivo' | translate}}" [ngClass]="{'archivo_invalido': archivo.err}">
-                                                {{ archivo.file.name }} <i class="fa fa-times fa-2xs" aria-hidden="true" title="{{'GLOBAL.eliminar' | translate}}" (click)="deleteSelectedFile(campo.nombre, archivo.file.name)"></i>
-                                             </span>
-                                        </div>
-                                        <div class="col-3">
-                                            <span *ngIf="campo.archivosEnLinea.length > 0" class="enlace-documento alinear" (click)="download(archivo.urlTemp)" title="{{'GLOBAL.tooltip_descargar_arhivo' | translate}}">
-                                                <i class="fa fa-cloud-download fa-2x" aria-hidden="true"></i>
-                                                <i>{{'GLOBAL.tooltip_descargar' | translate}}</i>
+                                                {{ archivo.file.name }} <i *ngIf="!selectFiles.disabled" class="fa fa-times fa-2xs" aria-hidden="true" title="{{'GLOBAL.eliminar' | translate}}" (click)="deleteSelectedFile(campo.nombre, archivo.file.name)"></i>
                                             </span>
+                                            <span class="enlace-documento" *ngFor="let archivoLinea of campo.archivosEnLinea" (click)="previewFile(archivoLinea.url)" title="{{'GLOBAL.tooltip_descargar_arhivo' | translate}}">
+                                                <i class="fa fa-cloud-download fa-2sx" aria-hidden="true"></i> {{ archivoLinea.nombre }}{{ archivoLinea.type }} <i *ngIf="!selectFiles.disabled" class="fa fa-times fa-2xs" aria-hidden="true" title="{{'GLOBAL.eliminar_temporalmente' | translate}}" (click)="deleteSelectedFileLinea(campo.nombre, archivoLinea.Id)"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-12">
                                         </div>
                                     </div>
                                     <mat-hint *ngIf="formStep3.get(campo.nombre).touched && formStep3.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
@@ -154,7 +160,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                 </mat-form-field>
                                 <mat-form-field *ngSwitchCase="'select'" floatLabel="always">
                                     <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
-                                    <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                                    <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}" [disabled]="campo.sololectura ? campo.sololectura : false">
                                         <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
                                         <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre ? opcion.Nombre : opcion.nombre }}</mat-option>
                                     </mat-select>
@@ -171,14 +177,16 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         </div>
                         </div>
                     </form>
-                    <div class="button-center">
-                        <button mat-raised-button matStepperPrevious>{{ 'GLOBAL.regresar' | translate }}</button>
-                        <button mat-raised-button matStepperNext disabled>{{ 'GLOBAL.siguiente' | translate }}</button>
+                    <div class="button-stepper">
+                        <button mat-stroked-button matStepperPrevious>{{ 'GLOBAL.regresar' | translate }}</button>
+                        <button mat-stroked-button matStepperNext disabled>{{ 'GLOBAL.siguiente' | translate }}</button>
                     </div>
                 </mat-step>
             </mat-vertical-stepper>
+            <br>
             <div class="button-center">
-                <button mat-raised-button color="primary" *ngIf="formularioCompleto()" (click)="prepararEnvioData()">{{ 'GLOBAL.guardar' | translate }}</button>
+                <button mat-raised-button (click)="vista=VIEWS.LIST">{{ 'GLOBAL.cancelar' | translate }}</button>
+                <button *ngIf="!soloLectura" mat-raised-button [color]="formularioCompleto() ? 'primary' : ''" (click)="elegirAccion()">{{ 'GLOBAL.guardar' | translate }}</button>
             </div>
         </nb-card-body>
         <nb-card-footer>

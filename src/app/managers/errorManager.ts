@@ -21,17 +21,17 @@ export class HttpErrorManager {
 
       console.error(
         `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
+        `body was: `, error.error);
     }
     // return an observable with a user-facing error message
     if(error.status === 200){
       return []
     }else {
-      return throwError({
+      return throwError(error.error/* {
         status: error.status,
         System: error.error.System,
         message: 'Something bad happened; please try again later.',
-      });
+      } */);
     }
   };
 }
