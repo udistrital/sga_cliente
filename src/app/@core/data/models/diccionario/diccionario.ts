@@ -17,6 +17,7 @@ export const ACTIONS = Object.freeze({
     DELETE: Symbol(),
     CREATE: Symbol(),
     SEND: Symbol(),
+    EDIT_PART: Symbol(),
 })
 
 export const ROLES = Object.freeze({

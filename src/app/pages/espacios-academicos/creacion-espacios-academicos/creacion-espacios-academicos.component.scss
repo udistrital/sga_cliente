@@ -18,6 +18,8 @@ nb-card-header {
 }
 
 .button-center {
+    padding-left: 20%;
+    padding-right: 20%;
     display: flex;
     justify-content: space-around;
 }
@@ -25,6 +27,11 @@ nb-card-header {
 mat-vertical-stepper {
     padding-left: 5%;
     padding-right: 5%;
+}
+
+.button-stepper {
+    display: flex;
+    justify-content: space-between;
 }
 
 .box-field {

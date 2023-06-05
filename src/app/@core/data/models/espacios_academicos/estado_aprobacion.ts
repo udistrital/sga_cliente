@@ -7,3 +7,10 @@ export class EstadoAprobacion {
     readonly fecha_creacion: Date;
     fecha_modificacion: Date;
 }
+
+export const STD = Object.freeze({
+    IN_EDIT: 'IN-EDIT',
+    IN_REV: 'IN-REV',
+    IS_APRV: 'IS-APRV',
+    NOT_APRV: 'NOT-APRV',
+})

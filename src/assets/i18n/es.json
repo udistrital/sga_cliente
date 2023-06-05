@@ -713,7 +713,9 @@
         "total": "Total",
         "falta_campo": "** Debe llenar este campo",
         "formatos_permitidos": "** Sólo se admiten los siguientes formatos",
-        "tamano_superado": "** El tamaño del archivo es superior a "
+        "tamano_superado": "** El tamaño del archivo es superior a ",
+        "enfoque": "Enfoque",
+        "eliminar_temporalmente": "Eliminar temporalmente"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -731,7 +733,11 @@
         "error_cargar_documento": "Ocurrió un error al descargar documentos",
         "rol_insuficiente_titulo": "El usuario no cuenta con permisos",
         "rol_insuficiente": "El usuario no cuenta con los permisos suficientes para usar el sistema.",
-        "0": "El servicio solicitado no se encuentra disponible"
+        "0": "El servicio solicitado no se encuentra disponible",
+        "titulo_generico": "¡Disculpe, algo ha salido mal!",
+        "fallo_informacion_en": "Ha habido un error al consultar la información sobre",
+        "sin_informacion_en": "No se ha encontrado información sobre",
+        "persiste_error_comunique_OAS": "Regrese e intente de nuevo más tarde. Si el error persiste, comuníquese con Oficina Asesora de Sistemas (OAS)"
     },
     "recibo_pago": {
         "generado": "El recibo de pago ha sido generado correctamente",
@@ -2249,7 +2255,9 @@
         "editar": "Editar",
         "mover": "Mover",
         "borrar": "Borrar",
+        "asignar": "Asignar",
         "ask_borrar": "¿Seguro de borrar esta asignación?",
+        "ask_mover": "¿Está seguro de establecer la asignación en el horario de ",
         "espacio_fisico": "Espacio físico",
         "sede": "Sede",
         "edificio": "Edificio",
@@ -2334,6 +2342,7 @@
         "guardado_ptd_exito": "Se ha guardado el plan de trabajo docente para la vinculación"
     },
     "espacios_academicos": {
+        "espacios_academicos":"Espacios Académicos",
         "consulta_espacios": "Consulta espacios académicos",
         "resultados_espacios": "Resultados",
         "nuevo_espacio": "Nuevo espacio académico",
@@ -2358,6 +2367,17 @@
         "aprobar_espacio": "Aprobación de espacio academico",
         "total_horas_es": "El total de horas debe ser igual a",
         "crear_espacios_pregunta": "A punto de crear un espacio académico, ¿Desea continuar?",
-        "agregar_varios_archivos": "Puede agregar varios archivos si lo requiere"
+        "editar_espacios_pregunta": "A punto de editar un espacio académico, ¿Desea continuar?",
+        "agregar_varios_archivos": "Puede agregar varios archivos si lo requiere",
+        "no_requeridos": "No requiere",
+        "creacion_espacio_ok": "¡Creación exitosa de espacio académico!",
+        "edicion_espacio_ok": "¡Edición exitosa del espacio académico actual!",
+        "creacion_espacio_fallo": "¡No se pudo crear el espacio académico!",
+        "edicion_espacio_fallo": "¡No se pudo editar el espacio académico actual!",
+        "enviar_revision_pregunta": "A punto de enviar a revisión, ¿Desea continuar?",
+        "enviar_revision_ok": "¡Envío a revisión exitoso!",
+        "enviar_revision_fallo": "¡No se pudo enviar a revisión!",
+        "formulario_no_completo": "El formulario no está completo o hay información errónea, revise e ingrese la información faltante o válida",
+        "observacion_prev": "Observación previa"
     }
 }
