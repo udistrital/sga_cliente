@@ -2265,7 +2265,8 @@
         "error_aprobacion_preasignacion": "Pre-assignment(s) could not be approved",
         "alerta_campos_preasignacion": "Verify the form fields",
         "seleccion_periodo": "Please select the period to load the data",
-        "guardado_ptd_exito": "The teacher work plan assignment has been saved for the linkage"
+        "guardado_ptd_exito": "The teacher work plan assignment has been saved for the linkage",
+        "espacio_ocupado": "Space occupied"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",
