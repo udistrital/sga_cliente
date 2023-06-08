@@ -2339,7 +2339,8 @@
         "error_aprobacion_preasignacion": "No se pudo aprobar la(s) preasignación(es)",
         "alerta_campos_preasignacion": "Verifique los campos del formulario",
         "seleccion_periodo": "Por favor, seleccione el periodo para cargar los datos",
-        "guardado_ptd_exito": "Se ha guardado el plan de trabajo docente para la vinculación"
+        "guardado_ptd_exito": "Se ha guardado el plan de trabajo docente para la vinculación",
+        "espacio_ocupado": "Espacio ocupado"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",

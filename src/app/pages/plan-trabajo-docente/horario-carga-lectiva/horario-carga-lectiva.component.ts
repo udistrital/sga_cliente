@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
-import { CdkDragMove, CdkDragRelease } from '@angular/cdk/drag-drop';
+import { CdkDragMove, CdkDragRelease, CdkDragStart } from '@angular/cdk/drag-drop';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { TranslateService } from '@ngx-translate/core';
 import { MODALS, ROLES } from '../../../@core/data/models/diccionario/diccionario';
@@ -62,6 +62,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
 
   @ViewChild('contenedorCargaLectiva', { static: false }) contenedorCargaLectiva: ElementRef;
   listaCargaLectiva: any[] = [];
+  listaOcupacion: any[] = [];
   /*************************** */
 
   /** Entradas y Salidas */
@@ -104,6 +105,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   ubicacionForm: FormGroup;
   ubicacionActive: boolean = false;
   editandoAsignacion: elementDragDrop = undefined;
+  ocupados: any[] = [];
 
   ngOnInit() {
     this.Data.carga[this.seleccion].forEach(carga => {
@@ -235,6 +237,38 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
     }
   }
 
+  onDragStarted(event: CdkDragStart, elementMoved: elementDragDrop) {
+    this.listaOcupacion = [];
+    this.OutLoading.emit(true);
+    this.sgaMidService.get(`plan_trabajo_docente/disponibilidad/${elementMoved.salon.Id}/${this.Data.vigencia}/${this.Data.plan_docente[this.seleccion]}`).subscribe(res => {
+      this.ocupados = res.Response.Body;
+      this.OutLoading.emit(false);
+      this.ocupados.forEach(newElement => {
+        const newElementFormat: elementDragDrop = {
+          id: null,
+          nombre: this.translate.instant('ptd.espacio_ocupado'),
+          idCarga: newElement.id,
+          idEspacioAcademico: null,
+          horas: newElement.horas,
+          horaFormato: null,
+          tipo: null,
+          sede: null,
+          edificio: null,
+          salon: null,
+          estado: null,
+          bloqueado: true,
+          dragPosition: newElement.finalPosition,
+          prevPosition: newElement.finalPosition,
+          finalPosition: newElement.finalPosition
+        };
+        this.listaOcupacion.push(newElementFormat);
+        const coord = this.getPositionforMatrix(newElement);
+        this.changeStateRegion(coord.x, coord.y, newElement.horas, true);
+      });
+      this.OutLoading.emit(false);
+    });
+  }
+
   calculateTimeSpan(dragPosition, h): string {
     const iniTimeRaw = dragPosition.y / this.snapGridSize.y + this.horarioSize.hourIni;
     const finTimeRaw = iniTimeRaw + h;
@@ -246,7 +280,8 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   }
 
   onDragReleased(event: CdkDragRelease, elementMoved: elementDragDrop) {
-    this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.asignar'), this.translate.instant('ptd.ask_mover' )+"<br>" + elementMoved.horaFormato + "?", MODALS.QUESTION, true).then(
+    this.listaOcupacion = [];
+    this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.asignar'), this.translate.instant('ptd.ask_mover') + "<br>" + elementMoved.horaFormato + "?", MODALS.QUESTION, true).then(
       (action) => {
         if (action.value) {
           elementMoved.estado = this.estado.ubicado;
