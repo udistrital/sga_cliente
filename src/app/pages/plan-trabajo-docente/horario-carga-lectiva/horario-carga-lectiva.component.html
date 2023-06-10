@@ -25,11 +25,10 @@
     <mat-form-field style="width: 40%;" *ngIf="isDocente">
         <mat-label>{{ 'ptd.select_actividad' | translate }}:</mat-label>
         <mat-select [(ngModel)]="actividadSelected">
-            <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
             <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
-            <!-- <mat-option *ngFor="let item of periodos" [value]="item">
-                {{item.Nombre}}
-            </mat-option> -->
+            <mat-option *ngFor="let item of actividades" [value]="item">
+                {{item.nombre}}
+            </mat-option>
         </mat-select>
     </mat-form-field>
     <button mat-raised-button color="primary" style="margin-left: 1.5rem;"
@@ -143,7 +142,7 @@
                                 [ngClass]="{'carga_lectiva': element.tipo == tipo.carga_lectiva, 'actividades': element.tipo == tipo.actividades, 'flotando': element.estado == estado.flotando, 'ocupado': element.estado == estado.ocupado }"
                                 cdkDrag [cdkDragFreeDragPosition]="element.dragPosition"
                                 [cdkDragDisabled]="element.bloqueado" cdkDragBoundary=".grid-carga-lectiva"
-                                (cdkDragStarted)="onDragStarted($event, element)"
+                                (cdkDragStarted)="onDragStarted(element)"
                                 (cdkDragMoved)="onDragMoved($event, element)"
                                 (cdkDragReleased)="onDragReleased($event, element)">
                                 <div class="info-tooltip">
