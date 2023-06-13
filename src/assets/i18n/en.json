@@ -2283,6 +2283,7 @@
         "teoricoPractico": "T/P",
         "electivaIntrinseca": "EI",
         "electivaExtrinseca": "EE"
+        "espacio_ocupado": "Space occupied"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",
