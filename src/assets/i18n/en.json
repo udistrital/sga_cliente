@@ -148,6 +148,7 @@
             "invitacion": "Invitation to academic\npractices"
         },
         "preinscripcion_espacios_academicos": {
+            "preinscripcion_espacios_academicos": "Academic spaces\npre-registration",
             "preinscripcion_espacios": "Academic spaces\npre-registration"
         },
         "ptd": {
@@ -161,6 +162,10 @@
         "espacios_academicos": {
             "espacios_academicos": "Academic Spaces",
             "admin_espacios": "Manage Academic Spaces"
+        },
+        "plan_estudios": {
+            "plan_estudios": "Study Plan",
+            "crear_plan_estudios": "Create Study Plan"
         }
     },
     "GLOBAL": {
@@ -682,7 +687,12 @@
         "formatos_permitidos": "** Only the following formats are supported",
         "tamano_superado": "** The file size is greater than ",
         "enfoque": "Approach",
-        "eliminar_temporalmente": "Temporarily remove"
+        "eliminar_temporalmente": "Temporarily remove",
+        "ver": "View",
+        "agregar_varios_archivos": "You can attach multiple files if required",
+        "guardar_continuar": "Save and continue",
+        "err_min": "The value cannot be less than ",
+        "err_max": "The value cannot be greater than "
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -2265,7 +2275,14 @@
         "error_aprobacion_preasignacion": "Pre-assignment(s) could not be approved",
         "alerta_campos_preasignacion": "Verify the form fields",
         "seleccion_periodo": "Please select the period to load the data",
-        "guardado_ptd_exito": "The teacher work plan assignment has been saved for the linkage"
+        "guardado_ptd_exito": "The teacher work plan assignment has been saved for the linkage",
+        "obligatorioBasico": "OB",
+        "obligatorioComplementario": "OC",
+        "teorico": "T",
+        "practico": "P",
+        "teoricoPractico": "T/P",
+        "electivaIntrinseca": "EI",
+        "electivaExtrinseca": "EE"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",
@@ -2305,5 +2322,34 @@
         "enviar_revision_fallo": "Could not submit for review!",
         "formulario_no_completo": "The form is not complete or there is wrong information, please review and enter the missing or valid information",
         "observacion_prev": "Previous observation"
+    },
+    "plan_estudios": {
+        "plan_estudios":"Study Plan",
+        "crear": "Create Study Plan",
+        "organizar": "Establish order for study plans",
+        "planes_estudio_creados": "Study plans created",
+        "select_proyecto":"Selection of the Curricular Project",
+        "resolucion": "Resolution",
+        "total_creditos": "Total Credits",
+        "placeholder_total_creditos": "Number of credits greater than zero",
+        "codigo_proyecto": "Curricular Project Code",
+        "codigo_plan": "Code for the study plan",
+        "numero_semestres": "Number of semesters",
+        "placeholder_numero_semestres": "Number of semesters greater than zero",
+        "numero_resolucion": "Number of resolution",
+        "anio_resolucion": "Year resolution",
+        "soporte_plan": "Study plan support documents",
+        "parametrizacion_semestral": "Parameterization per semester",
+        "mensaje_soporte_multiple_proyecto": "The table shows the study plans related to the creation, the system supports the creation of study plans of more than one curricular project.",
+        "mensaje_tabla_espacios_si_vacio_solicite_inclusion": "Mr. user, the table shows all the academic spaces related to your curricular project, if there is no space, request its inclusion in the system.",
+        "total_espacios_asignar": "Total spaces to be assigned",
+        "agregar_semestre": "Add semester",
+        "semestre": "Semester",
+        "finalizar_semestre": "Finish semester",
+        "seguro_cancelar": "Cancel study plan creation?",
+        "seguro_limpiar": "Dismiss the study plan form?",
+        "seguro_crear": "Save the study plan?",
+        "seguro_limpiar_semestre": "Dismiss the definition of academic spaces for this semester?",
+        "seguro_finalizar": "Save definition of academic spaces for this semester?"
     }
 }
