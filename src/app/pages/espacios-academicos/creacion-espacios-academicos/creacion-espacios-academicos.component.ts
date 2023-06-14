@@ -143,7 +143,6 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
       actions: false,
       noDataMessage: this.translate.instant('GLOBAL.table_no_data_found')
     };
-    this.tbEspaciosAcademicos["columns"]
   }
 
   ajustarBotonesSegunEstado(espacio: EspacioAcademico) {

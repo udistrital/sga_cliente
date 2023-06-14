@@ -159,6 +159,7 @@ import { DocumentoService } from '../@core/data/documento.service';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DocProgramaObligatorioComponent } from './components/doc-programa-obligatorio/doc-programa-obligatorio.component';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { DinamicFormGroupComponent } from './components/dinamic-form-group/dinamic-form-group.component';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -207,6 +208,7 @@ const COMPONENTS = [
   DocProgramaObligatorioComponent,
   Ng2StButtonComponent,
   Ng2StCheckComponent,
+  DinamicFormGroupComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -247,7 +249,7 @@ const NB_THEME_PROVIDERS = [
 @NgModule({
   imports: [...BASE_MODULES, ...NB_MODULES, SharedModule, ...MAT_MODULES, MomentModule, NbEvaIconsModule,],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES, ...MAT_MODULES, ...DIRECTIVES],
-  declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective, NotePercentageComponent, DocProgramaObligatorioComponent],
+  declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective, NotePercentageComponent, DocProgramaObligatorioComponent, DinamicFormGroupComponent],
   entryComponents: [...ENTRY_COMPONENTS],
 })
 export class ThemeModule {
