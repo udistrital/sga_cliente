@@ -1,0 +1,44 @@
+.box-field {
+    //border: 1px solid pink;
+    padding-bottom: 1.25rem;
+    padding-top: 1.25rem;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+/* .mat-input-element {
+    height: 25px;
+}
+
+.mat-select {
+    height: 25px;
+} */
+
+mat-hint {
+    color: red !important;
+}
+
+/* button.mat-raised-button {
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+.enlace-documento {
+  cursor: pointer;
+  color: var(--primary);
+  margin-left: 1rem;
+  padding: 10px !important;
+}
+
+.archivo_invalido {
+    text-decoration:line-through;
+    color: red;
+}
+
+.separator {
+    border: 1px dashed var(--primary);
+}

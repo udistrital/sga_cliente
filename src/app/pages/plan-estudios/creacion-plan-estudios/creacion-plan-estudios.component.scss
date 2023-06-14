@@ -1,0 +1,98 @@
+fieldset {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.sombra-mini {
+    box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.2);
+}
+
+.modo-ventana {
+    display: flex;
+    justify-content: space-between;
+    .button {
+        cursor: pointer;
+    }
+    .cancel {
+        color: darkred;
+    }
+}
+
+.alinear-center {
+    padding-left: 25%;
+    padding-right: 25%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.alinear-right {
+    padding-right: 2rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.espacio-doble {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.espacio {
+    padding-bottom: 2rem;
+}
+
+.advertencia {
+    background-color: var(--warning-main);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 0.4rem;
+    margin: 1rem;
+}
+
+.recuadro {
+    border: 1px solid var(--primary);
+    border-radius: 0.2rem;
+}
+
+.mat-expansion-panel-header.mat-expanded,
+.mat-expansion-panel-header.mat-expanded:hover,
+.mat-expansion-panel-header.mat-expanded.cdk-focused {
+  background-color: var(--primary);
+  mat-panel-title {
+    color: floralwhite !important;
+  }
+  mat-panel-description {
+    color: floralwhite !important;
+  }
+}
+
+::ng-deep {
+    mat-expansion-panel {
+        .mat-expansion-panel-body {
+            padding: 0;
+        }
+    }
+}
+
+.mat-action-row {
+    padding-left: 25%;
+    padding-right: 25%;
+    place-content: space-around;
+}
+  
+::ng-deep {
+    ng2-st-tbody-edit-delete {
+        display: none;
+        height: 0 !important;
+    }
+
+    ng2-st-tbody-custom {
+        display: flex;
+        text-align: center;
+
+        a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+            color: var(--primary)
+        }
+    }
+}

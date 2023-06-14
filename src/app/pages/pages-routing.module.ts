@@ -105,6 +105,10 @@ const routes: Routes = [{
       loadChildren: () => import ('./espacios-academicos/espacios-academicos.module').then(m => m.EspaciosAcademicosModule),
     },
     {
+      path: 'plan-estudios',
+      loadChildren: () => import ('./plan-estudios/plan-estudios.module').then(m => m.PlanEstudiosModule),
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
