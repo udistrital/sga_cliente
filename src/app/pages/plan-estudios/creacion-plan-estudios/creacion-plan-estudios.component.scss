@@ -12,6 +12,8 @@ fieldset {
     justify-content: space-between;
     .button {
         cursor: pointer;
+        border: 2px solid var(--primary);
+        border-radius: 0.3rem;
     }
     .cancel {
         color: darkred;
@@ -32,12 +34,12 @@ fieldset {
 }
 
 .espacio-doble {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 .espacio {
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
 }
 
 .advertencia {
@@ -94,5 +96,23 @@ fieldset {
         a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
             color: var(--primary)
         }
+    }
+}
+
+:host {
+    ::ng-deep .resumenTabla .ng2-smart-titles {
+        background-color: var(--primary);
+    }
+    ::ng-deep .resumenTabla .ng2-smart-title {
+        height: 1px;
+        overflow: hidden;
+    }
+    ::ng-deep .resumenTotal .nombre .ng2-smart-title {
+        height: 1px;
+        overflow: hidden;
+    }
+    ::ng-deep .resumenTotal .ng2-smart-actions .ng2-smart-title {
+        height: 1px;
+        overflow: hidden;
     }
 }

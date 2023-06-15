@@ -34,7 +34,6 @@ export class DinamicFormGroupComponent implements OnInit, OnChanges, OnDestroy {
   // * Recepción de datos por trigger de cambios en Inputs 
   //#region
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('[L:34]: ngOnChanges', changes);
     if(changes.defineForm) {
       this.formFields = Object.keys(this.defineForm);
       this.formGroup = this.buildForm(this.defineForm);
@@ -150,6 +149,7 @@ export class DinamicFormGroupComponent implements OnInit, OnChanges, OnDestroy {
     this.defineForm[field].archivosLocal = [];
     this.defineForm[field].archivosLinea = [];
     this.defineForm[field].archivosDelete = [];
+    this.defineForm[field].validaArchivos = {errTipo: false, errTam: false};
   }
 
   /** trigger cuando hay cambio en selección de archivos */
@@ -164,6 +164,7 @@ export class DinamicFormGroupComponent implements OnInit, OnChanges, OnDestroy {
     this.defineForm[label].validaArchivos = errs;
     this.formGroup.patchValue({[label]: nameFiles});
     this.formGroup.get(label).markAsTouched({onlySelf: true});
+    this.putErrorIfRequired(label, errs);
   }
 
   /** Quitar archivo seleccionado local */
@@ -176,7 +177,8 @@ export class DinamicFormGroupComponent implements OnInit, OnChanges, OnDestroy {
       this.defineForm[label].validaArchivos = errs;
       this.formGroup.patchValue({[label]: nameFiles});
       this.formGroup.get(label).markAsTouched({onlySelf: true});
-    } 
+      this.putErrorIfRequired(label, errs);
+    }
   }
 
   /** Quitar archivo seleccionado en linea */
@@ -190,6 +192,7 @@ export class DinamicFormGroupComponent implements OnInit, OnChanges, OnDestroy {
       this.defineForm[label].validaArchivos = errs;
       this.formGroup.patchValue({[label]: nameFiles});
       this.formGroup.get(label).markAsTouched({onlySelf: true});
+      this.putErrorIfRequired(label, errs);
     }
   }
 
@@ -205,6 +208,12 @@ export class DinamicFormGroupComponent implements OnInit, OnChanges, OnDestroy {
     return nameFiles;
   }
 
+  /** Añade error si no coincide extensión y tamaño */
+  putErrorIfRequired(label: string, errs: any) {
+    if (errs.errTipo || errs.errTam) {
+      this.formGroup.get(label).setErrors({errorArchivo: "Type or Size Invalid" });
+    }
+  }
   /** Valida si el archivo cumple con extensión y tamaño */
   validateFiles(tipoArchivos: string, tamMBArchivos: number, archivosLocal: any[]) {
     let errTipo = false;
