@@ -2276,13 +2276,6 @@
         "alerta_campos_preasignacion": "Verify the form fields",
         "seleccion_periodo": "Please select the period to load the data",
         "guardado_ptd_exito": "The teacher work plan assignment has been saved for the linkage",
-        "obligatorioBasico": "OB",
-        "obligatorioComplementario": "OC",
-        "teorico": "T",
-        "practico": "P",
-        "teoricoPractico": "T/P",
-        "electivaIntrinseca": "EI",
-        "electivaExtrinseca": "EE"
         "espacio_ocupado": "Space occupied"
     },
     "espacios_academicos": {
@@ -2322,7 +2315,15 @@
         "enviar_revision_ok": "Submission for review successful!",
         "enviar_revision_fallo": "Could not submit for review!",
         "formulario_no_completo": "The form is not complete or there is wrong information, please review and enter the missing or valid information",
-        "observacion_prev": "Previous observation"
+        "observacion_prev": "Previous observation",
+        "obligatorioBasico": "OB",
+        "obligatorioComplementario": "OC",
+        "electivaIntrinseca": "EI",
+        "electivaExtrinseca": "EE",
+        "componentePropedeutico": "CP",
+        "teorico": "T",
+        "practico": "P",
+        "teoricoPractico": "T/P"
     },
     "plan_estudios": {
         "plan_estudios":"Study Plan",
@@ -2351,6 +2352,10 @@
         "seguro_limpiar": "Dismiss the study plan form?",
         "seguro_crear": "Save the study plan?",
         "seguro_limpiar_semestre": "Dismiss the definition of academic spaces for this semester?",
-        "seguro_finalizar": "Save definition of academic spaces for this semester?"
+        "seguro_finalizar": "Save definition of academic spaces for this semester?",
+        "agregar_espacio": "Add this space to the current semester",
+        "quitar_espacio": "Remove space from this semester",
+        "creditos": "Credits",
+        "resumen_general": "Total Study plan"
     }
 }

@@ -26,15 +26,15 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
             <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
                 <legend class="modo-ventana">
                     <small>&nbsp; {{ 'plan_estudios.crear' | translate }} </small>
-                    <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="cancelar()"> &nbsp;</i>
+                    <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="cancelar()"></i>
                 </legend>
-                <mat-horizontal-stepper #stepper [linear]="true">
+                <mat-horizontal-stepper #stepper [linear]="true" #stepper>
                     <mat-step [stepControl]="formGroupPlanEstudio" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}">
                         <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
                         <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
                         <div class="alinear-center">
                             <button mat-raised-button (click)="limpiar()">{{ 'GLOBAL.limpiar' | translate }}</button>
-                            <button mat-raised-button color="primary" (click)="guardar()" matStepperNext>{{ 'GLOBAL.guardar_continuar' | translate }}</button>
+                            <button mat-raised-button [color]="formGroupPlanEstudio.valid ? 'primary' : ''" (click)="guardar(stepper)">{{ 'GLOBAL.guardar_continuar' | translate }}</button>
                         </div>
                     </mat-step>
                     <mat-step>
@@ -66,12 +66,27 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                 </mat-expansion-panel-header>
                                 <ng2-smart-table [settings]="tbSemestre" [source]="semestre" (custom)="onAction($event)">
                                 </ng2-smart-table>
+                                <div class="resumenTabla">
+                                    <ng2-smart-table [settings]="tbSemestreTotal" [source]="dataSemestreTotal[numero]">
+                                    </ng2-smart-table>
+                                </div>
                                 <mat-action-row>
                                     <button mat-raised-button type="button" (click)="limpiarSemestre(semestre)" [disabled]="!desactivarAgregarSemestre">{{ 'GLOBAL.limpiar' | translate }}</button>
-                                    <button mat-raised-button type="button" color="primary" (click)="finalizarSemestre()" [disabled]="!desactivarAgregarSemestre">{{ 'plan_estudios.finalizar_semestre' | translate }}</button>
+                                    <button mat-raised-button type="button" color="primary" (click)="finalizarSemestre()" [disabled]="!desactivarAgregarSemestre || (semestre.count() == 0)">{{ 'plan_estudios.finalizar_semestre' | translate }}</button>
                                 </mat-action-row>
                             </mat-expansion-panel>
                         </mat-accordion>
+                        <nb-card status="success" class="recuadro" style="margin: 2rem 0px 1rem 0px;" *ngIf="dataSemestre.length > 0">
+                            <nb-card-header class="d-flex justify-content-around align-items-center" style="padding: 5px;">
+                              {{ 'plan_estudios.resumen_general' | translate }}
+                            </nb-card-header>
+                            <nb-card-body style="padding: 1px;">
+                                <div class="resumenTotal">
+                                    <ng2-smart-table [settings]="tbSemestreTotal" [source]="dataSemestreTotalTotal">
+                                    </ng2-smart-table>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
                     </mat-step>
                 </mat-horizontal-stepper>
             </fieldset>

@@ -11,7 +11,7 @@ const routes: Routes = [{
   children: [{
     path: 'crear',
     component: CreacionPlanEstudiosComponent,
-    //canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   }]
 }];
 

@@ -10,6 +10,9 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { Ng2StButtonComponent } from '../../../@theme/components';
 import { MODALS, VIEWS } from '../../../@core/data/models/diccionario/diccionario';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatStepper } from '@angular/material';
 
 @Component({
   selector: 'creacion-plan-estudios',
@@ -46,54 +49,50 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   tbSemestre: Object;
   dataSemestre: LocalDataSource[];
 
+  tbSemestreTotal: Object;
+  dataSemestreTotal: LocalDataSource[];
+  dataSemestreTotalTotal: LocalDataSource;
+
   niveles: any[];
   proyectos: any[];
 
   desactivarAgregarSemestre: boolean = false;
 
-  emuleListEspacios: any[] = [
-    {
-      _id: "1",
-      espacioAcademico: "Calculo 1",
-      prerequisitos: "Ninguno",
-      clase: "Obigatorio básico",
-      creditos: 3
-    },
-    {
-      _id: "2",
-      espacioAcademico: "Calculo 2",
-      prerequisitos: "Calculo 1",
-      clase: "Obigatorio básico",
-      creditos: 3
-    },
-    {
-      _id: "3",
-      espacioAcademico: "Calculo 3",
-      prerequisitos: "Calculo 2",
-      clase: "Obigatorio básico",
-      creditos: 3
-    },
-    {
-      _id: "4",
-      espacioAcademico: "Calculo 4",
-      prerequisitos: "Calculo 3",
-      clase: "Obigatorio básico",
-      creditos: 3
-    },
-  ];
+  proyecto_id: number;
+  ListEspacios: any[] = [];
+  readonly formatototal = {
+    nombre: "TOTAL",
+    creditos: 0,
+    htd: 0,
+    htc: 0,
+    hta: 0,
+    OB: 0,
+    OC: 0,
+    EI: 0,
+    EE: 0,
+    CP: 0,
+    ENFQ_TEO: 0,
+    ENFQ_PRAC: 0,
+    ENFQ_TEOPRAC: 0, 
+  }
 
   constructor(
     private translate: TranslateService,
     private popUpManager: PopUpManager,
     private projectService: ProyectoAcademicoService,
+    private sgaMidService: SgaMidService,
+    private domSanitizer: DomSanitizer,
   ) {
     this.dataPlanesEstudio = new LocalDataSource();
     this.dataEspaciosAcademicos = new LocalDataSource();
     this.dataSemestre = [];
+    this.dataSemestreTotal = [];
+    this.dataSemestreTotalTotal = new LocalDataSource();
     this.translate.onLangChange.subscribe(() => {
       this.createTablePlanesEstudio();
       this.createTableEspaciosAcademicos();
       this.createTableSemestre();
+      this.createTableSemestreTotal();
     })
   }
 
@@ -180,6 +179,9 @@ export class CreacionPlanEstudiosComponent implements OnInit {
 
   createTableEspaciosAcademicos() {
     this.tbEspaciosAcademicos = {
+      pager: {
+        perPage: 5,
+      },
       columns: {
         index:{
           title: '#',
@@ -189,13 +191,13 @@ export class CreacionPlanEstudiosComponent implements OnInit {
            },
           width: '5%',
         },
-        espacioAcademico: {
+        nombre: {
           title: this.translate.instant('ptd.espacio_academico'),
           editable: false,
           width: '25%',
           filter: true,
         },
-        prerequisitos: {
+        prerequisitos_str: {
           title: this.translate.instant('espacios_academicos.espacios_requeridos'),
           editable: false,
           width: '25%',
@@ -249,6 +251,10 @@ export class CreacionPlanEstudiosComponent implements OnInit {
       this.dataSemestre[this.dataSemestre.length-1].add(event.data);
       this.dataSemestre[this.dataSemestre.length-1].refresh();
       this.dataEspaciosAcademicos.remove(event.data);
+      const semestreId = this.dataSemestre.length-1;
+      const totalSemestre = this.filaTotal(this.dataSemestre[semestreId]);
+      this.dataSemestreTotal[semestreId].load(totalSemestre);
+      this.dataSemestreTotal[semestreId].refresh();
     }
   }
 
@@ -257,6 +263,10 @@ export class CreacionPlanEstudiosComponent implements OnInit {
       this.dataEspaciosAcademicos.add(event.data);
       this.dataEspaciosAcademicos.refresh();
       this.dataSemestre[this.dataSemestre.length-1].remove(event.data);
+      const semestreId = this.dataSemestre.length-1;
+      const totalSemestre = this.filaTotal(this.dataSemestre[semestreId]);
+      this.dataSemestreTotal[semestreId].load(totalSemestre);
+      this.dataSemestreTotal[semestreId].refresh();
     }
   }
 
@@ -278,83 +288,129 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   }
 
   createTableSemestre() {
+    const checkmark = this.domSanitizer.bypassSecurityTrustHtml(`<div style="font-size: 2rem; text-align: center;"><i class="nb-checkmark-circle"></i></div>`);
     this.tbSemestre = {
       columns: {
-        espacioAcademico: {
+        nombre: {
           title: this.translate.instant('ptd.espacio_academico'),
           editable: false,
           width: '23%',
-          filter: true,
+          filter: false,
         },
         creditos: {
-          title: this.translate.instant('proyecto.creditos_proyecto'),
+          title: this.translate.instant('plan_estudios.creditos'),
           editable: false,
           width: '7%',
-          filter: true,
+          filter: false,
         },
         htd: {
           title: this.translate.instant('espacios_academicos.htd'),
           editable: false,
           width: '7%',
-          filter: true,
+          filter: false,
         },
         htc: {
           title: this.translate.instant('espacios_academicos.htc'),
           editable: false,
           width: '7%',
-          filter: true,
+          filter: false,
         },
         hta: {
           title: this.translate.instant('espacios_academicos.hta'),
           editable: false,
           width: '7%',
-          filter: true,
+          filter: false,
         },
-        obligatorioBasico: {
+        OB: {
           title: this.translate.instant('espacios_academicos.obligatorioBasico'),
           editable: false,
           width: '7%',
-          filter: true,
+          filter: false,
+          type: 'html',
+          valuePrepareFunction: (valor: number) =>
+            (valor === 1)
+              ?  checkmark
+              : '',
         },
-        obligatorioComplementario: {
+        OC: {
           title: this.translate.instant('espacios_academicos.obligatorioComplementario'),
           editable: false,
           width: '7%',
-          filter: true,
+          filter: false,
+          type: 'html',
+          valuePrepareFunction: (valor: number) =>
+            (valor === 1)
+              ? checkmark
+              : '',
         },
-        teorico: {
-          title: this.translate.instant('espacios_academicos.teorico'),
-          editable: false,
-          width: '7%',
-          filter: true,
-        },
-        practico: {
-          title: this.translate.instant('espacios_academicos.practico'),
-          editable: false,
-          width: '7%',
-          filter: true,
-        },
-        teoricoPractico: {
-          title: this.translate.instant('espacios_academicos.teoricoPractico'),
-          editable: false,
-          width: '7%',
-          filter: true,
-        },
-        electivaIntrinseca: {
+        EI: {
           title: this.translate.instant('espacios_academicos.electivaIntrinseca'),
           editable: false,
           width: '7%',
-          filter: true,
+          filter: false,
+          type: 'html',
+          valuePrepareFunction: (valor: number) =>
+            (valor === 1)
+              ? checkmark
+              : '',
         },
-        electivaExtrinseca: {
+        EE: {
           title: this.translate.instant('espacios_academicos.electivaExtrinseca'),
           editable: false,
           width: '7%',
-          filter: true,
+          filter: false,
+          type: 'html',
+          valuePrepareFunction: (valor: number) =>
+            (valor === 1)
+              ? checkmark
+              : '',
         },
-        
+        CP: {
+          title: this.translate.instant('espacios_academicos.componentePropedeutico'),
+          editable: false,
+          width: '7%',
+          filter: false,
+          type: 'html',
+          valuePrepareFunction: (valor: number) =>
+            (valor === 1)
+              ? checkmark
+              : '',
+        },
+        ENFQ_TEO: {
+          title: this.translate.instant('espacios_academicos.teorico'),
+          editable: false,
+          width: '7%',
+          filter: false,
+          type: 'html',
+          valuePrepareFunction: (valor: number) =>
+            (valor === 1)
+              ? checkmark
+              : '',
+        },
+        ENFQ_PRAC: {
+          title: this.translate.instant('espacios_academicos.practico'),
+          editable: false,
+          width: '7%',
+          filter: false,
+          type: 'html',
+          valuePrepareFunction: (valor: number) =>
+            (valor === 1)
+              ? checkmark
+              : '',
+        },
+        ENFQ_TEOPRAC: {
+          title: this.translate.instant('espacios_academicos.teoricoPractico'),
+          editable: false,
+          width: '7%',
+          filter: false,
+          type: 'html',
+          valuePrepareFunction: (valor: number) =>
+            (valor === 1)
+              ? checkmark
+              : '',
+        }, 
       },
-      hideSubHeader: false,
+      hideSubHeader: true,
       mode: 'external',
       actions: {
         position: 'right',
@@ -371,6 +427,158 @@ export class CreacionPlanEstudiosComponent implements OnInit {
       },
       noDataMessage: this.translate.instant('GLOBAL.table_no_data_found')
     };
+  }
+
+  createTableSemestreTotal() {
+    this.tbSemestreTotal = {
+      columns: {
+        nombre: {
+          title: this.translate.instant('ptd.espacio_academico'),
+          editable: false,
+          width: '23%',
+          filter: false,
+        },
+        creditos: {
+          title: this.translate.instant('plan_estudios.creditos'),
+          editable: false,
+          width: '7%',
+          filter: false,
+          type: 'html',
+        },
+        htd: {
+          title: this.translate.instant('espacios_academicos.htd'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        htc: {
+          title: this.translate.instant('espacios_academicos.htc'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        hta: {
+          title: this.translate.instant('espacios_academicos.hta'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        OB: {
+          title: this.translate.instant('espacios_academicos.obligatorioBasico'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        OC: {
+          title: this.translate.instant('espacios_academicos.obligatorioComplementario'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        EI: {
+          title: this.translate.instant('espacios_academicos.electivaIntrinseca'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        EE: {
+          title: this.translate.instant('espacios_academicos.electivaExtrinseca'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        CP: {
+          title: this.translate.instant('espacios_academicos.componentePropedeutico'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        ENFQ_TEO: {
+          title: this.translate.instant('espacios_academicos.teorico'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        ENFQ_PRAC: {
+          title: this.translate.instant('espacios_academicos.practico'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        },
+        ENFQ_TEOPRAC: {
+          title: this.translate.instant('espacios_academicos.teoricoPractico'),
+          editable: false,
+          width: '7%',
+          filter: false,
+        }, 
+      },
+      hideSubHeader: true,
+      mode: 'external',
+      actions: {
+        position: 'right',
+        columnTitle: this.translate.instant('GLOBAL.acciones'),
+        add: false,
+        edit: false,
+        delete: false,
+        custom: [
+          {
+            name: 'remove_from_semester',
+            title: '<i class="nb-info"></i>',
+          },
+        ],
+      },
+      noDataMessage: this.translate.instant('GLOBAL.table_no_data_found')
+    };
+  }
+
+  filaTotal(semestre: LocalDataSource): any {
+    let total = <any>UtilidadesService.hardCopy(this.formatototal);
+    semestre.getAll().then((data) => {
+      if (data.length > 0) {
+        data.forEach((dataind) => {
+          total.creditos += dataind.creditos;
+          total.htd += dataind.htd;
+          total.htc += dataind.htc;
+          total.hta += dataind.hta;
+          total.OB += dataind.OB;
+          total.OC += dataind.OC;
+          total.EI += dataind.EI;
+          total.EE += dataind.EE;
+          total.CP += dataind.CP;
+          total.ENFQ_TEO += dataind.ENFQ_TEO;
+          total.ENFQ_PRAC += dataind.ENFQ_PRAC;
+          total.ENFQ_TEOPRAC += dataind.ENFQ_TEOPRAC;
+        })
+      }
+    });
+    this.totalTotal();
+    return [total];
+  }
+
+  totalTotal() {
+    let total = <any>UtilidadesService.hardCopy(this.formatototal);
+    this.dataSemestre.forEach(semestre => {
+      semestre.getAll().then((data) => {
+        if (data.length > 0) {
+          data.forEach((dataind) => {
+            total.creditos += dataind.creditos;
+            total.htd += dataind.htd;
+            total.htc += dataind.htc;
+            total.hta += dataind.hta;
+            total.OB += dataind.OB;
+            total.OC += dataind.OC;
+            total.EI += dataind.EI;
+            total.EE += dataind.EE;
+            total.CP += dataind.CP;
+            total.ENFQ_TEO += dataind.ENFQ_TEO;
+            total.ENFQ_PRAC += dataind.ENFQ_PRAC;
+            total.ENFQ_TEOPRAC += dataind.ENFQ_TEOPRAC;
+          })
+        }
+      });
+    });
+    this.dataSemestreTotalTotal.load([total]);
+    this.dataSemestreTotalTotal.refresh();
   }
   //#endregion
   // * ----------
@@ -403,6 +611,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
         if (event.proyectoCurriular) {
           this.formPlanEstudio.codigoProyecto.valor = event.proyectoCurriular.Codigo;
           this.formGroupPlanEstudio.patchValue({codigoProyecto: event.proyectoCurriular.Codigo});
+          this.proyecto_id = event.proyectoCurriular.Id;
         } else {
           this.formPlanEstudio.codigoProyecto.valor = undefined;
           this.formGroupPlanEstudio.patchValue({codigoProyecto: undefined});
@@ -427,18 +636,31 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   nuevoPlanEstudio() {
     this.crearFormulario();
     this.createTableEspaciosAcademicos();
+    this.createTableSemestreTotal();
+    this.totalTotal();
     this.vista = VIEWS.FORM;
-    this.dataEspaciosAcademicos.load(this.emuleListEspacios);
+    this.dataEspaciosAcademicos.load([]);
   }
 
-  guardar() {
+  guardar(stepper: MatStepper) {
     this.formGroupPlanEstudio.markAllAsTouched();
     if (this.formGroupPlanEstudio.valid) {
       this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'), 
                                        this.translate.instant('plan_estudios.seguro_crear'), MODALS.INFO, true).then(
       (action) => {
         if (action.value) {
-          console.log('creado ok')
+          this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
+            this.ListEspacios = result;
+            this.dataEspaciosAcademicos.load(this.ListEspacios);
+            stepper.next();
+          }, (error) => {
+            this.ListEspacios = [];
+            const falloEn = Object.keys(error)[0];
+            this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
+                                                 this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
+                                                 this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+                                                 MODALS.ERROR, false);
+          })
         }    
       }
     );
@@ -474,7 +696,10 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     if (semestresMax && this.dataSemestre.length < semestresMax) {
       this.desactivarAgregarSemestre = true;
       this.dataSemestre.push(new LocalDataSource());
+      let total = <any>UtilidadesService.hardCopy(this.formatototal);
+      this.dataSemestreTotal.push(new LocalDataSource([total]));
       this.createTableSemestre();
+      this.createTableSemestreTotal();
     }
   }
 
@@ -529,6 +754,24 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   // * ----------
 
   // * ----------
+  // * Cargar informacion particular 
+  //#region
+  consultarEspaciosAcademicos(id_proyecto: number): Promise<any> {
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.sgaMidService.get('espacios_academicos/byProject/'+id_proyecto).subscribe((resp) => {
+        this.loading = false;
+        resolve(resp.Data);
+      }, (err) => {
+        this.loading = false;
+        reject({"espacios": err});
+      })
+    })
+  }
+  //#endregion
+  // * ----------
+
+  // * ----------
   // * Insertar info parametrica en formulario 
   //#region
   async loadSelects() {
@@ -545,7 +788,11 @@ export class CreacionPlanEstudiosComponent implements OnInit {
       await Promise.all(promesas);
       this.loading = false;
     } catch (error) {
-      console.warn(error);
+      const falloEn = Object.keys(error)[0];
+      this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
+                                           this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
+                                           this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+                                           MODALS.ERROR, false);
       this.loading = false;
     }
   }
