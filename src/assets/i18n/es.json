@@ -2350,13 +2350,6 @@
         "alerta_campos_preasignacion": "Verifique los campos del formulario",
         "seleccion_periodo": "Por favor, seleccione el periodo para cargar los datos",
         "guardado_ptd_exito": "Se ha guardado el plan de trabajo docente para la vinculación",
-        "obligatorioBasico": "OB",
-        "obligatorioComplementario": "OC",
-        "teorico": "T",
-        "practico": "P",
-        "teoricoPractico": "T/P",
-        "electivaIntrinseca": "EI",
-        "electivaExtrinseca": "EE"
         "espacio_ocupado": "Espacio ocupado"
     },
     "espacios_academicos": {
@@ -2396,7 +2389,15 @@
         "enviar_revision_ok": "¡Envío a revisión exitoso!",
         "enviar_revision_fallo": "¡No se pudo enviar a revisión!",
         "formulario_no_completo": "El formulario no está completo o hay información errónea, revise e ingrese la información faltante o válida",
-        "observacion_prev": "Observación previa"
+        "observacion_prev": "Observación previa",
+        "obligatorioBasico": "OB",
+        "obligatorioComplementario": "OC",
+        "electivaIntrinseca": "EI",
+        "electivaExtrinseca": "EE",
+        "componentePropedeutico": "CP",
+        "teorico": "T",
+        "practico": "P",
+        "teoricoPractico": "T/P"
     },
     "plan_estudios": {
         "plan_estudios":"Plan de estudios",
@@ -2425,6 +2426,10 @@
         "seguro_limpiar": "¿Descartar el formulario de plan de estudio?",
         "seguro_crear": "¿Guardar el plan de estudios?",
         "seguro_limpiar_semestre": "¿Descartar la definición de espacios académicos para este semestre?",
-        "seguro_finalizar": "¿Guardar definición de espacios académicos para este semestre?"
+        "seguro_finalizar": "¿Guardar definición de espacios académicos para este semestre?",
+        "agregar_espacio": "Agregar este espacio al semestre actual",
+        "quitar_espacio": "Quitar espacio de este semestre",
+        "creditos": "Créditos",
+        "resumen_general": "Total Plan de estudio"
     }
 }
