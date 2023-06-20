@@ -16,3 +16,19 @@ nb-card-header {
     left: 0.5rem;
     z-index: 3;
 }
+
+.advertencia {
+    background-color: var(--warning-main);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 0.7rem;
+    border-radius: 0.4rem;
+    margin-left: 1rem;
+    width: 51%;
+}
+
+.unaLinea {
+    display: flex;
+    align-items: flex-start;
+}

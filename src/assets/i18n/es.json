@@ -2350,7 +2350,10 @@
         "alerta_campos_preasignacion": "Verifique los campos del formulario",
         "seleccion_periodo": "Por favor, seleccione el periodo para cargar los datos",
         "guardado_ptd_exito": "Se ha guardado el plan de trabajo docente para la vinculación",
-        "espacio_ocupado": "Espacio ocupado"
+        "espacio_ocupado": "Espacio ocupado",
+        "mensaje_copiar_plan": "Al copiar el Plan de Trabajo Docente se descartará lo asignado hasta el momento y se sustituirá por la copia. Sin embargo, los cambios no se hacen efectivos hasta que guarde los cambios.",
+        "espacios_no_requeridos": "En el Plan de Trabajo Docente anterior se encontraron espacios academicos que ya no se requieren ni se cargan para el plan actual, estos son:",
+        "espacios_sin_asignar": "En el plan de Trabajo Docente anterior no estaban asignados algunos espacios, por favor defina la carga lectiva faltante para los siguientes espacios académicos:"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",

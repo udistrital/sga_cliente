@@ -105,4 +105,16 @@ export class PopUpManager {
         };
         return Swal.fire(opt);
     }
+
+    public showManyPopUp(title, steps: any[], type) {
+        const opts = steps.map(step => {
+            return {
+                title: title,
+                html: step,
+                icon: type,
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar')
+            }
+        })
+        return Swal.queue(opts)
+    }
 }
