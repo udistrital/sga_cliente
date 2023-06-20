@@ -2276,7 +2276,10 @@
         "alerta_campos_preasignacion": "Verify the form fields",
         "seleccion_periodo": "Please select the period to load the data",
         "guardado_ptd_exito": "The teacher work plan assignment has been saved for the linkage",
-        "espacio_ocupado": "Space occupied"
+        "espacio_ocupado": "Space occupied",
+        "mensaje_copiar_plan": "When copying the Teacher Work Plan, what has been assigned up to now will be discarded and replaced by the copy. However, the changes do not take effect until you save the changes.",
+        "espacios_no_requeridos": "In the previous Teacher Work Plan, were found academic spaces that are no longer required or loaded for the current plan, these are:",
+        "espacios_sin_asignar": "In the previous Teacher Work plan some spaces were not assigned, please define the missing study load for the following academic spaces:"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",

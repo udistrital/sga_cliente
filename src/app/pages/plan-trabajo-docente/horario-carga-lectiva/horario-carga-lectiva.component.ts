@@ -110,38 +110,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.getActividades().then(() => {
-      this.Data.carga[this.seleccion].forEach(carga => {
-        this.identificador++;
-
-        var nombre;
-        if (carga.espacio_academico_id != null) {
-          nombre = this.Data.espacios_academicos[this.seleccion].find(espacio => espacio.id == carga.espacio_academico_id).nombre;
-        } else {
-          nombre = this.actividades.find(actividad => actividad._id == carga.actividad_id).nombre
-        }
-
-        const newElement: elementDragDrop = {
-          id: this.identificador,
-          nombre: nombre,
-          idCarga: carga.id,
-          idEspacioAcademico: carga.espacio_academico_id,
-          idActividad: carga.actividad_id,
-          horas: carga.horario.horas,
-          horaFormato: carga.horario.horaFormato,
-          tipo: carga.horario.tipo,
-          sede: carga.sede,
-          edificio: carga.edificio,
-          salon: carga.salon,
-          estado: carga.horario.estado,
-          bloqueado: (this.isDocente && carga.horario.tipo == this.tipo.carga_lectiva) || (this.isCoordinador && carga.horario.tipo == this.tipo.actividades),
-          dragPosition: carga.horario.dragPosition,
-          prevPosition: carga.horario.prevPosition,
-          finalPosition: carga.horario.finalPosition
-        };
-        this.listaCargaLectiva.push(newElement);
-        const coord = this.getPositionforMatrix(newElement);
-        this.changeStateRegion(coord.x, coord.y, newElement.horas, true);
-      });
+      //this.loadCarga();
     });
 
     this.getSedes().then(() => { this.OutLoading.emit(false); });
@@ -165,19 +134,24 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.edit = this.WorkingMode == ACTIONS.EDIT;
-    this.isDocente = this.Rol == ROLES.DOCENTE;
-    this.isCoordinador = this.Rol == ROLES.ADMIN_DOCENCIA || this.Rol == ROLES.COORDINADOR;
-    this.vinculaciones = this.Data.tipo_vinculacion;
-    this.seleccion = this.Data.seleccion;
-
-    this.vinculacionSelected = this.vinculaciones[this.seleccion];
-    this.asignaturas = this.Data.espacios_academicos[this.seleccion];
-    this.observacion = this.Data.resumenes[this.seleccion].observacion ? this.Data.resumenes[this.seleccion].observacion : '';
-    this.calcularHoras();
-    this.calcularHoras(this.tipo.actividades);
-    this.calcularHoras(this.tipo.carga_lectiva);
-    this.getActividades();
+    if (this.Data) {
+      this.edit = this.WorkingMode == ACTIONS.EDIT;
+      this.isDocente = this.Rol == ROLES.DOCENTE;
+      this.isCoordinador = this.Rol == ROLES.ADMIN_DOCENCIA || this.Rol == ROLES.COORDINADOR;
+      this.vinculaciones = this.Data.tipo_vinculacion;
+      this.seleccion = this.Data.seleccion;
+      this.vinculacionSelected = this.vinculaciones[this.seleccion];
+      this.asignaturas = this.Data.espacios_academicos[this.seleccion];
+      this.observacion = this.Data.resumenes[this.seleccion].observacion ? this.Data.resumenes[this.seleccion].observacion : '';
+      this.loadCarga();
+      this.calcularHoras();
+      this.calcularHoras(this.tipo.actividades);
+      this.calcularHoras(this.tipo.carga_lectiva);
+      this.getActividades();
+      console.log(this.Data)
+    } else {
+      this.listaCargaLectiva = [];
+    }
   }
 
   getDragPosition(eventDrag: CdkDragMove) {
@@ -379,6 +353,41 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
     }
 
     this.cancelarUbicacion();
+  }
+
+  loadCarga() {
+    this.Data.carga[this.seleccion].forEach(carga => {
+      console.log(carga)
+      this.identificador++;
+      var nombre;
+      if (carga.espacio_academico_id != null) {
+        nombre = this.Data.espacios_academicos[this.seleccion].find(espacio => espacio.id == carga.espacio_academico_id).nombre;
+      } else {
+        nombre = this.actividades.find(actividad => actividad._id == carga.actividad_id).nombre
+      }
+
+      const newElement: elementDragDrop = {
+        id: this.identificador,
+        nombre: nombre,
+        idCarga: carga.id,
+        idEspacioAcademico: carga.espacio_academico_id,
+        idActividad: carga.actividad_id,
+        horas: carga.horario.horas,
+        horaFormato: carga.horario.horaFormato,
+        tipo: carga.horario.tipo,
+        sede: carga.sede,
+        edificio: carga.edificio,
+        salon: carga.salon,
+        estado: carga.horario.estado,
+        bloqueado: (this.isDocente && carga.horario.tipo == this.tipo.carga_lectiva) || (this.isCoordinador && carga.horario.tipo == this.tipo.actividades),
+        dragPosition: carga.horario.dragPosition,
+        prevPosition: carga.horario.prevPosition,
+        finalPosition: carga.horario.finalPosition
+      };
+      this.listaCargaLectiva.push(newElement);
+      const coord = this.getPositionforMatrix(newElement);
+      this.changeStateRegion(coord.x, coord.y, newElement.horas, true);
+    });
   }
 
   async editElement(elementClicked: elementDragDrop) {
