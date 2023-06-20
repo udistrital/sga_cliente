@@ -61,17 +61,20 @@
             <!-- clon ptd -->
             <fieldset [ngClass]="{'fieldseter':true}">
                 <legend><small>&nbsp; {{ 'ptd.copy_ptd' | translate }}</small></legend>
+                <div class="unaLinea">
                 <mat-form-field style="width: 40%;">
                     <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
-                    <mat-select> <!-- [(ngModel)]="periodo" [disabled]='false' (selectionChange)="selectPeriodo()"> -->
+                    <mat-select [(ngModel)]="periodoCopia" [disabled]='false'>
                         <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
-                        <!-- <mat-option *ngFor="let item of periodos" [value]="item">
+                        <mat-option *ngFor="let item of periodosAnteriores" [value]="item">
                             {{item.Nombre}}
-                        </mat-option> -->
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="copy_ptd()"> {{
+                <button mat-raised-button color="primary" style="margin-left: 1.5rem;" [disabled]="!periodoCopia" (click)="copy_ptd()"> {{
                     'GLOBAL.copiar' | translate }} </button>
+                <div class="advertencia" *ngIf="periodoCopia">{{ 'ptd.mensaje_copiar_plan' | translate }}</div>
+                </div>
             </fieldset>
             <!-- horario carga lectiva -->
             <horario-carga-lectiva [WorkingMode]="canEdit" [Rol]="rolIs" [Data]="detalleAsignacion"

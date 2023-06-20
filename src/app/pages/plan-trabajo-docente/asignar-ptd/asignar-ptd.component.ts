@@ -10,6 +10,7 @@ import { ParametrosService } from '../../../@core/data/parametros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../../../@core/data/users.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'asignar-ptd',
@@ -36,6 +37,12 @@ export class AsignarPtdComponent implements OnInit {
   canEdit: Symbol = ACTIONS.VIEW;
   asignaturaAdd: any = undefined;
   detalleAsignacion: any = undefined;
+
+  periodosAnteriores: any[] = [];
+  periodoCopia: any;
+  readonly tipo = { carga_lectiva: 1, actividades: 2 };
+
+  detalleAsignacionRespaldo: any = undefined;
 
   constructor(
     private translate: TranslateService,
@@ -135,7 +142,15 @@ export class AsignarPtdComponent implements OnInit {
               this.sgaMidService.get(`plan_trabajo_docente/plan/${out.rowData.docente_id}/${out.rowData.periodo_id}/${out.rowData.tipo_vinculacion_id}`).subscribe((res: any) => {
                 this.loading = false;
                 this.detalleAsignacion = res.Data;
-                this.dataDocente = { Nombre: out.rowData.docente, Documento: out.rowData.identificacion, Periodo: out.rowData.periodo_academico, TipoVinculacion: out.rowData.tipo_vinculacion };
+                this.dataDocente = {
+                  Nombre: out.rowData.docente,
+                  Documento: out.rowData.identificacion,
+                  Periodo: out.rowData.periodo_academico,
+                  TipoVinculacion: out.rowData.tipo_vinculacion,
+                  docente_id: out.rowData.docente_id,
+                  periodo_id: out.rowData.periodo_id,
+                  tipo_vinculacion_id: out.rowData.tipo_vinculacion_id
+                };
                 this.vista = VIEWS.FORM;
                 if (this.rolIs == ROLES.DOCENTE) {
                   this.popUpManager.showPopUpGeneric(this.translate.instant('notas.docente'), this.translate.instant('ptd.aviso_informativo_docente_p1') + '.<br><br>' +
@@ -184,8 +199,9 @@ export class AsignarPtdComponent implements OnInit {
   }
 
   copy_ptd() {
+    const NombrePeriodo = this.periodoCopia.Nombre;
     if (this.rolIs == ROLES.DOCENTE) {
-      this.popUpManager.showPopUpGeneric('', this.translate.instant('ptd.copiar_plan_ver_coordinador_p1') + "xxxx-xx" + '.<br>' +
+      this.popUpManager.showPopUpGeneric('', this.translate.instant('ptd.copiar_plan_ver_coordinador_p1') + NombrePeriodo + '.<br>' +
         this.translate.instant('ptd.copiar_plan_ver_docente_p1') + '<br><br>' +
         this.translate.instant('ptd.copiar_plan_ver_docente_p2') + '.<br>' +
         this.translate.instant('ptd.copiar_plan_ver_docente_p3') + '.<br>' +
@@ -199,24 +215,46 @@ export class AsignarPtdComponent implements OnInit {
         });
     }
     if (this.rolIs == ROLES.ADMIN_DOCENCIA || this.rolIs == ROLES.COORDINADOR) {
-      this.popUpManager.showPopUpGeneric('', this.translate.instant('ptd.copiar_plan_ver_coordinador_p1') + "xxxx-xx" + '.<br>' +
+      this.popUpManager.showPopUpGeneric('', this.translate.instant('ptd.copiar_plan_ver_coordinador_p1') + NombrePeriodo + '.<br>' +
         this.translate.instant('ptd.copiar_plan_ver_coordinador_p2') + '.', MODALS.QUESTION, true)
         .then(action => {
           if (action.value) {
-            console.log("copiar carga lectiva")
+            this.loading = true;
+            this.detalleAsignacionRespaldo = UtilidadesService.hardCopy(this.detalleAsignacion);
+            this.detalleAsignacion = undefined;
+            this.sgaMidService.get(`plan_trabajo_docente/copiar_plan/${this.dataDocente.docente_id}/${this.periodoCopia.Id}/${this.dataDocente.periodo_id}/${this.dataDocente.tipo_vinculacion_id}/${this.tipo.carga_lectiva}`).subscribe(resp => {
+                  this.loading = false;
+                  this.detalleAsignacionRespaldo.carga = [resp.Data.carga];
+                  this.detalleAsignacion = UtilidadesService.hardCopy(this.detalleAsignacionRespaldo);
+                  let textPopUp = []
+                  let no_requeridos = <any[]>resp.Data.espacios_academicos.no_requeridos;
+                  if (no_requeridos.length > 0) {
+                    let nombreEspacios = "";
+                    no_requeridos.forEach(espacioAcad => {
+                      nombreEspacios += "<b>" + espacioAcad.nombre + "</b><br>";
+                    })
+                    textPopUp.push(this.translate.instant('ptd.espacios_no_requeridos') + "<br>" + nombreEspacios);
+                  }
+                  let sin_carga = <any[]>resp.Data.espacios_academicos.sin_carga;
+                  if (sin_carga.length > 0) {
+                    let nombreEspacios = "";
+                    sin_carga.forEach(preasignEsp => {
+                      const espacio = this.detalleAsignacion.espacios_academicos[0].find(espacio => espacio.id == preasignEsp.espacio_academico_id);
+                      nombreEspacios += "<b>" + espacio.nombre + "</b><br>";
+                    })
+                    textPopUp.push(this.translate.instant('ptd.espacios_sin_asignar') + "<br>" + nombreEspacios);
+                  }
+                  this.popUpManager.showManyPopUp(this.translate.instant('ptd.copy_ptd'), textPopUp, MODALS.INFO)
+                }, err => {
+                  this.loading = false;
+                  this.detalleAsignacion = UtilidadesService.hardCopy(this.detalleAsignacionRespaldo);
+                  console.warn(err)
+                })
           } else {
             console.log("cancelar")
           }
         });
     }
-    /* this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.copy_ptd'),"dsdsdsf", MODALS.INFO, true).then(
-      action => {
-        if (action.value) {
-          console.log("copiar")
-        } else {
-          console.log("cancelar")
-        }
-      }) */
   }
 
   loadAsignaciones() {
@@ -263,8 +301,19 @@ export class AsignarPtdComponent implements OnInit {
     });
   }
 
+  cargarPeriodosAnteriores(periodo: any): void {
+    this.periodosAnteriores = this.periodos.filter(porPeriodo => {
+      if ((porPeriodo.Year <= periodo.Year) && (porPeriodo.Id < periodo.Id) && (porPeriodo.Nombre < periodo.Nombre)) {
+        return porPeriodo
+      } else {
+          return false
+      }
+    })
+  }
+
   selectPeriodo(periodo) {
     this.periodo = periodo.value;
+    this.cargarPeriodosAnteriores(this.periodo);
     this.loading = true;
     if (this.periodo) {
       this.loadAsignaciones();
