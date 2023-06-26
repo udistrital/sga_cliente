@@ -2353,7 +2353,9 @@
         "espacio_ocupado": "Espacio ocupado",
         "mensaje_copiar_plan": "Al copiar el Plan de Trabajo Docente se descartará lo asignado hasta el momento y se sustituirá por la copia. Sin embargo, los cambios no se hacen efectivos hasta que guarde los cambios.",
         "espacios_no_requeridos": "En el Plan de Trabajo Docente anterior se encontraron espacios academicos que ya no se requieren ni se cargan para el plan actual, estos son:",
-        "espacios_sin_asignar": "En el plan de Trabajo Docente anterior no estaban asignados algunos espacios, por favor defina la carga lectiva faltante para los siguientes espacios académicos:"
+        "espacios_sin_asignar": "En el plan de Trabajo Docente anterior no estaban asignados algunos espacios, por favor defina la carga lectiva faltante para los siguientes espacios académicos:",
+        "no_info_copia_carga_lectiva": "Sin carga lectiva para el periodo seleccionado, o información incompleta",
+        "no_info_copia_actividades": "Sin actividades para el periodo seleccionado, o información incompleta"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",

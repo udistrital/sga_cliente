@@ -109,9 +109,9 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   ocupados: any[] = [];
 
   ngOnInit() {
-    this.getActividades().then(() => {
+    /* this.getActividades().then(() => {
       //this.loadCarga();
-    });
+    }); */
 
     this.getSedes().then(() => { this.OutLoading.emit(false); });
 
@@ -143,12 +143,12 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
       this.vinculacionSelected = this.vinculaciones[this.seleccion];
       this.asignaturas = this.Data.espacios_academicos[this.seleccion];
       this.observacion = this.Data.resumenes[this.seleccion].observacion ? this.Data.resumenes[this.seleccion].observacion : '';
-      this.loadCarga();
       this.calcularHoras();
       this.calcularHoras(this.tipo.actividades);
       this.calcularHoras(this.tipo.carga_lectiva);
-      this.getActividades();
-      console.log(this.Data)
+      this.getActividades().then(() =>{
+        this.loadCarga();
+      })
     } else {
       this.listaCargaLectiva = [];
     }
@@ -357,7 +357,6 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
 
   loadCarga() {
     this.Data.carga[this.seleccion].forEach(carga => {
-      console.log(carga)
       this.identificador++;
       var nombre;
       if (carga.espacio_academico_id != null) {
@@ -497,7 +496,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
       estado_plan: this.Data.estado_plan[this.seleccion]
     }
 
-    this.sgaMidService.put('plan_trabajo_docente/plan', { carga_plan: carga_plan, plan_docente: plan_docente }).subscribe(
+    this.sgaMidService.put('plan_trabajo_docente/plan', { carga_plan: carga_plan, plan_docente: plan_docente, descartar: this.Data.descartar ? this.Data.descartar : [] }).subscribe(
       response => {
         this.OutLoading.emit(false);
         if (response.Response.Code == 200) {

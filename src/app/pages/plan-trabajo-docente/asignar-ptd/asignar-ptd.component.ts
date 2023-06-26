@@ -43,6 +43,7 @@ export class AsignarPtdComponent implements OnInit {
   readonly tipo = { carga_lectiva: 1, actividades: 2 };
 
   detalleAsignacionRespaldo: any = undefined;
+  detalleAsignacionDescartar: any[] = [];
 
   constructor(
     private translate: TranslateService,
@@ -152,6 +153,9 @@ export class AsignarPtdComponent implements OnInit {
                   tipo_vinculacion_id: out.rowData.tipo_vinculacion_id
                 };
                 this.vista = VIEWS.FORM;
+                this.periodoCopia = undefined;
+                this.detalleAsignacionRespaldo = undefined;
+                this.detalleAsignacionDescartar = [];
                 if (this.rolIs == ROLES.DOCENTE) {
                   this.popUpManager.showPopUpGeneric(this.translate.instant('notas.docente'), this.translate.instant('ptd.aviso_informativo_docente_p1') + '.<br><br>' +
                     this.translate.instant('ptd.aviso_informativo_docente_p2') + '.', MODALS.INFO, false)
@@ -208,9 +212,25 @@ export class AsignarPtdComponent implements OnInit {
         this.translate.instant('ptd.copiar_plan_ver_docente_p4') + '.', MODALS.QUESTION, true)
         .then(action => {
           if (action.value) {
-            console.log("copiar actividades")
-          } else {
-            console.log("cancelar")
+            this.loading = true;
+            this.detalleAsignacionRespaldo = UtilidadesService.hardCopy(this.detalleAsignacion);
+            const justCargaLectiva = this.detalleAsignacionRespaldo.carga[this.detalleAsignacionRespaldo.seleccion].filter(item => !(item.actividad_id));
+            this.detalleAsignacionDescartar = this.detalleAsignacionRespaldo.carga[this.detalleAsignacionRespaldo.seleccion].filter(item => (item.actividad_id));
+            this.detalleAsignacionRespaldo.carga[this.detalleAsignacionRespaldo.seleccion] = justCargaLectiva;
+            this.detalleAsignacion = undefined;
+            this.sgaMidService.get(`plan_trabajo_docente/copiar_plan/${this.dataDocente.docente_id}/${this.periodoCopia.Id}/${this.dataDocente.periodo_id}/${this.dataDocente.tipo_vinculacion_id}/${this.tipo.actividades}`).subscribe(resp => {
+              this.loading = false;
+              this.detalleAsignacionRespaldo.carga[this.detalleAsignacionRespaldo.seleccion].push(...resp.Data.carga)
+              this.detalleAsignacion = UtilidadesService.hardCopy(this.detalleAsignacionRespaldo);
+              this.detalleAsignacion.descartar = this.detalleAsignacionDescartar;
+            }, err => {
+              this.loading = false;
+              this.detalleAsignacionRespaldo.carga[this.detalleAsignacionRespaldo.seleccion].push(...this.detalleAsignacionDescartar)
+              this.detalleAsignacion = UtilidadesService.hardCopy(this.detalleAsignacionRespaldo);
+              this.detalleAsignacion.descartar = [];
+              this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.copy_ptd'), this.translate.instant('ptd.no_info_copia_actividades'), MODALS.ERROR, false)
+              console.warn(err)
+            })
           }
         });
     }
@@ -221,11 +241,15 @@ export class AsignarPtdComponent implements OnInit {
           if (action.value) {
             this.loading = true;
             this.detalleAsignacionRespaldo = UtilidadesService.hardCopy(this.detalleAsignacion);
+            const justActividades = this.detalleAsignacionRespaldo.carga[this.detalleAsignacionRespaldo.seleccion].filter(item => !(item.espacio_academico_id));
+            this.detalleAsignacionDescartar = this.detalleAsignacionRespaldo.carga[this.detalleAsignacionRespaldo.seleccion].filter(item => (item.espacio_academico_id));
+            this.detalleAsignacionRespaldo.carga[this.detalleAsignacionRespaldo.seleccion] = justActividades;
             this.detalleAsignacion = undefined;
             this.sgaMidService.get(`plan_trabajo_docente/copiar_plan/${this.dataDocente.docente_id}/${this.periodoCopia.Id}/${this.dataDocente.periodo_id}/${this.dataDocente.tipo_vinculacion_id}/${this.tipo.carga_lectiva}`).subscribe(resp => {
                   this.loading = false;
-                  this.detalleAsignacionRespaldo.carga = [resp.Data.carga];
+                  this.detalleAsignacionRespaldo.carga[this.detalleAsignacionRespaldo.seleccion].push(...resp.Data.carga)
                   this.detalleAsignacion = UtilidadesService.hardCopy(this.detalleAsignacionRespaldo);
+                  this.detalleAsignacion.descartar = this.detalleAsignacionDescartar;
                   let textPopUp = []
                   let no_requeridos = <any[]>resp.Data.espacios_academicos.no_requeridos;
                   if (no_requeridos.length > 0) {
@@ -239,19 +263,19 @@ export class AsignarPtdComponent implements OnInit {
                   if (sin_carga.length > 0) {
                     let nombreEspacios = "";
                     sin_carga.forEach(preasignEsp => {
-                      const espacio = this.detalleAsignacion.espacios_academicos[0].find(espacio => espacio.id == preasignEsp.espacio_academico_id);
-                      nombreEspacios += "<b>" + espacio.nombre + "</b><br>";
+                      nombreEspacios += "<b>" + preasignEsp.nombre + "</b><br>";
                     })
                     textPopUp.push(this.translate.instant('ptd.espacios_sin_asignar') + "<br>" + nombreEspacios);
                   }
                   this.popUpManager.showManyPopUp(this.translate.instant('ptd.copy_ptd'), textPopUp, MODALS.INFO)
                 }, err => {
                   this.loading = false;
+                  this.detalleAsignacionRespaldo.carga[this.detalleAsignacionRespaldo.seleccion].push(...this.detalleAsignacionDescartar)
                   this.detalleAsignacion = UtilidadesService.hardCopy(this.detalleAsignacionRespaldo);
+                  this.detalleAsignacion.descartar = [];
+                  this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.copy_ptd'), this.translate.instant('ptd.no_info_copia_carga_lectiva'), MODALS.ERROR, false)
                   console.warn(err)
                 })
-          } else {
-            console.log("cancelar")
           }
         });
     }
