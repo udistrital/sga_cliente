@@ -193,14 +193,14 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
     }
   }
 
-  eliminarPreasignacion() {
+  /* eliminarPreasignacion() {
     this.anyService.delete(environment.PLAN_TRABAJO_DOCENTE_SERVICE, 'pre_asignacion', { Id: this.data.id }).subscribe(
       (response: any) => {
         this.popUpManager.showSuccessAlert(this.translate.instant('ptd.preasignacion_eliminada'));
         this.dialogRef.close();
       }
     );
-  }
+  } */
 
   cancelar() {
     this.dialogRef.close();

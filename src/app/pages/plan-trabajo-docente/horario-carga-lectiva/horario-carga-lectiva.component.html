@@ -32,7 +32,7 @@
         </mat-select>
     </mat-form-field>
     <button mat-raised-button color="primary" style="margin-left: 1.5rem;"
-        [disabled]="!vinculacionSelected || (!asignaturaSelected && !actividadSelected)"
+        [disabled]="!vinculacionSelected || (!asignaturaSelected && !actividadSelected) || !edit"
         (click)="formularioEspacioFisico()"> {{
         'GLOBAL.agregar' | translate }}
     </button>
@@ -40,7 +40,7 @@
 
 <!-- <dialogo-ubicacion></dialogo-ubicacion> -->
 
-<fieldset id="ubicacion" [ngClass]="{'fieldseter':true}" [hidden]="!ubicacionActive">
+<fieldset id="ubicacion" [ngClass]="{'fieldseter':true}" [hidden]="!ubicacionActive" *ngIf="edit">
     <legend>
         <small>&nbsp; {{ 'ptd.espacio_fisico' | translate }}</small>
     </legend>
@@ -247,9 +247,23 @@
             </mat-form-field>
         </fieldset>
     </div>
+    <div class="row" style="display: flex; align-items: center; margin-top: 1rem;" *ngIf="Data.aprobacion">
+        <fieldset [ngClass]="{'fieldseter':true}" style="width: 80%; margin: auto;">
+            <legend><small>&nbsp; {{ 'ptd.aprobacion_plan_coordinacion' | translate }}</small></legend>
+            <mat-form-field style="width: 100%;">
+                <mat-label>* {{ 'ptd.aprobacion_plan_coordinacion' | translate }}:</mat-label>
+                <mat-select [(ngModel)]="aprobacion">
+                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                    <mat-option *ngFor="let item of Data.aprobacion" [value]="item">
+                        {{item.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </fieldset>
+    </div>
     <br>
     <div class="row" style="display: flex; justify-content: center; align-items: center;" *ngIf="edit">
-        <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="guardar_ptd()"> {{
+        <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="guardar_ptd()" [disabled]="(Data.aprobacion && !aprobacion)"> {{
             'ptd.guardar_ptd' | translate }} </button>
         <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="cancelar()"> {{
             'GLOBAL.cancelar' | translate }} </button>

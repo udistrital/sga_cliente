@@ -22,6 +22,8 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
+                
+                &nbsp;<button mat-stroked-button (click)="loadAsignaciones()" *ngIf="periodo"> {{ 'GLOBAL.actualizar' | translate }} </button>
 
                 <ng2-smart-table [hidden]="!periodo" [settings]="tbDocente" [source]="dataDocentes">
                 </ng2-smart-table>
@@ -33,7 +35,7 @@
     <!-- Vista de gestión ptd -->
     <ng-container *ngSwitchCase="VIEWS.FORM">
         <nb-card-header>
-            <button mat-stroked-button class="top-left-regresar" (click)="vista=VIEWS.LIST">{{ 'GLOBAL.regresar' |
+            <button mat-stroked-button class="top-left-regresar" (click)="regresar()">{{ 'GLOBAL.regresar' |
                 translate }}</button>
             <div class="row" align="center">
                 <div class="col">
@@ -66,22 +68,23 @@
                     <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
                     <mat-select [(ngModel)]="periodoCopia" [disabled]='false'>
                         <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
-                        <mat-option *ngFor="let item of periodosAnteriores" [value]="item">
-                            {{item.Nombre}}
-                        </mat-option>
+                        <ng-container *ngIf="(canEdit == ACTIONS.EDIT)">
+                            <mat-option *ngFor="let item of periodosAnteriores" [value]="item">
+                                {{item.Nombre}}
+                            </mat-option>
+                        </ng-container>
                     </mat-select>
                 </mat-form-field>
-                <button mat-raised-button color="primary" style="margin-left: 1.5rem;" [disabled]="!periodoCopia" (click)="copy_ptd()"> {{
+                <button mat-raised-button color="primary" style="margin-left: 1.5rem;" [disabled]="!periodoCopia || (canEdit != ACTIONS.EDIT)" (click)="copy_ptd()"> {{
                     'GLOBAL.copiar' | translate }} </button>
                 <div class="advertencia" *ngIf="periodoCopia">{{ 'ptd.mensaje_copiar_plan' | translate }}</div>
                 </div>
             </fieldset>
             <!-- horario carga lectiva -->
             <horario-carga-lectiva [WorkingMode]="canEdit" [Rol]="rolIs" [Data]="detalleAsignacion"
-                (OutCancelar)="vista=VIEWS.LIST" (OutLoading)="loading=$event"></horario-carga-lectiva>
+                (OutCancelar)="regresar()" (OutLoading)="loading=$event"></horario-carga-lectiva>
         </nb-card-body>
         <nb-card-footer>
-            <!-- <button mat-raised-button color="primary" (click)="vista = VIEWS.LIST"> regresar </button> -->
         </nb-card-footer>
     </ng-container>
 </nb-card>
