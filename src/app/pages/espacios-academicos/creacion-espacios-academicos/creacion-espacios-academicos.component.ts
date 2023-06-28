@@ -9,6 +9,7 @@ import { FORM_ESPACIO_ACADEMICO } from './form-espacio_academico';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { EspaciosAcademicosService } from '../../../@core/data/espacios_academicos.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { format } from 'url';
@@ -59,6 +60,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
     private formBuilder: FormBuilder,
     private projectService: ProyectoAcademicoService,
     private parametrosService: ParametrosService,
+    private sgaMidService: SgaMidService,
     private espaciosAcademicosService: EspaciosAcademicosService,
     private autenticationService: ImplicitAutenticationService,
     private gestorDocumentalService: NewNuxeoService
@@ -765,7 +767,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
   //#region
   loadEspaciosAcademicos(): Promise<EspacioAcademico[]> {
     return new Promise<any>((resolve, reject) => {
-      this.espaciosAcademicosService.get('espacio-academico?query=activo:true&limit=0').subscribe(
+      this.espaciosAcademicosService.get('espacio-academico?query=espacio_academico_padre,activo:true&limit=0').subscribe(
         (resp) => {
           if (Object.keys(resp.Data[0]).length > 0) {
             resolve(resp.Data);
@@ -854,7 +856,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
 
   postEspacio_Academico(espacio_academico: EspacioAcademico) {
     this.loading = true;
-    this.espaciosAcademicosService.post('espacio-academico', espacio_academico).subscribe(
+    this.sgaMidService.post('espacios_academicos/espacio_academico_hijos', espacio_academico).subscribe(
       resp => {
         if (resp.Status == "201") {
           this.loading = false;
