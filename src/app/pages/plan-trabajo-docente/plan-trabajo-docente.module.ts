@@ -7,6 +7,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialog, MatDialogModule } from '@angular/material';
 import { dialogoPreAsignacionPtdComponent } from './preasignacion/dialogo-preasignacion/dialogo-preasignacion.component';
 import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.service';
+import { PlanTrabajoDocenteService } from '../../@core/data/plan_trabajo_docente.service';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.
   ],
   providers: [
     MatDialog,
-    EspaciosAcademicosService
+    EspaciosAcademicosService,
+    PlanTrabajoDocenteService,
   ],
   entryComponents: [
     dialogoPreAsignacionPtdComponent,

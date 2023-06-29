@@ -2355,7 +2355,20 @@
         "espacios_no_requeridos": "En el Plan de Trabajo Docente anterior se encontraron espacios academicos que ya no se requieren ni se cargan para el plan actual, estos son:",
         "espacios_sin_asignar": "En el plan de Trabajo Docente anterior no estaban asignados algunos espacios, por favor defina la carga lectiva faltante para los siguientes espacios académicos:",
         "no_info_copia_carga_lectiva": "Sin carga lectiva para el periodo seleccionado, o información incompleta",
-        "no_info_copia_actividades": "Sin actividades para el periodo seleccionado, o información incompleta"
+        "no_info_copia_actividades": "Sin actividades para el periodo seleccionado, o información incompleta",
+        "enviar_a_docente": "Enviar a docente",
+        "enviar_a_coordinacion": "Enviar a coordinación",
+        "pregunta_enviar_a_docente": "¿Enviar para aprobación de docente? Esta acción significa que ha sido aprobado por el Proyecto Curricular",
+        "pregunta_enviar_a_coordinacion": "¿Enviar aprobación a coordinación? Los espacios académicos aprobados harán parte de su Plan Trabajo Docente",
+        "pregunta_editar": "La edición de la preasignación requiere nuevamente el proceso de aprobación, ¿Continuar?",
+        "pregunta_eliminar": "¿Eliminar la preasignación seleccionada?",
+        "pregunta_enviar": "Al enviar no podrá seguir editando, ¿continuar?",
+        "plan_enviado_ok": "El plan ha sido enviado",
+        "error_enviar_plan": "No se pudo enviar el plan",
+        "info_modo_solo_ver": "En este estado no es posible editar el plan",
+        "aprobacion_plan_coordinacion": "Aprobación del Plan Trabajo Docente",
+        "recordar_aprobar_plan": "No olvide aprobar o rechazar el plan en la sección final de esta página",
+        "revisar_solapamiento_carga": "Por favor revise que no haya superposición entre carga lectiva y actividades. Corrobore que resumen el total de horas coincída con lo cargado en horario."
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",

@@ -10,6 +10,9 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MODALS } from '../../../@core/data/models/diccionario/diccionario';
+import { AnyService } from '../../../@core/data/any.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'preasignacion',
@@ -35,7 +38,8 @@ export class PreAsignacionPtdComponent implements OnInit {
     private userService: UserService,
     private parametrosService: ParametrosService,
     private sgaMidService: SgaMidService,
-    private autenticationService: ImplicitAutenticationService
+    private autenticationService: ImplicitAutenticationService,
+    private anyService: AnyService,
   ) {
     this.data = new LocalDataSource();
     this.cargarPeriodo();
@@ -122,7 +126,7 @@ export class PreAsignacionPtdComponent implements OnInit {
           renderComponent: Ng2StCheckComponent,
         },
         enviar: {
-          title: this.translate.instant('GLOBAL.enviar'),
+          title: this.translate.instant('ptd.enviar_a_docente'),
           editable: false,
           width: '5%',
           filter: false,
@@ -130,18 +134,23 @@ export class PreAsignacionPtdComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              let data = {
-                "preasignaciones": [
-                  { "Id": out["rowData"].id },
-                ],
-                "no-preasignaciones": [],
-                "docente": false,
-              }
-
-              this.sgaMidService.put('plan_trabajo_docente/aprobacion_preasignacion', data).subscribe((res) => {
-                this.popUpManager.showSuccessAlert(this.translate.instant('ptd.aprobacion_preasignacion'));
-                this.loadPreasignaciones();
-              });
+              this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.enviar_a_docente'), this.translate.instant('ptd.pregunta_enviar_a_docente'), MODALS.INFO, false).then(
+                action => {
+                  if (action.value) {
+                    let data = {
+                      "preasignaciones": [
+                        { "Id": out["rowData"].id },
+                      ],
+                      "no-preasignaciones": [],
+                      "docente": false,
+                    }
+      
+                    this.sgaMidService.put('plan_trabajo_docente/aprobacion_preasignacion', data).subscribe((res) => {
+                      this.popUpManager.showSuccessAlert(this.translate.instant('ptd.aprobacion_preasignacion'));
+                      this.loadPreasignaciones();
+                    });
+                  }
+              })
             })
           }
         },
@@ -154,14 +163,42 @@ export class PreAsignacionPtdComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              this.dialogConfig.data = out["rowData"];
-              const preasignacionDialog = this.dialog.open(dialogoPreAsignacionPtdComponent, this.dialogConfig);
-              preasignacionDialog.afterClosed().subscribe(result => {
-                this.loadPreasignaciones();
-              });
+              this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.preasignacion'), this.translate.instant('ptd.pregunta_editar'), MODALS.INFO, false).then(
+                action => {
+                  if (action.value) {
+                    this.dialogConfig.data = out["rowData"];
+                    const preasignacionDialog = this.dialog.open(dialogoPreAsignacionPtdComponent, this.dialogConfig);
+                    preasignacionDialog.afterClosed().subscribe(result => {
+                      this.loadPreasignaciones();
+                    });
+                  }
+              })
             })
           }
         },
+        borrar: {
+          title: this.translate.instant('GLOBAL.eliminar'),
+          editable: false,
+          width: '5%',
+          filter: false,
+          type: 'custom',
+          renderComponent: Ng2StButtonComponent,
+          onComponentInitFunction: (instance) => {
+            instance.valueChanged.subscribe((out) => {
+              this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.preasignacion'), this.translate.instant('ptd.pregunta_eliminar'), MODALS.WARNING, false).then(
+                action => {
+                  if (action.value) {
+                    this.anyService.delete(environment.PLAN_TRABAJO_DOCENTE_SERVICE, 'pre_asignacion', { Id: out.rowData.id }).subscribe(
+                      (response: any) => {
+                        this.popUpManager.showSuccessAlert(this.translate.instant('ptd.preasignacion_eliminada'));
+                        this.loadPreasignaciones();                        
+                      }
+                    )
+                  }
+              })
+            })
+          }
+        }
       }
     } else {
       this.tbEstructura['columns'] = {
@@ -237,33 +274,39 @@ export class PreAsignacionPtdComponent implements OnInit {
   }
 
   enviarAprobacion() {
-    let req = {
-      "preasignaciones": [],
-      "no-preasignaciones": [],
-      "docente": true,
-    }
-
-    this.data.getAll().then(
-      data => {
-        data.forEach((preasignacion) => {
-          if (preasignacion.aprobacion_docente.value) {
-            req.preasignaciones.push({ "Id": preasignacion.id });
-          } else {
-            req['no-preasignaciones'].push({ "Id": preasignacion.id });
+    this.popUpManager.showPopUpGeneric(this.translate.instant('GLOBAL.enviar_aprobacion'), this.translate.instant('ptd.pregunta_enviar_a_coordinacion'), MODALS.QUESTION, false).then(
+      action => {
+        if (action.value) {
+          let req = {
+            "preasignaciones": [],
+            "no-preasignaciones": [],
+            "docente": true,
           }
-        });
-
-        this.sgaMidService.put('plan_trabajo_docente/aprobacion_preasignacion', req).subscribe((res) => {
-          this.popUpManager.showSuccessAlert(this.translate.instant('ptd.aprobacion_preasignacion'));
-          this.loadPreasignaciones();
-        }, err => {
-          this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_aprobacion_preasignacion'));
-        });
-      },
-    );
+      
+          this.data.getAll().then(
+            data => {
+              data.forEach((preasignacion) => {
+                if (preasignacion.aprobacion_docente.value) {
+                  req.preasignaciones.push({ "Id": preasignacion.id });
+                } else {
+                  req['no-preasignaciones'].push({ "Id": preasignacion.id });
+                }
+              });
+      
+              this.sgaMidService.put('plan_trabajo_docente/aprobacion_preasignacion', req).subscribe((res) => {
+                this.popUpManager.showSuccessAlert(this.translate.instant('ptd.aprobacion_preasignacion'));
+                this.loadPreasignaciones();
+              }, err => {
+                this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_aprobacion_preasignacion'));
+              });
+            },
+          );
+        }
+    })
   }
 
   loadPreasignaciones() {
+    this.loading = true;
     if (this.coodrinador) {
       this.sgaMidService.get('plan_trabajo_docente/preasignaciones/' + this.periodo.Id).subscribe(res => {
         if (res !== null) {

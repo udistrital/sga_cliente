@@ -2281,7 +2281,20 @@
         "espacios_no_requeridos": "In the previous Teacher Work Plan, were found academic spaces that are no longer required or loaded for the current plan, these are:",
         "espacios_sin_asignar": "In the previous Teacher Work plan some spaces were not assigned, please define the missing study load for the following academic spaces:",
         "no_info_copia_carga_lectiva": "No study load for the selected period, or incomplete information",
-        "no_info_copia_actividades": "No activities for the selected period, or incomplete information"
+        "no_info_copia_actividades": "No activities for the selected period, or incomplete information",
+        "enviar_a_docente": "Send to teacher",
+        "enviar_a_coordinacion": "Send to coordination",
+        "pregunta_enviar_a_docente": "Send for Teacher Approval? This action means that it has been approved by the Curricular Project",
+        "pregunta_enviar_a_coordinacion": "Send approval to coordination? The approved academic spaces will be part of your Teacher Work Plan",
+        "pregunta_editar": "Editing the preassignment requires the approval process again, Continue?",
+        "pregunta_eliminar": "Delete the selected preassignment?",
+        "pregunta_enviar": "When you send you will not be able to continue editing, continue?",
+        "plan_enviado_ok": "The plan has been sent",
+        "error_enviar_plan": "Failed to send plan",
+        "info_modo_solo_ver": "In this state it is not possible to edit the plan",
+        "aprobacion_plan_coordinacion": "Approval of Teacher Work Plan",
+        "recordar_aprobar_plan": "Don't forget to approve or reject the plan in the final section of this page",
+        "revisar_solapamiento_carga": "Please check that there is no overlap between study load and activities. Check that the summary of the total hours coincides with what is charged in the schedule."
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",
