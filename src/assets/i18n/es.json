@@ -683,7 +683,17 @@
         "tooltip_previsualizar_archivo": "Previsualizar archivo seleccionado",
         "tooltip_descargar_arhivo": "Descargar archivo en línea",
         "seleccionar_archivo": "Seleccionar archivo",
-        "comunicar_OAS_error": "Por favor comuníquese con Oficina Asesora de Sistemas (OAS) para atender el problema"
+        "comunicar_OAS_error": "Por favor comuníquese con Oficina Asesora de Sistemas (OAS) para atender el problema",
+        "nombre_entidad": "Nombre de la entidad",
+        "placeholder_nombre_entidad": "Ej: Universidad Distrital - Oficina Asesora de Sistemas",
+        "pais_entidad": "País de la entidad",
+        "placeholder_pais_entidad": "Ej: Colombia",
+        "correo_entidad": "Correo de la entidad",
+        "placeholder_correo_entidad": "Ej: correo@entidad.com",
+        "telefono_entidad": "Teléfono de la entidad",
+        "placeholder_telefono_entidad": "Ej: 323 93 00 Ext. 1112",
+        "direccion_entidad": "Dirección de la entidad",
+        "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
