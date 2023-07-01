@@ -107,6 +107,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   ubicacionActive: boolean = false;
   editandoAsignacion: elementDragDrop = undefined;
   ocupados: any[] = [];
+  aprobacion: any = undefined;
 
   ngOnInit() {
     /* this.getActividades().then(() => {
@@ -378,7 +379,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
         edificio: carga.edificio,
         salon: carga.salon,
         estado: carga.horario.estado,
-        bloqueado: (this.isDocente && carga.horario.tipo == this.tipo.carga_lectiva) || (this.isCoordinador && carga.horario.tipo == this.tipo.actividades),
+        bloqueado: !this.edit || (this.isDocente && carga.horario.tipo == this.tipo.carga_lectiva) || (this.isCoordinador && carga.horario.tipo == this.tipo.actividades),
         dragPosition: carga.horario.dragPosition,
         prevPosition: carga.horario.prevPosition,
         finalPosition: carga.horario.finalPosition
@@ -490,12 +491,23 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
       }
     }
 
+    let estado_plan_is = "";
+    if (this.isCoordinador) {
+      if (this.aprobacion) {
+        estado_plan_is = this.aprobacion._id;
+      } else {
+        estado_plan_is = "Sin definir"
+      }
+    } else {
+      estado_plan_is = this.Data.estado_plan[this.seleccion];
+    }
+
     let plan_docente = {
       id: this.Data.plan_docente[this.seleccion],
       resumen: JSON.stringify({ horas_lectivas: this.calcularHoras(this.tipo.carga_lectiva), horas_actividades: this.calcularHoras(this.tipo.actividades), observacion: this.observacion }),
-      estado_plan: this.Data.estado_plan[this.seleccion]
+      estado_plan: estado_plan_is
     }
-
+    
     this.sgaMidService.put('plan_trabajo_docente/plan', { carga_plan: carga_plan, plan_docente: plan_docente, descartar: this.Data.descartar ? this.Data.descartar : [] }).subscribe(
       response => {
         this.OutLoading.emit(false);
