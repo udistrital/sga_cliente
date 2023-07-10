@@ -83,6 +83,15 @@
             <!-- horario carga lectiva -->
             <horario-carga-lectiva [WorkingMode]="canEdit" [Rol]="rolIs" [Data]="detalleAsignacion"
                 (OutCancelar)="regresar()" (OutLoading)="loading=$event"></horario-carga-lectiva>
+            <!-- reportes -->
+            <fieldset [ngClass]="{'fieldseter':true}" *ngIf="verReportes">
+                <legend><small>&nbsp; {{ 'GLOBAL.reportes' | translate }}</small></legend>
+                <div class="buttons_reportes">
+                    <button mat-raised-button color="primary" (click)="generarReporte('C')"> {{ 'ptd.gen_rep_carga_lectiva' | translate }} </button>
+                    <button mat-raised-button color="primary" (click)="generarReporte('A')"> {{ 'ptd.gen_rep_actividades' | translate }} </button>
+                    <button mat-raised-button color="primary" (click)="generarReporte('CA')"> {{ 'ptd.gen_rep_total' | translate }} </button>
+                </div>
+            </fieldset>
         </nb-card-body>
         <nb-card-footer>
         </nb-card-footer>

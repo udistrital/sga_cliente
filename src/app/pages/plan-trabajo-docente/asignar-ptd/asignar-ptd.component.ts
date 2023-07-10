@@ -48,6 +48,8 @@ export class AsignarPtdComponent implements OnInit {
   estadosPlan: any[] = [];
   estadosAprobar: any[] = [];
 
+  verReportes: boolean = false;
+
   constructor(
     private translate: TranslateService,
     private popUpManager: PopUpManager,
@@ -170,6 +172,7 @@ export class AsignarPtdComponent implements OnInit {
                   this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.aprobacion_plan_coordinacion'), 
                                                       this.translate.instant('ptd.recordar_aprobar_plan'), MODALS.INFO, false);
                 }
+                this.verReportes = out.rowData.estado === "Enviado a coordinación" || out.rowData.estado === "Aprobado"
                 this.vista = VIEWS.FORM;
                 this.periodoCopia = undefined;
                 this.detalleAsignacionRespaldo = undefined;
@@ -413,6 +416,27 @@ export class AsignarPtdComponent implements OnInit {
         console.warn("getfail", err_g);
       })
     }
+  }
+
+  generarReporte(tipoCarga: string) {
+    this.loading = true;
+    this.sgaMidService.post(`reportes/plan_trabajo_docente/${this.dataDocente.docente_id}/${this.dataDocente.tipo_vinculacion_id}/${this.dataDocente.periodo_id}/${tipoCarga}`, null).subscribe(
+      resp => {
+        this.loading = false;
+        const rawFile = new Uint8Array(atob(resp.Data).split('').map(char => char.charCodeAt(0)));
+        const urlFile = window.URL.createObjectURL(new Blob([rawFile], { type: 'application/vnd.ms-excel' }));
+        const download = document.createElement("a");
+        download.href = urlFile;
+        download.download = "Reporte_PTD.xlsx";
+        document.body.appendChild(download);
+        download.click();
+        document.body.removeChild(download);
+      }, err => {
+        this.loading = false;
+        this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'), this.translate.instant('ERROR.persiste_error_comunique_OAS'), MODALS.ERROR, false)
+        console.warn(err)
+      }
+    )
   }
 
   regresar() {
