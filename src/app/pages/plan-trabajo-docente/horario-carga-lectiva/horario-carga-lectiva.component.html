@@ -1,0 +1,271 @@
+<fieldset [ngClass]="{'fieldseter':true}" *ngIf="isCoordinador || isDocente">
+    <legend>
+        <small *ngIf="isCoordinador">&nbsp; {{ 'ptd.select_carga_lectiva' | translate }}</small>
+        <small *ngIf="isDocente">&nbsp; {{ 'ptd.select_actividades' | translate }}</small>
+    </legend>
+    <mat-form-field style="width: 40%;">
+        <mat-label>{{ 'ptd.tipo_vinculo_docente' | translate }}:</mat-label>
+        <mat-select [(ngModel)]="vinculacionSelected" (selectionChange)="selectVinculacion($event)">
+            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+            <mat-option *ngFor="let item of vinculaciones" [value]="item">
+                {{item.nombre}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field style="width: 40%;" *ngIf="isCoordinador">
+        <mat-label>{{ 'ptd.select_asignatura' | translate }}:</mat-label>
+        <mat-select [(ngModel)]="asignaturaSelected">
+            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+            <mat-option *ngFor="let item of asignaturas" [value]="item">
+                {{item.nombre}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 40%;" *ngIf="isDocente">
+        <mat-label>{{ 'ptd.select_actividad' | translate }}:</mat-label>
+        <mat-select [(ngModel)]="actividadSelected">
+            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+            <mat-option *ngFor="let item of actividades" [value]="item">
+                {{item.nombre}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" style="margin-left: 1.5rem;"
+        [disabled]="!vinculacionSelected || (!asignaturaSelected && !actividadSelected) || !edit"
+        (click)="formularioEspacioFisico()"> {{
+        'GLOBAL.agregar' | translate }}
+    </button>
+</fieldset>
+
+<!-- <dialogo-ubicacion></dialogo-ubicacion> -->
+
+<fieldset id="ubicacion" [ngClass]="{'fieldseter':true}" [hidden]="!ubicacionActive" *ngIf="edit">
+    <legend>
+        <small>&nbsp; {{ 'ptd.espacio_fisico' | translate }}</small>
+    </legend>
+    <form novalidate [formGroup]="ubicacionForm" #fform="ngForm" class="form-horizontal">
+        <div class="row">
+            <div class="campos">
+                <div class="espacio">
+                    <mat-form-field style="width: 49%;">
+                        <mat-label>*{{ 'ptd.sede' | translate }}:</mat-label>
+                        <mat-select formControlName="sede" [(ngModel)]="sede" (selectionChange)="cambioSede()">
+                            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                            <mat-option *ngFor="let item of opcionesSedes" [value]="item">
+                                {{item.Nombre}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <mat-error
+                                *ngIf="preasignacionForm.get('sede').hasError('required') && preasignacionForm.get('sede').touched">
+                                {{ 'ptd.error_tipo_vinculacion' | translate }}
+                            </mat-error> -->
+                    </mat-form-field>
+
+                    <mat-form-field style="width: 49%;">
+                        <mat-label>*{{ 'ptd.edificio' | translate }}:</mat-label>
+                        <mat-select formControlName="edificio" [(ngModel)]="edificio"
+                            (selectionChange)="cambioEdificio()">
+                            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                            <mat-option *ngFor="let item of opcionesEdificios" [value]="item">
+                                {{item.Nombre}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <mat-error
+                                *ngIf="preasignacionForm.get('edificio').hasError('required') && preasignacionForm.get('edificio').touched">
+                                {{ 'ptd.error_periodo' | translate }}
+                            </mat-error> -->
+                    </mat-form-field>
+                </div>
+
+                <div class="espacio">
+                    <mat-form-field style="width: 49%;">
+                        <mat-label>*{{ 'ptd.salon' | translate }}:</mat-label>
+                        <input matInput type="text" formControlName="salon" [matAutocomplete]="auto"
+                            (keyup)="searchTerm$.next({text: $event.target.value, field: fform.directives[3]})">
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                            (optionSelected)="cambioSalon($event)">
+                            <mat-option *ngFor="let option of opcionesSalonesFiltrados" [value]="option">
+                                {{option.Nombre}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field style="width: 49%;">
+                        <mat-label>*{{ 'ptd.horas' | translate }}:</mat-label>
+                        <input matInput id="horas" formControlName="horas" type="number" step="0.25" min="0.5" max="17"
+                            onkeypress="return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57" />
+                    </mat-form-field>
+                </div>
+                <div class="botones">
+                    <button class="float-right" (click)="addCarga()" [disabled]="ubicacionForm.invalid" mat-button
+                        type="button">{{
+                        'GLOBAL.aceptar' | translate }}
+                    </button>
+                    <button class="float-right" (click)="cancelarUbicacion()" mat-button type="button">{{
+                        'GLOBAL.cancelar' | translate }} </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</fieldset>
+
+<fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+    <legend>
+        <small *ngIf="!edit">&nbsp; {{ 'ptd.plan_trabajo' | translate }}</small>
+        <small *ngIf="isCoordinador && edit">&nbsp; {{ 'ptd.insert_carga_lectiva' | translate }}</small>
+        <small *ngIf="isDocente && edit">&nbsp; {{ 'ptd.insert_actividad' | translate }}</small>
+    </legend>
+    <div class="row" style="display: flex; align-items: center; margin: auto;"
+        [style.padding-left.px]="snapGridSize.x*1.5" [style.padding-right.px]="snapGridSize.x*1.5">
+        <table style="margin: auto;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{{ 'ptd.lu' | translate }}</th>
+                    <th>{{ 'ptd.ma' | translate }}</th>
+                    <th>{{ 'ptd.mi' | translate }}</th>
+                    <th>{{ 'ptd.ju' | translate }}</th>
+                    <th>{{ 'ptd.vi' | translate }}</th>
+                    <th>{{ 'ptd.sa' | translate }}</th>
+                    <th>{{ 'ptd.do' | translate }}</th>
+                </tr>
+            </thead>
+            <tbody style="position: relative;">
+                <tr *ngFor="let hour of genHoursforTable()">
+                    <td>{{hour}}:00 - {{hour+1}}:00</td>
+                    <td class="drag-area" *ngIf="hour == horarioSize.hourIni">
+                        <div class="day">{{ 'ptd.lu' | translate }}</div>
+                        <div class="grid-carga-lectiva" #contenedorCargaLectiva>
+                            <div class="element-carga-lectiva" *ngFor="let element of listaCargaLectiva"
+                                style="position: absolute;" [style.height.px]="element.horas * snapGridSize.y"
+                                [ngClass]="{'carga_lectiva': element.tipo == tipo.carga_lectiva, 'actividades': element.tipo == tipo.actividades, 'flotando': element.estado == estado.flotando, 'ocupado': element.estado == estado.ocupado }"
+                                cdkDrag [cdkDragFreeDragPosition]="element.dragPosition"
+                                [cdkDragDisabled]="element.bloqueado" cdkDragBoundary=".grid-carga-lectiva"
+                                (cdkDragStarted)="onDragStarted(element)"
+                                (cdkDragMoved)="onDragMoved($event, element)"
+                                (cdkDragReleased)="onDragReleased($event, element)">
+                                <div class="info-tooltip">
+                                    <i>{{ 'ptd.editar' | translate }}</i>
+                                    <i>{{ 'ptd.mover' | translate }}</i>
+                                    <i>{{ 'ptd.borrar' | translate }}</i>
+                                </div>
+                                <div class="contenedor-opciones">
+                                    <label class="left-top" title="{{ 'ptd.editar' | translate }}"
+                                        (click)="editElement(element)"><i class="nb-edit"></i></label>
+                                    <label cdkDragHandle class="center-top" title="{{ 'ptd.mover' | translate }}"><i
+                                            class="nb-keypad"></i><i class="nb-keypad"></i><i class="nb-keypad"></i><i
+                                            class="nb-keypad"></i><i class="nb-keypad"></i></label>
+                                    <label class="right-top" title="{{ 'ptd.borrar' | translate }}"
+                                        (click)="deleteElement($event.target, element)"><i class="nb-trash"></i></label>
+                                </div>
+                                <div class="contenido" *ngIf="element.edificio == '-'">
+                                    *{{ element.nombre }} <br>
+                                    *{{element.sede.CodigoAbreviacion}} <br>
+                                    *{{ element.horaFormato }}
+                                </div>
+                                <div class="contenido" *ngIf="element.edificio != '-'">
+                                    *{{ element.nombre }} <br>
+                                    *{{ element.sede.CodigoAbreviacion }} - {{ element.edificio.Nombre }}<br>
+                                    *{{ element.salon.Nombre }} <br>
+                                    *{{ element.horaFormato }}
+                                </div>
+                            </div>
+
+                            <div class="element-ocupado" *ngFor="let element of listaOcupacion"
+                                style="position: absolute;" [style.height.px]="element.horas * snapGridSize.y" cdkDrag
+                                [cdkDragFreeDragPosition]="element.dragPosition" [cdkDragDisabled]="element.bloqueado"
+                                cdkDragBoundary=".grid-carga-lectiva">
+                                <div class="contenido">
+                                    *{{ element.nombre }}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="drag-area" *ngIf="hour != horarioSize.hourIni">
+                        <div class="day">{{ 'ptd.lu' | translate }}</div>
+                    </td>
+                    <td class="drag-area">
+                        <div class="day">{{ 'ptd.ma' | translate }}</div>
+                    </td>
+                    <td class="drag-area">
+                        <div class="day">{{ 'ptd.mi' | translate }}</div>
+                    </td>
+                    <td class="drag-area">
+                        <div class="day">{{ 'ptd.ju' | translate }}</div>
+                    </td>
+                    <td class="drag-area">
+                        <div class="day">{{ 'ptd.vi' | translate }}</div>
+                    </td>
+                    <td class="drag-area">
+                        <div class="day">{{ 'ptd.sa' | translate }}</div>
+                    </td>
+                    <td class="drag-area">
+                        <div class="day">{{ 'ptd.do' | translate }}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</fieldset>
+<fieldset [ngClass]="{'fieldseter':true}">
+    <legend><small>&nbsp; {{ 'GLOBAL.resumen' | translate }}</small></legend>
+    <div class="row" style="display: flex; align-items: center;">
+        <table class="resumen" style="width: 80%; margin: auto;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{{ 'GLOBAL.tipo_vinculacion' | translate }}</th>
+                    <th>{{ 'ptd.total_horas' | translate }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ 'ptd.carga_lectiva' | translate }}</td>
+                    <td class="drag-area"> {{vinculacionSelected ? vinculacionSelected.nombre: ''}} </td>
+                    <td class="drag-area"> {{ calcularHoras(tipo.carga_lectiva) }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'ptd.actividades' | translate }}</td>
+                    <td class="drag-area"> {{vinculacionSelected ? vinculacionSelected.nombre: ''}} </td>
+                    <td class="drag-area"> {{ calcularHoras(tipo.actividades) }} </td>
+                </tr>
+                <tr>
+                    <td colspan="2">{{ 'ptd.total' | translate }}</td>
+                    <td class="drag-area"> {{ calcularHoras() }} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="row" style="display: flex; align-items: center;">
+        <fieldset [ngClass]="{'fieldseter':true}" style="width: 80%; margin: auto;">
+            <legend><small>&nbsp; {{ 'GLOBAL.observaciones' | translate }}</small></legend>
+            <mat-form-field style="width: 100%;">
+                <mat-label>{{ 'GLOBAL.observaciones' | translate }}:</mat-label>
+                <textarea [(ngModel)]="observacion" matInput></textarea>
+            </mat-form-field>
+        </fieldset>
+    </div>
+    <div class="row" style="display: flex; align-items: center; margin-top: 1rem;" *ngIf="Data.aprobacion">
+        <fieldset [ngClass]="{'fieldseter':true}" style="width: 80%; margin: auto;">
+            <legend><small>&nbsp; {{ 'ptd.aprobacion_plan_coordinacion' | translate }}</small></legend>
+            <mat-form-field style="width: 100%;">
+                <mat-label>* {{ 'ptd.aprobacion_plan_coordinacion' | translate }}:</mat-label>
+                <mat-select [(ngModel)]="aprobacion">
+                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                    <mat-option *ngFor="let item of Data.aprobacion" [value]="item">
+                        {{item.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </fieldset>
+    </div>
+    <br>
+    <div class="row" style="display: flex; justify-content: center; align-items: center;" *ngIf="edit">
+        <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="guardar_ptd()" [disabled]="(Data.aprobacion && !aprobacion)"> {{
+            'ptd.guardar_ptd' | translate }} </button>
+        <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="cancelar()"> {{
+            'GLOBAL.cancelar' | translate }} </button>
+    </div>
+</fieldset>

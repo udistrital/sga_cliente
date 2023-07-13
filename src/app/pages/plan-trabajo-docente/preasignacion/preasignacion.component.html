@@ -1,0 +1,64 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <ng-container>
+        <nb-card-header>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'ptd.preasignar_ptd' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+
+        <!-- Vista de tabla lista docentes -->
+        <nb-card-body *ngIsGranted="['DOCENTE']">
+            <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+                <legend><small>&nbsp; {{ 'ptd.preasignacion' | translate }}</small></legend>
+
+                <mat-form-field style="width: 40%;">
+                    <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                    <mat-select (selectionChange)="selectPeriodo($event)">
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <mat-option *ngFor="let item of periodos" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <ng2-smart-table [hidden]="!periodo" [settings]="tbEstructura" [source]="data">
+                </ng2-smart-table>
+            </fieldset>
+
+            <button mat-raised-button color="primary" (click)="enviarAprobacion()"> {{ 'GLOBAL.enviar_aprobacion' |
+                translate }}
+            </button>
+        </nb-card-body>
+
+        <!-- Vista de tabla lista Coordinador -->
+        <nb-card-body *ngIsGranted="['COORDINADOR', 'ADMIN_DOCENCIA']">
+            <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+                <legend><small>&nbsp; {{ 'ptd.list_docente' | translate }}</small></legend>
+
+                <mat-form-field style="width: 40%;">
+                    <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                    <mat-select (selectionChange)="selectPeriodo($event)">
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <mat-option *ngFor="let item of periodos" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                &nbsp;<button mat-stroked-button (click)="loadPreasignaciones()" *ngIf="periodo"> {{ 'GLOBAL.actualizar' | translate }} </button>
+
+                <ng2-smart-table [hidden]="!periodo" [settings]="tbEstructura" [source]="data">
+                </ng2-smart-table>
+            </fieldset>
+
+            <button mat-raised-button color="primary" (click)="agregacionPreasignacion()"> {{ 'GLOBAL.nuevo' | translate
+                }} </button>
+        </nb-card-body>
+
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+</nb-card>

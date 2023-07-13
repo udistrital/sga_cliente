@@ -3,6 +3,7 @@ import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-t
 import { TranslateService } from '@ngx-translate/core';
 import { spagoBIService } from '../../..//@core/utils/spagoBIAPI/spagoBIService';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'ngx-visualizacion',
@@ -31,6 +32,7 @@ export class VisualizacionComponent implements OnInit {
     this.route.data.subscribe(data => {
       if (data && data.reportLabel) {
         this.reportLabel = data.reportLabel;
+        const reportLabel= this.reportLabel + environment.SPAGOBI.TIPO_REPORTE;
         this.reportConfig = {
           documentLabel: this.reportLabel,
           executionRole: '/spagobi/user',

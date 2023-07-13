@@ -39,6 +39,7 @@ export const environment = {
     CONTEXTPATH: 'knowage',
     USER: 'desarrollooas',
     PASSWORD: 'desarrollooas',
+    TIPO_REPORTE: '',
   },
   CORE_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/core_crud/v2/',
   EVENTO_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/sesiones_crud/v2/',
@@ -64,4 +65,6 @@ export const environment = {
   PARAMETROS_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8205/v1/',
   PSE_SERVICE: 'https://pruebasfuncionarios.portaloas.udistrital.edu.co/botonPago/index.php?',
   GOOGLE_MID_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8514/v1/',
+  ESPACIOS_ACADEMICOS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/espacios_academicos_crud/v1/',
+  PLAN_TRABAJO_DOCENTE_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_trabajo_docente_crud/v1/',
 };

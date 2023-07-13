@@ -18,3 +18,5 @@ export * from './customize-button/customize-button.component';
 export * from './note-percentage/note-percentage.component';
 export * from './render-data/render-data.component';
 export * from './doc-programa-obligatorio/doc-programa-obligatorio.component'
+export * from './ng2-st-button/ng2-st-button.component'
+export * from './ng2-st-check/ng2-st-check.component'

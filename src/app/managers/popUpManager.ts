@@ -85,4 +85,36 @@ export class PopUpManager {
         };
         return Swal.fire(opt);
     }
+
+    public showPopUpForm(title, form, cancelar): Promise<any> {
+        const opt: any = {
+            title: title,
+            html: form.html,
+            showCancelButton: cancelar,
+            allowOutsideClick: !cancelar,
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+            preConfirm: () => {
+                const results = {};
+                form.ids.forEach(id => {
+                    const element = <HTMLInputElement>Swal.getPopup().querySelector('#' + id)
+                    results[id] = element.value;
+                });
+                return results;
+            },
+        };
+        return Swal.fire(opt);
+    }
+
+    public showManyPopUp(title, steps: any[], type) {
+        const opts = steps.map(step => {
+            return {
+                title: title,
+                html: step,
+                icon: type,
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar')
+            }
+        })
+        return Swal.queue(opts)
+    }
 }

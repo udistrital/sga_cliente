@@ -1,29 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { EspaciosAcademicosRoutingModule, routedComponents } from './espacios-academicos-routing.module';
 import { ThemeModule } from '../../@theme/theme.module';
-import { NbSpinnerModule } from '@nebular/theme';
 import { SharedModule } from '../../shared/shared.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { EspaciosAcademicosRoutingModule, routedComponents } from './espacios-academicos-routing.module';
-import { CheckboxAssistanceComponent } from '../../@theme/components/checkbox-assistance/checkbox-assistance.component';
+import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.service';
 
 @NgModule({
-  declarations: [
-    routedComponents,
-  ],
+  declarations: [...routedComponents],
   imports: [
-    ThemeModule,
     CommonModule,
-    SharedModule,
-    NbSpinnerModule,
-    Ng2SmartTableModule,
     EspaciosAcademicosRoutingModule,
+    ThemeModule,
+    SharedModule,
+    Ng2SmartTableModule
   ],
-  exports: [
-    routedComponents,
-  ],
-  entryComponents: [
-    CheckboxAssistanceComponent,
+  providers: [
+    EspaciosAcademicosService
   ]
 })
 export class EspaciosAcademicosModule { }

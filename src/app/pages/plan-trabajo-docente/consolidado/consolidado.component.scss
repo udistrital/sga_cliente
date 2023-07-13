@@ -1,0 +1,23 @@
+fieldset {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+nb-card-header {
+    background-color: white;
+    position: sticky;
+    top: 77px;
+    z-index: 2;
+}
+
+.top-left-regresar {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 3;
+}
+
+.button-center {
+    display: flex;
+    justify-content: space-around;
+}

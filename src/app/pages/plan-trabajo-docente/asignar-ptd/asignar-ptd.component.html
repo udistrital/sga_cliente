@@ -1,0 +1,99 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
+    <!-- Vista de tabla lista docentes -->
+    <ng-container *ngSwitchCase="VIEWS.LIST">
+        <nb-card-header>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'ptd.asignacion_ptd' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+                <legend><small>&nbsp; {{ 'ptd.list_docente' | translate }}</small></legend>
+
+                <mat-form-field style="width: 40%;">
+                    <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="periodo" (selectionChange)="selectPeriodo($event)">
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <mat-option *ngFor="let item of periodos" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                
+                &nbsp;<button mat-stroked-button (click)="loadAsignaciones()" *ngIf="periodo"> {{ 'GLOBAL.actualizar' | translate }} </button>
+
+                <ng2-smart-table [hidden]="!periodo" [settings]="tbDocente" [source]="dataDocentes">
+                </ng2-smart-table>
+            </fieldset>
+        </nb-card-body>
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+    <!-- Vista de gestión ptd -->
+    <ng-container *ngSwitchCase="VIEWS.FORM">
+        <nb-card-header>
+            <button mat-stroked-button class="top-left-regresar" (click)="regresar()">{{ 'GLOBAL.regresar' |
+                translate }}</button>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'ptd.gest_ptd' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <!-- Select periodo -->
+            <fieldset [ngClass]="{'fieldseter':true}">
+                <legend><small>&nbsp; {{ 'periodo.select_periodo' | translate }}</small></legend>
+                <mat-form-field style="width: 40%;">
+                    <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="periodo" [disabled]='true' (selectionChange)="selectPeriodo($event)">
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <mat-option *ngFor="let item of periodos" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </fieldset>
+            <!-- info docente -->
+            <ngx-dinamicform [normalform]="formDocente" [modeloData]="dataDocente">
+            </ngx-dinamicform>
+            <!-- clon ptd -->
+            <fieldset [ngClass]="{'fieldseter':true}">
+                <legend><small>&nbsp; {{ 'ptd.copy_ptd' | translate }}</small></legend>
+                <div class="unaLinea">
+                <mat-form-field style="width: 40%;">
+                    <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="periodoCopia" [disabled]='false'>
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <ng-container *ngIf="(canEdit == ACTIONS.EDIT)">
+                            <mat-option *ngFor="let item of periodosAnteriores" [value]="item">
+                                {{item.Nombre}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-raised-button color="primary" style="margin-left: 1.5rem;" [disabled]="!periodoCopia || (canEdit != ACTIONS.EDIT)" (click)="copy_ptd()"> {{
+                    'GLOBAL.copiar' | translate }} </button>
+                <div class="advertencia" *ngIf="periodoCopia">{{ 'ptd.mensaje_copiar_plan' | translate }}</div>
+                </div>
+            </fieldset>
+            <!-- horario carga lectiva -->
+            <horario-carga-lectiva [WorkingMode]="canEdit" [Rol]="rolIs" [Data]="detalleAsignacion"
+                (OutCancelar)="regresar()" (OutLoading)="loading=$event"></horario-carga-lectiva>
+            <!-- reportes -->
+            <fieldset [ngClass]="{'fieldseter':true}" *ngIf="verReportes">
+                <legend><small>&nbsp; {{ 'GLOBAL.reportes' | translate }}</small></legend>
+                <div class="buttons_reportes">
+                    <button mat-raised-button color="primary" (click)="generarReporte('C')"> {{ 'ptd.gen_rep_carga_lectiva' | translate }} </button>
+                    <button mat-raised-button color="primary" (click)="generarReporte('A')"> {{ 'ptd.gen_rep_actividades' | translate }} </button>
+                    <button mat-raised-button color="primary" (click)="generarReporte('CA')"> {{ 'ptd.gen_rep_total' | translate }} </button>
+                </div>
+            </fieldset>
+        </nb-card-body>
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+</nb-card>

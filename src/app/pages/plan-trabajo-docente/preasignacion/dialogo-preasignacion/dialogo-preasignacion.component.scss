@@ -1,0 +1,42 @@
+fieldset {
+    // margin-top: 1rem;
+    // margin-bottom: 1rem;
+}
+
+form {
+    width: 100%;
+}
+
+nb-card-body {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.campos {
+    width: 100%;
+    padding: 0rem 1rem;
+}
+
+.botones {
+    // width: 80px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-evenly
+}
+
+.espacio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    button {
+        height: 3rem;
+        width: 2rem;
+    }
+
+    i {
+        font-size: 2rem
+    }
+}

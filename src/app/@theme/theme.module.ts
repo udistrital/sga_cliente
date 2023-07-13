@@ -133,7 +133,8 @@ import {
   CustomizeButtonComponent,
   NotePercentageComponent,
   RenderDataComponent,
-  
+  Ng2StButtonComponent,
+  Ng2StCheckComponent,
 } from './components';
 
 import { CapitalizePipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -157,6 +158,8 @@ import { SgaMidService } from '../@core/data/sga_mid.service';
 import { DocumentoService } from '../@core/data/documento.service';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { DocProgramaObligatorioComponent } from './components/doc-programa-obligatorio/doc-programa-obligatorio.component';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { DinamicFormGroupComponent } from './components/dinamic-form-group/dinamic-form-group.component';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -203,6 +206,9 @@ const COMPONENTS = [
   NotePercentageComponent,
   RenderDataComponent,
   DocProgramaObligatorioComponent,
+  Ng2StButtonComponent,
+  Ng2StCheckComponent,
+  DinamicFormGroupComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -211,6 +217,8 @@ const ENTRY_COMPONENTS = [
   CustomizeButtonComponent,
   RenderDataComponent,
   DocProgramaObligatorioComponent,
+  Ng2StButtonComponent,
+  Ng2StCheckComponent,
 ];
 
 const PIPES = [
@@ -234,13 +242,14 @@ const NB_THEME_PROVIDERS = [
   ).providers,
   ...NbSidebarModule.forRoot().providers,
   ...NbMenuModule.forRoot().providers,
+  {provide: STEPPER_GLOBAL_OPTIONS, useValue: {showError: true}},
 ];
 
 
 @NgModule({
-  imports: [...BASE_MODULES, ...NB_MODULES, SharedModule, ...MAT_MODULES, MomentModule,   NbEvaIconsModule,  ],
+  imports: [...BASE_MODULES, ...NB_MODULES, SharedModule, ...MAT_MODULES, MomentModule, NbEvaIconsModule,],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES, ...MAT_MODULES, ...DIRECTIVES],
-  declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective, NotePercentageComponent, DocProgramaObligatorioComponent],
+  declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective, NotePercentageComponent, DocProgramaObligatorioComponent, DinamicFormGroupComponent],
   entryComponents: [...ENTRY_COMPONENTS],
 })
 export class ThemeModule {

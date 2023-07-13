@@ -1,0 +1,59 @@
+<form *ngIf="builded" [formGroup]="formGroup">
+    <div class="row">
+        <div *ngFor="let nombre of formFields" [class]="defineForm[nombre].claseGrid + ' box-field'" >
+            <ng-container [ngSwitch]="defineForm[nombre].tipo">
+                
+                <!-- Tipo Input -->
+                <mat-form-field *ngSwitchCase="'input'" floatLabel="always">
+                    <mat-label>{{ defineForm[nombre].requerido ? '* '+defineForm[nombre].label : defineForm[nombre].label }}:</mat-label>
+                    <input matInput [formControlName]="nombre" [type]="defineForm[nombre].tipoDato" [placeholder]="defineForm[nombre].placeholder"
+                            [min]="(defineForm[nombre].minimo || defineForm[nombre].minimo === 0)?defineForm[nombre].minimo:undefined"
+                            [max]="defineForm[nombre].maximo?defineForm[nombre].maximo:undefined"
+                            [step]="defineForm[nombre].paso?defineForm[nombre].paso:1"
+                            [readonly]="defineForm[nombre].soloLectura ? defineForm[nombre].soloLectura : false">
+                    <mat-hint *ngIf="formGroup.get(nombre).touched && formGroup.get(nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                    <mat-hint *ngIf="formGroup.get(nombre).touched && formGroup.get(nombre).errors?.min">{{ 'GLOBAL.err_min' | translate }}{{defineForm[nombre].minimo}}</mat-hint>
+                    <mat-hint *ngIf="formGroup.get(nombre).touched && formGroup.get(nombre).errors?.max">{{ 'GLOBAL.err_max' | translate }}</mat-hint>
+                </mat-form-field>
+                <!-- Tipo select -->
+                <mat-form-field *ngSwitchCase="'select'" floatLabel="always">
+                    <mat-label>{{ defineForm[nombre].requerido ? '* '+defineForm[nombre].label : defineForm[nombre].label }}:</mat-label>
+                    <mat-select [formControlName]="nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                        <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
+                        <ng-container *ngIf="defineForm[nombre].opciones">
+                            <mat-option *ngFor="let opcion of defineForm[nombre].opciones" [value]="opcion">{{ opcion.Nombre ? opcion.Nombre : opcion.nombre }}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-hint *ngIf="formGroup.get(nombre).touched && formGroup.get(nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                </mat-form-field>
+                <!-- Tipo file Multiple -->
+                <mat-form-field *ngSwitchCase="'fileMultiple'"  floatLabel="always">
+                    <input #documento type="file" multiple (change)="onChangeSelectFiles(nombre, $event)" style="display: none;"/>
+                    <input matInput [formControlName]="nombre" [type]="text" style="display: none;">
+                    <mat-label>{{ defineForm[nombre].requerido ? '* '+defineForm[nombre].label : defineForm[nombre].label }}: <i>({{ 'GLOBAL.agregar_varios_archivos' | translate }})</i></mat-label>
+                    <div class="row">
+                        <div class="col-12 d-flex flex-wrap">
+                            <button #selectFiles type="button" mat-raised-button (click)="documento.click()"  [disabled]="defineForm[nombre].soloLectura ? defineForm[nombre].soloLectura : false">{{'GLOBAL.seleccionar_archivo' | translate}}</button>
+                            <span class="enlace-documento" *ngFor="let archivo of defineForm[nombre].archivosLocal" (click)="previewFile(archivo.urlTemp)" title="{{'GLOBAL.tooltip_previsualizar_archivo' | translate}}" [ngClass]="{'archivo_invalido': archivo.err}">
+                                {{ archivo.file.name }} <i *ngIf="!selectFiles.disabled" class="fa fa-times fa-2xs" aria-hidden="true" title="{{'GLOBAL.eliminar' | translate}}" (click)="deleteSelectedFile(nombre, archivo.file.name)"></i>
+                            </span>
+                            <span class="enlace-documento" *ngFor="let archivoLinea of defineForm[nombre].archivosLinea" (click)="previewFile(archivoLinea.url)" title="{{'GLOBAL.tooltip_descargar_arhivo' | translate}}">
+                                <i class="fa fa-cloud-download fa-2sx" aria-hidden="true"></i> {{ archivoLinea.nombre }}{{ archivoLinea.type }} <i *ngIf="!selectFiles.disabled" class="fa fa-times fa-2xs" aria-hidden="true" title="{{'GLOBAL.eliminar_temporalmente' | translate}}" (click)="deleteSelectedFileLinea(nombre, archivoLinea.Id)"></i>
+                            </span>
+                        </div>
+                        <div class="col-12">
+                        </div>
+                    </div>
+                    <mat-hint *ngIf="formGroup.get(nombre).touched && formGroup.get(nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                    <mat-hint *ngIf="defineForm[nombre].validaArchivos.errTipo">&nbsp; {{ 'GLOBAL.formatos_permitidos' | translate }}: {{ defineForm[nombre].tipoArchivos }}</mat-hint>
+                    <mat-hint *ngIf="defineForm[nombre].validaArchivos.errTam">&nbsp; {{ 'GLOBAL.tamano_superado' | translate }}{{ defineForm[nombre].tamMBArchivos }}MB</mat-hint>
+                </mat-form-field>
+                <!-- Yo si hago algo, soy un separador -->
+                <div *ngSwitchCase="'separator'" class="separator"></div>
+                <!-- Soy un espacio vacío -->
+                <div *ngSwitchDefault></div>
+            </ng-container>
+        </div>
+    </div>
+</form>
+
