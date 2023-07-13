@@ -9,6 +9,7 @@ import { RevisionConsolidadoComponent } from './revision-consolidado/revision-co
 import { PreAsignacionPtdComponent } from './preasignacion/preasignacion.component';
 import { dialogoPreAsignacionPtdComponent } from './preasignacion/dialogo-preasignacion/dialogo-preasignacion.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
+import { DialogoAsignarPeriodoComponent } from './preasignacion/dialogo-asignar-periodo/dialogo-asignar-periodo.component';
 
 
 const routes: Routes = [{
@@ -56,4 +57,5 @@ export const routedComponents = [
   RevisionConsolidadoComponent,
   PreAsignacionPtdComponent,
   dialogoPreAsignacionPtdComponent,
+  DialogoAsignarPeriodoComponent,
 ]
