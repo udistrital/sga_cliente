@@ -329,7 +329,6 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
   }
 
   loadProyectos() {
-    console.log("loadProyectos");
     return new Promise((resolve, reject) => {
       if (this.preasignacionForm.get("espacio_academico").value != null) {
         this.espacio_academico = this.preasignacionForm.get("espacio_academico").value;
@@ -342,6 +341,9 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
           if (res !== null && res.Status === '200') {
             this.opcionesGrupos = res.Data;
             this.opcionesGruposTodas = res.Data;
+            this.opcionesProyectos = [];
+            this.preasignacionForm.get("nivel").setValue(null);
+ 
             res.Data.forEach(element => {
               if (!this.opcionesProyectos.some(opcion => opcion === element.ProyectoAcademico)) {
                 this.opcionesProyectos.push(element.ProyectoAcademico);
@@ -351,9 +353,6 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
           }
         }, (error: HttpErrorResponse) => {
           this.showAcademicSpaceGroup2AssingPeriod(this.espacio_academico._id);
-          // this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_no_found_proyectos'));
-          // reject(this.opcionesGrupos);
-          console.log("End show");
         });
 
       } else {
@@ -385,7 +384,6 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
   }
 
   changeGrupo() {
-    console.log("changeGrupo");
     if (this.preasignacionForm.get("grupo").value != null) {
       this.grupo = this.preasignacionForm.get("grupo").value;
       this.preasignacionForm.get("nivel").setValue(this.grupo.Nivel);
@@ -397,7 +395,6 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
   }
 
   loadPreasignacion() {
-    console.log("loadPreasignacion");
     this.anyService.get(environment.TERCEROS_SERVICE, `datos_identificacion?query=TerceroId.Id:${this.data.docente_id},Activo:true&fields=Numero`).subscribe((res: any) => {
       this.preasignacionForm.get("doc_docente").setValue(res[0].Numero);
       this.buscarDocenteDocumento();
@@ -412,12 +409,49 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
   }
 
   loadAcademicSpacePreassignment(){
+    return new Promise((resolve, reject) => {
+      if (this.preasignacionForm.get("espacio_academico").value != null) {
+        this.espacio_academico = this.preasignacionForm.get("espacio_academico").value;
+        this.preasignacionForm.get("codigo").setValue(this.espacio_academico.codigo);
+        this.preasignacionForm.get("grupo").enable();
+        this.preasignacionForm.get("proyecto").enable();
+        this.preasignacionForm.get("nivel").enable();
 
+        this.sgaMidService.get(`plan_trabajo_docente/grupos_espacio_academico/${this.espacio_academico._id}/${this.periodo.Id}`).subscribe((res: any) => {
+          if (res !== null && res.Status === '200') {
+            this.opcionesGrupos = res.Data;
+            this.opcionesGruposTodas = res.Data;
+            this.opcionesProyectos = [];
+            this.preasignacionForm.get("nivel").setValue(null);
+            this.preasignacionForm.get("proyecto").setValue(null);
+ 
+            res.Data.forEach(element => {
+              if (!this.opcionesProyectos.some(opcion => opcion === element.ProyectoAcademico)) {
+                this.opcionesProyectos.push(element.ProyectoAcademico);
+              }
+            });
+            resolve(this.opcionesGrupos);
+          }
+        }, (error: HttpErrorResponse) => {
+          this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_no_found_proyectos'));
+          this.preasignacionForm.get("codigo").setValue(null);
+          this.preasignacionForm.get("grupo").disable();
+          this.preasignacionForm.get("proyecto").disable();
+          this.preasignacionForm.get("nivel").disable();
+          reject(this.opcionesGrupos);
+        });
+
+      } else {
+        this.preasignacionForm.get("codigo").setValue(null);
+        this.preasignacionForm.get("grupo").disable();
+        this.preasignacionForm.get("proyecto").disable();
+        this.preasignacionForm.get("nivel").disable();
+        reject(this.opcionesGrupos);
+      }
+    });
   }
 
   showAcademicSpaceGroup2AssingPeriod(academicSpaceId){
-    console.log("Dta heredada");
-    console.log(academicSpaceId);
     const dialogAssignPeriodConfig = new MatDialogConfig();
     dialogAssignPeriodConfig.width = '550px';
     dialogAssignPeriodConfig.height = '300px';
@@ -427,8 +461,13 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
     };
     const assignPeriodDialog = this.dialog.open(DialogoAsignarPeriodoComponent, dialogAssignPeriodConfig);
     assignPeriodDialog.afterClosed().subscribe(result => {
-      console.log("OK")
-      //this.loadPreasignacion();
+      this.loadAcademicSpacePreassignment().then((res: any) => {
+      }).catch(err => {
+        this.preasignacionForm.get("codigo").setValue(null);
+        this.preasignacionForm.get("grupo").disable();
+        this.preasignacionForm.get("proyecto").disable();
+        this.preasignacionForm.get("nivel").disable();
+      });
     });
   }
 }
