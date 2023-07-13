@@ -725,7 +725,7 @@
         "agregar_varios_archivos": "Puede agregar varios archivos si lo requiere",
         "guardar_continuar": "Guardar y continuar",
         "err_min": "El valor no puede ser menor que ",
-        "err_max": "El valor no puede ser mayor que "
+        "err_max": "El valor no puede ser mayor que ",
         "nombre_entidad": "Nombre de la entidad",
         "placeholder_nombre_entidad": "Ej: Universidad Distrital - Oficina Asesora de Sistemas",
         "pais_entidad": "País de la entidad",

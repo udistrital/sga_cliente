@@ -692,7 +692,7 @@
         "agregar_varios_archivos": "You can attach multiple files if required",
         "guardar_continuar": "Save and continue",
         "err_min": "The value cannot be less than ",
-        "err_max": "The value cannot be greater than "
+        "err_max": "The value cannot be greater than ",
         "nombre_entidad": "Entity name",
         "placeholder_nombre_entidad": "E.g.: Universidad Distrital - Oficina Asesora de Sistemas",
         "pais_entidad": "Entity Country",
