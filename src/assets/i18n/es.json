@@ -63,9 +63,9 @@
             "reportes": "Reportes",
             "inscripciones": {
                 "inscripciones": "Inscripciones",
-                "aspirantes": "Inscritos por programa",
+                "aspirantes": "Aspirantes por programa",
                 "admitidos": "Admitidos por programa",
-                "inscritos": "Aspirantes por programa"
+                "inscritos": "Inscritos por programa"
             },
             "icfes": {
                 "icfes": "Registro ICFES SNP",
