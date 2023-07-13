@@ -41,6 +41,7 @@ export const environment = {
     CONTEXTPATH: 'knowage',
     USER: 'desarrollooas',
     PASSWORD: 'desarrollooas',
+    TIPO_REPORTE: '',
   },
   CORE_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/core_crud/v2/',
   //CORE_SERVICE: 'http://pruebasapi2.intranetoas.udistrital.edu.co:8105/v1/',

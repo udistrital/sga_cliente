@@ -34,6 +34,7 @@ export const environment = {
     CONTEXTPATH: 'knowage',
     USER: 'desarrollooas',
     PASSWORD: 'desarrollooas',
+    TIPO_REPORTE: '',
   },
   TERCEROS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_crud/v1/',
   PRODUCCION_ACADEMICA_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/produccion_academica_crud/v2/',
