@@ -1,0 +1,26 @@
+nb-card-body {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    width: 100%;
+}
+
+.text-header {
+    text-align: justify;
+    font-size: 1rem;
+}
+
+.campos {
+    width: 100%;
+    padding: 0rem 1rem;
+}
+
+.espacio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
