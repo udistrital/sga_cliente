@@ -1,0 +1,65 @@
+<div class="dinamic-form" [nbSpinner]="loading">
+    <ng-container>
+        <nb-card-body>
+            <form novalidate [formGroup]="assignPeriodForm" #fform="ngForm" class="form-horizontal">
+                <div class="row">
+                    <div class="campos">
+                        <div class="espacio">
+                            <p class="text-header"><b>{{ 'ptd.mensaje_espacio_sin_periodo' | translate }}</b></p>
+                        </div>
+                        <div class="espacio">
+                            <mat-form-field style="width: 24%;">
+                                <input matInput type="text" formControlName="nivel" readonly placeholder="*{{ 'GLOBAL.nivel' | translate }}:" />
+                                <mat-error
+                                    *ngIf="assignPeriodForm.get('nivel').hasError('required') && assignPeriodForm.get('nivel').touched">
+                                    {{ 'ptd.error_nivel' | translate }}
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field style="width: 24%;">
+                                <input matInput type="text" formControlName="subnivel" readonly placeholder="*{{ 'GLOBAL.subnivel' | translate }}:" />
+                                <mat-error
+                                    *ngIf="assignPeriodForm.get('subnivel').hasError('required') && assignPeriodForm.get('subnivel').touched">
+                                    {{ 'ptd.error_nivel' | translate }}
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field style="width: 48%;">
+                                <input matInput type="text" formControlName="proyecto" readonly placeholder="*{{ 'ptd.proyecto_curricular' | translate }}:" />
+                                <mat-error
+                                    *ngIf="assignPeriodForm.get('proyecto').hasError('required') && assignPeriodForm.get('proyecto').touched">
+                                    {{ 'ptd.error_nivel' | translate }}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="espacio">
+                            <mat-form-field style="width: 48%;">
+                                <input matInput type="text" formControlName="espacio_academico" readonly placeholder="*{{ 'ptd.espacio_academico' | translate }}:" />
+                                <mat-error
+                                    *ngIf="assignPeriodForm.get('espacio_academico').hasError('required') && assignPeriodForm.get('espacio_academico').touched">
+                                    {{ 'ptd.error_nivel' | translate }}
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field style="width: 48%;">
+                                <mat-label>*{{ 'GLOBAL.grupos' | translate }}:</mat-label>
+                                <mat-select formControlName="gruposSeleccionados" multiple>
+                                    <!-- <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option> -->
+                                    <mat-option *ngFor="let item of groupsList" [value]="item">
+                                        {{item}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="assignPeriodForm.get('gruposSeleccionados').hasError('required') && assignPeriodForm.get('gruposSeleccionados').touched">
+                                    {{ 'ptd.error_grupo' | translate }}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="botones" align="center">
+                    <button class="float-center" (click)="sendAssingPeriodGroups()" mat-button type="button">
+                        Asignar Periodo
+                    </button>
+                </div>
+            </form>
+        </nb-card-body>
+    </ng-container>
+</div>

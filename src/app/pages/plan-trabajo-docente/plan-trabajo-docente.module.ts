@@ -8,6 +8,7 @@ import { MatDialog, MatDialogModule } from '@angular/material';
 import { dialogoPreAsignacionPtdComponent } from './preasignacion/dialogo-preasignacion/dialogo-preasignacion.component';
 import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.service';
 import { PlanTrabajoDocenteService } from '../../@core/data/plan_trabajo_docente.service';
+import { DialogoAsignarPeriodoComponent } from './preasignacion/dialogo-asignar-periodo/dialogo-asignar-periodo.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { PlanTrabajoDocenteService } from '../../@core/data/plan_trabajo_docente
   ],
   entryComponents: [
     dialogoPreAsignacionPtdComponent,
+    DialogoAsignarPeriodoComponent
   ],
   exports: [
     dialogoPreAsignacionPtdComponent,

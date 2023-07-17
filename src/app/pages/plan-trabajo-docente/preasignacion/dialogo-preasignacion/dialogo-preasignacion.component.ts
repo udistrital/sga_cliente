@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PopUpManager } from '../../../../managers/popUpManager';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatDialogConfig} from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, BehaviorSubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap, startWith } from 'rxjs/operators';
@@ -12,6 +12,7 @@ import { ParametrosService } from '../../../../@core/data/parametros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SgaMidService } from '../../../../@core/data/sga_mid.service';
 import { EspaciosAcademicosService } from '../../../../@core/data/espacios_academicos.service';
+import { DialogoAsignarPeriodoComponent } from '../dialogo-asignar-periodo/dialogo-asignar-periodo.component';
 
 @Component({
   selector: 'dialogo-preasignacion',
@@ -45,6 +46,7 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<dialogoPreAsignacionPtdComponent>,
+    public dialog: MatDialog,
     private translate: TranslateService,
     private popUpManager: PopUpManager,
     private sgaMidService: SgaMidService,
@@ -339,6 +341,9 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
           if (res !== null && res.Status === '200') {
             this.opcionesGrupos = res.Data;
             this.opcionesGruposTodas = res.Data;
+            this.opcionesProyectos = [];
+            this.preasignacionForm.get("nivel").setValue(null);
+ 
             res.Data.forEach(element => {
               if (!this.opcionesProyectos.some(opcion => opcion === element.ProyectoAcademico)) {
                 this.opcionesProyectos.push(element.ProyectoAcademico);
@@ -347,8 +352,7 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
             resolve(this.opcionesGrupos);
           }
         }, (error: HttpErrorResponse) => {
-          this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_no_found_proyectos'));
-          reject(this.opcionesGrupos);
+          this.showAcademicSpaceGroup2AssingPeriod(this.espacio_academico._id);
         });
 
       } else {
@@ -402,5 +406,68 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
       this.preasignacionForm.get("tipo_vinculacion").setValue(parseInt(this.data.tipo_vinculacion_id));
       this.preasignacionForm.get("periodo").setValue(this.periodos.find(periodo => periodo.Id == this.data.periodo_id));
     })
+  }
+
+  loadAcademicSpacePreassignment(){
+    return new Promise((resolve, reject) => {
+      if (this.preasignacionForm.get("espacio_academico").value != null) {
+        this.espacio_academico = this.preasignacionForm.get("espacio_academico").value;
+        this.preasignacionForm.get("codigo").setValue(this.espacio_academico.codigo);
+        this.preasignacionForm.get("grupo").enable();
+        this.preasignacionForm.get("proyecto").enable();
+        this.preasignacionForm.get("nivel").enable();
+
+        this.sgaMidService.get(`plan_trabajo_docente/grupos_espacio_academico/${this.espacio_academico._id}/${this.periodo.Id}`).subscribe((res: any) => {
+          if (res !== null && res.Status === '200') {
+            this.opcionesGrupos = res.Data;
+            this.opcionesGruposTodas = res.Data;
+            this.opcionesProyectos = [];
+            this.preasignacionForm.get("nivel").setValue(null);
+            this.preasignacionForm.get("proyecto").setValue(null);
+ 
+            res.Data.forEach(element => {
+              if (!this.opcionesProyectos.some(opcion => opcion === element.ProyectoAcademico)) {
+                this.opcionesProyectos.push(element.ProyectoAcademico);
+              }
+            });
+            resolve(this.opcionesGrupos);
+          }
+        }, (error: HttpErrorResponse) => {
+          this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_no_found_proyectos'));
+          this.preasignacionForm.get("codigo").setValue(null);
+          this.preasignacionForm.get("grupo").disable();
+          this.preasignacionForm.get("proyecto").disable();
+          this.preasignacionForm.get("nivel").disable();
+          reject(this.opcionesGrupos);
+        });
+
+      } else {
+        this.preasignacionForm.get("codigo").setValue(null);
+        this.preasignacionForm.get("grupo").disable();
+        this.preasignacionForm.get("proyecto").disable();
+        this.preasignacionForm.get("nivel").disable();
+        reject(this.opcionesGrupos);
+      }
+    });
+  }
+
+  showAcademicSpaceGroup2AssingPeriod(academicSpaceId){
+    const dialogAssignPeriodConfig = new MatDialogConfig();
+    dialogAssignPeriodConfig.width = '550px';
+    dialogAssignPeriodConfig.height = '300px';
+    dialogAssignPeriodConfig.data = {
+      espacio_academico_sin_periodo: academicSpaceId,
+      periodo_id: this.periodo.Id
+    };
+    const assignPeriodDialog = this.dialog.open(DialogoAsignarPeriodoComponent, dialogAssignPeriodConfig);
+    assignPeriodDialog.afterClosed().subscribe(result => {
+      this.loadAcademicSpacePreassignment().then((res: any) => {
+      }).catch(err => {
+        this.preasignacionForm.get("codigo").setValue(null);
+        this.preasignacionForm.get("grupo").disable();
+        this.preasignacionForm.get("proyecto").disable();
+        this.preasignacionForm.get("nivel").disable();
+      });
+    });
   }
 }
