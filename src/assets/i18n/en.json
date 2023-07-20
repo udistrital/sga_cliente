@@ -2381,6 +2381,8 @@
         "agregar_espacio": "Add this space to the current semester",
         "quitar_espacio": "Remove space from this semester",
         "creditos": "Credits",
-        "resumen_general": "Total Study plan"
+        "resumen_general": "Total Study plan",
+        "plan_estudios_creacion_ok": "Curriculum created successfully",
+        "plan_estudios_creacion_error": "Failed to create curriculum"
     }
 }

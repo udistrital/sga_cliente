@@ -2452,6 +2452,8 @@
         "agregar_espacio": "Agregar este espacio al semestre actual",
         "quitar_espacio": "Quitar espacio de este semestre",
         "creditos": "Créditos",
-        "resumen_general": "Total Plan de estudio"
+        "resumen_general": "Total Plan de estudio",
+        "plan_estudios_creacion_ok": "Plan de estudios creado exitosamente",
+        "plan_estudios_creacion_error": "No fue posible crear el plan de estudios"
     }
 }

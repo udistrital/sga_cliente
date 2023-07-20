@@ -5,7 +5,7 @@ import { PlanEstudiosRoutingModule, routedComponents } from './plan-estudios-rou
 import { ThemeModule } from '../../@theme/theme.module';
 import { SharedModule } from '../../shared/shared.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-
+import { PlanEstudiosService } from '../../@core/data/plan_estudios.service';
 
 @NgModule({
   declarations: [...routedComponents],
@@ -17,7 +17,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
     Ng2SmartTableModule
   ],
   providers: [
-
+    PlanEstudiosService
   ]
 })
 export class PlanEstudiosModule { }

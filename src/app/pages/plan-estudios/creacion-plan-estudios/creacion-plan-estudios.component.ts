@@ -11,8 +11,12 @@ import { Ng2StButtonComponent } from '../../../@theme/components';
 import { MODALS, VIEWS } from '../../../@core/data/models/diccionario/diccionario';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { PlanEstudiosService } from '../../../@core/data/plan_estudios.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material';
+import Swal from 'sweetalert2';
+import { HttpErrorResponse } from '@angular/common/http';
+import { PlanEstudio } from '../../../@core/data/models/plan_estudios/plan_estudio';
 
 @Component({
   selector: 'creacion-plan-estudios',
@@ -37,6 +41,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   readonly VIEWS = VIEWS;
   vista: Symbol;
 
+  planEstudioBody: any;
   formPlanEstudio: FormParams;
   formGroupPlanEstudio: FormGroup;
 
@@ -82,6 +87,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     private projectService: ProyectoAcademicoService,
     private sgaMidService: SgaMidService,
     private domSanitizer: DomSanitizer,
+    private planEstudiosService: PlanEstudiosService,
   ) {
     this.dataPlanesEstudio = new LocalDataSource();
     this.dataEspaciosAcademicos = new LocalDataSource();
@@ -645,22 +651,30 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   guardar(stepper: MatStepper) {
     this.formGroupPlanEstudio.markAllAsTouched();
     if (this.formGroupPlanEstudio.valid) {
-      this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'), 
-                                       this.translate.instant('plan_estudios.seguro_crear'), MODALS.INFO, true).then(
-      (action) => {
-        if (action.value) {
-          this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
-            this.ListEspacios = result;
-            this.dataEspaciosAcademicos.load(this.ListEspacios);
-            stepper.next();
-          }, (error) => {
-            this.ListEspacios = [];
-            const falloEn = Object.keys(error)[0];
-            this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
-                                                 this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
-                                                 this.translate.instant('ERROR.persiste_error_comunique_OAS'),
-                                                 MODALS.ERROR, false);
-          })
+      this.popUpManager.showPopUpGeneric(
+        this.translate.instant('plan_estudios.plan_estudios'), 
+        this.translate.instant('plan_estudios.seguro_crear'), 
+        MODALS.INFO, 
+        true).then(
+          (action) => {
+            if (action.value) {
+              this.createStudyPlan().then((res: any) => {
+                this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
+                  this.ListEspacios = result;
+                  this.dataEspaciosAcademicos.load(this.ListEspacios);
+                  stepper.next();
+                }, (error) => {
+                  this.ListEspacios = [];
+                  const falloEn = Object.keys(error)[0];
+                  this.popUpManager.showPopUpGeneric(
+                    this.translate.instant('ERROR.titulo_generico'),
+                    this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
+                    this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+                    MODALS.ERROR, false);
+            });
+          }).catch( err => {
+            console.log("error en el guardado", err)
+          });
         }    
       }
     );
@@ -799,4 +813,46 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   //#endregion
   // * ----------
 
+  // * ----------
+  // * Crear plan de estudios datos básicos 
+  //#region
+  createStudyPlan() {
+    return new Promise((resolve, reject) => {
+      // Prepare data
+      this.planEstudioBody = {
+        Nombre: "",
+        NumeroResolucion: Number(this.formGroupPlanEstudio.get('numeroResolucion').value),
+        NumeroSemestres: Number(this.formGroupPlanEstudio.get('numeroSemestres').value),
+        ProyectoAcademicoId: Number(this.formGroupPlanEstudio.get('codigoProyecto').value),
+        TotalCreditos: Number(this.formGroupPlanEstudio.get('totalCreditosPrograma').value),
+        AnoResolucion: Number(this.formGroupPlanEstudio.get('anioResolucion').value),
+        Codigo: this.formGroupPlanEstudio.get('codigoPlanEstudio').value,
+        CodigoAbreaviacion: "",
+        EspaciosSemestreDistribucion: "{}",
+        Observacion: "",
+        ResumenPlanEstudios: "{}",
+        SoporteDocumental: "{}",
+      }
+
+      this.planEstudioBody = <PlanEstudio>this.planEstudioBody;
+      this.loading = true;
+      this.sgaMidService.post('plan_estudios/base', this.planEstudioBody)
+      .subscribe(res => {
+        this.loading = false;
+        this.popUpManager.showSuccessAlert(
+          this.translate.instant('plan_estudios.plan_estudios_creacion_ok')
+          );
+          resolve(res);
+        },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.popUpManager.showErrorAlert(
+            this.translate.instant('plan_estudios.plan_estudios_creacion_error')
+          );
+          reject(error);
+          });
+    });
+  }
+  //#endregion
+  // * ----------
 }
