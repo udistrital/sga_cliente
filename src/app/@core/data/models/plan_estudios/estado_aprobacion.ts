@@ -1,7 +1,7 @@
 export class EstadoAprobacion {
-    Id: number;
+    readonly Id: number;
     Nombre: string;
     Descripcion: string;
     CodigoAbreviacion: string;
-    Activo: boolean;
+    Activo: boolean = true;
 }

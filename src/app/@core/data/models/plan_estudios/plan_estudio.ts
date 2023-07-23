@@ -1,20 +1,22 @@
 import { EstadoAprobacion } from "./estado_aprobacion";
 
 export class PlanEstudio {
-    Id: number;
+    readonly Id: number;
     Nombre: string;
     NumeroResolucion: number;
     NumeroSemestres: number;
-    Observacion: string;
-    PlanEstudioPadreId: any;
+    Observacion: string = "";
+    PlanEstudioPadreId: any = null;
     ProyectoAcademicoId: number;
-    ResumenPlanEstudios: string;
-    SoporteDocumental: string;
+    ResumenPlanEstudios: string = "";
+    SoporteDocumental: string = "";
     TotalCreditos: number;
-    Activo: boolean;
+    Activo: boolean = true;
     AnoResolucion: number;
     Codigo: string;
     CodigoAbreaviacion: string;
-    EspaciosSemestreDistribucion: string;
+    EspaciosSemestreDistribucion: string = "";
     EstadoAprobacionId: EstadoAprobacion;
+    readonly FechaCreacion: Date;
+    readonly FechaModificacion: Date;
 }
