@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Ng2StButtonComponent } from '../../../@theme/components';
-import { MODALS, VIEWS } from '../../../@core/data/models/diccionario/diccionario';
+import { ACTIONS, MODALS, VIEWS } from '../../../@core/data/models/diccionario/diccionario';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PlanEstudiosService } from '../../../@core/data/plan_estudios.service';
@@ -47,6 +47,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   formGroupPlanEstudio: FormGroup;
 
   tbPlanesEstudio: Object;
+  planesEstudio: any[];
   dataPlanesEstudio: LocalDataSource;
 
   tbEspaciosAcademicos: Object;
@@ -81,6 +82,8 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     ENFQ_PRAC: 0,
     ENFQ_TEOPRAC: 0, 
   }
+
+  readonly ACTIONS = ACTIONS;
 
   constructor(
     private translate: TranslateService,
@@ -165,7 +168,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
               console.log("ver: ", out.value, out.rowData)
             })}
         },
-        editar: {
+        enviar: {
           title: this.translate.instant('GLOBAL.enviar'),
           editable: false,
           width: '5%',
@@ -174,7 +177,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              console.log("editar: ", out.value, out.rowData)
+              console.log("enviar: ", out.value, out.rowData)
             })}
         },
       },
@@ -685,6 +688,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           this.formGroupPlanEstudio.reset();
           this.dataSemestre = [];
           this.vista = VIEWS.LIST;
+          this.loadSelects();
         }    
       }
     );
@@ -753,6 +757,27 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   // * ----------
 
   // * ----------
+  // * Carga planes de estudio existentes
+  //#region
+  loadPlanesEstudio(): Promise<PlanEstudio[]>{
+    return new Promise<any>((resolve, reject) => {
+      this.planEstudiosService.get("plan_estudio?query=activo:true&limit=0").subscribe(
+        (resp) => {
+          if (Object.keys(resp.Data[0]).length > 0) {
+            resolve(resp.Data);
+          } else {
+            resolve([]);
+          }
+        }, (err) => {
+          reject({"plan_estudio": err})
+        }
+      );
+    });
+  }
+  //#endregion
+  // * ----------
+
+  // * ----------
   // * Cargar informacion particular 
   //#region
   consultarEspaciosAcademicos(id_proyecto: number): Promise<any> {
@@ -785,6 +810,14 @@ export class CreacionPlanEstudiosComponent implements OnInit {
         this.proyectos = proyectos;
       }));
       await Promise.all(promesas);
+      
+      // Datos de la tabla planes de estudio
+      this.planesEstudio = await this.loadPlanesEstudio();
+      this.planesEstudio.forEach(plan => {
+        this.organizarDatosTablaPlanEstudio(plan);
+      });
+      this.dataPlanesEstudio.load(this.planesEstudio);
+
       this.loading = false;
     } catch (error) {
       const falloEn = Object.keys(error)[0];
@@ -828,7 +861,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   }
 
   // * ----------
-  // * Estructuracion 
+  // * Estructuracion plan de estudio
   //#region
   prepareIds2Stringify(idsArchivos: number[], nameField: string): string {
     let result = {}
@@ -837,6 +870,21 @@ export class CreacionPlanEstudiosComponent implements OnInit {
       result[nameField] = idsArchivos;
     }
     return JSON.stringify(result);
+  }
+
+  organizarDatosTablaPlanEstudio(plan: any){
+    const proyecto = this.proyectos.find(proyecto => proyecto.Id == plan.ProyectoAcademicoId);    
+    plan["proyectoCurricular"] = proyecto["Nombre"];
+
+    plan["plan_estudio"] = plan["Nombre"];
+    plan["resolucion"] = plan["NumeroResolucion"];
+    plan["totalCreditos"] = plan["TotalCreditos"];
+
+    const estado = plan["EstadoAprobacionId"];
+    plan["estado"] = estado["Nombre"];
+
+    plan["ver"] = {value: ACTIONS.VIEW, type: 'ver', disabled: false};
+    plan["enviar"] = {value: ACTIONS.SEND, type: 'enviar', disabled: false};
   }
   //#endregion
   // * ----------
@@ -851,7 +899,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     newPlanEstudio.Nombre = "";
     newPlanEstudio.NumeroResolucion = Number(this.formGroupPlanEstudio.get('numeroResolucion').value);
     newPlanEstudio.NumeroSemestres = Number(this.formGroupPlanEstudio.get('numeroSemestres').value);
-    newPlanEstudio.ProyectoAcademicoId = Number(this.formGroupPlanEstudio.get('codigoProyecto').value);
+    newPlanEstudio.ProyectoAcademicoId = Number(this.formGroupPlanEstudio.get('proyectoCurriular').value["Id"]);
     newPlanEstudio.TotalCreditos = Number(this.formGroupPlanEstudio.get('totalCreditosPrograma').value);
     newPlanEstudio.AnoResolucion = Number(this.formGroupPlanEstudio.get('anioResolucion').value);
     newPlanEstudio.Codigo = this.formGroupPlanEstudio.get('codigoPlanEstudio').value;
@@ -875,8 +923,6 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           this.translate.instant('ERROR.persiste_error_comunique_OAS'),
           MODALS.ERROR, false);
       });
-    }).catch( err => {
-      console.log("error en el guardado", err)
     });
   }
 
@@ -895,8 +941,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           this.loading = false;
           this.popUpManager.showErrorAlert(
             this.translate.instant('plan_estudios.plan_estudios_creacion_error')
-          );
-          reject(error);
+            );
           });
     });
   }
