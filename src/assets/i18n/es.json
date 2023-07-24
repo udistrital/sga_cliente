@@ -2382,7 +2382,9 @@
         "info_modo_solo_ver": "En este estado no es posible editar el plan",
         "aprobacion_plan_coordinacion": "Aprobación del Plan Trabajo Docente",
         "recordar_aprobar_plan": "No olvide aprobar o rechazar el plan en la sección final de esta página",
-        "revisar_solapamiento_carga": "Por favor revise que no haya superposición entre carga lectiva y actividades. Corrobore que resumen el total de horas coincída con lo cargado en horario."
+        "revisar_solapamiento_carga": "Por favor revise que no haya superposición entre carga lectiva y actividades. Corrobore que resumen el total de horas coincída con lo cargado en horario.",
+        "descargar": "Descargar PTD",
+        "formato_doc": "Seleccione el tipo de archivo"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",
