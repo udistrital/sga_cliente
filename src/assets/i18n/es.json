@@ -2454,6 +2454,9 @@
         "creditos": "Créditos",
         "resumen_general": "Total Plan de estudio",
         "plan_estudios_creacion_ok": "Plan de estudios creado exitosamente",
-        "plan_estudios_creacion_error": "No fue posible crear el plan de estudios"
+        "plan_estudios_creacion_error": "No fue posible crear el plan de estudios",
+        "enviar_revision_pregunta": "A punto de enviar a revisión, ¿Desea continuar?",
+        "enviar_revision_ok": "¡Envío a revisión exitoso!",
+        "enviar_revision_fallo": "¡No se pudo enviar a revisión!"
     }
 }

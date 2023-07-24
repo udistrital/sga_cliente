@@ -18,6 +18,7 @@ import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PlanEstudio } from '../../../@core/data/models/plan_estudios/plan_estudio';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { EstadoAprobacion, STD } from '../../../@core/data/models/plan_estudios/estado_aprobacion';
 
 @Component({
   selector: 'creacion-plan-estudios',
@@ -64,6 +65,8 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   proyectos: any[];
 
   desactivarAgregarSemestre: boolean = false;
+
+  estadosAprobacion: EstadoAprobacion[];
 
   proyecto_id: number;
   ListEspacios: any[] = [];
@@ -177,7 +180,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              console.log("enviar: ", out.value, out.rowData)
+              this.send2ReviewStudyPlan(out.rowData);
             })}
         },
       },
@@ -753,6 +756,23 @@ export class CreacionPlanEstudiosComponent implements OnInit {
       );
     });
   }
+
+  loadEstadosAprobacion(): Promise<EstadoAprobacion[]> {
+    return new Promise<any>((resolve, reject) => {
+      this.planEstudiosService.get("estado_aprobacion?query=activo:true&limit=0").
+      subscribe(
+        (resp) => {
+          if (Object.keys(resp.Data[0]).length > 0) {
+            resolve(resp.Data);
+          } else {
+            reject({"estado_aprobacion": null});
+          }
+        }, (err) => {
+          reject({"estado_aprobacion": err});
+        }
+      )
+    });
+  }
   //#endregion
   // * ----------
 
@@ -811,6 +831,8 @@ export class CreacionPlanEstudiosComponent implements OnInit {
       }));
       await Promise.all(promesas);
       
+      this.estadosAprobacion = await this.loadEstadosAprobacion();
+
       // Datos de la tabla planes de estudio
       this.planesEstudio = await this.loadPlanesEstudio();
       this.planesEstudio.forEach(plan => {
@@ -886,6 +908,24 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     plan["ver"] = {value: ACTIONS.VIEW, type: 'ver', disabled: false};
     plan["enviar"] = {value: ACTIONS.SEND, type: 'enviar', disabled: false};
   }
+
+  async recargarPlanEstudios() {
+    this.loading = true;
+    this.loadPlanesEstudio().then(planes => {
+      this.planesEstudio = planes;
+      this.planesEstudio.forEach(plan => {
+        this.organizarDatosTablaPlanEstudio(plan);
+      });
+      this.dataPlanesEstudio.load(this.planesEstudio);
+      this.loading = false;
+    }).catch(err => {
+      this.loading = false;
+      this.popUpManager.showPopUpGeneric(
+        this.translate.instant('plan_estudios.plan_estudios'),
+        this.translate.instant('ERROR.sin_informacion_en') + ': <b>' + this.translate.instant('plan_estudios.plan_estudios') + '</b>.',
+        MODALS.WARNING, false);
+    });
+  }
   //#endregion
   // * ----------
 
@@ -944,6 +984,43 @@ export class CreacionPlanEstudiosComponent implements OnInit {
             );
           });
     });
+  }
+  //#endregion
+  // * ----------
+
+  // * ----------
+  // * Enviar plan de estudios a revision
+  //#region
+  send2ReviewStudyPlan(planEstudioBody: PlanEstudio) {
+    this.popUpManager.showPopUpGeneric(
+      this.translate.instant('plan_estudios.plan_estudios'),
+      this.translate.instant('plan_estudios.enviar_revision_pregunta'), MODALS.INFO, true).
+      then(
+        action => {
+          if (action.value) {
+            this.loading = true;
+            planEstudioBody.EstadoAprobacionId = this.estadosAprobacion.find(
+              estado => estado.CodigoAbreviacion == STD.IN_REV);
+              this.planEstudiosService.put('plan_estudio/', planEstudioBody).
+              subscribe(
+                resp => {
+                  if (resp.Status == "200") {
+                    this.loading = false;
+                    this.popUpManager.showSuccessAlert(
+                      this.translate.instant('plan_estudios.enviar_revision_ok'));
+                      this.recargarPlanEstudios();
+                      this.vista = VIEWS.LIST;
+                  } else {
+                    this.loading = false;
+                    this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.enviar_revision_fallo'));
+                  }
+                }, 
+                err => {
+                  this.loading = false;
+                  this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.enviar_revision_fallo'));
+                });
+              }
+            });
   }
   //#endregion
   // * ----------
