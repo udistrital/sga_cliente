@@ -2301,7 +2301,9 @@
         "info_modo_solo_ver": "In this state it is not possible to edit the plan",
         "aprobacion_plan_coordinacion": "Approval of Teacher Work Plan",
         "recordar_aprobar_plan": "Don't forget to approve or reject the plan in the final section of this page",
-        "revisar_solapamiento_carga": "Please check that there is no overlap between study load and activities. Check that the summary of the total hours coincides with what is charged in the schedule."
+        "revisar_solapamiento_carga": "Please check that there is no overlap between study load and activities. Check that the summary of the total hours coincides with what is charged in the schedule.",
+        "descargar": "Download PTD",
+        "formato_doc": "Select the file type"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",
