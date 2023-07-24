@@ -2383,6 +2383,9 @@
         "creditos": "Credits",
         "resumen_general": "Total Study plan",
         "plan_estudios_creacion_ok": "Curriculum created successfully",
-        "plan_estudios_creacion_error": "Failed to create curriculum"
+        "plan_estudios_creacion_error": "Failed to create curriculum",
+        "enviar_revision_pregunta": "About to submit for review, do you want to continue?",
+        "enviar_revision_ok": "Submission for review successful!",
+        "enviar_revision_fallo": "Could not submit for review!"
     }
 }
