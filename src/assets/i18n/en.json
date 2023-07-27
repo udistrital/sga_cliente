@@ -166,6 +166,11 @@
         "plan_estudios": {
             "plan_estudios": "Study Plan",
             "crear_plan_estudios": "Create Study Plan"
+        },
+        "gestion-horarios": {
+            "gestion-horarios": "Schedule Management",
+            "disponibilidad-cupos": "Availability of places",
+            "horarios-grupos": "Schedules by Groups"
         }
     },
     "GLOBAL": {
@@ -2382,5 +2387,33 @@
         "quitar_espacio": "Remove space from this semester",
         "creditos": "Credits",
         "resumen_general": "Total Study plan"
+    },
+    "gestion_horarios": {
+        "encabezado": "Module for the Availability of quotas",
+        "label":"Availability of places",
+        "mensaje_inicial": "Please select the curricular project, the academic period and the semester that is to consult the availability of places by academic space",
+        "header_parametros": "Query definition",
+        "periodo_academico": "Academic period",
+        "semestre":"Academic semester",
+        "header_resultados": "Query Results",
+        "mensaje_tabla": "The table exposes the allocation of quotas for the different academic spaces for the information entered, you can edit the quotas or enable or disable the quotas",
+        "codigo": "Code",
+        "espacio_academico":"Academic space",
+        "grupo":"Group",
+        "cupos": "Places",
+        "inscritos":"Inscribed",
+        "disponibles": "Available",
+        "editar":"Edit",
+        "inactivar":"Inactivate",
+        "encabezado_2": "Module for Schedules by group",
+        "label_2": "Hours per group",
+        "mensaje_inicial_2": "Please select the search criteria you wish to carry out, select the academic period, academic project, academic space and group to consult, the more criteria you select, the more specific the query will be",
+        "reportes": "Download reports",
+        "sede": "Campus",
+        "edificio":"Building",
+        "salon":"Lounge",
+        "proyecto_academico":"academic project",
+        "dia": "Day",
+        "hora": "Hour"
     }
 }

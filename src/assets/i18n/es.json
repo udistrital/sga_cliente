@@ -171,6 +171,11 @@
         "plan_estudios": {
             "plan_estudios": "Plan de estudios",
             "crear_plan_estudios": "Crear plan de estudio"
+        },
+        "gestion-horarios": {
+            "gestion-horarios": "Gestion de horarios",
+            "disponibilidad-cupos": "Disponibilidad de cupos",
+            "horarios-grupos": "Horarios por Grupos"
         }
     },
     "GLOBAL": {
@@ -2453,5 +2458,34 @@
         "quitar_espacio": "Quitar espacio de este semestre",
         "creditos": "Créditos",
         "resumen_general": "Total Plan de estudio"
+    },
+    "gestion_horarios": {
+        "encabezado": "Módulo para la Disponibilidad de cupos",
+        "label":"Disponibilidad de cupos",
+        "mensaje_inicial": "Por favor seleccione el proyecto curricular, el periodo académico y el semestre que sea consultar la disponibilidad de cupos por espacio académico",
+        "header_parametros": "Definición de consulta",
+        "periodo_academico": "Periodo académico",
+        "semestre":"Semestre académico",
+        "header_resultados": "Resultados de consulta",
+        "mensaje_tabla": "La tabla expone la asignación de cupos para los diferentes espacios académicos para la información ingresada, podrá editar los cupos o habilitar o inhabilitar los cupos",
+        "codigo": "Código",
+        "espacio_academico":"Espacio Académico",
+        "grupo":"Grupo",
+        "cupos": "Cupos",
+        "inscritos":"Inscritos",
+        "disponibles": "Disponibles",
+        "editar":"Editar",
+        "inactivar":"Inactivar",
+        "encabezado_2": "Módulo para Horarios por grupo",
+        "label_2": "Horarios por grupo",
+        "mensaje_inicial_2": "Por favor selecciones los criterios de búsqueda que desea realizar, seleccione el periodo académico, el proyecto académico, espacio académico y grupo a consultar, entre más criterios seleccione la consulta será más especifica",
+        "reportes": "Descargar reportes",
+        "sede": "Sede",
+        "edificio":"Edificio",
+        "salon":"Salón",
+        "proyecto_academico":"Proyecto Académico",
+        "dia": "Dia",
+        "hora": "Hora"
     }
+
 }
