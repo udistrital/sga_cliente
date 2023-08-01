@@ -63,7 +63,7 @@ export class AsignarPtdComponent implements OnInit {
     this.cargarPeriodo();
     this.cargarEstadosPlan().then(estados => {
       this.estadosPlan = <any[]>estados;
-      this.estadosAprobar = this.estadosPlan.filter(estado => (estado.codigo_abreviacion == "APR") || (estado.codigo_abreviacion == "N_APR"));
+      this.estadosAprobar = this.estadosPlan.filter(estado => (estado.codigo_abreviacion == "PAPR") || (estado.codigo_abreviacion == "N_APR"));
     })
   }
 

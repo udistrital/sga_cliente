@@ -12,6 +12,29 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
         <nb-card-body>
             <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
                 <legend><small>&nbsp; {{ 'ptd.list_planes' | translate }}</small></legend>
+                
+                <mat-form-field style="width: 20%;">
+                    <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="periodos.select" (selectionChange)="filtrarPlanes()">
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <mat-option *ngFor="let item of periodos?.opciones" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field style="width: 30%;">
+                    <mat-label>{{ 'GLOBAL.proyecto_academico' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="proyectos.select" (selectionChange)="filtrarPlanes()">
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <mat-option *ngFor="let item of proyectos?.opciones" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                &nbsp;<button mat-stroked-button (click)="filtrarPlanes()"> {{ 'GLOBAL.actualizar' | translate }} </button>
+                
                 <ng2-smart-table [settings]="tbPlanes" [source]="dataPlanes">
                 </ng2-smart-table>
             </fieldset>
@@ -22,7 +45,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
     <!-- Vista de verificar ptd -->
     <ng-container *ngSwitchCase="VIEWS.FORM">
         <nb-card-header>
-            <button mat-stroked-button class="top-left-regresar" (click)="vista=VIEWS.LIST">{{ 'GLOBAL.regresar' | translate }}</button>
+            <button mat-stroked-button class="top-left-regresar" (click)="vista=VIEWS.LIST; filtrarPlanes()">{{ 'GLOBAL.regresar' | translate }}</button>
             <div class="row" align="center">
                 <div class="col">
                     {{ 'ptd.verif_plan' | translate }}
@@ -34,17 +57,17 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
             <ngx-dinamicform [normalform]="formDocente" [modeloData]="dataDocente">
             </ngx-dinamicform>
             <!-- horario ptd -->
-            <horario-carga-lectiva (OutCancelar)="vista=VIEWS.LIST"></horario-carga-lectiva>
+            <horario-carga-lectiva (OutCancelar)="vista=VIEWS.LIST" [Data]="infoPlan"></horario-carga-lectiva>
             <!-- info verificar -->
-            <ngx-dinamicform [normalform]="formVerificar" [modeloData]="dataVerificar">
+            <ngx-dinamicform [normalform]="formVerificar" [modeloData]="dataVerificar" (result)="validarFormVerificar($event)">
             </ngx-dinamicform>
             <!-- reportes -->
             <fieldset [ngClass]="{'fieldseter':true}">
                 <legend><small>&nbsp; {{ 'GLOBAL.reportes' | translate }}</small></legend>
                 <div class="buttons_reportes">
-                    <button mat-raised-button color="primary" > {{ 'ptd.gen_rep_carga_lectiva' | translate }} </button>
-                    <button mat-raised-button color="primary" > {{ 'ptd.gen_rep_actividades' | translate }} </button>
-                    <button mat-raised-button color="primary" > {{ 'ptd.gen_rep_total' | translate }} </button>
+                    <button mat-raised-button color="primary" (click)="generarReporte('C')"> {{ 'ptd.gen_rep_carga_lectiva' | translate }} </button>
+                    <button mat-raised-button color="primary" (click)="generarReporte('A')"> {{ 'ptd.gen_rep_actividades' | translate }} </button>
+                    <button mat-raised-button color="primary" (click)="generarReporte('CA')"> {{ 'ptd.gen_rep_total' | translate }} </button>
                 </div>
             </fieldset>
         </nb-card-body>
