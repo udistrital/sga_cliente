@@ -2307,7 +2307,8 @@
         "no_planes_particulares": "No plans found for the selected period or curricular project",
         "respuesta_enviada": "The response has been sent",
         "error_respuesta_enviada": "Failed to send the response",
-        "select_aprobar": "Approval"
+        "select_aprobar": "Approval",
+        "proyecto_sin_espacios": "The Curricular Project related to the selected subject does not have defined physical spaces"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",

@@ -2378,7 +2378,8 @@
         "no_planes_particulares": "No se encuentran planes para el periodo o proyecto curricular seleccionados",
         "respuesta_enviada": "La respuesta ha sido enviada",
         "error_respuesta_enviada": "No se pudo enviar la respuesta",
-        "select_aprobar": "Aprobación"
+        "select_aprobar": "Aprobación",
+        "proyecto_sin_espacios": "El Proyecto Curricular relacionado a la asignatura seleccionada no cuenta con espacios físicos definidos"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",

@@ -372,7 +372,7 @@ export class VerificarPtdComponent implements OnInit {
 
   generarReporte(tipoCarga: string, docente?: any, vinculacion?: any) {
     this.loading = true;
-    this.sgaMidService.post(`reportes/plan_trabajo_docente/${docente ? docente : this.dataDocente.docente_id}/${vinculacion ? vinculacion : this.dataDocente.tipo_vinculacion_id}/${this.periodos.select.Id}/${tipoCarga}`, null).subscribe(
+    this.sgaMidService.post(`reportes/plan_trabajo_docente/${docente ? docente : this.dataDocente.docente_id}/${vinculacion ? vinculacion : this.dataDocente.tipo_vinculacion_id}/${this.periodos.select.Id}/${tipoCarga}`, {}).subscribe(
       resp => {
         this.loading = false;
         const rawFilePDF = new Uint8Array(atob(resp.Data.pdf).split('').map(char => char.charCodeAt(0)));
