@@ -1,5 +1,13 @@
 import { EstadoAprobacion } from "./estado_aprobacion";
 
+// estructura de cada espacio académico de la lista de
+// espacios académicos de cada semestre
+export class EspacioEspaciosSemestreDistribucion {
+    Id: number;
+    OrdenTabla: number;
+    EspaciosRequeridos: Object;
+}
+
 export class PlanEstudio {
     readonly Id: number;
     Nombre: string;

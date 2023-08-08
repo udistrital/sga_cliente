@@ -16,7 +16,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
-import { PlanEstudio } from '../../../@core/data/models/plan_estudios/plan_estudio';
+import { PlanEstudio, EspacioEspaciosSemestreDistribucion } from '../../../@core/data/models/plan_estudios/plan_estudio';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { EstadoAprobacion, STD } from '../../../@core/data/models/plan_estudios/estado_aprobacion';
 
@@ -83,7 +83,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     CP: 0,
     ENFQ_TEO: 0,
     ENFQ_PRAC: 0,
-    ENFQ_TEOPRAC: 0, 
+    ENFQ_TEOPRAC: 0,
   }
 
   readonly ACTIONS = ACTIONS;
@@ -169,7 +169,8 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
               console.log("ver: ", out.value, out.rowData)
-            })}
+            })
+          }
         },
         enviar: {
           title: this.translate.instant('GLOBAL.enviar'),
@@ -181,7 +182,8 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
               this.send2ReviewStudyPlan(out.rowData);
-            })}
+            })
+          }
         },
       },
       hideSubHeader: false,
@@ -197,12 +199,12 @@ export class CreacionPlanEstudiosComponent implements OnInit {
         perPage: 5,
       },
       columns: {
-        index:{
+        index: {
           title: '#',
           filter: false,
-          valuePrepareFunction: (value,row,cell) => {
-            return cell.row.index+1;
-           },
+          valuePrepareFunction: (value, row, cell) => {
+            return cell.row.index + 1;
+          },
           width: '5%',
         },
         nombre: {
@@ -252,7 +254,27 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   onAction(event): void {
     switch (event.action) {
       case 'add_to_semester':
-        this.addtoSemester(event);
+        console.log(this.dataSemestre.length);
+        console.log(this.dataSemestre);
+        this.runValidations2SpacesAdding(event).then(
+          (result) => {
+            console.log("RESULTADO RUN VALIDACION: ", result);
+
+            if (result["valid"]) {
+              console.log("Es valido");
+              this.addtoSemester(event);
+            } else {
+              console.log("NO ES VALIDO");
+
+              console.log(result);
+
+              this.popUpManager.showErrorAlert(result["error"]);
+            }
+          }).catch(
+            (result) => {
+              console.log("Error agregando espacio ");
+              this.popUpManager.showErrorAlert(result["error"]);
+            });
         break;
       case 'remove_from_semester':
         this.removeFromSemester(event);
@@ -262,10 +284,10 @@ export class CreacionPlanEstudiosComponent implements OnInit {
 
   addtoSemester(event) {
     if (this.dataSemestre.length >= 1 && this.desactivarAgregarSemestre) {
-      this.dataSemestre[this.dataSemestre.length-1].add(event.data);
-      this.dataSemestre[this.dataSemestre.length-1].refresh();
+      this.dataSemestre[this.dataSemestre.length - 1].add(event.data);
+      this.dataSemestre[this.dataSemestre.length - 1].refresh();
       this.dataEspaciosAcademicos.remove(event.data);
-      const semestreId = this.dataSemestre.length-1;
+      const semestreId = this.dataSemestre.length - 1;
       const totalSemestre = this.filaTotal(this.dataSemestre[semestreId]);
       this.dataSemestreTotal[semestreId].load(totalSemestre);
       this.dataSemestreTotal[semestreId].refresh();
@@ -276,8 +298,8 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     if (this.desactivarAgregarSemestre) {
       this.dataEspaciosAcademicos.add(event.data);
       this.dataEspaciosAcademicos.refresh();
-      this.dataSemestre[this.dataSemestre.length-1].remove(event.data);
-      const semestreId = this.dataSemestre.length-1;
+      this.dataSemestre[this.dataSemestre.length - 1].remove(event.data);
+      const semestreId = this.dataSemestre.length - 1;
       const totalSemestre = this.filaTotal(this.dataSemestre[semestreId]);
       this.dataSemestreTotal[semestreId].load(totalSemestre);
       this.dataSemestreTotal[semestreId].refresh();
@@ -285,20 +307,20 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   }
 
   limpiarSemestre(semestre: LocalDataSource) {
-    this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'), 
-                                       this.translate.instant('plan_estudios.seguro_limpiar'), MODALS.QUESTION, true).then(
-      (action) => {
-        if (action.value) {
-          semestre.getAll().then((data) => {
-            data.forEach((dataind) => {
-              this.dataEspaciosAcademicos.add(dataind)
+    this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'),
+      this.translate.instant('plan_estudios.seguro_limpiar'), MODALS.QUESTION, true).then(
+        (action) => {
+          if (action.value) {
+            semestre.getAll().then((data) => {
+              data.forEach((dataind) => {
+                this.dataEspaciosAcademicos.add(dataind)
+              })
+              this.dataEspaciosAcademicos.refresh();
+              semestre.load([]);
             })
-            this.dataEspaciosAcademicos.refresh();
-            semestre.load([]);
-          })
-        }    
-      }
-    );
+          }
+        }
+      );
   }
 
   createTableSemestre() {
@@ -343,7 +365,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           type: 'html',
           valuePrepareFunction: (valor: number) =>
             (valor === 1)
-              ?  checkmark
+              ? checkmark
               : '',
         },
         OC: {
@@ -422,7 +444,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
             (valor === 1)
               ? checkmark
               : '',
-        }, 
+        },
       },
       hideSubHeader: true,
       mode: 'external',
@@ -524,7 +546,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           editable: false,
           width: '7%',
           filter: false,
-        }, 
+        },
       },
       hideSubHeader: true,
       mode: 'external',
@@ -608,7 +630,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           this.formPlanEstudio.subnivel.opciones = this.niveles.filter(nivel => nivel.NivelFormacionPadreId && (nivel.NivelFormacionPadreId.Id == event.nivel.Id));
         } else {
           this.formPlanEstudio.subnivel.opciones = [];
-          this.formGroupPlanEstudio.patchValue({subnivel: undefined});
+          this.formGroupPlanEstudio.patchValue({ subnivel: undefined });
         }
         break;
 
@@ -617,21 +639,21 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           this.formPlanEstudio.proyectoCurriular.opciones = this.proyectos.filter(proyecto => proyecto.NivelFormacionId && (proyecto.NivelFormacionId.Id == event.subnivel.Id));
         } else {
           this.formPlanEstudio.proyectoCurriular.opciones = [];
-          this.formGroupPlanEstudio.patchValue({proyectoCurriular: undefined});
+          this.formGroupPlanEstudio.patchValue({ proyectoCurriular: undefined });
         }
         break;
-      
+
       case 'proyectoCurriular':
         if (event.proyectoCurriular) {
           this.formPlanEstudio.codigoProyecto.valor = event.proyectoCurriular.Codigo;
-          this.formGroupPlanEstudio.patchValue({codigoProyecto: event.proyectoCurriular.Codigo});
+          this.formGroupPlanEstudio.patchValue({ codigoProyecto: event.proyectoCurriular.Codigo });
           this.proyecto_id = event.proyectoCurriular.Id;
         } else {
           this.formPlanEstudio.codigoProyecto.valor = undefined;
-          this.formGroupPlanEstudio.patchValue({codigoProyecto: undefined});
+          this.formGroupPlanEstudio.patchValue({ codigoProyecto: undefined });
         }
         break;
-    
+
       default:
         break;
     }
@@ -657,8 +679,16 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   }
 
   guardar(stepper: MatStepper) {
+    // Remover
+    this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
+      this.ListEspacios = result;
+      this.dataEspaciosAcademicos.load(this.ListEspacios);
+      stepper.next();
+    });
+    // End Remover
+
     this.formGroupPlanEstudio.markAllAsTouched();
-    if (this.formGroupPlanEstudio.valid) {
+    /* if (this.formGroupPlanEstudio.valid) {
       this.popUpManager.showPopUpGeneric(
         this.translate.instant('plan_estudios.plan_estudios'), 
         this.translate.instant('plan_estudios.seguro_crear'), 
@@ -669,32 +699,32 @@ export class CreacionPlanEstudiosComponent implements OnInit {
               this.prepareCreate(stepper);
             }    
           });
-    }
+    } */
   }
 
   limpiar() {
-    this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'), 
-                                       this.translate.instant('plan_estudios.seguro_limpiar'), MODALS.QUESTION, true).then(
-      (action) => {
-        if (action.value) {
-          this.formGroupPlanEstudio.reset();
-        }    
-      }
-    );
+    this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'),
+      this.translate.instant('plan_estudios.seguro_limpiar'), MODALS.QUESTION, true).then(
+        (action) => {
+          if (action.value) {
+            this.formGroupPlanEstudio.reset();
+          }
+        }
+      );
   }
 
   cancelar() {
-    this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'), 
-                                       this.translate.instant('plan_estudios.seguro_cancelar'), MODALS.WARNING, true).then(
-      (action) => {
-        if (action.value) {
-          this.formGroupPlanEstudio.reset();
-          this.dataSemestre = [];
-          this.vista = VIEWS.LIST;
-          this.loadSelects();
-        }    
-      }
-    );
+    this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'),
+      this.translate.instant('plan_estudios.seguro_cancelar'), MODALS.WARNING, true).then(
+        (action) => {
+          if (action.value) {
+            this.formGroupPlanEstudio.reset();
+            this.dataSemestre = [];
+            this.vista = VIEWS.LIST;
+            this.loadSelects();
+          }
+        }
+      );
   }
 
   agregarSemestre() {
@@ -704,20 +734,24 @@ export class CreacionPlanEstudiosComponent implements OnInit {
       this.dataSemestre.push(new LocalDataSource());
       let total = <any>UtilidadesService.hardCopy(this.formatototal);
       this.dataSemestreTotal.push(new LocalDataSource([total]));
+      console.log(this.dataSemestre);
       this.createTableSemestre();
       this.createTableSemestreTotal();
     }
   }
 
   finalizarSemestre() {
-    this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'), 
-                                       this.translate.instant('plan_estudios.seguro_finalizar'), MODALS.INFO, true).then(
-      (action) => {
-        if (action.value) {
-          this.desactivarAgregarSemestre = false;
-        }    
-      }
-    );
+    this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'),
+      this.translate.instant('plan_estudios.seguro_finalizar'), MODALS.INFO, true).then(
+        (action) => {
+          if (action.value) {
+            this.desactivarAgregarSemestre = false;
+            this.prepareUpdateBySemester();
+            console.log("Finish-----------------------");
+
+          }
+        }
+      );
   }
   //#endregion
   // * ----------
@@ -732,10 +766,10 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           if (Object.keys(resp[0]).length > 0) {
             resolve(resp);
           } else {
-            reject({"nivel": null});
+            reject({ "nivel": null });
           }
         }, (err) => {
-          reject({"nivel": err});
+          reject({ "nivel": err });
         }
       );
     });
@@ -748,10 +782,10 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           if (Object.keys(resp[0]).length > 0) {
             resolve(resp);
           } else {
-            reject({"proyecto": null});
+            reject({ "proyecto": null });
           }
         }, (err) => {
-          reject({"proyecto": err});
+          reject({ "proyecto": err });
         }
       );
     });
@@ -760,17 +794,17 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   loadEstadosAprobacion(): Promise<EstadoAprobacion[]> {
     return new Promise<any>((resolve, reject) => {
       this.planEstudiosService.get("estado_aprobacion?query=activo:true&limit=0").
-      subscribe(
-        (resp) => {
-          if (Object.keys(resp.Data[0]).length > 0) {
-            resolve(resp.Data);
-          } else {
-            reject({"estado_aprobacion": null});
+        subscribe(
+          (resp) => {
+            if (Object.keys(resp.Data[0]).length > 0) {
+              resolve(resp.Data);
+            } else {
+              reject({ "estado_aprobacion": null });
+            }
+          }, (err) => {
+            reject({ "estado_aprobacion": err });
           }
-        }, (err) => {
-          reject({"estado_aprobacion": err});
-        }
-      )
+        )
     });
   }
   //#endregion
@@ -779,7 +813,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   // * ----------
   // * Carga planes de estudio existentes
   //#region
-  loadPlanesEstudio(): Promise<PlanEstudio[]>{
+  loadPlanesEstudio(): Promise<PlanEstudio[]> {
     return new Promise<any>((resolve, reject) => {
       this.planEstudiosService.get("plan_estudio?query=activo:true&limit=0").subscribe(
         (resp) => {
@@ -789,7 +823,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
             resolve([]);
           }
         }, (err) => {
-          reject({"plan_estudio": err})
+          reject({ "plan_estudio": err })
         }
       );
     });
@@ -803,15 +837,34 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   consultarEspaciosAcademicos(id_proyecto: number): Promise<any> {
     this.loading = true;
     return new Promise((resolve, reject) => {
-      this.sgaMidService.get('espacios_academicos/byProject/'+id_proyecto).subscribe((resp) => {
+      this.sgaMidService.get('espacios_academicos/byProject/' + id_proyecto).subscribe((resp) => {
         this.loading = false;
         resolve(resp.Data);
       }, (err) => {
         this.loading = false;
-        reject({"espacios": err});
+        reject({ "espacios": err });
       })
     })
   }
+  //#endregion
+  // * ----------
+
+  // * ----------
+  // * Cargar datos del plan de estudio actual
+  //#region
+  consultarPlanEstudio(idPlan: number): Promise<any> {
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.planEstudiosService.get('plan_estudio/' + idPlan).subscribe((resp) => {
+        this.loading = false;
+        resolve(resp.Data);
+      }, (err) => {
+        this.loading = false;
+        reject({ "plan_estudios": err });
+      })
+    });
+  }
+
   //#endregion
   // * ----------
 
@@ -830,7 +883,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
         this.proyectos = proyectos;
       }));
       await Promise.all(promesas);
-      
+
       this.estadosAprobacion = await this.loadEstadosAprobacion();
 
       // Datos de la tabla planes de estudio
@@ -844,9 +897,9 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     } catch (error) {
       const falloEn = Object.keys(error)[0];
       this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
-                                           this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
-                                           this.translate.instant('ERROR.persiste_error_comunique_OAS'),
-                                           MODALS.ERROR, false);
+        this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
+        this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+        MODALS.ERROR, false);
       this.loading = false;
     }
   }
@@ -856,7 +909,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   // * ----------
   // * Funciones para carga y descarga de archivos
   //#region
-  prepararArchivos(): any[]{
+  prepararArchivos(): any[] {
     const idTipoDocument = 72; // carpeta Nuxeo
     const archivos = <any[]>this.formPlanEstudio.soportes.archivosLocal;
     return archivos.map(archivo => {
@@ -888,14 +941,14 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   prepareIds2Stringify(idsArchivos: number[], nameField: string): string {
     let result = {}
     result[nameField] = []
-    if (idsArchivos){
+    if (idsArchivos) {
       result[nameField] = idsArchivos;
     }
     return JSON.stringify(result);
   }
 
-  organizarDatosTablaPlanEstudio(plan: any){
-    const proyecto = this.proyectos.find(proyecto => proyecto.Id == plan.ProyectoAcademicoId);    
+  organizarDatosTablaPlanEstudio(plan: any) {
+    const proyecto = this.proyectos.find(proyecto => proyecto.Id == plan.ProyectoAcademicoId);
     plan["proyectoCurricular"] = proyecto["Nombre"];
 
     plan["plan_estudio"] = plan["Nombre"];
@@ -905,8 +958,8 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     const estado = plan["EstadoAprobacionId"];
     plan["estado"] = estado["Nombre"];
 
-    plan["ver"] = {value: ACTIONS.VIEW, type: 'ver', disabled: false};
-    plan["enviar"] = {value: ACTIONS.SEND, type: 'enviar', disabled: false};
+    plan["ver"] = { value: ACTIONS.VIEW, type: 'ver', disabled: false };
+    plan["enviar"] = { value: ACTIONS.SEND, type: 'enviar', disabled: false };
   }
 
   async recargarPlanEstudios() {
@@ -930,10 +983,10 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   // * ----------
 
   // * ----------
-  // * Crear plan de estudios datos básicos 
+  // * Crear/ actualizar plan de estudios datos básicos 
   //#region
 
-  async prepareCreate(stepper: MatStepper){
+  async prepareCreate(stepper: MatStepper) {
     this.loading = true;
     let newPlanEstudio = new PlanEstudio();
     newPlanEstudio.Nombre = "";
@@ -950,6 +1003,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     this.loading = false;
 
     this.createStudyPlan(newPlanEstudio).then((res: any) => {
+      this.planEstudioBody = res;
       this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
         this.ListEspacios = result;
         this.dataEspaciosAcademicos.load(this.ListEspacios);
@@ -970,17 +1024,76 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.loading = true;
       this.sgaMidService.post('plan_estudios/base', planEstudioBody)
-      .subscribe(res => {
-        this.loading = false;
-        this.popUpManager.showSuccessAlert(
-          this.translate.instant('plan_estudios.plan_estudios_creacion_ok')
-          );
-          resolve(res);
-        },
-        (error: HttpErrorResponse) => {
+        .subscribe(res => {
           this.loading = false;
-          this.popUpManager.showErrorAlert(
-            this.translate.instant('plan_estudios.plan_estudios_creacion_error')
+          this.popUpManager.showSuccessAlert(
+            this.translate.instant('plan_estudios.plan_estudios_creacion_ok')
+          ).then((action) => {
+            resolve(res.Data);
+          });
+        },
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            this.popUpManager.showErrorAlert(
+              this.translate.instant('plan_estudios.plan_estudios_creacion_error')
+            );
+          });
+    });
+  }
+
+  async prepareUpdateBySemester() {
+    this.loading = true;
+    if (this.planEstudioBody == undefined) {
+      await this.consultarPlanEstudio(13).then((res) => {
+        this.planEstudioBody = res;
+      });
+    }
+    this.formatearEspaciosPlanEstudio().then((res) => {
+      this.loading = false;
+      console.log("Formateado");
+      console.log("Plan Actual: ", this.planEstudioBody);
+      if (res) {
+        this.updateStudyPlan(this.planEstudioBody).then((updatedPlan) => {
+          this.planEstudioBody = updatedPlan;
+          console.log("Acutalizado plan de estudios");
+          
+        });
+      } else {
+        this.loading = false;
+        this.popUpManager.showErrorAlert(
+          this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
+        );
+      }
+    }).catch((error) => {
+      this.loading = false;
+      this.popUpManager.showErrorAlert(
+        this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
+      );
+    });
+  }
+
+  updateStudyPlan(planEstudioBody: PlanEstudio) {
+    return new Promise((resolve, reject) => {
+      this.loading = true;
+      this.planEstudiosService.put('plan_estudio/', planEstudioBody)
+        .subscribe(res => {
+          this.loading = false;
+          if (Object.keys(res.Data).length > 0) {
+            this.popUpManager.showSuccessAlert(
+              this.translate.instant('plan_estudios.plan_estudios_actualizacion_ok')
+            ).then((action) => {
+              resolve(res.Data);
+            });
+          } else {
+            this.popUpManager.showErrorAlert(
+              this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
+            );
+          }
+        },
+          (error: HttpErrorResponse) => {
+            this.loading = false;
+            this.popUpManager.showErrorAlert(
+              this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
             );
           });
     });
@@ -1001,27 +1114,257 @@ export class CreacionPlanEstudiosComponent implements OnInit {
             this.loading = true;
             planEstudioBody.EstadoAprobacionId = this.estadosAprobacion.find(
               estado => estado.CodigoAbreviacion == STD.IN_REV);
-              this.planEstudiosService.put('plan_estudio/', planEstudioBody).
+            this.planEstudiosService.put('plan_estudio/', planEstudioBody).
               subscribe(
                 resp => {
                   if (resp.Status == "200") {
                     this.loading = false;
                     this.popUpManager.showSuccessAlert(
                       this.translate.instant('plan_estudios.enviar_revision_ok'));
-                      this.recargarPlanEstudios();
-                      this.vista = VIEWS.LIST;
+                    this.recargarPlanEstudios();
+                    this.vista = VIEWS.LIST;
                   } else {
                     this.loading = false;
                     this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.enviar_revision_fallo'));
                   }
-                }, 
+                },
                 err => {
                   this.loading = false;
                   this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.enviar_revision_fallo'));
                 });
-              }
-            });
+          }
+        });
   }
+  //#endregion
+  // * ----------
+
+  // * ----------
+  // * Validaciones espacios académicos por semestre
+  //#region
+
+  runValidations2SpacesAdding(event): Promise<object> {
+    let result = {
+      valid: true,
+      error: null,
+      showPopUp: false,
+      messagePopUp: ""
+    }
+    return new Promise<object>((resolve, reject) => {
+      this.validarPrerequisitosAgregar(event).then((valid) => {
+        console.log("RESULTADO VALIDACIÓN: ", valid);
+
+        if (valid) {
+          resolve(result);
+        } else {
+          result["valid"] = false;
+          result["error"] = this.translate.instant(
+            'plan_estudios.error_validacion_prerrequisitos_espacios');
+          reject(result);
+        }
+      });
+    });
+  }
+
+  validarPrerrequisitoSinAsignar(prerrequisito): Promise<any> {
+    return new Promise((resolve) => {
+      // Validar que no se encuentre en la lista de espacios por asignar
+
+      this.dataEspaciosAcademicos.getAll().then((data) => {
+        console.log("Primer validación");
+        let index = 0;
+
+        if (data.length > 0) {
+          for (const element of data) {
+            console.log("Buscando en la lista de espacios");
+
+            if (element._id === prerrequisito._id) {
+              console.log("Tiene prerrequisito sin asignar");
+              resolve(false);
+              console.log("Pasando a romper el for");
+              break;
+            }
+
+            console.log("Fin iteración ", index, " sin asignar");
+            if (index >= data.length - 1) {
+              console.log("Total espacios barrido !!!!!!!!!!!!");
+              resolve(true);
+            }
+            index++;
+          }
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  }
+
+  validarPrerrequisitoSemestreActual(prerrequisito): Promise<any> {
+    return new Promise((resolve) => {
+      // Validar que no se encuentre en el semestre actual
+      this.dataSemestre[this.dataSemestre.length - 1].getAll().then((data) => {
+        console.log("Segunda validación");
+        let index = 0;
+
+        if (data.length > 0) {
+          for (const element of data) {
+            console.log("Buscando en la lista de espacios del semestre");
+            if (element._id === prerrequisito._id) {
+              console.log("Tiene prerrequisitos en el mismo semestre");
+              resolve(false);
+              break;
+            }
+
+            if (index >= data.length - 1) {
+              resolve(true);
+            }
+            console.log("Fin iteración ", index, " mismo semestre");
+            index++;
+          }
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  }
+
+  async validarPrerequisitosAgregar(event): Promise<boolean> {
+    console.log("dataEspaciosAcademicos", this.dataEspaciosAcademicos);
+    console.log("dataSemestre", this.dataSemestre);
+    console.log("Event: ", event);
+    console.log("Smestre total: ", this.dataSemestreTotal);
+
+    let currentSpace = event.data;
+    let prerrequisitos = currentSpace["prerequisitos"];
+    let index = 0;
+    let validPrerequisite = true;
+    let stopIt = false;
+    console.log("prerrequisitos: ", prerrequisitos);
+    console.log("Tipo pr: ", typeof prerrequisitos);
+    if (prerrequisitos != undefined) {
+      for (const prerrequisito of prerrequisitos) {
+        console.log("prerrequisito index: ", index);
+        await this.validarPrerrequisitoSinAsignar(prerrequisito).then((res) => {
+          console.log("Finalizando primer validación, res:", res);
+          if (!res) {
+            console.log("Resultado negativo primer validación");
+            validPrerequisite = res;
+            stopIt = true;
+          }
+        });
+        console.log("Resultado returnado en ", index, ", STOP: ", stopIt);
+        if (stopIt) {
+          console.log("Primer break");
+          break;
+        } else {
+          await this.validarPrerrequisitoSemestreActual(prerrequisito).then((resSemestre) => {
+            console.log("#####Finalizando segunda validación, res: ", resSemestre);
+
+            if (!resSemestre) {
+              console.log("Registrado en el mismo semestre");
+              validPrerequisite = resSemestre;
+              stopIt = true;
+            }
+          });
+        }
+
+        if (stopIt) {
+          console.log("Segundo break");
+          break;
+        }
+        index++;
+      }
+      console.log("-------------------FINALIZADO FINAL, validPrerequisite: ", validPrerequisite);
+      return validPrerequisite;
+    } else {
+      console.log("SIN PRERREQUSITOS");
+      return validPrerequisite;
+    }
+  }
+  //#endregion
+  // * ----------
+
+  // * ----------
+  // * Procesamiento almacenamiento de semestre con espacios académicos 
+  //#region
+
+  async organizarEspaciosSemestreActual(): Promise<any> {
+    let idxsemestre = this.dataSemestre.length - 1;
+    let numSemestre = idxsemestre + 1;
+    let etiquetaSemestre = "semestre_".concat(numSemestre.toString());
+    let semestre = {};
+    let espaciosAcademicosOrdenados = [];
+
+    await this.dataSemestre[idxsemestre].getAll().then((espacios) => {
+      espacios.forEach((espacio, index) => {
+        let etiquetaEspacio = "espacio_".concat((index + 1).toString());
+        let newEspacio = new EspacioEspaciosSemestreDistribucion();
+        let espaciosRequeridosId = espacio["prerequisitos"] ? espacio["prerequisitos"].map((e) => e._id) : "NA";
+        newEspacio.Id = espacio["_id"];
+        newEspacio.OrdenTabla = index + 1;
+        newEspacio.EspaciosRequeridos = {
+          Id: espaciosRequeridosId,
+        }
+        console.log("Formatear object: ", JSON.stringify(newEspacio));
+
+        espaciosAcademicosOrdenados.push({
+          [etiquetaEspacio]: newEspacio
+        });
+        console.log("Indice: ", index, "espacio leng: ", espacios.length);
+
+        if (index >= (espacios.length - 1)) {
+          console.log("Finalizado el empaquetado");
+
+          semestre[etiquetaSemestre] = {
+            espacios_academicos: espaciosAcademicosOrdenados
+          };
+        }
+      });
+    });
+    console.log("TERMINAMOS ------");
+
+    return semestre;
+  }
+
+  obtenerEspaciosSemestre(): any {
+    const espaciosSemestreStr = this.planEstudioBody.EspaciosSemestreDistribucion;
+    if (espaciosSemestreStr === "" || espaciosSemestreStr === "{}" || espaciosSemestreStr === undefined) {
+      return {};
+    } else {
+      return JSON.parse(espaciosSemestreStr);
+    }
+  }
+
+  async formatearEspaciosPlanEstudio(): Promise<any> {
+    try {
+      let espaciosSemestre = await this.obtenerEspaciosSemestre();
+      console.log("plan de estudio", this.planEstudioBody);
+
+      return new Promise((resolve, reject) => {
+        this.organizarEspaciosSemestreActual().then((semestreRes) => {
+          if (Object.keys(semestreRes).length > 0) {
+            const semestreEt = Object.keys(semestreRes)[0];
+            console.log("Espacios semestre: ", espaciosSemestre);
+            if (Object.keys(espaciosSemestre).length > 0) {
+              espaciosSemestre[semestreEt] = semestreRes[semestreEt];
+            } else {
+              espaciosSemestre = semestreRes;
+            }
+            this.planEstudioBody.EspaciosSemestreDistribucion = JSON.stringify(espaciosSemestre);
+            resolve(true);
+          } else {
+            reject(false);
+          }
+        });
+      });
+    } catch (error) {
+      this.loading = false;
+      this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
+        this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + this.translate.instant('plan_estudios.organizar') +
+        '</b>.<br><br>' + this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+        MODALS.ERROR, false);
+    }
+  }
+
   //#endregion
   // * ----------
 }

@@ -2353,6 +2353,7 @@
     "plan_estudios": {
         "plan_estudios":"Study Plan",
         "crear": "Create Study Plan",
+        "actualizar": "Update Study Plan",
         "organizar": "Establish order for study plans",
         "planes_estudio_creados": "Study plans created",
         "select_proyecto":"Selection of the Curricular Project",
@@ -2384,8 +2385,11 @@
         "resumen_general": "Total Study plan",
         "plan_estudios_creacion_ok": "Curriculum created successfully",
         "plan_estudios_creacion_error": "Failed to create curriculum",
+        "plan_estudios_actualizacion_ok": "Curriculum updated successfully",
+        "plan_estudios_actualizacion_error": "Failed to update curriculum",
         "enviar_revision_pregunta": "About to submit for review, do you want to continue?",
         "enviar_revision_ok": "Submission for review successful!",
-        "enviar_revision_fallo": "Could not submit for review!"
+        "enviar_revision_fallo": "Could not submit for review!",
+        "error_validacion_prerrequisitos_espacios": "The selected academic space has prerequisites that must be assigned in previous semesters"
     }
 }
