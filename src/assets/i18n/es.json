@@ -2386,10 +2386,14 @@
         "error_enviar_plan": "No se pudo enviar el plan",
         "info_modo_solo_ver": "En este estado no es posible editar el plan",
         "aprobacion_plan_coordinacion": "Aprobación del Plan Trabajo Docente",
-        "recordar_aprobar_plan": "No olvide aprobar o rechazar el plan en la sección final de esta página",
+        "recordar_aprobar_plan": "No olvide preaprobar o rechazar el plan en la sección final de esta página",
         "revisar_solapamiento_carga": "Por favor revise que no haya superposición entre carga lectiva y actividades. Corrobore que resumen el total de horas coincída con lo cargado en horario.",
         "descargar": "Descargar PTD",
-        "formato_doc": "Seleccione el tipo de archivo"
+        "formato_doc": "Seleccione el tipo de archivo",
+        "no_planes_particulares": "No se encuentran planes para el periodo o proyecto curricular seleccionados",
+        "respuesta_enviada": "La respuesta ha sido enviada",
+        "error_respuesta_enviada": "No se pudo enviar la respuesta",
+        "select_aprobar": "Aprobación"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",
