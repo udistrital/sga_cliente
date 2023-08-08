@@ -1,10 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { VIEWS } from '../../../@core/data/models/diccionario/diccionario';
+import { MODALS, ROLES, VIEWS } from '../../../@core/data/models/diccionario/diccionario';
 import { LocalDataSource } from 'ng2-smart-table';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { Ng2StButtonComponent } from '../../../@theme/components';
 import { FORM_CONSOLIDADO, FORM_RESPUESTA_DEC } from '../forms/form-consolidado';
+import { PlanTrabajoDocenteService } from '../../../@core/data/plan_trabajo_docente.service';
+import { ParametrosService } from '../../../@core/data/parametros.service';
+import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
+import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { UserService } from '../../../@core/data/users.service';
+import { TercerosService } from '../../../@core/data/terceros.service';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   selector: 'consolidado',
@@ -28,10 +35,26 @@ export class ConsolidadoComponent implements OnInit {
   formRespuestaConsolidado: any;
   dataRespuestaConsolidado: any;
   respuestaConsolidado: boolean;
+
+  consolidadoInfo: any = undefined;
+
+  periodos: {select: any, opciones?: any[]} = {select: null};
+  proyectos: {select: any, opciones?: any[]} = {select: null};
+  estadosConsolidado: {select: any, opciones?: any[]} = {select: null};
+
+  isCoordinator: String = undefined;
+  listaPlanesConsolidado: any = undefined;
   
   constructor(
     private translate: TranslateService,
-    private popUpManager: PopUpManager
+    private popUpManager: PopUpManager,
+    private parametrosService: ParametrosService,
+    private projectService: ProyectoAcademicoService,
+    private planTrabajoDocenteService: PlanTrabajoDocenteService,
+    private sgaMidService: SgaMidService,
+    private userService: UserService,
+    private tercerosService: TercerosService,
+    private autenticationService: ImplicitAutenticationService,
     ) {
       this.dataConsolidados = new LocalDataSource();
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -49,19 +72,13 @@ export class ConsolidadoComponent implements OnInit {
     this.buildFormNewEditConsolidado();
     this.buildFormRespuestaConsolidado();
     this.createTable();
-    const data = [
-      {
-        proyecto_curricular: 'Ing en Comedia',
-        codigo: '123',
-        fecha_radicado: '02/03/2020',
-        periodo_academico: '2023-1',
-        revision_decanatura: {value: undefined, type: 'ver', disabled: false},
-        gestion: {value: undefined, type: 'editar', disabled: false},
-        estado: 'por definir',
-        enviar: {value: undefined, type: 'enviar', disabled: false},
+    this.loadSelects();
+    this.dataConsolidados.load([]);
+    this.autenticationService.getRole().then(
+      (rol: Array<String>) => {
+        this.isCoordinator = rol.find(role => (role == ROLES.ADMIN_DOCENCIA || role == ROLES.COORDINADOR));
       }
-    ]
-    this.dataConsolidados.load(data);
+    );
   }
 
   createTable() {
@@ -121,8 +138,7 @@ export class ConsolidadoComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              this.vista = VIEWS.FORM;
-              this.newEditConsolidado = true;
+              this.nuevoEditarConsolidado(out.rowData.ConsolidadoJson);
             })}
         },
         estado: {
@@ -160,6 +176,16 @@ export class ConsolidadoComponent implements OnInit {
     });
   }
 
+  getIndexFormNewEditConsolidado(nombre: String): number {
+    for (let index = 0; index < this.formNewEditConsolidado.campos.length; index++) {
+      const element = this.formNewEditConsolidado.campos[index];
+      if (element.nombre === nombre) {
+        return index
+      }
+    }
+    return -1;
+  }
+
   buildFormRespuestaConsolidado() {
     this.formRespuestaConsolidado.btn = this.translate.instant('GLOBAL.aceptar');
     //this.formRespuestaConsolidado.titulo = this.translate.instant(this.formNewEditConsolidado.titulo_i18n);
@@ -173,5 +199,221 @@ export class ConsolidadoComponent implements OnInit {
     this.vista = VIEWS.LIST;
     this.newEditConsolidado = false;
     this.respuestaConsolidado = false;
+  }
+
+  // * ----------
+  // * Carga información paramétrica (selects)
+  //#region
+  loadPeriodo(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.parametrosService.get('periodo/?query=CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0').subscribe(
+        (resp) => {
+          if (Object.keys(resp.Data[0]).length > 0) {
+            resolve(resp.Data);
+          } else {
+            reject({"periodo": null});
+          }
+        }, (err) => {
+          reject({"periodo": err});
+        }
+      );
+    });
+  }
+
+  loadProyectos(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.projectService.get('proyecto_academico_institucion?query=Activo:true&sortby=Nombre&order=asc&limit=0').subscribe(
+        (resp) => {
+          if (Object.keys(resp[0]).length > 0) {
+            resolve(resp);
+          } else {
+            reject({"proyecto": null});
+          }
+        }, (err) => {
+          reject({"proyecto": err});
+        }
+      );
+    });
+  }
+
+  cargarEstadosConsolidado(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.planTrabajoDocenteService.get('estado_consolidado?query=activo:true&limit=0').subscribe(res => {
+        if (res.Data.length > 0) {
+          resolve(res.Data)
+        } else {
+          reject({"estado_consolidado": null})
+        }
+      }, err => {
+        reject({"estado_consolidado": err})
+      })
+    });
+  }
+  //#endregion
+  // * ----------
+
+
+  async loadSelects() {
+    this.loading = true;
+    try {
+      // ? carga paralela de parametricas
+      let promesas = [];
+      promesas.push(this.loadPeriodo().then(periodos => {this.periodos.opciones = periodos}));
+      promesas.push(this.loadProyectos().then(proyectos => {this.proyectos.opciones = proyectos;}));
+      promesas.push(this.cargarEstadosConsolidado().then(estadosConsolidado => {this.estadosConsolidado.opciones = estadosConsolidado;}));
+      this.loading = false
+    } catch (error) {
+      console.warn(error);
+      this.loading = false;
+      const falloEn = Object.keys(error)[0];
+      if (error[falloEn] == null) {
+        this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
+                                           this.translate.instant('ERROR.sin_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
+                                           this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+                                           MODALS.ERROR, false);
+      } else {
+        this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
+                                           this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
+                                           this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+                                           MODALS.ERROR, false);
+      }
+    }
+  }
+
+  listarConsolidados() {
+    if (this.periodos.select) {
+      let proyecto = ""
+      if (this.proyectos.select) {
+        proyecto = ",proyecto_academico_id:"+this.proyectos.select.Id;
+      }
+      this.loading = true;
+      this.planTrabajoDocenteService.get(`consolidado_docente?query=activo:true,periodo_id:${this.periodos.select.Id}${proyecto}&limit=0`).subscribe((resp) => {
+        this.loading = false;
+        let rawlistarConsolidados = <any[]>resp.Data;
+        let formatedData = [];
+        rawlistarConsolidados.forEach(consolidado => {
+          const proyecto = this.proyectos.opciones.find(proyecto => proyecto.Id == consolidado.proyecto_academico_id);
+          const periodo = this.periodos.opciones.find(periodo => periodo.Id == consolidado.periodo_id);
+          const estadoConsolidado = this.estadosConsolidado.opciones.find(estado => estado._id == consolidado.estado_consolidado_id);
+          let opcionGestion = "ver"
+          if ((estadoConsolidado && estadoConsolidado.codigo_abreviacion == "DEF") || (consolidado.estado_consolidado_id == "Sin Definir")) {
+            opcionGestion = "editar"
+          }
+          formatedData.push({
+            "proyecto_curricular": proyecto ? proyecto.Nombre : "",
+            "codigo": proyecto ? proyecto.Codigo : "",
+            "fecha_radicado": consolidado.fecha_creacion,
+            "periodo_academico": periodo ? periodo.Nombre : "",
+            "revision_decanatura": {value: undefined, type: 'ver', disabled: false},
+            "gestion": {value: undefined, type: opcionGestion, disabled: false},
+            "estado": estadoConsolidado ? estadoConsolidado.nombre : consolidado.estado_consolidado_id,
+            "enviar": {value: undefined, type: 'enviar', disabled: false},
+            "ConsolidadoJson": consolidado
+          })
+        })
+        this.dataConsolidados.load(formatedData);
+
+      }, (err) => {
+        this.loading = false;
+        console.warn(err);
+      });
+    }
+  }
+
+  nuevoEditarConsolidado(consolidado: any) {
+    this.vista = VIEWS.FORM;
+    this.newEditConsolidado = true;
+    this.formNewEditConsolidado.campos[this.getIndexFormNewEditConsolidado("Rol")].valor = this.isCoordinator;
+    this.listaPlanesConsolidado = "";
+    let terceroId = 0;
+    if (consolidado) {
+      this.consolidadoInfo = consolidado;
+      const consolidado_coordinacion = JSON.parse(this.consolidadoInfo.consolidado_coordinacion);
+      terceroId = consolidado_coordinacion.responsable_id;
+    } else {
+      this.consolidadoInfo = undefined;
+      terceroId = this.userService.getPersonaId();
+    }
+    this.tercerosService.get('tercero/'+terceroId).subscribe(resTerc => {
+      this.formNewEditConsolidado.campos[this.getIndexFormNewEditConsolidado("QuienEnvia")].valor = resTerc.NombreCompleto;
+    }, err => {
+      console.warn(err);
+      this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'), this.translate.instant('ERROR.persiste_error_comunique_OAS'), MODALS.ERROR, false)
+    });
+  }
+
+  validarFormNewEdit(event) {
+    if (this.periodos.select && this.proyectos.select) {
+      if (event.valid) {
+        if (this.consolidadoInfo == undefined) {
+          const consolidado = {
+            "documento_id": "",
+            "responsable_id": this.userService.getPersonaId(),
+          }
+          const prepareData = {
+            "plan_docente_id": JSON.stringify(this.listaPlanesConsolidado),
+            "periodo_id": `${this.periodos.select.Id}`,
+            "proyecto_academico_id": `${this.proyectos.select.Id}`,
+            "estado_consolidado_id": `${this.estadosConsolidado.opciones.find(estado => estado.codigo_abreviacion == "DEF")._id}`,
+            "respuesta_decanatura": "{}",
+            "consolidado_coordinacion": JSON.stringify(consolidado),
+            "cumple_normativa": false,
+            "aprobado": false,
+            "activo": true
+          }
+          this.loading = true;
+          this.planTrabajoDocenteService.post('consolidado_docente', prepareData).subscribe((resp) => {
+            this.loading = false;
+            this.popUpManager.showSuccessAlert(this.translate.instant('ptd.crear_consolidado_ok'));
+          }, (err) => {
+            this.loading = false;
+            console.warn(err);
+            this.popUpManager.showErrorAlert(this.translate.instant('ptd.fallo_crear_consolidado'));
+          });
+        } else {
+          const consolidado = {
+            "documento_id": "",
+            "responsable_id": this.userService.getPersonaId(),
+          }
+          this.consolidadoInfo.periodo_id = `${this.periodos.select.Id}`;
+          this.consolidadoInfo.proyecto_academico_id = `${this.proyectos.select.Id}`;
+          this.consolidadoInfo.estado_consolidado_id = `${this.estadosConsolidado.opciones.find(estado => estado.codigo_abreviacion == "DEF")._id}`;
+          this.consolidadoInfo.consolidado_coordinacion = JSON.stringify(consolidado);
+          this.loading = true;
+          this.planTrabajoDocenteService.put('consolidado_docente/'+this.consolidadoInfo._id, this.consolidadoInfo).subscribe((resp) => {
+            this.loading = false;
+            this.popUpManager.showSuccessAlert(this.translate.instant('ptd.actualizar_consolidado_ok'));
+          }, (err) => {
+            this.loading = false;
+            console.warn(err);
+            this.popUpManager.showErrorAlert(this.translate.instant('ptd.fallo_actualizar_consolidado'));
+          });
+        }
+      }
+    } else {
+      this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.diligenciar_consolidado'), this.translate.instant('ptd.select_periodo_proyecto'), MODALS.INFO, false)
+    }
+  }
+
+  obtenerDocConsolidado() {
+  if (this.periodos.select) {
+    this.loading = true;
+    this.sgaMidService.post(`reportes/verif_cump_ptd/${this.periodos.select.Id}/${this.proyectos.select ? this.proyectos.select.Id : 0}`,{}).subscribe((resp) =>  {
+      this.loading = false;
+      this.listaPlanesConsolidado = resp.Data.listaIdPlanes;
+      const rawFileExcel = new Uint8Array(atob(resp.Data.excel).split('').map(char => char.charCodeAt(0)));
+      const urlFileExcel = window.URL.createObjectURL(new Blob([rawFileExcel], { type: 'application/vnd.ms-excel' }));
+      const download = document.createElement("a");
+      download.href = urlFileExcel;
+      download.download = "Consolidado.xlsx";
+      document.body.appendChild(download);
+      download.click();
+      document.body.removeChild(download);
+    }, (err) => {
+      this.loading = false;
+      this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'), this.translate.instant('ERROR.persiste_error_comunique_OAS'), MODALS.ERROR, false)
+      console.warn(err)
+    });
+  }
   }
 }

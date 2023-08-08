@@ -14,9 +14,9 @@ export let FORM_CONSOLIDADO = {
             label_i18n: 'GLOBAL.adjuntar_documento',
             placeholder_i18n: 'GLOBAL.adjuntar_documento',
             requerido: true,
-            tipo: 'pdf',
+            tipo: 'pdf,xlsx',
             tipoDocumento: 5, // pendiente Id
-            formatos: 'pdf',
+            formatos: 'pdf, xlsx',
             url: '',
             tamanoMaximo: 2,
         },
