@@ -254,20 +254,13 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   onAction(event): void {
     switch (event.action) {
       case 'add_to_semester':
-        console.log(this.dataSemestre.length);
-        console.log(this.dataSemestre);
         this.runValidations2SpacesAdding(event).then(
           (result) => {
             console.log("RESULTADO RUN VALIDACION: ", result);
 
             if (result["valid"]) {
-              console.log("Es valido");
               this.addtoSemester(event);
             } else {
-              console.log("NO ES VALIDO");
-
-              console.log(result);
-
               this.popUpManager.showErrorAlert(result["error"]);
             }
           }).catch(
@@ -679,16 +672,8 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   }
 
   guardar(stepper: MatStepper) {
-    // Remover
-    this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
-      this.ListEspacios = result;
-      this.dataEspaciosAcademicos.load(this.ListEspacios);
-      stepper.next();
-    });
-    // End Remover
-
     this.formGroupPlanEstudio.markAllAsTouched();
-    /* if (this.formGroupPlanEstudio.valid) {
+    if (this.formGroupPlanEstudio.valid) {
       this.popUpManager.showPopUpGeneric(
         this.translate.instant('plan_estudios.plan_estudios'), 
         this.translate.instant('plan_estudios.seguro_crear'), 
@@ -699,7 +684,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
               this.prepareCreate(stepper);
             }    
           });
-    } */
+    }
   }
 
   limpiar() {
@@ -734,7 +719,6 @@ export class CreacionPlanEstudiosComponent implements OnInit {
       this.dataSemestre.push(new LocalDataSource());
       let total = <any>UtilidadesService.hardCopy(this.formatototal);
       this.dataSemestreTotal.push(new LocalDataSource([total]));
-      console.log(this.dataSemestre);
       this.createTableSemestre();
       this.createTableSemestreTotal();
     }
@@ -747,8 +731,6 @@ export class CreacionPlanEstudiosComponent implements OnInit {
           if (action.value) {
             this.desactivarAgregarSemestre = false;
             this.prepareUpdateBySemester();
-            console.log("Finish-----------------------");
-
           }
         }
       );
@@ -1043,20 +1025,22 @@ export class CreacionPlanEstudiosComponent implements OnInit {
 
   async prepareUpdateBySemester() {
     this.loading = true;
+    // Remover
     if (this.planEstudioBody == undefined) {
       await this.consultarPlanEstudio(13).then((res) => {
         this.planEstudioBody = res;
       });
     }
+    // End remover
+
+    await this.formatearResumenTotal();
     this.formatearEspaciosPlanEstudio().then((res) => {
-      this.loading = false;
-      console.log("Formateado");
       console.log("Plan Actual: ", this.planEstudioBody);
       if (res) {
+        this.loading = true;
         this.updateStudyPlan(this.planEstudioBody).then((updatedPlan) => {
+          this.loading = false;
           this.planEstudioBody = updatedPlan;
-          console.log("Acutalizado plan de estudios");
-          
         });
       } else {
         this.loading = false;
@@ -1228,18 +1212,14 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   }
 
   async validarPrerequisitosAgregar(event): Promise<boolean> {
-    console.log("dataEspaciosAcademicos", this.dataEspaciosAcademicos);
-    console.log("dataSemestre", this.dataSemestre);
     console.log("Event: ", event);
-    console.log("Smestre total: ", this.dataSemestreTotal);
 
     let currentSpace = event.data;
     let prerrequisitos = currentSpace["prerequisitos"];
     let index = 0;
     let validPrerequisite = true;
     let stopIt = false;
-    console.log("prerrequisitos: ", prerrequisitos);
-    console.log("Tipo pr: ", typeof prerrequisitos);
+
     if (prerrequisitos != undefined) {
       for (const prerrequisito of prerrequisitos) {
         console.log("prerrequisito index: ", index);
@@ -1303,25 +1283,18 @@ export class CreacionPlanEstudiosComponent implements OnInit {
         newEspacio.OrdenTabla = index + 1;
         newEspacio.EspaciosRequeridos = {
           Id: espaciosRequeridosId,
-        }
-        console.log("Formatear object: ", JSON.stringify(newEspacio));
-
+        };
         espaciosAcademicosOrdenados.push({
           [etiquetaEspacio]: newEspacio
         });
-        console.log("Indice: ", index, "espacio leng: ", espacios.length);
 
         if (index >= (espacios.length - 1)) {
-          console.log("Finalizado el empaquetado");
-
           semestre[etiquetaSemestre] = {
             espacios_academicos: espaciosAcademicosOrdenados
           };
         }
       });
     });
-    console.log("TERMINAMOS ------");
-
     return semestre;
   }
 
@@ -1337,13 +1310,11 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   async formatearEspaciosPlanEstudio(): Promise<any> {
     try {
       let espaciosSemestre = await this.obtenerEspaciosSemestre();
-      console.log("plan de estudio", this.planEstudioBody);
 
       return new Promise((resolve, reject) => {
         this.organizarEspaciosSemestreActual().then((semestreRes) => {
           if (Object.keys(semestreRes).length > 0) {
             const semestreEt = Object.keys(semestreRes)[0];
-            console.log("Espacios semestre: ", espaciosSemestre);
             if (Object.keys(espaciosSemestre).length > 0) {
               espaciosSemestre[semestreEt] = semestreRes[semestreEt];
             } else {
@@ -1365,6 +1336,20 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     }
   }
 
+  //#endregion
+  // * ----------
+
+  // * ----------
+  // * Procesamiento almacenamiento de semestre con espacios académicos 
+  //#region
+  formatearResumenTotal() {
+    let resumenTotal = {}
+    this.dataSemestreTotalTotal.getAll().then((data) => {
+      resumenTotal = data[0];
+      resumenTotal["numero_semestres"] = this.dataSemestre.length;
+      this.planEstudioBody.ResumenPlanEstudios = JSON.stringify(resumenTotal);
+    })
+  }
   //#endregion
   // * ----------
 }
