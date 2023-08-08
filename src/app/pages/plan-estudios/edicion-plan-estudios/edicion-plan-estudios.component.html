@@ -16,9 +16,8 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                 </div>
                 <ng2-smart-table [settings]="tbPlanesEstudio" [source]="dataPlanesEstudio">
                 </ng2-smart-table>
-                <div class="alinear-center-espacio-doble" [class.generate]="habilitadoGenerarPlan">
+                <div class="alinear-center espacio-doble">
                     <button mat-raised-button color="primary" (click)="nuevoPlanEstudio()">{{ 'plan_estudios.crear' | translate }}</button>
-                    <button mat-raised-button color="primary" (click)="organizarPlanesEstudio()">{{ 'plan_estudios.organizar' | translate }}</button>
                     <button mat-raised-button color="primary" (click)="organizarPlanesEstudio()" [hidden]="habilitadoGenerarPlan">{{ 'plan_estudios.generar_plan' | translate }}</button>
                 </div>
             </fieldset>

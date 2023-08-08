@@ -65,6 +65,7 @@ export class CreacionPlanEstudiosComponent implements OnInit {
   proyectos: any[];
 
   desactivarAgregarSemestre: boolean = false;
+  habilitadoGenerarPlan: boolean = false;
 
   estadosAprobacion: EstadoAprobacion[];
 
@@ -116,11 +117,18 @@ export class CreacionPlanEstudiosComponent implements OnInit {
     this.loadSelects();
     this.createTablePlanesEstudio();
     this.gestorDocumentalService.clearLocalFiles();
+    this.habilitarGenerarPlan();
   }
 
   crearFormulario() {
     this.formPlanEstudio = <FormParams>(UtilidadesService.hardCopy(FORM_PLAN_ESTUDIO));
     this.formPlanEstudio.nivel.opciones = this.niveles.filter(nivel => nivel.NivelFormacionPadreId == undefined);
+  }
+
+  habilitarGenerarPlan() {
+    if (this.dataPlanesEstudio.count() > 0) {
+      this.habilitadoGenerarPlan = true;
+    }
   }
 
   // * ----------

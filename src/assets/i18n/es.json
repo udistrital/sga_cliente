@@ -170,7 +170,8 @@
         },
         "plan_estudios": {
             "plan_estudios": "Plan de estudios",
-            "crear_plan_estudios": "Crear plan de estudio"
+            "crear_plan_estudios": "Crear plan de estudio",
+            "editar_plan_estudios": "Editar plan de estudio"
         }
     },
     "GLOBAL": {
@@ -2426,6 +2427,7 @@
         "crear": "Crear Plan de Estudio",
         "actualizar": "Actualizar Plan de Estudio",
         "organizar": "Establecer orden para planes de estudio",
+        "generar_plan": "Generar Plan de Estudios",
         "planes_estudio_creados": "Planes de estudio creados",
         "select_proyecto":"Selección del Proyecto Curricular",
         "resolucion": "Resolución",

@@ -165,7 +165,8 @@
         },
         "plan_estudios": {
             "plan_estudios": "Study Plan",
-            "crear_plan_estudios": "Create Study Plan"
+            "crear_plan_estudios": "Create Study Plan",
+            "editar_plan_estudios": "Edit Study Plan"
         }
     },
     "GLOBAL": {
@@ -2355,6 +2356,7 @@
         "crear": "Create Study Plan",
         "actualizar": "Update Study Plan",
         "organizar": "Establish order for study plans",
+        "generar_plan": "Generate Study Plan",
         "planes_estudio_creados": "Study plans created",
         "select_proyecto":"Selection of the Curricular Project",
         "resolucion": "Resolution",
