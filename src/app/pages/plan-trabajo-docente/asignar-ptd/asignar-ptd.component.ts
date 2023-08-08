@@ -63,7 +63,7 @@ export class AsignarPtdComponent implements OnInit {
     this.cargarPeriodo();
     this.cargarEstadosPlan().then(estados => {
       this.estadosPlan = <any[]>estados;
-      this.estadosAprobar = this.estadosPlan.filter(estado => (estado.codigo_abreviacion == "APR") || (estado.codigo_abreviacion == "N_APR"));
+      this.estadosAprobar = this.estadosPlan.filter(estado => (estado.codigo_abreviacion == "PAPR") || (estado.codigo_abreviacion == "N_APR"));
     })
   }
 
@@ -423,20 +423,60 @@ export class AsignarPtdComponent implements OnInit {
     this.sgaMidService.post(`reportes/plan_trabajo_docente/${this.dataDocente.docente_id}/${this.dataDocente.tipo_vinculacion_id}/${this.dataDocente.periodo_id}/${tipoCarga}`, null).subscribe(
       resp => {
         this.loading = false;
-        const rawFile = new Uint8Array(atob(resp.Data).split('').map(char => char.charCodeAt(0)));
-        const urlFile = window.URL.createObjectURL(new Blob([rawFile], { type: 'application/vnd.ms-excel' }));
-        const download = document.createElement("a");
-        download.href = urlFile;
-        download.download = "Reporte_PTD.xlsx";
-        document.body.appendChild(download);
-        download.click();
-        document.body.removeChild(download);
+        const rawFilePDF = new Uint8Array(atob(resp.Data.pdf).split('').map(char => char.charCodeAt(0)));
+        const urlFilePDF = window.URL.createObjectURL(new Blob([rawFilePDF], { type: 'application/pdf' }));
+        this.previewFile(urlFilePDF)
+        const rawFileExcel = new Uint8Array(atob(resp.Data.excel).split('').map(char => char.charCodeAt(0)));
+        const urlFileExcel = window.URL.createObjectURL(new Blob([rawFileExcel], { type: 'application/vnd.ms-excel' }));
+
+        const html = {
+          html: [
+            `<label class="swal2">${this.translate.instant('ptd.formato_doc')}</label>
+            <select id="formato" class="swal2-input">
+            <option value="excel" >Excel</option>
+            <option value="pdf" >PDF</option>
+            </select>`
+          ],
+          ids: ["formato"],
+        }
+        this.popUpManager.showPopUpForm(this.translate.instant('ptd.descargar'), html, false).then((action) => {
+          if (action.value) {
+            if (action.value.formato === "excel") {
+              const download = document.createElement("a");
+              download.href = urlFileExcel;
+              download.download = "Reporte_PTD.xlsx";
+              document.body.appendChild(download);
+              download.click();
+              document.body.removeChild(download);
+            }
+            if (action.value.formato === "pdf") {
+              const download = document.createElement("a");
+              download.href = urlFilePDF;
+              download.download = "Reporte_PTD.pdf";
+              document.body.appendChild(download);
+              download.click();
+              document.body.removeChild(download);
+            }
+          }
+        })
+        
       }, err => {
         this.loading = false;
         this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'), this.translate.instant('ERROR.persiste_error_comunique_OAS'), MODALS.ERROR, false)
         console.warn(err)
       }
     )
+  }
+
+  previewFile(url: string) {
+    const h = screen.height * 0.65;
+    const w = h * 3/4;
+    const left = (screen.width * 3/4) - (w / 2);
+    const top = (screen.height / 2) - (h / 2);
+    window.open(url, '', 'toolbar=no,' +
+      'location=no, directories=no, status=no, menubar=no,' +
+      'scrollbars=no, resizable=no, copyhistory=no, ' +
+      'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
   }
 
   regresar() {

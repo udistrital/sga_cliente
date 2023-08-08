@@ -1,0 +1,57 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">    
+    <nb-card-header>
+        <div class="row" align="center">
+            <div class="col">
+                {{ 'gestion_horarios.encabezado' | translate }}
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <ng-container *ngSwitchCase="VIEWS.LIST">
+                <legend><small>&nbsp; {{ 'gestion_horarios.label' | translate }} </small></legend>
+                <div class="alinear-center">
+                    <div class="advertencia">{{ 'gestion_horarios.mensaje_inicial' | translate }}</div>
+                </div>
+<!-- ------------------------------------------------ -->
+
+<mat-vertical-stepper #stepper [linear]="false">
+    <mat-step [stepControl]="formStep1" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}">
+        <ng-template matStepLabel>{{ 'gestion_horarios.header_parametros' | translate }}</ng-template>
+        <form [formGroup]="formStep1">
+            <div class="row">
+            <div *ngFor="let campo of formDef.campos_p1" [class]="campo.claseGrid">
+                <ng-container [ngSwitch]="campo.etiqueta">
+                    <ng-container *ngIf="!(campo.ocultar ? campo.ocultar : false)">
+                        <mat-form-field *ngSwitchCase="'select'" floatLabel="always">
+                            <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                            <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}" [disabled]="campo.sololectura ? campo.sololectura : false">
+                                <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
+                                <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre }}</mat-option>
+                            </mat-select>
+                            <mat-hint *ngIf="formStep1.get(campo.nombre).touched && formStep1.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                        </mat-form-field>
+                    </ng-container>
+                </ng-container>
+            </div>
+            </div>
+        </form>
+        <div class="button-stepper">
+            <button mat-stroked-button matStepperNext>{{ 'GLOBAL.siguiente' | translate }}</button>
+        </div>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>{{ 'gestion_horarios.header_resultados' | translate }}</ng-template>
+            <div class="alinear-center">
+                <div class="advertencia">{{ 'gestion_horarios.mensaje_tabla' | translate }}</div>
+            </div>
+
+                <ng2-smart-table [settings]="tbDiponibilidadHorarios" [source]="dataPlanesEstudio">
+                </ng2-smart-table>
+    </mat-step>
+</mat-vertical-stepper>
+<!-- ------------------------------------------------ -->           
+
+        </ng-container>
+    </nb-card-body>
+</nb-card>

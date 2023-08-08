@@ -109,6 +109,10 @@ const routes: Routes = [{
       loadChildren: () => import ('./plan-estudios/plan-estudios.module').then(m => m.PlanEstudiosModule),
     },
     {
+      path: 'gestion-horarios',
+      loadChildren: () => import ('./gestion-horarios/gestion-horarios.module').then(m => m.GestionHorariosModule),
+    },
+    {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

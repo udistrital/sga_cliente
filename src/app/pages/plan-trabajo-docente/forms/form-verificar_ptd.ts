@@ -19,10 +19,11 @@ export let FORM_VERIFICAR_PTD = {
         etiqueta: 'select',
         claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
         nombre: 'EstadoAprobado',
-        label_i18n: 'GLOBAL.estado_aprobado',
-        placeholder_i18n: 'GLOBAL.estado_aprobado',
+        label_i18n: 'ptd.select_aprobar',
+        placeholder_i18n: 'ptd.select_aprobar',
         requerido: true,
         tipo: 'text',
+        key: 'nombre', // ? para el nombre opción en select
       },
       {
         etiqueta: 'textarea',

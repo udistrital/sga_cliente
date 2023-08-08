@@ -171,6 +171,11 @@
         "plan_estudios": {
             "plan_estudios": "Plan de estudios",
             "crear_plan_estudios": "Crear plan de estudio"
+        },
+        "gestion-horarios": {
+            "gestion-horarios": "Gestion de horarios",
+            "disponibilidad-cupos": "Disponibilidad de cupos",
+            "horarios-grupos": "Horarios por Grupos"
         }
     },
     "GLOBAL": {
@@ -2371,8 +2376,14 @@
         "error_enviar_plan": "No se pudo enviar el plan",
         "info_modo_solo_ver": "En este estado no es posible editar el plan",
         "aprobacion_plan_coordinacion": "Aprobación del Plan Trabajo Docente",
-        "recordar_aprobar_plan": "No olvide aprobar o rechazar el plan en la sección final de esta página",
-        "revisar_solapamiento_carga": "Por favor revise que no haya superposición entre carga lectiva y actividades. Corrobore que resumen el total de horas coincída con lo cargado en horario."
+        "recordar_aprobar_plan": "No olvide preaprobar o rechazar el plan en la sección final de esta página",
+        "revisar_solapamiento_carga": "Por favor revise que no haya superposición entre carga lectiva y actividades. Corrobore que resumen el total de horas coincída con lo cargado en horario.",
+        "descargar": "Descargar PTD",
+        "formato_doc": "Seleccione el tipo de archivo",
+        "no_planes_particulares": "No se encuentran planes para el periodo o proyecto curricular seleccionados",
+        "respuesta_enviada": "La respuesta ha sido enviada",
+        "error_respuesta_enviada": "No se pudo enviar la respuesta",
+        "select_aprobar": "Aprobación"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",
@@ -2462,5 +2473,34 @@
         "enviar_revision_ok": "¡Envío a revisión exitoso!",
         "enviar_revision_fallo": "¡No se pudo enviar a revisión!",
         "error_validacion_prerrequisitos_espacios": "El espacio académico seleccionado tiene prerrequisitos que deben ser asignados en semestres anteriores"
+    },
+    "gestion_horarios": {
+        "encabezado": "Módulo para la Disponibilidad de cupos",
+        "label":"Disponibilidad de cupos",
+        "mensaje_inicial": "Por favor seleccione el proyecto curricular, el periodo académico y el semestre que sea consultar la disponibilidad de cupos por espacio académico",
+        "header_parametros": "Definición de consulta",
+        "periodo_academico": "Periodo académico",
+        "semestre":"Semestre académico",
+        "header_resultados": "Resultados de consulta",
+        "mensaje_tabla": "La tabla expone la asignación de cupos para los diferentes espacios académicos para la información ingresada, podrá editar los cupos o habilitar o inhabilitar los cupos",
+        "codigo": "Código",
+        "espacio_academico":"Espacio Académico",
+        "grupo":"Grupo",
+        "cupos": "Cupos",
+        "inscritos":"Inscritos",
+        "disponibles": "Disponibles",
+        "editar":"Editar",
+        "inactivar":"Inactivar",
+        "encabezado_2": "Módulo para Horarios por grupo",
+        "label_2": "Horarios por grupo",
+        "mensaje_inicial_2": "Por favor selecciones los criterios de búsqueda que desea realizar, seleccione el periodo académico, el proyecto académico, espacio académico y grupo a consultar, entre más criterios seleccione la consulta será más especifica",
+        "reportes": "Descargar reportes",
+        "sede": "Sede",
+        "edificio":"Edificio",
+        "salon":"Salón",
+        "proyecto_academico":"Proyecto Académico",
+        "dia": "Dia",
+        "hora": "Hora"
     }
+
 }
