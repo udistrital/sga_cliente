@@ -345,12 +345,11 @@ export class VerificarPtdComponent implements OnInit {
         action => {
           if (action.value) {
             let putPlan = <any>UtilidadesService.hardCopy(this.formVerificar["GET_plan_docente"]);
-            const jsonResp = {
-              concertado: event.data.VerificarPTD.DeAcuerdo,
-              observacion: event.data.VerificarPTD.Observaciones,
-              responsable_id: this.userService.getPersonaId(),
-            }
-            putPlan.respuesta = JSON.stringify(jsonResp);
+            let respuestaJson = putPlan.respuesta ? JSON.parse(putPlan.respuesta) : {};
+            respuestaJson["concertado"] = event.data.VerificarPTD.DeAcuerdo;
+            respuestaJson["observacion"] = event.data.VerificarPTD.Observaciones;
+            respuestaJson["responsable_id"] = this.userService.getPersonaId();
+            putPlan.respuesta = JSON.stringify(respuestaJson);
             putPlan.estado_plan_id = event.data.VerificarPTD.EstadoAprobado._id;
 
             this.loading = true;

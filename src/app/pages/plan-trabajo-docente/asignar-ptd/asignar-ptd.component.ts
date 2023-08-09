@@ -401,6 +401,11 @@ export class AsignarPtdComponent implements OnInit {
     if (estado) {
       this.loading = true;
       this.planTrabajoDocenteService.get('plan_docente/' + id_plan).subscribe(res_g => {
+        if (!coordinador) {
+          let respuestaJson = res_g.Data.respuesta ? JSON.parse(res_g.Data.respuesta) : {};
+          respuestaJson["DocenteAprueba"] = new Date().toLocaleString('es-CO', {timeZone: 'America/Bogota'});
+          res_g.Data.respuesta = JSON.stringify(respuestaJson);
+        }
         res_g.Data.estado_plan_id = estado._id;
         this.planTrabajoDocenteService.put('plan_docente/' + id_plan, res_g.Data).subscribe(res_p => {
           this.popUpManager.showSuccessAlert(this.translate.instant('ptd.plan_enviado_ok'));
