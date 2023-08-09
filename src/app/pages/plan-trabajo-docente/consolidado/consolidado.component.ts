@@ -12,6 +12,7 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'consolidado',
@@ -55,6 +56,7 @@ export class ConsolidadoComponent implements OnInit {
     private userService: UserService,
     private tercerosService: TercerosService,
     private autenticationService: ImplicitAutenticationService,
+    private GestorDocumental: NewNuxeoService,
     ) {
       this.dataConsolidados = new LocalDataSource();
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -199,6 +201,7 @@ export class ConsolidadoComponent implements OnInit {
     this.vista = VIEWS.LIST;
     this.newEditConsolidado = false;
     this.respuestaConsolidado = false;
+    this.listarConsolidados();
   }
 
   // * ----------
@@ -302,7 +305,7 @@ export class ConsolidadoComponent implements OnInit {
           formatedData.push({
             "proyecto_curricular": proyecto ? proyecto.Nombre : "",
             "codigo": proyecto ? proyecto.Codigo : "",
-            "fecha_radicado": consolidado.fecha_creacion,
+            "fecha_radicado": this.formatoFecha(consolidado.fecha_creacion),
             "periodo_academico": periodo ? periodo.Nombre : "",
             "revision_decanatura": {value: undefined, type: 'ver', disabled: false},
             "gestion": {value: undefined, type: opcionGestion, disabled: false},
@@ -320,6 +323,12 @@ export class ConsolidadoComponent implements OnInit {
     }
   }
 
+  formatoFecha(fechaHora: string): string {
+    const fecha_hora = fechaHora.split('T');
+    const fechaPartes = fecha_hora[0].split('-');
+    return fechaPartes[2]+'/'+fechaPartes[1]+'/'+fechaPartes[0]+' - '+fecha_hora[1].split('.')[0]
+  }
+
   nuevoEditarConsolidado(consolidado: any) {
     this.vista = VIEWS.FORM;
     this.newEditConsolidado = true;
@@ -330,6 +339,14 @@ export class ConsolidadoComponent implements OnInit {
       this.consolidadoInfo = consolidado;
       const consolidado_coordinacion = JSON.parse(this.consolidadoInfo.consolidado_coordinacion);
       terceroId = consolidado_coordinacion.responsable_id;
+      this.loading = true;
+      this.GestorDocumental.get([{Id: consolidado_coordinacion.documento_id, ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}]).subscribe(
+        (resp: any[])  => {
+          this.loading = false;
+          this.formNewEditConsolidado.campos[this.getIndexFormNewEditConsolidado("ArchivoSoporte")].urlTemp = resp[0].url;
+          this.formNewEditConsolidado.campos[this.getIndexFormNewEditConsolidado("ArchivoSoporte")].valor = resp[0].url;
+        }
+      );
     } else {
       this.consolidadoInfo = undefined;
       terceroId = this.userService.getPersonaId();
@@ -342,38 +359,60 @@ export class ConsolidadoComponent implements OnInit {
     });
   }
 
-  validarFormNewEdit(event) {
+  async validarFormNewEdit(event) {
     if (this.periodos.select && this.proyectos.select) {
       if (event.valid) {
         if (this.consolidadoInfo == undefined) {
-          const consolidado = {
-            "documento_id": "",
-            "responsable_id": this.userService.getPersonaId(),
+          if (this.listaPlanesConsolidado == "") {
+            this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.diligenciar_consolidado'), this.translate.instant('ptd.please_descargue_consolidado'), MODALS.INFO, false)
+          } else {
+            this.loading = true;
+            this.GestorDocumental.uploadFiles([event.data.Consolidado.ArchivoSoporte]).subscribe(
+              (resp: any[]) => {
+                const consolidado = {
+                  "documento_id": resp[0].res.Id,
+                  "responsable_id": this.userService.getPersonaId(),
+                }
+                const prepareData = {
+                  "plan_docente_id": JSON.stringify(this.listaPlanesConsolidado),
+                  "periodo_id": `${this.periodos.select.Id}`,
+                  "proyecto_academico_id": `${this.proyectos.select.Id}`,
+                  "estado_consolidado_id": `${this.estadosConsolidado.opciones.find(estado => estado.codigo_abreviacion == "DEF")._id}`,
+                  "respuesta_decanatura": "{}",
+                  "consolidado_coordinacion": JSON.stringify(consolidado),
+                  "cumple_normativa": false,
+                  "aprobado": false,
+                  "activo": true
+                }
+                
+                this.planTrabajoDocenteService.post('consolidado_docente', prepareData).subscribe((resp) => {
+                  this.loading = false;
+                  this.popUpManager.showSuccessAlert(this.translate.instant('ptd.crear_consolidado_ok'));
+                }, (err) => {
+                  this.loading = false;
+                  console.warn(err);
+                  this.popUpManager.showErrorAlert(this.translate.instant('ptd.fallo_crear_consolidado'));
+                });
+              }
+            )
           }
-          const prepareData = {
-            "plan_docente_id": JSON.stringify(this.listaPlanesConsolidado),
-            "periodo_id": `${this.periodos.select.Id}`,
-            "proyecto_academico_id": `${this.proyectos.select.Id}`,
-            "estado_consolidado_id": `${this.estadosConsolidado.opciones.find(estado => estado.codigo_abreviacion == "DEF")._id}`,
-            "respuesta_decanatura": "{}",
-            "consolidado_coordinacion": JSON.stringify(consolidado),
-            "cumple_normativa": false,
-            "aprobado": false,
-            "activo": true
-          }
-          this.loading = true;
-          this.planTrabajoDocenteService.post('consolidado_docente', prepareData).subscribe((resp) => {
-            this.loading = false;
-            this.popUpManager.showSuccessAlert(this.translate.instant('ptd.crear_consolidado_ok'));
-          }, (err) => {
-            this.loading = false;
-            console.warn(err);
-            this.popUpManager.showErrorAlert(this.translate.instant('ptd.fallo_crear_consolidado'));
-          });
         } else {
+          const verifyNewDoc = new Promise(resolve => {
+            if (event.data.Consolidado.ArchivoSoporte.file != undefined) {
+              this.GestorDocumental.uploadFiles([event.data.Consolidado.ArchivoSoporte]).subscribe(
+                (resp: any[]) => {
+                  resolve(resp[0].res.Id)
+                });
+            } else {
+              resolve(JSON.parse(this.consolidadoInfo.consolidado_coordinacion).documento_id)
+            }
+          })
           const consolidado = {
-            "documento_id": "",
+            "documento_id": await verifyNewDoc,
             "responsable_id": this.userService.getPersonaId(),
+          }
+          if (this.listaPlanesConsolidado != "") {
+            this.consolidadoInfo.plan_docente_id = JSON.stringify(this.listaPlanesConsolidado);
           }
           this.consolidadoInfo.periodo_id = `${this.periodos.select.Id}`;
           this.consolidadoInfo.proyecto_academico_id = `${this.proyectos.select.Id}`;

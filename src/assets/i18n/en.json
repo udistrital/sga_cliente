@@ -2316,7 +2316,8 @@
         "fallo_crear_consolidado": "Failed to create consolidated",
         "actualizar_consolidado_ok": "Consolidated updated successfully",
         "fallo_actualizar_consolidado": "Failed to update the consolidated",
-        "select_periodo_proyecto": "You must select the period and the academic project to save the consolidated"
+        "select_periodo_proyecto": "You must select the period and the academic project to save the consolidated",
+        "please_descargue_consolidado": "Please generate the document to relate the teacher work plans to the present consolidated"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",

@@ -14,11 +14,12 @@ export let FORM_CONSOLIDADO = {
             label_i18n: 'GLOBAL.adjuntar_documento',
             placeholder_i18n: 'GLOBAL.adjuntar_documento',
             requerido: true,
-            tipo: 'pdf,xlsx',
+            tipo: 'vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             tipoDocumento: 5, // pendiente Id
-            formatos: 'pdf, xlsx',
+            formatos: 'xlsx',
             url: '',
             tamanoMaximo: 2,
+            noPreview: true
         },
         {
             etiqueta: 'input',
