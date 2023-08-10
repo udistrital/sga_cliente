@@ -159,13 +159,23 @@ export class DinamicformComponent implements OnInit, OnChanges {
     })
   }
 
-  download(url, title, w, h) {
-    const left = (screen.width / 2) - (w / 2);
-    const top = (screen.height / 2) - (h / 2);
-    window.open(url, title, 'toolbar=no,' +
-      'location=no, directories=no, status=no, menubar=no,' +
-      'scrollbars=no, resizable=no, copyhistory=no, ' +
-      'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+  download(url, title, w, h, noPreview?) {
+    if (noPreview) {
+      const download = document.createElement("a");
+      download.href = url;
+      download.download = title;
+      document.body.appendChild(download);
+      download.click();
+      document.body.removeChild(download);
+    } else {
+      const left = (screen.width / 2) - (w / 2);
+      const top = (screen.height / 2) - (h / 2);
+      let prev = window.open(url, title, 'toolbar=no,' +
+        'location=no, directories=no, status=no, menubar=no,' +
+        'scrollbars=no, resizable=no, copyhistory=no, ' +
+        'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+      prev.document.title = title;
+    }
   }
 
   onChange(event, c) {
@@ -288,8 +298,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
             return false;
           }
         }
-        if (c.formatos) {
-          if (c.formatos.indexOf(c.File.type.split('/')[1]) === -1) {
+        if (c.tipo) {
+          if (c.tipo.indexOf(c.File.type.split('/')[1]) === -1) {
             c.clase = 'form-control form-control-danger';
             c.alerta = 'Solo se admiten los siguientes formatos: ' + c.formatos;
             return false;

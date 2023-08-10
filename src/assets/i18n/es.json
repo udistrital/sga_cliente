@@ -2383,7 +2383,17 @@
         "no_planes_particulares": "No se encuentran planes para el periodo o proyecto curricular seleccionados",
         "respuesta_enviada": "La respuesta ha sido enviada",
         "error_respuesta_enviada": "No se pudo enviar la respuesta",
-        "select_aprobar": "Aprobación"
+        "select_aprobar": "Aprobación",
+        "proyecto_sin_espacios": "El Proyecto Curricular relacionado a la asignatura seleccionada no cuenta con espacios físicos definidos",
+        "generador_consolidado": "Herramienta de generación de consolidado",
+        "generar_consolidado": "Generar Documento",
+        "generador_consolidado_info": "Esta herramienta genera el consolidado de manera automática, pero se recomienda revisar y ajustar si es necesario.",
+        "crear_consolidado_ok": "El consolidado ha sido creado",
+        "fallo_crear_consolidado": "Falló al crear el consolidado",
+        "actualizar_consolidado_ok": "El consolidado se actualizó correctamente",
+        "fallo_actualizar_consolidado": "Falló al actualizar el consolidado",
+        "select_periodo_proyecto": "Debe seleccionar el periodo y el proyecto academico para guardar el consolidado",
+        "please_descargue_consolidado": "Por favor genere el documento para relacionar los planes de trabajo docente al presente consolidado"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",

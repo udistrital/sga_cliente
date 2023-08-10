@@ -2312,7 +2312,17 @@
         "no_planes_particulares": "No plans found for the selected period or curricular project",
         "respuesta_enviada": "The response has been sent",
         "error_respuesta_enviada": "Failed to send the response",
-        "select_aprobar": "Approval"
+        "select_aprobar": "Approval",
+        "proyecto_sin_espacios": "The Curricular Project related to the selected subject does not have defined physical spaces",
+        "generador_consolidado": "Consolidated generation tool",
+        "generar_consolidado": "Generate Document",
+        "generador_consolidado_info": "This tool generates the consolidated automatically, but it is recommended to review and adjust if necessary.",
+        "crear_consolidado_ok": "The consolidated has been created",
+        "fallo_crear_consolidado": "Failed to create consolidated",
+        "actualizar_consolidado_ok": "Consolidated updated successfully",
+        "fallo_actualizar_consolidado": "Failed to update the consolidated",
+        "select_periodo_proyecto": "You must select the period and the academic project to save the consolidated",
+        "please_descargue_consolidado": "Please generate the document to relate the teacher work plans to the present consolidated"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",

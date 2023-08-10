@@ -21,3 +21,10 @@ nb-card-header {
     display: flex;
     justify-content: space-around;
 }
+
+.info-alert {
+    background-color: var(--warning-main);
+    font-weight: 700;
+    padding: 0.5rem;
+    border-radius: 0.4rem;
+}
