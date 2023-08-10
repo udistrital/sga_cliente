@@ -108,6 +108,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   editandoAsignacion: elementDragDrop = undefined;
   ocupados: any[] = [];
   aprobacion: any = undefined;
+  EspaciosProyecto: any = undefined;
 
   ngOnInit() {
     /* this.getActividades().then(() => {
@@ -299,6 +300,18 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   }
 
   async formularioEspacioFisico() {
+    if (this.asignaturaSelected) {
+      this.sgaMidService.get('plan_trabajo_docente/espacios_fisicos_dependencia/'+this.asignaturaSelected.proyecto_id).subscribe(res => {
+        if (res.Data.PorAsignar) {
+          this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.espacio_fisico'), this.translate.instant('ptd.proyecto_sin_espacios'), MODALS.WARNING, false)
+        }
+        this.EspaciosProyecto = res.Data;
+        this.opcionesSedes = this.EspaciosProyecto.Sedes
+      }, err => {
+        this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'), this.translate.instant('ERROR.persiste_error_comunique_OAS'), MODALS.ERROR, false)
+        console.warn(err)
+      });
+    }
     this.ubicacionActive = true;
     const c: Element = document.getElementById("ubicacion");
     await new Promise(f => setTimeout(f, 10));
@@ -568,14 +581,21 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
     this.ubicacionForm.get('edificio').setValue(undefined);
     this.ubicacionForm.get('salon').setValue(undefined);
     return new Promise((resolve, reject) => {
-      this.oikosService.get(`espacio_fisico_padre?query=PadreId.Id:${this.ubicacionForm.get("sede").value.Id}&fields=HijoId&limit=0`).subscribe(res => {
-        res.forEach(element => {
-          this.opcionesEdificios.push(element.HijoId);
-          this.ubicacionForm.get('edificio').enable();
-        });
+      if (this.asignaturaSelected) {
+        this.opcionesEdificios = this.EspaciosProyecto.Edificios[this.ubicacionForm.get("sede").value.Id];
         this.opcionesEdificios.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
-        resolve(res);
-      });
+        this.ubicacionForm.get('edificio').enable();
+        resolve(this.opcionesEdificios)
+      } else {
+        this.oikosService.get(`espacio_fisico_padre?query=PadreId.Id:${this.ubicacionForm.get("sede").value.Id}&fields=HijoId&limit=0`).subscribe(res => {
+          res.forEach(element => {
+            this.opcionesEdificios.push(element.HijoId);
+            this.ubicacionForm.get('edificio').enable();
+          });
+          this.opcionesEdificios.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+          resolve(res);
+        });
+      }
     });
   }
 
@@ -584,15 +604,21 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
     this.opcionesSalonesFiltrados = [];
     this.ubicacionForm.get('salon').disable();
     this.ubicacionForm.get('salon').setValue(undefined);
-
-    this.oikosService.get(`espacio_fisico_padre?query=PadreId.Id:${this.ubicacionForm.get("edificio").value.Id}&fields=HijoId&limit=0`).subscribe(res => {
-      res.forEach(element => {
-        this.opcionesSalones.push(element.HijoId);
-        this.ubicacionForm.get('salon').enable();
-      });
+    if (this.asignaturaSelected) {
+      this.opcionesSalones = this.EspaciosProyecto.Salones[this.ubicacionForm.get("edificio").value.Id];
       this.opcionesSalones.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
       this.opcionesSalonesFiltrados = this.opcionesSalones;
-    });
+      this.ubicacionForm.get('salon').enable();
+    } else {
+      this.oikosService.get(`espacio_fisico_padre?query=PadreId.Id:${this.ubicacionForm.get("edificio").value.Id}&fields=HijoId&limit=0`).subscribe(res => {
+        res.forEach(element => {
+          this.opcionesSalones.push(element.HijoId);
+          this.ubicacionForm.get('salon').enable();
+        });
+        this.opcionesSalones.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+        this.opcionesSalonesFiltrados = this.opcionesSalones;
+      });
+    }
   }
 
   cambioSalon(element) {

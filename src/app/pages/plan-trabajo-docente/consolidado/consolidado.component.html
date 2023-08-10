@@ -12,11 +12,32 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
         <nb-card-body>
             <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
                 <legend><small>&nbsp; {{ 'ptd.list_consolidados' | translate }}</small></legend>
+
+                <mat-form-field style="width: 20%;">
+                    <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="periodos.select" (selectionChange)="listarConsolidados()">
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <mat-option *ngFor="let item of periodos?.opciones" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field style="width: 30%;">
+                    <mat-label>{{ 'GLOBAL.proyecto_academico' | translate }}:</mat-label>
+                    <mat-select [(ngModel)]="proyectos.select" (selectionChange)="listarConsolidados()">
+                        <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        <mat-option *ngFor="let item of proyectos?.opciones" [value]="item">
+                            {{item.Nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                &nbsp;<button mat-stroked-button (click)="listarConsolidados()"> {{ 'GLOBAL.actualizar' | translate }} </button>
                 <ng2-smart-table [settings]="tbConsolidados" [source]="dataConsolidados">
                 </ng2-smart-table>
                 <br>
                 <div class="button-center">
-                    <button mat-raised-button color="primary" (click)="vista=VIEWS.FORM; newEditConsolidado=true;"> {{ 'ptd.new_consolidado' | translate }} </button>
+                    <button mat-raised-button color="primary" (click)="nuevoEditarConsolidado(undefined)"> {{ 'ptd.new_consolidado' | translate }} </button>
                 </div>
             </fieldset>
         </nb-card-body>
@@ -38,7 +59,35 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
         </nb-card-header>
         <nb-card-body>
             <!-- formulario nuevo/editar consolidado -->
-            <ngx-dinamicform [normalform]="formNewEditConsolidado" [modeloData]="dataNewEditConsolidado" *ngIf="newEditConsolidado">
+            <ng-container *ngIf="newEditConsolidado">
+                <fieldset [ngClass]="{'fieldseter':true}" >
+                    <legend>
+                        &nbsp; {{ 'ptd.generador_consolidado' | translate }}
+                      </legend>
+                    <mat-form-field style="width: 20%;">
+                        <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+                        <mat-select [(ngModel)]="periodos.select" >
+                            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                            <mat-option *ngFor="let item of periodos?.opciones" [value]="item">
+                                {{item.Nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    &nbsp;
+                    <mat-form-field style="width: 30%;">
+                        <mat-label>{{ 'GLOBAL.proyecto_academico' | translate }}:</mat-label>
+                        <mat-select [(ngModel)]="proyectos.select" >
+                            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                            <mat-option *ngFor="let item of proyectos?.opciones" [value]="item">
+                                {{item.Nombre}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    &nbsp;<button mat-stroked-button (click)="obtenerDocConsolidado()"> {{ 'ptd.generar_consolidado' | translate }} </button>
+                    &nbsp;<div class="info-alert" align="center"> {{ 'ptd.generador_consolidado_info' | translate }} </div>
+                </fieldset>
+            </ng-container>
+            <ngx-dinamicform [normalform]="formNewEditConsolidado" [modeloData]="dataNewEditConsolidado" (result)="validarFormNewEdit($event)"*ngIf="newEditConsolidado">
             </ngx-dinamicform>
             <!-- formulario respuesta consolidado -->
             <ngx-dinamicform [normalform]="formRespuestaConsolidado" [modeloData]="dataRespuestaConsolidado" *ngIf="respuestaConsolidado">

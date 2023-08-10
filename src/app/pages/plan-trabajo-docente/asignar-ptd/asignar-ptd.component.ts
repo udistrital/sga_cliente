@@ -420,7 +420,7 @@ export class AsignarPtdComponent implements OnInit {
 
   generarReporte(tipoCarga: string) {
     this.loading = true;
-    this.sgaMidService.post(`reportes/plan_trabajo_docente/${this.dataDocente.docente_id}/${this.dataDocente.tipo_vinculacion_id}/${this.dataDocente.periodo_id}/${tipoCarga}`, null).subscribe(
+    this.sgaMidService.post(`reportes/plan_trabajo_docente/${this.dataDocente.docente_id}/${this.dataDocente.tipo_vinculacion_id}/${this.dataDocente.periodo_id}/${tipoCarga}`, {}).subscribe(
       resp => {
         this.loading = false;
         const rawFilePDF = new Uint8Array(atob(resp.Data.pdf).split('').map(char => char.charCodeAt(0)));
