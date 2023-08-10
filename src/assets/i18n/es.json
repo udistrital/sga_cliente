@@ -2445,6 +2445,7 @@
     "plan_estudios": {
         "plan_estudios":"Plan de estudios",
         "crear": "Crear Plan de Estudio",
+        "actualizar": "Actualizar Plan de Estudio",
         "organizar": "Establecer orden para planes de estudio",
         "planes_estudio_creados": "Planes de estudio creados",
         "select_proyecto":"Selección del Proyecto Curricular",
@@ -2476,10 +2477,12 @@
         "resumen_general": "Total Plan de estudio",
         "plan_estudios_creacion_ok": "Plan de estudios creado exitosamente",
         "plan_estudios_creacion_error": "No fue posible crear el plan de estudios",
+        "plan_estudios_actualizacion_ok": "Plan de estudios actualizado exitosamente",
+        "plan_estudios_actualizacion_error": "No fue posible actualizar el plan de estudios",
         "enviar_revision_pregunta": "A punto de enviar a revisión, ¿Desea continuar?",
         "enviar_revision_ok": "¡Envío a revisión exitoso!",
         "enviar_revision_fallo": "¡No se pudo enviar a revisión!",
-        "resumen_general": "Total Plan de estudio"
+        "error_validacion_prerrequisitos_espacios": "El espacio académico seleccionado tiene prerrequisitos que deben ser asignados en semestres anteriores"
     },
     "gestion_horarios": {
         "encabezado": "Módulo para la Disponibilidad de cupos",
