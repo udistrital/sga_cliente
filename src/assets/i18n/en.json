@@ -2353,8 +2353,9 @@
     },
     "plan_estudios": {
         "plan_estudios":"Study Plan",
+        "plan_estudios_ciclos": "Study plan by cycles",
         "crear": "Create Study Plan",
-        "actualizar": "Update Study Plan",
+        "editar": "Edit Study Plan",
         "organizar": "Establish order for study plans",
         "generar_plan": "Generate Study Plan",
         "planes_estudio_creados": "Study plans created",

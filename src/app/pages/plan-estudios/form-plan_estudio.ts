@@ -1,4 +1,4 @@
-import { FormParams } from "../../../@core/data/models/define-form-fields";
+import { FormParams } from "../../@core/data/models/define-form-fields";
 
 export let FORM_PLAN_ESTUDIO: FormParams = {
     "nivel": {

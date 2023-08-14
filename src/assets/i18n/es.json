@@ -2424,8 +2424,9 @@
     },
     "plan_estudios": {
         "plan_estudios":"Plan de estudios",
+        "plan_estudios_ciclos": "Plan de estudios por ciclos",
         "crear": "Crear Plan de Estudio",
-        "actualizar": "Actualizar Plan de Estudio",
+        "editar": "Editar Plan de Estudio",
         "organizar": "Establecer orden para planes de estudio",
         "generar_plan": "Generar Plan de Estudios",
         "planes_estudio_creados": "Planes de estudio creados",
