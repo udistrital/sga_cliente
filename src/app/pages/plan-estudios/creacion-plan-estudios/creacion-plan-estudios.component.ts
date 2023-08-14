@@ -263,7 +263,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
   async prepareCreate(stepper: MatStepper) {
     this.loading = true;
     let newPlanEstudio = new PlanEstudio();
-    newPlanEstudio.Nombre = "";
+    newPlanEstudio.Nombre = this.formGroupPlanEstudio.get('nombrePlanEstudio').value;
     newPlanEstudio.NumeroResolucion = Number(this.formGroupPlanEstudio.get('numeroResolucion').value);
     newPlanEstudio.NumeroSemestres = Number(this.formGroupPlanEstudio.get('numeroSemestres').value);
     newPlanEstudio.ProyectoAcademicoId = Number(this.formGroupPlanEstudio.get('proyectoCurriular').value["Id"]);

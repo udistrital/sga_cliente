@@ -47,6 +47,16 @@ export let FORM_PLAN_ESTUDIO: FormParams = {
         valor: undefined,
         claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
     },
+    "nombrePlanEstudio": {
+        label_i18n: 'plan_estudios.nombre_plan_estudios',
+        placeholder_i18n: 'plan_estudios.nombre_plan_estudios',
+        tipo: 'input',
+        tipoDato: 'text',
+        requerido: true,
+        soloLectura: false,
+        valor: undefined,
+        claseGrid: 'col-lg-4 col-md-4 col-sm-12 col-xs-12',
+    },
     "codigoPlanEstudio": {
         label_i18n: 'plan_estudios.codigo_plan',
         placeholder_i18n: 'plan_estudios.codigo_plan',

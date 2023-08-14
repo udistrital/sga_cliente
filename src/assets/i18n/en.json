@@ -2359,6 +2359,7 @@
         "organizar": "Establish order for study plans",
         "generar_plan": "Generate Study Plan",
         "planes_estudio_creados": "Study plans created",
+        "nombre_plan_estudios": "Name of the study plan",
         "select_proyecto":"Selection of the Curricular Project",
         "resolucion": "Resolution",
         "total_creditos": "Total Credits",
