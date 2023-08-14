@@ -12,6 +12,7 @@ import { UserService } from '../../../@core/data/users.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { PlanTrabajoDocenteService } from '../../../@core/data/plan_trabajo_docente.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'asignar-ptd',
@@ -58,6 +59,7 @@ export class AsignarPtdComponent implements OnInit {
     private parametrosService: ParametrosService,
     private autenticationService: ImplicitAutenticationService,
     private planTrabajoDocenteService: PlanTrabajoDocenteService,
+    private GestorDocumental: NewNuxeoService,
   ) {
     this.dataDocentes = new LocalDataSource();
     this.cargarPeriodo();
@@ -136,7 +138,7 @@ export class AsignarPtdComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              console.log("ver soporte:", out);
+              this.verPTDFirmado(out.value);
             })
           }
         },
@@ -471,6 +473,14 @@ export class AsignarPtdComponent implements OnInit {
         console.warn(err)
       }
     )
+  }
+
+  verPTDFirmado(idDoc) {
+    this.loading = true;
+    this.GestorDocumental.get([{Id: idDoc}]).subscribe((resp: any[]) => {
+      this.loading = false;
+      this.previewFile(resp[0].url);
+    })
   }
 
   previewFile(url: string) {
