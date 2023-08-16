@@ -141,7 +141,8 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
         (response: any) => {
           this.autenticationService.getRole().then(
             (rol: Array <String>) => {
-              let r = rol.find(role => (role == "ADMIN_SGA" || role == "VICERRECTOR" || role == "ASESOR_VICE")); // rol admin o vice
+
+              let r = rol.find(role => (role == "ADMIN_SGA" || role == "VICERRECTOR" || role == "ASESOR_VICE")); // rol admin, pendiente vice
               if (r) {
                 this.proyectos = <any[]>response.filter(
                   proyecto => this.filtrarProyecto(proyecto),
@@ -155,8 +156,8 @@ export class AsignarDocumentosDescuentosComponent implements OnInit {
                       proyecto => dependencias.includes(proyecto.Id)
                     );
                     if (dependencias.length > 1) {
-                      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
-                      this.proyectos.forEach(p => { p.Id = undefined })
+                      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion'));//+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                      //this.proyectos.forEach(p => { p.Id = undefined })
                     }
                   },
                   (error: any) => {

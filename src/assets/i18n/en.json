@@ -699,7 +699,17 @@
         "err_min": "The value cannot be less than ",
         "err_max": "The value cannot be greater than ",
         "firmantes": "Signers",
-        "representantes": "Representatives"
+        "representantes": "Representatives",
+        "nombre_entidad": "Entity name",
+        "placeholder_nombre_entidad": "E.g.: Universidad Distrital - Oficina Asesora de Sistemas",
+        "pais_entidad": "Entity Country",
+        "placeholder_pais_entidad": "E.g.: Colombia",
+        "correo_entidad": "Entity email",
+        "placeholder_correo_entidad": "E.g.: email@entity.com",
+        "telefono_entidad": "Entity telephone number",
+        "placeholder_telefono_entidad": "E.g.: 323 93 00 Ext. 1112",
+        "direccion_entidad": "Entity Address",
+        "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
