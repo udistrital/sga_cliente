@@ -2232,6 +2232,7 @@
         "quien_responde": "Who gives the answer",
         "placeholder_quien_responde": "Name of who responds",
         "dar_respuesta": "Give response",
+        "editar_respuesta": "Edit response",
         "gen_rep_carga_lectiva": "Generate report by Study Load",
         "gen_rep_actividades": "Generate report by Activities",
         "gen_rep_total": "Generate totals report",

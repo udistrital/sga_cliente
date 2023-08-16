@@ -2302,6 +2302,7 @@
         "quien_responde": "Quien da la respuesta",
         "placeholder_quien_responde": "Nombre de quien responde",
         "dar_respuesta": "Dar respuesta",
+        "editar_respuesta": "Editar respuesta",
         "gen_rep_carga_lectiva": "Generar reporte por Carga Lectiva",
         "gen_rep_actividades": "Generar reporte por Actividades",
         "gen_rep_total": "Generar reporte de totales",
