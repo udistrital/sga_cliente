@@ -167,6 +167,11 @@
             "plan_estudios": "Study Plan",
             "crear_plan_estudios": "Create Study Plan",
             "editar_plan_estudios": "Edit Study Plan"
+        },
+        "gestion-horarios": {
+            "gestion-horarios": "Schedule Management",
+            "disponibilidad-cupos": "Availability of places",
+            "horarios-grupos": "Schedules by Groups"
         }
     },
     "GLOBAL": {
@@ -693,7 +698,19 @@
         "agregar_varios_archivos": "You can attach multiple files if required",
         "guardar_continuar": "Save and continue",
         "err_min": "The value cannot be less than ",
-        "err_max": "The value cannot be greater than "
+        "err_max": "The value cannot be greater than ",
+        "firmantes": "Signers",
+        "representantes": "Representatives",
+        "nombre_entidad": "Entity name",
+        "placeholder_nombre_entidad": "E.g.: Universidad Distrital - Oficina Asesora de Sistemas",
+        "pais_entidad": "Entity Country",
+        "placeholder_pais_entidad": "E.g.: Colombia",
+        "correo_entidad": "Entity email",
+        "placeholder_correo_entidad": "E.g.: email@entity.com",
+        "telefono_entidad": "Entity telephone number",
+        "placeholder_telefono_entidad": "E.g.: 323 93 00 Ext. 1112",
+        "direccion_entidad": "Entity Address",
+        "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1176,7 +1193,10 @@
         "regresar": "To return",
         "siguiente": "Next",
         "reset": "Restart Registration",
-        "proyecto_padre": "Parent project"
+        "proyecto_padre": "Parent project",
+        "mensaje_oikos": "Please relate the curricular project with the physical space of the OIKOS system, if the physical space does not exist, please notify the system administrator",
+        "oikos": "Physical space",
+        "erro_oikos": "Please select the physical space!"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
@@ -2301,8 +2321,26 @@
         "error_enviar_plan": "Failed to send plan",
         "info_modo_solo_ver": "In this state it is not possible to edit the plan",
         "aprobacion_plan_coordinacion": "Approval of Teacher Work Plan",
-        "recordar_aprobar_plan": "Don't forget to approve or reject the plan in the final section of this page",
-        "revisar_solapamiento_carga": "Please check that there is no overlap between study load and activities. Check that the summary of the total hours coincides with what is charged in the schedule."
+        "recordar_aprobar_plan": "Don't forget to pre-approve or reject the plan in the final section of this page",
+        "revisar_solapamiento_carga": "Please check that there is no overlap between study load and activities. Check that the summary of the total hours coincides with what is charged in the schedule.",
+        "descargar": "Download PTD",
+        "formato_doc": "Select the file type",
+        "no_planes_particulares": "No plans found for the selected period or curricular project",
+        "respuesta_enviada": "The response has been sent",
+        "error_respuesta_enviada": "Failed to send the response",
+        "select_aprobar": "Approval",
+        "proyecto_sin_espacios": "The Curricular Project related to the selected subject does not have defined physical spaces",
+        "generador_consolidado": "Consolidated generation tool",
+        "generar_consolidado": "Generate Document",
+        "generador_consolidado_info": "This tool generates the consolidated automatically, but it is recommended to review and adjust if necessary.",
+        "crear_consolidado_ok": "The consolidated has been created",
+        "fallo_crear_consolidado": "Failed to create consolidated",
+        "actualizar_consolidado_ok": "Consolidated updated successfully",
+        "fallo_actualizar_consolidado": "Failed to update the consolidated",
+        "select_periodo_proyecto": "You must select the period and the academic project to save the consolidated",
+        "please_descargue_consolidado": "Please generate the document to relate the teacher work plans to the present consolidated",
+        "info_firma_digital": "This Teacher Work Plan will be approved and therefore digitally signed",
+        "info_agrerar_representante": "If you are not the coordinator, please add yourself as a representative"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",
@@ -2395,6 +2433,35 @@
         "enviar_revision_pregunta": "About to submit for review, do you want to continue?",
         "enviar_revision_ok": "Submission for review successful!",
         "enviar_revision_fallo": "Could not submit for review!",
+        "resumen_general": "Total Study plan",
         "error_validacion_prerrequisitos_espacios": "The selected academic space has prerequisites that must be assigned in previous semesters"
+    },
+    "gestion_horarios": {
+        "encabezado": "Module for the Availability of quotas",
+        "label":"Availability of places",
+        "mensaje_inicial": "Please select the curricular project, the academic period and the semester that is to consult the availability of places by academic space",
+        "header_parametros": "Query definition",
+        "periodo_academico": "Academic period",
+        "semestre":"Academic semester",
+        "header_resultados": "Query Results",
+        "mensaje_tabla": "The table exposes the allocation of quotas for the different academic spaces for the information entered, you can edit the quotas or enable or disable the quotas",
+        "codigo": "Code",
+        "espacio_academico":"Academic space",
+        "grupo":"Group",
+        "cupos": "Places",
+        "inscritos":"Inscribed",
+        "disponibles": "Available",
+        "editar":"Edit",
+        "inactivar":"Inactivate",
+        "encabezado_2": "Module for Schedules by group",
+        "label_2": "Hours per group",
+        "mensaje_inicial_2": "Please select the search criteria you wish to carry out, select the academic period, academic project, academic space and group to consult, the more criteria you select, the more specific the query will be",
+        "reportes": "Download reports",
+        "sede": "Campus",
+        "edificio":"Building",
+        "salon":"Lounge",
+        "proyecto_academico":"academic project",
+        "dia": "Day",
+        "hora": "Hour"
     }
 }

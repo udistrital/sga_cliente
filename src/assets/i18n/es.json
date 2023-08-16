@@ -172,6 +172,11 @@
             "plan_estudios": "Plan de estudios",
             "crear_plan_estudios": "Crear plan de estudio",
             "editar_plan_estudios": "Editar plan de estudio"
+        },
+        "gestion-horarios": {
+            "gestion-horarios": "Gestion de horarios",
+            "disponibilidad-cupos": "Disponibilidad de cupos",
+            "horarios-grupos": "Horarios por Grupos"
         }
     },
     "GLOBAL": {
@@ -726,7 +731,19 @@
         "agregar_varios_archivos": "Puede agregar varios archivos si lo requiere",
         "guardar_continuar": "Guardar y continuar",
         "err_min": "El valor no puede ser menor que ",
-        "err_max": "El valor no puede ser mayor que "
+        "err_max": "El valor no puede ser mayor que ",
+        "firmantes": "Firmantes",
+        "representantes": "Representantes",
+        "nombre_entidad": "Nombre de la entidad",
+        "placeholder_nombre_entidad": "Ej: Universidad Distrital - Oficina Asesora de Sistemas",
+        "pais_entidad": "País de la entidad",
+        "placeholder_pais_entidad": "Ej: Colombia",
+        "correo_entidad": "Correo de la entidad",
+        "placeholder_correo_entidad": "Ej: correo@entidad.com",
+        "telefono_entidad": "Teléfono de la entidad",
+        "placeholder_telefono_entidad": "Ej: 323 93 00 Ext. 1112",
+        "direccion_entidad": "Dirección de la entidad",
+        "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1133,7 +1150,6 @@
         "codigo_snies": "Código SNIES",
         "codigo_interno": "Código interno",
         "facultad": "Facultad:",
-        "erro_selec": "Por favor seleccione la facultad!",
         "nombre_proyecto": "Nombre",
         "nivel_proyecto": "Nivel",
         "metodologia_proyecto": "Metodología",
@@ -1209,7 +1225,11 @@
         "regresar": "Regresar",
         "siguiente": "Siguiente",
         "reset": "Reiniciar registro",
-        "proyecto_padre": "Proyecto padre"
+        "proyecto_padre": "Proyecto padre",
+        "mensaje_oikos": "Por favor relacione el proyecto curricular con el espacio físico del sistema OIKOS, si no existe el espacio físico por favor notificar al administrador del sistema",
+        "oikos": "Espacio Físico",
+        "erro_selec": "Por favor seleccione la facultad!",
+        "erro_oikos": "Por favor seleccione el espacio fisico!"
     },
     "consultaproyecto": {
         "titulo": "Consulta de un proyecto curricular ",
@@ -2372,8 +2392,26 @@
         "error_enviar_plan": "No se pudo enviar el plan",
         "info_modo_solo_ver": "En este estado no es posible editar el plan",
         "aprobacion_plan_coordinacion": "Aprobación del Plan Trabajo Docente",
-        "recordar_aprobar_plan": "No olvide aprobar o rechazar el plan en la sección final de esta página",
-        "revisar_solapamiento_carga": "Por favor revise que no haya superposición entre carga lectiva y actividades. Corrobore que resumen el total de horas coincída con lo cargado en horario."
+        "recordar_aprobar_plan": "No olvide preaprobar o rechazar el plan en la sección final de esta página",
+        "revisar_solapamiento_carga": "Por favor revise que no haya superposición entre carga lectiva y actividades. Corrobore que resumen el total de horas coincída con lo cargado en horario.",
+        "descargar": "Descargar PTD",
+        "formato_doc": "Seleccione el tipo de archivo",
+        "no_planes_particulares": "No se encuentran planes para el periodo o proyecto curricular seleccionados",
+        "respuesta_enviada": "La respuesta ha sido enviada",
+        "error_respuesta_enviada": "No se pudo enviar la respuesta",
+        "select_aprobar": "Aprobación",
+        "proyecto_sin_espacios": "El Proyecto Curricular relacionado a la asignatura seleccionada no cuenta con espacios físicos definidos",
+        "generador_consolidado": "Herramienta de generación de consolidado",
+        "generar_consolidado": "Generar Documento",
+        "generador_consolidado_info": "Esta herramienta genera el consolidado de manera automática, pero se recomienda revisar y ajustar si es necesario.",
+        "crear_consolidado_ok": "El consolidado ha sido creado",
+        "fallo_crear_consolidado": "Falló al crear el consolidado",
+        "actualizar_consolidado_ok": "El consolidado se actualizó correctamente",
+        "fallo_actualizar_consolidado": "Falló al actualizar el consolidado",
+        "select_periodo_proyecto": "Debe seleccionar el periodo y el proyecto academico para guardar el consolidado",
+        "please_descargue_consolidado": "Por favor genere el documento para relacionar los planes de trabajo docente al presente consolidado",
+        "info_firma_digital": "El presente Plan Trabajo Docente va a ser aprobado y por ende firmado digitalmente",
+        "info_agrerar_representante": "Si usted no es el coordinador, por favor agréguese como representante"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",
@@ -2467,5 +2505,34 @@
         "enviar_revision_ok": "¡Envío a revisión exitoso!",
         "enviar_revision_fallo": "¡No se pudo enviar a revisión!",
         "error_validacion_prerrequisitos_espacios": "El espacio académico seleccionado tiene prerrequisitos que deben ser asignados en semestres anteriores"
+    },
+    "gestion_horarios": {
+        "encabezado": "Módulo para la Disponibilidad de cupos",
+        "label":"Disponibilidad de cupos",
+        "mensaje_inicial": "Por favor seleccione el proyecto curricular, el periodo académico y el semestre que sea consultar la disponibilidad de cupos por espacio académico",
+        "header_parametros": "Definición de consulta",
+        "periodo_academico": "Periodo académico",
+        "semestre":"Semestre académico",
+        "header_resultados": "Resultados de consulta",
+        "mensaje_tabla": "La tabla expone la asignación de cupos para los diferentes espacios académicos para la información ingresada, podrá editar los cupos o habilitar o inhabilitar los cupos",
+        "codigo": "Código",
+        "espacio_academico":"Espacio Académico",
+        "grupo":"Grupo",
+        "cupos": "Cupos",
+        "inscritos":"Inscritos",
+        "disponibles": "Disponibles",
+        "editar":"Editar",
+        "inactivar":"Inactivar",
+        "encabezado_2": "Módulo para Horarios por grupo",
+        "label_2": "Horarios por grupo",
+        "mensaje_inicial_2": "Por favor selecciones los criterios de búsqueda que desea realizar, seleccione el periodo académico, el proyecto académico, espacio académico y grupo a consultar, entre más criterios seleccione la consulta será más especifica",
+        "reportes": "Descargar reportes",
+        "sede": "Sede",
+        "edificio":"Edificio",
+        "salon":"Salón",
+        "proyecto_academico":"Proyecto Académico",
+        "dia": "Dia",
+        "hora": "Hora"
     }
+
 }

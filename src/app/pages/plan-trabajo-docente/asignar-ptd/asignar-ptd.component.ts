@@ -12,6 +12,7 @@ import { UserService } from '../../../@core/data/users.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { PlanTrabajoDocenteService } from '../../../@core/data/plan_trabajo_docente.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'asignar-ptd',
@@ -58,12 +59,13 @@ export class AsignarPtdComponent implements OnInit {
     private parametrosService: ParametrosService,
     private autenticationService: ImplicitAutenticationService,
     private planTrabajoDocenteService: PlanTrabajoDocenteService,
+    private GestorDocumental: NewNuxeoService,
   ) {
     this.dataDocentes = new LocalDataSource();
     this.cargarPeriodo();
     this.cargarEstadosPlan().then(estados => {
       this.estadosPlan = <any[]>estados;
-      this.estadosAprobar = this.estadosPlan.filter(estado => (estado.codigo_abreviacion == "APR") || (estado.codigo_abreviacion == "N_APR"));
+      this.estadosAprobar = this.estadosPlan.filter(estado => (estado.codigo_abreviacion == "PAPR") || (estado.codigo_abreviacion == "N_APR"));
     })
   }
 
@@ -136,7 +138,7 @@ export class AsignarPtdComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              console.log("ver soporte:", out);
+              this.verPTDFirmado(out.value);
             })
           }
         },
@@ -401,6 +403,11 @@ export class AsignarPtdComponent implements OnInit {
     if (estado) {
       this.loading = true;
       this.planTrabajoDocenteService.get('plan_docente/' + id_plan).subscribe(res_g => {
+        if (!coordinador) {
+          let respuestaJson = res_g.Data.respuesta ? JSON.parse(res_g.Data.respuesta) : {};
+          respuestaJson["DocenteAprueba"] = new Date().toLocaleString('es-CO', {timeZone: 'America/Bogota'});
+          res_g.Data.respuesta = JSON.stringify(respuestaJson);
+        }
         res_g.Data.estado_plan_id = estado._id;
         this.planTrabajoDocenteService.put('plan_docente/' + id_plan, res_g.Data).subscribe(res_p => {
           this.popUpManager.showSuccessAlert(this.translate.instant('ptd.plan_enviado_ok'));
@@ -420,23 +427,71 @@ export class AsignarPtdComponent implements OnInit {
 
   generarReporte(tipoCarga: string) {
     this.loading = true;
-    this.sgaMidService.post(`reportes/plan_trabajo_docente/${this.dataDocente.docente_id}/${this.dataDocente.tipo_vinculacion_id}/${this.dataDocente.periodo_id}/${tipoCarga}`, null).subscribe(
+    this.sgaMidService.post(`reportes/plan_trabajo_docente/${this.dataDocente.docente_id}/${this.dataDocente.tipo_vinculacion_id}/${this.dataDocente.periodo_id}/${tipoCarga}`, {}).subscribe(
       resp => {
         this.loading = false;
-        const rawFile = new Uint8Array(atob(resp.Data).split('').map(char => char.charCodeAt(0)));
-        const urlFile = window.URL.createObjectURL(new Blob([rawFile], { type: 'application/vnd.ms-excel' }));
-        const download = document.createElement("a");
-        download.href = urlFile;
-        download.download = "Reporte_PTD.xlsx";
-        document.body.appendChild(download);
-        download.click();
-        document.body.removeChild(download);
+        const rawFilePDF = new Uint8Array(atob(resp.Data.pdf).split('').map(char => char.charCodeAt(0)));
+        const urlFilePDF = window.URL.createObjectURL(new Blob([rawFilePDF], { type: 'application/pdf' }));
+        this.previewFile(urlFilePDF)
+        const rawFileExcel = new Uint8Array(atob(resp.Data.excel).split('').map(char => char.charCodeAt(0)));
+        const urlFileExcel = window.URL.createObjectURL(new Blob([rawFileExcel], { type: 'application/vnd.ms-excel' }));
+
+        const html = {
+          html: [
+            `<label class="swal2">${this.translate.instant('ptd.formato_doc')}</label>
+            <select id="formato" class="swal2-input">
+            <option value="excel" >Excel</option>
+            <option value="pdf" >PDF</option>
+            </select>`
+          ],
+          ids: ["formato"],
+        }
+        this.popUpManager.showPopUpForm(this.translate.instant('ptd.descargar'), html, false).then((action) => {
+          if (action.value) {
+            if (action.value.formato === "excel") {
+              const download = document.createElement("a");
+              download.href = urlFileExcel;
+              download.download = "Reporte_PTD.xlsx";
+              document.body.appendChild(download);
+              download.click();
+              document.body.removeChild(download);
+            }
+            if (action.value.formato === "pdf") {
+              const download = document.createElement("a");
+              download.href = urlFilePDF;
+              download.download = "Reporte_PTD.pdf";
+              document.body.appendChild(download);
+              download.click();
+              document.body.removeChild(download);
+            }
+          }
+        })
+        
       }, err => {
         this.loading = false;
         this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'), this.translate.instant('ERROR.persiste_error_comunique_OAS'), MODALS.ERROR, false)
         console.warn(err)
       }
     )
+  }
+
+  verPTDFirmado(idDoc) {
+    this.loading = true;
+    this.GestorDocumental.get([{Id: idDoc}]).subscribe((resp: any[]) => {
+      this.loading = false;
+      this.previewFile(resp[0].url);
+    })
+  }
+
+  previewFile(url: string) {
+    const h = screen.height * 0.65;
+    const w = h * 3/4;
+    const left = (screen.width * 3/4) - (w / 2);
+    const top = (screen.height / 2) - (h / 2);
+    window.open(url, '', 'toolbar=no,' +
+      'location=no, directories=no, status=no, menubar=no,' +
+      'scrollbars=no, resizable=no, copyhistory=no, ' +
+      'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
   }
 
   regresar() {

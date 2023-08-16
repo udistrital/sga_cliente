@@ -11,7 +11,7 @@
                   <input readonly matInput placeholder="{{ 'proyecto.codigo_interno' | translate }}"
                     formControlName="codigo_interno" class="form-control" name="codigo_interno" [(ngModel)]="data.codigointerno" />
                   <mat-error *ngIf="Campo30Control.hasError('required')">
-                    {{ "proyecto.erro_codigo" | translate }}</mat-error>
+                    {{ "proyecto.erro_odigo" | translate }}</mat-error>
                 </mat-form-field>
                 <br>
                 <mat-form-field>
@@ -34,6 +34,22 @@
                       {{ "proyecto.erro_selec" | translate }}</mat-error>
                     </mat-form-field>
                     <br />
+
+
+                    <mat-form-field>
+                      <mat-label>{{ "proyecto.oikos" | translate }}</mat-label>
+                      <mat-select [formControl]="CampoControl_espacio" required [(ngModel)]="opcionSeleccionadoEspacio">
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let nombreespacio of espacio" [value]="nombreespacio">
+                          {{ nombreespacio["Nombre"] }}
+                        </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="CampoControl_espacio.hasError('required')">
+                          {{ "proyecto.erro_oikos" | translate }}</mat-error>
+                        </mat-form-field>
+                        <br />
+
+
 
                 <mat-form-field>
                   <input readonly matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}" formControlName="nombre_proyecto"

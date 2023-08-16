@@ -488,12 +488,12 @@
                             <div class="row">
                                 <div class="col-9">
                                     <button type="button" mat-raised-button (click)="documento.click()" [disabled]="c.estadoDoc ? c.estadoDoc.aprobado : false">{{'GLOBAL.seleccionar_archivo' | translate}}</button>
-                                    <span *ngIf="c.File" class="enlace-documento" (click)="download(c.urlTemp,c.File.name,500,500)" title="{{'GLOBAL.tooltip_previsualizar_archivo' | translate}}">
+                                    <span *ngIf="c.File" class="enlace-documento" (click)="download(c.urlTemp,c.File.name,500,500,(c.noPreview ? c.noPreview : false))" title="{{'GLOBAL.tooltip_previsualizar_archivo' | translate}}">
                                         {{c.File?.name}}
                                      </span>
                                 </div>
                                 <div class="col-3">
-                                    <span *ngIf="c.valor && !c.File" class="enlace-documento alinear" (click)="download(c.valor,c.nombre,500,500)" title="{{'GLOBAL.tooltip_descargar_arhivo' | translate}}">
+                                    <span *ngIf="c.valor && !c.File" class="enlace-documento alinear" (click)="download(c.valor,c.nombre,500,500,(c.noPreview ? c.noPreview : false))" title="{{'GLOBAL.tooltip_descargar_arhivo' | translate}}">
                                         <i class="fa fa-cloud-download fa-2x" aria-hidden="true"></i>
                                         <i>{{'GLOBAL.tooltip_descargar' | translate}}</i>
                                     </span>

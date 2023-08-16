@@ -10,6 +10,7 @@ import { PreAsignacionPtdComponent } from './preasignacion/preasignacion.compone
 import { dialogoPreAsignacionPtdComponent } from './preasignacion/dialogo-preasignacion/dialogo-preasignacion.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
 import { DialogoAsignarPeriodoComponent } from './preasignacion/dialogo-asignar-periodo/dialogo-asignar-periodo.component';
+import { DialogoFirmaPtdComponent } from './verificar-ptd/dialogo-firma-ptd/dialogo-firma-ptd.component';
 
 
 const routes: Routes = [{
@@ -58,4 +59,5 @@ export const routedComponents = [
   PreAsignacionPtdComponent,
   dialogoPreAsignacionPtdComponent,
   DialogoAsignarPeriodoComponent,
+  DialogoFirmaPtdComponent,
 ]
