@@ -34,8 +34,8 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
                         <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
                         <div class="alinear-center">
-                            <button mat-raised-button (click)="limpiar()">{{ 'GLOBAL.limpiar' | translate }}</button>
-                            <button mat-raised-button [color]="formGroupPlanEstudio.valid ? 'primary' : ''" (click)="guardar(stepper)">{{ 'GLOBAL.guardar_continuar' | translate }}</button>
+                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.limpiar' | translate }}</button>
+                            <button mat-raised-button [color]="formGroupPlanEstudio.valid ? 'primary' : ''" (click)="guardar(stepper)" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.guardar_continuar' | translate }}</button>
                         </div>
                     </mat-step>
                     <mat-step>
@@ -56,24 +56,28 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                             </nb-card>
                         </div>
                         <div class="alinear-center espacio">
-                            <button mat-raised-button color="primary" (click)="agregarSemestre()" [disabled]="desactivarAgregarSemestre">{{ 'plan_estudios.agregar_semestre' | translate }}</button>
+                            <button mat-raised-button color="primary" (click)="agregarSemestre()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo" [hidden]="!enEdicionPlanEstudio">{{ 'plan_estudios.agregar_semestre' | translate }}</button>
                         </div>
                         <mat-accordion>
-                            <mat-expansion-panel hideToggle *ngFor="let semestre of dataSemestre; let numero = index" [expanded]="(numero+1) === dataSemestre.length">
+                            <mat-expansion-panel hideToggle *ngFor="let semestre of dataSemestre; let numero = index" [expanded]="(numero) === punteroSemestrePlan">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         {{ 'plan_estudios.semestre' | translate }} # {{ numero + 1 }}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <ng2-smart-table [settings]="tbSemestre" [source]="semestre" (custom)="onAction($event)">
-                                </ng2-smart-table>
+                                <div class="custom-action-tb" [class.hide]="!this.enEdicionSemestreNuevo && !this.enEdicionSemestreViejo">
+                                    <ng2-smart-table [settings]="tbSemestre" [source]="semestre" (custom)="onAction($event)">
+                                    </ng2-smart-table>
+                                </div>
+                                
                                 <div class="resumenTabla">
                                     <ng2-smart-table [settings]="tbSemestreTotal" [source]="dataSemestreTotal[numero]">
                                     </ng2-smart-table>
                                 </div>
                                 <mat-action-row>
-                                    <button mat-raised-button type="button" (click)="limpiarSemestre(semestre)" [disabled]="!desactivarAgregarSemestre">{{ 'GLOBAL.limpiar' | translate }}</button>
-                                    <button mat-raised-button type="button" color="primary" (click)="finalizarSemestre()" [disabled]="!desactivarAgregarSemestre || (semestre.count() == 0)">{{ 'plan_estudios.finalizar_semestre' | translate }}</button>
+                                    <button mat-raised-button type="button" (click)="limpiarSemestre(semestre, numero)" [disabled]="!enEdicionSemestreNuevo" [hidden]="!enEdicionPlanEstudio || (numero+1) !== dataSemestre.length">{{ 'GLOBAL.limpiar' | translate }}</button>
+                                    <button mat-raised-button type="button" color="primary" (click)="editarSemestre(numero)" [disabled]="enEdicionSemestreNuevo" [hidden]="!enEdicionPlanEstudio || (numero === punteroSemestrePlan && (enEdicionSemestreNuevo || enEdicionSemestreViejo))">{{ 'plan_estudios.editar_semestre' | translate }}</button>
+                                    <button mat-raised-button type="button" color="primary" (click)="finalizarSemestre()" [disabled]="!(enEdicionSemestreNuevo || enEdicionSemestreViejo) || (semestre.count() == 0) || !(numero === punteroSemestrePlan)" [hidden]="!enEdicionPlanEstudio">{{ 'plan_estudios.finalizar_semestre' | translate }}</button>
                                 </mat-action-row>
                             </mat-expansion-panel>
                         </mat-accordion>

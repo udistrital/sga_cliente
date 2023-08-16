@@ -63,8 +63,9 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
   ngOnInit() {
     this.loading = false;
     this.vista = VIEWS.LIST;
-    this.loadSelects();
-    this.loadStudyPlanTable();
+    this.loadSelects().then(() => {
+      this.loadStudyPlanTable();
+    });
     this.createTablePlanesEstudio();
     this.gestorDocumentalService.clearLocalFiles();
     this.habilitarGenerarPlan();
@@ -146,8 +147,8 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
 
     const estado = plan["EstadoAprobacionId"];
     plan["estado"] = estado["Nombre"];
-    plan["planPorCiclos"] = estado["EsPlanEstudioPadre"] ? this.translate.instant('GLOBAL.si') : this.translate.instant('GLOBAL.no');
-
+    plan["planPorCiclos"] = plan["EsPlanEstudioPadre"] ? this.translate.instant('GLOBAL.si') : this.translate.instant('GLOBAL.no');
+    
     plan["ver"] = { value: ACTIONS.VIEW, type: 'ver', disabled: false };
     plan["enviar"] = { value: ACTIONS.SEND, type: 'enviar', disabled: false };
   }
@@ -219,6 +220,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
   // * Acciones botones 
   //#region
   nuevoPlanEstudio() {
+    this.enEdicionPlanEstudio = true;
     this.crearFormulario();
     this.createTableEspaciosAcademicos();
     this.createTableSemestreTotal();

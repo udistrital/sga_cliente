@@ -113,7 +113,7 @@ fieldset {
         text-align: center;
 
         a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
-            color: var(--primary)
+            color: var(--primary);
         }
     }
 }
@@ -133,5 +133,35 @@ fieldset {
     ::ng-deep .resumenTotal .ng2-smart-actions .ng2-smart-title {
         height: 1px;
         overflow: hidden;
+    }
+
+    ::ng-deep .resumenTotal .a.ng2-smart-action.ng2-smart-action-custom-custom {
+        display: none;
+    }
+}
+
+.custom-action-tb {
+    ::ng-deep {
+        ng2-st-tbody-custom {
+            display: flex;
+            text-align: center;
+    
+            a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+                color: darkred;
+            }
+        }
+    }
+}
+
+.custom-action-tb.hide {
+    ::ng-deep {
+        ng2-st-tbody-custom {
+            display: flex;
+            text-align: center;
+    
+            a.ng2-smart-action.ng2-smart-action-custom-custom {
+                display: none;
+            }
+        }
     }
 }
