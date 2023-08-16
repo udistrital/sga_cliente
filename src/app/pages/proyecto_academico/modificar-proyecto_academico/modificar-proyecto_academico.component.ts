@@ -55,8 +55,10 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   compleform: any;
   coordinador: any;
   facultad = [];
+  espacio= [];
   area = [];
   opcionSeleccionadoFacultad: any;
+  opcionSeleccionadoEspacio: any;
   opcionSeleccionadoUnidad: any;
   opcionSeleccionadoArea: any;
   opcionSeleccionadoNucleo: any;
@@ -108,6 +110,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   creandoAutor: boolean = true;
 
   CampoControl = new FormControl("", [Validators.required]);
+  CampoControl_espacio = new FormControl("", [Validators.required]);
   Campo1Control = new FormControl("", [Validators.required]);
   Campo2Control = new FormControl("", [Validators.required]);
   Campo3Control = new FormControl("", [Validators.required]);
@@ -166,8 +169,6 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ModificarProyectoAcademicoComponent>,
     private toasterService: ToasterService,
-    private nuxeoService: NuxeoService,
-    private documentoService: DocumentoService,
     private sanitization: DomSanitizer,
     private oikosService: OikosService,
     private terceroService: TercerosService,
@@ -245,6 +246,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     });
 
     this.loadfacultad();
+    this.loadespacio();
     this.loadnivel();
     this.loadmetodologia();
     this.loadunidadtiempo();
@@ -594,6 +596,34 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       );
   }
 
+  loadespacio() {
+    this.oikosService
+      .get("dependencia_tipo_dependencia/?query=TipoDependenciaId:1&limit=0")
+      .subscribe(
+        (res: any) => {
+          const r = <any>res;
+          if (res !== null && r.Type !== "error") {
+            console.log(this.data);
+            this.espacio = res.map((data: any) => data.DependenciaId);
+            
+            this.espacio.forEach((esp: any) => {
+              if (esp.Id === Number(this.data.iddependencia)) {
+                 this.opcionSeleccionadoEspacio = esp;
+               }
+             });
+          }
+        },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: "error",
+            title: error.status + "",
+            text: this.translate.instant("ERROR." + error.status),
+            confirmButtonText: this.translate.instant("GLOBAL.aceptar")
+          });
+        }
+      );
+  }
+
   loadnivel() {
     this.proyectoacademicoService.get("nivel_formacion").subscribe(
       res => {
@@ -771,7 +801,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         UnidadTiempoId: this.opcionSeleccionadoUnidad["Id"],
         AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
         FacultadId: this.opcionSeleccionadoFacultad["Id"],
-        DependenciaId: 0,
+        DependenciaId: this.opcionSeleccionadoEspacio["Id"],
         AreaConocimientoId: this.opcionSeleccionadoArea["Id"],
         NucleoBaseId: this.opcionSeleccionadoNucleo["Id"],
         MetodologiaId: this.metodologia,
@@ -930,7 +960,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           UnidadTiempoId: this.opcionSeleccionadoUnidad["Id"],
           AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
           FacultadId: this.opcionSeleccionadoFacultad["Id"],
-          DependenciaId: 0,
+          DependenciaId: this.opcionSeleccionadoEspacio["Id"],
           AreaConocimientoId: this.opcionSeleccionadoArea["Id"],
           NucleoBaseId: this.opcionSeleccionadoNucleo["Id"],
           MetodologiaId: this.metodologia,
@@ -1116,7 +1146,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           UnidadTiempoId: this.opcionSeleccionadoUnidad["Id"],
           AnoActoAdministrativoId: String(this.actoform.value.ano_acto),
           FacultadId: this.opcionSeleccionadoFacultad["Id"],
-          DependenciaId: 0,
+          DependenciaId: this.opcionSeleccionadoEspacio["Id"],
           AreaConocimientoId: this.opcionSeleccionadoArea["Id"],
           NucleoBaseId: this.opcionSeleccionadoNucleo["Id"],
           MetodologiaId: this.metodologia,
