@@ -65,8 +65,9 @@ export class EdicionPlanEstudiosComponent extends PlanEstudioBaseComponent imple
   ngOnInit() {
     this.loading = false;
     this.vista = VIEWS.LIST;
-    this.loadSelects();
-    this.loadStudyPlanTable();
+    this.loadSelects().then(() => {
+      this.loadStudyPlanTable();
+    });
     this.createTablePlanesEstudio();
     this.gestorDocumentalService.clearLocalFiles();
     this.habilitarGenerarPlan();

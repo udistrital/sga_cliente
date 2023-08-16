@@ -6,9 +6,10 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { SharedModule } from '../../shared/shared.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { PlanEstudiosService } from '../../@core/data/plan_estudios.service';
+import { PlanEstudiosCompuestoComponent } from './plan-estudios-compuesto/plan-estudios-compuesto.component';
 
 @NgModule({
-  declarations: [...routedComponents],
+  declarations: [...routedComponents, PlanEstudiosCompuestoComponent],
   imports: [
     CommonModule,
     PlanEstudiosRoutingModule,

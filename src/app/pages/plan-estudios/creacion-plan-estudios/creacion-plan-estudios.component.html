@@ -56,7 +56,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                             </nb-card>
                         </div>
                         <div class="alinear-center espacio">
-                            <button mat-raised-button color="primary" (click)="agregarSemestre()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo" [hidden]="!enEdicionPlanEstudio">{{ 'plan_estudios.agregar_semestre' | translate }}</button>
+                            <button mat-raised-button color="primary" (click)="agregarSemestre()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo" [hidden]="!enEdicionPlanEstudio || numSemestresCompletado">{{ 'plan_estudios.agregar_semestre' | translate }}</button>
                         </div>
                         <mat-accordion>
                             <mat-expansion-panel hideToggle *ngFor="let semestre of dataSemestre; let numero = index" [expanded]="(numero) === punteroSemestrePlan">
@@ -75,7 +75,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                     </ng2-smart-table>
                                 </div>
                                 <mat-action-row>
-                                    <button mat-raised-button type="button" (click)="limpiarSemestre(semestre, numero)" [disabled]="!enEdicionSemestreNuevo" [hidden]="!enEdicionPlanEstudio || (numero+1) !== dataSemestre.length">{{ 'GLOBAL.limpiar' | translate }}</button>
+                                    <button mat-raised-button type="button" (click)="limpiarSemestre(semestre)" [disabled]="!enEdicionSemestreNuevo" [hidden]="!enEdicionPlanEstudio || (numero+1) !== dataSemestre.length">{{ 'GLOBAL.limpiar' | translate }}</button>
                                     <button mat-raised-button type="button" color="primary" (click)="editarSemestre(numero)" [disabled]="enEdicionSemestreNuevo" [hidden]="!enEdicionPlanEstudio || (numero === punteroSemestrePlan && (enEdicionSemestreNuevo || enEdicionSemestreViejo))">{{ 'plan_estudios.editar_semestre' | translate }}</button>
                                     <button mat-raised-button type="button" color="primary" (click)="finalizarSemestre()" [disabled]="!(enEdicionSemestreNuevo || enEdicionSemestreViejo) || (semestre.count() == 0) || !(numero === punteroSemestrePlan)" [hidden]="!enEdicionPlanEstudio">{{ 'plan_estudios.finalizar_semestre' | translate }}</button>
                                 </mat-action-row>

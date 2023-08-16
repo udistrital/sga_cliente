@@ -12,9 +12,9 @@ import { PlanEstudiosService } from '../../../@core/data/plan_estudios.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material';
 import { HttpErrorResponse } from '@angular/common/http';
-import { PlanEstudio, EspacioEspaciosSemestreDistribucion } from '../../../@core/data/models/plan_estudios/plan_estudio';
+import { PlanEstudio } from '../../../@core/data/models/plan_estudios/plan_estudio';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
-import { EstadoAprobacion, STD } from '../../../@core/data/models/plan_estudios/estado_aprobacion';
+import { STD } from '../../../@core/data/models/plan_estudios/estado_aprobacion';
 import { PlanEstudioBaseComponent } from '../plan-estudio-base/plan-estudio-base.component';
 
 @Component({

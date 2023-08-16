@@ -59,6 +59,7 @@ export abstract class PlanEstudioBaseComponent {
   enEdicionPlanEstudio: boolean = false;
   enEdicionSemestreNuevo: boolean = false;
   enEdicionSemestreViejo: boolean = false;
+  numSemestresCompletado: boolean = false;
   habilitadoGenerarPlan: boolean = false;
   
   punteroSemestrePlan: number = 0;
@@ -520,7 +521,7 @@ export abstract class PlanEstudioBaseComponent {
     }
   }
 
-  limpiarSemestre(semestre: LocalDataSource, index: number) {
+  limpiarSemestre(semestre: LocalDataSource) {
     this.popUpManager
       .showPopUpGeneric(
         this.translate.instant("plan_estudios.plan_estudios"),
@@ -634,6 +635,7 @@ export abstract class PlanEstudioBaseComponent {
       this.dataSemestreTotal.push(new LocalDataSource([total]));
       this.createTableSemestre();
       this.createTableSemestreTotal();
+      this.numSemestresCompletado = this.dataSemestre.length === semestresMax;
     }
   }
 
@@ -948,25 +950,18 @@ export abstract class PlanEstudioBaseComponent {
 
   validarPrerrequisitoSinAsignar(prerrequisito): Promise<any> {
     return new Promise((resolve) => {
-      // Validar que no se encuentre en la lista de espacios por asignar
+      // Valida que no se encuentre en la lista de espacios por asignar
       this.dataEspaciosAcademicos.getAll().then((data) => {
-        console.log("Primer validación");
         let index = 0;
 
         if (data.length > 0) {
           for (const element of data) {
-            console.log("Buscando en la lista de espacios");
-
             if (element._id === prerrequisito._id) {
-              console.log("Tiene prerrequisito sin asignar");
               resolve(false);
-              console.log("Pasando a romper el for");
               break;
             }
 
-            console.log("Fin iteración ", index, " sin asignar");
             if (index >= data.length - 1) {
-              console.log("Total espacios barrido !!!!!!!!!!!!");
               resolve(true);
             }
             index++;
@@ -980,16 +975,13 @@ export abstract class PlanEstudioBaseComponent {
 
   validarPrerrequisitoSemestreActual(prerrequisito): Promise<any> {
     return new Promise((resolve) => {
-      // Validar que no se encuentre en el semestre actual
+      // Valida que no se encuentre en el semestre actual
       this.dataSemestre[this.dataSemestre.length - 1].getAll().then((data) => {
-        console.log("Segunda validación");
         let index = 0;
 
         if (data.length > 0) {
           for (const element of data) {
-            console.log("Buscando en la lista de espacios del semestre");
             if (element._id === prerrequisito._id) {
-              console.log("Tiene prerrequisitos en el mismo semestre");
               resolve(false);
               break;
             }
@@ -997,7 +989,6 @@ export abstract class PlanEstudioBaseComponent {
             if (index >= data.length - 1) {
               resolve(true);
             }
-            console.log("Fin iteración ", index, " mismo semestre");
             index++;
           }
         } else {
