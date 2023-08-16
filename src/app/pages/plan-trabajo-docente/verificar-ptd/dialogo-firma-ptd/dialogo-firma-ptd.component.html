@@ -1,0 +1,44 @@
+<div [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge" nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+<div class="swal2-header">
+    <div class="swal2-icon swal2-info swal2-icon-show" style="display: flex;">
+        <div class="swal2-icon-content">!</div>
+    </div>
+    <h4 class="swal2-title" id="swal2-title" style="display: flex;">{{ 'ptd.info_firma_digital' | translate }}</h4>
+</div>
+<div class="swal2-content">
+    <label style="display: flex;"><b class="swal2-label">{{ 'GLOBAL.firmantes' | translate }}</b></label>
+    <div class="swal2-html-container" style="display: inline-block;">
+        <div *ngFor="let firmante of firmantes">
+            <div class="row">
+                {{ firmante.cargo }}: &nbsp;&nbsp;{{ firmante.nombre }} {{ firmante.tipoId }} {{ firmante.identificacion }}
+            </div>
+        </div>
+    </div>
+    <div class="mini-separador"></div>
+    <ng-container *ngIf="representantes.length > 0">
+        <label style="display: flex;"><b class="swal2-label">{{ 'GLOBAL.representantes' | translate }}</b></label>
+        <div class="swal2-html-container" style="display: inline-block;">
+            <div *ngFor="let representante of representantes">
+                <div class="row">
+                    {{ representante.cargo }}: &nbsp;&nbsp;{{ representante.nombre }} {{ representante.tipoId }} {{ representante.identificacion }}
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="representantes.length <= 0">
+        <div class="swal2-html-container" style="display: inline-block;" *ngIf="!miniSearch">
+            <label style="display: flex;"><span class="swal2-label info-alert">{{ 'ptd.info_agrerar_representante' | translate }}</span>
+                &nbsp;<button mat-raised-button class="swal2-confirm" (click)="miniSearch = true">{{ 'GLOBAL.agregar' | translate }}</button>
+            </label>
+        </div>
+        <div class="swal2-html-container" style="display: inline-block;" *ngIf="miniSearch">
+            <input #docTercero type="number" min="0" class="swal2-input" style="display: inline-block; max-width: fit-content;" placeholder="{{ 'GLOBAL.numero_documento' | translate }}">
+            &nbsp;<button mat-raised-button class="swal2-confirm" style="display: inline-block;" (click)="buscarTercero(docTercero.value)">{{ 'GLOBAL.buscar' | translate }}</button>
+        </div>
+    </ng-container>
+</div>
+<div class="swal2-actions">
+    <button type="button" class="swal2-confirm swal2-styled" style="display: inline-block;" [disabled]="miniSearch" (click)="firmar()">{{ 'GLOBAL.aceptar' | translate }}</button>
+    <button type="button" class="swal2-cancel swal2-styled"  style="display: inline-block;" (click)="cancelar()">{{ 'GLOBAL.cancelar' | translate }}</button>
+</div>
+</div>

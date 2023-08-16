@@ -730,7 +730,9 @@
         "agregar_varios_archivos": "Puede agregar varios archivos si lo requiere",
         "guardar_continuar": "Guardar y continuar",
         "err_min": "El valor no puede ser menor que ",
-        "err_max": "El valor no puede ser mayor que "
+        "err_max": "El valor no puede ser mayor que ",
+        "firmantes": "Firmantes",
+        "representantes": "Representantes"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -2396,7 +2398,9 @@
         "actualizar_consolidado_ok": "El consolidado se actualizó correctamente",
         "fallo_actualizar_consolidado": "Falló al actualizar el consolidado",
         "select_periodo_proyecto": "Debe seleccionar el periodo y el proyecto academico para guardar el consolidado",
-        "please_descargue_consolidado": "Por favor genere el documento para relacionar los planes de trabajo docente al presente consolidado"
+        "please_descargue_consolidado": "Por favor genere el documento para relacionar los planes de trabajo docente al presente consolidado",
+        "info_firma_digital": "El presente Plan Trabajo Docente va a ser aprobado y por ende firmado digitalmente",
+        "info_agrerar_representante": "Si usted no es el coordinador, por favor agréguese como representante"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",

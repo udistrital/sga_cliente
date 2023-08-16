@@ -153,6 +153,37 @@ export class NewNuxeoService {
         return documents$;
     }
 
+    uploadFilesElectronicSign(files: Array<any>) {
+        const documentsSubject = new Subject<any[]>();
+        const documents$ = documentsSubject.asObservable();
+
+        const documentos = [];
+
+        files.map(async (file) => {
+            const sendFileDataandSigners = [{
+                IdTipoDocumento: file.IdDocumento,
+                nombre: file.nombre.replace(/[\.]/g),
+                metadatos: file.metadatos ? file.metadatos : {},
+                descripcion: file.descripcion ? file.descripcion : "",
+                file: file.base64 ? file.base64 : await this.fileToBase64(file.file),
+                firmantes: file.firmantes ? file.firmantes : [],
+                representantes: file.representantes ? file.representantes : []
+              }];
+              
+            this.anyService.post(environment.NUXEO_SERVICE, '/document/firma_electronica', sendFileDataandSigners)
+                .subscribe((dataResponse) => {
+                    documentos.push(dataResponse);
+                    if (documentos.length === files.length) {
+                    documentsSubject.next(documentos);
+                    }
+                }, (error) => {
+                    documentsSubject.error(error);
+                })
+        });
+
+        return documents$
+    }
+
     get(files) {
         const documentsSubject = new Subject<Documento[]>();
         const documents$ = documentsSubject.asObservable();

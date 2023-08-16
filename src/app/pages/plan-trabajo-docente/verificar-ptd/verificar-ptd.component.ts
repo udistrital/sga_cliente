@@ -14,6 +14,9 @@ import { ImplicitAutenticationService } from '../../../@core/utils/implicit_aute
 import { UserService } from '../../../@core/data/users.service';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { DialogoFirmaPtdComponent } from './dialogo-firma-ptd/dialogo-firma-ptd.component';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 
 @Component({
   selector: 'verificar-ptd',
@@ -55,6 +58,8 @@ export class VerificarPtdComponent implements OnInit {
     private autenticationService: ImplicitAutenticationService,
     private userService: UserService,
     private tercerosService: TercerosService,
+    private dialog: MatDialog,
+    private GestorDocumental: NewNuxeoService,
     ) {
       this.dataPlanes = new LocalDataSource();
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -124,7 +129,12 @@ export class VerificarPtdComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              this.generarReporte('CA', out.rowData.tercero_id, out.rowData.vinculacion_id);
+              const idDoc = Number(out.value);
+              if (idDoc > 0) {
+                this.verPTDFirmado(idDoc);
+              } else {
+                this.generarReporte('CA', out.rowData.tercero_id, out.rowData.vinculacion_id);
+              }
             })}
         },
         gestion: {
@@ -305,7 +315,11 @@ export class VerificarPtdComponent implements OnInit {
             terceroId = jsonResp.responsable_id;
             this.formVerificar.campos[this.getIndexFormVerificar("DeAcuerdo")].valor = jsonResp.concertado;
             this.formVerificar.campos[this.getIndexFormVerificar("Observaciones")].valor = jsonResp.observacion;
-            this.formVerificar.campos[this.getIndexFormVerificar("EstadoAprobado")].valor = this.estadosPlan.opciones.find(estado => estado._id === resPlan.Data.estado_plan_id);
+            const estadoPlan = this.estadosPlan.opciones.find(estado => estado._id === resPlan.Data.estado_plan_id);
+            this.formVerificar.campos[this.getIndexFormVerificar("EstadoAprobado")].valor = estadoPlan;
+            if (estadoPlan.codigo_abreviacion == "APR") {
+              this.formVerificar.btn = "";
+            }
           } else {
             terceroId = this.userService.getPersonaId();
           }
@@ -342,28 +356,60 @@ export class VerificarPtdComponent implements OnInit {
   validarFormVerificar(event): void {
     if (event.valid) {
       this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.dar_respuesta'), "", MODALS.QUESTION, true).then(
-        action => {
+        async action => {
           if (action.value) {
             let putPlan = <any>UtilidadesService.hardCopy(this.formVerificar["GET_plan_docente"]);
-            const jsonResp = {
-              concertado: event.data.VerificarPTD.DeAcuerdo,
-              observacion: event.data.VerificarPTD.Observaciones,
-              responsable_id: this.userService.getPersonaId(),
-            }
-            putPlan.respuesta = JSON.stringify(jsonResp);
+            let respuestaJson = putPlan.respuesta ? JSON.parse(putPlan.respuesta) : {};
+            respuestaJson["concertado"] = event.data.VerificarPTD.DeAcuerdo;
+            respuestaJson["observacion"] = event.data.VerificarPTD.Observaciones;
+            respuestaJson["responsable_id"] = this.userService.getPersonaId();
+            putPlan.respuesta = JSON.stringify(respuestaJson);
             putPlan.estado_plan_id = event.data.VerificarPTD.EstadoAprobado._id;
-
-            this.loading = true;
-            this.planTrabajoDocenteService.put('plan_docente/'+putPlan._id, putPlan).subscribe(
-              resp => {
-                this.loading = false;
-                this.popUpManager.showSuccessAlert(this.translate.instant('ptd.respuesta_enviada'))
-              }, err => {
-                this.loading = false;
-                this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_respuesta_enviada'))
-                console.warn(err);
+            
+            if (event.data.VerificarPTD.EstadoAprobado.codigo_abreviacion === "APR") {
+              const dialogParams = new MatDialogConfig();
+              dialogParams.width = '640px';
+              dialogParams.height = '440px';
+              dialogParams.data = {
+                docenteId: putPlan.docente_id,
+                responsableId: respuestaJson.responsable_id,
+                vinculacionId: this.dataDocente.tipo_vinculacion_id,
+                periodoId: this.periodos.select.Id,
+              };
+              const dialogFirma = this.dialog.open(DialogoFirmaPtdComponent, dialogParams);
+              const outDialog = await dialogFirma.afterClosed().toPromise();
+              if (outDialog.document) {
+                putPlan.soporte_documental = outDialog.document;
+                this.loading = true;
+                this.planTrabajoDocenteService.put('plan_docente/'+putPlan._id, putPlan).subscribe(
+                  resp => {
+                    this.loading = false;
+                    this.popUpManager.showSuccessAlert(this.translate.instant('ptd.respuesta_enviada'))
+                  }, err => {
+                    this.loading = false;
+                    this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_respuesta_enviada'))
+                    console.warn(err);
+                  }
+                );
+              } else if (outDialog.error) {
+                this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
+                                           this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + outDialog.from + '</b>.<br><br>' +
+                                           this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+                                           MODALS.ERROR, false);
               }
-            );
+            } else {
+              this.loading = true;
+              this.planTrabajoDocenteService.put('plan_docente/'+putPlan._id, putPlan).subscribe(
+                resp => {
+                  this.loading = false;
+                  this.popUpManager.showSuccessAlert(this.translate.instant('ptd.respuesta_enviada'))
+                }, err => {
+                  this.loading = false;
+                  this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_respuesta_enviada'))
+                  console.warn(err);
+                }
+              );
+            }
           }
         }
       );
@@ -418,6 +464,14 @@ export class VerificarPtdComponent implements OnInit {
         console.warn(err)
       }
     )
+  }
+
+  verPTDFirmado(idDoc: number) {
+    this.loading = true;
+    this.GestorDocumental.get([{Id: idDoc}]).subscribe((resp: any[]) => {
+      this.loading = false;
+      this.previewFile(resp[0].url);
+    })
   }
 
   previewFile(url: string) {
