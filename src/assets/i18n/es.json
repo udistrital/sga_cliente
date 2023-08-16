@@ -1137,7 +1137,6 @@
         "codigo_snies": "Código SNIES",
         "codigo_interno": "Código interno",
         "facultad": "Facultad:",
-        "erro_selec": "Por favor seleccione la facultad!",
         "nombre_proyecto": "Nombre",
         "nivel_proyecto": "Nivel",
         "metodologia_proyecto": "Metodología",
@@ -1213,7 +1212,11 @@
         "regresar": "Regresar",
         "siguiente": "Siguiente",
         "reset": "Reiniciar registro",
-        "proyecto_padre": "Proyecto padre"
+        "proyecto_padre": "Proyecto padre",
+        "mensaje_oikos": "Por favor relacione el proyecto curricular con el espacio físico del sistema OIKOS, si no existe el espacio físico por favor notificar al administrador del sistema",
+        "oikos": "Espacio Físico",
+        "erro_selec": "Por favor seleccione la facultad!",
+        "erro_oikos": "Por favor seleccione el espacio fisico!"
     },
     "consultaproyecto": {
         "titulo": "Consulta de un proyecto curricular ",

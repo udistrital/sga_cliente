@@ -31,6 +31,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   facultad: string;
   nombre: String;
   nivel: string;
+  iddependencia: number;
   metodologia: string;
   abreviacion: string;
   correo: string;
@@ -245,6 +246,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         Id: this.idproyecto,
         id_documento_acto: this.id_documento_acto,
         proyecto_padre_id: this.proyecto_padre_id,
+        iddependencia:this.iddependencia,
       },
     });
 
@@ -309,6 +311,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         id_documento_registro_coordinador: this
           .id_documento_registro_coordinador,
         proyecto_padre_id: this.proyecto_padre_id,
+        iddependencia:this.iddependencia,
       },
     });
 
@@ -413,6 +416,9 @@ export class ListProyectoAcademicoComponent implements OnInit {
             );
             this.duracion = res.map(
               (data: any) => data.ProyectoAcademico.Duracion,
+            );
+            this.iddependencia = res.map(
+              (data: any) => data.ProyectoAcademico.DependenciaId,
             );
             this.tipo_duracion = res.map((data: any) => data.NombreUnidad);
             this.ciclos = res.map((data: any) => data.CiclosLetra);
@@ -526,6 +532,10 @@ export class ListProyectoAcademicoComponent implements OnInit {
             );
             this.resolucion_acreditacion = res.map(
               (data: any) => data.Registro[0].NumeroActoAdministrativo,
+            );
+
+            this.iddependencia = res.map(
+              (data: any) => data.ProyectoAcademico.DependenciaId,
             );
             this.resolucion_acreditacion_ano = res.map(
               (data: any) => data.Registro[0].AnoActoAdministrativoId,
