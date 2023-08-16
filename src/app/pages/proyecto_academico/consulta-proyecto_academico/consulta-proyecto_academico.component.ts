@@ -1,10 +1,12 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
+import { OikosService } from "../../../@core/data/oikos.service";
+
 import { TranslateService } from '@ngx-translate/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import 'style-loader!angular2-toaster/toaster.css';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup,FormControl } from '@angular/forms';
 import { Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ListRegistroProyectoAcademicoComponent } from '../list-registro_proyecto_academico/list-registro_proyecto_academico.component';
@@ -32,16 +34,18 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
   basicform: FormGroup;
   source_emphasys: LocalDataSource = new LocalDataSource();
   settings_emphasys: any;
+  espacio= [];
+  opcionSeleccionadoEspacio: any;
+  CampoControl_espacio = new FormControl("", [Validators.required]);
 
 
   constructor(private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialog,
     private _ngZone: NgZone,
-    private nuxeoService: NuxeoService,
-    private documentoService: DocumentoService,
     public dialogRef: MatDialogRef<ConsultaProyectoAcademicoComponent>,
     private routerService: Router,
+    private oikosService: OikosService,
     private newNuxeoService: NewNuxeoService,
     private formBuilder: FormBuilder) {
       this.source_emphasys.load(data.enfasis);
@@ -113,10 +117,12 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadespacio();
     this.basicform = this.formBuilder.group({
       codigo_interno: ['', Validators.required],
       codigo_snies: ['', Validators.required],
       facultad: ['', Validators.required],
+      espacio: ['', Validators.required],
       nivel_proyecto: ['', Validators.required],
       metodologia_proyecto: ['', Validators.required],
       nombre_proyecto: ['', Validators.required],
@@ -148,6 +154,31 @@ export class ConsultaProyectoAcademicoComponent implements OnInit {
     });
   }
 
-
+  loadespacio() {
+    this.oikosService
+      .get("dependencia_tipo_dependencia/?query=TipoDependenciaId:1&limit=0")
+      .subscribe(
+        (res: any) => {
+          const r = <any>res;
+          if (res !== null && r.Type !== "error") {
+            this.espacio = res.map((data: any) => data.DependenciaId);
+            
+            this.espacio.forEach((esp: any) => {
+              if (esp.Id === Number(this.data.iddependencia)) {
+                 this.opcionSeleccionadoEspacio = esp;
+               }
+             });
+          }
+        },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: "error",
+            title: error.status + "",
+            text: this.translate.instant("ERROR." + error.status),
+            confirmButtonText: this.translate.instant("GLOBAL.aceptar")
+          });
+        }
+      );
+  }
 
 }

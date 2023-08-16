@@ -698,6 +698,8 @@
         "guardar_continuar": "Save and continue",
         "err_min": "The value cannot be less than ",
         "err_max": "The value cannot be greater than ",
+        "firmantes": "Signers",
+        "representantes": "Representatives",
         "nombre_entidad": "Entity name",
         "placeholder_nombre_entidad": "E.g.: Universidad Distrital - Oficina Asesora de Sistemas",
         "pais_entidad": "Entity Country",
@@ -1190,7 +1192,10 @@
         "regresar": "To return",
         "siguiente": "Next",
         "reset": "Restart Registration",
-        "proyecto_padre": "Parent project"
+        "proyecto_padre": "Parent project",
+        "mensaje_oikos": "Please relate the curricular project with the physical space of the OIKOS system, if the physical space does not exist, please notify the system administrator",
+        "oikos": "Physical space",
+        "erro_oikos": "Please select the physical space!"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
@@ -2332,7 +2337,9 @@
         "actualizar_consolidado_ok": "Consolidated updated successfully",
         "fallo_actualizar_consolidado": "Failed to update the consolidated",
         "select_periodo_proyecto": "You must select the period and the academic project to save the consolidated",
-        "please_descargue_consolidado": "Please generate the document to relate the teacher work plans to the present consolidated"
+        "please_descargue_consolidado": "Please generate the document to relate the teacher work plans to the present consolidated",
+        "info_firma_digital": "This Teacher Work Plan will be approved and therefore digitally signed",
+        "info_agrerar_representante": "If you are not the coordinator, please add yourself as a representative"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",
