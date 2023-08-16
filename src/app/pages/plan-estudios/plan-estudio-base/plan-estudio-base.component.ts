@@ -496,10 +496,9 @@ export abstract class PlanEstudioBaseComponent {
       this.dataSemestre[this.punteroSemestrePlan].add(event.data);
       this.dataSemestre[this.punteroSemestrePlan].refresh();
       this.dataEspaciosAcademicos.remove(event.data);
-      const semestreId = this.punteroSemestrePlan;
-      const totalSemestre = this.filaTotal(this.dataSemestre[semestreId]);
-      this.dataSemestreTotal[semestreId].load(totalSemestre);
-      this.dataSemestreTotal[semestreId].refresh();
+      const totalSemestre = this.filaTotal(this.dataSemestre[this.punteroSemestrePlan]);
+      this.dataSemestreTotal[this.punteroSemestrePlan].load(totalSemestre);
+      this.dataSemestreTotal[this.punteroSemestrePlan].refresh();
     }
   }
 
@@ -531,12 +530,16 @@ export abstract class PlanEstudioBaseComponent {
       )
       .then((action) => {
         if (action.value) {
-          semestre.getAll().then((data) => {
-            data.forEach((dataind) => {
+          semestre.getAll().then(async (data) => {
+            await data.forEach((dataind) => {
               this.dataEspaciosAcademicos.add(dataind);
             });
-            this.dataEspaciosAcademicos.refresh();
-            semestre.load([]);
+            await this.dataEspaciosAcademicos.refresh();
+            await semestre.load([]);
+            const totalSemestre = await this.filaTotal(this.dataSemestre[this.punteroSemestrePlan]);
+            await this.dataSemestreTotal[this.punteroSemestrePlan].load(totalSemestre);
+            await this.dataSemestreTotal[this.punteroSemestrePlan].refresh();
+            this.prepareUpdateBySemester();
           });
         }
       });
@@ -931,8 +934,6 @@ export abstract class PlanEstudioBaseComponent {
     }
     return new Promise<object>((resolve, reject) => {
       this.validarPrerequisitosAgregar(event).then((valid) => {
-        console.log("RESULTADO VALIDACIÓN: ", valid);
-
         if (valid) {
           resolve(result);
         } else {
@@ -1055,25 +1056,31 @@ export abstract class PlanEstudioBaseComponent {
     let espaciosAcademicosOrdenados = [];
 
     await this.dataSemestre[this.punteroSemestrePlan].getAll().then((espacios) => {
-      espacios.forEach((espacio, index) => {
-        let etiquetaEspacio = "espacio_".concat((index + 1).toString());
-        let newEspacio = new EspacioEspaciosSemestreDistribucion();
-        let espaciosRequeridosId = espacio["prerequisitos"] ? espacio["prerequisitos"].map((e) => e._id) : "NA";
-        newEspacio.Id = espacio["_id"];
-        newEspacio.OrdenTabla = index + 1;
-        newEspacio.EspaciosRequeridos = {
-          Id: espaciosRequeridosId,
-        };
-        espaciosAcademicosOrdenados.push({
-          [etiquetaEspacio]: newEspacio
-        });
-
-        if (index >= (espacios.length - 1)) {
-          semestre[etiquetaSemestre] = {
-            espacios_academicos: espaciosAcademicosOrdenados
-          };
+      if (espacios.length == 0) {
+        semestre[etiquetaSemestre]= {
+          espacios_academicos: []
         }
-      });
+      } else {
+        espacios.forEach((espacio, index) => {
+          let etiquetaEspacio = "espacio_".concat((index + 1).toString());
+          let newEspacio = new EspacioEspaciosSemestreDistribucion();
+          let espaciosRequeridosId = espacio["prerequisitos"] ? espacio["prerequisitos"].map((e) => e._id) : "NA";
+          newEspacio.Id = espacio["_id"];
+          newEspacio.OrdenTabla = index + 1;
+          newEspacio.EspaciosRequeridos = {
+            Id: espaciosRequeridosId,
+          };
+          espaciosAcademicosOrdenados.push({
+            [etiquetaEspacio]: newEspacio
+          });
+  
+          if (index >= (espacios.length - 1)) {
+            semestre[etiquetaSemestre] = {
+              espacios_academicos: espaciosAcademicosOrdenados
+            };
+          }
+        });
+      }
     });
     return semestre;
   }
