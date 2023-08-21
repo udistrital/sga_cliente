@@ -24,6 +24,7 @@ export class PlanEstudio {
     Codigo: string;
     CodigoAbreaviacion: string;
     EspaciosSemestreDistribucion: string = "";
+    EsPlanEstudioPadre: boolean;
     EstadoAprobacionId: EstadoAprobacion;
     readonly FechaCreacion: Date;
     readonly FechaModificacion: Date;

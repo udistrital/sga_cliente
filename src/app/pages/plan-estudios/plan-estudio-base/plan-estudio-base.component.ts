@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { PopUpManager } from "../../../managers/popUpManager";
-import { FORM_PLAN_ESTUDIO } from "../form-plan_estudio";
 import { UtilidadesService } from "../../../@core/utils/utilidades.service";
+import { FORM_PLAN_ESTUDIO, FORM_PLAN_ESTUDIO_VISUALIZACION } from "../form-plan_estudio";
 import { FormParams } from "../../../@core/data/models/define-form-fields";
 import { FormGroup } from "@angular/forms";
 import { ProyectoAcademicoService } from "../../../@core/data/proyecto_academico.service";
@@ -59,8 +59,13 @@ export abstract class PlanEstudioBaseComponent {
   enEdicionPlanEstudio: boolean = false;
   enEdicionSemestreNuevo: boolean = false;
   enEdicionSemestreViejo: boolean = false;
+
   numSemestresCompletado: boolean = false;
   habilitadoGenerarPlan: boolean = false;
+  esPlanEstudioPadre: boolean = false;
+  planEstudioPadreAsignado2Form: boolean = false;
+
+  mainAction: Symbol;
   
   punteroSemestrePlan: number = 0;
 
@@ -135,9 +140,12 @@ export abstract class PlanEstudioBaseComponent {
     protected gestorDocumentalService: NewNuxeoService
   ) {}
 
-  crearFormulario() {
+  crearFormulario(formPlanEstudio: FormParams) {
+    console.log("Crearformulario");
+    
+    this.planEstudioPadreAsignado2Form = false;
     this.formPlanEstudio = <FormParams>(
-      UtilidadesService.hardCopy(FORM_PLAN_ESTUDIO)
+      UtilidadesService.hardCopy(formPlanEstudio)
     );
     this.formPlanEstudio.nivel.opciones = this.niveles.filter(
       (nivel) => nivel.NivelFormacionPadreId == undefined
@@ -599,8 +607,26 @@ export abstract class PlanEstudioBaseComponent {
   // * ----------
 
   // * ----------
-  // * Reaccionar a cambios de formularios
+  // * Reaccionar a cambios o creación de formularios
   //#region
+
+  asignarForm(event) {
+    this.formGroupPlanEstudio = event;
+
+    // Carga de datos en la acción de visualizar o editar
+    if ((this.mainAction === ACTIONS.VIEW || this.mainAction === ACTIONS.EDIT)){
+      console.log("Cargando datos del formulario");
+      this.cargarFormularioPlanEstudios();
+    }
+
+    // Asignación del tipo de plan al formulario
+    if (!this.planEstudioPadreAsignado2Form) {
+      this.planEstudioPadreAsignado2Form = true;
+      let valorEsPlanPadre = this.esPlanEstudioPadre ? this.translate.instant('GLOBAL.si') : this.translate.instant('GLOBAL.no');
+      this.formGroupPlanEstudio.patchValue({ planPorCiclos: valorEsPlanPadre });
+    }
+  }
+
   actualizarForm(event) {
     this.formGroupPlanEstudio = event;
   }
@@ -615,6 +641,7 @@ export abstract class PlanEstudioBaseComponent {
       this.translate.instant('plan_estudios.seguro_cancelar'), MODALS.WARNING, true).then(
         (action) => {
           if (action.value) {
+            this.planEstudioPadreAsignado2Form = false;
             this.formGroupPlanEstudio.reset();
             this.dataSemestre = [];
             this.vista = VIEWS.LIST;
@@ -662,6 +689,17 @@ export abstract class PlanEstudioBaseComponent {
           }
         }
       );
+  }
+
+  organizarPlanEstudioCompuesto(){
+    this.enEdicionPlanEstudio = true;
+    this.esPlanEstudioPadre = true;
+    this.crearFormulario(FORM_PLAN_ESTUDIO);
+    this.createTableEspaciosAcademicos();
+    this.createTableSemestreTotal();
+    this.totalTotal();
+    this.vista = VIEWS.SECONDARY_FORM;
+    this.dataEspaciosAcademicos.load([]);
   }
   //#endregion
   // * ----------
@@ -1127,6 +1165,72 @@ export abstract class PlanEstudioBaseComponent {
       resumenTotal["numero_semestres"] = this.dataSemestre.length;
       this.planEstudioBody.ResumenPlanEstudios = JSON.stringify(resumenTotal);
     })
+  }
+  //#endregion
+  // * ----------
+
+  // * ----------
+  // * Visualizar plan de estudio 
+  //#region
+  async viewStudyPlan(planEstudioBody: PlanEstudio) {
+    const idPlan = planEstudioBody.Id;
+
+    await this.consultarPlanEstudio(idPlan).then((res) => {
+      this.enEdicionPlanEstudio = false;
+      this.enEdicionSemestreNuevo = false;
+      this.enEdicionSemestreViejo = false;
+      this.planEstudioBody = res;      
+      this.esPlanEstudioPadre = this.planEstudioBody.EsPlanEstudioPadre ? true: false;
+      this.crearFormulario(FORM_PLAN_ESTUDIO_VISUALIZACION);
+      this.createTableEspaciosAcademicos();
+      this.createTableSemestreTotal();
+      this.totalTotal();
+      if (this.esPlanEstudioPadre) {
+        //this.vista = VIEWS.SECONDARY_FORM;
+        this.vista = VIEWS.FORM;
+      } else {
+        this.vista = VIEWS.FORM;
+      }
+      
+      this.mainAction = ACTIONS.VIEW;
+    });
+  }
+
+  cargarFormularioPlanEstudios(){
+    try {
+      this.loading = true;
+      
+      const idProyecto = this.planEstudioBody.ProyectoAcademicoId;
+      let proyectoCurricular: any;
+      let subnivel: any;
+      let nivel: any;
+      if (idProyecto) {
+        console.log("Buscando proyecto");
+        
+        proyectoCurricular = this.proyectos.find(proyecto => proyecto.Id == idProyecto);
+        subnivel = proyectoCurricular ? proyectoCurricular.NivelFormacionId : undefined;
+        nivel = subnivel ? subnivel.NivelFormacionPadreId : undefined;
+      }
+      this.formGroupPlanEstudio.patchValue({
+        nivel: nivel ? nivel.Nombre : undefined,
+        subnivel: subnivel ? subnivel.Nombre : undefined,
+        proyectoCurricular: proyectoCurricular ? proyectoCurricular.Nombre : undefined,
+        codigoProyecto: proyectoCurricular ? proyectoCurricular.Codigo : undefined,
+        planPorCiclos: this.planEstudioBody.EsPlanEstudioPadre ? this.translate.instant('GLOBAL.si') : this.translate.instant('GLOBAL.no'),
+        nombrePlanEstudio: this.planEstudioBody.Nombre,
+        codigoPlanEstudio: this.planEstudioBody.Codigo,
+        totalCreditosPrograma: this.planEstudioBody.TotalCreditos,
+        numeroSemestres: this.planEstudioBody.NumeroSemestres,
+        numeroResolucion: this.planEstudioBody.NumeroResolucion,
+        anioResolucion: this.planEstudioBody.AnoResolucion
+      });
+      //this.formGroupPlanEstudio.patchValue({ soportes: this.planEstudioBody });
+      this.loading = false;
+    } catch (error) {
+      this.loading = false;
+      this.popUpManager.showErrorAlert(
+        this.translate.instant('plan_estudios.error_cargando_datos_formulario'));
+    }
   }
   //#endregion
   // * ----------

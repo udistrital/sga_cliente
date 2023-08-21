@@ -18,12 +18,85 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                 </ng2-smart-table>
                 <div class="alinear-center-espacio-doble" [class.generate]="habilitadoGenerarPlan">
                     <button mat-raised-button color="primary" (click)="nuevoPlanEstudio()">{{ 'plan_estudios.crear' | translate }}</button>
-                    <button mat-raised-button color="primary" (click)="organizarPlanesEstudio()">{{ 'plan_estudios.organizar' | translate }}</button>
-                    <button mat-raised-button color="primary" (click)="organizarPlanesEstudio()" [hidden]="habilitadoGenerarPlan">{{ 'plan_estudios.generar_plan' | translate }}</button>
+                    <button mat-raised-button color="primary" (click)="organizarPlanEstudioCompuesto()">{{ 'plan_estudios.organizar' | translate }}</button>
+                    <button mat-raised-button color="primary" (click)="generarPlanEstudio()" [hidden]="habilitadoGenerarPlan">{{ 'plan_estudios.generar_plan' | translate }}</button>
                 </div>
             </fieldset>
         </ng-container>
         <ng-container *ngSwitchCase="VIEWS.FORM">
+            <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
+                <legend class="modo-ventana">
+                    <small>&nbsp; {{ 'plan_estudios.crear' | translate }} </small>
+                    <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="cancelar()"></i>
+                </legend>
+                <mat-horizontal-stepper #stepper [linear]="true" #stepper>
+                    <mat-step [stepControl]="formGroupPlanEstudio" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}">
+                        <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
+                        <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)" (createdForm)="asignarForm($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
+                        <div class="alinear-center">
+                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.limpiar' | translate }}</button>
+                            <button mat-raised-button [color]="formGroupPlanEstudio.valid ? 'primary' : ''" (click)="guardar(stepper)" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.guardar_continuar' | translate }}</button>
+                        </div>
+                    </mat-step>
+                    <mat-step>
+                        <ng-template matStepLabel>{{ 'plan_estudios.parametrizacion_semestral' | translate }}</ng-template>
+                        <div class="alinear-center">
+                            <div class="advertencia">{{ 'plan_estudios.mensaje_tabla_espacios_si_vacio_solicite_inclusion' | translate }}</div>
+                        </div>
+                        <ng2-smart-table [settings]="tbEspaciosAcademicos" [source]="dataEspaciosAcademicos" (custom)="onAction($event)">
+                        </ng2-smart-table>
+                        <div class="alinear-right espacio-doble">
+                            <nb-card status="success" class="recuadro">
+                                <nb-card-header class="d-flex justify-content-around align-items-center" style="padding: 5px;">
+                                  {{ 'plan_estudios.total_espacios_asignar' | translate }}
+                                </nb-card-header>
+                                <nb-card-body class="d-flex justify-content-around align-items-center" style="padding: 5px;">
+                                  <label><b>{{ dataEspaciosAcademicos.count() }}</b></label>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                        <div class="alinear-center espacio">
+                            <button mat-raised-button color="primary" (click)="agregarSemestre()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo" [hidden]="!enEdicionPlanEstudio || numSemestresCompletado">{{ 'plan_estudios.agregar_semestre' | translate }}</button>
+                        </div>
+                        <mat-accordion>
+                            <mat-expansion-panel hideToggle *ngFor="let semestre of dataSemestre; let numero = index" [expanded]="(numero) === punteroSemestrePlan">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        {{ 'plan_estudios.semestre' | translate }} # {{ numero + 1 }}
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="custom-action-tb" [class.hide]="!this.enEdicionSemestreNuevo && !this.enEdicionSemestreViejo">
+                                    <ng2-smart-table [settings]="tbSemestre" [source]="semestre" (custom)="onAction($event)">
+                                    </ng2-smart-table>
+                                </div>
+                                
+                                <div class="resumenTabla">
+                                    <ng2-smart-table [settings]="tbSemestreTotal" [source]="dataSemestreTotal[numero]">
+                                    </ng2-smart-table>
+                                </div>
+                                <mat-action-row>
+                                    <button mat-raised-button type="button" (click)="limpiarSemestre(semestre)" [disabled]="!enEdicionSemestreNuevo" [hidden]="!enEdicionPlanEstudio || (numero+1) !== dataSemestre.length">{{ 'GLOBAL.limpiar' | translate }}</button>
+                                    <button mat-raised-button type="button" color="primary" (click)="editarSemestre(numero)" [disabled]="enEdicionSemestreNuevo" [hidden]="!enEdicionPlanEstudio || (numero === punteroSemestrePlan && (enEdicionSemestreNuevo || enEdicionSemestreViejo))">{{ 'plan_estudios.editar_semestre' | translate }}</button>
+                                    <button mat-raised-button type="button" color="primary" (click)="finalizarSemestre()" [disabled]="!(enEdicionSemestreNuevo || enEdicionSemestreViejo) || (semestre.count() == 0) || !(numero === punteroSemestrePlan)" [hidden]="!enEdicionPlanEstudio">{{ 'plan_estudios.finalizar_semestre' | translate }}</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                        <nb-card status="success" class="recuadro" style="margin: 2rem 0px 1rem 0px;" *ngIf="dataSemestre.length > 0">
+                            <nb-card-header class="d-flex justify-content-around align-items-center" style="padding: 5px;">
+                              {{ 'plan_estudios.resumen_general' | translate }}
+                            </nb-card-header>
+                            <nb-card-body style="padding: 1px;">
+                                <div class="resumenTotal">
+                                    <ng2-smart-table [settings]="tbSemestreTotal" [source]="dataSemestreTotalTotal">
+                                    </ng2-smart-table>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </mat-step>
+                </mat-horizontal-stepper>
+            </fieldset>
+        </ng-container>
+        <ng-container *ngSwitchCase="VIEWS.SECONDARY_FORM">
             <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
                 <legend class="modo-ventana">
                     <small>&nbsp; {{ 'plan_estudios.crear' | translate }} </small>

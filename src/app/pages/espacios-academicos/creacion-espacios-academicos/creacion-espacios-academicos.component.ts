@@ -182,6 +182,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
   // * Constructor de formulario, buscar campo, update i18n, suscribirse a cambios
   //#region
   buildFormEspaciosAcademicos() {
+    
     // ? primera carga del formulario: validación e idioma
     const form1 = {};
     this.formDef.campos_p1.forEach(campo => {

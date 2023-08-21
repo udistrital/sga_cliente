@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PopUpManager } from '../../../managers/popUpManager';
-import { FORM_PLAN_ESTUDIO } from '../form-plan_estudio';
+import { FORM_PLAN_ESTUDIO_EDICION } from '../form-plan_estudio';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { FormParams } from '../../../@core/data/models/define-form-fields';
 import { FormGroup } from '@angular/forms';

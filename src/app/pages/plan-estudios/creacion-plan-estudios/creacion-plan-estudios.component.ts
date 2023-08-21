@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { FORM_PLAN_ESTUDIO } from "../form-plan_estudio";
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Ng2StButtonComponent } from '../../../@theme/components';
@@ -85,7 +86,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
       renderComponent: Ng2StButtonComponent,
       onComponentInitFunction: (instance) => {
         instance.valueChanged.subscribe((out) => {
-          console.log("ver: ", out.value, out.rowData)
+          this.viewStudyPlan(out.rowData);
         })
       }
     };
@@ -190,18 +191,18 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
 
       case 'subnivel':
         if (event.subnivel) {
-          this.formPlanEstudio.proyectoCurriular.opciones = this.proyectos.filter(proyecto => proyecto.NivelFormacionId && (proyecto.NivelFormacionId.Id == event.subnivel.Id));
+          this.formPlanEstudio.proyectoCurricular.opciones = this.proyectos.filter(proyecto => proyecto.NivelFormacionId && (proyecto.NivelFormacionId.Id == event.subnivel.Id));
         } else {
-          this.formPlanEstudio.proyectoCurriular.opciones = [];
-          this.formGroupPlanEstudio.patchValue({ proyectoCurriular: undefined });
+          this.formPlanEstudio.proyectoCurricular.opciones = [];
+          this.formGroupPlanEstudio.patchValue({ proyectoCurricular: undefined });
         }
         break;
 
-      case 'proyectoCurriular':
-        if (event.proyectoCurriular) {
-          this.formPlanEstudio.codigoProyecto.valor = event.proyectoCurriular.Codigo;
-          this.formGroupPlanEstudio.patchValue({ codigoProyecto: event.proyectoCurriular.Codigo });
-          this.proyecto_id = event.proyectoCurriular.Id;
+      case 'proyectoCurricular':
+        if (event.proyectoCurricular) {
+          this.formPlanEstudio.codigoProyecto.valor = event.proyectoCurricular.Codigo;
+          this.formGroupPlanEstudio.patchValue({ codigoProyecto: event.proyectoCurricular.Codigo });
+          this.proyecto_id = event.proyectoCurricular.Id;
         } else {
           this.formPlanEstudio.codigoProyecto.valor = undefined;
           this.formGroupPlanEstudio.patchValue({ codigoProyecto: undefined });
@@ -220,8 +221,10 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
   // * Acciones botones 
   //#region
   nuevoPlanEstudio() {
+    this.mainAction = ACTIONS.CREATE;
     this.enEdicionPlanEstudio = true;
-    this.crearFormulario();
+    this.esPlanEstudioPadre = false;
+    this.crearFormulario(FORM_PLAN_ESTUDIO);
     this.createTableEspaciosAcademicos();
     this.createTableSemestreTotal();
     this.totalTotal();
@@ -251,6 +254,8 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
         (action) => {
           if (action.value) {
             this.formGroupPlanEstudio.reset();
+            let valorEsPlanPadre = this.esPlanEstudioPadre ? this.translate.instant('GLOBAL.si') : this.translate.instant('GLOBAL.no');
+            this.formGroupPlanEstudio.patchValue({ planPorCiclos: valorEsPlanPadre });
           }
         }
       );
@@ -268,10 +273,11 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
     newPlanEstudio.Nombre = this.formGroupPlanEstudio.get('nombrePlanEstudio').value;
     newPlanEstudio.NumeroResolucion = Number(this.formGroupPlanEstudio.get('numeroResolucion').value);
     newPlanEstudio.NumeroSemestres = Number(this.formGroupPlanEstudio.get('numeroSemestres').value);
-    newPlanEstudio.ProyectoAcademicoId = Number(this.formGroupPlanEstudio.get('proyectoCurriular').value["Id"]);
+    newPlanEstudio.ProyectoAcademicoId = Number(this.formGroupPlanEstudio.get('proyectoCurricular').value["Id"]);
     newPlanEstudio.TotalCreditos = Number(this.formGroupPlanEstudio.get('totalCreditosPrograma').value);
     newPlanEstudio.AnoResolucion = Number(this.formGroupPlanEstudio.get('anioResolucion').value);
     newPlanEstudio.Codigo = this.formGroupPlanEstudio.get('codigoPlanEstudio').value;
+    newPlanEstudio.EsPlanEstudioPadre = this.esPlanEstudioPadre;
 
     const archivos = this.prepararArchivos();
     const idsArchivos = await this.cargarArchivos(archivos);
@@ -283,6 +289,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
       this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
         this.ListEspacios = result;
         this.dataEspaciosAcademicos.load(this.ListEspacios);
+        this.planEstudioPadreAsignado2Form = false;
         stepper.next();
       }, (error) => {
         this.ListEspacios = [];
