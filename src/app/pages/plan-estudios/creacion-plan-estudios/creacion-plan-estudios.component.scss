@@ -46,6 +46,21 @@ fieldset {
     justify-content: space-around;
 }
 
+.alinear-center.right {
+    padding-left: 45%;
+    padding-right: 5%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.alinear-center.left {
+    padding-bottom: 1rem;
+    padding-left: 15%;
+    padding-right: 45%;
+    display: flex;
+    justify-content: space-around;
+}
+
 .alinear-right {
     padding-right: 2rem;
     display: flex;
