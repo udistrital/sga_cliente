@@ -141,8 +141,6 @@ export abstract class PlanEstudioBaseComponent {
   ) {}
 
   crearFormulario(formPlanEstudio: FormParams) {
-    console.log("Crearformulario");
-    
     this.planEstudioPadreAsignado2Form = false;
     this.formPlanEstudio = <FormParams>(
       UtilidadesService.hardCopy(formPlanEstudio)
@@ -615,7 +613,6 @@ export abstract class PlanEstudioBaseComponent {
 
     // Carga de datos en la acción de visualizar o editar
     if ((this.mainAction === ACTIONS.VIEW || this.mainAction === ACTIONS.EDIT)){
-      console.log("Cargando datos del formulario");
       this.cargarFormularioPlanEstudios();
     }
 
@@ -700,6 +697,23 @@ export abstract class PlanEstudioBaseComponent {
     this.totalTotal();
     this.vista = VIEWS.SECONDARY_FORM;
     this.dataEspaciosAcademicos.load([]);
+  }
+
+  salirEdicionFormulario(){
+    this.popUpManager.showPopUpGeneric(
+      this.translate.instant('plan_estudios.plan_estudios'),
+      this.translate.instant('plan_estudios.seguro_salir_formulario'), 
+      MODALS.WARNING, true).then(
+        (action) => {
+          if (action.value) {
+            this.planEstudioPadreAsignado2Form = false;
+            this.formGroupPlanEstudio.reset();
+            this.dataSemestre = [];
+            this.vista = VIEWS.LIST;
+            this.loadSelects();
+          }
+        }
+      );
   }
   //#endregion
   // * ----------
@@ -874,6 +888,70 @@ export abstract class PlanEstudioBaseComponent {
         }
       );
     });
+  }
+
+  checkIfAlreadyDownloaded(idArchivos: any[]): Promise<number[]> {
+    let notDonwloaded = []
+    return new Promise<number[]>((resolve) => {
+      if (idArchivos.length > 0) {
+        idArchivos.forEach((id, i) => {
+          this.gestorDocumentalService.getByIdLocal(id).subscribe(
+            () => {/* Ya está */},
+            () => {notDonwloaded.push(id);}
+          );
+          if ((i+1) == idArchivos.length) {
+            resolve(notDonwloaded);
+          }
+        });
+      } else {
+        resolve(notDonwloaded);
+      }
+    });
+  }
+
+  descargarArchivos(idArchivos: any[]): Promise<any> {
+    this.loading = true;
+    return new Promise<any>((resolve, reject) => {
+      this.checkIfAlreadyDownloaded(idArchivos).then(
+        faltantes => {
+          const limitQuery = faltantes.length;
+          let idsForQuery = "";
+          faltantes.forEach((id, i) => {
+            idsForQuery += String(id);
+            if (i < limitQuery-1) idsForQuery += '|';
+          });
+          if (limitQuery > 0) {
+            this.gestorDocumentalService.getManyFiles('?query=Id__in:'+idsForQuery+'&limit='+limitQuery).subscribe(
+              r => {
+                if(!r.downloadProgress) {
+                  this.loading = false;
+                  resolve(true);
+                }
+              }, e => {
+                this.loading = false;
+                reject(false);
+              }
+            );
+          } else {
+            this.loading = false;
+            resolve(true)
+          }
+      });
+    });
+  }
+
+  desactivarSuprimidos(idArchivos: any[], relacion: string) {
+    this.loading = true;
+    if (idArchivos.length > 0) {
+      idArchivos.forEach((id, i) => {
+        this.gestorDocumentalService.deleteByIdDoc(id, relacion).subscribe();
+        if ((i+1) == idArchivos.length) {
+          this.loading = false;
+        }
+      });
+    } else {
+      this.loading = false;
+    }
   }
   //#endregion
   // * ----------
@@ -1114,18 +1192,17 @@ export abstract class PlanEstudioBaseComponent {
     return semestre;
   }
 
-  obtenerEspaciosSemestre(): any {
-    const espaciosSemestreStr = this.planEstudioBody.EspaciosSemestreDistribucion;
-    if (espaciosSemestreStr === "" || espaciosSemestreStr === "{}" || espaciosSemestreStr === undefined) {
+  str2JsonValidated(valueStr): any {
+    if (valueStr === "" || valueStr === "{}" || valueStr === undefined) {
       return {};
     } else {
-      return JSON.parse(espaciosSemestreStr);
+      return JSON.parse(valueStr);
     }
   }
 
   async formatearEspaciosPlanEstudio(): Promise<any> {
     try {
-      let espaciosSemestre = await this.obtenerEspaciosSemestre();
+      let espaciosSemestre = await this.str2JsonValidated(this.planEstudioBody.EspaciosSemestreDistribucion);
 
       return new Promise((resolve, reject) => {
         this.organizarEspaciosSemestreActual().then((semestreRes) => {
@@ -1186,8 +1263,7 @@ export abstract class PlanEstudioBaseComponent {
       this.createTableSemestreTotal();
       this.totalTotal();
       if (this.esPlanEstudioPadre) {
-        //this.vista = VIEWS.SECONDARY_FORM;
-        this.vista = VIEWS.FORM;
+        this.vista = VIEWS.SECONDARY_FORM;
       } else {
         this.vista = VIEWS.FORM;
       }
@@ -1205,8 +1281,6 @@ export abstract class PlanEstudioBaseComponent {
       let subnivel: any;
       let nivel: any;
       if (idProyecto) {
-        console.log("Buscando proyecto");
-        
         proyectoCurricular = this.proyectos.find(proyecto => proyecto.Id == idProyecto);
         subnivel = proyectoCurricular ? proyectoCurricular.NivelFormacionId : undefined;
         nivel = subnivel ? subnivel.NivelFormacionPadreId : undefined;
@@ -1224,8 +1298,35 @@ export abstract class PlanEstudioBaseComponent {
         numeroResolucion: this.planEstudioBody.NumeroResolucion,
         anioResolucion: this.planEstudioBody.AnoResolucion
       });
-      //this.formGroupPlanEstudio.patchValue({ soportes: this.planEstudioBody });
+
+      // Cargar soportes
+      let nombresSoporte = '';
+      let soporteDocumental = this.str2JsonValidated(this.planEstudioBody.SoporteDocumental);
+      if (Object.keys(soporteDocumental).length) {
+        const listaSoportes = soporteDocumental['SoporteDocumental'] ? soporteDocumental['SoporteDocumental'] : [];
+        this.descargarArchivos(listaSoportes).then(() => {
+          listaSoportes.forEach((idSoporte: number) => {
+            this.gestorDocumentalService.getByIdLocal(idSoporte).subscribe( supportFile => {
+              this.formPlanEstudio.soportes.archivosLinea.push(supportFile);
+              nombresSoporte += supportFile.nombre + ', ';
+              this.formGroupPlanEstudio.patchValue({
+                soportes: nombresSoporte
+              });
+            });
+          });
+        });
+      }
       this.loading = false;
+    } catch (error) {
+      this.loading = false;
+      this.popUpManager.showErrorAlert(
+        this.translate.instant('plan_estudios.error_cargando_datos_formulario'));
+    }
+  }
+
+  cargarParametrizacionSemestres(){
+    try {
+
     } catch (error) {
       this.loading = false;
       this.popUpManager.showErrorAlert(

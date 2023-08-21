@@ -17,6 +17,8 @@ import { PlanEstudio } from '../../../@core/data/models/plan_estudios/plan_estud
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { STD } from '../../../@core/data/models/plan_estudios/estado_aprobacion';
 import { PlanEstudioBaseComponent } from '../plan-estudio-base/plan-estudio-base.component';
+import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+
 
 @Component({
   selector: 'creacion-plan-estudios',
@@ -32,6 +34,12 @@ import { PlanEstudioBaseComponent } from '../plan-estudio-base/plan-estudio-base
         animate('300ms ease-out', style({ transform: 'translateY(150%)' }))
       ])
     ])
+  ],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: {displayDefaultIndicatorType: false},
+    },
   ]
 })
 export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent implements OnInit {
