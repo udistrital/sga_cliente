@@ -9,6 +9,7 @@ import { dialogoPreAsignacionPtdComponent } from './preasignacion/dialogo-preasi
 import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.service';
 import { PlanTrabajoDocenteService } from '../../@core/data/plan_trabajo_docente.service';
 import { DialogoAsignarPeriodoComponent } from './preasignacion/dialogo-asignar-periodo/dialogo-asignar-periodo.component';
+import { DialogoFirmaPtdComponent } from './verificar-ptd/dialogo-firma-ptd/dialogo-firma-ptd.component';
 
 
 @NgModule({
@@ -28,10 +29,13 @@ import { DialogoAsignarPeriodoComponent } from './preasignacion/dialogo-asignar-
   ],
   entryComponents: [
     dialogoPreAsignacionPtdComponent,
-    DialogoAsignarPeriodoComponent
+    DialogoAsignarPeriodoComponent,
+    DialogoFirmaPtdComponent,
+
   ],
   exports: [
     dialogoPreAsignacionPtdComponent,
+    DialogoFirmaPtdComponent,
   ]
 })
 export class PlanTrabajoDocenteModule { }

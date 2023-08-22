@@ -318,7 +318,7 @@ export class VerificarPtdComponent implements OnInit {
             const estadoPlan = this.estadosPlan.opciones.find(estado => estado._id === resPlan.Data.estado_plan_id);
             this.formVerificar.campos[this.getIndexFormVerificar("EstadoAprobado")].valor = estadoPlan;
             if (estadoPlan.codigo_abreviacion == "APR") {
-              this.formVerificar.btn = "";
+              this.formVerificar.btn = this.translate.instant('ptd.editar_respuesta');
             }
           } else {
             terceroId = this.userService.getPersonaId();
