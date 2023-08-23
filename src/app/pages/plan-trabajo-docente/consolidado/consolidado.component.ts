@@ -13,6 +13,7 @@ import { UserService } from '../../../@core/data/users.service';
 import { TercerosService } from '../../../@core/data/terceros.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 
 @Component({
   selector: 'consolidado',
@@ -140,7 +141,8 @@ export class ConsolidadoComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              this.nuevoEditarConsolidado(out.rowData.ConsolidadoJson);
+              const readonly = out.rowData.gestion.type === 'ver';
+              this.nuevoEditarConsolidado(out.rowData.ConsolidadoJson, readonly);
             })}
         },
         estado: {
@@ -158,7 +160,21 @@ export class ConsolidadoComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              console.log("enviar:", out);
+              let putPlan = <any>UtilidadesService.hardCopy(out.rowData.ConsolidadoJson);
+              const estado = this.estadosConsolidado.opciones.find(estado => estado.codigo_abreviacion === "ENV");
+              putPlan.estado_consolidado_id = estado._id;
+              this.loading = true;
+              this.planTrabajoDocenteService.put('consolidado_docente/'+putPlan._id, putPlan).subscribe(
+                resp => {
+                  this.loading = false;
+                  this.popUpManager.showSuccessAlert(this.translate.instant('ptd.actualizar_consolidado_ok'))
+                  this.listarConsolidados();
+                }, err => {
+                  this.loading = false;
+                  console.warn(err);
+                  this.popUpManager.showErrorAlert(this.translate.instant('ptd.fallo_actualizar_consolidado'))
+                }
+              );
             })}
         },
       },
@@ -295,11 +311,12 @@ export class ConsolidadoComponent implements OnInit {
         let rawlistarConsolidados = <any[]>resp.Data;
         let formatedData = [];
         rawlistarConsolidados.forEach(consolidado => {
+          const estadoConsolidado = this.estadosConsolidado.opciones.find(estado => estado._id == consolidado.estado_consolidado_id);
+          // if (estadoConsolidado.codigo_abreviacion == "DEF" || estadoConsolidado.codigo_abreviacion == "ENV") {} // ? para filtrar si se requier por estado...pendiete
           const proyecto = this.proyectos.opciones.find(proyecto => proyecto.Id == consolidado.proyecto_academico_id);
           const periodo = this.periodos.opciones.find(periodo => periodo.Id == consolidado.periodo_id);
-          const estadoConsolidado = this.estadosConsolidado.opciones.find(estado => estado._id == consolidado.estado_consolidado_id);
           let opcionGestion = "ver"
-          if ((estadoConsolidado && estadoConsolidado.codigo_abreviacion == "DEF") || (consolidado.estado_consolidado_id == "Sin Definir")) {
+          if ((estadoConsolidado && estadoConsolidado.codigo_abreviacion == "DEF") && (this.isCoordinator)) {
             opcionGestion = "editar"
           }
           formatedData.push({
@@ -308,9 +325,9 @@ export class ConsolidadoComponent implements OnInit {
             "fecha_radicado": this.formatoFecha(consolidado.fecha_creacion),
             "periodo_academico": periodo ? periodo.Nombre : "",
             "revision_decanatura": {value: undefined, type: 'ver', disabled: false},
-            "gestion": {value: undefined, type: opcionGestion, disabled: false},
+            "gestion": {value: undefined, type: opcionGestion, disabled: !this.isCoordinator},
             "estado": estadoConsolidado ? estadoConsolidado.nombre : consolidado.estado_consolidado_id,
-            "enviar": {value: undefined, type: 'enviar', disabled: false},
+            "enviar": {value: undefined, type: 'enviar', disabled: (!this.isCoordinator) || (estadoConsolidado.codigo_abreviacion != "DEF")},
             "ConsolidadoJson": consolidado
           })
         })
@@ -329,7 +346,7 @@ export class ConsolidadoComponent implements OnInit {
     return fechaPartes[2]+'/'+fechaPartes[1]+'/'+fechaPartes[0]+' - '+fecha_hora[1].split('.')[0]
   }
 
-  nuevoEditarConsolidado(consolidado: any) {
+  nuevoEditarConsolidado(consolidado: any, readonly?: boolean) {
     this.vista = VIEWS.FORM;
     this.newEditConsolidado = true;
     this.formNewEditConsolidado.campos[this.getIndexFormNewEditConsolidado("Rol")].valor = this.isCoordinator;
@@ -357,6 +374,11 @@ export class ConsolidadoComponent implements OnInit {
       console.warn(err);
       this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'), this.translate.instant('ERROR.persiste_error_comunique_OAS'), MODALS.ERROR, false)
     });
+    if (readonly ? readonly : false) {
+      this.formNewEditConsolidado.btn = "";
+    } else {
+      this.formNewEditConsolidado.btn = this.translate.instant('GLOBAL.guardar');
+    }
   }
 
   async validarFormNewEdit(event) {
@@ -440,6 +462,9 @@ export class ConsolidadoComponent implements OnInit {
     this.sgaMidService.post(`reportes/verif_cump_ptd/${this.periodos.select.Id}/${this.proyectos.select ? this.proyectos.select.Id : 0}`,{}).subscribe((resp) =>  {
       this.loading = false;
       this.listaPlanesConsolidado = resp.Data.listaIdPlanes;
+      const rawFilePDF = new Uint8Array(atob(resp.Data.pdf).split('').map(char => char.charCodeAt(0)));
+      const urlFilePDF = window.URL.createObjectURL(new Blob([rawFilePDF], { type: 'application/pdf' }));
+      this.previewFile(urlFilePDF);
       const rawFileExcel = new Uint8Array(atob(resp.Data.excel).split('').map(char => char.charCodeAt(0)));
       const urlFileExcel = window.URL.createObjectURL(new Blob([rawFileExcel], { type: 'application/vnd.ms-excel' }));
       const download = document.createElement("a");
@@ -454,5 +479,16 @@ export class ConsolidadoComponent implements OnInit {
       console.warn(err)
     });
   }
+  }
+
+  previewFile(url: string) {
+    const h = screen.height * 0.65;
+    const w = h * 3/4;
+    const left = (screen.width * 3/4) - (w / 2);
+    const top = (screen.height / 2) - (h / 2);
+    window.open(url, '', 'toolbar=no,' +
+      'location=no, directories=no, status=no, menubar=no,' +
+      'scrollbars=no, resizable=no, copyhistory=no, ' +
+      'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
   }
 }

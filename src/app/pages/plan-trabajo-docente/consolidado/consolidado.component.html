@@ -33,11 +33,12 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                     </mat-select>
                 </mat-form-field>
                 &nbsp;<button mat-stroked-button (click)="listarConsolidados()"> {{ 'GLOBAL.actualizar' | translate }} </button>
+
                 <ng2-smart-table [settings]="tbConsolidados" [source]="dataConsolidados">
                 </ng2-smart-table>
                 <br>
                 <div class="button-center">
-                    <button mat-raised-button color="primary" (click)="nuevoEditarConsolidado(undefined)"> {{ 'ptd.new_consolidado' | translate }} </button>
+                    <button mat-raised-button color="primary" (click)="nuevoEditarConsolidado(undefined)" [disabled]="!isCoordinator"> {{ 'ptd.new_consolidado' | translate }} </button>
                 </div>
             </fieldset>
         </nb-card-body>
@@ -87,7 +88,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                     &nbsp;<div class="info-alert" align="center"> {{ 'ptd.generador_consolidado_info' | translate }} </div>
                 </fieldset>
             </ng-container>
-            <ngx-dinamicform [normalform]="formNewEditConsolidado" [modeloData]="dataNewEditConsolidado" (result)="validarFormNewEdit($event)"*ngIf="newEditConsolidado">
+            <ngx-dinamicform [normalform]="formNewEditConsolidado" [modeloData]="dataNewEditConsolidado" (result)="validarFormNewEdit($event)" *ngIf="newEditConsolidado">
             </ngx-dinamicform>
             <!-- formulario respuesta consolidado -->
             <ngx-dinamicform [normalform]="formRespuestaConsolidado" [modeloData]="dataRespuestaConsolidado" *ngIf="respuestaConsolidado">
