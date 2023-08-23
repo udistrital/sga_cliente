@@ -487,7 +487,7 @@
                             <mat-label>{{c.requerido?'* '+c.label:c.label}}</mat-label>
                             <div class="row">
                                 <div class="col-9">
-                                    <button type="button" mat-raised-button (click)="documento.click()" [disabled]="c.estadoDoc ? c.estadoDoc.aprobado : false">{{'GLOBAL.seleccionar_archivo' | translate}}</button>
+                                    <button type="button" mat-raised-button (click)="documento.click()" [disabled]="(c.estadoDoc ? c.estadoDoc.aprobado : false) || (c.deshabilitar ? c.deshabilitar : false)">{{'GLOBAL.seleccionar_archivo' | translate}}</button>
                                     <span *ngIf="c.File" class="enlace-documento" (click)="download(c.urlTemp,c.File.name,500,500,(c.noPreview ? c.noPreview : false))" title="{{'GLOBAL.tooltip_previsualizar_archivo' | translate}}">
                                         {{c.File?.name}}
                                      </span>
