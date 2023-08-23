@@ -59,10 +59,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         <div class="alinear-center espacio" >
                             <button mat-raised-button matStepperPrevious [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.regresar' | translate }}</button>
                             <button mat-raised-button color="primary" (click)="agregarSemestre()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo" [hidden]="!enEdicionPlanEstudio || numSemestresCompletado">{{ 'plan_estudios.agregar_semestre' | translate }}</button>
-                            <button mat-raised-button [color]="enEdicionPlanEstudio ? '' : 'primary'" (click)="salirEdicionFormulario()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo">{{ 'GLOBAL.salir' | translate }}</button>
-                        </div>
-                        <div>
-                            
+                            <button mat-raised-button (click)="salirEdicionFormulario()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo">{{ 'GLOBAL.salir' | translate }}</button>
                         </div>
                         <mat-accordion>
                             <mat-expansion-panel hideToggle *ngFor="let semestre of dataSemestre; let numero = index" [expanded]="(numero) === punteroSemestrePlan">
@@ -98,6 +95,38 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                 </div>
                             </nb-card-body>
                         </nb-card>
+                    </mat-step>
+                </mat-horizontal-stepper>
+            </fieldset>
+        </ng-container>
+        <ng-container *ngSwitchCase="VIEWS.SECONDARY_FORM">
+            <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
+                <legend class="modo-ventana">
+                    <small>&nbsp; {{ 'plan_estudios.crear' | translate }} </small>
+                    <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="cancelar()"></i>
+                </legend>
+                <mat-horizontal-stepper #stepper [linear]="true" #stepper>
+                    <!-- [stepControl]="formGroupPlanEstudio" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}" -->                    
+                    <mat-step>
+                        <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
+                        <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)" (createdForm)="asignarForm($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
+                        <div class="alinear-center" [class.right]="!enEdicionPlanEstudio">
+                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.limpiar' | translate }}</button>
+                            <button mat-raised-button [color]="formGroupPlanEstudio.valid ? 'primary' : ''" (click)="guardar(stepper)" [disabled]="!formGroupPlanEstudio.valid" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.guardar_continuar' | translate }}</button>
+                            <button mat-raised-button matStepperNext [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.siguiente' | translate }}</button>
+                        </div>
+                    </mat-step>
+                    <mat-step>
+                        <ng-template matStepLabel>{{ 'plan_estudios.parametrizacion_plan_ciclos' | translate }}</ng-template>
+                        <ng2-smart-table [settings]="tbSimpleStudyPlans" [source]="dataSimpleStudyPlans" (custom)="onAction($event)">
+                        </ng2-smart-table>
+                        <ng2-smart-table [settings]="tbOrganizedStudyPlans" [source]="dataOrganizedStudyPlans" (custom)="onAction($event)">
+                        </ng2-smart-table>
+                        <div class="alinear-center espacio" >
+                            <button mat-raised-button matStepperPrevious [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.regresar' | translate }}</button>
+                            <button mat-raised-button color="primary" (click)="registrarPlanOrdenado()" [disabled]="dataOrganizedStudyPlans.count() == 0" [hidden]="!enEdicionPlanEstudio || numSemestresCompletado">{{ 'GLOBAL.guardar' | translate }}</button>
+                            <button mat-raised-button (click)="salirEdicionFormulario()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo">{{ 'GLOBAL.salir' | translate }}</button>
+                        </div>
                     </mat-step>
                 </mat-horizontal-stepper>
             </fieldset>

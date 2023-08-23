@@ -57,6 +57,8 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
       sgaMidService, domSanitizer, planEstudiosService, 
       gestorDocumentalService);
     this.dataPlanesEstudio = new LocalDataSource();
+    this.dataSimpleStudyPlans = new LocalDataSource();
+    this.dataOrganizedStudyPlans = new LocalDataSource();
     this.dataEspaciosAcademicos = new LocalDataSource();
     this.dataSemestre = [];
     this.dataSemestreTotal = [];
@@ -294,20 +296,24 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
 
     this.createStudyPlan(newPlanEstudio).then((res: any) => {
       this.planEstudioBody = res;
-      this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
-        this.ListEspacios = result;
-        this.dataEspaciosAcademicos.load(this.ListEspacios);
-        this.planEstudioPadreAsignado2Form = false;
-        stepper.next();
-      }, (error) => {
-        this.ListEspacios = [];
-        const falloEn = Object.keys(error)[0];
-        this.popUpManager.showPopUpGeneric(
-          this.translate.instant('ERROR.titulo_generico'),
-          this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
-          this.translate.instant('ERROR.persiste_error_comunique_OAS'),
-          MODALS.ERROR, false);
-      });
+      if (this.esPlanEstudioPadre) {
+
+      } else {
+        this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
+          this.ListEspacios = result;
+          this.dataEspaciosAcademicos.load(this.ListEspacios);
+          this.planEstudioPadreAsignado2Form = false;
+          stepper.next();
+        }, (error) => {
+          this.ListEspacios = [];
+          const falloEn = Object.keys(error)[0];
+          this.popUpManager.showPopUpGeneric(
+            this.translate.instant('ERROR.titulo_generico'),
+            this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
+            this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+            MODALS.ERROR, false);
+        });
+      }
     });
   }
 

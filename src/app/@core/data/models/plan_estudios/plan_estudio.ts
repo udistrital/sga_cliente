@@ -29,3 +29,9 @@ export class PlanEstudio {
     readonly FechaCreacion: Date;
     readonly FechaModificacion: Date;
 }
+
+export class PlanCiclosOrdenado {
+    PlanEstudioId: PlanEstudio;
+    OrdenPlan: string = "";
+    Activo: boolean = true;
+}

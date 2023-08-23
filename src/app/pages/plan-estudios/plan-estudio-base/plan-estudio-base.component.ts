@@ -19,16 +19,17 @@ import { HttpErrorResponse } from "@angular/common/http";
 import {
   PlanEstudio,
   EspacioEspaciosSemestreDistribucion,
+  PlanCiclosOrdenado,
 } from "../../../@core/data/models/plan_estudios/plan_estudio";
 import { NewNuxeoService } from "../../../@core/utils/new_nuxeo.service";
 import {
   EstadoAprobacion,
 } from "../../../@core/data/models/plan_estudios/estado_aprobacion";
 
-@Component({
+/*@Component({
   selector: "plan-estudio-base",
   template: "",
-})
+})*/
 export abstract class PlanEstudioBaseComponent {
   loading: boolean;
 
@@ -52,6 +53,14 @@ export abstract class PlanEstudioBaseComponent {
   tbSemestreTotal: Object;
   dataSemestreTotal: LocalDataSource[];
   dataSemestreTotalTotal: LocalDataSource;
+
+  planEstudioOrdenadoBody: any;
+  tbSimpleStudyPlans: Object;
+  simpleStudyPlans: any[];
+  dataSimpleStudyPlans: LocalDataSource;
+
+  tbOrganizedStudyPlans: Object;
+  dataOrganizedStudyPlans: LocalDataSource;
 
   niveles: any[];
   proyectos: any[];
@@ -130,6 +139,7 @@ export abstract class PlanEstudioBaseComponent {
 
   readonly ACTIONS = ACTIONS;
 
+
   constructor(
     protected translate: TranslateService,
     protected popUpManager: PopUpManager,
@@ -201,7 +211,7 @@ export abstract class PlanEstudioBaseComponent {
           filter: true,
         },
       },
-      hideSubHeader: false,
+      hideSubHeader: !withActions,
       mode: "external",
       noDataMessage: this.translate.instant("GLOBAL.table_no_data_found"),
     };
@@ -507,6 +517,12 @@ export abstract class PlanEstudioBaseComponent {
       case "remove_from_semester":
         this.removeFromSemester(event);
         break;
+      case "add_to_plan":
+        this.addPlan(event);
+        break;
+      case "remove_plan":
+        this.removePlan(event);
+        break;
     }
   }
 
@@ -537,6 +553,18 @@ export abstract class PlanEstudioBaseComponent {
       });
       
     }
+  }
+
+  addPlan(event) {
+    this.dataOrganizedStudyPlans.add(event.data);
+    this.dataOrganizedStudyPlans.refresh();
+    this.dataSimpleStudyPlans.remove(event.data);
+  }
+
+  removePlan(event){
+    this.dataSimpleStudyPlans.add(event.data);
+    this.dataSimpleStudyPlans.refresh();
+    this.dataOrganizedStudyPlans.remove(event.data);
   }
 
   limpiarSemestre(semestre: LocalDataSource) {
@@ -617,6 +645,79 @@ export abstract class PlanEstudioBaseComponent {
   // * ----------
 
   // * ----------
+  // * Crear tabla de lista planes estudio por ciclos
+  //#region
+  createSimpleTableStudyPlan(withActions: boolean = true) {
+    let tableColumns = <any>UtilidadesService.hardCopy(this.studyPlanTableColumns);
+    this.tbSimpleStudyPlans = {
+      pager: {
+        perPage: 5,
+      },
+      columns: tableColumns,
+      hideSubHeader: false,
+      mode: 'external',
+      actions: false,
+      noDataMessage: this.translate.instant('GLOBAL.table_no_data_found')
+    };
+    if (withActions) {
+      this.tbSimpleStudyPlans['actions'] = {
+        position: "right",
+        columnTitle: this.translate.instant("GLOBAL.acciones"),
+        add: false,
+        edit: false,
+        delete: false,
+        custom: [
+          {
+            name: "add_to_plan",
+            title:
+              '<i class="nb-plus-circled" title="' +
+              this.translate.instant("plan_estudios.agregar_plan") +
+              '"></i>',
+          },
+        ],
+      }
+    } else {
+      this.tbSimpleStudyPlans['actions'] = false;
+    }
+  }
+
+  createTableOrganizedStudyPlan(withActions: boolean = true) {
+    let tableColumns = <any>UtilidadesService.hardCopy(this.studyPlanTableColumns);
+    this.tbOrganizedStudyPlans = {
+      pager: {
+        perPage: 5,
+      },
+      columns: tableColumns,
+      hideSubHeader: false,
+      mode: 'external',
+      actions: false,
+      noDataMessage: this.translate.instant('GLOBAL.table_no_data_found')
+    };
+    if (withActions) {
+      this.tbOrganizedStudyPlans['actions'] = {
+        position: "right",
+        columnTitle: this.translate.instant("GLOBAL.acciones"),
+        add: false,
+        edit: false,
+        delete: false,
+        custom: [
+          {
+            name: "remove_plan",
+            title:
+              '<i class="nb-close-circled" title="' +
+              this.translate.instant("plan_estudios.quitar_plan") +
+              '"></i>',
+          },
+        ],
+      }
+    } else {
+      this.tbOrganizedStudyPlans['actions'] = false;
+    }
+  }
+  //#endregion
+  // * ----------
+
+  // * ----------
   // * Reaccionar a cambios o creación de formularios
   //#region
 
@@ -669,6 +770,7 @@ export abstract class PlanEstudioBaseComponent {
             this.planEstudioPadreAsignado2Form = false;
             this.formGroupPlanEstudio.reset();
             this.dataSemestre = [];
+            //this.dataOrganizedStudyPlans = [];
             this.vista = VIEWS.LIST;
             this.loadSelects();
           }
@@ -720,11 +822,10 @@ export abstract class PlanEstudioBaseComponent {
     this.enEdicionPlanEstudio = true;
     this.esPlanEstudioPadre = true;
     this.crearFormulario(FORM_PLAN_ESTUDIO);
-    this.createTableEspaciosAcademicos();
-    this.createTableSemestreTotal();
-    this.totalTotal();
+    this.createSimpleTableStudyPlan();
+    this.createTableOrganizedStudyPlan();
     this.vista = VIEWS.SECONDARY_FORM;
-    this.dataEspaciosAcademicos.load([]);
+    this.loadStudyPlanSimpleTable();
   }
 
   salirEdicionFormulario(){
@@ -803,9 +904,15 @@ export abstract class PlanEstudioBaseComponent {
   // * ----------
   // * Carga planes de estudio existentes
   //#region
-  loadPlanesEstudio(): Promise<PlanEstudio[]> {
+  loadPlanesEstudio(queryComplement = undefined): Promise<PlanEstudio[]> {
     return new Promise<any>((resolve, reject) => {
-      this.planEstudiosService.get("plan_estudio?query=activo:true&limit=0").subscribe(
+      let endpoint: string;
+      if (queryComplement) {
+        endpoint = "plan_estudio?query=activo:true," + queryComplement + "&limit=0"
+      } else {
+        endpoint = "plan_estudio?query=activo:true&limit=0";
+      }
+      this.planEstudiosService.get(endpoint).subscribe(
         (resp) => {
           if (Object.keys(resp.Data[0]).length > 0) {
             resolve(resp.Data);
@@ -817,6 +924,40 @@ export abstract class PlanEstudioBaseComponent {
         }
       );
     });
+  }
+
+  async loadStudyPlanSimpleTable() {
+    this.loading = true;
+    try {
+      // Datos de la tabla planes de estudio por ciclos
+      this.simpleStudyPlans = await this.loadPlanesEstudio("EsPlanEstudioPadre:false");
+      this.simpleStudyPlans.forEach(plan => {
+        this.organizarDatosTablaSimplePlanEstudio(plan);
+      });
+      this.dataSimpleStudyPlans.load(this.simpleStudyPlans);
+
+      this.loading = false;
+    } catch (error) {
+      const falloEn = Object.keys(error)[0];
+      this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
+        this.translate.instant('ERROR.fallo_informacion_en') + ': <b>' + falloEn + '</b>.<br><br>' +
+        this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+        MODALS.ERROR, false);
+      this.loading = false;
+    }
+  }
+
+  organizarDatosTablaSimplePlanEstudio(plan: any) {
+    const proyecto = this.proyectos.find(proyecto => proyecto.Id == plan.ProyectoAcademicoId);
+    plan["proyectoCurricular"] = proyecto["Nombre"];
+
+    plan["plan_estudio"] = plan["Nombre"];
+    plan["resolucion"] = plan["NumeroResolucion"];
+    plan["totalCreditos"] = plan["TotalCreditos"];
+
+    const estado = plan["EstadoAprobacionId"];
+    plan["estado"] = estado["Nombre"];
+    plan["planPorCiclos"] = plan["EsPlanEstudioPadre"] ? this.translate.instant('GLOBAL.si') : this.translate.instant('GLOBAL.no');
   }
   //#endregion
   // * ----------
@@ -1404,6 +1545,61 @@ export abstract class PlanEstudioBaseComponent {
       this.popUpManager.showErrorAlert(
         this.translate.instant('plan_estudios.error_cargando_datos_formulario'));
     }
+  }
+  //#endregion
+  // * ----------
+
+
+  // * ----------
+  // * Gestión plan de estudio por ciclos
+  //#region
+  async formatearOrdenPlanesCiclos() {
+    let ordenPlanes = {};
+    await this.dataOrganizedStudyPlans.getAll().then((planes) => {
+      planes.forEach((plan, index) => {
+        console.log("Plan hijo", plan);
+        
+        ordenPlanes['plan_'.concat((index + 1).toString())] = {
+          "Id": plan.Id
+        };
+      });
+    });
+    console.log("ordenPlanes: ", ordenPlanes);
+    
+    return ordenPlanes;
+  }
+
+  async registrarPlanOrdenado(): Promise<any> {
+    this.loading = true;
+    let newPlanCicloOrdenado = await new PlanCiclosOrdenado();
+    await this.formatearOrdenPlanesCiclos().then((ordenPlanes) => {
+      newPlanCicloOrdenado.PlanEstudioId = this.planEstudioBody;
+      newPlanCicloOrdenado.OrdenPlan = JSON.stringify(ordenPlanes);
+    });
+    return new Promise((resolve) => {
+      console.log("PlanActual");
+      this.planEstudiosService.post('plan_estudio_proyecto_academico', newPlanCicloOrdenado)
+      .subscribe(res => {
+        this.loading = false;
+        if (Object.keys(res.Data).length > 0) {
+          this.popUpManager.showSuccessAlert(
+            this.translate.instant('plan_estudios.plan_estudios_actualizacion_ok')
+          ).then((action) => {
+            resolve(res.Data);
+          });
+        } else {
+          this.popUpManager.showErrorAlert(
+            this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
+          );
+        }
+      },
+      (error: HttpErrorResponse) => {
+        this.loading = false;
+        this.popUpManager.showErrorAlert(
+          this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
+        );
+      });
+    });
   }
   //#endregion
   // * ----------
