@@ -1,9 +1,10 @@
 import { FormParams } from "../../@core/data/models/define-form-fields";
+import * as lo_ from "lodash";
 
 export let FORM_PLAN_ESTUDIO: FormParams = {
     "nivel": {
         label_i18n: 'GLOBAL.nivel',
-        placeholder_i18n: 'GLOBAL.placeholder_nivel',
+        placeholder_i18n: 'GLOBAL.nivel',
         tipo: 'select',
         tipoDato: 'text',
         requerido: true,
@@ -15,7 +16,7 @@ export let FORM_PLAN_ESTUDIO: FormParams = {
     },
     "subnivel": {
         label_i18n: 'GLOBAL.subnivel',
-        placeholder_i18n: 'GLOBAL.placeholder_nivel',
+        placeholder_i18n: 'GLOBAL.subnivel',
         tipo: 'select',
         tipoDato: 'text',
         requerido: true,
@@ -25,9 +26,9 @@ export let FORM_PLAN_ESTUDIO: FormParams = {
         opciones: [],
         notificar: true,
     },
-    "proyectoCurriular": {
+    "proyectoCurricular": {
         label_i18n: 'GLOBAL.proyecto_academico',
-        placeholder_i18n: 'GLOBAL.placeholder_proyecto_academico',
+        placeholder_i18n: 'GLOBAL.proyecto_academico',
         tipo: 'select',
         tipoDato: 'text',
         requerido: true,
@@ -40,6 +41,16 @@ export let FORM_PLAN_ESTUDIO: FormParams = {
     "codigoProyecto": {
         label_i18n: 'plan_estudios.codigo_proyecto',
         placeholder_i18n: 'plan_estudios.codigo_proyecto',
+        tipo: 'input',
+        tipoDato: 'text',
+        requerido: false,
+        soloLectura: true,
+        valor: undefined,
+        claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
+    },
+    "planPorCiclos": {
+        label_i18n: 'plan_estudios.plan_estudios_ciclos',
+        placeholder_i18n: 'plan_estudios.plan_estudios_ciclos',
         tipo: 'input',
         tipoDato: 'text',
         requerido: false,
@@ -128,3 +139,85 @@ export let FORM_PLAN_ESTUDIO: FormParams = {
         validaArchivos: {errTipo: false, errTam: false},
     }
 }
+
+function getFormPlanEstudioEdicion(): FormParams {
+    let formPlanEstudioEdicion = lo_.cloneDeep(FORM_PLAN_ESTUDIO);
+    formPlanEstudioEdicion.nivel = {
+        label_i18n: 'GLOBAL.nivel',
+        placeholder_i18n: 'GLOBAL.nivel',
+        tipo: 'input',
+        tipoDato: 'text',
+        requerido: false,
+        soloLectura: true,
+        valor: undefined,
+        claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+    };
+    formPlanEstudioEdicion.subnivel = {
+        label_i18n: 'GLOBAL.subnivel',
+        placeholder_i18n: 'GLOBAL.subnivel',
+        tipo: 'input',
+        tipoDato: 'text',
+        requerido: false,
+        soloLectura: true,
+        valor: undefined,
+        claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+    };
+    formPlanEstudioEdicion.proyectoCurricular = {
+        label_i18n: 'GLOBAL.proyecto_academico',
+        placeholder_i18n: 'GLOBAL.proyecto_academico',
+        tipo: 'input',
+        tipoDato: 'text',
+        requerido: false,
+        soloLectura: true,
+        valor: undefined,
+        claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+        opciones: [],
+        notificar: true,
+    };
+    return formPlanEstudioEdicion;
+}
+
+function getFormPlanEstudioVisualizacion(): FormParams {
+    let formPlanEstudioVisualizacion = lo_.cloneDeep(FORM_PLAN_ESTUDIO);
+    formPlanEstudioVisualizacion.nivel = {
+        label_i18n: 'GLOBAL.nivel',
+        placeholder_i18n: 'GLOBAL.nivel',
+        tipo: 'input',
+        tipoDato: 'text',
+        requerido: false,
+        soloLectura: true,
+        valor: undefined,
+        claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+    };
+    formPlanEstudioVisualizacion.subnivel = {
+        label_i18n: 'GLOBAL.subnivel',
+        placeholder_i18n: 'GLOBAL.subnivel',
+        tipo: 'input',
+        tipoDato: 'text',
+        requerido: false,
+        soloLectura: true,
+        valor: undefined,
+        claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+    };
+    formPlanEstudioVisualizacion.proyectoCurricular = {
+        label_i18n: 'GLOBAL.proyecto_academico',
+        placeholder_i18n: 'GLOBAL.proyecto_academico',
+        tipo: 'input',
+        tipoDato: 'text',
+        requerido: false,
+        soloLectura: true,
+        valor: undefined,
+        claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
+        opciones: [],
+        notificar: true,
+    };
+    for (const key in formPlanEstudioVisualizacion) {
+        formPlanEstudioVisualizacion[key].soloLectura = true;
+        formPlanEstudioVisualizacion[key].requerido = false;
+    }
+    return formPlanEstudioVisualizacion;
+}
+
+export let FORM_PLAN_ESTUDIO_EDICION: FormParams = getFormPlanEstudioEdicion();
+
+export let FORM_PLAN_ESTUDIO_VISUALIZACION: FormParams = getFormPlanEstudioVisualizacion();

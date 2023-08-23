@@ -182,6 +182,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
   // * Constructor de formulario, buscar campo, update i18n, suscribirse a cambios
   //#region
   buildFormEspaciosAcademicos() {
+    
     // ? primera carga del formulario: validación e idioma
     const form1 = {};
     this.formDef.campos_p1.forEach(campo => {
@@ -881,6 +882,8 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
   // * Flujo para editar espacio academico 
   //#region
   editarEspacioAcad(accion: Symbol, espacio_academico: EspacioAcademico) {
+    console.log("Espacio academico: ", espacio_academico);
+    
     this.limpiarFormulario();
     this.id_espacio_academico = espacio_academico._id;
     const proyecto = this.proyectos.find(proyecto => proyecto.Id == espacio_academico.proyecto_academico_id);

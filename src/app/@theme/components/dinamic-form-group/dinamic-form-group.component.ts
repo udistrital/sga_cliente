@@ -12,6 +12,7 @@ export class DinamicFormGroupComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input('defineForm') defineForm: FormParams;
   @Output() subsChanges: EventEmitter<Object> = new EventEmitter();
+  @Output() createdForm: EventEmitter<any> = new EventEmitter();
   @Output() updatedForm: EventEmitter<any> = new EventEmitter();
 
   formFields: string[];
@@ -65,7 +66,8 @@ export class DinamicFormGroupComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
     const buildedForm = this.formBuilder.group(form);
-    this.updatedForm.emit(buildedForm);
+    
+    this.createdForm.emit(buildedForm);
     return buildedForm;
   }
 
