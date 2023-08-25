@@ -25,6 +25,7 @@ import { NewNuxeoService } from "../../../@core/utils/new_nuxeo.service";
 import {
   EstadoAprobacion,
 } from "../../../@core/data/models/plan_estudios/estado_aprobacion";
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 /*@Component({
   selector: "plan-estudio-base",
@@ -147,7 +148,8 @@ export abstract class PlanEstudioBaseComponent {
     protected sgaMidService: SgaMidService,
     protected domSanitizer: DomSanitizer,
     protected planEstudiosService: PlanEstudiosService,
-    protected gestorDocumentalService: NewNuxeoService
+    protected gestorDocumentalService: NewNuxeoService,
+    protected autenticationService: ImplicitAutenticationService
   ) {}
 
   crearFormulario(formPlanEstudio: FormParams) {
@@ -515,6 +517,7 @@ export abstract class PlanEstudioBaseComponent {
           });
         break;
       case "remove_from_semester":
+        // ToDo validar si no tiene prerrequisitos
         this.removeFromSemester(event);
         break;
       case "add_to_plan":
@@ -556,15 +559,41 @@ export abstract class PlanEstudioBaseComponent {
   }
 
   addPlan(event) {
-    this.dataOrganizedStudyPlans.add(event.data);
+    let newPlan = event.data;
+    newPlan["orden"] = this.dataOrganizedStudyPlans.count() + 1;
+    this.dataOrganizedStudyPlans.add(newPlan);
     this.dataOrganizedStudyPlans.refresh();
     this.dataSimpleStudyPlans.remove(event.data);
   }
 
-  removePlan(event){
-    this.dataSimpleStudyPlans.add(event.data);
-    this.dataSimpleStudyPlans.refresh();
-    this.dataOrganizedStudyPlans.remove(event.data);
+  async removePlan(event){
+    await this.dataOrganizedStudyPlans.remove(event.data);
+    if (this.planEstudioOrdenadoBody) {
+      this.prepareUpdateOrderedPlan().then((res) => {
+        if (res) {
+          this.dataSimpleStudyPlans.add(event.data);
+          this.dataSimpleStudyPlans.refresh();
+          this.dataOrganizedStudyPlans.getAll().then((dataPlans) => {
+            dataPlans.forEach((plan, index) => {
+              plan["orden"] = index + 1;
+            });
+          });
+          
+        } else {
+          this.dataOrganizedStudyPlans.add(event.data);
+          this.dataOrganizedStudyPlans.refresh();
+        }
+      });
+    } else {
+      this.dataSimpleStudyPlans.add(event.data);
+      this.dataSimpleStudyPlans.refresh();
+      this.dataOrganizedStudyPlans.getAll().then((dataPlans) => {
+        dataPlans.forEach((plan, index) => {
+          plan["orden"] = index + 1;
+        });
+      });
+      this.dataOrganizedStudyPlans.refresh();
+    }
   }
 
   limpiarSemestre(semestre: LocalDataSource) {
@@ -683,6 +712,12 @@ export abstract class PlanEstudioBaseComponent {
 
   createTableOrganizedStudyPlan(withActions: boolean = true) {
     let tableColumns = <any>UtilidadesService.hardCopy(this.studyPlanTableColumns);
+    tableColumns['orden'] = {
+      title: this.translate.instant('GLOBAL.orden'),
+      editable: false,
+      width: "15%",
+      filter: true, 
+    }
     this.tbOrganizedStudyPlans = {
       pager: {
         perPage: 5,
@@ -763,14 +798,23 @@ export abstract class PlanEstudioBaseComponent {
   // * Acciones botones
   //#region
   cancelar() {
+    let message = "";
+    if (this.enEdicionPlanEstudio) {
+      message = this.translate.instant('plan_estudios.seguro_cancelar');
+    } else {
+      message = this.translate.instant('plan_estudios.seguro_salir_formulario');
+    }
     this.popUpManager.showPopUpGeneric(this.translate.instant('plan_estudios.plan_estudios'),
-      this.translate.instant('plan_estudios.seguro_cancelar'), MODALS.WARNING, true).then(
+      message, MODALS.WARNING, true).then(
         (action) => {
           if (action.value) {
             this.planEstudioPadreAsignado2Form = false;
             this.formGroupPlanEstudio.reset();
             this.dataSemestre = [];
-            //this.dataOrganizedStudyPlans = [];
+            this.dataOrganizedStudyPlans = undefined;
+            this.planEstudioBody = undefined;
+            this.planEstudioOrdenadoBody = undefined;
+            this.enEdicionPlanEstudio = false;
             this.vista = VIEWS.LIST;
             this.loadSelects();
           }
@@ -838,7 +882,11 @@ export abstract class PlanEstudioBaseComponent {
             this.planEstudioPadreAsignado2Form = false;
             this.formGroupPlanEstudio.reset();
             this.dataSemestre = [];
+            this.dataOrganizedStudyPlans = undefined;
+            this.planEstudioBody = undefined;
+            this.planEstudioOrdenadoBody = undefined;
             this.vista = VIEWS.LIST;
+            this.enEdicionPlanEstudio = false;
             this.loadSelects();
           }
         }
@@ -930,6 +978,8 @@ export abstract class PlanEstudioBaseComponent {
     this.loading = true;
     try {
       // Datos de la tabla planes de estudio por ciclos
+      //ToDo agregar filtro de solo planes aprobados, actualmente muestra todos los que
+      // no son hijos
       this.simpleStudyPlans = await this.loadPlanesEstudio("EsPlanEstudioPadre:false");
       this.simpleStudyPlans.forEach(plan => {
         this.organizarDatosTablaSimplePlanEstudio(plan);
@@ -1149,7 +1199,7 @@ export abstract class PlanEstudioBaseComponent {
   async prepareUpdateBySemester(): Promise<boolean> {
     this.loading = true;
     await this.formatearResumenTotal();
-    return new Promise<any>((resolve) => {
+    return new Promise((resolve) => {
       this.formatearEspaciosPlanEstudio().then((res) => {
         if (res) {
           this.loading = true;
@@ -1175,11 +1225,11 @@ export abstract class PlanEstudioBaseComponent {
     });
   }
 
-  updateStudyPlan(planEstudioBody: PlanEstudio) {
+  updateStudyPlan(planEstudioBody: PlanEstudio): Promise<any> {
     return new Promise((resolve, reject) => {
       this.loading = true;
       this.planEstudiosService.put('plan_estudio/', planEstudioBody)
-        .subscribe(res => {
+        .subscribe((res) => {
           this.loading = false;
           if (Object.keys(res.Data).length > 0) {
             this.popUpManager.showSuccessAlert(
@@ -1191,6 +1241,7 @@ export abstract class PlanEstudioBaseComponent {
             this.popUpManager.showErrorAlert(
               this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
             );
+            reject(undefined);
           }
         },
           (error: HttpErrorResponse) => {
@@ -1198,6 +1249,7 @@ export abstract class PlanEstudioBaseComponent {
             this.popUpManager.showErrorAlert(
               this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
             );
+            reject(undefined);
           });
     });
   }
@@ -1557,16 +1609,27 @@ export abstract class PlanEstudioBaseComponent {
     let ordenPlanes = {};
     await this.dataOrganizedStudyPlans.getAll().then((planes) => {
       planes.forEach((plan, index) => {
-        console.log("Plan hijo", plan);
-        
         ordenPlanes['plan_'.concat((index + 1).toString())] = {
-          "Id": plan.Id
+          "Id": plan.Id,
+          "Orden": plan.orden,
         };
       });
     });
-    console.log("ordenPlanes: ", ordenPlanes);
-    
     return ordenPlanes;
+  }
+
+  consultarPlanOrdenado(idPlanOrdenadoCiclo: number): Promise<any>{
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.planEstudiosService.get('plan_estudio_proyecto_academico/' + idPlanOrdenadoCiclo)
+      .subscribe((resp) => {
+        this.loading = false;
+        resolve(resp.Data);
+      }, (err) => {
+        this.loading = false;
+        reject({ "plan_estudio_proyecto": err });
+      });
+    });
   }
 
   async registrarPlanOrdenado(): Promise<any> {
@@ -1577,14 +1640,14 @@ export abstract class PlanEstudioBaseComponent {
       newPlanCicloOrdenado.OrdenPlan = JSON.stringify(ordenPlanes);
     });
     return new Promise((resolve) => {
-      console.log("PlanActual");
       this.planEstudiosService.post('plan_estudio_proyecto_academico', newPlanCicloOrdenado)
-      .subscribe(res => {
+      .subscribe((res) => {
         this.loading = false;
         if (Object.keys(res.Data).length > 0) {
           this.popUpManager.showSuccessAlert(
             this.translate.instant('plan_estudios.plan_estudios_actualizacion_ok')
           ).then((action) => {
+            this.planEstudioOrdenadoBody = res.Data;
             resolve(res.Data);
           });
         } else {
@@ -1598,6 +1661,53 @@ export abstract class PlanEstudioBaseComponent {
         this.popUpManager.showErrorAlert(
           this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
         );
+      });
+    });
+  }
+
+  async prepareUpdateOrderedPlan(): Promise<boolean> {
+    this.loading = true;
+    await this.formatearOrdenPlanesCiclos().then((ordenPlanes) => {
+      this.planEstudioOrdenadoBody.OrdenPlan = JSON.stringify(ordenPlanes);
+    });
+    return new Promise((resolve) => {
+      this.actualizarPlanOrdenado(this.planEstudioOrdenadoBody).then((updatedOrderedPlan) => {
+        this.loading = false;
+        this.planEstudioOrdenadoBody = updatedOrderedPlan;
+        resolve(true);
+      },
+      (err) => {
+        this.loading = false;
+        resolve(false);
+      });
+    });
+  }
+
+  actualizarPlanOrdenado(planCiclosBody: PlanCiclosOrdenado): Promise<any> {
+    this.loading = true;
+    return new Promise((resolve, reject) => {
+      this.planEstudiosService.put('plan_estudio_proyecto_academico/', planCiclosBody)
+      .subscribe((res) => {
+        this.loading = false;
+        if (Object.keys(res.Data).length > 0) {
+          this.popUpManager.showSuccessAlert(
+            this.translate.instant('plan_estudios.plan_estudios_actualizacion_ok')
+          ).then((action) => {
+            resolve(res.Data);
+          });
+        } else {
+          this.popUpManager.showErrorAlert(
+            this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
+          );
+          reject({"plan_estudio_proyecto": "Error actualizando"});
+        }
+      },
+      (error: HttpErrorResponse) => {
+        this.loading = false;
+        this.popUpManager.showErrorAlert(
+          this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
+        );
+        reject({"plan_estudio_proyecto": "Error actualizando"});
       });
     });
   }
