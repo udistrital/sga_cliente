@@ -2472,6 +2472,7 @@
         "organizar": "Crear Plan de Estudios por Ciclos",
         "generar_plan": "Generar Plan de Estudios",
         "planes_estudio_creados": "Planes de estudio creados",
+        "planes_estudio_asignados": "Planes de estudio asignados",
         "nombre_plan_estudios": "Nombre del plan de estudios",
         "nombre_plan_estudios_general": "Nombre del plan de estudios general",
         "select_proyecto":"Selección del Proyecto Curricular",

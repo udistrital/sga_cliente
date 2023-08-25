@@ -203,6 +203,16 @@ export class EdicionPlanEstudiosComponent extends PlanEstudioBaseComponent imple
   // * ----------
   // * Acciones botones 
   //#region
+  async cancelar() {
+    await super.cancelar();
+    this.loadStudyPlanTable();
+  }
+
+  async salirEdicionFormulario() {
+    await super.cancelar();
+    this.loadStudyPlanTable();
+  }
+  
   guardar(stepper: MatStepper) {
     this.formGroupPlanEstudio.markAllAsTouched();
     if (this.formGroupPlanEstudio.valid) {
@@ -227,7 +237,11 @@ export class EdicionPlanEstudiosComponent extends PlanEstudioBaseComponent imple
   async prepareUpdate(stepper: MatStepper) {
     this.loading = true;
     const archivos = await this.prepararArchivos();
-    const idsArchivos = await this.cargarArchivos(archivos);
+    let idsArchivos = [];
+    if (Array.isArray(archivos) && archivos.length) {
+      idsArchivos = await this.cargarArchivos(archivos);
+    }
+    
     let soportesPlan = this.str2JsonValidated(this.planEstudioBody.SoporteDocumental);
     let totalSoportes = [];
     if (soportesPlan) {
