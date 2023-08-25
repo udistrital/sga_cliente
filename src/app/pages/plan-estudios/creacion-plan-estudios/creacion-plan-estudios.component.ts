@@ -248,6 +248,15 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
   // * ----------
   // * Acciones botones 
   //#region
+  async cancelar() {
+    await super.cancelar();
+    this.loadStudyPlanTable();
+  }
+  async salirEdicionFormulario() {
+    await super.cancelar();
+    this.loadStudyPlanTable();
+  }
+
   nuevoPlanEstudio() {
     this.mainAction = ACTIONS.CREATE;
     this.enEdicionPlanEstudio = true;
@@ -308,7 +317,10 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
     newPlanEstudio.EsPlanEstudioPadre = this.esPlanEstudioPadre;
 
     const archivos = this.prepararArchivos();
-    const idsArchivos = await this.cargarArchivos(archivos);
+    let idsArchivos = [];
+    if (Array.isArray(archivos) && archivos.length) {
+      idsArchivos = await this.cargarArchivos(archivos);
+    }
     newPlanEstudio.SoporteDocumental = this.prepareIds2Stringify(idsArchivos, "SoporteDocumental");
     this.loading = false;
 
