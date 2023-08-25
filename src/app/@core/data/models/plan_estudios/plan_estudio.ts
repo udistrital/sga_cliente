@@ -31,6 +31,7 @@ export class PlanEstudio {
 }
 
 export class PlanCiclosOrdenado {
+    readonly Id: number;
     PlanEstudioId: PlanEstudio;
     OrdenPlan: string = "";
     Activo: boolean = true;

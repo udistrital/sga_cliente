@@ -106,8 +106,8 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                     <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="cancelar()"></i>
                 </legend>
                 <mat-horizontal-stepper #stepper [linear]="true" #stepper>
-                    <!-- [stepControl]="formGroupPlanEstudio" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}" -->                    
-                    <mat-step>
+                    
+                    <mat-step >
                         <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
                         <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)" (createdForm)="asignarForm($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
                         <div class="alinear-center" [class.right]="!enEdicionPlanEstudio">
@@ -118,14 +118,18 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                     </mat-step>
                     <mat-step>
                         <ng-template matStepLabel>{{ 'plan_estudios.parametrizacion_plan_ciclos' | translate }}</ng-template>
+                        <div class="alinear-center">
+                            <div class="advertencia">{{ 'plan_estudios.mensaje_tabla_planes_por_ciclos_indice_orden' | translate }}</div>
+                        </div>
                         <ng2-smart-table [settings]="tbSimpleStudyPlans" [source]="dataSimpleStudyPlans" (custom)="onAction($event)">
                         </ng2-smart-table>
                         <ng2-smart-table [settings]="tbOrganizedStudyPlans" [source]="dataOrganizedStudyPlans" (custom)="onAction($event)">
                         </ng2-smart-table>
                         <div class="alinear-center espacio" >
                             <button mat-raised-button matStepperPrevious [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.regresar' | translate }}</button>
-                            <button mat-raised-button color="primary" (click)="registrarPlanOrdenado()" [disabled]="dataOrganizedStudyPlans.count() == 0" [hidden]="!enEdicionPlanEstudio || numSemestresCompletado">{{ 'GLOBAL.guardar' | translate }}</button>
-                            <button mat-raised-button (click)="salirEdicionFormulario()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo">{{ 'GLOBAL.salir' | translate }}</button>
+                            <button mat-raised-button color="primary" (click)="registrarPlanOrdenado()" [disabled]="dataOrganizedStudyPlans.count() == 0" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.guardar' | translate }}</button>
+                            <button mat-raised-button color="primary" (click)="generarPlanEstudio()" [disabled]="dataOrganizedStudyPlans.count() == 0">{{ 'plan_estudios.generar_plan' | translate }}</button>
+                            <button mat-raised-button (click)="salirEdicionFormulario()">{{ 'GLOBAL.salir' | translate }}</button>
                         </div>
                     </mat-step>
                 </mat-horizontal-stepper>

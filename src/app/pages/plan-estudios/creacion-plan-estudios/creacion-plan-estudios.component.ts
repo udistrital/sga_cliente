@@ -6,7 +6,7 @@ import { FORM_PLAN_ESTUDIO } from "../form-plan_estudio";
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Ng2StButtonComponent } from '../../../@theme/components';
-import { ACTIONS, MODALS, VIEWS } from '../../../@core/data/models/diccionario/diccionario';
+import { ACTIONS, MODALS, ROLES, VIEWS } from '../../../@core/data/models/diccionario/diccionario';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PlanEstudiosService } from '../../../@core/data/plan_estudios.service';
@@ -17,8 +17,8 @@ import { PlanEstudio } from '../../../@core/data/models/plan_estudios/plan_estud
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { STD } from '../../../@core/data/models/plan_estudios/estado_aprobacion';
 import { PlanEstudioBaseComponent } from '../plan-estudio-base/plan-estudio-base.component';
-import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
-
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   selector: 'creacion-plan-estudios',
@@ -51,11 +51,12 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
     sgaMidService: SgaMidService,
     domSanitizer: DomSanitizer,
     planEstudiosService: PlanEstudiosService,
-    gestorDocumentalService: NewNuxeoService
+    gestorDocumentalService: NewNuxeoService,
+    autenticationService: ImplicitAutenticationService
   ) {
     super(translate, popUpManager, projectService, 
       sgaMidService, domSanitizer, planEstudiosService, 
-      gestorDocumentalService);
+      gestorDocumentalService, autenticationService);
     this.dataPlanesEstudio = new LocalDataSource();
     this.dataSimpleStudyPlans = new LocalDataSource();
     this.dataOrganizedStudyPlans = new LocalDataSource();
@@ -130,8 +131,25 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
   async loadStudyPlanTable() {
     this.loading = true;
     try {
-      // Datos de la tabla planes de estudio
-      this.planesEstudio = await this.loadPlanesEstudio();
+      await this.autenticationService.getRole().then(
+        async (rol: Array<String>) => {
+          
+          let rolAdmin = rol.find(role => (role == ROLES.ADMIN_SGA || role == ROLES.VICERRECTOR || role == ROLES.ASESOR_VICE));
+          let rolCoordinador = rol.find(role => (role == ROLES.COORDINADOR || role == ROLES.COORDINADOR_PREGADO || role == ROLES.COORDINADOR_POSGRADO));
+          
+          // Datos de la tabla planes de estudio
+          if (rolAdmin) {
+            console.log("Rol admin");
+            
+            this.planesEstudio = await this.loadPlanesEstudio();
+          } else if (rolCoordinador) {
+            console.log("Rol admin");
+            this.planesEstudio = await this.loadPlanesEstudio("EstadoAprobacionId:4");
+          } else {
+            this.planesEstudio = [];
+          }
+        }
+      );
       this.planesEstudio.forEach(plan => {
         this.organizarDatosTablaPlanEstudio(plan);
       });
@@ -297,7 +315,8 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
     this.createStudyPlan(newPlanEstudio).then((res: any) => {
       this.planEstudioBody = res;
       if (this.esPlanEstudioPadre) {
-
+        this.planEstudioPadreAsignado2Form = false;
+        stepper.next();
       } else {
         this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
           this.ListEspacios = result;
