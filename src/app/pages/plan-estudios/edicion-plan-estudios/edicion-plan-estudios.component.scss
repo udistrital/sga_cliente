@@ -46,6 +46,21 @@ fieldset {
     justify-content: space-around;
 }
 
+.alinear-center.right {
+    padding-left: 45%;
+    padding-right: 5%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.alinear-center.left {
+    padding-bottom: 1rem;
+    padding-left: 15%;
+    padding-right: 45%;
+    display: flex;
+    justify-content: space-around;
+}
+
 .alinear-right {
     padding-right: 2rem;
     display: flex;
@@ -113,7 +128,7 @@ fieldset {
         text-align: center;
 
         a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
-            color: var(--primary)
+            color: var(--primary);
         }
     }
 }
@@ -134,4 +149,39 @@ fieldset {
         height: 1px;
         overflow: hidden;
     }
+
+    ::ng-deep .resumenTabla .a.ng2-smart-action.ng2-smart-action-custom-custom {
+        display: none;
+    }
+}
+
+.custom-action-tb {
+    ::ng-deep {
+        ng2-st-tbody-custom {
+            display: flex;
+            text-align: center;
+    
+            a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+                color: darkred;
+            }
+        }
+    }
+}
+
+.custom-action-tb.hide {
+    ::ng-deep {
+        ng2-st-tbody-custom {
+            display: flex;
+            text-align: center;
+    
+            a.ng2-smart-action.ng2-smart-action-custom-custom {
+                display: none;
+            }
+        }
+    }
+}
+
+.mat-card-custom {
+    margin-top: 1rem;
+    border-bottom: 2px solid var(--primary);
 }
