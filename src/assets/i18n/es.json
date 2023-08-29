@@ -745,7 +745,8 @@
         "telefono_entidad": "Teléfono de la entidad",
         "placeholder_telefono_entidad": "Ej: 323 93 00 Ext. 1112",
         "direccion_entidad": "Dirección de la entidad",
-        "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1"
+        "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1",
+        "item": "Ítem"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -2462,7 +2463,11 @@
         "componentePropedeutico": "CP",
         "teorico": "T",
         "practico": "P",
-        "teoricoPractico": "T/P"
+        "teoricoPractico": "T/P",
+        "obligatorioBasicoTexto": "Obligatorio Básico",
+        "obligatorioComplementarioTexto": "Obligatorio Complementario",
+        "electivaIntrinsecaTexto": "Electiva Intrínseca",
+        "electivaExtrinsecaTexto": "Electiva Extrínseca"
     },
     "plan_estudios": {
         "plan_estudios":"Plan de estudios",
@@ -2516,7 +2521,9 @@
         "enviar_revision_ok": "¡Envío a revisión exitoso!",
         "enviar_revision_fallo": "¡No se pudo enviar a revisión!",
         "error_validacion_prerrequisitos_espacios": "El espacio académico seleccionado tiene prerrequisitos que deben ser asignados en semestres anteriores",
-        "error_cargando_datos_formulario": "Error cargando información del Plan de Estudios"
+        "error_cargando_datos_formulario": "Error cargando información del Plan de Estudios",
+        "resumen": "Consolidado del Plan de Estudio",
+        "resolucion_aprobacion": "Resolución de aprobación"
     },
     "gestion_horarios": {
         "encabezado": "Módulo para la Disponibilidad de cupos",

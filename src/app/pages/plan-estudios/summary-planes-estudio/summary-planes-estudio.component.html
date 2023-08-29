@@ -1,0 +1,81 @@
+<div class="encabezado">
+    <div class="content">
+        <img src="../../../../assets/images/logonuevo.png" alt="logo_distrital">
+        <div class="texto_titulo">
+            <h3>{{dataPlanes.Facultad}}</h3>
+            <h4>{{dataPlanes.Nombre}}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-4" *ngFor="let plan of dataPlanes.Planes" style="padding-top: 2rem;">
+    <div class="plan_view">
+        <table class="table_info">
+            <thead>
+                <tr>
+                    <th colspan="2">{{ plan.Nombre }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ 'plan_estudios.resolucion_aprobacion' | translate }}</td>
+                    <td>{{ plan.Resolucion }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'plan_estudios.total_creditos' | translate }}</td>
+                    <td>{{ plan.Creditos }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'proyecto.codigo_snies' | translate }}</td>
+                    <td>{{ plan.Snies }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'plan_estudios.plan_estudios' | translate }}</td>
+                    <td>{{ plan.PlanEstudio }} </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="detail_plan" style="height: 250px;">
+            La distribución de asignaturas
+        </div>
+            
+        <table class="table_info">
+            <thead>
+                <tr>
+                    <th colspan="2">{{ plan.Nombre }}</th>
+                </tr>
+                <tr class="subheader">
+                    <th>{{ 'GLOBAL.item' | translate }}</th>
+                    <th>{{ 'GLOBAL.total' | translate }} </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ 'espacios_academicos.obligatorioBasicoTexto' | translate }}</td>
+                    <td class="cntr">{{ plan.Resumen.OB }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'espacios_academicos.obligatorioComplementarioTexto' | translate }}</td>
+                    <td class="cntr">{{ plan.Resumen.OC }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'espacios_academicos.electivaIntrinsecaTexto' | translate }}</td>
+                    <td class="cntr">{{ plan.Resumen.EI }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'espacios_academicos.electivaExtrinsecaTexto' | translate }}</td>
+                    <td class="cntr">{{ plan.Resumen.EE }} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+
+<div class="convencion">
+    <div class="content2">
+        <img src="../../../../assets/images/convenciones_plan_estudio.png" alt="convenciones_plan_estudio">
+    </div>
+</div>

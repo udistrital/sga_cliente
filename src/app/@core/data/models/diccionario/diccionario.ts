@@ -3,6 +3,7 @@ export const VIEWS = Object.freeze({
     FORM: Symbol(),
     SECONDARY_LIST: Symbol(),
     SECONDARY_FORM: Symbol(),
+    SUMMARY: Symbol(),
 })
 
 export const MODALS = Object.freeze({
