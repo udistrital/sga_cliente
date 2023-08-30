@@ -2472,6 +2472,21 @@
         "salon":"Lounge",
         "proyecto_academico":"academic project",
         "dia": "Day",
-        "hora": "Hour"
+        "hora": "Hour",
+        "encabezado_gestion":"Module for schedule management",
+        "mensaje_gestion":"User in this component you must select the action of interest to perform in the module",
+        "label_gestion": "Transversal information",
+        "calendario_gestion": "Academic Calendar",
+        "mensaje_calendario": "User, keep in mind that you can only manage schedules within the dates established here",
+        "select_calendario": "Select the Academic Calendar",
+        "elije_fecha_inicio":"Initial date",
+        "elije_fecha_final": "Final date",
+        "suite":"Overall suite",
+        "mensaje_suite": "User, please select the option you want to perform",
+        "boton_1": "Group management",
+        "boton_2": "Register schedule",
+        "boton_3": "Copy schedule",
+        "boton_4": "List schedules",
+        "boton_5": "Report schedules"
     }
 }

@@ -176,7 +176,8 @@
         "gestion-horarios": {
             "gestion-horarios": "Gestion de horarios",
             "disponibilidad-cupos": "Disponibilidad de cupos",
-            "horarios-grupos": "Horarios por Grupos"
+            "horarios-grupos": "Horarios por Grupos",
+            "gestion-horario": "Gestion de horarios"
         }
     },
     "GLOBAL": {
@@ -2543,7 +2544,22 @@
         "salon":"Salón",
         "proyecto_academico":"Proyecto Académico",
         "dia": "Dia",
-        "hora": "Hora"
+        "hora": "Hora",
+        "encabezado_gestion":"Módulo para la gestión de horarios",
+        "mensaje_gestion":"Usuario en este componente usted debe seleccionar la acción de interes a realizar en el módulo",
+        "label_gestion": "Información transversal",
+        "calendario_gestion": "Calendario Académica",
+        "mensaje_calendario": "Usuario, tenga en cuenta que solo podra gestionar horarios dentro de las fechas aqui establecidas",
+        "select_calendario": "Seleccione el Calendario Académico",
+        "elije_fecha_inicio":"Fecha inicial",
+        "elije_fecha_final": "Fecha final",
+        "suite":"Suite general",
+        "mensaje_suite": "Usuario, por favor seleccione la opcion la cual desea realizar",
+        "boton_1": "Gestión grupos",
+        "boton_2": "Registrar horario",
+        "boton_3": "Copiar horario",
+        "boton_4": "Listar horarios",
+        "boton_5": "Reporte horarios"
     }
 
 }
