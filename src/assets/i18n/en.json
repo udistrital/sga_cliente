@@ -2452,7 +2452,13 @@
         "error_validacion_prerrequisitos_espacios": "The selected academic space has prerequisites that must be assigned in previous semesters",
         "error_cargando_datos_formulario": "Error loading information of the Study Plan",
         "resumen": "Consolidated Study Plan",
-        "resolucion_aprobacion": "Approval resolution"
+        "resolucion_aprobacion": "Approval resolution",
+        "nombre_asignatura": "NAME OF THE SUBJECT",
+        "codigo_asignatura": "Subject code",
+        "cant_creditos": "Number of credits",
+        "prerequisitos": "Prerequisites",
+        "convenciones": "CONVENTIONS",
+        "clasificacion": "Classification"
     },
     "gestion_horarios": {
         "encabezado": "Module for the Availability of quotas",
