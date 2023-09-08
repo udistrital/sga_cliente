@@ -1,0 +1,168 @@
+
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">    
+    <nb-card-header>
+        <div class="row" align="center">
+            <div class="col">
+                {{ 'gestion_horarios.encabezado_gestion' | translate }}
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <ng-container *ngSwitchCase="VIEWS.LIST">
+            <div class="alinear-center">
+                <div class="advertencia">{{ 'gestion_horarios.mensaje_gestion' | translate }}</div>
+            </div>
+                <legend><small>&nbsp; {{ 'gestion_horarios.label_gestion' | translate }} </small></legend>
+           
+<!-- ------------------------------------------------ -->
+
+<mat-vertical-stepper #stepper [linear]="false">
+    <mat-step [stepControl]="formStep1" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}">
+        <ng-template matStepLabel>{{ 'gestion_horarios.header_parametros' | translate }}</ng-template>
+        <form [formGroup]="formStep1">
+            <div class="row">
+            <div *ngFor="let campo of formDef.campos_p1" [class]="campo.claseGrid">
+                <ng-container [ngSwitch]="campo.etiqueta">
+                    <ng-container *ngIf="!(campo.ocultar ? campo.ocultar : false)">
+                        <mat-form-field *ngSwitchCase="'select'" floatLabel="always">
+                            <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                            <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}" [disabled]="campo.sololectura ? campo.sololectura : false">
+                                <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
+                                <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre }}</mat-option>
+                            </mat-select>
+                            <mat-hint *ngIf="formStep1.get(campo.nombre).touched && formStep1.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                        </mat-form-field>
+                    </ng-container>
+                </ng-container>
+            </div>
+            </div>
+        </form>
+        <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+            <legend><small>&nbsp; {{ 'gestion_horarios.calendario_gestion' | translate }}</small></legend>
+
+            <div class="alinear-center">
+                <div class="advertencia">{{ 'gestion_horarios.mensaje_calendario' | translate }}</div>
+            </div>
+
+            <mat-form-field style="width: 30%;">
+                <mat-label>{{ 'gestion_horarios.select_calendario' | translate }}:</mat-label>
+                <mat-select [(ngModel)]="periodo" (selectionChange)="selectCalendario($event)">
+                    <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                    <mat-option *ngFor="let item of calendarios" [value]="item">
+                        {{item.Nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+                &nbsp;
+                &nbsp;
+
+                <div class="contenedor">
+                    <div class="contenido">
+
+                        <mat-form-field style="width: 70%;">
+                            <mat-label>{{ 'gestion_horarios.elije_fecha_inicio' | translate }}:</mat-label>
+                            <input matInput [matDatepicker]="Fecha_inicial">
+                            <mat-datepicker-toggle matSuffix [for]="Fecha_inicial"></mat-datepicker-toggle>
+                            <mat-datepicker #Fecha_inicial></mat-datepicker>
+                            <mat-error>{{ 'notas.fecha_invalida' | translate }}</mat-error>
+                        </mat-form-field> 
+                        &nbsp;
+
+
+                    </div> 
+                    
+
+                    <div class="contenido" >
+
+                        <mat-form-field style="width: 70%;">
+                            <mat-label>{{ 'gestion_horarios.elije_fecha_final' | translate }}:</mat-label>
+                            <input matInput [matDatepicker]="Fecha_final">
+                            <mat-datepicker-toggle matSuffix [for]="Fecha_final"></mat-datepicker-toggle>
+                            <mat-datepicker #Fecha_final></mat-datepicker>
+                            <mat-error>{{ 'notas.fecha_invalida' | translate }}</mat-error>
+                        </mat-form-field> 
+                    </div>
+
+                </div>
+       
+               
+               
+            
+            
+        </fieldset>
+
+          
+        <div class="button-stepper">
+            <button mat-stroked-button matStepperNext>{{ 'GLOBAL.siguiente' | translate }}</button>
+        </div>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>{{ 'gestion_horarios.suite' | translate }}</ng-template>
+            <div class="alinear-center">
+                <div class="advertencia">{{ 'gestion_horarios.mensaje_suite' | translate }}</div>
+            </div>
+            <div class="contenedor">
+                <div class="contenido_boton">
+                    <div class="example-button-container">
+                        <button mat-flat-button color="primary" (click)="to_gestion_grupo()">
+                            <div class="outer-div">
+                            <mat-icon class="icon-display">supervisor_account</mat-icon>
+                            <span>{{ 'gestion_horarios.boton_1' | translate }}</span>
+                        </div>
+                        </button>
+                      </div>
+                </div>
+                <div class="contenido_boton" >
+                    <div class="example-button-container">
+                        <button mat-flat-button color="primary">
+                            <div class="outer-div">
+                            <mat-icon class="icon-display">assignment</mat-icon>
+                            <span>{{ 'gestion_horarios.boton_2' | translate }}</span>
+                        </div>
+                        </button>
+                      </div>
+                </div>
+                <div class="contenido_boton">
+                    <div class="example-button-container">
+                        <button mat-flat-button color="primary">
+                            <div class="outer-div">
+                            <mat-icon class="icon-display">view_carousel</mat-icon>
+                            <span>{{ 'gestion_horarios.boton_3' | translate }}</span>
+                        </div>
+                        </button>
+                      </div>
+                </div>
+                <div class="contenido_boton">
+                    <div class="example-button-container">
+                        <button mat-flat-button color="primary">
+                            <div class="outer-div">
+                            <mat-icon class="icon-display">list</mat-icon>
+                            <span>{{ 'gestion_horarios.boton_4' | translate }}</span>
+                        </div>
+                        </button>
+                      </div>
+
+                </div>
+                <div class="contenido_boton" >
+                    <div class="example-button-container">
+                        <button mat-flat-button color="primary">
+                            <div class="outer-div">
+                            <mat-icon class="icon-display">save_alt</mat-icon>
+                            <span>{{ 'gestion_horarios.boton_5' | translate }}</span>
+                        </div>
+                        </button>
+                      </div>
+                </div>
+            </div>
+ 
+    </mat-step>
+</mat-vertical-stepper>
+<!-- ------------------------------------------------ -->          
+
+<gestion-grupos *ngIf="bandera_gestion_grupo">
+</gestion-grupos>
+
+        </ng-container>
+    </nb-card-body>
+</nb-card>
