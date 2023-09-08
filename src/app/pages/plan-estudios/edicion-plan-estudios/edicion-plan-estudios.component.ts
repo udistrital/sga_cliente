@@ -141,7 +141,7 @@ export class EdicionPlanEstudiosComponent extends PlanEstudioBaseComponent imple
             
             this.planesEstudio = await this.loadPlanesEstudio();
           } else if (rolCoordinador) {
-            console.log("Rol admin");
+            console.log("Rol coor");
             this.planesEstudio = await this.loadPlanesEstudio("EstadoAprobacionId:4");
           } else {
             this.planesEstudio = [];
@@ -174,7 +174,7 @@ export class EdicionPlanEstudiosComponent extends PlanEstudioBaseComponent imple
 
     const estado = plan["EstadoAprobacionId"];
     plan["estado"] = estado["Nombre"];
-    plan["planPorCiclos"] = estado["EsPlanEstudioPadre"] ? this.translate.instant('GLOBAL.si') : this.translate.instant('GLOBAL.no');
+    plan["planPorCiclos"] = plan["EsPlanEstudioPadre"] ? this.translate.instant('GLOBAL.si') : this.translate.instant('GLOBAL.no');
 
     plan["ver"] = { value: ACTIONS.VIEW, type: 'ver', disabled: false };
     plan["editar"] = { value: ACTIONS.EDIT, type: 'editar', disabled: false };
@@ -274,19 +274,22 @@ export class EdicionPlanEstudiosComponent extends PlanEstudioBaseComponent imple
     this.enEdicionPlanEstudio = true;
 
     this.consultarPlanEstudio(idPlan).then((res) => {
-      this.enEdicionSemestreNuevo = false;
-      this.enEdicionSemestreViejo = true;
-      this.planEstudioBody = res;      
+      this.planEstudioBody = res;
       this.esPlanEstudioPadre = this.planEstudioBody.EsPlanEstudioPadre ? true: false;
       this.proyecto_id = this.planEstudioBody.ProyectoAcademicoId;
       this.crearFormulario(FORM_PLAN_ESTUDIO_EDICION);
-      this.createTableEspaciosAcademicos(false);
-      this.createTableSemestreTotal();
-      this.totalTotal();
       if (this.esPlanEstudioPadre) {
+        this.createSimpleTableStudyPlan();
+        this.createTableOrganizedStudyPlan();
+        this.dataOrganizedStudyPlans = new LocalDataSource();
         this.vista = VIEWS.SECONDARY_FORM;
       } else {
+        this.createTableEspaciosAcademicos();
+        this.createTableSemestreTotal();
+        this.totalTotal();
         this.vista = VIEWS.FORM;
+        this.enEdicionSemestreNuevo = false;
+        this.enEdicionSemestreViejo = false;
       }
     }, (error) => {
       this.loading = false;

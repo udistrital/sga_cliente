@@ -146,7 +146,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
             
             this.planesEstudio = await this.loadPlanesEstudio();
           } else if (rolCoordinador) {
-            console.log("Rol admin");
+            console.log("Rol coor");
             this.planesEstudio = await this.loadPlanesEstudio("EstadoAprobacionId:4");
           } else {
             this.planesEstudio = [];
@@ -331,6 +331,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
       this.planEstudioBody = res;
       if (this.esPlanEstudioPadre) {
         this.planEstudioPadreAsignado2Form = false;
+        this.dataOrganizedStudyPlans = new LocalDataSource();
         stepper.next();
       } else {
         this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {

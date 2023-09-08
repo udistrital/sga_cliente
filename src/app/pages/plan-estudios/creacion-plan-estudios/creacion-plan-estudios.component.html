@@ -123,12 +123,16 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         </div>
                         <ng2-smart-table [settings]="tbSimpleStudyPlans" [source]="dataSimpleStudyPlans" (custom)="onAction($event)">
                         </ng2-smart-table>
-                        <div class="alinear-center espacio-doble">
-                            <p>{{ 'plan_estudios.planes_estudio_asignados' | translate }}</p>
-                        </div>
+                        <br>
+                        <mat-card class="alinear-center espacio-doble mat-card-custom">
+                            <mat-card-header>
+                                <mat-card-title>{{ 'plan_estudios.planes_estudio_asignados' | translate }}</mat-card-title>
+                            </mat-card-header>
+                        </mat-card>
                         <ng2-smart-table [settings]="tbOrganizedStudyPlans" [source]="dataOrganizedStudyPlans" (custom)="onAction($event)">
                         </ng2-smart-table>
-                        <div class="alinear-center espacio" >
+                        <br>
+                        <div class="alinear-center espacio-doble" >
                             <button mat-raised-button matStepperPrevious [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.regresar' | translate }}</button>
                             <button mat-raised-button color="primary" (click)="registrarPlanOrdenado()" [disabled]="dataOrganizedStudyPlans == undefined || dataOrganizedStudyPlans.count() == 0" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.guardar' | translate }}</button>
                             <button mat-raised-button color="primary" (click)="generarPlanEstudio()" [disabled]="dataOrganizedStudyPlans == undefined || dataOrganizedStudyPlans.count() == 0">{{ 'plan_estudios.generar_plan' | translate }}</button>
