@@ -250,7 +250,7 @@
         "fecha_fin": "Fecha de finalización",
         "informacion_contacto": "Información de contacto",
         "placeholder_fecha_fin": "Ej: 24/08/2018",
-        "periodo": "Período",
+        "periodo": "Periodo",
         "alerta_llenar_campo": "Debe llenar este campo",
         "tipo_periodo": "Tipo Período",
         "placeholder_tipo_periodo": "ej: Administratico, Académico",
@@ -2523,7 +2523,13 @@
         "error_validacion_prerrequisitos_espacios": "El espacio académico seleccionado tiene prerrequisitos que deben ser asignados en semestres anteriores",
         "error_cargando_datos_formulario": "Error cargando información del Plan de Estudios",
         "resumen": "Consolidado del Plan de Estudio",
-        "resolucion_aprobacion": "Resolución de aprobación"
+        "resolucion_aprobacion": "Resolución de aprobación",
+        "nombre_asignatura": "NOMBRE DE LA ASIGNATURA",
+        "codigo_asignatura": "Código de la asignatura",
+        "cant_creditos": "Cantidad de créditos",
+        "prerequisitos": "Prerrequisitos",
+        "convenciones": "CONVENCIONES",
+        "clasificacion": "Clasificación"
     },
     "gestion_horarios": {
         "encabezado": "Módulo para la Disponibilidad de cupos",

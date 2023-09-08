@@ -6,6 +6,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { SharedModule } from '../../shared/shared.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { PlanEstudiosService } from '../../@core/data/plan_estudios.service';
+import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.service';
 
 @NgModule({
   declarations: [...routedComponents],
@@ -17,7 +18,8 @@ import { PlanEstudiosService } from '../../@core/data/plan_estudios.service';
     Ng2SmartTableModule
   ],
   providers: [
-    PlanEstudiosService
+    PlanEstudiosService,
+    EspaciosAcademicosService,
   ]
 })
 export class PlanEstudiosModule { }
