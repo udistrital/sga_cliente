@@ -1,19 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { ACTIONS, MODALS, ROLES, VIEWS } from '../../../@core/data/models/diccionario/diccionario';
+import { LocalDataSource } from 'ng2-smart-table';
+import { HttpErrorResponse } from '@angular/common/http';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { PopUpManager } from '../../../managers/popUpManager';
+import { Ng2StButtonComponent } from '../../../@theme/components';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { FORM_GESTION_HORARIO } from './form-gestion-horario';
+import { FORM_GESTION_GRUPOS } from './form-gestion-grupos';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 
+interface select_temporal {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
-  selector: 'gestion-horario',
-  templateUrl: './gestion-horario.component.html',
-  styleUrls: ['./gestion-horario.component.scss']
+  selector: 'gestion-grupos',
+  templateUrl: './gestion-grupos.component.html',
+  styleUrls: ['./gestion-grupos.component.scss']
 })
-export class GestionHorarioComponent implements OnInit {
+export class GestionGruposComponent implements OnInit {
 
   loading: boolean;
 
@@ -27,10 +34,14 @@ export class GestionHorarioComponent implements OnInit {
   niveles: any[];
   proyectos: any[];
   periodos: any[] ;
-  bandera_gestion_grupo: boolean = false;
 
   readonly ACTIONS = ACTIONS;
   crear_editar: Symbol;
+  temporal: select_temporal[] = [
+    {value: 'Valor_1', viewValue: 'Steak'},
+    {value: 'Valor_2', viewValue: 'Pizza'},
+    {value: 'Valor_3', viewValue: 'Tacos'},
+  ];
 
   constructor(
     private translate: TranslateService,
@@ -40,6 +51,7 @@ export class GestionHorarioComponent implements OnInit {
     private parametrosService: ParametrosService,
     ) {
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+        this.createTable();
         this.updateLanguage();
       })
     }
@@ -47,38 +59,64 @@ export class GestionHorarioComponent implements OnInit {
   ngOnInit() {
     this.loading = false;
     this.vista = VIEWS.LIST;
-    this.formDef = {...FORM_GESTION_HORARIO};
+    this.formDef = {...FORM_GESTION_GRUPOS};
     this.loadSelects();
-    this.buildFormDisponibilidadCupos();
+    this.createTable();
   }
 
   // * ----------
   // * Creación de tabla (lista espacios_academicos) 
   //#region
- 
-
-  // * ----------
-  // * Constructor de formulario, buscar campo, update i18n, suscribirse a cambios
-  //#region
-  buildFormDisponibilidadCupos() {
-    // ? primera carga del formulario: validación e idioma
-    const form1 = {};
-    this.formDef.campos_p1.forEach(campo => {
-      form1[campo.nombre] = new FormControl('', campo.validacion);
-      campo.label = this.translate.instant(campo.label_i18n);
-      campo.placeholder = this.translate.instant(campo.placeholder_i18n);
-    });
-    this.formStep1 = this.formBuilder.group(form1);
-
-    // ? Los campos que requieren ser observados cuando cambian se suscriben
-    this.formDef.campos_p1.forEach(campo => {
-      if (campo.entrelazado) {
-        this.formStep1.get(campo.nombre).valueChanges.subscribe(value => {
-          this.myOnChanges(campo.nombre, value);
-        });
-      }  
-    });
+  createTable() {
+    this.tbDiponibilidadHorarios = {
+      columns: {
+        index:{
+          title: '#',
+          filter: false,
+          valuePrepareFunction: (value,row,cell) => {
+            return cell.row.index+1;
+           },
+          width: '2%',
+        },
+        codigo: {
+          title: this.translate.instant('gestion_horarios.codigo_grupo'),
+          editable: false,
+          width: '5%',
+          filter: true,
+        },
+        capacidad: {
+          title: this.translate.instant('gestion_horarios.capacidad'),
+          editable: false,
+          width: '12%',
+          filter: true,
+        },
+        espacio: {
+          title: this.translate.instant('gestion_horarios.espacio_academico'),
+          editable: false,
+          width: '25%',
+          filter: true,
+        },
+        inantivar: {
+          title: this.translate.instant('gestion_horarios.acciones'),
+          editable: false,
+          width: '3%',
+          filter: false,
+          type: 'custom',
+          renderComponent: Ng2StButtonComponent,
+          onComponentInitFunction: (instance) => {
+            instance.valueChanged.subscribe((out) => {
+            })}
+        },
+      },
+      hideSubHeader: false,
+      mode: 'external',
+      actions: false,
+      noDataMessage: this.translate.instant('GLOBAL.table_no_data_found')
+    };
   }
+
+
+
 
   getIndexOf(campos: any[], label: string): number {
     return campos.findIndex(campo => campo.nombre == label);
@@ -199,11 +237,6 @@ export class GestionHorarioComponent implements OnInit {
         }
       );
     });
-  }
-
-  to_gestion_grupo(){
-    console.log("to_gestion_grupo");
-    this.bandera_gestion_grupo =true;
   }
 
 

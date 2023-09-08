@@ -2559,7 +2559,24 @@
         "boton_2": "Registrar horario",
         "boton_3": "Copiar horario",
         "boton_4": "Listar horarios",
-        "boton_5": "Reporte horarios"
+        "boton_5": "Reporte horarios",
+        "encabezado_3": "Gestión grupos",
+        "mensaje_inicial_3": "Usuario, en el presente módulo usted podra crear los cursos que sean de su interes.",
+        "plan_estudios":"Plan de estudios",
+        "header_grupos": "Listado de grupos",
+        "codigo_grupo": "Codigo Grupo",
+        "capacidad": "Capacidad grupo",
+        "acciones": "Acciones",
+        "crear": "Crear nuevo grupo",
+        "header_crear_grupo": "Crear nuevo grupo",
+        "header_1_crear_grupo": "Asignación espacios académicos",
+        "select_espacio": "Seleccione los espacios relacionados",
+        "select_espacio_2": "Seleccione el grupo del espacios relacionado",
+        "header_2_crear_grupo": "  Codificación y capacidad grupo",
+        "label_1_codificacion": "Codigo proyecto curricular: ",
+        "label_2_codificacion": "Indicador para el grupo:",
+        "label_3_codificacion": "Codigo resultado para el grupo",
+        "label_4_codificacion": "Capacidad del grupo"
     }
 
 }
