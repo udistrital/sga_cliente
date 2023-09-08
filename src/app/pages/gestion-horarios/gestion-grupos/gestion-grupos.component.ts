@@ -5,8 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { Ng2StButtonComponent } from '../../../@theme/components';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { FORM_GESTION_GRUPOS } from './form-gestion-grupos';
+import { FormGroup } from '@angular/forms';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 
@@ -45,8 +44,6 @@ export class GestionGruposComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
-    private popUpManager: PopUpManager,
-    private formBuilder: FormBuilder,
     private projectService: ProyectoAcademicoService,
     private parametrosService: ParametrosService,
     ) {
@@ -59,7 +56,6 @@ export class GestionGruposComponent implements OnInit {
   ngOnInit() {
     this.loading = false;
     this.vista = VIEWS.LIST;
-    this.formDef = {...FORM_GESTION_GRUPOS};
     this.loadSelects();
     this.createTable();
   }
