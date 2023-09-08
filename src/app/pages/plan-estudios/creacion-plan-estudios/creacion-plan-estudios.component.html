@@ -138,6 +138,15 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                 </mat-horizontal-stepper>
             </fieldset>
         </ng-container>
+        <ng-container *ngSwitchCase="VIEWS.SUMMARY">
+            <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
+                <legend class="modo-ventana">
+                    <small>&nbsp; {{ 'plan_estudios.resumen' | translate }} </small>
+                    <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="vista=VIEWS.LIST;"></i>
+                </legend>
+                <summary-planes-estudio [dataPlanes]="dataPlanes"></summary-planes-estudio>
+            </fieldset>
+        </ng-container>
     </nb-card-body>
     <nb-card-footer>
     </nb-card-footer>

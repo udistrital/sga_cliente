@@ -44,6 +44,8 @@ import { ImplicitAutenticationService } from '../../../@core/utils/implicit_aute
 })
 export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent implements OnInit {
 
+  dataPlanes: any = undefined;
+
   constructor(
     translate: TranslateService,
     popUpManager: PopUpManager,
@@ -404,6 +406,58 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
                 });
           }
         });
+  }
+  //#endregion
+  // * ----------
+
+  // * ----------
+  // * Visualizador dinámico planes de estudio
+  //#region
+  generarPlanEstudio() {
+    this.dataPlanes = {
+      Nombre: "Ingeniería Eléctrica",
+      Facultad: "Facultad de Ingeniería",
+      Planes: [{
+        Nombre: "Proyecto 1",
+        Resolucion: "1020 de 2023",
+        Creditos: 60,
+        Snies: "123456",
+        PlanEstudio: "2102",
+        Resumen: {
+          OB: 30,
+          OC: 20,
+          EI: 3,
+          EE: 2
+        }
+      },
+      {
+        Nombre: "Proyecto 2",
+        Resolucion: "1020 de 2023",
+        Creditos: 60,
+        Snies: "123456",
+        PlanEstudio: "2102",
+        Resumen: {
+          OB: 30,
+          OC: 20,
+          EI: 3,
+          EE: 2
+        }
+      },
+      {
+        Nombre: "Proyecto 3",
+        Resolucion: "1020 de 2023",
+        Creditos: 60,
+        Snies: "123456",
+        PlanEstudio: "2102",
+        Resumen: {
+          OB: 30,
+          OC: 20,
+          EI: 3,
+          EE: 2
+        }
+      }]
+    };
+    this.vista = VIEWS.SUMMARY;
   }
   //#endregion
   // * ----------

@@ -4,6 +4,7 @@ import { PlanEstudiosComponent } from './plan-estudios.component';
 import { CreacionPlanEstudiosComponent } from './creacion-plan-estudios/creacion-plan-estudios.component';
 import { EdicionPlanEstudiosComponent } from './edicion-plan-estudios/edicion-plan-estudios.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
+import { SummaryPlanesEstudioComponent } from './summary-planes-estudio/summary-planes-estudio.component';
 
 
 const routes: Routes = [{
@@ -31,5 +32,6 @@ export class PlanEstudiosRoutingModule { }
 export const routedComponents = [
   PlanEstudiosComponent,
   CreacionPlanEstudiosComponent,
-  EdicionPlanEstudiosComponent
+  EdicionPlanEstudiosComponent,
+  SummaryPlanesEstudioComponent
 ]

@@ -1,0 +1,73 @@
+.encabezado {
+    display: flex;
+    justify-content: space-around;
+}
+
+.content {
+    width: 528px;
+    height: 230px;
+}
+
+.texto_titulo {
+    position: relative;
+    top: -60px;
+    left: 138px;
+    width: 388px;
+    height: 60px;
+    text-align: center;
+}
+
+.plan_view {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.table_info {
+    width: 75%;
+    thead {
+        background-color: var(--primary);
+        color: white;
+        .subheader {
+            background-color: gray;
+        }
+        th {
+            padding: 0.4rem;
+            text-align: center;
+        }
+    }
+    tbody {
+        td {
+            padding: 0.3rem;
+            border-bottom: 1px solid gray;
+        }
+    }
+}
+
+.cntr {
+    text-align: center;
+}
+
+.detail_plan {
+    width: 100%;
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px dashed var(--primary);
+}
+
+.convencion {
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem;
+}
+
+.content2 {
+    width: 750px;
+}
