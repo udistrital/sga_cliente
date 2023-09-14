@@ -34,7 +34,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                 </mat-form-field>
                 &nbsp;<button mat-stroked-button (click)="listarConsolidados()"> {{ 'GLOBAL.actualizar' | translate }} </button>
 
-                <ng2-smart-table [settings]="tbRevConsolidados" [source]="dataRevConsolidados">
+                <ng2-smart-table [settings]="tbRevConsolidados" [source]="dataRevConsolidados" *ngIf="tbRevConsolidados">
                 </ng2-smart-table>
             </fieldset>
         </nb-card-body>
