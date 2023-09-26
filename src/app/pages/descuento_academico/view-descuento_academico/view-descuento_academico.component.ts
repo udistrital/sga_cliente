@@ -111,6 +111,8 @@ export class ViewDescuentoAcademicoComponent implements OnInit {
               soportes1 += String(this.info_descuento[i].DocumentoId);
               if (i < this.info_descuento.length - 1 ) {
                 soportes1 += '|';
+              } else {
+                soportes1 += `&limit=${Number(this.info_descuento.length)}`;
               }
             }
           }
