@@ -22,6 +22,7 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { TAGS_INSCRIPCION_PROGRAMA } from '../def_suite_inscrip_programa/def_tags_por_programa';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import { MODALS } from '../../../@core/data/models/diccionario/diccionario';
 
 
 @Component({
@@ -296,15 +297,29 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                       if (Object.keys(respSuite.Data[0]).length > 0) {
                         this.tagsObject = JSON.parse(respSuite.Data[0].ListaTags);
 
-                        this.info_persona_id = response[0].TerceroId.Id;
+                        let TercerosAsociadoInscripcion = 0;
+                        for (let i = 0; i < response.length; i++) {
+                          if (this.inscripcionInfo.PersonaId == response[i].TerceroId.Id) {
+                            TercerosAsociadoInscripcion = response[i].TerceroId.Id;
+                            break;
+                          }
+                        }
+                        if (TercerosAsociadoInscripcion == 0) {
+                          console.warn("PersonaId not found: ", this.inscripcionInfo.PersonaId);
+                          this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
+                            this.translate.instant('ERROR.sin_informacion_en') + ": \"inscripcion.PersonaId\".<br><br>" +
+                            this.translate.instant('ERROR.persiste_error_comunique_OAS'), MODALS.ERROR, false);
+                        }
+
+                        this.info_persona_id = TercerosAsociadoInscripcion;
                         this.pivotDocument.updateInfo({
-                          TerceroId: response[0].TerceroId.Id,
+                          TerceroId: TercerosAsociadoInscripcion,
                           IdInscripcion: event.data['Credencial'],
                           ProgramaAcademicoId: this.proyectos_selected.toString(),
                           ProgramaAcademico: res.Nombre,
                           IdPeriodo: this.periodo.Id
                         })
-                        sessionStorage.setItem('TerceroId', response[0].TerceroId.Id);
+                        sessionStorage.setItem('TerceroId', TercerosAsociadoInscripcion.toString());
                         sessionStorage.setItem('IdInscripcion', event.data['Credencial']);
                         sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
                         sessionStorage.setItem('ProgramaAcademico', res.Nombre);
