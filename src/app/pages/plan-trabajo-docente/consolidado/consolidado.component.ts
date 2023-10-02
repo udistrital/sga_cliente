@@ -128,8 +128,7 @@ export class ConsolidadoComponent implements OnInit {
           renderComponent: Ng2StButtonComponent,
           onComponentInitFunction: (instance) => {
             instance.valueChanged.subscribe((out) => {
-              this.vista = VIEWS.FORM;
-              this.respuestaConsolidado = true;
+              this.verRevDecano(out.rowData.ConsolidadoJson);
             })}
         },
         gestion: {
@@ -205,12 +204,22 @@ export class ConsolidadoComponent implements OnInit {
   }
 
   buildFormRespuestaConsolidado() {
-    this.formRespuestaConsolidado.btn = this.translate.instant('GLOBAL.aceptar');
+    //this.formRespuestaConsolidado.btn = this.translate.instant('GLOBAL.aceptar');
     //this.formRespuestaConsolidado.titulo = this.translate.instant(this.formNewEditConsolidado.titulo_i18n);
     this.formRespuestaConsolidado.campos.forEach(campo => {
       campo.label = this.translate.instant(campo.label_i18n);
       campo.placeholder = this.translate.instant(campo.placeholder_i18n);
     });
+  }
+
+  getIndexFormRespuestaConsolidado(nombre: String): number {
+    for (let index = 0; index < this.formRespuestaConsolidado.campos.length; index++) {
+      const element = this.formRespuestaConsolidado.campos[index];
+      if (element.nombre === nombre) {
+        return index
+      }
+    }
+    return -1;
   }
 
   regresar() {
@@ -309,14 +318,17 @@ export class ConsolidadoComponent implements OnInit {
       this.planTrabajoDocenteService.get(`consolidado_docente?query=activo:true,periodo_id:${this.periodos.select.Id}${proyecto}&limit=0`).subscribe((resp) => {
         this.loading = false;
         let rawlistarConsolidados = <any[]>resp.Data;
+        const idEstadosFiltro = this.estadosConsolidado.opciones
+          .filter(estado => ["DEF","ENV","APR","N_APR"].includes(estado.codigo_abreviacion))
+          .map(estado => estado._id);
+        rawlistarConsolidados = rawlistarConsolidados.filter(consolidado => idEstadosFiltro.includes(consolidado.estado_consolidado_id));
         let formatedData = [];
         rawlistarConsolidados.forEach(consolidado => {
           const estadoConsolidado = this.estadosConsolidado.opciones.find(estado => estado._id == consolidado.estado_consolidado_id);
-          // if (estadoConsolidado.codigo_abreviacion == "DEF" || estadoConsolidado.codigo_abreviacion == "ENV") {} // ? para filtrar si se requier por estado...pendiete
           const proyecto = this.proyectos.opciones.find(proyecto => proyecto.Id == consolidado.proyecto_academico_id);
           const periodo = this.periodos.opciones.find(periodo => periodo.Id == consolidado.periodo_id);
           let opcionGestion = "ver"
-          if ((estadoConsolidado && estadoConsolidado.codigo_abreviacion == "DEF") && (this.isCoordinator)) {
+          if ((estadoConsolidado && (estadoConsolidado.codigo_abreviacion == "DEF" || estadoConsolidado.codigo_abreviacion == "N_APR")) && (this.isCoordinator)) {
             opcionGestion = "editar"
           }
           formatedData.push({
@@ -341,9 +353,7 @@ export class ConsolidadoComponent implements OnInit {
   }
 
   formatoFecha(fechaHora: string): string {
-    const fecha_hora = fechaHora.split('T');
-    const fechaPartes = fecha_hora[0].split('-');
-    return fechaPartes[2]+'/'+fechaPartes[1]+'/'+fechaPartes[0]+' - '+fecha_hora[1].split('.')[0]
+    return new Date(fechaHora).toLocaleString('es-CO', { timeZone: 'America/Bogota' });
   }
 
   nuevoEditarConsolidado(consolidado: any, readonly?: boolean) {
@@ -400,7 +410,7 @@ export class ConsolidadoComponent implements OnInit {
                   "periodo_id": `${this.periodos.select.Id}`,
                   "proyecto_academico_id": `${this.proyectos.select.Id}`,
                   "estado_consolidado_id": `${this.estadosConsolidado.opciones.find(estado => estado.codigo_abreviacion == "DEF")._id}`,
-                  "respuesta_decanatura": "{}",
+                  "respuesta_decanatura": JSON.stringify({sec: {}, dec: {}}),
                   "consolidado_coordinacion": JSON.stringify(consolidado),
                   "cumple_normativa": false,
                   "aprobado": false,
@@ -490,5 +500,22 @@ export class ConsolidadoComponent implements OnInit {
       'location=no, directories=no, status=no, menubar=no,' +
       'scrollbars=no, resizable=no, copyhistory=no, ' +
       'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+  }
+
+  verRevDecano(consolidado: any) {
+    console.log(consolidado)
+    const respuesta_decanatura = JSON.parse(consolidado.respuesta_decanatura);
+    const estado = this.estadosConsolidado.opciones.find(estado => estado._id == consolidado.estado_consolidado_id);
+    this.formRespuestaConsolidado.campos[this.getIndexFormRespuestaConsolidado('Respuesta')].valor = estado ? estado.nombre : "Sin Definir";
+    let Observaciones = "";
+    if (Object.keys(respuesta_decanatura.sec).length > 0) {
+      Observaciones += "Secretaría Decanatura:\n" + respuesta_decanatura.sec.observacion + "\n\n";
+    }
+    if (Object.keys(respuesta_decanatura.dec).length > 0) {
+      Observaciones += "Decanatura:\n" + respuesta_decanatura.dec.observacion + "\n";
+    }
+    this.formRespuestaConsolidado.campos[this.getIndexFormRespuestaConsolidado('Observaciones')].valor = Observaciones;
+    this.vista = VIEWS.FORM;
+    this.respuestaConsolidado = true;
   }
 }

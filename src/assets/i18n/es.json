@@ -176,7 +176,8 @@
         "gestion-horarios": {
             "gestion-horarios": "Gestion de horarios",
             "disponibilidad-cupos": "Disponibilidad de cupos",
-            "horarios-grupos": "Horarios por Grupos"
+            "horarios-grupos": "Horarios por Grupos",
+            "gestion-horario": "Gestion de horarios"
         }
     },
     "GLOBAL": {
@@ -250,7 +251,7 @@
         "fecha_fin": "Fecha de finalización",
         "informacion_contacto": "Información de contacto",
         "placeholder_fecha_fin": "Ej: 24/08/2018",
-        "periodo": "Período",
+        "periodo": "Periodo",
         "alerta_llenar_campo": "Debe llenar este campo",
         "tipo_periodo": "Tipo Período",
         "placeholder_tipo_periodo": "ej: Administratico, Académico",
@@ -745,7 +746,8 @@
         "telefono_entidad": "Teléfono de la entidad",
         "placeholder_telefono_entidad": "Ej: 323 93 00 Ext. 1112",
         "direccion_entidad": "Dirección de la entidad",
-        "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1"
+        "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1",
+        "item": "Ítem"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -2462,7 +2464,11 @@
         "componentePropedeutico": "CP",
         "teorico": "T",
         "practico": "P",
-        "teoricoPractico": "T/P"
+        "teoricoPractico": "T/P",
+        "obligatorioBasicoTexto": "Obligatorio Básico",
+        "obligatorioComplementarioTexto": "Obligatorio Complementario",
+        "electivaIntrinsecaTexto": "Electiva Intrínseca",
+        "electivaExtrinsecaTexto": "Electiva Extrínseca"
     },
     "plan_estudios": {
         "plan_estudios":"Plan de estudios",
@@ -2516,7 +2522,15 @@
         "enviar_revision_ok": "¡Envío a revisión exitoso!",
         "enviar_revision_fallo": "¡No se pudo enviar a revisión!",
         "error_validacion_prerrequisitos_espacios": "El espacio académico seleccionado tiene prerrequisitos que deben ser asignados en semestres anteriores",
-        "error_cargando_datos_formulario": "Error cargando información del Plan de Estudios"
+        "error_cargando_datos_formulario": "Error cargando información del Plan de Estudios",
+        "resumen": "Consolidado del Plan de Estudio",
+        "resolucion_aprobacion": "Resolución de aprobación",
+        "nombre_asignatura": "NOMBRE DE LA ASIGNATURA",
+        "codigo_asignatura": "Código de la asignatura",
+        "cant_creditos": "Cantidad de créditos",
+        "prerequisitos": "Prerrequisitos",
+        "convenciones": "CONVENCIONES",
+        "clasificacion": "Clasificación"
     },
     "gestion_horarios": {
         "encabezado": "Módulo para la Disponibilidad de cupos",
@@ -2544,7 +2558,39 @@
         "salon":"Salón",
         "proyecto_academico":"Proyecto Académico",
         "dia": "Dia",
-        "hora": "Hora"
+        "hora": "Hora",
+        "encabezado_gestion":"Módulo para la gestión de horarios",
+        "mensaje_gestion":"Usuario en este componente usted debe seleccionar la acción de interes a realizar en el módulo",
+        "label_gestion": "Información transversal",
+        "calendario_gestion": "Calendario Académica",
+        "mensaje_calendario": "Usuario, tenga en cuenta que solo podra gestionar horarios dentro de las fechas aqui establecidas",
+        "select_calendario": "Seleccione el Calendario Académico",
+        "elije_fecha_inicio":"Fecha inicial",
+        "elije_fecha_final": "Fecha final",
+        "suite":"Suite general",
+        "mensaje_suite": "Usuario, por favor seleccione la opcion la cual desea realizar",
+        "boton_1": "Gestión grupos",
+        "boton_2": "Registrar horario",
+        "boton_3": "Copiar horario",
+        "boton_4": "Listar horarios",
+        "boton_5": "Reporte horarios",
+        "encabezado_3": "Gestión grupos",
+        "mensaje_inicial_3": "Usuario, en el presente módulo usted podra crear los cursos que sean de su interes.",
+        "plan_estudios":"Plan de estudios",
+        "header_grupos": "Listado de grupos",
+        "codigo_grupo": "Codigo Grupo",
+        "capacidad": "Capacidad grupo",
+        "acciones": "Acciones",
+        "crear": "Crear nuevo grupo",
+        "header_crear_grupo": "Crear nuevo grupo",
+        "header_1_crear_grupo": "Asignación espacios académicos",
+        "select_espacio": "Seleccione los espacios relacionados",
+        "select_espacio_2": "Seleccione el grupo del espacios relacionado",
+        "header_2_crear_grupo": "  Codificación y capacidad grupo",
+        "label_1_codificacion": "Codigo proyecto curricular: ",
+        "label_2_codificacion": "Indicador para el grupo:",
+        "label_3_codificacion": "Codigo resultado para el grupo",
+        "label_4_codificacion": "Capacidad del grupo"
     }
 
 }

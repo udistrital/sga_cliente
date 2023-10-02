@@ -712,7 +712,8 @@
         "telefono_entidad": "Entity telephone number",
         "placeholder_telefono_entidad": "E.g.: 323 93 00 Ext. 1112",
         "direccion_entidad": "Entity Address",
-        "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1"
+        "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1",
+        "item": "Item"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -2391,7 +2392,11 @@
         "componentePropedeutico": "CP",
         "teorico": "T",
         "practico": "P",
-        "teoricoPractico": "T/P"
+        "teoricoPractico": "T/P",
+        "obligatorioBasicoTexto": "Basic Required",
+        "obligatorioComplementarioTexto": "Complementary Required",
+        "electivaIntrinsecaTexto": "Intrinsic Elective",
+        "electivaExtrinsecaTexto": "Extrinsic Elective"
     },
     "plan_estudios": {
         "plan_estudios":"Study Plan",
@@ -2445,7 +2450,15 @@
         "enviar_revision_ok": "Submission for review successful!",
         "enviar_revision_fallo": "Could not submit for review!",
         "error_validacion_prerrequisitos_espacios": "The selected academic space has prerequisites that must be assigned in previous semesters",
-        "error_cargando_datos_formulario": "Error loading information of the Study Plan"
+        "error_cargando_datos_formulario": "Error loading information of the Study Plan",
+        "resumen": "Consolidated Study Plan",
+        "resolucion_aprobacion": "Approval resolution",
+        "nombre_asignatura": "NAME OF THE SUBJECT",
+        "codigo_asignatura": "Subject code",
+        "cant_creditos": "Number of credits",
+        "prerequisitos": "Prerequisites",
+        "convenciones": "CONVENTIONS",
+        "clasificacion": "Classification"
     },
     "gestion_horarios": {
         "encabezado": "Module for the Availability of quotas",
@@ -2473,6 +2486,21 @@
         "salon":"Lounge",
         "proyecto_academico":"academic project",
         "dia": "Day",
-        "hora": "Hour"
+        "hora": "Hour",
+        "encabezado_gestion":"Module for schedule management",
+        "mensaje_gestion":"User in this component you must select the action of interest to perform in the module",
+        "label_gestion": "Transversal information",
+        "calendario_gestion": "Academic Calendar",
+        "mensaje_calendario": "User, keep in mind that you can only manage schedules within the dates established here",
+        "select_calendario": "Select the Academic Calendar",
+        "elije_fecha_inicio":"Initial date",
+        "elije_fecha_final": "Final date",
+        "suite":"Overall suite",
+        "mensaje_suite": "User, please select the option you want to perform",
+        "boton_1": "Group management",
+        "boton_2": "Register schedule",
+        "boton_3": "Copy schedule",
+        "boton_4": "List schedules",
+        "boton_5": "Report schedules"
     }
 }

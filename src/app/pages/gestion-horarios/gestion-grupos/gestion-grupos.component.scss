@@ -27,40 +27,6 @@ fieldset {
     justify-content: space-around;
 }
 
-
-.alinear-center-espacio-doble {
-    padding-left: 25%;
-    padding-right: 25%;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    display: flex;
-    justify-content: space-around;
-}
-
-.alinear-center-espacio-doble.generate {
-    padding-left: 15%;
-    padding-right: 15%;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    display: flex;
-    justify-content: space-around;
-}
-
-.alinear-center.right {
-    padding-left: 45%;
-    padding-right: 5%;
-    display: flex;
-    justify-content: space-around;
-}
-
-.alinear-center.left {
-    padding-bottom: 1rem;
-    padding-left: 15%;
-    padding-right: 45%;
-    display: flex;
-    justify-content: space-around;
-}
-
 .alinear-right {
     padding-right: 2rem;
     display: flex;
@@ -128,7 +94,7 @@ fieldset {
         text-align: center;
 
         a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
-            color: var(--primary);
+            color: var(--primary)
         }
     }
 }
@@ -149,39 +115,91 @@ fieldset {
         height: 1px;
         overflow: hidden;
     }
-
-    ::ng-deep .resumenTabla .a.ng2-smart-action.ng2-smart-action-custom-custom {
-        display: none;
-    }
 }
 
-.custom-action-tb {
-    ::ng-deep {
-        ng2-st-tbody-custom {
-            display: flex;
-            text-align: center;
-    
-            a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
-                color: darkred;
-            }
-        }
-    }
-}
-
-.custom-action-tb.hide {
-    ::ng-deep {
-        ng2-st-tbody-custom {
-            display: flex;
-            text-align: center;
-    
-            a.ng2-smart-action.ng2-smart-action-custom-custom {
-                display: none;
-            }
-        }
-    }
-}
-
-.mat-card-custom {
+fieldset {
     margin-top: 1rem;
-    border-bottom: 2px solid var(--primary);
+    margin-bottom: 1rem;
+}
+
+nb-card-header {
+    background-color: white;
+    position: sticky;
+    top: 77px;
+    z-index: 2;
+}
+
+.top-left-regresar {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 3;
+}
+
+.button-center {
+    padding-left: 20%;
+    padding-right: 20%;
+    display: flex;
+    justify-content: space-around;
+}
+
+mat-vertical-stepper {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.button-stepper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.box-field {
+    //border: 1px solid pink;
+    padding-bottom: 1.25rem;
+    padding-top: 1.25rem;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+mat-hint {
+    color: red !important;
+}
+
+table {
+    width: 100%;
+    border: 1px solid darkcyan;
+    th {
+        text-align: center;
+        color: white;
+        background-color: var(--primary);
+    }
+    td {
+        text-align: center !important;
+    }
+}
+
+.kindaTable {
+    padding: 0 !important;
+    margin: -1px;
+}
+
+.archivo_invalido {
+    text-decoration:line-through;
+    color: red;
+}
+
+
+.contenedor{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content: space-around;
+}
+.contenido{
+    height:100px;
+    width:49%;
+    float:left;
+    margin: 2px;
 }

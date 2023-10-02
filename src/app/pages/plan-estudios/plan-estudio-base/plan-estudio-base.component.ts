@@ -766,6 +766,9 @@ export abstract class PlanEstudioBaseComponent {
             this.cargarPlanesOrdenados(this.mainAction === ACTIONS.EDIT);
           } else {
             this.cargarParametrizacionSemestres(this.mainAction === ACTIONS.EDIT);
+            this.enEdicionSemestreNuevo = false;
+            this.enEdicionSemestreViejo = false;
+
           }
         }
       }, (error) => {
@@ -1482,12 +1485,13 @@ export abstract class PlanEstudioBaseComponent {
       this.proyecto_id = this.planEstudioBody.ProyectoAcademicoId;
       this.crearFormulario(FORM_PLAN_ESTUDIO_VISUALIZACION);
       if (this.esPlanEstudioPadre) {
-        this.createSimpleTableStudyPlan();
-        this.createTableOrganizedStudyPlan();
+        this.createSimpleTableStudyPlan(false);
+        this.createTableOrganizedStudyPlan(false);
+        this.dataOrganizedStudyPlans = new LocalDataSource();
         this.vista = VIEWS.SECONDARY_FORM;
       } else {
         this.createTableEspaciosAcademicos(false);
-        this.createTableSemestreTotal();
+        this.createTableSemestreTotal(false);
         this.totalTotal();
         this.vista = VIEWS.FORM;
       }
@@ -1567,6 +1571,9 @@ export abstract class PlanEstudioBaseComponent {
         this.ListEspacios = espacios;
         
         if (Object.keys(semestreDistribucion).length && Array.isArray(this.ListEspacios)) {
+          let idEspacio;
+          let espacio;
+          let indexEspacio;
           for (const semestreKey in semestreDistribucion) {
             this.dataSemestre.push(new LocalDataSource());
             this.punteroSemestrePlan = this.dataSemestre.length - 1;
@@ -1574,11 +1581,11 @@ export abstract class PlanEstudioBaseComponent {
             
             if (espaciosSemestre){
               espaciosSemestre.forEach((espacioSemestre, idx) => {
-                let idEspacio  = espacioSemestre['espacio_'.concat((idx + 1).toString())].Id;
-                let espacio = this.ListEspacios.find(espacio => espacio._id == idEspacio);
+                idEspacio  = espacioSemestre['espacio_'.concat((idx + 1).toString())].Id;
+                espacio = this.ListEspacios.find(espacio => espacio._id == idEspacio);
                 if (espacio) {
                   this.dataSemestre[this.punteroSemestrePlan].add(espacio);
-                  const indexEspacio = this.ListEspacios.find(espacio => espacio._id == idEspacio);
+                  indexEspacio = this.ListEspacios.findIndex(espacio => espacio._id == idEspacio);
                   this.ListEspacios.splice(indexEspacio, 1);
                 }
               });
@@ -1611,26 +1618,40 @@ export abstract class PlanEstudioBaseComponent {
     }
   }
 
-  cargarPlanesOrdenados(withActions: boolean = true) {
+  async cargarPlanesOrdenados(withActions: boolean = true) {
     try {
       this.loading = true;
+      this.simpleStudyPlans = await this.loadPlanesEstudio("EsPlanEstudioPadre:false");
+      await this.simpleStudyPlans.forEach(plan => {
+        this.organizarDatosTablaSimplePlanEstudio(plan);
+      });
       this.consultarPlanOrdenadoQuery(
         "PlanEstudioId:".concat(this.planEstudioBody.Id).toString()).then(
-          async (planCiclos) => {
+          (planCiclos) => {
           if(Array.isArray(planCiclos) && planCiclos.length) {
-            this.planEstudioOrdenadoBody = planCiclos[0];
-            const ordenPlanes = this.str2JsonValidated(this.planEstudioOrdenadoBody.OrdenPlan);
-            this.simpleStudyPlans = [];
-            await this.loadPlanesEstudio("EsPlanEstudioPadre:false").then((planes) => {
-              this.simpleStudyPlans = planes;
-              for (const oPlan in ordenPlanes) {
-                // ToDo organizar tablas
+            const valorPlanClicos = planCiclos[0];
+            if (valorPlanClicos != undefined && Object.keys(valorPlanClicos).length){
+              this.planEstudioOrdenadoBody = valorPlanClicos;
+              const ordenPlanes = this.str2JsonValidated(this.planEstudioOrdenadoBody.OrdenPlan);
+              let idOrdenPlan;
+              let plan2add;
+              let indexPlan;
+              
+              for (const oPlan in ordenPlanes) {                
+                idOrdenPlan = ordenPlanes[oPlan].Id;
+                plan2add = this.simpleStudyPlans.find(plan => plan.Id == idOrdenPlan);
+                
+                if (plan2add) {
+                  this.dataOrganizedStudyPlans.add(plan2add);
+                  indexPlan = this.simpleStudyPlans.findIndex(plan => plan.Id == idOrdenPlan);
+                  this.simpleStudyPlans.splice(indexPlan, 1);
+                }
               }
-
-            });
+            } else {
+              this.planEstudioOrdenadoBody = undefined;
+            }
+            this.dataOrganizedStudyPlans.refresh();
             this.dataSimpleStudyPlans.load(this.simpleStudyPlans);
-            this.createSimpleTableStudyPlan(withActions);
-            this.createTableOrganizedStudyPlan(withActions);
             this.loading = false;
           }
         }, (error) => {
@@ -1704,28 +1725,54 @@ export abstract class PlanEstudioBaseComponent {
       newPlanCicloOrdenado.OrdenPlan = JSON.stringify(ordenPlanes);
     });
     return new Promise((resolve) => {
-      this.planEstudiosService.post('plan_estudio_proyecto_academico', newPlanCicloOrdenado)
-      .subscribe((res) => {
-        this.loading = false;
-        if (Object.keys(res.Data).length > 0) {
-          this.popUpManager.showSuccessAlert(
-            this.translate.instant('plan_estudios.plan_estudios_actualizacion_ok')
-          ).then((action) => {
-            this.planEstudioOrdenadoBody = res.Data;
-            resolve(res.Data);
-          });
-        } else {
+      if (this.planEstudioOrdenadoBody != undefined && Object.keys(this.planEstudioOrdenadoBody).length) {
+        this.planEstudioOrdenadoBody.OrdenPlan = newPlanCicloOrdenado.OrdenPlan;
+        this.planEstudiosService.put('plan_estudio_proyecto_academico', this.planEstudioOrdenadoBody)
+        .subscribe((res) => {
+          this.loading = false;
+          if (Object.keys(res.Data).length > 0) {
+            this.popUpManager.showSuccessAlert(
+              this.translate.instant('plan_estudios.plan_estudios_actualizacion_ok')
+            ).then((action) => {
+              this.planEstudioOrdenadoBody = res.Data;
+              resolve(res.Data);
+            });
+          } else {
+            this.popUpManager.showErrorAlert(
+              this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
+            );
+          }
+        },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
           this.popUpManager.showErrorAlert(
             this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
           );
-        }
-      },
-      (error: HttpErrorResponse) => {
-        this.loading = false;
-        this.popUpManager.showErrorAlert(
-          this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
-        );
-      });
+        });
+      } else {
+        this.planEstudiosService.post('plan_estudio_proyecto_academico', newPlanCicloOrdenado)
+        .subscribe((res) => {
+          this.loading = false;
+          if (Object.keys(res.Data).length > 0) {
+            this.popUpManager.showSuccessAlert(
+              this.translate.instant('plan_estudios.plan_estudios_actualizacion_ok')
+            ).then((action) => {
+              this.planEstudioOrdenadoBody = res.Data;
+              resolve(res.Data);
+            });
+          } else {
+            this.popUpManager.showErrorAlert(
+              this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
+            );
+          }
+        },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.popUpManager.showErrorAlert(
+            this.translate.instant('plan_estudios.plan_estudios_actualizacion_error')
+          );
+        });
+      }
     });
   }
 

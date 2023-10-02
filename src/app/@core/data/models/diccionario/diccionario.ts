@@ -3,6 +3,7 @@ export const VIEWS = Object.freeze({
     FORM: Symbol(),
     SECONDARY_LIST: Symbol(),
     SECONDARY_FORM: Symbol(),
+    SUMMARY: Symbol(),
 })
 
 export const MODALS = Object.freeze({
@@ -34,5 +35,6 @@ export const ROLES = Object.freeze({
     ADMIN_DOCENCIA: 'ADMIN_DOCENCIA',
     DOCENTE: 'DOCENTE',
     ASIS_PROYECTO: 'ASIS_PROYECTO',
-    SEC_DECANATURA: 'SEC_DECANATURA'
+    SEC_DECANATURA: 'SEC_DECANATURA',
+    DECANO: 'DECANO'
 })
