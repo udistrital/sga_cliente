@@ -38,6 +38,7 @@ export class RevisionConsolidadoComponent implements OnInit {
   estadosConsolidado: {select: any, opciones?: any[]} = {select: null};
 
   isSecDecanatura: String = undefined;
+  isDecano: String = undefined;
 
   revConsolidadoInfo: any = undefined;
 
@@ -60,19 +61,20 @@ export class RevisionConsolidadoComponent implements OnInit {
       })
     }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loading = false;
     this.vista = VIEWS.LIST;
     this.formRevConsolidado = {...FORM_REVISION_CONSOLIDADO};
+    this.dataRevConsolidados.load([]);
+    await this.autenticationService.getRole().then(
+      (rol: Array<String>) => {
+        this.isSecDecanatura = rol.find(role => (role == ROLES.SEC_DECANATURA));
+        this.isDecano = rol.find(role => (role == ROLES.DECANO));
+      }
+    );
     this.buildFormRevConsolidado();
     this.createTable();
     this.loadSelects();
-    this.dataRevConsolidados.load([]);
-    this.autenticationService.getRole().then(
-      (rol: Array<String>) => {
-        this.isSecDecanatura = rol.find(role => (role == ROLES.SEC_DECANATURA));
-      }
-    );
   }
 
   createTable() {
@@ -166,6 +168,10 @@ export class RevisionConsolidadoComponent implements OnInit {
   buildFormRevConsolidado() {
     this.formRevConsolidado.btn = this.translate.instant('GLOBAL.guardar');
     this.formRevConsolidado.titulo = this.translate.instant(this.formRevConsolidado.titulo_i18n);
+    if (this.isDecano) {
+      this.formRevConsolidado.campos.splice(this.getIndexFormRevConsolidado("infoParaSecDec"),1);
+      this.formRevConsolidado.campos.splice(this.getIndexFormRevConsolidado("ArchivoSoporte"),1);
+    }
     this.formRevConsolidado.campos.forEach(campo => {
       campo.label = this.translate.instant(campo.label_i18n);
       campo.placeholder = this.translate.instant(campo.placeholder_i18n);
@@ -242,7 +248,14 @@ export class RevisionConsolidadoComponent implements OnInit {
       promesas.push(this.loadProyectos().then(proyectos => {this.proyectos.opciones = proyectos;}));
       promesas.push(this.cargarEstadosConsolidado().then(estadosConsolidado => {
         this.estadosConsolidado.opciones = estadosConsolidado;
-        const ops = this.estadosConsolidado.opciones.filter(estado => (estado.codigo_abreviacion === "AVA" || estado.codigo_abreviacion === "N_APR"));
+        let estadosCodAbrev: string[] = [];
+        if (this.isSecDecanatura) {
+          estadosCodAbrev = ["AVA","N_APR"];
+        }
+        if (this.isDecano) {
+          estadosCodAbrev = ["APR"];
+        }
+        const ops = this.estadosConsolidado.opciones.filter(estado => estadosCodAbrev.includes(estado.codigo_abreviacion));
         this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('EnviarAprovacionDec')].opciones = ops;
       }));
       this.loading = false
@@ -273,29 +286,11 @@ export class RevisionConsolidadoComponent implements OnInit {
       this.loading = true;
       this.planTrabajoDocenteService.get(`consolidado_docente?query=activo:true,periodo_id:${this.periodos.select.Id}${proyecto}&limit=0`).subscribe((resp) => {
         this.loading = false;
+        const idEstadosFiltro = this.idEstadosSegunRol();
         let rawlistarConsolidados = <any[]>resp.Data;
-        let formatedData = [];
-        rawlistarConsolidados.forEach(consolidado => {
-          const proyecto = this.proyectos.opciones.find(proyecto => proyecto.Id == consolidado.proyecto_academico_id);
-          const periodo = this.periodos.opciones.find(periodo => periodo.Id == consolidado.periodo_id);
-          const estadoConsolidado = this.estadosConsolidado.opciones.find(estado => estado._id == consolidado.estado_consolidado_id);
-          let opcionGestion = "ver"
-          if ((estadoConsolidado && estadoConsolidado.codigo_abreviacion == "ENV") && (this.isSecDecanatura)) {
-            opcionGestion = "editar"
-          }
-          formatedData.push({
-            "proyecto_curricular": proyecto ? proyecto.Nombre : "",
-            "codigo": proyecto ? proyecto.Codigo : "",
-            "fecha_radicado": this.formatoFecha(consolidado.fecha_creacion),
-            "periodo_academico": periodo ? periodo.Nombre : "",
-            "gestion": {value: undefined, type: opcionGestion, disabled: !this.isSecDecanatura},
-            "estado": estadoConsolidado ? estadoConsolidado.nombre : consolidado.estado_consolidado_id,
-            "enviar": {value: undefined, type: 'enviar', disabled: (!this.isSecDecanatura) || (estadoConsolidado.codigo_abreviacion != "AVA")},
-            "ConsolidadoJson": consolidado
-          })
-        })
+        rawlistarConsolidados = rawlistarConsolidados.filter(consolidado => idEstadosFiltro.includes(consolidado.estado_consolidado_id));
+        const formatedData = this.estilizarDatosSegunRol(rawlistarConsolidados);
         this.dataRevConsolidados.load(formatedData);
-
       }, (err) => {
         this.loading = false;
         console.warn(err);
@@ -303,22 +298,65 @@ export class RevisionConsolidadoComponent implements OnInit {
     }
   }
 
+  idEstadosSegunRol(): string[] {
+    let estadosCodAbrev: string[] = [];
+    if (this.isSecDecanatura) {
+      estadosCodAbrev = ["ENV","AVA","ENV_AVA","N_APR"];
+    }
+    if (this.isDecano) {
+      estadosCodAbrev = ["ENV_AVA","APR"];
+    }
+    return this.estadosConsolidado.opciones
+      .filter(estado => estadosCodAbrev.includes(estado.codigo_abreviacion))
+      .map(estado => estado._id);
+  }
+
+  estilizarDatosSegunRol(consolidados: any[]): any[] {
+    let formatedData = [];
+    consolidados.forEach(consolidado => {
+      const proyecto = this.proyectos.opciones.find(proyecto => proyecto.Id == consolidado.proyecto_academico_id);
+      const periodo = this.periodos.opciones.find(periodo => periodo.Id == consolidado.periodo_id);
+      const estadoConsolidado = this.estadosConsolidado.opciones.find(estado => estado._id == consolidado.estado_consolidado_id);
+      let opcionGestion = "ver";
+      if ((estadoConsolidado && estadoConsolidado.codigo_abreviacion == "ENV") && (this.isSecDecanatura)) {
+        opcionGestion = "editar";
+      }
+      if ((estadoConsolidado && estadoConsolidado.codigo_abreviacion == "ENV_AVA") && (this.isDecano)) {
+        opcionGestion = "editar";
+      }
+      formatedData.push({
+        "proyecto_curricular": proyecto ? proyecto.Nombre : "",
+        "codigo": proyecto ? proyecto.Codigo : "",
+        "fecha_radicado": this.formatoFecha(consolidado.fecha_creacion),
+        "periodo_academico": periodo ? periodo.Nombre : "",
+        "gestion": { value: undefined, type: opcionGestion, disabled: (!this.isSecDecanatura && !this.isDecano) },
+        "estado": estadoConsolidado ? estadoConsolidado.nombre : consolidado.estado_consolidado_id,
+        "enviar": { value: undefined, type: 'enviar', disabled: (!this.isSecDecanatura) || (estadoConsolidado.codigo_abreviacion != "AVA") },
+        "ConsolidadoJson": consolidado
+      })
+    })
+    return formatedData;
+  }
+
   formatoFecha(fechaHora: string): string {
-    const fecha_hora = fechaHora.split('T');
-    const fechaPartes = fecha_hora[0].split('-');
-    return fechaPartes[2]+'/'+fechaPartes[1]+'/'+fechaPartes[0]+' - '+fecha_hora[1].split('.')[0]
+    return new Date(fechaHora).toLocaleString('es-CO', { timeZone: 'America/Bogota' });
   }
 
   revisarConsolidado(consolidado: any, readonly?: boolean) {
     this.revConsolidadoInfo = consolidado;
     this.vista = VIEWS.FORM;
-    this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('Rol')].valor = this.isSecDecanatura;
+    this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('Rol')].valor = this.isSecDecanatura || this.isDecano;
     this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('CumpleNorma')].valor = consolidado.cumple_normativa;
+    this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('CumpleNorma')].deshabilitar = !this.isSecDecanatura;
+
     const estadoApr = this.estadosConsolidado.opciones.find(estado => estado._id == consolidado.estado_consolidado_id);
-    if (estadoApr.codigo_abreviacion === "AVA" || estadoApr.codigo_abreviacion === "N_APR")
-    this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('EnviarAprovacionDec')].valor = estadoApr;
-    const consolidado_coordinacion = JSON.parse(consolidado.consolidado_coordinacion);
-    this.loading = true;
+    if (estadoApr.codigo_abreviacion === "AVA" || estadoApr.codigo_abreviacion === "N_APR" || estadoApr.codigo_abreviacion === "APR") {
+      this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('EnviarAprovacionDec')].valor = estadoApr;
+    }
+
+    if (this.isSecDecanatura) {
+      const consolidado_coordinacion = JSON.parse(consolidado.consolidado_coordinacion);
+      this.loading = true;
       this.GestorDocumental.get([{Id: consolidado_coordinacion.documento_id, ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}]).subscribe(
         (resp: any[])  => {
           this.loading = false;
@@ -326,22 +364,36 @@ export class RevisionConsolidadoComponent implements OnInit {
           this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].valor = resp[0].url;
         }
       );
+    }
+    
     let terceroId = 0;
-    if (consolidado.respuesta_decanatura !== "{}") {
-      const respuesta_decanatura = JSON.parse(consolidado.respuesta_decanatura);
-      if (respuesta_decanatura.documento_id && respuesta_decanatura.documento_id > 0) {
+    const respuesta_decanatura = JSON.parse(consolidado.respuesta_decanatura);
+    if (Object.keys(respuesta_decanatura.sec).length > 0) {
+      if (respuesta_decanatura.sec.documento_id && respuesta_decanatura.sec.documento_id > 0) {
         this.loading = true;
-        this.GestorDocumental.get([{Id: respuesta_decanatura.documento_id, ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}]).subscribe(
+        this.GestorDocumental.get([{Id: respuesta_decanatura.sec.documento_id, ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}]).subscribe(
           (resp: any[])  => {
             this.loading = false;
-            this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporte")].urlTemp = resp[0].url;
-            this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporte")].valor = resp[0].url;
+            if (this.isDecano) {
+              this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].urlTemp = resp[0].url;
+              this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].valor = resp[0].url;
+            } else {
+              this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporte")].urlTemp = resp[0].url;
+              this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporte")].valor = resp[0].url;
+            }
           }
         );
       }
-      terceroId = respuesta_decanatura.responsable_id;
-      this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('Observaciones')].valor = respuesta_decanatura.observacion;
-    } else {
+      if (this.isSecDecanatura) {
+        terceroId = respuesta_decanatura.sec.responsable_id;
+        this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('Observaciones')].valor = respuesta_decanatura.sec.observacion;
+      }
+    }
+    if ((Object.keys(respuesta_decanatura.dec).length > 0) && this.isDecano) {
+      terceroId = respuesta_decanatura.dec.responsable_id;
+      this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('Observaciones')].valor = respuesta_decanatura.dec.observacion;
+    }
+    if (terceroId == 0) {
       terceroId = this.userService.getPersonaId();
     }
     this.tercerosService.get('tercero/'+terceroId).subscribe(resTerc => {
@@ -360,25 +412,28 @@ export class RevisionConsolidadoComponent implements OnInit {
   async validarFormRevConsolidado(event) {
     if (event.valid) {
       let respuesta_decanatura = JSON.parse(this.revConsolidadoInfo.respuesta_decanatura);
-      const verifyNewDoc = new Promise(resolve => {
-        if (event.data.RevisionConsolidado.ArchivoSoporte.file != undefined) {
-          this.GestorDocumental.uploadFiles([event.data.RevisionConsolidado.ArchivoSoporte]).subscribe(
-            (resp: any[]) => {
-              resolve(resp[0].res.Id)
-            });
-        } else {
-          resolve(respuesta_decanatura.documento_id)
-        }
-      });
-
-      respuesta_decanatura.documento_id = await verifyNewDoc;
-      respuesta_decanatura.responsable_id = this.userService.getPersonaId();
-      respuesta_decanatura.observacion = event.data.RevisionConsolidado.Observaciones;
-      
-      this.revConsolidadoInfo.cumple_normativa = event.data.RevisionConsolidado.CumpleNorma;
-      this.revConsolidadoInfo.respuesta_decanatura = JSON.stringify(respuesta_decanatura);
+      if (this.isSecDecanatura) {
+        const verifyNewDoc = new Promise(resolve => {
+          if (event.data.RevisionConsolidado.ArchivoSoporte.file != undefined) {
+            this.GestorDocumental.uploadFiles([event.data.RevisionConsolidado.ArchivoSoporte]).subscribe(
+              (resp: any[]) => {
+                resolve(resp[0].res.Id)
+              });
+          } else {
+            resolve(respuesta_decanatura.sec.documento_id)
+          }
+        });
+        respuesta_decanatura.sec.documento_id = await verifyNewDoc;
+        respuesta_decanatura.sec.responsable_id = this.userService.getPersonaId();
+        respuesta_decanatura.sec.observacion = event.data.RevisionConsolidado.Observaciones;
+        this.revConsolidadoInfo.cumple_normativa = event.data.RevisionConsolidado.CumpleNorma;
+      }
+      if (this.isDecano) {
+        respuesta_decanatura.dec.responsable_id = this.userService.getPersonaId();
+        respuesta_decanatura.dec.observacion = event.data.RevisionConsolidado.Observaciones;
+      }
       this.revConsolidadoInfo.estado_consolidado_id = event.data.RevisionConsolidado.EnviarAprovacionDec._id;
-
+      this.revConsolidadoInfo.respuesta_decanatura = JSON.stringify(respuesta_decanatura);
       this.loading = true;
           this.planTrabajoDocenteService.put('consolidado_docente/'+this.revConsolidadoInfo._id, this.revConsolidadoInfo).subscribe((resp) => {
             this.loading = false;

@@ -46,7 +46,7 @@ export let FORM_RESPUESTA_DEC = {
     //titulo_i18n: 'ptd.formato_control_cumplimiento_norma',
     tipo_formulario: 'mini',
     alertas: true,
-    btn: 'Guardar',
+    btn: '',
     modelo: 'RespuestaConsolidado',
     customPadding: '0',
     campos: [
@@ -97,6 +97,7 @@ export let FORM_REVISION_CONSOLIDADO = {
         },
         {
             etiqueta: 'label',
+            nombre: 'infoParaSecDec',
             claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
             label_i18n: "ptd.info_revisar_cargar_formato",
             placeholder_i18n: 'ptd.info_revisar_cargar_formato',
