@@ -2468,7 +2468,16 @@
         "obligatorioBasicoTexto": "Obligatorio Básico",
         "obligatorioComplementarioTexto": "Obligatorio Complementario",
         "electivaIntrinsecaTexto": "Electiva Intrínseca",
-        "electivaExtrinsecaTexto": "Electiva Extrínseca"
+        "electivaExtrinsecaTexto": "Electiva Extrínseca",
+        "espacio_modular": "Espacio modular",
+        "agrupacion_espacios": "Agrupación Espacios Academicos",
+        "agrupacion_espacios_color": "Color Agrupación Espacios Academicos",
+        "agregar_agrupacion_espacios": "Agregar Agrupación Espacios Academicos",
+        "lista_agrupaciones": "Listado Agrupación Espacios Academicos",
+        "select_color": "Elige el color deseado",
+        "agregar_agrupacion_ok": "La Agrupación ha sido agregada",
+        "agregar_agrupacion_fail": "No se pudo agregar la agrupación"
+
     },
     "plan_estudios": {
         "plan_estudios":"Plan de estudios",
