@@ -1,4 +1,3 @@
-
 <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
 nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">    
     <nb-card-header>
@@ -115,7 +114,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                 </div>
                 <div class="contenido_boton" >
                     <div class="example-button-container">
-                        <button mat-flat-button color="primary">
+                        <button mat-flat-button color="primary" (click)="to_gestion_registo()">
                             <div class="outer-div">
                             <mat-icon class="icon-display">assignment</mat-icon>
                             <span>{{ 'gestion_horarios.boton_2' | translate }}</span>
@@ -163,6 +162,8 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
 <gestion-grupos *ngIf="bandera_gestion_grupo">
 </gestion-grupos>
 
+<registro-horarios *ngIf="bandera_registro_horario">
+</registro-horarios>
         </ng-container>
     </nb-card-body>
 </nb-card>

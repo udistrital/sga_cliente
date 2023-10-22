@@ -33,6 +33,7 @@ export class GestionGruposComponent implements OnInit {
   niveles: any[];
   proyectos: any[];
   periodos: any[] ;
+  bandera_registro_horario: boolean;
 
   readonly ACTIONS = ACTIONS;
   crear_editar: Symbol;
@@ -235,5 +236,11 @@ export class GestionGruposComponent implements OnInit {
     });
   }
 
+  to_main_component(){
+    console.log("to_main_component");
+    this.bandera_registro_horario =false;
+  }
+
 
 }
+
