@@ -5,7 +5,8 @@ import { CreacionPlanEstudiosComponent } from './creacion-plan-estudios/creacion
 import { EdicionPlanEstudiosComponent } from './edicion-plan-estudios/edicion-plan-estudios.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
 import { SummaryPlanesEstudioComponent } from './summary-planes-estudio/summary-planes-estudio.component';
-
+import { VisualizarDocumentoPlanComponent } from './visualizar-documento-plan/visualizar-documento-plan.component';
+import { SafeURL } from '../../@core/pipes/safeUrl.pipe';
 
 const routes: Routes = [{
   path: '',
@@ -33,5 +34,7 @@ export const routedComponents = [
   PlanEstudiosComponent,
   CreacionPlanEstudiosComponent,
   EdicionPlanEstudiosComponent,
-  SummaryPlanesEstudioComponent
+  SummaryPlanesEstudioComponent,
+  SafeURL,
+  VisualizarDocumentoPlanComponent,
 ]

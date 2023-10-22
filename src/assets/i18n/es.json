@@ -241,6 +241,7 @@
         "si": "Si",
         "no": "No",
         "cerrar": "Cerrar",
+        "cerrar_visualizador": "Cerrar visualizador",
         "NA": "No aplica",
         "accion_no_permitida": "Acción no permitida",
         "confirmar": "Confirmar",
@@ -2523,6 +2524,8 @@
         "enviar_revision_fallo": "¡No se pudo enviar a revisión!",
         "error_validacion_prerrequisitos_espacios": "El espacio académico seleccionado tiene prerrequisitos que deben ser asignados en semestres anteriores",
         "error_cargando_datos_formulario": "Error cargando información del Plan de Estudios",
+        "error_cargando_plan_estudio_visualizacion": "Error cargando datos del plan de estudio para su visualización",
+        "error_generando_plan_estudio_visualizacion": "Error generando el documento del plan de estudio para su visualización",
         "resumen": "Consolidado del Plan de Estudio",
         "resolucion_aprobacion": "Resolución de aprobación",
         "nombre_asignatura": "NOMBRE DE LA ASIGNATURA",
@@ -2530,7 +2533,8 @@
         "cant_creditos": "Cantidad de créditos",
         "prerequisitos": "Prerrequisitos",
         "convenciones": "CONVENCIONES",
-        "clasificacion": "Clasificación"
+        "clasificacion": "Clasificación",
+        "descargar_documento": "Descargar Plan de Estudio"
     },
     "gestion_horarios": {
         "encabezado": "Módulo para la Disponibilidad de cupos",
