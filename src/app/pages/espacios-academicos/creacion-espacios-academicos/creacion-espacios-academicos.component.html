@@ -95,7 +95,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                         <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
                                         <mat-select [formControlName]="campo.nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}" [disabled]="campo.sololectura ? campo.sololectura : false">
                                             <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
-                                            <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre }}</mat-option>
+                                            <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre ? opcion.Nombre : opcion.nombre }}</mat-option>
                                         </mat-select>
                                         <mat-hint *ngIf="formStep2.get(campo.nombre).touched && formStep2.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
                                     </mat-form-field>
@@ -106,6 +106,14 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                                             <mat-option *ngFor="let opcion of campo.opciones" [value]="opcion">{{ opcion.Nombre ? opcion.Nombre : opcion.nombre }}</mat-option>
                                         </mat-select>
                                         <mat-hint *ngIf="formStep2.get(campo.nombre).touched && formStep2.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                    </mat-form-field>
+                                    <mat-form-field *ngSwitchCase="'colorView'" floatLabel="always">
+                                        <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                                        <input matInput [formControlName]="campo.nombre" [type]="campo.tipo" readonly [style.background-color]="campo.color ? campo.color : 'white'" style="border: 1px solid gray; border-radius: 3px;">
+                                    </mat-form-field>
+                                    <mat-form-field *ngSwitchCase="'botonAux'" floatLabel="always" class="boton">
+                                        <input matInput [formControlName]="campo.nombre" [type]="campo.tipo" style="display: none;">
+                                        <button type="button" mat-raised-button [color]="campo.colorBoton" [disabled]="campo.deshabilitar ? campo.deshabilitar : false" style="width: 100%; line-height: 25px;" (click)="nuevaAgrupacion()">{{ campo.label }}</button>
                                     </mat-form-field>
                                 </ng-container>
                             </ng-container>
@@ -187,6 +195,61 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
             <div class="button-center">
                 <button mat-raised-button (click)="vista=VIEWS.LIST">{{ 'GLOBAL.cancelar' | translate }}</button>
                 <button *ngIf="!soloLectura" mat-raised-button [color]="formularioCompleto() ? 'primary' : ''" (click)="elegirAccion()">{{ 'GLOBAL.guardar' | translate }}</button>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+        </nb-card-footer>
+    </ng-container>
+    <!-- vista formulario creación agrupacion de espacios -->
+    <ng-container *ngSwitchCase="VIEWS.SECONDARY_FORM">
+        <nb-card-header>
+          <button mat-stroked-button class="top-left-regresar" (click)="vista=VIEWS.FORM;">{{ 'GLOBAL.regresar' | translate }}</button>
+            <div class="row" align="center">
+                <div class="col">
+                    {{ 'espacios_academicos.agregar_agrupacion_espacios' | translate }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <div style="padding: 1rem 20% 1rem 20%;">
+                <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+                    <legend><small>&nbsp; {{ 'espacios_academicos.lista_agrupaciones' | translate }} - {{ facu ? facu.Nombre : '' }}</small></legend>
+                    <ng2-smart-table [settings]="tbAgrupacionEspacios" [source]="dataAgrupacionEspacios">
+                    </ng2-smart-table>
+                </fieldset>
+                <br>
+                <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto; padding: 1.25rem;">
+                    <legend><small>&nbsp; {{ 'espacios_academicos.agregar_agrupacion_espacios' | translate }}</small></legend>
+                    <form [formGroup]="formAgrup">
+                        <div class="row">
+                            <div *ngFor="let campo of formDefAgrupacion" [class]="campo.claseGrid">
+                                <ng-container [ngSwitch]="campo.etiqueta">
+                                    <ng-container *ngIf="!(campo.ocultar ? campo.ocultar : false)">
+                                        <mat-form-field *ngSwitchCase="'input'" floatLabel="always">
+                                            <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                                            <input matInput [formControlName]="campo.nombre" [type]="campo.tipo" [placeholder]="campo.placeholder" [readonly]="campo.sololectura ? campo.sololectura : false" [min]="campo.min">
+                                            <mat-hint *ngIf="formAgrup.get(campo.nombre).touched && formAgrup.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                        </mat-form-field>
+                                        <mat-form-field *ngSwitchCase="'textarea'" floatLabel="always">
+                                            <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                                            <textarea matInput [formControlName]="campo.nombre" [placeholder]="campo.placeholder" [readonly]="campo.sololectura ? campo.sololectura : false">
+                                            </textarea>
+                                            <mat-hint *ngIf="formAgrup.get(campo.nombre).touched && formAgrup.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                        </mat-form-field>
+                                        <mat-form-field *ngSwitchCase="'inputColor'" floatLabel="always">
+                                            <mat-label>{{ campo.requerido ? '* '+campo.label : campo.label }}:</mat-label>
+                                            <input matInput [formControlName]="campo.nombre" [type]="campo.tipo" [placeholder]="campo.placeholder" [readonly]="campo.sololectura ? campo.sololectura : false" [min]="campo.min" class="showhand" title="{{ 'espacios_academicos.select_color' | translate }}">
+                                            <mat-hint *ngIf="formAgrup.get(campo.nombre).touched && formAgrup.get(campo.nombre).errors?.required">{{ 'GLOBAL.falta_campo' | translate }}</mat-hint>
+                                        </mat-form-field>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            </div>
+                    </form>
+                    <div class="button-center">
+                        <button mat-raised-button [color]="formAgrup.valid ? 'primary' : ''" (click)="guardarAgrupacion()">{{ 'GLOBAL.guardar' | translate }}</button>
+                    </div>
+                </fieldset>
             </div>
         </nb-card-body>
         <nb-card-footer>
