@@ -1,3 +1,4 @@
+
 <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
 nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">    
     <nb-card-header>
@@ -133,7 +134,8 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
     </mat-step>
 </mat-vertical-stepper>
 <!-- ------------------------------------------------ -->           
-
-        </ng-container>
+<button mat-flat-button color="primary" (click)="to_main_component()" >{{ 'GLOBAL.salir' | translate }}
+</button>
+    </ng-container>
     </nb-card-body>
 </nb-card>
