@@ -2586,11 +2586,24 @@
         "header_1_crear_grupo": "Asignación espacios académicos",
         "select_espacio": "Seleccione los espacios relacionados",
         "select_espacio_2": "Seleccione el grupo del espacios relacionado",
-        "header_2_crear_grupo": "  Codificación y capacidad grupo",
+        "header_2_crear_grupo": "Codificación y capacidad grupo",
         "label_1_codificacion": "Codigo proyecto curricular: ",
         "label_2_codificacion": "Indicador para el grupo:",
         "label_3_codificacion": "Codigo resultado para el grupo",
-        "label_4_codificacion": "Capacidad del grupo"
+        "label_4_codificacion": "Capacidad del grupo",
+        "encabezado_4":"Registrar horario",
+        "mensaje_inicial_4": "Usuario en el presente módulo usted podra realizar la gestión de los horarios para sus proyectos curriculares relacionados.",
+        "header_especifico": "Información especifica",
+        "header_1_periodo": "Periódo Académico",
+        "placeholder_grupo": "Seleccione el grupo para el cual aplica la asignación horaría",
+        "siguiente_especidfico": "Pasar con la información especifica",
+        "mensaje_inicial_5": "A continuación usted deberá seleccionar e ingresar la información Especifica requerida.",
+        "header_2_asignacion": "Asignacion de Espacio Fisico",
+        "select_facultad": "Seleccione del listado la Facultad",
+        "select_bloque": "Seleccione del listado el Bloque",
+        "select_salon": "Seleccione del listado el Salon",
+        "siguiente_horaria": "Continuar con la información horaria",
+        "header_2_horaria": "Información horaria"
     }
 
 }
