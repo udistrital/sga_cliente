@@ -224,6 +224,7 @@
         "si": "Yes",
         "no": "No",
         "cerrar": "Close",
+        "cerrar_visualizador": "Close viewer",
         "NA": "Doesn't apply",
         "accion_no_permitida": "Action not allowed",
         "filtrar": "Filter",
@@ -2459,6 +2460,8 @@
         "enviar_revision_fallo": "Could not submit for review!",
         "error_validacion_prerrequisitos_espacios": "The selected academic space has prerequisites that must be assigned in previous semesters",
         "error_cargando_datos_formulario": "Error loading information of the Study Plan",
+        "error_cargando_plan_estudio_visualizacion": "Error loading study plan data for viewing",
+        "error_generando_plan_estudio_visualizacion": "Error generating the study plan document for viewing",
         "resumen": "Consolidated Study Plan",
         "resolucion_aprobacion": "Approval resolution",
         "nombre_asignatura": "NAME OF THE SUBJECT",
@@ -2466,7 +2469,8 @@
         "cant_creditos": "Number of credits",
         "prerequisitos": "Prerequisites",
         "convenciones": "CONVENTIONS",
-        "clasificacion": "Classification"
+        "clasificacion": "Classification",
+        "descargar_documento": "Download Study Plan"
     },
     "gestion_horarios": {
         "encabezado": "Module for the Availability of quotas",
