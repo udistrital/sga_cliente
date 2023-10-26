@@ -43,7 +43,7 @@ export const routedComponents = [
   EdicionPlanEstudiosComponent,
   SummaryPlanesEstudioComponent,
   SafeURL,
-  VisualizarDocumentoPlanComponent,,
+  VisualizarDocumentoPlanComponent,
   EvaluarPlanEstudiosComponent,
   DialogoEvaluarComponent
 ]
