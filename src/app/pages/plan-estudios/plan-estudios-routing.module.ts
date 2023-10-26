@@ -5,7 +5,8 @@ import { CreacionPlanEstudiosComponent } from './creacion-plan-estudios/creacion
 import { EdicionPlanEstudiosComponent } from './edicion-plan-estudios/edicion-plan-estudios.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
 import { SummaryPlanesEstudioComponent } from './summary-planes-estudio/summary-planes-estudio.component';
-
+import { EvaluarPlanEstudiosComponent } from './evaluar-plan-estudios/evaluar-plan-estudios.component';
+import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar/dialogo-evaluar.component';
 
 const routes: Routes = [{
   path: '',
@@ -19,6 +20,11 @@ const routes: Routes = [{
     path: 'editar',
     component: EdicionPlanEstudiosComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'evaluar',
+    component: EvaluarPlanEstudiosComponent,
+    //canActivate: [AuthGuard]
   }
   ]
 }];
@@ -33,5 +39,7 @@ export const routedComponents = [
   PlanEstudiosComponent,
   CreacionPlanEstudiosComponent,
   EdicionPlanEstudiosComponent,
-  SummaryPlanesEstudioComponent
+  SummaryPlanesEstudioComponent,
+  EvaluarPlanEstudiosComponent,
+  DialogoEvaluarComponent
 ]
