@@ -1,0 +1,197 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">    
+    <nb-card-header>
+        <div class="row" align="center">
+            <div class="col">
+                {{ 'gestion_horarios.encabezado_4' | translate }}
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <ng-container *ngSwitchCase="VIEWS.LIST">
+        <div class="alinear-center">
+            <div class="advertencia">{{ 'gestion_horarios.mensaje_inicial_4' | translate }}</div>
+        </div>
+
+
+
+    <mat-vertical-stepper #stepper [linear]="false">
+            <mat-step >
+            <ng-template matStepLabel>{{ 'gestion_horarios.label_gestion' | translate }}</ng-template>
+                
+            <mat-card
+                style="width:calc(80% - 60px); border: 1px #666666 solid; border-radius: 15px;background-color: #F5F5F5; margin: auto;">
+            <mat-card-content>
+                <p>
+                    <label for="">{{ 'gestion_horarios.proyecto_academico' | translate }}:_____________________________________________________________ </label>
+                </p>
+                <p>
+                    <label for="">{{ 'gestion_horarios.plan_estudios' | translate }}: _____________________________________________________________ </label>
+                </p>
+                <p>
+                    <label for="">{{ 'gestion_horarios.semestre' | translate }}: _____________________________________________________________</label>
+                </p>
+            </mat-card-content>
+        </mat-card>
+
+
+
+        <mat-vertical-stepper #stepper [linear]="false">
+            <mat-step  >
+                <ng-template matStepLabel>{{ 'gestion_horarios.header_1_periodo' | translate }}</ng-template>
+
+                <div class="contenedor">
+                    <mat-form-field style="width: 60%;">
+                        <mat-label>{{ 'periodo.select_periodo' | translate }}</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                            {{temp.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                    &nbsp;
+
+                </div>
+    
+                <button mat-stroked-button matStepperNext>{{ 'GLOBAL.siguiente' | translate }}</button>
+
+            </mat-step>
+
+            <mat-step >
+            <ng-template matStepLabel>{{ 'gestion_horarios.grupo' | translate }}</ng-template>
+            <div class="contenedor">
+                <mat-form-field style="width: 60%;">
+                <mat-label>{{ 'gestion_horarios.placeholder_grupo' | translate }}</mat-label>
+                    <mat-select>
+                    <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                    {{temp.viewValue}}
+                    </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                &nbsp;
+
+            </div>
+            </mat-step>  
+
+        </mat-vertical-stepper>
+            
+        <div class="button-stepper">
+            <button mat-stroked-button matStepperNext>{{ 'gestion_horarios.siguiente_especidfico' | translate }}</button>
+        </div>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>{{ 'gestion_horarios.header_especifico' | translate }}</ng-template>
+        <div class="alinear-center">
+            <div class="advertencia">{{ 'gestion_horarios.mensaje_inicial_5' | translate }}</div>
+        </div>
+
+        <mat-vertical-stepper #stepper [linear]="false">
+            <mat-step [stepControl]="formStep1" errorMessage="{{ 'GLOBAL.diligenciar_paso' | translate }}" >
+                <ng-template matStepLabel>{{ 'gestion_horarios.header_1_crear_grupo' | translate }}</ng-template>
+
+
+
+                <div class="contenedor">
+                    <div class="contenido">
+
+                        <mat-form-field style="width: 60%;">
+                            <mat-label>{{ 'gestion_horarios.select_espacio' | translate }}</mat-label>
+                            <mat-select>
+                              <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                                {{temp.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field> 
+                        &nbsp;
+
+
+                    </div> 
+                    
+
+                    <div class="contenido" >
+
+                        <mat-form-field style="width: 60%;">
+                            <mat-label>{{ 'gestion_horarios.select_espacio_2' | translate }}</mat-label>
+                            <mat-select>
+                              <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                                {{temp.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field> 
+                    </div>
+
+                </div>
+                <button mat-stroked-button matStepperNext>{{ 'GLOBAL.siguiente' | translate }}</button>
+
+            </mat-step>
+
+            <mat-step >
+            <ng-template matStepLabel>{{ 'gestion_horarios.header_2_asignacion' | translate }}</ng-template>
+
+            <div class="contenedor">
+                <div class="contenido">
+
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>{{ 'gestion_horarios.select_facultad' | translate }}</mat-label>
+                        <mat-select>
+                          <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                            {{temp.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                    &nbsp;
+
+
+                </div> 
+                
+
+                <div class="contenido" >
+
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>{{ 'gestion_horarios.select_bloque' | translate }}</mat-label>
+                        <mat-select>
+                          <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                            {{temp.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                </div>
+
+
+                <div class="contenido" >
+
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>{{ 'gestion_horarios.select_salon' | translate }}</mat-label>
+                        <mat-select>
+                          <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                            {{temp.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                </div>
+
+            </div>
+               
+
+                
+
+        <div class="button-stepper">
+            <button mat-stroked-button matStepperNext>{{ 'gestion_horarios.siguiente_horaria' | translate }}</button>
+        </div>
+        </mat-step>  
+
+
+        </mat-vertical-stepper>
+
+          
+    </mat-step>
+    <mat-step >
+        <ng-template matStepLabel>{{ 'gestion_horarios.header_2_horaria' | translate }}</ng-template>
+
+    </mat-step>
+</mat-vertical-stepper>
+<!-- ------------------------------------------------ -->           
+
+        </ng-container>
+    </nb-card-body>
+</nb-card>

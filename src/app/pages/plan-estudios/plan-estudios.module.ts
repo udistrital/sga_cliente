@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { PlanEstudiosService } from '../../@core/data/plan_estudios.service';
 import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.service';
+import { VisualizarDocumentoPlanComponent } from './visualizar-documento-plan/visualizar-documento-plan.component';
 import { MatDialog, MatDialogModule } from '@angular/material';
 import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar/dialogo-evaluar.component';
 
@@ -26,6 +27,7 @@ import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar
     EspaciosAcademicosService,
   ],
   entryComponents: [
+    VisualizarDocumentoPlanComponent,
     DialogoEvaluarComponent
   ],
   exports: [

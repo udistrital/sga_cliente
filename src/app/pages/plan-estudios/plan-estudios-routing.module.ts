@@ -5,6 +5,8 @@ import { CreacionPlanEstudiosComponent } from './creacion-plan-estudios/creacion
 import { EdicionPlanEstudiosComponent } from './edicion-plan-estudios/edicion-plan-estudios.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
 import { SummaryPlanesEstudioComponent } from './summary-planes-estudio/summary-planes-estudio.component';
+import { VisualizarDocumentoPlanComponent } from './visualizar-documento-plan/visualizar-documento-plan.component';
+import { SafeURL } from '../../@core/pipes/safeUrl.pipe';
 import { EvaluarPlanEstudiosComponent } from './evaluar-plan-estudios/evaluar-plan-estudios.component';
 import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar/dialogo-evaluar.component';
 
@@ -40,6 +42,8 @@ export const routedComponents = [
   CreacionPlanEstudiosComponent,
   EdicionPlanEstudiosComponent,
   SummaryPlanesEstudioComponent,
+  SafeURL,
+  VisualizarDocumentoPlanComponent,,
   EvaluarPlanEstudiosComponent,
   DialogoEvaluarComponent
 ]

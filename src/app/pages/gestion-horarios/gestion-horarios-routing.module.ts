@@ -6,6 +6,7 @@ import { HorariosGruposComponent } from './horarios-grupos/horarios-grupos.compo
 import { GestionHorarioComponent } from './gestion-horario/gestion-horario.component';
 import { GestionGruposComponent } from './gestion-grupos/gestion-grupos.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
+import { RegistroHorariosComponent } from './registro-horarios/registro-horarios.component';
 
 
 const routes: Routes = [{
@@ -30,6 +31,11 @@ const routes: Routes = [{
     path: 'gestion-grupos',
     component: GestionGruposComponent,
     //canActivate: [AuthGuard],
+  },
+  {
+    path: 'registro-horarios',
+    component: RegistroHorariosComponent,
+    //canActivate: [AuthGuard],
   }]
 }];
 
@@ -44,5 +50,6 @@ export const routedComponents = [
     DisponibilidadCuposComponent,
     HorariosGruposComponent,
     GestionHorarioComponent,
-    GestionGruposComponent
+    GestionGruposComponent,
+    RegistroHorariosComponent
 ]

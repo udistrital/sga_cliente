@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EspacioSummary, PlanEstudioSummary } from '../../../@core/data/models/plan_estudios/plan_estudio_summary';
 import { EspaciosAcademicosService } from '../../../@core/data/espacios_academicos.service';
+import { PopUpManager } from '../../../managers/popUpManager';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { VisualizarDocumentoPlanComponent } from '../visualizar-documento-plan/visualizar-documento-plan.component';
 
 @Component({
   selector: 'summary-planes-estudio',
@@ -16,6 +19,7 @@ export class SummaryPlanesEstudioComponent implements OnInit {
   Escuelas: any = {};
  
   constructor(
+    public dialog: MatDialog,
     private espaciosAcademicosService: EspaciosAcademicosService,
   ) { }
 
@@ -183,4 +187,13 @@ export class SummaryPlanesEstudioComponent implements OnInit {
     })
   }
 
+  generateStudyPlanDocument() {
+    const dialogVisualizadorDocumento = new MatDialogConfig();
+    dialogVisualizadorDocumento.width = '80vw';
+    dialogVisualizadorDocumento.height = '90vh';
+    dialogVisualizadorDocumento.data = {
+      "dataPlanes": this.dataPlanes
+    };
+    this.dialog.open(VisualizarDocumentoPlanComponent, dialogVisualizadorDocumento);
+  }
 }

@@ -241,6 +241,7 @@
         "si": "Si",
         "no": "No",
         "cerrar": "Cerrar",
+        "cerrar_visualizador": "Cerrar visualizador",
         "NA": "No aplica",
         "accion_no_permitida": "Acción no permitida",
         "confirmar": "Confirmar",
@@ -2469,7 +2470,16 @@
         "obligatorioBasicoTexto": "Obligatorio Básico",
         "obligatorioComplementarioTexto": "Obligatorio Complementario",
         "electivaIntrinsecaTexto": "Electiva Intrínseca",
-        "electivaExtrinsecaTexto": "Electiva Extrínseca"
+        "electivaExtrinsecaTexto": "Electiva Extrínseca",
+        "espacio_modular": "Espacio modular",
+        "agrupacion_espacios": "Agrupación Espacios Academicos",
+        "agrupacion_espacios_color": "Color Agrupación Espacios Academicos",
+        "agregar_agrupacion_espacios": "Agregar Agrupación Espacios Academicos",
+        "lista_agrupaciones": "Listado Agrupación Espacios Academicos",
+        "select_color": "Elige el color deseado",
+        "agregar_agrupacion_ok": "La Agrupación ha sido agregada",
+        "agregar_agrupacion_fail": "No se pudo agregar la agrupación"
+
     },
     "plan_estudios": {
         "plan_estudios":"Plan de estudios",
@@ -2537,6 +2547,8 @@
         "error_validacion_prerrequisitos_espacios": "El espacio académico seleccionado tiene prerrequisitos que deben ser asignados en semestres anteriores",
         "error_cargando_datos_formulario": "Error cargando información del Plan de Estudios",
         "error_datos_incompletos": "Por favor complete todos los campos obligatorios",
+        "error_cargando_plan_estudio_visualizacion": "Error cargando datos del plan de estudio para su visualización",
+        "error_generando_plan_estudio_visualizacion": "Error generando el documento del plan de estudio para su visualización",
         "resumen": "Consolidado del Plan de Estudio",
         "resolucion_aprobacion": "Resolución de aprobación",
         "nombre_asignatura": "NOMBRE DE LA ASIGNATURA",
@@ -2544,7 +2556,8 @@
         "cant_creditos": "Cantidad de créditos",
         "prerequisitos": "Prerrequisitos",
         "convenciones": "CONVENCIONES",
-        "clasificacion": "Clasificación"
+        "clasificacion": "Clasificación",
+        "descargar_documento": "Descargar Plan de Estudio"
     },
     "gestion_horarios": {
         "encabezado": "Módulo para la Disponibilidad de cupos",
@@ -2600,11 +2613,24 @@
         "header_1_crear_grupo": "Asignación espacios académicos",
         "select_espacio": "Seleccione los espacios relacionados",
         "select_espacio_2": "Seleccione el grupo del espacios relacionado",
-        "header_2_crear_grupo": "  Codificación y capacidad grupo",
+        "header_2_crear_grupo": "Codificación y capacidad grupo",
         "label_1_codificacion": "Codigo proyecto curricular: ",
         "label_2_codificacion": "Indicador para el grupo:",
         "label_3_codificacion": "Codigo resultado para el grupo",
-        "label_4_codificacion": "Capacidad del grupo"
+        "label_4_codificacion": "Capacidad del grupo",
+        "encabezado_4":"Registrar horario",
+        "mensaje_inicial_4": "Usuario en el presente módulo usted podra realizar la gestión de los horarios para sus proyectos curriculares relacionados.",
+        "header_especifico": "Información especifica",
+        "header_1_periodo": "Periódo Académico",
+        "placeholder_grupo": "Seleccione el grupo para el cual aplica la asignación horaría",
+        "siguiente_especidfico": "Pasar con la información especifica",
+        "mensaje_inicial_5": "A continuación usted deberá seleccionar e ingresar la información Especifica requerida.",
+        "header_2_asignacion": "Asignacion de Espacio Fisico",
+        "select_facultad": "Seleccione del listado la Facultad",
+        "select_bloque": "Seleccione del listado el Bloque",
+        "select_salon": "Seleccione del listado el Salon",
+        "siguiente_horaria": "Continuar con la información horaria",
+        "header_2_horaria": "Información horaria"
     }
 
 }

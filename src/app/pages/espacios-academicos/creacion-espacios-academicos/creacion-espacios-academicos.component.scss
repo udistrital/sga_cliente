@@ -70,3 +70,11 @@ table {
     text-decoration:line-through;
     color: red;
 }
+
+::ng-deep .boton .mat-form-field-infix {
+    border: 1px solid transparent !important;
+}
+
+.showhand:hover {
+    cursor: pointer;
+}
