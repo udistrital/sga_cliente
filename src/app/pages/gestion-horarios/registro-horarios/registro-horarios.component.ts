@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, EventEmitter, ElementRef } from '@angular/core';
 import { ACTIONS, MODALS, ROLES, VIEWS } from '../../../@core/data/models/diccionario/diccionario';
 import { LocalDataSource } from 'ng2-smart-table';
+import { CdkDragMove, CdkDragRelease, CdkDragStart } from '@angular/cdk/drag-drop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { PopUpManager } from '../../../managers/popUpManager';
@@ -8,6 +9,25 @@ import { Ng2StButtonComponent } from '../../../@theme/components';
 import { FormGroup } from '@angular/forms';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
+
+interface elementDragDrop {
+  id: number;
+  nombre: string;
+  idCarga: string;
+  idEspacioAcademico: string;
+  idActividad: string;
+  horas: number;
+  horaFormato: string;
+  sede: any,
+  edificio: any,
+  salon: any,
+  tipo: number;
+  estado: number;
+  bloqueado: boolean;
+  dragPosition: { x: number, y: number };
+  prevPosition: { x: number, y: number };
+  finalPosition: { x: number, y: number };
+}
 
 interface select_temporal {
   value: string;
@@ -20,6 +40,43 @@ interface select_temporal {
   styleUrls: ['./registro-horarios.component.scss']
 })
 export class RegistroHorariosComponent implements OnInit {
+
+
+    /** Definitions for horario */
+    readonly horarioSize = { days: 7, hourIni: 6, hourEnd: 23, difHoras: 23 - 6, stepHour: 0.25 };
+    readonly containerGridLengths = {
+      x: this.horarioSize.days,
+      y: (this.horarioSize.hourEnd - this.horarioSize.hourIni),
+    };
+    readonly snapGridSize = { x: 150, y: 75, ymin: 75 * 0.25 }; //px no olvide editarlas en scss si las cambia
+    readonly containerGridsize = {
+      x: this.containerGridLengths.x * this.snapGridSize.x,
+      y: this.containerGridLengths.y * this.snapGridSize.y
+    };
+    readonly tipo = { carga_lectiva: 1, actividades: 2 };
+    readonly estado = { flotando: 1, ubicado: 2, ocupado: 3 }
+  
+    matrixBusy = Array(this.containerGridLengths.x)
+      .fill(0).map(() => Array(this.containerGridLengths.y / this.horarioSize.stepHour)
+        .fill(0).map(() => false)
+      )
+  
+    genHoursforTable() {
+      return Array(this.horarioSize.hourEnd - this.horarioSize.hourIni).fill(0).map((_, index) => index + this.horarioSize.hourIni);
+    }
+  
+    @ViewChild('contenedorCargaLectiva', { static: false }) contenedorCargaLectiva: ElementRef;
+    listaCargaLectiva: any[] = [];
+    listaOcupacion: any[] = [];
+    /*************************** */
+  
+    /** Entradas y Salidas */
+    @Input() WorkingMode: Symbol = undefined;
+    @Input() Rol: string = undefined;
+    @Input() Data: any = undefined;
+    @Output() OutCancelar: EventEmitter<boolean> = new EventEmitter();
+    @Output() OutLoading: EventEmitter<boolean> = new EventEmitter();
+
 
   loading: boolean;
 
@@ -183,4 +240,15 @@ export class RegistroHorariosComponent implements OnInit {
   }
 
 
+
+// Metodos componente matrix de horario 
+
+
+
+
+
 }
+
+
+
+

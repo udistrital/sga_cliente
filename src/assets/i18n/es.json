@@ -748,7 +748,8 @@
         "placeholder_telefono_entidad": "Ej: 323 93 00 Ext. 1112",
         "direccion_entidad": "Dirección de la entidad",
         "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1",
-        "item": "Ítem"
+        "item": "Ítem",
+        "evaluar": "Evaluar"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -2485,10 +2486,18 @@
         "plan_estudios_ciclos": "Plan de estudios por ciclos",
         "crear": "Crear Plan de Estudios",
         "editar": "Editar Plan de Estudios",
+        "evaluar": "Evaluar Plan de Estudios",
         "organizar": "Crear Plan de Estudios por Ciclos",
+        "estado_evaluacion": "Estado de Evaluación",
+        "evaluacion": "Evaluación",
+        "quien_da_respuesta": "Evaluado por",
+        "nombre_evaluador": "Nombre del coordinador respectivo",
+        "dar_respuesta": "Dar respuesta",
+        "actualizar_estado_evaluacion": "¿Está seguro que desea actualizar el estado de evaluación?\n No podrá modificarla después de aceptar.",
         "generar_plan": "Generar Plan de Estudios",
         "planes_estudio_creados": "Planes de estudio creados",
         "planes_estudio_asignados": "Planes de estudio asignados",
+        "planes_estudio_evaluados": "Planes de estudio evaluados",
         "nombre_plan_estudios": "Nombre del plan de estudios",
         "nombre_plan_estudios_general": "Nombre del plan de estudios general",
         "select_proyecto":"Selección del Proyecto Curricular",
@@ -2507,6 +2516,7 @@
         "mensaje_soporte_multiple_proyecto": "La tabla muestra el/los planes de estudios relacionados en la creación, el sistema soporta la creación de planes de estudio de más de un proyecto curricular.",
         "mensaje_tabla_espacios_si_vacio_solicite_inclusion": "Usuario la tabla muestra todos los espacios académicos relacionados a su proyecto curricular, si no existe algún espacio solicite la inclusión en el sistema.",
         "mensaje_tabla_planes_por_ciclos_indice_orden": "Usuario en el orden que agregue los planes de estudio será el mismo orden con el que se organiza el plan por ciclos.",
+        "mensaje_evaluacion_plan_estudio": "Si el plan de estudio cumple con todos los requerimientos definidos puede realizar la aprobación o crear una observación para el plan de estudio en cuestión.",
         "total_espacios_asignar": "Total de espacios por asignar",
         "agregar_semestre": "Agregar semestre",
         "semestre": "Semestre",
@@ -2531,8 +2541,12 @@
         "enviar_revision_pregunta": "A punto de enviar a revisión, ¿Desea continuar?",
         "enviar_revision_ok": "¡Envío a revisión exitoso!",
         "enviar_revision_fallo": "¡No se pudo enviar a revisión!",
+        "enviar_evaluacion_pregunta": "A punto de enviar la evaluación, ¿Desea continuar?",
+        "enviar_evaluacion_ok": "¡Enviada evaluación correctamente!",
+        "enviar_evaluacion_fallo": "¡No se pudo enviar la evaluación!",
         "error_validacion_prerrequisitos_espacios": "El espacio académico seleccionado tiene prerrequisitos que deben ser asignados en semestres anteriores",
         "error_cargando_datos_formulario": "Error cargando información del Plan de Estudios",
+        "error_datos_incompletos": "Por favor complete todos los campos obligatorios",
         "error_cargando_plan_estudio_visualizacion": "Error cargando datos del plan de estudio para su visualización",
         "error_generando_plan_estudio_visualizacion": "Error generando el documento del plan de estudio para su visualización",
         "resumen": "Consolidado del Plan de Estudio",
@@ -2616,7 +2630,16 @@
         "select_bloque": "Seleccione del listado el Bloque",
         "select_salon": "Seleccione del listado el Salon",
         "siguiente_horaria": "Continuar con la información horaria",
-        "header_2_horaria": "Información horaria"
+        "header_2_horaria": "Información horaria",
+        "mensaje_inicial_6":"A continuación usted deberá ubicar graficamente el espacio academico de interes.",
+        "mensaje_inicial_7": "Usuario, la asignación de carga academica es opcional siempre y cuando se encuentre dentro de las fechas establecidas en el calendario general",
+        "header_horario_2": "Asignación de Carga Académica",
+        "guardar_parcial":"Guardar parcial",
+        "finalizar": "Finalizar",
+        "select_identificacion": "Número identificación docente:",
+        "select_nombre": "Nombre del Docente:",
+        "select_vinculacion": "Tipo de vinculación del docente:",
+        "select_horas": "Horas asignadas:"
     }
 
 }
