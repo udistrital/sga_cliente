@@ -2616,7 +2616,16 @@
         "select_bloque": "Seleccione del listado el Bloque",
         "select_salon": "Seleccione del listado el Salon",
         "siguiente_horaria": "Continuar con la información horaria",
-        "header_2_horaria": "Información horaria"
+        "header_2_horaria": "Información horaria",
+        "mensaje_inicial_6":"A continuación usted deberá ubicar graficamente el espacio academico de interes.",
+        "mensaje_inicial_7": "Usuario, la asignación de carga academica es opcional siempre y cuando se encuentre dentro de las fechas establecidas en el calendario general",
+        "header_horario_2": "Asignación de Carga Académica",
+        "guardar_parcial":"Guardar parcial",
+        "finalizar": "Finalizar",
+        "select_identificacion": "Número identificación docente:",
+        "select_nombre": "Nombre del Docente:",
+        "select_vinculacion": "Tipo de vinculación del docente:",
+        "select_horas": "Horas asignadas:"
     }
 
 }

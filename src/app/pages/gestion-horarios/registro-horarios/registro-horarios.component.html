@@ -18,6 +18,8 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
     <mat-vertical-stepper #stepper [linear]="false">
             <mat-step >
             <ng-template matStepLabel>{{ 'gestion_horarios.label_gestion' | translate }}</ng-template>
+
+            <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
                 
             <mat-card
                 style="width:calc(80% - 60px); border: 1px #666666 solid; border-radius: 15px;background-color: #F5F5F5; margin: auto;">
@@ -78,8 +80,11 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
         <div class="button-stepper">
             <button mat-stroked-button matStepperNext>{{ 'gestion_horarios.siguiente_especidfico' | translate }}</button>
         </div>
+    </fieldset>
     </mat-step>
     <mat-step>
+
+        <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
         <ng-template matStepLabel>{{ 'gestion_horarios.header_especifico' | translate }}</ng-template>
         <div class="alinear-center">
             <div class="advertencia">{{ 'gestion_horarios.mensaje_inicial_5' | translate }}</div>
@@ -183,10 +188,202 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
 
         </mat-vertical-stepper>
 
-          
+    </fieldset>   
     </mat-step>
     <mat-step >
         <ng-template matStepLabel>{{ 'gestion_horarios.header_2_horaria' | translate }}</ng-template>
+
+
+        <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+            <div class="alinear-center">
+                <div class="advertencia">{{ 'gestion_horarios.mensaje_inicial_6' | translate }}</div>
+            </div>
+            <div class="row" style="display: flex; align-items: center; margin: auto;"
+                [style.padding-left.px]="snapGridSize.x*1.5" [style.padding-right.px]="snapGridSize.x*1.5">
+                <table style="margin: auto;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>{{ 'ptd.lu' | translate }}</th>
+                            <th>{{ 'ptd.ma' | translate }}</th>
+                            <th>{{ 'ptd.mi' | translate }}</th>
+                            <th>{{ 'ptd.ju' | translate }}</th>
+                            <th>{{ 'ptd.vi' | translate }}</th>
+                            <th>{{ 'ptd.sa' | translate }}</th>
+                            <th>{{ 'ptd.do' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody style="position: relative;">
+                        <tr *ngFor="let hour of genHoursforTable()">
+                            <td>{{hour}}:00 - {{hour+1}}:00</td>
+                            <td class="drag-area" *ngIf="hour == horarioSize.hourIni">
+                                <div class="day">{{ 'ptd.lu' | translate }}</div>
+                                <div class="grid-carga-lectiva" #contenedorCargaLectiva>
+                                    <div class="element-carga-lectiva" *ngFor="let element of listaCargaLectiva"
+                                        style="position: absolute;" [style.height.px]="element.horas * snapGridSize.y"
+                                        [ngClass]="{'carga_lectiva': element.tipo == tipo.carga_lectiva, 'actividades': element.tipo == tipo.actividades, 'flotando': element.estado == estado.flotando, 'ocupado': element.estado == estado.ocupado }"
+                                        cdkDrag [cdkDragFreeDragPosition]="element.dragPosition"
+                                        [cdkDragDisabled]="element.bloqueado" cdkDragBoundary=".grid-carga-lectiva"
+                                        (cdkDragStarted)="onDragStarted(element)"
+                                        (cdkDragMoved)="onDragMoved($event, element)"
+                                        (cdkDragReleased)="onDragReleased($event, element)">
+                                        <div class="info-tooltip">
+                                            <i>{{ 'ptd.editar' | translate }}</i>
+                                            <i>{{ 'ptd.mover' | translate }}</i>
+                                            <i>{{ 'ptd.borrar' | translate }}</i>
+                                        </div>
+                                        <div class="contenedor-opciones">
+                                            <label class="left-top" title="{{ 'ptd.editar' | translate }}"
+                                                (click)="editElement(element)"><i class="nb-edit"></i></label>
+                                            <label cdkDragHandle class="center-top" title="{{ 'ptd.mover' | translate }}"><i
+                                                    class="nb-keypad"></i><i class="nb-keypad"></i><i class="nb-keypad"></i><i
+                                                    class="nb-keypad"></i><i class="nb-keypad"></i></label>
+                                            <label class="right-top" title="{{ 'ptd.borrar' | translate }}"
+                                                (click)="deleteElement($event.target, element)"><i class="nb-trash"></i></label>
+                                        </div>
+                                        <div class="contenido" *ngIf="element.edificio == '-'">
+                                            *{{ element.nombre }} <br>
+                                            *{{element.sede.CodigoAbreviacion}} <br>
+                                            *{{ element.horaFormato }}
+                                        </div>
+                                        <div class="contenido" *ngIf="element.edificio != '-'">
+                                            *{{ element.nombre }} <br>
+                                            *{{ element.sede.CodigoAbreviacion }} - {{ element.edificio.Nombre }}<br>
+                                            *{{ element.salon.Nombre }} <br>
+                                            *{{ element.horaFormato }}
+                                        </div>
+                                    </div>
+        
+                                    <div class="element-ocupado" *ngFor="let element of listaOcupacion"
+                                        style="position: absolute;" [style.height.px]="element.horas * snapGridSize.y" cdkDrag
+                                        [cdkDragFreeDragPosition]="element.dragPosition" [cdkDragDisabled]="element.bloqueado"
+                                        cdkDragBoundary=".grid-carga-lectiva">
+                                        <div class="contenido">
+                                            *{{ element.nombre }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="drag-area" *ngIf="hour != horarioSize.hourIni">
+                                <div class="day">{{ 'ptd.lu' | translate }}</div>
+                            </td>
+                            <td class="drag-area">
+                                <div class="day">{{ 'ptd.ma' | translate }}</div>
+                            </td>
+                            <td class="drag-area">
+                                <div class="day">{{ 'ptd.mi' | translate }}</div>
+                            </td>
+                            <td class="drag-area">
+                                <div class="day">{{ 'ptd.ju' | translate }}</div>
+                            </td>
+                            <td class="drag-area">
+                                <div class="day">{{ 'ptd.vi' | translate }}</div>
+                            </td>
+                            <td class="drag-area">
+                                <div class="day">{{ 'ptd.sa' | translate }}</div>
+                            </td>
+                            <td class="drag-area">
+                                <div class="day">{{ 'ptd.do' | translate }}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alinear-center">
+                <div class="advertencia">{{ 'gestion_horarios.mensaje_inicial_7' | translate }}</div>
+            </div>
+
+            <fieldset [ngClass]="{'fieldseter':true}" style="overflow:auto;">
+                <legend>
+                    <small *ngIf="!edit">&nbsp; {{ 'gestion_horarios.header_horario_2' | translate }}</small>
+                </legend>
+
+                
+            <div class="contenedor">
+                <div class="contenido">
+
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>{{ 'gestion_horarios.select_identificacion' | translate }}</mat-label>
+                        <mat-select>
+                          <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                            {{temp.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                    &nbsp;
+
+
+                </div> 
+                
+
+                <div class="contenido" >
+
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>{{ 'gestion_horarios.select_nombre' | translate }}</mat-label>
+                        <mat-select>
+                          <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                            {{temp.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                </div>
+
+
+
+            </div>
+
+            <div class="contenedor">
+                <div class="contenido">
+
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>{{ 'gestion_horarios.select_vinculacion' | translate }}</mat-label>
+                        <mat-select>
+                          <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                            {{temp.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                    &nbsp;
+
+
+                </div> 
+                
+
+                <div class="contenido" >
+
+                    <mat-form-field style="width: 80%;">
+                        <mat-label>{{ 'gestion_horarios.select_horas' | translate }}</mat-label>
+                        <mat-select>
+                          <mat-option *ngFor="let temp of temporal" [value]="temp.value">
+                            {{temp.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                </div>
+
+
+
+            </div>
+
+
+            <div class="contenedor">
+                <div class="contenido">
+                    <button mat-raised-button color="primary">{{ 'gestion_horarios.guardar_parcial' | translate }}</button>
+                </div> 
+                
+
+                <div class="contenido" >
+                    <button mat-raised-button color="primary">{{ 'gestion_horarios.finalizar' | translate }}</button>
+                </div>
+
+
+
+            </div>
+
+        </fieldset>
+
+        </fieldset>
 
     </mat-step>
 </mat-vertical-stepper>

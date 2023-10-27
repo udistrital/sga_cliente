@@ -2543,6 +2543,15 @@
         "select_bloque": "Select the Block from the list",
         "select_salon": "Select the room from the list",
         "siguiente_horaria": "Continue with time information",
-        "header_2_horaria": "Time information"
+        "header_2_horaria": "Time information",
+        "mensaje_inicial_6":"Next you must graphically locate the academic space of interest.",
+        "mensaje_inicial_7": "User, the assignment of academic load is optional as long as it is within the dates established in the general calendar",
+        "header_horario_2": "Academic Load Assignment",
+        "guardar_parcial":"Save partial",
+        "finalizar": "Finish",
+        "select_identificacion": "Teacher identification number:",
+        "select_nombre": "Teacher's name:",
+        "select_vinculacion": "Type of teacher connection:",
+        "select_horas": "Assigned hours:"
     }
 }
