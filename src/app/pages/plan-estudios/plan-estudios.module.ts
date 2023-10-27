@@ -8,6 +8,8 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { PlanEstudiosService } from '../../@core/data/plan_estudios.service';
 import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.service';
 import { VisualizarDocumentoPlanComponent } from './visualizar-documento-plan/visualizar-documento-plan.component';
+import { MatDialog, MatDialogModule } from '@angular/material';
+import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar/dialogo-evaluar.component';
 
 @NgModule({
   declarations: [...routedComponents],
@@ -16,14 +18,20 @@ import { VisualizarDocumentoPlanComponent } from './visualizar-documento-plan/vi
     PlanEstudiosRoutingModule,
     ThemeModule,
     SharedModule,
-    Ng2SmartTableModule
+    Ng2SmartTableModule,
+    MatDialogModule
   ],
   providers: [
+    MatDialog,
     PlanEstudiosService,
     EspaciosAcademicosService,
   ],
   entryComponents: [
     VisualizarDocumentoPlanComponent,
+    DialogoEvaluarComponent
+  ],
+  exports: [
+    DialogoEvaluarComponent
   ]
 })
 export class PlanEstudiosModule { }
