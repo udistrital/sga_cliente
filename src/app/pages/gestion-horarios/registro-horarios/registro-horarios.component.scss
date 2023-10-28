@@ -1,8 +1,3 @@
-fieldset {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
 .sombra-mini {
     box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.2);
 }
@@ -117,10 +112,6 @@ fieldset {
     }
 }
 
-fieldset {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
 
 nb-card-header {
     background-color: white;
@@ -203,3 +194,246 @@ table {
     float:left;
     margin: 2px;
 }
+
+
+
+
+
+
+fieldset {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Valor de ancho de la cuadrícula */
+  $snap-grid-width: 150px;
+  /* Valor de alto de la cuadrícula */
+  $snap-grid-height: 75px;
+  
+  #ubicacion {
+    scroll-margin-block: 130px;
+    scroll-behavior: smooth;
+  }
+  
+  /* estilo cuadricula tabla horario - headers */
+  th, td {
+    width: $snap-grid-width;
+    min-width: $snap-grid-width;
+    background-color: var(--primary);
+    color: white;
+    text-align: center;
+    border: 1px solid lightblue;
+  }
+  
+  .resumen {
+    td {
+      height: 45px;
+    }
+  }
+  
+  th {
+    height: 50px;
+  }
+  
+  td {
+    height: $snap-grid-height;
+  }
+  
+  .day {
+    color: lightslategray;
+  }
+  
+  /* estilo cuadricula tabla horario - cuadricula horario */
+  .drag-area {
+    background-color: white;
+    border: 1px solid lightblue;
+    color: black;
+  }
+  
+  /* elemento que contiene las cards */
+  .grid-carga-lectiva {
+    position: absolute;
+    top: 0px;
+    left: $snap-grid-width;
+    z-index: 1;
+    height: 100%;
+    width: $snap-grid-width * 7;
+  }
+  
+  /* card que contiene la info */
+  .element-carga-lectiva {
+    width: $snap-grid-width;
+    height: $snap-grid-height;
+    border: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #fff;
+    border-radius: 4px;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;
+  }
+  
+  /* estilos card dependiendo de la situación */
+  .carga_lectiva {
+    background: lightgoldenrodyellow;
+  }
+  
+  .actividades {
+    background: lightcyan;
+  }
+  
+  .flotando {
+    background: lavender !important;
+    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.2),
+      0 8px 10px 1px rgba(0, 0, 0, 0.14),
+      0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  
+    .info-tooltip {
+      visibility: visible;
+    }
+  }
+  
+  .ocupado {
+    background: rgb(255, 200, 208) !important;
+  }
+  
+  .element-carga-lectiva:not(:active):hover {
+    height: $snap-grid-height * 2 !important;
+    background-color: rgba($color: lightskyblue, $alpha: 0.75);
+    transition-delay: 0.5s;
+    z-index: 49;
+    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.2),
+      0 8px 10px 1px rgba(0, 0, 0, 0.14),
+      0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .element-carga-lectiva:not(:active):hover .info-tooltip {
+    visibility: visible;
+  }
+  
+  .element-carga-lectiva:not(:active):hover .contenido {
+    transition: font-size 1s ease-in-out;
+    font-size: 1rem;
+  }
+  
+  /* estilo cuando la card es arrastrada */
+  .element-carga-lectiva:active {
+    z-index: 50;
+    background: lightskyblue;
+    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.2),
+      0 8px 10px 1px rgba(0, 0, 0, 0.14),
+      0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* estilo para espacio ocupado */
+  .element-ocupado {
+    background: lightgray;
+    width: $snap-grid-width;
+    height: $snap-grid-height;
+    border: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* estilo para iconos de opciones */
+  .contenedor-opciones {
+    width: 100%;
+    height: 1rem;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+  }
+  
+  .left-top {
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: var(--primary);
+  }
+  
+  .center-top {
+    cursor: move;
+    font-size: 1rem;
+  }
+  
+  .right-top {
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: var(--primary);
+  }
+  
+  .contenido {
+    font-size: 0.85rem;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    line-height: 1;
+  }
+  
+  /* estilo tooltip para opciones */
+  .info-tooltip {
+    font-size: 0.85rem;
+    position: absolute;
+    left: -5%;
+    top: -2.5rem;
+    width: 110%;
+    padding: 3px;
+    background-color: rgba(135, 206, 250, 0.75);
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    color: black;
+    border-radius: 3px;
+    visibility: hidden;
+    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.2),
+  }
+  
+  i {
+    width: 35px;
+  }
+  
+  .botones {
+    // width: 80px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-evenly
+  }
+  
+  .row {
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+  
+  
+  .campos {
+    width: 100%;
+    padding: 0rem 1rem;
+  }
+  
+  .espacio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
