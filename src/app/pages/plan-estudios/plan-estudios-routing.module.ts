@@ -26,7 +26,7 @@ const routes: Routes = [{
   {
     path: 'evaluar',
     component: EvaluarPlanEstudiosComponent,
-    //canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   }
   ]
 }];

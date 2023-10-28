@@ -171,7 +171,8 @@
         "plan_estudios": {
             "plan_estudios": "Plan de estudios",
             "crear_plan_estudios": "Crear plan de estudio",
-            "editar_plan_estudios": "Editar plan de estudio"
+            "editar_plan_estudios": "Editar plan de estudio",
+            "evaluar_plan_estudios": "Evaluar plan de estudio"
         },
         "gestion-horarios": {
             "gestion-horarios": "Gestion de horarios",
