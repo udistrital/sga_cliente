@@ -84,6 +84,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
     this.createTablePlanesEstudio();
     this.gestorDocumentalService.clearLocalFiles();
     this.habilitarGenerarPlan();
+    this.personaId = Number(window.localStorage.getItem('persona_id'));
   }
 
   // * ----------
@@ -145,20 +146,52 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
             console.log("Rol admin");
             
             this.planesEstudio = await this.loadPlanesEstudio();
+            this.planesEstudio.forEach(plan => {
+              this.organizarDatosTablaPlanEstudio(plan);
+            });
+            this.dataPlanesEstudio.load(this.planesEstudio);
+      
+            this.loading = false;
           } else if (rolCoordinador) {
-            console.log("Rol coor");
-            this.planesEstudio = await this.loadPlanesEstudio("EstadoAprobacionId:4");
+            console.log("Rol coordinador filtrando tercero");
+            await this.loadPlanesEstudioPorTerceroVinculacion(this.personaId).then((planes) => {
+              if (planes.length > 0) {
+                this.planesEstudio = planes;
+                this.planesEstudio.forEach(plan => {
+                  this.organizarDatosTablaPlanEstudio(plan);
+                });
+                this.dataPlanesEstudio.load(this.planesEstudio);
+          
+                this.loading = false;
+              } else {
+                this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.plan_estudios_sin_vinculacion_error'));
+                this.loading = false;
+              }
+            }).catch((error) => {
+              this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.plan_estudios_sin_vinculacion_error'));
+              this.loading = false;
+            });
           } else {
-            this.planesEstudio = [];
+            await this.loadPlanesEstudioPorTerceroVinculacion(this.personaId).then((planes) => {
+              if (planes.length > 0) {
+                this.planesEstudio = planes;
+                this.planesEstudio.forEach(plan => {
+                  this.organizarDatosTablaPlanEstudio(plan);
+                });
+                this.dataPlanesEstudio.load(this.planesEstudio);
+          
+                this.loading = false;
+              } else {
+                this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.plan_estudios_sin_vinculacion_error'));
+                this.loading = false;
+              }
+            }).catch((error) => {
+              this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.plan_estudios_sin_vinculacion_error'));
+              this.loading = false;
+            });
           }
         }
       );
-      this.planesEstudio.forEach(plan => {
-        this.organizarDatosTablaPlanEstudio(plan);
-      });
-      this.dataPlanesEstudio.load(this.planesEstudio);
-
-      this.loading = false;
     } catch (error) {
       const falloEn = Object.keys(error)[0];
       this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),

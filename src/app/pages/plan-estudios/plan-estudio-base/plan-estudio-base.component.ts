@@ -99,6 +99,8 @@ export abstract class PlanEstudioBaseComponent {
     ENFQ_TEOPRAC: 0,
   };
 
+  personaId: number;
+
   readonly studyPlanTableColumns = {
     plan_estudio: {
       title: this.translate.instant("plan_estudios.plan_estudios"),
@@ -969,6 +971,22 @@ export abstract class PlanEstudioBaseComponent {
         endpoint = "plan_estudio?query=activo:true&limit=0";
       }
       this.planEstudiosService.get(endpoint).subscribe(
+        (resp) => {
+          if (Object.keys(resp.Data[0]).length > 0) {
+            resolve(resp.Data);
+          } else {
+            resolve([]);
+          }
+        }, (err) => {
+          reject({ "plan_estudio": err })
+        }
+      );
+    });
+  }
+
+  loadPlanesEstudioPorTerceroVinculacion(terceroId): Promise<PlanEstudio[]> {
+    return new Promise<any>((resolve, reject) => {
+      this.sgaMidService.get("plan_estudio/dependencia_vinculacion_tercero/" + terceroId).subscribe(
         (resp) => {
           if (Object.keys(resp.Data[0]).length > 0) {
             resolve(resp.Data);

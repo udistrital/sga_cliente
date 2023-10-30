@@ -2477,6 +2477,7 @@
         "error_cargando_plan_estudio_visualizacion": "Error loading study plan data for viewing",
         "error_generando_plan_estudio_visualizacion": "Error generating the study plan document for viewing",
         "error_datos_incompletos": "Please complete all required fields",
+        "plan_estudios_sin_vinculacion_error": "Your user is not associated to any curricular project, nor do you have the appropriate role. Please contact the Systems Advisory Office (OAS) to address the problem.",
         "resumen": "Consolidated Study Plan",
         "resolucion_aprobacion": "Approval resolution",
         "nombre_asignatura": "NAME OF THE SUBJECT",
