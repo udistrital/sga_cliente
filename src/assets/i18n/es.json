@@ -172,7 +172,8 @@
             "plan_estudios": "Plan de estudios",
             "crear_plan_estudios": "Crear plan de estudio",
             "editar_plan_estudios": "Editar plan de estudio",
-            "evaluar_plan_estudios": "Evaluar plan de estudio"
+            "evaluar_plan_estudios": "Evaluar plan de estudio",
+            "revisar_plan_estudios": "Revisar plan de estudio"
         },
         "gestion-horarios": {
             "gestion-horarios": "Gestion de horarios",
@@ -2488,6 +2489,7 @@
         "crear": "Crear Plan de Estudios",
         "editar": "Editar Plan de Estudios",
         "evaluar": "Evaluar Plan de Estudios",
+        "revisar": "Reporte de Plan de Estudios",
         "organizar": "Crear Plan de Estudios por Ciclos",
         "estado_evaluacion": "Estado de Evaluación",
         "evaluacion": "Evaluación",
@@ -2499,6 +2501,7 @@
         "planes_estudio_creados": "Planes de estudio creados",
         "planes_estudio_asignados": "Planes de estudio asignados",
         "planes_estudio_evaluados": "Planes de estudio evaluados",
+        "planes_estudio_reportados": "Planes de estudio reportados",
         "nombre_plan_estudios": "Nombre del plan de estudios",
         "nombre_plan_estudios_general": "Nombre del plan de estudios general",
         "select_proyecto":"Selección del Proyecto Curricular",
@@ -2518,6 +2521,7 @@
         "mensaje_tabla_espacios_si_vacio_solicite_inclusion": "Usuario la tabla muestra todos los espacios académicos relacionados a su proyecto curricular, si no existe algún espacio solicite la inclusión en el sistema.",
         "mensaje_tabla_planes_por_ciclos_indice_orden": "Usuario en el orden que agregue los planes de estudio será el mismo orden con el que se organiza el plan por ciclos.",
         "mensaje_evaluacion_plan_estudio": "Si el plan de estudio cumple con todos los requerimientos definidos puede realizar la aprobación o crear una observación para el plan de estudio en cuestión.",
+        "mensaje_tabla_reporte_plan_estudio": "La tabla muestra todos los planes de estudio registrados en el sistema, usted podra observar y generar los planes de estudio en estado aprobado",
         "total_espacios_asignar": "Total de espacios por asignar",
         "agregar_semestre": "Agregar semestre",
         "semestre": "Semestre",

@@ -167,7 +167,8 @@
             "plan_estudios": "Study Plan",
             "crear_plan_estudios": "Create Study Plan",
             "editar_plan_estudios": "Edit Study Plan",
-            "evaluar_plan_estudios": "Evaluate Study Plan"
+            "evaluar_plan_estudios": "Evaluate Study Plan",
+            "revisar_plan_estudios": "Review Study Plan"
         },
         "gestion-horarios": {
             "gestion-horarios": "Schedule Management",
@@ -2415,6 +2416,7 @@
         "crear": "Create Study Plan",
         "editar": "Edit Study Plan",
         "evaluar": "Evaluate Study Plan",
+        "revisar": "Study Plan Report",
         "organizar": "Create Study Plan by Cycles",
         "estado_evaluacion": "Approval status",
         "evaluacion": "Evaluation",
@@ -2445,6 +2447,7 @@
         "mensaje_tabla_espacios_si_vacio_solicite_inclusion": "User, the table shows all the academic spaces related to your curricular project, if there is no space, request its inclusion in the system.",
         "mensaje_tabla_planes_por_ciclos_indice_orden": "User, in the order that you add the study plans, it will be the same order in which the plan is organized by cycles.",
         "mensaje_evaluacion_plan_estudio": "If the study plan meets all the defined requirements, you can approve or create an observation for the study plan in question.",
+        "mensaje_tabla_reporte_plan_estudio": "The table shows all the study plans registered in the system, you can observe and generate the study plans in approved status",
         "total_espacios_asignar": "Total spaces to be assigned",
         "agregar_semestre": "Add semester",
         "semestre": "Semester",
