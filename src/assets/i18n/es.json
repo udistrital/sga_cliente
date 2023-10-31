@@ -1471,7 +1471,7 @@
         "correo_actual": "Correo actual",
         "generar_comprobante": "Si no ha guardado o no se ha generado el comprobante, presione aquí",
         "info_impresion_auto": "NOTA: Se genera un documento comprobante de inscripción al completar la barra de carga.",
-        "fallo_carga_mensaje": "Algó falló en la carga de información, por favor regrese e intente de nuevo",
+        "fallo_carga_mensaje": "Algo falló en la carga de información, por favor regrese e intente de nuevo",
         "sin_documento": "El archivo que intenta visualizar no se encuentra",
         "confirmar_ajuste_documentos_observacion": "Confirmar edición de documentos con observaciones",
         "cambio_estado_ok": "Confirmación de edición exitosa",

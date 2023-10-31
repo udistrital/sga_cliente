@@ -102,6 +102,8 @@ export class ViewDocumentoProgramaComponent implements OnInit {
               docSoporte1 += String(doc.DocumentoId);
               if (i < this.infoCarga.nCargas - 1 ) {
                 docSoporte1 += '|'
+              } else {
+                docSoporte1 += `&limit=${Number(this.infoCarga.nCargas)}`;
               }
               doc.IdDoc = doc.DocumentoId;
             });
