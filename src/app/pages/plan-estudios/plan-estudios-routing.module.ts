@@ -9,6 +9,7 @@ import { VisualizarDocumentoPlanComponent } from './visualizar-documento-plan/vi
 import { SafeURL } from '../../@core/pipes/safeUrl.pipe';
 import { EvaluarPlanEstudiosComponent } from './evaluar-plan-estudios/evaluar-plan-estudios.component';
 import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar/dialogo-evaluar.component';
+import { RevisarPlanesEstudioComponent } from './revisar-planes-estudio/revisar-planes-estudio.component';
 
 const routes: Routes = [{
   path: '',
@@ -26,6 +27,11 @@ const routes: Routes = [{
   {
     path: 'evaluar',
     component: EvaluarPlanEstudiosComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'revisar',
+    component: RevisarPlanesEstudioComponent,
     //canActivate: [AuthGuard]
   }
   ]
@@ -45,5 +51,6 @@ export const routedComponents = [
   SafeURL,
   VisualizarDocumentoPlanComponent,
   EvaluarPlanEstudiosComponent,
-  DialogoEvaluarComponent
+  DialogoEvaluarComponent,
+  RevisarPlanesEstudioComponent
 ]
