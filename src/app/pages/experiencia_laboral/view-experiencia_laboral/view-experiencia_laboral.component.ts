@@ -98,6 +98,8 @@ export class ViewExperienciaLaboralComponent implements OnInit {
               soportes1 += String(this.info_experiencia_laboral[i].Soporte);
               if( i < (this.info_experiencia_laboral.length - 1) ) {
                 soportes1 += '|';
+              } else {
+                soportes1 += `&limit=${Number(this.info_experiencia_laboral.length)}`;
               }
               this.info_experiencia_laboral[i].IdDoc = parseInt(this.info_experiencia_laboral[i].Soporte,10);
             }
