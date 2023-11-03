@@ -12,7 +12,7 @@
       <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}">
         <legend><small>&nbsp; {{ 'plan_estudios.planes_estudio_evaluados' | translate }} </small></legend>
         <div class="alinear-center">
-          <div class="advertencia">{{ 'plan_estudios.mensaje_soporte_multiple_proyecto' | translate }}</div>
+          <div class="advertencia">{{ 'plan_estudios.mensaje_tabla_evaluacion_plan_estudio' | translate }}</div>
         </div>
         <ng2-smart-table [settings]="tbPlanesEstudio" [source]="dataPlanesEstudio">
         </ng2-smart-table>
@@ -21,7 +21,7 @@
     <ng-container *ngSwitchCase="VIEWS.FORM">
       <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
         <legend class="modo-ventana">
-          <small>&nbsp; {{ 'plan_estudios.crear' | translate }} </small>
+          <small>&nbsp; {{ 'plan_estudios.evaluar' | translate }} </small>
           <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}"
             (click)="cancelar()"></i>
         </legend>
@@ -42,10 +42,6 @@
           </mat-step>
           <mat-step>
             <ng-template matStepLabel>{{ 'plan_estudios.parametrizacion_semestral' | translate }}</ng-template>
-            <div class="alinear-center">
-              <div class="advertencia">{{ 'plan_estudios.mensaje_tabla_espacios_si_vacio_solicite_inclusion' | translate
-                }}</div>
-            </div>
             <ng2-smart-table [settings]="tbEspaciosAcademicos" [source]="dataEspaciosAcademicos"
               (custom)="onAction($event)">
             </ng2-smart-table>
@@ -121,7 +117,7 @@
     <ng-container *ngSwitchCase="VIEWS.SECONDARY_FORM">
       <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
           <legend class="modo-ventana">
-              <small>&nbsp; {{ 'plan_estudios.crear' | translate }} </small>
+              <small>&nbsp; {{ 'plan_estudios.evaluar' | translate }} </small>
               <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="cancelar()"></i>
           </legend>
           <mat-horizontal-stepper #stepper [linear]="true" #stepper>
@@ -137,9 +133,6 @@
               </mat-step>
               <mat-step>
                   <ng-template matStepLabel>{{ 'plan_estudios.parametrizacion_plan_ciclos' | translate }}</ng-template>
-                  <div class="alinear-center">
-                      <div class="advertencia">{{ 'plan_estudios.mensaje_tabla_planes_por_ciclos_indice_orden' | translate }}</div>
-                  </div>
                   <ng2-smart-table [settings]="tbSimpleStudyPlans" [source]="dataSimpleStudyPlans" (custom)="onAction($event)">
                   </ng2-smart-table>
                   <br>

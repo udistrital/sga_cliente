@@ -135,7 +135,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
     try {
       console.log("Roles encontrados, ", this.personaRoles)
       let rolAdmin = this.personaRoles.find(role => (role == ROLES.ADMIN_SGA || role == ROLES.VICERRECTOR || role == ROLES.ASESOR_VICE));
-      let rolCoordinador = this.personaRoles.find(role => (role == ROLES.COORDINADOR || role == ROLES.COORDINADOR_PREGADO || role == ROLES.COORDINADOR_POSGRADO));
+      let rolCoordinador = this.personaRoles.find(role => (role == ROLES.COORDINADOR || role == ROLES.COORDINADOR_PREGADO || role == ROLES.COORDINADOR_POSGRADO || role == ROLES.ADMIN_DOCENCIA));
       
       // Datos de la tabla planes de estudio
       if (rolAdmin) {
@@ -176,23 +176,8 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
           this.loading = false;
         });
       } else {
-        this.loadPlanesEstudioPorTerceroVinculacion(this.personaId).then((planes) => {
-          if (planes.length > 0) {
-            this.planesEstudio = planes;
-            this.planesEstudio.forEach(plan => {
-              this.organizarDatosTablaPlanEstudio(plan);
-            });
-            this.dataPlanesEstudio.load(this.planesEstudio);
-      
-            this.loading = false;
-          } else {
-            this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.plan_estudios_sin_vinculacion_error'));
-            this.loading = false;
-          }
-        }).catch((error) => {
-          this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.plan_estudios_sin_vinculacion_error'));
-          this.loading = false;
-        });
+        this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.plan_estudios_sin_vinculacion_error'));
+        this.loading = false;
       }
     } catch (error) {
       const falloEn = Object.keys(error)[0];
