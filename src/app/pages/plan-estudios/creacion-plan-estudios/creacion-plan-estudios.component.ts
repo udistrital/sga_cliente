@@ -557,7 +557,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
     let persona_id = Number(localStorage.getItem('persona_id'));
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '80vw';
-    dialogConfig.height = '480px';
+    dialogConfig.height = '510px';
     dialogConfig.data = {
       "tercero_id": persona_id,
       "estadosAprobacion": this.estadosAprobacion,
