@@ -165,8 +165,7 @@
         },
         "plan_estudios": {
             "plan_estudios": "Study Plan",
-            "crear_plan_estudios": "Create Study Plan",
-            "editar_plan_estudios": "Edit Study Plan",
+            "crear_plan_estudios": "Create/Edit Study Plan",
             "evaluar_plan_estudios": "Evaluate Study Plan",
             "revisar_plan_estudios": "Review Study Plan"
         },
