@@ -283,7 +283,7 @@ export class EvaluarPlanEstudiosComponent extends PlanEstudioBaseComponent imple
     let persona_id = Number(localStorage.getItem('persona_id'));
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '80vw';
-    dialogConfig.height = '580px';
+    dialogConfig.height = '590px';
     dialogConfig.data = {
       "tercero_id": persona_id,
       "rol": this.role,

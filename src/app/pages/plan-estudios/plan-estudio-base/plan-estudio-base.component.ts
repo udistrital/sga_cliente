@@ -105,6 +105,8 @@ export abstract class PlanEstudioBaseComponent {
   personaId: number;
   personaRoles: String[];
 
+  hideButtons: boolean = false;
+
   readonly studyPlanTableColumns = {
     plan_estudio: {
       title: this.translate.instant("plan_estudios.plan_estudios"),

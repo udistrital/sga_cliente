@@ -10,6 +10,7 @@ import { SafeURL } from '../../@core/pipes/safeUrl.pipe';
 import { EvaluarPlanEstudiosComponent } from './evaluar-plan-estudios/evaluar-plan-estudios.component';
 import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar/dialogo-evaluar.component';
 import { RevisarPlanesEstudioComponent } from './revisar-planes-estudio/revisar-planes-estudio.component';
+import { DialogVerObservacionComponent } from './dialog-ver-observacion/dialog-ver-observacion.component';
 
 const routes: Routes = [{
   path: '',
@@ -52,5 +53,6 @@ export const routedComponents = [
   VisualizarDocumentoPlanComponent,
   EvaluarPlanEstudiosComponent,
   DialogoEvaluarComponent,
-  RevisarPlanesEstudioComponent
+  RevisarPlanesEstudioComponent,
+  DialogVerObservacionComponent
 ]
