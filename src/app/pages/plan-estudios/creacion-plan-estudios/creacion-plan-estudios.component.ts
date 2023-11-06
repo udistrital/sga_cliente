@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
-import { FORM_PLAN_ESTUDIO } from "../form-plan_estudio";
+import { FORM_PLAN_ESTUDIO, FORM_PLAN_ESTUDIO_EDICION } from "../form-plan_estudio";
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Ng2StButtonComponent } from '../../../@theme/components';
@@ -11,14 +11,15 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PlanEstudiosService } from '../../../@core/data/plan_estudios.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatStepper } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatStepper } from '@angular/material';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PlanEstudio } from '../../../@core/data/models/plan_estudios/plan_estudio';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
-import { STD } from '../../../@core/data/models/plan_estudios/estado_aprobacion';
+import { EstadoAprobacion, STD } from '../../../@core/data/models/plan_estudios/estado_aprobacion';
 import { PlanEstudioBaseComponent } from '../plan-estudio-base/plan-estudio-base.component';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+
 
 @Component({
   selector: 'creacion-plan-estudios',
@@ -143,6 +144,8 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
         
         this.loading = true;
         this.loadPlanesEstudio().then(planes => {
+          console.log("Plan de estudios consultados:");
+          console.log(planes);
           this.planesEstudio = planes;
           this.planesEstudio.forEach(plan => {
             this.organizarDatosTablaPlanEstudio(plan);
@@ -150,6 +153,8 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
           this.dataPlanesEstudio.load(this.planesEstudio);
           this.loading = false;
         }).catch(err => {
+          console.log("Error al cargar planes de estudios");
+          console.log(err);
           this.loading = false;
           this.popUpManager.showPopUpGeneric(
             this.translate.instant('plan_estudios.plan_estudios'),
@@ -190,7 +195,9 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
   }
 
   organizarDatosTablaPlanEstudio(plan: any) {
+    console.log("Plan: ", plan);
     const proyecto = this.proyectos.find(proyecto => proyecto.Id == plan.ProyectoAcademicoId);
+    console.log("Proyecto: ", proyecto);
     plan["proyectoCurricular"] = proyecto["Nombre"];
 
     plan["plan_estudio"] = plan["Nombre"];
@@ -203,6 +210,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
     
     plan["ver"] = { value: ACTIONS.VIEW, type: 'ver', disabled: false };
     plan["enviar"] = { value: ACTIONS.SEND, type: 'enviar', disabled: false };
+    console.log("Plan organizado");
   }
   //#endregion
   // * ----------
@@ -265,6 +273,7 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
   nuevoPlanEstudio() {
     this.mainAction = ACTIONS.CREATE;
     this.enEdicionPlanEstudio = true;
+    this.modoCreacion = true;
     this.esPlanEstudioPadre = false;
     this.crearFormulario(FORM_PLAN_ESTUDIO);
     this.createTableEspaciosAcademicos();
@@ -332,10 +341,12 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
     this.createStudyPlan(newPlanEstudio).then((res: any) => {
       this.planEstudioBody = res;
       if (this.esPlanEstudioPadre) {
+        this.modoCreacion = false;
         this.planEstudioPadreAsignado2Form = false;
         this.dataOrganizedStudyPlans = new LocalDataSource();
         stepper.next();
       } else {
+        this.modoCreacion = false;
         this.consultarEspaciosAcademicos(this.proyecto_id).then((result) => {
           this.ListEspacios = result;
           this.dataEspaciosAcademicos.load(this.ListEspacios);
