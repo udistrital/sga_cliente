@@ -58,6 +58,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         <div class="alinear-center espacio" >
                             <button mat-raised-button matStepperPrevious [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.regresar' | translate }}</button>
                             <button mat-raised-button color="primary" (click)="agregarSemestre()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo" [hidden]="!enEdicionPlanEstudio || numSemestresCompletado">{{ 'plan_estudios.agregar_semestre' | translate }}</button>
+                            <button mat-raised-button color="primary" (click)="generarPlanEstudio()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo">{{ 'plan_estudios.generar_plan' | translate }}</button>
                             <button mat-raised-button (click)="salirEdicionFormulario()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo">{{ 'GLOBAL.salir' | translate }}</button>
                         </div>
                         <mat-accordion>

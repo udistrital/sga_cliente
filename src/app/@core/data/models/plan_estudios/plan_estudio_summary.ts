@@ -1,7 +1,8 @@
 export class PlanEstudioSummary {
     Nombre: string;
     Facultad: string;
-    Planes: PlanSummary[];
+    Planes?: PlanSummary[];
+    Escuelas?: any;
 }
 
 export class PlanSummary {
@@ -12,13 +13,13 @@ export class PlanSummary {
     Snies: string;
     PlanEstudio: string;
     InfoPeriodos: InfoPeriodo[];
-    Resumen: Resumen;
+    Resumen?: Resumen;
 }
 
 export class InfoPeriodo {
     Orden: number;
     Espacios: EspacioSummary[];
-    Creditos?: number;
+    TotalCreditos?: number;
 }
 
 export class EspacioSummary {
@@ -31,11 +32,13 @@ export class EspacioSummary {
     HTA: number;
     Clasificacion: string;
     Escuela: string;
+    EscuelaColor?: string;
+    EscuelaColorFuente?: string;
 }
 
 export class Resumen {
-    OB: number;
-    OC: number;
-    EI: number;
-    EE: number;
+    OB?: number;
+    OC?: number;
+    EI?: number;
+    EE?: number;
 }

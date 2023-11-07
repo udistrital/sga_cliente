@@ -111,7 +111,7 @@ export abstract class PlanEstudioBaseComponent {
     plan_estudio: {
       title: this.translate.instant("plan_estudios.plan_estudios"),
       editable: false,
-      width: "25%",
+      width: "20%",
       filter: true,
     },
     proyectoCurricular: {
@@ -939,11 +939,9 @@ export abstract class PlanEstudioBaseComponent {
   }
 
   loadProyectos(): Promise<any> {
-    console.log("Cargando proyectos");
     return new Promise((resolve, reject) => {
       this.projectService.get('proyecto_academico_institucion?query=Activo:true&sortby=Nombre&order=asc&limit=0').subscribe(
         (resp) => {
-          console.log("proyectos", resp);
           if (Object.keys(resp[0]).length > 0) {
             resolve(resp);
           } else {
@@ -1090,7 +1088,6 @@ export abstract class PlanEstudioBaseComponent {
       })
     });
   }
-
   //#endregion
   // * ----------
 
@@ -1862,232 +1859,20 @@ export abstract class PlanEstudioBaseComponent {
   // * ----------
   // * Visualizador dinámico planes de estudio
   //#region
-  generarPlanEstudio(planEstudioBody: PlanEstudio) {
+  generarPlanEstudio() {
     this.loading = true;
-    this.planEstudiosService.get('plan_estudio').subscribe(resp => {
+    this.sgaMidService.get('plan_estudios/study_plan_visualization/'+this.planEstudioBody.Id).subscribe(resp => {
       this.loading = false;
-      this.dataPlanes = {
-        Nombre: "Ingeniería Eléctrica",
-        Facultad: "Facultad de Ingeniería",
-        Planes: [{
-          Orden: 1,
-          Nombre: "Proyecto 1",
-          Resolucion: "1020 de 2023",
-          Creditos: 60,
-          Snies: "123456",
-          PlanEstudio: "2102",
-          InfoPeriodos: [
-            {
-              Orden: 1,
-              Espacios: [
-                {
-                  Codigo: "CALCI",
-                  Nombre: "Cálculo Diferencial",
-                  Creditos: 3,
-                  Prerequisitos: [],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "1" 
-                },
-                {
-                  Codigo: "INGI",
-                  Nombre: "Inglés 1",
-                  Creditos: 2,
-                  Prerequisitos: [],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "2" 
-                },
-                {
-                  Codigo: "ALGI",
-                  Nombre: "Algebra Lineal",
-                  Creditos: 3,
-                  Prerequisitos: [],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "1" 
-                }
-              ]
-            },
-            {
-              Orden: 2,
-              Espacios: [
-                {
-                  Codigo: "CALCII",
-                  Nombre: "Cálculo Integral",
-                  Creditos: 3,
-                  Prerequisitos: ["CALCI"],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "1" 
-                },
-                {
-                  Codigo: "INGII",
-                  Nombre: "Inglés 2",
-                  Creditos: 2,
-                  Prerequisitos: ["INGI"],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "2" 
-                },
-              ]
-            },
-            {
-              Orden: 3,
-              Espacios: [
-                {
-                  Codigo: "CALCIII",
-                  Nombre: "Cálculo Multivariado",
-                  Creditos: 3,
-                  Prerequisitos: ["CALCII"],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "1" 
-                },
-                {
-                  Codigo: "INGIII",
-                  Nombre: "Inglés 3",
-                  Creditos: 2,
-                  Prerequisitos: ["INGII"],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "2" 
-                },
-                {
-                  Codigo: "TCAMP",
-                  Nombre: "Teoría de Campos Electromagnéticos",
-                  Creditos: 4,
-                  Prerequisitos: ["CALCI", "CALCII"],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "3" 
-                }
-              ]
-            },
-            {
-              Orden: 4,
-              Espacios: [
-                {
-                  Codigo: "CALCIV",
-                  Nombre: "Ecuaciones Diferenciales con Yu Takeuchi",
-                  Creditos: 4,
-                  Prerequisitos: ["CALCIII"],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "1" 
-                },
-                {
-                  Codigo: "INGIV",
-                  Nombre: "Inglés 4",
-                  Creditos: 2,
-                  Prerequisitos: ["INGIII"],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "2" 
-                },
-              ]
-            }
-          ],
-          Resumen: {
-            OB: 30,
-            OC: 20,
-            EI: 3,
-            EE: 2
-          }
-        },
-        {
-          Orden: 2,
-          Nombre: "Proyecto 2",
-          Resolucion: "1020 de 2023",
-          Creditos: 60,
-          Snies: "123456",
-          PlanEstudio: "2102",
-          InfoPeriodos: [
-            {
-              Orden: 1,
-              Espacios: [
-                {
-                  Codigo: "CIRCI",
-                  Nombre: "Circuitos 1",
-                  Creditos: 3,
-                  Prerequisitos: [],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "4" 
-                },
-                {
-                  Codigo: "GERMI",
-                  Nombre: "Alemán 1",
-                  Creditos: 2,
-                  Prerequisitos: [],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "5" 
-                }
-              ]
-            },
-            {
-              Orden: 2,
-              Espacios: [
-                {
-                  Codigo: "CIRCII",
-                  Nombre: "Circuitos 2",
-                  Creditos: 3,
-                  Prerequisitos: ["CIRCI"],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "4" 
-                },
-                {
-                  Codigo: "GERMII",
-                  Nombre: "Alemán 2",
-                  Creditos: 2,
-                  Prerequisitos: ["GERMI"],
-                  HTD: 2,
-                  HTC: 2,
-                  HTA: 4,
-                  Clasificacion: "OB",
-                  Escuela: "5" 
-                }
-              ]
-            }
-          ],
-          Resumen: {
-            OB: 30,
-            OC: 20,
-            EI: 3,
-            EE: 2
-          }
-        },
-      ]
-      };
-      this.vista = VIEWS.SUMMARY;
+      if (resp !== null && resp.Status == "200") {
+        this.dataPlanes = resp.Data;
+        this.vista = VIEWS.SUMMARY;
+      } else {
+        this.dataPlanes = undefined;
+        this.popUpManager.showPopUpGeneric(
+          this.translate.instant('ERROR.titulo_generico'),
+          this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+          MODALS.ERROR, false);
+      }
     }, error => {
       this.loading = false;
       this.dataPlanes = undefined;

@@ -173,7 +173,6 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
             MODALS.WARNING, false);
         });
       } else if (rolCoordinador) {
-        console.log("Rol coordinador filtrando tercero");
         this.loadPlanesEstudioPorTerceroVinculacion(this.personaId).then((planes) => {
           if (planes.length > 0) {
             this.planesEstudio = planes;
