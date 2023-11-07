@@ -2349,7 +2349,8 @@
         "please_descargue_consolidado": "Please generate the document to relate the teacher work plans to the present consolidated",
         "info_firma_digital": "This Teacher Work Plan will be approved and therefore digitally signed",
         "info_agrerar_representante": "If you are not the coordinator, please add yourself as a representative",
-        "info_revisar_cargar_formato": "Please download, review and re-upload the \"Compliance control form with current regulations\""
+        "info_revisar_cargar_formato": "Please download, review and re-upload the \"Compliance control form with current regulations\"",
+        "no_valid_pre_asignacion": "The academic space already has pre-assignment for the current period."
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",
