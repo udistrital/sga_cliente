@@ -159,23 +159,46 @@ export class DinamicformComponent implements OnInit, OnChanges {
     })
   }
 
-  download(url, title, w, h, noPreview?) {
-    if (noPreview) {
-      const download = document.createElement("a");
-      download.href = url;
-      download.download = title;
-      document.body.appendChild(download);
-      download.click();
-      document.body.removeChild(download);
+  download(url, title, w, h, previewForm?) {
+    if (previewForm !== undefined) {
+      switch (previewForm) {
+        case "preview":
+          this.preview(url, title, w, h);
+          break;
+        case "nopreview":
+          this.nopreview(url, title);
+          break;
+        case "both":
+          const spliturl = url.split('|');
+          this.preview(spliturl[0], title, w, h);
+          this.nopreview(spliturl[1], title);
+          break;
+        default:
+          this.preview(url, title, w, h);
+          break;
+      }
     } else {
-      const left = (screen.width / 2) - (w / 2);
-      const top = (screen.height / 2) - (h / 2);
-      let prev = window.open(url, title, 'toolbar=no,' +
-        'location=no, directories=no, status=no, menubar=no,' +
-        'scrollbars=no, resizable=no, copyhistory=no, ' +
-        'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-      prev.document.title = title;
+      this.preview(url, title, w, h);
     }
+  }
+
+  preview(url, title, w, h) {
+    const left = (screen.width / 2) - (w / 2);
+    const top = (screen.height / 2) - (h / 2);
+    let prev = window.open(url, title, 'toolbar=no,' +
+      'location=no, directories=no, status=no, menubar=no,' +
+      'scrollbars=no, resizable=no, copyhistory=no, ' +
+      'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    prev.document.title = title;
+  }
+
+  nopreview(url, title) {
+    const download = document.createElement("a");
+    download.href = url;
+    download.download = title;
+    document.body.appendChild(download);
+    download.click();
+    document.body.removeChild(download);
   }
 
   onChange(event, c) {

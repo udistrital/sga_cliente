@@ -503,7 +503,6 @@ export class ConsolidadoComponent implements OnInit {
   }
 
   verRevDecano(consolidado: any) {
-    console.log(consolidado)
     const respuesta_decanatura = JSON.parse(consolidado.respuesta_decanatura);
     const estado = this.estadosConsolidado.opciones.find(estado => estado._id == consolidado.estado_consolidado_id);
     this.formRespuestaConsolidado.campos[this.getIndexFormRespuestaConsolidado('Respuesta')].valor = estado ? estado.nombre : "Sin Definir";

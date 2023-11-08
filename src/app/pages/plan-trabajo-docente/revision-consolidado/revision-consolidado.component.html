@@ -53,6 +53,9 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
         </nb-card-header>
         <nb-card-body>
             <!-- formulario revision consolidado -->
+            <div align="center">
+                <div *ngIf="formRevConsolidado.btn != ''" class="info-alert" style="width: 97.5%;"> {{ 'ptd.info_cambio_documento_consolidado' | translate }} </div>
+            </div>
             <ngx-dinamicform [normalform]="formRevConsolidado" [modeloData]="dataRevConsolidado" (result)="validarFormRevConsolidado($event)">
             </ngx-dinamicform>
         </nb-card-body>

@@ -2350,7 +2350,8 @@
         "info_firma_digital": "This Teacher Work Plan will be approved and therefore digitally signed",
         "info_agrerar_representante": "If you are not the coordinator, please add yourself as a representative",
         "info_revisar_cargar_formato": "Please download, review and re-upload the \"Compliance control form with current regulations\"",
-        "no_valid_pre_asignacion": "The academic space already has pre-assignment for the current period."
+        "no_valid_pre_asignacion": "The academic space already has pre-assignment for the current period.",
+        "info_cambio_documento_consolidado": "It's important to note that making changes to the Consolidated document's content will require restarting the approval process (changing its status to 'Not approved') and, if necessary, updating the Teacher Work Plans."
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",

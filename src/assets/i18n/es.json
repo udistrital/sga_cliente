@@ -2422,7 +2422,8 @@
         "info_firma_digital": "El presente Plan Trabajo Docente va a ser aprobado y por ende firmado digitalmente",
         "info_agrerar_representante": "Si usted no es el coordinador, por favor agréguese como representante",
         "info_revisar_cargar_formato": "Por favor, descargue revise y cargue nuevamente el \"Formato de control del cumplimiento de la normatividad vigente\"",
-        "no_valid_pre_asignacion": "El espacio académico ya cuenta con preasignación para el presente periodo."
+        "no_valid_pre_asignacion": "El espacio académico ya cuenta con preasignación para el presente periodo.",
+        "info_cambio_documento_consolidado": "Es importante tener en cuenta que si se modifica el contenido del documento Consolidado, será necesario reiniciar el proceso de aprobación (cambiando su estado a 'No aprobado') y, en caso necesario, actualizar los Planes de Trabajo Docente."
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",
