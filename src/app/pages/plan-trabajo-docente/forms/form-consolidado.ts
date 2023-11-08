@@ -93,7 +93,8 @@ export let FORM_REVISION_CONSOLIDADO = {
             url: '',
             tamanoMaximo: 2,
             deshabilitar: true,
-            previewForm: "both"
+            previewForm: "both",
+            messagepreview: "ptd.pdf_solover_excel_imprimir | translate"
         },
         {
             etiqueta: 'label',
@@ -116,7 +117,8 @@ export let FORM_REVISION_CONSOLIDADO = {
             formatos: 'xlsx',
             url: '',
             tamanoMaximo: 2,
-            previewForm: "both"
+            previewForm: "both",
+            messagepreview: "ptd.pdf_solover_excel_imprimir | translate"
         },
         {
             etiqueta: 'textarea',
