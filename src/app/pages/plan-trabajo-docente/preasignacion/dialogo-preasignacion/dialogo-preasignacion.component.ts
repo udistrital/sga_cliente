@@ -13,6 +13,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SgaMidService } from '../../../../@core/data/sga_mid.service';
 import { EspaciosAcademicosService } from '../../../../@core/data/espacios_academicos.service';
 import { DialogoAsignarPeriodoComponent } from '../dialogo-asignar-periodo/dialogo-asignar-periodo.component';
+import { PlanTrabajoDocenteService } from '../../../../@core/data/plan_trabajo_docente.service';
+import { MODALS } from '../../../../@core/data/models/diccionario/diccionario';
 
 @Component({
   selector: 'dialogo-preasignacion',
@@ -54,6 +56,7 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
     private parametrosService: ParametrosService,
     private anyService: AnyService,
     private builder: FormBuilder,
+    private planTrabajoDocenteService: PlanTrabajoDocenteService,
     @Inject(MAT_DIALOG_DATA) private data: any,
   ) {
     this.loading = true;
@@ -168,30 +171,57 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
         "aprobacion_proyecto": false,
         "activo": true
       }
-
-      if (this.modificando) {
-        this.anyService.put(environment.PLAN_TRABAJO_DOCENTE_SERVICE, 'pre_asignacion/' + this.data.id, request).subscribe(
-          (response: any) => {
-            this.popUpManager.showSuccessAlert(this.translate.instant('ptd.preasignacion_actualizada'));
-            this.dialogRef.close();
-          },
-          (error: any) => {
-            this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_actualizar_preasignacion'));
-          },
-        );
+      const esp_acad_padre = this.preasignacionForm.get("espacio_academico").value;
+      if (esp_acad_padre.espacio_modular ? esp_acad_padre.espacio_modular : false) {
+        this.savePreasign(request);
       } else {
-        this.anyService.post(environment.PLAN_TRABAJO_DOCENTE_SERVICE, 'pre_asignacion', request).subscribe(
-          (response: any) => {
-            this.popUpManager.showSuccessAlert(this.translate.instant('ptd.preasignacion_creada'));
-            this.dialogRef.close();
-          },
-          (error: any) => {
-            this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_crear_preasignacion'));
-          },
-        );
+        if (this.modificando) { // ? si es editing salta verificacion de no preasignado
+          this.savePreasign(request);
+        } else {
+          // ? no modular -> solo se registra una vez la preasignacion -> verificar previa preasignacion
+          this.planTrabajoDocenteService.get(`pre_asignacion?query=activo:true,espacio_academico_id:${this.grupo.Id},periodo_id:${this.periodo.Id}`).subscribe((resp) => {
+            if (resp.Data.length == 0) {
+              // ? continue presasignacion si cero para el grupo en particular
+                this.savePreasign(request);
+            } else {
+              this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.seleccion_docente'), this.translate.instant('ptd.no_valid_pre_asignacion'), MODALS.WARNING, false);
+            }
+          }, err => {
+            this.popUpManager.showPopUpGeneric(
+              this.translate.instant('ERROR.titulo_generico'),
+              this.translate.instant('ERROR.fallo_informacion_en') + ': <b>pre_asignacion</b>.<br><br>' +
+              this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+              MODALS.ERROR, false);
+            console.warn(err)
+          });
+        }
       }
     } else {
       this.popUpManager.showErrorAlert(this.translate.instant('ptd.alerta_campos_preasignacion'));
+    }
+  }
+
+  savePreasign(request: any) {
+    if (this.modificando) {
+      this.anyService.put(environment.PLAN_TRABAJO_DOCENTE_SERVICE, 'pre_asignacion/' + this.data.id, request).subscribe(
+        (response: any) => {
+          this.popUpManager.showSuccessAlert(this.translate.instant('ptd.preasignacion_actualizada'));
+          this.dialogRef.close();
+        },
+        (error: any) => {
+          this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_actualizar_preasignacion'));
+        },
+      );
+    } else {
+      this.anyService.post(environment.PLAN_TRABAJO_DOCENTE_SERVICE, 'pre_asignacion', request).subscribe(
+        (response: any) => {
+          this.popUpManager.showSuccessAlert(this.translate.instant('ptd.preasignacion_creada'));
+          this.dialogRef.close();
+        },
+        (error: any) => {
+          this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_crear_preasignacion'));
+        },
+      );
     }
   }
 
@@ -255,7 +285,7 @@ export class dialogoPreAsignacionPtdComponent implements OnInit {
 
   cargarEspaciosAcademicos() {
     return new Promise((resolve, reject) => {
-      this.espaciosAcademicosService.get('espacio-academico?query=activo:true,espacio_academico_padre&limit=0&fields=codigo,nombre,_id')
+      this.espaciosAcademicosService.get('espacio-academico?query=activo:true,espacio_academico_padre&limit=0&sortby=nombre&order=asc&fields=codigo,nombre,_id,espacio_modular')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {

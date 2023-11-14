@@ -314,6 +314,7 @@ export class PreAsignacionPtdComponent implements OnInit {
         }
         this.loading = false;
       }, err => {
+        this.data.load([]);
         this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_no_found_preasignaciones'));
         this.loading = false;
       });
@@ -325,6 +326,7 @@ export class PreAsignacionPtdComponent implements OnInit {
         }
         this.loading = false;
       }, err => {
+        this.data.load([]);
         this.popUpManager.showErrorAlert(this.translate.instant('ptd.error_no_found_preasignaciones'));
         this.loading = false;
       });
@@ -333,7 +335,7 @@ export class PreAsignacionPtdComponent implements OnInit {
 
   cargarPeriodo() {
     return new Promise((resolve, reject) => {
-      this.parametrosService.get('periodo/?query=CodigoAbreviacion:PA,activo:true&sortby=Id&order=desc&limit=0')
+      this.parametrosService.get('periodo/?query=CodigoAbreviacion:PA&sortby=Id&order=desc&limit=0')
         .subscribe(res => {
           const r = <any>res;
           if (res !== null && r.Status === '200') {

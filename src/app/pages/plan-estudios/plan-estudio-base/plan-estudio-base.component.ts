@@ -70,6 +70,7 @@ export abstract class PlanEstudioBaseComponent {
   enEdicionPlanEstudio: boolean = false;
   enEdicionSemestreNuevo: boolean = false;
   enEdicionSemestreViejo: boolean = false;
+  modoCreacion: boolean = false;
 
   numSemestresCompletado: boolean = false;
   habilitadoGenerarPlan: boolean = false;
@@ -103,6 +104,8 @@ export abstract class PlanEstudioBaseComponent {
   dataPlanes: PlanEstudioSummary = undefined;
   personaId: number;
   personaRoles: String[];
+
+  hideButtons: boolean = false;
 
   readonly studyPlanTableColumns = {
     plan_estudio: {
@@ -834,6 +837,7 @@ export abstract class PlanEstudioBaseComponent {
             this.planEstudioBody = undefined;
             this.planEstudioOrdenadoBody = undefined;
             this.enEdicionPlanEstudio = false;
+            this.modoCreacion = false;
             this.vista = VIEWS.LIST;
             this.loadSelects();
           }
@@ -883,6 +887,7 @@ export abstract class PlanEstudioBaseComponent {
 
   organizarPlanEstudioCompuesto(){
     this.enEdicionPlanEstudio = true;
+    this.modoCreacion = true;
     this.esPlanEstudioPadre = true;
     this.crearFormulario(FORM_PLAN_ESTUDIO);
     this.createSimpleTableStudyPlan();
@@ -934,9 +939,11 @@ export abstract class PlanEstudioBaseComponent {
   }
 
   loadProyectos(): Promise<any> {
+    console.log("Cargando proyectos");
     return new Promise((resolve, reject) => {
       this.projectService.get('proyecto_academico_institucion?query=Activo:true&sortby=Nombre&order=asc&limit=0').subscribe(
         (resp) => {
+          console.log("proyectos", resp);
           if (Object.keys(resp[0]).length > 0) {
             resolve(resp);
           } else {

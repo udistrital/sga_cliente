@@ -10,6 +10,7 @@ import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.
 import { VisualizarDocumentoPlanComponent } from './visualizar-documento-plan/visualizar-documento-plan.component';
 import { MatDialog, MatDialogModule } from '@angular/material';
 import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar/dialogo-evaluar.component';
+import { DialogVerObservacionComponent } from './dialog-ver-observacion/dialog-ver-observacion.component';
 
 @NgModule({
   declarations: [...routedComponents],
@@ -28,10 +29,12 @@ import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar
   ],
   entryComponents: [
     VisualizarDocumentoPlanComponent,
-    DialogoEvaluarComponent
+    DialogoEvaluarComponent,
+    DialogVerObservacionComponent
   ],
   exports: [
-    DialogoEvaluarComponent
+    DialogoEvaluarComponent,
+    DialogVerObservacionComponent
   ]
 })
 export class PlanEstudiosModule { }

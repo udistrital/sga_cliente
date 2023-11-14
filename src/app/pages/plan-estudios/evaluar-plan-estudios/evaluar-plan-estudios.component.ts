@@ -20,6 +20,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { PlanEstudioSummary } from '../../../@core/data/models/plan_estudios/plan_estudio_summary';
 import { DialogoEvaluarComponent } from './dialogo-evaluar/dialogo-evaluar.component';
+import { DialogVerObservacionComponent } from '../dialog-ver-observacion/dialog-ver-observacion.component';
 
 @Component({
   selector: 'evaluar-plan-estudios',
@@ -125,6 +126,19 @@ export class EvaluarPlanEstudiosComponent extends PlanEstudioBaseComponent imple
         })
       }
     };
+    tableColumns['ver_ob'] = {
+      title: this.translate.instant('GLOBAL.ver_ob'),
+      editable: false,
+      width: '5%',
+      filter: false,
+      type: 'custom',
+      renderComponent: Ng2StButtonComponent,
+      onComponentInitFunction: (instance) => {
+        instance.valueChanged.subscribe((out) => {
+          this.viewObservation(out.rowData);
+        })
+      }
+    };
     tableColumns['evaluar'] = {
       title: this.translate.instant('GLOBAL.evaluar'),
       editable: false,
@@ -186,6 +200,11 @@ export class EvaluarPlanEstudiosComponent extends PlanEstudioBaseComponent imple
 
     plan["ver"] = { value: ACTIONS.VIEW, type: 'ver', disabled: false };
     plan["evaluar"] = { value: ACTIONS.EVALUATE, type: 'evaluar', disabled: false };
+    if (plan["RevisorId"] == 0 || plan["RevisorId"] == undefined || plan["RevisorId"] == null) {
+      plan["ver_ob"] = { value: undefined, type: 'ver', disabled: true, hidden: true };
+    } else {
+      plan["ver_ob"] = { value: ACTIONS.VIEW, type: 'ver', disabled: false };
+    }
   }
 
   async recargarPlanEstudios() {
@@ -283,7 +302,7 @@ export class EvaluarPlanEstudiosComponent extends PlanEstudioBaseComponent imple
     let persona_id = Number(localStorage.getItem('persona_id'));
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '80vw';
-    dialogConfig.height = '580px';
+    dialogConfig.height = '590px';
     dialogConfig.data = {
       "tercero_id": persona_id,
       "rol": this.role,
@@ -538,6 +557,26 @@ export class EvaluarPlanEstudiosComponent extends PlanEstudioBaseComponent imple
         MODALS.ERROR, false);
     });
   }
+  //#endregion
+  // * ----------
+
+  // * ----------
+  // * Visualización de ventana aprobación
+  // #region
+
+  viewObservation(planEstudioBody: PlanEstudio) {
+    let persona_id = Number(localStorage.getItem('persona_id'));
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '80vw';
+    dialogConfig.height = '510px';
+    dialogConfig.data = {
+      "tercero_id": persona_id,
+      "estadosAprobacion": this.estadosAprobacion,
+      "planEstudioId": planEstudioBody.Id
+    };
+    this.dialog.open(DialogVerObservacionComponent, dialogConfig);
+  }
+
   //#endregion
   // * ----------
 }

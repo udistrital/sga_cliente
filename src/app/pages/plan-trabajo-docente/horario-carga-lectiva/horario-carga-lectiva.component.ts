@@ -562,7 +562,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
 
   getSedes() {
     return new Promise((resolve, reject) => {
-      this.oikosService.get('espacio_fisico?query=TipoEspacioFisicoId.Id:1,Activo:true&limit=0&fields=Id,Nombre,CodigoAbreviacion&sortby=Nombre&order=asc').subscribe(res => {
+      this.oikosService.get('espacio_fisico?query=TipoEspacioFisicoId.Id:38,Activo:true&limit=0&fields=Id,Nombre,CodigoAbreviacion&sortby=Nombre&order=asc').subscribe(res => {
         this.opcionesSedes = res;
         resolve(res);
       }, err => {

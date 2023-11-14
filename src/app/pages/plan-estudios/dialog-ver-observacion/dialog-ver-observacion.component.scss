@@ -1,0 +1,63 @@
+nb-card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  form {
+    width: 100%;
+  }
+  
+  .advertencia {
+    background-color: var(--warning-main);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 0.4rem;
+    margin: 1rem;
+  }
+  
+  .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  
+    .column {
+      // width: 50%;
+      flex: 1;
+      padding: 0 2rem;
+    }
+  }
+  
+  textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid transparent;
+    padding: 0;
+    resize: none;
+  }
+  
+  .row p {
+    text-align: left;
+    font-size: 1rem;
+  }
+  
+  .bold {
+    font-weight: bold;
+  }
+  
+  .row mat-form-field {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .row button {
+    display: block;
+    margin: 0 auto;
+    width: auto;
+  }
+  
