@@ -9,8 +9,9 @@ export class EstadoAprobacion {
 }
 
 export const STD = Object.freeze({
-    IN_EDIT: 'IN-EDIT',
-    IN_REV: 'IN-REV',
-    IS_APRV: 'IS-APRV',
+    IN_EDIT: 'ED',
+    IN_REV: 'REV',
+    IS_APRV: 'APRO',
+    WITH_OB: 'OB',
     NOT_APRV: 'NOT-APRV',
 })

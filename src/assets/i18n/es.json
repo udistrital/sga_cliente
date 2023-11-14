@@ -170,8 +170,7 @@
         },
         "plan_estudios": {
             "plan_estudios": "Plan de estudios",
-            "crear_plan_estudios": "Crear plan de estudio",
-            "editar_plan_estudios": "Editar plan de estudio",
+            "crear_plan_estudios": "Crear/ Editar plan de estudio",
             "evaluar_plan_estudios": "Evaluar plan de estudio",
             "revisar_plan_estudios": "Revisar plan de estudio"
         },
@@ -732,6 +731,8 @@
         "enfoque": "Enfoque",
         "eliminar_temporalmente": "Eliminar temporalmente",
         "ver": "Ver",
+        "ver_ob": "Ver Observación",
+        "ver_editar": "Ver/Editar",
         "ordenar": "Ordenar",
         "orden": "Orden",
         "agregar_varios_archivos": "Puede agregar varios archivos si lo requiere",
@@ -2539,6 +2540,7 @@
         "seguro_crear": "¿Guardar el plan de estudios?",
         "seguro_limpiar_semestre": "¿Descartar la definición de espacios académicos para este semestre?",
         "seguro_finalizar": "¿Guardar definición de espacios académicos para este semestre?",
+        "seguro_salir_formulario_observacion": "¿Está seguro de salir del formulario de evaluación del plan de estudio?",
         "agregar_espacio": "Agregar este espacio al semestre actual",
         "quitar_espacio": "Quitar espacio de este semestre",
         "agregar_plan": "Agregar plan de estudio",

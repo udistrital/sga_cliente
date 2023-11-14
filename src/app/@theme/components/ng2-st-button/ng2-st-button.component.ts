@@ -5,7 +5,7 @@ import { ViewCell } from 'ng2-smart-table';
   selector: 'ng2-st-button',
   template: `
     <div>  
-      <button mat-raised-button color="primary" (click)="action()" [ngSwitch]="value.type" [disabled]="value.disabled">
+      <button mat-raised-button color="primary" (click)="action()" [ngSwitch]="value.type" [disabled]="value.disabled" [hidden]="value.hidden">
         <i *ngSwitchCase="'ver'" class="nb-search" title="{{ 'GLOBAL.tooltip_ver_registro' | translate }}"></i>
         <i *ngSwitchCase="'editar'" class="nb-edit" title="{{ 'GLOBAL.tooltip_editar_registro' | translate }}"></i>
         <i *ngSwitchCase="'borrar'" class="nb-trash" title="{{ 'GLOBAL.eliminar' | translate }}"></i>

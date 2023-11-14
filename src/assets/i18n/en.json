@@ -165,8 +165,7 @@
         },
         "plan_estudios": {
             "plan_estudios": "Study Plan",
-            "crear_plan_estudios": "Create Study Plan",
-            "editar_plan_estudios": "Edit Study Plan",
+            "crear_plan_estudios": "Create/Edit Study Plan",
             "evaluar_plan_estudios": "Evaluate Study Plan",
             "revisar_plan_estudios": "Review Study Plan"
         },
@@ -698,6 +697,8 @@
         "enfoque": "Approach",
         "eliminar_temporalmente": "Temporarily remove",
         "ver": "View",
+        "ver_ob": "View Observation",
+        "ver_editar": "View/Edit",
         "ordenar": "Order",
         "orden": "Order",
         "agregar_varios_archivos": "You can attach multiple files if required",
@@ -2465,6 +2466,7 @@
         "seguro_crear": "Save the study plan?",
         "seguro_limpiar_semestre": "Dismiss the definition of academic spaces for this semester?",
         "seguro_finalizar": "Save definition of academic spaces for this semester?",
+        "seguro_salir_formulario_observacion": "Are you sure to exit the study plan evaluation form?",
         "agregar_espacio": "Add this space to the current semester",
         "quitar_espacio": "Remove space from this semester",
         "agregar_plan": "Add study plan",

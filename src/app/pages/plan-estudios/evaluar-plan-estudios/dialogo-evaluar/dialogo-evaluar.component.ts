@@ -177,4 +177,15 @@ export class DialogoEvaluarComponent implements OnInit {
       );
     }
   }
+
+  salirObservacion() {
+    this.popUpManager.showPopUpGeneric(
+      this.translate.instant('plan_estudios.plan_estudios'),
+      this.translate.instant('plan_estudios.seguro_salir_formulario_observacion'), MODALS.INFO, true
+    ).then((action) => {
+      if (action.value) {
+        this.dialogRef.close();
+      }
+    });
+  }
 }

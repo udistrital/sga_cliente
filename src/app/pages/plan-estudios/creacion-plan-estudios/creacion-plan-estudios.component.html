@@ -33,7 +33,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
                         <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)" (createdForm)="asignarForm($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
                         <div class="alinear-center" [class.right]="!enEdicionPlanEstudio">
-                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.limpiar' | translate }}</button>
+                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio || !modoCreacion">{{ 'GLOBAL.limpiar' | translate }}</button>
                             <button mat-raised-button [color]="formGroupPlanEstudio.valid ? 'primary' : ''" (click)="guardar(stepper)" [disabled]="!formGroupPlanEstudio.valid" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.guardar_continuar' | translate }}</button>
                             <button mat-raised-button matStepperNext [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.siguiente' | translate }}</button>
                         </div>
@@ -110,7 +110,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
                         <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)" (createdForm)="asignarForm($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
                         <div class="alinear-center" [class.right]="!enEdicionPlanEstudio">
-                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.limpiar' | translate }}</button>
+                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio || !modoCreacion">{{ 'GLOBAL.limpiar' | translate }}</button>
                             <button mat-raised-button [color]="formGroupPlanEstudio.valid ? 'primary' : ''" (click)="guardar(stepper)" [disabled]="!formGroupPlanEstudio.valid" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.guardar_continuar' | translate }}</button>
                             <button mat-raised-button matStepperNext [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.siguiente' | translate }}</button>
                         </div>

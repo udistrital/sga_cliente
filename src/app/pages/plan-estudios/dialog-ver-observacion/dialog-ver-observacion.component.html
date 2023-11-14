@@ -1,0 +1,63 @@
+<div class="dinamic-form" [nbSpinner]="loading">
+    <ng-container>
+      <nb-card-body>
+        <form novalidate [formGroup]="revisionForm" #fform="ngForm" class="form-horizontal">
+          <fieldset [ngClass]="{'fieldseter': true}">
+            <legend><small>&nbsp; {{ 'plan_estudios.evaluar' | translate }}</small></legend>
+  
+            <div class="row">
+              <div class="column">
+                <p class="bold">{{ 'plan_estudios.evaluacion' | translate }}: </p>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="column">
+                <ng-container>
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>{{ 'plan_estudios.estado_evaluacion' | translate }}</mat-label>
+                    <input matInput type="text" formControlName="estadoSeleccionado" [disabled]="true" readonly>
+                  </mat-form-field>
+                </ng-container>
+              </div>
+  
+              <div class="column">
+                <mat-form-field style="width: 100%;" floatLabel="always">
+                  <mat-label>{{ 'GLOBAL.observaciones' | translate }}</mat-label>
+                  <textarea matInput rows="5" [formControl]="revisionForm.get('observaciones')"
+                    [disabled]="true" readonly></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="column">
+                <p class="bold">{{ 'plan_estudios.quien_da_respuesta' | translate }}: </p>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="column">
+                <ng-container>
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>{{ 'GLOBAL.rol' | translate }}</mat-label>
+                    <input matInput type="text" formControlName="rolSeleccionado" [disabled]="true" readonly>
+                  </mat-form-field>
+                </ng-container>
+              </div>
+              <div class="column">
+                <mat-form-field style="width: 100%;">
+                  <mat-label for="nombreEvaluador">{{ 'plan_estudios.nombre_evaluador' | translate }}</mat-label>
+                  <input matInput type="text" [formControl]="revisionForm.get('nombreEvaluador')" [disabled]="true" readonly>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <button mat-raised-button color="primary" (click)="salirObservacion()">{{ 'GLOBAL.salir' | translate }}</button>
+            </div>
+          </fieldset>
+        </form>
+      </nb-card-body>
+    </ng-container>
+  </div>
