@@ -4,6 +4,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { AnyService } from '../../../@core/data/any.service';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { DialogPreviewFileComponent } from '../dialog-preview-file/dialog-preview-file.component';
 
 @Component({
   selector: 'ngx-dinamicform',
@@ -32,6 +34,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
   constructor(
     private sanitization: DomSanitizer,
     private anyService: AnyService,
+    private matDialog: MatDialog,
   ) {
     this.data = {
       valid: true,
@@ -159,23 +162,51 @@ export class DinamicformComponent implements OnInit, OnChanges {
     })
   }
 
-  download(url, title, w, h, noPreview?) {
-    if (noPreview) {
-      const download = document.createElement("a");
-      download.href = url;
-      download.download = title;
-      document.body.appendChild(download);
-      download.click();
-      document.body.removeChild(download);
+  download(url, title, w, h, previewForm?, message?) {
+    if (previewForm !== undefined) {
+      switch (previewForm) {
+        case "preview":
+          this.preview(url, title, message);
+          break;
+        case "nopreview":
+          this.nopreview(url, title);
+          break;
+        case "both":
+          const spliturl = url.split('|');
+          this.preview(spliturl[0], title, message);
+          this.nopreview(spliturl[1], title);
+          break;
+        default:
+          this.preview(url, title, message);
+          break;
+      }
     } else {
-      const left = (screen.width / 2) - (w / 2);
-      const top = (screen.height / 2) - (h / 2);
-      let prev = window.open(url, title, 'toolbar=no,' +
-        'location=no, directories=no, status=no, menubar=no,' +
-        'scrollbars=no, resizable=no, copyhistory=no, ' +
-        'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-      prev.document.title = title;
+      this.preview(url, title, message);
     }
+  }
+
+  preview(url, title, message) {
+    /* const left = (screen.width / 2) - (w / 2);
+    const top = (screen.height / 2) - (h / 2);
+    let prev = window.open(url, title, 'toolbar=no,' +
+      'location=no, directories=no, status=no, menubar=no,' +
+      'scrollbars=no, resizable=no, copyhistory=no, ' +
+      'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    prev.document.title = title; */
+    const dialogDoc = new MatDialogConfig();
+    dialogDoc.width = '80vw';
+    dialogDoc.height = '90vh';
+    dialogDoc.data = {url, title, message};
+    this.matDialog.open(DialogPreviewFileComponent, dialogDoc);
+  }
+
+  nopreview(url, title) {
+    const download = document.createElement("a");
+    download.href = url;
+    download.download = title;
+    document.body.appendChild(download);
+    download.click();
+    document.body.removeChild(download);
   }
 
   onChange(event, c) {
