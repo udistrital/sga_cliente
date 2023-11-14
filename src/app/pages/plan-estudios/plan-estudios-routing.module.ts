@@ -32,7 +32,7 @@ const routes: Routes = [{
   {
     path: 'revisar',
     component: RevisarPlanesEstudioComponent,
-    //canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   }
   ]
 }];
