@@ -14,6 +14,8 @@ import { TercerosService } from '../../../@core/data/terceros.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { DialogPreviewFileComponent } from '../../../@theme/components/dialog-preview-file/dialog-preview-file.component';
 
 @Component({
   selector: 'consolidado',
@@ -58,6 +60,7 @@ export class ConsolidadoComponent implements OnInit {
     private tercerosService: TercerosService,
     private autenticationService: ImplicitAutenticationService,
     private GestorDocumental: NewNuxeoService,
+    private matDialog: MatDialog,
     ) {
       this.dataConsolidados = new LocalDataSource();
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -492,18 +495,22 @@ export class ConsolidadoComponent implements OnInit {
   }
 
   previewFile(url: string) {
-    const h = screen.height * 0.65;
+    /* const h = screen.height * 0.65;
     const w = h * 3/4;
     const left = (screen.width * 3/4) - (w / 2);
     const top = (screen.height / 2) - (h / 2);
     window.open(url, '', 'toolbar=no,' +
       'location=no, directories=no, status=no, menubar=no,' +
       'scrollbars=no, resizable=no, copyhistory=no, ' +
-      'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+      'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left); */
+      const dialogDoc = new MatDialogConfig();
+      dialogDoc.width = '80vw';
+      dialogDoc.height = '90vh';
+      dialogDoc.data = {url};
+      this.matDialog.open(DialogPreviewFileComponent, dialogDoc);
   }
 
   verRevDecano(consolidado: any) {
-    console.log(consolidado)
     const respuesta_decanatura = JSON.parse(consolidado.respuesta_decanatura);
     const estado = this.estadosConsolidado.opciones.find(estado => estado._id == consolidado.estado_consolidado_id);
     this.formRespuestaConsolidado.campos[this.getIndexFormRespuestaConsolidado('Respuesta')].valor = estado ? estado.nombre : "Sin Definir";

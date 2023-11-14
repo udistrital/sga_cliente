@@ -773,7 +773,8 @@
         "titulo_generico": "¡Disculpe, algo ha salido mal!",
         "fallo_informacion_en": "Ha habido un error al consultar la información sobre",
         "sin_informacion_en": "No se ha encontrado información sobre",
-        "persiste_error_comunique_OAS": "Regrese e intente de nuevo más tarde. Si el error persiste, comuníquese con Oficina Asesora de Tecnologías e Información (OAS)"
+        "persiste_error_comunique_OAS": "Regrese e intente de nuevo más tarde. Si el error persiste, comuníquese con Oficina Asesora de Tecnologías e Información (OATI)",
+        "error_previsualizar_doc": "No se pudo visualizar el documento, no es un formato válido o no se ha encontrado."
     },
     "recibo_pago": {
         "generado": "El recibo de pago ha sido generado correctamente",
@@ -1471,7 +1472,7 @@
         "correo_actual": "Correo actual",
         "generar_comprobante": "Si no ha guardado o no se ha generado el comprobante, presione aquí",
         "info_impresion_auto": "NOTA: Se genera un documento comprobante de inscripción al completar la barra de carga.",
-        "fallo_carga_mensaje": "Algó falló en la carga de información, por favor regrese e intente de nuevo",
+        "fallo_carga_mensaje": "Algo falló en la carga de información, por favor regrese e intente de nuevo",
         "sin_documento": "El archivo que intenta visualizar no se encuentra",
         "confirmar_ajuste_documentos_observacion": "Confirmar edición de documentos con observaciones",
         "cambio_estado_ok": "Confirmación de edición exitosa",
@@ -2421,7 +2422,10 @@
         "please_descargue_consolidado": "Por favor genere el documento para relacionar los planes de trabajo docente al presente consolidado",
         "info_firma_digital": "El presente Plan Trabajo Docente va a ser aprobado y por ende firmado digitalmente",
         "info_agrerar_representante": "Si usted no es el coordinador, por favor agréguese como representante",
-        "info_revisar_cargar_formato": "Por favor, descargue revise y cargue nuevamente el \"Formato de control del cumplimiento de la normatividad vigente\""
+        "info_revisar_cargar_formato": "Por favor, descargue revise y cargue nuevamente el \"Formato de control del cumplimiento de la normatividad vigente\"",
+        "no_valid_pre_asignacion": "El espacio académico ya cuenta con preasignación para el presente periodo.",
+        "info_cambio_documento_consolidado": "Es importante tener en cuenta que si se modifica el contenido del documento Consolidado, será necesario reiniciar el proceso de aprobación (cambiando su estado a 'No aprobado') y, en caso necesario, actualizar los Planes de Trabajo Docente.",
+        "pdf_solover_excel_imprimir": "Documento Pdf no apto para imprimir o editar, por favor, guarde la versión excel propocionada."
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",

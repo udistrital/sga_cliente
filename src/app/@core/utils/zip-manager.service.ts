@@ -37,10 +37,26 @@ export class ZipManagerService {
     })]
   }
 
+  manejarNombresRepetidos(archivos: any[]): any[] {
+    const contador: Record<string, number> = {};
+    return archivos.map(archivo => {
+      const { nombreDocumento, ...file_info} = archivo;
+      if (contador[nombreDocumento] === undefined) {
+        contador[nombreDocumento] = 1;
+        return archivo;
+      } else {
+        contador[nombreDocumento]++;
+        const nombreN = `${nombreDocumento} (${contador[nombreDocumento]})`;
+        return { nombreDocumento: nombreN, ...file_info};
+      }
+    })
+  }
+
   generarZip(nombreCarpeta: string) {
     return new Promise((resolve, reject) => {
       this.CarpetaPrincipal = nombreCarpeta != "" ? nombreCarpeta : this.CarpetaPrincipal;
       let zip = new JSZip();
+      this.Archivos = this.manejarNombresRepetidos(this.Archivos);
       this.Archivos.forEach((archivo, index) => {
         let nombre = <string>archivo.nombreDocumento;
         let carpeta = <string>archivo.carpeta;
