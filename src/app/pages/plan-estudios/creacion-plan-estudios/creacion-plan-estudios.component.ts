@@ -452,13 +452,17 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
               estado => estado.CodigoAbreviacion == STD.IN_REV);
             this.planEstudiosService.put('plan_estudio/', planEstudioBody).
               subscribe(
-                resp => {
+                async resp => {
                   if (resp.Status == "200") {
                     this.loading = false;
+                    const reload = new Promise(resolve => {
+                      this.loadStudyPlanTable();
+                      this.vista = VIEWS.LIST;
+                      resolve(true);
+                    });
                     this.popUpManager.showSuccessAlert(
                       this.translate.instant('plan_estudios.enviar_revision_ok'));
-                    this.loadStudyPlanTable();
-                    this.vista = VIEWS.LIST;
+                    await reload;
                   } else {
                     this.loading = false;
                     this.popUpManager.showErrorAlert(this.translate.instant('plan_estudios.enviar_revision_fallo'));
@@ -506,6 +510,8 @@ export class CreacionPlanEstudiosComponent extends PlanEstudioBaseComponent impl
     this.planEstudioBody.SoporteDocumental = await this.prepareIds2Stringify(totalSoportes, "SoporteDocumental");
     this.updateStudyPlan(this.planEstudioBody).then((res) => {
       if (res) {
+        const semestresMax = Number(this.formGroupPlanEstudio.get('numeroSemestres').value);
+        this.numSemestresCompletado = this.dataSemestre.length === semestresMax;
         stepper.next();
       }
     });

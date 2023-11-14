@@ -129,18 +129,20 @@
     box-shadow: 1px 1px 1px 1px rgba(0,0,0,.35);
 	display: grid;
     // ? organizar maximo de 5 items por columna
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
     grid-auto-columns: 1fr;
     grid-auto-flow: column;
 
     .cuadro {
         border: 1px dashed var(--primary);
-        width: 180px;
+        width: 250px;
         height: 2rem;
-        margin: 0.5rem;
+        margin: 0.1rem 0.5rem;
         text-align: center;
-        padding: 0.5rem;
+        padding: 0.3rem 0.1rem;
+        font-weight: 400;
+        font-size: 0.9rem;
     }
 }
 

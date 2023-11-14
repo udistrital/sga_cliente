@@ -1634,6 +1634,9 @@ export abstract class PlanEstudioBaseComponent {
         } 
         this.planEstudioPadreAsignado2Form = false;
         this.dataEspaciosAcademicos.load(this.ListEspacios);
+
+        this.numSemestresCompletado = this.dataSemestre.length === this.planEstudioBody.NumeroSemestres;
+        this.formPlanEstudio.numeroSemestres.minimo = this.dataSemestre.length;
       }, (error) => {
         this.loading = false;
         this.popUpManager.showPopUpGeneric(
