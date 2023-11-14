@@ -101,7 +101,7 @@ export class RevisarPlanesEstudioComponent extends PlanEstudioBaseComponent impl
       renderComponent: Ng2StButtonComponent,
       onComponentInitFunction: (instance) => {
         instance.valueChanged.subscribe((out) => {
-          this.generarPlanEstudio(out.rowData);
+          this.generarPlanEstudioVisualizacion(out.rowData);
         })
       }
     };
@@ -206,6 +206,28 @@ export class RevisarPlanesEstudioComponent extends PlanEstudioBaseComponent impl
     plan["planPorCiclos"] = plan["EsPlanEstudioPadre"] ? this.translate.instant('GLOBAL.si') : this.translate.instant('GLOBAL.no');
     
     plan["ver"] = { value: ACTIONS.VIEW, type: 'ver', disabled: false };
+  }
+  //#endregion
+  // * ----------
+
+  // * ----------
+  // * Cargar datos plan de estudio tabla
+  //#region
+  generarPlanEstudioVisualizacion(planEstudioBody: PlanEstudio){
+    this.loading = true;
+    const idPlan = planEstudioBody.Id;
+    this.consultarPlanEstudio(idPlan).then((res) => {
+      this.planEstudioBody = res;
+      this.generarPlanEstudio();
+    }, (error) => {
+      this.loading = false;
+      this.vista = VIEWS.LIST;
+      this.popUpManager.showPopUpGeneric(
+        this.translate.instant('ERROR.titulo_generico'),
+        this.translate.instant('plan_estudios.error_cargando_datos_formulario') + '</b>.<br><br>' +
+        this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+        MODALS.ERROR, false);
+    });
   }
   //#endregion
   // * ----------

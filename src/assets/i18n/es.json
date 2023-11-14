@@ -170,7 +170,7 @@
         },
         "plan_estudios": {
             "plan_estudios": "Plan de estudios",
-            "crear_plan_estudios": "Crear/ Editar plan de estudio",
+            "crear_plan_estudios": "Crear/Editar plan de estudio",
             "evaluar_plan_estudios": "Evaluar plan de estudio",
             "revisar_plan_estudios": "Revisar plan de estudio"
         },
@@ -2535,7 +2535,7 @@
         "editar_semestre": "Editar semestre",
         "finalizar_semestre": "Finalizar semestre",
         "seguro_salir_formulario": "¿Está seguro de salir del formulario de plan de estudio?",
-        "seguro_cancelar": "¿Cancelar creación/edición de plan de estudio?",
+        "seguro_cancelar": "¿Está seguro de salir de la creación/edición de plan de estudio?",
         "seguro_limpiar": "¿Descartar el formulario de plan de estudio?",
         "seguro_crear": "¿Guardar el plan de estudios?",
         "seguro_limpiar_semestre": "¿Descartar la definición de espacios académicos para este semestre?",
