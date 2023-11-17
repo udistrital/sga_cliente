@@ -3,7 +3,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
     <nb-card-header>
         <div class="row" align="center">
             <div class="col">
-                {{ 'plan_estudios.crear' | translate }}
+                {{ 'plan_estudios.crear_editar' | translate }}
             </div>
         </div>
     </nb-card-header>
@@ -19,14 +19,13 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                 <div class="alinear-center-espacio-doble" [class.generate]="habilitadoGenerarPlan">
                     <button mat-raised-button color="primary" (click)="nuevoPlanEstudio()">{{ 'plan_estudios.crear' | translate }}</button>
                     <button mat-raised-button color="primary" (click)="organizarPlanEstudioCompuesto()">{{ 'plan_estudios.organizar' | translate }}</button>
-                    <button mat-raised-button color="primary" (click)="generarPlanEstudio()" [hidden]="habilitadoGenerarPlan">{{ 'plan_estudios.generar_plan' | translate }}</button>
                 </div>
             </fieldset>
         </ng-container>
         <ng-container *ngSwitchCase="VIEWS.FORM">
             <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
                 <legend class="modo-ventana">
-                    <small>&nbsp; {{ 'plan_estudios.crear' | translate }} </small>
+                    <small>&nbsp; {{ 'plan_estudios.crear_editar' | translate }} </small>
                     <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="cancelar()"></i>
                 </legend>
                 <mat-horizontal-stepper #stepper [linear]="true" #stepper>
@@ -34,7 +33,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
                         <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)" (createdForm)="asignarForm($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
                         <div class="alinear-center" [class.right]="!enEdicionPlanEstudio">
-                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.limpiar' | translate }}</button>
+                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio || !modoCreacion">{{ 'GLOBAL.limpiar' | translate }}</button>
                             <button mat-raised-button [color]="formGroupPlanEstudio.valid ? 'primary' : ''" (click)="guardar(stepper)" [disabled]="!formGroupPlanEstudio.valid" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.guardar_continuar' | translate }}</button>
                             <button mat-raised-button matStepperNext [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.siguiente' | translate }}</button>
                         </div>
@@ -59,6 +58,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         <div class="alinear-center espacio" >
                             <button mat-raised-button matStepperPrevious [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.regresar' | translate }}</button>
                             <button mat-raised-button color="primary" (click)="agregarSemestre()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo" [hidden]="!enEdicionPlanEstudio || numSemestresCompletado">{{ 'plan_estudios.agregar_semestre' | translate }}</button>
+                            <button mat-raised-button color="primary" (click)="generarPlanEstudio()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo">{{ 'plan_estudios.generar_plan' | translate }}</button>
                             <button mat-raised-button (click)="salirEdicionFormulario()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo">{{ 'GLOBAL.salir' | translate }}</button>
                         </div>
                         <mat-accordion>
@@ -102,7 +102,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
         <ng-container *ngSwitchCase="VIEWS.SECONDARY_FORM">
             <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
                 <legend class="modo-ventana">
-                    <small>&nbsp; {{ 'plan_estudios.crear' | translate }} </small>
+                    <small>&nbsp; {{ 'plan_estudios.crear_editar' | translate }} </small>
                     <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="cancelar()"></i>
                 </legend>
                 <mat-horizontal-stepper #stepper [linear]="true" #stepper>
@@ -111,7 +111,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
                         <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
                         <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)" (createdForm)="asignarForm($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
                         <div class="alinear-center" [class.right]="!enEdicionPlanEstudio">
-                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.limpiar' | translate }}</button>
+                            <button mat-raised-button (click)="limpiar()" [hidden]="!enEdicionPlanEstudio || !modoCreacion">{{ 'GLOBAL.limpiar' | translate }}</button>
                             <button mat-raised-button [color]="formGroupPlanEstudio.valid ? 'primary' : ''" (click)="guardar(stepper)" [disabled]="!formGroupPlanEstudio.valid" [hidden]="!enEdicionPlanEstudio">{{ 'GLOBAL.guardar_continuar' | translate }}</button>
                             <button mat-raised-button matStepperNext [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.siguiente' | translate }}</button>
                         </div>

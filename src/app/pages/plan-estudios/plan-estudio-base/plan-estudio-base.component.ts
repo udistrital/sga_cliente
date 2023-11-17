@@ -26,6 +26,7 @@ import {
   EstadoAprobacion,
 } from "../../../@core/data/models/plan_estudios/estado_aprobacion";
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import { PlanEstudioSummary } from "../../../@core/data/models/plan_estudios/plan_estudio_summary";
 
 /*@Component({
   selector: "plan-estudio-base",
@@ -69,6 +70,7 @@ export abstract class PlanEstudioBaseComponent {
   enEdicionPlanEstudio: boolean = false;
   enEdicionSemestreNuevo: boolean = false;
   enEdicionSemestreViejo: boolean = false;
+  modoCreacion: boolean = false;
 
   numSemestresCompletado: boolean = false;
   habilitadoGenerarPlan: boolean = false;
@@ -99,11 +101,17 @@ export abstract class PlanEstudioBaseComponent {
     ENFQ_TEOPRAC: 0,
   };
 
+  dataPlanes: PlanEstudioSummary = undefined;
+  personaId: number;
+  personaRoles: String[];
+
+  hideButtons: boolean = false;
+
   readonly studyPlanTableColumns = {
     plan_estudio: {
       title: this.translate.instant("plan_estudios.plan_estudios"),
       editable: false,
-      width: "25%",
+      width: "20%",
       filter: true,
     },
     proyectoCurricular: {
@@ -151,6 +159,12 @@ export abstract class PlanEstudioBaseComponent {
     protected gestorDocumentalService: NewNuxeoService,
     protected autenticationService: ImplicitAutenticationService
   ) {}
+
+  setRoles(){
+    this.autenticationService.getRole().then((rol:Array<String>)=>{
+      this.personaRoles = rol;
+    })
+  }
 
   crearFormulario(formPlanEstudio: FormParams) {
     this.planEstudioPadreAsignado2Form = false;
@@ -823,6 +837,7 @@ export abstract class PlanEstudioBaseComponent {
             this.planEstudioBody = undefined;
             this.planEstudioOrdenadoBody = undefined;
             this.enEdicionPlanEstudio = false;
+            this.modoCreacion = false;
             this.vista = VIEWS.LIST;
             this.loadSelects();
           }
@@ -872,6 +887,7 @@ export abstract class PlanEstudioBaseComponent {
 
   organizarPlanEstudioCompuesto(){
     this.enEdicionPlanEstudio = true;
+    this.modoCreacion = true;
     this.esPlanEstudioPadre = true;
     this.crearFormulario(FORM_PLAN_ESTUDIO);
     this.createSimpleTableStudyPlan();
@@ -982,6 +998,22 @@ export abstract class PlanEstudioBaseComponent {
     });
   }
 
+  loadPlanesEstudioPorTerceroVinculacion(terceroId): Promise<PlanEstudio[]> {
+    return new Promise<any>((resolve, reject) => {
+      this.sgaMidService.get("plan_estudio/dependencia_vinculacion_tercero/" + terceroId).subscribe(
+        (resp) => {
+          if (Object.keys(resp.Data[0]).length > 0) {
+            resolve(resp.Data);
+          } else {
+            resolve([]);
+          }
+        }, (err) => {
+          reject({ "plan_estudio": err })
+        }
+      );
+    });
+  }
+
   async loadStudyPlanSimpleTable() {
     this.loading = true;
     try {
@@ -1056,7 +1088,6 @@ export abstract class PlanEstudioBaseComponent {
       })
     });
   }
-
   //#endregion
   // * ----------
 
@@ -1603,6 +1634,9 @@ export abstract class PlanEstudioBaseComponent {
         } 
         this.planEstudioPadreAsignado2Form = false;
         this.dataEspaciosAcademicos.load(this.ListEspacios);
+
+        this.numSemestresCompletado = this.dataSemestre.length === this.planEstudioBody.NumeroSemestres;
+        this.formPlanEstudio.numeroSemestres.minimo = this.dataSemestre.length;
       }, (error) => {
         this.loading = false;
         this.popUpManager.showPopUpGeneric(
@@ -1820,6 +1854,35 @@ export abstract class PlanEstudioBaseComponent {
         );
         reject({"plan_estudio_proyecto": "Error actualizando"});
       });
+    });
+  }
+  //#endregion
+  // * ----------
+
+  // * ----------
+  // * Visualizador dinámico planes de estudio
+  //#region
+  generarPlanEstudio() {
+    this.loading = true;
+    this.sgaMidService.get('plan_estudios/study_plan_visualization/'+this.planEstudioBody.Id).subscribe(resp => {
+      this.loading = false;
+      if (resp !== null && resp.Status == "200") {
+        this.dataPlanes = resp.Data;
+        this.vista = VIEWS.SUMMARY;
+      } else {
+        this.dataPlanes = undefined;
+        this.popUpManager.showPopUpGeneric(
+          this.translate.instant('ERROR.titulo_generico'),
+          this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+          MODALS.ERROR, false);
+      }
+    }, error => {
+      this.loading = false;
+      this.dataPlanes = undefined;
+      this.popUpManager.showPopUpGeneric(
+        this.translate.instant('ERROR.titulo_generico'),
+        this.translate.instant('ERROR.persiste_error_comunique_OAS'),
+        MODALS.ERROR, false);
     });
   }
   //#endregion

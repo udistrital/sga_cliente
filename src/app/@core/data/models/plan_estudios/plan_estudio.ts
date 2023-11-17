@@ -14,7 +14,6 @@ export class PlanEstudio {
     NumeroResolucion: number;
     NumeroSemestres: number;
     Observacion: string = "";
-    PlanEstudioPadreId: any = null;
     ProyectoAcademicoId: number;
     ResumenPlanEstudios: string = "";
     SoporteDocumental: string = "";
@@ -26,6 +25,8 @@ export class PlanEstudio {
     EspaciosSemestreDistribucion: string = "";
     EsPlanEstudioPadre: boolean;
     EstadoAprobacionId: EstadoAprobacion;
+    RevisorId: number = 0;
+    RevisorRol: string = "";
     readonly FechaCreacion: Date;
     readonly FechaModificacion: Date;
 }

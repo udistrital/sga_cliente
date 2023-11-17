@@ -102,7 +102,7 @@
                                 <mat-select formControlName="espacio_academico" (selectionChange)="loadProyectos()">
                                     <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
                                     <mat-option *ngFor="let item of opcionesEspaciosAcademicos" [value]="item">
-                                        {{item.nombre}}
+                                        {{item.nombre}} {{ item.espacio_modular ? (' - (' + ('espacios_academicos.espacio_modular' | translate) + ')') : '' }}
                                     </mat-option>
                                 </mat-select>
                                 <mat-error

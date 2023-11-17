@@ -1,0 +1,33 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">    
+    <nb-card-header>
+        <div class="row" align="center">
+            <div class="col">
+                {{ 'plan_estudios.revisar' | translate }}
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <ng-container *ngSwitchCase="VIEWS.LIST">
+            <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" >
+                <legend><small>&nbsp; {{ 'plan_estudios.planes_estudio_reportados' | translate }} </small></legend>
+                <div class="alinear-center">
+                    <div class="advertencia">{{ 'plan_estudios.mensaje_tabla_reporte_plan_estudio' | translate }}</div>
+                </div>
+                <ng2-smart-table [settings]="tbPlanesEstudio" [source]="dataPlanesEstudio">
+                </ng2-smart-table>
+            </fieldset>
+        </ng-container>
+        <ng-container *ngSwitchCase="VIEWS.SUMMARY">
+            <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
+                <legend class="modo-ventana">
+                    <small>&nbsp; {{ 'plan_estudios.resumen' | translate }} </small>
+                    <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="vista=VIEWS.LIST;"></i>
+                </legend>
+                <summary-planes-estudio [dataPlanes]="dataPlanes"></summary-planes-estudio>
+            </fieldset>
+        </ng-container>
+    </nb-card-body>
+    <nb-card-footer>
+    </nb-card-footer>
+</nb-card>

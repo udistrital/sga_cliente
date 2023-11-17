@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { GestionHorariosRoutingModule, routedComponents } from './gestion-horarios-routing.module';
 import { ThemeModule } from '../../@theme/theme.module';
 import { SharedModule } from '../../shared/shared.module';
@@ -14,7 +14,8 @@ import { EspaciosAcademicosService } from '../../@core/data/espacios_academicos.
     GestionHorariosRoutingModule,
     ThemeModule,
     SharedModule,
-    Ng2SmartTableModule
+    Ng2SmartTableModule,
+    DragDropModule
   ],
   providers: [
     EspaciosAcademicosService

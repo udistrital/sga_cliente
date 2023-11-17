@@ -42,7 +42,7 @@
                 <div class="top_col">{{ 'GLOBAL.periodo' | translate }}: {{ periodo.Orden }}</div>
                 <table id="{{espacio.Codigo}}" class="info_asignatura" *ngFor="let espacio of periodo.Espacios"
                         (mouseenter)="mouseHoverIn($event, espacio.Prerequisitos)" (mouseleave)="mouseHoverOut($event, espacio.Prerequisitos)"
-                        [style.backgroundColor]="Escuelas[espacio.Escuela].Color" [style.color]="Escuelas[espacio.Escuela].TxtColor">
+                        [style.backgroundColor]="espacio.EscuelaColor" [style.color]="espacio.EscuelaColorFuente">
                     <tr>
                         <td title="{{ 'plan_estudios.codigo_asignatura' | translate }}">{{espacio.Codigo}}</td>
                         <td colspan="4" title="{{espacio.Nombre}}">
@@ -62,7 +62,7 @@
                         <td colspan="5" >&nbsp;{{printRequired(espacio.Prerequisitos)}}</td>
                     </tr>
                 </table>
-                <div class="bottom_col">{{ 'plan_estudios.cant_creditos' | translate }}: {{ periodo.Creditos }} </div>
+                <div class="bottom_col">{{ 'plan_estudios.cant_creditos' | translate }}: {{ periodo.TotalCreditos }} </div>
             </div>
         </div>
             
@@ -315,4 +315,7 @@
         </ng-container>
     </div>
 </div>
-  
+
+<div class="alinear-center-espacio-doble">
+    <button mat-raised-button color="primary" (click)="generateStudyPlanDocument()">{{ 'plan_estudios.descargar_documento' | translate }}</button>
+</div>

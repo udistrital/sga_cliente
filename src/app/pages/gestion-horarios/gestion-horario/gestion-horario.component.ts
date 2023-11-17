@@ -28,6 +28,7 @@ export class GestionHorarioComponent implements OnInit {
   proyectos: any[];
   periodos: any[] ;
   bandera_gestion_grupo: boolean = false;
+  bandera_registro_horario: boolean = false;
 
   readonly ACTIONS = ACTIONS;
   crear_editar: Symbol;
@@ -204,6 +205,11 @@ export class GestionHorarioComponent implements OnInit {
   to_gestion_grupo(){
     console.log("to_gestion_grupo");
     this.bandera_gestion_grupo =true;
+  }
+
+  to_gestion_registo(){
+    console.log("to_gestion_registo");
+    this.bandera_registro_horario =true;
   }
 
 

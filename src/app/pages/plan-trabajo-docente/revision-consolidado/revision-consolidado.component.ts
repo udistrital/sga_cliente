@@ -166,13 +166,18 @@ export class RevisionConsolidadoComponent implements OnInit {
   }
 
   buildFormRevConsolidado() {
-    this.formRevConsolidado.btn = this.translate.instant('GLOBAL.guardar');
+    if (this.formRevConsolidado.btn != '') {
+      this.formRevConsolidado.btn = this.translate.instant('GLOBAL.guardar');
+    }
     this.formRevConsolidado.titulo = this.translate.instant(this.formRevConsolidado.titulo_i18n);
     if (this.isDecano) {
-      this.formRevConsolidado.campos.splice(this.getIndexFormRevConsolidado("infoParaSecDec"),1);
-      this.formRevConsolidado.campos.splice(this.getIndexFormRevConsolidado("ArchivoSoporte"),1);
+      if (this.getIndexFormRevConsolidado("infoParaSecDec") != -1) {
+        this.formRevConsolidado.campos.splice(this.getIndexFormRevConsolidado("infoParaSecDec"),1);
+        this.formRevConsolidado.campos.splice(this.getIndexFormRevConsolidado("ArchivoSoporte"),1);
+      }
     }
     this.formRevConsolidado.campos.forEach(campo => {
+
       campo.label = this.translate.instant(campo.label_i18n);
       campo.placeholder = this.translate.instant(campo.placeholder_i18n);
     });
@@ -343,6 +348,7 @@ export class RevisionConsolidadoComponent implements OnInit {
   }
 
   revisarConsolidado(consolidado: any, readonly?: boolean) {
+    this.formRevConsolidado.btn = this.translate.instant('GLOBAL.guardar');
     this.revConsolidadoInfo = consolidado;
     this.vista = VIEWS.FORM;
     this.formRevConsolidado.campos[this.getIndexFormRevConsolidado('Rol')].valor = this.isSecDecanatura || this.isDecano;
@@ -357,13 +363,21 @@ export class RevisionConsolidadoComponent implements OnInit {
     if (this.isSecDecanatura) {
       const consolidado_coordinacion = JSON.parse(consolidado.consolidado_coordinacion);
       this.loading = true;
-      this.GestorDocumental.get([{Id: consolidado_coordinacion.documento_id, ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}]).subscribe(
-        (resp: any[])  => {
-          this.loading = false;
-          this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].urlTemp = resp[0].url;
-          this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].valor = resp[0].url;
-        }
-      );
+      this.sgaMidService.post(`reportes/verif_cump_ptd/${consolidado.periodo_id}/${consolidado.proyecto_academico_id}`,{}).subscribe((resp1) =>  {
+        const rawFilePDF = new Uint8Array(atob(resp1.Data.pdf).split('').map(char => char.charCodeAt(0)));
+        const urlFilePDF = window.URL.createObjectURL(new Blob([rawFilePDF], { type: 'application/pdf' }));
+        this.GestorDocumental.get([{Id: consolidado_coordinacion.documento_id, ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}]).subscribe(
+          (resp: any[])  => {
+            this.loading = false;
+            this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].urlTemp = urlFilePDF+"|"+resp[0].url;
+            this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].valor = urlFilePDF+"|"+resp[0].url;
+          }
+        );
+      }, (err) => {
+        this.loading = false;
+        this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'), this.translate.instant('ERROR.persiste_error_comunique_OAS'), MODALS.ERROR, false)
+        console.warn(err)
+      });
     }
     
     let terceroId = 0;
@@ -371,18 +385,26 @@ export class RevisionConsolidadoComponent implements OnInit {
     if (Object.keys(respuesta_decanatura.sec).length > 0) {
       if (respuesta_decanatura.sec.documento_id && respuesta_decanatura.sec.documento_id > 0) {
         this.loading = true;
-        this.GestorDocumental.get([{Id: respuesta_decanatura.sec.documento_id, ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}]).subscribe(
-          (resp: any[])  => {
-            this.loading = false;
-            if (this.isDecano) {
-              this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].urlTemp = resp[0].url;
-              this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].valor = resp[0].url;
-            } else {
-              this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporte")].urlTemp = resp[0].url;
-              this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporte")].valor = resp[0].url;
+        this.sgaMidService.post(`reportes/verif_cump_ptd/${consolidado.periodo_id}/${consolidado.proyecto_academico_id}`,{}).subscribe((resp1) =>  {
+          const rawFilePDF = new Uint8Array(atob(resp1.Data.pdf).split('').map(char => char.charCodeAt(0)));
+          const urlFilePDF = window.URL.createObjectURL(new Blob([rawFilePDF], { type: 'application/pdf' }));
+          this.GestorDocumental.get([{Id: respuesta_decanatura.sec.documento_id, ContentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}]).subscribe(
+            (resp: any[])  => {
+              this.loading = false;
+              if (this.isDecano) {
+                this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].urlTemp = urlFilePDF+"|"+resp[0].url;
+                this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporteCoordinacion")].valor = urlFilePDF+"|"+resp[0].url;
+              } else {
+                this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporte")].urlTemp = urlFilePDF+"|"+resp[0].url;
+                this.formRevConsolidado.campos[this.getIndexFormRevConsolidado("ArchivoSoporte")].valor = urlFilePDF+"|"+resp[0].url;
+              }
             }
-          }
-        );
+          );
+        }, (err) => {
+          this.loading = false;
+          this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'), this.translate.instant('ERROR.persiste_error_comunique_OAS'), MODALS.ERROR, false)
+          console.warn(err)
+        });
       }
       if (this.isSecDecanatura) {
         terceroId = respuesta_decanatura.sec.responsable_id;
