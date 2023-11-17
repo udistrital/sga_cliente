@@ -11,6 +11,7 @@ import { SgaMidService } from '../@core/data/sga_mid.service';
 import { DocumentoService } from '../@core/data/documento.service';
 import { MatDialogModule } from '@angular/material';
 import { NewTercero } from '../@theme/components/new-tercero/new-tercero.component';
+import { NotificacionesMidService } from '../@core/data/notificaciones_mid.service';
 
 
 
@@ -35,6 +36,7 @@ const PAGES_COMPONENTS = [
     CampusMidService,
     SgaMidService,
     DocumentoService,
+    NotificacionesMidService
   ],
   exports: [
   ]
