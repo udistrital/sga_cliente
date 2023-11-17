@@ -1743,7 +1743,14 @@
         "resumen_estados_inscripcion": "Resumen estados de inscripción aspirantes",
         "descargar_zip": "Descargar compilado documental del aspirante",
         "no_vinculacion_no_rol": "Su usuario no se encuentra vinculado a ningun proyecto curricular ni cuenta con el rol adecuado",
-        "multiple_vinculacion": "Su usuario aparece vinculado a más de un proyecto curricular"
+        "multiple_vinculacion": "Su usuario aparece vinculado a más de un proyecto curricular",
+        "notificar_observaciones":"Notificar observaciones",
+        "titulo_sin_observaciones":"Sin Observaciones",
+        "error_sin_observaciones":"No ha realizado observaciones que notificar",
+        "titulo_notificacion_success":"Notificación exitosa",
+        "desc_notificacion_success":"la notificación de las observaciones se hizo de forma exitosa",
+        "titulo_notificacion_error":"Fallo en la notificación",
+        "desc_notificacion_error":"Ocurrió un error al momento de notificar al usuario"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",

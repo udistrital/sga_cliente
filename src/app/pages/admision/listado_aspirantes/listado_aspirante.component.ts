@@ -24,6 +24,8 @@ import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { UserService } from '../../../@core/data/users.service';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import { Destination, EmailTemplated } from '../../../@core/data/models/notificaciones_mid/email_templated';
+import { NotificacionesMidService } from '../../../@core/data/notificaciones_mid.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -104,7 +106,8 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     private sgaMidService: SgaMidService,
     private userService: UserService,
     private autenticationService: ImplicitAutenticationService,
-    ) {
+    private notificacionesMidService: NotificacionesMidService
+  ) {
 
     this.translate = translate;
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -148,12 +151,12 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       },
       mode: 'internal',
       columns: {
-        index:{
+        index: {
           title: '#',
           filter: false,
-          valuePrepareFunction: (value,row,cell) => {
-            return cell.row.index+1;
-           },
+          valuePrepareFunction: (value, row, cell) => {
+            return cell.row.index + 1;
+          },
           width: '2%',
         },
         NumeroDocumento: {
@@ -218,7 +221,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
           title: this.translate.instant('GLOBAL.Estado'),
           filterFunction: (cell?: any, search?: string) => {
             if (search.length > 0) {
-              return cell.Nombre.match(RegExp(search,"i"));
+              return cell.Nombre.match(RegExp(search, "i"));
             }
           },
           compareFunction: (direction: any, a: any, b: any) => {
@@ -226,13 +229,13 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
             let second = b.Nombre.toLowerCase();
 
             if (first < second) {
-                return -1 * direction;
+              return -1 * direction;
             }
             if (first > second) {
-                return direction;
+              return direction;
             }
             return 0;
-         },
+          },
           valuePrepareFunction: (cell, row, test) => {
             var t = test.column.editor.config.list.find(x => x.value === cell.Id)
             if (t)
@@ -350,33 +353,39 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     if (newState.value == this.IdIncripcionSolicitada) {
       this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_cambiar_inscripcion_solicitada'))
     } else {
-    Swal.fire({
-      title: this.translate.instant('GLOBAL.' + 'confirmar_actualizar'),
-      text: newState.title,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: this.translate.instant('GLOBAL.' + 'actualizar')
-    }).then((result) => {
-      if (result.value) {
-        const updateState = {
-          ...event.newData.Inscripcion,
-          ...{ EstadoInscripcionId: { Id: newState.value } }
-        }
-        this.inscripcionService.put('inscripcion', updateState)
-          .subscribe((response) => {
-            Swal.fire(
-              this.translate.instant('GLOBAL.' + 'operacion_exitosa'),
-              '',
-              'success'
-            )
-            this.mostrartabla()
-            event.confirm.resolve(event.newData);
-          })
+      Swal.fire({
+        title: this.translate.instant('GLOBAL.' + 'confirmar_actualizar'),
+        text: newState.title,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: this.translate.instant('GLOBAL.' + 'actualizar')
+      }).then((result) => {
+        if (result.value) {
+          const updateState = {
+            ...event.newData.Inscripcion,
+            ...{ EstadoInscripcionId: { Id: newState.value } }
+          }
+          this.inscripcionService.put('inscripcion', updateState)
+            .subscribe((response) => {
+              Swal.fire(
+                this.translate.instant('GLOBAL.' + 'operacion_exitosa'),
+                '',
+                'success'
+              )
+              const data_notificacion = {
+                Email:event.data.Email,
+                NombreAspirante:event.data.NombreAspirante,
+                estado:newState.title
+              }
+              this.notificar_cambio_estado(data_notificacion)
+              this.mostrartabla()
+              event.confirm.resolve(event.newData);
+            })
 
-      } else {
-        event.confirm.reject();
-      }
-    });
+        } else {
+          event.confirm.reject();
+        }
+      });
     }
   }
 
@@ -388,7 +397,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
           this.autenticationService.getRole().then(
-            (rol: Array <String>) => {
+            (rol: Array<String>) => {
               let r = rol.find(role => (role == "ADMIN_SGA" || role == "VICERRECTOR" || role == "ASESOR_VICE")); // rol admin o vice
               if (r) {
                 this.proyectos = <any[]>response.filter(
@@ -396,19 +405,19 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                 );
               } else {
                 const id_tercero = this.userService.getPersonaId();
-                this.sgaMidService.get('admision/dependencia_vinculacion_tercero/'+id_tercero).subscribe(
+                this.sgaMidService.get('admision/dependencia_vinculacion_tercero/' + id_tercero).subscribe(
                   (respDependencia: any) => {
                     const dependencias = <Number[]>respDependencia.Data.DependenciaId;
                     this.proyectos = <any[]>response.filter(
                       proyecto => dependencias.includes(proyecto.Id)
                     );
                     if (dependencias.length > 1) {
-                      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion'));//+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                      this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('admision.multiple_vinculacion'));//+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
                       //this.proyectos.forEach(p => { p.Id = undefined })
                     }
                   },
                   (error: any) => {
-                    this.popUpManager.showErrorAlert(this.translate.instant('admision.no_vinculacion_no_rol')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                    this.popUpManager.showErrorAlert(this.translate.instant('admision.no_vinculacion_no_rol') + ". " + this.translate.instant('GLOBAL.comunicar_OAS_error'));
                   }
                 );
               }
@@ -463,7 +472,7 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     this.admitidos = [];
 
     this.loading = true;
-    this.sgaMidService.get('admision/getlistaaspirantespor?id_periodo='+this.periodo.Id+'&id_proyecto='+this.proyectos_selected.Id+'&tipo_lista=3')
+    this.sgaMidService.get('admision/getlistaaspirantespor?id_periodo=' + this.periodo.Id + '&id_proyecto=' + this.proyectos_selected.Id + '&tipo_lista=3')
       .subscribe(
         (response: any) => {
           if (response.Success && response.Status == "200") {
@@ -572,9 +581,9 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   enfasis(idEnf) {
     const promiseEnfasis = new Promise((resolve, reject) => {
       this.proyectoAcademicoService.get('enfasis/' + idEnf)
-      .subscribe((response) => {
-        resolve(response);
-      })
+        .subscribe((response) => {
+          resolve(response);
+        })
     });
     return promiseEnfasis;
   }
@@ -582,28 +591,28 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   documento(idPersona) {
     const promiseIdentificacion = new Promise((resolve, reject) => {
       this.tercerosService.get('datos_identificacion?query=Activo:true,TerceroId:' + idPersona)
-      .subscribe((response: any[]) => {
-        resolve(response[0].Numero);
-      })
+        .subscribe((response: any[]) => {
+          resolve(response[0].Numero);
+        })
     });
     return promiseIdentificacion;
   }
 
   telefono(idTercero, idtel) {
     return new Promise((resolve, reject) => {
-      this.tercerosService.get('info_complementaria_tercero?query=TerceroId.Id:'+idTercero+',InfoComplementariaId.Id:'+idtel+'&sortby=Id&order=desc&fields=Dato&limit=1')
+      this.tercerosService.get('info_complementaria_tercero?query=TerceroId.Id:' + idTercero + ',InfoComplementariaId.Id:' + idtel + '&sortby=Id&order=desc&fields=Dato&limit=1')
         .subscribe((response) => {
-          if (response != null && response.Status != '404' 
-              && Object.keys(response[0]).length > 0) {
-                let dataTel = JSON.parse(response[0].Dato)
-                resolve(dataTel.principal)
+          if (response != null && response.Status != '404'
+            && Object.keys(response[0]).length > 0) {
+            let dataTel = JSON.parse(response[0].Dato)
+            resolve(dataTel.principal)
           } else {
             reject("Bad answer")
           }
         },
-        (error: HttpErrorResponse) => {
-          reject(error)
-        });
+          (error: HttpErrorResponse) => {
+            reject(error)
+          });
     });
   }
 
@@ -616,10 +625,18 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   }
 
   admitir(inscrito) {
+    var updateState = inscrito.Inscripcion;
+    updateState.EstadoInscripcionId.Id=this.estadoAdmitido.Id
     const promiseInscrito = new Promise((resolve, reject) => {
-      this.inscripcionService.put('inscripcion', inscrito)
+      this.inscripcionService.put('inscripcion', updateState)
         .subscribe((response) => {
           resolve(response);
+          const data_notificacion = {
+            Email:inscrito.Email,
+            NombreAspirante:inscrito.NombreAspirante,
+            estado:'ADMITIDO'
+          }
+          this.notificar_cambio_estado(data_notificacion)
         })
     });
     return promiseInscrito;
@@ -660,7 +677,6 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
                 b.textContent = i + 1 + '';
               }
             }
-
             await this.admitir(updateState);
             if ((i + 1) === numero_inscritos) {
               Swal.close();
@@ -677,13 +693,13 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
       })
   }
 
-public loadLists() {
-  this.store.select((state) => state).subscribe(
-    (list) => {
-      this.InfoContacto = list.listInfoContacto[0];
-    },
-  );
-}
+  public loadLists() {
+    this.store.select((state) => state).subscribe(
+      (list) => {
+        this.InfoContacto = list.listInfoContacto[0];
+      },
+    );
+  }
 
   private showToast(type: string, title: string, body: string) {
     this.config = new ToasterConfig({
@@ -705,4 +721,54 @@ public loadLists() {
     };
     this.toasterService.popAsync(toast);
   }
+
+  notificar_cambio_estado(data:any){
+    var body: EmailTemplated = new  EmailTemplated();
+    const hoy = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+    const fecha_format = hoy.toLocaleDateString('es-ES', options).split(',')[1].replace(' ', '').split('de')
+    body.Source="Notificacion test <notificaciones_sga_test@udistrital.edu.co>";
+    body.Template="TEST_SGA_inscripcion-cambio-estado";
+    body.Destinations=[];
+    var destination:Destination = new Destination();
+    destination.Destination={
+      ToAddresses:[data.Email]
+    };
+    destination.ReplacementTemplateData={
+      dia:fecha_format[0],
+      mes:fecha_format[1],
+      anio:fecha_format[2],
+      nombre:data.NombreAspirante,
+      estado:data.estado
+    }
+    body.Destinations.push(destination)
+    body.DefaultTemplateData={
+      dia:fecha_format[0],
+      mes:fecha_format[1],
+      anio:fecha_format[2],
+      nombre:"",
+      estado:""
+    }
+    this.notificacionesMidService.post('email/enviar_templated_email', body).subscribe((response: any) => {
+      Swal.fire({
+        icon: 'success',
+        title: this.translate.instant('admision.titulo_notificacion_success'),
+        text: this.translate.instant('admision.desc_notificacion_success'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    }, (err) => {
+      Swal.fire({
+        icon: 'error',
+        title: this.translate.instant('admision.titulo_notificacion_error'),
+        text: this.translate.instant('admision.desc_notificacion_error'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+    })
+  }
+
 }

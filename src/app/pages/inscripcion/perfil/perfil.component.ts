@@ -20,6 +20,7 @@ export class PerfilComponent implements OnInit {
 
   info_persona_id: number;
   info_inscripcion_id: number;
+  estado_inscripcion: string;
   loading: boolean;
   timer: Subscription;
   @Input('info_persona_id')
@@ -77,6 +78,8 @@ export class PerfilComponent implements OnInit {
 
   // tslint:disable-next-line: no-output-rename
   @Output('revisar_doc') revisar_doc: EventEmitter<any> = new EventEmitter();
+
+  @Output('notificar_obs') notificar_obs: EventEmitter<any> = new EventEmitter();
 
   constructor(private translate: TranslateService,
     public pivotDocument: PivotDocument,
@@ -190,7 +193,7 @@ export class PerfilComponent implements OnInit {
 
   descargar_comprobante_inscription() {
     this.loading = true;
-
+    
     let documentacion = this.zipManagerService.listarArchivos();
     let documentacionOrganizada: any = {};
     documentacion.forEach(doc => {
@@ -301,6 +304,7 @@ export class PerfilComponent implements OnInit {
     }
 
     if ((actualTag == "inscripcion") && infoCarga.EstadoInscripcion) {
+      this.estado_inscripcion=infoCarga.EstadoInscripcion
       this.showErrors = infoCarga.EstadoInscripcion != "Inscripción solicitada";
     }
 
@@ -328,6 +332,10 @@ export class PerfilComponent implements OnInit {
       this.siguienteTagDesde(actualTag);
     }
 
+  }
+
+  notificar_observaciones_aspirante(){
+    this.notificar_obs.emit(this.zipManagerService.listarArchivos());
   }
 
 }
