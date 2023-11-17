@@ -103,7 +103,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   ngOnInit() {
     this.pivotDocument.document$.subscribe((document: any) => {
       if (document) {
-        console.log('documento', document)
         this.revisarDocumento(document)
       }
     })
@@ -113,8 +112,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   async loadData() {
     try {
       this.info_persona_id = this.userService.getPersonaId();
-      console.log(this.info_persona_id)
-      console.log(this.userService.getPrograma())
       await this.cargarPeriodo();
       await this.loadLevel();
     } catch (error) {
@@ -210,7 +207,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                   }
                 );
               }
-              console.log("proyectos", this.proyectos)
             }
           );
         },
@@ -299,18 +295,15 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   }
 
   loadPerfil(event) {
-    console.log(event)
     this.aspirante = event.data;
     this.tercerosService.get('datos_identificacion?query=Activo:true,numero:' + event.data.Identificacion).subscribe(
       (response: any) => {
         this.projectService.get('proyecto_academico_institucion/' + this.proyectos_selected).subscribe(
           (res: any) => {
-            console.log("proyecto", res);
             this.proyecto = res;
             this.inscripcion_id = event.data['Credencial'];
             this.inscripcionService.get('inscripcion?query=Id:' + this.inscripcion_id).subscribe(
               (resp: any[]) => {
-                console.log("inscripcion", resp)
                 this.inscripcionInfo = resp[0];
                 this.evaluacionInscripcionService.get('tags_por_dependencia?query=Activo:true,PeriodoId:' + this.periodo.Id + ',DependenciaId:' + this.proyectos_selected + ',TipoInscripcionId:' + resp[0].TipoInscripcionId.Id)
                   .subscribe((respSuite: any) => {
@@ -319,15 +312,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                         this.tagsObject = JSON.parse(respSuite.Data[0].ListaTags);
 
                         this.info_persona_id = response[0].TerceroId.Id;
-                        console.log(this.proyectos_selected)
-                        console.log(this.periodo)
-                        console.log('info', {
-                          TerceroId: response[0].TerceroId.Id,
-                          IdInscripcion: event.data['Credencial'],
-                          ProgramaAcademicoId: this.proyectos_selected.toString(),
-                          ProgramaAcademico: res.Nombre,
-                          IdPeriodo: this.periodo.Id
-                        })
                         this.pivotDocument.updateInfo({
                           TerceroId: response[0].TerceroId.Id,
                           IdInscripcion: event.data['Credencial'],
@@ -416,7 +400,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   }
 
   revisarDocumento(doc: any) {
-    console.log("documento a revisar", doc)
     this.folderTagtoReload = "";
     const assignConfig = new MatDialogConfig();
     assignConfig.width = '1300px';
@@ -464,7 +447,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     this.getTelefonoDependencia();
     var correos = [];
     archivos.map((doc) => {
-      console.log(doc)
       if (doc.aprobado == "No aprobado") {
         this.observacionesDoc.push({
           numero: (this.observacionesDoc.length + 1).toString(),
@@ -473,7 +455,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
         })
       }
     })
-    console.log(this.observacionesDoc)
     if (this.observacionesDoc.length == 0) {
       Swal.fire({
         icon: 'warning',
@@ -538,7 +519,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                 }
               }
 
-              console.log(body);
               this.notificacionesMidService.post('email/enviar_templated_email', body).subscribe((response: any) => {
                 Swal.fire({
                   icon: 'success',
@@ -572,7 +552,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
         // if (res !== null) {
         if (Object.keys(res[0]).length > 0) {
           const data = <Tercero>res[0];
-          console.log(data)
           this.nombreRevisor = data.NombreCompleto
         }
       }, (error: HttpErrorResponse) => {
@@ -587,7 +566,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
         // if (res !== null) {
         if (res.length != 0) {
           if (Object.keys(res[0]).length > 0) {
-            console.log(res[0])
             this.telefonoDep = res[0].TelefonoDependencia
           }
         }
