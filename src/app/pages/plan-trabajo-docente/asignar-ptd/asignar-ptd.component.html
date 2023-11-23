@@ -45,7 +45,7 @@
         </nb-card-header>
         <nb-card-body>
             <!-- Select periodo -->
-            <fieldset [ngClass]="{'fieldseter':true}">
+            <!-- <fieldset [ngClass]="{'fieldseter':true}">
                 <legend><small>&nbsp; {{ 'periodo.select_periodo' | translate }}</small></legend>
                 <mat-form-field style="width: 40%;">
                     <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
@@ -56,12 +56,12 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-            </fieldset>
+            </fieldset> -->
             <!-- info docente -->
-            <ngx-dinamicform [normalform]="formDocente" [modeloData]="dataDocente">
-            </ngx-dinamicform>
+            <!-- <ngx-dinamicform [normalform]="formDocente" [modeloData]="dataDocente">
+            </ngx-dinamicform> -->
             <!-- clon ptd -->
-            <fieldset [ngClass]="{'fieldseter':true}">
+            <!-- <fieldset [ngClass]="{'fieldseter':true}">
                 <legend><small>&nbsp; {{ 'ptd.copy_ptd' | translate }}</small></legend>
                 <div class="unaLinea">
                 <mat-form-field style="width: 40%;">
@@ -79,19 +79,43 @@
                     'GLOBAL.copiar' | translate }} </button>
                 <div class="advertencia" *ngIf="periodoCopia">{{ 'ptd.mensaje_copiar_plan' | translate }}</div>
                 </div>
-            </fieldset>
+            </fieldset> -->
             <!-- horario carga lectiva -->
-            <horario-carga-lectiva [WorkingMode]="canEdit" [Rol]="rolIs" [Data]="detalleAsignacion"
-                (OutCancelar)="regresar()" (OutLoading)="loading=$event"></horario-carga-lectiva>
+            <!-- <horario-carga-lectiva [WorkingMode]="canEdit" [Rol]="rolIs" [Data]="detalleAsignacion"
+                (OutCancelar)="regresar()" (OutLoading)="loading=$event"></horario-carga-lectiva> -->
             <!-- reportes -->
-            <fieldset [ngClass]="{'fieldseter':true}" *ngIf="verReportes">
+            <!-- <fieldset [ngClass]="{'fieldseter':true}" *ngIf="verReportes">
                 <legend><small>&nbsp; {{ 'GLOBAL.reportes' | translate }}</small></legend>
                 <div class="buttons_reportes">
                     <button mat-raised-button color="primary" (click)="generarReporte('C')"> {{ 'ptd.gen_rep_carga_lectiva' | translate }} </button>
                     <button mat-raised-button color="primary" (click)="generarReporte('A')"> {{ 'ptd.gen_rep_actividades' | translate }} </button>
                     <button mat-raised-button color="primary" (click)="generarReporte('CA')"> {{ 'ptd.gen_rep_total' | translate }} </button>
                 </div>
-            </fieldset>
+            </fieldset> -->
+            
+            <!-- PDT Simple no modular -->
+            <ng-container *ngIf="detallesAsignaciones.length <= 0">
+                <asignar-ptd-multiple [dataDocente]="dataDocente" [detalleAsignacion]="detalleAsignacion" [periodosAnteriores]="periodosAnteriores"></asignar-ptd-multiple>
+            </ng-container>
+            <!-- PDT con asignación modular -->
+            <ng-container *ngIf="detallesAsignaciones.length > 0">
+                <mat-tab-group mat-align-tabs="center" [selectedIndex]="1">
+                    <mat-tab [label]=" 'ptd.ptd_general' | translate ">
+                        <asignar-ptd-multiple [dataDocente]="dataDocente" [detalleAsignacion]="detallesGeneral" [periodosAnteriores]="periodosAnteriores" [soloLectura]="true"></asignar-ptd-multiple>
+                    </mat-tab>
+                    <mat-tab [label]=" 'ptd.ptd_docente_principal' | translate ">
+                        <asignar-ptd-multiple [dataDocente]="dataDocente" [detalleAsignacion]="detalleAsignacion" [periodosAnteriores]="periodosAnteriores" (OutDetalleChanged)="manageChangesInGeneralPTD($event)"></asignar-ptd-multiple>
+                    </mat-tab>
+                    <ng-container *ngFor="let detalleAsign of detallesAsignaciones; index as i">
+                        <mat-tab [label]=" ('ptd.ptd_docente_relacionado' | translate) + ' ' + (i+1)">
+                            <asignar-ptd-multiple [dataDocente]="dataDocentes_ptd[0]" [detalleAsignacion]="detalleAsign" [periodosAnteriores]="periodosAnteriores" (OutDetalleChanged)="manageChangesInGeneralPTD($event)"></asignar-ptd-multiple>
+                        </mat-tab>
+                    </ng-container>
+                    <mat-tab [label]=" 'ptd.ptd_timed' | translate ">
+
+                    </mat-tab>
+                </mat-tab-group>
+            </ng-container>
         </nb-card-body>
         <nb-card-footer>
         </nb-card-footer>

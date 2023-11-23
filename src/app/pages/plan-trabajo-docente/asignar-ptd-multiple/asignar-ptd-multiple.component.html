@@ -1,0 +1,35 @@
+<!-- info docente -->
+<ngx-dinamicform [normalform]="formDocente" [modeloData]="dataDocente">
+</ngx-dinamicform>
+<!-- clon ptd -->
+<fieldset [ngClass]="{'fieldseter':true}" *ngIf="!soloLectura">
+    <legend><small>&nbsp; {{ 'ptd.copy_ptd' | translate }}</small></legend>
+    <div class="unaLinea">
+    <mat-form-field style="width: 40%;">
+        <mat-label>{{ 'GLOBAL.periodo' | translate }}:</mat-label>
+        <mat-select [(ngModel)]="periodoCopia" [disabled]='false'>
+            <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+            <ng-container *ngIf="(canEdit == ACTIONS.EDIT)">
+                <mat-option *ngFor="let item of periodosAnteriores" [value]="item">
+                    {{item.Nombre}}
+                </mat-option>
+            </ng-container>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" style="margin-left: 1.5rem;" [disabled]="!periodoCopia || (canEdit != ACTIONS.EDIT)" (click)="copy_ptd()"> {{
+        'GLOBAL.copiar' | translate }} </button>
+    <div class="advertencia" *ngIf="periodoCopia">{{ 'ptd.mensaje_copiar_plan' | translate }}</div>
+    </div>
+</fieldset>
+<!-- horario carga lectiva -->
+<horario-carga-lectiva [WorkingMode]="soloLectura ? ACTIONS.VIEW : canEdit" [Rol]="rolIs" [Data]="detalleAsignacion"
+    (OutLoading)="doReload($event)" (DataChanged)="whatChanged($event)"></horario-carga-lectiva>
+<!-- reportes -->
+<fieldset [ngClass]="{'fieldseter':true}" *ngIf="verReportes">
+    <legend><small>&nbsp; {{ 'GLOBAL.reportes' | translate }}</small></legend>
+    <div class="buttons_reportes">
+        <button mat-raised-button color="primary" (click)="generarReporte('C')"> {{ 'ptd.gen_rep_carga_lectiva' | translate }} </button>
+        <button mat-raised-button color="primary" (click)="generarReporte('A')"> {{ 'ptd.gen_rep_actividades' | translate }} </button>
+        <button mat-raised-button color="primary" (click)="generarReporte('CA')"> {{ 'ptd.gen_rep_total' | translate }} </button>
+    </div>
+</fieldset>

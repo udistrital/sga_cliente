@@ -2425,7 +2425,11 @@
         "info_revisar_cargar_formato": "Por favor, descargue revise y cargue nuevamente el \"Formato de control del cumplimiento de la normatividad vigente\"",
         "no_valid_pre_asignacion": "El espacio académico ya cuenta con preasignación para el presente periodo.",
         "info_cambio_documento_consolidado": "Es importante tener en cuenta que si se modifica el contenido del documento Consolidado, será necesario reiniciar el proceso de aprobación (cambiando su estado a 'No aprobado') y, en caso necesario, actualizar los Planes de Trabajo Docente.",
-        "pdf_solover_excel_imprimir": "Documento Pdf no apto para imprimir o editar, por favor, guarde la versión excel propocionada."
+        "pdf_solover_excel_imprimir": "Documento Pdf no apto para imprimir o editar, por favor, guarde la versión excel propocionada.",
+        "ptd_general": "PTD General",
+        "ptd_docente_principal": "PTD Docente principal",
+        "ptd_docente_relacionado": "PTD Docente relacionado",
+        "ptd_timed": "PTD por Tiempos"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",
