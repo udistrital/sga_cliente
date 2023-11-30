@@ -98,6 +98,7 @@ export class ImplicitAutenticationService {
 
 
     updateAuth(payload) {
+        payload.role = this.roles2List(payload.role);
         const user = localStorage.getItem('user');
         if (user) {
             this.userSubject.next(JSON.parse(atob(user)));
@@ -128,6 +129,16 @@ export class ImplicitAutenticationService {
             };
         }
     }
+
+    roles2List(roles: string | null | string[]): string[] {
+        if (Array.isArray(roles)) {
+          return roles;
+        } else if (typeof roles === 'string') {
+          return [roles];
+        } else {
+          return [];
+        }
+      }
 
     public logout(action): void {
         const state = localStorage.getItem('state');
