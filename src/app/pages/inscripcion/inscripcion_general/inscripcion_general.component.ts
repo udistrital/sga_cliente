@@ -1301,7 +1301,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
       if (this.selectedValue !== undefined) {
         sessionStorage.setItem('ProgramaAcademicoId', this.selectedValue);
-        this.programaService.get('proyecto_academico_enfasis/?query=ProyectoAcademicoInstitucionId.Id:' + this.selectedValue)
+        this.programaService.get('proyecto_academico_enfasis/?query=Activo:true,ProyectoAcademicoInstitucionId.Id:' + this.selectedValue + '&limit=0')
           .subscribe((enfasis: any) => {
             this.enfasis = enfasis.map((e) => (e.EnfasisId));
             this.tieneEnfasis = this.enfasis.length > 0;
