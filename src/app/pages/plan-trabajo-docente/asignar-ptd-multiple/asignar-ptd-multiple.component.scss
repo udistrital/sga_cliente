@@ -1,0 +1,32 @@
+fieldset {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* nb-card-header {
+    background-color: white;
+    position: sticky;
+    top: 77px;
+    z-index: 2;
+} */
+
+.advertencia {
+    background-color: var(--warning-main);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 0.7rem;
+    border-radius: 0.4rem;
+    margin-left: 1rem;
+    width: 51%;
+}
+
+.unaLinea {
+    display: flex;
+    align-items: flex-start;
+}
+
+.buttons_reportes {
+    display: flex;
+    justify-content: space-around;
+}

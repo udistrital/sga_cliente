@@ -39,6 +39,9 @@ export class AsignarPtdComponent implements OnInit {
   canEdit: Symbol = ACTIONS.VIEW;
   asignaturaAdd: any = undefined;
   detalleAsignacion: any = undefined;
+  detallesAsignaciones: any[] = [];
+  dataDocentes_ptd: any[] = [];
+  detallesGeneral: any = undefined;
 
   periodosAnteriores: any[] = [];
   periodoCopia: any;
@@ -162,6 +165,7 @@ export class AsignarPtdComponent implements OnInit {
                 this.detalleAsignacion = res.Data;
                 this.dataDocente = {
                   Nombre: out.rowData.docente,
+                  NombreCorto: (res.Data.docente.nombre1 && res.Data.docente.apellido1) ? res.Data.docente.nombre1 + ' ' + res.Data.docente.apellido1 : res.Data.docente.nombre,
                   Documento: out.rowData.identificacion,
                   Periodo: out.rowData.periodo_academico,
                   TipoVinculacion: out.rowData.tipo_vinculacion,
@@ -169,6 +173,7 @@ export class AsignarPtdComponent implements OnInit {
                   periodo_id: out.rowData.periodo_id,
                   tipo_vinculacion_id: out.rowData.tipo_vinculacion_id
                 };
+                this.checknloadRelatedPTD(this.detalleAsignacion.planes_relacionados_query);
                 if (this.coordinador && (out.rowData.estado === "Enviado a coordinación")) {
                   this.detalleAsignacion.aprobacion = this.estadosAprobar;
                   this.popUpManager.showPopUpGeneric(this.translate.instant('ptd.aprobacion_plan_coordinacion'), 
@@ -190,7 +195,7 @@ export class AsignarPtdComponent implements OnInit {
                 }
               }, (error: HttpErrorResponse) => {
                 this.loading = false;
-                console.log("error:", error);
+                console.warn("error:", error);
               });
             })
           }
@@ -234,6 +239,53 @@ export class AsignarPtdComponent implements OnInit {
       campo.label = this.translate.instant(campo.label_i18n);
       campo.placeholder = this.translate.instant(campo.placeholder_i18n);
     });
+  }
+
+  checknloadRelatedPTD(otherPTD: string[]) {
+    this.detallesAsignaciones = [];
+    this.dataDocentes_ptd = [];
+    this.detallesGeneral = undefined;
+    if (otherPTD.length > 0) {
+      this.loading = true;
+      this.detallesGeneral = <any>UtilidadesService.hardCopy(this.detalleAsignacion);
+      this.detallesGeneral.docentesModular = {}
+      this.detallesGeneral.docentesModular[this.dataDocente.docente_id] = this.dataDocente;
+      this.detallesGeneral.carga[0] = this.detallesGeneral.carga[0].map(c => ({
+        ...c,
+        docente_id: this.dataDocente.docente_id,
+        modular: false,
+      }))
+    
+    otherPTD.forEach(doc_per_vinc => {
+      this.sgaMidService.get('plan_trabajo_docente/plan/'+doc_per_vinc).subscribe(res => {
+        this.loading = false;
+        this.detallesAsignaciones.push(res.Data);
+        const nombre = (res.Data.docente.nombre1 && res.Data.docente.apellido1) ? res.Data.docente.nombre1 + ' ' + res.Data.docente.apellido1 : res.Data.docente.nombre;
+        const datathisDocente = {
+          Nombre:  res.Data.docente.nombre,
+          NombreCorto: nombre,
+          Documento: res.Data.docente.identificacion,
+          Periodo: res.Data.periodo_academico,
+          TipoVinculacion: res.Data.tipo_vinculacion[0].nombre,
+          docente_id: res.Data.docente.id,
+          periodo_id: res.Data.vigencia,
+          tipo_vinculacion_id: res.Data.tipo_vinculacion[0].id
+        };
+        this.dataDocentes_ptd.push(datathisDocente)
+        const relatedCarga = <any[]>UtilidadesService.hardCopy(res.Data.carga[0]);
+        this.detallesGeneral.docentesModular[datathisDocente.docente_id] = datathisDocente;
+        this.detallesGeneral.carga[0].push(...relatedCarga.map(c => ({
+          ...c,
+          docente_id: datathisDocente.docente_id,
+          modular: true,
+        })));
+        this.detallesGeneral.espacios_academicos[0].push(...res.Data.espacios_academicos[0])
+      }, err => {
+        this.loading = false;
+        console.warn(doc_per_vinc, err);
+      })
+    })
+    }
   }
 
   copy_ptd() {
@@ -497,5 +549,11 @@ export class AsignarPtdComponent implements OnInit {
   regresar() {
     this.loadAsignaciones();
     this.vista = VIEWS.LIST;
+  }
+
+  manageChangesInGeneralPTD(event) {
+    console.log('manageChangesInGeneral:', event)
+    const xd = this.detallesGeneral.carga[0].filter(c => c.docenteModular != event.docente_id)
+    console.log(xd)
   }
 }

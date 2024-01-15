@@ -29,6 +29,9 @@ interface elementDragDrop {
   dragPosition: { x: number, y: number };
   prevPosition: { x: number, y: number };
   finalPosition: { x: number, y: number };
+  modular?: boolean;
+  docente_id?: string;
+  docenteName?: string;
 }
 
 @Component({
@@ -70,8 +73,8 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   @Input() WorkingMode: Symbol = undefined;
   @Input() Rol: string = undefined;
   @Input() Data: any = undefined;
-  @Output() OutCancelar: EventEmitter<boolean> = new EventEmitter();
   @Output() OutLoading: EventEmitter<boolean> = new EventEmitter();
+  @Output() DataChanged: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private popUpManager: PopUpManager,
@@ -111,9 +114,6 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   EspaciosProyecto: any = undefined;
 
   ngOnInit() {
-    /* this.getActividades().then(() => {
-      //this.loadCarga();
-    }); */
 
     this.getSedes().then(() => { this.OutLoading.emit(false); });
 
@@ -370,6 +370,8 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   }
 
   loadCarga() {
+    this.listaCargaLectiva = [];
+
     this.Data.carga[this.seleccion].forEach(carga => {
       this.identificador++;
       var nombre;
@@ -395,8 +397,15 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
         bloqueado: !this.edit || (this.isDocente && carga.horario.tipo == this.tipo.carga_lectiva) || (this.isCoordinador && carga.horario.tipo == this.tipo.actividades),
         dragPosition: carga.horario.dragPosition,
         prevPosition: carga.horario.prevPosition,
-        finalPosition: carga.horario.finalPosition
+        finalPosition: carga.horario.finalPosition,
       };
+
+      if (this.Data.docentesModular) {
+        newElement.modular = true;
+        newElement.docente_id = carga.docente_id;
+        newElement.docenteName = this.Data.docentesModular[carga.docente_id].NombreCorto;
+      }
+
       this.listaCargaLectiva.push(newElement);
       const coord = this.getPositionforMatrix(newElement);
       this.changeStateRegion(coord.x, coord.y, newElement.horas, true);
@@ -447,6 +456,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
             this.anyService.delete(environment.PLAN_TRABAJO_DOCENTE_SERVICE, 'carga_plan', { Id: elementClicked.idCarga }).subscribe(
               (response: any) => {
                 this.OutLoading.emit(false);
+                this.DataChanged.emit(this.listaCargaLectiva);
               });
           } else {
             this.OutLoading.emit(false);
@@ -460,7 +470,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   calcularHoras(tipo?) {
     let total = 0;
     this.listaCargaLectiva.forEach((carga: elementDragDrop) => {
-      if (this.isInsideGrid(carga)) {
+      if (this.isInsideGrid(carga) && !carga.modular) {
         if (tipo) {
           if (carga.tipo == tipo) {
             total += carga.horas;
@@ -526,12 +536,9 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
         this.OutLoading.emit(false);
         if (response.Response.Code == 200) {
           this.popUpManager.showSuccessAlert(this.translate.instant('ptd.guardado_ptd_exito') + " " + this.vinculacionSelected.nombre);
+          this.DataChanged.emit(this.listaCargaLectiva);
         }
       });
-  }
-
-  cancelar() {
-    this.OutCancelar.emit(true);
   }
 
   selectVinculacion(event) {
