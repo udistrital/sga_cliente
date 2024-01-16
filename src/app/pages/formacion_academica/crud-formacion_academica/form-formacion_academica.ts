@@ -11,7 +11,7 @@ export let FORM_FORMACION_ACADEMICA = {
     {
       etiqueta: 'input',
       claseGrid: 'col-lg-10 col-md-10 col-sm-9 col-xs-8',
-      nombre: 'Nit',
+      nombre: 'Nitx',
       label_i18n: 'nit',
       placeholder_i18n: 'nit',
       requerido: true,
@@ -115,6 +115,15 @@ export let FORM_FORMACION_ACADEMICA = {
       placeholder_i18n: 'fecha_inicio',
       requerido: true,
       tipo: 'date',
+    },
+    {
+      etiqueta: 'checkbox',
+      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
+      nombre: 'FormacionActual',
+      label_i18n: 'formacion_actual',
+      requerido: true,
+      tipo: 'checkbox',
+      valor: false,
     },
     {
       etiqueta: 'mat-date',
