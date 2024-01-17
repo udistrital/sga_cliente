@@ -131,28 +131,23 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
     this.formInfoFormacionAcademica.btn = this.translate.instant('GLOBAL.guardar');
     this.formInfoFormacionAcademica.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
-
     for (let i = 0; i < this.formInfoFormacionAcademica.campos.length; i++) {
-      for (let j = 0; j < this.formInfoFormacionAcademica.campos[i].length; j++) {
-        const campo = this.formInfoFormacionAcademica.campos[i][j];
-        campo.label = this.translate.instant('GLOBAL.' + campo.label_i18n);
-        campo.placeholder = this.translate.instant('GLOBAL.placeholder_' + campo.label_i18n);
-    
-        if (campo.placeholder_i18n_2) {
-          campo.placeholder2 = this.translate.instant('GLOBAL.placeholder_' + campo.placeholder_i18n_2);
-        }
+      this.formInfoFormacionAcademica.campos[i].label = this.translate.instant('GLOBAL.' + this.formInfoFormacionAcademica.campos[i].label_i18n);
+      this.formInfoFormacionAcademica.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +
+        this.formInfoFormacionAcademica.campos[i].label_i18n);
+      if (this.formInfoFormacionAcademica.campos[i].placeholder_i18n_2) {
+        this.formInfoFormacionAcademica.campos[i].placeholder2 = this.translate.instant('GLOBAL.placeholder_' + 
+          this.formInfoFormacionAcademica.campos[i].placeholder_i18n_2)
       }
     }
 
     this.formInfoNuevoTercero.btn = this.translate.instant('GLOBAL.guardar');
     this.formInfoNuevoTercero.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
     for (let i = 0; i < this.formInfoNuevoTercero.campos.length; i++) {
-      for (let j = 0; j < this.formInfoNuevoTercero.campos[i].length; j++) {
-        const campo = this.formInfoNuevoTercero.campos[i][j];
-        campo.label = this.translate.instant('GLOBAL.' + campo.label_i18n);
-        campo.placeholder = this.translate.instant('GLOBAL.placeholder_' + campo.label_i18n);
-      }
-    } 
+      this.formInfoNuevoTercero.campos[i].label = this.translate.instant('GLOBAL.' + this.formInfoNuevoTercero.campos[i].label_i18n);
+      this.formInfoNuevoTercero.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +
+        this.formInfoNuevoTercero.campos[i].label_i18n);
+    }
   }
 
   useLanguage(language: string) {
@@ -174,7 +169,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   }
 
   guardarProgramaNuevo(){
-    const { i: cProgAca, j: progAca } = this.getIndexForm('ProgramaAcademico');
     if (this.NombreProgramaNuevo.valid) {
       let nombre = <string>this.NombreProgramaNuevo.value;
       let ProgramaPost: Parametro = {
@@ -204,7 +198,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                   this.loading = false;
                   this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.programa_creado_ok'));
                   this.nuevoPrograma = false;
-                  this.formInfoFormacionAcademica.campos[cProgAca][progAca].valor = response.Data;
+                  this.formInfoFormacionAcademica.campos[this.getIndexForm("ProgramaAcademico")].valor = response.Data;
                 } else {
                   this.loading = false;
                   this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.programa_creado_fail'))
@@ -221,45 +215,44 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     }
   }
 
-  getIndexForm(nombre: string):  { i: number, j: number }  {
-    for (let i = 0; i < this.formInfoFormacionAcademica.campos.length; i++) {
-      for (let j = 0; j < this.formInfoFormacionAcademica.campos[i].length; j++) {
-        const element = this.formInfoFormacionAcademica.campos[i][j];
-        if (element.nombre === nombre) {
-          return { i, j };
-        }
+  getIndexForm(nombre: String): number {
+    for (let index = 0; index < this.formInfoFormacionAcademica.campos.length; index++) {
+      const element = this.formInfoFormacionAcademica.campos[index];
+      if (element.nombre === nombre) {
+        return index
       }
     }
+    return 0;
   }
 
   searchNit(nit: string) {
     this.loading = true;
     nit = nit.trim();
     this.nit = nit.trim();
-    const { i: cInit, j: init } = this.getIndexForm('Nit');
-    const { i: cInombre, j: inombre } = this.getIndexForm('NombreUniversidad');
-    const { i: cIdir, j: idir } = this.getIndexForm('Direccion');
-    const { i: cItel, j: itel } = this.getIndexForm('Telefono');
-    const { i: cIcorreo, j: icorreo } = this.getIndexForm('Correo');
-    const { i: cIPais, j: iPais } = this.getIndexForm('Pais');
-    this.formInfoFormacionAcademica.campos[cInit][init].valor = nit;
+    const init = this.getIndexForm('Nit');
+    const inombre = this.getIndexForm('NombreUniversidad');
+    const idir = this.getIndexForm('Direccion');
+    const itel = this.getIndexForm('Telefono');
+    const icorreo = this.getIndexForm('Correo');
+    const iPais = this.getIndexForm('Pais');
+    this.formInfoFormacionAcademica.campos[init].valor = nit;
     
     this.sgaMidService.get('formacion_academica/info_universidad?Id=' + nit)
       .subscribe((res: any) => {
         this.universidadConsultada = res;
-        this.formInfoFormacionAcademica.campos[cInit][init].valor = res.NumeroIdentificacion;
-        this.formInfoFormacionAcademica.campos[cInombre][inombre].valor =
+        this.formInfoFormacionAcademica.campos[init].valor = res.NumeroIdentificacion;
+        this.formInfoFormacionAcademica.campos[inombre].valor =
           (res.NombreCompleto && res.NombreCompleto.Id) ? res.NombreCompleto : { Id: 0, Nombre: 'No registrado' };
-        this.formInfoFormacionAcademica.campos[cIdir][idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
-        this.formInfoFormacionAcademica.campos[cItel][itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
-        this.formInfoFormacionAcademica.campos[cIcorreo][icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
-        this.formInfoFormacionAcademica.campos[cIPais][iPais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : { Id: 0, Nombre: 'No registrado' };
-        [this.formInfoFormacionAcademica.campos[cInit][init],
-        this.formInfoFormacionAcademica.campos[cInombre][inombre],
-        this.formInfoFormacionAcademica.campos[cIdir][idir],
-        this.formInfoFormacionAcademica.campos[cIcorreo][icorreo],
-        this.formInfoFormacionAcademica.campos[cIPais][iPais],
-        this.formInfoFormacionAcademica.campos[cItel][itel]]
+        this.formInfoFormacionAcademica.campos[idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
+        this.formInfoFormacionAcademica.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
+        this.formInfoFormacionAcademica.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
+        this.formInfoFormacionAcademica.campos[iPais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : { Id: 0, Nombre: 'No registrado' };
+        [this.formInfoFormacionAcademica.campos[init],
+        this.formInfoFormacionAcademica.campos[inombre],
+        this.formInfoFormacionAcademica.campos[idir],
+        this.formInfoFormacionAcademica.campos[icorreo],
+        this.formInfoFormacionAcademica.campos[iPais],
+        this.formInfoFormacionAcademica.campos[itel]]
           .forEach(element => {
             element.deshabilitar = element.valor ? true : false
           });
@@ -268,11 +261,11 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         (error: HttpErrorResponse) => {
           this.loading = false;
           if (error.status === 404) {
-            [this.formInfoFormacionAcademica.campos[cInombre][inombre],
-            this.formInfoFormacionAcademica.campos[cIdir][idir],
-            this.formInfoFormacionAcademica.campos[cIcorreo][icorreo],
-            this.formInfoFormacionAcademica.campos[cIPais][iPais],
-            this.formInfoFormacionAcademica.campos[cItel][itel]]
+            [this.formInfoFormacionAcademica.campos[inombre],
+            this.formInfoFormacionAcademica.campos[idir],
+            this.formInfoFormacionAcademica.campos[icorreo],
+            this.formInfoFormacionAcademica.campos[iPais],
+            this.formInfoFormacionAcademica.campos[itel]]
               .forEach(element => {
                 element.deshabilitar = true;
                 element.valor = '';
@@ -300,20 +293,20 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
   NuevoTercero(event) {
     this.nuevoTercero = false;
-    const { i: cInit, j: init } = this.getIndexForm('Nit');
-    this.formInfoFormacionAcademica.campos[cInit][init].valor = event['infoPost'].Nit;
+    const iNit = this.getIndexForm('Nit');
+    this.formInfoFormacionAcademica.campos[iNit].valor = event['infoPost'].Nit;
     this.searchNit(event['infoPost'].Nit);
   }
 
   searchDoc(data) {
     if(data.data.Nit){
       this.loading = true;
-      const { i: cInit, j: init } = this.getIndexForm('Nit');
-      const { i: cInombre, j: inombre } = this.getIndexForm('NombreUniversidad');
-      const { i: cIdir, j: idir } = this.getIndexForm('Direccion');
-      const { i: cItel, j: itel } = this.getIndexForm('Telefono');
-      const { i: cIcorreo, j: icorreo } = this.getIndexForm('Correo');
-      const { i: cIPais, j: iPais } = this.getIndexForm('Pais');
+      const init = this.getIndexForm('Nit');
+      const inombre = this.getIndexForm('NombreUniversidad');
+      const idir = this.getIndexForm('Direccion');
+      const itel = this.getIndexForm('Telefono');
+      const icorreo = this.getIndexForm('Correo');
+      const iPais = this.getIndexForm('Pais');
       const regex = /^[0-9]+(?:-[0-9]+)*$/;
       data.data.Nit = data.data.Nit.trim()
       const nit = typeof data === 'string' ? data : data.data.Nit;
@@ -326,9 +319,9 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         this.edit_status = false;
         //this.loading = false;
       } else {
-        if (this.formInfoFormacionAcademica.campos[cInombre][inombre].valor ? 
-          this.formInfoFormacionAcademica.campos[cInombre][inombre].valor.Id ? true : false : false) {
-          IdUniversidad = this.formInfoFormacionAcademica.campos[cInombre][inombre].valor.Id;
+        if (this.formInfoFormacionAcademica.campos[inombre].valor ? 
+          this.formInfoFormacionAcademica.campos[inombre].valor.Id ? true : false : false) {
+          IdUniversidad = this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].valor.Id;
           this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdUniversidad).subscribe(
             (res: any) => {
               this.searchNit(res[0]['Numero']);
@@ -354,7 +347,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
           this.loadListUniversidades(nit);
           //this.nit = nit;
           //this.formInfoFormacionAcademica.campos[inombre].valor = nit;
-          this.formInfoFormacionAcademica.campos[cInit][init].valor = null;
+          this.formInfoFormacionAcademica.campos[init].valor = null;
         }
       }
     } else {
@@ -364,7 +357,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   }
 
   loadListUniversidades(nombre: string): void {
-    const { i: cInombre, j: inombre } = this.getIndexForm('NombreUniversidad');
     if (nombre) {
       this.loading = true;
       nombre = nombre.trim();
@@ -379,7 +371,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
             }
           }
           this.loading = false;
-          this.formInfoFormacionAcademica.campos[cInombre][inombre].opciones = universidad;
+          this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].opciones = universidad;
         },
           (error: HttpErrorResponse) => {
             this.loading = false;
@@ -420,8 +412,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                     this.SoporteDocumento = this.temp_info_academica.Documento;
                     const FechaI = moment(this.temp_info_academica.FechaInicio, 'DD-MM-YYYY').toDate();
                     const FechaF = moment(this.temp_info_academica.FechaFinalizacion, 'DD-MM-YYYY').toDate();
-                    const { i: cInit, j: init } = this.getIndexForm('Nit');
-                    const { i: cIdoc, j: idoc } = this.getIndexForm('Documento');
+                    const init = this.getIndexForm('Nit');
                     this.info_formacion_academica = {
                       Nit: this.temp_info_academica.Nit,
                       ProgramaAcademico: this.temp_info_academica.ProgramaAcademico,
@@ -430,13 +421,13 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                       TituloTrabajoGrado: this.temp_info_academica.TituloTrabajoGrado,
                       DescripcionTrabajoGrado: this.temp_info_academica.DescripcionTrabajoGrado,
                     }
-                    this.formInfoFormacionAcademica.campos[cInit][init].valor = this.info_formacion_academica.Nit;
-                    this.formInfoFormacionAcademica.campos[cInit][init].deshabilitar = true;
+                    this.formInfoFormacionAcademica.campos[init].valor = this.info_formacion_academica.Nit;
+                    this.formInfoFormacionAcademica.campos[init].deshabilitar = true;
                     this.searchNit(this.temp_info_academica.Nit);
                     //this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].urlTemp = filesResponse[0].url;
-                    this.formInfoFormacionAcademica.campos[cIdoc][idoc].valor = filesResponse[0].url;
+                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].valor = filesResponse[0].url;
                     let estadoDoc = this.utilidades.getEvaluacionDocumento(filesResponse[0].Metadatos);
-                    this.formInfoFormacionAcademica.campos[cIdoc][idoc].estadoDoc = estadoDoc;
+                    this.formInfoFormacionAcademica.campos[this.getIndexForm('Documento')].estadoDoc = estadoDoc;
                   }
                   this.loading = false;
                 },
@@ -609,12 +600,12 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                   .subscribe(res => {
                     const r = <any>res;
                     if (r !== null && r.Type !== 'error') {
-                      const { i: cInombre, j: inombre } = this.getIndexForm('NombreUniversidad');
+                      const inombre = this.getIndexForm('NombreUniversidad');
                       this.eventChange.emit(true);
                       this.popUpManager.showSuccessAlert(this.translate.instant('informacion_academica.informacion_academica_registrada'));
                       /* this.showToast('info', this.translate.instant('GLOBAL.crear'),
                         this.translate.instant('informacion_academica.informacion_academica_registrada')); */
-                      this.formInfoFormacionAcademica.campos[cInombre][inombre].valor = '';
+                      this.formInfoFormacionAcademica.campos[inombre].valor = '';
                       this.info_formacion_academica_id = 0;
                       this.info_formacion_academica = undefined;
                       this.clean = !this.clean;
@@ -663,8 +654,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     setTimeout(() => {
       this.percentage = event;
       if(this.percentage == 0){
-        const { i: cInit, j: init } = this.getIndexForm('Nit');
-        this.formInfoFormacionAcademica.campos[cInit][init].deshabilitar = false;
+        this.formInfoFormacionAcademica.campos[this.getIndexForm('Nit')].deshabilitar = false;
       } else {
         if (this.canEmit) {
           this.result.emit(this.percentage);
@@ -722,9 +712,8 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   public loadLists() {
     this.store.select((state) => state).subscribe(
       (list) => {
-        const { i: cIPais, j: iPais } = this.getIndexForm('Pais');
-        this.formInfoFormacionAcademica.campos[cIPais][iPais].opciones = list.listPais[0];
-        this.formInfoNuevoTercero.campos[cIPais][iPais].opciones = list.listPais[0];
+        this.formInfoFormacionAcademica.campos[this.getIndexForm('Pais')].opciones = list.listPais[0];
+        this.formInfoNuevoTercero.campos[this.getIndexForm('Pais')].opciones = list.listPais[0];
         //this.formInfoFormacionAcademica.campos[this.getIndexForm('ProgramaAcademico')].opciones = list.listProgramaAcademico[0];
       },
     );

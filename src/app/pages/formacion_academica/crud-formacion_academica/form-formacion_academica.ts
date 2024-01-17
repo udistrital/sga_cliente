@@ -8,8 +8,8 @@ export let FORM_FORMACION_ACADEMICA = {
   btnLimpiar: 'Limpiar',
   modelo: 'InfoFormacionAcademica',
   campos: [
-    [
       {
+        step: 1,
         etiqueta: 'input',
         claseGrid: 'col-lg-10 col-md-10 col-sm-9 col-xs-8',
         nombre: 'Nit',
@@ -19,6 +19,7 @@ export let FORM_FORMACION_ACADEMICA = {
         tipo: 'text',
       },
       {
+        step: 1,
         etiqueta: 'button',
         claseGrid: 'col-lg-2 col-md-2 col-sm-3 col-xs-4',
         nombre: 'BusquedaBoton',
@@ -27,6 +28,7 @@ export let FORM_FORMACION_ACADEMICA = {
         label_i18n: 'buscar',
       },
       {
+        step: 1,
         etiqueta: 'select',
         claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
         nombre: 'NombreUniversidad',
@@ -40,6 +42,7 @@ export let FORM_FORMACION_ACADEMICA = {
         entrelazado: true,
       },
       {
+        step: 1,
         etiqueta: 'select',
         claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
         nombre: 'Pais',
@@ -52,6 +55,7 @@ export let FORM_FORMACION_ACADEMICA = {
         opciones: [],
       },
       {
+        step: 1,
         etiqueta: 'input',
         claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
         nombre: 'Direccion',
@@ -62,6 +66,7 @@ export let FORM_FORMACION_ACADEMICA = {
         tipo: 'text',
       },
       {
+        step: 1,
         etiqueta: 'input',
         claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
         nombre: 'Correo',
@@ -72,6 +77,7 @@ export let FORM_FORMACION_ACADEMICA = {
         tipo: 'text',
       },
       {
+        step: 1,
         etiqueta: 'input',
         claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
         nombre: 'Telefono',
@@ -92,9 +98,8 @@ export let FORM_FORMACION_ACADEMICA = {
         key: 'Nombre',
         opciones: [],
       }, */
-    ],
-    [
       {
+        step: 2,
         etiqueta: 'autocomplete',
         claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
         nombre: 'ProgramaAcademico',
@@ -111,6 +116,7 @@ export let FORM_FORMACION_ACADEMICA = {
         entrelazado: true,
       },
       {
+        step: 2,
         etiqueta: 'mat-date',
         claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
         nombre: 'FechaInicio',
@@ -120,6 +126,7 @@ export let FORM_FORMACION_ACADEMICA = {
         tipo: 'date',
       },
       {
+        step: 2,
         etiqueta: 'mat-date',
         claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
         nombre: 'FechaFinalizacion',
@@ -129,6 +136,7 @@ export let FORM_FORMACION_ACADEMICA = {
         tipo: 'date',
       },
       {
+        step: 2,
         etiqueta: 'input',
         claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
         nombre: 'TituloTrabajoGrado',
@@ -138,6 +146,7 @@ export let FORM_FORMACION_ACADEMICA = {
         tipo: 'text',
       },
       {
+        step: 2,
         etiqueta: 'textarea',
         claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
         nombre: 'DescripcionTrabajoGrado',
@@ -148,6 +157,7 @@ export let FORM_FORMACION_ACADEMICA = {
         cantidadCaracteres: 400,
       },
       {
+        step: 3,
         etiqueta: 'fileRev',
         claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
         clase: 'form-control',
@@ -161,7 +171,6 @@ export let FORM_FORMACION_ACADEMICA = {
         url: '',
         tamanoMaximo: 2,
       }
-    ],
   ],
 }
 
