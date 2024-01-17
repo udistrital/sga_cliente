@@ -313,43 +313,59 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   }
 
   onDelete(event): void {
-    console.log(event.data);
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.eliminar'),
-      text: this.translate.instant('GLOBAL.eliminar') + '?',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-    };
-    Swal.fire(opt)
-      .then((willDelete) => {
-        this.loading = true;
-        if (willDelete.value) {
-          this.mid.delete('descuento_academico', event.data).subscribe(res => {
-            if (res !== null) {
-              this.loadData();
-              this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
-                this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
-                this.translate.instant('GLOBAL.confirmarEliminar'));
-            }
-            this.loading = false;
-          },
-            (error: HttpErrorResponse) => {
+    let estado: string = event.data.EstadoObservacion;
+    let esAprobado: boolean = estado === "Aprobado";
+
+    if (esAprobado) {
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.eliminar'),
+        text: this.translate.instant('descuento_academico.no_permite_borrar'),
+        icon: 'info',
+        dangerMode: true,
+        showCancelButton: false,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar')
+      };
+      Swal.fire(opt);
+    } else {
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.eliminar'),
+        text: this.translate.instant('descuento_academico.seguro_borrar'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+      };
+      Swal.fire(opt)
+        .then((willDelete) => {
+          this.loading = true;
+          if (willDelete.value) {
+            event.data.Activo = false;
+            this.sgaMidService.put('descuento_academico', event.data).subscribe(res => {
+              if (res !== null) {
+                this.loadData();
+                this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
+                  this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
+                  this.translate.instant('GLOBAL.confirmarEliminar'));
+              }
               this.loading = false;
-              Swal.fire({
-                icon: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.eliminar') + '-' +
-                  this.translate.instant('GLOBAL.descuento_matricula'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            },
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.eliminar') + '-' +
+                    this.translate.instant('GLOBAL.descuento_matricula'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
               });
-            });
-        }
-        this.loading = false;
-      });
+          }
+          this.loading = false;
+        });
+    }
   }
 
   activetab(): void {

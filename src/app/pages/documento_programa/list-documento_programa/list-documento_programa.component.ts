@@ -11,6 +11,7 @@ import { Documento } from '../../../@core/data/models/documento/documento';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import Swal from 'sweetalert2';
+import { BodyOutputType, Toast, ToasterConfig, ToasterService } from 'angular2-toaster';
 
 @Component({
   selector: 'ngx-list-documento-programa',
@@ -66,6 +67,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     private popUpManager: PopUpManager,
     private newNuxeoService: NewNuxeoService,
     private utilidades: UtilidadesService,
+    private toasterService: ToasterService
   ) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -268,7 +270,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     } else {
       const opt: any = {
         title: this.translate.instant('GLOBAL.eliminar'),
-        text: this.translate.instant('documento_programa.no_permite_borrar'),
+        text: this.translate.instant('documento_programa.seguro_borrar'),
         icon: 'warning',
         buttons: true,
         dangerMode: true,
@@ -280,8 +282,27 @@ export class ListDocumentoProgramaComponent implements OnInit {
         .then((willDelete) => {
           this.loading = true;
           if (willDelete.value) {
-            console.log(event.data);
+            this.inscripcionService.delete('soporte_documento_programa', event.data).subscribe(res => {
+              if (res !== null) {
+                this.loadData();
+                this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
+                  this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
+                  this.translate.instant('GLOBAL.confirmarEliminar'));
+              }
+              this.loading = false;
+            }, (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.eliminar') + '-' +
+                    this.translate.instant('GLOBAL.descuento_matricula'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
           }
+          this.loading = false;
         });
     }
   }
@@ -334,6 +355,17 @@ export class ListDocumentoProgramaComponent implements OnInit {
 
   activetab(): void {
     this.cambiotab = !this.cambiotab;
+  }
+
+  private showToast(type: string, title: string, body: string) {
+    const toast: Toast = {
+      type: type, // 'default', 'info', 'success', 'warning', 'error'
+      title: title,
+      body: body,
+      showCloseButton: true,
+      bodyOutputType: BodyOutputType.TrustedHtml,
+    };
+    this.toasterService.popAsync(toast);
   }
 
 }
