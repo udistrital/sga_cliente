@@ -443,6 +443,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                     this.sendCorreo();
                   }
                 }
+                setTimeout(() => {this.folderTagtoReload = "";}, 1);
                 //this.showProfile = false
               },
               error => {

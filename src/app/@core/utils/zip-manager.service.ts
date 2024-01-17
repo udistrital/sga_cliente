@@ -14,8 +14,13 @@ export class ZipManagerService {
     private newNuxeoService: NewNuxeoService,
     ) { }
 
-  adjuntarArchivos(file: any[]): number {
-    this.Archivos.push(...file);
+  adjuntarArchivos(newfiles: any[]): number {
+    newfiles.forEach(nf => {
+      const existing = this.Archivos.some(f => f.DocumentoId === nf.DocumentoId);
+      if (!existing) {
+        this.Archivos.push(nf);
+      }
+    });
     return this.Archivos.length
   }
 
