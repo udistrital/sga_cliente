@@ -107,6 +107,10 @@ export class ListDescuentoAcademicoComponent implements OnInit {
             name: 'edit',
             title: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
           },
+          {
+            name: 'delete',
+            title: '<i class="nb-trash" title="' + this.translate.instant('GLOBAL.eliminar') + '"></i>',
+          },
         ],
       },
       add: {
@@ -262,6 +266,9 @@ export class ListDescuentoAcademicoComponent implements OnInit {
       case 'edit':
         this.onEdit(event);
         break;
+      case 'delete':
+        this.onDelete(event);
+        break;
     }
   }
 
@@ -306,6 +313,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   }
 
   onDelete(event): void {
+    console.log(event.data);
     const opt: any = {
       title: this.translate.instant('GLOBAL.eliminar'),
       text: this.translate.instant('GLOBAL.eliminar') + '?',

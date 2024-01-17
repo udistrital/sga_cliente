@@ -1548,7 +1548,9 @@
         "tooltip_crear": "Crear documento",
         "seguro_continuar_registrar": "¿Está seguro de registrar este documento?",
         "no_documentos": "No tiene documentos registrados.",
-        "documento_cambiar": "Seleccione el reemplazo para el tipo de documento elegido."
+        "documento_cambiar": "Seleccione el reemplazo para el tipo de documento elegido.",
+        "no_permite_borrar": "En este estado no es posible eliminar el documento.",
+        "seguro_borrar": "¿Esta seguro que desea eliminar el documento?"
     },
     "documento_proyecto": {
         "documento": "Documento proyecto",
@@ -1612,7 +1614,9 @@
         "descuentos_seleccionados": "Descuentos asignados:",
         "carga_nuevo_descuento": "Asignando nuevo descuento...",
         "carga_eliminando_descuento": "Eliminando descuento del proyecto...",
-        "tooltip_crear": "Crear descuento"
+        "tooltip_crear": "Crear descuento",
+        "no_permite_borrar": "En este estado no es posible eliminar el descuento.",
+        "seguro_borrar": "¿Esta seguro que desea eliminar el descuento?"
     },
     "idiomas": {
         "no_data": "No existe información registrada sobre idiomas",

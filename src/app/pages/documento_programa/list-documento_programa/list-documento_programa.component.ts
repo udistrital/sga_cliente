@@ -10,6 +10,7 @@ import { SoporteDocumentoAux } from '../../../@core/data/models/documento/soport
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'ngx-list-documento-programa',
@@ -108,6 +109,10 @@ export class ListDocumentoProgramaComponent implements OnInit {
           {
             name: 'edit',
             title: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
+          },
+          {
+            name: 'delete',
+            title: '<i class="nb-trash" title="' + this.translate.instant('GLOBAL.eliminar') + '"></i>',
           },
         ],
       },
@@ -246,6 +251,41 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.activetab();
   }
 
+  onDelete(event): void {
+    let estado: string = event.data.EstadoObservacion;
+    let esAprobado: boolean = estado === "Aprobado";
+
+    if (esAprobado) {
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.eliminar'),
+        text: this.translate.instant('documento_programa.no_permite_borrar'),
+        icon: 'info',
+        dangerMode: true,
+        showCancelButton: false,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar')
+      };
+      Swal.fire(opt);
+    } else {
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.eliminar'),
+        text: this.translate.instant('documento_programa.no_permite_borrar'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        showCancelButton: true,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+      };
+      Swal.fire(opt)
+        .then((willDelete) => {
+          this.loading = true;
+          if (willDelete.value) {
+            console.log(event.data);
+          }
+        });
+    }
+  }
+
   onAction(event): void {
     switch (event.action) {
       case 'open':
@@ -253,6 +293,9 @@ export class ListDocumentoProgramaComponent implements OnInit {
         break;
       case 'edit':
         this.onEdit(event);
+        break;
+      case 'delete':
+        this.onDelete(event);
         break;
     }
   }
