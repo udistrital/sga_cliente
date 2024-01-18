@@ -291,12 +291,20 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     this.searchNit(event['infoPost'].Nit);
   }
 
+  onChangeDate (data){
+    console.log(data)
+    this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].minDate
+    = this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaInicio')].valor
+  }
+
   updateFinishDate (data){
     if(data.button == 'FormacionBoton'){
-      const FechaFinalizacion = this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')]
-      FechaFinalizacion.requerido = !FechaFinalizacion.requerido
-      FechaFinalizacion.deshabilitar = !FechaFinalizacion.deshabilitar
-      if(FechaFinalizacion.deshabilitar){
+      const fechaFinalizacion = this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')]
+      this.formInfoFormacionAcademica.campos[this.getIndexForm('Telefono')].ocultar = true
+      fechaFinalizacion.requerido = !fechaFinalizacion.requerido
+      fechaFinalizacion.deshabilitar = !fechaFinalizacion.deshabilitar
+      fechaFinalizacion.ocultar = !fechaFinalizacion.ocultar
+      if(fechaFinalizacion.deshabilitar){
         this.formInfoFormacionAcademica.campos[this.getIndexForm('FormacionBoton')].icono = 'fa fa-check'
       }else{
         this.formInfoFormacionAcademica.campos[this.getIndexForm('FormacionBoton')].icono = ''

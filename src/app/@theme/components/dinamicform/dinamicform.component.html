@@ -378,7 +378,7 @@
                             <input matInput [(ngModel)]="c.valor" [matDatepicker]="picker"
                                 (dateChange)="onChangeDate($event,c); validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" [placeholder]="c.placeholder"
-                                [disabled]="c.deshabilitar">
+                                [disabled]="c.deshabilitar"  [hidden]="c.ocultar" [min]="c.minDate" [max]="c.maxDate">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
@@ -513,7 +513,7 @@
 
                         <!--buttton -->
                         <div *ngSwitchCase="'button'" class="row {{c.ocultar?'no-mostrar':''}}">
-                            <div class="{{c.claseGrid }}">
+                            <div class="{{c.claseGrid }}" >
                                 <button mat-button id="{{c.id}}" (click)="auxButton(c)">
                                     <i class="{{c.icono}}"></i>
                                     {{ c.label }}

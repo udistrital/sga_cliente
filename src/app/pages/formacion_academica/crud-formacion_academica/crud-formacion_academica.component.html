@@ -7,8 +7,8 @@
       [normalform]="formInfoFormacionAcademica"
       [modeloData]="info_formacion_academica"
       (result)="validarForm($event)"
-      (resultAux)="searchDoc($event)"
-      (resultAux)="updateFinishDate($event)"
+      (resultAux)="searchDoc($event); updateFinishDate($event)"
+      (dateChange)="onChangeDate($event)"
       [clean]="clean"
       (percentage)="setPercentage($event)"
       (interlaced)="getEvento($event)">
