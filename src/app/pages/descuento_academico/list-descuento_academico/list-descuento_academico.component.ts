@@ -13,6 +13,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { DescuentoAcademicoService } from '../../../@core/data/descuento_academico.service';
 
 @Component({
   selector: 'ngx-list-descuento-academico',
@@ -61,7 +62,8 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     private toasterService: ToasterService,
     private documentoService: DocumentoService,
     private utilidades: UtilidadesService,
-    private newNuxeoService: NewNuxeoService) {
+    private newNuxeoService: NewNuxeoService,
+    private descuentoAcademicoService: DescuentoAcademicoService) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
@@ -331,8 +333,6 @@ export class ListDescuentoAcademicoComponent implements OnInit {
         title: this.translate.instant('GLOBAL.eliminar'),
         text: this.translate.instant('descuento_academico.seguro_borrar'),
         icon: 'warning',
-        buttons: true,
-        dangerMode: true,
         showCancelButton: true,
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
@@ -342,11 +342,11 @@ export class ListDescuentoAcademicoComponent implements OnInit {
           this.loading = true;
           if (willDelete.value) {
             event.data.Activo = false;
-            this.sgaMidService.put('descuento_academico', event.data).subscribe(res => {
+            this.descuentoAcademicoService.put('solicitud_descuento', event.data).subscribe(res => {
               if (res !== null) {
                 this.loadData();
                 this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
-                  this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
+                  this.translate.instant('GLOBAL.descuento_academico') + ' ' +
                   this.translate.instant('GLOBAL.confirmarEliminar'));
               }
               this.loading = false;
@@ -358,7 +358,7 @@ export class ListDescuentoAcademicoComponent implements OnInit {
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.eliminar') + '-' +
-                    this.translate.instant('GLOBAL.descuento_matricula'),
+                    this.translate.instant('GLOBAL.descuento_academico'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
