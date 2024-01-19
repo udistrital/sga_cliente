@@ -305,6 +305,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       fechaFinalizacion.deshabilitar = !fechaFinalizacion.deshabilitar
       fechaFinalizacion.ocultar = !fechaFinalizacion.ocultar
       if(fechaFinalizacion.deshabilitar){
+        fechaFinalizacion.valor = ''
         this.formInfoFormacionAcademica.campos[this.getIndexForm('FormacionBoton')].icono = 'fa fa-check'
       }else{
         this.formInfoFormacionAcademica.campos[this.getIndexForm('FormacionBoton')].icono = ''
