@@ -37,6 +37,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
   tipoInscripcion: number;
   listAlreadyUploaded: number[] = [];
+  config: ToasterConfig;
 
   @Input('persona_id')
   set info(info: number) {
@@ -141,6 +142,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
               documento.TipoDocumento = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Nombre'];
               documento.DocumentoId = soporte['DocumentoId'];
               documento.SoporteDocumentoId = soporte['Id'];
+              documento.DocumentoProgramaId = soporte['DocumentoProgramaId'];
               await this.cargarEstadoDocumento(documento).then((estado: any) => {
                 documento.EstadoObservacion = estado.estadoObservacion;
                 documento.Observacion = estado.observacion;
@@ -262,7 +264,6 @@ export class ListDocumentoProgramaComponent implements OnInit {
         title: this.translate.instant('GLOBAL.eliminar'),
         text: this.translate.instant('documento_programa.no_permite_borrar'),
         icon: 'info',
-        dangerMode: true,
         showCancelButton: false,
         confirmButtonText: this.translate.instant('GLOBAL.aceptar')
       };
@@ -272,8 +273,6 @@ export class ListDocumentoProgramaComponent implements OnInit {
         title: this.translate.instant('GLOBAL.eliminar'),
         text: this.translate.instant('documento_programa.seguro_borrar'),
         icon: 'warning',
-        buttons: true,
-        dangerMode: true,
         showCancelButton: true,
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
@@ -282,11 +281,12 @@ export class ListDocumentoProgramaComponent implements OnInit {
         .then((willDelete) => {
           this.loading = true;
           if (willDelete.value) {
-            this.inscripcionService.delete('soporte_documento_programa', event.data).subscribe(res => {
+            event.data.DocumentoProgramaId.Activo = false;
+            this.inscripcionService.put('documento_programa/', event.data.DocumentoProgramaId).subscribe(res => {
               if (res !== null) {
                 this.loadData();
                 this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
-                  this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
+                  this.translate.instant('GLOBAL.documento_programa') + ' ' +
                   this.translate.instant('GLOBAL.confirmarEliminar'));
               }
               this.loading = false;
@@ -297,7 +297,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
                   title: error.status + '',
                   text: this.translate.instant('ERROR.' + error.status),
                   footer: this.translate.instant('GLOBAL.eliminar') + '-' +
-                    this.translate.instant('GLOBAL.descuento_matricula'),
+                    this.translate.instant('GLOBAL.documento_programa'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
                 });
               });
@@ -358,6 +358,16 @@ export class ListDocumentoProgramaComponent implements OnInit {
   }
 
   private showToast(type: string, title: string, body: string) {
+    this.config = new ToasterConfig({
+      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
+      positionClass: 'toast-top-center',
+      timeout: 5000,  // ms
+      newestOnTop: true,
+      tapToDismiss: false, // hide on click
+      preventDuplicates: true,
+      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
+      limit: 5,
+    });
     const toast: Toast = {
       type: type, // 'default', 'info', 'success', 'warning', 'error'
       title: title,

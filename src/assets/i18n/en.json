@@ -719,7 +719,8 @@
         "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1",
         "item": "Item",
         "evaluar": "Evaluate",
-        "descuento_academico": "Academic discount"
+        "descuento_academico": "Academic discount",
+        "documento_programa": "Document"
     },
     "ERROR": {
         "general": "The request could not be satisfied",

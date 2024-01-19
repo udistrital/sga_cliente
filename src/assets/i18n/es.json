@@ -753,7 +753,8 @@
         "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1",
         "item": "Ítem",
         "evaluar": "Evaluar",
-        "descuento_academico": "Descuento académico"
+        "descuento_academico": "Descuento académico",
+        "documento_programa": "Documento"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",

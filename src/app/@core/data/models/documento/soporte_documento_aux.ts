@@ -5,4 +5,5 @@ export class SoporteDocumentoAux {
     SoporteDocumentoId: number;
     EstadoObservacion: string;
     Observacion: string;
+    DocumentoProgramaId: DocumentoPrograma;
 }
