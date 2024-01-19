@@ -8,10 +8,10 @@
       [modeloData]="info_formacion_academica"
       (result)="validarForm($event)"
       (resultAux)="searchDoc($event); updateFinishDate($event)"
-      (dateChange)="onChangeDate($event)"
+      (dateChange)="onChangeDate()"
       [clean]="clean"
       (percentage)="setPercentage($event)"
-      (interlaced)="getEvento($event)">
+      (interlaced)="getEvento($event); onChangeDate()">
     </ngx-dinamicform>
 
     <ngx-new-tercero *ngIf="nuevoTercero"

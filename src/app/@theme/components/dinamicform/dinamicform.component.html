@@ -378,7 +378,8 @@
                             <input matInput [(ngModel)]="c.valor" [matDatepicker]="picker"
                                 (dateChange)="onChangeDate($event,c); validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" [placeholder]="c.placeholder"
-                                [disabled]="c.deshabilitar"  [hidden]="c.ocultar" [min]="c.minDate" [max]="c.maxDate">
+                                [disabled]="c.deshabilitar"  [hidden]="c.ocultar" [min]="c.minDate" [max]="c.maxDate"
+                                [class]="c.clase">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
