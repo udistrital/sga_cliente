@@ -1,6 +1,9 @@
 <div class="col-md-12 col-lg-12 ">
     <nb-card>
         <nb-card-body>
+            <div class="preinscription-alert">
+                {{ 'inscripcion.alerta_idiomas' | translate }}
+            </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'GLOBAL.lista' | translate }}" [active]="!cambiotab">
                     <br />

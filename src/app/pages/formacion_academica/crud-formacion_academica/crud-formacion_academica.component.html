@@ -1,5 +1,8 @@
 <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
   nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+  <div class="preinscription-alert">
+    {{ 'inscripcion.alerta_formacion_academica' | translate }}
+  </div>
   <toaster-container [toasterconfig]="config"></toaster-container>
 
   <ngx-dinamicform *ngIf="!nuevoTercero && !nuevoPrograma" [normalform]="formInfoFormacionAcademica"
