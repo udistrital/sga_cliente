@@ -11,7 +11,6 @@ import { Documento } from '../../../@core/data/models/documento/documento';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import Swal from 'sweetalert2';
-import { BodyOutputType, Toast, ToasterConfig, ToasterService } from 'angular2-toaster';
 
 @Component({
   selector: 'ngx-list-documento-programa',
@@ -37,7 +36,6 @@ export class ListDocumentoProgramaComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
   tipoInscripcion: number;
   listAlreadyUploaded: number[] = [];
-  config: ToasterConfig;
 
   @Input('persona_id')
   set info(info: number) {
@@ -67,8 +65,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     private inscripcionService: InscripcionService,
     private popUpManager: PopUpManager,
     private newNuxeoService: NewNuxeoService,
-    private utilidades: UtilidadesService,
-    private toasterService: ToasterService
+    private utilidades: UtilidadesService
   ) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -285,9 +282,12 @@ export class ListDocumentoProgramaComponent implements OnInit {
             this.inscripcionService.put('documento_programa/', event.data.DocumentoProgramaId).subscribe(res => {
               if (res !== null) {
                 this.loadData();
-                this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
-                  this.translate.instant('GLOBAL.documento_programa') + ' ' +
-                  this.translate.instant('GLOBAL.confirmarEliminar'));
+                Swal.fire({
+                  icon: 'success',
+                  title: this.translate.instant('documento_programa.documento_eliminado'),
+                  text: this.translate.instant('documento_programa.mensaje_eliminado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
               }
               this.loading = false;
             }, (error: HttpErrorResponse) => {
@@ -356,26 +356,4 @@ export class ListDocumentoProgramaComponent implements OnInit {
   activetab(): void {
     this.cambiotab = !this.cambiotab;
   }
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
-  }
-
 }

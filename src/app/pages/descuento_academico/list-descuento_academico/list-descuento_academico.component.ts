@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { SolicitudDescuento } from '../../../@core/data/models/descuento/solicitud_descuento';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
@@ -27,7 +26,6 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   periodo: number;
   inscripcion: number;
   cambiotab: boolean = false;
-  config: ToasterConfig;
   settings: any;
   source: LocalDataSource = new LocalDataSource();
   data: Array<SolicitudDescuento>;
@@ -59,7 +57,6 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     private mid: CampusMidService,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
-    private toasterService: ToasterService,
     private documentoService: DocumentoService,
     private utilidades: UtilidadesService,
     private newNuxeoService: NewNuxeoService,
@@ -345,9 +342,12 @@ export class ListDescuentoAcademicoComponent implements OnInit {
             this.descuentoAcademicoService.put('solicitud_descuento', event.data).subscribe(res => {
               if (res !== null) {
                 this.loadData();
-                this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
-                  this.translate.instant('GLOBAL.descuento_academico') + ' ' +
-                  this.translate.instant('GLOBAL.confirmarEliminar'));
+                Swal.fire({
+                  icon: 'success',
+                  title: this.translate.instant('descuento_academico.descuento_eliminado'),
+                  text: this.translate.instant('descuento_academico.mensaje_eliminado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
               }
               this.loading = false;
             },
@@ -394,26 +394,5 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   getPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);
-  }
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
   }
 }

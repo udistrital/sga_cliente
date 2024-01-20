@@ -752,9 +752,7 @@
         "direccion_entidad": "Dirección de la entidad",
         "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1",
         "item": "Ítem",
-        "evaluar": "Evaluar",
-        "descuento_academico": "Descuento académico",
-        "documento_programa": "Documento"
+        "evaluar": "Evaluar"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1552,7 +1550,9 @@
         "no_documentos": "No tiene documentos registrados.",
         "documento_cambiar": "Seleccione el reemplazo para el tipo de documento elegido.",
         "no_permite_borrar": "En este estado no es posible eliminar el documento.",
-        "seguro_borrar": "¿Esta seguro que desea eliminar el documento?"
+        "seguro_borrar": "¿Esta seguro que desea eliminar el documento?",
+        "documento_eliminado": "Documento eliminado",
+        "mensaje_eliminado": "Se ha eliminado exitosamente el documento."
     },
     "documento_proyecto": {
         "documento": "Documento proyecto",
@@ -1618,7 +1618,8 @@
         "carga_eliminando_descuento": "Eliminando descuento del proyecto...",
         "tooltip_crear": "Crear descuento",
         "no_permite_borrar": "En este estado no es posible eliminar el descuento.",
-        "seguro_borrar": "¿Esta seguro que desea eliminar el descuento?"
+        "seguro_borrar": "¿Esta seguro que desea eliminar el descuento?",
+        "mensaje_eliminado": "Se ha eliminado exitosamente el descuento."
     },
     "idiomas": {
         "no_data": "No existe información registrada sobre idiomas",

@@ -718,9 +718,7 @@
         "direccion_entidad": "Entity Address",
         "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1",
         "item": "Item",
-        "evaluar": "Evaluate",
-        "descuento_academico": "Academic discount",
-        "documento_programa": "Document"
+        "evaluar": "Evaluate"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1516,7 +1514,9 @@
         "no_documentos": "There are no registered documents.",
         "documento_cambiar": "Please select the replacement document for the chosen item.",
         "no_permite_borrar": "In this state, it is not possible to remove the document.",
-        "seguro_borrar": "Are you sure you want to remove the document?"
+        "seguro_borrar": "Are you sure you want to remove the document?",
+        "documento_eliminado": "Document removed",
+        "mensaje_eliminado": "The document has been successfully deleted."
     },
     "documento_proyecto": {
         "documento": "Project document",
@@ -1585,7 +1585,8 @@
         "carga_eliminando_descuento": "Removing discount from project...",
         "tooltip_crear": "Create discount",
         "no_permite_borrar": "In this state, it is not possible to remove the discount.",
-        "seguro_borrar": "Are you sure you want to remove the discount?"
+        "seguro_borrar": "Are you sure you want to remove the discount?",
+        "mensaje_eliminado": "The discount has been successfully deleted."
     },
     "idiomas": {
         "no_data": "There is no registered information on languages",
