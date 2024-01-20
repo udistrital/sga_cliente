@@ -431,8 +431,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                     this.SoporteDocumento = this.temp_info_academica.Documento;
                     const FechaI = moment(this.temp_info_academica.FechaInicio, 'DD-MM-YYYY').toDate();
                     let FechaF;
-                    console.log(this.temp_info_academica.FechaFinalizacion)
-                    console.log(this.temp_info_academica.FechaFinalizacion !== '')
                     if(this.temp_info_academica.FechaFinalizacion !== ''){
                       FechaF = moment(this.temp_info_academica.FechaFinalizacion, 'DD-MM-YYYY').toDate();
                     }else{
@@ -694,7 +692,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       const formData = event.data.InfoFormacionAcademica;
-      console.log(formData)
       const InfoFormacionAcademica = {
         TerceroId: this.persona_id,
         ProgramaAcademicoId: formData.ProgramaAcademico.Id,
@@ -707,7 +704,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       };
       const tempfecha = momentTimezone.tz(formData.FechaFinalizacion, 'America/Bogota').format('DDMMYYYY');
       if(isDate(formData.FechaFinalizacion)){
-        console.log('Si hay fecha')
         InfoFormacionAcademica.FechaFinalizacion = momentTimezone.tz(formData.FechaFinalizacion, 'America/Bogota').format('DDMMYYYY')
       }
 
