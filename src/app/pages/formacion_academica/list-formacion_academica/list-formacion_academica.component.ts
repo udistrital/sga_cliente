@@ -161,7 +161,11 @@ export class ListFormacionAcademicaComponent implements OnInit {
           const FechaI = element.FechaInicio;
           const FechaF = element.FechaFinalizacion;
           element.FechaInicio = FechaI.substring(0, 2) + '-' + FechaI.substring(2, 4) + '-' + FechaI.substring(4, 8);
-          element.FechaFinalizacion = FechaF.substring(0, 2) + '-' + FechaF.substring(2, 4) + '-' + FechaF.substring(4, 8);
+          if(FechaF !== ''){
+            element.FechaFinalizacion = FechaF.substring(0, 2) + '-' + FechaF.substring(2, 4) + '-' + FechaF.substring(4, 8);
+          }else{
+            element.FechaFinalizacion = 'Actualidad';
+          }
           let estadoDoc = await <any>this.cargarEstadoDocumento(element.Documento);
           element.Estado = estadoDoc.estadoObservacion;
           element.Observacion = estadoDoc.observacion;

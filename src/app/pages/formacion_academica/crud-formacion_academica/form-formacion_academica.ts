@@ -112,7 +112,7 @@ export let FORM_FORMACION_ACADEMICA = {
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       nombre: 'FormacionBoton',
       claseBoton: 'btn btn-primary btn-sm',
-      icono: 'fa fa-square-check',
+      icono: '',
       label_i18n: 'formacion_actual',
     },
     {

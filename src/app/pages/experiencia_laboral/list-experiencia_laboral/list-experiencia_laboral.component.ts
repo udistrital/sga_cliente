@@ -100,7 +100,11 @@ export class ListExperienciaLaboralComponent implements OnInit {
           title: this.translate.instant('GLOBAL.fecha_fin'),
           width: '20%',
           valuePrepareFunction: (value) => {
-            return formatDate(value, 'yyyy-MM-dd', 'en');
+            if(value !== ''){
+              return formatDate(value, 'yyyy-MM-dd', 'en');
+            }else{
+              return ('Actualidad')
+            }
           },
         },
         Estado: {

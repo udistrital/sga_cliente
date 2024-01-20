@@ -284,7 +284,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   }
 
   NuevoTercero(event) {
-    console.log('neuvo tercero')
     this.nuevoTercero = false;
     const iNit = this.getIndexForm('Nit');
     this.formInfoFormacionAcademica.campos[iNit].valor = event['infoPost'].Nit;

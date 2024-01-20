@@ -6,7 +6,8 @@
     <ngx-dinamicform *ngIf="!nuevoTercero" [normalform]="formInfoExperienciaLaboral"
                      [modeloData]="info_experiencia_laboral"
                      (result)="validarForm($event)"
-                     (resultAux)="searchNit($event)"
+                     (resultAux)="searchNit($event); updateFinishDate($event)"
+                     (dateChange)="onChangeDate()"
                      [clean]="clean"
                      (interlaced)="getSeleccion($event)"
                      (percentage)="setPercentage($event)">
