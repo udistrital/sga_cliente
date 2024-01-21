@@ -265,6 +265,8 @@
         "codigo_abreviacion": "Código abreviación",
         "placeholder_codigo_abreviacion": "ej: ACADE",
         "placeholder_activo": "ej: Activo",
+        "buscador_entidad": "Ingrese NIT o Nombre de la Empresa",
+        "placeholder_buscador_entidad" : "Ej: 900123456 o Acme Ltda.",
         "numero_orden": "Numero orden",
         "placeholder_numero_orden": "ej: 1,2,3",
         "placeholder_ano": "ej: 2019",

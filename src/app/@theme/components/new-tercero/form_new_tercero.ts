@@ -14,7 +14,7 @@ export let NUEVO_TERCERO = {
       label_i18n: 'nit',
       placeholder_i18n: 'nit',
       requerido: true,
-      deshabilitar: true,
+      deshabilitar: false,
       tipo: 'text',
     },
     {

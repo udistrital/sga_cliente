@@ -241,42 +241,70 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     }
   }
 
-  searchNit(data) {
-    if(data.data.Nit){
-      const inombre = this.getIndexForm('NombreEmpresa');
-      const regex = /^[0-9]+(?:-[0-9]+)*$/;
-      data.data.Nit = data.data.Nit.trim();
-      const nit = typeof data === 'string' ? data : data.data.Nit;
-
-      if (regex.test(nit) === true) {
-        this.searchOrganizacion(nit);
-        this.indexSelect = null;
-        this.detalleExp = null;
-      } else {
-        this.clean = !this.clean;
-        //this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
-        this.loadListEmpresa(nit);
-        this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
-      }
-    }  else {
-      this.popUpManager.showAlert(this.translate.instant('inscripcion.experiencia_laboral'), this.translate.instant('GLOBAL.no_vacio'))
+  searchNit(event) {
+    console.log("THIS IS A EVENT --> ", event)
+    if(event != null){
+      this.searchOrganizacion(event.NIT)
+    } else {
+      FORM_EXPERIENCIA_LABORAL.campos.filter( campo => {
+        if (campo.nombre == "Buscador"){
+          campo.opciones = [
+            {
+              "NIT": "Na-1",
+              "NombreCompleto": "CREAR NUEVO REGISTRO",
+              "Label": "CREAR NUEVO REGISTRO"
+            }
+          ]
+        }
+      })
     }
-    
   }
 
   getSeleccion(event) {
-    let IdEmpresa;
-    if (event.nombre === 'NombreEmpresa') {
-      IdEmpresa = this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')].valor.Id;
-      this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdEmpresa).subscribe(
-        (res: any) => {
-          this.searchOrganizacion(res[0]['Numero'])
-        },
-        (error: HttpErrorResponse) => {
+  
+    // Funcion que se ejecuta con el evento interlaced de dinamicform
+    // se recibe un objeto, {name, value}
+    switch (event.name) {
+      case "selected_value_autocomplete_Buscador":
+        if(event.value != null){
+          this.searchOrganizacion(event.value.NIT)
+        } else {
+          FORM_EXPERIENCIA_LABORAL.campos.filter( campo => {
+            if (campo.nombre == "Buscador"){
+              campo.opciones = [
+                {
+                  "NIT": "Na-1",
+                  "NombreCompleto": "CREAR NUEVO REGISTRO",
+                  "Label": "CREAR NUEVO REGISTRO"
+                }
+              ]
+            }
+          }) 
+        }
+        break;
 
-        },
-      )
+      case "selected_value_autocomplete_Cargo":
+          console.log("selected_value_autocomplete_Cargo", event)
+          let IdEmpresa;
+          console.log(event.value.value.nombre)
+          if (event.value.nombre === 'NombreEmpresa') {
+            IdEmpresa = this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')].valor.Id;
+            this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdEmpresa).subscribe(
+              (res: any) => {
+                this.searchOrganizacion(res[0]['Numero'])
+              },
+              (error: HttpErrorResponse) => {
+
+              },
+            )
+          }
+          break;
+      default :
+        console.log("getSelection($event) --> ", event)
+          
     }
+    
+    
   }
 
   loadListEmpresa(nombre: string): void {
@@ -547,7 +575,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   setPercentage(event) {
     this.percentage = event;
     if(this.percentage == 0){
-      this.formInfoExperienciaLaboral.campos[this.getIndexForm('Nit')].deshabilitar = false;
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('Nit')].deshabilitar = true;
     } else {
       if (this.canEmit) {
         this.result.emit(this.percentage);

@@ -447,6 +447,8 @@
         "placeholder_idioma_publicacion": "E.g.: English",
         "revista": "Journal",
         "placeholder_revista": "E.g.: Nature Energy",
+        "buscador_entidad": "Enter NIT or Company Name",
+        "placeholder_buscador_entidad" : "E.g., 900123456 or Acme Ltd.",
         "volumen": "Volume",
         "placeholder_volumen": "E.g.: 1",
         "fasciculo": "Fascicle",
