@@ -51,7 +51,6 @@ export class DinamicformComponent implements OnInit, OnChanges {
         filter(data => (data.text).length > 3),
         switchMap(({ text, path, query, keyToFilter, field }) => this.searchEntries(text, path, query, keyToFilter, field)),
       ).subscribe((response: any) => {
-        console.log(response[1])
         let opciones = []
         if (response.queryOptions.hasOwnProperty('Data')) {
           opciones = response.queryOptions.Data;
@@ -62,7 +61,6 @@ export class DinamicformComponent implements OnInit, OnChanges {
         fieldAutocomplete[0].opciones = opciones;
         if (opciones != null){
           if (opciones.length == 1 && Object.keys(opciones[0]).length == 0) {
-            console.log("MEOTOD RARO")
             let canEmit = fieldAutocomplete[0].entrelazado ? fieldAutocomplete[0].entrelazado : false;
             if (canEmit) {
               this.interlaced.emit({...fieldAutocomplete[0], noOpciones: true, valorBuscado: response.keyToFilter});

@@ -273,7 +273,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
             if (campo.nombre == "Buscador"){
               campo.opciones = [
                 {
-                  "NIT": "Na-1",
+                  "NIT": null,
                   "NombreCompleto": "CREAR NUEVO REGISTRO",
                   "Label": "CREAR NUEVO REGISTRO"
                 }
@@ -284,24 +284,17 @@ export class CrudExperienciaLaboralComponent implements OnInit {
         break;
 
       case "selected_value_autocomplete_Cargo":
-          console.log("selected_value_autocomplete_Cargo", event)
-          let IdEmpresa;
-          console.log(event.value.value.nombre)
-          if (event.value.nombre === 'NombreEmpresa') {
-            IdEmpresa = this.formInfoExperienciaLaboral.campos[this.getIndexForm('NombreEmpresa')].valor.Id;
-            this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdEmpresa).subscribe(
-              (res: any) => {
-                this.searchOrganizacion(res[0]['Numero'])
-              },
-              (error: HttpErrorResponse) => {
-
-              },
-            )
-          }
+          // NO SE QUE HACE ESTO AQUI ???
+          // let IdEmpresa = event.value.Id
+          // this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdEmpresa).subscribe(
+          //   (res: any) => {
+          //     console.log(res[0]['Numero'])
+          //     this.searchOrganizacion(res[0]['Numero'])
+          //   },
+          //   (error: HttpErrorResponse) => {
+          //   },
+          //   )
           break;
-      default :
-        console.log("getSelection($event) --> ", event)
-          
     }
     
     
@@ -335,73 +328,93 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     }
   }
 
-  searchOrganizacion(nit: string): void {
-    this.loading = true;
-    nit = nit.trim();
-    this.nit = nit.trim();
-    const init = this.getIndexForm('Nit');
-    const inombre = this.getIndexForm('NombreEmpresa');
-    const itipo = this.getIndexForm('TipoOrganizacion');
-    const idir = this.getIndexForm('Direccion');
-    const itel = this.getIndexForm('Telefono');
-    const icorreo = this.getIndexForm('Correo');
-    const ipais = this.getIndexForm('Pais');
-    this.sgaMidService.get('experiencia_laboral/informacion_empresa?Id=' + nit)
-      .subscribe((res: any) => {
-        this.formInfoExperienciaLaboral.campos[init].valor = res.NumeroIdentificacion;
-        this.formInfoExperienciaLaboral.campos[inombre].valor = (res.NombreCompleto &&
-          res.NombreCompleto.Id) ? res.NombreCompleto : { Id: 0, NombreCompleto: 'No registrado' };
-        this.formInfoExperienciaLaboral.campos[idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
-        this.formInfoExperienciaLaboral.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
-        this.formInfoExperienciaLaboral.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
-        this.formInfoExperienciaLaboral.campos[ipais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : { Id: 0, Nombre: 'No registrado' };
-        this.formInfoExperienciaLaboral.campos[itipo].valor = (res.TipoTerceroId &&
-          res.TipoTerceroId.Id) ? res.TipoTerceroId : { Id: 0, Nombre: 'No registrado' };
-        [
-          this.formInfoExperienciaLaboral.campos[init],
-          this.formInfoExperienciaLaboral.campos[inombre],
-          this.formInfoExperienciaLaboral.campos[idir],
-          this.formInfoExperienciaLaboral.campos[icorreo],
-          this.formInfoExperienciaLaboral.campos[ipais],
-          this.formInfoExperienciaLaboral.campos[itipo],
-          this.formInfoExperienciaLaboral.campos[itel]]
-          .forEach(element => {
-            element.deshabilitar = element.valor ? true : false
-          });
-        this.loading = false;
-      },
-        (error: HttpErrorResponse) => {
-          if (error.status === 404) {
-            this.clean = !this.clean;
-            [this.formInfoExperienciaLaboral.campos[inombre],
+  searchOrganizacion(nit: string | null): void {
+    if (nit != null) {
+      this.loading = true;
+      nit = nit.trim();
+      this.nit = nit.trim();
+      const init = this.getIndexForm('Nit');
+      const inombre = this.getIndexForm('NombreEmpresa');
+      const itipo = this.getIndexForm('TipoOrganizacion');
+      const idir = this.getIndexForm('Direccion');
+      const itel = this.getIndexForm('Telefono');
+      const icorreo = this.getIndexForm('Correo');
+      const ipais = this.getIndexForm('Pais');
+      this.sgaMidService.get('experiencia_laboral/informacion_empresa?Id=' + nit)
+        .subscribe((res: any) => {
+          this.formInfoExperienciaLaboral.campos[init].valor = res.NumeroIdentificacion;
+          this.formInfoExperienciaLaboral.campos[inombre].valor = (res.NombreCompleto &&
+            res.NombreCompleto.Id) ? res.NombreCompleto : { Id: 0, NombreCompleto: 'No registrado' };
+          this.formInfoExperienciaLaboral.campos[idir].valor = (res.Direccion) ? res.Direccion : 'No registrado';
+          this.formInfoExperienciaLaboral.campos[itel].valor = (res.Telefono) ? res.Telefono : 'No registrado';
+          this.formInfoExperienciaLaboral.campos[icorreo].valor = (res.Correo) ? res.Correo : 'No registrado';
+          this.formInfoExperienciaLaboral.campos[ipais].valor = (res.Ubicacion && res.Ubicacion.Id) ? res.Ubicacion : { Id: 0, Nombre: 'No registrado' };
+          this.formInfoExperienciaLaboral.campos[itipo].valor = (res.TipoTerceroId &&
+            res.TipoTerceroId.Id) ? res.TipoTerceroId : { Id: 0, Nombre: 'No registrado' };
+          [
+            this.formInfoExperienciaLaboral.campos[init],
+            this.formInfoExperienciaLaboral.campos[inombre],
             this.formInfoExperienciaLaboral.campos[idir],
             this.formInfoExperienciaLaboral.campos[icorreo],
             this.formInfoExperienciaLaboral.campos[ipais],
             this.formInfoExperienciaLaboral.campos[itipo],
             this.formInfoExperienciaLaboral.campos[itel]]
-              .forEach(element => {
-                element.deshabilitar = false;
-              });
-          }
-          this.loading = false;
-          const opt: any = {
-            title: this.translate.instant('experiencia_laboral.titulo1_crear_entidad') + ` ${nit} ` +
-              this.translate.instant('experiencia_laboral.titulo2_crear_entidad'),
-            text: this.translate.instant('experiencia_laboral.crear_entidad'),
-            icon: 'warning',
-            buttons: true,
-            dangerMode: true,
-            showCancelButton: true,
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-            cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-          };
-          Swal.fire(opt)
-            .then((action) => {
-              if (action.value) {
-                this.nuevoTercero = true;
-              }
+            .forEach(element => {
+              element.deshabilitar = element.valor ? true : false
             });
-        });
+          this.loading = false;
+        },
+          (error: HttpErrorResponse) => {
+            if (error.status === 404) {
+              this.clean = !this.clean;
+              [this.formInfoExperienciaLaboral.campos[inombre],
+              this.formInfoExperienciaLaboral.campos[idir],
+              this.formInfoExperienciaLaboral.campos[icorreo],
+              this.formInfoExperienciaLaboral.campos[ipais],
+              this.formInfoExperienciaLaboral.campos[itipo],
+              this.formInfoExperienciaLaboral.campos[itel]]
+                .forEach(element => {
+                  element.deshabilitar = false;
+                });
+            }
+            this.loading = false;
+            const opt: any = {
+              title: this.translate.instant('experiencia_laboral.titulo1_crear_entidad') + ` ${nit} ` +
+                this.translate.instant('experiencia_laboral.titulo2_crear_entidad'),
+              text: this.translate.instant('experiencia_laboral.crear_entidad'),
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true,
+              showCancelButton: true,
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+            };
+            Swal.fire(opt)
+              .then((action) => {
+                if (action.value) {
+                  this.nuevoTercero = true;
+                }
+              });
+          });
+        } else {
+          this.loading = false;
+            const opt: any = {
+              title: this.translate.instant('experiencia_laboral.crear_entidad'),
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true,
+              showCancelButton: true,
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+            };
+            Swal.fire(opt)
+              .then((action) => {
+                if (action.value) {
+                  this.nuevoTercero = true;
+                }
+              });
+
+        }
   }
 
   createInfoExperienciaLaboral(infoExperienciaLaboral: any): void {
