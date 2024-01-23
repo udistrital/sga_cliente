@@ -164,7 +164,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
           if(FechaF !== ''){
             element.FechaFinalizacion = FechaF.substring(0, 2) + '-' + FechaF.substring(2, 4) + '-' + FechaF.substring(4, 8);
           }else{
-            element.FechaFinalizacion = 'Actualidad';
+            element.FechaFinalizacion = 'Actual';
           }
           let estadoDoc = await <any>this.cargarEstadoDocumento(element.Documento);
           element.Estado = estadoDoc.estadoObservacion;

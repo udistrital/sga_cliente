@@ -103,7 +103,7 @@ export class ListExperienciaLaboralComponent implements OnInit {
             if(value !== ''){
               return formatDate(value, 'yyyy-MM-dd', 'en');
             }else{
-              return ('Actualidad')
+              return ('Actual')
             }
           },
         },
