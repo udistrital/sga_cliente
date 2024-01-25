@@ -154,8 +154,10 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
         index: {
           title: '#',
           filter: false,
+          type: 'html',
           valuePrepareFunction: (value, row, cell) => {
-            return cell.row.index + 1;
+            const absoluteIndex = (cell.row.index + 1) + (this.source_emphasys.getPaging().page - 1) * this.source_emphasys.getPaging().perPage;
+            return `<div>${absoluteIndex}</div>`;
           },
           width: '2%',
         },
