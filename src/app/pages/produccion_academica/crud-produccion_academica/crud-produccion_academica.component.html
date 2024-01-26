@@ -69,6 +69,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                         <textarea matInput placeholder="Autosize textarea" matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="6" [(ngModel)]="info_produccion_academica.Resumen" [ngModelOptions]="{standalone: true}" type="text" id="resumen_produccion" 
                             [placeholder]="translate.instant('produccion_academica.placeholder_resumen')"></textarea>
                         <mat-hint class="text-danger" *ngIf="!info_produccion_academica.Resumen">{{'produccion_academica.alerta_llenar_campo' | translate}}</mat-hint>
+                        <mat-hint class="text-danger" *ngIf="info_produccion_academica.Resumen?.length > 400">{{'produccion_academica.alerta_limite_caracteres_superado' | translate}}</mat-hint>
                     </mat-form-field>
                 </div>
             </div>

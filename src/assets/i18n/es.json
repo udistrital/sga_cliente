@@ -837,6 +837,8 @@
         "datos_basicos": "Datos básicos",
         "alerta_llenar_campo": "Debe llenar este campo",
         "alerta_llenar_campos_datos_basicos": "Debe llenar todos los datos básicos",
+        "alerta_limite_caracteres_superado": "Has superado el límite de caracteres permitidos (400)",
+        "alerta_caracteres_resumen": "Has superado el límite de caracteres permitidos (400) en el campo resumen de la información básica",
         "seguro_continuar_registrar_produccion": "¿Está seguro de registrar esta producción?",
         "seguro_continuar_eliminar_produccion": "¿Está seguro de eliminar esta producción?",
         "seguro_continuar_actualizar_produccion": "¿Está seguro de actualizar esta producción?",
