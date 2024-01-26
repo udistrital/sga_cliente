@@ -757,7 +757,9 @@
         "titulo_generico": "¡Disculpe, algo ha salido mal!",
         "fallo_informacion_en": "Ha habido un error al consultar la información sobre",
         "sin_informacion_en": "No se ha encontrado información sobre",
-        "persiste_error_comunique_OAS": "Regrese e intente de nuevo más tarde. Si el error persiste, comuníquese con Oficina Asesora de Sistemas (OAS)"
+        "persiste_error_comunique_OAS": "Regrese e intente de nuevo más tarde. Si el error persiste, comuníquese con Oficina Asesora de Sistemas (OAS)",
+        "contenido_archivo_erroneo": "Non-standard file content for the requested format",
+        "contenido_archivo_erroneo_mensaje": "The content of the file is not correct for the requested format and may be unreadable when uploaded. \nTry saving it again in the allowed formats; If it is a PDF, save it in an optimized or compressed version."
     },
     "recibo_pago": {
         "generado": "El recibo de pago ha sido generado correctamente",
