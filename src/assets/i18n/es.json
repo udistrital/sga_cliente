@@ -1241,7 +1241,7 @@
         "erro_selec": "Por favor seleccione la facultad!",
         "erro_oikos": "Por favor seleccione el espacio fisico!",
         "modalidad": "Modalidad del proyecto",
-        "modalidad_proyecto": "Nombre modalidad:",
+        "modalidad_proyecto": "Modalidad:",
         "erro_selec_modalidad": "Por favor seleccione la modalidad!"
     },
     "consultaproyecto": {
