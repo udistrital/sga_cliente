@@ -38,6 +38,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { Modalidad } from '../../../@core/data/models/proyecto_academico/modalidad';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -62,7 +63,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   resoluform: any;
   actoform: any;
   compleform: any;
-  modalidadform: any;
   facultad = [];
   espacio_fisico = [];
   area = [];
@@ -92,6 +92,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   proyecto_academico: ProyectoAcademicoInstitucion;
   tipo_titulacion: TipoTitulacion;
   metodologia: Metodologia;
+  modalidad: Modalidad;
   nivel_formacion: NivelFormacion;
   registro_califacado_acreditacion: RegistroCalificadoAcreditacion;
   tipo_registro: TipoRegistro;
@@ -141,6 +142,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   CampoCorreoControl = new FormControl('', [Validators.required, Validators.email]);
   CampoCreditosControl = new FormControl('', [Validators.required, Validators.maxLength(4)]);
   selectFormControl = new FormControl('', Validators.required);
+  modalidadControl = new FormControl('', Validators.required);
   @Output() eventChange = new EventEmitter();
 
   subscription: Subscription;
@@ -204,9 +206,6 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       titulacion_mujer: ['', Validators.required],
       titulacion_hombre: ['', Validators.required],
       competencias: ['', Validators.required],
-    });
-    this.modalidadform = formBuilder.group({
-      modalidadControl: ['', Validators.required]
     });
 
     this.subscription = this.listEnfasisService.getListEnfasis().subscribe(listEnfasis => {
@@ -619,9 +618,12 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   registroproyecto() {
     try {
       if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0
-        && this.fileActoAdministrativo) {
+        && this.fileActoAdministrativo && this.modalidadControl.valid) {
         this.metodologia = {
           Id: this.opcionSeleccionadoMeto['Id'],
+        }
+        this.modalidad = {
+          Id: this.modalidadControl.value.Id
         }
         this.nivel_formacion = <NivelFormacion>{
           Id: this.opcionSeleccionadoNivel['Id'],
@@ -651,6 +653,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           NivelFormacionId: this.nivel_formacion,
           AnoActoAdministrativo: this.actoform.value.ano_acto,
           ProyectoPadreId: this.proyecto_padre_id,
+          ModalidadId: this.modalidad
         }
 
         this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)
