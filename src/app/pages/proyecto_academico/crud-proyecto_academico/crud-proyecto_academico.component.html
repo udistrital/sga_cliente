@@ -347,6 +347,37 @@
                             </form>
                         </mat-step>
 
+                        <mat-step [stepControl]="modalidadform">
+                            <form>
+                                <ng-template matStepLabel>{{ 'proyecto.modalidad' | translate }}</ng-template>
+                                <div class="col-sm-12">
+
+                                    <nb-card class="m-4" accent="info">
+                                        <nb-card-body>
+                                            <mat-form-field center>
+                                                <mat-label>{{ 'proyecto.modalidad_proyecto' | translate }}</mat-label>
+                                                <mat-select [formControl]="modalidadControl" [(ngModel)]="opcionSeleccionadoModalidad">
+                                                    <mat-option>--</mat-option>
+                                                    <mat-option *ngFor="let modalidad of modalidades" [value]="modalidad">
+                                                        {{modalidad?.Nombre}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="modalidadControl?.hasError('required')">{{
+                                                    'proyecto.erro_selec_modalidad' | translate }}</mat-error>
+                                            </mat-form-field>
+                                        </nb-card-body>
+                                    </nb-card>
+                                </div>
+
+                                <div>
+                                    <button class="m-3" mat-button matStepperPrevious>{{ 'proyecto.regresar' | translate
+                                        }}</button>
+                                    <button class="m-3" mat-button matStepperNext>{{ 'proyecto.siguiente' | translate
+                                        }}</button>
+                                </div>
+                            </form>
+                        </mat-step>
+
                         <mat-step [stepControl]="actoform">
                             <form [formGroup]="actoform">
                                 <ng-template matStepLabel>{{ 'proyecto.acto' | translate }}</ng-template>

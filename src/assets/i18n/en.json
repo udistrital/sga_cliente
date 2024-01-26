@@ -1277,6 +1277,9 @@
         "administrar_enfasis": "Administrate emphasys",
         "error_enfasis_ya_existe": "The emphasys is already added"
     },
+    "modalidad": {
+        "administrar_modalidad": "Administrate modalities"
+    },
     "historial_registro": {
         "titulo": "History of accreditation records and high quality of the Academic Project",
         "registro": "Registry",

@@ -62,6 +62,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   resoluform: any;
   actoform: any;
   compleform: any;
+  modalidadform: any;
   facultad = [];
   espacio_fisico = [];
   area = [];
@@ -73,6 +74,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   opcionSeleccionadoEnfasis: any;
   opcionSeleccionadoNivel: any;
   opcionSeleccionadoMeto: any;
+  opcionSeleccionadoModalidad: any;
   checkenfasis: boolean = false;
   checkciclos: boolean = false;
   checkofrece: boolean = false;
@@ -81,6 +83,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   enfasis = [];
   nivel = [];
   metodo = [];
+  modalidades = [];
   fecha_creacion: Date;
   fecha_vencimiento: string;
   fecha_vencimiento_mostrar: string;
@@ -202,6 +205,9 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       titulacion_hombre: ['', Validators.required],
       competencias: ['', Validators.required],
     });
+    this.modalidadform = formBuilder.group({
+      modalidadControl: ['', Validators.required]
+    });
 
     this.subscription = this.listEnfasisService.getListEnfasis().subscribe(listEnfasis => {
       if (listEnfasis) {
@@ -303,6 +309,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.loadenfasis();
     this.loadnivel();
     this.loadmetodologia();
+    this.loadmodalidades();
 
     // cargar data del proyecto que se clonara
     this.activatedRoute.paramMap.subscribe(params => {
@@ -533,6 +540,24 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.enfasis = <any>res;
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
+
+  loadmodalidades()  {
+    this.proyectoacademicoService.get('modalidad')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.modalidades = <any>res;
         }
       },
         (error: HttpErrorResponse) => {

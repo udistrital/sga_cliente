@@ -1239,7 +1239,10 @@
         "mensaje_oikos": "Por favor relacione el proyecto curricular con el espacio físico del sistema OIKOS, si no existe el espacio físico por favor notificar al administrador del sistema",
         "oikos": "Espacio Físico",
         "erro_selec": "Por favor seleccione la facultad!",
-        "erro_oikos": "Por favor seleccione el espacio fisico!"
+        "erro_oikos": "Por favor seleccione el espacio fisico!",
+        "modalidad": "Modalidad del proyecto",
+        "modalidad_proyecto": "Nombre modalidad:",
+        "erro_selec_modalidad": "Por favor seleccione la modalidad!"
     },
     "consultaproyecto": {
         "titulo": "Consulta de un proyecto curricular ",
@@ -1311,6 +1314,9 @@
         "administrar_enfasis": "Administrar énfasis",
         "error_enfasis_ya_existe": "El énfasis ya fue agregado",
         "select_enfasis": "Seleccione el énfasis"
+    },
+    "modalidad": {
+        "administrar_modalidad": "Administrar modalidades"
     },
     "historial_registro": {
         "titulo": "Histórico de registros de acreditación y alta calidad del proyecto curricular",
