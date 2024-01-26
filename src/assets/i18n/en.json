@@ -725,8 +725,8 @@
         "fallo_informacion_en": "There was an error querying the information about",
         "sin_informacion_en": "No information has been found about",
         "persiste_error_comunique_OAS": "Please return and try again later. If the error persists, contact the Systems Advisory Office (Oficina Asesora de Sistemas)",
-        "contenido_archivo_erroneo": "Contenido de archivo no estandar para el formato solicitado",
-        "contenido_archivo_erroneo_mensaje": "El contenido del archivo no es correcto para el formato solicitado y puede quedar ilegible al cargarlo. \nIntente guardarlo nuevamente en los formatos permitidos; si se trata de un PDF guárdelo en versión optimizada o comprimida."
+        "contenido_archivo_erroneo": "Non-standard file content for the requested format",
+        "contenido_archivo_erroneo_mensaje": "The content of the file is not correct for the requested format and may be unreadable when uploaded. \nTry saving it again in the allowed formats; If it is a PDF, save it in an optimized or compressed version."
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",
