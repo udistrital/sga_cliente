@@ -1316,6 +1316,7 @@
         "select_enfasis": "Seleccione el énfasis"
     },
     "modalidad": {
+        "titulo": "Modalidades",
         "administrar_modalidad": "Administrar modalidades",
         "buscar": "Buscar",
         "busqueda": "Ingrese su búsqueda",

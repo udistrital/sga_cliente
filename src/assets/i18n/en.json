@@ -1280,6 +1280,7 @@
         "error_enfasis_ya_existe": "The emphasys is already added"
     },
     "modalidad": {
+        "titulo": "Modalities",
         "administrar_modalidad": "Administrate modalities",
         "buscar": "Search",
         "busqueda": "Enter your search",

@@ -43,7 +43,7 @@ export class CrudModalidadComponent implements OnInit {
   }
 
   loadModalidad() {
-    if (this.modalidadId !== undefined && this.modalidadId !== 0) {
+    if (this.modalidadId != null) {
       this.proyectoAcademicoService.get('modalidad/?query=id:' + this.modalidadId)
         .subscribe((res: any) => {
           if (res.Type !== 'error') {
@@ -72,7 +72,7 @@ export class CrudModalidadComponent implements OnInit {
           });
         });
     } else  {
-      this.infoModalidad = undefined;
+      this.infoModalidad = null;
     }
   }
 

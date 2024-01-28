@@ -68,7 +68,7 @@ export class ListModalidadComponent implements OnInit {
   }
 
   registrarModalidad() {
-    this.modalidadId = 0;
+    this.modalidadId = null;
     this.showCrud = true;
   }
 
