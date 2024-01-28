@@ -1,8 +1,8 @@
-<div class="row">
+<div class="crud-modalidad-container">
     <fieldset [ngClass]="{'fieldseter':true}">
         <legend> {{ modalidadId == null ? ('modalidad.registrar' | translate) : ('modalidad.actualizar' | translate) }} </legend>
             <form [formGroup]="modalidadForm" (ngSubmit)="onSubmit()">
-                <mat-form-field>
+                <mat-form-field class="flex">
                     <input matInput placeholder="{{ 'GLOBAL.nombre' | translate }}"
                         formControlName="nombre" class="form-control"
                         name="nombre">
@@ -10,8 +10,7 @@
                         {{ 'modalidad.error_nombre' | translate }}
                     </mat-error>
                 </mat-form-field>
-                <br><br>
-                <mat-form-field>
+                <mat-form-field class="flex">
                     <input matInput placeholder="{{ 'GLOBAL.descripcion' | translate }}"
                         formControlName="descripcion" class="form-control"
                         name="descripcion">
@@ -19,8 +18,7 @@
                         {{ 'modalidad.error_descripcion' | translate }}
                     </mat-error>
                 </mat-form-field>
-                <br><br>
-                <mat-form-field>
+                <mat-form-field class="flex">
                     <input matInput placeholder="{{ 'GLOBAL.codigo_abreviacion' | translate }}"
                         formControlName="abreviacion" class="form-control"
                         name="abreviacion">
@@ -28,8 +26,7 @@
                         {{ 'modalidad.error_abreviacion' | translate }}
                     </mat-error>
                 </mat-form-field>
-                <br><br>
-                <mat-form-field>
+                <mat-form-field class="flex">
                     <input matInput placeholder="{{ 'GLOBAL.numero_orden' | translate }}"
                         formControlName="numeroOrden" class="form-control"
                         name="numeroOrden">
