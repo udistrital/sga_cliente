@@ -85,6 +85,10 @@ const routes: Routes = [{
       loadChildren: () => import ('./enfasis/enfasis.module').then(m => m.EnfasisModule),
     },
     {
+      path: 'modalidad',
+      loadChildren: () => import('./modalidad/modalidad.module').then(m => m.ModalidadModule),
+    },
+    {
       path: 'tipo_inscripcion',
       loadChildren: () => import ('./tipo_inscripcion/tipo_inscripcion.module').then(m => m.TipoInscripcionModule),
     },    
