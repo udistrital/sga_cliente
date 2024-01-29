@@ -724,7 +724,9 @@
         "titulo_generico": "Sorry, something has gone wrong!",
         "fallo_informacion_en": "There was an error querying the information about",
         "sin_informacion_en": "No information has been found about",
-        "persiste_error_comunique_OAS": "Please return and try again later. If the error persists, contact the Systems Advisory Office (Oficina Asesora de Sistemas)"
+        "persiste_error_comunique_OAS": "Please return and try again later. If the error persists, contact the Systems Advisory Office (Oficina Asesora de Sistemas)",
+        "contenido_archivo_erroneo": "Non-standard file content for the requested format",
+        "contenido_archivo_erroneo_mensaje": "The content of the file is not correct for the requested format and may be unreadable when uploaded. \nTry saving it again in the allowed formats; If it is a PDF, save it in an optimized or compressed version."
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",

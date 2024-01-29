@@ -37,7 +37,25 @@ export class NewNuxeoService {
         "application/json": ".json",
         "application/xml": ".xml"
       };
-      
+    
+    // ? list from: https://www.garykessler.net/library/file_sigs.html
+    private fileSignatures = {
+        "image/jpeg": ["FFD8", "FFD8FF", "464946", "696600"],
+        "image/png": ["89504E47"],
+        "image/gif": ["47494638"],
+        "image/bmp": ["424D"],
+        "image/webp": ["52494646", "57454250"],
+        "image/svg+xml": ["3C737667"],
+        "application/pdf": ["25504446", "255044462D"],
+        "application/msword": ["D0CF11E0A1B11AE1"],
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ["504B0304", "504B030414000600"],
+        "application/vnd.ms-excel": ["D0CF11E0A1B11AE1"],
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ["504B0304", "504B030414000600"],
+        "application/vnd.ms-powerpoint": ["D0CF11E0A1B11AE1"],
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation": ["504B0304", "504B030414000600"],
+        "none": []
+        // Text,HTML,CSS,JavaScript,JSON,XML files don't have a unique signature
+      };
 
     constructor(
         private anyService: AnyService,
@@ -45,6 +63,21 @@ export class NewNuxeoService {
         private documentService: DocumentoService,
     ) {
 
+    }
+
+    readVerifyMimeType(file: File): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const arrayBuffer = reader.result as ArrayBuffer;
+                const uint8Array = new Uint8Array(arrayBuffer.slice(0, 8));
+                const mime = Array.from(uint8Array).map(byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase();
+                const extension = file.type || "none";
+                resolve(this.fileSignatures[extension].some(sign => mime.startsWith(sign)))
+            };
+            reader.onerror = () => resolve(false)
+            reader.readAsArrayBuffer(file)
+        });
     }
 
     clearLocalFiles() {
