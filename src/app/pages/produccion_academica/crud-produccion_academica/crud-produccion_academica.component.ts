@@ -673,9 +673,9 @@ export class CrudProduccionAcademicaComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
-      if (this.info_produccion_academica.Titulo === undefined ||
-        this.info_produccion_academica.Fecha === undefined ||
-        this.info_produccion_academica.Resumen === undefined) {
+      if (!this.info_produccion_academica.Titulo ||
+        !this.info_produccion_academica.Fecha ||
+        !this.info_produccion_academica.Resumen) {
         Swal.fire({
           icon: 'warning',
           title: 'ERROR',
