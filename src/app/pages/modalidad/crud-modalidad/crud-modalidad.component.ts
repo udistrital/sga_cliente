@@ -7,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'ngx-crud-modalidad',
+  selector: 'crud-modalidad',
   templateUrl: './crud-modalidad.component.html',
   styleUrls: ['./crud-modalidad.component.scss']
 })

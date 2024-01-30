@@ -19,7 +19,7 @@
         <ng-container *ngFor="let columna of displayedColumns" [matColumnDef]="columna">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ nombresColumnas[columna] | translate }}</th>
             <td mat-cell *matCellDef="let fila">
-                <ng-container *ngIf="columna !== 'acciones'">{{ fila[columna] }}</ng-container>
+                <ng-container *ngIf="columna !== 'acciones' && columna !== 'Activo'">{{ fila[columna] }}</ng-container>
 
                 <ng-container *ngIf="columna === 'acciones'">
                     <button mat-icon-button matTooltip="{{ 'modalidad.editar' | translate }}" (click)="editarRegistro(fila)">
@@ -28,6 +28,10 @@
                     <button mat-icon-button matTooltip="{{ 'modalidad.eliminar' | translate }}" (click)="eliminarRegistro(fila)">
                       <mat-icon>delete_outline</mat-icon>
                     </button>
+                </ng-container>
+
+                <ng-container *ngIf="columna === 'Activo'">
+                    {{ fila[columna] == true ? ('GLOBAL.activo' | translate) : ('GLOBAL.inactivo' | translate) }}
                 </ng-container>
             </td>
         </ng-container>
@@ -39,4 +43,4 @@
     </table>
 </div>
 
-<ngx-crud-modalidad *ngIf="showCrud" [modalidad_id]="modalidadId" (eventChange)="onChange($event)"></ngx-crud-modalidad>
+<crud-modalidad *ngIf="showCrud" [modalidad_id]="modalidadId" (eventChange)="onChange($event)"></crud-modalidad>

@@ -7,7 +7,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Modalidad } from '../../../@core/data/models/modalidad/modalidad';
 
 @Component({
-  selector: 'ngx-list-modalidad',
+  selector: 'list-modalidad',
   templateUrl: './list-modalidad.component.html',
   styleUrls: ['./list-modalidad.component.scss']
 })
