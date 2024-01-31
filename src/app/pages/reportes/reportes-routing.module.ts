@@ -11,19 +11,19 @@ const routes: Routes = [{
     {
       path: 'inscripciones/inscritos',
       component: VisualizacionComponent,
-      data: { reportLabel: 'RteInscritos' },
+      data: { reportLabel: 'RteInscritosProd' },
       canActivate: [AuthGuard],
     },
     {
       path: 'inscripciones/aspirantes',
       component: VisualizacionComponent,
-      data: { reportLabel: 'RteAspirantes' },
+      data: { reportLabel: 'RteAspirantesProd' },
       canActivate: [AuthGuard],
     },
     {
       path: 'inscripciones/admitidos',
       component: VisualizacionComponent,
-      data: { reportLabel: 'RteAdmitidos' },
+      data: { reportLabel: 'RteAdmitidosProd' },
       canActivate: [AuthGuard],
     },
   ],

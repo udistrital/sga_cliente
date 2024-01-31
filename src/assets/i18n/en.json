@@ -62,9 +62,9 @@
             "reportes": "Reports",
             "inscripciones": {
                 "inscripciones": "Inscriptions",
-                "aspirantes": "Inscritos por programa",
+                "aspirantes": "Aspirantes por programa",
                 "admitidos": "Admitidos por programa",
-                "inscritos": "Aspirantes por programa"
+                "inscritos": "Inscritos por programa"
             },
             "icfes": {
                 "icfes": "ICFES SNP Registration",
@@ -741,7 +741,9 @@
         "fallo_informacion_en": "There was an error querying the information about",
         "sin_informacion_en": "No information has been found about",
         "persiste_error_comunique_OAS": "Please return and try again later. If the error persists, contact the Technology and Information Advisory Office (Oficina Asesora de Tecnologías e Información)",
-        "error_previsualizar_doc": "The document could not be viewed, it is not a valid format, or it was not found."
+        "error_previsualizar_doc": "The document could not be viewed, it is not a valid format, or it was not found.",
+        "contenido_archivo_erroneo": "Non-standard file content for the requested format",
+        "contenido_archivo_erroneo_mensaje": "The content of the file is not correct for the requested format and may be unreadable when uploaded. \nTry saving it again in the allowed formats; If it is a PDF, save it in an optimized or compressed version."
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",
