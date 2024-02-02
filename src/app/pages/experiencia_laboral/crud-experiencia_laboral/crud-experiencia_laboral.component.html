@@ -2,6 +2,9 @@
          nbSpinnerStatus="success"
          nbSpinnerSize="xxlarge"
          nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+    <div class="preinscription-alert">
+        {{ 'inscripcion.alerta_experiencia_laboral' | translate }}
+    </div>
     <toaster-container [toasterconfig]="config"></toaster-container>
     <ngx-dinamicform *ngIf="!nuevoTercero" [normalform]="formInfoExperienciaLaboral"
                      [modeloData]="info_experiencia_laboral"

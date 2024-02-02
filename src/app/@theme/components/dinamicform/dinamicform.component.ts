@@ -564,6 +564,19 @@ export class DinamicformComponent implements OnInit, OnChanges {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
   }
 
+  getUniqueSteps(campos: any[]): number[] {
+    return [...new Set(campos.map(c => c.step))];
+  }
+  
+  getStepLabel(step: number): string {
+    return `Paso ${step}`;
+  }
+  
+  getFieldsInStep(step: number): any[] {
+    return this.normalform.campos.filter(c => c.step === step);
+  }
+  
+
   ngOnDestroy() {
     this.clearForm();
   }

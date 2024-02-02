@@ -137,6 +137,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     {provide: MAT_DATE_LOCALE, useValue: 'es-CO'},
     {provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true}}
   ],
+  imports: [BrowserAnimationsModule],
 })
 export class MaterialModule { }
 

@@ -1,13 +1,14 @@
 import { environment } from "../../../../environments/environment"
 
 export let FORM_EXPERIENCIA_LABORAL = {
-  tipo_formulario: 'mini',
+  tipo_formulario: 'bySteps',
   alertas: true,
   btn: 'Guardar',
   btnLimpiar: 'Limpiar',
   modelo: 'InfoExperienciaLaboral',
   campos: [
     {
+      step: 1,
       etiqueta: 'autocomplete',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'Buscador',
@@ -23,6 +24,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       opciones: [],
     },
     {
+      step: 1,
       etiqueta: 'input',
       claseGrid: 'col-lg-4 col-md-4 col-sm-4 col-xs-4',
       nombre: 'Nit',
@@ -33,6 +35,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       deshabilitar: true
     },
     {
+      step: 1,
       etiqueta: 'select',
       claseGrid: 'col-lg-8 col-md-8 col-sm-8 col-xs-8',
       nombre: 'NombreEmpresa',
@@ -46,6 +49,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       entrelazado: true,
     },
     {
+      step: 1,
       etiqueta: 'select',
       claseGrid: 'col-lg-4 col-md-4 col-sm-12 col-xs-12',
       nombre: 'TipoOrganizacion',
@@ -57,6 +61,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       opciones: [],
     },
     {
+      step: 1,
       etiqueta: 'select',
       claseGrid: 'col-lg-4 col-md-4 col-sm-12 col-xs-12',
       nombre: 'Pais',
@@ -69,6 +74,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       opciones: [],
     },
     {
+      step: 1,
       etiqueta: 'input',
       claseGrid: 'col-lg-4 col-md-4 col-sm-12 col-xs-12',
       nombre: 'Direccion',
@@ -79,6 +85,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       tipo: 'text',
     },
     {
+      step: 1,
       etiqueta: 'input',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       nombre: 'Correo',
@@ -89,6 +96,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       tipo: 'text',
     },
     {
+      step: 1,
       etiqueta: 'input',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       nombre: 'Telefono',
@@ -99,6 +107,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       tipo: 'text',
     },
     {
+      step: 2,
       etiqueta: 'mat-date',
       claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
       nombre: 'FechaInicio',
@@ -108,6 +117,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       tipo: 'date',
     },
     {
+      step: 2,
       etiqueta: 'mat-date',
       claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
       nombre: 'FechaFinalizacion',
@@ -117,6 +127,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       tipo: 'date',
     },
     {
+      step: 2,
       etiqueta: 'select',
       claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
       nombre: 'TipoDedicacion',
@@ -128,6 +139,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       opciones: [],
     },
     {
+      step: 2,
       etiqueta: 'select',
       claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
       nombre: 'TipoVinculacion',
@@ -139,6 +151,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       opciones: [],
     },
     {
+      step: 2,
       etiqueta: 'autocomplete',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'Cargo',
@@ -154,6 +167,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       opciones: [],
     },
     {
+      step: 2,
       etiqueta: 'textarea',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'Actividades',
@@ -164,6 +178,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
       cantidadCaracteres: 400,
     },
     {
+      step: 3,
       etiqueta: 'fileRev',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       clase: 'form-control',
