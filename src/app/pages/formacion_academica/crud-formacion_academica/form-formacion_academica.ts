@@ -2,13 +2,14 @@ import { environment } from "../../../../environments/environment"
 
 export let FORM_FORMACION_ACADEMICA = {
   // titulo: 'FormacionAcademica',
-  tipo_formulario: 'mini',
+  tipo_formulario: 'bySteps',
   alertas: true,
   btn: 'Guardar',
   btnLimpiar: 'Limpiar',
   modelo: 'InfoFormacionAcademica',
   campos: [
     {
+      step: 1,
       etiqueta: 'input',
       claseGrid: 'col-lg-10 col-md-10 col-sm-9 col-xs-8',
       nombre: 'Nit',
@@ -18,6 +19,7 @@ export let FORM_FORMACION_ACADEMICA = {
       tipo: 'text',
     },
     {
+      step: 1,
       etiqueta: 'button',
       claseGrid: 'col-lg-2 col-md-2 col-sm-3 col-xs-4',
       nombre: 'BusquedaBoton',
@@ -26,6 +28,7 @@ export let FORM_FORMACION_ACADEMICA = {
       label_i18n: 'buscar',
     },
     {
+      step: 1,
       etiqueta: 'select',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'NombreUniversidad',
@@ -39,6 +42,7 @@ export let FORM_FORMACION_ACADEMICA = {
       entrelazado: true,
     },
     {
+      step: 1,
       etiqueta: 'select',
       claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
       nombre: 'Pais',
@@ -51,6 +55,7 @@ export let FORM_FORMACION_ACADEMICA = {
       opciones: [],
     },
     {
+      step: 1,
       etiqueta: 'input',
       claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
       nombre: 'Direccion',
@@ -61,6 +66,7 @@ export let FORM_FORMACION_ACADEMICA = {
       tipo: 'text',
     },
     {
+      step: 1,
       etiqueta: 'input',
       claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
       nombre: 'Correo',
@@ -71,6 +77,7 @@ export let FORM_FORMACION_ACADEMICA = {
       tipo: 'text',
     },
     {
+      step: 1,
       etiqueta: 'input',
       claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
       nombre: 'Telefono',
@@ -92,6 +99,7 @@ export let FORM_FORMACION_ACADEMICA = {
       opciones: [],
     }, */
     {
+      step: 2,
       etiqueta: 'autocomplete',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       nombre: 'ProgramaAcademico',
@@ -108,6 +116,7 @@ export let FORM_FORMACION_ACADEMICA = {
       entrelazado: true,
     },
     {
+      step: 2,
       etiqueta: 'button',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       nombre: 'FormacionBoton',
@@ -116,6 +125,7 @@ export let FORM_FORMACION_ACADEMICA = {
       label_i18n: 'formacion_actual',
     },
     {
+      step: 2,
       etiqueta: 'mat-date',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       nombre: 'FechaInicio',
@@ -125,6 +135,7 @@ export let FORM_FORMACION_ACADEMICA = {
       tipo: 'date',
     },
     {
+      step: 2,
       etiqueta: 'mat-date',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       nombre: 'FechaFinalizacion',
@@ -137,6 +148,7 @@ export let FORM_FORMACION_ACADEMICA = {
       minDate: null,
     },
     {
+      step: 2,
       etiqueta: 'input',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'TituloTrabajoGrado',
@@ -146,6 +158,7 @@ export let FORM_FORMACION_ACADEMICA = {
       tipo: 'text',
     },
     {
+      step: 2,
       etiqueta: 'textarea',
       claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
       nombre: 'DescripcionTrabajoGrado',
@@ -156,6 +169,7 @@ export let FORM_FORMACION_ACADEMICA = {
       cantidadCaracteres: 400,
     },
     {
+      step: 3,
       etiqueta: 'fileRev',
       claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       clase: 'form-control',
@@ -241,3 +255,88 @@ export let NUEVO_TERCERO = {
     },
   ],
 }
+
+export let FORM_FORM_ACADEMICA = {
+  // titulo: 'FormacionAcademica',
+  tipo_formulario: 'mini',
+  alertas: true,
+  btn: 'Guardar',
+  btnLimpiar: 'Limpiar',
+  modelo: 'InfoFormacionAcademica',
+  campos: [
+    {
+      etiqueta: 'input',
+      claseGrid: 'col-lg-10 col-md-10 col-sm-9 col-xs-8',
+      nombre: 'Nit',
+      label_i18n: 'nit',
+      placeholder_i18n: 'nit',
+      requerido: true,
+      tipo: 'text',
+    },
+    {
+      etiqueta: 'button',
+      claseGrid: 'col-lg-2 col-md-2 col-sm-3 col-xs-4',
+      nombre: 'BusquedaBoton',
+      claseBoton: 'btn btn-primary btn-sm',
+      icono: 'fa fa-search',
+      label_i18n: 'buscar',
+    },
+    {
+      etiqueta: 'select',
+      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12',
+      nombre: 'NombreUniversidad',
+      label_i18n: 'nombre_universidad',
+      placeholder_i18n: 'nombre_universidad',
+      requerido: true,
+      deshabilitar: true,
+      tipo: 'InfoPersona',
+      key: 'NombreCompleto',
+      opciones: [],
+      entrelazado: true,
+    },
+    {
+      etiqueta: 'select',
+      claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
+      nombre: 'Pais',
+      label_i18n: 'pais_universidad',
+      placeholder_i18n: 'pais_universidad',
+      requerido: true,
+      deshabilitar: true,
+      tipo: 'Lugar',
+      key: 'Nombre',
+      opciones: [],
+    },
+    {
+      etiqueta: 'input',
+      claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
+      nombre: 'Direccion',
+      label_i18n: 'direccion_universidad',
+      placeholder_i18n: 'direccion_universidad',
+      requerido: true,
+      deshabilitar: true,
+      tipo: 'text',
+    },
+    {
+      etiqueta: 'input',
+      claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
+      nombre: 'Correo',
+      label_i18n: 'correo_universidad',
+      placeholder_i18n: 'correo_universidad',
+      requerido: true,
+      deshabilitar: true,
+      tipo: 'text',
+    },
+    {
+      etiqueta: 'input',
+      claseGrid: 'col-lg-3 col-md-6 col-sm-12 col-xs-12',
+      nombre: 'Telefono',
+      label_i18n: 'telefono_universidad',
+      placeholder_i18n: 'telefono_universidad',
+      requerido: true,
+      deshabilitar: true,
+      tipo: 'text',
+    }
+  ],
+}
+
+

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FORM_FORMACION_ACADEMICA, NUEVO_TERCERO } from './form-formacion_academica';
+import { FORM_FORMACION_ACADEMICA, FORM_FORM_ACADEMICA, NUEVO_TERCERO } from './form-formacion_academica';
 import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
@@ -20,10 +20,14 @@ import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { Lugar } from './../../../@core/data/models/lugar/lugar'
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { Parametro } from '../../../@core/data/models/parametro/parametro';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatButtonModule} from '@angular/material/button';
 import { isDate } from 'util';
 
 @Component({
@@ -47,6 +51,9 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   nit: any;
   nuevoPrograma: boolean = false;
   canEmit: boolean = false;
+
+  isLinear = true;
+  data: any = {};
 
   @Input('info_formacion_academica_id')
   set name(info_formacion_academica_id: number) {
@@ -79,6 +86,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   updateFormacion: EventEmitter<void> = new EventEmitter();
 
   info_formacion_academica: any;
+  formTestOne: any;
   formInfoFormacionAcademica: any;
   formInfoNuevoTercero: any;
   regInfoFormacionAcademica: any;
@@ -91,7 +99,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
 
   NombreProgramaNuevo = new FormControl('', [Validators.required]);
 
-  constructor(
+  constructor(private _formBuilder: FormBuilder,
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private sgaMidService: SgaMidService,
@@ -121,6 +129,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   }
 
   construirForm() {
+
     this.formInfoFormacionAcademica.btn = this.translate.instant('GLOBAL.guardar');
     this.formInfoFormacionAcademica.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
     for (let i = 0; i < this.formInfoFormacionAcademica.campos.length; i++) {
