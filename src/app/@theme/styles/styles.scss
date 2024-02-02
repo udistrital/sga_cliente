@@ -283,6 +283,9 @@ mat-form-field.mat-form-field-should-float label {
   font-size: 18px !important;
   color: rgba(0, 0, 0, 0.75) !important;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
 
 
 // Estilos del boton "Ayuda" de la pagina de inscripcion

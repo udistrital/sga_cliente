@@ -2,6 +2,9 @@
     <nb-card>
         <nb-card-body>
             <toaster-container [toasterconfig]="config"></toaster-container>
+            <div class="preinscription-alert">
+                {{ 'inscripcion.alerta_desc_matricula' | translate }}
+            </div>
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'GLOBAL.lista' | translate }}" [active]="!cambiotab">
                     <br />
