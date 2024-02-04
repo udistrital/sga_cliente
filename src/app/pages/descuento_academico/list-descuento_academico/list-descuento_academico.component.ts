@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { CampusMidService } from '../../../@core/data/campus_mid.service';
 import { SolicitudDescuento } from '../../../@core/data/models/descuento/solicitud_descuento';
-import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
@@ -13,6 +12,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { DescuentoAcademicoService } from '../../../@core/data/descuento_academico.service';
 
 @Component({
   selector: 'ngx-list-descuento-academico',
@@ -26,7 +26,6 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   periodo: number;
   inscripcion: number;
   cambiotab: boolean = false;
-  config: ToasterConfig;
   settings: any;
   source: LocalDataSource = new LocalDataSource();
   data: Array<SolicitudDescuento>;
@@ -58,10 +57,10 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     private mid: CampusMidService,
     private sgaMidService: SgaMidService,
     private popUpManager: PopUpManager,
-    private toasterService: ToasterService,
     private documentoService: DocumentoService,
     private utilidades: UtilidadesService,
-    private newNuxeoService: NewNuxeoService) {
+    private newNuxeoService: NewNuxeoService,
+    private descuentoAcademicoService: DescuentoAcademicoService) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
@@ -106,6 +105,10 @@ export class ListDescuentoAcademicoComponent implements OnInit {
           {
             name: 'edit',
             title: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
+          },
+          {
+            name: 'delete',
+            title: '<i class="nb-trash" title="' + this.translate.instant('GLOBAL.eliminar') + '"></i>',
           },
         ],
       },
@@ -262,6 +265,9 @@ export class ListDescuentoAcademicoComponent implements OnInit {
       case 'edit':
         this.onEdit(event);
         break;
+      case 'delete':
+        this.onDelete(event);
+        break;
     }
   }
 
@@ -306,42 +312,60 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   }
 
   onDelete(event): void {
-    const opt: any = {
-      title: this.translate.instant('GLOBAL.eliminar'),
-      text: this.translate.instant('GLOBAL.eliminar') + '?',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
-    };
-    Swal.fire(opt)
-      .then((willDelete) => {
-        this.loading = true;
-        if (willDelete.value) {
-          this.mid.delete('descuento_academico', event.data).subscribe(res => {
-            if (res !== null) {
-              this.loadData();
-              this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
-                this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
-                this.translate.instant('GLOBAL.confirmarEliminar'));
-            }
-            this.loading = false;
-          },
-            (error: HttpErrorResponse) => {
+    let estado: string = event.data.EstadoObservacion;
+    let esAprobado: boolean = estado === "Aprobado";
+
+    if (esAprobado) {
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.eliminar'),
+        text: this.translate.instant('descuento_academico.no_permite_borrar'),
+        icon: 'info',
+        dangerMode: true,
+        showCancelButton: false,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar')
+      };
+      Swal.fire(opt);
+    } else {
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.eliminar'),
+        text: this.translate.instant('descuento_academico.seguro_borrar'),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+      };
+      Swal.fire(opt)
+        .then((willDelete) => {
+          this.loading = true;
+          if (willDelete.value) {
+            event.data.Activo = false;
+            this.descuentoAcademicoService.put('solicitud_descuento', event.data).subscribe(res => {
+              if (res !== null) {
+                this.loadData();
+                Swal.fire({
+                  icon: 'success',
+                  title: this.translate.instant('descuento_academico.descuento_eliminado'),
+                  text: this.translate.instant('descuento_academico.mensaje_eliminado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              }
               this.loading = false;
-              Swal.fire({
-                icon: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.eliminar') + '-' +
-                  this.translate.instant('GLOBAL.descuento_matricula'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            },
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.eliminar') + '-' +
+                    this.translate.instant('GLOBAL.descuento_academico'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
               });
-            });
-        }
-        this.loading = false;
-      });
+          }
+          this.loading = false;
+        });
+    }
   }
 
   activetab(): void {
@@ -370,26 +394,5 @@ export class ListDescuentoAcademicoComponent implements OnInit {
   getPercentage(event) {
     this.percentage = event;
     this.result.emit(this.percentage);
-  }
-
-  private showToast(type: string, title: string, body: string) {
-    this.config = new ToasterConfig({
-      // 'toast-top-full-width', 'toast-bottom-full-width', 'toast-top-left', 'toast-top-center'
-      positionClass: 'toast-top-center',
-      timeout: 5000,  // ms
-      newestOnTop: true,
-      tapToDismiss: false, // hide on click
-      preventDuplicates: true,
-      animation: 'slideDown', // 'fade', 'flyLeft', 'flyRight', 'slideDown', 'slideUp'
-      limit: 5,
-    });
-    const toast: Toast = {
-      type: type, // 'default', 'info', 'success', 'warning', 'error'
-      title: title,
-      body: body,
-      showCloseButton: true,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
-    this.toasterService.popAsync(toast);
   }
 }

@@ -265,6 +265,8 @@
         "codigo_abreviacion": "Código abreviación",
         "placeholder_codigo_abreviacion": "ej: ACADE",
         "placeholder_activo": "ej: Activo",
+        "buscador_entidad": "Ingrese NIT o Nombre de la Empresa",
+        "placeholder_buscador_entidad" : "Ej: 900123456 o Acme Ltda.",
         "numero_orden": "Numero orden",
         "placeholder_numero_orden": "ej: 1,2,3",
         "placeholder_ano": "ej: 2019",
@@ -752,7 +754,9 @@
         "direccion_entidad": "Dirección de la entidad",
         "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1",
         "item": "Ítem",
-        "evaluar": "Evaluar"
+        "evaluar": "Evaluar",
+        "formacion_actual": "Formación actual",
+        "experiencia_actual": "Trabajo actual"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1562,7 +1566,11 @@
         "documento_cambiar": "Seleccione el reemplazo para el tipo de documento elegido.",
         "descuento_academico_no_registrado": "Descuento académico no registrado",
         "descuento_academico_registrado": "Descuento académico registrado",
-        "documento_descuento_academico_no_registrado": "Error subiendo el documento de soporte"
+        "documento_descuento_academico_no_registrado": "Error subiendo el documento de soporte",
+        "no_permite_borrar": "En este estado no es posible eliminar el documento.",
+        "seguro_borrar": "¿Esta seguro que desea eliminar el documento?",
+        "documento_eliminado": "Documento eliminado",
+        "mensaje_eliminado": "Se ha eliminado exitosamente el documento."
     },
     "documento_proyecto": {
         "documento": "Documento proyecto",
@@ -1630,7 +1638,10 @@
         "tooltip_crear": "Crear descuento",
         "documento_documento_programa_no_registrado": "Error subiendo el documento de soporte",
         "documento_programa_no_registrado": "Documento no registrado",
-        "documento_programa_registrado": "Documento registrado"
+        "documento_programa_registrado": "Documento registrado",
+        "no_permite_borrar": "En este estado no es posible eliminar el descuento.",
+        "seguro_borrar": "¿Esta seguro que desea eliminar el descuento?",
+        "mensaje_eliminado": "Se ha eliminado exitosamente el descuento."
     },
     "idiomas": {
         "no_data": "No existe información registrada sobre idiomas",

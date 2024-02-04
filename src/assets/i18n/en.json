@@ -453,6 +453,8 @@
         "placeholder_idioma_publicacion": "E.g.: English",
         "revista": "Journal",
         "placeholder_revista": "E.g.: Nature Energy",
+        "buscador_entidad": "Enter NIT or Company Name",
+        "placeholder_buscador_entidad" : "E.g., 900123456 or Acme Ltd.",
         "volumen": "Volume",
         "placeholder_volumen": "E.g.: 1",
         "fasciculo": "Fascicle",
@@ -752,7 +754,9 @@
         "se_admitiran": "Will be admitted",
         "tipo_colegio": "Type of School where Grade 11 was completed",
         "tipo_icfes": "Type of ICFES",
-        "valido_colegio": "Did you validate your high school diploma?"
+        "valido_colegio": "Did you validate your high school diploma?",
+        "formacion_actual": "Current formation",
+        "experiencia_actual": "Current work"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1562,7 +1566,11 @@
         "documento_cambiar": "Please select the replacement document for the chosen item.",
         "documento_documento_programa_no_registrado": "Error uploading support document",
         "documento_programa_no_registrado": "Document not registered",
-        "documento_programa_registrado": "Document registered"
+        "documento_programa_registrado": "Document registered",
+        "no_permite_borrar": "In this state, it is not possible to remove the document.",
+        "seguro_borrar": "Are you sure you want to remove the document?",
+        "documento_eliminado": "Document removed",
+        "mensaje_eliminado": "The document has been successfully deleted."
     },
     "documento_proyecto": {
         "documento": "Project document",
@@ -1630,7 +1638,10 @@
         "descuentos_seleccionados": "Discounts assigned:",
         "carga_nuevo_descuento": "Assigning new discount...",
         "carga_eliminando_descuento": "Removing discount from project...",
-        "tooltip_crear": "Create discount"
+        "tooltip_crear": "Create discount",
+        "no_permite_borrar": "In this state, it is not possible to remove the discount.",
+        "seguro_borrar": "Are you sure you want to remove the discount?",
+        "mensaje_eliminado": "The discount has been successfully deleted."
     },
     "idiomas": {
         "no_data": "There is no registered information on languages",

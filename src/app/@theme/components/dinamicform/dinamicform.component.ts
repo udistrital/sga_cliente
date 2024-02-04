@@ -26,11 +26,14 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() resultSmart: EventEmitter<any> = new EventEmitter();
   @Output() interlaced: EventEmitter<any> = new EventEmitter();
   @Output() percentage: EventEmitter<any> = new EventEmitter();
+  @Output() dateChange: EventEmitter<any> = new EventEmitter();
   data: any;
   searchTerm$ = new Subject<any>();
   @ViewChild(MatDatepicker, { static: true }) datepicker: MatDatepicker<Date>;
   @ViewChildren("documento") fileInputs: QueryList<ElementRef>;
-
+  
+  data: any;
+  searchTerm$ = new Subject<any>();
   DocumentoInputVariable: ElementRef;
   init: boolean;
 
@@ -65,11 +68,15 @@ export class DinamicformComponent implements OnInit, OnChanges {
         }
         const fieldAutocomplete = this.normalform.campos.filter((field) => (field.nombre === response.options.field.nombre));
         fieldAutocomplete[0].opciones = opciones;
-        if (opciones.length == 1 && Object.keys(opciones[0]).length == 0) {
-          let canEmit = fieldAutocomplete[0].entrelazado ? fieldAutocomplete[0].entrelazado : false;
-          if (canEmit) {
-            this.interlaced.emit({...fieldAutocomplete[0], noOpciones: true, valorBuscado: response.keyToFilter});
+        if (opciones != null){
+          if (opciones.length == 1 && Object.keys(opciones[0]).length == 0) {
+            let canEmit = fieldAutocomplete[0].entrelazado ? fieldAutocomplete[0].entrelazado : false;
+            if (canEmit) {
+              this.interlaced.emit({...fieldAutocomplete[0], noOpciones: true, valorBuscado: response.keyToFilter});
+            }
           }
+        } else if (opciones == null){
+          this.interlaced.emit({value: null, name: `selected_value_autocomplete_${response.options.field.nombre}`})
         }
       });
   }
@@ -81,18 +88,20 @@ export class DinamicformComponent implements OnInit, OnChanges {
   setNewValue({ element, field }) {
     field.valor = element.option.value;
     this.validCampo(field);
+    this.interlaced.emit({value: element.option.value, name: `selected_value_autocomplete_${field.nombre}`})
   }
 
   searchEntries(text, path, query, keyToFilter, field) {
 
+    const encodedText = encodeURIComponent(text);
     const channelOptions = new BehaviorSubject<any>({ field: field });
     const options$ = channelOptions.asObservable();
-    const queryOptions$ = this.anyService.get(path, query.replace(keyToFilter, text))
+    const queryOptions$ = this.anyService.get(path, query.replace(keyToFilter, encodedText))
     return combineLatest([options$, queryOptions$]).pipe(
       map(([options$, queryOptions$]) => ({
         options: options$,
         queryOptions: queryOptions$,
-        keyToFilter: text,
+        keyToFilter: encodedText,
       })),
     );
   }
@@ -317,6 +326,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
 
   onChangeDate(event, c) {
     c.valor = event.value;
+    this.dateChange.emit(c)
   }
 
   validCampo(c, emit = true): boolean {
