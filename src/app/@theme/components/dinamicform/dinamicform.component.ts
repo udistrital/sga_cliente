@@ -23,6 +23,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() resultSmart: EventEmitter<any> = new EventEmitter();
   @Output() interlaced: EventEmitter<any> = new EventEmitter();
   @Output() percentage: EventEmitter<any> = new EventEmitter();
+  @Output() dateChange: EventEmitter<any> = new EventEmitter();
   data: any;
   searchTerm$ = new Subject<any>();
   @ViewChild(MatDatepicker, { static: true }) datepicker: MatDatepicker<Date>;
@@ -311,6 +312,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
 
   onChangeDate(event, c) {
     c.valor = event.value;
+    this.dateChange.emit(c)
   }
 
   validCampo(c, emit = true): boolean {

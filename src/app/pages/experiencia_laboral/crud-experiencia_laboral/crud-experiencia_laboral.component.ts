@@ -140,6 +140,33 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     this.translate.use(language);
   }
 
+  onChangeDate (){
+    this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].minDate
+    = this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaInicio')].valor
+    if(this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].valor < 
+    this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaInicio')].valor){
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].valor = ''
+    }
+  }
+
+  updateFinishDate (data){
+    if(data.button == 'ExperienciaBoton' || data == 'EditOption'){
+      const fechaFinalizacion = this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')]
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('Telefono')].ocultar = true
+      fechaFinalizacion.requerido = !fechaFinalizacion.requerido
+      fechaFinalizacion.deshabilitar = !fechaFinalizacion.deshabilitar
+      fechaFinalizacion.ocultar = !fechaFinalizacion.ocultar
+      if(fechaFinalizacion.deshabilitar){
+        fechaFinalizacion.valor = ''
+        this.formInfoExperienciaLaboral.campos[this.getIndexForm('ExperienciaBoton')].icono = 'fa fa-check'
+      }else{
+        this.formInfoExperienciaLaboral.campos[this.getIndexForm('ExperienciaBoton')].icono = ''
+      }
+
+    }
+  }
+
+
   NuevoTercero(event) {
     this.nuevoTercero = false;
     const iNit = this.getIndexForm('Nit');
@@ -172,6 +199,10 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     const icargo = this.getIndexForm('Cargo');
     const iactividades = this.getIndexForm('Actividades');
     const isoporte = this.getIndexForm('Soporte');
+
+    if(this.detalleExp.FechaFinalizacion == ''){
+      this.updateFinishDate('EditOption')
+    }
 
     this.formInfoExperienciaLaboral.campos[init].valor = this.detalleExp.Nit;
     this.formInfoExperienciaLaboral.campos[inombre].valor = (this.detalleExp.NombreEmpresa &&
@@ -242,24 +273,27 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   }
 
   searchNit(data) {
-    if(data.data.Nit){
-      const inombre = this.getIndexForm('NombreEmpresa');
-      const regex = /^[0-9]+(?:-[0-9]+)*$/;
-      data.data.Nit = data.data.Nit.trim();
-      const nit = typeof data === 'string' ? data : data.data.Nit;
+    if(data.button == "BusquedaBoton"){
 
-      if (regex.test(nit) === true) {
-        this.searchOrganizacion(nit);
-        this.indexSelect = null;
-        this.detalleExp = null;
-      } else {
-        this.clean = !this.clean;
-        //this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
-        this.loadListEmpresa(nit);
-        this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
+      if(data.data.Nit){
+        const inombre = this.getIndexForm('NombreEmpresa');
+        const regex = /^[0-9]+(?:-[0-9]+)*$/;
+        data.data.Nit = data.data.Nit.trim();
+        const nit = typeof data === 'string' ? data : data.data.Nit;
+  
+        if (regex.test(nit) === true) {
+          this.searchOrganizacion(nit);
+          this.indexSelect = null;
+          this.detalleExp = null;
+        } else {
+          this.clean = !this.clean;
+          //this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
+          this.loadListEmpresa(nit);
+          this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
+        }
+      }  else {
+        this.popUpManager.showAlert(this.translate.instant('inscripcion.experiencia_laboral'), this.translate.instant('GLOBAL.no_vacio'))
       }
-    }  else {
-      this.popUpManager.showAlert(this.translate.instant('inscripcion.experiencia_laboral'), this.translate.instant('GLOBAL.no_vacio'))
     }
     
   }

@@ -6,8 +6,8 @@
   <toaster-container [toasterconfig]="config"></toaster-container>
 
   <ngx-dinamicform *ngIf="!nuevoTercero && !nuevoPrograma" [normalform]="formInfoFormacionAcademica"
-    [modeloData]="info_formacion_academica" (result)="validarForm($event)" (resultAux)="searchDoc($event)"
-    [clean]="clean" (percentage)="setPercentage($event)" (interlaced)="getEvento($event)">
+    [modeloData]="info_formacion_academica" (result)="validarForm($event)" (resultAux)="searchDoc($event); updateFinishDate($event)"
+    (dateChange)="onChangeDate()" [clean]="clean" (percentage)="setPercentage($event)" (interlaced)="getEvento($event)">
   </ngx-dinamicform>
 
   <ngx-new-tercero *ngIf="nuevoTercero" [nit]="nit" (result)="NuevoTercero($event)">

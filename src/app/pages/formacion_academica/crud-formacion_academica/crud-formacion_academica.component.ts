@@ -28,6 +28,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatButtonModule} from '@angular/material/button';
+import { isDate } from 'util';
 
 @Component({
   selector: 'ngx-crud-formacion-academica',
@@ -298,62 +299,89 @@ export class CrudFormacionAcademicaComponent implements OnInit {
     this.searchNit(event['infoPost'].Nit);
   }
 
-  searchDoc(data) {
-    if(data.data.Nit){
-      this.loading = true;
-      const init = this.getIndexForm('Nit');
-      const inombre = this.getIndexForm('NombreUniversidad');
-      const idir = this.getIndexForm('Direccion');
-      const itel = this.getIndexForm('Telefono');
-      const icorreo = this.getIndexForm('Correo');
-      const iPais = this.getIndexForm('Pais');
-      const regex = /^[0-9]+(?:-[0-9]+)*$/;
-      data.data.Nit = data.data.Nit.trim()
-      const nit = typeof data === 'string' ? data : data.data.Nit;
-      let IdUniversidad;
-      if (regex.test(nit) === true) {
-        this.searchNit(nit);
-
-        this.info_formacion_academica = undefined;
-        this.info_formacion_academica_id = 0;
-        this.edit_status = false;
-        //this.loading = false;
-      } else {
-        if (this.formInfoFormacionAcademica.campos[inombre].valor ? 
-          this.formInfoFormacionAcademica.campos[inombre].valor.Id ? true : false : false) {
-          IdUniversidad = this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].valor.Id;
-          this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdUniversidad).subscribe(
-            (res: any) => {
-              this.searchNit(res[0]['Numero']);
-
-              this.info_formacion_academica = undefined;
-              this.info_formacion_academica_id = 0;
-              this.edit_status = false;
-              this.loading = false;
-            },
-            (error: HttpErrorResponse) => {
-              this.loading = false;
-            },
-          )
-        } else {
-          this.loading = false;
-          /* [this.formInfoFormacionAcademica.campos[idir],
-          this.formInfoFormacionAcademica.campos[icorreo],
-          this.formInfoFormacionAcademica.campos[iPais],
-          this.formInfoFormacionAcademica.campos[itel]]
-            .forEach(element => {
-              element.deshabilitar = false;
-            }); */
-          this.loadListUniversidades(nit);
-          //this.nit = nit;
-          //this.formInfoFormacionAcademica.campos[inombre].valor = nit;
-          this.formInfoFormacionAcademica.campos[init].valor = null;
-        }
-      }
-    } else {
-      this.popUpManager.showAlert(this.translate.instant('inscripcion.formacion_academica'), this.translate.instant('GLOBAL.no_vacio'))
+  onChangeDate (){
+    this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].minDate
+    = this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaInicio')].valor
+    if(this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].valor < 
+    this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaInicio')].valor){
+      this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].valor = ''
     }
-    
+  }
+
+  updateFinishDate (data){
+    if(data.button == 'FormacionBoton' || data == 'EditOption'){
+      const fechaFinalizacion = this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')]
+      this.formInfoFormacionAcademica.campos[this.getIndexForm('Telefono')].ocultar = true
+      fechaFinalizacion.requerido = !fechaFinalizacion.requerido
+      fechaFinalizacion.deshabilitar = !fechaFinalizacion.deshabilitar
+      fechaFinalizacion.ocultar = !fechaFinalizacion.ocultar
+      if(fechaFinalizacion.deshabilitar){
+        fechaFinalizacion.valor = ''
+        this.formInfoFormacionAcademica.campos[this.getIndexForm('FormacionBoton')].icono = 'fa fa-check'
+      }else{
+        this.formInfoFormacionAcademica.campos[this.getIndexForm('FormacionBoton')].icono = ''
+      }
+      
+    }
+  }
+
+  searchDoc(data) {
+    if(data.button == "BusquedaBoton"){
+      if(data.data.Nit){
+        this.loading = true;
+        const init = this.getIndexForm('Nit');
+        const inombre = this.getIndexForm('NombreUniversidad');
+        const idir = this.getIndexForm('Direccion');
+        const itel = this.getIndexForm('Telefono');
+        const icorreo = this.getIndexForm('Correo');
+        const iPais = this.getIndexForm('Pais');
+        const regex = /^[0-9]+(?:-[0-9]+)*$/;
+        data.data.Nit = data.data.Nit.trim()
+        const nit = typeof data === 'string' ? data : data.data.Nit;
+        let IdUniversidad;
+        if (regex.test(nit) === true) {
+          this.searchNit(nit);
+  
+          this.info_formacion_academica = undefined;
+          this.info_formacion_academica_id = 0;
+          this.edit_status = false;
+          //this.loading = false;
+        } else {
+          if (this.formInfoFormacionAcademica.campos[inombre].valor ? 
+            this.formInfoFormacionAcademica.campos[inombre].valor.Id ? true : false : false) {
+            IdUniversidad = this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].valor.Id;
+            this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdUniversidad).subscribe(
+              (res: any) => {
+                this.searchNit(res[0]['Numero']);
+  
+                this.info_formacion_academica = undefined;
+                this.info_formacion_academica_id = 0;
+                this.edit_status = false;
+                this.loading = false;
+              },
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+              },
+            )
+          } else {
+            this.loading = false;
+            /* [this.formInfoFormacionAcademica.campos[idir],
+            this.formInfoFormacionAcademica.campos[icorreo],
+            this.formInfoFormacionAcademica.campos[iPais],
+            this.formInfoFormacionAcademica.campos[itel]]
+              .forEach(element => {
+                element.deshabilitar = false;
+              }); */
+            this.loadListUniversidades(nit);
+            //this.nit = nit;
+            //this.formInfoFormacionAcademica.campos[inombre].valor = nit;
+            this.formInfoFormacionAcademica.campos[init].valor = null;
+          }
+        }
+      } else {
+        this.popUpManager.showAlert(this.translate.instant('inscripcion.formacion_academica'), this.translate.instant('GLOBAL.no_vacio'))
+      }
+    } 
   }
 
   loadListUniversidades(nombre: string): void {
@@ -411,7 +439,13 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                   if (Object.keys(filesResponse).length === files.length) {
                     this.SoporteDocumento = this.temp_info_academica.Documento;
                     const FechaI = moment(this.temp_info_academica.FechaInicio, 'DD-MM-YYYY').toDate();
-                    const FechaF = moment(this.temp_info_academica.FechaFinalizacion, 'DD-MM-YYYY').toDate();
+                    let FechaF;
+                    if(this.temp_info_academica.FechaFinalizacion !== ''){
+                      FechaF = moment(this.temp_info_academica.FechaFinalizacion, 'DD-MM-YYYY').toDate();
+                    }else{
+                      this.updateFinishDate('EditOption')
+                    }
+                   
                     const init = this.getIndexForm('Nit');
                     this.info_formacion_academica = {
                       Nit: this.temp_info_academica.Nit,
@@ -671,12 +705,17 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         TerceroId: this.persona_id,
         ProgramaAcademicoId: formData.ProgramaAcademico.Id,
         FechaInicio: momentTimezone.tz(formData.FechaInicio, 'America/Bogota').format('DDMMYYYY'),
-        FechaFinalizacion: momentTimezone.tz(formData.FechaFinalizacion, 'America/Bogota').format('DDMMYYYY'),
+        FechaFinalizacion: '',
         TituloTrabajoGrado: formData.TituloTrabajoGrado,
         DescripcionTrabajoGrado: formData.DescripcionTrabajoGrado,
         DocumentoId: formData.Documento,
         NitUniversidad: formData.Nit,
       };
+      const tempfecha = momentTimezone.tz(formData.FechaFinalizacion, 'America/Bogota').format('DDMMYYYY');
+      if(isDate(formData.FechaFinalizacion)){
+        InfoFormacionAcademica.FechaFinalizacion = momentTimezone.tz(formData.FechaFinalizacion, 'America/Bogota').format('DDMMYYYY')
+      }
+
       if (!this.info_formacion_academica || (this.info_formacion_academica === null && this.info_proyecto_id === null)
         || (this.info_formacion_academica_id === undefined && this.info_proyecto_id === undefined)) {
         this.createInfoFormacionAcademica(InfoFormacionAcademica);
