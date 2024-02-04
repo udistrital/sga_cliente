@@ -32,9 +32,9 @@ export class VisualizacionComponent implements OnInit {
     this.route.data.subscribe(data => {
       if (data && data.reportLabel) {
         this.reportLabel = data.reportLabel;
-        const reportLabel= this.reportLabel + environment.SPAGOBI.TIPO_REPORTE;
+        const reportLabel = this.reportLabel + environment.SPAGOBI.TIPO_REPORTE;
         this.reportConfig = {
-          documentLabel: this.reportLabel,
+          documentLabel: reportLabel,
           executionRole: '/spagobi/user',
           displayToolbar: true,
           displaySliders: true,

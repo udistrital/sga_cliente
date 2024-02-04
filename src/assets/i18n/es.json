@@ -63,9 +63,9 @@
             "reportes": "Reportes",
             "inscripciones": {
                 "inscripciones": "Inscripciones",
-                "aspirantes": "Inscritos por programa",
+                "aspirantes": "Aspirantes por programa",
                 "admitidos": "Admitidos por programa",
-                "inscritos": "Aspirantes por programa"
+                "inscritos": "Inscritos por programa"
             },
             "icfes": {
                 "icfes": "Registro ICFES SNP",
@@ -175,10 +175,10 @@
             "revisar_plan_estudios": "Revisar plan de estudio"
         },
         "gestion-horarios": {
-            "gestion-horarios": "Gestion de horarios",
+            "gestion-horarios": "Gestión de horarios",
             "disponibilidad-cupos": "Disponibilidad de cupos",
             "horarios-grupos": "Horarios por Grupos",
-            "gestion-horario": "Gestion de horarios"
+            "gestion-horario": "Gestión de horarios"
         }
     },
     "GLOBAL": {
@@ -779,7 +779,9 @@
         "fallo_informacion_en": "Ha habido un error al consultar la información sobre",
         "sin_informacion_en": "No se ha encontrado información sobre",
         "persiste_error_comunique_OAS": "Regrese e intente de nuevo más tarde. Si el error persiste, comuníquese con Oficina Asesora de Tecnologías e Información (OATI)",
-        "error_previsualizar_doc": "No se pudo visualizar el documento, no es un formato válido o no se ha encontrado."
+        "error_previsualizar_doc": "No se pudo visualizar el documento, no es un formato válido o no se ha encontrado.",
+        "contenido_archivo_erroneo": "Contenido de archivo no estándar para el formato solicitado",
+        "contenido_archivo_erroneo_mensaje": "El contenido del archivo no es correcto para el formato solicitado y puede quedar ilegible al cargarlo. \nIntente guardarlo nuevamente en los formatos permitidos; si se trata de un PDF guárdelo en versión optimizada o comprimida."
     },
     "recibo_pago": {
         "generado": "El recibo de pago ha sido generado correctamente",
@@ -1032,7 +1034,8 @@
         "ejecutable_programa": "Soporte de archivo ejecutable de aplicación",
         "codigo_fuente": "Soporte de código fuente del software",
         "archivo_video": "Soporte de producción audiovisual",
-        "soportes": "Lista de soportes"
+        "soportes": "Lista de soportes",
+        "inscrito": "Ha sido inscrito al período académico:"
     },
     "archivo_icfes": {
         "archivo_icfes": "Archivo de registros del ICFES",
@@ -1471,7 +1474,7 @@
         "placeholder_comentarios": "Comentario respecto a la solicitud",
         "inscripcion_general": "Información general",
         "generar_matricula": "Generar recibo de matrícula",
-        "no_fechas_inscripcion": "El proyecto curricular seleccionado no presenta fechas de inscripcion",
+        "no_fechas_inscripcion": "El proyecto curricular seleccionado no presenta fechas de inscripción",
         "persona_ya_existe": "¡El sistema SGA ha encontrado información personal relacionada con el numero de documento diligenciado!",
         "info_persona_ya_existe": "Con el fin de evitar duplicado de información se utilizarán los datos encontrados para continuar el proceso de inscripción.\nSi considera que los datos presentados no coinciden debe realizar una solicitud formal a la Oficina Asesora de Tecnologías e Información quien revisará la veracidad de los datos.",
         "no_hay_programa_evento": "El programa aún no ha sido asignado a un calendario o aún no se han definido fechas para la inscripción.",
@@ -1561,6 +1564,9 @@
         "seguro_continuar_registrar": "¿Está seguro de registrar este documento?",
         "no_documentos": "No tiene documentos registrados.",
         "documento_cambiar": "Seleccione el reemplazo para el tipo de documento elegido.",
+        "descuento_academico_no_registrado": "Descuento académico no registrado",
+        "descuento_academico_registrado": "Descuento académico registrado",
+        "documento_descuento_academico_no_registrado": "Error subiendo el documento de soporte",
         "no_permite_borrar": "En este estado no es posible eliminar el documento.",
         "seguro_borrar": "¿Esta seguro que desea eliminar el documento?",
         "documento_eliminado": "Documento eliminado",
@@ -1599,7 +1605,8 @@
         "poner_obligatorio": "¿Establecer documento como obligatorio?",
         "quitar_obligatorio": "¿Establecer documento como opcional?",
         "ajuste_ok": "Cambio realizado",
-        "ajuste_fail": "No se pudo realizar el cambio"
+        "ajuste_fail": "No se pudo realizar el cambio",
+        "error_enfasis_ya_existe": "El énfasis ya fue agregado"
     },
     "descuento_academico": {
         "descuento_academico_no_registrado": "Descuento académico no registrado",
@@ -1629,6 +1636,9 @@
         "carga_nuevo_descuento": "Asignando nuevo descuento...",
         "carga_eliminando_descuento": "Eliminando descuento del proyecto...",
         "tooltip_crear": "Crear descuento",
+        "documento_documento_programa_no_registrado": "Error subiendo el documento de soporte",
+        "documento_programa_no_registrado": "Documento no registrado",
+        "documento_programa_registrado": "Documento registrado",
         "no_permite_borrar": "En este estado no es posible eliminar el descuento.",
         "seguro_borrar": "¿Esta seguro que desea eliminar el descuento?",
         "mensaje_eliminado": "Se ha eliminado exitosamente el descuento."
@@ -1773,9 +1783,10 @@
         "titulo_sin_observaciones":"Sin Observaciones",
         "error_sin_observaciones":"No ha realizado observaciones que notificar",
         "titulo_notificacion_success":"Notificación exitosa",
-        "desc_notificacion_success":"la notificación de las observaciones se hizo de forma exitosa",
+        "desc_notificacion_success":"La notificación de las observaciones se hizo de forma exitosa",
         "titulo_notificacion_error":"Fallo en la notificación",
-        "desc_notificacion_error":"Ocurrió un error al momento de notificar al usuario"
+        "desc_notificacion_error":"Ocurrió un error al momento de notificar al usuario",
+        "registro_error": "Se produjo un error inesperado al guardar información"
     },
     "cupos": {
         "aviso_periodo": "Período en el cual se define los cupos de admisión",
@@ -1905,7 +1916,7 @@
         "sin_calendarios": "No existen calendarios.",
         "subir_resolucion": "Subir resolución",
         "descargar_resolucion": "Descargar resolución",
-        "crear_actividad_proceso": "por favor a continuación añada la primer actividad del proceso",
+        "crear_actividad_proceso": "Por favor a continuación añada la primer actividad del proceso",
         "tooltip_seleccionar_proyectos": "Habilitar edición por programas",
         "tooltip_detalle_actividad": "Detalle programas asociados",
         "select_proyectos_actividades": "Selección de edición a proyectos curriculares",
@@ -1927,15 +1938,16 @@
         "fechas_globales": "Calendario fechas globales",
         "modificacion_fechas_info": "A continuacion usted podrá modificar las fechas de la actividad correspondiente, teniendo en cuenta que el sistema limita su edición al rango de las fechas globales del calendario general.",
         "descripcion": "Descripción",
-        "descripcion_proceso": "Descripcion de proceso",
+        "descripcion_proceso": "Descripción de proceso",
         "periodicidad_2": "Periodicidad",
         "seguro_extension": "Está a punto de crear una extensión de calendario, ¿Desea continuar?",
         "Extension_calendario_ok": "¡La extensión del calendario se ha realizado correctamente!",
         "calendario_tiene_extension": "Este calendario cuenta con extensión.",
-        "extension_inactiva": "Esta extensión de calendario está desctivada.",
+        "extension_inactiva": "Esta extensión de calendario está desactivada.",
         "seleccione_version_calendario": "Seleccione la versión del calendario",
-        "add_extension_extension": "Agregar otra extension",
-        "sin_permiso_edicion": "No tiene permiso para editar esta actividad"
+        "add_extension_extension": "Agregar otra extensión",
+        "sin_permiso_edicion": "No tiene permiso para editar esta actividad",
+        "Add another extension": "Agregar otra extensión"
     },
     "derechos_pecuniarios": {
         "titulo": "Derechos pecuniarios",
@@ -2516,7 +2528,6 @@
         "select_color": "Elige el color deseado",
         "agregar_agrupacion_ok": "La Agrupación ha sido agregada",
         "agregar_agrupacion_fail": "No se pudo agregar la agrupación"
-
     },
     "plan_estudios": {
         "plan_estudios":"Plan de estudios",
@@ -2685,5 +2696,4 @@
         "select_vinculacion": "Tipo de vinculación del docente:",
         "select_horas": "Horas asignadas:"
     }
-
 }

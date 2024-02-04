@@ -124,7 +124,7 @@ export class CrudInfoPersonaComponent implements OnInit {
             this.datosEncontrados = {...res}
             const files = []
             this.formInfoPersona.btn = '';
-            if (temp.Genero.Nombre != "NO APLICA") {
+            if (temp.Genero && (temp.Genero.Nombre != "NO APLICA")) {
               this.formInfoPersona.campos[this.getIndexForm('Genero')].valor = temp.Genero;
             }
             this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].valor = temp.EstadoCivil;

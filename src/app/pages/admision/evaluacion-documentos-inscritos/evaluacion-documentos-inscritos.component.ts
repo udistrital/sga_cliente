@@ -442,6 +442,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                       this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
                     })
                 }
+                setTimeout(() => {this.folderTagtoReload = "";}, 1);
                 //this.showProfile = false
               },
               error => {
