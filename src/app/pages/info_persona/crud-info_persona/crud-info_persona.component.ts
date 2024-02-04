@@ -13,6 +13,8 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { MatDialog } from '@angular/material/dialog';
+import { VideoModalComponent } from '../../../@theme/components/video-modal/video-modal.component';
 
 @Component({
   selector: 'ngx-crud-info-persona',
@@ -69,6 +71,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     private autenticationService: ImplicitAutenticationService,
     private store: Store<IAppState>,
     private listService: ListService,
+    private dialog: MatDialog,
   ) {
       this.formInfoPersona = UtilidadesService.hardCopy(FORM_INFO_PERSONA);
       this.construirForm();
@@ -449,6 +452,17 @@ export class CrudInfoPersonaComponent implements OnInit {
         this.formInfoPersona.campos[this.getIndexForm('IdentidadGenero')].opciones = list.listIdentidadGenero[0];
       },
     );
+  }
+
+  openVideoModal(videoId: string): void {
+    const dialogRef = this.dialog.open(VideoModalComponent, {
+      width: '600px', 
+      data: { videoId: videoId }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Modal cerrado');
+    });
   }
 
 }

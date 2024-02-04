@@ -161,6 +161,7 @@ import { DocProgramaObligatorioComponent } from './components/doc-programa-oblig
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { DinamicFormGroupComponent } from './components/dinamic-form-group/dinamic-form-group.component';
 import { DialogPreviewFileComponent } from './components/dialog-preview-file/dialog-preview-file.component';
+import { VideoModalComponent } from './components/video-modal/video-modal.component';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -252,7 +253,7 @@ const NB_THEME_PROVIDERS = [
 @NgModule({
   imports: [...BASE_MODULES, ...NB_MODULES, SharedModule, ...MAT_MODULES, MomentModule, NbEvaIconsModule,],
   exports: [...BASE_MODULES, ...NB_MODULES, ...COMPONENTS, ...PIPES, ...MAT_MODULES, ...DIRECTIVES],
-  declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective, NotePercentageComponent, DocProgramaObligatorioComponent, DinamicFormGroupComponent, DialogPreviewFileComponent],
+  declarations: [...COMPONENTS, ...PIPES, DinamicformComponent, SelectComponent, ButtonPaymentComponent, LinkDownloadComponent, CheckboxAssistanceComponent, NgIsGrantedDirective, NotePercentageComponent, DocProgramaObligatorioComponent, DinamicFormGroupComponent, DialogPreviewFileComponent, VideoModalComponent],
   entryComponents: [...ENTRY_COMPONENTS],
 })
 export class ThemeModule {
