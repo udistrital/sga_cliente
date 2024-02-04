@@ -283,3 +283,40 @@ mat-form-field.mat-form-field-should-float label {
   font-size: 18px !important;
   color: rgba(0, 0, 0, 0.75) !important;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+// Estilos del boton "Ayuda" de la pagina de inscripcion
+.round-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 70px;
+  height: 70px;
+  border: 3px solid rgb(60, 141, 188);
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.round-button:hover {
+  border: 3px solid rgb(171, 208, 230);
+}
+
+.button-content {
+  text-align: center;
+}
+
+.button-content img {
+  margin: 0;
+}
+
+.button-content p {
+  margin: 0;
+  line-height: 1;
+  color: rgb(60, 141, 188);
+}

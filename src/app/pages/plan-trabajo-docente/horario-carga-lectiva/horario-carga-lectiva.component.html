@@ -1,4 +1,4 @@
-<fieldset [ngClass]="{'fieldseter':true}" *ngIf="isCoordinador || isDocente">
+<fieldset [ngClass]="{'fieldseter':true}" *ngIf="(isCoordinador || isDocente) && edit">
     <legend>
         <small *ngIf="isCoordinador">&nbsp; {{ 'ptd.select_carga_lectiva' | translate }}</small>
         <small *ngIf="isDocente">&nbsp; {{ 'ptd.select_actividades' | translate }}</small>
@@ -161,13 +161,21 @@
                                 <div class="contenido" *ngIf="element.edificio == '-'">
                                     *{{ element.nombre }} <br>
                                     *{{element.sede.CodigoAbreviacion}} <br>
-                                    *{{ element.horaFormato }}
+                                    <!-- *{{ element.horaFormato }} -->
                                 </div>
                                 <div class="contenido" *ngIf="element.edificio != '-'">
                                     *{{ element.nombre }} <br>
                                     *{{ element.sede.CodigoAbreviacion }} - {{ element.edificio.Nombre }}<br>
                                     *{{ element.salon.Nombre }} <br>
-                                    *{{ element.horaFormato }}
+                                    <!-- *{{ element.horaFormato }} <br> -->
+                                    {{ element.docenteName }}
+                                </div>
+                                <div class="info-contenidoBig">
+                                    *{{ element.nombre }} <br>
+                                    *{{ element.sede.CodigoAbreviacion }} - {{ element.edificio.Nombre }}<br>
+                                    *{{ element.salon.Nombre }} <br>
+                                    *{{ element.horaFormato }} <br>
+                                    {{ element.docenteName }}
                                 </div>
                             </div>
 
@@ -264,7 +272,7 @@
     <div class="row" style="display: flex; justify-content: center; align-items: center;" *ngIf="edit">
         <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="guardar_ptd()" [disabled]="(Data.aprobacion && !aprobacion)"> {{
             'ptd.guardar_ptd' | translate }} </button>
-        <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="cancelar()"> {{
-            'GLOBAL.cancelar' | translate }} </button>
+        <!-- <button mat-raised-button color="primary" style="margin-left: 1.5rem;" (click)="cancelar()"> {{
+            'GLOBAL.cancelar' | translate }} </button> -->
     </div>
 </fieldset>

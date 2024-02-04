@@ -447,6 +447,8 @@
         "placeholder_idioma_publicacion": "E.g.: English",
         "revista": "Journal",
         "placeholder_revista": "E.g.: Nature Energy",
+        "buscador_entidad": "Enter NIT or Company Name",
+        "placeholder_buscador_entidad" : "E.g., 900123456 or Acme Ltd.",
         "volumen": "Volume",
         "placeholder_volumen": "E.g.: 1",
         "fasciculo": "Fascicle",
@@ -718,7 +720,9 @@
         "direccion_entidad": "Entity Address",
         "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1",
         "item": "Item",
-        "evaluar": "Evaluate"
+        "evaluar": "Evaluate",
+        "formacion_actual": "Current formation",
+        "experiencia_actual": "Current work"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -1381,6 +1385,14 @@
         "alerta_poblacion_discapacidades": "Applicant, please note that the disability must be contained in the statutory law 1618 of 2013, with their respective documentary support, also if you belong to a specific type of population please note that you must attach their respective documentary support according to Law 1448 of 2001 (single registry of victims), and Resolution 0762 of 2020 of the Ministry of Interior (certificate of self-recognition). If you have more than one disability condition or if you belong to more than one population, please upload a single document in pdf format with all the necessary certifications in the corresponding category.",
         "alerta_transferencia": "Applicant, remember that in order to carry out this type of procedure you must be within the dates stipulated in the curricular program of interest.",
         "alerta_recibo_transferencia": "Please note the following information: <br><br> - The transfer will only be granted once (1) in the student's academic life.<br>- Applicants who have interrupted their studies for more than two (2) continuous or discontinuous years cannot apply for internal or external transfers.<br>- Re-entries, maximum term one (1) year.",
+        "alerta_formacion_academica" : "Please fill in the NIT of the educational institution where you completed your education, select search, the data of the institution will be automatically adjusted. Complete the information of the academic program and attach the corresponding supports",
+        "alerta_experiencia_laboral" :  "Applicant please fill in the NIT of the company where you performed, select search, the data of the enterprise will be automatically adjusted, complete the information of your relationship and attach the corresponding supports",
+        "alerta_formacion" : "Applicant please fill in the information in the list by clicking on the button or in the form section.",
+        "alerta_experiencia" : "Applicant please fill in the information in the list by clicking on the button or in the form section.",
+        "alerta_idiomas" : "Applicant please fill in the information in the list by clicking on the button or in the form section.",
+        "alerta_prod_academica" : "AApplicant please fill in the information in the list by clicking on the button or in the form section.",
+        "alerta_doc_sol" : "Applicant please fill in the information in the list by clicking on the button or in the form section.",
+        "alerta_desc_matricula" : "Applicant please fill in the information in the list by clicking on the button or in the form section.",
         "solicitud_transferencia": "Transfer request",
         "btn_nueva_solicitud": "Make a new request",
         "btn_descargar_normativa": "Download related regulations",
@@ -1512,7 +1524,11 @@
         "tooltip_crear": "Create document",
         "seguro_continuar_registrar": "Are you sure you want to register this academic discount?",
         "no_documentos": "There are no registered documents.",
-        "documento_cambiar": "Please select the replacement document for the chosen item."
+        "documento_cambiar": "Please select the replacement document for the chosen item.",
+        "no_permite_borrar": "In this state, it is not possible to remove the document.",
+        "seguro_borrar": "Are you sure you want to remove the document?",
+        "documento_eliminado": "Document removed",
+        "mensaje_eliminado": "The document has been successfully deleted."
     },
     "documento_proyecto": {
         "documento": "Project document",
@@ -1579,7 +1595,10 @@
         "descuentos_seleccionados": "Discounts assigned:",
         "carga_nuevo_descuento": "Assigning new discount...",
         "carga_eliminando_descuento": "Removing discount from project...",
-        "tooltip_crear": "Create discount"
+        "tooltip_crear": "Create discount",
+        "no_permite_borrar": "In this state, it is not possible to remove the discount.",
+        "seguro_borrar": "Are you sure you want to remove the discount?",
+        "mensaje_eliminado": "The discount has been successfully deleted."
     },
     "idiomas": {
         "no_data": "There is no registered information on languages",

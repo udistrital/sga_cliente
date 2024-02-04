@@ -106,13 +106,14 @@ td {
 }
 
 .element-carga-lectiva:not(:active):hover {
-  height: $snap-grid-height * 2 !important;
+  /* height: $snap-grid-height * 2 !important;
   background-color: rgba($color: lightskyblue, $alpha: 0.75);
   transition-delay: 0.5s;
   z-index: 49;
   box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.2),
     0 8px 10px 1px rgba(0, 0, 0, 0.14),
-    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    0 3px 14px 2px rgba(0, 0, 0, 0.12); */
+  z-index: 49;
 }
 
 .element-carga-lectiva:not(:active):hover .info-tooltip {
@@ -120,8 +121,13 @@ td {
 }
 
 .element-carga-lectiva:not(:active):hover .contenido {
-  transition: font-size 1s ease-in-out;
-  font-size: 1rem;
+  /* transition: font-size 1s ease-in-out;
+  font-size: 1rem; */
+}
+
+.element-carga-lectiva:not(:active):hover .info-contenidoBig {
+  transition-delay: 0.5s;
+  visibility: visible;
 }
 
 /* estilo cuando la card es arrastrada */
@@ -178,6 +184,7 @@ td {
 
 .contenido {
   font-size: 0.85rem;
+  font-weight: 300;
   flex: 1;
   display: flex;
   justify-content: center;
@@ -234,4 +241,26 @@ i {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.info-contenidoBig {
+  font-size: 1rem;
+  font-weight: 500;
+  position: absolute;
+  left: -50%;
+  top: 1.5rem;
+  width: 200%;
+  height: 130px;
+  padding: 3px;
+  background-color: rgba(255, 255, 255, 0.90);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: black;
+  overflow-y: auto;
+  border-radius: 3px;
+  visibility: hidden;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+  0 2px 2px 0 rgba(0, 0, 0, 0.14),
+  0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }

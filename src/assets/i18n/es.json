@@ -265,6 +265,8 @@
         "codigo_abreviacion": "Código abreviación",
         "placeholder_codigo_abreviacion": "ej: ACADE",
         "placeholder_activo": "ej: Activo",
+        "buscador_entidad": "Ingrese NIT o Nombre de la Empresa",
+        "placeholder_buscador_entidad" : "Ej: 900123456 o Acme Ltda.",
         "numero_orden": "Numero orden",
         "placeholder_numero_orden": "ej: 1,2,3",
         "placeholder_ano": "ej: 2019",
@@ -752,7 +754,9 @@
         "direccion_entidad": "Dirección de la entidad",
         "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1",
         "item": "Ítem",
-        "evaluar": "Evaluar"
+        "evaluar": "Evaluar",
+        "formacion_actual": "Formación actual",
+        "experiencia_actual": "Trabajo actual"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -1416,6 +1420,14 @@
         "alerta_poblacion_discapacidades": "Aspirante, tenga en cuenta que la discapacidad debe estar contenida en la ley estatutaria 1618 de 2013, con su respectivo soporte documental, además si usted pertenece a un tipo de población especifica tenga en cuenta que debe adjuntar su respectivo soporte documental de acuerdo a la Ley 1448 de 2001 (registro único de victimas), y la Resolución 0762 de 2020 del Ministerio del Interior (certificado de autorreconocimiento). Si usted tiene más de una condición de discapacidad o si pertenece a más de una población, por favor subir un solo documento en formato pdf con todas las certificaciones necesarias en la categoría correspondiente.",
         "alerta_transferencia": "Aspirante, recuerde que para realizar este tipo de trámite debe estar dentro de las fechas estipuladas en el programa curricular de interés.",
         "alerta_recibo_transferencia": "Aspirante tenga en cuenta la siguiente información: <br><br> - El traspaso sole se concederá una (1) vez en la vida académica del (la) estudiante.<br>- No pueden solicitar transferencias internas o externas los (las) aspirantes que hayan interrumpido su carrera por más de dos (2) años continuos o discontinuos.<br>- Reingresos, plazo máximo un (1) año.",
+        "alerta_formacion_academica" : "Aspirante por favor diligencie el NIT de la institución educativa en la que realizó su formación, seleccione buscar, se ajustaran automáticamente los datos de la instiución. Complete la información del programa académico y adjunte los soportes correspondientes",
+        "alerta_experiencia_laboral" : "Aspirante por favor diligencie el NIT de la empresa en la que se desempeñó, seleccione buscar, se ajustaran automáticamente los datos de la empresa. Complete la información de su vinculación y adjunte los soportes correspondientes",
+        "alerta_formacion" : "Aspirante por favor diligencie la información en la lista mediante el botón o en el apartado de formulario",
+        "alerta_experiencia" : "Aspirante por favor diligencie la información en la lista mediante el botón o en el apartado de formulario",
+        "alerta_idiomas" : "Aspirante por favor diligencie la información en la lista mediante el botón o en el apartado de formulario",
+        "alerta_prod_academica" : "Aspirante por favor diligencie la información en la lista mediante el botón o en el apartado de formulario",
+        "alerta_doc_sol" : "Aspirante por favor diligencie la información en la lista mediante el botón o en el apartado de formulario",
+        "alerta_desc_matricula" : "Aspirante por favor diligencie la información en la lista mediante el botón o en el apartado de formulario",
         "solicitud_transferencia": "Solicitud de transferencia",
         "btn_nueva_solicitud": "Realizar nueva solicitud",
         "btn_descargar_normativa": "Descargar normativa relacionada",
@@ -1548,7 +1560,11 @@
         "tooltip_crear": "Crear documento",
         "seguro_continuar_registrar": "¿Está seguro de registrar este documento?",
         "no_documentos": "No tiene documentos registrados.",
-        "documento_cambiar": "Seleccione el reemplazo para el tipo de documento elegido."
+        "documento_cambiar": "Seleccione el reemplazo para el tipo de documento elegido.",
+        "no_permite_borrar": "En este estado no es posible eliminar el documento.",
+        "seguro_borrar": "¿Esta seguro que desea eliminar el documento?",
+        "documento_eliminado": "Documento eliminado",
+        "mensaje_eliminado": "Se ha eliminado exitosamente el documento."
     },
     "documento_proyecto": {
         "documento": "Documento proyecto",
@@ -1612,7 +1628,10 @@
         "descuentos_seleccionados": "Descuentos asignados:",
         "carga_nuevo_descuento": "Asignando nuevo descuento...",
         "carga_eliminando_descuento": "Eliminando descuento del proyecto...",
-        "tooltip_crear": "Crear descuento"
+        "tooltip_crear": "Crear descuento",
+        "no_permite_borrar": "En este estado no es posible eliminar el descuento.",
+        "seguro_borrar": "¿Esta seguro que desea eliminar el descuento?",
+        "mensaje_eliminado": "Se ha eliminado exitosamente el descuento."
     },
     "idiomas": {
         "no_data": "No existe información registrada sobre idiomas",
@@ -2433,7 +2452,11 @@
         "info_revisar_cargar_formato": "Por favor, descargue revise y cargue nuevamente el \"Formato de control del cumplimiento de la normatividad vigente\"",
         "no_valid_pre_asignacion": "El espacio académico ya cuenta con preasignación para el presente periodo.",
         "info_cambio_documento_consolidado": "Es importante tener en cuenta que si se modifica el contenido del documento Consolidado, será necesario reiniciar el proceso de aprobación (cambiando su estado a 'No aprobado') y, en caso necesario, actualizar los Planes de Trabajo Docente.",
-        "pdf_solover_excel_imprimir": "Documento Pdf no apto para imprimir o editar, por favor, guarde la versión excel propocionada."
+        "pdf_solover_excel_imprimir": "Documento Pdf no apto para imprimir o editar, por favor, guarde la versión excel propocionada.",
+        "ptd_general": "PTD General",
+        "ptd_docente_principal": "PTD Docente principal",
+        "ptd_docente_relacionado": "PTD Docente relacionado",
+        "ptd_timed": "PTD por Tiempos"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",

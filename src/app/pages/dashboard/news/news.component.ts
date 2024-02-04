@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
+import { MatDialog } from '@angular/material/dialog';
+import { VideoModalComponent } from '../../../@theme/components/video-modal/video-modal.component';
 
 
 @Component({
@@ -14,7 +16,10 @@ export class NewsComponent {
     themeSubscription: any;
     news: any;
 
-    constructor(private themeService: NbThemeService) {
+    constructor(
+        private themeService: NbThemeService,
+        private dialog: MatDialog,
+        ) {
         this.themeSubscription = this.themeService.getJsTheme().subscribe(theme => {
             this.currentTheme = theme.name;
         });
@@ -43,4 +48,15 @@ export class NewsComponent {
 
         }];
     }
+
+    openVideoModal(videoId: string): void {
+        const dialogRef = this.dialog.open(VideoModalComponent, {
+          width: '600px', 
+          data: { videoId: videoId }
+        });
+      
+        dialogRef.afterClosed().subscribe(result => {
+          console.log('Modal cerrado');
+        });
+      }
 }
