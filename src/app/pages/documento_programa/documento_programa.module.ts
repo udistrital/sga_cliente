@@ -10,6 +10,7 @@ import { DocumentoService } from '../../@core/data/documento.service';
 import { CrudDocumentoProgramaComponent } from './crud-documento_programa/crud-documento_programa.component';
 import { ListDocumentoProgramaComponent } from './list-documento_programa/list-documento_programa.component';
 import { ViewDocumentoProgramaComponent } from './view-documento_programa/view-documento_programa.component';
+import { ToasterModule } from 'angular2-toaster';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { ViewDocumentoProgramaComponent } from './view-documento_programa/view-d
     Ng2SmartTableModule,
     SharedModule,
     NbSpinnerModule,
+    ToasterModule
   ],
   declarations: [
     ...routedComponents,

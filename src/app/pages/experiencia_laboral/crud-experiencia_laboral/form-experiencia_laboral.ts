@@ -128,8 +128,17 @@ export let FORM_EXPERIENCIA_LABORAL = {
     },
     {
       step: 2,
-      etiqueta: 'select',
+      etiqueta: 'button',
       claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
+      nombre: 'ExperienciaBoton',
+      claseBoton: 'btn btn-primary btn-sm',
+      icono: '',
+      label_i18n: 'experiencia_actual',
+    },
+    {
+      step: 2,
+      etiqueta: 'select',
+      claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       nombre: 'TipoDedicacion',
       label_i18n: 'tipo_dedicacion',
       placeholder_i18n: 'tipo_dedicacion',
@@ -141,7 +150,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
     {
       step: 2,
       etiqueta: 'select',
-      claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
+      claseGrid: 'col-lg-6 col-md-6 col-sm-12 col-xs-12',
       nombre: 'TipoVinculacion',
       label_i18n: 'tipo_vinculacion',
       placeholder_i18n: 'tipo_vinculacion',

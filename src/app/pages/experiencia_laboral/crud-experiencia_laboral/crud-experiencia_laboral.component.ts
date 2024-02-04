@@ -140,6 +140,33 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     this.translate.use(language);
   }
 
+  onChangeDate (){
+    this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].minDate
+    = this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaInicio')].valor
+    if(this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].valor < 
+    this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaInicio')].valor){
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].valor = ''
+    }
+  }
+
+  updateFinishDate (data){
+    if(data.button == 'ExperienciaBoton' || data == 'EditOption'){
+      const fechaFinalizacion = this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')]
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('Telefono')].ocultar = true
+      fechaFinalizacion.requerido = !fechaFinalizacion.requerido
+      fechaFinalizacion.deshabilitar = !fechaFinalizacion.deshabilitar
+      fechaFinalizacion.ocultar = !fechaFinalizacion.ocultar
+      if(fechaFinalizacion.deshabilitar){
+        fechaFinalizacion.valor = ''
+        this.formInfoExperienciaLaboral.campos[this.getIndexForm('ExperienciaBoton')].icono = 'fa fa-check'
+      }else{
+        this.formInfoExperienciaLaboral.campos[this.getIndexForm('ExperienciaBoton')].icono = ''
+      }
+
+    }
+  }
+
+
   NuevoTercero(event) {
     this.nuevoTercero = false;
     const iNit = this.getIndexForm('Nit');
@@ -172,6 +199,10 @@ export class CrudExperienciaLaboralComponent implements OnInit {
     const icargo = this.getIndexForm('Cargo');
     const iactividades = this.getIndexForm('Actividades');
     const isoporte = this.getIndexForm('Soporte');
+
+    if(this.detalleExp.FechaFinalizacion == ''){
+      this.updateFinishDate('EditOption')
+    }
 
     this.formInfoExperienciaLaboral.campos[init].valor = this.detalleExp.Nit;
     this.formInfoExperienciaLaboral.campos[inombre].valor = (this.detalleExp.NombreEmpresa &&
@@ -240,6 +271,7 @@ export class CrudExperienciaLaboralComponent implements OnInit {
           });
     }
   }
+
 
   searchNit(event) {
     console.log("THIS IS A EVENT --> ", event)
