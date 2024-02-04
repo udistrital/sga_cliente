@@ -31,6 +31,7 @@ export class NewTercero implements OnInit {
       Nit: nit,
     }
     this.formInfoNuevoTercero.campos[this.getIndexFormNew('Nit')].valor = nit;
+    this.formInfoNuevoTercero.campos[this.getIndexFormNew('Nit')].deshabilitar = true;
   }
   terceroData = null;
   info_tercero: any;
