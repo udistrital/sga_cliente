@@ -325,7 +325,7 @@ export class SelectDocumentoProyectoComponent implements OnInit {
   loadDataProyecto() {
     this.loading = true;
     this.documento_proyecto = [];
-    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + sessionStorage.getItem('ProgramaAcademicoId') + ',TipoInscripcionId:' + sessionStorage.getItem('TipoInscripcionId') + ',PeriodoId:'+sessionStorage.getItem('PeriodoId') + '&limit=0').subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + sessionStorage.getItem('ProgramaAcademicoId') + ',TipoInscripcionId:' + sessionStorage.getItem('TipoInscripcionId') + ',PeriodoId:'+sessionStorage.getItem('PeriodoId') + '&limit=100').subscribe(
       response => {
         if(response === undefined || response === null){
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
+// import { ElementRef, ViewChild } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
@@ -21,6 +22,8 @@ import { DialogoDocumentosComponent } from '../../admision/dialogo-documentos/di
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { TAGS_INSCRIPCION_PROGRAMA } from '../../admision/def_suite_inscrip_programa/def_tags_por_programa';
 import { TimeService } from '../../../@core/utils/time.service';
+import { VideoModalComponent } from '../../../@theme/components/video-modal/video-modal.component';
+
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -83,6 +86,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   @Output('result') result: EventEmitter<any> = new EventEmitter();
   @Output() changeTab: EventEmitter<any> = new EventEmitter();
   @Output() ocultarBarra: EventEmitter<boolean> = new EventEmitter();
+
+  // @ViewChild('videoModal', { static: true }) videoModal: ElementRef;
 
   inscripcion_id: number;
   info_persona_id: number;
@@ -1301,7 +1306,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
       if (this.selectedValue !== undefined) {
         sessionStorage.setItem('ProgramaAcademicoId', this.selectedValue);
-        this.programaService.get('proyecto_academico_enfasis/?query=ProyectoAcademicoInstitucionId.Id:' + this.selectedValue)
+        this.programaService.get('proyecto_academico_enfasis/?query=Activo:true,ProyectoAcademicoInstitucionId.Id:' + this.selectedValue + '&limit=0')
           .subscribe((enfasis: any) => {
             this.enfasis = enfasis.map((e) => (e.EnfasisId));
             this.tieneEnfasis = this.enfasis.length > 0;
@@ -1432,5 +1437,16 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       assignConfig.data = { documento: doc }
       const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
 //      dialogo.afterClosed().subscribe(data => {});
+  }
+
+  openVideoModal(videoId: string): void {
+    const dialogRef = this.dialog.open(VideoModalComponent, {
+      width: '600px', 
+      data: { videoId: videoId }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Modal cerrado');
+    });
   }
 }

@@ -10,6 +10,7 @@ import { SoporteDocumentoAux } from '../../../@core/data/models/documento/soport
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'ngx-list-documento-programa',
@@ -64,7 +65,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
     private inscripcionService: InscripcionService,
     private popUpManager: PopUpManager,
     private newNuxeoService: NewNuxeoService,
-    private utilidades: UtilidadesService,
+    private utilidades: UtilidadesService
   ) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -109,6 +110,10 @@ export class ListDocumentoProgramaComponent implements OnInit {
             name: 'edit',
             title: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
           },
+          {
+            name: 'delete',
+            title: '<i class="nb-trash" title="' + this.translate.instant('GLOBAL.eliminar') + '"></i>',
+          },
         ],
       },
       add: {
@@ -134,6 +139,7 @@ export class ListDocumentoProgramaComponent implements OnInit {
               documento.TipoDocumento = soporte['DocumentoProgramaId']['TipoDocumentoProgramaId']['Nombre'];
               documento.DocumentoId = soporte['DocumentoId'];
               documento.SoporteDocumentoId = soporte['Id'];
+              documento.DocumentoProgramaId = soporte['DocumentoProgramaId'];
               await this.cargarEstadoDocumento(documento).then((estado: any) => {
                 documento.EstadoObservacion = estado.estadoObservacion;
                 documento.Observacion = estado.observacion;
@@ -246,6 +252,61 @@ export class ListDocumentoProgramaComponent implements OnInit {
     this.activetab();
   }
 
+  onDelete(event): void {
+    let estado: string = event.data.EstadoObservacion;
+    let esAprobado: boolean = estado === "Aprobado";
+
+    if (esAprobado) {
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.eliminar'),
+        text: this.translate.instant('documento_programa.no_permite_borrar'),
+        icon: 'info',
+        showCancelButton: false,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar')
+      };
+      Swal.fire(opt);
+    } else {
+      const opt: any = {
+        title: this.translate.instant('GLOBAL.eliminar'),
+        text: this.translate.instant('documento_programa.seguro_borrar'),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        cancelButtonText: this.translate.instant('GLOBAL.cancelar'),
+      };
+      Swal.fire(opt)
+        .then((willDelete) => {
+          this.loading = true;
+          if (willDelete.value) {
+            event.data.DocumentoProgramaId.Activo = false;
+            this.inscripcionService.put('documento_programa/', event.data.DocumentoProgramaId).subscribe(res => {
+              if (res !== null) {
+                this.loadData();
+                Swal.fire({
+                  icon: 'success',
+                  title: this.translate.instant('documento_programa.documento_eliminado'),
+                  text: this.translate.instant('documento_programa.mensaje_eliminado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              }
+              this.loading = false;
+            }, (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.eliminar') + '-' +
+                    this.translate.instant('GLOBAL.documento_programa'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              });
+          }
+          this.loading = false;
+        });
+    }
+  }
+
   onAction(event): void {
     switch (event.action) {
       case 'open':
@@ -253,6 +314,9 @@ export class ListDocumentoProgramaComponent implements OnInit {
         break;
       case 'edit':
         this.onEdit(event);
+        break;
+      case 'delete':
+        this.onDelete(event);
         break;
     }
   }
@@ -292,5 +356,4 @@ export class ListDocumentoProgramaComponent implements OnInit {
   activetab(): void {
     this.cambiotab = !this.cambiotab;
   }
-
 }

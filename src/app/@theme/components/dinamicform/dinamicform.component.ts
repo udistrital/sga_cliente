@@ -4,6 +4,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { AnyService } from '../../../@core/data/any.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { PopUpManager } from '../../../managers/popUpManager';
+import { TranslateService } from '@ngx-translate/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DialogPreviewFileComponent } from '../dialog-preview-file/dialog-preview-file.component';
 
@@ -23,17 +26,23 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() resultSmart: EventEmitter<any> = new EventEmitter();
   @Output() interlaced: EventEmitter<any> = new EventEmitter();
   @Output() percentage: EventEmitter<any> = new EventEmitter();
+  @Output() dateChange: EventEmitter<any> = new EventEmitter();
   data: any;
   searchTerm$ = new Subject<any>();
   @ViewChild(MatDatepicker, { static: true }) datepicker: MatDatepicker<Date>;
   @ViewChildren("documento") fileInputs: QueryList<ElementRef>;
-
+  
+  data: any;
+  searchTerm$ = new Subject<any>();
   DocumentoInputVariable: ElementRef;
   init: boolean;
 
   constructor(
     private sanitization: DomSanitizer,
     private anyService: AnyService,
+    private gestorDocumental: NewNuxeoService,
+    private popUpManager: PopUpManager,
+    private translate: TranslateService,
     private matDialog: MatDialog,
   ) {
     this.data = {
@@ -59,11 +68,15 @@ export class DinamicformComponent implements OnInit, OnChanges {
         }
         const fieldAutocomplete = this.normalform.campos.filter((field) => (field.nombre === response.options.field.nombre));
         fieldAutocomplete[0].opciones = opciones;
-        if (opciones.length == 1 && Object.keys(opciones[0]).length == 0) {
-          let canEmit = fieldAutocomplete[0].entrelazado ? fieldAutocomplete[0].entrelazado : false;
-          if (canEmit) {
-            this.interlaced.emit({...fieldAutocomplete[0], noOpciones: true, valorBuscado: response.keyToFilter});
+        if (opciones != null){
+          if (opciones.length == 1 && Object.keys(opciones[0]).length == 0) {
+            let canEmit = fieldAutocomplete[0].entrelazado ? fieldAutocomplete[0].entrelazado : false;
+            if (canEmit) {
+              this.interlaced.emit({...fieldAutocomplete[0], noOpciones: true, valorBuscado: response.keyToFilter});
+            }
           }
+        } else if (opciones == null){
+          this.interlaced.emit({value: null, name: `selected_value_autocomplete_${response.options.field.nombre}`})
         }
       });
   }
@@ -75,18 +88,20 @@ export class DinamicformComponent implements OnInit, OnChanges {
   setNewValue({ element, field }) {
     field.valor = element.option.value;
     this.validCampo(field);
+    this.interlaced.emit({value: element.option.value, name: `selected_value_autocomplete_${field.nombre}`})
   }
 
   searchEntries(text, path, query, keyToFilter, field) {
 
+    const encodedText = encodeURIComponent(text);
     const channelOptions = new BehaviorSubject<any>({ field: field });
     const options$ = channelOptions.asObservable();
-    const queryOptions$ = this.anyService.get(path, query.replace(keyToFilter, text))
+    const queryOptions$ = this.anyService.get(path, query.replace(keyToFilter, encodedText))
     return combineLatest([options$, queryOptions$]).pipe(
       map(([options$, queryOptions$]) => ({
         options: options$,
         queryOptions: queryOptions$,
-        keyToFilter: text,
+        keyToFilter: encodedText,
       })),
     );
   }
@@ -311,6 +326,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
 
   onChangeDate(event, c) {
     c.valor = event.value;
+    this.dateChange.emit(c)
   }
 
   validCampo(c, emit = true): boolean {
@@ -440,6 +456,26 @@ export class DinamicformComponent implements OnInit, OnChanges {
     return true;
   }
 
+  checkFileSignature(): Promise<boolean> {
+    const len = this.normalform.campos.length;
+    return new Promise<boolean>((resolve, reject) => {
+      this.normalform.campos.forEach(async (d, i) => {
+        if ((d.etiqueta === 'file' || d.etiqueta === 'fileRev') && !d.ocultar) {
+          const valid = await this.gestorDocumental.readVerifyMimeType(d.File);
+          if (!valid) {
+            d.clase = 'form-control form-control-danger';
+            d.alerta = this.translate.instant('ERROR.contenido_archivo_erroneo');
+            this.popUpManager.showPopUpGeneric(this.translate.instant('GLOBAL.error'), d.File.name + "<br><br>" + this.translate.instant('ERROR.contenido_archivo_erroneo_mensaje'), "error", false)
+            reject(false)
+          }
+        }
+        if (len-1 === i) {
+          resolve(true)
+        }
+      });
+    });
+  }
+
   clearForm() {
     this.normalform.campos.forEach(d => {
       d.valor = null;
@@ -465,7 +501,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     this.percentage.emit(0);
   }
 
-  validForm() {
+  async validForm() {
     const result = {};
     let requeridos = 0;
     let resueltos = 0;
@@ -490,6 +526,10 @@ export class DinamicformComponent implements OnInit, OnChanges {
         this.data.valid = false;
       }
     });
+
+    if (this.data.valid) {
+      await this.checkFileSignature().then(() => this.data.valid = true).catch(() => this.data.valid = false);
+    }
 
     this.data.valid = this.data.valid && this.checkConfirmacion();
 
