@@ -39,6 +39,7 @@ import { DocumentoService } from "../../../@core/data/documento.service";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Vinculacion } from "../../../@core/data/models/terceros/vinculacion";
 import { NewNuxeoService } from "../../../@core/utils/new_nuxeo.service";
+import { Modalidad } from "../../../@core/data/models/proyecto_academico/modalidad";
 
 @Component({
   selector: "ngx-modificar-proyecto-academico",
@@ -65,6 +66,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   opcionSeleccionadoEnfasis: any;
   opcionSeleccionadoNivel: any;
   opcionSeleccionadoMeto: any;
+  opcionSeleccionadoModalidad: any;
   checkenfasis: boolean = false;
   checkciclos: boolean = false;
   checkalta: boolean = false;
@@ -74,6 +76,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   enfasis = [];
   nivel = [];
   metodo = [];
+  modalidades = [];
   fecha_creacion_calificado: Date;
   fecha_creacion_alta: Date;
   fecha_inicio_coordinador: Date;
@@ -91,6 +94,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   proyecto_academico: ProyectoAcademicoInstitucion;
   tipo_titulacion: TipoTitulacion;
   metodologia: Metodologia;
+  modalidad: Modalidad;
   nivel_formacion: NivelFormacion;
   registro_califacado_acreditacion: RegistroCalificadoAcreditacion;
   registro_califacado_alta_calidad: RegistroCalificadoAcreditacion;
@@ -142,6 +146,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
   Campo27Control = new FormControl("", [Validators.required, Validators.maxLength(2)]);
   Campo29Control = new FormControl("", [Validators.required]);
   Campo30Control = new FormControl("", [Validators.required]);
+  modalidadControl = new FormControl('', Validators.required);
 
   selectFormControl = new FormControl("", Validators.required);
   @Output() eventChange = new EventEmitter();
@@ -249,6 +254,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     this.loadespacio();
     this.loadnivel();
     this.loadmetodologia();
+    this.loadModalidad();
     this.loadunidadtiempo();
     this.loadarea();
     this.loadnucleo();
@@ -672,6 +678,30 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
     );
   }
 
+  loadModalidad() {
+    this.proyectoacademicoService.get("modalidad").subscribe(
+      res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== "error") {
+          this.modalidades = <any>res;
+          this.modalidades.forEach((mod: any) => {
+            if (mod.Id === Number(this.data.idModalidad)) {
+              this.opcionSeleccionadoModalidad = mod;
+            }
+          });
+        }
+      },
+      (error: HttpErrorResponse) => {
+        Swal.fire({
+          icon: "error",
+          title: error.status + "",
+          text: this.translate.instant("ERROR." + error.status),
+          confirmButtonText: this.translate.instant("GLOBAL.aceptar")
+        });
+      }
+    );
+  }
+
   loadunidadtiempo() {
     this.coreService.get("unidad_tiempo").subscribe(
       res => {
@@ -782,6 +812,9 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
       this.nivel_formacion = <NivelFormacion>{
         Id: this.opcionSeleccionadoNivel["Id"]
       };
+      this.modalidad = {
+        Id: this.opcionSeleccionadoModalidad["Id"]
+      };
       this.proyecto_academico = {
         Id: Number(this.data.idproyecto),
         Codigo: String(this.basicform.value.codigo_interno),
@@ -807,7 +840,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         MetodologiaId: this.metodologia,
         NivelFormacionId: this.nivel_formacion,
         AnoActoAdministrativo: String(this.actoform.value.ano_acto),
-        ProyectoPadreId: this.data.proyecto_padre_id
+        ProyectoPadreId: this.data.proyecto_padre_id,
+        ModalidadId: this.modalidad
       };
 
       this.titulacion_proyecto_snies = {
@@ -941,6 +975,9 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         this.nivel_formacion = <NivelFormacion>{
           Id: this.opcionSeleccionadoNivel["Id"]
         };
+        this.modalidad = {
+          Id: this.opcionSeleccionadoModalidad["Id"]
+        };
         this.proyecto_academico = {
           Id: Number(this.data.idproyecto),
           Codigo: String(this.basicform.value.codigo_interno),
@@ -966,7 +1003,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           MetodologiaId: this.metodologia,
           NivelFormacionId: this.nivel_formacion,
           AnoActoAdministrativo: String(this.actoform.value.ano_acto),
-          ProyectoPadreId: this.data.proyecto_padre_id
+          ProyectoPadreId: this.data.proyecto_padre_id,
+          ModalidadId: this.modalidad
         };
 
         this.calculateEndDate(
@@ -1127,6 +1165,9 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         this.nivel_formacion = <NivelFormacion>{
           Id: this.opcionSeleccionadoNivel["Id"]
         };
+        this.modalidad = {
+          Id: this.opcionSeleccionadoModalidad["Id"]
+        };
         this.proyecto_academico = {
           Id: Number(this.data.idproyecto),
           Codigo: String(this.basicform.value.codigo_interno),
@@ -1152,7 +1193,8 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           MetodologiaId: this.metodologia,
           NivelFormacionId: this.nivel_formacion,
           AnoActoAdministrativo: String(this.actoform.value.ano_acto),
-          ProyectoPadreId: this.data.proyecto_padre_id
+          ProyectoPadreId: this.data.proyecto_padre_id,
+          ModalidadId: this.modalidad
         };
 
         this.calculateEndDate(

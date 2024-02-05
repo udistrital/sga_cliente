@@ -1246,7 +1246,10 @@
         "proyecto_padre": "Parent project",
         "mensaje_oikos": "Please relate the curricular project with the physical space of the OIKOS system, if the physical space does not exist, please notify the system administrator",
         "oikos": "Physical space",
-        "erro_oikos": "Please select the physical space!"
+        "erro_oikos": "Please select the physical space!",
+        "modalidad": "Project modality.",
+        "modalidad_proyecto": "Modality:",
+        "erro_selec_modalidad": "Please select the modality!"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
@@ -1318,6 +1321,29 @@
         "administrar_enfasis": "Administrate emphasys",
         "error_enfasis_ya_existe": "The emphasys is already added",
         "select_enfasis": "Select emphasis"
+    },
+    "modalidad": {
+        "titulo": "Modalities",
+        "administrar_modalidad": "Administrate modalities",
+        "buscar": "Search",
+        "busqueda": "Enter your search",
+        "registrar": "Register new modality",
+        "actualizar": "Update modality",
+        "editar": "Edit modality",
+        "eliminar": "Delete modality",
+        "error_nombre": "Please insert the name for the modality",
+        "error_descripcion": "Please insert the description",
+        "error_codigo_abreviacion": "Please insert the abbreviation code",
+        "error_numero_orden":"Please insert the orden number",
+        "seguro_continuar_registro": "Are you sure you want to register this modality?",
+        "seguro_continuar_eliminar": "Are you sure you want to delete this modality?",
+        "seguro_actualizar_registro": "Are you sure you want to update this modality?",
+        "creada": "Modality created",
+        "no_creada": "Modality no created",
+        "eliminada": "Modality removed",
+        "no_eliminada": "Modality no removed",
+        "actualizada": "Modality updated",
+        "no_actualizada": "Modality no updated"
     },
     "historial_registro": {
         "titulo": "History of accreditation records and high quality of the Academic Project",

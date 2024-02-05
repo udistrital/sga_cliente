@@ -1246,7 +1246,10 @@
         "mensaje_oikos": "Por favor relacione el proyecto curricular con el espacio físico del sistema OIKOS, si no existe el espacio físico por favor notificar al administrador del sistema",
         "oikos": "Espacio Físico",
         "erro_selec": "Por favor seleccione la facultad!",
-        "erro_oikos": "Por favor seleccione el espacio fisico!"
+        "erro_oikos": "Por favor seleccione el espacio fisico!",
+        "modalidad": "Modalidad del proyecto",
+        "modalidad_proyecto": "Modalidad:",
+        "erro_selec_modalidad": "Por favor seleccione la modalidad!"
     },
     "consultaproyecto": {
         "titulo": "Consulta de un proyecto curricular ",
@@ -1318,6 +1321,29 @@
         "administrar_enfasis": "Administrar énfasis",
         "error_enfasis_ya_existe": "El énfasis ya fue agregado",
         "select_enfasis": "Seleccione el énfasis"
+    },
+    "modalidad": {
+        "titulo": "Modalidades",
+        "administrar_modalidad": "Administrar modalidades",
+        "buscar": "Buscar",
+        "busqueda": "Ingrese su búsqueda",
+        "registrar": "Registrar nueva modalidad",
+        "actualizar": "Actualizar modalidad",
+        "editar": "Editar modalidad",
+        "eliminar": "Eliminar modalidad",
+        "error_nombre": "Por favor ingrese el nombre de la modalidad",
+        "error_descripcion": "Por favor ingrese la descripción",
+        "error_codigo_abreviacion": "Por favor ingrese el código de abreviación",
+        "error_numero_orden":"Por favor ingrese el número de orden",
+        "seguro_continuar_registro": "¿Está seguro de registrar esta modalidad?",
+        "seguro_continuar_eliminar": "¿Está seguro de eliminar esta modalidad?",
+        "seguro_actualizar_registro": "¿Está seguro de actualizar esta modalidad?",
+        "creada": "Modalidad creada",
+        "no_creada": "Modalidad no creada",
+        "eliminada": "Modalidad eliminada",
+        "no_eliminada": "Modalidad no eliminada",
+        "actualizada": "Modalidad actualizada",
+        "no_actualizada": "Modalidad no actualizada"
     },
     "historial_registro": {
         "titulo": "Histórico de registros de acreditación y alta calidad del proyecto curricular",

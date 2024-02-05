@@ -1,0 +1,49 @@
+<div class="crud-modalidad-container">
+    <fieldset [ngClass]="{'fieldseter':true}">
+        <legend> {{ modalidadId == null ? ('modalidad.registrar' | translate) : ('modalidad.actualizar' | translate) }} </legend>
+            <form [formGroup]="modalidadForm" (ngSubmit)="onSubmit()">
+                <mat-form-field class="flex">
+                    <input matInput placeholder="{{ 'GLOBAL.nombre' | translate }}"
+                        formControlName="nombre" class="form-control"
+                        name="nombre">
+                    <mat-error *ngIf="f.nombre.touched && f.nombre.hasError('required')">
+                        {{ 'modalidad.error_nombre' | translate }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="flex">
+                    <input matInput placeholder="{{ 'GLOBAL.descripcion' | translate }}"
+                        formControlName="descripcion" class="form-control"
+                        name="descripcion">
+                    <mat-error *ngIf="f.descripcion.touched && f.descripcion.hasError('required')">
+                        {{ 'modalidad.error_descripcion' | translate }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="flex">
+                    <input matInput placeholder="{{ 'GLOBAL.codigo_abreviacion' | translate }}"
+                        formControlName="abreviacion" class="form-control"
+                        name="abreviacion">
+                    <mat-error *ngIf="f.abreviacion.touched && f.abreviacion.hasError('required')">
+                        {{ 'modalidad.error_abreviacion' | translate }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="flex">
+                    <input matInput placeholder="{{ 'GLOBAL.numero_orden' | translate }}"
+                        formControlName="numeroOrden" class="form-control"
+                        name="numeroOrden">
+                    <mat-error *ngIf="f.numeroOrden.touched && f.numeroOrden.hasError('required')">
+                        {{ 'modalidad.error_numero_orden' | translate }}
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-checkbox formControlName="activo" [(ngModel)]="activo">
+                    {{ 'GLOBAL.activo' | translate }}
+                </mat-checkbox>
+
+                <div class="row">
+                    <div class="col-12 ml-auto">
+                      <button class="float-right" mat-button type="submit" [disabled]="modalidadForm.invalid">{{ 'GLOBAL.guardar' | translate }} </button>
+                    </div>
+                </div>
+            </form>
+    </fieldset>
+</div>

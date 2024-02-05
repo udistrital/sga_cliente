@@ -113,6 +113,11 @@
                                         formControlName="ofrece_proyecto" class="form-control" name="ofrece_proyecto"
                                         [(ngModel)]="data.ofrece">
                                 </mat-form-field>
+                                <mat-form-field>
+                                    <input readonly matInput placeholder="{{ 'proyecto.modalidad_proyecto' | translate }}"
+                                        formControlName="modalidad" class="form-control" name="modalidad"
+                                        [(ngModel)]="data.modalidad">
+                                </mat-form-field>
                             </form>
 
 
