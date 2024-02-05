@@ -433,7 +433,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                 this.popUpManager.showSuccessAlert(this.translate.instant('admision.registro_exito'))
                 this.folderTagtoReload = data.folderOrTag;
                 if (!data.metadata.aprobado && data.metadata.observacion !== '') {
-
+                  
                   this.inscripcionInfo.EstadoInscripcionId.Id = 6; // 6 id de INSCRITO con Observacion
                   this.inscripcionService.put('inscripcion', this.inscripcionInfo)
                     .subscribe(resp => {

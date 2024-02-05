@@ -119,7 +119,7 @@ export class ViewProduccionAcademicaComponent implements OnInit {
                         observacion: estadoDoc.observacion,
                         nombreDocumento: this.translate.instant('produccion_academica.'+itemForm.label_i18n),
                         tabName: prepareNombre, 
-                        carpeta: "Producción Académica/"+prepareNombre.replace(/[\<\>\:\"\|\?\*\/\.]/g,'')
+                        carpeta: "Producción Académica"
                       };
                       produccion["Soportes"].push(prepareDoc);
                       this.zipManagerService.adjuntarArchivos([prepareDoc]);
