@@ -1206,6 +1206,7 @@
         "mensaje_oikos": "Please relate the curricular project with the physical space of the OIKOS system, if the physical space does not exist, please notify the system administrator",
         "oikos": "Physical space",
         "erro_oikos": "Please select the physical space!",
+        "modalidad": "Project modality.",
         "modalidad_proyecto": "Modality:",
         "erro_selec_modalidad": "Please select the modality!"
     },
