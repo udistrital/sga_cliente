@@ -2496,7 +2496,9 @@
         "ptd_general": "PTD General",
         "ptd_docente_principal": "PTD Docente principal",
         "ptd_docente_relacionado": "PTD Docente relacionado",
-        "ptd_timed": "PTD por Tiempos"
+        "ptd_timed": "PTD por Tiempos",
+        "tiempo_inferior_periodo": "Carga con tiempo inferior al periodo",
+        "seccion_tiempo": "Sección de tiempo"
     },
     "espacios_academicos": {
         "espacios_academicos":"Espacios Académicos",
