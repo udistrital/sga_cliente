@@ -756,7 +756,9 @@
         "item": "Ítem",
         "evaluar": "Evaluar",
         "formacion_actual": "Formación actual",
-        "experiencia_actual": "Trabajo actual"
+        "experiencia_actual": "Trabajo actual",
+        "paso": "Paso",
+        "ayuda": "Ayuda"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",

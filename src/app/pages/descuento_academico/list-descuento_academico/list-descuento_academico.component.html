@@ -7,7 +7,7 @@
             <nb-tabset fullWidth (changeTab)="selectTab($event)">
                 <nb-tab tabTitle="{{ 'GLOBAL.lista' | translate }}" [active]="!cambiotab">
                     <br />
-                    <toaster-container [toasterconfig]="config"></toaster-container>
+                    
                     <ng2-smart-table
                         [settings]="settings"
                         [source]="source"
