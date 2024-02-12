@@ -18,6 +18,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { NuxeoService } from '../../../@core/utils/nuxeo.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { TercerosMidService } from '../../../@core/data/terceros_mid.service';
 
 @Component({
   selector: 'ngx-crud-info-caracteristica',
@@ -61,6 +62,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     private popUpManager: PopUpManager,
     private translate: TranslateService,
     private sgamidService: SgaMidService,
+    private tercerosMidService: TercerosMidService,
     private userService: UserService,
     private ubicacionesService: UbicacionService,
     private store: Store<IAppState>,
@@ -273,7 +275,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '') {
       this.denied_acces = false;
-      this.sgamidService.get('persona/consultar_complementarios/' + this.info_persona_id)
+      this.tercerosMidService.get('personas/consultar_complementarios/' + this.info_persona_id)
         .subscribe(async res => {
           if (res !== null && res.Response.Code !== '404') {
             console.log(res.Response)
@@ -352,7 +354,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
           this.info_info_caracteristica.Ente = this.info_persona_id;
           //console.log("put: ", this.info_info_caracteristica); this.loading = false;
-          this.sgamidService.put('persona/actualizar_complementarios', this.info_info_caracteristica)
+          this.tercerosMidService.put('persona/actualizar_complementarios', this.info_info_caracteristica)
             .subscribe(res => {
               this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                 this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
@@ -398,7 +400,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           const info_info_caracteristica_post = <any>infoCaracteristica;
           info_info_caracteristica_post.TipoRelacionUbicacionEnte = 1;
           info_info_caracteristica_post.Tercero = this.info_persona_id;
-          this.sgamidService.post('persona/guardar_complementarios', info_info_caracteristica_post)
+          this.tercerosMidService.post('persona/guardar_complementarios', info_info_caracteristica_post)
             .subscribe(res => {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;

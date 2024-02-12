@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { TercerosMidService } from '../../../@core/data/terceros_mid.service';
 import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
@@ -68,6 +69,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     private translate: TranslateService,
     private popUpManager: PopUpManager,
     private sgamidService: SgaMidService,
+    private tercerosMidService: TercerosMidService,
     private autenticationService: ImplicitAutenticationService,
     private store: Store<IAppState>,
     private listService: ListService,
@@ -269,7 +271,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     let dataTel = {principal: infoPersona.Telefono, alterno: this.datosEncontrados.TelefonoAlterno? this.datosEncontrados.TelefonoAlterno : null}
     prepareUpdate.Complementarios.Telefono.data = JSON.stringify(dataTel);
 
-    this.sgamidService.put('persona/actualizar_persona',prepareUpdate).subscribe((response) => {
+    this.tercerosMidService.put('persona/actualizar_persona',prepareUpdate).subscribe((response) => {
       this.faltandatos = false;
       this.existePersona = false;
       this.formInfoPersona.btn = '';
@@ -300,7 +302,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     infoPersona.FechaExpedicion = infoPersona.FechaExpedicion + ' +0000 +0000';
     infoPersona.NumeroIdentificacion = (infoPersona.NumeroIdentificacion).toString();
     infoPersona.Usuario = this.autenticationService.getPayload().email;
-    this.sgamidService.post('persona/guardar_persona', infoPersona).subscribe(res => {
+    this.tercerosMidService.post('persona/guardar_persona', infoPersona).subscribe(res => {
       const r = <any>res
       if (r !== null && r.Type !== 'error') {
         window.localStorage.setItem('ente', r.Id);
