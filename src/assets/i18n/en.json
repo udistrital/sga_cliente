@@ -756,7 +756,9 @@
         "tipo_icfes": "Type of ICFES",
         "valido_colegio": "Did you validate your high school diploma?",
         "formacion_actual": "Current formation",
-        "experiencia_actual": "Current work"
+        "experiencia_actual": "Current work",
+        "paso": "Step",
+        "ayuda": "Help"
     },
     "ERROR": {
         "general": "The request could not be satisfied",

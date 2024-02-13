@@ -559,8 +559,8 @@
             </legend>
             <div class="row">
                 <mat-vertical-stepper #stepper style="margin-inline: auto; width: 90%;">
-                    <mat-step *ngFor="let step of getUniqueSteps(normalform.campos)" [label]="getStepLabel(step)">
-                        <fieldset [ngClass]="{'fieldseter':!normalform.hidefield}">
+                    <mat-step *ngFor="let step of getUniqueSteps(normalform.campos); let primero = first; let ultimo = last" [label]=" ('GLOBAL.paso' | translate) + ' ' + step ">
+                        <fieldset [ngClass]="{'fieldseter':!normalform.hidefield}" style="margin: 1rem;">
                             <div class="row">
                                 <div *ngFor="let c of getFieldsInStep(step)" class="{{c.claseGrid}}"
                                     [ngSwitch]="c.etiqueta">
@@ -818,9 +818,12 @@
                                 </div>
                             </div>
                         </fieldset>
+                        <div class="button-stepper">
+                            <button mat-stroked-button matStepperPrevious [disabled]="primero">{{ 'GLOBAL.regresar' | translate }}</button>
+                            <button mat-stroked-button matStepperNext [disabled]="ultimo">{{ 'GLOBAL.siguiente' | translate }}</button>
+                        </div>
                     </mat-step>
                 </mat-vertical-stepper>
-
             </div>
             <ng-content></ng-content>
             <div class="buttons-container" *ngIf="normalform.btnLimpiar || normalform.btn">

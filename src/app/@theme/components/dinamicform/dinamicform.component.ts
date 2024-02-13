@@ -597,11 +597,14 @@ export class DinamicformComponent implements OnInit, OnChanges {
   }
 
   getUniqueSteps(campos: any[]): number[] {
-    return [...new Set(campos.map(c => c.step))];
-  }
-  
-  getStepLabel(step: number): string {
-    return `Paso ${step}`;
+    const uniqueSteps: number[] = [];
+    for (const campo of campos) {
+      const step = campo.step;
+      if (!uniqueSteps.includes(step)) {
+        uniqueSteps.push(step);
+      }
+    }
+    return uniqueSteps;
   }
   
   getFieldsInStep(step: number): any[] {
