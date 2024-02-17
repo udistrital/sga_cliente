@@ -14,22 +14,22 @@ const routes: Routes = [{
         {
             path: 'nueva-solicitud',
             component: NuevaSolicitudComponent,
-            canActivate: [AuthGuard],
+            //canActivate: [AuthGuard],
         },
         {
             path: 'nueva-solicitud/:id/:process',
             component: NuevaSolicitudComponent,
-            canActivate: [AuthGuard],
+            //canActivate: [AuthGuard],
         },
         {
             path: 'lista-practicas/:process',
             component: ListPracticasAcademicasComponent,
-            canActivate: [AuthGuard],
+            //canActivate: [AuthGuard],
         },
         {
             path: 'detalle-practica-academica/:id/:process',
             component: DetallePracticaAcademicaComponent,
-            canActivate: [AuthGuard],
+            //canActivate: [AuthGuard],
         }
     ]
 }];
