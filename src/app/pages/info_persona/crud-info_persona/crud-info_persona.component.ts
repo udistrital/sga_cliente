@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { TercerosMidService } from '../../../@core/data/terceros_mid.service';
 import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
@@ -68,6 +69,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     private translate: TranslateService,
     private popUpManager: PopUpManager,
     private sgamidService: SgaMidService,
+    private tercerosMidService: TercerosMidService,
     private autenticationService: ImplicitAutenticationService,
     private store: Store<IAppState>,
     private listService: ListService,
@@ -81,9 +83,6 @@ export class CrudInfoPersonaComponent implements OnInit {
       this.loading = true;
       Promise.all([
       this.listService.findGenero(),
-      this.listService.findOrientacionSexual(),
-      this.listService.findIdentidadGenero(),
-      this.listService.findEstadoCivil(),
       this.listService.findTipoIdentificacion()]).then(() => {
         this.loadLists();
       });
@@ -124,10 +123,9 @@ export class CrudInfoPersonaComponent implements OnInit {
             this.datosEncontrados = {...res}
             const files = []
             this.formInfoPersona.btn = '';
-            if (temp.Genero.Nombre != "NO APLICA") {
+            if (temp.Genero && (temp.Genero.Nombre != "NO APLICA")) {
               this.formInfoPersona.campos[this.getIndexForm('Genero')].valor = temp.Genero;
             }
-            this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].valor = temp.EstadoCivil;
             this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].valor = temp.TipoIdentificacion;
             if (temp.FechaNacimiento != null) {
               temp.FechaNacimiento = temp.FechaNacimiento.replace("T00:00:00Z", "T05:00:00Z");
@@ -192,14 +190,6 @@ export class CrudInfoPersonaComponent implements OnInit {
           this.formInfoPersona.campos.splice(this.getIndexForm('VerificarNumeroIdentificacion'),1);
 
           this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.persona_ya_existe'), this.translate.instant('inscripcion.info_persona_ya_existe'),'info',false).then(()=>{
-            this.formInfoPersona.campos.forEach(campo => {
-              if(campo.valor){
-                campo.deshabilitar = true;
-                if(campo.nombre == "EstadoCivil" || campo.nombre == "OrientacionSexual" || campo.nombre == "IdentidadGenero"){
-                  campo.deshabilitar = false;
-                }
-              }
-            });
             let UsuarioExistente = <string>this.info_info_persona.UsuarioWSO2;
             let correoActual = <string>this.autenticationService.getPayload().email;
             if (UsuarioExistente.match(UtilidadesService.ListaPatrones.correo)) {
@@ -237,9 +227,6 @@ export class CrudInfoPersonaComponent implements OnInit {
       Identificacion: { hasId: null, data: {} },
       Complementarios: {
         Genero: { hasId: null, data: {} },
-        EstadoCivil: { hasId: null, data: {} },
-        OrientacionSexual: { hasId: null, data: {} },
-        IdentidadGenero: { hasId: null, data: {} },
         Telefono: { hasId: null, data: {} },
       } 
     }
@@ -278,28 +265,13 @@ export class CrudInfoPersonaComponent implements OnInit {
     }
     prepareUpdate.Complementarios.Genero.data = infoPersona.Genero;
 
-    if(this.datosEncontrados.hasOwnProperty('EstadoCivil')){
-      prepareUpdate.Complementarios.EstadoCivil.hasId = this.datosEncontrados.EstadoCivilId;
-    }
-    prepareUpdate.Complementarios.EstadoCivil.data = infoPersona.EstadoCivil;
-
-    if(this.datosEncontrados.hasOwnProperty('OrientacionSexual')){
-      prepareUpdate.Complementarios.OrientacionSexual.hasId = this.datosEncontrados.OrientacionSexualId;
-    }
-    prepareUpdate.Complementarios.OrientacionSexual.data = infoPersona.OrientacionSexual;
-
-    if(this.datosEncontrados.hasOwnProperty('IdentidadGenero')){
-      prepareUpdate.Complementarios.IdentidadGenero.hasId = this.datosEncontrados.IdentidadGeneroId;
-    }
-    prepareUpdate.Complementarios.IdentidadGenero.data = infoPersona.IdentidadGenero;
-
     if(this.datosEncontrados.hasOwnProperty('Telefono')){
       prepareUpdate.Complementarios.Telefono.hasId = this.datosEncontrados.TelefonoId;
     }
     let dataTel = {principal: infoPersona.Telefono, alterno: this.datosEncontrados.TelefonoAlterno? this.datosEncontrados.TelefonoAlterno : null}
     prepareUpdate.Complementarios.Telefono.data = JSON.stringify(dataTel);
 
-    this.sgamidService.put('persona/actualizar_persona',prepareUpdate).subscribe((response) => {
+    this.tercerosMidService.put('persona/actualizar_persona',prepareUpdate).subscribe((response) => {
       this.faltandatos = false;
       this.existePersona = false;
       this.formInfoPersona.btn = '';
@@ -330,7 +302,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     infoPersona.FechaExpedicion = infoPersona.FechaExpedicion + ' +0000 +0000';
     infoPersona.NumeroIdentificacion = (infoPersona.NumeroIdentificacion).toString();
     infoPersona.Usuario = this.autenticationService.getPayload().email;
-    this.sgamidService.post('persona/guardar_persona', infoPersona).subscribe(res => {
+    this.tercerosMidService.post('persona/guardar_persona', infoPersona).subscribe(res => {
       const r = <any>res
       if (r !== null && r.Type !== 'error') {
         window.localStorage.setItem('ente', r.Id);
@@ -446,10 +418,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     this.store.select((state) => state).subscribe(
       (list) => {
         this.formInfoPersona.campos[this.getIndexForm('Genero')].opciones = (<any>list.listGenero[0]).filter((g) => g.Nombre != "NO APLICA");
-        this.formInfoPersona.campos[this.getIndexForm('EstadoCivil')].opciones = list.listEstadoCivil[0];
         this.formInfoPersona.campos[this.getIndexForm('TipoIdentificacion')].opciones = list.listTipoIdentificacion[0];
-        this.formInfoPersona.campos[this.getIndexForm('OrientacionSexual')].opciones = list.listOrientacionSexual[0];
-        this.formInfoPersona.campos[this.getIndexForm('IdentidadGenero')].opciones = list.listIdentidadGenero[0];
       },
     );
   }

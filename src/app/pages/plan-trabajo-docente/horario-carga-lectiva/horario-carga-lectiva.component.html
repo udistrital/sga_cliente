@@ -97,6 +97,32 @@
                             onkeypress="return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57" />
                     </mat-form-field>
                 </div>
+
+                <div class="espacio" style="width: 50%;">
+                    <mat-checkbox type="checkbox" class="customised-control-input" color="primary"
+                        [(checked)]="manageByTime" (change)="habilitarSelectFechas()">
+                        {{ "ptd.tiempo_inferior_periodo" | translate }}
+                    </mat-checkbox>
+
+                    <ng-container *ngIf="manageByTime">
+                        <mat-form-field floatLabel="always">
+                            <mat-label> {{ "GLOBAL.fecha_inicio" | translate}}:</mat-label>
+                            <input matInput formControlName="fecha_ini" [matDatepicker]="picker1"
+                                 [placeholder]=" 'GLOBAL.placeholder_fecha_inicio' | translate ">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field floatLabel="always">
+                            <mat-label> {{ "GLOBAL.fecha_fin" | translate}}:</mat-label>
+                            <input matInput formControlName="fecha_fin" [matDatepicker]="picker2" [min]="picker1._datepickerInput._value"
+                                [placeholder]=" 'GLOBAL.placeholder_fecha_fin' | translate ">
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </ng-container>
+                </div>
+
                 <div class="botones">
                     <button class="float-right" (click)="addCarga()" [disabled]="ubicacionForm.invalid" mat-button
                         type="button">{{

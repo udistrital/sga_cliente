@@ -553,7 +553,7 @@ export class AsignarPtdComponent implements OnInit {
 
   manageChangesInGeneralPTD(event) {
     console.log('manageChangesInGeneral:', event)
-    const xd = this.detallesGeneral.carga[0].filter(c => c.docenteModular != event.docente_id)
+    const xd = this.detallesGeneral.carga[0].filter(c => c.docente != event.docente_id)
     console.log(xd)
   }
 }

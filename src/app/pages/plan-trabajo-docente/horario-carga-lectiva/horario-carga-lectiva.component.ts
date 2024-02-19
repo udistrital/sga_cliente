@@ -112,6 +112,7 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
   ocupados: any[] = [];
   aprobacion: any = undefined;
   EspaciosProyecto: any = undefined;
+  manageByTime: boolean = false;
 
   ngOnInit() {
 
@@ -122,6 +123,8 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
       edificio: [null, Validators.required],
       salon: [null, Validators.required],
       horas: [null, Validators.required],
+      fecha_ini: [null],
+      fecha_fin: [null],
     });
 
     this.ubicacionForm.get('edificio').disable();
@@ -133,6 +136,16 @@ export class HorarioCargaLectivaComponent implements OnInit, OnChanges {
     this.searchTerm$.pipe(distinctUntilChanged(),).subscribe((response: any) => {
       this.opcionesSalonesFiltrados = this.opcionesSalones.filter((value, index, array) => value.Nombre.toLowerCase().includes(response.text.toLowerCase()));
     });
+  }
+
+  habilitarSelectFechas() {
+    this.manageByTime = !this.manageByTime;
+    const validador = this.manageByTime ? Validators.required : null;
+    this.ubicacionForm.get('fecha_ini').setValidators(validador);
+    this.ubicacionForm.get('fecha_ini').updateValueAndValidity();
+    this.ubicacionForm.get('fecha_fin').setValidators(validador);
+    this.ubicacionForm.get('fecha_fin').updateValueAndValidity();
+    console.log(this.ubicacionForm)
   }
 
   ngOnChanges() {

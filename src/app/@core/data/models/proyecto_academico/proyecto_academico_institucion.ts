@@ -1,4 +1,5 @@
 import {Metodologia} from './metodologia'
+import { Modalidad } from './modalidad';
 import {NivelFormacion} from './nivel_formacion'
 
 export class ProyectoAcademicoInstitucion {
@@ -26,4 +27,5 @@ export class ProyectoAcademicoInstitucion {
     NivelFormacionId: NivelFormacion;
     AnoActoAdministrativo: string;
     ProyectoPadreId: ProyectoAcademicoInstitucion;
+    ModalidadId: Modalidad;
 }

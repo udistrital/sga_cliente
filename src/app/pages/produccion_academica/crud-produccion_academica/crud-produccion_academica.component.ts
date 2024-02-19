@@ -673,16 +673,31 @@ export class CrudProduccionAcademicaComponent implements OnInit {
 
   validarForm(event) {
     if (event.valid) {
-      if (this.info_produccion_academica.Titulo === undefined ||
-        this.info_produccion_academica.Fecha === undefined ||
-        this.info_produccion_academica.Resumen === undefined) {
+      if (!this.info_produccion_academica.Titulo ||
+        !this.info_produccion_academica.Fecha ||
+        !this.info_produccion_academica.Resumen) {
         Swal.fire({
           icon: 'warning',
           title: 'ERROR',
           text: this.translate.instant('produccion_academica.alerta_llenar_campos_datos_basicos'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         });
+      } else if (this.info_produccion_academica.Resumen && this.info_produccion_academica.Resumen.length > 400) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'ERROR',
+          text: this.translate.instant('produccion_academica.alerta_caracteres_resumen'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        });
       } else {
+        console.log(this.info_produccion_academica);
+        const caracteresEspeciales1: RegExp = /[\"\\\/\b\f]/g;  // pueden romper JSON string in api GO
+        const caracteresEspeciales2: RegExp = /[\t\n\r]/g;  // pueden romper JSON string in api GO
+        const multiespacio: RegExp = /\s\s+/g; // bonus: quitar muchos espacios juntos
+        this.info_produccion_academica.Resumen.replace(caracteresEspeciales1,'');
+        this.info_produccion_academica.Resumen.replace(caracteresEspeciales2,' '); // tabs y enter se reemplazan por espacio
+        this.info_produccion_academica.Resumen.replace(multiespacio, ' ');
+        console.log(this.info_produccion_academica);
         const promises = [];
         if (event.data.ProduccionAcademica) {
           // Subir archivos y verificar los
@@ -693,7 +708,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           const metadatos = [];
           const filesToUpload = [];
           for (let i = 0; i < keys.length; i++) {
-            if (tempMetadatos[keys[i]].nombre) {
+            if (tempMetadatos[keys[i]] && tempMetadatos[keys[i]].nombre) {
               // Archivo se debe subir a nuxeo
               if (tempMetadatos[keys[i]].file !== undefined) {
                 filesToUpload.push(tempMetadatos[keys[i]]);

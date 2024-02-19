@@ -33,6 +33,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   nivel: string;
   iddependencia: number;
   metodologia: string;
+  modalidad: string;
   abreviacion: string;
   correo: string;
   numerocreditos: Number;
@@ -45,6 +46,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
   idfacultad: Number;
   idnivel: Number;
   idmetodo: Number;
+  idModalidad: Number;
   idunidad: Number;
   idarea: Number;
   idnucleo: Number;
@@ -235,6 +237,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         facultad: this.facultad,
         nivel: this.nivel,
         metodologia: this.metodologia,
+        modalidad: this.modalidad,
         abreviacion: this.abreviacion,
         correo: this.correo,
         numerocreditos: this.numerocreditos,
@@ -266,6 +269,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         facultad: this.facultad,
         nivel: this.nivel,
         metodologia: this.metodologia,
+        modalidad: this.modalidad,
         abreviacion: this.abreviacion,
         correo: this.correo,
         numerocreditos: this.numerocreditos,
@@ -277,6 +281,7 @@ export class ListProyectoAcademicoComponent implements OnInit {
         idfacultad: this.idfacultad,
         idnivel: this.idnivel,
         idmetodo: this.idmetodo,
+        idModalidad: this.idModalidad,
         idunidad: this.idunidad,
         oferta_check: this.oferta_check,
         ciclos_check: this.ciclos_check,
@@ -405,6 +410,9 @@ export class ListProyectoAcademicoComponent implements OnInit {
             this.metodologia = res.map(
               (data: any) => data.ProyectoAcademico.MetodologiaId.Nombre,
             );
+            this.modalidad = res.some((data: any) => data.ProyectoAcademico.ModalidadId != null) ? res.map(
+              (data: any) => data.ProyectoAcademico.ModalidadId.Nombre,
+            ) : null;
             this.abreviacion = res.map(
               (data: any) => data.ProyectoAcademico.CodigoAbreviacion,
             );
@@ -478,6 +486,9 @@ export class ListProyectoAcademicoComponent implements OnInit {
             this.metodologia = res.map(
               (data: any) => data.ProyectoAcademico.MetodologiaId.Nombre,
             );
+            this.modalidad = res.some((data: any) => data.ProyectoAcademico.ModalidadId != null) ? this.modalidad = res.map(
+              (data: any) => data.ProyectoAcademico.ModalidadId.Nombre
+            ) : null;
             this.abreviacion = res.map(
               (data: any) => data.ProyectoAcademico.CodigoAbreviacion,
             );
@@ -503,6 +514,9 @@ export class ListProyectoAcademicoComponent implements OnInit {
             this.idmetodo = res.map(
               (data: any) => data.ProyectoAcademico.MetodologiaId.Id,
             );
+            this.idModalidad = res.some((data: any) => data.ProyectoAcademico.ModalidadId != null) ? res.map(
+              (data: any) => data.ProyectoAcademico.ModalidadId.Id,
+            ) : null;
             this.idunidad = res.map(
               (data: any) => data.ProyectoAcademico.UnidadTiempoId,
             );

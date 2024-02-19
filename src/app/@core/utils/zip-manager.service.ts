@@ -14,8 +14,13 @@ export class ZipManagerService {
     private newNuxeoService: NewNuxeoService,
     ) { }
 
-  adjuntarArchivos(file: any[]): number {
-    this.Archivos.push(...file);
+  adjuntarArchivos(newfiles: any[]): number {
+    newfiles.forEach(nf => {
+      const existing = this.Archivos.some(f => f.DocumentoId === nf.DocumentoId);
+      if (!existing) {
+        this.Archivos.push(nf);
+      }
+    });
     return this.Archivos.length
   }
 
@@ -28,6 +33,7 @@ export class ZipManagerService {
     return [...this.Archivos.map(f => {
       return {
         carpeta: f.carpeta.split('/')[0],
+        subcarpeta: f.subcarpeta || '',
         grupoDoc: f.tabName,
         documentoId: f.DocumentoId,
         nombreDocumento: f.nombreDocumento,
@@ -40,8 +46,8 @@ export class ZipManagerService {
   manejarNombresRepetidos(archivos: any[]): any[] {
     const contador: Record<string, number> = {};
     return archivos.map(archivo => {
-      const { nombreDocumento, ...file_info} = archivo;
-      if (contador[nombreDocumento] === undefined) {
+      const { nombreDocumento, subcarpeta, ...file_info} = archivo;
+      if (contador[nombreDocumento + (subcarpeta||'')] === undefined) {
         contador[nombreDocumento] = 1;
         return archivo;
       } else {
@@ -60,6 +66,7 @@ export class ZipManagerService {
       this.Archivos.forEach((archivo, index) => {
         let nombre = <string>archivo.nombreDocumento;
         let carpeta = <string>archivo.carpeta;
+        let subcarpeta = <string>archivo.subcarpeta ? '/' + <string>archivo.subcarpeta : '';
         nombre = nombre.replace(/[\<\>\:\"\|\?\*\/\.]/g,'');  
         //nombre = nombre.concat('.pdf');
         this.newNuxeoService.getByIdLocal(archivo.DocumentoId)
@@ -67,7 +74,7 @@ export class ZipManagerService {
         fetch(file.url)
           .then((res) => res.blob())
           .then((blob) => {
-            zip.folder(this.CarpetaPrincipal).folder(carpeta).file(nombre+file.type, blob, {binary: true});
+            zip.folder(this.CarpetaPrincipal).folder(carpeta + subcarpeta).file(nombre+file.type, blob, {binary: true});
             if (index === this.Archivos.length - 1) {
               zip.generateAsync({type:"blob"})
                 .then((content) => {

@@ -9,7 +9,7 @@
     "MENU": {
         "menu": {
             "menu": "Menu",
-            "rol": "Rol",
+            "rol": "Role",
             "opciones": "Options"
         },
         "aplicaciones": "Apps",
@@ -51,7 +51,8 @@
             "definir_conceptos": "Define Concepts",
             "asignar_valores": "Assign Values",
             "consultar_conceptos": "Consult concepts",
-            "recibos_derechos_pecuniarios": "Generation of payment \nreceipts"
+            "recibos_derechos_pecuniarios": "Generation of payment \nreceipts",
+            "consultar_solicitudes": "Consult\nrequests"
         },
         "archivo_icfes": {
             "archivo_icfes": "Icfes file",
@@ -62,9 +63,9 @@
             "reportes": "Reports",
             "inscripciones": {
                 "inscripciones": "Inscriptions",
-                "aspirantes": "Inscritos por programa",
-                "admitidos": "Admitidos por programa",
-                "inscritos": "Aspirantes por programa"
+                "aspirantes": "Applicants by program",
+                "admitidos": "Admitted by program",
+                "inscritos": "Enrolled by program"
             },
             "icfes": {
                 "icfes": "ICFES SNP Registration",
@@ -101,7 +102,8 @@
         "calendarioacademico": {
             "calendarioacademico": "Academic calendar",
             "list_calendarioacademico": "List of academic calendars",
-            "buscar_calendario_proyecto": "Search calendar by project"
+            "buscar_calendario_proyecto": "Search calendar by project",
+            "administración calendario": "Calendar Management"
         },
         "proyecto_academico": {
             "proyecto_academico": "Academic Project",
@@ -111,7 +113,8 @@
         "inscripcion": {
             "inscripcion": "Inscription",
             "inscripcion_general": "Enrollment in an academic project",
-            "preinscripcion": "Pre-registration for \nacademic projects"
+            "preinscripcion": "Pre-registration for \nacademic projects",
+            "transferencia": "Transfer"
         },
         "admision": {
             "evaluacion_documentos": "Evaluation of registration\n documents",
@@ -145,7 +148,9 @@
             "crear_nueva_practica": "New Request",
             "ver_nuevas_solicitudes": "New requests",
             "en_proceso": "Requests in process",
-            "invitacion": "Invitation to academic\npractices"
+            "invitacion": "Invitation to academic\npractices",
+            "informe_practica": "Practice report",
+            "listado_practicas": "List of academic\npractices"
         },
         "preinscripcion_espacios_academicos": {
             "preinscripcion_espacios_academicos": "Academic spaces\npre-registration",
@@ -172,7 +177,8 @@
         "gestion-horarios": {
             "gestion-horarios": "Schedule Management",
             "disponibilidad-cupos": "Availability of places",
-            "horarios-grupos": "Schedules by Groups"
+            "horarios-grupos": "Schedules by Groups",
+            "gestion-horario": "Schedule management"
         }
     },
     "GLOBAL": {
@@ -721,8 +727,38 @@
         "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1",
         "item": "Item",
         "evaluar": "Evaluate",
+        "admitiendo_aspirantes": "Admitting applicants",
+        "agregar_empresa": "Company",
+        "agregar_universidad": "University",
+        "aspirantes_admitidos": "admitted applicants",
+        "aspirantes_correctamente": "candidates correctly",
+        "confirme_numero_registro": "CONFIRM the ICFES Registration Number (SNP)",
+        "fecha": "Date",
+        "fecha_expedicion": "Document issue date",
+        "info_contacto": "Contact information",
+        "info_familiar": "Family information",
+        "institucion": "Institution",
+        "limpiar": "Clean",
+        "numero": "Number",
+        "numero_registro": "ICFES registration number (SNP)",
+        "placeholder_confirme_numero_registro": "E.g.: ICFES registration number",
+        "placeholder_fecha_expedicion": "E.g.: 05/05/2013",
+        "placeholder_numero_registro": "E.g.: ICFES registration number",
+        "placeholder_tipo_colegio": "E.g.: Official",
+        "placeholder_tipo_icfes": "E.g.: Type of ICFES",
+        "placeholder_valido_colegio": "E.g.: No",
+        "proceso_admision_exitoso": "Successful admission process",
+        "programa": "Program",
+        "rol": "Role",
+        "se_admitieron": "Were admitted",
+        "se_admitiran": "Will be admitted",
+        "tipo_colegio": "Type of School where Grade 11 was completed",
+        "tipo_icfes": "Type of ICFES",
+        "valido_colegio": "Did you validate your high school diploma?",
         "formacion_actual": "Current formation",
-        "experiencia_actual": "Current work"
+        "experiencia_actual": "Current work",
+        "paso": "Step",
+        "ayuda": "Help"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -745,7 +781,9 @@
         "fallo_informacion_en": "There was an error querying the information about",
         "sin_informacion_en": "No information has been found about",
         "persiste_error_comunique_OAS": "Please return and try again later. If the error persists, contact the Technology and Information Advisory Office (Oficina Asesora de Tecnologías e Información)",
-        "error_previsualizar_doc": "The document could not be viewed, it is not a valid format, or it was not found."
+        "error_previsualizar_doc": "The document could not be viewed, it is not a valid format, or it was not found.",
+        "contenido_archivo_erroneo": "Non-standard file content for the requested format",
+        "contenido_archivo_erroneo_mensaje": "The content of the file is not correct for the requested format and may be unreadable when uploaded. \nTry saving it again in the allowed formats; If it is a PDF, save it in an optimized or compressed version."
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",
@@ -809,6 +847,8 @@
         "datos_basicos": "Basic data",
         "alerta_llenar_campo": "You must fill this field",
         "alerta_llenar_campos_datos_basicos": "You must fill all basic data fields",
+        "alerta_limite_caracteres_superado": "You have exceeded the limit of allowed characters (400)",
+        "alerta_caracteres_resumen": "You have exceeded the allowed character limit (400) in the basic information summary field",
         "seguro_continuar_registrar_produccion": "Are you sure you want to register this production?",
         "seguro_continuar_eliminar_produccion": "Are you sure you want to delete this production?",
         "seguro_continuar_actualizar_produccion": "Are you sure you want to update this production?",
@@ -1018,9 +1058,9 @@
         "historico_acreditaciones": "Accreditation history",
         "error_obteniendo_reporte": "There was an error getting the report information, please try again.",
         "icfes_snp": "List of applicants projects with SNP registration",
-        "RteAdmitidos": "Listado de admitidos por periodo y proyecto.",
-        "RteAspirantes": "Listado de aspirantes por periodo y proyecto.",
-        "RteInscritos": "Listado de inscritos por periodo y proyecto."
+        "RteAdmitidos": "List of admitted by period and project.",
+        "RteAspirantes": "List of applicants by period and project.",
+        "RteInscritos": "List of enrolled by period and project."
     },
     "evento": {
         "evento": "Event",
@@ -1037,7 +1077,7 @@
         "nombre_publico": "Name",
         "descripcion_publico": "Description",
         "agregar_encargado": "Add",
-        "rol_encargado": "Rol",
+        "rol_encargado": "Role",
         "placeholder_rol_encargado": "Creator",
         "nombre_encargado": "Name",
         "placeholder_nombre_encargado": "Andres Perez",
@@ -1122,7 +1162,8 @@
         "proyecto": "Curriculum Project",
         "fecha_inicio": "Start date",
         "fecha_finaliza": "Finish date",
-        "filtro": "Write to filter by curricular project name"
+        "filtro": "Write to filter by curricular project name",
+        "ano": "Year"
     },
     "proyecto": {
         "titulo": "Registration of an Academic Project",
@@ -1209,7 +1250,10 @@
         "proyecto_padre": "Parent project",
         "mensaje_oikos": "Please relate the curricular project with the physical space of the OIKOS system, if the physical space does not exist, please notify the system administrator",
         "oikos": "Physical space",
-        "erro_oikos": "Please select the physical space!"
+        "erro_oikos": "Please select the physical space!",
+        "modalidad": "Project modality.",
+        "modalidad_proyecto": "Modality:",
+        "erro_selec_modalidad": "Please select the modality!"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
@@ -1279,7 +1323,31 @@
         "enfasis_actualizado": "Emphasys updated",
         "enfasis_no_actualizado": "Emphasys not updated",
         "administrar_enfasis": "Administrate emphasys",
-        "error_enfasis_ya_existe": "The emphasys is already added"
+        "error_enfasis_ya_existe": "The emphasys is already added",
+        "select_enfasis": "Select emphasis"
+    },
+    "modalidad": {
+        "titulo": "Modalities",
+        "administrar_modalidad": "Administrate modalities",
+        "buscar": "Search",
+        "busqueda": "Enter your search",
+        "registrar": "Register new modality",
+        "actualizar": "Update modality",
+        "editar": "Edit modality",
+        "eliminar": "Delete modality",
+        "error_nombre": "Please insert the name for the modality",
+        "error_descripcion": "Please insert the description",
+        "error_codigo_abreviacion": "Please insert the abbreviation code",
+        "error_numero_orden":"Please insert the orden number",
+        "seguro_continuar_registro": "Are you sure you want to register this modality?",
+        "seguro_continuar_eliminar": "Are you sure you want to delete this modality?",
+        "seguro_actualizar_registro": "Are you sure you want to update this modality?",
+        "creada": "Modality created",
+        "no_creada": "Modality no created",
+        "eliminada": "Modality removed",
+        "no_eliminada": "Modality no removed",
+        "actualizada": "Modality updated",
+        "no_actualizada": "Modality no updated"
     },
     "historial_registro": {
         "titulo": "History of accreditation records and high quality of the Academic Project",
@@ -1457,7 +1525,8 @@
         "no_edit_doc_aprobado": "You cannot edit approved document",
         "ya_existe_registro": "You already have information loaded for this field",
         "informar_estado_inscrito_obs": "Applicant, your enrollment is conditioned by observations in the attached documentation, please go to Registration Details to review and correct the information not approved. If you do not, you cannot continue with the process.",
-        "info_boton_cambio_inscrito": "Do not forget to press the button \"Confirm edition of documents with observations\" to return to the ENROLLED status, this is enabled when you have edited all the not approved documents."
+        "info_boton_cambio_inscrito": "Do not forget to press the button \"Confirm edition of documents with observations\" to return to the ENROLLED status, this is enabled when you have edited all the not approved documents.",
+        "no_fechas_inscripcion": "The selected curricular project does not present registration dates"
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
@@ -1525,6 +1594,9 @@
         "seguro_continuar_registrar": "Are you sure you want to register this academic discount?",
         "no_documentos": "There are no registered documents.",
         "documento_cambiar": "Please select the replacement document for the chosen item.",
+        "documento_documento_programa_no_registrado": "Error uploading support document",
+        "documento_programa_no_registrado": "Document not registered",
+        "documento_programa_registrado": "Document registered",
         "no_permite_borrar": "In this state, it is not possible to remove the document.",
         "seguro_borrar": "Are you sure you want to remove the document?",
         "documento_eliminado": "Document removed",
@@ -1563,7 +1635,8 @@
         "poner_obligatorio": "Set document as required?",
         "quitar_obligatorio": "Set document as optional?",
         "ajuste_ok": "Change made",
-        "ajuste_fail": "The change could not be made"
+        "ajuste_fail": "The change could not be made",
+        "error_documento_ya_existe": "The document has already been added"
     },
     "descuento_academico": {
         "documento_programa_no_registrado": "Document not registered",
@@ -1737,7 +1810,13 @@
         "descargar_zip": "Download the applicant's documentary compilation",
         "no_vinculacion_no_rol": "Your user is not linked to any academic project and does not have the appropriate role",
         "multiple_vinculacion": "Your user appears linked to more than one academic project",
-        "notificar_observaciones":"Report observations"
+        "notificar_observaciones":"Report observations",
+        "desc_notificacion_error": "An error occurred while notifying the user",
+        "desc_notificacion_success": "The notification of the observations was done successfully",
+        "error_sin_observaciones": "There have been no observations to report",
+        "titulo_notificacion_error": "Notification failure",
+        "titulo_notificacion_success": "Successful notification",
+        "titulo_sin_observaciones": "No observations"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",
@@ -1756,7 +1835,8 @@
         "seleccionar_admitidos": "Select admitted",
         "ver_listado_aspirantes": "Show list of applicants",
         "cupos_proyecto": "Number of assigned places",
-        "sin_cupos_periodo": "No quotas have been defined for this period or curricular project"
+        "sin_cupos_periodo": "No quotas have been defined for this period or curricular project",
+        "cupos_disponibles": "Number of places available:"
     },
     "calendario": {
         "seguro_continuar_inhabilitar_calendario": "¿Are you sure to disable this calendar?",
@@ -1865,7 +1945,39 @@
         "tooltip_crear_proceso": "Create process",
         "sin_calendarios": "There are no calendars.",
         "subir_resolucion": "Upload resolution",
-        "descargar_resolucion": "Download resolution"
+        "descargar_resolucion": "Download resolution",
+        "Add another extension": "Add another extension",
+        "administración_calendario_proyecto": "Academic calendar administration by curricular project",
+        "calendario_tiene_extension": "This calendar has an extension.",
+        "crear_actividad_proceso": "Please add the first activity of the process below",
+        "descripcion": "Description",
+        "descripcion_actividad": "Description of the activity",
+        "descripcion_proceso": "Process description",
+        "edicion_actividades": "Editing activities",
+        "Extension_calendario_ok": "The calendar extension was successful!",
+        "extension_inactiva": "This calendar extension is disabled.",
+        "extension_proyectos_info": "User: Please note that the assignment of the calendar extension must be done \"one by one\" with the programs that are associated with the general calendar, for which you must repeat the process with each of them.",
+        "fecha_edicion": "Edition date",
+        "fechas_globales": "Calendar global dates",
+        "formulario_extension": "Calendar Extension",
+        "informacion_general": "General information",
+        "mensaje_estado_actividad": "Are you sure to change the activity status?",
+        "modificacion_fechas_info": "Next you can modify the dates of the corresponding activity, taking into account that the system limits its editing to the range of global dates of the general calendar.",
+        "periodicidad_2": "Periodicity",
+        "programas_curriculares": "Related curricular programs",
+        "proyecto_curricular": "Curricular project",
+        "resolucion_extension": "Resolution of calendar extension",
+        "seguro_extension": "You are about to create a calendar extension, do you want to continue?",
+        "seleccion_proyectos_info": "Next you will be able to select the curricular projects for which you enable the editing of dates in the respective activities established in the general calendar.",
+        "seleccione_version_calendario": "Select calendar version",
+        "select_proyectos_actividades": "Editing selection for curricular projects",
+        "sin_permiso_edicion": "You do not have permission to edit this activity",
+        "sin_proyectos_actividades": "There are no curricular projects with specific dates for this activity.",
+        "tooltip_detalle_actividad": "Details associated programs",
+        "tooltip_detalle_proceso": "Process detail",
+        "tooltip_estado_actividad": "Activate/Deactivate activity",
+        "tooltip_seleccionar_proyectos": "Enable editing by programs",
+        "add_extension_extension": "Add another extension"
     },
     "derechos_pecuniarios": {
         "titulo": "Financial entitlements",
@@ -1946,7 +2058,8 @@
         "pago_ya_adjuntado": "Payment was previously enclosed.",
         "solicitud_generada": "The request has been generated successfully.",
         "error_solicitud_generada": "Request could not be generated.",
-        "error_respuesta_solicitud": "It was not possible to respond to the request."
+        "error_respuesta_solicitud": "It was not possible to respond to the request.",
+        "id": "Id"
     },
     "tipo_inscripcion": {
         "titulo": "Inscriptions Type",
@@ -2023,7 +2136,10 @@
         "generar_id_boton": "Update ID ",
         "generar_solicitud": "Generate new request",
         "modificar_solicitud": "Modify the request",
-        "responder_solicitud": "Respond to the request"
+        "responder_solicitud": "Respond to the request",
+        "apellido_actual": "Current last name",
+        "apellido_nuevo": "New Last Name",
+        "solicitud_encabezado": "Request details"
     },
     "practicas_academicas": {
         "titulo": "Academic Practice Request",
@@ -2095,7 +2211,9 @@
         "estado_actual": "Current status of the request",
         "invitaciones_no_enviadas": "Invitations could not be sent",
         "invitaciones_enviadas": "Invitations were sent",
-        "solicitud_creada": "The request was successfully created. Request ID: "
+        "solicitud_creada": "The request was successfully created. Request ID: ",
+        "cumplido_practica": "Fulfillment of practice",
+        "informe_practica": "Practice report"
     },
     "preinscripcion_espacios_academicos": {
         "preinscripcion_titulo": "Academic spaces Pre-registration",
@@ -2203,7 +2321,8 @@
         "cerrar_corte_notas": "A grade cut is going to close! Keep in mind that once closed you will not be able to edit again unless you request an extemporaneous modification.",
         "title_finalizar": "Generation of final grades",
         "info_finalizar": "About to finish the registration of grades, please fill in the fields of absences and observations if you haven't already done so. The foregoing in order to evaluate cases of subject losses due to absences.",
-        "pregunta_finalizar_registros": "Do you want to end the qualification process? You can press cancel to save changes and review the final notes, if you have already made the pertinent revisions, press accept to conclude the process."
+        "pregunta_finalizar_registros": "Do you want to end the qualification process? You can press cancel to save changes and review the final notes, if you have already made the pertinent revisions, press accept to conclude the process.",
+        "info_guardado_necesario": "Teacher: Every time you make changes to percentages, it is recommended that you save the grade table again to ensure the change in percentages in the students' grades."
     },
     "asignaturas": {
         "notas_parciales": "Partial grades",
@@ -2374,7 +2493,14 @@
         "info_revisar_cargar_formato": "Please download, review and re-upload the \"Compliance control form with current regulations\"",
         "no_valid_pre_asignacion": "The academic space already has pre-assignment for the current period.",
         "info_cambio_documento_consolidado": "It's important to note that making changes to the Consolidated document's content will require restarting the approval process (changing its status to 'Not approved') and, if necessary, updating the Teacher Work Plans.",
-        "pdf_solover_excel_imprimir": "Pdf document not suitable for printing or editing, please save the excel version provided."
+        "pdf_solover_excel_imprimir": "Pdf document not suitable for printing or editing, please save the excel version provided.",
+        "aprobacion_preasignacion": "Pre-assignment successfully approved",
+        "ptd_docente_principal": "PTD Principal Teacher",
+        "ptd_docente_relacionado": "Related Teacher PTD",
+        "ptd_general": "General PTD",
+        "ptd_timed": "PTD by Times",
+        "tiempo_inferior_periodo": "Loading with time less than the period",
+        "seccion_tiempo": "Time section"
     },
     "espacios_academicos": {
         "espacios_academicos":"Academic Spaces",
@@ -2517,7 +2643,8 @@
         "prerequisitos": "Prerequisites",
         "convenciones": "CONVENTIONS",
         "clasificacion": "Classification",
-        "descargar_documento": "Download Study Plan"
+        "descargar_documento": "Download Study Plan",
+        "planes_estudio_reportados": "Reported study plans"
     },
     "gestion_horarios": {
         "encabezado": "Module for the Availability of quotas",

@@ -4,6 +4,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { AnyService } from '../../../@core/data/any.service';
+import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { PopUpManager } from '../../../managers/popUpManager';
+import { TranslateService } from '@ngx-translate/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DialogPreviewFileComponent } from '../dialog-preview-file/dialog-preview-file.component';
 
@@ -24,8 +27,6 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() interlaced: EventEmitter<any> = new EventEmitter();
   @Output() percentage: EventEmitter<any> = new EventEmitter();
   @Output() dateChange: EventEmitter<any> = new EventEmitter();
-  data: any;
-  searchTerm$ = new Subject<any>();
   @ViewChild(MatDatepicker, { static: true }) datepicker: MatDatepicker<Date>;
   @ViewChildren("documento") fileInputs: QueryList<ElementRef>;
   
@@ -37,6 +38,9 @@ export class DinamicformComponent implements OnInit, OnChanges {
   constructor(
     private sanitization: DomSanitizer,
     private anyService: AnyService,
+    private gestorDocumental: NewNuxeoService,
+    private popUpManager: PopUpManager,
+    private translate: TranslateService,
     private matDialog: MatDialog,
   ) {
     this.data = {
@@ -450,6 +454,26 @@ export class DinamicformComponent implements OnInit, OnChanges {
     return true;
   }
 
+  checkFileSignature(): Promise<boolean> {
+    const len = this.normalform.campos.length;
+    return new Promise<boolean>((resolve, reject) => {
+      this.normalform.campos.forEach(async (d, i) => {
+        if ((d.etiqueta === 'file' || d.etiqueta === 'fileRev') && !d.ocultar) {
+          const valid = await this.gestorDocumental.readVerifyMimeType(d.File);
+          if (!valid) {
+            d.clase = 'form-control form-control-danger';
+            d.alerta = this.translate.instant('ERROR.contenido_archivo_erroneo');
+            this.popUpManager.showPopUpGeneric(this.translate.instant('GLOBAL.error'), d.File.name + "<br><br>" + this.translate.instant('ERROR.contenido_archivo_erroneo_mensaje'), "error", false)
+            reject(false)
+          }
+        }
+        if (len-1 === i) {
+          resolve(true)
+        }
+      });
+    });
+  }
+
   clearForm() {
     this.normalform.campos.forEach(d => {
       d.valor = null;
@@ -475,7 +499,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     this.percentage.emit(0);
   }
 
-  validForm() {
+  async validForm() {
     const result = {};
     let requeridos = 0;
     let resueltos = 0;
@@ -500,6 +524,10 @@ export class DinamicformComponent implements OnInit, OnChanges {
         this.data.valid = false;
       }
     });
+
+    if (this.data.valid) {
+      await this.checkFileSignature().then(() => this.data.valid = true).catch(() => this.data.valid = false);
+    }
 
     this.data.valid = this.data.valid && this.checkConfirmacion();
 
@@ -569,11 +597,14 @@ export class DinamicformComponent implements OnInit, OnChanges {
   }
 
   getUniqueSteps(campos: any[]): number[] {
-    return [...new Set(campos.map(c => c.step))];
-  }
-  
-  getStepLabel(step: number): string {
-    return `Paso ${step}`;
+    const uniqueSteps: number[] = [];
+    for (const campo of campos) {
+      const step = campo.step;
+      if (!uniqueSteps.includes(step)) {
+        uniqueSteps.push(step);
+      }
+    }
+    return uniqueSteps;
   }
   
   getFieldsInStep(step: number): any[] {
