@@ -6,6 +6,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import * as momentTimezone from 'moment-timezone';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import Swal from 'sweetalert2';
+import { decrypt } from '../../../@core/utils/util-encrypt';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -140,7 +141,8 @@ export class ViewSolicitudesComponent implements OnInit {
   }
 
   loadSolicitud() {
-    const IdTercero = localStorage.getItem('persona_id');
+    const id = decrypt(localStorage.getItem('persona_id'));
+    const IdTercero = id;
     this.sgaMidService
       .get('solicitud_evaluacion/consultar_solicitud/' + IdTercero)
       .subscribe(
@@ -260,7 +262,8 @@ export class ViewSolicitudesComponent implements OnInit {
   }
 
   nuevoNombre() {
-    sessionStorage.setItem('TerceroSolitud', localStorage.getItem('persona_id'));
+    const id = decrypt(localStorage.getItem('persona_id'));
+    sessionStorage.setItem('TerceroSolitud', id);
     this.showSolicitudNombre = true;
     this.showSolicitudID = false;
     this.showTable = false;
@@ -268,7 +271,8 @@ export class ViewSolicitudesComponent implements OnInit {
   }
 
   nuevoID() {
-    sessionStorage.setItem('TerceroSolitud', localStorage.getItem('persona_id'));
+    const id = decrypt(localStorage.getItem('persona_id'));
+    sessionStorage.setItem('TerceroSolitud', id);
     this.showSolicitudID = true;
     this.showTable = false;
     this.showSolicitudNombre = false;

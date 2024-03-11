@@ -20,6 +20,7 @@ import { PlanEstudioBaseComponent } from '../plan-estudio-base/plan-estudio-base
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { PlanEstudioSummary } from '../../../@core/data/models/plan_estudios/plan_estudio_summary';
+import { decrypt } from '../../../@core/utils/util-encrypt';
 
 
 @Component({
@@ -75,7 +76,8 @@ export class RevisarPlanesEstudioComponent extends PlanEstudioBaseComponent impl
    }
 
   async ngOnInit() {
-    this.personaId = await Number(window.localStorage.getItem('persona_id'));
+    const id = decrypt(window.localStorage.getItem('persona_id'));
+    this.personaId = await Number(id);
     await this.setRoles();
     this.loading = false;
     this.vista = VIEWS.LIST;

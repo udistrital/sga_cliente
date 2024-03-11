@@ -5,6 +5,7 @@ import { SgaMidService } from '../../../@core/data/sga_mid.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import * as momentTimezone from 'moment-timezone';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
+import { decrypt } from '../../../@core/utils/util-encrypt';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -129,7 +130,8 @@ export class ListSolicitudesEstudianteComponent implements OnInit {
   }
 
   loadSolicitud() {
-    const IdTercero = localStorage.getItem('persona_id');
+    const id = decrypt(localStorage.getItem('persona_id'));
+    const IdTercero = id;
     this.sgaMidService
       .get('solicitud_evaluacion/consultar_solicitud/' + IdTercero)
       .subscribe(

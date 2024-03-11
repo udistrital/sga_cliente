@@ -13,6 +13,7 @@ import { ImplicitAutenticationService } from '../../../@core/utils/implicit_aute
 import * as momentTimezone from 'moment-timezone';
 import Swal from 'sweetalert2';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { decrypt } from '../../../@core/utils/util-encrypt';
 
 @Component({
   selector: 'ngx-actualizacion-datos',
@@ -353,7 +354,8 @@ export class ActualizacionDatosComponent implements OnInit {
 
   loadInfo() {
     this.loadInfoSolicitante();
-    const TerceroId = parseInt(localStorage.getItem('persona_id'), 10)
+    const id = decrypt(localStorage.getItem('persona_id'));
+    const TerceroId = parseInt(id, 10)
     if (TerceroId !== undefined) {
       const hoy = new Date();
       this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor = hoy.getFullYear() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getDate();
@@ -456,7 +458,8 @@ export class ActualizacionDatosComponent implements OnInit {
                 if (this.modificado) {
                   Solicitud.SolicitudPadreId = sessionStorage.getItem('Solicitud')
                 }
-                Solicitud.Solicitante = parseInt(localStorage.getItem('persona_id'), 10);
+                const id = decrypt(localStorage.getItem('persona_id'));
+                Solicitud.Solicitante = parseInt(id, 10);
                 Solicitud.TipoSolicitud = 3;
                 this.sgaMidService.post('solicitud_evaluacion/registrar_solicitud', Solicitud).subscribe(
                   (res: any) => {

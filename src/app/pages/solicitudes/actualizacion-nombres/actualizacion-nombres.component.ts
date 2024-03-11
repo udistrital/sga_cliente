@@ -17,6 +17,7 @@ import Swal from 'sweetalert2';
 import * as momentTimezone from 'moment-timezone';
 import * as moment from 'moment';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { decrypt } from '../../../@core/utils/util-encrypt';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -29,39 +30,39 @@ export class ActualizacionNombresComponent implements OnInit {
   @Input()
   set nuevaSolicitud(nuevaSolicitud: boolean) {
     this.solicitudNueva = nuevaSolicitud;
-    this.autenticationService.getRole().then((rol)=> {
+    this.autenticationService.getRole().then((rol) => {
       this.rol = rol;
-        if (nuevaSolicitud) {
-          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].valor = '';
-          this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].valor = '';
-          this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = '';
-          this.solicitudForm.campos[this.getIndexForm('Documento')].valor = '';
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-          this.solicitudForm.btn = 'Enviar'
-          this.Admin = false;
-  
-          if (this.rol.includes('ESTUDIANTE')) {
-            this.loadInfo();
-            this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
-            this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false;
-            this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].deshabilitar = false;
-            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].deshabilitar = false;
-            this.respuestaSolicitudForm.campos.forEach(campo => {
-              campo.deshabilitar = true;
-            });
-            this.loading = false;
-          }
-        } else {
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
-          if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
-            this.Admin = false;
-            this.loadInfoById();
-          } if (this.rol.includes('ESTUDIANTE')) {
-            this.Admin = false;
-            this.loadInfo();
-            this.loadInfoById();
-          }
+      if (nuevaSolicitud) {
+        this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].valor = '';
+        this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].valor = '';
+        this.solicitudForm.campos[this.getIndexForm('Documento')].urlTemp = '';
+        this.solicitudForm.campos[this.getIndexForm('Documento')].valor = '';
+        this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+        this.solicitudForm.btn = 'Enviar'
+        this.Admin = false;
+
+        if (this.rol.includes('ESTUDIANTE')) {
+          this.loadInfo();
+          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
+          this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false;
+          this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].deshabilitar = false;
+          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].deshabilitar = false;
+          this.respuestaSolicitudForm.campos.forEach(campo => {
+            campo.deshabilitar = true;
+          });
+          this.loading = false;
         }
+      } else {
+        this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+        if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
+          this.Admin = false;
+          this.loadInfoById();
+        } if (this.rol.includes('ESTUDIANTE')) {
+          this.Admin = false;
+          this.loadInfo();
+          this.loadInfoById();
+        }
+      }
     })
   }
 
@@ -72,7 +73,7 @@ export class ActualizacionNombresComponent implements OnInit {
     this.solicitudRespuesta.Observacion = '';
     this.solicitudRespuesta.SolicitudId = 0;
     this.respuestaSolicitudForm.campos[1].valor = false;
-    this.rol = this.autenticationService.getRole().then ((rol)=> {
+    this.rol = this.autenticationService.getRole().then((rol) => {
       this.rol = rol;
       if (dataSolicitud !== undefined) {
         this.solicitudRespuesta.Observacion = dataSolicitud.Observacion
@@ -85,41 +86,41 @@ export class ActualizacionNombresComponent implements OnInit {
             campo.deshabilitar = true;
           });
         }
-  
+
         if (dataSolicitud.Estado === 'Rectificar') {
           this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-            if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
-              this.respuestaSolicitudForm.campos.forEach(campo => {
-                campo.deshabilitar = false;
-              });
-              this.respuestaSolicitudForm.btn = 'Enviar';
-              this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
-            }
+          if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
+            this.respuestaSolicitudForm.campos.forEach(campo => {
+              campo.deshabilitar = false;
+            });
+            this.respuestaSolicitudForm.btn = 'Enviar';
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+          }
         }
-  
+
         if (dataSolicitud.Estado === 'Radicada') {
-            if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
-              this.respuestaSolicitudForm.campos.forEach(campo => {
-                campo.deshabilitar = false;
-              });
-              this.respuestaSolicitudForm.btn = 'Enviar';
-              this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
-            } if (this.rol.includes('ESTUDIANTE')) {
-              this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-            }
+          if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
+            this.respuestaSolicitudForm.campos.forEach(campo => {
+              campo.deshabilitar = false;
+            });
+            this.respuestaSolicitudForm.btn = 'Enviar';
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+          } if (this.rol.includes('ESTUDIANTE')) {
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+          }
         }
-  
+
         if (dataSolicitud.Estado === 'Rechazada') {
           this.respuestaSolicitudForm.btn = '';
           this.Admin = true;
           this.respuestaSolicitudForm.campos.forEach(campo => {
             campo.deshabilitar = true;
           });
-            if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
-              this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
-            } if (this.rol.includes('ESTUDIANTE')) {
-              this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
-            }
+          if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = 'noMostrar';
+          } if (this.rol.includes('ESTUDIANTE')) {
+            this.solicitudForm.campos[this.getIndexForm('ButonEditar')].id = '';
+          }
         }
       } else {
         this.Admin = false;
@@ -154,11 +155,11 @@ export class ActualizacionNombresComponent implements OnInit {
     private dialogo: MatDialog) {
     this.solicitudForm = ACTUALIZAR_NOMBRE;
     this.respuestaSolicitudForm = RESPUESTA_SOLICITUD;
-    this.autenticationService.getRole().then((rol)=> {
+    this.autenticationService.getRole().then((rol) => {
       this.rol = rol
       this.construirForm();
       this.loading = true;
-  
+
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
         this.construirForm();
       });
@@ -231,11 +232,11 @@ export class ActualizacionNombresComponent implements OnInit {
                     this.loading = false;
                   }
                 },
-                  (error: HttpErrorResponse) => {
-                    this.loading = false;
-                    this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-                  },
-                );
+                (error: HttpErrorResponse) => {
+                  this.loading = false;
+                  this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+                },
+              );
             }
             this.loading = false;
           } else if (response.Response.Code === '404') {
@@ -318,11 +319,11 @@ export class ActualizacionNombresComponent implements OnInit {
                   this.loading = false;
                 }
               },
-                (error: HttpErrorResponse) => {
-                  this.loading = false;
-                  this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-                },
-              );
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+              },
+            );
           }
         } else if (response.Response.Code === '404') {
           this.sgaMidService.get('solicitud_evaluacion/consultar_solicitud/' + IdSolcitud + '/18').subscribe(
@@ -349,11 +350,11 @@ export class ActualizacionNombresComponent implements OnInit {
                       }
                       this.loading = false;
                     },
-                      (error: HttpErrorResponse) => {
-                        this.loading = false;
-                        this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-                      },
-                    );
+                    (error: HttpErrorResponse) => {
+                      this.loading = false;
+                      this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+                    },
+                  );
                 } else {
                   this.loading = false;
                 }
@@ -385,7 +386,8 @@ export class ActualizacionNombresComponent implements OnInit {
 
   loadInfo() {
     this.loadInfoSolicitante();
-    const TerceroId = parseInt(localStorage.getItem('persona_id'), 10)
+    const id = decrypt(localStorage.getItem('persona_id'));
+    const TerceroId = parseInt(id, 10)
     if (TerceroId !== undefined) {
       const hoy = new Date();
       this.solicitudForm.campos[this.getIndexForm('FechaSolicitud')].valor = hoy.getFullYear() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getDate();
@@ -470,86 +472,87 @@ export class ActualizacionNombresComponent implements OnInit {
               (responseNux: any[]) => {
                 if (responseNux[0].Status == "200") {
 
-                    this.solicitudDatos['Documento'] = responseNux[0].res.Id;
-                
-                const hoy = new Date();
-                this.solicitudDatos.FechaSolicitud = momentTimezone.tz(hoy.getFullYear() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getDate(),
-                  'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
-                this.solicitudDatos.FechaSolicitud = this.solicitudDatos.FechaSolicitud + ' +0000 +0000';
-                Solicitud.Solicitud = this.solicitudDatos;
-                Solicitud.Solicitante = parseInt(localStorage.getItem('persona_id'), 10);
-                Solicitud.TipoSolicitud = 4;
-                if (this.modificado) {
-                  Solicitud.SolicitudPadreId = sessionStorage.getItem('Solicitud')
-                }
-                this.sgaMidService.post('solicitud_evaluacion/registrar_solicitud', Solicitud).subscribe(
-                  (res: any) => {
-                    if (res.Response.Code === '200') {
+                  this.solicitudDatos['Documento'] = responseNux[0].res.Id;
+
+                  const hoy = new Date();
+                  this.solicitudDatos.FechaSolicitud = momentTimezone.tz(hoy.getFullYear() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getDate(),
+                    'America/Bogota').format('YYYY-MM-DD HH:mm:ss');
+                  this.solicitudDatos.FechaSolicitud = this.solicitudDatos.FechaSolicitud + ' +0000 +0000';
+                  Solicitud.Solicitud = this.solicitudDatos;
+                  const id = decrypt(localStorage.getItem('persona_id'));
+                  Solicitud.Solicitante = parseInt(id, 10);
+                  Solicitud.TipoSolicitud = 4;
+                  if (this.modificado) {
+                    Solicitud.SolicitudPadreId = sessionStorage.getItem('Solicitud')
+                  }
+                  this.sgaMidService.post('solicitud_evaluacion/registrar_solicitud', Solicitud).subscribe(
+                    (res: any) => {
+                      if (res.Response.Code === '200') {
+                        this.loading = false;
+                        Swal.fire({
+                          icon: 'success',
+                          title: this.translate.instant('GLOBAL.operacion_exitosa'),
+                          text: this.translate.instant('solicitudes.crear_exito'),
+                          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                        }).then((willDelete) => {
+                          if (willDelete.value) {
+                            this.solicitudEnviada.emit(true);
+                          }
+                        });
+                      } else {
+                        this.loading = false;
+                        this.popUpManager.showErrorToast(this.translate.instant('solicitudes.crear_error'));
+                      }
+                    },
+                    (error: HttpErrorResponse) => {
                       this.loading = false;
                       Swal.fire({
-                        icon: 'success',
-                        title: this.translate.instant('GLOBAL.operacion_exitosa'),
-                        text: this.translate.instant('solicitudes.crear_exito'),
+                        icon: 'error',
+                        title: error.status + '',
+                        text: this.translate.instant('ERROR.' + error.status),
+                        footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
                         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                      }).then((willDelete) => {
-                        if (willDelete.value) {
-                          this.solicitudEnviada.emit(true);
-                        }
                       });
-                    } else {
-                      this.loading = false;
-                      this.popUpManager.showErrorToast(this.translate.instant('solicitudes.crear_error'));
-                    }
-                  },
-                  (error: HttpErrorResponse) => {
-                    this.loading = false;
-                    Swal.fire({
-                      icon: 'error',
-                      title: error.status + '',
-                      text: this.translate.instant('ERROR.' + error.status),
-                      footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
-                      confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                    });
-                  },
-                );
+                    },
+                  );
                 } else {
                   this.loading = false;
                 }
               },
-                (error: HttpErrorResponse) => {
-                  this.loading = false;
-                  Swal.fire({
-                    icon: 'error',
-                    title: error.status + '',
-                    text: this.translate.instant('ERROR.' + error.status),
-                    footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
-                    confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                  });
-                },
-              );
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('informacion_academica.documento_informacion_academica_no_registrado'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
+              },
+            );
           }
         },
-      );
+        );
     }
   }
 
   habilitarRevision(event) {
-      if (event.button === 'ButonEditar') {
-        if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
-          this.Admin = true;
-        } if (this.rol.includes('ESTUDIANTE')) {
-          this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
-          this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false;
-          this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].deshabilitar = false;
-          this.solicitudForm.campos[this.getIndexForm('ButonEditar')].deshabilitar = false;
-          this.respuestaSolicitudForm.campos.forEach(campo => {
-            campo.deshabilitar = true;
-          });
-          this.respuestaSolicitudForm.btn = ''
-          this.Admin = true;
-          this.modificado = true;
-          this.solicitudForm.btn = 'Enviar'
-        }
+    if (event.button === 'ButonEditar') {
+      if (this.rol.includes('ADMIN_SGA') || this.rol.includes('ASISTENTE_ADMISIONES')) {
+        this.Admin = true;
+      } if (this.rol.includes('ESTUDIANTE')) {
+        this.solicitudForm.campos[this.getIndexForm('ApellidoNuevo')].deshabilitar = false;
+        this.solicitudForm.campos[this.getIndexForm('Documento')].deshabilitar = false;
+        this.solicitudForm.campos[this.getIndexForm('NombreNuevo')].deshabilitar = false;
+        this.solicitudForm.campos[this.getIndexForm('ButonEditar')].deshabilitar = false;
+        this.respuestaSolicitudForm.campos.forEach(campo => {
+          campo.deshabilitar = true;
+        });
+        this.respuestaSolicitudForm.btn = ''
+        this.Admin = true;
+        this.modificado = true;
+        this.solicitudForm.btn = 'Enviar'
+      }
     }
   }
 }

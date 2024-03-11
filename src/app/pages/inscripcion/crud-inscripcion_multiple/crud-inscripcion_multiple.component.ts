@@ -23,6 +23,7 @@ import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { environment } from '../../../../environments/environment';
 import { Periodo } from '../../../@core/data/models/periodo/periodo';
+import { decrypt } from '../../../@core/utils/util-encrypt';
 
 @Component({
   selector: 'ngx-crud-inscripcion-multiple',
@@ -803,10 +804,11 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   preinscripcion() {
     this.proyectos_preinscripcion = [];
+    const id = decrypt(localStorage.getItem('persona_id'));
     this.arr_proyecto.forEach(proyecto => {
       Number(localStorage.getItem('IdNivel'))
       this.proyectos_preinscripcion.push({
-        PersonaId: Number(localStorage.getItem('persona_id')),
+        PersonaId: Number(id),
         ProgramaAcademicoId: proyecto['Id'],
         PeriodoId: Number(localStorage.getItem('IdPeriodo')),
         EstadoInscripcionId: { Id: 1 },
