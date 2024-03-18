@@ -1187,7 +1187,10 @@
         "regresar": "To return",
         "siguiente": "Next",
         "reset": "Restart Registration",
-        "proyecto_padre": "Parent project"
+        "proyecto_padre": "Parent project",
+        "mensaje_oikos": "Please relate the curricular project with the physical space of the OIKOS system, if the physical space does not exist, please notify the system administrator",
+        "oikos": "Physical space",
+        "erro_oikos": "Please select the physical space!"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
