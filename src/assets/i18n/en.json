@@ -66,10 +66,6 @@
                 "admitidos": "Admitidos por programa",
                 "inscritos": "Inscritos por programa"
             },
-            "transferencias": {
-                "transferencias": "Transfers",
-                "reingresos": "Readmissions"
-            },
             "icfes": {
                 "icfes": "ICFES SNP Registration",
                 "icfes_por_proyecto": "Records by project"
@@ -173,9 +169,6 @@
         }
     },
     "GLOBAL": {
-        "welcome": "The Academic Management System welcomes you",
-        "init_message": "The District University offers, through the Information Technology Advisory Office, the application that supports the development of academic processes as well as various administrative processes related to its mission.",
-        "oati":  "Information Technology Advisory Office",
         "admitir": "Admit",
         "aspirantes_inscritos": "Enrolled Applicants",
         "click_aqui": "Click here",
@@ -211,7 +204,6 @@
         "confirmarEliminar": "has been removed",
         "info_estado": "Registration Status",
         "guardar": "Save",
-        "continuar": "Continue",
         "porcentaje": "Porcentage",
         "formulario": "Form",
         "lista": "List",
@@ -692,9 +684,6 @@
         "grupos": "Groups",
         "total": "Total",
         "falta_campo": "** You must fill this field",
-        "tamano_superado_razon": "Company name can't exced 100 characters",
-        "numero_fuera_rango": "The number must be between 0 and 9",
-        "digito_verificacion_incorrecto": "Verification digit not correspond with NIT number",
         "formatos_permitidos": "** Only the following formats are supported",
         "tamano_superado": "** The file size is greater than ",
         "enfoque": "Approach",
@@ -711,21 +700,9 @@
         "correo_entidad": "Entity email",
         "placeholder_correo_entidad": "E.g.: email@entity.com",
         "telefono_entidad": "Entity telephone number",
-        "placeholder_telefono_entidad": "E.g.: 3239300",
+        "placeholder_telefono_entidad": "E.g.: 323 93 00 Ext. 1112",
         "direccion_entidad": "Entity Address",
-        "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1",
-        "nit_sin_digito_o_caracteres_especiales": "Enter the Nit without a check digit or characters such as periods, hyphens or spaces",
-        "nit_incorrecto": "The Nit provided is incorrect",
-        "experiencia_actual": "Actual work",
-        "formacion_actual": "Actual formation",
-        "direccion": "Address",
-        "naturaleza": "Nature",
-        "via": "Via",
-        "digito_verificacion": "Check digit",
-        "natural": "Natural",
-        "juridica": "Jurídica",
-        "razon_social": "Company name",
-        "campos_obligatorios": "Fields marked with * are required"
+        "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -749,25 +726,13 @@
         "sin_informacion_en": "No information has been found about",
         "persiste_error_comunique_OAS": "Please return and try again later. If the error persists, contact the Systems Advisory Office (Oficina Asesora de Sistemas)",
         "contenido_archivo_erroneo": "Non-standard file content for the requested format",
-        "contenido_archivo_erroneo_mensaje": "The file content is not correct for the requested format and may become illegible when loaded. \nTry saving it again in the allowed formats; if it's a PDF, save it in an optimized or compressed version.",
-        "inactivar_registro": "It has not been possible to inactivate the record",
-        "actualizar_pagador": "It was not possible to update the information",
-        "guardar_pagador": "It is not possible to save the information",
-        "no_generado": "The receipt could not be generated. Verify your personal information",
-        "cargar_datos": "It is not possible to load the third party",
-        "procesar_direccion": "An error occurred while processing the address",
-        "sin_espacios": "Please remove the spaces",
-        "sin_puntos_comas": "The document number consists of 8 to 15 digits, without symbols, spaces or letters."
+        "contenido_archivo_erroneo_mensaje": "The content of the file is not correct for the requested format and may be unreadable when uploaded. \nTry saving it again in the allowed formats; If it is a PDF, save it in an optimized or compressed version."
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",
         "no_generado": "The receipt could not be generated. Verify your personal information",
         "recibo_duplicado": "You have already generated a receipt with the selected criteria",
-        "maximo_recibos": "I already generate the maximum receipts allowed",
-        "no_hay_cambios": "There are no changes in the billing information",
-        "pagador_actualizado": "Information updated",
-        "pagador_guardado": "Information saved",
-        "mensaje_recibo_vencido": "Expired receipt. Reload to generate a new one for the same program."
+        "maximo_recibos": "I already generate the maximum receipts allowed"
     },
     "produccion_academica": {
         "titulo_revista": "Magazine title",
@@ -1182,8 +1147,8 @@
         "enfasis": "Emphasis of the academic project ",
         "enfasis_proyecto": "Emphasis Name:",
         "registro_proyecto": "Academic Project Registration",
-        "erro_codigo": "Please enter the project code, it must contain 3 to 6 digits and only numbers",
-        "erro_codigoSnies": "Please enter the SNIES Code, it must contain a maximum of 10 characters",
+        "erro_codigo": "Please enter the project code, it must contain 3 digits and numbers only.",
+        "erro_codigoSnies": "Please enter the SNIES Code.",
         "erro_nombre": "Please enter the Project Name.",
         "erro_meto": "Please select the Project Methodology!",
         "erro_abre": "Please enter the Project Abbreviation.",
@@ -1199,7 +1164,7 @@
         "erro_selec_area": "Please select the knowledge area!",
         "erro_selec_nucleo": "Please select the Core Knowledge Base!",
         "erro_nivel": "Please select the level of training!",
-        "erro_reso": "Please enter the resolution, only number and maximum 8 digits!!",
+        "erro_reso": "Please enter the resolution, only number and maximum 4 digits!!",
         "erro_ano": "Please enter the resolution year, only number and maximum 4 digits!",
         "erro_acto": "Please enter the administrative act number!",
         "erro_ano_acto": "Please enter the year of the administrative act!",
@@ -1214,8 +1179,8 @@
         "mensaje": "This Module allows you to register a new academic project or create one from an academic project that has similar characteristics, in order to perform the registration you must have the evidence of the administrative act at hand, please enter the requested information.",
         "vigencia": "Validity of registration:",
         "vigencia_mes": "# Effective months",
-        "erro_mes_vigencia": "Please enter the number of months, maximum number allowed 99!",
-        "erro_ano_vigencia": "Please enter the number of years, maximum number allowed 99!.",
+        "erro_mes_vigencia": "Please enter the number of months, maximum number allowed 12!",
+        "erro_ano_vigencia": "Please enter the number of years, maximum number allowed 9!.",
         "vigencia_año": "# Years of validity",
         "fecha_calculada_vencimiento": "Registration expires on:",
         "proyecto_no_cargado": "Project not loaded",
@@ -1225,12 +1190,7 @@
         "proyecto_padre": "Parent project",
         "mensaje_oikos": "Please relate the curricular project with the physical space of the OIKOS system, if the physical space does not exist, please notify the system administrator",
         "oikos": "Physical space",
-        "erro_oikos": "Please select the physical space!",
-        "error_consulta": "Error occurred, please try again later.",
-        "proyecto_encontrado": "Project found.",
-        "detalle_proyecto_encontrado": "The SNIES code {{codigo_snies}} corresponds to the internal code {{codigo_interno}} with the name '{{nombre_proyecto}}'.<br><br> If the project does not match the expected one, please contact the system administrator.<br><br> Are you sure you want to proceed with the registration of this curricular project?",
-        "proyecto_no_encontrado": "Project not found.",
-        "detalle_proyecto_no_encontrado": "No academic project associated with the SNIES code {{codigo_snies}} was found. <br><br> Please verify if the entered code is correct. If it is, please contact the system administrator."
+        "erro_oikos": "Please select the physical space!"
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
@@ -1332,7 +1292,6 @@
         "nivel": "Level",
         "tipo": "Type of registration",
         "estado": "State",
-        "estado_solicitud": "Application status",
         "nueva": "Make a new pre-registration",
         "listado": "Pre-registration list",
         "listado_solicitudes": "List of applications",
@@ -1448,33 +1407,6 @@
         "error_res_solicitud": "An unexpected error occurred giving you response to the request",
         "solicitud_generada": "The request was successfully generated",
         "placeholder_comentarios": "Comment regarding the request",
-        "nombres_reintegro": "Name",
-        "programa_reintegro": "Academic Program",
-        "tipo_identificacion_reintegro": "Identification Type",
-        "numero_identificacion_reintegro": "Identification Number",
-        "fecha_expedicion_reintegro": "Issue Date",
-        "lugar_expedicion_reintegro": "Place of Issue",
-        "codigo_carrera_reintegro": "Career Code",
-        "codigo_estudiante_reintegro": "Student Code",
-        "periodo_desde_reintegro": "Period From",
-        "periodo_hasta_reintegro": "Period To",
-        "motivo_retiro_reintegro": "Reason for Withdrawal",
-        "placeholder_nombres_reintegro": "Enter your first names",
-        "placeholder_programa_reintegro": "Enter your academic program",
-        "placeholder_apellidos_reintegro": "Enter your last names",
-        "placeholder_tipo_identificacion_reintegro": "Select identification type",
-        "placeholder_numero_identificacion_reintegro": "Enter identification number",
-        "placeholder_fecha_expedicion_reintegro": "Select issue date",
-        "placeholder_lugar_expedicion_reintegro": "Select place of issue",
-        "placeholder_codigo_carrera_reintegro": "Enter career code",
-        "placeholder_codigo_estudiante_reintegro": "Select student code",
-        "placeholder_periodo_desde_reintegro": "Select initial period",
-        "placeholder_periodo_hasta_reintegro": "Select final period",
-        "placeholder_motivo_retiro_reintegro": "Describe the reason for your withdrawal from the academic program",
-        "telefono2_reintegro":"Phone number 2",
-        "telefono1_reintegro":"Phone number 1",
-        "placeholder_telefono2_reintegro":"Enter phone number 2",
-        "placeholder_telefono1_reintegro":"Enter phone number 1",
         "inscripcion_general": "General information",
         "generar_matricula": "Generate registration receipt",
         "persona_ya_existe": "The SGA system has found personal information related to the document number filled out!",
@@ -1498,8 +1430,7 @@
         "no_edit_doc_aprobado": "You cannot edit approved document",
         "ya_existe_registro": "You already have information loaded for this field",
         "informar_estado_inscrito_obs": "Applicant, your enrollment is conditioned by observations in the attached documentation, please go to Registration Details to review and correct the information not approved. If you do not, you cannot continue with the process.",
-        "info_boton_cambio_inscrito": "Do not forget to press the button \"Confirm edition of documents with observations\" to return to the ENROLLED status, this is enabled when you have edited all the not approved documents.",
-        "no_permite_cambio": "It is not possible to change the status to '{{nuevo_estado}}'"
+        "info_boton_cambio_inscrito": "Do not forget to press the button \"Confirm edition of documents with observations\" to return to the ENROLLED status, this is enabled when you have edited all the not approved documents."
     },
     "reingreso": {
         "reingreso_no_registrado": "Re-entry request not created",
@@ -1601,9 +1532,7 @@
         "poner_obligatorio": "Set document as required?",
         "quitar_obligatorio": "Set document as optional?",
         "ajuste_ok": "Change made",
-        "ajuste_fail": "The change could not be made",
-        "sin_acceso": "No Acces",
-        "sin_acceso_cuerpo": "You dont have acces to this component, if you need to create a new document please contact the support office to create a new request"
+        "ajuste_fail": "The change could not be made"
     },
     "descuento_academico": {
         "documento_programa_no_registrado": "Document not registered",
@@ -1736,7 +1665,6 @@
         "asistencia": "Attendance",
         "requiere_asistencia": "Requires attendance?",
         "revisar_docs": "Review documents",
-        "formulario_pagador": "Payer form",
         "doc_valido": "Valid document",
         "seguro_revision": "Are you sure about registering this document review?",
         "observacion": "Observation",
@@ -1774,8 +1702,7 @@
         "resumen_estados_inscripcion": "Summary status of applicants",
         "descargar_zip": "Download the applicant's documentary compilation",
         "no_vinculacion_no_rol": "Your user is not linked to any academic project and does not have the appropriate role",
-        "multiple_vinculacion": "Your user appears linked to more than one academic project",
-        "seguro_pagador": "Are you sure you about registering this payer information?"
+        "multiple_vinculacion": "Your user appears linked to more than one academic project"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",
