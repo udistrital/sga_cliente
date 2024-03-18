@@ -444,7 +444,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
 
   loadfacultad() {
-    this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2')
+    this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2&limit=0')
       .subscribe((res: any) => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
