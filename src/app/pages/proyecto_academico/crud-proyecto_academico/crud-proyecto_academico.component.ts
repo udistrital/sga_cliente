@@ -63,8 +63,10 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   actoform: any;
   compleform: any;
   facultad = [];
+  espacio_fisico = [];
   area = [];
   opcionSeleccionadoFacultad: any;
+  opcionSeleccionadoEspacioFisico: any;
   opcionSeleccionadoUnidad: any;
   opcionSeleccionadoArea: any;
   opcionSeleccionadoNucleo: any;
@@ -109,6 +111,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   proyecto_padre_id: ProyectoAcademicoInstitucion;
 
   CampoControl = new FormControl('', [Validators.required]);
+  CampoControl_espacio = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
   Campo2Control = new FormControl('', [Validators.required]);
   Campo3Control = new FormControl('', [Validators.required]);
@@ -292,6 +295,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadespacio();
     this.loadfacultad();
     this.loadarea();
     this.loadnucleo();
@@ -334,6 +338,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           this.opcionSeleccionadoFacultad = this.facultad.find((facultad_temp: any) => facultad_temp.Id === proyecto_a_clonar.IdDependenciaFacultad);
           this.opcionSeleccionadoArea = this.area.find((area_temp: any) => area_temp.Id === proyecto_a_clonar.ProyectoAcademico.AreaConocimientoId);
           this.opcionSeleccionadoNucleo = this.nucleo.find((nucleo_temp: any) => nucleo_temp.Id === proyecto_a_clonar.ProyectoAcademico.NucleoBaseId);
+          this.opcionSeleccionadoEspacioFisico = this.espacio_fisico.find((espacio_fisico_temp: any) => espacio_fisico_temp.Id === proyecto_a_clonar.IdEspacioFisico)
           // info basica
           this.basicform = this.formBuilder.group({
             codigo_snies: ['', Validators.required],
@@ -433,11 +438,29 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
 
   loadfacultad() {
-    this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2')
+    this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2&limit=0')
       .subscribe((res: any) => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
           this.facultad = res.map((data: any) => (data.DependenciaId));
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
+
+  loadespacio() {
+    this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:1&limit=0')
+      .subscribe((res: any) => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.espacio_fisico = res.map((data: any) => (data.DependenciaId));
         }
       },
         (error: HttpErrorResponse) => {
@@ -595,7 +618,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           Oferta: this.checkofrece,
           UnidadTiempoId: this.opcionSeleccionadoUnidad['Id'],
           AnoActoAdministrativoId: this.actoform.value.ano_acto,
-          DependenciaId: 0,
+          DependenciaId: this.opcionSeleccionadoEspacioFisico['Id'],
           FacultadId: this.opcionSeleccionadoFacultad['Id'],
           AreaConocimientoId: this.opcionSeleccionadoArea['Id'],
           NucleoBaseId: this.opcionSeleccionadoNucleo['Id'],
