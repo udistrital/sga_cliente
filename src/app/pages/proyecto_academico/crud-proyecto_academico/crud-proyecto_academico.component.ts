@@ -122,12 +122,12 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   Campo4Control = new FormControl('', [Validators.required]);
   Campo5Control = new FormControl('', [Validators.required]);
   Campo6Control = new FormControl('', [Validators.required]);
-  Campo7Control = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(3), Validators.pattern('^[0-9]*$')]);
+  Campo7Control = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]);
   Campo8Control = new FormControl('', [Validators.required]);
   Campo9Control = new FormControl('', [Validators.required]);
   Campo10Control = new FormControl('', [Validators.required]);
-  Campo11Control = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]);
-  Campo12Control = new FormControl('', [Validators.required]);
+  Campo11Control = new FormControl('', [Validators.required, Validators.maxLength(8), Validators.pattern('^[0-9]*$')]);
+  Campo12Control = new FormControl('', [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]*$')]);
   Campo13Control = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]);
   Campo14Control = new FormControl('', [Validators.required]);
   Campo16Control = new FormControl('', [Validators.required]);
@@ -136,11 +136,11 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   Campo19Control = new FormControl('', [Validators.required]);
   Campo20Control = new FormControl('', [Validators.required]);
   Campo21Control = new FormControl('', [Validators.required]);
-  Campo22Control = new FormControl('', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(12)]);
-  Campo23Control = new FormControl('', [Validators.required, Validators.maxLength(1), Validators.pattern('^[0-9]*$')]);
-  Campo24Control = new FormControl('', [Validators.required]);
+  Campo22Control = new FormControl('', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(99)]);
+  Campo23Control = new FormControl('', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(99)]);
+  Campo24Control = new FormControl('', [Validators.required, Validators.maxLength(10)]);
   CampoCorreoControl = new FormControl('', [Validators.required, Validators.email]);
-  CampoCreditosControl = new FormControl('', [Validators.required, Validators.maxLength(4)]);
+  CampoCreditosControl = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]);
   selectFormControl = new FormControl('', Validators.required);
   modalidadControl = new FormControl('', Validators.required);
   @Output() eventChange = new EventEmitter();
@@ -177,22 +177,22 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       returnedValueicon: 'String',
     }
     this.basicform = formBuilder.group({
-      codigo_snies: ['', Validators.required],
-      codigo_interno: ['', Validators.required],
+      codigo_snies: ['', [Validators.required, Validators.maxLength(10)]],
+      codigo_interno: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
       nombre_proyecto: ['', Validators.required],
       abreviacion_proyecto: ['', Validators.required],
       correo_proyecto: ['', [Validators.required, Validators.email]],
       numero_proyecto: ['', Validators.required],
-      creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
-      duracion_proyecto: ['', Validators.required],
+      creditos_proyecto: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]],
+      duracion_proyecto: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]*$')]],
       selector: [''],
     })
     this.resoluform = formBuilder.group({
-      resolucion: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]],
+      resolucion: ['', [Validators.required, Validators.maxLength(8), Validators.pattern('^[0-9]*$')]],
       ano_resolucion: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]],
       fecha_creacion: ['', Validators.required],
-      mes_vigencia: ['', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(12)]],
-      ano_vigencia: ['', [Validators.required, Validators.maxLength(1), Validators.pattern('^[0-9]*$')]],
+      mes_vigencia: ['', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(99)]],
+      ano_vigencia: ['', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(99)]],
       documento: ['', Validators.required],
       Campo4Control: [{ value: '', disabled: true }, Validators.required],
     })
@@ -347,14 +347,14 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           this.opcionSeleccionadoEspacioFisico = this.espacio_fisico.find((espacio_fisico_temp: any) => espacio_fisico_temp.Id === proyecto_a_clonar.IdEspacioFisico)
           // info basica
           this.basicform = this.formBuilder.group({
-            codigo_snies: ['', Validators.required],
-            codigo_interno: ['', Validators.required],
+            codigo_snies: ['', [Validators.required, Validators.maxLength(10)]],
+            codigo_interno: ['', [Validators.required,, Validators.minLength(3), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
             nombre_proyecto: ['', Validators.required],
             abreviacion_proyecto: [proyecto_a_clonar.ProyectoAcademico.CodigoAbreviacion, Validators.required],
             correo_proyecto: [proyecto_a_clonar.ProyectoAcademico.CorreoElectronico, [Validators.required, Validators.email]],
             numero_proyecto: [proyecto_a_clonar.TelefonoDependencia, Validators.required],
-            creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4)]],
-            duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, Validators.required],
+            creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]],
+            duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]*$')]],
             selector: [''],
           })
           // acto administrativo
