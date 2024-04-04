@@ -41,7 +41,7 @@ const routes: Routes = [{
         {
             path: 'detalle-calendario',
             component: DetalleCalendarioComponent,
-            canActivate: [AuthGuard],
+            //canActivate: [AuthGuard],
         },
         {
             path: 'asignar-calendario-proyecto',
