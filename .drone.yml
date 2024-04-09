@@ -74,8 +74,21 @@ steps:
     event:
     - push
 
+- name: fetch_secret
+    image: amazon/aws-cli
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+    commands:
+      - aws ssm get-parameter --name /preprod/sga_cliente/secretKey --with-decryption --query "Parameter.Value" --output text > secret.txt
+
 - name: nodejs_release
   image: node:12.22.7
+  environment:
+      SECRET_KEY:
+        from_file: secret.txt
   commands:
   - node --version
   - npm i
