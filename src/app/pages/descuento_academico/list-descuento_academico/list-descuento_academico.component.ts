@@ -13,6 +13,7 @@ import { Documento } from '../../../@core/data/models/documento/documento';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { DescuentoAcademicoService } from '../../../@core/data/descuento_academico.service';
+import { decrypt } from '../../../@core/utils/util-encrypt';
 
 @Component({
   selector: 'ngx-list-descuento-academico',
@@ -132,114 +133,115 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     //     this.periodo = inscripciondata.PeriodoId;
     //     this.programa = 16;
     //this.loading = true;
-        this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' +
-          'PersonaId=' + Number(window.localStorage.getItem('persona_id')) + '&DependenciaId=' +
-          Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
-          .subscribe((result: any) => {
-            const r = <any>result.Data.Body[1];
-                if (result !== null && (result.Data.Code == '400'|| result.Data.Code == '404') ) {
-                  this.popUpManager.showAlert('', this.translate.instant('inscripcion.sin_descuento'));
-                  this.getPercentage(0);
-                  this.source.load([]);
-                }else {
-                  this.data = <Array<SolicitudDescuento>>r;
-                  this.data.forEach(async docDesc => {
-                    let estadoDoc = await <any>this.cargarEstadoDocumento(docDesc["DocumentoId"]);
-                    this.listAlreadyUploaded.push(docDesc["DescuentosDependenciaId"].TipoDescuentoId.Id);
-                    docDesc["EstadoObservacion"] = estadoDoc.estadoObservacion;
-                    docDesc["Observacion"] = estadoDoc.observacion;
-                    docDesc["Aprobado"] = estadoDoc.aprobado;
-                    this.source.load(this.data);
-                  });
-                  this.getPercentage(1);
-                  this.source.load(this.data);
-                }
-                //this.loading = false;
-          },
-            (error: HttpErrorResponse) => {
-              //this.loading = false;
-              Swal.fire({
-                icon: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.cargar') + '-' +
-                  this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-                  this.translate.instant('GLOBAL.descuento_matricula'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-              });
-            });
-        // this.descuentoService.get('descuentos_dependencia/?query=DependenciaId:' + this.programa +
-        //   ',PeriodoId:' + this.periodo + '&limit=0')
-        //   .subscribe(descuentos => {
-        //     const descuentosdependencia = <Array<any>>descuentos;
-        //     this.data = [];
-        //     descuentosdependencia.forEach(element => {
-        //       this.descuentoService.get('solicitud_descuento/?query=DescuentosDependenciaId:' + element.Id + ',PersonaId:' + this.persona + '&limit=0')
-        //         .subscribe(solicitud => {
-        //           if (solicitud !== null && JSON.stringify(solicitud[0]) !== '{}') {
-        //             this.solicituddescuento = <any>solicitud[0];
-        //             if (this.solicituddescuento.Id !== undefined && this.solicituddescuento.Id !== null) {
-        //               const id_aux = this.solicituddescuento.Id;
-        //               this.mid.get('descuento_academico/?PersonaId=' + this.persona + '&SolicitudId=' + id_aux)
-        //                 .subscribe(res => {
-        //                   console.info(JSON.stringify(res))
-        //                   if (res !== null) {
-        //                     this.data.push(<SolicitudDescuento>res);
-        //                     this.loading = false;
-        //                     this.getPercentage(1);
-        //                     this.source.load(this.data);
-        //                   }
-        //                 },
-        //                   (error: HttpErrorResponse) => {
-        //                     Swal.fire({
-        //                       icon:'error',
-        //                       title: error.status + '',
-        //                       text: this.translate.instant('ERROR.' + error.status),
-        //                       footer: this.translate.instant('GLOBAL.cargar') + '-' +
-        //                         this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-        //                         this.translate.instant('GLOBAL.descuento_matricula'),
-        //                       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        //                     });
-        //                   });
-        //             }
-        //           }
-        //         },
-        //           (error: HttpErrorResponse) => {
-        //             Swal.fire({
-        //               icon:'error',
-        //               title: error.status + '',
-        //               text: this.translate.instant('ERROR.' + error.status),
-        //               footer: this.translate.instant('GLOBAL.cargar') + '-' +
-        //                 this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-        //                 this.translate.instant('GLOBAL.descuento_matricula'),
-        //               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        //             });
-        //         });
-        //     });
-        //   },
-        //     (error: HttpErrorResponse) => {
-        //       Swal.fire({
-        //         icon:'error',
-        //         title: error.status + '',
-        //         text: this.translate.instant('ERROR.' + error.status),
-        //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
-        //           this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-        //           this.translate.instant('GLOBAL.descuentos_dependencia'),
-        //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-        //       });
-        //     });
-      // },
-      //   (error: HttpErrorResponse) => {
-      //     Swal.fire({
-      //       icon:'error',
-      //       title: error.status + '',
-      //       text: this.translate.instant('ERROR.' + error.status),
-      //       footer: this.translate.instant('GLOBAL.cargar') + '-' +
-      //         this.translate.instant('GLOBAL.descuento_matricula') + '|' +
-      //         this.translate.instant('GLOBAL.admision'),
-      //       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-      //     });
-      // });
+    const id = decrypt(window.localStorage.getItem('persona_id'));
+    this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' +
+      'PersonaId=' + Number(id) + '&DependenciaId=' +
+      Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
+      .subscribe((result: any) => {
+        const r = <any>result.Data.Body[1];
+        if (result !== null && (result.Data.Code == '400' || result.Data.Code == '404')) {
+          this.popUpManager.showAlert('', this.translate.instant('inscripcion.sin_descuento'));
+          this.getPercentage(0);
+          this.source.load([]);
+        } else {
+          this.data = <Array<SolicitudDescuento>>r;
+          this.data.forEach(async docDesc => {
+            let estadoDoc = await <any>this.cargarEstadoDocumento(docDesc["DocumentoId"]);
+            this.listAlreadyUploaded.push(docDesc["DescuentosDependenciaId"].TipoDescuentoId.Id);
+            docDesc["EstadoObservacion"] = estadoDoc.estadoObservacion;
+            docDesc["Observacion"] = estadoDoc.observacion;
+            docDesc["Aprobado"] = estadoDoc.aprobado;
+            this.source.load(this.data);
+          });
+          this.getPercentage(1);
+          this.source.load(this.data);
+        }
+        //this.loading = false;
+      },
+        (error: HttpErrorResponse) => {
+          //this.loading = false;
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + '-' +
+              this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+              this.translate.instant('GLOBAL.descuento_matricula'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+    // this.descuentoService.get('descuentos_dependencia/?query=DependenciaId:' + this.programa +
+    //   ',PeriodoId:' + this.periodo + '&limit=0')
+    //   .subscribe(descuentos => {
+    //     const descuentosdependencia = <Array<any>>descuentos;
+    //     this.data = [];
+    //     descuentosdependencia.forEach(element => {
+    //       this.descuentoService.get('solicitud_descuento/?query=DescuentosDependenciaId:' + element.Id + ',PersonaId:' + this.persona + '&limit=0')
+    //         .subscribe(solicitud => {
+    //           if (solicitud !== null && JSON.stringify(solicitud[0]) !== '{}') {
+    //             this.solicituddescuento = <any>solicitud[0];
+    //             if (this.solicituddescuento.Id !== undefined && this.solicituddescuento.Id !== null) {
+    //               const id_aux = this.solicituddescuento.Id;
+    //               this.mid.get('descuento_academico/?PersonaId=' + this.persona + '&SolicitudId=' + id_aux)
+    //                 .subscribe(res => {
+    //                   console.info(JSON.stringify(res))
+    //                   if (res !== null) {
+    //                     this.data.push(<SolicitudDescuento>res);
+    //                     this.loading = false;
+    //                     this.getPercentage(1);
+    //                     this.source.load(this.data);
+    //                   }
+    //                 },
+    //                   (error: HttpErrorResponse) => {
+    //                     Swal.fire({
+    //                       icon:'error',
+    //                       title: error.status + '',
+    //                       text: this.translate.instant('ERROR.' + error.status),
+    //                       footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //                         this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+    //                         this.translate.instant('GLOBAL.descuento_matricula'),
+    //                       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //                     });
+    //                   });
+    //             }
+    //           }
+    //         },
+    //           (error: HttpErrorResponse) => {
+    //             Swal.fire({
+    //               icon:'error',
+    //               title: error.status + '',
+    //               text: this.translate.instant('ERROR.' + error.status),
+    //               footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //                 this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+    //                 this.translate.instant('GLOBAL.descuento_matricula'),
+    //               confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //             });
+    //         });
+    //     });
+    //   },
+    //     (error: HttpErrorResponse) => {
+    //       Swal.fire({
+    //         icon:'error',
+    //         title: error.status + '',
+    //         text: this.translate.instant('ERROR.' + error.status),
+    //         footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //           this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+    //           this.translate.instant('GLOBAL.descuentos_dependencia'),
+    //         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //       });
+    //     });
+    // },
+    //   (error: HttpErrorResponse) => {
+    //     Swal.fire({
+    //       icon:'error',
+    //       title: error.status + '',
+    //       text: this.translate.instant('ERROR.' + error.status),
+    //       footer: this.translate.instant('GLOBAL.cargar') + '-' +
+    //         this.translate.instant('GLOBAL.descuento_matricula') + '|' +
+    //         this.translate.instant('GLOBAL.admision'),
+    //       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+    //     });
+    // });
   }
 
   cargarEstadoDocumento(Id: any) {
@@ -288,14 +290,14 @@ export class ListDescuentoAcademicoComponent implements OnInit {
           });
         }
       },
-        error => {
-          this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
-        },
-      );
+      error => {
+        this.popUpManager.showErrorToast('ERROR.error_cargar_documento');
+      },
+    );
   }
 
   onEdit(event): void {
-    if(event.data.Aprobado != true) {
+    if (event.data.Aprobado != true) {
       this.uid = event.data.Id;
       this.activetab();
     } else {
