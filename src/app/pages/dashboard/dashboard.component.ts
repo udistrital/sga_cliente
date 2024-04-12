@@ -1,6 +1,8 @@
 import {Component, OnDestroy} from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
+import { Console } from 'console';
 import { takeWhile } from 'rxjs/operators' ;
+import { environment } from '../../../environments/environment';
 
 interface CardSettings {
   title: string;
@@ -16,7 +18,6 @@ interface CardSettings {
 export class DashboardComponent implements OnDestroy {
 
   private alive = true;
-
   lightCard: CardSettings = {
     title: 'Light',
     iconClass: 'nb-lightbulb',
@@ -77,6 +78,9 @@ export class DashboardComponent implements OnDestroy {
   };
 
   constructor(private themeService: NbThemeService) {
+    console.log(environment['SECRET_KEY']); 
+    console.log(environment['CONFIGURACION_SERVICE']);    
+   
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
