@@ -83,12 +83,14 @@ steps:
     commands:
       - aws ssm get-parameter --name /preprod/sga_cliente/secretKey
         --with-decryption --query "Parameter.Value" --output text > secret.txt
+      - cat secret.txt
   - name: nodejs_release
     image: node:12.22.7
     environment:
       SECRET_KEY:
         from_file: secret.txt
     commands:
+      - cat secret.txt
       - node --version
       - npm i
       - npm run build:test
