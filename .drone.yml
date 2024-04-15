@@ -85,14 +85,18 @@ steps:
         --with-decryption --query "Parameter.Value" --output text > secret.txt
   - name: nodejs_release
     image: node:12.22.7
+    environment:
+      SECRET_KEY:
+        from_secret: SECRET_KEY
     commands:
       - ls
       - node --version
       - npm i
+      - echo $SECRET_KEY
       - export SECRET_KEY=$(cat secret.txt)
       - |
-        sed -i "s|SECRET_KEY: ''|SECRET_KEY: '$(printf '%s' \"$SECRET_KEY\" | \
-        sed 's/[\\/&]/\\\\&/g')'|\" src/environments/environment.ts
+        sed -i "s|SECRET_KEY: ''|SECRET_KEY: '$(printf '%s' "$SECRET_KEY" |
+        sed 's/[\\/&]/\\\\&/g')'|" src/environments/environment.ts
       - cat src/environments/environment.ts
       - npm run build:test
     when:
