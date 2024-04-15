@@ -97,6 +97,9 @@ steps:
       - |
         sed -i "s|SECRET_KEY: ''|SECRET_KEY: '$(printf '%s' "$SECRET_KEY" |
         sed 's/[\\/&]/\\\\&/g')'|" src/environments/environment.ts
+      - |
+        sed -i "s|SECRET_KEY: ''|SECRET_KEY: '$(printf '%s' "$SECRET_KEY" |
+        sed 's/[\\/&]/\\\\&/g')'|" src/environments/environment.test.ts
       - cat src/environments/environment.ts
       - npm run build:test
     when:
