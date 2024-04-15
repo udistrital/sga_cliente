@@ -96,11 +96,12 @@ steps:
       - export SECRET_KEY=$(cat secret.txt)
       - |
         sed -i "s|SECRET_KEY: ''|SECRET_KEY: '$(printf '%s' "$SECRET_KEY" |
-        sed 's/[\\/&]/\\\\&/g')'|" src/environments/environment.ts
+        sed 's/[/&]/\\&/g')'|" src/environments/environment.ts
       - |
         sed -i "s|SECRET_KEY: ''|SECRET_KEY: '$(printf '%s' "$SECRET_KEY" |
-        sed 's/[\\/&]/\\\\&/g')'|" src/environments/environment.test.ts
+        sed 's/[/&]/\\&/g')'|" src/environments/environment.test.ts
       - cat src/environments/environment.ts
+      - cat src/environments/environment.test.ts
       - npm run build:test
     when:
       branch:
