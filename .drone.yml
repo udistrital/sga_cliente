@@ -57,110 +57,119 @@ steps:
 #     branch:
 #     - unitest
 
-- name: run_sonar_scanner
-  image: aosapps/drone-sonar-plugin
-  settings:
-    sonar_host:
-      from_secret: SONAR_HOST
-    sonar_token:
-      from_secret: SONAR_TOKEN
-    ver: 1.0
-    exclusions: "**/node_modules/**,**/*.spec.ts,documentation/**"
-  when:
-    branch:
-    - develop
-    - feature/*
-    - release/*
-    event:
-    - push
-
-- name: nodejs_release
-  image: node:12.22.7
-  commands:
-  - node --version
-  - npm i
-  - npm run build:test
-  when:
-    branch:
-    - release/*
-    event:
-    - push
-
-- name: nodejs_master
-  image: node:12.22.7
-  commands:
-  - node --version
-  - npm i
-  - npm run build:prod
-  when:
-    branch:
-    - master
-    event:
-    - push
-
-- name: publish_s3_release
-  image: plugins/s3
-  settings:
-    bucket: cliente-pruebas
-    access_key:
-      from_secret: aws_access_key_id
-    secret_key:
-      from_secret: aws_secret_access_key
-    region: us-east-1
-    source: dist/**/*
-    target: /${DRONE_REPO_NAME}
-    strip_prefix: dist/
-  when:
-    branch:
-    - release/*
-    event:
-    - push
-
-- name: publish_s3_master
-  image: plugins/s3
-  settings:
-    bucket: cliente-prod
-    access_key:
-      from_secret: aws_access_key_id
-    secret_key:
-      from_secret: aws_secret_access_key
-    region: us-east-1
-    source: dist/**/*
-    target: /${DRONE_REPO_NAME}
-    strip_prefix: dist/
-  when:
-    branch:
-    - master
-    event:
-    - push
-
-- name: notify_telegram
-  image: appleboy/drone-telegram
-  settings:
-    token:
-      from_secret: telegram_token
-    to:
-      from_secret: telegram_to
-    format: html
-    message: >
-      {{#success build.status}}
-        ✅ <a href="{{build.link}}">SUCCESS</a> <b>Build #{{build.number}}</b> (type: <code>{{ build.event }}</code>)
-        <b>Repo:</b><code>{{repo.name}}</code> <b>Branch:</b><code>{{commit.branch}}</code>
-        <b>Commit:</b> <a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
-        <b>Autor:</b>{{commit.author}} <code>&#128526 </code>
-      {{else}}
-        ❌ <a href="{{build.link}}">FAILURE</a> <b>Build #{{build.number}}</b> (type: <code>{{ build.event }}</code>)
-        <b>Repo:</b><code>{{repo.name}}</code> <b>Branch:</b> <code>{{commit.branch}}</code>
-        <b>Commit:</b> <a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
-        <b>Autor:</b>{{commit.author}} <code>&#128549 </code>
-      {{/success}}
-  when:
-    branch:
-    - develop
-    - release/*
-    - master
-    event:
-    - push
-    status:
-    - failure
-    - success
+  - name: run_sonar_scanner
+    image: aosapps/drone-sonar-plugin
+    settings:
+      sonar_host:
+        from_secret: SONAR_HOST
+      sonar_token:
+        from_secret: SONAR_TOKEN
+      ver: 1
+      exclusions: "**/node_modules/**,**/*.spec.ts,documentation/**"
+    when:
+      branch:
+        - develop
+        - feature/*
+        - release/*
+      event:
+        - push
+  - name: fetch_secret
+    image: amazon/aws-cli
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+    commands:
+      - aws ssm get-parameter --name /preprod/sga_cliente/secretKey
+        --with-decryption --query "Parameter.Value" --output text > secret.txt
+  - name: nodejs_release
+    image: node:12.22.7
+    commands:
+      - node --version
+      - npm i
+      - export SECRET_KEY=$(cat secret.txt)
+      - 'sed -i "s/SECRET_KEY: ''''/SECRET_KEY: ''$SECRET_KEY''/" src/environments/environment.ts'
+      - 'sed -i "s/SECRET_KEY: ''''/SECRET_KEY: ''$SECRET_KEY''/" src/environments/environment.test.ts'
+      - cat src/environments/environment.ts
+      - npm run build:test
+    when:
+      branch:
+        - release/*
+      event:
+        - push
+  - name: nodejs_master
+    image: node:12.22.7
+    commands:
+      - node --version
+      - npm i
+      - npm run build:prod
+    when:
+      branch:
+        - master
+      event:
+        - push
+  - name: publish_s3_release
+    image: plugins/s3
+    settings:
+      bucket: cliente-pruebas
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      region: us-east-1
+      source: dist/**/*
+      target: /${DRONE_REPO_NAME}
+      strip_prefix: dist/
+    when:
+      branch:
+        - release/*
+      event:
+        - push
+  - name: publish_s3_master
+    image: plugins/s3
+    settings:
+      bucket: cliente-prod
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      region: us-east-1
+      source: dist/**/*
+      target: /${DRONE_REPO_NAME}
+      strip_prefix: dist/
+    when:
+      branch:
+        - master
+      event:
+        - push
+  - name: notify_telegram
+    image: appleboy/drone-telegram
+    settings:
+      token:
+        from_secret: telegram_token
+      to:
+        from_secret: telegram_to
+      format: html
+      message: >
+        {{#success build.status}}
+          ✅ <a href="{{build.link}}">SUCCESS</a> <b>Build #{{build.number}}</b> (type: <code>{{ build.event }}</code>)
+          <b>Repo:</b><code>{{repo.name}}</code> <b>Branch:</b><code>{{commit.branch}}</code>
+          <b>Commit:</b> <a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
+          <b>Autor:</b>{{commit.author}} <code>&#128526 </code>
+        {{else}}
+          ❌ <a href="{{build.link}}">FAILURE</a> <b>Build #{{build.number}}</b> (type: <code>{{ build.event }}</code>)
+          <b>Repo:</b><code>{{repo.name}}</code> <b>Branch:</b> <code>{{commit.branch}}</code>
+          <b>Commit:</b> <a href="{{commit.link}}">{{truncate commit.sha 7}}</a>
+          <b>Autor:</b>{{commit.author}} <code>&#128549 </code>
+        {{/success}}
+    when:
+      branch:
+        - develop
+        - release/*
+        - master
+      event:
+        - push
+      status:
+        - failure
+        - success
