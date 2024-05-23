@@ -298,9 +298,9 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       const itel = this.getIndexForm('Telefono');
       const icorreo = this.getIndexForm('Correo');
       const iPais = this.getIndexForm('Pais');
-      const regex = /^[0-9]+(?:-[0-9]+)*$/;
+      const regex = /^[0-9]*$/;
       data.data.Nit = data.data.Nit.trim()
-      const nit = typeof data === 'string' ? data : data.data.Nit;
+      let nit: string = String(data.data.Nit);
       let IdUniversidad;
       if (regex.test(nit) === true) {
         this.searchNit(nit);
@@ -310,36 +310,49 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         this.edit_status = false;
         //this.loading = false;
       } else {
-        if (this.formInfoFormacionAcademica.campos[inombre].valor ? 
-          this.formInfoFormacionAcademica.campos[inombre].valor.Id ? true : false : false) {
-          IdUniversidad = this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].valor.Id;
-          this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdUniversidad).subscribe(
-            (res: any) => {
-              this.searchNit(res[0]['Numero']);
+        nit = nit.replace(/[. ]/g, '').split('-')[0];
 
-              this.info_formacion_academica = undefined;
-              this.info_formacion_academica_id = 0;
-              this.edit_status = false;
-              this.loading = false;
-            },
-            (error: HttpErrorResponse) => {
-              this.loading = false;
-            },
-          )
+        if (regex.test(nit) === true) {
+          this.searchNit(nit);
+
+          this.info_formacion_academica = undefined;
+          this.info_formacion_academica_id = 0;
+          this.edit_status = false;          
         } else {
+          this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.nit_incorrecto'));
           this.loading = false;
-          /* [this.formInfoFormacionAcademica.campos[idir],
-          this.formInfoFormacionAcademica.campos[icorreo],
-          this.formInfoFormacionAcademica.campos[iPais],
-          this.formInfoFormacionAcademica.campos[itel]]
-            .forEach(element => {
-              element.deshabilitar = false;
-            }); */
-          this.loadListUniversidades(nit);
-          //this.nit = nit;
-          //this.formInfoFormacionAcademica.campos[inombre].valor = nit;
-          this.formInfoFormacionAcademica.campos[init].valor = null;
         }
+
+        //if (this.formInfoFormacionAcademica.campos[inombre].valor ? 
+        //  this.formInfoFormacionAcademica.campos[inombre].valor.Id ? true : false : false) {
+        //  IdUniversidad = this.formInfoFormacionAcademica.campos[this.getIndexForm('NombreUniversidad')].valor.Id;
+        //  this.tercerosService.get('datos_identificacion?query=TerceroId__Id:' + IdUniversidad).subscribe(
+        //    (res: any) => {
+        //      this.searchNit(res[0]['Numero']);
+//
+        //      this.info_formacion_academica = undefined;
+        //      this.info_formacion_academica_id = 0;
+        //      this.edit_status = false;
+        //      this.loading = false;
+        //    },
+        //    (error: HttpErrorResponse) => {
+        //      this.loading = false;
+        //    },
+        //  )
+        //} else {
+        //  this.loading = false;
+        //  /* [this.formInfoFormacionAcademica.campos[idir],
+        //  this.formInfoFormacionAcademica.campos[icorreo],
+        //  this.formInfoFormacionAcademica.campos[iPais],
+        //  this.formInfoFormacionAcademica.campos[itel]]
+        //    .forEach(element => {
+        //      element.deshabilitar = false;
+        //    }); */
+        //  this.loadListUniversidades(nit);
+        //  //this.nit = nit;
+        //  //this.formInfoFormacionAcademica.campos[inombre].valor = nit;
+        //  this.formInfoFormacionAcademica.campos[init].valor = null;
+        //}
       }
     } else {
       this.popUpManager.showAlert(this.translate.instant('inscripcion.formacion_academica'), this.translate.instant('GLOBAL.no_vacio'))

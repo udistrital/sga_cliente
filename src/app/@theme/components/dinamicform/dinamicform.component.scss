@@ -229,3 +229,10 @@
   text-align: center;
   justify-content: center;
 }
+
+.alerta {
+  background-color: var(--warning-main);
+  font-weight: 500;
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+}
