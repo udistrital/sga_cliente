@@ -735,7 +735,9 @@
         "telefono_entidad": "Teléfono de la entidad",
         "placeholder_telefono_entidad": "Ej: 323 93 00 Ext. 1112",
         "direccion_entidad": "Dirección de la entidad",
-        "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1"
+        "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1",
+        "nit_sin_digito_o_caracteres_especiales": "Ingrese el Nit sin digito de verificación o caracteres como puntos, guión o espacios",
+        "nit_incorrecto": "El Nit proporcionado es incorrecto"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
