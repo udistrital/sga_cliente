@@ -702,7 +702,9 @@
         "telefono_entidad": "Entity telephone number",
         "placeholder_telefono_entidad": "E.g.: 323 93 00 Ext. 1112",
         "direccion_entidad": "Entity Address",
-        "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1"
+        "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1",
+        "nit_sin_digito_o_caracteres_especiales": "Enter the Nit without a check digit or characters such as periods, hyphens or spaces",
+        "nit_incorrecto": "The Nit provided is incorrect"
     },
     "ERROR": {
         "general": "The request could not be satisfied",

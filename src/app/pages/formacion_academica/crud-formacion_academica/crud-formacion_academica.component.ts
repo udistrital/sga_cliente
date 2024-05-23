@@ -303,7 +303,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       let nit: string = String(data.data.Nit);
       let IdUniversidad;
       if (regex.test(nit) === true) {
-        this.formInfoFormacionAcademica.campos[init].valor = nit;
         this.searchNit(nit);
 
         this.info_formacion_academica = undefined;
@@ -314,7 +313,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         nit = nit.replace(/[. ]/g, '').split('-')[0];
 
         if (regex.test(nit) === true) {
-          this.formInfoFormacionAcademica.campos[init].valor = nit;
           this.searchNit(nit);
 
           this.info_formacion_academica = undefined;
@@ -417,17 +415,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
                   if (Object.keys(filesResponse).length === files.length) {
                     this.SoporteDocumento = this.temp_info_academica.Documento;
                     const FechaI = moment(this.temp_info_academica.FechaInicio, 'DD-MM-YYYY').toDate();
-                    let FechaF
-                    if (this.temp_info_academica.FechaFinalizacion == ''){
-                      const isActual = this.getIndexForm('formacion_actual')
-                      this.formInfoFormacionAcademica.campos[isActual].valor = true
-                      this.onCheckChange(new CustomEvent("event", {
-                        detail: true
-                      }))
-                    }else {
-                      FechaF = moment(this.temp_info_academica.FechaFinalizacion, 'DD-MM-YYYY').toDate();
-                    }
-                    
+                    const FechaF = moment(this.temp_info_academica.FechaFinalizacion, 'DD-MM-YYYY').toDate();
                     const init = this.getIndexForm('Nit');
                     this.info_formacion_academica = {
                       Nit: this.temp_info_academica.Nit,
@@ -582,19 +570,6 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       });
   }
 
-  onCheckChange(event) {
-    if (event.checked || event.detail) {
-      this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].deshabilitar = true
-      this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].ocultar = true
-      this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].valor = ''
-      this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].requerido = false
-    }else {
-      this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].deshabilitar = false
-      this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].ocultar = false
-      this.formInfoFormacionAcademica.campos[this.getIndexForm('FechaFinalizacion')].requerido = true
-    }
-  }
-
   createInfoFormacionAcademica(infoFormacionAcademica: any): void {
     const opt: any = {
       title: this.translate.instant('GLOBAL.crear'),
@@ -696,14 +671,11 @@ export class CrudFormacionAcademicaComponent implements OnInit {
   validarForm(event) {
     if (event.valid) {
       const formData = event.data.InfoFormacionAcademica;
-      if(formData.FechaFinalizacion != ''){
-        formData.FechaFinalizacion = momentTimezone.tz(formData.FechaFinalizacion, 'America/Bogota').format('DDMMYYYY')
-      }
       const InfoFormacionAcademica = {
         TerceroId: this.persona_id,
         ProgramaAcademicoId: formData.ProgramaAcademico.Id,
         FechaInicio: momentTimezone.tz(formData.FechaInicio, 'America/Bogota').format('DDMMYYYY'),
-        FechaFinalizacion: formData.FechaFinalizacion,
+        FechaFinalizacion: momentTimezone.tz(formData.FechaFinalizacion, 'America/Bogota').format('DDMMYYYY'),
         TituloTrabajoGrado: formData.TituloTrabajoGrado,
         DescripcionTrabajoGrado: formData.DescripcionTrabajoGrado,
         DocumentoId: formData.Documento,
