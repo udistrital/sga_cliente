@@ -733,7 +733,7 @@
         "correo_entidad": "Correo de la entidad",
         "placeholder_correo_entidad": "Ej: correo@entidad.com",
         "telefono_entidad": "Teléfono de la entidad",
-        "placeholder_telefono_entidad": "Ej: 323 93 00 Ext. 1112",
+        "placeholder_telefono_entidad": "Ej: 3239300",
         "direccion_entidad": "Dirección de la entidad",
         "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1",
         "nit_sin_digito_o_caracteres_especiales": "Ingrese el Nit sin digito de verificación o caracteres como puntos, guión o espacios",
