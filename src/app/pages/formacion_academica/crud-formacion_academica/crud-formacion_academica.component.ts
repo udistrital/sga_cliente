@@ -303,6 +303,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
       let nit: string = String(data.data.Nit);
       let IdUniversidad;
       if (regex.test(nit) === true) {
+        this.formInfoFormacionAcademica.campos[init].valor = nit;
         this.searchNit(nit);
 
         this.info_formacion_academica = undefined;
@@ -313,6 +314,7 @@ export class CrudFormacionAcademicaComponent implements OnInit {
         nit = nit.replace(/[. ]/g, '').split('-')[0];
 
         if (regex.test(nit) === true) {
+          this.formInfoFormacionAcademica.campos[init].valor = nit;
           this.searchNit(nit);
 
           this.info_formacion_academica = undefined;
