@@ -249,12 +249,14 @@ export class CrudExperienciaLaboralComponent implements OnInit {
       let nit: string = String(data.data.Nit);
 
       if (regex.test(nit) === true) {
+        this.formInfoExperienciaLaboral.campos[this.getIndexForm('Nit')].valor = nit;
         this.searchOrganizacion(nit);
         this.indexSelect = null;
         this.detalleExp = null;
       } else {
         nit = nit.replace(/[. ]/g, '').split('-')[0];
         if (regex.test(nit) === true) {
+          this.formInfoExperienciaLaboral.campos[this.getIndexForm('Nit')].valor = nit;
           this.searchOrganizacion(nit);
           this.indexSelect = null;
           this.detalleExp = null;
