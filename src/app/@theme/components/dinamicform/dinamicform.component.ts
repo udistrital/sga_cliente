@@ -310,6 +310,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
       return true;
       // console.info((c.etiqueta === 'file' && (c.valor)?true:c.valor.name === undefined));
     }
+    if (c.etiqueta === 'input' && c.tipo === 'number' && (c.valor === '' || c.valor === null || c.valor === undefined)) {
+      c.alerta = '** Debe llenar este campo solo con numeros';
+      c.clase = 'form-control form-control-danger';
+      return false;
+    }
     if (c.requerido && ((c.valor === '' && c.etiqueta !== 'file') || c.valor === null || c.valor === undefined ||
       (JSON.stringify(c.valor) === '{}' && c.etiqueta !== 'file') || JSON.stringify(c.valor) === '[]')
       || ((c.etiqueta === 'file' && c.valor.name === undefined) && (c.etiqueta === 'file' && (c.urlTemp === undefined || c.urlTemp === '')))
