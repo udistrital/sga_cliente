@@ -8,6 +8,12 @@ export let FORM_EXPERIENCIA_LABORAL = {
   modelo: 'InfoExperienciaLaboral',
   campos: [
     {
+      etiqueta: 'label',
+      claseGrid: 'col-lg-12 col-md-12 col-sm-12 col-xs-12 alerta',
+      label_i18n: "nit_sin_digito_o_caracteres_especiales",
+      tipo: 'text',
+    },
+    {
       etiqueta: 'input',
       claseGrid: 'col-lg-10 col-md-10 col-sm-9 col-xs-8',
       nombre: 'Nit',
