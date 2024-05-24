@@ -700,7 +700,7 @@
         "correo_entidad": "Entity email",
         "placeholder_correo_entidad": "E.g.: email@entity.com",
         "telefono_entidad": "Entity telephone number",
-        "placeholder_telefono_entidad": "E.g.: 323 93 00 Ext. 1112",
+        "placeholder_telefono_entidad": "E.g.: 3239300",
         "direccion_entidad": "Entity Address",
         "placeholder_direccion_entidad": "E.g.: Cra 8 # 40-78 Piso 1",
         "nit_sin_digito_o_caracteres_especiales": "Enter the Nit without a check digit or characters such as periods, hyphens or spaces",
