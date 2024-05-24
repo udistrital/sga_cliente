@@ -244,19 +244,28 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   searchNit(data) {
     if(data.data.Nit){
       const inombre = this.getIndexForm('NombreEmpresa');
-      const regex = /^[0-9]+(?:-[0-9]+)*$/;
+      const regex = /^[0-9]*$/;
       data.data.Nit = data.data.Nit.trim();
-      const nit = typeof data === 'string' ? data : data.data.Nit;
+      let nit: string = String(data.data.Nit);
 
       if (regex.test(nit) === true) {
         this.searchOrganizacion(nit);
         this.indexSelect = null;
         this.detalleExp = null;
       } else {
-        this.clean = !this.clean;
-        //this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
-        this.loadListEmpresa(nit);
-        this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
+        nit = nit.replace(/[. ]/g, '').split('-')[0];
+        if (regex.test(nit) === true) {
+          this.searchOrganizacion(nit);
+          this.indexSelect = null;
+          this.detalleExp = null;
+        } else {
+          this.popUpManager.showErrorAlert(this.translate.instant('GLOBAL.nit_incorrecto'));
+          this.loading = false;
+        }
+        //this.clean = !this.clean;
+        ////this.formInfoExperienciaLaboral.campos[inombre].deshabilitar = false;
+        //this.loadListEmpresa(nit);
+        //this.formInfoExperienciaLaboral.campos[inombre].valor = nit;
       }
     }  else {
       this.popUpManager.showAlert(this.translate.instant('inscripcion.experiencia_laboral'), this.translate.instant('GLOBAL.no_vacio'))
