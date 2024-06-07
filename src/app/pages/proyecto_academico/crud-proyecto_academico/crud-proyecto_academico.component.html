@@ -1,5 +1,6 @@
 <div class="row">
     <div class="col">
+        <toaster-container [toasterconfig]="config"></toaster-container>
         <nb-card>
 
             <fieldset [ngClass]="{'fieldseter' : true }">
@@ -24,7 +25,7 @@
                                             <mat-form-field>
                                                 <input matInput placeholder="{{ 'proyecto.codigo_snies' | translate }}"
                                                     formControlName="codigo_snies" class="form-control"
-                                                    name="codigo_snies">
+                                                    name="codigo_snies" #codigoSnies (blur)="onBlurCodigoSnies(codigoSnies.value)">
                                                 <mat-error *ngIf="Campo24Control.hasError('required')">{{
                                                     'proyecto.erro_codigoSnies' | translate }}</mat-error>
                                             </mat-form-field>
@@ -32,7 +33,7 @@
 
                                             <mat-form-field>
                                                 <input matInput placeholder="{{ 'proyecto.codigo_interno' | translate }}" formControlName="codigo_interno"
-                                                    class="form-control" name="codigo_interno">
+                                                    class="form-control" name="codigo_interno" readonly>
                                                 <mat-error
                                                     *ngIf="Campo7Control.hasError('required')">
                                                     {{ 'proyecto.erro_codigo' | translate }}</mat-error>
@@ -54,7 +55,7 @@
 
                                             <mat-form-field>
                                                 <input matInput placeholder="{{ 'proyecto.nombre_proyecto' | translate }}" formControlName="nombre_proyecto"
-                                                    class="form-control" name="nombre_proyecto">
+                                                    class="form-control" name="nombre_proyecto" readonly>
                                                 <mat-error *ngIf="Campo8Control.hasError('required')">{{
                                                     'proyecto.erro_nombre' | translate }}</mat-error>
                                             </mat-form-field>
