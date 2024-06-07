@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError, map } from 'rxjs/operators';
 import { HttpErrorManager } from './errorManager'
@@ -14,17 +14,17 @@ import { HttpErrorManager } from './errorManager'
 @Injectable({
   providedIn: 'root',
 })
-export class RequestManager {
+export class RequestManagerSOAP {
   private path: string;
   public httpOptions: any;
   constructor(private http: HttpClient, private errManager: HttpErrorManager) {
     const acces_token = window.localStorage.getItem('access_token');
     if (acces_token !== null) {
       this.httpOptions = {
-        // headers: new HttpHeaders({
-        //   'Content-Type': 'application/json',
-        //   'Authorization': `Bearer ${acces_token}`,
-        // }),
+        headers: new HttpHeaders({
+           'Content-Type': '',
+           'Authorization': `Bearer ${acces_token}`,
+        }),
       }
     }
   }
@@ -46,6 +46,7 @@ export class RequestManager {
    * @returns Observable<any>
    */
   get(endpoint) {
+    console.log(this.httpOptions);
     return this.http.get<any>(`${this.path}${endpoint}`, this.httpOptions).pipe(
       map(
         (res) => {
@@ -109,14 +110,5 @@ export class RequestManager {
     return this.http.delete<any>(`${this.path}${endpoint}/${id}`, this.httpOptions).pipe(
       catchError(this.errManager.handleError),
     );
-  }
-
-  get_soap(endpoint: string) {
-    return this.http.get(`${this.path}${endpoint}`,
-      {
-        headers: new HttpHeaders({
-          'Content-Type': 'multipart/form-data'
-        })
-      });
   }
 };

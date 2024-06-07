@@ -1192,7 +1192,12 @@
         "proyecto_padre": "Parent project",
         "mensaje_oikos": "Please relate the curricular project with the physical space of the OIKOS system, if the physical space does not exist, please notify the system administrator",
         "oikos": "Physical space",
-        "erro_oikos": "Please select the physical space!"
+        "erro_oikos": "Please select the physical space!",
+        "error_consulta": "Error occurred, please try again later.",
+        "proyecto_encontrado": "Project found.",
+        "detalle_proyecto_encontrado": "The SNIES code {{codigo_snies}} corresponds to the internal code {{codigo_interno}} with the name '{{nombre_proyecto}}'.<br><br> If the project does not match the expected one, please contact the system administrator.<br><br> Are you sure you want to proceed with the registration of this curricular project?",
+        "proyecto_no_encontrado": "Project not found.",
+        "detalle_proyecto_no_encontrado": "No academic project associated with the SNIES code {{codigo_snies}} was found. <br><br> Please verify if the entered code is correct. If it is, please contact the system administrator."
     },
     "consultaproyecto": {
         "titulo": "Consultation of an Academic Project",
