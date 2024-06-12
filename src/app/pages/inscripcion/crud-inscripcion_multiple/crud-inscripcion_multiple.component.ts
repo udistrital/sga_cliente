@@ -531,6 +531,9 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                     } else if (response.Code === '400') {
                       reject([]);
                       this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+                    } else {
+                      reject([]);
+                      this.popUpManager.showErrorToast(response.Body);
                     }
                     this.loading = false;
                   },
