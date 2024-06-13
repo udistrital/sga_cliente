@@ -271,7 +271,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     let dataTel = {principal: infoPersona.Telefono, alterno: this.datosEncontrados.TelefonoAlterno? this.datosEncontrados.TelefonoAlterno : null}
     prepareUpdate.Complementarios.Telefono.data = JSON.stringify(dataTel);
 
-    this.tercerosMidService.put('persona/actualizar_persona',prepareUpdate).subscribe((response) => {
+    this.tercerosMidService.put('personas',prepareUpdate).subscribe((response) => {
       this.faltandatos = false;
       this.existePersona = false;
       this.formInfoPersona.btn = '';
@@ -302,7 +302,7 @@ export class CrudInfoPersonaComponent implements OnInit {
     infoPersona.FechaExpedicion = infoPersona.FechaExpedicion + ' +0000 +0000';
     infoPersona.NumeroIdentificacion = (infoPersona.NumeroIdentificacion).toString();
     infoPersona.Usuario = this.autenticationService.getPayload().email;
-    this.tercerosMidService.post('persona/guardar_persona', infoPersona).subscribe(res => {
+    this.tercerosMidService.post('personas', infoPersona).subscribe(res => {
       const r = <any>res
       if (r !== null && r.Type !== 'error') {
         window.localStorage.setItem('ente', r.Id);

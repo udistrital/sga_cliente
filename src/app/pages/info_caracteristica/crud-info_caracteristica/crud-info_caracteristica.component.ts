@@ -275,7 +275,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
     if (this.info_persona_id !== undefined && this.info_persona_id !== 0 &&
       this.info_persona_id.toString() !== '') {
       this.denied_acces = false;
-      this.tercerosMidService.get('personas/consultar_complementarios/' + this.info_persona_id)
+      this.tercerosMidService.get('personas/' + this.info_persona_id + '/complementarios')
         .subscribe(async res => {
           if (res !== null && res.Response.Code !== '404') {
             console.log(res.Response)
@@ -354,7 +354,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
           this.info_info_caracteristica.Ente = this.info_persona_id;
           //console.log("put: ", this.info_info_caracteristica); this.loading = false;
-          this.tercerosMidService.put('persona/actualizar_complementarios', this.info_info_caracteristica)
+          this.tercerosMidService.put('personas/complementarios', this.info_info_caracteristica)
             .subscribe(res => {
               this.showToast('info', this.translate.instant('GLOBAL.actualizar'),
                 this.translate.instant('GLOBAL.info_caracteristica') + ' ' +
@@ -400,7 +400,7 @@ export class CrudInfoCaracteristicaComponent implements OnInit {
           const info_info_caracteristica_post = <any>infoCaracteristica;
           info_info_caracteristica_post.TipoRelacionUbicacionEnte = 1;
           info_info_caracteristica_post.Tercero = this.info_persona_id;
-          this.tercerosMidService.post('persona/guardar_complementarios', info_info_caracteristica_post)
+          this.tercerosMidService.post('personas/complementarios', info_info_caracteristica_post)
             .subscribe(res => {
               if (res !== null) {
                 this.info_info_caracteristica = <InfoCaracteristica>infoCaracteristica;
