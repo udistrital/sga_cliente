@@ -84,6 +84,14 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
   cantidad_inscritos_obs: number = 0;
   mostrarConteos: boolean = false;
 
+  stateTransitions = {
+    'Inscripción solicitada': [],
+    'INSCRITO': ['INSCRITO con Observación', 'ADMITIDO', 'OPCIONADO', 'NO ADMITIDO'],
+    'INSCRITO con Observación': ['INSCRITO', 'ADMITIDO', 'OPCIONADO', 'NO ADMITIDO'],
+    'ADMITIDO': ['INSCRITO', 'INSCRITO con Observación', 'OPCIONADO', 'NO ADMITIDO'],
+    'OPCIONADO': ['INSCRITO', 'INSCRITO con Observación', 'ADMITIDO', 'NO ADMITIDO'],
+    'NO ADMITIDO': ['INSCRITO', 'INSCRITO con Observación', 'ADMITIDO', 'OPCIONADO']
+  };
 
   CampoControl = new FormControl('', [Validators.required]);
   Campo1Control = new FormControl('', [Validators.required]);
@@ -345,8 +353,20 @@ export class ListadoAspiranteComponent implements OnInit, OnChanges {
     }
   }
 
+  canChangeState(currentState: string, newState: string): boolean {
+    const allowedStates = this.stateTransitions[currentState] || [];
+    return allowedStates.includes(newState);
+  }
+
   onSaveConfirm(event) {
+    const currentState = event.data.EstadoInscripcionId;
     const newState = this.estados.filter((data) => (data.value === parseInt(event.newData.EstadoInscripcionId, 10)))[0];
+
+    if (!this.canChangeState(currentState.Nombre, newState.title)) {
+      this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_permite_cambio', { nuevo_estado: newState.title }))
+      return;
+    }
+
     if (newState.value == this.IdIncripcionSolicitada) {
       this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_cambiar_inscripcion_solicitada'))
     } else {
