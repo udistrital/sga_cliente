@@ -358,6 +358,7 @@ export class CrudPropuestaGradoComponent implements OnInit {
                 this.setPercentage(1);
                 this.eventChange.emit(true);
                 this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
+                this.loadPropuestaGrado();
               } else {
                 this.loading = false;
                 this.popUpManager.showErrorAlert(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));
