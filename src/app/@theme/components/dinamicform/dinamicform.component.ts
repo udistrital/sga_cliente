@@ -415,11 +415,16 @@ export class DinamicformComponent implements OnInit, OnChanges {
     return new Promise<boolean>((resolve, reject) => {
       this.normalform.campos.forEach(async (d, i) => {
         if ((d.etiqueta === 'file' || d.etiqueta === 'fileRev') && !d.ocultar) {
-          const valid = await this.gestorDocumental.readVerifyMimeType(d.File);
+          let valid = false;
+          if (d.File) {
+            valid = await this.gestorDocumental.readVerifyMimeType(d.File);
+          } else if (d.valor || d.url) {
+            valid = true;
+          }
           if (!valid) {
             d.clase = 'form-control form-control-danger';
             d.alerta = this.translate.instant('ERROR.contenido_archivo_erroneo');
-            this.popUpManager.showPopUpGeneric(this.translate.instant('GLOBAL.error'), d.File.name + "<br><br>" + this.translate.instant('ERROR.contenido_archivo_erroneo_mensaje'), "error", false)
+            this.popUpManager.showPopUpGeneric(this.translate.instant('GLOBAL.error'), d.File ? d.File.name : "" + "<br><br>" + this.translate.instant('ERROR.contenido_archivo_erroneo_mensaje'), "error", false)
             reject(false)
           }
         }
