@@ -323,8 +323,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
                         sessionStorage.setItem('IdInscripcion', event.data['Credencial']);
                         sessionStorage.setItem('ProgramaAcademicoId', this.proyectos_selected.toString());
                         sessionStorage.setItem('ProgramaAcademico', res.Nombre);
-                        window.localStorage.setItem('IdPeriodo', String(this.periodo.Id));
-                        sessionStorage.setItem('IdPeriodo', this.periodo.Id);
+                        window.localStorage.setItem('IdPeriodo', this.periodo.Id);
                         sessionStorage.setItem('IdTipoInscripcion', resp[0].TipoInscripcionId.Id);
                         this.showProfile = false;
 
@@ -358,16 +357,6 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   createTable() {
     this.settings = {
       columns: {
-        index:{
-          title: '#',
-          filter: false,
-          type: 'html',
-          valuePrepareFunction: (value, row, cell) => {
-            const absoluteIndex = (cell.row.index + 1) + (this.dataSource.getPaging().page - 1) * this.dataSource.getPaging().perPage;
-            return `<div>${absoluteIndex}</div>`;
-          },
-          width: '2%',
-        },
         Credencial: {
           title: this.translate.instant('admision.credencial'),
           width: '20%',
