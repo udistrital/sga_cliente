@@ -130,7 +130,7 @@ export class ViewInfoPersonaComponent implements OnInit {
                       this.direccion = info.DireccionResidencia;
                       this.telefono = info.Telefono;
                       this.telefonoAlt = info.TelefonoAlterno;
-                      this.lugarOrigen = info.CiudadResidencia.Nombre + ", " + info.DepartamentoResidencia.Nombre;
+                      this.lugarOrigen = (info.CiudadResidencia != null ? info.CiudadResidencia.Nombre + ", " : '') + (info.DepartamentoResidencia != null ? info.DepartamentoResidencia.Nombre : '');
                       this.addCargado(3);
                     }
                   },
