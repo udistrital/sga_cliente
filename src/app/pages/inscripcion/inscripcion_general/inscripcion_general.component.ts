@@ -540,8 +540,18 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.sgaMidService.get('inscripciones/info_complementaria_tercero/' + this.info_persona_id)
         .subscribe(res => {
           if (res !== null && JSON.stringify(res[0]) !== '{}' && res.Response.Code !== '404') {
-            this.percentage_info = this.percentage_info + Number((100 / factor).toFixed(2));
-            this.percentage_tab_info[2] = Number((100 / factor));
+            const params = Object.keys(res.Response.Body[0]);
+            const count_params = params.filter(e => 
+            ["EstratoResidencia",
+            "Telefono",
+            "PaisResidencia",
+            "DepartamentoResidencia",
+            "CiudadResidencia",
+            "DireccionResidencia",
+            "CorreoAlterno"].includes(e)).length;
+            const percent = (count_params+1)/8*100;
+            this.percentage_info = this.percentage_info + Number((percent / factor).toFixed(2));
+            this.percentage_tab_info[2] = Number((percent / factor));
             this.loading = false;
           } else {
             this.percentage_info = this.percentage_info + 0;
