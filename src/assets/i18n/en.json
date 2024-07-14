@@ -169,6 +169,9 @@
         }
     },
     "GLOBAL": {
+        "welcome": "The Academic Management System welcomes you",
+        "init_message": "The District University offers, through the Information Technology Advisory Office, the application that supports the development of academic processes as well as various administrative processes related to its mission.",
+        "oati":  "Information Technology Advisory Office",
         "admitir": "Admit",
         "aspirantes_inscritos": "Enrolled Applicants",
         "click_aqui": "Click here",
