@@ -4,7 +4,6 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { DashboardComponent } from './dashboard.component';
 import { CarouselComponent } from './carousel/carousel.component';
 import { NewsComponent } from './news/news.component';
-import { VideoModalComponent } from '../../@theme/components/video-modal/video-modal.component';
 import { SharedModule } from '../../shared/shared.module';
 
 
@@ -17,9 +16,6 @@ import { SharedModule } from '../../shared/shared.module';
     DashboardComponent,
     CarouselComponent,
     NewsComponent,
-  ],
-  entryComponents: [
-    VideoModalComponent,
   ],
 })
 export class DashboardModule { }
