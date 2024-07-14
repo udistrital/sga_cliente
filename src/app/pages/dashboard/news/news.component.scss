@@ -1,0 +1,17 @@
+.container-baner{
+    background: linear-gradient(to top, white, var(--primary));
+    height: 400px;
+    text-align: center;
+    padding-top: 5%;
+}
+.title-home{
+    color: white;
+    opacity: none;
+    font-size: 3rem;
+}
+.guide-home{
+    color: var(--primary);
+    opacity: none !important;
+    font-size: 1.5rem;
+    padding: 4rem 15% 0 15%;
+}
