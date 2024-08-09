@@ -589,8 +589,9 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               }
             });
             this.loading = true;
+            const anioConcepto = this.periodo.Ciclo === '1' ? this.periodo.Year - 1 : this.periodo.Year;
             this.parametrosService.get('parametro_periodo?query=ParametroId.TipoParametroId.Id:2,' +
-              'ParametroId.CodigoAbreviacion:' + this.parametro + ',PeriodoId.Year:'+ this.periodo.Year +',PeriodoId.CodigoAbreviacion:VG').subscribe(
+              'ParametroId.CodigoAbreviacion:' + this.parametro + ',PeriodoId.Year:'+ anioConcepto +',PeriodoId.CodigoAbreviacion:VG').subscribe(
                 response => {
                   this.loading = false;
                   const parametro = <any>response['Data'][0];
