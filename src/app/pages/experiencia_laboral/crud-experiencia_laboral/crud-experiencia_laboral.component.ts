@@ -620,12 +620,15 @@ export class CrudExperienciaLaboralComponent implements OnInit {
   }
 
   onCheckChange(event) {
-    //this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].deshabilitar = !this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].deshabilitar
-    this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].ocultar = !this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].ocultar
-    this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].requerido = !this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].requerido
-
-    if (event.checked) {
+    if (event.checked || event.detail) {
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].deshabilitar = true
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].ocultar = true
       this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].valor = ''
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].requerido = false
+    }else {
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].deshabilitar = false
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].ocultar = false
+      this.formInfoExperienciaLaboral.campos[this.getIndexForm('FechaFinalizacion')].requerido = true
     }
   }
 
