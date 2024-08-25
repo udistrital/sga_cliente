@@ -100,7 +100,11 @@ export class ListExperienciaLaboralComponent implements OnInit {
           title: this.translate.instant('GLOBAL.fecha_fin'),
           width: '20%',
           valuePrepareFunction: (value) => {
-            return formatDate(value, 'yyyy-MM-dd', 'en');
+            if (value !== '') {
+              return formatDate(value, 'yyyy-MM-dd', 'en');
+            } else {
+              return ('Actual')
+            }
           },
         },
         Estado: {
@@ -169,9 +173,9 @@ export class ListExperienciaLaboralComponent implements OnInit {
         } else {
           this.popUpManager.showAlert(this.translate.instant('GLOBAL.error'),
             this.translate.instant('experiencia_laboral.error'));
-            this.getPercentage(0);
-            this.source.load([]);
-          }
+          this.getPercentage(0);
+          this.source.load([]);
+        }
         this.loading = false;
       },
       (error: HttpErrorResponse) => {

@@ -98,7 +98,7 @@ export let FORM_EXPERIENCIA_LABORAL = {
     },
     {
       etiqueta: 'mat-date',
-      claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
+      claseGrid: 'col-lg-4 col-md-4 col-sm-12 col-xs-12',
       nombre: 'FechaInicio',
       label_i18n: 'fecha_inicio',
       placeholder_i18n: 'fecha_inicio',
@@ -107,12 +107,22 @@ export let FORM_EXPERIENCIA_LABORAL = {
     },
     {
       etiqueta: 'mat-date',
-      claseGrid: 'col-lg-3 col-md-3 col-sm-12 col-xs-12',
+      claseGrid: 'col-lg-4 col-md-4 col-sm-12 col-xs-12',
       nombre: 'FechaFinalizacion',
       label_i18n: 'fecha_fin',
       placeholder_i18n: 'fecha_fin',
       requerido: true,
       tipo: 'date',
+      deshabilitar: false,
+      ocultar:false,
+    },
+    {
+      etiqueta: 'checkbox',
+      nombre: 'experiencia_actual',
+      claseGrid: 'col-lg-4 col-md-4 col-sm-12 col-xs-12',
+      label_i18n: 'experiencia_actual',
+      placeholder_i18n: 'experiencia_actual',
+      requerido: false,
     },
     {
       etiqueta: 'select',
