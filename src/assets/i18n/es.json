@@ -741,7 +741,9 @@
         "placeholder_direccion_entidad": "Ej: Cra 8 # 40-78 Piso 1",
         "nit_sin_digito_o_caracteres_especiales": "Ingrese el Nit sin digito de verificación o caracteres como puntos, guión o espacios",
         "nit_incorrecto": "El Nit proporcionado es incorrecto",
-        "experiencia_actual": "Trabajo actual"
+        "experiencia_actual": "Trabajo actual",
+        "formacion_actual": "Formnación actual"
+
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",

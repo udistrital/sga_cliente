@@ -10,7 +10,9 @@
       (resultAux)="searchDoc($event)"
       [clean]="clean"
       (percentage)="setPercentage($event)"
-      (interlaced)="getEvento($event)">
+      (interlaced)="getEvento($event)"
+      (checkChange)=" onCheckChange($event)">
+      
     </ngx-dinamicform>
 
     <ngx-new-tercero *ngIf="nuevoTercero"
