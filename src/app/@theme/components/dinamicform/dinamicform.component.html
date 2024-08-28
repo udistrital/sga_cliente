@@ -339,7 +339,7 @@
                         <!-- checkbox -->
                         <div *ngSwitchCase="'checkbox'" class="form-group validation-checkboxes" [hidden]="c.ocultar">
                             <mat-checkbox type="checkbox" class="customised-control-input" [disabled]="c.deshabilitar"
-                                color="primary" [(checked)]="c.valor" (change)="c.valor = !c.valor; c.alerta = '';">
+                                color="primary" [(checked)]="c.valor" (change)="onChangeCheckBox($event,c)">
                                 {{c.requerido?'* '+c.label:c.label}}</mat-checkbox>
                             <mat-hint class="text-danger">{{c.alerta}}</mat-hint>
                         </div>
@@ -378,6 +378,7 @@
                             <input matInput [(ngModel)]="c.valor" [matDatepicker]="picker"
                                 (dateChange)="onChangeDate($event,c); validCampo(c)"
                                 [ngModelOptions]="{standalone: true}" [placeholder]="c.placeholder"
+                                [hidden]="c.ocultar"
                                 [disabled]="c.deshabilitar">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>

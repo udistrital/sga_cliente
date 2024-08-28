@@ -24,6 +24,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() resultSmart: EventEmitter<any> = new EventEmitter();
   @Output() interlaced: EventEmitter<any> = new EventEmitter();
   @Output() percentage: EventEmitter<any> = new EventEmitter();
+  @Output() checkChange: EventEmitter<any> = new EventEmitter();
   data: any;
   searchTerm$ = new Subject<any>();
   @ViewChild(MatDatepicker, { static: true }) datepicker: MatDatepicker<Date>;
@@ -172,6 +173,12 @@ export class DinamicformComponent implements OnInit, OnChanges {
       'location=no, directories=no, status=no, menubar=no,' +
       'scrollbars=no, resizable=no, copyhistory=no, ' +
       'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+  }
+
+  onChangeCheckBox(event, c){
+    if (c.valor !== undefined) {
+      this.checkChange.emit(event)
+    }
   }
 
   onChange(event, c) {
