@@ -1545,7 +1545,9 @@
         "poner_obligatorio": "Set document as required?",
         "quitar_obligatorio": "Set document as optional?",
         "ajuste_ok": "Change made",
-        "ajuste_fail": "The change could not be made"
+        "ajuste_fail": "The change could not be made",
+        "sin_acceso": "No Acces",
+        "sin_acceso_cuerpo": "You dont have acces to this component, if you need to create a new document please contact the support office to create a new request"
     },
     "descuento_academico": {
         "documento_programa_no_registrado": "Document not registered",
