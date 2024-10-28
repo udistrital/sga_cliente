@@ -646,7 +646,7 @@ export class ListService {
         (list: any) => {
           if (!list || list.length === 0) {
             // this.coreService.get('grupo_investigacion/?query=Activo:true&limit=0')
-            this.cidcService.get('research_units/?query=Activo:true&limit=0')
+            this.cidcService.get('research_units?filter=[["group_state_name","=","Activo"]]&take=10000&sort=[{"selector":"name","desc":false}]')
               .subscribe(
                 (result: any) => {
                   const r = <any>result.data;
