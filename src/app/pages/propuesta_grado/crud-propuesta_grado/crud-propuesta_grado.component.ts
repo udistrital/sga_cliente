@@ -86,10 +86,8 @@ export class CrudPropuestaGradoComponent implements OnInit {
     private popUpManager: PopUpManager,
     private newNuxeoService: NewNuxeoService,
     private toasterService: ToasterService,
-    private utilidades: UtilidadesService) {
-      this.listService.findGrupoInvestigacion();
-      this.listService.findLineaInvestigacion();
-      this.listService.findTipoProyecto();
+    private utilidades: UtilidadesService) 
+    {
     this.formPropuestaGrado = FORM_PROPUESTA_GRADO;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
