@@ -34,14 +34,14 @@ import { MODALS } from '../../../@core/data/models/diccionario/diccionario';
 export class EvaluacionDocumentosInscritosComponent implements OnInit {
 
   loading: boolean = false;
-  CampoControl = new FormControl('', [Validators.required]);
-  Campo1Control = new FormControl('', [Validators.required]);
   settings: any;
   dataSource: LocalDataSource;
   info_persona_id: any;
   periodo: any;
   nivel_load: any;
   selectednivel: any;
+  cantidad_registros_load: number[];
+  selectedCantidadRegistros: number = 0;
   proyectos_selected: any[];
   inscripcion_id: any;
   showProfile: boolean;
@@ -55,7 +55,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
   folderTagtoReload: string = "";
   inscripcionInfo: any;
-
+  showTable: boolean;
 
   periodos = [];
   proyectos = [];
@@ -81,6 +81,9 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
     this.invitacionTemplate = new InvitacionTemplate();
     this.dataSource = new LocalDataSource();
     this.showProfile = true;
+    this.showTable = true;
+    this.cantidad_registros_load = [10, 15, 20, 25, 30];
+    this.selectedCantidadRegistros = this.cantidad_registros_load[0];
     this.loadData();
     this.createTable()
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -131,24 +134,28 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   selectPeriodo() {
     this.selectednivel = undefined;
     this.proyectos_selected = undefined;
-  }
-
-  changePeriodo() {
-    this.CampoControl.setValue('');
-    this.Campo1Control.setValue('');
+    this.selectedCantidadRegistros = this.cantidad_registros_load[0];
+    this.loadCantidadRegistros();
+    this.proyectos = [];
+    this.dataSource.load([]);
   }
 
   loadLevel() {
     this.projectService.get('nivel_formacion?limit=0').subscribe(
       (response: any) => {
-        if (response !== null || response !== undefined) {
-          this.nivel_load = <any>response;
+        if (Array.isArray(response)) {
+          this.nivel_load = response.filter(nivel => nivel.NivelFormacionPadreId === null && nivel.Activo === true)
         }
       },
       error => {
         this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
       },
     );
+  }
+
+  loadCantidadRegistros() {
+    this.showTable = false;
+    this.createTable();
   }
 
   filtrarProyecto(proyecto) {
@@ -166,8 +173,9 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
 
   loadProyectos() {
     this.dataSource.load([]);
+    this.proyectos_selected = [];
     this.Aspirantes = [];
-    if (this.selectednivel !== NaN) {
+    if (this.selectednivel !== undefined) {
       this.projectService.get('proyecto_academico_institucion?limit=0').subscribe(
         (response: any) => {
           this.autenticationService.getRole().then(
@@ -206,34 +214,36 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
   }
 
   loadInscritos() {
-    this.loading = true;
-    this.dataSource.load([]);
-    this.Aspirantes = [];
-    this.sgaMidService.get('admision/getlistaaspirantespor?id_periodo='+this.periodo.Id+'&id_proyecto='+this.proyectos_selected+'&tipo_lista=1')
-      .subscribe(
-        (response: any) => {
-          if (response.Success && response.Status == "200") {
-            this.Aspirantes = response.Data;
-            this.cantidad_inscritos = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO").length;
-            this.cantidad_inscritos_obs = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO con Observación").length;
-            this.cantidad_admitidos = this.Aspirantes.filter(aspirante => aspirante.Estado == "ADMITIDO").length;
-            this.cantidad_aspirantes = this.cantidad_inscritos + this.cantidad_inscritos_obs + this.cantidad_admitidos;
-            this.dataSource.load(this.Aspirantes);
+    if(this.proyectos_selected !== null)
+    {
+      this.loading = true;
+      this.dataSource.load([]);
+      this.Aspirantes = [];
+      this.sgaMidService.get('admision/getlistaaspirantespor?id_periodo='+this.periodo.Id+'&id_proyecto='+this.proyectos_selected+'&tipo_lista=1')
+        .subscribe(
+          (response: any) => {
+            if (response.Success && response.Status == "200") {
+              this.Aspirantes = response.Data;
+              this.cantidad_inscritos = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO").length;
+              this.cantidad_inscritos_obs = this.Aspirantes.filter(aspirante => aspirante.Estado == "INSCRITO con Observación").length;
+              this.cantidad_admitidos = this.Aspirantes.filter(aspirante => aspirante.Estado == "ADMITIDO").length;
+              this.cantidad_aspirantes = this.cantidad_inscritos + this.cantidad_inscritos_obs + this.cantidad_admitidos;
+              this.dataSource.load(this.Aspirantes);
+              this.loading = false;
+              this.mostrarConteos = true;
+            }
+          },
+          (error: HttpErrorResponse) => {
             this.loading = false;
-            this.mostrarConteos = true;
+            this.mostrarConteos = false;
+            Swal.fire({
+              icon: 'warning',
+              title: this.translate.instant('admision.titulo_no_aspirantes'),
+              text: this.translate.instant('admision.error_no_aspirantes'),
+              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            });
           }
-        },
-        (error: HttpErrorResponse) => {
-          this.loading = false;
-          this.mostrarConteos = false;
-          Swal.fire({
-            icon: 'warning',
-            title: this.translate.instant('admision.titulo_no_aspirantes'),
-            text: this.translate.instant('admision.error_no_aspirantes'),
-            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-          });
-        }
-      );
+        );
 
 
     /* this.inscripcionService.get('inscripcion?query=EstadoInscripcionId__Id:5,ProgramaAcademicoId:' +
@@ -275,6 +285,7 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
           this.popUpManager.showErrorToast(this.translate.instant('admision.error_cargar'));
         },
       ); */
+    }
   }
 
   activateTab() {
@@ -357,6 +368,10 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
 
   createTable() {
     this.settings = {
+      pager: {
+        display: true,
+        perPage: this.selectedCantidadRegistros,
+      },
       columns: {
         index:{
           title: '#',
@@ -408,6 +423,11 @@ export class EvaluacionDocumentosInscritosComponent implements OnInit {
         ],
       },
     };
+    if(this.showTable == false){
+      setTimeout(() => {
+        this.showTable = true;
+      }, 0);
+    }
   }
 
   revisarDocumento(doc: any) {
