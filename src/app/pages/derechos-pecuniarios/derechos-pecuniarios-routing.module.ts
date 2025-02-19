@@ -33,7 +33,7 @@ const routes: Routes = [{
         {
             path: 'definir-conceptos',
             component: DefinirConceptosComponent,
-            canActivate: [AuthGuard],
+            //canActivate: [AuthGuard],
         },
         {
             path: 'consultar-conceptos',
