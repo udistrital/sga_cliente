@@ -28,12 +28,12 @@ const routes: Routes = [{
         {
             path: 'copiar-conceptos',
             component: CopiarConceptosComponent,
-            canActivate: [AuthGuard],
+            //canActivate: [AuthGuard],
         },
         {
             path: 'definir-conceptos',
             component: DefinirConceptosComponent,
-            canActivate: [AuthGuard],
+            //canActivate: [AuthGuard],
         },
         {
             path: 'consultar-conceptos',
