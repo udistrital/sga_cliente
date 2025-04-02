@@ -11,6 +11,7 @@ import { TransferenciaComponent } from './transferencia/transferencia.component'
 import { SolicitudTransferenciaComponent } from './solicitud-transferencia/solicitud-transferencia.component';
 import { DialogoDocumentosTransferenciasComponent } from './dialogo-documentos-transferencias/dialogo-documentos-transferencias.component';
 import { DialogoDocumentosComponent } from '../admision/dialogo-documentos/dialogo-documentos.component';
+import { DialogoFormularioPagadorComponent } from '../admision/dialogo-formulario-pagador/dialogo-formulario-pagador.component';
 
 const routes: Routes = [{
   path: '',
@@ -55,4 +56,5 @@ export const routedComponents = [
   SolicitudTransferenciaComponent,
   DialogoDocumentosTransferenciasComponent,
   DialogoDocumentosComponent,
+  DialogoFormularioPagadorComponent,
 ];

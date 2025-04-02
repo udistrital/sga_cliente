@@ -1,0 +1,156 @@
+<div class="dinamic-form" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+  nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+  <form novalidate [formGroup]="revisionForm" class="form-horizontal">
+    <fieldset [ngClass]="{'fieldseter': true}">
+      <legend>
+        &nbsp; {{ 'admision.formulario_pagador' | translate }}
+      </legend>
+      <div class="row">
+        <div class="col-12">
+
+          <!-- Naturaleza -->
+          <label class="form-label">{{ 'GLOBAL.naturaleza' | translate }}</label>
+          <mat-form-field style="width: 100%;" appearance="fill">
+            <mat-select formControlName="naturaleza">
+              <mat-option *ngFor="let naturaleza of naturalezas" [value]="naturaleza.value">
+                {{ naturaleza.nombre | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Tipo de Documento -->
+          <label class="form-label">{{ 'GLOBAL.tipo_documento' | translate }}</label>
+          <mat-form-field style="width: 100%;" appearance="fill">
+            <mat-select formControlName="tipoDocumento">
+              <mat-option value="C">Cédula de ciudadanía</mat-option>
+              <mat-option value="N">NIT</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Digito verificacion -->
+          <div *ngIf="mostrarDigitoVerificacion">
+            <label class="form-label">{{ 'GLOBAL.digito_verificacion' | translate }}</label>
+            <mat-form-field style="width: 100%;" appearance="fill">
+              <input matInput formControlName="digito_verificacion">
+            </mat-form-field>
+          </div>
+
+          <!-- Nombres -->
+          <label class="form-label">{{ 'GLOBAL.nombres' | translate }}</label>
+          <mat-form-field style="width: 100%;" appearance="fill">
+            <input matInput formControlName="nombres">
+          </mat-form-field>
+
+          <!-- Apellidos -->
+          <label class="form-label">{{ 'GLOBAL.apellidos' | translate }}</label>
+          <mat-form-field style="width: 100%;" appearance="fill">
+            <input matInput formControlName="apellidos">
+          </mat-form-field>
+
+          <!-- Dirección -->
+          <label class="form-label">{{ 'GLOBAL.direccion' | translate }}</label>
+          <div class="row align-items-center">
+            <div class="col-3">
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <mat-select formControlName="tipoVia">
+                  <mat-option *ngFor="let via of vias" [value]="via.Abreviatura">
+                    {{ via.Nomenclatura | translate }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-2">
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <input matInput formControlName="numeroVia">
+              </mat-form-field>
+            </div>
+            <div class="col-auto">
+              <span style="font-size: 1.2rem; font-weight: bold;">#</span>
+            </div>
+            <div class="col-2">
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <input matInput formControlName="numeroSecundario">
+              </mat-form-field>
+            </div>
+            <div class="col-auto">
+              <span style="font-size: 1.2rem; font-weight: bold;">-</span>
+            </div>
+            <div class="col-2">
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <input matInput formControlName="complementoDireccion">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Interior1 -->
+          <div class="row align-items-center">
+            <div class="col-1">
+            </div>
+            <div class="col-auto">
+              <span>Interior 1: </span>
+            </div>
+            <div class="col-3">
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <mat-select formControlName="tipoVia">
+                  <mat-option *ngFor="let int of interior" [value]="int.Abreviatura">
+                    {{ int.Nomenclatura | translate }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <input matInput formControlName="numeroVia">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Interior2 -->
+          <div class="row align-items-center">
+            <div class="col-1">
+            </div>
+            <div class="col-auto">
+              <span>Interior 2: </span>
+            </div>
+            <div class="col-3">
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <mat-select formControlName="tipoVia">
+                  <mat-option *ngFor="let int of interior" [value]="int.Abreviatura">
+                    {{ int.Nomenclatura | translate }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <input matInput formControlName="numeroVia">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <label class="form-label">{{ 'GLOBAL.telefono' | translate }}</label>
+          <mat-form-field style="width: 100%;" appearance="fill">
+            <input matInput type="tel" formControlName="telefono">
+          </mat-form-field>
+
+          <!-- Correo -->
+          <label class="form-label">{{ 'GLOBAL.correo' | translate }}</label>
+          <mat-form-field style="width: 100%;" appearance="fill">
+            <input matInput type="email" formControlName="correo">
+          </mat-form-field>
+
+          <!-- Botón de Guardar -->
+          <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+              <button mat-raised-button color="primary" (click)="guardarRevision()">
+                {{ 'GLOBAL.guardar' | translate }}
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
