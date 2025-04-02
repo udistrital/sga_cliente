@@ -11,7 +11,7 @@ import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academic
 import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
 import { ReciboPago } from '../../../@core/data/models/inscripcion/recibo_pago';
-import { MatSelect } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatSelect } from '@angular/material';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
@@ -23,6 +23,7 @@ import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { environment } from '../../../../environments/environment';
 import { Periodo } from '../../../@core/data/models/periodo/periodo';
+import { DialogoFormularioPagadorComponent } from '../../admision/dialogo-formulario-pagador/dialogo-formulario-pagador.component';
 
 @Component({
   selector: 'ngx-crud-inscripcion-multiple',
@@ -111,6 +112,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     private userService: UserService,
     private parametrosService: ParametrosService,
     private inscripcionService: InscripcionService,
+    private dialog: MatDialog,
     private eventoService: EventoService) {
     this.showProyectoCurricular = false;
     this.showTipoInscripcion = false;
@@ -557,72 +559,15 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   descargarReciboPago(data) {
-    this.itemSelect({ data: data })
-    if (this.selectedLevel === undefined) {
-      this.selectedLevel = parseInt(data.NivelPP, 10);
-    }
-    if (this.info_info_persona != null) {
-      this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
-      this.recibo_pago = new ReciboPago();
-      this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + ' ' +
-        this.info_info_persona.SegundoNombre + ' ' + this.info_info_persona.PrimerApellido + ' ' + this.info_info_persona.SegundoApellido;
-      this.recibo_pago.DocumentoDelAspirante = this.info_info_persona.NumeroIdentificacion;
-      this.recibo_pago.Periodo = this.periodo.Nombre;
-      this.recibo_pago.ProyectoAspirante = data['ProgramaAcademicoId']
-      this.recibo_pago.Comprobante = data['ReciboInscripcion'][0];
-      if (this.selectedLevel === 1) {
-        this.parametro = '13';
-      } else if (this.selectedLevel === 2) {
-        this.parametro = '12';
-      }
-      this.loading = true;
-      let periodo = localStorage.getItem('IdPeriodo');
-      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel + '/periodo/' + periodo).subscribe(
-        (response: any[]) => {
-          this.loading = false;
-          if (response !== null && response.length !== 0) {
-            this.inscripcionProjects = response;
-            this.inscripcionProjects.forEach(proyecto => {
-              if (proyecto.ProyectoId === this.selectedProject && proyecto.Evento != null) {
-                this.recibo_pago.Fecha_pago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
-              }
-            });
-            this.loading = true;
-            const anioConcepto = this.periodo.Ciclo === '1' ? this.periodo.Year - 1 : this.periodo.Year;
-            this.parametrosService.get('parametro_periodo?query=ParametroId.TipoParametroId.Id:2,' +
-              'ParametroId.CodigoAbreviacion:' + this.parametro + ',PeriodoId.Year:'+ anioConcepto +',PeriodoId.CodigoAbreviacion:VG').subscribe(
-                response => {
-                  this.loading = false;
-                  const parametro = <any>response['Data'][0];
-                  this.recibo_pago.Descripcion = parametro['ParametroId']['Nombre'];
-                  const valor = JSON.parse(parametro['Valor']);
-                  this.recibo_pago.ValorDerecho = valor['Costo']
-                  this.sgaMidService.post('generar_recibo', this.recibo_pago).subscribe(
-                    response => {
-                      this.loading = false;
-                      const reciboData = new Uint8Array(atob(response['Data']).split('').map(char => char.charCodeAt(0)));
-                      this.recibo_generado = window.URL.createObjectURL(new Blob([reciboData], { type: 'application/pdf' }));
-                      window.open(this.recibo_generado);
-                    },
-                    error => {
-                      this.loading = false;
-                      this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
-                    },
-                  );
-                },
-                error => {
-                  this.loading = false;
-                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                },
-              );
-          }
-        },
-        error => {
-          this.loading = false;
-          this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('calendario.sin_proyecto_curricular'));
-        },
-      );
-    }
+      const assignConfig = new MatDialogConfig();
+      assignConfig.width = '1300px';
+      assignConfig.maxHeight = '80vh';
+      assignConfig.autoFocus = false;
+      assignConfig.data = { 
+        info_recibo: data,
+        info_info_persona: this.info_info_persona
+       }
+      const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
   }
 
   abrirPago(data) {
