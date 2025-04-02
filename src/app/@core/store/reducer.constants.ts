@@ -46,4 +46,5 @@ export const REDUCER_LIST = {
     InfoSocioEconomica: 'listTipoInfoSocioEconomica',
     InfoContacto: 'listTipoInfoContacto',
     // TipoPublicacionLibro: 'listReducerTipoPublicacionLibro',
+    ParametrosNomenclaturaDian: 'listNomenclaturasDian',
 };
