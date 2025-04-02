@@ -49,4 +49,5 @@ export const rootReducer: ActionReducerMap<IAppState> = {
   listTipoTercero: ListReducer.ListReducerTipoTercero,
   listInfoSocioEconomica: ListReducer.ListReducerInfoSocioEconomica,
   listInfoContacto: ListReducer.ListReducerInfoContacto,
+  listNomenclaturaDian: ListReducer.ListReducerNomenclaturaDian,
 }

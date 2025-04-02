@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LocalDataSource } from 'ng2-smart-table';
+import { AgoraService } from '../../../@core/data/agora.service';
 import Swal from 'sweetalert2';
 import { forEach } from 'jszip';
 
@@ -49,11 +50,13 @@ export class DialogoFormularioPagadorComponent implements OnInit {
     private builder: FormBuilder,
     private sgaMidService: SgaMidService,
     private parametrosService: ParametrosService,
+    private AgoraService: AgoraService,
     private fb: FormBuilder,
   ) {
     this.crearForm();
     this.dialogRef.backdropClick().subscribe(() => this.dialogRef.close());
     this.cargarPeriodo();
+    this.cargarNomenclaturasDian();
     this.direccionForm = this.fb.group({
       tipoVia: ['']
     });
@@ -75,6 +78,41 @@ export class DialogoFormularioPagadorComponent implements OnInit {
       }
     });
   }
+
+  cargarNomenclaturasDian() {
+    this.AgoraService.get('parametro_nomenclatura_dian?limit=0')
+      .subscribe(grupo => {
+          this.parametros_nomenclatura_dian = grupo['Data'];
+          this.parametros_nomenclatura_dian.forEach(element => {
+            if (element['Tipo'] === 1) {
+              this.vias.push({
+                Abreviatura: element.Abreviatura, 
+                Nomenclatura: element.Nomenclatura
+              });
+            } 
+            if (element['Tipo'] === 0)  {
+              this.interior.push({
+                Abreviatura: element.Abreviatura,
+                Nomenclatura: element.Nomenclatura
+              });
+            }
+          });    
+          console.log(this.vias);
+          console.log(this.interior);
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            footer: this.translate.instant('GLOBAL.cargar') + ' - ' +
+              this.translate.instant('admision.nomenclatura_dian'),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+
+  }
+
 
   cargarPeriodo() {
     this.loading = true;
