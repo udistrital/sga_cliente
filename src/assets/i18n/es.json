@@ -742,13 +742,14 @@
         "nit_sin_digito_o_caracteres_especiales": "Ingrese el Nit sin digito de verificación o caracteres como puntos, guión o espacios",
         "nit_incorrecto": "El Nit proporcionado es incorrecto",
         "experiencia_actual": "Trabajo actual",
-        "formacion_actual": "Formnación actual",
+        "formacion_actual": "Formación actual",
         "direccion": "Dirección",
         "naturaleza": "Naturaleza",
         "via": "Vía",
         "digito_verificacion": "Dígito de verificación",
         "natural": "Natural",
-        "juridica": "Jurídica"
+        "juridica": "Jurídica",
+        "razon_social": "Razón social"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",

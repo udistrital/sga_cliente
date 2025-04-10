@@ -715,7 +715,8 @@
         "via": "Via",
         "digito_verificacion": "Check digit",
         "natural": "Natural",
-        "juridica": "Jurídica"
+        "juridica": "Jurídica",
+        "razon_social": "Company name"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
