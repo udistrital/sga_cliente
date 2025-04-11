@@ -222,7 +222,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           renderComponent: LinkDownloadComponent,
           type: 'custom',
           onComponentInitFunction: (instance) => {
-            instance.save.subscribe((data) => this.descargarReciboPago(data))
+            instance.save.subscribe((data) => this.mostrarFormularioYDescargar(data))
           },
         },
         Opcion: {
@@ -238,7 +238,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               // Solamente se usa esta linea para pruebas saltaldo el pago de recibo
               // sessionStorage.setItem('EstadoInscripcion', 'true');
               if (data.estado === false || data.estado === 'false') {
-                this.abrirPago(data.data);
+                this.mostrarFormularioYPagar(data.data);
               } else if (data.estado === true || data.estado === 'true') {
                 sessionStorage.setItem('IdEstadoInscripcion', data.data.EstadoInscripcion);
                 this.itemSelect({ data: data.data });
@@ -558,18 +558,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     });
   }
 
-  descargarReciboPago(data) {
-      const assignConfig = new MatDialogConfig();
-      assignConfig.width = '1300px';
-      assignConfig.maxHeight = '80vh';
-      assignConfig.autoFocus = false;
-      assignConfig.data = { 
-        info_recibo: data,
-        info_info_persona: this.info_info_persona
-       }
-      const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
-  }
-
   abrirPago(data) {
     this.parametros_pago.NUM_DOC_IDEN = this.info_info_persona.NumeroIdentificacion;
     this.parametros_pago.REFERENCIA = data['ReciboInscripcion'][0];
@@ -790,5 +778,39 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   ocultarBarraExterna(event: boolean) {
     this.ocultarBarra.emit(event);
+  }
+
+  mostrarFormularioYDescargar(data) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '1300px';
+    assignConfig.maxHeight = '80vh';
+    assignConfig.autoFocus = false;
+    assignConfig.data = { 
+      info_recibo: data,
+      info_info_persona: this.info_info_persona,
+      accion: 'descargar'
+    };
+    
+    const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
+  }
+  
+  mostrarFormularioYPagar(data) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '1300px';
+    assignConfig.maxHeight = '80vh';
+    assignConfig.autoFocus = false;
+    assignConfig.data = { 
+      info_recibo: data,
+      info_info_persona: this.info_info_persona,
+      accion: 'pagar'
+    };
+    
+    const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
+    
+    dialogo.afterClosed().subscribe(result => {
+      if (result && result.continuar) {
+        this.abrirPago(data);
+      }
+    });
   }
 }

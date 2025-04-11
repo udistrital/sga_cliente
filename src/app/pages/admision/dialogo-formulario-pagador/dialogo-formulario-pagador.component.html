@@ -235,9 +235,14 @@
         </div>
       </div>
 
-      <!-- Botón de Guardar -->
+      <!-- Botones -->
       <div class="row">
         <div class="col-12 d-flex justify-content-end">
+          <button mat-button
+                  (click)="continuar()" 
+                  class="px-4 py-2 mr-2">
+            {{ 'GLOBAL.continuar' | translate }}
+          </button>
           <button mat-raised-button color="primary" 
                   (click)="guardarRevision()" 
                   [disabled]="loading || revisionForm.invalid" 
