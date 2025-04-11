@@ -44,6 +44,7 @@ export class DialogoFormularioPagadorComponent implements OnInit {
   mostrarDigitoVerificacion: boolean;
   esJuridica: boolean = false;
   direccionPreview: string = '';
+  accion: string;
 
   constructor(
     public dialogRef: MatDialogRef<DialogoFormularioPagadorComponent>,
@@ -68,6 +69,7 @@ export class DialogoFormularioPagadorComponent implements OnInit {
       { value: 'J', nombre: 'Jurídica' }
     ];
     this.mostrarDigitoVerificacion = false;
+    this.accion = data.accion || 'descargar';
   }
 
   ngOnInit() {
@@ -323,8 +325,13 @@ export class DialogoFormularioPagadorComponent implements OnInit {
       this.popUpManager.showConfirmAlert(this.translate.instant('admision.seguro_pagador')).then(
         ok => {
           if (ok.value) {
-            this.dialogRef.close()
-            this.descargarReciboPago();
+            this.dialogRef.close();
+            
+            if (this.accion === 'descargar') {
+              this.descargarReciboPago();
+            } else if (this.accion === 'pagar') {
+              this.dialogRef.close({ continuar: true });
+            }
           } else {
             this.revisionForm.patchValue({
               aprobado: false,
@@ -464,5 +471,14 @@ export class DialogoFormularioPagadorComponent implements OnInit {
     }
     
     digitoControl.updateValueAndValidity();
+  }
+
+  continuar() {
+    if (this.accion === 'descargar') {
+      this.dialogRef.close();
+      this.descargarReciboPago();
+    } else if (this.accion === 'pagar') {
+      this.dialogRef.close({ continuar: true });
+    }
   }
 }
