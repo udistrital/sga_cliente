@@ -148,7 +148,7 @@ export class DialogoFormularioPagadorComponent implements OnInit {
   }
 
   cargarPeriodo() {
-    this.loading = true;
+    //this.loading = true;
     return new Promise((resolve, reject) => {
       this.parametrosService.get('periodo?query=Activo:true,CodigoAbreviacion:PA&sortby=Id&order=desc&limit=1')
         .subscribe(res => {
@@ -250,7 +250,7 @@ export class DialogoFormularioPagadorComponent implements OnInit {
       segundoNombre: [''],
       primerApellido: ['', Validators.required],
       segundoApellido: [''],
-      razonSocial: [''],
+      razonSocial: ['', [Validators.required, Validators.maxLength(100)]],
       tipoVia: ['', Validators.required],
       numeroVia: ['', Validators.required],
       numeroSecundario: ['', Validators.required],
@@ -303,7 +303,7 @@ export class DialogoFormularioPagadorComponent implements OnInit {
       segundoNombreControl.clearValidators();
       primerApellidoControl.clearValidators();
       segundoApellidoControl.clearValidators();
-      razonSocialControl.setValidators([Validators.required]);
+      razonSocialControl.setValidators([Validators.required,Validators.maxLength(100)]);
       digitoVerificacionControl.setValidators([Validators.required, Validators.pattern(/^[0-9]$/)]);
     } else { // Es natural
       primerNombreControl.setValidators([Validators.required]);
