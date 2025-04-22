@@ -95,10 +95,10 @@
                 {{ 'GLOBAL.falta_campo' | translate }}
               </mat-error>
               <mat-error *ngIf="revisionForm.get('digito_verificacion').hasError('pattern')">
-                El dígito debe ser un número entre 0 y 9
+                {{ 'GLOBAL.numero_fuera_rango' | translate }}
               </mat-error>
               <mat-error *ngIf="revisionForm.get('digito_verificacion').hasError('digitoIncorrecto')">
-                El dígito de verificación no corresponde con el NIT ingresado
+                {{ 'GLOBAL.digito_verificacion_incorrecto' | translate }}
               </mat-error>
             </mat-form-field>
           </div>
@@ -106,8 +106,12 @@
             <label class="form-label">{{ 'GLOBAL.razon_social' | translate }}</label>
             <mat-form-field appearance="fill" style="width: 100%;">
               <input matInput formControlName="razonSocial">
+              <mat-hint align="end">{{revisionForm.get('razonSocial').value?.length || 0}}/100</mat-hint>
               <mat-error *ngIf="revisionForm.get('razonSocial').hasError('required')">
                 {{ 'GLOBAL.falta_campo' | translate }}
+              </mat-error>
+              <mat-error *ngIf="revisionForm.get('razonSocial').hasError('maxlength')">
+                {{ 'GLOBAL.tamano_superado_razon' | translate }}
               </mat-error>
             </mat-form-field>
           </div>
