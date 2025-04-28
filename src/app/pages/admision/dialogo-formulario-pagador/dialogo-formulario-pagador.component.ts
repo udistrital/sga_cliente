@@ -331,13 +331,17 @@ export class DialogoFormularioPagadorComponent implements OnInit {
       this.popUpManager.showConfirmAlert(this.translate.instant('admision.seguro_pagador')).then(
         ok => {
           if (ok.value) {
-            this.dialogRef.close();
+            this.guardarDatosPagador().then(() => {
+              this.dialogRef.close();
             
             if (this.accion === 'descargar') {
               this.descargarReciboPago();
             } else if (this.accion === 'pagar') {
               this.dialogRef.close({ continuar: true });
             }
+          }).catch(error => {
+            this.popUpManager.showErrorAlert(this.translate.instant('ERROR.guardar_pagador'));
+          });
           } else {
             this.revisionForm.patchValue({
               aprobado: false,
@@ -488,7 +492,7 @@ export class DialogoFormularioPagadorComponent implements OnInit {
     }
   }
   
-  // Carga de informacion 
+  // **Carga de informacion**
 
   consultarDatosPagador() {
     // Mostrar indicador de carga
@@ -522,11 +526,7 @@ export class DialogoFormularioPagadorComponent implements OnInit {
           );
           
           
-          // Verificamos cuántos registros activos hay
-          if (registrosActivos.length === 0) {
-            // No hay registros activos
-            this.popUpManager.showInfoToast(this.translate.instant('admision.no_existe_pagador'));
-          } else if (registrosActivos.length === 1) {
+          if (registrosActivos.length === 1) {
             // Hay exactamente un registro activo (caso ideal)
             this.datosPagador = registrosActivos[0];
             this.cargarDatosEnFormulario();
@@ -537,7 +537,6 @@ export class DialogoFormularioPagadorComponent implements OnInit {
           }
         } else {
           console.error('No se encontraron registros para este recibo');
-          this.popUpManager.showInfoToast(this.translate.instant('admision.no_existe_pagador'));
         }
       },
       (error: HttpErrorResponse) => {
@@ -625,9 +624,7 @@ export class DialogoFormularioPagadorComponent implements OnInit {
     }
   }
   
-  procesarDireccion(direccionCompleta: string) {
-    console.log('Procesando dirección:', direccionCompleta);
-    
+  procesarDireccion(direccionCompleta: string) {    
     if (!direccionCompleta) return;
     
     // Comprobar si la dirección tiene el formato "CL 213 123 123"
@@ -650,5 +647,105 @@ export class DialogoFormularioPagadorComponent implements OnInit {
     } else {
       console.warn('Formato de dirección no reconocido:', direccionCompleta);
     }
+  }
+
+  // **Guardado de informacion**
+  guardarDatosPagador(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.loading = true;
+      
+      // Obtener los valores del formulario
+      const formValues = this.revisionForm.value;
+      
+      // Extraer el número de recibo
+      const numeroRecibo = Array.isArray(this.data.info_recibo.ReciboInscripcion) 
+        ? this.data.info_recibo.ReciboInscripcion[0] 
+        : this.data.info_recibo.ReciboInscripcion;
+      
+      // Formatear la fecha actual como DD/MM/YYYY
+      const fechaActual = new Date();
+      const fechaFormateada = `${fechaActual.getDate().toString().padStart(2, '0')}/${
+        (fechaActual.getMonth() + 1).toString().padStart(2, '0')}/${
+        fechaActual.getFullYear()}`;
+      
+      const tipoVia = this.revisionForm.get('tipoVia').value || '';
+      const numeroVia = this.revisionForm.get('numeroVia').value || '';
+      const numeroSecundario = this.revisionForm.get('numeroSecundario').value || '';
+      const complemento = this.revisionForm.get('complementoDireccion').value || '';
+      const tipoInterior1 = this.revisionForm.get('tipoInterior1').value || '';
+      const numeroInterior1 = this.revisionForm.get('numeroInterior1').value || '';
+      const tipoInterior2 = this.revisionForm.get('tipoInterior2').value || '';
+      const numeroInterior2 = this.revisionForm.get('numeroInterior2').value || '';
+
+      let direccionFormateada = tipoVia;
+
+      if (numeroVia) direccionFormateada += " " + numeroVia;
+      if (numeroSecundario) direccionFormateada += " " + numeroSecundario;
+      if (complemento) direccionFormateada += " " + complemento;
+      if (tipoInterior1 && numeroInterior1) direccionFormateada += " " + tipoInterior1 + " " + numeroInterior1;
+      if (tipoInterior2 && numeroInterior2) direccionFormateada += " " + tipoInterior2 + " " + numeroInterior2;
+  
+      // Eliminar posibles espacios duplicados
+      direccionFormateada = direccionFormateada.trim().replace(/\s+/g, ' ');
+
+      // Crear objeto de datos del pagador en el formato que espera el backend
+      const pagador = {
+        TERPA_SECUENCIA: parseInt(numeroRecibo, 10),
+        TERPA_ANO_PAGO: fechaActual.getFullYear(),
+        TERPA_NATURALEZA: formValues.naturaleza,
+        TERPA_TDO_CODVAR: formValues.tipoDocumento,
+        TERPA_NRO_DOCUMENTO: parseInt(formValues.numeroDocumento, 10),
+        TERPA_DIGITO_CHEQUEO: formValues.digito_verificacion ? parseInt(formValues.digito_verificacion, 10) : null,
+        TERPA_DIRECCION: direccionFormateada,
+        TERPA_TELEFONO: parseInt(formValues.telefono, 10),
+        TERPA_EMAIL: formValues.correo,
+        TERPA_ESTADO_REGISTRO: "A",
+        TERPA_FECHA_REGISTRO: fechaFormateada
+      };
+      
+      // Asignar campos específicos según el tipo de persona
+      if (formValues.naturaleza === 'J') {
+        // Persona jurídica
+        pagador['TERPA_RAZON_SOCIAL'] = formValues.razonSocial;
+        pagador['TERPA_PRIMER_APELLIDO'] = null;
+        pagador['TERPA_SEGUNDO_APELLIDO'] = null;
+        pagador['TERPA_PRIMER_NOMBRE'] = null;
+        pagador['TERPA_SEGUNDO_NOMBRE'] = null;
+      } else {
+        // Persona natural
+        pagador['TERPA_RAZON_SOCIAL'] = null;
+        pagador['TERPA_PRIMER_APELLIDO'] = formValues.primerApellido;
+        pagador['TERPA_SEGUNDO_APELLIDO'] = formValues.segundoApellido || null;
+        pagador['TERPA_PRIMER_NOMBRE'] = formValues.primerNombre;
+        pagador['TERPA_SEGUNDO_NOMBRE'] = formValues.segundoNombre || null;
+      }
+      
+      // Construir el objeto completo con la estructura correcta
+      const datosRequest = {
+        _posttercero_pago: pagador
+      };
+      
+      
+      // Realizar la petición POST al endpoint de facturación electrónica
+      this.sgaMidService.post('facturacion_electronica', datosRequest).subscribe(
+        (response: any) => {
+          this.loading = false;
+          console.log('Respuesta del servidor:', response);
+          
+          if (response && response.Success) {
+            this.popUpManager.showSuccessAlert(this.translate.instant('GLOBAL.pagador_guardado'));
+            resolve();
+          } else {
+            this.popUpManager.showErrorAlert(this.translate.instant('ERROR.guardar_pagador'));
+            reject(new Error('Error al guardar el pagador'));
+          }
+        },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.popUpManager.showErrorAlert(this.translate.instant('ERROR.guardar_pagador'));
+          reject(error);
+        }
+      );
+    });
   }
 }
