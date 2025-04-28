@@ -16,6 +16,8 @@ import { AgoraService } from '../../../@core/data/agora.service';
 import Swal from 'sweetalert2';
 import { forEach } from 'jszip';
 import { MatSelectChange } from '@angular/material/select';
+import { DatosPagador } from '../../../@core/data/models/datos_pagador/datos_pagador';
+
 
 @Component({
   selector: 'dialogo-formulario-pagador',
@@ -45,6 +47,8 @@ export class DialogoFormularioPagadorComponent implements OnInit {
   esJuridica: boolean = false;
   direccionPreview: string = '';
   accion: string;
+  datosPagador: DatosPagador;
+
 
   constructor(
     public dialogRef: MatDialogRef<DialogoFormularioPagadorComponent>,
@@ -106,6 +110,8 @@ export class DialogoFormularioPagadorComponent implements OnInit {
     //     console.log('¡ERROR DE DÍGITO DETECTADO!');
     //   }
     // });
+
+    this.consultarDatosPagador();
   }
 
   onNaturalezaChange(event: MatSelectChange): void {
@@ -479,6 +485,170 @@ export class DialogoFormularioPagadorComponent implements OnInit {
       this.descargarReciboPago();
     } else if (this.accion === 'pagar') {
       this.dialogRef.close({ continuar: true });
+    }
+  }
+  
+  // Carga de informacion 
+
+  consultarDatosPagador() {
+    // Mostrar indicador de carga
+    //this.loading = true;
+    
+    // Extraer el número de recibo
+    const numeroRecibo = Array.isArray(this.data.info_recibo.ReciboInscripcion) 
+      ? this.data.info_recibo.ReciboInscripcion[0] 
+      : this.data.info_recibo.ReciboInscripcion;
+    
+    
+    this.sgaMidService.get(`facturacion_electronica/${numeroRecibo}`).subscribe(
+      (response: any) => {
+        this.loading = false;
+        
+        let entries = [];
+        
+        if (response && response.Data && response.Data.Entries && response.Data.Entries.Entry) {
+          // Caso 1: Los datos están dentro de response.Data
+          entries = response.Data.Entries.Entry;
+        } else if (response && response.Entries && response.Entries.Entry) {
+          // Caso 2: Los datos están directamente en response
+          entries = response.Entries.Entry;
+        }
+        
+        // Verificamos si tenemos entries para procesar
+        if (Array.isArray(entries) && entries.length > 0) {
+          // Filtramos solo los registros activos (TERPA_ESTADO_REGISTRO = "A")
+          const registrosActivos = entries.filter(
+            entry => entry.TERPA_ESTADO_REGISTRO === "A"
+          );
+          
+          
+          // Verificamos cuántos registros activos hay
+          if (registrosActivos.length === 0) {
+            // No hay registros activos
+            this.popUpManager.showInfoToast(this.translate.instant('admision.no_existe_pagador'));
+          } else if (registrosActivos.length === 1) {
+            // Hay exactamente un registro activo (caso ideal)
+            this.datosPagador = registrosActivos[0];
+            this.cargarDatosEnFormulario();
+          } else {
+            // Hay más de un registro activo (caso de error)
+            console.error('Se encontraron múltiples registros activos para el mismo recibo:', registrosActivos);
+            this.popUpManager.showErrorAlert(this.translate.instant('admision.error_multiples_registros'));
+          }
+        } else {
+          console.error('No se encontraron registros para este recibo');
+          this.popUpManager.showInfoToast(this.translate.instant('admision.no_existe_pagador'));
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Error al consultar datos del pagador:', error);
+        this.loading = false;
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+      }
+    );
+  }
+  
+  cargarDatosEnFormulario() {
+    if (!this.datosPagador) {
+      console.error('No hay datos de pagador para cargar en el formulario');
+      return;
+    }
+    
+    
+    try {
+      // Determinar si es persona jurídica
+      const esJuridica = this.datosPagador.TERPA_NATURALEZA === 'J';
+      this.esJuridica = esJuridica;
+      
+      // Cargar datos básicos - usando un bloque try/catch para cada sección
+      try {
+        this.revisionForm.patchValue({
+          naturaleza: this.datosPagador.TERPA_NATURALEZA || '',
+          tipoDocumento: this.datosPagador.TERPA_TDO_CODVAR || '',
+          numeroDocumento: this.datosPagador.TERPA_NRO_DOCUMENTO || ''
+        });
+      } catch (e) {
+        console.error('Error al cargar datos básicos:', e);
+      }
+      
+      // Cargar nombres/apellidos o razón social según tipo de persona
+      try {
+        if (esJuridica) {
+          this.revisionForm.patchValue({
+            razonSocial: this.datosPagador.TERPA_RAZON_SOCIAL || ''
+          });
+          
+          // Si es jurídica y tiene dígito de verificación
+          if (this.datosPagador.TERPA_DIGITO_CHEQUEO) {
+            this.revisionForm.patchValue({
+              digito_verificacion: this.datosPagador.TERPA_DIGITO_CHEQUEO
+            });
+          }
+        } else {
+          // Persona natural
+          this.revisionForm.patchValue({
+            primerNombre: this.datosPagador.TERPA_PRIMER_NOMBRE || '',
+            segundoNombre: this.datosPagador.TERPA_SEGUNDO_NOMBRE || '',
+            primerApellido: this.datosPagador.TERPA_PRIMER_APELLIDO || '',
+            segundoApellido: this.datosPagador.TERPA_SEGUNDO_APELLIDO || ''
+          });
+        }
+      } catch (e) {
+        console.error('Error al cargar nombres/razón social:', e);
+      }
+      
+      // Cargar datos de contacto
+      try {
+        this.revisionForm.patchValue({
+          telefono: this.datosPagador.TERPA_TELEFONO || '',
+          correo: this.datosPagador.TERPA_EMAIL || ''
+        });
+      } catch (e) {
+        console.error('Error al cargar datos de contacto:', e);
+      }
+      
+      // Procesar dirección
+      try {
+        if (this.datosPagador.TERPA_DIRECCION) {
+          this.procesarDireccion(this.datosPagador.TERPA_DIRECCION);
+        }
+      } catch (e) {
+        console.error('Error al procesar dirección:', e);
+      }
+      
+      // Actualizar validadores según naturaleza
+      this.actualizarValidadoresPorNaturaleza(this.datosPagador.TERPA_NATURALEZA);
+      this.actualizarValidacionDigito();
+      
+    } catch (error) {
+      console.error('Error general al cargar datos en formulario:', error);
+    }
+  }
+  
+  procesarDireccion(direccionCompleta: string) {
+    console.log('Procesando dirección:', direccionCompleta);
+    
+    if (!direccionCompleta) return;
+    
+    // Comprobar si la dirección tiene el formato "CL 213 123 123"
+    const partes = direccionCompleta.split(' ');
+    
+    if (partes.length >= 3) {
+      try {
+        this.revisionForm.patchValue({
+          tipoVia: partes[0] || '',
+          numeroVia: partes[1] || '',
+          numeroSecundario: partes[2] || '',
+          complementoDireccion: partes.slice(3).join(' ') || ''
+        });
+        
+        // Actualizar dirección preview
+        this.actualizarDireccionPreview();
+      } catch (e) {
+        console.error('Error al asignar partes de la dirección:', e);
+      }
+    } else {
+      console.warn('Formato de dirección no reconocido:', direccionCompleta);
     }
   }
 }
