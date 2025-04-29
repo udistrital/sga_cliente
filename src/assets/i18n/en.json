@@ -744,13 +744,23 @@
         "sin_informacion_en": "No information has been found about",
         "persiste_error_comunique_OAS": "Please return and try again later. If the error persists, contact the Systems Advisory Office (Oficina Asesora de Sistemas)",
         "contenido_archivo_erroneo": "Non-standard file content for the requested format",
-        "contenido_archivo_erroneo_mensaje": "The content of the file is not correct for the requested format and may be unreadable when uploaded. \nTry saving it again in the allowed formats; If it is a PDF, save it in an optimized or compressed version."
+        "contenido_archivo_erroneo_mensaje": "The file content is not correct for the requested format and may become illegible when loaded. \nTry saving it again in the allowed formats; if it's a PDF, save it in an optimized or compressed version.",
+        "inactivar_registro": "It has not been possible to inactivate the record",
+        "actualizar_pagador": "It was not possible to update the information",
+        "guardar_pagador": "It is not possible to save the information",
+        "no_generado": "The receipt could not be generated. Verify your personal information",
+        "cargar_datos": "It is not possible to load the third party",
+        "procesar_direccion": "An error occurred while processing the address",
+        "sin_espacios": "Please remove the spaces"
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",
         "no_generado": "The receipt could not be generated. Verify your personal information",
         "recibo_duplicado": "You have already generated a receipt with the selected criteria",
-        "maximo_recibos": "I already generate the maximum receipts allowed"
+        "maximo_recibos": "I already generate the maximum receipts allowed",
+        "no_hay_cambios": "There are no changes in the billing information",
+        "pagador_actualizado": "Information updated",
+        "pagador_guardado": "Information saved"
     },
     "produccion_academica": {
         "titulo_revista": "Magazine title",
