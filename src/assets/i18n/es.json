@@ -777,13 +777,22 @@
         "sin_informacion_en": "No se ha encontrado información sobre",
         "persiste_error_comunique_OAS": "Regrese e intente de nuevo más tarde. Si el error persiste, comuníquese con Oficina Asesora de Sistemas (OAS)",
         "contenido_archivo_erroneo": "Contenido de archivo no estándar para el formato solicitado",
-        "contenido_archivo_erroneo_mensaje": "El contenido del archivo no es correcto para el formato solicitado y puede quedar ilegible al cargarlo. \nIntente guardarlo nuevamente en los formatos permitidos; si se trata de un PDF guárdelo en versión optimizada o comprimida."
+        "contenido_archivo_erroneo_mensaje": "El contenido del archivo no es correcto para el formato solicitado y puede quedar ilegible al cargarlo. \nIntente guardarlo nuevamente en los formatos permitidos; si se trata de un PDF guárdelo en versión optimizada o comprimida.",
+        "inactivar_registro": "No ha sido posible inactivar el registro",
+        "actualizar_pagador": "No fue posible actualizar la informacion",
+        "guardar_pagador": "No es posible guardar la informacion",
+        "no_generado": "El recibo no ha podido ser generado. Verifique su información personal",
+        "cargar_datos": "No es posible cargar el tercero",
+        "procesar_direccion": "Ocurrio un error procesando la direccion",
+        "sin_espacios": "Por favor elimine los espacios"
     },
     "recibo_pago": {
         "generado": "El recibo de pago ha sido generado correctamente",
-        "no_generado": "El recibo no ha podido ser generado. Verifique su información personal",
         "recibo_duplicado": "Ya ha generado un recibo con los criterios seleccionados",
-        "maximo_recibos": "Ya genero el máximo de recibos permitidos"
+        "maximo_recibos": "Ya genero el máximo de recibos permitidos",
+        "no_hay_cambios": "No hay cambios en la informacion de facturacion",
+        "pagador_actualizado": "Informacion actualizada",
+        "pagador_guardado": "Informacion guardada"
     },
     "produccion_academica": {
         "titulo_revista": "Título de revista",
