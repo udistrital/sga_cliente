@@ -137,7 +137,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
     this.setLoading(true);
     
     this.suscripciones.push(
-      this.agoraService.get('parametro_nomenclatura_dian?limit=0')
+      this.agoraService.get('parametro_nomenclatura_dian?limit=110&offset=0')
         .pipe(finalize(() => this.setLoading(false)))
         .subscribe(
           grupo => {
