@@ -84,7 +84,8 @@ export const environment = {
   ESPACIOS_ACADEMICOS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/espacios_academicos_crud/v1/',
   PLAN_TRABAJO_DOCENTE_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_trabajo_docente_crud/v1/',
   DEPENDENCIAS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/dependencias_api/v1/',
-  AGORA_SERVICE: 'http://localhost:8081/v1/',
-  SGA_MID_TERCERO: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_mid/v2/',
-  PLAN_ESTUDIOS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/planes_estudios_crud/v1/',
+  //AGORA_SERVICE: 'http://localhost:8081/v1/',
+  AGORA_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/agora_crud/v1/',
+  // SGA_MID_TERCERO: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_mid/v2/',
+  // PLAN_ESTUDIOS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/planes_estudios_crud/v1/',
 };
