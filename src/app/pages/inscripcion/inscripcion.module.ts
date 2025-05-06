@@ -57,6 +57,7 @@ import { NbSpinnerModule } from '@nebular/theme';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { DialogoDocumentosTransferenciasComponent } from './dialogo-documentos-transferencias/dialogo-documentos-transferencias.component';
 import { DialogoDocumentosComponent } from '../admision/dialogo-documentos/dialogo-documentos.component';
+import { DialogoFormularioPagadorComponent } from '../admision/dialogo-formulario-pagador/dialogo-formulario-pagador.component';
 
 @NgModule({
   imports: [
@@ -121,6 +122,7 @@ import { DialogoDocumentosComponent } from '../admision/dialogo-documentos/dialo
     LinkDownloadComponent,
     DialogoDocumentosTransferenciasComponent,
     DialogoDocumentosComponent,
+    DialogoFormularioPagadorComponent,
    ],
   exports: [
     InscripcionGeneralComponent,

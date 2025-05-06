@@ -207,6 +207,7 @@
         "confirmarEliminar": "has been removed",
         "info_estado": "Registration Status",
         "guardar": "Save",
+        "continuar": "Continue",
         "porcentaje": "Porcentage",
         "formulario": "Form",
         "lista": "List",
@@ -687,6 +688,9 @@
         "grupos": "Groups",
         "total": "Total",
         "falta_campo": "** You must fill this field",
+        "tamano_superado_razon": "Company name can't exced 100 characters",
+        "numero_fuera_rango": "The number must be between 0 and 9",
+        "digito_verificacion_incorrecto": "Verification digit not correspond with NIT number",
         "formatos_permitidos": "** Only the following formats are supported",
         "tamano_superado": "** The file size is greater than ",
         "enfoque": "Approach",
@@ -709,7 +713,14 @@
         "nit_sin_digito_o_caracteres_especiales": "Enter the Nit without a check digit or characters such as periods, hyphens or spaces",
         "nit_incorrecto": "The Nit provided is incorrect",
         "experiencia_actual": "Actual work",
-        "formacion_actual": "Actual formation"
+        "formacion_actual": "Actual formation",
+        "direccion": "Address",
+        "naturaleza": "Nature",
+        "via": "Via",
+        "digito_verificacion": "Check digit",
+        "natural": "Natural",
+        "juridica": "Jurídica",
+        "razon_social": "Company name"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -733,13 +744,23 @@
         "sin_informacion_en": "No information has been found about",
         "persiste_error_comunique_OAS": "Please return and try again later. If the error persists, contact the Systems Advisory Office (Oficina Asesora de Sistemas)",
         "contenido_archivo_erroneo": "Non-standard file content for the requested format",
-        "contenido_archivo_erroneo_mensaje": "The content of the file is not correct for the requested format and may be unreadable when uploaded. \nTry saving it again in the allowed formats; If it is a PDF, save it in an optimized or compressed version."
+        "contenido_archivo_erroneo_mensaje": "The file content is not correct for the requested format and may become illegible when loaded. \nTry saving it again in the allowed formats; if it's a PDF, save it in an optimized or compressed version.",
+        "inactivar_registro": "It has not been possible to inactivate the record",
+        "actualizar_pagador": "It was not possible to update the information",
+        "guardar_pagador": "It is not possible to save the information",
+        "no_generado": "The receipt could not be generated. Verify your personal information",
+        "cargar_datos": "It is not possible to load the third party",
+        "procesar_direccion": "An error occurred while processing the address",
+        "sin_espacios": "Please remove the spaces"
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",
         "no_generado": "The receipt could not be generated. Verify your personal information",
         "recibo_duplicado": "You have already generated a receipt with the selected criteria",
-        "maximo_recibos": "I already generate the maximum receipts allowed"
+        "maximo_recibos": "I already generate the maximum receipts allowed",
+        "no_hay_cambios": "There are no changes in the billing information",
+        "pagador_actualizado": "Information updated",
+        "pagador_guardado": "Information saved"
     },
     "produccion_academica": {
         "titulo_revista": "Magazine title",
@@ -1682,6 +1703,7 @@
         "asistencia": "Attendance",
         "requiere_asistencia": "Requires attendance?",
         "revisar_docs": "Review documents",
+        "formulario_pagador": "Payer form",
         "doc_valido": "Valid document",
         "seguro_revision": "Are you sure about registering this document review?",
         "observacion": "Observation",
@@ -1719,7 +1741,8 @@
         "resumen_estados_inscripcion": "Summary status of applicants",
         "descargar_zip": "Download the applicant's documentary compilation",
         "no_vinculacion_no_rol": "Your user is not linked to any academic project and does not have the appropriate role",
-        "multiple_vinculacion": "Your user appears linked to more than one academic project"
+        "multiple_vinculacion": "Your user appears linked to more than one academic project",
+        "seguro_pagador": "Are you sure you about registering this payer information?"
     },
     "cupos": {
         "aviso_periodo": "Period in which the admission quotas are defined",
