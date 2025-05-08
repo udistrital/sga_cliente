@@ -118,111 +118,123 @@
         </div>
       </ng-container>
 
-      <!-- Dirección compacta -->
+      <!-- Dirección -->
       <div class="card mb-3">
-        <div class="card-header bg-light">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
           <label class="form-label mb-0">{{ 'GLOBAL.direccion' | translate }}</label>
+          
+          <!-- Botón de edición que solo se muestra cuando no se esta editando y hay dirección -->
+          <button *ngIf="!editandoDireccion && direccionPreview" 
+                  mat-icon-button 
+                  color="primary" 
+                  (click)="iniciarEdicionDireccion()"
+                  matTooltip="{{ 'GLOBAL.editar_direccion' | translate }}">
+            <mat-icon>edit</mat-icon>
+          </button>
         </div>
+        
         <div class="card-body pt-3 pb-2">
-          <!-- Línea principal -->
-          <div class="row mb-2">
-            <div class="col-md-3">
-              <mat-form-field appearance="fill" style="width: 100%;">
-                <mat-label>Tipo vía</mat-label>
-                <mat-select formControlName="tipoVia">
-                  <mat-option *ngFor="let via of vias" [value]="via.Abreviatura">
-                    {{ via.Nomenclatura | translate }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-md-2">
-              <mat-form-field appearance="fill" style="width: 100%;">
-                <mat-label>Número</mat-label>
-                <input matInput formControlName="numeroVia">
-                <mat-error *ngIf="revisionForm.get('numeroVia').hasError('required')">
-                  {{ 'GLOBAL.falta_campo' | translate }}
-                </mat-error>
-                <mat-error *ngIf="revisionForm.get('numeroVia').hasError('contieneEspacios')">
-                  {{ 'ERROR.sin_espacios' | translate }}
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="col-md-1 d-flex align-items-center justify-content-center">
-              <span class="fs-5 fw-bold">#</span>
-            </div>
-            <div class="col-md-2">
-              <mat-form-field appearance="fill" style="width: 100%;">
-                <mat-label>Nº secundario</mat-label>
-                <input matInput formControlName="numeroSecundario">
-                <mat-error *ngIf="revisionForm.get('numeroSecundario').hasError('required')">
-                  {{ 'GLOBAL.falta_campo' | translate }}
-                </mat-error>
-                <mat-error *ngIf="revisionForm.get('numeroSecundario').hasError('contieneEspacios')">
-                  {{ 'ERROR.sin_espacios' | translate }}
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="col-md-1 d-flex align-items-center justify-content-center">
-              <span class="fs-5 fw-bold">-</span>
-            </div>
-            <div class="col-md-3">
-              <mat-form-field appearance="fill" style="width: 100%;">
-                <mat-label>Complemento</mat-label>
-                <input matInput formControlName="complementoDireccion">
-              </mat-form-field>
-            </div>
+          <!-- Vista previa de dirección (se muestra cuando hay datos y no se esta editando) -->
+          <div *ngIf="!editandoDireccion && direccionPreview" class="p-3 border rounded bg-light mb-3">
+            <strong>{{ direccionPreview }}</strong>
           </div>
+          
+          <!-- Campos de edición de dirección (solo se muestran cuando se esta editando) -->
+          <div *ngIf="mostrarCamposDireccion && editandoDireccion">
+            <!-- Línea principal -->
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                  <mat-label>Tipo vía</mat-label>
+                  <mat-select formControlName="tipoVia">
+                    <mat-option *ngFor="let via of vias" [value]="via.Abreviatura">
+                      {{ via.Nomenclatura | translate }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-2">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                  <mat-label>Número</mat-label>
+                  <input matInput formControlName="numeroVia">
+                  <mat-error *ngIf="revisionForm.get('numeroVia').hasError('required')">
+                    {{ 'GLOBAL.falta_campo' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-1 d-flex align-items-center justify-content-center">
+                <span class="fs-5 fw-bold">#</span>
+              </div>
+              <div class="col-md-2">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                  <mat-label>Nº secundario</mat-label>
+                  <input matInput formControlName="numeroSecundario">
+                  <mat-error *ngIf="revisionForm.get('numeroSecundario').hasError('required')">
+                    {{ 'GLOBAL.falta_campo' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-1 d-flex align-items-center justify-content-center">
+                <span class="fs-5 fw-bold">-</span>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                  <mat-label>Complemento</mat-label>
+                  <input matInput formControlName="complementoDireccion">
+                </mat-form-field>
+              </div>
+            </div>
 
-          <!-- Interior 1 y 2 -->
-          <div class="row">
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col-md-4">
-                  <mat-form-field appearance="fill" style="width: 100%;">
-                    <mat-label>Interior 1</mat-label>
-                    <mat-select formControlName="tipoInterior1">
-                      <mat-option *ngFor="let int of interior" [value]="int.Abreviatura">
-                        {{ int.Nomenclatura | translate }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+            <!-- Interior 1 y 2 -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-4">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                      <mat-label>Interior 1</mat-label>
+                      <mat-select formControlName="tipoInterior1">
+                        <mat-option *ngFor="let int of interior" [value]="int.Abreviatura">
+                          {{ int.Nomenclatura | translate }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-8">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                      <mat-label>Número</mat-label>
+                      <input matInput formControlName="numeroInterior1">
+                    </mat-form-field>
+                  </div>
                 </div>
-                <div class="col-md-8">
-                  <mat-form-field appearance="fill" style="width: 100%;">
-                    <mat-label>Número</mat-label>
-                    <input matInput formControlName="numeroInterior1">
-                  </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-4">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                      <mat-label>Interior 2</mat-label>
+                      <mat-select formControlName="tipoInterior2">
+                        <mat-option *ngFor="let int of interior" [value]="int.Abreviatura">
+                          {{ int.Nomenclatura | translate }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-8">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                      <mat-label>Número</mat-label>
+                      <input matInput formControlName="numeroInterior2">
+                    </mat-form-field>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col-md-4">
-                  <mat-form-field appearance="fill" style="width: 100%;">
-                    <mat-label>Interior 2</mat-label>
-                    <mat-select formControlName="tipoInterior2">
-                      <mat-option *ngFor="let int of interior" [value]="int.Abreviatura">
-                        {{ int.Nomenclatura | translate }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-8">
-                  <mat-form-field appearance="fill" style="width: 100%;">
-                    <mat-label>Número</mat-label>
-                    <input matInput formControlName="numeroInterior2">
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- Vista previa dirección -->
-          <div class="row mt-2">
-            <div class="col-12">
-              <div class="border p-2 bg-light rounded">
-                <strong>Dirección completa:</strong> {{ direccionPreview || 'Pendiente de completar' }}
+            <!-- Vista previa dirección cuando se está editando -->
+            <div class="row mt-2" *ngIf="editandoDireccion">
+              <div class="col-12">
+                <div class="border p-2 bg-light rounded">
+                  <strong>Dirección completa:</strong> {{ direccionPreview || 'Pendiente de completar' }}
+                </div>
               </div>
             </div>
           </div>
