@@ -890,52 +890,31 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
    */
   private inactivarRegistro(registro: any): Promise<void> {
     return new Promise((resolve, reject) => {
-      // Clonar el registro
-      const registroInactivado = JSON.parse(JSON.stringify(registro));
+      const secuencia = parseInt(registro.TERPA_SECUENCIA, 10);
       
-      // Cambiar estado a inactivo
-      registroInactivado.TERPA_ESTADO_REGISTRO = 'I';
-      
-      // Obtener secuencia
-      const secuencia = registroInactivado.TERPA_SECUENCIA;
-      
-      // Formatear fecha
-      const fechaObj = new Date(registroInactivado.TERPA_FECHA_REGISTRO);
-      const dia = fechaObj.getDate().toString().padStart(2, '0');
-      const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
-      const anio = fechaObj.getFullYear();
-      registroInactivado.TERPA_FECHA_REGISTRO = `${dia}/${mes}/${anio}`;
-      
-      // Convertir a números
-      registroInactivado.TERPA_ANO_PAGO = parseInt(registroInactivado.TERPA_ANO_PAGO, 10);
-      registroInactivado.TERPA_NRO_DOCUMENTO = parseInt(registroInactivado.TERPA_NRO_DOCUMENTO, 10);
-      registroInactivado.TERPA_TELEFONO = parseInt(registroInactivado.TERPA_TELEFONO, 10);
-      
-      if (registroInactivado.TERPA_DIGITO_CHEQUEO) {
-        registroInactivado.TERPA_DIGITO_CHEQUEO = parseInt(registroInactivado.TERPA_DIGITO_CHEQUEO, 10);
-      }
-
-      registroInactivado.TERPA_SECUENCIA = parseInt(registroInactivado.TERPA_SECUENCIA, 10);
-      
-      // Crear objeto de petición
+      // Crear objeto minimalista solo con la información necesaria
       const datosRequest = {
-        _puttercero_pago_secuencia: registroInactivado
+        _puttercero_pago_secuencia: {
+          TERPA_SECUENCIA: secuencia,
+          TERPA_ESTADO_REGISTRO: "I"
+        }
       };
       
+      
       // Hacer petición PUT
-      this.sgaMidService.put(`facturacion_electronica/${secuencia}`, datosRequest).subscribe(
-        (response: any) => {
-          if (response && response.Success) {
-            resolve();
-          } else {
-            reject(new Error('Error al inactivar el registro existente'));
-          }
-        },
-        (error: HttpErrorResponse) => {
-          reject(error);
+    this.sgaMidService.put(`facturacion_electronica/${secuencia}`, datosRequest).subscribe(
+      (response: any) => {
+        if (response && response.Success) {
+          resolve();
+        } else {
+          reject(new Error('Error al inactivar el registro existente'));
         }
-      );
-    });
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      }
+    );
+  });
   }
   
   /**
