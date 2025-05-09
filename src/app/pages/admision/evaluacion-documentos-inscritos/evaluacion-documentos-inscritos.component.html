@@ -20,43 +20,26 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
           <!-- Nivel -->
           <mat-form-field style="width: 75%;">
             <mat-label>{{ 'admision.nivel' | translate }}:</mat-label>
-            <mat-select [(ngModel)]="selectednivel" #nivel="ngModel" (selectionChange)="loadProyectos()" required>
-              <mat-option [value]="null">--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+            <mat-select [formControl]="CampoControl" [(ngModel)]="selectednivel" (selectionChange)="loadProyectos()" >
+              <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
               <mat-option *ngFor="let item of nivel_load" [value]="item.Id"> {{item.Nombre}} </mat-option>
             </mat-select>
-            <mat-error *ngIf="nivel.invalid && nivel.touched">
-              {{ 'admision.erro_selec_nivel' | translate }}
-            </mat-error>
+            <mat-error *ngIf="CampoControl.hasError('required')">{{ 'admision.erro_selec_nivel' | translate }}</mat-error>
           </mat-form-field>
 
           <!-- Proyecto académico -->
           <mat-form-field style="width: 75%;">
             <mat-label>{{ 'admision.proyecto' | translate }}:</mat-label>
-            <mat-select [(ngModel)]="proyectos_selected"
-                        #proyecto="ngModel"
+            <mat-select [formControl]="Campo1Control"
+                        [(ngModel)]="proyectos_selected"
                         (selectionChange)="loadInscritos()"
-                        [disabled]='selectprograma' required>
-              <mat-option [value]="null">--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
+                        [disabled]='selectprograma'>
+              <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
               <mat-option *ngFor="let item of proyectos" [value]="item.Id" [disabled]="!item.Id">{{item.Nombre}}</mat-option>
             </mat-select>
-            <mat-error *ngIf="proyecto.invalid && proyecto.touched">
-              {{ 'admision.error_proyecto' | translate }}
-            </mat-error>
+            <mat-error *ngIf="Campo1Control.hasError('required')">{{ 'admision.error_proyecto' | translate }}</mat-error>
           </mat-form-field>
           <br/><br/>
-                    
-          <!-- Cantidad registros por pagina -->
-          <mat-form-field style="width: 35%;">
-            <mat-label>{{ 'admision.cantidad_registros' | translate }}:</mat-label>
-            <mat-select [(ngModel)]="selectedCantidadRegistros" #cantidad_registros="ngModel" (selectionChange)="loadCantidadRegistros()" required>
-              <mat-option>--{{ 'GLOBAL.seleccionar' | translate }}--</mat-option>
-              <mat-option *ngFor="let item of cantidad_registros_load" [value]="item"> {{item}} </mat-option>
-            </mat-select>
-            <mat-error *ngIf="cantidad_registros.invalid && cantidad_registros.touched">
-              {{ 'admision.erro_selec_cantidad_registros' | translate }}
-            </mat-error>
-          </mat-form-field>
-
 
           <nb-card status="success" style="border: 1px solid var(--primary);" *ngIf="mostrarConteos">
             <nb-card-header class="d-flex justify-content-around align-items-center">
@@ -73,11 +56,11 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
 
             <!--Tabla-->
             <nb-card-body>
-              <div style="overflow: auto;" *ngIf="showTable">
-                <ng2-smart-table [settings]="settings" 
-                                 [source]="dataSource" 
-                                 (custom)="loadPerfil($event)">
-                </ng2-smart-table>
+              <div style="overflow: auto;">
+              <ng2-smart-table [settings]="settings"
+                               [source]="dataSource"
+                               (custom)="loadPerfil($event)">
+              </ng2-smart-table>
               </div>
             </nb-card-body>
         </div>
