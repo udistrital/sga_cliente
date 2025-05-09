@@ -49,6 +49,10 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
   direccionPreview: string = '';
   accion: string;
   
+  // Control de modo de edición de dirección
+  mostrarCamposDireccion: boolean = true;
+  editandoDireccion: boolean = false;
+  
   // Datos para selección
   dataSource: LocalDataSource;
   parametros_nomenclatura_dian = [];
@@ -91,7 +95,9 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
     camposDireccion.forEach(campo => {
       this.suscripciones.push(
         this.revisionForm.get(campo).valueChanges.subscribe(() => {
-          this.actualizarDireccionPreview();
+          if (this.editandoDireccion) {
+            this.actualizarDireccionPreview();
+          }
         })
       );
     });
@@ -128,6 +134,30 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
   onNaturalezaChange(event: MatSelectChange): void {
     this.esJuridica = event.value === 'J';
     this.actualizarValidadoresPorNaturaleza(event.value);
+  }
+
+  /**
+   * Maneja el inicio de edición de dirección
+   */
+  iniciarEdicionDireccion(): void {
+    this.editandoDireccion = true;
+    this.mostrarCamposDireccion = true;
+    this.formularioModificado = true;
+    
+    // Restablecer los campos a valores vacíos para nueva entrada
+    this.revisionForm.patchValue({
+      tipoVia: '',
+      numeroVia: '',
+      numeroSecundario: '',
+      complementoDireccion: '',
+      tipoInterior1: '',
+      numeroInterior1: '',
+      tipoInterior2: '',
+      numeroInterior2: ''
+    });
+    
+    // Limpiar la vista previa
+    this.direccionPreview = '';
   }
 
   /**
@@ -198,7 +228,6 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
 
   /**
    * Método completo para descargar recibo y cerrar diálogo
-   * (Solución para el problema de descarga)
    */
   descargarReciboCompletoYCerrar() {
     // Mostrar indicador de carga
@@ -318,8 +347,8 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       segundoApellido: [''],
       razonSocial: ['', [Validators.required, Validators.maxLength(100)]],
       tipoVia: ['', Validators.required],
-      numeroVia: ['', [Validators.required, this.noEspaciosValidator()]],
-      numeroSecundario: ['',  [Validators.required, this.noEspaciosValidator()]],
+      numeroVia: ['', Validators.required],
+      numeroSecundario: ['',  Validators.required],
       complementoDireccion: ['', Validators.required],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{7,10}$/)]],
       correo: ['', [Validators.required, Validators.email]],
@@ -403,6 +432,8 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
           if (ok.value) {
             this.guardarDatosPagador().then(() => {
               this.deshabilitarBotonContinuar = false;
+              this.editandoDireccion = false;
+              this.mostrarCamposDireccion = false;
               
               if (this.accion === 'descargar') {
                 // Usar el nuevo método que maneja todo el proceso
@@ -605,21 +636,32 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
                 this.datosPagadorOriginal = null;
                 this.formularioModificado = false;
                 this.deshabilitarBotonContinuar = true;
+                this.mostrarCamposDireccion = true;
+                this.editandoDireccion = true;
               } else if (registrosActivos.length === 1) {
                 // Edición de registro existente
                 this.datosPagador = registrosActivos[0];
                 this.cargarDatosEnFormulario();
                 this.formularioModificado = false;
                 this.deshabilitarBotonContinuar = false;
+                this.mostrarCamposDireccion = false;
+                this.editandoDireccion = false;
               } else {
                 // Error: múltiples registros
                 this.popUpManager.showErrorAlert(this.translate.instant('admision.error_multiples_registros'));
                 this.formularioModificado = false;
               }
+            } else {
+              // No hay datos existentes, mostrar campos de dirección para edición
+              this.mostrarCamposDireccion = true;
+              this.editandoDireccion = true;
             }
           },
           (error: HttpErrorResponse) => {
             this.manejarError(error, 'ERROR.general');
+            // En caso de error, mostrar campos de dirección para edición
+            this.mostrarCamposDireccion = true;
+            this.editandoDireccion = true;
           }
         )
     );
@@ -666,6 +708,9 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       
       // Procesar dirección
       if (this.datosPagador.TERPA_DIRECCION) {
+        this.direccionPreview = this.datosPagador.TERPA_DIRECCION;
+        // Solo cargamos los valores de dirección en el formulario para tenerlos
+        // pero no mostramos los campos hasta que el usuario decida editar
         this.procesarDireccion(this.datosPagador.TERPA_DIRECCION);
       }
       
@@ -683,26 +728,70 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
   procesarDireccion(direccionCompleta: string) {    
     if (!direccionCompleta) return;
     
-    const partes = direccionCompleta.split(' ');
-    
-    if (partes.length >= 3) {
-      try {
-        const valoresDireccion = {
-          tipoVia: partes[0] || '',
-          numeroVia: partes[1] || '',
-          numeroSecundario: partes[2] || '',
-          complementoDireccion: partes[3] || '',
-          tipoInterior1: partes[4] || '',
-          numeroInterior1: partes[5] || '',
-          tipoInterior2: partes[6] || '',
-          numeroInterior2: partes[7] || '',
-        };
-        
-        this.revisionForm.patchValue(valoresDireccion);
-        this.actualizarDireccionPreview();
-      } catch (e) {
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.procesar_direccion'));
+    try {
+      const partes = direccionCompleta.split(' ');
+      
+      // Determinar si hay componentes de interior
+      let tipoVia = '';
+      let numeroVia = '';
+      let numeroSecundario = '';
+      let complementoDireccion = '';
+      let tipoInterior1 = '';
+      let numeroInterior1 = '';
+      let tipoInterior2 = '';
+      let numeroInterior2 = '';
+      
+      // Intentar extraer componentes básicos
+      if (partes.length >= 1) tipoVia = partes[0];
+      if (partes.length >= 2) numeroVia = partes[1];
+      
+      // Buscar índice del '#' para detectar número secundario
+      const indicePound = partes.indexOf('#');
+      if (indicePound > 0 && partes.length > indicePound + 1) {
+        numeroSecundario = partes[indicePound + 1];
+      } else if (partes.length >= 3) {
+        // Alternativa si no hay '#' explícito
+        numeroSecundario = partes[2];
       }
+      
+      // Buscar índice del '-' para complemento
+      const indiceComplemento = partes.indexOf('-');
+      if (indiceComplemento > 0 && partes.length > indiceComplemento + 1) {
+        complementoDireccion = partes[indiceComplemento + 1];
+      } else if (partes.length >= 4) {
+        // Alternativa si no hay '-' explícito
+        complementoDireccion = partes[3];
+      }
+      
+      // Buscar componentes de interior (después de posibles comas)
+      const direccionCompleta2 = direccionCompleta.split(',');
+      
+      if (direccionCompleta2.length >= 2) {
+        const partesInterior1 = direccionCompleta2[1].trim().split(' ');
+        if (partesInterior1.length >= 1) tipoInterior1 = partesInterior1[0];
+        if (partesInterior1.length >= 2) numeroInterior1 = partesInterior1[1];
+      }
+      
+      if (direccionCompleta2.length >= 3) {
+        const partesInterior2 = direccionCompleta2[2].trim().split(' ');
+        if (partesInterior2.length >= 1) tipoInterior2 = partesInterior2[0];
+        if (partesInterior2.length >= 2) numeroInterior2 = partesInterior2[1];
+      }
+      
+      // Actualizar formulario con los valores extraídos
+      this.revisionForm.patchValue({
+        tipoVia,
+        numeroVia,
+        numeroSecundario,
+        complementoDireccion,
+        tipoInterior1,
+        numeroInterior1,
+        tipoInterior2,
+        numeroInterior2
+      });
+    } catch (e) {
+      console.error('Error procesando dirección:', e);
+      this.popUpManager.showErrorToast(this.translate.instant('ERROR.procesar_direccion'));
     }
   }
 
@@ -712,8 +801,8 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
   guardarDatosPagador(): Promise<void> {
     return new Promise((resolve, reject) => {
       // Verificar cambios
-      if (!this.hayModificaciones()) {
-        this.popUpManager.showInfoToast(this.translate.instant('recibo_pago.no_hay_cambios'));
+      if (!this.hayModificaciones() && !this.editandoDireccion) {
+        //this.popUpManager.showInfoToast(this.translate.instant('recibo_pago.no_hay_cambios'));
         resolve();
         return;
       }
@@ -724,6 +813,11 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       const numeroRecibo = Array.isArray(this.data.info_recibo.ReciboInscripcion) 
         ? this.data.info_recibo.ReciboInscripcion[0] 
         : this.data.info_recibo.ReciboInscripcion;
+      
+      // Actualizar dirección previa desde formulario si se está editando
+      if (this.editandoDireccion) {
+        this.actualizarDireccionPreview();
+      }
       
       // Flujo de guardado según existencia de datos
       if (this.datosPagadorOriginal) {
@@ -765,6 +859,11 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
    * Construye dirección formateada para guardado
    */
   construirDireccionFormateada(): string {
+    // Si no estamos editando la dirección, usar la dirección previa
+    if (!this.editandoDireccion && this.direccionPreview) {
+      return this.direccionPreview;
+    }
+    
     const values = this.revisionForm.value;
     
     const partes = [
@@ -791,52 +890,31 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
    */
   private inactivarRegistro(registro: any): Promise<void> {
     return new Promise((resolve, reject) => {
-      // Clonar el registro
-      const registroInactivado = JSON.parse(JSON.stringify(registro));
+      const secuencia = parseInt(registro.TERPA_SECUENCIA, 10);
       
-      // Cambiar estado a inactivo
-      registroInactivado.TERPA_ESTADO_REGISTRO = 'I';
-      
-      // Obtener secuencia
-      const secuencia = registroInactivado.TERPA_SECUENCIA;
-      
-      // Formatear fecha
-      const fechaObj = new Date(registroInactivado.TERPA_FECHA_REGISTRO);
-      const dia = fechaObj.getDate().toString().padStart(2, '0');
-      const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
-      const anio = fechaObj.getFullYear();
-      registroInactivado.TERPA_FECHA_REGISTRO = `${dia}/${mes}/${anio}`;
-      
-      // Convertir a números
-      registroInactivado.TERPA_ANO_PAGO = parseInt(registroInactivado.TERPA_ANO_PAGO, 10);
-      registroInactivado.TERPA_NRO_DOCUMENTO = parseInt(registroInactivado.TERPA_NRO_DOCUMENTO, 10);
-      registroInactivado.TERPA_TELEFONO = parseInt(registroInactivado.TERPA_TELEFONO, 10);
-      
-      if (registroInactivado.TERPA_DIGITO_CHEQUEO) {
-        registroInactivado.TERPA_DIGITO_CHEQUEO = parseInt(registroInactivado.TERPA_DIGITO_CHEQUEO, 10);
-      }
-
-      registroInactivado.TERPA_SECUENCIA = parseInt(registroInactivado.TERPA_SECUENCIA, 10);
-      
-      // Crear objeto de petición
+      // Crear objeto minimalista solo con la información necesaria
       const datosRequest = {
-        _puttercero_pago_secuencia: registroInactivado
+        _puttercero_pago_secuencia: {
+          TERPA_SECUENCIA: secuencia,
+          TERPA_ESTADO_REGISTRO: "I"
+        }
       };
       
+      
       // Hacer petición PUT
-      this.sgaMidService.put(`facturacion_electronica/${secuencia}`, datosRequest).subscribe(
-        (response: any) => {
-          if (response && response.Success) {
-            resolve();
-          } else {
-            reject(new Error('Error al inactivar el registro existente'));
-          }
-        },
-        (error: HttpErrorResponse) => {
-          reject(error);
+    this.sgaMidService.put(`facturacion_electronica/${secuencia}`, datosRequest).subscribe(
+      (response: any) => {
+        if (response && response.Success) {
+          resolve();
+        } else {
+          reject(new Error('Error al inactivar el registro existente'));
         }
-      );
-    });
+      },
+      (error: HttpErrorResponse) => {
+        reject(error);
+      }
+    );
+  });
   }
   
   /**
@@ -938,9 +1016,8 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       if (this.normalizar(formValues.segundoApellido) !== this.normalizar(this.datosPagadorOriginal.TERPA_SEGUNDO_APELLIDO)) return true;
     }
     
-    // Comparar dirección
-    const direccionFormateada = this.construirDireccionFormateada();
-    if (this.normalizar(direccionFormateada) !== this.normalizar(this.datosPagadorOriginal.TERPA_DIRECCION)) return true;
+    // Si estamos editando la dirección, considerar que hay modificaciones
+    if (this.editandoDireccion) return true;
     
     // Sin cambios
     return false;
@@ -977,21 +1054,5 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
         this.translate.instant(contexto),
       confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
     });
-  }
-
-  /**
-   * Validador espacios
-   */
-  noEspaciosValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control || !control.value) {
-        return null;
-      }
-      
-      // Verificar si el valor contiene espacios
-      const contieneEspacios = /\s/.test(control.value);
-      
-      return contieneEspacios ? { contieneEspacios: true } : null;
-    };
   }
 }
