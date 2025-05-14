@@ -784,7 +784,8 @@
         "no_generado": "El recibo no ha podido ser generado. Verifique su información personal",
         "cargar_datos": "No es posible cargar el tercero",
         "procesar_direccion": "Ocurrio un error procesando la direccion",
-        "sin_espacios": "Por favor elimine los espacios"
+        "sin_espacios": "Por favor elimine los espacios",
+        "sin_puntos_comas": "No se permiten puntos ni comas en el número de documento"
     },
     "recibo_pago": {
         "generado": "El recibo de pago ha sido generado correctamente",

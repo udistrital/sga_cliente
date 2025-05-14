@@ -751,7 +751,8 @@
         "no_generado": "The receipt could not be generated. Verify your personal information",
         "cargar_datos": "It is not possible to load the third party",
         "procesar_direccion": "An error occurred while processing the address",
-        "sin_espacios": "Please remove the spaces"
+        "sin_espacios": "Please remove the spaces",
+        "sin_puntos_comas": "Please remove dots and commas"
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",
