@@ -941,7 +941,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
         TERPA_TDO_CODVAR: formValues.tipoDocumento,
         TERPA_NRO_DOCUMENTO: parseInt(formValues.numeroDocumento, 10),
         TERPA_DIGITO_CHEQUEO: formValues.digito_verificacion ? parseInt(formValues.digito_verificacion, 10) : null,
-        TERPA_DIRECCION: direccionFormateada,
+        TERPA_DIRECCION: direccionFormateada.toUpperCase(),
         TERPA_TELEFONO: parseInt(formValues.telefono, 10),
         TERPA_EMAIL: formValues.correo,
         TERPA_ESTADO_REGISTRO: "A",
@@ -951,7 +951,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       // Agregar campos específicos según tipo de persona
       if (formValues.naturaleza === 'J') {
         // Jurídica
-        pagador['TERPA_RAZON_SOCIAL'] = formValues.razonSocial;
+        pagador['TERPA_RAZON_SOCIAL'] = formValues.razonSocial.toUpperCase();
         pagador['TERPA_PRIMER_APELLIDO'] = null;
         pagador['TERPA_SEGUNDO_APELLIDO'] = null;
         pagador['TERPA_PRIMER_NOMBRE'] = null;
@@ -959,10 +959,10 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       } else {
         // Natural
         pagador['TERPA_RAZON_SOCIAL'] = null;
-        pagador['TERPA_PRIMER_APELLIDO'] = formValues.primerApellido;
-        pagador['TERPA_SEGUNDO_APELLIDO'] = formValues.segundoApellido || null;
-        pagador['TERPA_PRIMER_NOMBRE'] = formValues.primerNombre;
-        pagador['TERPA_SEGUNDO_NOMBRE'] = formValues.segundoNombre || null;
+        pagador['TERPA_PRIMER_APELLIDO'] = formValues.primerApellido.toUpperCase();
+        pagador['TERPA_SEGUNDO_APELLIDO'] = formValues.segundoApellido.toUpperCase() || null;
+        pagador['TERPA_PRIMER_NOMBRE'] = formValues.primerNombre.toUpperCase();
+        pagador['TERPA_SEGUNDO_NOMBRE'] = formValues.segundoNombre.toUpperCase() || null;
       }
       
       // Crear objeto completo
