@@ -42,6 +42,9 @@
             <mat-error *ngIf="revisionForm.get('numeroDocumento').hasError('required')">
               {{ 'GLOBAL.falta_campo' | translate }}
             </mat-error>
+            <mat-error *ngIf="revisionForm.get('numeroDocumento').hasError('pattern')">
+              {{ 'ERROR.sin_puntos_comas' | translate }}
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
