@@ -340,7 +340,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       aprobado: [false, Validators.required],
       naturaleza: ['', Validators.required],
       tipoDocumento: ['', Validators.required],
-      numeroDocumento: ['', Validators.required],
+      numeroDocumento: ['', [Validators.required, Validators.pattern(/^[^.,]+$/)]],
       primerNombre: ['', Validators.required],
       segundoNombre: [''],
       primerApellido: ['', Validators.required],
