@@ -3,11 +3,14 @@
   <form novalidate [formGroup]="revisionForm" class="form-horizontal">
     <fieldset class="fieldseter">
       <legend>&nbsp; {{ 'admision.formulario_pagador' | translate }}</legend>
+      <div class="mb-4">
+        <small class="text-muted">{{ 'GLOBAL.campos_obligatorios' | translate }}</small>
+      </div>
       
       <!-- Sección de identificación-->
       <div class="row mb-3">
         <div class="col-md-4">
-          <label class="form-label">{{ 'GLOBAL.naturaleza' | translate }}</label>
+          <label class="form-label">{{ 'GLOBAL.naturaleza' | translate }} *</label>
           <mat-form-field appearance="fill" style="width: 100%;">
             <mat-select formControlName="naturaleza" (selectionChange)="onNaturalezaChange($event)">
               <mat-option *ngFor="let naturaleza of naturalezas" [value]="naturaleza.value">
@@ -20,7 +23,7 @@
           </mat-form-field>
         </div>
         <div class="col-md-4">
-          <label class="form-label">{{ 'GLOBAL.tipo_documento' | translate }}</label>
+          <label class="form-label">{{ 'GLOBAL.tipo_documento' | translate }} *</label>
           <mat-form-field appearance="fill" style="width: 100%;">
             <mat-select formControlName="tipoDocumento">
               <mat-option value="C">Cédula de ciudadanía</mat-option>
@@ -36,7 +39,7 @@
           </mat-form-field>
         </div>
         <div class="col-md-4">
-          <label class="form-label">{{ 'GLOBAL.numero_documento' | translate }}</label>
+          <label class="form-label">{{ 'GLOBAL.numero_documento' | translate }} *</label>
           <mat-form-field appearance="fill" style="width: 100%;">
             <input matInput formControlName="numeroDocumento">
             <mat-error *ngIf="revisionForm.get('numeroDocumento').hasError('required')">
@@ -53,7 +56,7 @@
       <ng-container *ngIf="!esJuridica">
         <div class="row mb-3">
           <div class="col-md-6">
-            <label class="form-label">{{ 'GLOBAL.primer_apellido' | translate }}</label>
+            <label class="form-label">{{ 'GLOBAL.primer_apellido' | translate }} *</label>
             <mat-form-field appearance="fill" style="width: 100%;">
               <input matInput formControlName="primerApellido">
               <mat-error *ngIf="revisionForm.get('primerApellido').hasError('required')">
@@ -70,7 +73,7 @@
         </div>
         <div class="row mb-3">
           <div class="col-md-6">
-            <label class="form-label">{{ 'GLOBAL.primer_nombre' | translate }}</label>
+            <label class="form-label">{{ 'GLOBAL.primer_nombre' | translate }} *</label>
             <mat-form-field appearance="fill" style="width: 100%;">
               <input matInput formControlName="primerNombre">
               <mat-error *ngIf="revisionForm.get('primerNombre').hasError('required')">
@@ -91,7 +94,7 @@
       <ng-container *ngIf="esJuridica">
         <div class="row mb-3">
           <div class="col-md-3">
-            <label class="form-label">{{ 'GLOBAL.digito_verificacion' | translate }}</label>
+            <label class="form-label">{{ 'GLOBAL.digito_verificacion' | translate }} *</label>
             <mat-form-field appearance="fill" style="width: 100%;">
               <input matInput formControlName="digito_verificacion">
               <mat-error *ngIf="revisionForm.get('digito_verificacion').hasError('required')">
@@ -106,7 +109,7 @@
             </mat-form-field>
           </div>
           <div class="col-md-9">
-            <label class="form-label">{{ 'GLOBAL.razon_social' | translate }}</label>
+            <label class="form-label">{{ 'GLOBAL.razon_social' | translate }} *</label>
             <mat-form-field appearance="fill" style="width: 100%;">
               <input matInput formControlName="razonSocial">
               <mat-hint align="end">{{revisionForm.get('razonSocial').value?.length || 0}}/100</mat-hint>
@@ -148,7 +151,7 @@
             <div class="row mb-2">
               <div class="col-md-3">
                 <mat-form-field appearance="fill" style="width: 100%;">
-                  <mat-label>Tipo vía</mat-label>
+                  <mat-label>Tipo vía *</mat-label>
                   <mat-select formControlName="tipoVia">
                     <mat-option *ngFor="let via of vias" [value]="via.Abreviatura">
                       {{ via.Nomenclatura | translate }}
@@ -158,7 +161,7 @@
               </div>
               <div class="col-md-2">
                 <mat-form-field appearance="fill" style="width: 100%;">
-                  <mat-label>Número</mat-label>
+                  <mat-label>Número *</mat-label>
                   <input matInput formControlName="numeroVia">
                   <mat-error *ngIf="revisionForm.get('numeroVia').hasError('required')">
                     {{ 'GLOBAL.falta_campo' | translate }}
@@ -170,7 +173,7 @@
               </div>
               <div class="col-md-2">
                 <mat-form-field appearance="fill" style="width: 100%;">
-                  <mat-label>Nº secundario</mat-label>
+                  <mat-label>Nº secundario *</mat-label>
                   <input matInput formControlName="numeroSecundario">
                   <mat-error *ngIf="revisionForm.get('numeroSecundario').hasError('required')">
                     {{ 'GLOBAL.falta_campo' | translate }}
@@ -182,7 +185,7 @@
               </div>
               <div class="col-md-3">
                 <mat-form-field appearance="fill" style="width: 100%;">
-                  <mat-label>Complemento</mat-label>
+                  <mat-label>Complemento *</mat-label>
                   <input matInput formControlName="complementoDireccion">
                 </mat-form-field>
               </div>
@@ -247,7 +250,7 @@
       <!-- Contacto (telefono y email) -->
       <div class="row mb-4">
         <div class="col-md-6">
-          <label class="form-label">{{ 'GLOBAL.telefono' | translate }}</label>
+          <label class="form-label">{{ 'GLOBAL.telefono' | translate }} *</label>
           <mat-form-field appearance="fill" style="width: 100%;">
             <input matInput type="tel" formControlName="telefono">
             <mat-error *ngIf="revisionForm.get('telefono').hasError('required')">
@@ -256,7 +259,7 @@
           </mat-form-field>
         </div>
         <div class="col-md-6">
-          <label class="form-label">{{ 'GLOBAL.correo' | translate }}</label>
+          <label class="form-label">{{ 'GLOBAL.correo' | translate }} *</label>
           <mat-form-field appearance="fill" style="width: 100%;">
             <input matInput type="email" formControlName="correo">
             <mat-error *ngIf="revisionForm.get('correo').hasError('required')">
