@@ -753,7 +753,8 @@
         "digito_verificacion": "Dígito de verificación",
         "natural": "Natural",
         "juridica": "Jurídica",
-        "razon_social": "Razón social"
+        "razon_social": "Razón social",
+        "campos_obligatorios": "Campos marcados con * son obligatorios"
     },
     "ERROR": {
         "general": "La solicitud no pudo ser cumplida",
@@ -785,7 +786,7 @@
         "cargar_datos": "No es posible cargar el tercero",
         "procesar_direccion": "Ocurrio un error procesando la direccion",
         "sin_espacios": "Por favor elimine los espacios",
-        "sin_puntos_comas": "No se permiten puntos ni comas en el número de documento"
+        "sin_puntos_comas": "El número de documento consta de 8 a 15 dígitos, sin símbolos, espacios ni letras."
     },
     "recibo_pago": {
         "generado": "El recibo de pago ha sido generado correctamente",

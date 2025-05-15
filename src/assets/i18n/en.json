@@ -720,7 +720,8 @@
         "digito_verificacion": "Check digit",
         "natural": "Natural",
         "juridica": "Jurídica",
-        "razon_social": "Company name"
+        "razon_social": "Company name",
+        "campos_obligatorios": "Fields marked with * are required"
     },
     "ERROR": {
         "general": "The request could not be satisfied",
@@ -752,7 +753,7 @@
         "cargar_datos": "It is not possible to load the third party",
         "procesar_direccion": "An error occurred while processing the address",
         "sin_espacios": "Please remove the spaces",
-        "sin_puntos_comas": "Please remove dots and commas"
+        "sin_puntos_comas": "The document number consists of 8 to 15 digits, without symbols, spaces or letters."
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",
