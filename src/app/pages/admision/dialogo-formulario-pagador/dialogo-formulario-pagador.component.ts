@@ -610,9 +610,12 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
     const numeroRecibo = Array.isArray(this.data.info_recibo.ReciboInscripcion) 
       ? this.data.info_recibo.ReciboInscripcion[0] 
       : this.data.info_recibo.ReciboInscripcion;
+
+    // Extraer año de generacion del recibo
+    const añoPago = this.data.info_recibo.ReciboAnio;
     
     this.suscripciones.push(
-      this.sgaMidService.get(`facturacion_electronica/${numeroRecibo}`)
+      this.sgaMidService.get(`facturacion_electronica/${numeroRecibo}/${añoPago}`)
         .pipe(finalize(() => this.setLoading(false)))
         .subscribe(
           (response: any) => {
@@ -891,11 +894,13 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
   private inactivarRegistro(registro: any): Promise<void> {
     return new Promise((resolve, reject) => {
       const secuencia = parseInt(registro.TERPA_SECUENCIA, 10);
+      const añoPago = parseInt(this.data.info_recibo.ReciboAnio);
       
       // Crear objeto minimalista solo con la información necesaria
       const datosRequest = {
         _puttercero_pago_secuencia: {
           TERPA_SECUENCIA: secuencia,
+          TERPA_ANO_PAGO: añoPago,
           TERPA_ESTADO_REGISTRO: "I"
         }
       };
@@ -923,6 +928,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
   private crearNuevoRegistro(numeroRecibo: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const formValues = this.revisionForm.value;
+      const añoPago = this.data.info_recibo.ReciboAnio;
       
       // Formatear fecha
       const fechaActual = new Date();
@@ -936,7 +942,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       // Crear objeto de datos
       const pagador = {
         TERPA_SECUENCIA: parseInt(numeroRecibo, 10),
-        TERPA_ANO_PAGO: fechaActual.getFullYear(),
+        TERPA_ANO_PAGO: parseInt(añoPago),
         TERPA_NATURALEZA: formValues.naturaleza,
         TERPA_TDO_CODVAR: formValues.tipoDocumento,
         TERPA_NRO_DOCUMENTO: parseInt(formValues.numeroDocumento, 10),
