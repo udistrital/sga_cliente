@@ -1167,6 +1167,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.show_prod = false;
         break;
       case 'perfil':
+        if (sessionStorage.getItem('IdEstadoInscripcion') === 'INSCRITO') {
+          this.imprimir = true;
+        } else {
+          this.imprimir = false;
+        }
         this.showRegreso = false;
         this.show_info = false;
         this.show_profile = true;
