@@ -13,6 +13,8 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
+import { DescuentoAcademicoService } from '../../../@core/data/descuento_academico.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-list-descuento-academico',
@@ -61,7 +63,10 @@ export class ListDescuentoAcademicoComponent implements OnInit {
     private toasterService: ToasterService,
     private documentoService: DocumentoService,
     private utilidades: UtilidadesService,
-    private newNuxeoService: NewNuxeoService) {
+    private newNuxeoService: NewNuxeoService,
+    private descuentoService: DescuentoAcademicoService,
+    private router: Router
+  ) {
     this.cargarCampos();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.cargarCampos();
@@ -106,6 +111,10 @@ export class ListDescuentoAcademicoComponent implements OnInit {
           {
             name: 'edit',
             title: '<i class="nb-edit" title="' + this.translate.instant('GLOBAL.tooltip_editar_registro') + '"></i>',
+          },
+          {
+            name: 'delete',
+            title: '<i class="nb-trash" title="' + this.translate.instant('GLOBAL.tooltip_elimianar_registro') + '"></i>',
           },
         ],
       },
@@ -262,6 +271,9 @@ export class ListDescuentoAcademicoComponent implements OnInit {
       case 'edit':
         this.onEdit(event);
         break;
+      case 'delete':
+        this.onDelete(event);
+        break;
     }
   }
 
@@ -319,26 +331,32 @@ export class ListDescuentoAcademicoComponent implements OnInit {
       .then((willDelete) => {
         this.loading = true;
         if (willDelete.value) {
-          this.mid.delete('descuento_academico', event.data).subscribe(res => {
-            if (res !== null) {
-              this.loadData();
-              this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
-                this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
-                this.translate.instant('GLOBAL.confirmarEliminar'));
-            }
-            this.loading = false;
-          },
-            (error: HttpErrorResponse) => {
+          const dataSolicitudDescuento = { ...event.data, Activo: false, PeriodoId: 0 };
+          this.descuentoService.put('solicitud_descuento', dataSolicitudDescuento)
+            .subscribe(res => {
+              if (res !== null) {
+                this.loadData();
+                this.showToast('info', this.translate.instant('GLOBAL.eliminar'),
+                  this.translate.instant('GLOBAL.descuento_matricula') + ' ' +
+                  this.translate.instant('GLOBAL.confirmarEliminar'));
+                const currentUrl = this.router.url;
+                this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+                  this.router.navigate([currentUrl]);
+                });
+              }
               this.loading = false;
-              Swal.fire({
-                icon: 'error',
-                title: error.status + '',
-                text: this.translate.instant('ERROR.' + error.status),
-                footer: this.translate.instant('GLOBAL.eliminar') + '-' +
-                  this.translate.instant('GLOBAL.descuento_matricula'),
-                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+            },
+              (error: HttpErrorResponse) => {
+                this.loading = false;
+                Swal.fire({
+                  icon: 'error',
+                  title: error.status + '',
+                  text: this.translate.instant('ERROR.' + error.status),
+                  footer: this.translate.instant('GLOBAL.eliminar') + '-' +
+                    this.translate.instant('GLOBAL.descuento_matricula'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                });
               });
-            });
         }
         this.loading = false;
       });
