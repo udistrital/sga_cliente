@@ -12,6 +12,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { DescuentoAcademicoService } from '../../../@core/data/descuento_academico.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DescuentoDependencia } from '../../../@core/data/models/descuento/descuento_dependencia';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   selector: 'ngx-select-descuento-proyecto',
@@ -32,11 +33,14 @@ export class SelectDescuentoProyectoComponent implements OnInit {
   subscription: Subscription;
   descuento_proyecto = [];
 
+  hasPermission: boolean = false;
+
   constructor(private translate: TranslateService,
     private descuentoService: DescuentoAcademicoService,
     private dialogRef: NbDialogRef<SelectDescuentoProyectoComponent>,
     private popUpManager: PopUpManager,
-    private toasterService: ToasterService) {
+    private toasterService: ToasterService,
+    private autenticationService: ImplicitAutenticationService) {
     this.loading = true;
     this.loadData();
     this.loadDataProyecto();
@@ -89,6 +93,7 @@ export class SelectDescuentoProyectoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.obtenerPermisos()
   }
 
   activetab(): void {
@@ -105,6 +110,15 @@ export class SelectDescuentoProyectoComponent implements OnInit {
   }
 
   onCreateDescuento(event: any) {
+    if (!this.hasPermission){
+      Swal.fire({
+          icon: 'info',
+          title: this.translate.instant('documento_proyecto.sin_acceso'),
+          text: this.translate.instant('documento_proyecto.sin_acceso_cuerpo'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        })
+      return
+    }
     const descuento = <TipoDescuento>event.value;
     if (!this.descuento_proyecto.find((descuento_registrado: any) => descuento_registrado.Id === descuento.Id) && descuento.Id) {
 
@@ -191,6 +205,15 @@ export class SelectDescuentoProyectoComponent implements OnInit {
   }
 
   onDeleteDescuento(event: any) {
+    if (!this.hasPermission){
+      Swal.fire({
+          icon: 'info',
+          title: this.translate.instant('documento_proyecto.sin_acceso'),
+          text: this.translate.instant('documento_proyecto.sin_acceso_cuerpo'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        })
+      return
+    }
     const descuento = <TipoDescuento>event.data;
 
     const opt: any = {
@@ -252,10 +275,29 @@ export class SelectDescuentoProyectoComponent implements OnInit {
   }
 
   openListDescuentoComponent() {
-    this.administrar_descuentos = true;
-    this.boton_retornar = true;
+    if (this.hasPermission){
+      this.administrar_descuentos = true;
+      this.boton_retornar = true;
+    }else{
+      Swal.fire({
+          icon: 'info',
+          title: this.translate.instant('documento_proyecto.sin_acceso'),
+          text: this.translate.instant('documento_proyecto.sin_acceso_cuerpo'),
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        })
+    }
+    
   }
 
+  obtenerPermisos() {
+    this.autenticationService.getRole().then((rol: Array<String>) => {
+      if (rol.includes('ADMIN_SGA') || rol.includes('VICERRECTOR') ) {
+        this.hasPermission = true;
+      } else {
+        this.hasPermission = false;
+      }
+    })
+  }
   retorno(event) {
     this.boton_retornar = event;
     this.loadData();
