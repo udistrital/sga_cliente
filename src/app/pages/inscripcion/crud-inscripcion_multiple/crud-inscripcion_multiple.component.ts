@@ -346,6 +346,16 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   dataInfo.push(element);
                   this.dataSource.load(dataInfo);
                   this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
+                  if (element.Estado == "Vencido"){
+                    this.inscripcionService.get('inscripcion/' + element.Id)
+                    .subscribe(res =>{
+                      res.Activo = false;
+                      res.PeriodoId = 0;
+                      this.inscripcionService.put('inscripcion/', res).subscribe( ()=>{
+                        window.location.reload();
+                      });
+                    });
+                  }
                 },
                 error => {
                   this.loading = false;
