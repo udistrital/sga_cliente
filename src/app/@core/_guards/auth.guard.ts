@@ -24,6 +24,19 @@ export class AuthGuard implements CanActivate {
       if (!!this.menu.getRoute(route_)) {
         return true;
       }
+    } else if (state.url.includes('/pages/inscripcion/solicitud-transferencia/')) {
+      let processParam = route.params.process;
+      if (processParam) {
+        const transferenciaConValor = `/pages/inscripcion/transferencia/${processParam}`;
+        const transferenciaConValorEncoded = `/pages/inscripcion/transferencia/${route.params.process}`;
+        const transferenciaConValorSinIgual = `/pages/inscripcion/transferencia/${processParam.replace('=', '')}`;
+        if (!!this.menu.getRoute(transferenciaConValor) ||
+          !!this.menu.getRoute(transferenciaConValorEncoded) ||
+          !!this.menu.getRoute(transferenciaConValorSinIgual)) {
+          console.log('AuthGuard - Usuario tiene acceso a transferencia con valor específico, permitiendo solicitud-transferencia');
+          return true;
+        }
+      }
     }
 
     this.pUpManager.showErrorAlert(this.translate.instant('ERROR.rol_insuficiente_titulo'));
