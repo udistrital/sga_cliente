@@ -352,7 +352,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                       res.Activo = false;
                       res.PeriodoId = 0;
                       this.inscripcionService.put('inscripcion/', res).subscribe( ()=>{
-                        window.location.reload();
+                        this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('recibo_pago.mensaje_recibo_vencido'));
                       });
                     });
                   }
