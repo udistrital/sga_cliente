@@ -225,7 +225,7 @@ export class TransferenciaComponent implements OnInit {
                 sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
                 sessionStorage.setItem('NivelId', data.Nivel)
 
-                this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
+                this.router.navigate([`/pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
               }
             })
           },
@@ -609,7 +609,7 @@ export class TransferenciaComponent implements OnInit {
         PersonaId: Number(this.uid),
         PeriodoId: this.dataTransferencia.Periodo.Id,
         Nivel: this.dataTransferencia.TipoInscripcion.NivelId,
-        ProgramaAcademicoId: this.dataTransferencia.ProyectoCurricular.Id,
+        ProgramaAcademicoCodigo: this.dataTransferencia.ProyectoCurricular.Id,
         TipoInscripcionId: this.dataTransferencia.TipoInscripcion.Id,
         Year: this.dataTransferencia.Periodo.Year,
         Periodo: parseInt(this.dataTransferencia.Periodo.Ciclo, 10),
@@ -624,7 +624,7 @@ export class TransferenciaComponent implements OnInit {
             this.inscripcionProjects = response;
             this.inscripcionProjects.forEach(proyecto => {
               if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id && proyecto.Evento != null) {
-                inscripcion.FechaPago = moment(proyecto.Evento[0].FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                inscripcion.FechaPago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
 
                 this.sgaMidService.post('inscripciones/generar_inscripcion', inscripcion).subscribe(
                   (response: any) => {
