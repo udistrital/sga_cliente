@@ -794,7 +794,8 @@
         "maximo_recibos": "Ya genero el máximo de recibos permitidos",
         "no_hay_cambios": "No hay cambios en la informacion de facturacion",
         "pagador_actualizado": "Informacion actualizada",
-        "pagador_guardado": "Informacion guardada"
+        "pagador_guardado": "Informacion guardada",
+        "mensaje_recibo_vencido": "Recibo vencido. Recargue para generar uno nuevo del mismo proyecto."
     },
     "produccion_academica": {
         "titulo_revista": "Título de revista",
