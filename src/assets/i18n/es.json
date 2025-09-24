@@ -114,7 +114,8 @@
             "inscripcion": "Inscripción",
             "inscripcion_general": "Inscripción a un \nproyecto curricular",
             "preinscripcion": "Preinscripción a \nproyectos curriculares",
-            "transferencia": "Transferencia"
+            "transferencia": "Transferencia",
+            "reintegro": "Reintegro"
         },
         "admision": {
             "evaluacion_documentos": "Evaluación de documentos \nde inscritos",
