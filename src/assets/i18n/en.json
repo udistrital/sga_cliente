@@ -762,7 +762,8 @@
         "maximo_recibos": "I already generate the maximum receipts allowed",
         "no_hay_cambios": "There are no changes in the billing information",
         "pagador_actualizado": "Information updated",
-        "pagador_guardado": "Information saved"
+        "pagador_guardado": "Information saved",
+        "mensaje_recibo_vencido": "Expired receipt. Reload to generate a new one for the same program."
     },
     "produccion_academica": {
         "titulo_revista": "Magazine title",
