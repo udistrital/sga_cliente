@@ -17,14 +17,7 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
-    if (!!this.menu.getRoute(state.url)) {
-      return true;
-    } else if (route.params && route.params.id) {
-      const route_ = state.url.replace(route.params.id, ':id');
-      if (!!this.menu.getRoute(route_)) {
-        return true;
-      }
-    } else if (state.url.includes('/pages/inscripcion/solicitud-transferencia/')) {
+    if (state.url.includes('/pages/inscripcion/solicitud-transferencia/')) {
       let processParam = route.params.process;
       if (processParam) {
         const transferenciaConValor = `/pages/inscripcion/transferencia/${processParam}`;
@@ -33,9 +26,15 @@ export class AuthGuard implements CanActivate {
         if (!!this.menu.getRoute(transferenciaConValor) ||
           !!this.menu.getRoute(transferenciaConValorEncoded) ||
           !!this.menu.getRoute(transferenciaConValorSinIgual)) {
-          console.log('AuthGuard - Usuario tiene acceso a transferencia con valor específico, permitiendo solicitud-transferencia');
           return true;
         }
+      }
+    } else if (!!this.menu.getRoute(state.url)) {
+      return true;
+    } else if (route.params && route.params.id) {
+      const route_ = state.url.replace(route.params.id, ':id');
+      if (!!this.menu.getRoute(route_)) {
+        return true;
       }
     }
 
