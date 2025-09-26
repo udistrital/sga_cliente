@@ -21,6 +21,8 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoDocumentosTransferenciasComponent } from '../dialogo-documentos-transferencias/dialogo-documentos-transferencias.component';
+import { LinkDownloadComponent } from '../../../@theme/components/link-download/link-download.component';
+import { DialogoFormularioPagadorComponent } from '../../admision/dialogo-formulario-pagador/dialogo-formulario-pagador.component';
 
 @Component({
   selector: 'transferencia',
@@ -182,26 +184,15 @@ export class TransferenciaComponent implements OnInit {
         },
         ...process === 'my' ? {
           Descargar: {
-            title: this.translate.instant('derechos_pecuniarios.ver_respuesta'),
+            title: this.translate.instant('inscripcion.descargar'),
             width: '5%',
             editable: false,
             filter: false,
-            renderComponent: CustomizeButtonComponent,
+            renderComponent: LinkDownloadComponent,
             type: 'custom',
             onComponentInitFunction: (instance) => {
-              instance.save.subscribe((data) => {
-                this.nuxeo.get([{ 'Id': data.VerRespuesta.DocRespuesta }]).subscribe(
-                  (documentos) => {
-                    const assignConfig = new MatDialogConfig();
-                    assignConfig.width = '1300px';
-                    assignConfig.height = '800px';
-                    let aux = { ...documentos[0], observacion: data.VerRespuesta.Observacion, fecha: data.VerRespuesta.FechaEvaluacion, terceroResponsable: data.VerRespuesta.TerceroResponsable }
-                    assignConfig.data = { documento: aux, observando: true }
-                    const dialogo = this.dialog.open(DialogoDocumentosTransferenciasComponent, assignConfig);
-                  }
-                );
-              })
-            }
+              instance.save.subscribe((data) => this.mostrarFormularioYDescargar(data))
+            },
           }
         } : {},
         Opcion: {
@@ -255,6 +246,9 @@ export class TransferenciaComponent implements OnInit {
                 const auxRecibo = element.Recibo;
                 const NumRecibo = auxRecibo.split('/', 1);
                 element.Recibo = NumRecibo[0];
+                element.ReciboInscripcion = NumRecibo;
+                element.ReciboAnio = auxRecibo.split('/', 2)[1];
+                console.log(res);
                 element.FechaGeneracion = momentTimezone.tz(element.FechaGeneracion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                 element.IdPrograma = element.Programa;
                 element.Programa = res.Nombre;
@@ -322,6 +316,8 @@ export class TransferenciaComponent implements OnInit {
                 const auxRecibo = element.Recibo;
                 const NumRecibo = auxRecibo.split('/', 1);
                 element.Recibo = NumRecibo[0];
+                element.ReciboInscripcion = NumRecibo;
+                element.ReciboAnio = auxRecibo.split('/', 2)[1];
                 element.FechaGeneracion = moment(element.FechaGeneracion, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 element.IdPrograma = element.Programa;
                 element.Programa = res.Nombre;
@@ -699,5 +695,19 @@ export class TransferenciaComponent implements OnInit {
         this.loadDataTercero(this.process);
       }
     }, 5000);
+  }
+
+  mostrarFormularioYDescargar(data) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '1300px';
+    assignConfig.maxHeight = '80vh';
+    assignConfig.autoFocus = false;
+    assignConfig.data = { 
+      info_recibo: data,
+      info_info_persona: this.info_info_persona,
+      accion: 'descargar'
+    };
+    console.log(assignConfig);
+    const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
   }
 }
