@@ -1,12 +1,7 @@
 <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
-    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" *ngIf="process === 'my' || process === 'all' || isDialog">
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" *ngIf="process === 'my'">
     <nb-card-header>
-        <div class="d-flex justify-content-between align-items-center">
-            <span>{{ 'inscripcion.solicitud_transferencia' | translate }}</span>
-            <button *ngIf="isDialog" mat-icon-button (click)="goback()" class="close-dialog-btn">
-                <mat-icon>close</mat-icon>
-            </button>
-        </div>
+        {{ 'inscripcion.solicitud_transferencia' | translate }}
     </nb-card-header>
     <nb-card-body>
         <div style="padding: 1rem;">
@@ -29,9 +24,13 @@
                 <br />
             </fieldset>
         </div>
+      
+
         <!-- Formulario de Reintegro -->
         <ngx-dinamicform *ngIf="tipo === 'Reingreso'" [normalform]="formReintegro" [modeloData]="dataReintegro" (result)="validarForm($event)">
             <div *ngIf="solicitudCreada && mostrarDocumento" class="files-container">
+                <!-- <ngx-download-file-nuxeo (loading)="changeLoading($event)" [idDoc]="file.id" [label]="file.label">
+                </ngx-download-file-nuxeo> -->
             </div>
         </ngx-dinamicform>
 
@@ -50,6 +49,11 @@
             <button mat-button type="button" (click)="goback()">
                 {{ 'GLOBAL.cancelar' | translate }}
             </button>
+            <button [disabled]="!terminadaInscripcion" mat-button type="button" (click)="send()">
+                {{ 'GLOBAL.enviar' | translate }}
+            </button>
         </div>
     </nb-card-footer>
 </nb-card>
+
+
