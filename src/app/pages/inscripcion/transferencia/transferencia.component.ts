@@ -21,6 +21,8 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoDocumentosTransferenciasComponent } from '../dialogo-documentos-transferencias/dialogo-documentos-transferencias.component';
+import { LinkDownloadComponent } from '../../../@theme/components/link-download/link-download.component';
+import { DialogoFormularioPagadorComponent } from '../../admision/dialogo-formulario-pagador/dialogo-formulario-pagador.component';
 
 @Component({
   selector: 'transferencia',
@@ -182,26 +184,19 @@ export class TransferenciaComponent implements OnInit {
         },
         ...process === 'my' ? {
           Descargar: {
-            title: this.translate.instant('derechos_pecuniarios.ver_respuesta'),
+            title: this.translate.instant('inscripcion.descargar'),
             width: '5%',
             editable: false,
             filter: false,
-            renderComponent: CustomizeButtonComponent,
+            renderComponent: LinkDownloadComponent,
             type: 'custom',
             onComponentInitFunction: (instance) => {
               instance.save.subscribe((data) => {
-                this.nuxeo.get([{ 'Id': data.VerRespuesta.DocRespuesta }]).subscribe(
-                  (documentos) => {
-                    const assignConfig = new MatDialogConfig();
-                    assignConfig.width = '1300px';
-                    assignConfig.height = '800px';
-                    let aux = { ...documentos[0], observacion: data.VerRespuesta.Observacion, fecha: data.VerRespuesta.FechaEvaluacion, terceroResponsable: data.VerRespuesta.TerceroResponsable }
-                    assignConfig.data = { documento: aux, observando: true }
-                    const dialogo = this.dialog.open(DialogoDocumentosTransferenciasComponent, assignConfig);
-                  }
-                );
+                // se añade ID de programa a 'localStorage' del programa del que se quiere ver el recibo
+                sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
+                this.mostrarFormularioYDescargar(data);
               })
-            }
+            },
           }
         } : {},
         Opcion: {
@@ -255,10 +250,21 @@ export class TransferenciaComponent implements OnInit {
                 const auxRecibo = element.Recibo;
                 const NumRecibo = auxRecibo.split('/', 1);
                 element.Recibo = NumRecibo[0];
+                element.ReciboInscripcion = NumRecibo;
+                element.ReciboAnio = auxRecibo.split('/', 2)[1];
                 element.FechaGeneracion = momentTimezone.tz(element.FechaGeneracion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                 element.IdPrograma = element.Programa;
                 element.Programa = res.Nombre;
                 element.Periodo = this.periodo.Id;
+                element.ProgramaAcademicoId = res.Nombre;
+                let level = res['NivelFormacionId'].NivelFormacionPadreId;
+                if (level == null || level == undefined) {
+                  level = res['NivelFormacionId'].Id;
+                } else {
+                  level = res['NivelFormacionId'].NivelFormacionPadreId.Id;
+                }
+                element.NivelPP = level;
+                element.tipo = "REINGRESO POSTGRADOS";
 
                 element.Descargar = {
                   icon: 'fa fa-download fa-2x',
@@ -322,10 +328,21 @@ export class TransferenciaComponent implements OnInit {
                 const auxRecibo = element.Recibo;
                 const NumRecibo = auxRecibo.split('/', 1);
                 element.Recibo = NumRecibo[0];
+                element.ReciboInscripcion = NumRecibo;
+                element.ReciboAnio = auxRecibo.split('/', 2)[1];
                 element.FechaGeneracion = moment(element.FechaGeneracion, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 element.IdPrograma = element.Programa;
                 element.Programa = res.Nombre;
                 element.Periodo = this.periodo.Id;
+                element.ProgramaAcademicoId = res.Nombre;
+                let level = res['NivelFormacionId'].NivelFormacionPadreId;
+                if (level == null || level == undefined) {
+                  level = res['NivelFormacionId'].Id;
+                } else {
+                  level = res['NivelFormacionId'].NivelFormacionPadreId.Id;
+                }
+                element.NivelPP = level;
+                element.tipo = "REINGRESO POSTGRADOS";
 
                 element.Descargar = {
                   icon: 'fa fa-download fa-2x',
@@ -699,5 +716,18 @@ export class TransferenciaComponent implements OnInit {
         this.loadDataTercero(this.process);
       }
     }, 5000);
+  }
+
+  mostrarFormularioYDescargar(data) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '1300px';
+    assignConfig.maxHeight = '80vh';
+    assignConfig.autoFocus = false;
+    assignConfig.data = { 
+      info_recibo: data,
+      info_info_persona: this.info_info_persona,
+      accion: 'descargar'
+    };
+    const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
   }
 }
