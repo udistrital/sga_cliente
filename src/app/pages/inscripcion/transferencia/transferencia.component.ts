@@ -192,6 +192,7 @@ export class TransferenciaComponent implements OnInit {
             type: 'custom',
             onComponentInitFunction: (instance) => {
               instance.save.subscribe((data) => {
+                // se añade ID de programa a 'localStorage' del programa del que se quiere ver el recibo
                 sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
                 this.mostrarFormularioYDescargar(data);
               })
@@ -263,7 +264,7 @@ export class TransferenciaComponent implements OnInit {
                   level = res['NivelFormacionId'].NivelFormacionPadreId.Id;
                 }
                 element.NivelPP = level;
-                element.tipo = "Reingreso";
+                element.tipo = "REINGRESO POSTGRADOS";
 
                 element.Descargar = {
                   icon: 'fa fa-download fa-2x',
