@@ -286,7 +286,12 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
           
           // Configurar descripción y valor
           const parametro_data = parametros.Data[0];
-          recibo.Descripcion = parametro_data.ParametroId.Nombre;
+          // Descripción queda sujeto a solo reingreso, no se considera generación de recibos de transferencia
+          if (this.data.info_recibo.tipo === null || this.data.info_recibo.tipo === undefined){
+            recibo.Descripcion = parametro_data.ParametroId.Nombre;
+          }else{
+            recibo.Descripcion = this.data.info_recibo.tipo;
+          }
           const valor = JSON.parse(parametro_data.Valor);
           recibo.ValorDerecho = valor.Costo;
           
