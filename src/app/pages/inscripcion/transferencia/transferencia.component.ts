@@ -191,7 +191,10 @@ export class TransferenciaComponent implements OnInit {
             renderComponent: LinkDownloadComponent,
             type: 'custom',
             onComponentInitFunction: (instance) => {
-              instance.save.subscribe((data) => this.mostrarFormularioYDescargar(data))
+              instance.save.subscribe((data) => {
+                sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
+                this.mostrarFormularioYDescargar(data);
+              })
             },
           }
         } : {},
@@ -248,11 +251,19 @@ export class TransferenciaComponent implements OnInit {
                 element.Recibo = NumRecibo[0];
                 element.ReciboInscripcion = NumRecibo;
                 element.ReciboAnio = auxRecibo.split('/', 2)[1];
-                console.log(res);
                 element.FechaGeneracion = momentTimezone.tz(element.FechaGeneracion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                 element.IdPrograma = element.Programa;
                 element.Programa = res.Nombre;
                 element.Periodo = this.periodo.Id;
+                element.ProgramaAcademicoId = res.Nombre;
+                let level = res['NivelFormacionId'].NivelFormacionPadreId;
+                if (level == null || level == undefined) {
+                  level = res['NivelFormacionId'].Id;
+                } else {
+                  level = res['NivelFormacionId'].NivelFormacionPadreId.Id;
+                }
+                element.NivelPP = level;
+                element.tipo = "Reingreso";
 
                 element.Descargar = {
                   icon: 'fa fa-download fa-2x',
@@ -322,6 +333,15 @@ export class TransferenciaComponent implements OnInit {
                 element.IdPrograma = element.Programa;
                 element.Programa = res.Nombre;
                 element.Periodo = this.periodo.Id;
+                element.ProgramaAcademicoId = res.Nombre;
+                let level = res['NivelFormacionId'].NivelFormacionPadreId;
+                if (level == null || level == undefined) {
+                  level = res['NivelFormacionId'].Id;
+                } else {
+                  level = res['NivelFormacionId'].NivelFormacionPadreId.Id;
+                }
+                element.NivelPP = level;
+                element.tipo = "REINGRESO POSTGRADOS";
 
                 element.Descargar = {
                   icon: 'fa fa-download fa-2x',
@@ -707,7 +727,6 @@ export class TransferenciaComponent implements OnInit {
       info_info_persona: this.info_info_persona,
       accion: 'descargar'
     };
-    console.log(assignConfig);
     const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
   }
 }
