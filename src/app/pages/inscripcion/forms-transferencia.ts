@@ -227,6 +227,17 @@ export const FORM_SOLICITUD_REINTEGRO = {
             deshabilitar: true,
         },
         {
+            index: 2,
+            etiqueta: 'input',
+            claseGrid: 'col-sm-6 col-xs-12',
+            nombre: 'TipoDocumento',
+            label_i18n: 'tipo_identificacion_reintegro',
+            placeholder_i18n: 'placeholder_tipo_identificacion_reintegro',
+            requerido: true,
+            tipo: 'text',
+            deshabilitar: true,
+        },
+        {
             etiqueta: 'input',
             claseGrid: 'col-sm-6 col-xs-12',
             nombre: 'NumeroIdentificacion',
@@ -256,7 +267,7 @@ export const FORM_SOLICITUD_REINTEGRO = {
             label_i18n: 'telefono1_reintegro',
             placeholder_i18n: 'placeholder_telefono1_reintegro',
             requerido: true,
-            tipo: 'number',
+            tipo: 'text'
         },
         {
             etiqueta: 'input',
@@ -265,7 +276,7 @@ export const FORM_SOLICITUD_REINTEGRO = {
             label_i18n: 'telefono2_reintegro',
             placeholder_i18n: 'placeholder_telefono2_reintegro',
             requerido: false,
-            tipo: 'number',
+            tipo: 'text'
         },
 
 
