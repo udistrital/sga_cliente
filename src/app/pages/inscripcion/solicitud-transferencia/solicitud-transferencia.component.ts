@@ -45,7 +45,6 @@ export class SolicitudTransferenciaComponent implements OnInit {
   id: any;
   estado: any;
   nombreEstudiante: any;
-  codigoEstudiante: any;
   documentoEstudiante: any;
   nombreCordinador: any;
   rolCordinador: any;
@@ -176,7 +175,10 @@ export class SolicitudTransferenciaComponent implements OnInit {
         // Datos del estudiante
         this.nombreEstudiante = inscripcion['Data']['DatosEstudiante']['Nombre'];
         this.documentoEstudiante = inscripcion['Data']['DatosEstudiante']['Identificacion'];
-        // this.codigoEstudiante = inscripcion['Data']['DatosInscripcion']['CodigoEstudiante'];
+        this.codigosEstudiante = [];
+        for (const codigo of inscripcion['Data']['CodigoEstudiante']) {
+          this.codigosEstudiante.push(codigo['Codigo']);
+        }
         this.solicitudId = inscripcion['Data']['SolicitudId'];
         this.programaAcademico = inscripcion['Data']['ProgramaDestino']['Nombre'];
 
@@ -188,25 +190,18 @@ export class SolicitudTransferenciaComponent implements OnInit {
           // Se traen los campos del formulario
           const nombre = this.getIndexForm('Nombres', this.tipo);
           const programa = this.getIndexForm('ProgramaAcademico', this.tipo);
-          // const tipoDocumento = this.getIndexFormTrans('TipoDocumento');
-          // const estudianteExterno = this.getIndexFormTrans('CodigoEstudianteExterno');
-          // const destino = this.getIndexFormTrans('ProgramaDestino');
-          // const universidad = this.getIndexFormTrans('UniversidadOrigen');
-          // const cancelo = this.getIndexFormTrans('Cancelo');
-          // const acuerdo = this.getIndexFormTrans('Acuerdo');
-          // const creditos = this.getIndexFormTrans('CantidadCreditos');
-          // const ultimo = this.getIndexFormTrans('UltimoSemestre');
+          const documento = this.getIndexForm('NumeroIdentificacion', this.tipo);
+          const codigos = this.getIndexForm('CodigoEstudiante', this.tipo);
 
           this.formReintegro.campos[nombre].valor = this.nombreEstudiante;
           this.formReintegro.campos[programa].valor = this.programaAcademico;
+          this.formReintegro.campos[documento].valor = this.documentoEstudiante;
+          this.formReintegro.campos[codigos].opciones = this.codigosEstudiante;
           this.loading = false;
-
 
         }
         else {
-          // Debug: Log form fields visibility
           this.logFormFields();
-
           this.formTransferencia.campos.forEach(campo => {
             delete campo.deshabilitar;
           });
@@ -323,7 +318,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
 
             this.nombreEstudiante = inscripcion['Data']['DatosEstudiante']['Nombre'];
             this.documentoEstudiante = inscripcion['Data']['DatosEstudiante']['Identificacion'];
-            this.codigoEstudiante = inscripcion['Data']['DatosInscripcion']['CodigoEstudiante'];
+            this.codigosEstudiante = inscripcion['Data']['DatosInscripcion']['CodigoEstudiante'];
             this.solicitudId = inscripcion['Data']['SolicitudId'];
 
             if ((inscripcion['Data']['Estado']['Nombre'] !== 'Requiere modificación' && this.process === 'my') || this.process === 'all') {
@@ -599,49 +594,52 @@ export class SolicitudTransferenciaComponent implements OnInit {
 
   async validarForm(event) {
     if (event.valid) {
-      let files: any;
-      const element = event.data.dataTransferencia.SoporteDocumento;
-      if (typeof element.file !== 'undefined' && element.file !== null) {
-        this.loading = true;
-        const file = {
-          file: await this.nuxeo.fileToBase64(element.file),
-          IdTipoDocumento: element.IdDocumento,
-          metadatos: {
-            NombreArchivo: element.nombre,
-            Tipo: 'Archivo',
-            Observaciones: element.nombre,
-            'dc:title': element.nombre,
-          },
-          descripcion: element.nombre,
-          nombre: element.nombre,
-          key: 'Documento',
+      let data: any;
+
+      if (this.tipo === 'Reingreso') {
+        // Para reintegro, usar los datos de dataReintegro
+        data = {
+          'InscripcionId': parseInt(this.id),
+          'Codigo_estudiante': event.data.dataReintegro.CodigoEstudiante,
+          'Motivo_retiro': event.data.dataReintegro.MotivoRetiro,
+          'Cantidad_creditos': 0, // Valor por defecto para reintegro
+          'Tipo': this.tipo,
+          'Proyecto_origen': null, // Para reintegro es el mismo programa
+          'Universidad': 'Universidad Distrital Francisco José de Caldas',
+          'Ultimo_semestre': 0, // Valor por defecto para reintegro
+          'Interna': true, // Siempre es interna para reintegro
+          'SolicitanteId': this.userService.getPersonaId(),
+          'FechaRadicacion': moment().format('YYYY-MM-DD hh:mm:ss'),
+          // Campos específicos de reintegro
+          'Nombres': event.data.dataReintegro.Nombres || event.data.dataReintegro.Nombre,
+          'NumeroIdentificacion': event.data.dataReintegro.NumeroIdentificacion,
+          'ProgramaAcademico': event.data.dataReintegro.ProgramaAcademico,
+          'Telefono1': event.data.dataReintegro.Telefono1,
+          'Telefono2': event.data.dataReintegro.Telefono2
         }
-        files = file;
-      } else if (this.idFileDocumento) {
-        files = this.idFileDocumento;
-      }
-
-      const data = {
-        'InscripcionId': parseInt(this.id),
-        'Codigo_estudiante': this.tipo == 'Reingreso' ? parseFloat(event.data.dataTransferencia.CodigoEstudiante.Codigo) :
-          this.tipo == 'Transferencia interna' ? event.data.dataTransferencia.CodigoEstudiante.Codigo :
+      } else {
+        // Para transferencia, usar los datos de dataTransferencia
+        data = {
+          'InscripcionId': parseInt(this.id),
+          'Codigo_estudiante': this.tipo == 'Transferencia interna' ? event.data.dataTransferencia.CodigoEstudiante.Codigo :
             event.data.dataTransferencia.CodigoEstudianteExterno,
-        'Motivo_retiro': event.data.dataTransferencia.MotivoCambio,
-        'Cantidad_creditos': event.data.dataTransferencia.CantidadCreditos,
-        'Tipo': this.tipo,
-        'Proyecto_origen': event.data.dataTransferencia.ProgramaOrigen ? event.data.dataTransferencia.ProgramaOrigen.Id : event.data.dataTransferencia.ProgramaOrigenInput,
-        'Universidad': event.data.dataTransferencia.UniversidadOrigen,
-        'Ultimo_semestre': event.data.dataTransferencia.UltimoSemestre,
-        'Interna': this.tipo == 'Transferencia interna',
-        'Acuerdo': event.data.dataTransferencia.Acuerdo == true,
-        'Cancelo': event.data.dataTransferencia.Cancelo == true,
-        'Documento': files,
-        'SolicitanteId': this.userService.getPersonaId(),
-        'FechaRadicacion': moment().format('YYYY-MM-DD hh:mm:ss'),
+          'Motivo_retiro': event.data.dataTransferencia.MotivoCambio,
+          'Cantidad_creditos': event.data.dataTransferencia.CantidadCreditos,
+          'Tipo': this.tipo,
+          'Proyecto_origen': event.data.dataTransferencia.ProgramaOrigen ? event.data.dataTransferencia.ProgramaOrigen.Id : event.data.dataTransferencia.ProgramaOrigenInput,
+          'Universidad': event.data.dataTransferencia.UniversidadOrigen,
+          'Ultimo_semestre': event.data.dataTransferencia.UltimoSemestre,
+          'Interna': this.tipo == 'Transferencia interna',
+          'Acuerdo': event.data.dataTransferencia.Acuerdo == true,
+          'Cancelo': event.data.dataTransferencia.Cancelo == true,
+          'SolicitanteId': this.userService.getPersonaId(),
+          'FechaRadicacion': moment().format('YYYY-MM-DD hh:mm:ss'),
+        }
       }
 
+      // Actualizacion-creacion de solicitud
       if (this.estado != 'Inscripción solicitada') {
-        this.sgaMidService.put('transferencia/' + this.solicitudId, data).subscribe(
+        this.sgaMidService.put('transferencia/' + this.id, data).subscribe(
           (res: any) => {
             if (res.Success == true) {
               this.loading = false;
@@ -675,6 +673,35 @@ export class SolicitudTransferenciaComponent implements OnInit {
         );
       }
 
+      // Manejo de archivos/documentos
+      if (this.tipo !== 'Reingreso') {
+        let files: any;
+        const element = event.data.dataTransferencia.SoporteDocumento;
+        if (typeof element.file !== 'undefined' && element.file !== null) {
+          this.loading = true;
+          const file = {
+            file: await this.nuxeo.fileToBase64(element.file),
+            IdTipoDocumento: element.IdDocumento,
+            metadatos: {
+              NombreArchivo: element.nombre,
+              Tipo: 'Archivo',
+              Observaciones: element.nombre,
+              'dc:title': element.nombre,
+            },
+            descripcion: element.nombre,
+            nombre: element.nombre,
+            key: 'Documento',
+          }
+          files = file;
+        } else if (this.idFileDocumento) {
+          files = this.idFileDocumento;
+        }
+
+        // Agregar documento a los datos si existe
+        if (files) {
+          data['Documento'] = files;
+        }
+      } 
     }
   }
 
