@@ -193,6 +193,7 @@ export class TransferenciaComponent implements OnInit {
             onComponentInitFunction: (instance) => {
               instance.save.subscribe((data) => {
                 // se añade ID de programa a 'localStorage' del programa del que se quiere ver el recibo
+                sessionStorage.removeItem('ProgramaAcademicoId');
                 sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
                 this.mostrarFormularioYDescargar(data);
               })
