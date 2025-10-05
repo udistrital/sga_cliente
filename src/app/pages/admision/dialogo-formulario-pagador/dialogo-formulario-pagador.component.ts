@@ -272,23 +272,21 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
             let evento_pago;
           
             if (tipo_reg == undefined || tipo_reg == null){
-              // suficiente para determinar que es inscripcion
+              // Suficiente para determinar que es inscripcion
               // en Incripción no se tiene ese parámetro
-              Object.keys(proyecto_item).filter(evento => evento.startsWith("Evento_"))
-              .forEach(evento => {
-                if (proyecto_item[evento].Pago === true && proyecto_item[evento].CodigoAbreviacion === "INSCR"){
-                  evento_pago = proyecto_item[evento];
-                } 
+              proyecto_item.Evento.forEach(evento =>{
+                if (evento.Pago === true && evento.CodigoAbreviacion === "INSCR"){
+                  evento_pago = evento;
+                }
               });
               recibo.Fecha_pago = moment(evento_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
               break;
             } else {
               // si hay un dato solo puede ser 11 - Id REINGRESO
-              Object.keys(proyecto_item).filter(evento => evento.startsWith("Evento_"))
-              .forEach(evento => {
-                if (proyecto_item[evento].Pago === true && proyecto_item[evento].CodigoAbreviacion === "REIN"){
-                  evento_pago = proyecto_item[evento];
-                } 
+              proyecto_item.Evento.forEach(evento =>{
+                if (evento.Pago === true && evento.CodigoAbreviacion === "REIN"){
+                  evento_pago = evento;
+                }
               });
               recibo.Fecha_pago = moment(evento_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
               break;

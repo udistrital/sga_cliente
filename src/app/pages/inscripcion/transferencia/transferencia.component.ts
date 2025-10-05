@@ -645,13 +645,11 @@ export class TransferenciaComponent implements OnInit {
               let evento_reingreso_pago;
               // if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id && proyecto.Evento != null) {
               if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id) {
-                Object.keys(proyecto).filter(evento => evento.startsWith("Evento_"))
-                .forEach(evento => {
-                  if (proyecto[evento].Pago === true && proyecto[evento].CodigoAbreviacion === "REIN"){
-                    evento_reingreso_pago = proyecto[evento];
-                  } 
+                proyecto.Evento.forEach(evento =>{
+                  if (evento.Pago === true && evento.CodigoAbreviacion === "REIN"){
+                    evento_reingreso_pago = evento;
+                  }
                 });
-                // inscripcion.FechaPago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 inscripcion.FechaPago = moment(evento_reingreso_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 this.sgaMidService.post('inscripciones/generar_inscripcion', inscripcion).subscribe(
                   (response: any) => {
