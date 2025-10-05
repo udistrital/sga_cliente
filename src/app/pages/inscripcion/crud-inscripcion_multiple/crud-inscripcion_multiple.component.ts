@@ -535,13 +535,11 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               // if (proyecto.ProyectoId === this.selectedProject && proyecto.Evento != null) {
               if (proyecto.ProyectoId === this.selectedProject) {
                 // halla el evento inscripción que indica fechas de pago
-                Object.keys(proyecto).filter(evento => evento.startsWith("Evento_"))
-                .forEach(evento => {
-                  if (proyecto[evento].Pago === true && proyecto[evento].CodigoAbreviacion === "INSCR"){
-                    evento_inscripcion_pago = proyecto[evento];
-                  } 
+                proyecto.Evento.forEach(evento =>{
+                  if (evento.Pago === true && evento.CodigoAbreviacion === "INSCR"){
+                    evento_inscripcion_pago = evento;
+                  }
                 });
-                // inscripcion.FechaPago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 inscripcion.FechaPago = moment(evento_inscripcion_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 this.sgaMidService.post('inscripciones/generar_inscripcion', inscripcion).subscribe(
                   (response: any) => {
