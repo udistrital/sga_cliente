@@ -48,6 +48,7 @@ export class TransferenciaComponent implements OnInit {
   parametros_pago: any;
   periodo: Periodo;
   periodos = [];
+  recibos_pendientes: { [key: string]: number } ;
 
   dataTransferencia: TransferenciaInterna = {
     Periodo: null,
@@ -107,6 +108,7 @@ export class TransferenciaComponent implements OnInit {
     };
     this.loadInfoPersona();
 
+    this.recibos_pendientes = this.recibos_pendientes || {};
     this.dataSource.load([]);
     this.sub = this._Activatedroute.paramMap.subscribe(async (params: any) => {
       const { process } = params.params;
@@ -267,6 +269,12 @@ export class TransferenciaComponent implements OnInit {
                 element.NivelPP = level;
                 element.tipo = "REINGRESO POSTGRADOS";
 
+                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null){
+                  this.recibos_pendientes[String(element.IdPrograma)] = 1;
+                } else {
+                  this.recibos_pendientes[String(element.IdPrograma)]++;
+                }
+
                 element.Descargar = {
                   icon: 'fa fa-download fa-2x',
                   label: 'Descargar',
@@ -344,6 +352,12 @@ export class TransferenciaComponent implements OnInit {
                 }
                 element.NivelPP = level;
                 element.tipo = "REINGRESO POSTGRADOS";
+
+                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null){
+                  this.recibos_pendientes[String(element.IdPrograma)] = 1;
+                } else {
+                  this.recibos_pendientes[String(element.IdPrograma)]++;
+                }
 
                 element.Descargar = {
                   icon: 'fa fa-download fa-2x',
@@ -583,6 +597,10 @@ export class TransferenciaComponent implements OnInit {
   }
 
   generarRecibo() {
+    if (this.recibos_pendientes[String(this.dataTransferencia.ProyectoCurricular.Id)] > 1){
+      this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
+      return
+    }
     this.popUpManager.showConfirmAlert(this.translate.instant('inscripcion.seguro_inscribirse')).then(
       async ok => {
         if (ok.value) {
