@@ -627,6 +627,7 @@ export class TransferenciaComponent implements OnInit {
         PersonaId: Number(this.uid),
         PeriodoId: this.dataTransferencia.Periodo.Id,
         Nivel: this.dataTransferencia.TipoInscripcion.NivelId,
+        ProgramaAcademicoId: this.dataTransferencia.ProyectoCurricular.Id,
         ProgramaAcademicoCodigo: this.dataTransferencia.ProyectoCurricular.Id,
         TipoInscripcionId: this.dataTransferencia.TipoInscripcion.Id,
         Year: this.dataTransferencia.Periodo.Year,
@@ -641,9 +642,17 @@ export class TransferenciaComponent implements OnInit {
           if (response !== null && response.length !== 0) {
             this.inscripcionProjects = response;
             this.inscripcionProjects.forEach(proyecto => {
-              if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id && proyecto.Evento != null) {
-                inscripcion.FechaPago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
-
+              let evento_reingreso_pago;
+              // if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id && proyecto.Evento != null) {
+              if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id) {
+                Object.keys(proyecto).filter(evento => evento.startsWith("Evento_"))
+                .forEach(evento => {
+                  if (proyecto[evento].Pago === true && proyecto[evento].CodigoAbreviacion === "REIN"){
+                    evento_reingreso_pago = proyecto[evento];
+                  } 
+                });
+                // inscripcion.FechaPago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                inscripcion.FechaPago = moment(evento_reingreso_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 this.sgaMidService.post('inscripciones/generar_inscripcion', inscripcion).subscribe(
                   (response: any) => {
                     if (response.Code === '200') {
