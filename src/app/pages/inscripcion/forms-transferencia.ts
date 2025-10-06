@@ -227,17 +227,6 @@ export const FORM_SOLICITUD_REINTEGRO = {
             deshabilitar: true,
         },
         {
-            index: 2,
-            etiqueta: 'input',
-            claseGrid: 'col-sm-6 col-xs-12',
-            nombre: 'TipoDocumento',
-            label_i18n: 'tipo_identificacion_reintegro',
-            placeholder_i18n: 'placeholder_tipo_identificacion_reintegro',
-            requerido: true,
-            tipo: 'text',
-            deshabilitar: true,
-        },
-        {
             etiqueta: 'input',
             claseGrid: 'col-sm-6 col-xs-12',
             nombre: 'NumeroIdentificacion',
