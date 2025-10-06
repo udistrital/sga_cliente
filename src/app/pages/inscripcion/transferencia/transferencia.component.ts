@@ -597,7 +597,7 @@ export class TransferenciaComponent implements OnInit {
   }
 
   generarRecibo() {
-    if (this.recibos_pendientes[String(this.dataTransferencia.ProyectoCurricular.Id)] > 1){
+    if (this.recibos_pendientes[String(this.dataTransferencia.ProyectoCurricular.Id)] >= 1){
       this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
       return
     }
