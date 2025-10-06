@@ -267,9 +267,31 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
         
         // Buscar el proyecto y establecer la fecha
         for (const proyecto_item of calendario) {
-          if (proyecto_item.ProyectoId === proyecto && proyecto_item.Evento) {
-            recibo.Fecha_pago = moment(proyecto_item.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
-            break;
+          if (proyecto_item.ProyectoId === proyecto) {
+            let tipo_reg = this.data.info_recibo.IdTipoInscripcion;
+            let evento_pago;
+          
+            if (tipo_reg == undefined || tipo_reg == null){
+              // Suficiente para determinar que es inscripcion
+              // en Incripción no se tiene ese parámetro
+              proyecto_item.Evento.forEach(evento =>{
+                if (evento.Pago === true && evento.CodigoAbreviacion === "INSCR"){
+                  evento_pago = evento;
+                }
+              });
+              recibo.Fecha_pago = moment(evento_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
+              break;
+            } else {
+              // si hay un dato solo puede ser 11 - Id REINGRESO
+              proyecto_item.Evento.forEach(evento =>{
+                if (evento.Pago === true && evento.CodigoAbreviacion === "REIN"){
+                  evento_pago = evento;
+                }
+              });
+              recibo.Fecha_pago = moment(evento_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
+              break;
+            }
+            
           }
         }
         

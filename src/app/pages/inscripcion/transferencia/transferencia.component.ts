@@ -48,6 +48,7 @@ export class TransferenciaComponent implements OnInit {
   parametros_pago: any;
   periodo: Periodo;
   periodos = [];
+  recibos_pendientes: { [key: string]: number } ;
 
   dataTransferencia: TransferenciaInterna = {
     Periodo: null,
@@ -107,6 +108,7 @@ export class TransferenciaComponent implements OnInit {
     };
     this.loadInfoPersona();
 
+    this.recibos_pendientes = this.recibos_pendientes || {};
     this.dataSource.load([]);
     this.sub = this._Activatedroute.paramMap.subscribe(async (params: any) => {
       const { process } = params.params;
@@ -193,6 +195,7 @@ export class TransferenciaComponent implements OnInit {
             onComponentInitFunction: (instance) => {
               instance.save.subscribe((data) => {
                 // se añade ID de programa a 'localStorage' del programa del que se quiere ver el recibo
+                sessionStorage.removeItem('ProgramaAcademicoId');
                 sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
                 this.mostrarFormularioYDescargar(data);
               })
@@ -265,6 +268,12 @@ export class TransferenciaComponent implements OnInit {
                 }
                 element.NivelPP = level;
                 element.tipo = "REINGRESO POSTGRADOS";
+
+                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null){
+                  this.recibos_pendientes[String(element.IdPrograma)] = 1;
+                } else {
+                  this.recibos_pendientes[String(element.IdPrograma)]++;
+                }
 
                 element.Descargar = {
                   icon: 'fa fa-download fa-2x',
@@ -343,6 +352,12 @@ export class TransferenciaComponent implements OnInit {
                 }
                 element.NivelPP = level;
                 element.tipo = "REINGRESO POSTGRADOS";
+
+                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null){
+                  this.recibos_pendientes[String(element.IdPrograma)] = 1;
+                } else {
+                  this.recibos_pendientes[String(element.IdPrograma)]++;
+                }
 
                 element.Descargar = {
                   icon: 'fa fa-download fa-2x',
@@ -582,6 +597,10 @@ export class TransferenciaComponent implements OnInit {
   }
 
   generarRecibo() {
+    if (this.recibos_pendientes[String(this.dataTransferencia.ProyectoCurricular.Id)] >= 1){
+      this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
+      return
+    }
     this.popUpManager.showConfirmAlert(this.translate.instant('inscripcion.seguro_inscribirse')).then(
       async ok => {
         if (ok.value) {
@@ -626,6 +645,7 @@ export class TransferenciaComponent implements OnInit {
         PersonaId: Number(this.uid),
         PeriodoId: this.dataTransferencia.Periodo.Id,
         Nivel: this.dataTransferencia.TipoInscripcion.NivelId,
+        ProgramaAcademicoId: this.dataTransferencia.ProyectoCurricular.Id,
         ProgramaAcademicoCodigo: this.dataTransferencia.ProyectoCurricular.Id,
         TipoInscripcionId: this.dataTransferencia.TipoInscripcion.Id,
         Year: this.dataTransferencia.Periodo.Year,
@@ -640,9 +660,15 @@ export class TransferenciaComponent implements OnInit {
           if (response !== null && response.length !== 0) {
             this.inscripcionProjects = response;
             this.inscripcionProjects.forEach(proyecto => {
-              if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id && proyecto.Evento != null) {
-                inscripcion.FechaPago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
-
+              let evento_reingreso_pago;
+              // if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id && proyecto.Evento != null) {
+              if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id) {
+                proyecto.Evento.forEach(evento =>{
+                  if (evento.Pago === true && evento.CodigoAbreviacion === "REIN"){
+                    evento_reingreso_pago = evento;
+                  }
+                });
+                inscripcion.FechaPago = moment(evento_reingreso_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 this.sgaMidService.post('inscripciones/generar_inscripcion', inscripcion).subscribe(
                   (response: any) => {
                     if (response.Code === '200') {
