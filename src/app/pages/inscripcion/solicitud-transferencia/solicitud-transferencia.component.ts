@@ -171,6 +171,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
         this.nivelNombre = inscripcion['Data']['Nivel']['Nombre'];
         this.nivel = inscripcion['Data']['Nivel']['Id'];
         this.tipo = inscripcion['Data']['TipoInscripcion']['Nombre'];
+        this.estado = inscripcion['Data']['Estado']['CodigoAbreviacion'];
 
         // Datos del estudiante
         this.nombreEstudiante = inscripcion['Data']['DatosEstudiante']['Nombre'];
@@ -594,25 +595,24 @@ export class SolicitudTransferenciaComponent implements OnInit {
 
   async validarForm(event) {
     if (event.valid) {
-      let data: any;
-
+      let data: any;      
       if (this.tipo === 'Reingreso') {
         // Para reintegro, usar los datos de dataReintegro
         data = {
           'InscripcionId': parseInt(this.id),
-          'Codigo_estudiante': event.data.dataReintegro.CodigoEstudiante,
-          'Motivo_retiro': event.data.dataReintegro.MotivoRetiro,
-          'Cantidad_creditos': 0, // Valor por defecto para reintegro
+          'CodigoEstudiante': event.data.dataReintegro.CodigoEstudiante,
+          'MotivoRetiro': event.data.dataReintegro.MotivoRetiro,
+          'CantidadCreditos': 0, // Valor por defecto para reintegro
           'Tipo': this.tipo,
-          'Proyecto_origen': null, // Para reintegro es el mismo programa
+          'ProyectoOrigen': null, // Para reintegro es el mismo programa
           'Universidad': 'Universidad Distrital Francisco José de Caldas',
-          'Ultimo_semestre': 0, // Valor por defecto para reintegro
+          'UltimoSemestre': 0, // Valor por defecto para reintegro
           'Interna': true, // Siempre es interna para reintegro
           'SolicitanteId': this.userService.getPersonaId(),
           'FechaRadicacion': moment().format('YYYY-MM-DD hh:mm:ss'),
           // Campos específicos de reintegro
           'Nombres': event.data.dataReintegro.Nombres || event.data.dataReintegro.Nombre,
-          'NumeroIdentificacion': event.data.dataReintegro.NumeroIdentificacion,
+          // 'NumeroIdentificacion': event.data.dataReintegro.NumeroIdentificacion,
           'ProgramaAcademico': event.data.dataReintegro.ProgramaAcademico,
           'Telefono1': event.data.dataReintegro.Telefono1,
           'Telefono2': event.data.dataReintegro.Telefono2
@@ -638,7 +638,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
       }
 
       // Actualizacion-creacion de solicitud
-      if (this.estado != 'Inscripción solicitada') {
+      if (this.estado != 'INSCSOL') {
         this.sgaMidService.put('transferencia/' + this.id, data).subscribe(
           (res: any) => {
             if (res.Success == true) {
@@ -701,7 +701,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
         if (files) {
           data['Documento'] = files;
         }
-      } 
+      }
     }
   }
 
