@@ -186,8 +186,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
         if (this.tipo === 'Reingreso') {
           this.logFormFields();
 
-          this.formReintegro.btn = 'Guardar';
-
+          this.formReintegro.btn = this.translate.instant('GLOBAL.enviar');
           // Se traen los campos del formulario
           const nombre = this.getIndexForm('Nombres', this.tipo);
           const programa = this.getIndexForm('ProgramaAcademico', this.tipo);
@@ -665,12 +664,16 @@ export class SolicitudTransferenciaComponent implements OnInit {
                   icon: 'info',
                   text: res.Body && res.Body.length ? res.Body.join('\n') : this.translate.instant('inscripcion.error_solicitud'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                }).then(() => {
+                  this.goback();
                 });
               } else {
                 Swal.fire({
                   icon: 'error',
                   text: res.Body && res.Body.length ? res.Body.join('\n') : this.translate.instant('inscripcion.error_solicitud'),
                   confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                }).then(() => {
+                  this.goback();
                 });
               }
             }
@@ -680,6 +683,8 @@ export class SolicitudTransferenciaComponent implements OnInit {
                 icon: 'success',
                 text: this.translate.instant('inscripcion.guardar'),
                 confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              }).then(() => {
+                this.goback();
               });
             }
           }, error => {
