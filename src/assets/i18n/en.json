@@ -1328,6 +1328,7 @@
         "nivel": "Level",
         "tipo": "Type of registration",
         "estado": "State",
+        "estado_solicitud": "Application status",
         "nueva": "Make a new pre-registration",
         "listado": "Pre-registration list",
         "listado_solicitudes": "List of applications",
