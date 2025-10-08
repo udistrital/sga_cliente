@@ -48,7 +48,7 @@ export class TransferenciaComponent implements OnInit {
   parametros_pago: any;
   periodo: Periodo;
   periodos = [];
-  recibos_pendientes: { [key: string]: number } ;
+  recibos_pendientes: { [key: string]: number };
 
   dataTransferencia: TransferenciaInterna = {
     Periodo: null,
@@ -223,7 +223,7 @@ export class TransferenciaComponent implements OnInit {
                 sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
                 sessionStorage.setItem('NivelId', data.Nivel)
 
-                this.router.navigate([`/pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
+                this.abrirDialogoSolicitudTransferencia(idInscripcion, process);
               }
             })
           },
@@ -755,5 +755,33 @@ export class TransferenciaComponent implements OnInit {
       accion: 'descargar'
     };
     const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
+  }
+
+  abrirDialogoSolicitudTransferencia(idInscripcion: string, process: string) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '95vw';
+    assignConfig.maxWidth = '95vw';
+    assignConfig.height = '90vh';
+    assignConfig.maxHeight = '90vh';
+    assignConfig.autoFocus = false;
+    assignConfig.data = {
+      idInscripcion: idInscripcion,
+      process: process
+    };
+
+    import('../solicitud-transferencia/solicitud-transferencia.component').then(m => {
+      const dialogo = this.dialog.open(m.SolicitudTransferenciaComponent, assignConfig);
+
+      dialogo.afterClosed().subscribe(result => {
+        if (this.process === 'my') {
+          this.loadDataTercero(this.process);
+        } else {
+          this.loadDataAll(this.process);
+        }
+      });
+    }).catch(error => {
+      console.error('Error loading solicitud-transferencia component:', error);
+      this.router.navigate([`/pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`]);
+    });
   }
 }
