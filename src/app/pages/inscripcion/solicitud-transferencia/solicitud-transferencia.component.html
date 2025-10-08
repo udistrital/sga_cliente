@@ -29,13 +29,9 @@
                 <br />
             </fieldset>
         </div>
-      
-
         <!-- Formulario de Reintegro -->
         <ngx-dinamicform *ngIf="tipo === 'Reingreso'" [normalform]="formReintegro" [modeloData]="dataReintegro" (result)="validarForm($event)">
             <div *ngIf="solicitudCreada && mostrarDocumento" class="files-container">
-                <!-- <ngx-download-file-nuxeo (loading)="changeLoading($event)" [idDoc]="file.id" [label]="file.label">
-                </ngx-download-file-nuxeo> -->
             </div>
         </ngx-dinamicform>
 
@@ -54,11 +50,6 @@
             <button mat-button type="button" (click)="goback()">
                 {{ 'GLOBAL.cancelar' | translate }}
             </button>
-            <!-- <button [disabled]="terminadaInscripcion" mat-button type="button" (click)="send()">
-                {{ 'GLOBAL.enviar' | translate }}
-            </button> -->
         </div>
     </nb-card-footer>
 </nb-card>
-
-

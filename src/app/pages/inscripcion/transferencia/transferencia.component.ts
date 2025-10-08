@@ -184,6 +184,12 @@ export class TransferenciaComponent implements OnInit {
           editable: false,
           filter: false,
         },
+        EstadoSolicitud: {
+          title: this.translate.instant('inscripcion.estado_solicitud'),
+          width: '15%',
+          editable: false,
+          filter: false,
+        },
         ...process === 'my' ? {
           Descargar: {
             title: this.translate.instant('inscripcion.descargar'),
@@ -269,20 +275,12 @@ export class TransferenciaComponent implements OnInit {
                 element.NivelPP = level;
                 element.tipo = "REINGRESO POSTGRADOS";
 
-                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null){
+                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null) {
                   this.recibos_pendientes[String(element.IdPrograma)] = 1;
                 } else {
                   this.recibos_pendientes[String(element.IdPrograma)]++;
                 }
 
-                element.Descargar = {
-                  icon: 'fa fa-download fa-2x',
-                  label: 'Descargar',
-                  class: 'btn btn-primary',
-                  documento: element.Respuesta
-                }
-
-                element.Descargar.disabled = true;
 
                 element.Opcion = {
                   icon: 'fa fa-search fa-2x',
@@ -344,6 +342,8 @@ export class TransferenciaComponent implements OnInit {
                 element.Programa = res.Nombre;
                 element.Periodo = this.periodo.Id;
                 element.ProgramaAcademicoId = res.Nombre;
+                const estadoSolicitudCodigo = element.EstadoSolicitud.CodigoAbreviacion;
+                element.EstadoSolicitud = element.EstadoSolicitud.Nombre;
                 let level = res['NivelFormacionId'].NivelFormacionPadreId;
                 if (level == null || level == undefined) {
                   level = res['NivelFormacionId'].Id;
@@ -353,17 +353,10 @@ export class TransferenciaComponent implements OnInit {
                 element.NivelPP = level;
                 element.tipo = "REINGRESO POSTGRADOS";
 
-                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null){
+                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null) {
                   this.recibos_pendientes[String(element.IdPrograma)] = 1;
                 } else {
                   this.recibos_pendientes[String(element.IdPrograma)]++;
-                }
-
-                element.Descargar = {
-                  icon: 'fa fa-download fa-2x',
-                  label: 'Descargar',
-                  class: 'btn btn-primary',
-                  documento: ''
                 }
 
                 if (element.Estado === 'Pendiente pago') {
@@ -378,24 +371,10 @@ export class TransferenciaComponent implements OnInit {
                     label: 'Inscribirme',
                     class: "btn btn-primary"
                   }
-
                 }
 
-                if (element.Estado === 'Solicitado') {
+                if (estadoSolicitudCodigo === 'INSCREAL') {
                   element.Opcion.disabled = true;
-                }
-
-                if (element.SolicitudFinalizada) {
-                  element.Descargar = {
-                    icon: 'fa fa-download fa-2x',
-                    label: 'Descargar',
-                    class: 'btn btn-primary',
-                    documento: element.VerRespuesta.DocRespuesta
-                  }
-                  delete element.Descargar.disabled;
-                  element.Opcion.disabled = true;
-                } else {
-                  element.Descargar.disabled = true;
                 }
 
                 dataInfo.push(element);
@@ -597,7 +576,7 @@ export class TransferenciaComponent implements OnInit {
   }
 
   generarRecibo() {
-    if (this.recibos_pendientes[String(this.dataTransferencia.ProyectoCurricular.Id)] >= 1){
+    if (this.recibos_pendientes[String(this.dataTransferencia.ProyectoCurricular.Id)] >= 1) {
       this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
       return
     }
