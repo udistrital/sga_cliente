@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { FORM_SOLICITUD_TRANSFERENCIA, FORM_RESPUESTA_SOLICITUD, FORM_SOLICITUD_REINTEGRO } from '../forms-transferencia';
@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { elementAt } from 'rxjs/operators';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'solicitud-transferencia',
@@ -50,6 +51,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
   rolCordinador: any;
   comentario: string;
   programaAcademico: string;
+  isDialog: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -60,11 +62,15 @@ export class SolicitudTransferenciaComponent implements OnInit {
     private popUpManager: PopUpManager,
     private userService: UserService,
     private router: Router,
-    private _Activatedroute: ActivatedRoute
+    private _Activatedroute: ActivatedRoute,
+    @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
+    @Optional() private dialogRef: MatDialogRef<SolicitudTransferenciaComponent>
   ) {
     this.formTransferencia = FORM_SOLICITUD_TRANSFERENCIA;
     this.formReintegro = FORM_SOLICITUD_REINTEGRO;
     this.formRespuesta = FORM_RESPUESTA_SOLICITUD;
+    this.isDialog = !!this.dialogData;
+    
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.utilidades.translateFields(this.formTransferencia, 'inscripcion.', 'inscripcion.placeholder_');
       this.utilidades.translateFields(this.formReintegro, 'inscripcion.', 'inscripcion.placeholder_');
@@ -76,24 +82,37 @@ export class SolicitudTransferenciaComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.sub = this._Activatedroute.paramMap.subscribe(async (params: any) => {
-      const { id, process } = params.params;
-      this.process = atob(process);
-      this.id = id
-
+    if (this.isDialog) {
+      // Handle dialog mode - get data from dialogData
+      this.id = this.dialogData.idInscripcion;
+      this.process = this.dialogData.process;
+      
       this.loading = true;
-      await this.loadSolicitud();
-      await this.loadInfoPersona();
-
+      this.loadSolicitud();
+      this.loadInfoPersona();
 
       if (this.process === 'all') {
         console.log("Entra process all")
-        await this.loadInfoPersona();
-        await this.loadEstados();
+        this.loadInfoPersona();
+        this.loadEstados();
       }
+    } else {
+      this.sub = this._Activatedroute.paramMap.subscribe(async (params: any) => {
+        const { id, process } = params.params;
+        this.process = atob(process);
+        this.id = id
 
-    })
+        this.loading = true;
+        await this.loadSolicitud();
+        await this.loadInfoPersona();
+
+        if (this.process === 'all') {
+          console.log("Entra process all")
+          await this.loadInfoPersona();
+          await this.loadEstados();
+        }
+      })
+    }
   }
 
   ocultarCampo(campo, ocultar) {
@@ -522,7 +541,11 @@ export class SolicitudTransferenciaComponent implements OnInit {
   }
 
   goback() {
-    this.router.navigate([`pages/inscripcion/transferencia/${btoa(this.process)}`])
+    if (this.isDialog) {
+      this.dialogRef.close();
+    } else {
+      this.router.navigate([`pages/inscripcion/transferencia/${btoa(this.process)}`]);
+    }
   }
 
   generarMatricula() {
