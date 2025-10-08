@@ -1,7 +1,12 @@
 <nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
-    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" *ngIf="process === 'my'">
+    nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" *ngIf="process === 'my' || process === 'all' || isDialog">>
     <nb-card-header>
-        {{ 'inscripcion.solicitud_transferencia' | translate }}
+        <div class="d-flex justify-content-between align-items-center">
+            <span>{{ 'inscripcion.solicitud_transferencia' | translate }}</span>
+            <button *ngIf="isDialog" mat-icon-button (click)="goback()" class="close-dialog-btn">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
     </nb-card-header>
     <nb-card-body>
         <div style="padding: 1rem;">
