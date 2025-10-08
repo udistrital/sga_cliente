@@ -15,7 +15,8 @@ export class AuthGuard implements CanActivate {
     private translate: TranslateService,
   ) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {    
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+
     if (!!this.menu.getRoute(state.url)) {
       return true;
     } else if (route.params && route.params.id) {
