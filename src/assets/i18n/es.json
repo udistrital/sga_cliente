@@ -1362,6 +1362,7 @@
         "nivel": "Nivel",
         "tipo": "Tipo de inscripción",
         "estado": "Estado",
+        "estado_solicitud": "Estado de la solicitud",
         "nueva": "Realizar nueva preinscripción",
         "listado": "Listado de preinscripciones",
         "listado_solicitudes": "Listado de solicitudes",
