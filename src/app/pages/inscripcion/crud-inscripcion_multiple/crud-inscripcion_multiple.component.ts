@@ -332,6 +332,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   element.ReciboAnio = auxRecibo.split('/', 2)[1];
                   element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                   element.ProgramaAcademicoId = res[0].Nombre;
+                  element.IdTipoInscripcion = parseInt(sessionStorage.getItem("IdTipoInscripcion"), 10);
+                  element.Periodo = this.periodo.Id;
                   let level = res[0].NivelFormacionId.NivelFormacionPadreId;
                   if (level == null || level == undefined) {
                     level = res[0].NivelFormacionId.Id;
