@@ -23,6 +23,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoDocumentosTransferenciasComponent } from '../dialogo-documentos-transferencias/dialogo-documentos-transferencias.component';
 import { LinkDownloadComponent } from '../../../@theme/components/link-download/link-download.component';
 import { DialogoFormularioPagadorComponent } from '../../admision/dialogo-formulario-pagador/dialogo-formulario-pagador.component';
+import { ButtonPaymentComponent } from '../../../@theme/components/button-payment/button-payment.component';
+import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 
 @Component({
   selector: 'transferencia',
@@ -48,7 +50,7 @@ export class TransferenciaComponent implements OnInit {
   parametros_pago: any;
   periodo: Periodo;
   periodos = [];
-  recibos_pendientes: { [key: string]: number };
+  recibos_pendientes: { [key: string]: number } ;
 
   dataTransferencia: TransferenciaInterna = {
     Periodo: null,
@@ -184,12 +186,6 @@ export class TransferenciaComponent implements OnInit {
           editable: false,
           filter: false,
         },
-        EstadoSolicitud: {
-          title: this.translate.instant('inscripcion.estado_solicitud'),
-          width: '15%',
-          editable: false,
-          filter: false,
-        },
         ...process === 'my' ? {
           Descargar: {
             title: this.translate.instant('inscripcion.descargar'),
@@ -213,12 +209,14 @@ export class TransferenciaComponent implements OnInit {
           width: '5%',
           editable: false,
           filter: false,
-          renderComponent: CustomizeButtonComponent,
+          // renderComponent: CustomizeButtonComponent,
+          renderComponent: ButtonPaymentComponent,
           type: 'custom',
           onComponentInitFunction: (instance) => {
             instance.save.subscribe((data) => {
-              if (data.Estado == 'Pendiente pago') {
-                this.abrirPago(data)
+              if (data.estado === false || data.estado === 'false') {
+                // this.abrirPago(data)
+                this.mostrarFormularioYPagar(data.data);
               } else {
                 const idInscripcion = data['Id'];
 
@@ -229,7 +227,7 @@ export class TransferenciaComponent implements OnInit {
                 sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
                 sessionStorage.setItem('NivelId', data.Nivel)
 
-                this.abrirDialogoSolicitudTransferencia(idInscripcion, process);
+                this.router.navigate([`/pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
               }
             })
           },
@@ -275,12 +273,20 @@ export class TransferenciaComponent implements OnInit {
                 element.NivelPP = level;
                 element.tipo = "REINGRESO POSTGRADOS";
 
-                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null) {
+                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null){
                   this.recibos_pendientes[String(element.IdPrograma)] = 1;
                 } else {
                   this.recibos_pendientes[String(element.IdPrograma)]++;
                 }
 
+                element.Descargar = {
+                  icon: 'fa fa-download fa-2x',
+                  label: 'Descargar',
+                  class: 'btn btn-primary',
+                  documento: element.Respuesta
+                }
+
+                element.Descargar.disabled = true;
 
                 element.Opcion = {
                   icon: 'fa fa-search fa-2x',
@@ -342,8 +348,6 @@ export class TransferenciaComponent implements OnInit {
                 element.Programa = res.Nombre;
                 element.Periodo = this.periodo.Id;
                 element.ProgramaAcademicoId = res.Nombre;
-                const estadoSolicitudCodigo = element.EstadoSolicitud.CodigoAbreviacion;
-                element.EstadoSolicitud = element.EstadoSolicitud.Nombre;
                 let level = res['NivelFormacionId'].NivelFormacionPadreId;
                 if (level == null || level == undefined) {
                   level = res['NivelFormacionId'].Id;
@@ -353,10 +357,17 @@ export class TransferenciaComponent implements OnInit {
                 element.NivelPP = level;
                 element.tipo = "REINGRESO POSTGRADOS";
 
-                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null) {
+                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null){
                   this.recibos_pendientes[String(element.IdPrograma)] = 1;
                 } else {
                   this.recibos_pendientes[String(element.IdPrograma)]++;
+                }
+
+                element.Descargar = {
+                  icon: 'fa fa-download fa-2x',
+                  label: 'Descargar',
+                  class: 'btn btn-primary',
+                  documento: ''
                 }
 
                 if (element.Estado === 'Pendiente pago') {
@@ -371,10 +382,24 @@ export class TransferenciaComponent implements OnInit {
                     label: 'Inscribirme',
                     class: "btn btn-primary"
                   }
+
                 }
 
-                if (estadoSolicitudCodigo === 'INSCREAL') {
+                if (element.Estado === 'Solicitado') {
                   element.Opcion.disabled = true;
+                }
+
+                if (element.SolicitudFinalizada) {
+                  element.Descargar = {
+                    icon: 'fa fa-download fa-2x',
+                    label: 'Descargar',
+                    class: 'btn btn-primary',
+                    documento: element.VerRespuesta.DocRespuesta
+                  }
+                  delete element.Descargar.disabled;
+                  element.Opcion.disabled = true;
+                } else {
+                  element.Descargar.disabled = true;
                 }
 
                 dataInfo.push(element);
@@ -576,7 +601,7 @@ export class TransferenciaComponent implements OnInit {
   }
 
   generarRecibo() {
-    if (this.recibos_pendientes[String(this.dataTransferencia.ProyectoCurricular.Id)] >= 1) {
+    if (this.recibos_pendientes[String(this.dataTransferencia.ProyectoCurricular.Id)] >= 1){
       this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
       return
     }
@@ -736,31 +761,24 @@ export class TransferenciaComponent implements OnInit {
     const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
   }
 
-  abrirDialogoSolicitudTransferencia(idInscripcion: string, process: string) {
+  mostrarFormularioYPagar(data) {
     const assignConfig = new MatDialogConfig();
-    assignConfig.width = '95vw';
-    assignConfig.maxWidth = '95vw';
-    assignConfig.height = '90vh';
-    assignConfig.maxHeight = '90vh';
+    assignConfig.width = '1300px';
+    assignConfig.maxHeight = '80vh';
     assignConfig.autoFocus = false;
-    assignConfig.data = {
-      idInscripcion: idInscripcion,
-      process: process
+    assignConfig.data = { 
+      info_recibo: data,
+      info_info_persona: this.info_info_persona,
+      accion: 'pagar'
     };
-
-    import('../solicitud-transferencia/solicitud-transferencia.component').then(m => {
-      const dialogo = this.dialog.open(m.SolicitudTransferenciaComponent, assignConfig);
-
-      dialogo.afterClosed().subscribe(result => {
-        if (this.process === 'my') {
-          this.loadDataTercero(this.process);
-        } else {
-          this.loadDataAll(this.process);
-        }
-      });
-    }).catch(error => {
-      console.error('Error loading solicitud-transferencia component:', error);
-      this.router.navigate([`/pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`]);
+    
+    const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
+    
+    dialogo.afterClosed().subscribe(result => {
+      if (result && result.continuar) {
+        this.abrirPago(data);
+      }
     });
   }
+
 }
