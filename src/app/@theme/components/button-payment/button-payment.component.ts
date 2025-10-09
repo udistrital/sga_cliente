@@ -28,16 +28,26 @@ export class ButtonPaymentComponent implements ViewCell, OnInit {
       this.isPaid = false;
       this.vencido = false;      
     } else if (this.rowData.Estado === 'Pago'){
+      console.log("1")
       this.notPaid = false;
       this.isPaid = true;
       this.vencido = false;
+      if (this.rowData.EstadoSolicitud == "INSCRITO"){
+        console.log("2");
+        this.isPaid = false;
+      }
     } else {
       this.notPaid = false;
       this.isPaid = false;
       this.vencido = true;
     }
-    if(this.rowData.EstadoInscripcion !== 'Inscripción solicitada'){
-      this.yaInscrito = true;
+    // caso ya en transferencia
+    if (this.rowData.EstadoSolicitud == 'Inscripción solicitada'){
+      this.yaInscrito = false;
+
+    } else if(this.rowData.EstadoInscripcion == 'Inscripción solicitada'){
+      // inscripcion
+      this.yaInscrito = false;           // Muestra el OJO ver inscripcion
     } else {
       this.yaInscrito = false;
     }
