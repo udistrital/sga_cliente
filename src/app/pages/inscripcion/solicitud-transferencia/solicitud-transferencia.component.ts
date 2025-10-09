@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { FORM_SOLICITUD_TRANSFERENCIA, FORM_RESPUESTA_SOLICITUD, FORM_SOLICITUD_REINTEGRO } from '../forms-transferencia';
@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 import { elementAt } from 'rxjs/operators';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'solicitud-transferencia',
@@ -50,6 +51,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
   rolCordinador: any;
   comentario: string;
   programaAcademico: string;
+  isDialog: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -60,11 +62,15 @@ export class SolicitudTransferenciaComponent implements OnInit {
     private popUpManager: PopUpManager,
     private userService: UserService,
     private router: Router,
-    private _Activatedroute: ActivatedRoute
+    private _Activatedroute: ActivatedRoute,
+    @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
+    @Optional() private dialogRef: MatDialogRef<SolicitudTransferenciaComponent>
   ) {
     this.formTransferencia = FORM_SOLICITUD_TRANSFERENCIA;
     this.formReintegro = FORM_SOLICITUD_REINTEGRO;
     this.formRespuesta = FORM_RESPUESTA_SOLICITUD;
+    this.isDialog = !!this.dialogData;
+    
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.utilidades.translateFields(this.formTransferencia, 'inscripcion.', 'inscripcion.placeholder_');
       this.utilidades.translateFields(this.formReintegro, 'inscripcion.', 'inscripcion.placeholder_');
@@ -76,24 +82,37 @@ export class SolicitudTransferenciaComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.sub = this._Activatedroute.paramMap.subscribe(async (params: any) => {
-      const { id, process } = params.params;
-      this.process = atob(process);
-      this.id = id
-
+    if (this.isDialog) {
+      // Handle dialog mode - get data from dialogData
+      this.id = this.dialogData.idInscripcion;
+      this.process = this.dialogData.process;
+      
       this.loading = true;
-      await this.loadSolicitud();
-      await this.loadInfoPersona();
-
+      this.loadSolicitud();
+      this.loadInfoPersona();
 
       if (this.process === 'all') {
         console.log("Entra process all")
-        await this.loadInfoPersona();
-        await this.loadEstados();
+        this.loadInfoPersona();
+        this.loadEstados();
       }
+    } else {
+      this.sub = this._Activatedroute.paramMap.subscribe(async (params: any) => {
+        const { id, process } = params.params;
+        this.process = atob(process);
+        this.id = id
 
-    })
+        this.loading = true;
+        await this.loadSolicitud();
+        await this.loadInfoPersona();
+
+        if (this.process === 'all') {
+          console.log("Entra process all")
+          await this.loadInfoPersona();
+          await this.loadEstados();
+        }
+      })
+    }
   }
 
   ocultarCampo(campo, ocultar) {
@@ -186,8 +205,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
         if (this.tipo === 'Reingreso') {
           this.logFormFields();
 
-          this.formReintegro.btn = 'Guardar';
-
+          this.formReintegro.btn = this.translate.instant('GLOBAL.enviar');
           // Se traen los campos del formulario
           const nombre = this.getIndexForm('Nombres', this.tipo);
           const programa = this.getIndexForm('ProgramaAcademico', this.tipo);
@@ -523,7 +541,11 @@ export class SolicitudTransferenciaComponent implements OnInit {
   }
 
   goback() {
-    this.router.navigate([`pages/inscripcion/transferencia/${btoa(this.process)}`])
+    if (this.isDialog) {
+      this.dialogRef.close();
+    } else {
+      this.router.navigate([`pages/inscripcion/transferencia/${btoa(this.process)}`]);
+    }
   }
 
   generarMatricula() {
@@ -595,7 +617,7 @@ export class SolicitudTransferenciaComponent implements OnInit {
 
   async validarForm(event) {
     if (event.valid) {
-      let data: any;      
+      let data: any;
       if (this.tipo === 'Reingreso') {
         // Para reintegro, usar los datos de dataReintegro
         data = {
@@ -658,14 +680,35 @@ export class SolicitudTransferenciaComponent implements OnInit {
       } else {
         this.sgaMidService.post('transferencia', data).subscribe(
           (res: any) => {
-            if (res.Success == true) {
+            if (res.Response.Code === '400') {
               this.loading = false;
-              this.popUpManager.showSuccessAlert(this.translate.instant('inscripcion.solicitud_generada')).then(cerrado => {
-                this.ngOnInit();
+              if (Array.isArray(res.Body) && res.Body.some((msg: string) => msg.includes('duplicate'))) {
+                Swal.fire({
+                  icon: 'info',
+                  text: res.Body && res.Body.length ? res.Body.join('\n') : this.translate.instant('inscripcion.error_solicitud'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                }).then(() => {
+                  this.goback();
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  text: res.Body && res.Body.length ? res.Body.join('\n') : this.translate.instant('inscripcion.error_solicitud'),
+                  confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                }).then(() => {
+                  this.goback();
+                });
+              }
+            }
+            if (res.Response.Code === '200') {
+              this.loading = false;
+              Swal.fire({
+                icon: 'success',
+                text: this.translate.instant('inscripcion.guardar'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              }).then(() => {
+                this.goback();
               });
-            } else {
-              this.loading = false;
-              this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.error_solicitud'));
             }
           }, error => {
             this.loading = false;
