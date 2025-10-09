@@ -224,7 +224,7 @@ export class TransferenciaComponent implements OnInit {
                 // this.abrirPago(data)
                 this.mostrarFormularioYPagar(data.data);
               } else {
-                const idInscripcion = data['Id'];
+                const idInscripcion = data.data['Id'];
 
                 sessionStorage.setItem('IdInscripcion', data.Id)
                 sessionStorage.setItem('ProgramaAcademico', data.Programa)
@@ -375,10 +375,6 @@ export class TransferenciaComponent implements OnInit {
                     label: 'Inscribirme',
                     class: "btn btn-primary"
                   }
-                }
-
-                if (estadoSolicitudCodigo === 'INSCREAL') {
-                  element.Opcion.disabled = true;
                 }
 
                 dataInfo.push(element);
