@@ -240,8 +240,18 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       ? this.data.info_recibo.ReciboInscripcion[0] 
       : this.data.info_recibo.ReciboInscripcion;
     const periodoId = localStorage.getItem('IdPeriodo');
-    const parametro = nivel === 1 ? '13' : '12';
-    
+    let parametro: number;
+    // identifica el tipo de derecho pecunario para asirnar el valor
+    if (nivel == 2 && this.data.info_recibo.IdTipoInscripcion == 15){
+      // IdTipoInscripcion: 15  --> INSCRIPCION POSTGRADO
+      parametro = 12;
+    }else if (nivel == 2 && this.data.info_recibo.IdTipoInscripcion == 11){
+      // IdTipoInscripcion: 11  --> REINGRESO POSTGRADO
+      parametro = 14;
+    } else if (nivel == 1){
+      parametro = 13;
+    }
+
     // Preparar el objeto recibo
     const recibo = new ReciboPago();
     recibo.NombreDelAspirante = this.data.info_info_persona.PrimerNombre + ' ' +
@@ -271,9 +281,8 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
             let tipo_reg = this.data.info_recibo.IdTipoInscripcion;
             let evento_pago;
           
-            if (tipo_reg == undefined || tipo_reg == null){
-              // Suficiente para determinar que es inscripcion
-              // en Incripción no se tiene ese parámetro
+            if (tipo_reg == 15){
+              // IdTipoInscripción: 15  --> INSCRIPCIONES POSTGRADOS 
               proyecto_item.Evento.forEach(evento =>{
                 if (evento.Pago === true && evento.CodigoAbreviacion === "INSCR"){
                   evento_pago = evento;
@@ -281,8 +290,8 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
               });
               recibo.Fecha_pago = moment(evento_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
               break;
-            } else {
-              // si hay un dato solo puede ser 11 - Id REINGRESO
+            } else if (tipo_reg == 11){
+              // IdTipoInscripción: 11  --> REINGRESOS POSTGRADOS
               proyecto_item.Evento.forEach(evento =>{
                 if (evento.Pago === true && evento.CodigoAbreviacion === "REIN"){
                   evento_pago = evento;
@@ -291,7 +300,6 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
               recibo.Fecha_pago = moment(evento_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
               break;
             }
-            
           }
         }
         

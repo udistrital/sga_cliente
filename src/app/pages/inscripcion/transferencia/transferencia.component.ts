@@ -23,6 +23,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoDocumentosTransferenciasComponent } from '../dialogo-documentos-transferencias/dialogo-documentos-transferencias.component';
 import { LinkDownloadComponent } from '../../../@theme/components/link-download/link-download.component';
 import { DialogoFormularioPagadorComponent } from '../../admision/dialogo-formulario-pagador/dialogo-formulario-pagador.component';
+import { ButtonPaymentComponent } from '../../../@theme/components/button-payment/button-payment.component';
+import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 
 @Component({
   selector: 'transferencia',
@@ -213,12 +215,14 @@ export class TransferenciaComponent implements OnInit {
           width: '5%',
           editable: false,
           filter: false,
-          renderComponent: CustomizeButtonComponent,
+          // renderComponent: CustomizeButtonComponent,
+          renderComponent: ButtonPaymentComponent,
           type: 'custom',
           onComponentInitFunction: (instance) => {
             instance.save.subscribe((data) => {
-              if (data.Estado == 'Pendiente pago') {
-                this.abrirPago(data)
+              if (data.estado === false || data.estado === 'false') {
+                // this.abrirPago(data)
+                this.mostrarFormularioYPagar(data.data);
               } else {
                 const idInscripcion = data['Id'];
 
@@ -734,6 +738,26 @@ export class TransferenciaComponent implements OnInit {
       accion: 'descargar'
     };
     const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
+  }
+
+  mostrarFormularioYPagar(data) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '1300px';
+    assignConfig.maxHeight = '80vh';
+    assignConfig.autoFocus = false;
+    assignConfig.data = { 
+      info_recibo: data,
+      info_info_persona: this.info_info_persona,
+      accion: 'pagar'
+    };
+    
+    const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
+    
+    dialogo.afterClosed().subscribe(result => {
+      if (result && result.continuar) {
+        this.abrirPago(data);
+      }
+    });
   }
 
   abrirDialogoSolicitudTransferencia(idInscripcion: string, process: string) {

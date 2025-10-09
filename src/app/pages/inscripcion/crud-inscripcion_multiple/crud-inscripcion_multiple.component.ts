@@ -24,6 +24,7 @@ import * as momentTimezone from 'moment-timezone';
 import { environment } from '../../../../environments/environment';
 import { Periodo } from '../../../@core/data/models/periodo/periodo';
 import { DialogoFormularioPagadorComponent } from '../../admision/dialogo-formulario-pagador/dialogo-formulario-pagador.component';
+import { TipoInscripcion } from '../../../@core/data/models/inscripcion/tipo_inscripcion';
 
 @Component({
   selector: 'ngx-crud-inscripcion-multiple',
@@ -332,6 +333,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   element.ReciboAnio = auxRecibo.split('/', 2)[1];
                   element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                   element.ProgramaAcademicoId = res[0].Nombre;
+                  element.IdTipoInscripcion = 15;
+                  element.Periodo = this.periodo.Id;
                   let level = res[0].NivelFormacionId.NivelFormacionPadreId;
                   if (level == null || level == undefined) {
                     level = res[0].NivelFormacionId.Id;
