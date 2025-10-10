@@ -256,7 +256,7 @@ export const FORM_SOLICITUD_REINTEGRO = {
             label_i18n: 'telefono1_reintegro',
             placeholder_i18n: 'placeholder_telefono1_reintegro',
             requerido: true,
-            tipo: 'text'
+            tipo: 'number',
         },
         {
             etiqueta: 'input',
@@ -265,7 +265,7 @@ export const FORM_SOLICITUD_REINTEGRO = {
             label_i18n: 'telefono2_reintegro',
             placeholder_i18n: 'placeholder_telefono2_reintegro',
             requerido: false,
-            tipo: 'text'
+            tipo: 'number',
         },
 
 
