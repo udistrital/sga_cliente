@@ -181,7 +181,7 @@ export class TransferenciaComponent implements OnInit {
           filter: false,
         },
         Estado: {
-          title: this.translate.instant('inscripcion.estado'),
+          title: this.translate.instant('inscripcion.estado_recibo'),
           width: '15%',
           editable: false,
           filter: false,
