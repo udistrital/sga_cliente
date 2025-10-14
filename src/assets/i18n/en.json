@@ -1467,7 +1467,7 @@
         "placeholder_fecha_expedicion_reintegro": "Select issue date",
         "placeholder_lugar_expedicion_reintegro": "Select place of issue",
         "placeholder_codigo_carrera_reintegro": "Enter career code",
-        "placeholder_codigo_estudiante_reintegro": "Enter student code",
+        "placeholder_codigo_estudiante_reintegro": "Select student code",
         "placeholder_periodo_desde_reintegro": "Select initial period",
         "placeholder_periodo_hasta_reintegro": "Select final period",
         "placeholder_motivo_retiro_reintegro": "Describe the reason for your withdrawal from the academic program",
