@@ -1504,7 +1504,7 @@
         "placeholder_fecha_expedicion_reintegro": "Seleccione la fecha de expedición",
         "placeholder_lugar_expedicion_reintegro": "Seleccione el lugar de expedición",
         "placeholder_codigo_carrera_reintegro": "Ingrese el código de carrera",
-        "placeholder_codigo_estudiante_reintegro": "Ingrese el código de estudiante",
+        "placeholder_codigo_estudiante_reintegro": "Seleccione el código de estudiante",
         "placeholder_periodo_desde_reintegro": "Seleccione el período inicial",
         "placeholder_periodo_hasta_reintegro": "Seleccione el período final",
         "placeholder_motivo_retiro_reintegro": "Describa el motivo de su retiro del programa académico",
