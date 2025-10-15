@@ -520,17 +520,25 @@ export class TransferenciaComponent implements OnInit {
         if (campo.nombre === 'ProyectoCurricular') {
           if (event.valor.Nombre === 'Reingreso') {
             let aux: any[] = [];
+            if (this.proyectosCurriculares != null) {
 
-            this.codigosEstudiante.forEach(codigo => {
               this.proyectosCurriculares.forEach(opcion => {
-                if (opcion.Id == codigo.IdProyecto) {
-                  aux.push(opcion)
-                }
-
+                aux.push(opcion)
               });
-            });
-            campo.valor = null;
-            campo.opciones = aux;
+
+              campo.valor = null;
+              campo.opciones = aux;
+            } else {
+
+              Swal.fire({
+                icon: 'warning',
+                title: this.translate.instant('GLOBAL.info'),
+                text: this.translate.instant('admision.error_calendario') + '. ' + this.translate.instant('admision.error_nueva_transferencia'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+            }
+
+
           } else {
             campo.opciones = this.proyectosCurriculares;
           }
