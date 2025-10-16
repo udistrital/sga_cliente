@@ -63,6 +63,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
           this.popUpManager.showErrorAlert(this.translate.instant('calendario.sin_calendarios'));
         } else {
           response.Response.Body[1].map(calendar => {
+            if (calendar.Nivel ==2) {
             this.data.push({
               Id: calendar.Id,
               Nombre: calendar.Nombre,
@@ -70,6 +71,7 @@ export class ListCalendarioAcademicoComponent implements OnInit {
               Dependencia: this.niveles.filter(nivel => nivel.Id === calendar.Nivel)[0].Nombre,
               Estado: calendar.Activo ? this.translate.instant('GLOBAL.activo') : this.translate.instant('GLOBAL.inactivo'),
             });
+          }
           });
           this.createTable();
         }
