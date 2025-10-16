@@ -35,6 +35,7 @@ processes: Proceso[] = [];
 userId: number = 0;
 DependenciaID: number = 0;
 IsAdmin: boolean = false;
+IsMultiProyect: boolean = false;
 
 niveles: NivelFormacion[];
 nivelesSelected: NivelFormacion; 
@@ -85,10 +86,19 @@ idCalendario: number = 0;
               this.DependenciaID = id;
               this.getInfoPrograma(this.DependenciaID);
             },(err: any) => {
-              if (err) {
-                this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+              if (err) { // ? err es en realidad array de ids
+                const ids: number[] = err;
+                this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'),this.translate.instant('admision.multiple_vinculacion'));
+                this.getListaProyectos().then(proyectos => {
+                  this.Proyectos = proyectos.filter(p => ids.includes(p.Id));
+                  this.IsMultiProyect = true;
+                }, err => {
+                  this.Proyectos = [];
+                  this.IsMultiProyect = false;
+                })
               } else {
                 this.popUpManager.showErrorAlert(this.translate.instant('admision.no_vinculacion_no_rol')+". "+this.translate.instant('GLOBAL.comunicar_OAS_error'));
+                this.IsMultiProyect = false;
               }
             })
           }
@@ -289,16 +299,20 @@ idCalendario: number = 0;
     );
   }
 
-  getListaProyectos() {
+  getListaProyectos(): Promise<ProyectoAcademicoInstitucion[]> {
+    return new Promise<ProyectoAcademicoInstitucion[]>((resolve, reject) => {
     this.projectService.get('proyecto_academico_institucion?query=Activo:true&limit=0&fields=Id,Nombre,NivelFormacionId')
       .subscribe(
         (response: ProyectoAcademicoInstitucion[]) => {
           this.ProyectosFull = response;
+          resolve(this.ProyectosFull);
         },
         (error) => {
           this.ProyectosFull = [];
+          reject([]);
         }
       );
+    });
   }
 
   onSelectLevel() {
@@ -357,8 +371,10 @@ idCalendario: number = 0;
       (res_proyecto: ProyectoAcademicoInstitucion) => {
         this.Proyecto_nombre = res_proyecto.Nombre;
         if (!this.IsAdmin) {
-          this.Proyectos = [res_proyecto];
-          this.proyectoSelected = res_proyecto;
+          if (!this.IsMultiProyect) {
+            this.Proyectos = [res_proyecto];
+            this.proyectoSelected = res_proyecto;
+          }
         }
         this.eventoService.get('tipo_recurrencia?limit=0').subscribe(
           res_recurrencia => {

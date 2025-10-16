@@ -679,15 +679,13 @@ export class CriterioAdmisionComponent implements OnInit, OnChanges {
             if (res.length > 1) {
               for (let i = 0; i < r.length; i++) {
                 let contieneId = this.dataSource.data.some(objeto => objeto.Id === r[i].RequisitoId.Id);
-                if (!contieneId && r[i].Activo != false){
+                if (!contieneId && r[i].Activo != false) {
                   r[i].Activo = false
                   var requisitoPut = r[i]
                   this.requisitoPut(requisitoPut);
                 }
-                
               }
               for (let j = 0; j < this.dataSource.data.length; j++) {
-
                 let existe = false;
 
                 for (let i = 0; i < r.length; i++) {
