@@ -417,13 +417,4 @@ export class ListReducer {
         return state;
     }
   }
-
-  static ListReducerNomenclaturaDian(state: Array<any> = new Array, action) {
-    switch (action.type) {
-      case REDUCER_LIST.ParametrosNomenclaturaDian:
-        return [...state, action.payload];
-      default:
-        return state;
-    }
-  }
 }

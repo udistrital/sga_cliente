@@ -230,9 +230,11 @@
   justify-content: center;
 }
 
-.alerta {
-  background-color: var(--warning-main);
-  font-weight: 500;
-  padding-top: 1rem;
-  margin-bottom: 1rem;
+.mat-form-field-disabled .mat-input-element {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.button-stepper {
+  display: flex;
+  justify-content: space-evenly;
 }

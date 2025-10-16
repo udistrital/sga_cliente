@@ -13,6 +13,7 @@ export const environment = {
       PASS: 'xxx',
     },
   },
+  SECRET_KEY: '',
   NUXEO_SERVICE:'https://autenticacion.portaloas.udistrital.edu.co/apioas/gestor_documental_mid/v1',
   CONFIGURACION_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/configuracion_crud_api/v1/',
   NOTIFICACION_SERVICE: 'wss://pruebasapi.portaloas.udistrital.edu.co:8116/ws',
@@ -66,6 +67,6 @@ export const environment = {
   GOOGLE_MID_SERVICE: 'http://pruebasapi.intranetoas.udistrital.edu.co:8514/v1/',
   ESPACIOS_ACADEMICOS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/espacios_academicos_crud/v1/',
   PLAN_TRABAJO_DOCENTE_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/plan_trabajo_docente_crud/v1/',
-  DEPENDENCIAS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/dependencias_api/v1/',
-  AGORA_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/agora_crud/v1/',
+  PLAN_ESTUDIOS_SERVICE: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/planes_estudios_crud/v1/',
+  SGA_MID_TERCERO: 'https://autenticacion.portaloas.udistrital.edu.co/apioas/terceros_mid/v2/',
 };

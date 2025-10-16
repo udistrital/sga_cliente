@@ -38,7 +38,7 @@ import { DocumentoService } from '../../../@core/data/documento.service';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
-import { DependenciasService } from '../../../@core/data/dependencias.service';
+import { Modalidad } from '../../../@core/data/models/proyecto_academico/modalidad';
 
 @Component({
   selector: 'ngx-crud-proyecto-academico',
@@ -74,6 +74,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   opcionSeleccionadoEnfasis: any;
   opcionSeleccionadoNivel: any;
   opcionSeleccionadoMeto: any;
+  opcionSeleccionadoModalidad: any;
   checkenfasis: boolean = false;
   checkciclos: boolean = false;
   checkofrece: boolean = false;
@@ -82,6 +83,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   enfasis = [];
   nivel = [];
   metodo = [];
+  modalidades = [];
   fecha_creacion: Date;
   fecha_vencimiento: string;
   fecha_vencimiento_mostrar: string;
@@ -90,6 +92,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   proyecto_academico: ProyectoAcademicoInstitucion;
   tipo_titulacion: TipoTitulacion;
   metodologia: Metodologia;
+  modalidad: Modalidad;
   nivel_formacion: NivelFormacion;
   registro_califacado_acreditacion: RegistroCalificadoAcreditacion;
   tipo_registro: TipoRegistro;
@@ -119,12 +122,12 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   Campo4Control = new FormControl('', [Validators.required]);
   Campo5Control = new FormControl('', [Validators.required]);
   Campo6Control = new FormControl('', [Validators.required]);
-  Campo7Control = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]);
+  Campo7Control = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(3), Validators.pattern('^[0-9]*$')]);
   Campo8Control = new FormControl('', [Validators.required]);
   Campo9Control = new FormControl('', [Validators.required]);
   Campo10Control = new FormControl('', [Validators.required]);
-  Campo11Control = new FormControl('', [Validators.required, Validators.maxLength(8), Validators.pattern('^[0-9]*$')]);
-  Campo12Control = new FormControl('', [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]*$')]);
+  Campo11Control = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]);
+  Campo12Control = new FormControl('', [Validators.required]);
   Campo13Control = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]);
   Campo14Control = new FormControl('', [Validators.required]);
   Campo16Control = new FormControl('', [Validators.required]);
@@ -133,12 +136,13 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   Campo19Control = new FormControl('', [Validators.required]);
   Campo20Control = new FormControl('', [Validators.required]);
   Campo21Control = new FormControl('', [Validators.required]);
-  Campo22Control = new FormControl('', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(99)]);
-  Campo23Control = new FormControl('', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(99)]);
-  Campo24Control = new FormControl('', [Validators.required, Validators.maxLength(10)]);
+  Campo22Control = new FormControl('', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(12)]);
+  Campo23Control = new FormControl('', [Validators.required, Validators.maxLength(1), Validators.pattern('^[0-9]*$')]);
+  Campo24Control = new FormControl('', [Validators.required]);
   CampoCorreoControl = new FormControl('', [Validators.required, Validators.email]);
-  CampoCreditosControl = new FormControl('', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]);
+  CampoCreditosControl = new FormControl('', [Validators.required, Validators.maxLength(4)]);
   selectFormControl = new FormControl('', Validators.required);
+  modalidadControl = new FormControl('', Validators.required);
   @Output() eventChange = new EventEmitter();
 
   subscription: Subscription;
@@ -163,8 +167,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     private sanitization: DomSanitizer,
     private listEnfasisService: ListEnfasisService,
     private newNuxeoService: NewNuxeoService,
-    private formBuilder: FormBuilder,
-    private dependenciasService: DependenciasService) {
+    private formBuilder: FormBuilder) {
 
     this.dpDayPickerConfig = {
       locale: 'es',
@@ -174,22 +177,22 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
       returnedValueicon: 'String',
     }
     this.basicform = formBuilder.group({
-      codigo_snies: ['', [Validators.required, Validators.maxLength(10)]],
-      codigo_interno: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
+      codigo_snies: ['', Validators.required],
+      codigo_interno: ['', Validators.required],
       nombre_proyecto: ['', Validators.required],
       abreviacion_proyecto: ['', Validators.required],
       correo_proyecto: ['', [Validators.required, Validators.email]],
       numero_proyecto: ['', Validators.required],
-      creditos_proyecto: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]],
-      duracion_proyecto: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]*$')]],
+      creditos_proyecto: ['', [Validators.required, Validators.maxLength(4)]],
+      duracion_proyecto: ['', Validators.required],
       selector: [''],
     })
     this.resoluform = formBuilder.group({
-      resolucion: ['', [Validators.required, Validators.maxLength(8), Validators.pattern('^[0-9]*$')]],
+      resolucion: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]],
       ano_resolucion: ['', [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]],
       fecha_creacion: ['', Validators.required],
-      mes_vigencia: ['', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(99)]],
-      ano_vigencia: ['', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(99)]],
+      mes_vigencia: ['', [Validators.required, Validators.maxLength(2), Validators.pattern('^[0-9]*$'), Validators.max(12)]],
+      ano_vigencia: ['', [Validators.required, Validators.maxLength(1), Validators.pattern('^[0-9]*$')]],
       documento: ['', Validators.required],
       Campo4Control: [{ value: '', disabled: true }, Validators.required],
     })
@@ -305,6 +308,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.loadenfasis();
     this.loadnivel();
     this.loadmetodologia();
+    this.loadmodalidades();
 
     // cargar data del proyecto que se clonara
     this.activatedRoute.paramMap.subscribe(params => {
@@ -343,14 +347,14 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           this.opcionSeleccionadoEspacioFisico = this.espacio_fisico.find((espacio_fisico_temp: any) => espacio_fisico_temp.Id === proyecto_a_clonar.IdEspacioFisico)
           // info basica
           this.basicform = this.formBuilder.group({
-            codigo_snies: ['', [Validators.required, Validators.maxLength(10)]],
-            codigo_interno: ['', [Validators.required,, Validators.minLength(3), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
+            codigo_snies: ['', Validators.required],
+            codigo_interno: ['', Validators.required],
             nombre_proyecto: ['', Validators.required],
             abreviacion_proyecto: [proyecto_a_clonar.ProyectoAcademico.CodigoAbreviacion, Validators.required],
             correo_proyecto: [proyecto_a_clonar.ProyectoAcademico.CorreoElectronico, [Validators.required, Validators.email]],
             numero_proyecto: [proyecto_a_clonar.TelefonoDependencia, Validators.required],
-            creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4), Validators.pattern('^[0-9]*$')]],
-            duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]*$')]],
+            creditos_proyecto: [proyecto_a_clonar.ProyectoAcademico.NumeroCreditos, [Validators.required, Validators.maxLength(4)]],
+            duracion_proyecto: [proyecto_a_clonar.ProyectoAcademico.Duracion, Validators.required],
             selector: [''],
           })
           // acto administrativo
@@ -440,7 +444,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
 
   loadfacultad() {
-    this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2&limit=0')
+    this.oikosService.get('dependencia_tipo_dependencia/?query=TipoDependenciaId:2')
       .subscribe((res: any) => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
@@ -547,6 +551,24 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
         });
   }
 
+  loadmodalidades()  {
+    this.proyectoacademicoService.get('modalidad')
+      .subscribe(res => {
+        const r = <any>res;
+        if (res !== null && r.Type !== 'error') {
+          this.modalidades = <any>res;
+        }
+      },
+        (error: HttpErrorResponse) => {
+          Swal.fire({
+            icon: 'error',
+            title: error.status + '',
+            text: this.translate.instant('ERROR.' + error.status),
+            confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+          });
+        });
+  }
+
   loadnivel() {
     this.proyectoacademicoService.get('nivel_formacion')
       .subscribe(res => {
@@ -593,70 +615,15 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
     this.routerService.navigateByUrl(`pages/proyecto_academico/list-proyecto_academico`);
   }
 
-  onBlurCodigoSnies(codigo: string) {
-    if (codigo != '') {
-      this.dependenciasService.get('proyecto_acad_snies/' + codigo)
-      .subscribe((res: any) => {
-        const r = <any>res;
-        if (this.isObjectEmpty(res.proyecto_snies)) {
-          const opt: any = {
-            title: this.translate.instant('proyecto.proyecto_no_encontrado'),
-            html: this.translate.instant('proyecto.detalle_proyecto_no_encontrado', { codigo_snies: codigo }),
-            icon: 'error',
-            buttons: true,
-            dangerMode: true,
-            showCancelButton: false,
-          };
-
-          Swal.fire(opt)
-          .then((willCreate) => {
-            if (willCreate.value) {
-              this.basicform.get('codigo_interno').setValue('');
-              this.basicform.get('nombre_proyecto').setValue('');
-            }
-          });
-        } else {
-          let proyecto = res.proyecto_snies.proyectos[0];
-
-          const opt: any = {
-            title: this.translate.instant('proyecto.proyecto_encontrado'),
-            html: this.translate.instant('proyecto.detalle_proyecto_encontrado', { codigo_snies: codigo, codigo_interno: proyecto.codigo_proyecto, nombre_proyecto: proyecto.nombre_proyecto }),
-            icon: 'warning',
-            buttons: true,
-            dangerMode: true,
-            showCancelButton: true,
-          };
-          Swal.fire(opt)
-          .then((willCreate) => {
-            if (willCreate.value) {
-              this.basicform.get('codigo_interno').setValue(proyecto.codigo_proyecto);
-              this.basicform.get('nombre_proyecto').setValue(proyecto.nombre_proyecto);
-            }
-          });
-        }
-      }, () => {
-        this.showToast('error', this.translate.instant('GLOBAL.error'), this.translate.instant('proyecto.error_consulta'));
-        this.basicform.get('codigo_interno').setValue('');
-        this.basicform.get('nombre_proyecto').setValue('');
-      });
-    }
-  }
-
-  isObjectEmpty(obj: any): boolean {
-    for (let key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        return false;
-      }
-    }
-    return obj && obj.constructor === Object;
-  }
-
   registroproyecto() {
     try {
       if (this.basicform.valid & this.resoluform.valid & this.compleform.valid & this.actoform.valid && this.arr_enfasis_proyecto.length > 0
-        && this.fileActoAdministrativo) {
+        && this.fileActoAdministrativo && this.modalidadControl.valid) {
         this.metodologia = {
           Id: this.opcionSeleccionadoMeto['Id'],
+        }
+        this.modalidad = {
+          Id: this.modalidadControl.value.Id
         }
         this.nivel_formacion = <NivelFormacion>{
           Id: this.opcionSeleccionadoNivel['Id'],
@@ -686,6 +653,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           NivelFormacionId: this.nivel_formacion,
           AnoActoAdministrativo: this.actoform.value.ano_acto,
           ProyectoPadreId: this.proyecto_padre_id,
+          ModalidadId: this.modalidad
         }
 
         this.calculateEndDate(this.fecha_creacion, this.resoluform.value.ano_vigencia, this.resoluform.value.mes_vigencia, 0)

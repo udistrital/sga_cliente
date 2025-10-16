@@ -156,10 +156,6 @@ export class PagesComponent implements OnInit {
       const roleUser = typeof user.role !== 'undefined' ? user.role : [];
       const roleUserService = typeof userService.role !== 'undefined' ? userService.role : [];
       const roles = (roleUser.concat(roleUserService)).filter((data: any) => (data.indexOf('/') === -1))
-      const defaultRoles = (roleUser.concat(roleUserService)).filter((data: any) => (data.indexOf('/')!== -1))
-      if (defaultRoles.length > 0) {
-        roles.push("ASPIRANTE")
-      }
       this.getMenu(roles);
     })
 
