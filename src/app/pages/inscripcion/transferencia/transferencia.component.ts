@@ -21,6 +21,10 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoDocumentosTransferenciasComponent } from '../dialogo-documentos-transferencias/dialogo-documentos-transferencias.component';
+import { LinkDownloadComponent } from '../../../@theme/components/link-download/link-download.component';
+import { DialogoFormularioPagadorComponent } from '../../admision/dialogo-formulario-pagador/dialogo-formulario-pagador.component';
+import { ButtonPaymentComponent } from '../../../@theme/components/button-payment/button-payment.component';
+import { Inscripcion } from '../../../@core/data/models/inscripcion/inscripcion';
 
 @Component({
   selector: 'transferencia',
@@ -46,6 +50,7 @@ export class TransferenciaComponent implements OnInit {
   parametros_pago: any;
   periodo: Periodo;
   periodos = [];
+  recibos_pendientes: { [key: string]: number };
 
   dataTransferencia: TransferenciaInterna = {
     Periodo: null,
@@ -105,6 +110,7 @@ export class TransferenciaComponent implements OnInit {
     };
     this.loadInfoPersona();
 
+    this.recibos_pendientes = this.recibos_pendientes || {};
     this.dataSource.load([]);
     this.sub = this._Activatedroute.paramMap.subscribe(async (params: any) => {
       const { process } = params.params;
@@ -175,33 +181,33 @@ export class TransferenciaComponent implements OnInit {
           filter: false,
         },
         Estado: {
-          title: this.translate.instant('inscripcion.estado'),
+          title: this.translate.instant('inscripcion.estado_recibo'),
+          width: '15%',
+          editable: false,
+          filter: false,
+        },
+        EstadoSolicitud: {
+          title: this.translate.instant('inscripcion.estado_solicitud'),
           width: '15%',
           editable: false,
           filter: false,
         },
         ...process === 'my' ? {
           Descargar: {
-            title: this.translate.instant('derechos_pecuniarios.ver_respuesta'),
+            title: this.translate.instant('inscripcion.descargar'),
             width: '5%',
             editable: false,
             filter: false,
-            renderComponent: CustomizeButtonComponent,
+            renderComponent: LinkDownloadComponent,
             type: 'custom',
             onComponentInitFunction: (instance) => {
               instance.save.subscribe((data) => {
-                this.nuxeo.get([{ 'Id': data.VerRespuesta.DocRespuesta }]).subscribe(
-                  (documentos) => {
-                    const assignConfig = new MatDialogConfig();
-                    assignConfig.width = '1300px';
-                    assignConfig.height = '800px';
-                    let aux = { ...documentos[0], observacion: data.VerRespuesta.Observacion, fecha: data.VerRespuesta.FechaEvaluacion, terceroResponsable: data.VerRespuesta.TerceroResponsable }
-                    assignConfig.data = { documento: aux, observando: true }
-                    const dialogo = this.dialog.open(DialogoDocumentosTransferenciasComponent, assignConfig);
-                  }
-                );
+                // se añade ID de programa a 'localStorage' del programa del que se quiere ver el recibo
+                sessionStorage.removeItem('ProgramaAcademicoId');
+                sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
+                this.mostrarFormularioYDescargar(data);
               })
-            }
+            },
           }
         } : {},
         Opcion: {
@@ -209,14 +215,16 @@ export class TransferenciaComponent implements OnInit {
           width: '5%',
           editable: false,
           filter: false,
-          renderComponent: CustomizeButtonComponent,
+          // renderComponent: CustomizeButtonComponent,
+          renderComponent: ButtonPaymentComponent,
           type: 'custom',
           onComponentInitFunction: (instance) => {
             instance.save.subscribe((data) => {
-              if (data.Estado == 'Pendiente pago') {
-                this.abrirPago(data)
+              if (data.estado === false || data.estado === 'false') {
+                // this.abrirPago(data)
+                this.mostrarFormularioYPagar(data.data);
               } else {
-                const idInscripcion = data['Id'];
+                const idInscripcion = data.data['Id'];
 
                 sessionStorage.setItem('IdInscripcion', data.Id)
                 sessionStorage.setItem('ProgramaAcademico', data.Programa)
@@ -225,7 +233,7 @@ export class TransferenciaComponent implements OnInit {
                 sessionStorage.setItem('ProgramaAcademicoId', data.IdPrograma)
                 sessionStorage.setItem('NivelId', data.Nivel)
 
-                this.router.navigate([`pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`])
+                this.abrirDialogoSolicitudTransferencia(idInscripcion, process);
               }
             })
           },
@@ -255,19 +263,28 @@ export class TransferenciaComponent implements OnInit {
                 const auxRecibo = element.Recibo;
                 const NumRecibo = auxRecibo.split('/', 1);
                 element.Recibo = NumRecibo[0];
+                element.ReciboInscripcion = NumRecibo;
+                element.ReciboAnio = auxRecibo.split('/', 2)[1];
                 element.FechaGeneracion = momentTimezone.tz(element.FechaGeneracion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                 element.IdPrograma = element.Programa;
                 element.Programa = res.Nombre;
                 element.Periodo = this.periodo.Id;
+                element.ProgramaAcademicoId = res.Nombre;
+                let level = res['NivelFormacionId'].NivelFormacionPadreId;
+                if (level == null || level == undefined) {
+                  level = res['NivelFormacionId'].Id;
+                } else {
+                  level = res['NivelFormacionId'].NivelFormacionPadreId.Id;
+                }
+                element.NivelPP = level;
+                element.tipo = "REINGRESO POSTGRADOS";
 
-                element.Descargar = {
-                  icon: 'fa fa-download fa-2x',
-                  label: 'Descargar',
-                  class: 'btn btn-primary',
-                  documento: element.Respuesta
+                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null) {
+                  this.recibos_pendientes[String(element.IdPrograma)] = 1;
+                } else {
+                  this.recibos_pendientes[String(element.IdPrograma)]++;
                 }
 
-                element.Descargar.disabled = true;
 
                 element.Opcion = {
                   icon: 'fa fa-search fa-2x',
@@ -322,16 +339,28 @@ export class TransferenciaComponent implements OnInit {
                 const auxRecibo = element.Recibo;
                 const NumRecibo = auxRecibo.split('/', 1);
                 element.Recibo = NumRecibo[0];
+                element.ReciboInscripcion = NumRecibo;
+                element.ReciboAnio = auxRecibo.split('/', 2)[1];
                 element.FechaGeneracion = moment(element.FechaGeneracion, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 element.IdPrograma = element.Programa;
                 element.Programa = res.Nombre;
                 element.Periodo = this.periodo.Id;
+                element.ProgramaAcademicoId = res.Nombre;
+                const estadoSolicitudCodigo = element.EstadoSolicitud.CodigoAbreviacion;
+                element.EstadoSolicitud = element.EstadoSolicitud.Nombre;
+                let level = res['NivelFormacionId'].NivelFormacionPadreId;
+                if (level == null || level == undefined) {
+                  level = res['NivelFormacionId'].Id;
+                } else {
+                  level = res['NivelFormacionId'].NivelFormacionPadreId.Id;
+                }
+                element.NivelPP = level;
+                element.tipo = "REINGRESO POSTGRADOS";
 
-                element.Descargar = {
-                  icon: 'fa fa-download fa-2x',
-                  label: 'Descargar',
-                  class: 'btn btn-primary',
-                  documento: ''
+                if (this.recibos_pendientes[String(element.IdPrograma)] == undefined || this.recibos_pendientes[String(element.IdPrograma)] == null) {
+                  this.recibos_pendientes[String(element.IdPrograma)] = 1;
+                } else {
+                  this.recibos_pendientes[String(element.IdPrograma)]++;
                 }
 
                 if (element.Estado === 'Pendiente pago') {
@@ -346,24 +375,6 @@ export class TransferenciaComponent implements OnInit {
                     label: 'Inscribirme',
                     class: "btn btn-primary"
                   }
-
-                }
-
-                if (element.Estado === 'Solicitado') {
-                  element.Opcion.disabled = true;
-                }
-
-                if (element.SolicitudFinalizada) {
-                  element.Descargar = {
-                    icon: 'fa fa-download fa-2x',
-                    label: 'Descargar',
-                    class: 'btn btn-primary',
-                    documento: element.VerRespuesta.DocRespuesta
-                  }
-                  delete element.Descargar.disabled;
-                  element.Opcion.disabled = true;
-                } else {
-                  element.Descargar.disabled = true;
                 }
 
                 dataInfo.push(element);
@@ -509,17 +520,25 @@ export class TransferenciaComponent implements OnInit {
         if (campo.nombre === 'ProyectoCurricular') {
           if (event.valor.Nombre === 'Reingreso') {
             let aux: any[] = [];
+            if (this.proyectosCurriculares != null) {
 
-            this.codigosEstudiante.forEach(codigo => {
               this.proyectosCurriculares.forEach(opcion => {
-                if (opcion.Id == codigo.IdProyecto) {
-                  aux.push(opcion)
-                }
-
+                aux.push(opcion)
               });
-            });
-            campo.valor = null;
-            campo.opciones = aux;
+
+              campo.valor = null;
+              campo.opciones = aux;
+            } else {
+
+              Swal.fire({
+                icon: 'warning',
+                title: this.translate.instant('GLOBAL.info'),
+                text: this.translate.instant('admision.error_calendario') + '. ' + this.translate.instant('admision.error_nueva_transferencia'),
+                confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              });
+            }
+
+
           } else {
             campo.opciones = this.proyectosCurriculares;
           }
@@ -565,6 +584,10 @@ export class TransferenciaComponent implements OnInit {
   }
 
   generarRecibo() {
+    if (this.recibos_pendientes[String(this.dataTransferencia.ProyectoCurricular.Id)] >= 1) {
+      this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
+      return
+    }
     this.popUpManager.showConfirmAlert(this.translate.instant('inscripcion.seguro_inscribirse')).then(
       async ok => {
         if (ok.value) {
@@ -610,6 +633,7 @@ export class TransferenciaComponent implements OnInit {
         PeriodoId: this.dataTransferencia.Periodo.Id,
         Nivel: this.dataTransferencia.TipoInscripcion.NivelId,
         ProgramaAcademicoId: this.dataTransferencia.ProyectoCurricular.Id,
+        ProgramaAcademicoCodigo: this.dataTransferencia.ProyectoCurricular.Id,
         TipoInscripcionId: this.dataTransferencia.TipoInscripcion.Id,
         Year: this.dataTransferencia.Periodo.Year,
         Periodo: parseInt(this.dataTransferencia.Periodo.Ciclo, 10),
@@ -623,9 +647,15 @@ export class TransferenciaComponent implements OnInit {
           if (response !== null && response.length !== 0) {
             this.inscripcionProjects = response;
             this.inscripcionProjects.forEach(proyecto => {
-              if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id && proyecto.Evento != null) {
-                inscripcion.FechaPago = moment(proyecto.Evento[0].FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
-
+              let evento_reingreso_pago;
+              // if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id && proyecto.Evento != null) {
+              if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id) {
+                proyecto.Evento.forEach(evento =>{
+                  if (evento.Pago === true && evento.CodigoAbreviacion === "REIN"){
+                    evento_reingreso_pago = evento;
+                  }
+                });
+                inscripcion.FechaPago = moment(evento_reingreso_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 this.sgaMidService.post('inscripciones/generar_inscripcion', inscripcion).subscribe(
                   (response: any) => {
                     if (response.Code === '200') {
@@ -699,5 +729,66 @@ export class TransferenciaComponent implements OnInit {
         this.loadDataTercero(this.process);
       }
     }, 5000);
+  }
+
+  mostrarFormularioYDescargar(data) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '1300px';
+    assignConfig.maxHeight = '80vh';
+    assignConfig.autoFocus = false;
+    assignConfig.data = { 
+      info_recibo: data,
+      info_info_persona: this.info_info_persona,
+      accion: 'descargar'
+    };
+    const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
+  }
+
+  mostrarFormularioYPagar(data) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '1300px';
+    assignConfig.maxHeight = '80vh';
+    assignConfig.autoFocus = false;
+    assignConfig.data = { 
+      info_recibo: data,
+      info_info_persona: this.info_info_persona,
+      accion: 'pagar'
+    };
+    
+    const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
+    
+    dialogo.afterClosed().subscribe(result => {
+      if (result && result.continuar) {
+        this.abrirPago(data);
+      }
+    });
+  }
+
+  abrirDialogoSolicitudTransferencia(idInscripcion: string, process: string) {
+    const assignConfig = new MatDialogConfig();
+    assignConfig.width = '95vw';
+    assignConfig.maxWidth = '95vw';
+    assignConfig.height = '90vh';
+    assignConfig.maxHeight = '90vh';
+    assignConfig.autoFocus = false;
+    assignConfig.data = {
+      idInscripcion: idInscripcion,
+      process: process
+    };
+
+    import('../solicitud-transferencia/solicitud-transferencia.component').then(m => {
+      const dialogo = this.dialog.open(m.SolicitudTransferenciaComponent, assignConfig);
+
+      dialogo.afterClosed().subscribe(result => {
+        if (this.process === 'my') {
+          this.loadDataTercero(this.process);
+        } else {
+          this.loadDataAll(this.process);
+        }
+      });
+    }).catch(error => {
+      console.error('Error loading solicitud-transferencia component:', error);
+      this.router.navigate([`/pages/inscripcion/solicitud-transferencia/${idInscripcion}/${btoa(process)}`]);
+    });
   }
 }

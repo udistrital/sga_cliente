@@ -12,6 +12,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
 import { DocumentoPrograma } from '../../../@core/data/models/documento/documento_programa';
 import { DocProgramaObligatorioComponent } from '../../../@theme/components/doc-programa-obligatorio/doc-programa-obligatorio.component';
+import { ImplicitAutenticationService } from '../../../@core/utils/implicit_autentication.service';
 
 @Component({
   selector: 'ngx-select-documento-proyecto',
@@ -32,11 +33,14 @@ export class SelectDocumentoProyectoComponent implements OnInit {
   subscription: Subscription;
   documento_proyecto = [];
 
+  hasPermission: boolean = false;
+
   constructor(private translate: TranslateService,
     private inscripcionService: InscripcionService,
     private dialogRef: NbDialogRef<SelectDocumentoProyectoComponent>,
     private popUpManager: PopUpManager,
-    private toasterService: ToasterService) {
+    private toasterService: ToasterService,
+    private autenticationService: ImplicitAutenticationService) {
     this.loading = true;
     this.loadData();
     this.loadDataProyecto();
@@ -93,6 +97,7 @@ export class SelectDocumentoProyectoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.obtenerPermisos()
   }
 
   activetab(): void {
@@ -258,22 +263,22 @@ export class SelectDocumentoProyectoComponent implements OnInit {
 
   onUpdate(documento: any) {
     var msgpopUp
-    if (documento.value == true){
+    if (documento.value == true) {
       msgpopUp = this.translate.instant('documento_proyecto.poner_obligatorio')
     } else {
       msgpopUp = this.translate.instant('documento_proyecto.quitar_obligatorio')
     }
-    this.popUpManager.showConfirmAlert(msgpopUp,this.translate.instant('documento_proyecto.documento')).then(accion => {
-      if(accion.value){
+    this.popUpManager.showConfirmAlert(msgpopUp, this.translate.instant('documento_proyecto.documento')).then(accion => {
+      if (accion.value) {
         const documentoModificado: DocumentoPrograma = new DocumentoPrograma();
-          documentoModificado.TipoDocumentoProgramaId = documento.Data;
-          documentoModificado.Activo = true;
-          documentoModificado.FechaCreacion = documento.Data.FechaPrograma;
-          documentoModificado.Id = documento.Data.IdDocPrograma;
-          documentoModificado.PeriodoId = parseInt(sessionStorage.getItem('PeriodoId'), 10);
-          documentoModificado.ProgramaId = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
-          documentoModificado.TipoInscripcionId = parseInt(sessionStorage.getItem('TipoInscripcionId'), 10);
-          documentoModificado.Obligatorio = documento.value;
+        documentoModificado.TipoDocumentoProgramaId = documento.Data;
+        documentoModificado.Activo = true;
+        documentoModificado.FechaCreacion = documento.Data.FechaPrograma;
+        documentoModificado.Id = documento.Data.IdDocPrograma;
+        documentoModificado.PeriodoId = parseInt(sessionStorage.getItem('PeriodoId'), 10);
+        documentoModificado.ProgramaId = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10);
+        documentoModificado.TipoInscripcionId = parseInt(sessionStorage.getItem('TipoInscripcionId'), 10);
+        documentoModificado.Obligatorio = documento.value;
         this.inscripcionService.put('documento_programa', documentoModificado).subscribe(response => {
           if (response.Type !== 'error') {
             this.popUpManager.showSuccessAlert(this.translate.instant('documento_proyecto.ajuste_ok'))
@@ -293,8 +298,28 @@ export class SelectDocumentoProyectoComponent implements OnInit {
   }
 
   openListDocumentoComponent() {
-    this.administrar_documentos = true;
-    this.boton_retornar = true;
+    if (this.hasPermission) {
+      this.administrar_documentos = true;
+      this.boton_retornar = true;
+    }else {
+      Swal.fire({
+        icon: 'info',
+        title: this.translate.instant('documento_proyecto.sin_acceso'),
+        text: this.translate.instant('documento_proyecto.sin_acceso_cuerpo'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      })
+    }
+
+  }
+
+  obtenerPermisos() {
+    this.autenticationService.getRole().then((rol: Array<String>) => {
+      if (rol.includes('ADMIN_SGA')) {
+        this.hasPermission = true;
+      } else {
+        this.hasPermission = false;
+      }
+    })
   }
 
   retorno(event) {
@@ -325,15 +350,15 @@ export class SelectDocumentoProyectoComponent implements OnInit {
   loadDataProyecto() {
     this.loading = true;
     this.documento_proyecto = [];
-    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + sessionStorage.getItem('ProgramaAcademicoId') + ',TipoInscripcionId:' + sessionStorage.getItem('TipoInscripcionId') + ',PeriodoId:'+sessionStorage.getItem('PeriodoId') + '&limit=100').subscribe(
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + sessionStorage.getItem('ProgramaAcademicoId') + ',TipoInscripcionId:' + sessionStorage.getItem('TipoInscripcionId') + ',PeriodoId:' + sessionStorage.getItem('PeriodoId') + '&limit=100').subscribe(
       response => {
-        if(response === undefined || response === null){
+        if (response === undefined || response === null) {
           this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
         }
-        else if (response.length == 1 && !response[0].hasOwnProperty('TipoDocumentoProgramaId')){
+        else if (response.length == 1 && !response[0].hasOwnProperty('TipoDocumentoProgramaId')) {
           this.source.load(this.documento_proyecto);
         }
-        else{
+        else {
           response.forEach(documento => {
             documento.TipoDocumentoProgramaId.IdDocPrograma = documento.Id;
             documento.TipoDocumentoProgramaId.FechaPrograma = documento.FechaCreacion;
