@@ -11,6 +11,7 @@ import { PopUpManager } from '../../../managers/popUpManager';
 import { DocumentoService } from '../../../@core/data/documento.service';
 import { Documento } from '../../../@core/data/models/documento/documento';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'ngx-list-formacion-academica',
@@ -99,7 +100,7 @@ export class ListFormacionAcademicaComponent implements OnInit {
           title: this.translate.instant('GLOBAL.fecha_fin'),
           width: '10%',
           valuePrepareFunction: (value) => {
-            return value;
+            return value
           },
         },
         Estado: {
@@ -149,45 +150,44 @@ export class ListFormacionAcademicaComponent implements OnInit {
   loadData(): void {
     this.loading = true;
     this.sgaMidService.get('formacion_academica?Id=' + this.persona_id)
-    .subscribe(response => {
-      if (response !== null && response.Response.Code === '404') {
-        this.loading = false;
-        this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-      } else if (response !== null && response.Response.Code === '200') {
-        if (Object.keys(response.Response.Body[0]).length > 0) {
-        const data = <Array<any>>response.Response.Body[0];
-        const dataInfo = <Array<any>>[];
-        data.forEach(async element => {
-          const FechaI = element.FechaInicio;
-          const FechaF = element.FechaFinalizacion;
-          element.FechaInicio = FechaI.substring(0, 2) + '-' + FechaI.substring(2, 4) + '-' + FechaI.substring(4, 8);
-          if(FechaF !== ''){
-            element.FechaFinalizacion = FechaF.substring(0, 2) + '-' + FechaF.substring(2, 4) + '-' + FechaF.substring(4, 8);
-          }else{
-            element.FechaFinalizacion = 'Actual';
+      .subscribe(response => {
+        if (response !== null && response.Response.Code === '404') {
+          this.loading = false;
+          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
+        } else if (response !== null && response.Response.Code === '200') {
+          if (Object.keys(response.Response.Body[0]).length > 0) {
+            const data = <Array<any>>response.Response.Body[0];
+            const dataInfo = <Array<any>>[];
+            data.forEach(async element => {
+              const FechaI = element.FechaInicio;
+              const FechaF = element.FechaFinalizacion;
+              element.FechaInicio = FechaI.substring(0, 2) + '-' + FechaI.substring(2, 4) + '-' + FechaI.substring(4, 8);
+              if (FechaF !== '') {
+                element.FechaFinalizacion = FechaF.substring(0, 2) + '-' + FechaF.substring(2, 4) + '-' + FechaF.substring(4, 8);
+              } else {
+                element.FechaFinalizacion = 'Actual';
+              } let estadoDoc = await <any>this.cargarEstadoDocumento(element.Documento);
+              element.Estado = estadoDoc.estadoObservacion;
+              element.Observacion = estadoDoc.observacion;
+              dataInfo.push(element);
+              this.getPercentage(1);
+              this.source.load(dataInfo);
+            });
+            this.loading = false;
+          } else {
+            this.getPercentage(0);
+            this.source.load([]);
+            this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
           }
-          let estadoDoc = await <any>this.cargarEstadoDocumento(element.Documento);
-          element.Estado = estadoDoc.estadoObservacion;
-          element.Observacion = estadoDoc.observacion;
-          dataInfo.push(element);
-          this.getPercentage(1);
-          this.source.load(dataInfo);
+        } else {
+          this.loading = false;
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
+        }
+      },
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
         });
-        this.loading = false;
-      } else {
-        this.getPercentage(0);
-        this.source.load([]);
-        this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-      }
-      } else {
-        this.loading = false;
-        this.popUpManager.showErrorToast(this.translate.instant('ERROR.400'));
-      }
-    },
-    (error: HttpErrorResponse) => {
-      this.loading = false;
-      this.popUpManager.showAlert('', this.translate.instant('formacion_academica.no_data'));
-    });
   }
 
   cargarEstadoDocumento(Id: any) {

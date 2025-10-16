@@ -196,6 +196,91 @@ export const FORM_SOLICITUD_TRANSFERENCIA = {
     ]
 }
 
+
+export const FORM_SOLICITUD_REINTEGRO = {
+    tipo_formulario: 'mini',
+    alertas: true,
+    titulo: "Información de solicitud de reintegro",
+    btn: 'Guardar',
+    modelo: 'dataReintegro',
+    campos: [
+        {
+            index: 0,
+            etiqueta: 'input',
+            claseGrid: 'col-sm-6 col-xs-12',
+            nombre: 'Nombre',
+            label_i18n: 'nombres_reintegro',
+            placeholder_i18n: 'placeholder_nombres_reintegro',
+            requerido: true,
+            tipo: 'text',
+            deshabilitar: true,
+        },
+        {
+            index: 1,
+            etiqueta: 'input',
+            claseGrid: 'col-sm-12 col-xs-12',
+            nombre: 'ProgramaAcademico',
+            label_i18n: 'programa_reintegro',
+            placeholder_i18n: 'placeholder_programa_reintegro',
+            requerido: true,
+            tipo: 'text',
+            deshabilitar: true,
+        },
+        {
+            etiqueta: 'input',
+            claseGrid: 'col-sm-6 col-xs-12',
+            nombre: 'NumeroIdentificacion',
+            label_i18n: 'numero_identificacion_reintegro',
+            placeholder_i18n: 'placeholder_numero_identificacion_reintegro',
+            requerido: true,
+            tipo: 'text',
+            deshabilitar: true,
+        },
+        {
+            etiqueta: 'select',
+            claseGrid: 'col-sm-6 col-xs-12',
+            nombre: 'CodigoEstudiante',
+            label_i18n: 'codigo_estudiante_reintegro',
+            placeholder_i18n: 'placeholder_codigo_estudiante_reintegro',
+            requerido: true,
+            tipo: 'select',
+            deshabilitar: false,
+            opciones: [],
+        },
+
+
+        {
+            etiqueta: 'input',
+            claseGrid: 'col-sm-6 col-xs-12',
+            nombre: 'Telefono1',
+            label_i18n: 'telefono1_reintegro',
+            placeholder_i18n: 'placeholder_telefono1_reintegro',
+            requerido: true,
+            tipo: 'number',
+        },
+        {
+            etiqueta: 'input',
+            claseGrid: 'col-sm-6 col-xs-12',
+            nombre: 'Telefono2',
+            label_i18n: 'telefono2_reintegro',
+            placeholder_i18n: 'placeholder_telefono2_reintegro',
+            requerido: false,
+            tipo: 'number',
+        },
+
+
+        {
+            etiqueta: 'textarea',
+            claseGrid: 'col-sm-12 col-xs-12',
+            nombre: 'MotivoRetiro',
+            label_i18n: 'motivo_retiro_reintegro',
+            placeholder_i18n: 'placeholder_motivo_retiro_reintegro',
+            requerido: true,
+            tipo: 'text',
+        }
+    ]
+}
+
 export const FORM_RESPUESTA_SOLICITUD = {
     tipo_formulario: 'mini',
     alertas: true,

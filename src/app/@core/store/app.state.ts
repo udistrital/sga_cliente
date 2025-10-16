@@ -26,6 +26,7 @@ import { TipoContribuyente } from '../data/models/terceros/tipo_contribuyente';
 import { OrientacionSexual } from '../data/models/informacion/orientacion_sexual';
 import { IdentidadGenero } from '../data/models/informacion/identidad_genero';
 // import { TipoPublicacionLibro } from '../data/models/tipo_publicacion_libro';
+import { NomenclaturaDian } from '../data/models/nomenclatura_dian/nomenclatura_dian';
 
 export interface IAppState {
   listGenero: Genero[],
@@ -75,4 +76,5 @@ export interface IAppState {
   listInfoSocioEconomica: InfoComplementaria[],
   listInfoContacto: InfoComplementaria[],
   // listTipoPublicacionLibro: TipoPublicacionLibro[],
+  listNomenclaturaDian: NomenclaturaDian[],
 }
