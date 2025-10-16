@@ -75,7 +75,7 @@ nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
                   </div>
 
 
-                  <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIsGranted="['VICERRECTOR', 'ASESOR_VICE', 'ADMIN_SGA', 'ASIS_PROYECTO', 'JEFE_DEPENDENCIA']" >
+                  <div class="col-sm-6 col-md-4 col-lg-3" align="center" id="info_basica" *ngIsGranted="['VICERRECTOR', 'ASESOR_VICE']" >
                     <nb-card class="exp-card"
                              (click)="openSelectDescuentoProyectoComponent()">
                       <nb-card-header>{{ 'documento_proyecto.descuentos' | translate }}</nb-card-header>

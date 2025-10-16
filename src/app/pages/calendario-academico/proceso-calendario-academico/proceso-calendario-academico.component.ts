@@ -49,13 +49,6 @@ export class ProcesoCalendarioAcademicoComponent {
         this.process.CalendarioId = {Id: this.data.calendar.calendarioId};
         this.process.TipoRecurrenciaId = {Id: this.processForm.value.TipoRecurrenciaId};
         this.process['Activo'] = true;
-        let nombre = this.process.Nombre.toUpperCase();
-        console.log(nombre);
-        if ( nombre.includes("INSCRIPCION") || nombre.includes("INSCRIP") ){
-          this.process["CodigoAbreviacion"] = "INSCR";
-        }else if (nombre.includes("REINTEGRO") || nombre.includes("REINGRE")) {
-          this.process["CodigoAbreviacion"] = "REIN";
-        }
         this.dialogRef.close(this.process);
       }
     });

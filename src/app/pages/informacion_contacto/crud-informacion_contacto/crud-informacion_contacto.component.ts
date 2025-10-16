@@ -186,7 +186,6 @@ export class CrudInformacionContactoComponent implements OnInit {
         .subscribe(res => {
           if (res !== null && res.Response.Code !== '404') {
             this.info_informacion_contacto = <InformacionContacto>res.Response.Body[0];
-            this.loading = false;
             if (this.info_informacion_contacto.PaisResidencia !== null && this.info_informacion_contacto.DepartamentoResidencia !== null
               && this.info_informacion_contacto.CiudadResidencia != null) {
               this.formInformacionContacto.campos[this.getIndexForm('DepartamentoResidencia')].opciones = [this.info_informacion_contacto.DepartamentoResidencia];
@@ -202,6 +201,7 @@ export class CrudInformacionContactoComponent implements OnInit {
             this.info_informacion_contacto = undefined;
             this.loading = false;
           });
+      this.loading = false;
     }
   }
 

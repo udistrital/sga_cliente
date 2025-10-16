@@ -26,12 +26,6 @@ const routes: Routes = [{
       data: { reportLabel: 'RteAdmitidos' },
       canActivate: [AuthGuard],
     },
-    {
-      path: 'transferencias/reingresos',
-      component: VisualizacionComponent,
-      data: { reportLabel: 'RteReingresosProd' },
-      canActivate: [AuthGuard],
-    },
   ],
 }];
 

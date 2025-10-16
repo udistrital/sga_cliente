@@ -58,7 +58,7 @@ export class NewTercero implements OnInit {
 
   construirForm() {
     this.formInfoNuevoTercero.btn = this.translate.instant('GLOBAL.guardar');
-    //this.formInfoNuevoTercero.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
+    this.formInfoNuevoTercero.btnLimpiar = this.translate.instant('GLOBAL.limpiar');
     for (let i = 0; i < this.formInfoNuevoTercero.campos.length; i++) {
       this.formInfoNuevoTercero.campos[i].label = this.translate.instant('GLOBAL.' + this.formInfoNuevoTercero.campos[i].label_i18n);
       this.formInfoNuevoTercero.campos[i].placeholder = this.translate.instant('GLOBAL.placeholder_' +

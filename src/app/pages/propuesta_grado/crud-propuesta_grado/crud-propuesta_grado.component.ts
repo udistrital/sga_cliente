@@ -86,8 +86,10 @@ export class CrudPropuestaGradoComponent implements OnInit {
     private popUpManager: PopUpManager,
     private newNuxeoService: NewNuxeoService,
     private toasterService: ToasterService,
-    private utilidades: UtilidadesService) 
-    {
+    private utilidades: UtilidadesService) {
+      this.listService.findGrupoInvestigacion();
+      this.listService.findLineaInvestigacion();
+      this.listService.findTipoProyecto();
     this.formPropuestaGrado = FORM_PROPUESTA_GRADO;
     this.construirForm();
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -356,7 +358,6 @@ export class CrudPropuestaGradoComponent implements OnInit {
                 this.setPercentage(1);
                 this.eventChange.emit(true);
                 this.popUpManager.showSuccessAlert(this.translate.instant('propuesta_grado.propuesta_grado_actualizada'));
-                this.loadPropuestaGrado();
               } else {
                 this.loading = false;
                 this.popUpManager.showErrorAlert(this.translate.instant('propuesta_grado.propuesta_grado_no_registrada'));

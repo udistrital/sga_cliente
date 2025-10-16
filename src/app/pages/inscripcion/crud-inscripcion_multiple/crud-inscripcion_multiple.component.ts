@@ -11,7 +11,7 @@ import { InstitucionEnfasis } from '../../../@core/data/models/proyecto_academic
 import { NivelFormacion } from '../../../@core/data/models/proyecto_academico/nivel_formacion';
 import { InfoPersona } from '../../../@core/data/models/informacion/info_persona';
 import { ReciboPago } from '../../../@core/data/models/inscripcion/recibo_pago';
-import { MatDialog, MatDialogConfig, MatSelect } from '@angular/material';
+import { MatSelect } from '@angular/material';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
@@ -23,8 +23,7 @@ import * as moment from 'moment';
 import * as momentTimezone from 'moment-timezone';
 import { environment } from '../../../../environments/environment';
 import { Periodo } from '../../../@core/data/models/periodo/periodo';
-import { DialogoFormularioPagadorComponent } from '../../admision/dialogo-formulario-pagador/dialogo-formulario-pagador.component';
-import { TipoInscripcion } from '../../../@core/data/models/inscripcion/tipo_inscripcion';
+import { decrypt } from '../../../@core/utils/util-encrypt';
 
 @Component({
   selector: 'ngx-crud-inscripcion-multiple',
@@ -113,7 +112,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     private userService: UserService,
     private parametrosService: ParametrosService,
     private inscripcionService: InscripcionService,
-    private dialog: MatDialog,
     private eventoService: EventoService) {
     this.showProyectoCurricular = false;
     this.showTipoInscripcion = false;
@@ -223,7 +221,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
           renderComponent: LinkDownloadComponent,
           type: 'custom',
           onComponentInitFunction: (instance) => {
-            instance.save.subscribe((data) => this.mostrarFormularioYDescargar(data))
+            instance.save.subscribe((data) => this.descargarReciboPago(data))
           },
         },
         Opcion: {
@@ -239,7 +237,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               // Solamente se usa esta linea para pruebas saltaldo el pago de recibo
               // sessionStorage.setItem('EstadoInscripcion', 'true');
               if (data.estado === false || data.estado === 'false') {
-                this.mostrarFormularioYPagar(data.data);
+                this.abrirPago(data.data);
               } else if (data.estado === true || data.estado === 'true') {
                 sessionStorage.setItem('IdEstadoInscripcion', data.data.EstadoInscripcion);
                 this.itemSelect({ data: data.data });
@@ -330,11 +328,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   const auxRecibo = element.ReciboInscripcion;
                   const NumRecibo = auxRecibo.split('/', 1);
                   element.ReciboInscripcion = NumRecibo;
-                  element.ReciboAnio = auxRecibo.split('/', 2)[1];
                   element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
                   element.ProgramaAcademicoId = res[0].Nombre;
-                  element.IdTipoInscripcion = 15;
-                  element.Periodo = this.periodo.Id;
                   let level = res[0].NivelFormacionId.NivelFormacionPadreId;
                   if (level == null || level == undefined) {
                     level = res[0].NivelFormacionId.Id;
@@ -349,21 +344,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                   dataInfo.push(element);
                   this.dataSource.load(dataInfo);
                   this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
-                  if (element.Estado == "Vencido"){
-                    this.inscripcionService.get('inscripcion/' + element.Id)
-                    .subscribe(res =>{
-                      res.Activo = false;
-                      res.PeriodoId = 0;
-                      this.inscripcionService.put('inscripcion/', res).subscribe( ()=>{
-                        // this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('recibo_pago.mensaje_recibo_vencido'));
-                        Swal.fire({
-                          icon: 'warning',
-                          text: this.translate.instant('recibo_pago.mensaje_recibo_vencido'),
-                          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
-                        });
-                      });
-                    });
-                  }
                 },
                 error => {
                   this.loading = false;
@@ -530,20 +510,11 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       let periodo = localStorage.getItem('IdPeriodo');
       this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel + '/periodo/' + periodo).subscribe(
         (response: any[]) => {
-          // recibe los proyectos como un arreglo
           if (response !== null && response.length !== 0) {
             this.inscripcionProjects = response;
             this.inscripcionProjects.forEach(proyecto => {
-              let evento_inscripcion_pago;
-              // if (proyecto.ProyectoId === this.selectedProject && proyecto.Evento != null) {
-              if (proyecto.ProyectoId === this.selectedProject) {
-                // halla el evento inscripción que indica fechas de pago
-                proyecto.Evento.forEach(evento =>{
-                  if (evento.Pago === true && evento.CodigoAbreviacion === "INSCR"){
-                    evento_inscripcion_pago = evento;
-                  }
-                });
-                inscripcion.FechaPago = moment(evento_inscripcion_pago.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
+              if (proyecto.ProyectoId === this.selectedProject && proyecto.Evento != null) {
+                inscripcion.FechaPago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
                 this.sgaMidService.post('inscripciones/generar_inscripcion', inscripcion).subscribe(
                   (response: any) => {
                     if (response.Code === '200') {
@@ -560,9 +531,6 @@ export class CrudInscripcionMultipleComponent implements OnInit {
                     } else if (response.Code === '400') {
                       reject([]);
                       this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
-                    } else {
-                      reject([]);
-                      this.popUpManager.showErrorToast(response.Body);
                     }
                     this.loading = false;
                   },
@@ -584,6 +552,74 @@ export class CrudInscripcionMultipleComponent implements OnInit {
         },
       );
     });
+  }
+
+  descargarReciboPago(data) {
+    this.itemSelect({ data: data })
+    if (this.selectedLevel === undefined) {
+      this.selectedLevel = parseInt(data.NivelPP, 10);
+    }
+    if (this.info_info_persona != null) {
+      this.selectedProject = parseInt(sessionStorage.getItem('ProgramaAcademicoId'), 10)
+      this.recibo_pago = new ReciboPago();
+      this.recibo_pago.NombreDelAspirante = this.info_info_persona.PrimerNombre + ' ' +
+        this.info_info_persona.SegundoNombre + ' ' + this.info_info_persona.PrimerApellido + ' ' + this.info_info_persona.SegundoApellido;
+      this.recibo_pago.DocumentoDelAspirante = this.info_info_persona.NumeroIdentificacion;
+      this.recibo_pago.Periodo = this.periodo.Nombre;
+      this.recibo_pago.ProyectoAspirante = data['ProgramaAcademicoId']
+      this.recibo_pago.Comprobante = data['ReciboInscripcion'][0];
+      if (this.selectedLevel === 1) {
+        this.parametro = '13';
+      } else if (this.selectedLevel === 2) {
+        this.parametro = '12';
+      }
+      this.loading = true;
+      let periodo = localStorage.getItem('IdPeriodo');
+      this.sgaMidService.get('consulta_calendario_proyecto/nivel/' + this.selectedLevel + '/periodo/' + periodo).subscribe(
+        (response: any[]) => {
+          this.loading = false;
+          if (response !== null && response.length !== 0) {
+            this.inscripcionProjects = response;
+            this.inscripcionProjects.forEach(proyecto => {
+              if (proyecto.ProyectoId === this.selectedProject && proyecto.Evento != null) {
+                this.recibo_pago.Fecha_pago = moment(proyecto.Evento.FechaFinEvento, 'YYYY-MM-DD').format('DD/MM/YYYY');
+              }
+            });
+            this.loading = true;
+            this.parametrosService.get('parametro_periodo?query=ParametroId.TipoParametroId.Id:2,' +
+              'ParametroId.CodigoAbreviacion:' + this.parametro + ',PeriodoId.Year:'+ this.periodo.Year +',PeriodoId.CodigoAbreviacion:VG').subscribe(
+                response => {
+                  this.loading = false;
+                  const parametro = <any>response['Data'][0];
+                  this.recibo_pago.Descripcion = parametro['ParametroId']['Nombre'];
+                  const valor = JSON.parse(parametro['Valor']);
+                  this.recibo_pago.ValorDerecho = valor['Costo']
+                  this.sgaMidService.post('generar_recibo', this.recibo_pago).subscribe(
+                    response => {
+                      this.loading = false;
+                      const reciboData = new Uint8Array(atob(response['Data']).split('').map(char => char.charCodeAt(0)));
+                      this.recibo_generado = window.URL.createObjectURL(new Blob([reciboData], { type: 'application/pdf' }));
+                      window.open(this.recibo_generado);
+                    },
+                    error => {
+                      this.loading = false;
+                      this.popUpManager.showErrorToast(this.translate.instant('recibo_pago.no_generado'));
+                    },
+                  );
+                },
+                error => {
+                  this.loading = false;
+                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                },
+              );
+          }
+        },
+        error => {
+          this.loading = false;
+          this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('calendario.sin_proyecto_curricular'));
+        },
+      );
+    }
   }
 
   abrirPago(data) {
@@ -769,10 +805,11 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   preinscripcion() {
     this.proyectos_preinscripcion = [];
+    const id = decrypt(localStorage.getItem('persona_id'));
     this.arr_proyecto.forEach(proyecto => {
       Number(localStorage.getItem('IdNivel'))
       this.proyectos_preinscripcion.push({
-        PersonaId: Number(localStorage.getItem('persona_id')),
+        PersonaId: Number(id),
         ProgramaAcademicoId: proyecto['Id'],
         PeriodoId: Number(localStorage.getItem('IdPeriodo')),
         EstadoInscripcionId: { Id: 1 },
@@ -806,39 +843,5 @@ export class CrudInscripcionMultipleComponent implements OnInit {
 
   ocultarBarraExterna(event: boolean) {
     this.ocultarBarra.emit(event);
-  }
-
-  mostrarFormularioYDescargar(data) {
-    const assignConfig = new MatDialogConfig();
-    assignConfig.width = '1300px';
-    assignConfig.maxHeight = '80vh';
-    assignConfig.autoFocus = false;
-    assignConfig.data = { 
-      info_recibo: data,
-      info_info_persona: this.info_info_persona,
-      accion: 'descargar'
-    };
-    
-    const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
-  }
-  
-  mostrarFormularioYPagar(data) {
-    const assignConfig = new MatDialogConfig();
-    assignConfig.width = '1300px';
-    assignConfig.maxHeight = '80vh';
-    assignConfig.autoFocus = false;
-    assignConfig.data = { 
-      info_recibo: data,
-      info_info_persona: this.info_info_persona,
-      accion: 'pagar'
-    };
-    
-    const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
-    
-    dialogo.afterClosed().subscribe(result => {
-      if (result && result.continuar) {
-        this.abrirPago(data);
-      }
-    });
   }
 }

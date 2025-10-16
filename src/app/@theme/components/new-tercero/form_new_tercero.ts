@@ -67,7 +67,7 @@ export let NUEVO_TERCERO = {
       label_i18n: 'telefono_entidad',
       placeholder_i18n: 'telefono_entidad',
       requerido: true,
-      tipo: 'number',
+      tipo: 'text',
     },
     {
       etiqueta: 'input',

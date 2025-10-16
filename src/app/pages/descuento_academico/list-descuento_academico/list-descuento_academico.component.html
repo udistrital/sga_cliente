@@ -12,9 +12,7 @@
                         [settings]="settings"
                         [source]="source"
                         (custom)="onAction($event)"
-                        (delete)="onDelete($event)" 
-                        (rowSelect)="itemselec($event)"
-                        (edit)="onEdit($event)"
+                        (delete)="onDelete($event)" (rowSelect)="itemselec($event)" (edit)="onEdit($event)"
                         (create)="onCreate($event)">
                     </ng2-smart-table>
                     <div class="text-center">

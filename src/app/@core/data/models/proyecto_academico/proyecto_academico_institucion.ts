@@ -27,5 +27,5 @@ export class ProyectoAcademicoInstitucion {
     NivelFormacionId: NivelFormacion;
     AnoActoAdministrativo: string;
     ProyectoPadreId: ProyectoAcademicoInstitucion;
-    // ModalidadId: Modalidad;
+    ModalidadId: Modalidad;
 }

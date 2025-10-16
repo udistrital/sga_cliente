@@ -841,7 +841,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
         NivelFormacionId: this.nivel_formacion,
         AnoActoAdministrativo: String(this.actoform.value.ano_acto),
         ProyectoPadreId: this.data.proyecto_padre_id,
-        // ModalidadId: this.modalidad
+        ModalidadId: this.modalidad
       };
 
       this.titulacion_proyecto_snies = {
@@ -1004,7 +1004,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           NivelFormacionId: this.nivel_formacion,
           AnoActoAdministrativo: String(this.actoform.value.ano_acto),
           ProyectoPadreId: this.data.proyecto_padre_id,
-          // ModalidadId: this.modalidad
+          ModalidadId: this.modalidad
         };
 
         this.calculateEndDate(
@@ -1194,7 +1194,7 @@ export class ModificarProyectoAcademicoComponent implements OnInit {
           NivelFormacionId: this.nivel_formacion,
           AnoActoAdministrativo: String(this.actoform.value.ano_acto),
           ProyectoPadreId: this.data.proyecto_padre_id,
-          // ModalidadId: this.modalidad
+          ModalidadId: this.modalidad
         };
 
         this.calculateEndDate(

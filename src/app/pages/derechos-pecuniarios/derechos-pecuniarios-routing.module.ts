@@ -23,12 +23,12 @@ const routes: Routes = [{
         {
             path: 'crud-derechos-pecuniarios',
             component: CrudDerechosPecuniariosComponent,
-            canActivate: [AuthGuard],
+            //canActivate: [AuthGuard],
         },
         {
             path: 'copiar-conceptos',
             component: CopiarConceptosComponent,
-            //canActivate: [AuthGuard],
+            canActivate: [AuthGuard],
         },
         {
             path: 'definir-conceptos',
