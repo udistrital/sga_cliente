@@ -572,6 +572,11 @@ export class TransferenciaComponent implements OnInit {
           reject(error);
         },
       );
+      // agregando los parametros para fechas de eventos, nivel quemado a posgrados
+      // let id_nivel = this.dataTransferencia.CalendarioAcademico.Nivel;
+      this.sgaMidService.get('consulta_calendario_proyecto/nivel/2/periodo/' + localStorage.getItem('IdPeriodo')).subscribe(response => {
+        this.inscripcionProjects = response;
+      });
     });
   }
 
@@ -588,6 +593,31 @@ export class TransferenciaComponent implements OnInit {
       this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
       return
     }
+    let fechaLimite;
+    let fechaActual = moment();
+
+    this.inscripcionProjects.forEach(proyecto => {
+      if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id) {
+        proyecto.Evento.forEach(element => {
+          if (element.CodigoAbreviacion === "REIN" && element.Pago === false) {
+            fechaLimite = moment(element.FechaFinEvento, 'YYYY-MM-DD');
+          }
+        });
+      }
+    });
+    if (!fechaLimite) {
+      console.warn('No se encontró fecha límite válida');
+      return;
+    }
+    if (fechaActual.isAfter(fechaLimite, 'day')) {
+      Swal.fire({
+        icon: 'warning',
+        text: this.translate.instant('calendario.sin_proyecto_curricular'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+      return;
+    }
+    
     this.popUpManager.showConfirmAlert(this.translate.instant('inscripcion.seguro_inscribirse')).then(
       async ok => {
         if (ok.value) {
