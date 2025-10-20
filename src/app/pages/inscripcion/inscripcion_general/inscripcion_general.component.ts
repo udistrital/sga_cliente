@@ -1,6 +1,5 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
-// import { ElementRef, ViewChild } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { UtilidadesService } from '../../../@core/utils/utilidades.service';
 import { InscripcionService } from '../../../@core/data/inscripcion.service';
@@ -22,9 +21,6 @@ import { DialogoDocumentosComponent } from '../../admision/dialogo-documentos/di
 import { EvaluacionInscripcionService } from '../../../@core/data/evaluacion_inscripcion.service';
 import { TAGS_INSCRIPCION_PROGRAMA } from '../../admision/def_suite_inscrip_programa/def_tags_por_programa';
 import { TimeService } from '../../../@core/utils/time.service';
-import { VideoModalComponent } from '../../../@theme/components/video-modal/video-modal.component';
-import { decrypt } from '../../../@core/utils/util-encrypt';
-
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -44,7 +40,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   es_transferencia: boolean = false;
   nivel: any;
 
-  tagsObject = { ...TAGS_INSCRIPCION_PROGRAMA };
+  tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
 
   @Input('inscriptionSettings')
   set nameInscription(inscriptionSettings: any) {
@@ -87,8 +83,6 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   @Output('result') result: EventEmitter<any> = new EventEmitter();
   @Output() changeTab: EventEmitter<any> = new EventEmitter();
   @Output() ocultarBarra: EventEmitter<boolean> = new EventEmitter();
-
-  // @ViewChild('videoModal', { static: true }) videoModal: ElementRef;
 
   inscripcion_id: number;
   info_persona_id: number;
@@ -277,20 +271,28 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   async checkEventoInscripcion() {
-    if (this.selectedValue) {
+    if(this.selectedValue) {
       let EventosPrograma = this.posgrados.find((EventsProgram) => EventsProgram.ProyectoId == this.selectedValue);
+      
       if (EventosPrograma) {
-        if (EventosPrograma.EventoInscripcion) {
-          let fechafin = moment(EventosPrograma.EventoInscripcion.FechaFinEvento, "YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+        let EventoInscripcion;
+        EventosPrograma.Evento.forEach(element => {
+          if (element.CodigoAbreviacion == "INSCR" && element.Pago == false){
+            // se halla evento de inscripcion, declara fechas límite
+            EventoInscripcion = element;
+          }
+        });
+        if (EventoInscripcion) {
+          let fechafin = moment(EventoInscripcion.FechaFinEvento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
           fechafin.setDate(fechafin.getDate() + 1);
 
           const realhora = await this.timeService.getDate("BOG");
           let ahora = moment(realhora).tz("America/Bogota").toDate();
 
-          if (fechafin > ahora) {
+          if(fechafin > ahora) {
             this.puedeInscribirse = true;
           } else {
-            if (!this.estaInscrito) {
+            if(!this.estaInscrito){
               this.popUpManager.showErrorAlert(this.translate.instant('inscripcion.no_puede_inscribirse'));
             }
             this.puedeInscribirse = false;
@@ -487,11 +489,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       if (this.percentage_total >= 100) {
         this.total = false;
         let enAlgunaVista = this.show_profile || this.show_info_pregrado ||
-          this.show_acad_pregrado || this.show_expe ||
-          this.show_proy || this.show_prod || this.show_desc ||
-          this.show_docu || this.show_info || this.show_acad ||
-          this.show_info_externa || this.show_idiomas;
-        if (!enAlgunaVista && this.estado_inscripcion_nombre == "INSCRIPCIÓN SOLICITADA") {
+                            this.show_acad_pregrado || this.show_expe || 
+                            this.show_proy || this.show_prod || this.show_desc ||
+                            this.show_docu || this.show_info || this.show_acad || 
+                            this.show_info_externa || this.show_idiomas;
+        if (!enAlgunaVista && this.estado_inscripcion_nombre == "INSCRIPCIÓN SOLICITADA"){
           this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.inscripcion'), this.translate.instant('inscripcion.mensaje_100_inscripcion'), "info", false)
         }
       } else {
@@ -639,7 +641,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           });
     });
   }
-
+  
   loadPercentageIdiomas() {
     this.loading = true;
     return new Promise((resolve, reject) => {
@@ -721,7 +723,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           (res: any[]) => {
             if (Object.keys(res[0]).length > 0) {
               this.percentage_docu = Math.round((res.length / this.tipo_documentos.length) * 100);
-              if (this.percentage_docu >= 100) {
+              if(this.percentage_docu >= 100){
                 this.percentage_docu = 100;
               }
               this.percentage_tab_docu[0] = Math.round(this.percentage_docu);
@@ -743,10 +745,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   loadPercentageDescuentos() {
     this.loading = true;
-    const id = decrypt(window.localStorage.getItem('persona_id'));
     return new Promise((resolve, reject) => {
       this.sgaMidService.get('descuento_academico/descuentopersonaperiododependencia?' + 'PersonaId=' +
-        Number(id) + '&DependenciaId=' +
+        Number(window.localStorage.getItem('persona_id')) + '&DependenciaId=' +
         Number(window.sessionStorage.getItem('ProgramaAcademicoId')) + '&PeriodoId=' + Number(window.sessionStorage.getItem('IdPeriodo')))
         .subscribe((res: any) => {
           if (res.Data.Code === '200') {
@@ -793,22 +794,22 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     });
   }
 
-  loadLists() {
+  loadLists() {  
     return new Promise((resolve, reject) => {
-      this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + ',PeriodoId:' + sessionStorage.getItem('IdPeriodo') + ',Obligatorio:true&limit=0').subscribe(
-        response => {
-          if (Object.keys(response[0]).length > 0) {
-            this.tipo_documentos = <any[]>response;
-          } else {
-            this.tipo_documentos = [];
-          }
-          resolve(this.tipo_documentos)
-        },
-        error => {
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          reject(error)
-        },
-      );
+    this.inscripcionService.get('documento_programa?query=Activo:true,ProgramaId:' + parseInt(sessionStorage.ProgramaAcademicoId, 10) + ',TipoInscripcionId:' + parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10) + ',PeriodoId:'+sessionStorage.getItem('IdPeriodo') + ',Obligatorio:true&limit=0').subscribe(
+      response => {
+        if (Object.keys(response[0]).length > 0) {
+          this.tipo_documentos = <any[]>response;
+        } else {
+          this.tipo_documentos = [];
+        }
+        resolve(this.tipo_documentos)
+      },
+      error => {
+        this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+        reject(error)
+      },
+    );
     });
   }
 
@@ -909,7 +910,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   realizarInscripcion() {
-    if (this.Campo1Control.status == "VALID" && this.enfasisControl.status == "VALID") {
+    if(this.Campo1Control.status == "VALID" && this.enfasisControl.status == "VALID") {
 
       this.loading = true;
       this.inscripcionService.get('inscripcion/' + parseInt(sessionStorage.IdInscripcion, 10)).subscribe(
@@ -917,12 +918,12 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
           this.loading = false;
           const inscripcionPut: any = response;
           inscripcionPut.ProgramaAcademicoId = parseInt(sessionStorage.ProgramaAcademicoId, 10);
-
+          
           if (this.tieneEnfasis) {
             if (this.enfasisSelected) {
               inscripcionPut.EnfasisId = parseInt(this.enfasisSelected, 10);
             } else {
-              inscripcionPut.EnfasisId = parseInt(this.enfasisControl.value, 10);
+              inscripcionPut.EnfasisId = parseInt(this.enfasisControl.value,10);
             }
           }
 
@@ -980,7 +981,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         },
       );
     } else {
-      this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('enfasis.select_enfasis'));
+      this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'),this.translate.instant('enfasis.select_enfasis'));
       this.enfasisControl.markAsTouched();
     }
 
@@ -1313,8 +1314,8 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   async tipo_inscripcion(select) {
     if (select == 'programa') {
       this.enfasisSelected = undefined;
-      this.tagsObject = { ...TAGS_INSCRIPCION_PROGRAMA };
-
+      this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
+    
       if (this.inscripcion.IdNivel === 1) {
         this.selectedTipo = 'Pregrado'
       } else {
@@ -1333,7 +1334,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.tieneEnfasis = false;
         this.enfasis = [];
       }
-
+    
       switch (this.selectedTipo) {
         case ('Pregrado'):
           this.selectTipo = 'Pregrado';
@@ -1375,7 +1376,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         this.resetPercentages();
         const IdPeriodo = parseInt(sessionStorage.getItem('IdPeriodo'), 10);
         const IdTipo = parseInt(sessionStorage.getItem('IdTipoInscripcion'), 10)
-        if (await this.loadSuitePrograma(IdPeriodo, this.selectedValue, IdTipo)) {
+        if(await this.loadSuitePrograma(IdPeriodo, this.selectedValue, IdTipo)) {
           if (this.estado_inscripcion_nombre !== "INSCRIPCIÓN SOLICITADA") {
             this.Campo1Control.disable();
             this.enfasisControl.disable();
@@ -1383,9 +1384,9 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
             this.soloPuedeVer = true;
             this.puedeInscribirse = false;
             localStorage.setItem("goToEdit", String(this.puedeInscribirse));
-            if (this.estado_inscripcion_nombre == "INSCRITO CON OBSERVACIÓN") {
-              this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.inscripcion'),
-                this.translate.instant('inscripcion.informar_estado_inscrito_obs'), "info", false);
+            if (this.estado_inscripcion_nombre == "INSCRITO CON OBSERVACIÓN"){
+              this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.inscripcion'), 
+                    this.translate.instant('inscripcion.informar_estado_inscrito_obs'), "info", false);
             }
           } else if (await this.checkEventoInscripcion()) {
             this.percentage_total = 0;
@@ -1397,17 +1398,17 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   redirectBecauseObservations() {
-    if (this.estado_inscripcion_nombre == "INSCRITO CON OBSERVACIÓN") {
-      this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.inscripcion'),
-        this.translate.instant('inscripcion.info_boton_cambio_inscrito'), "info", false);
+    if (this.estado_inscripcion_nombre == "INSCRITO CON OBSERVACIÓN"){
+      this.popUpManager.showPopUpGeneric(this.translate.instant('inscripcion.inscripcion'), 
+            this.translate.instant('inscripcion.info_boton_cambio_inscrito'), "info", false);
       this.perfil_editar('perfil');
     }
   }
 
   loadSuitePrograma(periodo, proyecto, tipoInscrip) {
     return new Promise((resolve) => {
-      this.loading = true;
-      this.evaluacionInscripcionService.get('tags_por_dependencia?query=Activo:true,PeriodoId:' + periodo + ',DependenciaId:' + proyecto + ',TipoInscripcionId:' + tipoInscrip)
+    this.loading = true;
+    this.evaluacionInscripcionService.get('tags_por_dependencia?query=Activo:true,PeriodoId:'+periodo+',DependenciaId:'+proyecto+',TipoInscripcionId:'+tipoInscrip)
         .subscribe((response: any) => {
           if (response != null && response.Status == '200') {
             if (Object.keys(response.Data[0]).length > 0) {
@@ -1416,7 +1417,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
               resolve(this.tagsObject)
             } else {
               this.loading = false;
-              this.tagsObject = { ...TAGS_INSCRIPCION_PROGRAMA };
+              this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
               this.puedeInscribirse = false;
               this.soloPuedeVer = false;
               this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('admision.no_tiene_suite'));
@@ -1424,22 +1425,22 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
             }
           } else {
             this.loading = false;
-            this.tagsObject = { ...TAGS_INSCRIPCION_PROGRAMA };
+            this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
             this.puedeInscribirse = false;
             this.soloPuedeVer = false;
             this.popUpManager.showAlert(this.translate.instant('inscripcion.preinscripcion'), this.translate.instant('admision.no_tiene_suite'));
             resolve(false);
           }
         },
-          (error: HttpErrorResponse) => {
-            this.loading = false;
-            this.tagsObject = { ...TAGS_INSCRIPCION_PROGRAMA };
-            this.puedeInscribirse = false;
-            this.soloPuedeVer = false;
-            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-            resolve(false);
-          });
-    });
+        (error: HttpErrorResponse) => {
+          this.loading = false;
+          this.tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
+          this.puedeInscribirse = false;
+          this.soloPuedeVer = false;
+          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+          resolve(false);
+        });
+  });
   }
 
   mostrarBarraExterna() {
@@ -1448,22 +1449,11 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   }
 
   revisarDocumento(doc: any) {
-    const assignConfig = new MatDialogConfig();
-    assignConfig.width = '1300px';
-    assignConfig.height = '750px';
-    assignConfig.data = { documento: doc }
-    const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
-    //      dialogo.afterClosed().subscribe(data => {});
-  }
-
-  openVideoModal(videoId: string): void {
-    const dialogRef = this.dialog.open(VideoModalComponent, {
-      width: '600px',
-      data: { videoId: videoId }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('Modal cerrado');
-    });
+      const assignConfig = new MatDialogConfig();
+      assignConfig.width = '1300px';
+      assignConfig.height = '750px';
+      assignConfig.data = { documento: doc }
+      const dialogo = this.dialog.open(DialogoDocumentosComponent, assignConfig);
+//      dialogo.afterClosed().subscribe(data => {});
   }
 }
