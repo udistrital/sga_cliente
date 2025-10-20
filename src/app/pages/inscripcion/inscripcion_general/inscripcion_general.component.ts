@@ -273,9 +273,17 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   async checkEventoInscripcion() {
     if(this.selectedValue) {
       let EventosPrograma = this.posgrados.find((EventsProgram) => EventsProgram.ProyectoId == this.selectedValue);
+      
       if (EventosPrograma) {
-        if (EventosPrograma.EventoInscripcion) {
-          let fechafin = moment(EventosPrograma.EventoInscripcion.FechaFinEvento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
+        let EventoInscripcion;
+        EventosPrograma.Evento.forEach(element => {
+          if (element.CodigoAbreviacion == "INSCR" && element.Pago == false){
+            // se halla evento de inscripcion, declara fechas límite
+            EventoInscripcion = element;
+          }
+        });
+        if (EventoInscripcion) {
+          let fechafin = moment(EventoInscripcion.FechaFinEvento,"YYYY-MM-DDTHH:mm:ss").tz("America/Bogota").toDate();
           fechafin.setDate(fechafin.getDate() + 1);
 
           const realhora = await this.timeService.getDate("BOG");
