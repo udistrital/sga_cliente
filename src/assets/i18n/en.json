@@ -62,9 +62,9 @@
             "reportes": "Reports",
             "inscripciones": {
                 "inscripciones": "Inscriptions",
-                "aspirantes": "Aspirantes por programa",
-                "admitidos": "Admitidos por programa",
-                "inscritos": "Inscritos por programa"
+                "aspirantes": "Aspirants by program",
+                "admitidos": "Admitted by program",
+                "inscritos": "Enrolled by program"
             },
             "reingresos": {
                 "reingresos": "Readmissions",
@@ -115,7 +115,9 @@
         "inscripcion": {
             "inscripcion": "Inscription",
             "inscripcion_general": "Enrollment in an academic project",
-            "preinscripcion": "Pre-registration for \nacademic projects"
+            "preinscripcion": "Pre-registration for \nacademic projects",
+            "reingreso": "Readmissions"
+
         },
         "admision": {
             "evaluacion_documentos": "Evaluation of registration\n documents",
