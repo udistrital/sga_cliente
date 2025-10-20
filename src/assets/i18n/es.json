@@ -67,9 +67,9 @@
                 "admitidos": "Admitidos por programa",
                 "inscritos": "Inscritos por programa"
             },
-            "transferencias": {
-                "transferencias": "Transferencias",
-                "reingresos": "Reingresos"
+            "reingresos": {
+                "reingresos": "Reingresos",
+                "solicitudes": "Solicitudes"
             },
             "icfes": {
                 "icfes": "Registro ICFES SNP",
@@ -118,8 +118,7 @@
             "inscripcion": "Inscripción",
             "inscripcion_general": "Inscripción a un \nproyecto curricular",
             "preinscripcion": "Preinscripción a \nproyectos curriculares",
-            "transferencia": "Transferencia",
-            "reintegro": "Reintegro"
+            "reingreso": "Reingreso"
         },
         "admision": {
             "evaluacion_documentos": "Evaluación de documentos \nde inscritos",

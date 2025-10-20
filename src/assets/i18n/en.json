@@ -66,9 +66,9 @@
                 "admitidos": "Admitidos por programa",
                 "inscritos": "Inscritos por programa"
             },
-            "transferencias": {
-                "transferencias": "Transfers",
-                "reingresos": "Readmissions"
+            "reingresos": {
+                "reingresos": "Readmissions",
+                "solicitudes": "Requests"
             },
             "icfes": {
                 "icfes": "ICFES SNP Registration",
