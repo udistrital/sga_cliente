@@ -468,6 +468,31 @@ export class CrudInscripcionMultipleComponent implements OnInit {
   }
 
   generar_recibo() {
+    let fechaLimite;
+    let fechaActual = moment();
+
+    this.inscripcionProjects.forEach(proyecto => {
+      if (proyecto.ProyectoId === this.selectedProject) {
+        proyecto.Evento.forEach(element => {
+          if (element.CodigoAbreviacion === "INSCR" && element.Pago === false) {
+            fechaLimite = moment(element.FechaFinEvento, 'YYYY-MM-DD');
+          }
+        });
+      }
+    });
+    if (!fechaLimite) {
+      console.warn('No se encontró fecha límite válida');
+      return;
+    }
+    if (fechaActual.isAfter(fechaLimite, 'day')) {
+      Swal.fire({
+        icon: 'warning',
+        text: this.translate.instant('calendario.sin_proyecto_curricular'),
+        confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+      });
+      return;
+    }
+    
     if (this.recibos_pendientes >= 3) {
       this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
     } else {
