@@ -612,7 +612,7 @@ export class TransferenciaComponent implements OnInit {
     if (fechaActual.isAfter(fechaLimite, 'day')) {
       Swal.fire({
         icon: 'warning',
-        text: this.translate.instant('calendario.sin_proyecto_curricular'),
+        text: this.translate.instant('inscripcion.no_hay_programa_evento'),
         confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
       });
       return;
