@@ -13,6 +13,7 @@ import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico
 import Swal from 'sweetalert2';
 import { ListService } from '../../../@core/store/services/list.service';
 import { SgaMidService } from '../../../@core/data/sga_mid.service';
+import { ProduccionAcademicaService } from '../../../@core/data/produccion_academica.service';
 import { FormControl, Validators } from '@angular/forms';
 import { PopUpManager } from '../../../managers/popUpManager';
 import * as moment from 'moment-timezone';
@@ -39,6 +40,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
   produccion_academica: boolean = false;
   es_transferencia: boolean = false;
   nivel: any;
+  metadato_error: any;
 
   tagsObject = {...TAGS_INSCRIPCION_PROGRAMA};
 
@@ -180,6 +182,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     private dialog: MatDialog,
     private evaluacionInscripcionService: EvaluacionInscripcionService,
     private timeService: TimeService,
+    private produccionAcademicaService: ProduccionAcademicaService,
   ) {
     sessionStorage.setItem('TerceroId', this.userService.getPersonaId().toString());
     this.info_persona_id = this.userService.getPersonaId();
@@ -695,6 +698,12 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
       this.sgaMidService.get('produccion_academica/pr_academica/' + this.info_persona_id)
         .subscribe(res => {
+          let lista_productos = res.Response.Body[0]
+          lista_productos.forEach(producto => {
+            if (producto.Metadatos.length < 1){
+              this.metadato_error = producto;
+            }
+          });
           if (res.Response.Code === '200') {
             this.percentage_prod = 100;
             this.percentage_tab_prod[0] = 100;
@@ -911,6 +920,30 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
 
   realizarInscripcion() {
     if(this.Campo1Control.status == "VALID" && this.enfasisControl.status == "VALID") {
+      if(this.metadato_error != undefined || this.metadato_error != null){
+        Swal.fire({
+          icon: 'warning',
+          title: 'ERROR',
+          // text: this.translate.instant('produccion_academica.alerta_llenar_campos_datos_basicos'),
+          text: 'Uno de los productos academicos está incompleto, por favor vuelva a generarlo',
+          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+        }).then( () => {
+          this.metadato_error.Activo = false;
+          this.produccionAcademicaService.get('produccion_academica/'+ this.metadato_error.Id)
+          .subscribe( resp => {
+            resp.Activo = false;
+            this.produccionAcademicaService.put('produccion_academica', resp )
+            .subscribe(res => {
+              if (res.Id == null || res.Id == undefined){
+                this.popUpManager.showErrorAlert(this.translate.instant('produccion_academica.produccion_no_actualizada'));
+              } else {
+                delete this.metadato_error;
+              }
+            });
+          });
+        });
+        return
+      }
 
       this.loading = true;
       this.inscripcionService.get('inscripcion/' + parseInt(sessionStorage.IdInscripcion, 10)).subscribe(
