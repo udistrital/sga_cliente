@@ -786,7 +786,8 @@
         "cargar_datos": "No es posible cargar el tercero",
         "procesar_direccion": "Ocurrio un error procesando la direccion",
         "sin_espacios": "Por favor elimine los espacios",
-        "sin_puntos_comas": "El número de documento consta de 8 a 15 dígitos, sin símbolos, espacios ni letras."
+        "sin_puntos_comas": "El número de documento consta de 8 a 15 dígitos, sin símbolos, espacios ni letras.",
+        "produccion_academica_incompleta": "Uno de los productos academicos está incompleto, por favor vuelva a generarlo."
     },
     "recibo_pago": {
         "generado": "El recibo de pago ha sido generado correctamente",

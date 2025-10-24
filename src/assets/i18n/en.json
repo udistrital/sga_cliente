@@ -753,7 +753,8 @@
         "cargar_datos": "It is not possible to load the third party",
         "procesar_direccion": "An error occurred while processing the address",
         "sin_espacios": "Please remove the spaces",
-        "sin_puntos_comas": "The document number consists of 8 to 15 digits, without symbols, spaces or letters."
+        "sin_puntos_comas": "The document number consists of 8 to 15 digits, without symbols, spaces or letters.",
+        "produccion_academica_incompleta": "One of the academic products is incomplete. Please regenerate it."
     },
     "recibo_pago": {
         "generado": "The payment receipt has been generated correctly",

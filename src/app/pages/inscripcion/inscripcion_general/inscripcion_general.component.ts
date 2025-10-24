@@ -916,8 +916,7 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
         Swal.fire({
           icon: 'warning',
           title: 'ERROR',
-          // text: this.translate.instant('produccion_academica.alerta_llenar_campos_datos_basicos'),
-          text: 'Uno de los productos academicos está incompleto, por favor vuelva a generarlo',
+          text: this.translate.instant('ERROR.produccion_academica_incompleta'),
           confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
         }).then( () => {
           this.metadato_error.Activo = false;
