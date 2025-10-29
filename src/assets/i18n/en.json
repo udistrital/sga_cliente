@@ -62,9 +62,13 @@
             "reportes": "Reports",
             "inscripciones": {
                 "inscripciones": "Inscriptions",
-                "aspirantes": "Aspirantes por programa",
-                "admitidos": "Admitidos por programa",
-                "inscritos": "Inscritos por programa"
+                "aspirantes": "Aspirants by program",
+                "admitidos": "Admitted by program",
+                "inscritos": "Enrolled by program"
+            },
+            "reingresos": {
+                "reingresos": "Readmissions",
+                "solicitudes": "Requests"
             },
             "icfes": {
                 "icfes": "ICFES SNP Registration",
@@ -111,7 +115,9 @@
         "inscripcion": {
             "inscripcion": "Inscription",
             "inscripcion_general": "Enrollment in an academic project",
-            "preinscripcion": "Pre-registration for \nacademic projects"
+            "preinscripcion": "Pre-registration for \nacademic projects",
+            "reingreso": "Readmissions"
+
         },
         "admision": {
             "evaluacion_documentos": "Evaluation of registration\n documents",
@@ -1328,6 +1334,7 @@
         "nivel": "Level",
         "tipo": "Type of registration",
         "estado": "State",
+        "estado_solicitud": "Application status",
         "nueva": "Make a new pre-registration",
         "listado": "Pre-registration list",
         "listado_solicitudes": "List of applications",
@@ -1443,6 +1450,33 @@
         "error_res_solicitud": "An unexpected error occurred giving you response to the request",
         "solicitud_generada": "The request was successfully generated",
         "placeholder_comentarios": "Comment regarding the request",
+        "nombres_reintegro": "Name",
+        "programa_reintegro": "Academic Program",
+        "tipo_identificacion_reintegro": "Identification Type",
+        "numero_identificacion_reintegro": "Identification Number",
+        "fecha_expedicion_reintegro": "Issue Date",
+        "lugar_expedicion_reintegro": "Place of Issue",
+        "codigo_carrera_reintegro": "Career Code",
+        "codigo_estudiante_reintegro": "Student Code",
+        "periodo_desde_reintegro": "Period From",
+        "periodo_hasta_reintegro": "Period To",
+        "motivo_retiro_reintegro": "Reason for Withdrawal",
+        "placeholder_nombres_reintegro": "Enter your first names",
+        "placeholder_programa_reintegro": "Enter your academic program",
+        "placeholder_apellidos_reintegro": "Enter your last names",
+        "placeholder_tipo_identificacion_reintegro": "Select identification type",
+        "placeholder_numero_identificacion_reintegro": "Enter identification number",
+        "placeholder_fecha_expedicion_reintegro": "Select issue date",
+        "placeholder_lugar_expedicion_reintegro": "Select place of issue",
+        "placeholder_codigo_carrera_reintegro": "Enter career code",
+        "placeholder_codigo_estudiante_reintegro": "Select student code",
+        "placeholder_periodo_desde_reintegro": "Select initial period",
+        "placeholder_periodo_hasta_reintegro": "Select final period",
+        "placeholder_motivo_retiro_reintegro": "Describe the reason for your withdrawal from the academic program",
+        "telefono2_reintegro":"Phone number 2",
+        "telefono1_reintegro":"Phone number 1",
+        "placeholder_telefono2_reintegro":"Enter phone number 2",
+        "placeholder_telefono1_reintegro":"Enter phone number 1",
         "inscripcion_general": "General information",
         "generar_matricula": "Generate registration receipt",
         "persona_ya_existe": "The SGA system has found personal information related to the document number filled out!",
