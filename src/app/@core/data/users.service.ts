@@ -108,11 +108,13 @@ export class UserService {
     this.anyService.get(path, 'tercero?query=Activo:True,UsuarioWSO2:' + UserEmail)
       .subscribe(res => {
         const respuesta = res as any[];
-        if (respuesta !== null && respuesta !== undefined) {
-          const minItem = respuesta.reduce((prev, current) => 
-            (current.Id < prev.Id ? current : prev)
-          );
-          this.user = minItem;
+        // if (respuesta !== null && respuesta !== undefined) {
+        //   const minItem = respuesta.reduce((prev, current) => 
+        //     (current.Id < prev.Id ? current : prev)
+        //   );
+        //   this.user = minItem;
+        if (res !== null) {
+          this.user = res[0];
           if (Object.keys(this.user).length !== 0) {
             this.user$.next(this.user);
             this.userSubject.next(this.user);
