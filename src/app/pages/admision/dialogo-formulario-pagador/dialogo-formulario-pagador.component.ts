@@ -245,7 +245,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
     if (nivel == 2 && this.data.info_recibo.IdTipoInscripcion == 15){
       // IdTipoInscripcion: 15  --> INSCRIPCION POSTGRADO
       parametro = 12;
-    }else if (nivel == 2 && this.data.info_recibo.IdTipoInscripcion == 11){
+    }else if (nivel != 1 && nivel != 3 && this.data.info_recibo.IdTipoInscripcion == 11){
       // IdTipoInscripcion: 11  --> REINGRESO POSTGRADO
       parametro = 14;
     } else if (nivel == 1){
