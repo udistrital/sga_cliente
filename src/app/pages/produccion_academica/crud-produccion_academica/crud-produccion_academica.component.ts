@@ -502,7 +502,7 @@ export class CrudProduccionAcademicaComponent implements OnInit {
           this.info_produccion_academica = <ProduccionAcademicaPost>ProduccionAcademica;
           this.sgaMidService.put('produccion_academica', this.info_produccion_academica)
             .subscribe((res: any) => {
-              if (res !== null) {
+              if (res.Id !== null || res.Id !== undefined) {
                 this.loading = false;
                 this.info_produccion_academica = <ProduccionAcademicaPost>res;
                 // this.showToast('info', this.translate.instant('GLOBAL.actualizar'), this.translate.instant('produccion_academica.produccion_actualizada'));
