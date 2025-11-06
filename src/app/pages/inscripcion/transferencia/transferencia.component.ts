@@ -600,7 +600,7 @@ export class TransferenciaComponent implements OnInit {
       if (proyecto.ProyectoId === this.dataTransferencia.ProyectoCurricular.Id) {
         proyecto.Evento.forEach(element => {
           if (element.CodigoAbreviacion === "REIN" && element.Pago === false) {
-            fechaLimite = moment(element.FechaFinEvento, 'YYYY-MM-DD');
+            fechaLimite = moment(element.FechaFinEvento);
           }
         });
       }
