@@ -699,11 +699,13 @@ export class InscripcionGeneralComponent implements OnInit, OnChanges {
       this.sgaMidService.get('produccion_academica/pr_academica/' + this.info_persona_id)
         .subscribe(res => {
           let lista_productos = res.Response.Body[0]
-          lista_productos.forEach(producto => {
-            if (producto.Metadatos.length < 1){
-              this.metadato_error = producto;
-            }
-          });
+          if (Array.isArray(lista_productos)) {
+            lista_productos.forEach(producto => {
+              if (producto.Metadatos.length < 1){
+                this.metadato_error = producto;
+              }
+            });
+          }
           if (res.Response.Code === '200') {
             this.percentage_prod = 100;
             this.percentage_tab_prod[0] = 100;
