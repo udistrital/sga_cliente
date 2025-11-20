@@ -24,6 +24,7 @@ export class HeaderComponent {
   user: any;
   title: any;
   username = '';
+  roles_sga = '';
   userMenu = [{ title: 'ver todas', icon: 'fa fa-list' }];
   public noNotify: any = '0';
 
@@ -50,8 +51,18 @@ export class HeaderComponent {
       });
     this.autenticacion.user$.subscribe((data: any) => {
       const { user, userService } = data;
-      console.log({ user, userService });
-      this.username = typeof user.email !== 'undefined' ? user.email : typeof userService.email !== 'undefined' ? userService.email : '';
+      // console.log({ user, userService });
+      const roleUser = typeof user.role !== 'undefined' ? user.role : [];
+      const roleUserService = typeof userService.role !== 'undefined' ? userService.role : [];
+      const roles = (roleUser.concat(roleUserService)).filter((dato: any) => (dato.indexOf('/') === -1))
+      const defaultRoles = (roleUser.concat(roleUserService)).filter((data1: any) => (data1.indexOf('/')!== -1))
+      if (defaultRoles.length > 0) {
+        roles.push("ASPIRANTE")
+      }
+      const roles_unicos = [...(new Set(roles))];
+      console.log(roles_unicos);
+      this.roles_sga = String(roles_unicos).replace(/,/g, ', ');
+      this.username = user.email;
       this.liveTokenValue = this.username !== '';
     })
   }
