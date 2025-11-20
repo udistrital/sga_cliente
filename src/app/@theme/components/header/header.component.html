@@ -22,6 +22,9 @@
         <li class="dropdown-item" (click)="logout()">{{ 'HOME.LOGOUT' | translate }}</li>
       </ul>
     </div>
+    <div class="roles_en_sga"> 
+      {{ roles_sga }}
+    </div>
   </nb-action>
   <nb-action class="control-item" icon="bell-outline" [badgeText]="notificacionService.noNotify$ | async"
     badgeStatus="danger" (click)="toggleNotifications()"></nb-action>
