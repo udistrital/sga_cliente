@@ -62,7 +62,7 @@ export class HeaderComponent {
       const roles_unicos = [...(new Set(roles))];
       console.log(roles_unicos);
       this.roles_sga = String(roles_unicos).replace(/,/g, ', ');
-      this.username = user.email;
+      this.username = typeof user.email !== 'undefined' ? user.email : typeof userService.email !== 'undefined' ? userService.email : '';
       this.liveTokenValue = this.username !== '';
     })
   }
