@@ -17,6 +17,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { DatosPagador } from '../../../@core/data/models/datos_pagador/datos_pagador';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { UserService } from '../../../@core/data/users.service';
 
 @Component({
   selector: 'dialogo-formulario-pagador',
@@ -74,7 +75,8 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
     private builder: FormBuilder,
     private sgaMidService: SgaMidService,
     private parametrosService: ParametrosService,
-    private agoraService: AgoraService
+    private agoraService: AgoraService,
+    private userService: UserService
   ) {
     this.accion = data.accion || 'descargar';
     this.crearForm();
@@ -86,6 +88,14 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.suscripciones.push(
+      this.userService.getUser().subscribe(user => {
+        console.log('Usuario cargado:', user);
+      })
+    );
+
+    console.log('Datos recibidos en el diálogo:', this.data);
     // Configurar observadores para campos de dirección
     const camposDireccion = [
       'tipoVia', 'numeroVia', 'numeroSecundario', 'complementoDireccion',
@@ -927,6 +937,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
    * Inactiva un registro existente
    */
   private inactivarRegistro(registro: any): Promise<void> {
+    console.log(registro);
     return new Promise((resolve, reject) => {
       const secuencia = parseInt(registro.TERPA_SECUENCIA, 10);
       const añoPago = parseInt(this.data.info_recibo.ReciboAnio);
