@@ -22,6 +22,14 @@
         <li class="dropdown-item" (click)="logout()">{{ 'HOME.LOGOUT' | translate }}</li>
       </ul>
     </div>
+    <div class="roles_en_sga"> 
+      <div class="roles-container">
+        <span>Roles: </span>
+        <mat-select [(ngModel)]="rolSeleccionado" (selectionChange)="evitarSeleccion($event);">
+          <mat-option *ngFor="let rol of roles_sga" [value]="rol"> {{ rol }} </mat-option>
+        </mat-select>
+      </div>
+    </div>
   </nb-action>
   <nb-action class="control-item" icon="bell-outline" [badgeText]="notificacionService.noNotify$ | async"
     badgeStatus="danger" (click)="toggleNotifications()"></nb-action>
