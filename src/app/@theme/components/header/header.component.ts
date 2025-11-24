@@ -53,7 +53,7 @@ export class HeaderComponent {
       });
     this.autenticacion.user$.subscribe((data: any) => {
       const { user, userService } = data;
-      // console.log({ user, userService });
+      
       const roleUser = typeof user.role !== 'undefined' ? user.role : [];
       const roleUserService = typeof userService.role !== 'undefined' ? userService.role : [];
       const roles = (roleUser.concat(roleUserService)).filter((dato: any) => (dato.indexOf('/') === -1))
@@ -61,7 +61,7 @@ export class HeaderComponent {
       if (defaultRoles.length > 0) {
         roles.push("ASPIRANTE")
       }
-      const roles_unicos = [...(new Set(roles))];
+      const roles_unicos = Array.from(new Set(roles));
 
       this.roles_sga = roles_unicos;
       this.rolSeleccionado = String(roles_unicos[0]);
