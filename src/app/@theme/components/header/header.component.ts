@@ -24,6 +24,9 @@ export class HeaderComponent {
   user: any;
   title: any;
   username = '';
+  // roles_sga = '';
+  roles_sga = [];
+  rolSeleccionado:string = 'string';
   userMenu = [{ title: 'ver todas', icon: 'fa fa-list' }];
   public noNotify: any = '0';
 
@@ -50,10 +53,29 @@ export class HeaderComponent {
       });
     this.autenticacion.user$.subscribe((data: any) => {
       const { user, userService } = data;
-      console.log({ user, userService });
+      
+      const roleUser = typeof user.role !== 'undefined' ? user.role : [];
+      const roleUserService = typeof userService.role !== 'undefined' ? userService.role : [];
+      const roles = (roleUser.concat(roleUserService)).filter((dato: any) => (dato.indexOf('/') === -1))
+      const defaultRoles = (roleUser.concat(roleUserService)).filter((data1: any) => (data1.indexOf('/')!== -1))
+      if (defaultRoles.length > 0) {
+        roles.push("ASPIRANTE")
+      }
+      const roles_unicos = Array.from(new Set(roles));
+
+      this.roles_sga = roles_unicos;
+      this.rolSeleccionado = String(roles_unicos[0]);
+
       this.username = typeof user.email !== 'undefined' ? user.email : typeof userService.email !== 'undefined' ? userService.email : '';
       this.liveTokenValue = this.username !== '';
     })
+  }
+
+  evitarSeleccion(event: any){
+    const rol_original = String(this.roles_sga[0]);
+    setTimeout(() => {
+      this.rolSeleccionado = rol_original;  
+    });
   }
 
   useLanguage(language: string) {

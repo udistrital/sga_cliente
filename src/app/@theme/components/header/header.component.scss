@@ -34,10 +34,29 @@
     display: block;
   }
 
+    .header-container nb-action:has(.roles_en_sga) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
   .header-container {
     display: flex;
     align-items: center;
     width: auto;
+
+    .roles_en_sga {
+      margin-top: 4px;
+      text-align: center;
+      font-size: 0.8em;
+      color: #6c757d;
+      display: block;
+      width: 90%;
+    }
+    .roles-container {
+      display: flex;
+      align-items: center; 
+    }
 
     .navigation {
       @include nb-ltr(padding-right, 1rem);
