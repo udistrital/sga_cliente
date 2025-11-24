@@ -71,6 +71,13 @@ export class HeaderComponent {
     })
   }
 
+  evitarSeleccion(event: any){
+    const rol_original = String(this.roles_sga[0]);
+    setTimeout(() => {
+      this.rolSeleccionado = rol_original;  
+    });
+  }
+
   useLanguage(language: string) {
     this.translate.use(language);
   }
