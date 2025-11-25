@@ -17,6 +17,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { DatosPagador } from '../../../@core/data/models/datos_pagador/datos_pagador';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { UserService } from '../../../@core/data/users.service';
 
 @Component({
   selector: 'dialogo-formulario-pagador',
@@ -74,7 +75,8 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
     private builder: FormBuilder,
     private sgaMidService: SgaMidService,
     private parametrosService: ParametrosService,
-    private agoraService: AgoraService
+    private agoraService: AgoraService,
+    private userService: UserService
   ) {
     this.accion = data.accion || 'descargar';
     this.crearForm();
@@ -86,6 +88,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     // Configurar observadores para campos de dirección
     const camposDireccion = [
       'tipoVia', 'numeroVia', 'numeroSecundario', 'complementoDireccion',
@@ -676,8 +679,9 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
                 this.deshabilitarBotonContinuar = true;
                 this.mostrarCamposDireccion = true;
                 this.editandoDireccion = true;
-              } else if (registrosActivos.length === 1) {
+              } else if (registrosActivos.length >= 1) {
                 // Edición de registro existente
+
                 this.datosPagador = registrosActivos[0];
                 this.cargarDatosEnFormulario();
                 this.formularioModificado = false;
@@ -685,7 +689,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
                 this.mostrarCamposDireccion = false;
                 this.editandoDireccion = false;
               } else {
-                // Error: múltiples registros
+                // Error:  registros
                 this.popUpManager.showErrorAlert(this.translate.instant('admision.error_multiples_registros'));
                 this.formularioModificado = false;
               }
@@ -1008,7 +1012,10 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       
       // Crear objeto completo
       const datosRequest = {
-        _posttercero_pago: pagador
+        _posttercero_pago: pagador,
+        tipo_usuario: this.data.tipo_usuario,
+        id_tipo_documento_dueno_recibo: this.data.info_info_persona.TipoIdentificacion.Id,
+        tercero_id: this.data.info_info_persona.Id
       };
       
       // Hacer petición POST
