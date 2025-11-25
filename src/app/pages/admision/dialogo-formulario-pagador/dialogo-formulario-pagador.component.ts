@@ -931,7 +931,6 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
    * Inactiva un registro existente
    */
   private inactivarRegistro(registro: any): Promise<void> {
-    console.log(registro);
     return new Promise((resolve, reject) => {
       const secuencia = parseInt(registro.TERPA_SECUENCIA, 10);
       const añoPago = parseInt(this.data.info_recibo.ReciboAnio);
