@@ -89,13 +89,6 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.suscripciones.push(
-      this.userService.getUser().subscribe(user => {
-        console.log('Usuario cargado:', user);
-      })
-    );
-
-    console.log('Datos recibidos en el diálogo:', this.data);
     // Configurar observadores para campos de dirección
     const camposDireccion = [
       'tipoVia', 'numeroVia', 'numeroSecundario', 'complementoDireccion',
@@ -686,8 +679,9 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
                 this.deshabilitarBotonContinuar = true;
                 this.mostrarCamposDireccion = true;
                 this.editandoDireccion = true;
-              } else if (registrosActivos.length === 1) {
+              } else if (registrosActivos.length >= 1) {
                 // Edición de registro existente
+
                 this.datosPagador = registrosActivos[0];
                 this.cargarDatosEnFormulario();
                 this.formularioModificado = false;
@@ -695,7 +689,7 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
                 this.mostrarCamposDireccion = false;
                 this.editandoDireccion = false;
               } else {
-                // Error: múltiples registros
+                // Error:  registros
                 this.popUpManager.showErrorAlert(this.translate.instant('admision.error_multiples_registros'));
                 this.formularioModificado = false;
               }
@@ -1019,7 +1013,10 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
       
       // Crear objeto completo
       const datosRequest = {
-        _posttercero_pago: pagador
+        _posttercero_pago: pagador,
+        tipo_usuario: this.data.tipo_usuario,
+        id_tipo_documento_dueno_recibo: this.data.info_info_persona.TipoIdentificacion.Id,
+        tercero_id: this.data.info_info_persona.Id
       };
       
       // Hacer petición POST

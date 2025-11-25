@@ -769,6 +769,7 @@ export class TransferenciaComponent implements OnInit {
     assignConfig.data = { 
       info_recibo: data,
       info_info_persona: this.info_info_persona,
+      tipo_usuario: 2,
       accion: 'descargar'
     };
     const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
@@ -782,6 +783,7 @@ export class TransferenciaComponent implements OnInit {
     assignConfig.data = { 
       info_recibo: data,
       info_info_persona: this.info_info_persona,
+      tipo_usuario: 2,
       accion: 'pagar'
     };
     
