@@ -324,52 +324,52 @@ export class CrudInscripcionMultipleComponent implements OnInit {
             const dataInfo = <Array<any>>[];
             this.recibos_pendientes = 0;
             data.forEach(element => {
-              if(element != null){
-              this.projectService.get('proyecto_academico_institucion?query=Id:' + element.ProgramaAcademicoId).subscribe(
-                res => {
-                  const auxRecibo = element.ReciboInscripcion;
-                  const NumRecibo = auxRecibo.split('/', 1);
-                  element.ReciboInscripcion = NumRecibo;
-                  element.ReciboAnio = auxRecibo.split('/', 2)[1];
-                  element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
-                  element.ProgramaAcademicoId = res[0].Nombre;
-                  element.IdTipoInscripcion = 15;
-                  element.Periodo = this.periodo.Id;
-                  let level = res[0].NivelFormacionId.NivelFormacionPadreId;
-                  if (level == null || level == undefined) {
-                    level = res[0].NivelFormacionId.Id;
-                  } else {
-                    level = res[0].NivelFormacionId.NivelFormacionPadreId.Id;
-                  }
-                  element.NivelPP = level;
-                  if (element.Estado === 'Pendiente pago') {
-                    this.recibos_pendientes++;
-                  }
-                  this.result.emit(1);
-                  dataInfo.push(element);
-                  this.dataSource.load(dataInfo);
-                  this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
-                  if (element.Estado == "Vencido"){
-                    this.inscripcionService.get('inscripcion/' + element.Id)
-                    .subscribe(res =>{
-                      res.Activo = false;
-                      res.PeriodoId = 0;
-                      this.inscripcionService.put('inscripcion/', res).subscribe( ()=>{
-                        // this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('recibo_pago.mensaje_recibo_vencido'));
-                        Swal.fire({
-                          icon: 'warning',
-                          text: this.translate.instant('recibo_pago.mensaje_recibo_vencido'),
-                          confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+              if (element != null) {
+                this.projectService.get('proyecto_academico_institucion?query=Id:' + element.ProgramaAcademicoId).subscribe(
+                  res => {
+                    const auxRecibo = element.ReciboInscripcion;
+                    const NumRecibo = auxRecibo.split('/', 1);
+                    element.ReciboInscripcion = NumRecibo;
+                    element.ReciboAnio = auxRecibo.split('/', 2)[1];
+                    element.FechaCreacion = momentTimezone.tz(element.FechaCreacion, 'America/Bogota').format('DD-MM-YYYY hh:mm:ss');
+                    element.ProgramaAcademicoId = res[0].Nombre;
+                    element.IdTipoInscripcion = 15;
+                    element.Periodo = this.periodo.Id;
+                    let level = res[0].NivelFormacionId.NivelFormacionPadreId;
+                    if (level == null || level == undefined) {
+                      level = res[0].NivelFormacionId.Id;
+                    } else {
+                      level = res[0].NivelFormacionId.NivelFormacionPadreId.Id;
+                    }
+                    element.NivelPP = level;
+                    if (element.Estado === 'Pendiente pago') {
+                      this.recibos_pendientes++;
+                    }
+                    this.result.emit(1);
+                    dataInfo.push(element);
+                    this.dataSource.load(dataInfo);
+                    this.dataSource.setSort([{ field: 'Id', direction: 'desc' }]);
+                    if (element.Estado == "Vencido") {
+                      this.inscripcionService.get('inscripcion/' + element.Id)
+                        .subscribe(res => {
+                          res.Activo = false;
+                          res.PeriodoId = 0;
+                          this.inscripcionService.put('inscripcion/', res).subscribe(() => {
+                            // this.popUpManager.showAlert(this.translate.instant('GLOBAL.info'), this.translate.instant('recibo_pago.mensaje_recibo_vencido'));
+                            Swal.fire({
+                              icon: 'warning',
+                              text: this.translate.instant('recibo_pago.mensaje_recibo_vencido'),
+                              confirmButtonText: this.translate.instant('GLOBAL.aceptar'),
+                            });
+                          });
                         });
-                      });
-                    });
-                  }
-                },
-                error => {
-                  this.loading = false;
-                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-                },
-              );
+                    }
+                  },
+                  error => {
+                    this.loading = false;
+                    this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+                  },
+                );
               }
 
             })
@@ -492,7 +492,7 @@ export class CrudInscripcionMultipleComponent implements OnInit {
       });
       return;
     }
-    
+
     if (this.recibos_pendientes >= 3) {
       this.popUpManager.showErrorAlert(this.translate.instant('recibo_pago.maximo_recibos'));
     } else {
@@ -563,8 +563,8 @@ export class CrudInscripcionMultipleComponent implements OnInit {
               // if (proyecto.ProyectoId === this.selectedProject && proyecto.Evento != null) {
               if (proyecto.ProyectoId === this.selectedProject) {
                 // halla el evento inscripción que indica fechas de pago
-                proyecto.Evento.forEach(evento =>{
-                  if (evento.Pago === true && evento.CodigoAbreviacion === "INSCR"){
+                proyecto.Evento.forEach(evento => {
+                  if (evento.Pago === true && evento.CodigoAbreviacion === "INSCR") {
                     evento_inscripcion_pago = evento;
                   }
                 });
@@ -838,28 +838,31 @@ export class CrudInscripcionMultipleComponent implements OnInit {
     assignConfig.width = '1300px';
     assignConfig.maxHeight = '80vh';
     assignConfig.autoFocus = false;
-    assignConfig.data = { 
+    assignConfig.data = {
+      tipo_usuario: 1,
       info_recibo: data,
       info_info_persona: this.info_info_persona,
       accion: 'descargar'
     };
-    
+
     const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
   }
-  
+
   mostrarFormularioYPagar(data) {
     const assignConfig = new MatDialogConfig();
     assignConfig.width = '1300px';
     assignConfig.maxHeight = '80vh';
     assignConfig.autoFocus = false;
-    assignConfig.data = { 
+    assignConfig.data = {
+            tipo_usuario: 1,
+
       info_recibo: data,
       info_info_persona: this.info_info_persona,
       accion: 'pagar'
     };
-    
+
     const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
-    
+
     dialogo.afterClosed().subscribe(result => {
       if (result && result.continuar) {
         this.abrirPago(data);
