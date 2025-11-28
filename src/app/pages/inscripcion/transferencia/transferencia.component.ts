@@ -663,7 +663,7 @@ export class TransferenciaComponent implements OnInit {
         PeriodoId: this.dataTransferencia.Periodo.Id,
         Nivel: this.dataTransferencia.TipoInscripcion.NivelId,
         ProgramaAcademicoId: this.dataTransferencia.ProyectoCurricular.Id,
-        ProgramaAcademicoCodigo: this.dataTransferencia.ProyectoCurricular.Id,
+        ProgramaAcademicoCodigo: this.dataTransferencia.ProyectoCurricular.Codigo,
         TipoInscripcionId: this.dataTransferencia.TipoInscripcion.Id,
         Year: this.dataTransferencia.Periodo.Year,
         Periodo: parseInt(this.dataTransferencia.Periodo.Ciclo, 10),
@@ -769,6 +769,7 @@ export class TransferenciaComponent implements OnInit {
     assignConfig.data = { 
       info_recibo: data,
       info_info_persona: this.info_info_persona,
+      tipo_usuario: 1,
       accion: 'descargar'
     };
     const dialogo = this.dialog.open(DialogoFormularioPagadorComponent, assignConfig);
@@ -782,6 +783,7 @@ export class TransferenciaComponent implements OnInit {
     assignConfig.data = { 
       info_recibo: data,
       info_info_persona: this.info_info_persona,
+      tipo_usuario: 1,
       accion: 'pagar'
     };
     
