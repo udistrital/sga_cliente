@@ -344,7 +344,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           // info basica
           this.basicform = this.formBuilder.group({
             codigo_snies: ['', [Validators.required, Validators.maxLength(10)]],
-            codigo_interno: ['', [Validators.required,, Validators.minLength(3), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
+            codigo_interno: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
             nombre_proyecto: ['', Validators.required],
             abreviacion_proyecto: [proyecto_a_clonar.ProyectoAcademico.CodigoAbreviacion, Validators.required],
             correo_proyecto: [proyecto_a_clonar.ProyectoAcademico.CorreoElectronico, [Validators.required, Validators.email]],
@@ -530,7 +530,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
   }
 
   loadenfasis() {
-    this.proyectoacademicoService.get('enfasis')
+    this.proyectoacademicoService.get('enfasis?limit=0')
       .subscribe(res => {
         const r = <any>res;
         if (res !== null && r.Type !== 'error') {
@@ -665,7 +665,7 @@ export class CrudProyectoAcademicoComponent implements OnInit, OnDestroy {
           Id: 0,
           Nombre: this.basicform.value.nombre_proyecto,
           CodigoSnies: this.basicform.value.codigo_snies,
-          Codigo: this.basicform.value.codigo_interno,
+          Codigo: String( this.basicform.value.codigo_interno ),
           Duracion: Number(this.basicform.value.duracion_proyecto),
           NumeroCreditos: Number(this.basicform.value.creditos_proyecto),
           CorreoElectronico: this.basicform.value.correo_proyecto,
