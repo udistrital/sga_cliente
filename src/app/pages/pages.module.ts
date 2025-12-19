@@ -11,6 +11,7 @@ import { SgaMidService } from '../@core/data/sga_mid.service';
 import { DocumentoService } from '../@core/data/documento.service';
 import { MatDialogModule } from '@angular/material';
 import { NewTercero } from '../@theme/components/new-tercero/new-tercero.component';
+import { FloatingButtonIrisComponent } from './floating-button-iris/floating-button-iris.component';
 
 
 
@@ -28,6 +29,7 @@ const PAGES_COMPONENTS = [
   ],
   declarations: [
     ...PAGES_COMPONENTS,
+    FloatingButtonIrisComponent,
   ],
   entryComponents: [
   ],
