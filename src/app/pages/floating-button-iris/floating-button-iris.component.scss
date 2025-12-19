@@ -1,0 +1,42 @@
+.icono-fijo {
+  position: fixed;
+  bottom: 20px;  /* Ajusta la distancia desde la parte inferior */
+  right: 20px;   /* Ajusta la distancia desde la parte derecha */
+  z-index: 1000;
+  border-radius: 50%;
+  border-width: 0.1em;
+  border-color: rgb(0, 103, 141);
+  border-style: solid;
+  background-color: #fff;  /* Fondo blanco */
+  padding: 9px;
+  box-shadow: 
+    0 0 20px rgba(0, 0, 0, 0.45);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.icono-fijo img {
+  width: 40px;
+  height: 40px;
+}
+
+.tooltip-text {
+  display: none;
+  max-width: 120px;
+  width: max-content;    
+  right: 0;
+}
+
+.icono-fijo:hover .tooltip-text {
+  display: block;
+  position: absolute;
+  bottom: 60px;
+  background-color: rgba(0, 103, 141, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+.icono-fijo:hover {
+  box-shadow: 
+    0 12px 30px rgba(0, 0, 0, 0.55);
+  transform: scale(1.03);
+}
