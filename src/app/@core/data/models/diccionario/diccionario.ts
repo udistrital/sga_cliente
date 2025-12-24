@@ -1,6 +1,9 @@
 export const VIEWS = Object.freeze({
     LIST: Symbol(),
     FORM: Symbol(),
+    SECONDARY_LIST: Symbol(),
+    SECONDARY_FORM: Symbol(),
+    SUMMARY: Symbol(),
 })
 
 export const MODALS = Object.freeze({
@@ -18,6 +21,7 @@ export const ACTIONS = Object.freeze({
     CREATE: Symbol(),
     SEND: Symbol(),
     EDIT_PART: Symbol(),
+    EVALUATE: Symbol(),
 })
 
 export const ROLES = Object.freeze({
@@ -31,5 +35,7 @@ export const ROLES = Object.freeze({
     ASISTENTE_ADMISIONES: 'ASISTENTE_ADMISIONES',
     ADMIN_DOCENCIA: 'ADMIN_DOCENCIA',
     DOCENTE: 'DOCENTE',
-    ASIS_PROYECTO: 'ASIS_PROYECTO'
+    ASIS_PROYECTO: 'ASIS_PROYECTO',
+    SEC_DECANATURA: 'SEC_DECANATURA',
+    DECANO: 'DECANO'
 })

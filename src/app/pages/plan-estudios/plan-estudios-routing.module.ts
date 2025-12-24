@@ -3,6 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { PlanEstudiosComponent } from './plan-estudios.component';
 import { CreacionPlanEstudiosComponent } from './creacion-plan-estudios/creacion-plan-estudios.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
+import { EvaluarPlanEstudiosComponent } from './evaluar-plan-estudios/evaluar-plan-estudios.component';
+import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar/dialogo-evaluar.component';
+import { RevisarPlanesEstudioComponent } from './revisar-planes-estudio/revisar-planes-estudio.component';
+import { DialogVerObservacionComponent } from './dialogo-ver-observacion/dialogo-ver-observacion.component';
 
 
 const routes: Routes = [{
@@ -12,7 +16,18 @@ const routes: Routes = [{
     path: 'crear',
     component: CreacionPlanEstudiosComponent,
     canActivate: [AuthGuard]
-  }]
+  },
+  {
+    path: 'evaluar',
+    component: EvaluarPlanEstudiosComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'revisar',
+    component: RevisarPlanesEstudioComponent,
+    canActivate: [AuthGuard]
+  }
+  ]
 }];
 
 @NgModule({
@@ -23,5 +38,10 @@ export class PlanEstudiosRoutingModule { }
 
 export const routedComponents = [
   PlanEstudiosComponent,
-  CreacionPlanEstudiosComponent
+  CreacionPlanEstudiosComponent,
+  RevisarPlanesEstudioComponent,
+  EvaluarPlanEstudiosComponent,
+  DialogoEvaluarComponent,
+  RevisarPlanesEstudioComponent,
+  DialogVerObservacionComponent
 ]

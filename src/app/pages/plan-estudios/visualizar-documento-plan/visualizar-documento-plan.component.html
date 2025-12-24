@@ -1,0 +1,14 @@
+<mat-dialog-content class="mat-typography" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}">
+<!-- <object [data]="documentData | safeUrl" type="application/pdf" *ngIf="documentLoad" id="pdf_view"></object> -->
+    
+
+</mat-dialog-content>
+<mat-dialog-actions style="align-items: center;flex-direction: row;">
+    <button mat-icon-button (click)="downloadDocument()" matTooltip="{{ 'plan_estudios.descargar_documento' | translate }}" style="margin-left: 20px;">
+        <mat-icon class="material-symbols-outlined">file_download</mat-icon>
+    </button>
+
+    <button mat-button mat-dialog-close style="background-color: var(--primary);color: white; position: absolute;
+    margin-left: calc( 40vw - 100px);" matTooltip="{{ 'GLOBAL.cerrar_visualizador' | translate }}">{{ 'GLOBAL.cerrar_visualizador' | translate }}</button>
+</mat-dialog-actions>

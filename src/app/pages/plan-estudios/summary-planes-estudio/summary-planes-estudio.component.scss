@@ -1,0 +1,156 @@
+.encabezado {
+    display: flex;
+    justify-content: space-around;
+}
+
+.content {
+    width: 528px;
+    height: 230px;
+}
+
+.texto_titulo {
+    position: relative;
+    top: -60px;
+    left: 138px;
+    width: 388px;
+    height: 60px;
+    text-align: center;
+}
+
+.plan_view {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.table_info {
+    max-width: 420px;
+    min-width: 360px;
+    thead {
+        background-color: var(--primary);
+        color: white;
+        .subheader {
+            background-color: gray;
+        }
+        th {
+            padding: 0.4rem;
+            text-align: center;
+        }
+    }
+    tbody {
+        td {
+            padding: 0.3rem;
+            border-bottom: 1px solid gray;
+        }
+    }
+}
+
+.cntr {
+    text-align: center;
+}
+
+.detail_plan {
+    width: 100%;
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px dashed var(--primary);
+    display: flex;
+    justify-content: space-evenly;
+    overflow-x: auto;
+}
+
+.convencion {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.column_semester {
+    width: 254px;
+    padding: 2px;
+    margin: 2px;
+    display: flex;
+    flex-direction: column;
+}
+
+.top_col {
+    font-weight: 400;
+    height: 2.25rem;
+    text-align: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border: 1px solid green;
+}
+
+.bottom_col {
+    font-weight: 400;
+    height: 2.25rem;
+    margin-top: auto;
+    text-align: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border: 1px solid saddlebrown;
+}
+
+.info_asignatura {
+    td {
+        width: 50px;
+        border: 1px solid var(--primary);
+        text-align: center;
+        vertical-align: center;
+    };
+
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.2);
+}
+
+.space_name {
+    height: 2.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.escuelas {
+    height: 179.2px;
+    border: 1px solid var(--primary);
+    margin: 10px;
+    padding: 5px;
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,.35);
+	display: grid;
+    // ? organizar maximo de 5 items por columna
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+
+    .cuadro {
+        border: 1px dashed var(--primary);
+        width: 250px;
+        height: 2rem;
+        margin: 0.1rem 0.5rem;
+        text-align: center;
+        padding: 0.3rem 0.1rem;
+        font-weight: 400;
+        font-size: 0.9rem;
+    }
+}
+
+.alinear-center-espacio-doble {
+    padding-left: 25%;
+    padding-right: 25%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-around;
+}

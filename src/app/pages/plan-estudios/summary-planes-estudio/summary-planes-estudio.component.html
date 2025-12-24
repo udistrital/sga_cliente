@@ -1,0 +1,321 @@
+<div class="encabezado">
+    <div class="content">
+        <img src="../../../../assets/images/logonuevo.png" alt="logo_distrital">
+        <div class="texto_titulo">
+            <h3>{{dataPlanes.Facultad}}</h3>
+            <h4>{{dataPlanes.Nombre}}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+  <div [class]="defineCols" *ngFor="let plan of dataPlanes.Planes" style="padding-top: 2rem;">
+    <div class="plan_view">
+        <table class="table_info">
+            <thead>
+                <tr>
+                    <th colspan="2">{{ plan.Nombre }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ 'plan_estudios.resolucion_aprobacion' | translate }}</td>
+                    <td>{{ plan.Resolucion }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'plan_estudios.total_creditos' | translate }}</td>
+                    <td>{{ plan.Creditos }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'proyecto.codigo_snies' | translate }}</td>
+                    <td>{{ plan.Snies }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'plan_estudios.plan_estudios' | translate }}</td>
+                    <td>{{ plan.PlanEstudio }} </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="detail_plan">
+            <div class="column_semester" *ngFor="let periodo of plan.InfoPeriodos">
+                <div class="top_col">{{ 'GLOBAL.periodo' | translate }}: {{ periodo.Orden }}</div>
+                <table id="{{espacio.Codigo}}" class="info_asignatura" *ngFor="let espacio of periodo.Espacios"
+                        (mouseenter)="mouseHoverIn($event, espacio.Prerequisitos)" (mouseleave)="mouseHoverOut($event, espacio.Prerequisitos)"
+                        [style.backgroundColor]="espacio.EscuelaColor" [style.color]="espacio.EscuelaColorFuente">
+                    <tr>
+                        <td title="{{ 'plan_estudios.codigo_asignatura' | translate }}">{{espacio.Codigo}}</td>
+                        <td colspan="4" title="{{espacio.Nombre}}">
+                            <div class="space_name">
+                                {{espacio.Nombre}}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td title="{{ 'plan_estudios.cant_creditos' | translate }}">{{espacio.Creditos}}</td>
+                        <td title="{{ 'espacios_academicos.placeholder_htd' | translate }}">{{espacio.HTD}}</td>
+                        <td title="{{ 'espacios_academicos.placeholder_htc' | translate }}">{{espacio.HTC}}</td>
+                        <td title="{{ 'espacios_academicos.placeholder_hta' | translate }}">{{espacio.HTA}}</td>
+                        <td title="{{ 'plan_estudios.clasificacion' | translate }}">{{espacio.Clasificacion}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" >&nbsp;{{printRequired(espacio.Prerequisitos)}}</td>
+                    </tr>
+                </table>
+                <div class="bottom_col">{{ 'plan_estudios.cant_creditos' | translate }}: {{ periodo.TotalCreditos }} </div>
+            </div>
+        </div>
+            
+        <table class="table_info">
+            <thead>
+                <!-- <tr>
+                    <th colspan="2">{{ plan.Nombre }}</th>
+                </tr> -->
+                <tr class="subheader">
+                    <th>{{ 'GLOBAL.item' | translate }}</th>
+                    <th>{{ 'GLOBAL.total' | translate }} </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ 'espacios_academicos.obligatorioBasicoTexto' | translate }}</td>
+                    <td class="cntr">{{ plan.Resumen.OB }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'espacios_academicos.obligatorioComplementarioTexto' | translate }}</td>
+                    <td class="cntr">{{ plan.Resumen.OC }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'espacios_academicos.electivaIntrinsecaTexto' | translate }}</td>
+                    <td class="cntr">{{ plan.Resumen.EI }} </td>
+                </tr>
+                <tr>
+                    <td>{{ 'espacios_academicos.electivaExtrinsecaTexto' | translate }}</td>
+                    <td class="cntr">{{ plan.Resumen.EE }} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="convencion">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="741px"
+        height="218px" viewBox="-0.5 -0.5 741 218"
+        content="&lt;mxfile host=&quot;Electron&quot; modified=&quot;2023-08-30T02:45:11.875Z&quot; agent=&quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.3.7 Chrome/112.0.5615.204 Electron/24.5.0 Safari/537.36&quot; etag=&quot;WWao3yA3EkWyRpSu1BSp&quot; version=&quot;21.3.7&quot; type=&quot;device&quot;&gt;&lt;diagram name=&quot;Página-1&quot; id=&quot;JvY1HcH73SmRbJTGj_wb&quot;&gt;7ZpRc6I6FMc/jY/tAAFpHxWxdWZb965797b3LYWI2UZiQ6i6n34TCQKGtnZaUdftTJUcQkL+v5PkHLAFvOniisHZ5IaGiLQsI1y0QK9lWaYNbPElLcvMcuGYmSFiOFSVCsMI/0LKaChrikOUVCpySgnHs6oxoHGMAl6xQcbovFptTEm11xmMkGYYBZDo1v9wyCdqFJZb2K8RjiZ5z2b7MjszhXllNZJkAkM6L5mA3wIeo5RnR9OFh4gUL9clu67/wtn1jTEU820uSJ+cf+4GV6Sz6PUdwxyw/+fkDFhZM8+QpGrE6m75MpeA0TQOkWzFaIHufII5Gs1gIM/OBXRhm/ApESVTHI4xIR4llIlyiMYwJeLmugln9BHl9pYFDNB2L8SddiMCk0Q1vVZINqQPT434GTGOFiWTGu4VolPE2VJUUWddpfwydylVnhcgnbayTcoQbWWEynmiddOFvuJASfwOuU2zRm7wMcVf1vaz9bTsDUFNXVC7Rk+wMzmBJqfX8kCrC0IcUbnqIPFB4KpvHMWQpwxqaovR89ckjWmMNjxbmSARjYoiy8balVJisXZ0lH2Kw1D2UouwCnlMY65WP9P4HFwXb9MyTadJXLaOC8YchzDMWQVM8utchpjT5GRIXW6QsmtIGY2ScjVSXxli6CnFyUmRMS2nisbV0bg1S561MzKXGpnr7+LTOBP/15SJDtVU+s7gA/wpV8EeZiI0ojuAFghlETs8aqA6oayand90msSWN/webB6lM8Qgx88nhM5yqhNujaSMrtEZZ+kx25voOinP4pCYTk8Inm1uMe/qIu7dwXM0eC2rneUkMxhXuLSfUpmLdR9g8BittDoLMvk7spsYcwzJSqi8pjiK5PfQU+4wfBAcIKcMZxN4OiNoKvSEK0PWrxhH1nV27Q68g6Dx4e2k9mY2ZrvnznbekQepn+4doCZ/GN7+8G+9wfDWH2loCpHM92XCIivzQb/d7yttS/bsr9E8biMxsHIZyhysOg7uxzmMbqzrR/e+PzF/0F/txbUbzs0zfYX1iEjYxsJ7A6wW0tUsPNGpYjY6VWoR6c+Jht3aRa+7SuDMBAe72PiOgxew9s5LT7V3sO/5A+UCPhEJBn6WD1oGMc9y+F6coADmvT6wYsP7uw+WnaW9f2dpJEjyfd1Z/EWts/x1DbXf7j9EMvXE9XZ40/0mYfbkxxfJvTMaXN12vv/7Td+j3/f2YEPUBp9tb/O0tE753T2Dq5mUx/uqoOaRZqOvCvT45ZjU3HTOfaup501HpCawDkzNuljteNRsH5iaejBzd3csYtrGgYlp1q2bWZAW4udSSA+nUrT4IZmtysJ9Pd1q5Cfkwfn5+avJQaX9j+DbiPn2uAnWvDxaPyJt5u1RW5MShREaqSJlfEIjGkPiF9aNuLeo84XSmRLrJ+J8qQI3mHJaBSAUZMs7df2qcC8LIrZVxd6ifLK3VKWXSb0IJ6EpC9BrCqiFlUMWIf5aRdWi1OdV2AwR+Y4GVe7j88k5J0/O3pbcYYG7OHlw7rbgrIMiB9x9kNsJgcstCXw6gNWlHcbgslRhRnHMk1LLX6WhFFJuREH5j0ELmFmLBdr1rX0gQdQj7kbnaTE178vnGpynedTxppeAw5qm9p8yTdc/cH4LgH1YAIw/BoCzJQCnIQCiWPxAPFvpip/ZA/83&lt;/diagram&gt;&lt;/mxfile&gt;"
+        style="background-color: rgb(255, 255, 255);">
+        <defs />
+        <g>
+            <rect x="10.24" y="10.24" width="716.8" height="179.2" fill="#000000" stroke="#000000" stroke-width="1.28"
+                pointer-events="all" transform="translate(2.56,3.84)" opacity="0.25" />
+            <rect x="10.24" y="10.24" width="716.8" height="179.2" fill="rgb(255, 255, 255)" stroke="#03678f"
+                stroke-width="1.28" pointer-events="all" />
+            <rect x="227.84" y="23.04" width="51.2" height="38.4" fill="#000000" stroke="#000000" stroke-width="1.28"
+                pointer-events="all" transform="translate(2.56,3.84)" opacity="0.25" />
+            <rect x="227.84" y="23.04" width="51.2" height="38.4" fill="rgb(255, 255, 255)" stroke="#03678f"
+                stroke-width="1.28" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="198" y="37" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="12px"
+                        text-anchor="middle">#</text>
+                </switch>
+            </g>
+            <rect x="23.04" y="23.04" width="147.2" height="38.4" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="131" y="36" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px" text-anchor="end">
+                        {{ 'plan_estudios.codigo_asignatura' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="35.84" y="61.44" width="134.4" height="38.4" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="131" y="66" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px"
+                        text-anchor="end">{{ 'plan_estudios.cant_creditos' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="80.64" y="99.84" width="89.6" height="25.6" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="131" y="91" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px"
+                        text-anchor="end">{{ 'plan_estudios.prerequisitos' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="87.04" y="138.24" width="192" height="25.6" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="143" y="121" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px" text-anchor="middle">
+                        HTD - {{ 'espacios_academicos.placeholder_htd' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="247.04" y="163.84" width="217.6" height="25.6" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="278" y="141" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px" text-anchor="middle">
+                        HTC - {{ 'espacios_academicos.placeholder_htc' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="445.44" y="138.24" width="204.8" height="25.6" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="428" y="121" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px" text-anchor="middle">
+                        HTA - {{ 'espacios_academicos.placeholder_hta' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="522.24" y="71.04" width="204.8" height="19.2" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="410" y="66" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px">
+                        OC - {{ 'espacios_academicos.obligatorioComplementarioTexto' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="23.04" y="180.48" width="153.6" height="21.76" rx="3.26" ry="3.26" fill="#000000" stroke="#000000"
+                stroke-width="1.28" pointer-events="all" transform="translate(2.56,3.84)" opacity="0.25" />
+            <rect x="23.04" y="180.48" width="153.6" height="21.76" rx="3.26" ry="3.26" fill="#e3f6ff" stroke="#03678f"
+                stroke-width="1.28" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="78" y="153" fill="#333333" font-family="Roboto" font-size="12px"
+                        text-anchor="middle">{{ 'plan_estudios.convenciones' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="522.24" y="32.64" width="204.8" height="19.2" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="410" y="36" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px">
+                        {{ 'plan_estudios.clasificacion' | translate }}:</text>
+                </switch>
+            </g>
+            <rect x="522.24" y="51.84" width="204.8" height="19.2" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="410" y="51" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px">
+                        OB - {{ 'espacios_academicos.obligatorioBasicoTexto' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="522.24" y="90.24" width="204.8" height="19.2" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="410" y="81" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px">
+                        EI - {{ 'espacios_academicos.electivaIntrinsecaTexto' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="522.24" y="109.44" width="204.8" height="19.2" fill="none" stroke="none" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="410" y="96" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px">
+                        EE - {{ 'espacios_academicos.electivaExtrinsecaTexto' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="279.04" y="23.04" width="204.8" height="38.4" fill="#000000" stroke="#000000" stroke-width="1.28"
+                pointer-events="all" transform="translate(2.56,3.84)" opacity="0.25" />
+            <rect x="279.04" y="23.04" width="204.8" height="38.4" fill="rgb(255, 255, 255)" stroke="#03678f"
+                stroke-width="1.28" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="298" y="36" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="10px"
+                        text-anchor="middle">{{ 'plan_estudios.nombre_asignatura' | translate }}</text>
+                </switch>
+            </g>
+            <rect x="227.84" y="61.44" width="51.2" height="38.4" fill="#000000" stroke="#000000" stroke-width="1.28"
+                pointer-events="all" transform="translate(2.56,3.84)" opacity="0.25" />
+            <rect x="227.84" y="61.44" width="51.2" height="38.4" fill="rgb(255, 255, 255)" stroke="#03678f"
+                stroke-width="1.28" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="198" y="67" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="12px"
+                        text-anchor="middle">#</text>
+                </switch>
+            </g>
+            <rect x="279.04" y="61.44" width="51.2" height="38.4" fill="#000000" stroke="#000000" stroke-width="1.28"
+                pointer-events="all" transform="translate(2.56,3.84)" opacity="0.25" />
+            <rect x="279.04" y="61.44" width="51.2" height="38.4" fill="rgb(255, 255, 255)" stroke="#03678f"
+                stroke-width="1.28" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="238" y="67" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="12px"
+                        text-anchor="middle">#</text>
+                </switch>
+            </g>
+            <rect x="330.24" y="61.44" width="51.2" height="38.4" fill="#000000" stroke="#000000" stroke-width="1.28"
+                pointer-events="all" transform="translate(2.56,3.84)" opacity="0.25" />
+            <rect x="330.24" y="61.44" width="51.2" height="38.4" fill="rgb(255, 255, 255)" stroke="#03678f"
+                stroke-width="1.28" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="278" y="67" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="12px"
+                        text-anchor="middle">#</text>
+                </switch>
+            </g>
+            <rect x="381.44" y="61.44" width="51.2" height="38.4" fill="#000000" stroke="#000000" stroke-width="1.28"
+                pointer-events="all" transform="translate(2.56,3.84)" opacity="0.25" />
+            <rect x="381.44" y="61.44" width="51.2" height="38.4" fill="rgb(255, 255, 255)" stroke="#03678f"
+                stroke-width="1.28" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="318" y="67" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="12px"
+                        text-anchor="middle">#</text>
+                </switch>
+            </g>
+            <rect x="432.64" y="61.44" width="51.2" height="38.4" fill="#000000" stroke="#000000" stroke-width="1.28"
+                pointer-events="all" transform="translate(2.56,3.84)" opacity="0.25" />
+            <rect x="432.64" y="61.44" width="51.2" height="38.4" fill="rgb(255, 255, 255)" stroke="#03678f"
+                stroke-width="1.28" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="358" y="67" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="12px"
+                        text-anchor="middle">XX</text>
+                </switch>
+            </g>
+            <rect x="227.84" y="99.84" width="256" height="25.6" fill="#000000" stroke="#000000" stroke-width="1.28"
+                pointer-events="all" transform="translate(2.56,3.84)" opacity="0.25" />
+            <rect x="227.84" y="99.84" width="256" height="25.6" fill="rgb(255, 255, 255)" stroke="#03678f"
+                stroke-width="1.28" pointer-events="all" />
+            <g transform="translate(-0.5 -0.5)scale(1.28)">
+                <switch>
+                    <text x="180" y="92" fill="rgb(0, 0, 0)" font-family="Roboto" font-size="12px"> #, 
+                        #, #...&#xa;</text>
+                </switch>
+            </g>
+            <path d="M 170.24 42.24 L 219.69 42.24" fill="none" stroke="#03678f" stroke-width="1.28" stroke-miterlimit="10"
+                pointer-events="stroke" />
+            <path d="M 226.41 42.24 L 217.45 46.72 L 219.69 42.24 L 217.45 37.76 Z" fill="#03678f" stroke="#03678f"
+                stroke-width="1.28" stroke-miterlimit="10" pointer-events="all" />
+            <path d="M 170.24 80.64 L 219.69 80.64" fill="none" stroke="#03678f" stroke-width="1.28" stroke-miterlimit="10"
+                pointer-events="stroke" />
+            <path d="M 226.41 80.64 L 217.45 85.12 L 219.69 80.64 L 217.45 76.16 Z" fill="#03678f" stroke="#03678f"
+                stroke-width="1.28" stroke-miterlimit="10" pointer-events="all" />
+            <path d="M 170.24 112.64 L 219.69 112.64" fill="none" stroke="#03678f" stroke-width="1.28"
+                stroke-miterlimit="10" pointer-events="stroke" />
+            <path d="M 226.41 112.64 L 217.45 117.12 L 219.69 112.64 L 217.45 108.16 Z" fill="#03678f" stroke="#03678f"
+                stroke-width="1.28" stroke-miterlimit="10" pointer-events="all" />
+            <path d="M 279.04 151.04 L 304.64 151.04 L 304.64 107.99" fill="none" stroke="#03678f" stroke-width="1.28"
+                stroke-miterlimit="10" pointer-events="stroke" />
+            <path d="M 304.64 101.27 L 309.12 110.23 L 304.64 107.99 L 300.16 110.23 Z" fill="#03678f" stroke="#03678f"
+                stroke-width="1.28" stroke-miterlimit="10" pointer-events="all" />
+            <path d="M 355.84 163.84 L 355.84 107.99" fill="none" stroke="#03678f" stroke-width="1.28"
+                stroke-miterlimit="10" pointer-events="stroke" />
+            <path d="M 355.84 101.27 L 360.32 110.23 L 355.84 107.99 L 351.36 110.23 Z" fill="#03678f" stroke="#03678f"
+                stroke-width="1.28" stroke-miterlimit="10" pointer-events="all" />
+            <path d="M 445.44 151.04 L 407.04 151.04 L 407.04 107.99" fill="none" stroke="#03678f" stroke-width="1.28"
+                stroke-miterlimit="10" pointer-events="stroke" />
+            <path d="M 407.04 101.27 L 411.52 110.23 L 407.04 107.99 L 402.56 110.23 Z" fill="#03678f" stroke="#03678f"
+                stroke-width="1.28" stroke-miterlimit="10" pointer-events="all" />
+            <path d="M 522.24 80.64 L 496.64 80.64 L 509.44 80.64 L 491.99 80.64" fill="none" stroke="#03678f"
+                stroke-width="1.28" stroke-miterlimit="10" pointer-events="stroke" />
+            <path d="M 485.27 80.64 L 494.23 76.16 L 491.99 80.64 L 494.23 85.12 Z" fill="#03678f" stroke="#03678f"
+                stroke-width="1.28" stroke-miterlimit="10" pointer-events="all" />
+        </g>
+    </svg>
+
+    <div class="escuelas">
+        <ng-container *ngFor="let grupo of getGrupos(Escuelas)" style="padding-top: 2rem;">
+            <div [style.backgroundColor]="grupo.Color" [style.color]="grupo.TxtColor" class="cuadro">{{grupo.Nombre}}</div>
+        </ng-container>
+    </div>
+</div>
+
+<div class="alinear-center-espacio-doble">
+    <button mat-raised-button color="primary" (click)="generateStudyPlanDocument()">{{ 'plan_estudios.descargar_documento' | translate }}</button>
+</div>

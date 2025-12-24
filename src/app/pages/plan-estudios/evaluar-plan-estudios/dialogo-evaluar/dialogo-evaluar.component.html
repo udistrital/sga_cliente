@@ -1,0 +1,92 @@
+<div class="dinamic-form" [nbSpinner]="loading">
+    <ng-container>
+        <nb-card-body>
+            <form novalidate [formGroup]="aprobacionForm" #fform="ngForm" class="form-horizontal">
+                <fieldset [ngClass]="{'fieldseter': true}">
+                    <legend><small>&nbsp; {{ 'plan_estudios.evaluar' | translate }}</small></legend>
+
+                    <div class="alinear-center">
+                        <div class="advertencia">{{ 'plan_estudios.mensaje_evaluacion_plan_estudio' | translate }}</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="column">
+                            <p class="bold">{{ 'plan_estudios.evaluacion' | translate }}: </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="column">
+                            <mat-form-field floatLabel="always">
+                                <mat-label>* {{ 'plan_estudios.estado_evaluacion' | translate }}:</mat-label>
+                                <mat-select formControlName="estadoSeleccionado" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                                    <ng-container>
+                                        <mat-option *ngFor="let item of estadosAprobacionList" [value]="item">
+                                            {{ item.Nombre }}
+                                            </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="aprobacionForm.get('estadoSeleccionado').hasError('required') && aprobacionForm.get('estadoSeleccionado').touched">
+                                    {{ 'ptd.error_grupo' | translate }}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="column">
+                            <mat-form-field style="width: 100%;" floatLabel="always">
+                                <mat-label>{{ 'GLOBAL.observaciones' | translate }}</mat-label>
+                                <textarea matInput rows="5" [formControl]="aprobacionForm.get('observaciones')"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="column">
+                            <p class="bold">{{ 'plan_estudios.quien_da_respuesta' | translate }}: </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="column">
+                            <ng-container *ngIf="!multipleRoles">
+                                <mat-form-field style="width: 100%;">
+                                    <mat-label>{{ 'GLOBAL.rol' | translate }}</mat-label>
+                                    <input matInput type="text" formControlName="rolSeleccionado" readonly placeholder="{{ 'GLOBAL.rol' | translate}}">
+                                </mat-form-field>
+                            </ng-container>
+                            <ng-container *ngIf="multipleRoles">
+                                <mat-form-field floatLabel="always">
+                                    <mat-label>* {{ 'GLOBAL.rol' | translate }}:</mat-label>
+                                    <mat-select formControlName="rolSeleccionado" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                                        <ng-container>
+                                            <mat-option *ngFor="let item of rolesList" [value]="item">
+                                                {{ item }}
+                                                </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="aprobacionForm.get('rolSeleccionado').hasError('required') && aprobacionForm.get('rolSeleccionado').touched">
+                                        {{ 'ptd.error_grupo' | translate }}
+                                    </mat-error>
+                                </mat-form-field>
+                            </ng-container>
+                        </div>
+                    <div class="column">
+                        <mat-form-field style="width: 100%;">
+                        <mat-label for="nombreEvaluador">{{ 'plan_estudios.nombre_evaluador' | translate }}</mat-label>
+                        <input matInput type="text" [formControl]="aprobacionForm.get('nombreEvaluador')">
+                        </mat-form-field>
+                    </div>
+                    </div>
+
+                    <div class="row">
+                        <button mat-raised-button color="primary" (click)="sendEvaluation()">{{ 'plan_estudios.dar_respuesta' |
+                        translate}}</button>
+                        <button mat-raised-button color="primary" (click)="salirObservacion()">{{ 'GLOBAL.salir' | translate }}</button>
+                    </div>
+                </fieldset>
+            </form>
+        </nb-card-body>
+    </ng-container>
+</div>

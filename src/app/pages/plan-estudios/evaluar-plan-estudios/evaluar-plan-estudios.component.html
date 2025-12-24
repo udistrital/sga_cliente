@@ -1,0 +1,143 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="xxlarge"
+  nbSpinnerMessage="{{ 'GLOBAL.cargando' | translate }}" [ngSwitch]="vista">
+  <nb-card-header>
+    <div class="row" align="center">
+      <div class="col">
+        {{ 'plan_estudios.evaluar' | translate }}
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <ng-container *ngSwitchCase="VIEWS.LIST">
+      <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}">
+        <legend><small>&nbsp; {{ 'plan_estudios.planes_estudio_evaluados' | translate }} </small></legend>
+        <div class="alinear-center">
+          <div class="advertencia">{{ 'plan_estudios.mensaje_tabla_evaluacion_plan_estudio' | translate }}</div>
+        </div>
+        <ng2-smart-table [settings]="tbPlanesEstudio" [source]="dataPlanesEstudio">
+        </ng2-smart-table>
+      </fieldset>
+    </ng-container>
+    <ng-container *ngSwitchCase="VIEWS.FORM">
+      <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
+        <legend class="modo-ventana">
+          <small>&nbsp; {{ 'plan_estudios.evaluar' | translate }} </small>
+          <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}"
+            (click)="cancelar()"></i>
+        </legend>
+        <mat-horizontal-stepper #stepper [linear]="true" #stepper>
+          <mat-step>
+            <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
+            <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)"
+              (createdForm)="asignarForm($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
+            <div class="alinear-center" [class.right]="!enEdicionPlanEstudio">
+              <button mat-raised-button matStepperNext [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.siguiente' | translate
+                }}</button>
+            </div>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>{{ 'plan_estudios.parametrizacion_semestral' | translate }}</ng-template>
+            <ng2-smart-table [settings]="tbEspaciosAcademicos" [source]="dataEspaciosAcademicos"
+              (custom)="onAction($event)">
+            </ng2-smart-table>
+            <div class="alinear-right espacio-doble">
+              <nb-card status="success" class="recuadro">
+                <nb-card-header class="d-flex justify-content-around align-items-center" style="padding: 5px;">
+                  {{ 'plan_estudios.total_espacios_asignar' | translate }}
+                </nb-card-header>
+                <nb-card-body class="d-flex justify-content-around align-items-center" style="padding: 5px;">
+                  <label><b>{{ dataEspaciosAcademicos.count() }}</b></label>
+                </nb-card-body>
+              </nb-card>
+            </div>
+            <div class="alinear-center espacio">
+              <button mat-raised-button matStepperPrevious [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.regresar' |
+                translate }}</button>
+              <button mat-raised-button color="primary" (click)="generarPlanEstudio()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo">{{ 'plan_estudios.generar_plan' | translate }}</button>
+              <button mat-raised-button (click)="salirEdicionFormulario()" [disabled]="enEdicionSemestreNuevo || enEdicionSemestreViejo">{{ 'GLOBAL.salir' | translate }}</button>
+            </div>
+            <mat-accordion>
+              <mat-expansion-panel hideToggle *ngFor="let semestre of dataSemestre; let numero = index"
+                [expanded]="(numero) === punteroSemestrePlan">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ 'plan_estudios.semestre' | translate }} # {{ numero + 1 }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="custom-action-tb"
+                  [class.hide]="!this.enEdicionSemestreNuevo && !this.enEdicionSemestreViejo">
+                  <ng2-smart-table [settings]="tbSemestre" [source]="semestre" (custom)="onAction($event)">
+                  </ng2-smart-table>
+                </div>
+
+                <div class="resumenTabla">
+                  <ng2-smart-table [settings]="tbSemestreTotal" [source]="dataSemestreTotal[numero]">
+                  </ng2-smart-table>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+            <nb-card status="success" class="recuadro" style="margin: 2rem 0px 1rem 0px;"
+              *ngIf="dataSemestre.length > 0">
+              <nb-card-header class="d-flex justify-content-around align-items-center" style="padding: 5px;">
+                {{ 'plan_estudios.resumen_general' | translate }}
+              </nb-card-header>
+              <nb-card-body style="padding: 1px;">
+                <div class="resumenTotal">
+                  <ng2-smart-table [settings]="tbSemestreTotal" [source]="dataSemestreTotalTotal">
+                  </ng2-smart-table>
+                </div>
+              </nb-card-body>
+            </nb-card>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </fieldset>
+    </ng-container>
+    <ng-container *ngSwitchCase="VIEWS.SECONDARY_FORM">
+      <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
+          <legend class="modo-ventana">
+              <small>&nbsp; {{ 'plan_estudios.evaluar' | translate }} </small>
+              <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}" (click)="cancelar()"></i>
+          </legend>
+          <mat-horizontal-stepper #stepper [linear]="true" #stepper>
+              
+              <mat-step >
+                  <ng-template matStepLabel>{{ 'espacios_academicos.select_proyecto' | translate }}</ng-template>
+                  <dinamic-form-group [defineForm]="formPlanEstudio" (subsChanges)="cambioEn($event)" (createdForm)="asignarForm($event)" (updatedForm)="actualizarForm($event)"></dinamic-form-group>
+                  <div class="alinear-center" [class.right]="!enEdicionPlanEstudio">
+                      <button mat-raised-button matStepperNext [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.siguiente' | translate }}</button>
+                  </div>
+              </mat-step>
+              <mat-step>
+                  <ng-template matStepLabel>{{ 'plan_estudios.parametrizacion_plan_ciclos' | translate }}</ng-template>
+                  <ng2-smart-table [settings]="tbSimpleStudyPlans" [source]="dataSimpleStudyPlans" (custom)="onAction($event)">
+                  </ng2-smart-table>
+                  <br>
+                  <mat-card class="alinear-center espacio-doble mat-card-custom">
+                      <mat-card-header>
+                          <mat-card-title>{{ 'plan_estudios.planes_estudio_asignados' | translate }}</mat-card-title>
+                      </mat-card-header>
+                  </mat-card>
+                  <ng2-smart-table [settings]="tbOrganizedStudyPlans" [source]="dataOrganizedStudyPlans" (custom)="onAction($event)">
+                  </ng2-smart-table>
+                  <br>
+                  <div class="alinear-center espacio-doble" >
+                      <button mat-raised-button matStepperPrevious [hidden]="enEdicionPlanEstudio">{{ 'GLOBAL.regresar' | translate }}</button>
+                      <button mat-raised-button color="primary" (click)="generarPlanEstudio()" [disabled]="dataOrganizedStudyPlans == undefined || dataOrganizedStudyPlans.count() == 0">{{ 'plan_estudios.generar_plan' | translate }}</button>
+                      <button mat-raised-button (click)="salirEdicionFormulario()">{{ 'GLOBAL.salir' | translate }}</button>
+                  </div>
+              </mat-step>
+          </mat-horizontal-stepper>
+      </fieldset>
+    </ng-container>
+    <ng-container *ngSwitchCase="VIEWS.SUMMARY">
+      <fieldset [@fadeInOut] [ngClass]="{'fieldseter':true}" class="sombra-mini">
+        <legend class="modo-ventana">
+          <small>&nbsp; {{ 'plan_estudios.resumen' | translate }} </small>
+          <i class="fa fa-times fa-2xs button cancel" aria-hidden="true" title="{{'GLOBAL.cancelar' | translate}}"
+            (click)="vista=VIEWS.LIST;"></i>
+        </legend>
+        <summary-planes-estudio [dataPlanes]="dataPlanes"></summary-planes-estudio>
+      </fieldset>
+    </ng-container>
+  </nb-card-body>
+</nb-card>
