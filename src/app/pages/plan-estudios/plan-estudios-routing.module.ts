@@ -3,11 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { PlanEstudiosComponent } from './plan-estudios.component';
 import { CreacionPlanEstudiosComponent } from './creacion-plan-estudios/creacion-plan-estudios.component';
 import { AuthGuard } from '../../@core/_guards/auth.guard';
+import { SummaryPlanesEstudioComponent } from './summary-planes-estudio/summary-planes-estudio.component';
+import { VisualizarDocumentoPlanComponent } from './visualizar-documento-plan/visualizar-documento-plan.component';
+import { SafeURL } from '../../@core/pipes/safeUrl.pipe';
 import { EvaluarPlanEstudiosComponent } from './evaluar-plan-estudios/evaluar-plan-estudios.component';
 import { DialogoEvaluarComponent } from './evaluar-plan-estudios/dialogo-evaluar/dialogo-evaluar.component';
 import { RevisarPlanesEstudioComponent } from './revisar-planes-estudio/revisar-planes-estudio.component';
 import { DialogVerObservacionComponent } from './dialogo-ver-observacion/dialogo-ver-observacion.component';
-
 
 const routes: Routes = [{
   path: '',
@@ -39,7 +41,9 @@ export class PlanEstudiosRoutingModule { }
 export const routedComponents = [
   PlanEstudiosComponent,
   CreacionPlanEstudiosComponent,
-  RevisarPlanesEstudioComponent,
+  SummaryPlanesEstudioComponent,
+  SafeURL,
+  VisualizarDocumentoPlanComponent,
   EvaluarPlanEstudiosComponent,
   DialogoEvaluarComponent,
   RevisarPlanesEstudioComponent,

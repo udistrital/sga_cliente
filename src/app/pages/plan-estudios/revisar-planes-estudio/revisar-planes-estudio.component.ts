@@ -57,7 +57,9 @@ export class RevisarPlanesEstudioComponent extends PlanEstudioBaseComponent impl
     gestorDocumentalService: NewNuxeoService,
     autenticationService: ImplicitAutenticationService
   ) {
-    super(translate, popUpManager, projectService, sgaMidService, domSanitizer, planEstudiosService, gestorDocumentalService, autenticationService);
+    super(translate, popUpManager, projectService, 
+      sgaMidService, domSanitizer, planEstudiosService, 
+      gestorDocumentalService, autenticationService);
     this.dataPlanesEstudio = new LocalDataSource();
     this.dataSimpleStudyPlans = new LocalDataSource();
     this.dataOrganizedStudyPlans = new LocalDataSource();
