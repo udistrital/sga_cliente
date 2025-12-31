@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ACTIONS, MODALS, ROLES, VIEWS } from '../../../@core/data/models/diccionario/diccionario';
 import { LocalDataSource } from 'ng2-smart-table';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { Ng2StButtonComponent } from '../../../@theme/components';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { FORM_ESPACIO_ACADEMICO } from './form-espacio_academico';
+import { FORM_AGRUPACION_ESPACIOS, FORM_ESPACIO_ACADEMICO } from './form-espacio_academico';
 import { ProyectoAcademicoService } from '../../../@core/data/proyecto_academico.service';
 import { ParametrosService } from '../../../@core/data/parametros.service';
 import { EspaciosAcademicosService } from '../../../@core/data/espacios_academicos.service';
@@ -15,6 +15,10 @@ import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { format } from 'url';
 import { EstadoAprobacion, STD } from '../../../@core/data/models/espacios_academicos/estado_aprobacion';
 import { EspacioAcademico } from '../../../@core/data/models/espacios_academicos/espacio_academico';
+import { AgrupacionEspacios } from '../../../@core/data/models/espacios_academicos/agrupacion_espacios';
+import { DomSanitizer } from '@angular/platform-browser';
+import { OikosService } from '../../../@core/data/oikos.service';
+import { MatStepper } from '@angular/material';
 
 @Component({
   selector: 'creacion-espacios-academicos',
@@ -22,6 +26,12 @@ import { EspacioAcademico } from '../../../@core/data/models/espacios_academicos
   styleUrls: ['./creacion-espacios-academicos.component.scss']
 })
 export class CreacionEspaciosAcademicosComponent implements OnInit {
+  @ViewChild('stepper', {static: false}) stepper: MatStepper;
+  setStep(paso: number) {
+    setTimeout(() => {
+      this.stepper.selectedIndex = paso-1;      
+    }, 500);
+  }
 
   loading: boolean;
 
@@ -30,6 +40,14 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
 
   tbEspaciosAcademicos: Object;
   dataEspaciosAcademicos: LocalDataSource;
+
+  formAgrup: FormGroup;
+  formDefAgrupacion: any;
+  facu: any;
+  agrupacionEspacios: AgrupacionEspacios[] = [];
+
+  tbAgrupacionEspacios: Object;
+  dataAgrupacionEspacios: LocalDataSource;
 
   formStep1: FormGroup;
   formStep2: FormGroup;
@@ -51,6 +69,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
   crear_editar: Symbol;
   soloLectura: boolean;
   id_espacio_academico: string;
+  espacio_academico: EspacioAcademico;
 
   rol: String = undefined;
 
@@ -63,9 +82,12 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
     private sgaMidService: SgaMidService,
     private espaciosAcademicosService: EspaciosAcademicosService,
     private autenticationService: ImplicitAutenticationService,
-    private gestorDocumentalService: NewNuxeoService
+    private gestorDocumentalService: NewNuxeoService,
+    private oikosService: OikosService,
+    protected domSanitizer: DomSanitizer,
     ) {
       this.dataEspaciosAcademicos = new LocalDataSource();
+      this.dataAgrupacionEspacios = new LocalDataSource();
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
         this.createTable();
         this.updateLanguage();
@@ -76,10 +98,12 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
     this.loading = false;
     this.vista = VIEWS.LIST;
     this.formDef = {...FORM_ESPACIO_ACADEMICO};
+    this.formDefAgrupacion = [...FORM_AGRUPACION_ESPACIOS];
     this.manageByRole();
     this.loadSelects();
     this.createTable();
     this.buildFormEspaciosAcademicos();
+    this.buildFormAgrupacionEspacios();
     this.gestorDocumentalService.clearLocalFiles();
   }
 
@@ -145,11 +169,51 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
       actions: false,
       noDataMessage: this.translate.instant('GLOBAL.table_no_data_found')
     };
+    this.tbAgrupacionEspacios = {
+      columns: {
+        nombre: {
+          title: this.translate.instant('GLOBAL.nombre'),
+          editable: false,
+          width: '35%',
+          filter: true,
+        },
+        descripcion: {
+          title: this.translate.instant('GLOBAL.descripcion'),
+          editable: false,
+          width: '35%',
+          filter: true,
+        },
+        color_hex: {
+          title: this.translate.instant('espacios_academicos.agrupacion_espacios_color'),
+          editable: false,
+          width: '30%',
+          filter: false,
+          type: 'html',
+          valuePrepareFunction: (value) => {
+            return this.domSanitizer.bypassSecurityTrustHtml(`
+            <div style="
+              background-color: ${value} !important;
+              text-align: center;
+              border: 1px solid gray;
+              border-radius: 3px;
+            "> &nbsp; </div>
+            `);
+          },
+        },
+      },
+      hideSubHeader: false,
+      mode: 'external',
+      actions: false,
+      noDataMessage: this.translate.instant('GLOBAL.table_no_data_found')
+    };
   }
 
   ajustarBotonesSegunEstado(espacio: EspacioAcademico) {
-    const estado = this.estados_aprobacion.find(estado => estado._id == espacio.estado_aprobacion_id);
-    espacio['estado'] = estado.nombre;
+    let estado = this.estados_aprobacion.find(estado => estado._id == espacio.estado_aprobacion_id);
+    console.log(estado);
+    console.log("separador ----");
+    console.log(estado.nombre);
+    espacio['estado'] = String(estado.nombre);
     if (this.rol == ROLES.ADMIN_SGA) {
       let accion, tipo;
       if ((estado.codigo_abreviacion == STD.IS_APRV)) {
@@ -181,6 +245,16 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
   // * ----------
   // * Constructor de formulario, buscar campo, update i18n, suscribirse a cambios
   //#region
+  buildFormAgrupacionEspacios() {
+    const form = {};
+    this.formDefAgrupacion.forEach(campo => {
+      form[campo.nombre] = new FormControl('', campo.validacion);
+      campo.label = this.translate.instant(campo.label_i18n);
+      campo.placeholder = this.translate.instant(campo.placeholder_i18n);
+    });
+    this.formAgrup = this.formBuilder.group(form);
+  }
+
   buildFormEspaciosAcademicos() {
     // ? primera carga del formulario: validación e idioma
     const form1 = {};
@@ -237,6 +311,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
     this.reloadLabels(this.formDef.campos_p1);
     this.reloadLabels(this.formDef.campos_p2);
     this.reloadLabels(this.formDef.campos_p3);
+    this.reloadLabels(this.formDefAgrupacion);
   }
 
   reloadLabels(campos: any[]) {
@@ -277,6 +352,41 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
     }
     if (label == 'soporte') {
       
+    }
+    if (label == 'proyectoCurricular' && field) {
+      const p = this.formStep1.get('proyectoCurricular').value;
+      const idx = this.formDef.campos_p2.findIndex(campo => campo.nombre == 'agrupacion_espacios');
+      this.loadAgrupacionEspacios(p.FacultadId).then((agrupacion_Espacios) => {
+        if (idx != -1) {
+          this.agrupacionEspacios = agrupacion_Espacios
+          this.formDef.campos_p2[idx].opciones = this.agrupacionEspacios;
+          if (this.espacio_academico) {
+            const a_e = this.agrupacionEspacios.find(ae => ae._id == this.espacio_academico.agrupacion_espacios_id)
+            this.formStep2.patchValue({
+              agrupacion_espacios: a_e
+            });
+          }
+        }
+      }).catch(() => {
+        if (idx != -1) {
+          this.agrupacionEspacios = [];
+          this.formDef.campos_p2[idx].opciones = [];
+        }
+      });
+    }
+    if (label == 'agrupacion_espacios') {
+      const idx = this.formDef.campos_p2.findIndex(campo => campo.nombre == 'agrupacion_espacios_color');
+      if (field) {
+        if (idx != -1) {
+          this.formDef.campos_p2[idx].color = field.color_hex;
+          this.formDef.campos_p2[idx+1].deshabilitar = true; // siguiente input al color, el boton de agregar
+        }
+      } else {
+        if (idx != -1) {
+          this.formDef.campos_p2[idx].color = null;
+          this.formDef.campos_p2[idx+1].deshabilitar = false; // siguiente input al color, el boton de agregar
+        }
+      }
     }
   }
 
@@ -477,6 +587,26 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
           }
         }, (err) => {
           reject({"estado_aprobacion": err});
+        }
+      )
+    });
+  }
+
+  loadAgrupacionEspacios(byFacultad?: any): Promise<AgrupacionEspacios[]> {
+    let facuId = "";
+    if (byFacultad != undefined) {
+      facuId = `,facultad_id:${byFacultad}`;
+    }
+    return new Promise<any>((resolve, reject) => {
+      this.espaciosAcademicosService.get('agrupacion-espacios?query=activo:true'+facuId+'&limit=0').subscribe(
+        (resp) => {
+          if (Object.keys(resp.Data[0]).length > 0) {
+            resolve(resp.Data);
+          } else {
+            reject({"agrupacion_espacios": null});
+          }
+        }, (err) => {
+          reject({"agrupacion_espacios": err});
         }
       )
     });
@@ -801,6 +931,18 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
                                            MODALS.WARNING, false);
     })
   }
+
+  loadFacultad(id: number) {
+    return new Promise<any>((resolve, reject) => {
+      this.oikosService.get(`dependencia/${id}`).subscribe(
+        (resp) => {
+            resolve(resp);
+        }, (err) => {
+          reject({"oikos": err});
+        }
+      );
+    });
+  }
   //#endregion
   // * ----------
 
@@ -810,6 +952,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
   nuevoEspacioAcad() {
     this.limpiarFormulario();
     this.id_espacio_academico = undefined;
+    this.espacio_academico = undefined;
     const estado = this.estados_aprobacion.find(estado => estado.codigo_abreviacion == STD.IN_EDIT);
     this.formStep3.patchValue({
       aprobado: estado,
@@ -832,6 +975,8 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
     newEspacio_Academico.clasificacion_espacio_id = (this.formStep2.get('clase').value).Id;
     newEspacio_Academico.enfoque_id = (this.formStep2.get('enfoque').value).Id;
     newEspacio_Academico.creditos = Number(this.formStep2.get('creditos').value);
+    newEspacio_Academico.espacio_modular = (this.formStep2.get('espacio_modular').value).Value;
+    newEspacio_Academico.agrupacion_espacios_id = (this.formStep2.get('agrupacion_espacios').value)._id;
     newEspacio_Academico.distribucion_horas = {
       HTD: Number(this.formStep2.get('htd').value),
       HTC: Number(this.formStep2.get('htc').value),
@@ -883,6 +1028,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
   editarEspacioAcad(accion: Symbol, espacio_academico: EspacioAcademico) {
     this.limpiarFormulario();
     this.id_espacio_academico = espacio_academico._id;
+    this.espacio_academico = espacio_academico;
     const proyecto = this.proyectos.find(proyecto => proyecto.Id == espacio_academico.proyecto_academico_id);
     const subnivel = this.niveles.find(nivel => nivel.Id == proyecto.NivelFormacionId.Id);
     const nivel = this.niveles.find(nivel => nivel.Id == proyecto.NivelFormacionId.NivelFormacionPadreId.Id);
@@ -891,6 +1037,11 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
       subnivel: subnivel,
       proyectoCurricular: proyecto
     })
+    const id_em = this.formDef.campos_p2.findIndex(campo => campo.nombre == 'espacio_modular');
+    let modular = undefined;
+    if (id_em != -1) {
+      modular = this.formDef.campos_p2[id_em].opciones.find(op => op.Value == espacio_academico.espacio_modular);
+    }
     this.formStep2.patchValue({
       nombre: espacio_academico.nombre,
       codigo: espacio_academico.codigo,
@@ -900,6 +1051,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
       clase: this.clases.find(clase => clase.Id == espacio_academico.clasificacion_espacio_id),
       enfoque: this.enfoques.find(enfoque => enfoque.Id == espacio_academico.enfoque_id),
       creditos: espacio_academico.creditos,
+      espacio_modular: modular,
       htd: espacio_academico.distribucion_horas["HTD"],
       htc: espacio_academico.distribucion_horas["HTC"],
       hta: espacio_academico.distribucion_horas["HTA"],
@@ -967,6 +1119,8 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
     editEspacio_Academico.clasificacion_espacio_id = (this.formStep2.get('clase').value).Id;
     editEspacio_Academico.enfoque_id = (this.formStep2.get('enfoque').value).Id;
     editEspacio_Academico.creditos = Number(this.formStep2.get('creditos').value);
+    editEspacio_Academico.espacio_modular = (this.formStep2.get('espacio_modular').value).Value;
+    editEspacio_Academico.agrupacion_espacios_id = (this.formStep2.get('agrupacion_espacios').value)._id;
     editEspacio_Academico.distribucion_horas = {
       HTD: Number(this.formStep2.get('htd').value),
       HTC: Number(this.formStep2.get('htc').value),
@@ -1017,6 +1171,7 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
           this.recargarEspaciosAcademicos();
           this.vista = VIEWS.LIST;
           this.id_espacio_academico = undefined;
+          this.espacio_academico = undefined;
         } else {
           this.loading = false;
           this.popUpManager.showErrorAlert(this.translate.instant('espacios_academicos.edicion_espacio_fallo'));
@@ -1114,5 +1269,62 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
   }
   //#endregion
   // * ----------
+  
+
+  // * ----------
+  // * Flujo para nueva agrupacion espacios o color de espacio acad
+  //#region
+  nuevaAgrupacion() {
+    this.vista = VIEWS.SECONDARY_FORM;
+    this.formAgrup.reset();
+    this.loading = true;
+    const p = this.formStep1.get('proyectoCurricular').value;
+    this.loadFacultad(p ? p.FacultadId : 0).then((facultad) => {
+      this.loading = false;
+      this.facu = facultad;
+    }).catch(() => {
+      this.loading = false;
+      this.facu = undefined;
+      this.popUpManager.showPopUpGeneric(this.translate.instant('ERROR.titulo_generico'),
+        this.translate.instant('ERROR.fallo_informacion_en') + ': <b> Oikos </b>', MODALS.ERROR, false);
+    })
+    this.dataAgrupacionEspacios.load(this.agrupacionEspacios);
+  }
+
+  guardarAgrupacion() {
+    if (this.formAgrup.valid && this.facu) {
+      let postAgrupacionEspacios = new AgrupacionEspacios();
+      postAgrupacionEspacios.nombre = this.formAgrup.get('nombre').value;
+      postAgrupacionEspacios.codigo_abreviacion = this.formAgrup.get('codigo_abreviacion').value;
+      postAgrupacionEspacios.descripcion = this.formAgrup.get('descripcion').value;
+      postAgrupacionEspacios.color_hex = this.formAgrup.get('color_hex').value;
+      postAgrupacionEspacios.facultad_id = this.facu.Id;
+      this.loading = true;
+      this.espaciosAcademicosService.post('agrupacion-espacios', postAgrupacionEspacios).subscribe((resp) => {
+        this.loading = false;
+        this.formAgrup.reset();
+        this.agrupacionEspacios.push(resp.Data);
+        this.dataAgrupacionEspacios.load(this.agrupacionEspacios);
+        const idx = this.formDef.campos_p2.findIndex(campo => campo.nombre == 'agrupacion_espacios');
+        if (idx != -1) {
+          this.formDef.campos_p2[idx].opciones = this.agrupacionEspacios;
+        }
+        this.formStep2.patchValue({agrupacion_espacios: resp.Data});
+        this.popUpManager.showSuccessAlert(this.translate.instant('espacios_academicos.agregar_agrupacion_ok')).then(() => {
+          this.vista = VIEWS.FORM;
+          this.setStep(2);
+        })
+      }, (error) => {
+        this.loading = false;
+        console.warn(error);
+        this.popUpManager.showErrorAlert(this.translate.instant('espacios_academicos.agregar_agrupacion_fail'))
+      });
+    } else {
+      this.formAgrup.markAllAsTouched();
+    }
+  }
+  //#endregion
+  // * ----------
+
 
 }
