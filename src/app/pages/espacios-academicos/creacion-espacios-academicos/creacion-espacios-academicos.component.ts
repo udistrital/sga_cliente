@@ -210,34 +210,34 @@ export class CreacionEspaciosAcademicosComponent implements OnInit {
 
   ajustarBotonesSegunEstado(espacio: EspacioAcademico) {
     let estado = this.estados_aprobacion.find(estado => estado._id == espacio.estado_aprobacion_id);
-    console.log(estado);
-    console.log("separador ----");
-    console.log(estado.nombre);
-    espacio['estado'] = String(estado.nombre);
-    if (this.rol == ROLES.ADMIN_SGA) {
-      let accion, tipo;
-      if ((estado.codigo_abreviacion == STD.IS_APRV)) {
-        accion = ACTIONS.VIEW;
-        tipo = 'ver';
+    if (estado != undefined){
+      espacio['estado'] = estado.nombre;
+      if (this.rol == ROLES.ADMIN_SGA) {
+        let accion, tipo;
+        if ((estado.codigo_abreviacion == STD.IS_APRV)) {
+          accion = ACTIONS.VIEW;
+          tipo = 'ver';
+        } else {
+          accion = ACTIONS.EDIT_PART;
+          tipo = 'editar';
+        }
+        espacio['gestion'] = {value: accion, type: tipo, disabled: false};
+        espacio['enviar'] = {value: undefined, type: 'enviar', disabled: true};
       } else {
-        accion = ACTIONS.EDIT_PART;
-        tipo = 'editar';
+        let accion, tipo;
+        if ((estado.codigo_abreviacion == STD.IN_EDIT) || (estado.codigo_abreviacion == STD.NOT_APRV)) {
+          accion = ACTIONS.EDIT;
+          tipo = 'editar';
+        } else {
+          accion = ACTIONS.VIEW;
+          tipo = 'ver';
+        }
+        espacio['gestion'] = {value: accion, type: tipo, disabled: false};
+        const siEnviar = (estado.codigo_abreviacion == STD.IN_EDIT)
+        espacio['enviar'] = {value: undefined, type: 'enviar', disabled: !siEnviar};
       }
-      espacio['gestion'] = {value: accion, type: tipo, disabled: false};
-      espacio['enviar'] = {value: undefined, type: 'enviar', disabled: true};
-    } else {
-      let accion, tipo;
-      if ((estado.codigo_abreviacion == STD.IN_EDIT) || (estado.codigo_abreviacion == STD.NOT_APRV)) {
-        accion = ACTIONS.EDIT;
-        tipo = 'editar';
-      } else {
-        accion = ACTIONS.VIEW;
-        tipo = 'ver';
-      }
-      espacio['gestion'] = {value: accion, type: tipo, disabled: false};
-      const siEnviar = (estado.codigo_abreviacion == STD.IN_EDIT)
-      espacio['enviar'] = {value: undefined, type: 'enviar', disabled: !siEnviar};
     }
+    
   }
   //#endregion
   // * ----------
