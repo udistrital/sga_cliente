@@ -2441,7 +2441,19 @@
         "componentePropedeutico": "CP",
         "teorico": "T",
         "practico": "P",
-        "teoricoPractico": "T/P"
+        "teoricoPractico": "T/P",
+        "obligatorioBasicoTexto": "Basic Required",
+        "obligatorioComplementarioTexto": "Complementary Required",
+        "electivaIntrinsecaTexto": "Intrinsic Elective",
+        "electivaExtrinsecaTexto": "Extrinsic Elective",
+        "espacio_modular": "Modular Space",
+        "agrupacion_espacios": "Academic Spaces Grouping",
+        "agrupacion_espacios_color": "Color Academic Spaces Grouping",
+        "agregar_agrupacion_espacios": "Add Academic Spaces Grouping",
+        "lista_agrupaciones": "Academic Spaces Grouping List",
+        "select_color": "Select the desired color",
+        "agregar_agrupacion_ok": "The Grouping has been added",
+        "agregar_agrupacion_fail": "The Grouping could not be added"
     },
     "plan_estudios": {
         "plan_estudios":"Study Plan",

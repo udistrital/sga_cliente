@@ -7,6 +7,8 @@ import { AnyService } from '../../../@core/data/any.service';
 import { NewNuxeoService } from '../../../@core/utils/new_nuxeo.service';
 import { PopUpManager } from '../../../managers/popUpManager';
 import { TranslateService } from '@ngx-translate/core';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { DialogPreviewFileComponent } from '../dialog-preview-file/dialog-preview-file.component';
 
 @Component({
   selector: 'ngx-dinamicform',
@@ -24,12 +26,12 @@ export class DinamicformComponent implements OnInit, OnChanges {
   @Output() resultSmart: EventEmitter<any> = new EventEmitter();
   @Output() interlaced: EventEmitter<any> = new EventEmitter();
   @Output() percentage: EventEmitter<any> = new EventEmitter();
-  @Output() checkChange: EventEmitter<any> = new EventEmitter();
-  data: any;
-  searchTerm$ = new Subject<any>();
+  @Output() dateChange: EventEmitter<any> = new EventEmitter();
   @ViewChild(MatDatepicker, { static: true }) datepicker: MatDatepicker<Date>;
   @ViewChildren("documento") fileInputs: QueryList<ElementRef>;
-
+  
+  data: any;
+  searchTerm$ = new Subject<any>();
   DocumentoInputVariable: ElementRef;
   init: boolean;
 
@@ -39,6 +41,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
     private gestorDocumental: NewNuxeoService,
     private popUpManager: PopUpManager,
     private translate: TranslateService,
+    private matDialog: MatDialog,
   ) {
     this.data = {
       valid: true,
@@ -63,11 +66,15 @@ export class DinamicformComponent implements OnInit, OnChanges {
         }
         const fieldAutocomplete = this.normalform.campos.filter((field) => (field.nombre === response.options.field.nombre));
         fieldAutocomplete[0].opciones = opciones;
-        if (opciones.length == 1 && Object.keys(opciones[0]).length == 0) {
-          let canEmit = fieldAutocomplete[0].entrelazado ? fieldAutocomplete[0].entrelazado : false;
-          if (canEmit) {
-            this.interlaced.emit({...fieldAutocomplete[0], noOpciones: true, valorBuscado: response.keyToFilter});
+        if (opciones != null){
+          if (opciones.length == 1 && Object.keys(opciones[0]).length == 0) {
+            let canEmit = fieldAutocomplete[0].entrelazado ? fieldAutocomplete[0].entrelazado : false;
+            if (canEmit) {
+              this.interlaced.emit({...fieldAutocomplete[0], noOpciones: true, valorBuscado: response.keyToFilter});
+            }
           }
+        } else if (opciones == null){
+          this.interlaced.emit({value: null, name: `selected_value_autocomplete_${response.options.field.nombre}`})
         }
       });
   }
@@ -79,18 +86,20 @@ export class DinamicformComponent implements OnInit, OnChanges {
   setNewValue({ element, field }) {
     field.valor = element.option.value;
     this.validCampo(field);
+    this.interlaced.emit({value: element.option.value, name: `selected_value_autocomplete_${field.nombre}`})
   }
 
   searchEntries(text, path, query, keyToFilter, field) {
 
+    const encodedText = encodeURIComponent(text);
     const channelOptions = new BehaviorSubject<any>({ field: field });
     const options$ = channelOptions.asObservable();
-    const queryOptions$ = this.anyService.get(path, query.replace(keyToFilter, text))
+    const queryOptions$ = this.anyService.get(path, query.replace(keyToFilter, encodedText))
     return combineLatest([options$, queryOptions$]).pipe(
       map(([options$, queryOptions$]) => ({
         options: options$,
         queryOptions: queryOptions$,
-        keyToFilter: text,
+        keyToFilter: encodedText,
       })),
     );
   }
@@ -166,19 +175,51 @@ export class DinamicformComponent implements OnInit, OnChanges {
     })
   }
 
-  download(url, title, w, h) {
-    const left = (screen.width / 2) - (w / 2);
+  download(url, title, w, h, previewForm?, message?) {
+    if (previewForm !== undefined) {
+      switch (previewForm) {
+        case "preview":
+          this.preview(url, title, message);
+          break;
+        case "nopreview":
+          this.nopreview(url, title);
+          break;
+        case "both":
+          const spliturl = url.split('|');
+          this.preview(spliturl[0], title, message);
+          this.nopreview(spliturl[1], title);
+          break;
+        default:
+          this.preview(url, title, message);
+          break;
+      }
+    } else {
+      this.preview(url, title, message);
+    }
+  }
+
+  preview(url, title, message) {
+    /* const left = (screen.width / 2) - (w / 2);
     const top = (screen.height / 2) - (h / 2);
-    window.open(url, title, 'toolbar=no,' +
+    let prev = window.open(url, title, 'toolbar=no,' +
       'location=no, directories=no, status=no, menubar=no,' +
       'scrollbars=no, resizable=no, copyhistory=no, ' +
       'width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    prev.document.title = title; */
+    const dialogDoc = new MatDialogConfig();
+    dialogDoc.width = '80vw';
+    dialogDoc.height = '90vh';
+    dialogDoc.data = {url, title, message};
+    this.matDialog.open(DialogPreviewFileComponent, dialogDoc);
   }
 
-  onChangeCheckBox(event, c){
-    if (c.valor !== undefined) {
-      this.checkChange.emit(event)
-    }
+  nopreview(url, title) {
+    const download = document.createElement("a");
+    download.href = url;
+    download.download = title;
+    document.body.appendChild(download);
+    download.click();
+    document.body.removeChild(download);
   }
 
   onChange(event, c) {
@@ -283,6 +324,7 @@ export class DinamicformComponent implements OnInit, OnChanges {
 
   onChangeDate(event, c) {
     c.valor = event.value;
+    this.dateChange.emit(c)
   }
 
   validCampo(c, emit = true): boolean {
@@ -301,8 +343,8 @@ export class DinamicformComponent implements OnInit, OnChanges {
             return false;
           }
         }
-        if (c.formatos) {
-          if (c.formatos.indexOf(c.File.type.split('/')[1]) === -1) {
+        if (c.tipo) {
+          if (c.tipo.indexOf(c.File.type.split('/')[1]) === -1) {
             c.clase = 'form-control form-control-danger';
             c.alerta = 'Solo se admiten los siguientes formatos: ' + c.formatos;
             return false;
@@ -316,11 +358,6 @@ export class DinamicformComponent implements OnInit, OnChanges {
     if (c.etiqueta === 'file' && !!c.ocultar) {
       return true;
       // console.info((c.etiqueta === 'file' && (c.valor)?true:c.valor.name === undefined));
-    }
-    if (c.etiqueta === 'input' && c.tipo === 'number' && (c.valor === '' || c.valor === null || c.valor === undefined)) {
-      c.alerta = '** Debe llenar este campo solo con numeros';
-      c.clase = 'form-control form-control-danger';
-      return false;
     }
     if (c.requerido && ((c.valor === '' && c.etiqueta !== 'file') || c.valor === null || c.valor === undefined ||
       (JSON.stringify(c.valor) === '{}' && c.etiqueta !== 'file') || JSON.stringify(c.valor) === '[]')
@@ -422,16 +459,11 @@ export class DinamicformComponent implements OnInit, OnChanges {
     return new Promise<boolean>((resolve, reject) => {
       this.normalform.campos.forEach(async (d, i) => {
         if ((d.etiqueta === 'file' || d.etiqueta === 'fileRev') && !d.ocultar) {
-          let valid = false;
-          if (d.File) {
-            valid = await this.gestorDocumental.readVerifyMimeType(d.File);
-          } else if (d.valor || d.url) {
-            valid = true;
-          }
+          const valid = await this.gestorDocumental.readVerifyMimeType(d.File);
           if (!valid) {
             d.clase = 'form-control form-control-danger';
             d.alerta = this.translate.instant('ERROR.contenido_archivo_erroneo');
-            this.popUpManager.showPopUpGeneric(this.translate.instant('GLOBAL.error'), d.File ? d.File.name : "" + "<br><br>" + this.translate.instant('ERROR.contenido_archivo_erroneo_mensaje'), "error", false)
+            this.popUpManager.showPopUpGeneric(this.translate.instant('GLOBAL.error'), d.File.name + "<br><br>" + this.translate.instant('ERROR.contenido_archivo_erroneo_mensaje'), "error", false)
             reject(false)
           }
         }
@@ -563,6 +595,22 @@ export class DinamicformComponent implements OnInit, OnChanges {
   isEqual(obj1, obj2) {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
   }
+
+  getUniqueSteps(campos: any[]): number[] {
+    const uniqueSteps: number[] = [];
+    for (const campo of campos) {
+      const step = campo.step;
+      if (!uniqueSteps.includes(step)) {
+        uniqueSteps.push(step);
+      }
+    }
+    return uniqueSteps;
+  }
+  
+  getFieldsInStep(step: number): any[] {
+    return this.normalform.campos.filter(c => c.step === step);
+  }
+  
 
   ngOnDestroy() {
     this.clearForm();

@@ -20,6 +20,8 @@ export class EspacioAcademico {
     soporte_documental: Object[];
     estado_aprobacion_id: string;
     observacion: string;
+    espacio_modular: boolean;
+    agrupacion_espacios_id: string;
     activo: boolean = true;
     readonly fecha_creacion: Date;
     fecha_modificacion: Date;

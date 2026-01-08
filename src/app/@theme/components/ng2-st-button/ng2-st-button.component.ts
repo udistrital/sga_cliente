@@ -5,12 +5,13 @@ import { ViewCell } from 'ng2-smart-table';
   selector: 'ng2-st-button',
   template: `
     <div>  
-      <button mat-raised-button color="primary" (click)="action()" [ngSwitch]="value.type" [disabled]="value.disabled">
+      <button mat-raised-button color="primary" (click)="action()" [ngSwitch]="value.type" [disabled]="value.disabled" [hidden]="value.hidden">
         <i *ngSwitchCase="'ver'" class="nb-search" title="{{ 'GLOBAL.tooltip_ver_registro' | translate }}"></i>
         <i *ngSwitchCase="'editar'" class="nb-edit" title="{{ 'GLOBAL.tooltip_editar_registro' | translate }}"></i>
         <i *ngSwitchCase="'borrar'" class="nb-trash" title="{{ 'GLOBAL.eliminar' | translate }}"></i>
         <i *ngSwitchCase="'crear'" class="nb-plus" title="{{ 'GLOBAL.crear' | translate }}"></i>
         <i *ngSwitchCase="'enviar'" class="nb-paper-plane" title="{{ 'GLOBAL.enviar' | translate }}"></i>
+        <i *ngSwitchCase="'evaluar'" class="nb-checkmark" title="{{ 'GLOBAL.evaluar' | translate }}"></i>
       </button>
     </div>
   `,
