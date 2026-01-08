@@ -18,7 +18,7 @@
                 <!-- Tipo select -->
                 <mat-form-field *ngSwitchCase="'select'" floatLabel="always">
                     <mat-label>{{ defineForm[nombre].requerido ? '* '+defineForm[nombre].label : defineForm[nombre].label }}:</mat-label>
-                    <mat-select [formControlName]="nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}">
+                    <mat-select [formControlName]="nombre" placeholder="{{ 'GLOBAL.seleccionar' | translate}}" [disabled]="defineForm[nombre].soloLectura ? defineForm[nombre].soloLectura : false">
                         <mat-option>{{ 'GLOBAL.seleccionar' | translate}}</mat-option>
                         <ng-container *ngIf="defineForm[nombre].opciones">
                             <mat-option *ngFor="let opcion of defineForm[nombre].opciones" [value]="opcion">{{ opcion.Nombre ? opcion.Nombre : opcion.nombre }}</mat-option>

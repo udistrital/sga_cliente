@@ -229,6 +229,14 @@
   text-align: center;
   justify-content: center;
 }
+.mat-form-field-disabled .mat-input-element {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.button-stepper {
+  display: flex;
+  justify-content: space-evenly;
+}
 
 .alerta {
   background-color: var(--warning-main);
