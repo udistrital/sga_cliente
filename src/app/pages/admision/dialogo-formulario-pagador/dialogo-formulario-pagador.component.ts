@@ -306,60 +306,76 @@ export class DialogoFormularioPagadorComponent implements OnInit, OnDestroy {
           }
         }
         
-        // Obtener parámetros
-        const anioConcepto = this.periodo.Ciclo === '1' ? this.periodo.Year - 1 : this.periodo.Year;
-        this.parametrosService.get(
-          `parametro_periodo?query=ParametroId.TipoParametroId.Id:2,ParametroId.CodigoAbreviacion:${parametro},PeriodoId.Year:${anioConcepto},PeriodoId.CodigoAbreviacion:VG`
-        ).subscribe((parametros: any) => {
-          if (!parametros || !parametros.Data || parametros.Data.length === 0) {
-            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-            this.setLoading(false);
-            return;
-          }
-          
-          // Configurar descripción y valor
-          const parametro_data = parametros.Data[0];
-          // Descripción queda sujeto a solo reingreso, no se considera generación de recibos de transferencia
-          if (this.data.info_recibo.tipo === null || this.data.info_recibo.tipo === undefined){
-            recibo.Descripcion = parametro_data.ParametroId.Nombre;
-          }else{
-            recibo.Descripcion = this.data.info_recibo.tipo;
-          }
-          const valor = JSON.parse(parametro_data.Valor);
-          recibo.ValorDerecho = valor.Costo;
-          
-          // Generar el recibo
-          this.sgaMidService.post('generar_recibo', recibo)
-            .subscribe((respuesta: any) => {
-              this.setLoading(false);
-              
-              if (respuesta && respuesta.Data) {
-                // Procesar el PDF
-                const reciboData = new Uint8Array(atob(respuesta.Data).split('').map(char => char.charCodeAt(0)));
-                const pdf = new Blob([reciboData], { type: 'application/pdf' });
-                const url = window.URL.createObjectURL(pdf);
-                
-                // Abrir el PDF en una nueva ventana
-                window.open(url, '_blank');
-                
-                // Esperar un breve momento para asegurarnos de que el navegador procese la apertura
-                setTimeout(() => {
-                  // Una vez abierto el PDF, ahora podemos cerrar el diálogo
-                  this.dialogRef.close();
-                }, 100);
-              } else {
-                this.popUpManager.showErrorToast(this.translate.instant('ERROR.no_generado'));
+        // Obtener parámetros - Intentar primero con año actual, luego con año anterior si falla
+        const buscarParametrosPeriodo = (anioConcepto: number, esReintentoAnioAnterior: boolean = false) => {
+          this.parametrosService.get(
+            `parametro_periodo?query=ParametroId.TipoParametroId.Id:2,ParametroId.CodigoAbreviacion:${parametro},PeriodoId.Year:${anioConcepto},PeriodoId.CodigoAbreviacion:VG`
+          ).subscribe((parametros: any) => {
+            if (!parametros || !parametros.Data || parametros.Data.length === 0) {
+              if (!esReintentoAnioAnterior) {
+                buscarParametrosPeriodo(this.periodo.Year - 1, true);
+                return;
               }
-            }, error => {
+              
+              this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
               this.setLoading(false);
-              this.popUpManager.showErrorToast(this.translate.instant('ERROR.no_generado'));
-              console.error('Error generando recibo:', error);
-            });
-        }, error => {
-          this.setLoading(false);
-          this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
-          console.error('Error obteniendo parámetros:', error);
-        });
+              return;
+            }
+            
+            // Configurar descripción y valor
+            const parametro_data = parametros.Data[0];
+            // Descripción queda sujeto a solo reingreso, no se considera generación de recibos de transferencia
+            if (this.data.info_recibo.tipo === null || this.data.info_recibo.tipo === undefined){
+              recibo.Descripcion = parametro_data.ParametroId.Nombre;
+            }else{
+              recibo.Descripcion = this.data.info_recibo.tipo;
+            }
+            const valor = JSON.parse(parametro_data.Valor);
+            recibo.ValorDerecho = valor.Costo;
+            
+            // Generar el recibo
+            this.sgaMidService.post('generar_recibo', recibo)
+              .subscribe((respuesta: any) => {
+                this.setLoading(false);
+                
+                if (respuesta && respuesta.Data) {
+                  // Procesar el PDF
+                  const reciboData = new Uint8Array(atob(respuesta.Data).split('').map(char => char.charCodeAt(0)));
+                  const pdf = new Blob([reciboData], { type: 'application/pdf' });
+                  const url = window.URL.createObjectURL(pdf);
+                  
+                  // Abrir el PDF en una nueva ventana
+                  window.open(url, '_blank');
+                  
+                  // Esperar un breve momento para asegurarnos de que el navegador procese la apertura
+                  setTimeout(() => {
+                    // Una vez abierto el PDF, ahora podemos cerrar el diálogo
+                    this.dialogRef.close();
+                  }, 100);
+                } else {
+                  this.popUpManager.showErrorToast(this.translate.instant('ERROR.no_generado'));
+                }
+              }, error => {
+                this.setLoading(false);
+                this.popUpManager.showErrorToast(this.translate.instant('ERROR.no_generado'));
+                console.error('Error generando recibo:', error);
+              });
+          }, error => {
+            // Si hay error y no hemos intentado con año anterior, reintentar silenciosamente
+            if (!esReintentoAnioAnterior) {
+              buscarParametrosPeriodo(this.periodo.Year - 1, true);
+              return;
+            }
+            
+            // Si ya intentamos con año anterior, mostrar error
+            this.setLoading(false);
+            this.popUpManager.showErrorToast(this.translate.instant('ERROR.general'));
+            console.error('Error obteniendo parámetros:', error);
+          });
+        };
+        
+        // Iniciar con el año actual
+        buscarParametrosPeriodo(this.periodo.Year, false);
       }, error => {
         this.setLoading(false);
         this.popUpManager.showAlert(
