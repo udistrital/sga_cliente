@@ -176,7 +176,7 @@
 
     <!-- ///////////// No tocar de aqui para arriba ///////////// -->
 
-    <nb-tab tabTitle="{{ 'calendario.formulario_extension' | translate }}" [active]="!activetab">
+    <!-- <nb-tab tabTitle="{{ 'calendario.formulario_extension' | translate }}" [active]="!activetab">
         <ng-container *ngIf="showList">
             <div class="row">
                 <div class="col-12">
@@ -224,7 +224,6 @@
                     </mat-form-field>
                 </div>
             </div>
-            <!-- anidado -->
             <fieldset [ngClass]="{'fieldseter':true} ">
                 <legend>
                     {{ 'calendario.resolucion_extension' | translate }}
@@ -305,7 +304,7 @@
                                         {{ process.Nombre }}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <ng2-smart-table [settings]="activitiesSettings" [source]="process.actividades" (create)="addActivity($event, process)" (custom)="onAction($event, process)" ></ng2-smart-table> <!-- (edit)="editActivity($event, process)" (delete)="deleteActivity($event, process)" -->
+                                <ng2-smart-table [settings]="activitiesSettings" [source]="process.actividades" (create)="addActivity($event, process)" (custom)="onAction($event, process)" ></ng2-smart-table>  (edit)="editActivity($event, process)" (delete)="deleteActivity($event, process)" 
                             </mat-expansion-panel>
                         </mat-accordion>
                     </mat-tab>
@@ -325,7 +324,7 @@
                                         {{ process.Nombre }}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <ng2-smart-table [settings]="activitiesSettings" [source]="process.actividades" (create)="addActivity($event, process)" (custom)="onAction($event, process)" ></ng2-smart-table> <!-- (edit)="editActivity($event, process)" (delete)="deleteActivity($event, process)" -->
+                                <ng2-smart-table [settings]="activitiesSettings" [source]="process.actividades" (create)="addActivity($event, process)" (custom)="onAction($event, process)" ></ng2-smart-table>  (edit)="editActivity($event, process)" (delete)="deleteActivity($event, process)" 
                             </mat-expansion-panel>
                         </mat-accordion>
                     </mat-tab>
@@ -347,6 +346,6 @@
             </div>
         </div>
     </form>
-    </nb-tab>
+    </nb-tab> -->
 </nb-tabset>
 </div>
