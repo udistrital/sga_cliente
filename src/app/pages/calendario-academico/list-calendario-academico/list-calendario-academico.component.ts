@@ -125,12 +125,12 @@ export class ListCalendarioAcademicoComponent implements OnInit {
                 this.translate.instant('calendario.tooltip_clonar') +
                 '"></i>',
           },
-          {
-            name: 'view',
-            title: '<i class="nb-home" title="' +
-                this.translate.instant('calendario.tooltip_detalle') +
-                '"></i>',
-          },
+          // {
+          //   name: 'view',
+          //   title: '<i class="nb-home" title="' +
+          //       this.translate.instant('calendario.tooltip_detalle') +
+          //       '"></i>',
+          // },
           {
             name: 'edit',
             title: '<i class="nb-edit" title="' +
