@@ -128,12 +128,12 @@ idCalendario: number = 0;
         position: 'right',
         columnTitle: this.translate.instant('GLOBAL.acciones'),
         custom: [
-          {
-            name: 'view',
-            title: '<i class="nb-search" title="' +
-                this.translate.instant('calendario.tooltip_detalle_proceso') +
-                '"></i>',
-          },
+          // {
+          //   name: 'view',
+          //   title: '<i class="nb-search" title="' +
+          //       this.translate.instant('calendario.tooltip_detalle_proceso') +
+          //       '"></i>',
+          // },
         ],
       },
       noDataMessage: this.translate.instant('calendario.sin_procesos'),
